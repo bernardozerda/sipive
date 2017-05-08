@@ -1,0 +1,243 @@
+<?php
+
+/**
+ * PRIMERA VERSION DE SALVAR ACTUALIZACION 
+*/
+$txtPrefijoRuta = "../../";
+
+include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
+include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ProyectoVivienda.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "SeguimientoProyectos.class.php" );
+
+$arrErrores = array(); // Todos los errores van aqui
+$numFechaHoy = time();
+
+/* * ********************************************************************************************************************
+ * VALIDACIONES DEL FORMULARIO
+ * ******************************************************************************************************************** */
+
+// Grupo de Gestion 
+if ($_POST['seqGrupoGestion'] == 0) {
+	$arrErrores[] = "Seleccione el grupo de la gestión realizada";
+}
+
+// Gestion
+if ($_POST['seqGestion'] == 0) {
+	$arrErrores[] = "Seleccione la gestión realizada";
+}
+
+// Comentarios
+if ($_POST['txtComentario'] == "") {
+	$arrErrores[] = "Por favor diligencie el campo de comentarios";
+}
+// ==================================================== DATOS DE LOS RADICADOS ==============================================================
+// Validacion del Número de Radicado Jurídico
+if( ( ! isset( $_POST['numRadicadoJuridico'] ) ) or (trim( $_POST['numRadicadoJuridico'] ) == "")  or (trim( $_POST['numRadicadoJuridico'] ) == 0 ) ){
+	$arrErrores[] = "Debe diligenciar el campo N&uacute;mero de Radicado Jur&iacute;dico";
+}
+
+// Validacion del Número de Radicado Técnico
+if( ( ! isset( $_POST['numRadicadoTecnico'] ) ) or (trim( $_POST['numRadicadoTecnico'] ) == "")  or (trim( $_POST['numRadicadoTecnico'] ) == 0 ) ){
+	$arrErrores[] = "Debe diligenciar el campo N&uacute;mero de Radicado T&eacute;cnico";
+}
+
+// Validacion del Número de Radicado Financiero
+if( ( ! isset( $_POST['numRadicadoFinanciero'] ) ) or (trim( $_POST['numRadicadoFinanciero'] ) == "")  or (trim( $_POST['numRadicadoFinanciero'] ) == 0 ) ){
+	$arrErrores[] = "Debe diligenciar el campo N&uacute;mero de Radicado Financiero";
+}
+
+// =================================================== DATOS DE LA APROBACION ===============================================================
+
+// Validacion de campos si la opción Aprueba el Proyeto está activa
+if ( $_POST['bolAprobacion'] == 1 ){
+	// Validacion del Número de Acta
+	if( ( ! isset( $_POST['numActaAprobacion'] ) ) or (trim( $_POST['numActaAprobacion'] ) == "" ) or (trim( $_POST['numActaAprobacion'] ) == 0 )){
+		$arrErrores[] = "Debe diligenciar el campo N&uacute;mero de Acta";
+	}
+
+	// Validacion del Número de Resolución
+	if( ( ! isset( $_POST['numResolucionAprobacion'] ) ) or (trim( $_POST['numResolucionAprobacion'] ) == "" ) or (trim( $_POST['numResolucionAprobacion'] ) == 0 )) {
+		$arrErrores[] = "Debe diligenciar el campo N&uacute;mero de Resoluci&oacute;n";
+	}
+
+	// Validacion de la Fecha de Resolución
+	if( ( ! isset( $_POST['fchResolucionAprobacion'] ) ) or (trim( $_POST['fchResolucionAprobacion'] ) == "" ) ) {
+		$arrErrores[] = "Debe diligenciar el campo Fecha de Resoluci&oacute;n";
+	}
+}
+
+// Carga el formulario anteior para validacion del tipo de documento
+$seqProyecto = $_POST['seqProyectoEditar'];
+$claProyectoAnterior = new proyectoVivienda;
+$claProyectoAnterior->cargarProyectoVivienda($seqProyecto);
+
+/* * ********************************************************************************************************************
+ * SALVAR LOS CAMBIOS
+ * ******************************************************************************************************************** */
+$arrErrores = array();
+if (empty($arrErrores)) {
+
+	// Carga el formulario anteior para validacion del numero de formulario	
+	$claProyectoCambios = new ProyectoVivienda;
+	$arrProyectoOriginal = $claProyectoCambios->cargarProyectoVivienda($seqProyecto);
+	
+	//var_dump ($arrProyectoOriginal);
+
+	// si no hay errores salva los datos del formulario
+	//if (empty($claCiudadano->arrErrores)) {
+		$claProyecto = new ProyectoVivienda;
+
+		$claProyecto->numNitProyecto = 					$_POST['numNitProyecto'];
+		$claProyecto->txtNombreProyecto = 				strtoupper($_POST['txtNombreProyecto']);
+		$claProyecto->txtNombrePlanParcial = 			strtoupper($_POST['txtNombrePlanParcial']);
+		$claProyecto->seqTipoEsquema = 					$_POST['seqTipoEsquema'];
+		$claProyecto->seqPryTipoModalidad = 			$_POST['seqPryTipoModalidad'];
+		$claProyecto->txtNombreOperador = 				$_POST['txtNombreOperador'];
+		$claProyecto->seqOpv = 							$_POST['seqOpv'];
+		$claProyecto->seqTipoProyecto = 				$_POST['seqTipoProyecto'];
+		$claProyecto->seqTipoUrbanizacion = 			$_POST['seqTipoUrbanizacion'];
+		$claProyecto->seqTipoSolucion = 				$_POST['seqTipoSolucion'];
+		$claProyecto->txtDescripcionProyecto = 			$_POST['txtDescripcionProyecto'];
+		$claProyecto->bolDireccion =	 				$_POST['bolDireccion'];
+		$claProyecto->txtDireccion =		 			$_POST['txtDireccion'];
+		$claProyecto->seqLocalidad =		 			$_POST['seqLocalidad'];
+		$claProyecto->valNumeroSoluciones = 			$_POST['valNumeroSoluciones'];
+		$claProyecto->valMaximoSubsidio = 				$_POST['valMaximoSubsidio'];
+		$claProyecto->valCostoProyecto = 				$_POST['valCostoProyecto'];
+		$claProyecto->valAreaConstruida = 				$_POST['valAreaConstruida'];
+		$claProyecto->valAreaLote = 					$_POST['valAreaLote'];
+		$claProyecto->txtChipLote = 					$_POST['txtChipLote'];
+		$claProyecto->txtRegistroEnajenacion =			$_POST['txtRegistroEnajenacion'];
+		$claProyecto->bolEquipamientoComunal = 			$_POST['bolEquipamientoComunal'];
+		$claProyecto->txtDescEquipamientoComunal = 		$_POST['txtDescEquipamientoComunal'];
+		$claProyecto->txtNombreOferente = 				$_POST['txtNombreOferente'];
+		$claProyecto->numNitOferente = 					$_POST['numNitOferente'];
+		$claProyecto->numTelefonoOferente = 			$_POST['numTelefonoOferente'];
+		$claProyecto->numCelularOferente = 				$_POST['numCelularOferente'];
+		$claProyecto->txtCorreoOferente = 				$_POST['txtCorreoOferente'];
+		$claProyecto->txtRepresentanteLegalOferente = 	$_POST['txtRepresentanteLegalOferente'];
+		$claProyecto->numNitRepresentanteLegalOferente = $_POST['numNitRepresentanteLegalOferente'];
+		$claProyecto->numTelefonoRepresentanteLegalOferente =	$_POST['numTelefonoRepresentanteLegalOferente'];
+		$claProyecto->numCelularRepresentanteLegalOferente =	$_POST['numCelularRepresentanteLegalOferente'];
+		$claProyecto->txtCorreoRepresentanteLegalOferente =	$_POST['txtCorreoRepresentanteLegalOferente'];
+		$claProyecto->txtEntidadOferente1 =				$_POST['txtEntidadOferente1'];
+		$claProyecto->txtEntidadOferente2 =				$_POST['txtEntidadOferente2'];
+		$claProyecto->txtEntidadOferente3 =				$_POST['txtEntidadOferente3'];
+		$claProyecto->txtEntidadOferente4 =				$_POST['txtEntidadOferente4'];
+		$claProyecto->txtEntidadOferente5 =				$_POST['txtEntidadOferente5'];
+		$claProyecto->bolConstructor = 					$_POST['bolConstructor'];
+		$claProyecto->seqConstructor = 					$_POST['seqConstructor'];
+		$claProyecto->txtLicenciaUrbanismo = 			$_POST['txtLicenciaUrbanismo'];
+		$claProyecto->txtExpideLicenciaUrbanismo =		$_POST['txtExpideLicenciaUrbanismo'];
+		$claProyecto->fchLicenciaUrbanismo1 = 			$_POST['fchLicenciaUrbanismo1'];
+		$claProyecto->fchLicenciaUrbanismo2 = 			$_POST['fchLicenciaUrbanismo2'];
+		$claProyecto->fchLicenciaUrbanismo3 = 			$_POST['fchLicenciaUrbanismo3'];
+		$claProyecto->fchVigenciaLicenciaUrbanismo =	$_POST['fchVigenciaLicenciaUrbanismo'];
+		$claProyecto->fchEjecutoriaLicenciaUrbanismo =	$_POST['fchEjecutoriaLicenciaUrbanismo'];
+		$claProyecto->txtResEjecutoriaLicenciaUrbanismo = $_POST['txtResEjecutoriaLicenciaUrbanismo'];
+		$claProyecto->txtLicenciaConstruccion = 		$_POST['txtLicenciaConstruccion'];
+		$claProyecto->fchLicenciaConstruccion1 = 		$_POST['fchLicenciaConstruccion1'];
+		$claProyecto->fchLicenciaConstruccion2 = 		$_POST['fchLicenciaConstruccion2'];
+		$claProyecto->fchLicenciaConstruccion3 =		$_POST['fchLicenciaConstruccion3'];
+		$claProyecto->fchVigenciaLicenciaConstruccion = $_POST['fchVigenciaLicenciaConstruccion'];
+		$claProyecto->txtNombreInterventor = 			$_POST['txtNombreInterventor'];
+		$claProyecto->bolTipoPersonaInterventor = 		$_POST['bolTipoPersonaInterventor'];
+		$claProyecto->numCedulaInterventor = 			$_POST['numCedulaInterventor'];
+		$claProyecto->numTProfesionalInterventor = 		$_POST['numTProfesionalInterventor'];
+		$claProyecto->numNitInterventor =				$_POST['numNitInterventor'];
+
+		$claProyecto->numRadicadoJuridico =				$_POST['numRadicadoJuridico'];
+		$claProyecto->numRadicadoTecnico =				$_POST['numRadicadoTecnico'];
+		$claProyecto->numRadicadoFinanciero =			$_POST['numRadicadoFinanciero'];
+		$claProyecto->bolAprobacion =					$_POST['bolAprobacion'];
+		$claProyecto->numActaAprobacion =				$_POST['numActaAprobacion'];
+		$claProyecto->numResolucionAprobacion =			$_POST['numResolucionAprobacion'];
+		$claProyecto->fchResolucionAprobacion =			$_POST['fchResolucionAprobacion'];
+		$claProyecto->txtObservacionAprobacion =		$_POST['txtObservacionAprobacion'];
+		$claProyecto->seqPryEstadoProceso = 			$_POST['seqPryEstadoProceso'];
+		$claProyecto->bolActivo = 						$_POST['bolActivo'];
+		$claProyecto->fchUltimaActualizacion = 			$_POST['fchUltimaActualizacion'];
+
+		$claProyecto->editarProyectoVivienda($seqProyecto);
+
+	/*} else {
+		$arrErrores = $claCiudadano->arrErrores;
+	}*/
+
+	/********************************************************************************************************************
+	* CALCULO DE LOS CAMBIOS DEL FORMULARIO
+	******************************************************************************************************************* */
+	
+	/*$claProyectoCambios->arrProyectoVivienda = $arrHogarAnterior;
+	$claProyecto->arrProyectoVivienda = $arrHogarNuevo;*/
+
+	$claSeguimientoProyectos = new SeguimientoProyectos;
+	$txtCambios = $claSeguimientoProyectos->cambiosPostulacion($_POST['seqProyectoEditar'], $arrProyectoOriginal, $claProyecto);
+
+	/*echo "seqProyectoEditar: " . $_POST['seqProyectoEditar'] . "<br>";
+	pr ($claProyectoCambios);
+	echo "<br>";
+	pr ($claProyecto);
+	echo "<br>";
+	print_r ($txtcambios);*/
+
+	$_POST['seqGestion'] = ( $_POST['seqGestion'] == "" ) ? 17 : $_POST['seqGestion'];
+
+	$sql = "
+			INSERT INTO T_SEG_SEGUIMIENTO_PROYECTOS (
+				seqProyecto,
+				fchMovimiento,
+				seqUsuario,
+				txtComentario,
+				txtCambios,
+				seqGestion,
+				bolMostrar
+			) VALUES (
+				$seqProyecto,
+				now(),
+				" . $_SESSION['seqUsuario'] . ",
+				\"" . ereg_replace("\n", "", $_POST['txtComentario']) . "\",
+				\"" . ereg_replace("\"", "", $txtCambios) . "\",
+				" . $_POST['seqGestion'] . ",
+				1
+			)
+		";
+		//echo "SEGUIMIENTO ACTUALIZACION: ". $sql;
+
+	try {
+		$aptBd->execute($sql);
+		$seqSeguimiento = $aptBd->Insert_ID();
+	} catch (Exception $objError) {
+		$arrErrores[] = "El Proyecto se ha salvado pero no ha quedado registro de la actividad";
+	}
+} // fin if errores vacios	
+
+/* * *********************************************************************************************************************
+ * IMPRESION DE LOS MENSAJES
+ * ******************************************************************************************************************** */
+if (empty($arrErrores)) {
+	$arrMensajes[] = "El formulario se ha actualizado, Proyecto [ " . strtoupper($_POST['txtNombreProyecto']) . " ].<br>" . "El numero de registro es " . number_format($seqSeguimiento, 0, ".", ",") . ". Conserve este numero para referencia futura";
+
+	$txtEstilo = "msgOk";
+} else {
+	$arrMensajes = $arrErrores;
+	$txtEstilo = "msgError";
+}
+
+echo "<table cellpadding='0' cellspacing='0' border='0' width='100%' id='tablaMensajes' style='padding:5px'>";
+
+if (!empty($arrNotificaciones)) {
+	foreach ($arrNotificaciones as $txtMensaje) {
+		echo "<tr><td class='msgAlerta'><li>$txtMensaje</li></td></tr>";
+	}
+}
+
+foreach ($arrMensajes as $txtMensaje) {
+	echo "<tr><td class='$txtEstilo'><li>$txtMensaje</li></td></tr>";
+}
+echo "</table>";
+?>

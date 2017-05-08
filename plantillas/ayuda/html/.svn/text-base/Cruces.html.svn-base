@@ -1,0 +1,19 @@
+<article>
+    La pantalla se encuentra dividida en dos secciones:
+    <br>
+    <strong>Listado de Cruces</strong>: En este campo se muestran los cruces realizados 
+    que se han almacenado en el sistema.
+    <br>
+    <strong>Seleccione los estados para listar los hogares: </strong> 
+    en este espacio se permite la selecci&oacute;n m&uacute;ltiple de los estado seleccionados.
+    Cuando se selecciona una o m&aacute;s casillas van apareciendo listados los hogares que se encuentren en los
+    estados que se escogieron. Una vez cargada la tabla con los campos Documento, Nombre y Estado 
+    se puede marcar uno o todos los selectores.
+    <br>
+    existen tres botones que permiten las siguientes acciones para las casillas seleccionadas: 
+    <ul>
+        <li><ins>Exportar a Excel: </ins>Permite exportar la selecci&oacute;n a un archivo xls (Hoja de c&aacute;lculo de MS Excel) </li>
+        <li><ins>Exportar a PDF: </ins>Permite exportar la selecci&oacute;n a un archivo pdf (Portable Format Document)</li>
+        <li><ins>Cargar Cruce</ins></li>
+    </ul>
+</article>

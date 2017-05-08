@@ -1,0 +1,462 @@
+<?php
+	/**
+	* CONFIGURACION DEL REPORTEADOR
+	**/
+
+// DEFINICION DE CAMPOS ===========================================================================================================================
+	
+	$arrCampos["txtNombreProyecto"]["nombre"] 					= "Nombre del Proyecto";
+	$arrCampos["txtNombrePlanParcial"]["nombre"] 				= "Nombre del Plan Parcial";
+	$arrCampos["seqTipoEsquema"]["nombre"] 						= "Tipo de Esquema";
+	$arrCampos["seqPryTipoModalidad"]["nombre"] 				= "Tipo de Modalidad";
+	$arrCampos["seqOpv"]["nombre"] 								= "Nombre de la OPV";
+	$arrCampos["seqTipoProyecto"]["nombre"] 					= "Tipo de Proyecto";
+	$arrCampos["txtDescripcionProyecto"]["nombre"] 				= "Descripción del Proyecto";
+	$arrCampos["seqTipoUrbanizacion"]["nombre"] 				= "Tipo de Urbanización";
+	$arrCampos["seqTipoSolucion"]["nombre"] 					= "Tipo de Solución";
+	$arrCampos["seqLocalidad"]["nombre"] 						= "Localidad";
+	$arrCampos["bolDireccion"]["nombre"] 						= "Se conoce la dirección?";
+	$arrCampos["txtDireccion"]["nombre"] 						= "Dirección";
+	$arrCampos["valNumeroSoluciones"]["nombre"] 				= "Número Soluciones";
+	$arrCampos["valAreaConstruida"]["nombre"] 					= "Area a construir";
+	$arrCampos["valMaximoSubsidio"]["nombre"] 					= "Valor Máximo a subsidiar";
+	$arrCampos["valAreaLote"]["nombre"] 						= "Area Lote";
+	$arrCampos["valCostoProyecto"]["nombre"] 					= "Costo Estimado del Proyecto";
+	$arrCampos["txtChipLote"]["nombre"] 						= "Chip Lote";
+	$arrCampos["txtRegistroEnajenacion"]["nombre"] 				= "Registro de Enajenación";
+	$arrCampos["bolEquipamientoComunal"]["nombre"] 				= "Tiene Equipamiento Comunal?";
+	$arrCampos["txtDescEquipamientoComunal"]["nombre"] 			= "Descripción Equipamiento Comunal";
+	$arrCampos["bolConstructor"]["nombre"] 						= "El oferente es constructor?";
+	$arrCampos["seqConstructor"]["nombre"] 						= "Constructor";
+	$arrCampos["txtLicenciaUrbanismo"]["nombre"] 				= "Licencia de Urbanismo";
+	$arrCampos["txtExpideLicenciaUrbanismo"]["nombre"] 			= "Entidad expide Licencia de Urbanismo";
+	$arrCampos["fchLicenciaUrbanismo1"]["nombre"] 				= "Fecha de Licencia de Urbanismo";
+	$arrCampos["fchVigenciaLicenciaUrbanismo"]["nombre"] 		= "Fecha de vigencia de Licencia de Urbanismo";
+	$arrCampos["fchEjecutoriaLicenciaUrbanismo"]["nombre"] 		= "Fecha ejecutoria de Licencia de Urbanismo";
+	$arrCampos["txtResEjecutoriaLicenciaUrbanismo"]["nombre"] 	= "Resolución ejecutoria de Licencia de Urbanismo";
+	$arrCampos["txtLicenciaConstruccion"]["nombre"] 			= "Licencia de Construcción";
+	$arrCampos["fchLicenciaConstruccion1"]["nombre"] 			= "Fecha de Licencia de Construcción";
+	$arrCampos["fchVigenciaLicenciaConstruccion"]["nombre"] 	= "Fecha de vigencia de Licencia de Construcción";
+	$arrCampos["txtNombreInterventor"]["nombre"] 				= "Nombre del Interventor";
+	$arrCampos["bolTipoPersonaInterventor"]["nombre"] 			= "Tipo de Persona Interventor";
+	$arrCampos["numNitInterventor"]["nombre"] 					= "NIT del Interventor";
+	$arrCampos["numCedulaInterventor"]["nombre"] 				= "Cédula del Interventor";
+	$arrCampos["numTProfesionalInterventor"]["nombre"] 			= "Tarjeta Profesional del Interventor";
+	$arrCampos["fchInscripcion"]["nombre"] 						= "Fecha de Inscripcion";
+	$arrCampos["fchUltimaActualizacion"]["nombre"] 				= "Fecha de Ultima Actualización";
+	$arrCampos["seqPryEstadoProceso"]["nombre"] 				= "Estado de Proceso";
+	$arrCampos["seqUsuario"]["nombre"] 							= "Usuario Inscripción";
+	
+	$arrCampos["txtNombreOferente"]["nombre"] 						= "Nombre del Oferente";
+	$arrCampos["numNitOferente"]["nombre"] 							= "NIT del Oferente";
+	$arrCampos["numTelefonoOferente"]["nombre"] 					= "Teléfono Fijo de Contacto";
+	$arrCampos["numCelularOferente"]["nombre"] 						= "Celular de Contacto";
+	$arrCampos["txtCorreoOferente"]["nombre"] 						= "Correo de Contacto";
+	$arrCampos["txtRepresentanteLegalOferente"]["nombre"] 			= "Representante Legal";
+	$arrCampos["numNitRepresentanteLegalOferente"]["nombre"] 		= "NIT Representante Legal";
+	$arrCampos["numTelefonoRepresentanteLegalOferente"]["nombre"] 	= "Teléfono Fijo del Representante Legal";
+	$arrCampos["numCelularRepresentanteLegalOferente"]["nombre"] 	= "Celular del Representante Legal";
+	$arrCampos["txtCorreoRepresentanteLegalOferente"]["nombre"] 	= "Correo del Representante Legal";
+	$arrCampos["txtEntidadOferente1"]["nombre"] 					= "Entidad asociada 1";
+	$arrCampos["txtEntidadOferente2"]["nombre"] 					= "Entidad asociada 2";
+	$arrCampos["txtEntidadOferente3"]["nombre"] 					= "Entidad asociada 3";
+	$arrCampos["txtEntidadOferente4"]["nombre"] 					= "Entidad asociada 4";
+	$arrCampos["txtEntidadOferente5"]["nombre"] 					= "Entidad asociada 5";
+
+	$arrCampos["numRadicadoJuridico"]["nombre"] 			= "Número de Radicado Jurídico";
+	$arrCampos["numRadicadoTecnico"]["nombre"] 				= "Número de Radicado Técnico";
+	$arrCampos["numRadicadoFinanciero"]["nombre"] 			= "Número de Radicado Financiero";
+	$arrCampos["bolAprobacion"]["nombre"] 					= "Se aprueba Proyecto";
+	$arrCampos["numActaAprobacion"]["nombre"] 				= "Número de Acta de Aprobación";
+	$arrCampos["numResolucionAprobacion"]["nombre"] 		= "Número de Resolución de Aprobación";
+	$arrCampos["fchResolucionAprobacion"]["nombre"] 		= "Fecha de Resolución de Aprobación";
+	$arrCampos["txtObservacionAprobacion"]["nombre"] 		= "Observación de Resolución de Aprobación";
+	
+	
+
+// DEFINICION DE TABLA ORIGEN ======================================================================================================================
+	
+	$arrCampos["txtNombreProyecto"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["txtNombrePlanParcial"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["seqTipoEsquema"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["seqPryTipoModalidad"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["seqOpv"]["tablaOrigen"] 							= "T_PRY_PROYECTO";
+	$arrCampos["seqTipoProyecto"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["txtDescripcionProyecto"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["seqTipoUrbanizacion"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["seqTipoSolucion"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["seqLocalidad"]["tablaOrigen"] 						= "T_PRY_PROYECTO";
+	$arrCampos["bolDireccion"]["tablaOrigen"] 						= "T_PRY_PROYECTO";
+	$arrCampos["txtDireccion"]["tablaOrigen"] 						= "T_PRY_PROYECTO";
+	$arrCampos["valNumeroSoluciones"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["valAreaConstruida"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["valMaximoSubsidio"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["valAreaLote"]["tablaOrigen"] 						= "T_PRY_PROYECTO";
+	$arrCampos["valCostoProyecto"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["txtChipLote"]["tablaOrigen"] 						= "T_PRY_PROYECTO";
+	$arrCampos["txtRegistroEnajenacion"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["bolEquipamientoComunal"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["txtDescEquipamientoComunal"]["tablaOrigen"] 		= "T_PRY_PROYECTO";
+	$arrCampos["bolConstructor"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["seqConstructor"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["txtLicenciaUrbanismo"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["txtExpideLicenciaUrbanismo"]["tablaOrigen"] 		= "T_PRY_PROYECTO";
+	$arrCampos["fchLicenciaUrbanismo1"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["fchVigenciaLicenciaUrbanismo"]["tablaOrigen"] 		= "T_PRY_PROYECTO";
+	$arrCampos["fchEjecutoriaLicenciaUrbanismo"]["tablaOrigen"] 	= "T_PRY_PROYECTO";
+	$arrCampos["txtResEjecutoriaLicenciaUrbanismo"]["tablaOrigen"] 	= "T_PRY_PROYECTO";
+	$arrCampos["txtLicenciaConstruccion"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["fchLicenciaConstruccion1"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["fchVigenciaLicenciaConstruccion"]["tablaOrigen"] 	= "T_PRY_PROYECTO";
+	$arrCampos["txtNombreInterventor"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["bolTipoPersonaInterventor"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["numNitInterventor"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["numCedulaInterventor"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["numTProfesionalInterventor"]["tablaOrigen"] 		= "T_PRY_PROYECTO";
+	$arrCampos["fchInscripcion"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["fchUltimaActualizacion"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["seqPryEstadoProceso"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["seqUsuario"]["tablaOrigen"] 						= "T_PRY_PROYECTO";
+
+	$arrCampos["txtNombreOferente"]["tablaOrigen"] 						= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["numNitOferente"]["tablaOrigen"] 						= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["numTelefonoOferente"]["tablaOrigen"] 					= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["numCelularOferente"]["tablaOrigen"] 					= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["txtCorreoOferente"]["tablaOrigen"] 						= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["txtRepresentanteLegalOferente"]["tablaOrigen"] 			= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["numNitRepresentanteLegalOferente"]["tablaOrigen"] 		= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["numTelefonoRepresentanteLegalOferente"]["tablaOrigen"] 	= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["numCelularRepresentanteLegalOferente"]["tablaOrigen"] 	= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["txtCorreoRepresentanteLegalOferente"]["tablaOrigen"] 	= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["txtEntidadOferente1"]["tablaOrigen"] 					= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["txtEntidadOferente2"]["tablaOrigen"] 					= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["txtEntidadOferente3"]["tablaOrigen"] 					= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["txtEntidadOferente4"]["tablaOrigen"] 					= "T_PRY_ENTIDAD_OFERENTE";
+	$arrCampos["txtEntidadOferente5"]["tablaOrigen"] 					= "T_PRY_ENTIDAD_OFERENTE";
+
+	$arrCampos["numRadicadoJuridico"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["numRadicadoTecnico"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["numRadicadoFinanciero"]["tablaOrigen"] 			= "T_PRY_PROYECTO";
+	$arrCampos["bolAprobacion"]["tablaOrigen"] 					= "T_PRY_PROYECTO";
+	$arrCampos["numActaAprobacion"]["tablaOrigen"] 				= "T_PRY_PROYECTO";
+	$arrCampos["numResolucionAprobacion"]["tablaOrigen"] 		= "T_PRY_PROYECTO";
+	$arrCampos["fchResolucionAprobacion"]["tablaOrigen"] 		= "T_PRY_PROYECTO";
+	$arrCampos["txtObservacionAprobacion"]["tablaOrigen"] 		= "T_PRY_PROYECTO";
+
+// DEFINICION DE ALIAS DE TABLAS ===================================================================================================================
+
+	$arrCampos["txtNombreProyecto"]["aliasOrigen"] 					= "pry";
+	$arrCampos["txtNombrePlanParcial"]["aliasOrigen"] 				= "pry";
+	$arrCampos["seqTipoEsquema"]["aliasOrigen"] 					= "pry";
+	$arrCampos["seqPryTipoModalidad"]["aliasOrigen"] 				= "pry";
+	$arrCampos["seqOpv"]["aliasOrigen"] 							= "pry";
+	$arrCampos["seqTipoProyecto"]["aliasOrigen"] 					= "pry";
+	$arrCampos["txtDescripcionProyecto"]["aliasOrigen"] 			= "pry";
+	$arrCampos["seqTipoUrbanizacion"]["aliasOrigen"] 				= "pry";
+	$arrCampos["seqTipoSolucion"]["aliasOrigen"] 					= "pry";
+	$arrCampos["seqLocalidad"]["aliasOrigen"] 						= "pry";
+	$arrCampos["bolDireccion"]["aliasOrigen"] 						= "pry";
+	$arrCampos["txtDireccion"]["aliasOrigen"] 						= "pry";
+	$arrCampos["valNumeroSoluciones"]["aliasOrigen"] 				= "pry";
+	$arrCampos["valAreaConstruida"]["aliasOrigen"] 					= "pry";
+	$arrCampos["valMaximoSubsidio"]["aliasOrigen"] 					= "pry";
+	$arrCampos["valAreaLote"]["aliasOrigen"] 						= "pry";
+	$arrCampos["valCostoProyecto"]["aliasOrigen"] 					= "pry";
+	$arrCampos["txtChipLote"]["aliasOrigen"] 						= "pry";
+	$arrCampos["txtRegistroEnajenacion"]["aliasOrigen"] 			= "pry";
+	$arrCampos["bolEquipamientoComunal"]["aliasOrigen"] 			= "pry";
+	$arrCampos["txtDescEquipamientoComunal"]["aliasOrigen"] 		= "pry";
+	$arrCampos["bolConstructor"]["aliasOrigen"] 					= "pry";
+	$arrCampos["seqConstructor"]["aliasOrigen"] 					= "pry";
+	$arrCampos["txtLicenciaUrbanismo"]["aliasOrigen"] 				= "pry";
+	$arrCampos["txtExpideLicenciaUrbanismo"]["aliasOrigen"] 		= "pry";
+	$arrCampos["fchLicenciaUrbanismo1"]["aliasOrigen"] 				= "pry";
+	$arrCampos["fchVigenciaLicenciaUrbanismo"]["aliasOrigen"] 		= "pry";
+	$arrCampos["fchEjecutoriaLicenciaUrbanismo"]["aliasOrigen"] 	= "pry";
+	$arrCampos["txtResEjecutoriaLicenciaUrbanismo"]["aliasOrigen"] 	= "pry";
+	$arrCampos["txtLicenciaConstruccion"]["aliasOrigen"] 			= "pry";
+	$arrCampos["fchLicenciaConstruccion1"]["aliasOrigen"] 			= "pry";
+	$arrCampos["fchVigenciaLicenciaConstruccion"]["aliasOrigen"] 	= "pry";
+	$arrCampos["txtNombreInterventor"]["aliasOrigen"] 				= "pry";
+	$arrCampos["bolTipoPersonaInterventor"]["aliasOrigen"] 			= "pry";
+	$arrCampos["numNitInterventor"]["aliasOrigen"] 					= "pry";
+	$arrCampos["numCedulaInterventor"]["aliasOrigen"] 				= "pry";
+	$arrCampos["numTProfesionalInterventor"]["aliasOrigen"] 		= "pry";
+	$arrCampos["fchInscripcion"]["aliasOrigen"] 					= "pry";
+	$arrCampos["fchUltimaActualizacion"]["aliasOrigen"] 			= "pry";
+	$arrCampos["seqPryEstadoProceso"]["aliasOrigen"] 				= "pry";
+	$arrCampos["seqUsuario"]["aliasOrigen"] 						= "pry";
+
+	$arrCampos["txtNombreOferente"]["aliasOrigen"] 						= "ofe";
+	$arrCampos["numNitOferente"]["aliasOrigen"] 						= "ofe";
+	$arrCampos["numTelefonoOferente"]["aliasOrigen"] 					= "ofe";
+	$arrCampos["numCelularOferente"]["aliasOrigen"] 					= "ofe";
+	$arrCampos["txtCorreoOferente"]["aliasOrigen"] 						= "ofe";
+	$arrCampos["txtRepresentanteLegalOferente"]["aliasOrigen"] 			= "ofe";
+	$arrCampos["numNitRepresentanteLegalOferente"]["aliasOrigen"] 		= "ofe";
+	$arrCampos["numTelefonoRepresentanteLegalOferente"]["aliasOrigen"] 	= "ofe";
+	$arrCampos["numCelularRepresentanteLegalOferente"]["aliasOrigen"] 	= "ofe";
+	$arrCampos["txtCorreoRepresentanteLegalOferente"]["aliasOrigen"] 	= "ofe";
+	$arrCampos["txtEntidadOferente1"]["aliasOrigen"] 					= "ofe";
+	$arrCampos["txtEntidadOferente2"]["aliasOrigen"] 					= "ofe";
+	$arrCampos["txtEntidadOferente3"]["aliasOrigen"] 					= "ofe";
+	$arrCampos["txtEntidadOferente4"]["aliasOrigen"] 					= "ofe";
+	$arrCampos["txtEntidadOferente5"]["aliasOrigen"] 					= "ofe";
+	
+	$arrCampos["numRadicadoJuridico"]["aliasOrigen"] 		= "pry";
+	$arrCampos["numRadicadoTecnico"]["aliasOrigen"] 		= "pry";
+	$arrCampos["numRadicadoFinanciero"]["aliasOrigen"] 		= "pry";
+	$arrCampos["bolAprobacion"]["aliasOrigen"] 				= "pry";
+	$arrCampos["numActaAprobacion"]["aliasOrigen"] 			= "pry";
+	$arrCampos["numResolucionAprobacion"]["aliasOrigen"] 	= "pry";
+	$arrCampos["fchResolucionAprobacion"]["aliasOrigen"] 	= "pry";
+	$arrCampos["txtObservacionAprobacion"]["aliasOrigen"] 	= "pry";
+
+// DEFINICION DE TIPOS DE DATOS ===================================================================================================================	
+
+	$arrCampos["txtNombreProyecto"]["tipoDato"] 				= "texto";
+	$arrCampos["txtNombrePlanParcial"]["tipoDato"] 				= "texto";
+	$arrCampos["seqTipoEsquema"]["tipoDato"] 					= "externo";
+	$arrCampos["seqPryTipoModalidad"]["tipoDato"] 				= "externo";
+	$arrCampos["seqOpv"]["tipoDato"] 							= "externo";
+	$arrCampos["seqTipoProyecto"]["tipoDato"] 					= "externo";
+	$arrCampos["txtDescripcionProyecto"]["tipoDato"] 			= "texto";
+	$arrCampos["seqTipoUrbanizacion"]["tipoDato"] 				= "externo";
+	$arrCampos["seqTipoSolucion"]["tipoDato"] 					= "externo";
+	$arrCampos["seqLocalidad"]["tipoDato"] 						= "externo";
+	$arrCampos["bolDireccion"]["tipoDato"] 						= "numero";
+	$arrCampos["txtDireccion"]["tipoDato"] 						= "texto";
+	$arrCampos["valNumeroSoluciones"]["tipoDato"] 				= "numero";
+	$arrCampos["valAreaConstruida"]["tipoDato"] 				= "numero";
+	$arrCampos["valMaximoSubsidio"]["tipoDato"] 				= "numero";
+	$arrCampos["valAreaLote"]["tipoDato"] 						= "numero";
+	$arrCampos["valCostoProyecto"]["tipoDato"] 					= "numero";
+	$arrCampos["txtChipLote"]["tipoDato"] 						= "texto";
+	$arrCampos["txtRegistroEnajenacion"]["tipoDato"] 			= "texto";
+	$arrCampos["bolEquipamientoComunal"]["tipoDato"] 			= "numero";
+	$arrCampos["txtDescEquipamientoComunal"]["tipoDato"] 		= "texto";
+	$arrCampos["bolConstructor"]["tipoDato"] 					= "numero";
+	$arrCampos["seqConstructor"]["tipoDato"] 					= "externo";
+	$arrCampos["txtLicenciaUrbanismo"]["tipoDato"] 				= "texto";
+	$arrCampos["txtExpideLicenciaUrbanismo"]["tipoDato"] 		= "texto";
+	$arrCampos["fchLicenciaUrbanismo1"]["tipoDato"] 			= "fecha";
+	$arrCampos["fchVigenciaLicenciaUrbanismo"]["tipoDato"] 		= "fecha";
+	$arrCampos["fchEjecutoriaLicenciaUrbanismo"]["tipoDato"] 	= "fecha";
+	$arrCampos["txtResEjecutoriaLicenciaUrbanismo"]["tipoDato"] = "texto";
+	$arrCampos["txtLicenciaConstruccion"]["tipoDato"] 			= "texto";
+	$arrCampos["fchLicenciaConstruccion1"]["tipoDato"] 			= "fecha";
+	$arrCampos["fchVigenciaLicenciaConstruccion"]["tipoDato"] 	= "fecha";
+	$arrCampos["txtNombreInterventor"]["tipoDato"] 				= "texto";
+	$arrCampos["bolTipoPersonaInterventor"]["tipoDato"] 		= "numero";
+	$arrCampos["numNitInterventor"]["tipoDato"] 				= "numero";
+	$arrCampos["numCedulaInterventor"]["tipoDato"] 				= "numero";
+	$arrCampos["numTProfesionalInterventor"]["tipoDato"] 		= "numero";
+	$arrCampos["fchInscripcion"]["tipoDato"] 					= "fecha";
+	$arrCampos["fchUltimaActualizacion"]["tipoDato"] 			= "fecha";
+	$arrCampos["seqPryEstadoProceso"]["tipoDato"] 				= "externo";
+	$arrCampos["seqUsuario"]["tipoDato"] 						= "externo";
+
+	$arrCampos["txtNombreOferente"]["tipoDato"] 						= "texto";
+	$arrCampos["numNitOferente"]["tipoDato"] 							= "numero";
+	$arrCampos["numTelefonoOferente"]["tipoDato"] 						= "numero";
+	$arrCampos["numCelularOferente"]["tipoDato"] 						= "numero";
+	$arrCampos["txtCorreoOferente"]["tipoDato"] 						= "texto";
+	$arrCampos["txtRepresentanteLegalOferente"]["tipoDato"] 			= "texto";
+	$arrCampos["numNitRepresentanteLegalOferente"]["tipoDato"] 			= "numero";
+	$arrCampos["numTelefonoRepresentanteLegalOferente"]["tipoDato"] 	= "numero";
+	$arrCampos["numCelularRepresentanteLegalOferente"]["tipoDato"] 		= "numero";
+	$arrCampos["txtCorreoRepresentanteLegalOferente"]["tipoDato"] 		= "texto";
+	$arrCampos["txtEntidadOferente1"]["tipoDato"] 						= "texto";
+	$arrCampos["txtEntidadOferente2"]["tipoDato"] 						= "texto";
+	$arrCampos["txtEntidadOferente3"]["tipoDato"] 						= "texto";
+	$arrCampos["txtEntidadOferente4"]["tipoDato"] 						= "texto";
+	$arrCampos["txtEntidadOferente5"]["tipoDato"] 						= "texto";
+	
+	$arrCampos["numRadicadoJuridico"]["tipoDato"] 			= "numero";
+	$arrCampos["numRadicadoTecnico"]["tipoDato"] 			= "numero";
+	$arrCampos["numRadicadoFinanciero"]["tipoDato"] 		= "numero";
+	$arrCampos["bolAprobacion"]["tipoDato"] 				= "numero";
+	$arrCampos["numActaAprobacion"]["tipoDato"] 			= "numero";	
+	$arrCampos["numResolucionAprobacion"]["tipoDato"] 		= "numero";
+	$arrCampos["fchResolucionAprobacion"]["tipoDato"] 		= "fecha";
+	$arrCampos["txtObservacionAprobacion"]["tipoDato"] 		= "texto";
+
+// DEFINICION DE TABLAS JOIN ======================================================================================================================
+	
+	$arrCampos["seqTipoEsquema"]["tablaJoin"] 			= "T_PRY_TIPO_ESQUEMA";
+	$arrCampos["seqPryTipoModalidad"]["tablaJoin"] 		= "T_PRY_TIPO_MODALIDAD";
+	$arrCampos["seqOpv"]["tablaJoin"] 					= "T_PRY_OPV";
+	$arrCampos["seqTipoProyecto"]["tablaJoin"] 			= "T_PRY_TIPO_PROYECTO";
+	$arrCampos["seqTipoUrbanizacion"]["tablaJoin"] 		= "T_PRY_TIPO_URBANIZACION";
+	$arrCampos["seqTipoSolucion"]["tablaJoin"] 			= "T_PRY_TIPO_SOLUCION";
+	$arrCampos["seqLocalidad"]["tablaJoin"] 			= "T_FRM_LOCALIDAD";
+	$arrCampos["seqConstructor"]["tablaJoin"] 			= "T_PRY_CONSTRUCTOR";
+	$arrCampos["seqPryEstadoProceso"]["tablaJoin"] 		= "T_PRY_ESTADO_PROCESO";
+	$arrCampos["seqUsuario"]["tablaJoin"] 				= "T_COR_USUARIO";
+
+	$arrCampos["seqTipoEsquema"]["aliasJoin"] 			= "teq";
+	$arrCampos["seqPryTipoModalidad"]["aliasJoin"] 		= "tmd";
+	$arrCampos["seqOpv"]["aliasJoin"] 					= "opv";
+	$arrCampos["seqTipoProyecto"]["aliasJoin"] 			= "tpy";
+	$arrCampos["seqTipoUrbanizacion"]["aliasJoin"] 		= "tur";
+	$arrCampos["seqTipoSolucion"]["aliasJoin"] 			= "tsl";
+	$arrCampos["seqLocalidad"]["aliasJoin"] 			= "loc";
+	$arrCampos["seqConstructor"]["aliasJoin"] 			= "con";
+	$arrCampos["seqPryEstadoProceso"]["aliasJoin"] 		= "est";
+	$arrCampos["seqUsuario"]["aliasJoin"] 				= "usu";
+
+// DEFINICION DE CAMPOS JOIN ======================================================================================================================	
+
+	$arrCampos["seqTipoEsquema"]["campoJoin"] 			= "seqTipoEsquema";
+	$arrCampos["seqPryTipoModalidad"]["campoJoin"] 		= "seqPryTipoModalidad";
+	$arrCampos["seqOpv"]["campoJoin"] 					= "seqOpv";
+	$arrCampos["seqTipoProyecto"]["campoJoin"] 			= "seqTipoProyecto";
+	$arrCampos["seqTipoUrbanizacion"]["campoJoin"] 		= "seqTipoUrbanizacion";
+	$arrCampos["seqTipoSolucion"]["campoJoin"] 			= "seqTipoSolucion";
+	$arrCampos["seqLocalidad"]["campoJoin"] 			= "seqLocalidad";
+	$arrCampos["seqConstructor"]["campoJoin"] 			= "seqConstructor";
+	$arrCampos["seqPryEstadoProceso"]["campoJoin"] 		= "seqPryEstadoProceso";
+	$arrCampos["seqUsuario"]["campoJoin"] 				= "seqUsuario";
+
+	$arrCampos["seqTipoEsquema"]["selectJoin"] 			= "txtTipoEsquema";
+	$arrCampos["seqPryTipoModalidad"]["selectJoin"] 	= "txtPryTipoModalidad";
+	$arrCampos["seqOpv"]["selectJoin"] 					= "txtNombreOpv";
+	$arrCampos["seqTipoProyecto"]["selectJoin"] 		= "txtTipoProyecto";
+	$arrCampos["seqTipoUrbanizacion"]["selectJoin"] 	= "txtTipoUrbanizacion";
+	$arrCampos["seqTipoSolucion"]["selectJoin"] 		= "txtTipoSolucion";
+	$arrCampos["seqLocalidad"]["selectJoin"] 			= "txtLocalidad";
+	$arrCampos["seqConstructor"]["selectJoin"] 			= "txtNombreConstructor";
+	$arrCampos["seqPryEstadoProceso"]["selectJoin"] 	= "txtPryEstadoProceso";
+	$arrCampos["seqUsuario"]["selectEspecial"] 			= "SELECT seqUsuario, UPPER( CONCAT( usu.txtNombre , ' ' , usu.txtApellido ) ) as txtUSuario
+															FROM T_COR_USUARIO usu
+															ORDER BY usu.seqUsuario";
+	
+	$arrCriterios['numero'][1]['texto'] = "Mayor o Igual";
+	$arrCriterios['numero'][1]['valor'] = ">=";
+	$arrCriterios['numero'][2]['texto'] = "Mayor";
+	$arrCriterios['numero'][2]['valor'] = ">";
+	$arrCriterios['numero'][3]['texto'] = "Igual";
+	$arrCriterios['numero'][3]['valor'] = "=";
+	$arrCriterios['numero'][4]['texto'] = "Menor o Igual";
+	$arrCriterios['numero'][4]['valor'] = "<=";
+	$arrCriterios['numero'][5]['texto'] = "Menor";
+	$arrCriterios['numero'][5]['valor'] = "<";
+
+	$arrCriterios['texto'][1]['texto'] = "Inicia Con";
+	$arrCriterios['texto'][1]['valor'] = "inicia";
+	$arrCriterios['texto'][2]['texto'] = "Termina Con";
+	$arrCriterios['texto'][2]['valor'] = "termina";
+	$arrCriterios['texto'][3]['texto'] = "Contiene";
+	$arrCriterios['texto'][3]['valor'] = "contiene";
+	$arrCriterios['texto'][4]['texto'] = "Igual";
+	$arrCriterios['texto'][4]['valor'] = "igual";
+
+	$arrCriterios['fecha'][1]['texto'] = "Mayor o Igual";
+	$arrCriterios['fecha'][1]['valor'] = ">=";
+	$arrCriterios['fecha'][2]['texto'] = "Mayor";
+	$arrCriterios['fecha'][2]['valor'] = ">";
+	$arrCriterios['fecha'][3]['texto'] = "Igual";
+	$arrCriterios['fecha'][3]['valor'] = "=";
+	$arrCriterios['fecha'][4]['texto'] = "Menor o Igual";
+	$arrCriterios['fecha'][4]['valor'] = "<=";
+	$arrCriterios['fecha'][5]['texto'] = "Menor";
+	$arrCriterios['fecha'][5]['valor'] = "<";
+
+	$arrCriterios['booleano'][1]['texto'] = "Igual";
+	$arrCriterios['booleano'][1]['valor'] = "=";
+
+	$arrCriterios['fechahora'][1]['texto'] = "Mayor o Igual";
+	$arrCriterios['fechahora'][1]['valor'] = ">=";
+	$arrCriterios['fechahora'][1]['hora'] = "";
+	$arrCriterios['fechahora'][2]['texto'] = "Mayor";
+	$arrCriterios['fechahora'][2]['valor'] = ">";
+	$arrCriterios['fechahora'][2]['hora'] = "00:00:00";
+	$arrCriterios['fechahora'][3]['texto'] = "Igual";
+	$arrCriterios['fechahora'][3]['valor'] = "=";
+	$arrCriterios['fechahora'][3]['hora'] = "";
+	$arrCriterios['fechahora'][4]['texto'] = "Menor o Igual";
+	$arrCriterios['fechahora'][4]['valor'] = "<=";
+	$arrCriterios['fechahora'][4]['hora'] = "";
+	$arrCriterios['fechahora'][5]['texto'] = "Menor";
+	$arrCriterios['fechahora'][5]['valor'] = "<";
+	$arrCriterios['fechahora'][5]['hora'] = "23:59:59";
+
+	$arrCriterios['externo'][1]['texto'] = "Igual";
+	$arrCriterios['externo'][1]['valor'] = "=";
+
+	/*
+	 * GRUPOS DE CAMPOS
+	 */
+
+	$arrCamposGrupos = array( );
+
+	$arrTemporalGrupo = &$arrCamposGrupos["Datos del Proyecto"];
+	$arrTemporalGrupo["txtNombreProyecto"]					= $arrCampos["txtNombreProyecto"]["nombre"];
+	$arrTemporalGrupo["txtNombrePlanParcial"] 				= $arrCampos["txtNombrePlanParcial"]["nombre"];
+	$arrTemporalGrupo["seqTipoEsquema"] 					= $arrCampos["seqTipoEsquema"]["nombre"];
+	$arrTemporalGrupo["seqPryTipoModalidad"] 				= $arrCampos["seqPryTipoModalidad"]["nombre"];
+	$arrTemporalGrupo["seqOpv"] 							= $arrCampos["seqOpv"]["nombre"];
+	$arrTemporalGrupo["seqTipoProyecto"] 					= $arrCampos["seqTipoProyecto"]["nombre"];
+	$arrTemporalGrupo["txtDescripcionProyecto"] 			= $arrCampos["txtDescripcionProyecto"]["nombre"];
+	$arrTemporalGrupo["seqTipoUrbanizacion"] 				= $arrCampos["seqTipoUrbanizacion"]["nombre"];
+	$arrTemporalGrupo["seqTipoSolucion"] 					= $arrCampos["seqTipoSolucion"]["nombre"];
+	$arrTemporalGrupo["seqLocalidad"] 						= $arrCampos["seqLocalidad"]["nombre"];
+	$arrTemporalGrupo["bolDireccion"] 						= $arrCampos["bolDireccion"]["nombre"];
+	$arrTemporalGrupo["txtDireccion"] 						= $arrCampos["txtDireccion"]["nombre"];
+	$arrTemporalGrupo["valNumeroSoluciones"] 				= $arrCampos["valNumeroSoluciones"]["nombre"];
+	$arrTemporalGrupo["valAreaConstruida"] 					= $arrCampos["valAreaConstruida"]["nombre"];
+	$arrTemporalGrupo["valMaximoSubsidio"] 					= $arrCampos["valMaximoSubsidio"]["nombre"];
+	$arrTemporalGrupo["valAreaLote"] 						= $arrCampos["valAreaLote"]["nombre"];
+	$arrTemporalGrupo["valCostoProyecto"] 					= $arrCampos["valCostoProyecto"]["nombre"];
+	$arrTemporalGrupo["txtChipLote"] 						= $arrCampos["txtChipLote"]["nombre"];
+	$arrTemporalGrupo["txtRegistroEnajenacion"] 			= $arrCampos["txtRegistroEnajenacion"]["nombre"];
+	$arrTemporalGrupo["bolEquipamientoComunal"] 			= $arrCampos["bolEquipamientoComunal"]["nombre"];
+	$arrTemporalGrupo["txtDescEquipamientoComunal"] 		= $arrCampos["txtDescEquipamientoComunal"]["nombre"];
+	$arrTemporalGrupo["bolConstructor"] 					= $arrCampos["bolConstructor"]["nombre"];
+	$arrTemporalGrupo["seqConstructor"] 					= $arrCampos["seqConstructor"]["nombre"];
+	$arrTemporalGrupo["txtLicenciaUrbanismo"] 				= $arrCampos["txtLicenciaUrbanismo"]["nombre"];
+	$arrTemporalGrupo["txtExpideLicenciaUrbanismo"] 		= $arrCampos["txtExpideLicenciaUrbanismo"]["nombre"];
+	$arrTemporalGrupo["fchLicenciaUrbanismo1"] 				= $arrCampos["fchLicenciaUrbanismo1"]["nombre"];
+	$arrTemporalGrupo["fchVigenciaLicenciaUrbanismo"] 		= $arrCampos["fchVigenciaLicenciaUrbanismo"]["nombre"];
+	$arrTemporalGrupo["fchEjecutoriaLicenciaUrbanismo"] 	= $arrCampos["fchEjecutoriaLicenciaUrbanismo"]["nombre"];
+	$arrTemporalGrupo["txtResEjecutoriaLicenciaUrbanismo"] 	= $arrCampos["txtResEjecutoriaLicenciaUrbanismo"]["nombre"];
+	$arrTemporalGrupo["txtLicenciaConstruccion"] 			= $arrCampos["txtLicenciaConstruccion"]["nombre"];
+	$arrTemporalGrupo["fchLicenciaConstruccion1"] 			= $arrCampos["fchLicenciaConstruccion1"]["nombre"];
+	$arrTemporalGrupo["fchVigenciaLicenciaConstruccion"] 	= $arrCampos["fchVigenciaLicenciaConstruccion"]["nombre"];
+	$arrTemporalGrupo["txtNombreInterventor"] 				= $arrCampos["txtNombreInterventor"]["nombre"];
+	$arrTemporalGrupo["bolTipoPersonaInterventor"] 			= $arrCampos["bolTipoPersonaInterventor"]["nombre"];
+	$arrTemporalGrupo["numNitInterventor"] 					= $arrCampos["numNitInterventor"]["nombre"];
+	$arrTemporalGrupo["numCedulaInterventor"] 				= $arrCampos["numCedulaInterventor"]["nombre"];
+	$arrTemporalGrupo["numTProfesionalInterventor"] 		= $arrCampos["numTProfesionalInterventor"]["nombre"];
+	$arrTemporalGrupo["fchInscripcion"] 					= $arrCampos["fchInscripcion"]["nombre"];
+	$arrTemporalGrupo["fchUltimaActualizacion"] 			= $arrCampos["fchUltimaActualizacion"]["nombre"];
+	$arrTemporalGrupo["seqPryEstadoProceso"] 				= $arrCampos["seqPryEstadoProceso"]["nombre"];
+	$arrTemporalGrupo["seqUsuario"] 						= $arrCampos["seqUsuario"]["nombre"];
+	
+	$arrTemporalGrupo = &$arrCamposGrupos["Datos del Oferente"];
+	$arrTemporalGrupo["txtNombreOferente"] 						= $arrCampos["txtNombreOferente"]["nombre"];
+	$arrTemporalGrupo["numNitOferente"] 						= $arrCampos["numNitOferente"]["nombre"];
+	$arrTemporalGrupo["numTelefonoOferente"] 					= $arrCampos["numTelefonoOferente"]["nombre"];
+	$arrTemporalGrupo["numCelularOferente"] 					= $arrCampos["numCelularOferente"]["nombre"];
+	$arrTemporalGrupo["txtCorreoOferente"] 						= $arrCampos["txtCorreoOferente"]["nombre"];
+	$arrTemporalGrupo["txtRepresentanteLegalOferente"] 			= $arrCampos["txtRepresentanteLegalOferente"]["nombre"];
+	$arrTemporalGrupo["numNitRepresentanteLegalOferente"] 		= $arrCampos["numNitRepresentanteLegalOferente"]["nombre"];
+	$arrTemporalGrupo["numTelefonoRepresentanteLegalOferente"] 	= $arrCampos["numTelefonoRepresentanteLegalOferente"]["nombre"];
+	$arrTemporalGrupo["numCelularRepresentanteLegalOferente"] 	= $arrCampos["numCelularRepresentanteLegalOferente"]["nombre"];
+	$arrTemporalGrupo["txtCorreoRepresentanteLegalOferente"] 	= $arrCampos["txtCorreoRepresentanteLegalOferente"]["nombre"];
+	$arrTemporalGrupo["txtEntidadOferente1"] 					= $arrCampos["txtEntidadOferente1"]["nombre"];
+	$arrTemporalGrupo["txtEntidadOferente2"] 					= $arrCampos["txtEntidadOferente2"]["nombre"];
+	$arrTemporalGrupo["txtEntidadOferente3"] 					= $arrCampos["txtEntidadOferente3"]["nombre"];
+	$arrTemporalGrupo["txtEntidadOferente4"] 					= $arrCampos["txtEntidadOferente4"]["nombre"];
+	$arrTemporalGrupo["txtEntidadOferente5"] 					= $arrCampos["txtEntidadOferente5"]["nombre"];
+	
+	$arrTemporalGrupo = &$arrCamposGrupos["Datos del Comité de Elegibilidad"];
+	$arrTemporalGrupo["numRadicadoJuridico"]			= $arrCampos["numRadicadoJuridico"]["nombre"];
+	$arrTemporalGrupo["numRadicadoTecnico"]				= $arrCampos["numRadicadoTecnico"]["nombre"];
+	$arrTemporalGrupo["numRadicadoFinanciero"]			= $arrCampos["numRadicadoFinanciero"]["nombre"];
+	$arrTemporalGrupo["bolAprobacion"]					= $arrCampos["bolAprobacion"]["nombre"];
+	$arrTemporalGrupo["numActaAprobacion"]				= $arrCampos["numActaAprobacion"]["nombre"];
+	$arrTemporalGrupo["numResolucionAprobacion"]		= $arrCampos["numResolucionAprobacion"]["nombre"];
+	$arrTemporalGrupo["fchResolucionAprobacion"]		= $arrCampos["fchResolucionAprobacion"]["nombre"];
+	$arrTemporalGrupo["txtObservacionAprobacion"]		= $arrCampos["txtObservacionAprobacion"]["nombre"];
+?>

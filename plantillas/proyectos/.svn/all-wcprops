@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/sdv/!svn/ver/103/plantillas/proyectos
+END
+cambioEstadosProyecto.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/sdv/!svn/ver/103/plantillas/proyectos/cambioEstadosProyecto.tpl
+END
+buscarProyecto.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/sdv/!svn/ver/43/plantillas/proyectos/buscarProyecto.tpl
+END
+buscarProyectoInscripcion.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/sdv/!svn/ver/87/plantillas/proyectos/buscarProyectoInscripcion.tpl
+END
+actualizacion.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/sdv/!svn/ver/160/plantillas/proyectos/actualizacion.tpl
+END
+datosDesembolso.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/sdv/!svn/ver/87/plantillas/proyectos/datosDesembolso.tpl
+END
+inscripcionProyectos.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/sdv/!svn/ver/1/plantillas/proyectos/inscripcionProyectos.tpl
+END
+pedirConfirmacion.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/sdv/!svn/ver/1/plantillas/proyectos/pedirConfirmacion.tpl
+END
+pedirSeguimiento.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/sdv/!svn/ver/87/plantillas/proyectos/pedirSeguimiento.tpl
+END
+desembolso.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/sdv/!svn/ver/87/plantillas/proyectos/desembolso.tpl
+END
+documentosDesembolso.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/sdv/!svn/ver/46/plantillas/proyectos/documentosDesembolso.tpl
+END
+elegibilidad.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/sdv/!svn/ver/87/plantillas/proyectos/elegibilidad.tpl
+END
+postulacionOLD.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/sdv/!svn/ver/87/plantillas/proyectos/postulacionOLD.tpl
+END
+inscripcion.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/sdv/!svn/ver/160/plantillas/proyectos/inscripcion.tpl
+END
+postulacion.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/sdv/!svn/ver/87/plantillas/proyectos/postulacion.tpl
+END

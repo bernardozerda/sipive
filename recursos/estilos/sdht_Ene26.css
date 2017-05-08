@@ -1,0 +1,381 @@
+
+	/**
+	 * FUENTES PARA EL APLICATIVO DE 
+	 * SUBSIDIOS DE VIVIENDA SDHT
+	 * @author Bernardo Zerda
+	 * @version 1.0 Mayo de 2009
+	**/
+
+
+	/** FUENTES GENERALES **/
+	
+	
+	
+	body {
+		background: White;
+		font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+		padding: 0px;	
+	}
+
+	button.reporteadorPlay{
+		font-family: sans-serif;
+		font-weight: bold;
+		background: url(../imagenes/play-icon.jpg) no-repeat;
+		background-position: left;
+		border: 1px solid #999999;
+		font-size: 12px;
+		vertical-align: middle;
+		text-align: left;
+		padding: 3px;
+		padding-left: 25px;
+		cursor: pointer;
+	}
+	
+	button.reporteadorExport{
+		font-family: sans-serif;
+		font-weight: bold;
+		background: url(../imagenes/excel.gif) no-repeat;
+		background-position: left;
+		border: 1px solid #999999;
+		font-size: 12px;
+		vertical-align: middle;
+		text-align: left;
+		padding: 3px;
+		padding-left: 25px;
+		cursor: pointer;
+	}	
+	
+	
+	input, textarea, select {
+		border: 1px solid #999999;
+		padding-left: 5px;
+		font-size: 10px;
+		font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+		text-transform: uppercase;
+	}
+	
+	input.buscarCedula{
+		background: #F9F9F9 no-repeat left;
+		background-image: url(../imagenes/icono_lupa.gif);
+		height: 20px;
+		border: none;
+		padding-left: 15px;
+	}
+			
+	.inputLogin{
+		border: 1px solid #999999;
+		padding-left: 5px;
+		font-size: 10px;
+		font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;	
+		text-transform: none;
+	}
+	
+	table, td, tr, div, th, label {
+		font-size: 11px;	
+		color: #505050;
+	}
+	
+	option{
+		padding-left: 5px;
+		font-size: 10px;
+		font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+		text-transform: uppercase;
+	}
+	
+	a {
+		text-decoration: underline;
+		font-size: 11px;
+		font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;	
+		color: #505050;
+	}
+	
+	a:hover {
+		text-decoration: underline;
+		font-size: 11px;
+		font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;	
+		color: #C8211B;
+		cursor: pointer;
+	}
+	
+	.msgError{
+		color: #C8211B;
+		font-weight: bold;
+		font-size: 10px;
+		padding-left: 10px;
+	}
+	
+	.msgOk{
+		color: #4682b4;
+		font-weight: bold;
+		font-size: 10px;	
+		padding-left: 10px;
+	}
+	
+.msgAlerta{
+	color: #b6891f;
+	font-weight: bold;
+	font-size: 10px;
+	padding-left: 10px;
+}	
+
+	.msgVerde{
+	color: #008FA6;
+	font-weight: bold;
+	font-size: 10px;
+	padding-left: 10px;
+}	
+	
+	
+	.salir{
+		background: #008FA6;
+		color: #BBFFFF;
+		font-weight: bold;
+		padding-right: 20px;
+		font-size: 12px;
+		text-align: right;
+		cursor: pointer;
+		text-decoration: none;
+		vertical-align: bottom;	
+	}
+	
+	.tituloLogin{
+		font-size: 12px;
+		color: black;
+		font-weight: bold;
+	}
+	
+	.tituloCajaLogin{
+		background: url(../imagenes/fondoCajaLogin.png) no-repeat;
+		color: white;
+		font-weight: bold;
+	}
+	
+	.mensajeCaptcha{
+		font-size: 9px;
+		font-style: normal;
+		padding-left: 10px;		
+	}
+	
+	.menuLateral{
+		font-weight: bolder;
+		background: url(../imagenes/bullet.jpg);
+		background-repeat: no-repeat;
+		background-position: left center;
+		padding-left: 15px;
+		padding-bottom: 3px;
+		padding-top: 3px;
+		font-size: 10px;
+	}
+	
+	.menuLateralOver{
+		font-weight: bolder;
+		background: url(../imagenes/bullet.jpg);
+		background-color: #e0e0e0;
+		background-repeat: no-repeat;
+		background-position: left center;
+		padding-left: 15px;
+		padding-bottom: 3px;
+		padding-top: 3px;
+		font-size: 10px;
+	}
+	
+	.tituloCampo{
+		text-align: left;
+		padding-left: 5px;
+	}
+	
+	.tituloTabla{
+		text-align: left;
+		padding-left: 10px;			
+		font-weight: bold;
+		background: #E4E4E4;
+	}
+	
+	.tituloTablaIndicadores{
+		text-align: left;
+		padding-left: 10px;			
+		font-weight: bold;
+		background: #505050;
+		color: #E4E4E4;
+	}
+	
+	.tituloAyuda{
+	text-align: right;
+	font-size: 9px;
+}
+	
+	.menu{
+		padding-left: 5px;
+	}
+	
+	.chartGraficas
+	{ 
+		width: 98%;
+		height: 350px;
+		margin-bottom: 10px;
+	} 
+	
+	.chartGraficasImprimir
+	{ 
+		width: 540px;
+		height: 360px;
+		margin-bottom: 10px;
+	} 
+	
+	.tituloReportesImprimir
+	{
+		font-weight: bolder;
+		height: 120%;
+		font: larger;
+	}
+
+	.yui-skin-sam .yui-dt-liner 
+	{ 
+		white-space:nowrap; 
+		
+	}
+
+.tituloVerde{
+	background: #008FA6; 
+	color: #BBFFFF; 
+	font-weight: bold; 
+	padding-left: 10px; 
+	font-size: 12px; 
+	text-decoration: none; 
+	vertical-align: middle;
+	height: 20px
+}	 
+
+.botonMas{
+	
+	cursor:pointer; 
+	height:13px; 
+	width:10px; 
+	float:left; 
+	border: 1px solid #999999; 
+	text-align:center;
+}
+
+.fila_0 { 
+	background-color: #FFFFFF;
+}
+
+.fila_1 { 
+	background-color: #E4E4E4;
+}
+
+.tituloNivel0{ 
+	font-weight: bold; 
+	vertical-align: top;
+	padding-top: 6px;
+	padding-left: 5px;
+}
+
+.tituloNivel1{ 
+	vertical-align: top;
+	padding-top: 6px;
+	padding-left: 15px;
+}
+
+.campoNivel1{ 
+	text-align: center;
+	vertical-align: top;
+	padding-top: 6px;
+}
+
+.fechaNivel1{ 
+	text-align: center;
+	vertical-align: top;
+	padding-top: 3px;
+}
+
+.campoValornivell{
+	width: 80px;
+	text-align: right;
+}
+
+.campoReadonly { 
+	background-color: #E4E4E4;
+}
+
+.campoPesos { 
+	text-align: right;
+}
+
+.campoPesosReadonly { 
+	background-color: #E4E4E4;
+	text-align: right;
+}
+
+.accordionItem h2 { 
+	margin: 0; 
+	font-size: 1.1em; 
+	padding: 0.4em; 
+	color: #FFFFFF;
+	text-align:	left;
+	background-color: #008FA6; 
+	border-bottom: 1px solid #BCBCBC;
+}
+.accordionItem h2:hover { 
+	cursor: pointer;
+}
+.accordionItem div { 
+	margin: 0; 
+	padding: 1em 0.4em; 
+	background-color: #E4E4E4; 
+	border-bottom: 1px solid #BCBCBC;
+}
+.accordionItem.hide h2 { 
+	color: #000; 
+	background-color: #E4E4E4;
+}
+
+.yui-skin-sam .yui-dt tr.vigenciaRojo,
+.yui-skin-sam .yui-dt tr.vigenciaRojo td.yui-dt-asc,
+.yui-skin-sam .yui-dt tr.vigenciaRojo td.yui-dt-desc,
+.yui-skin-sam .yui-dt td.vigenciaRojo td.yui-dt-asc,
+.yui-skin-sam .yui-dt td.vigenciaRojo td.yui-dt-desc {
+	background-color: F7D3DE;
+	color: #fff;
+}
+
+
+/* Class for marked rows */
+.yui-skin-sam .yui-dt tr.vigenciaAmarillo,
+.yui-skin-sam .yui-dt tr.vigenciaAmarillo td.yui-dt-asc,
+.yui-skin-sam .yui-dt tr.vigenciaAmarillo td.yui-dt-desc,
+.yui-skin-sam .yui-dt tr.vigenciaAmarillo td.yui-dt-asc,
+.yui-skin-sam .yui-dt tr.vigenciaAmarillo td.yui-dt-desc {
+	background-color: #feff2b;
+	color: #fff;
+}
+
+
+#GraficaTotalGiros488 					, #GraficaTotalHogares488 ,
+#GraficaTotalGiros644 					, #GraficaTotalHogares644 ,
+#GraficaOperaciones 						, #GraficaOperacionesPorContrato ,
+#GraficaCDPEjecutado488 				, #GraficaCDPEjecutado644 ,
+#GraficaTotal488 							, #GraficaTotal644 ,
+#GraficaOperacionesPorContratoTotal 
+	{
+		width: 420px;
+		height: 220px;
+	}
+
+#GraficaTotalGirosTODO , #GraficaTotalHogaresTODO , #GraficaResumen
+{
+	width: 420px;
+	height: 320px;
+} 
+
+.marquee_code{
+height:auto;
+width:auto;
+background-color:FFD519;
+font-family:Helvetica;
+font-size:14pt;
+color:#0012CC;
+border-width:2px;
+border-style:none;
+border-color:F7FF08;
+}

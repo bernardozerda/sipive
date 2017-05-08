@@ -1,0 +1,50 @@
+10
+
+dir
+304
+http://192.168.6.41/svn/SDV/librerias/bootstrap
+http://192.168.6.41/svn/SDV
+
+
+
+2013-09-13T23:44:31.336615Z
+267
+sdht_usuario
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+9b971741-84e0-442b-a6c3-59f87042966a
+
+
+
+
+
+
+0
+
+css
+dir
+
+fonts
+dir
+
+htmlIE
+dir
+
+img
+dir
+
+js
+dir
+

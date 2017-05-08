@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/SDV/!svn/ver/307/plantillas/webservice
+END
+mensajes.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/SDV/!svn/ver/307/plantillas/webservice/mensajes.tpl
+END
+terminos.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/SDV/!svn/ver/317/plantillas/webservice/terminos.tpl
+END
+activacion.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/SDV/!svn/ver/311/plantillas/webservice/activacion.tpl
+END
+ayuda.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/SDV/!svn/ver/315/plantillas/webservice/ayuda.tpl
+END
+salvarRegistro.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/SDV/!svn/ver/311/plantillas/webservice/salvarRegistro.tpl
+END

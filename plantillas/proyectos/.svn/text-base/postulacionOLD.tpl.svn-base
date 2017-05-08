@@ -1,0 +1,571 @@
+<!-- PLANTILLA DE POSTULACION CON PESTAÑAS -->
+<form name="frmActualizacion" id="frmActualizacion" onSubmit="pedirConfirmacion('mensajes', this, './contenidos/proyectos/pedirConfirmacion.php'); return false;" autocomplete=off >	
+
+<!-- CODGIO PARA EL POP UP DE SEGUIMIENTO -->
+	{assign var=seqPryEstadoProceso value=$objFormularioProyecto->seqPryEstadoProceso}
+	{include file='subsidios/pedirSeguimiento.tpl'}
+	<br>
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="z-index:999999;">
+	<tr>
+		<td style='display: none' width="150px" align="center">
+		</td>
+		<td></td><td></td><td></td>
+		<td align="right" style="padding-right: 10px;" width="250px">
+			<!--<input type="submit" name="salvar" id="salvar" value="Salvar Postulaci&oacute;n" onClick="preguntarAntes()">-->
+			<input type="submit" name="salvar" id="salvar" value="Salvar Proyecto">
+		</td>
+	</tr>
+</table>
+<br>
+<!-- TAB VIEW DE POSTULACION -->
+<div id="postulacion" class="yui-navset" style="width:100%; text-align:left;">
+	<ul class="yui-nav">
+		<li class="selected"><a href="#frm"><em>Formulario</em></a></li>
+		<li><a href="#seg"><em>Seguimiento</em></a></li>
+		<!--<li><a href="#aad"><em>Actos Administrativos</em></a></li>-->
+	</ul>
+	<div class="yui-content">
+		<!-- FORMULARIO DE POSTULACION -->
+		<div id="frm" style="height:600px;">
+			<!-- TABLA DE ESTADO DEL PROCESO Y NUMERO DEL FORMULARIO -->
+			<table cellspacing="2" cellpadding="0" border="0" width="100%">
+			<!--<tr>
+				<td colspan="2" height="22px" style="padding-left:10px;" width="105px"><b>Estado: &nbsp;</b>
+				<input type='text' id='seqEstado' name='seqEstado' value='{$seqEstadoProceso}'>
+				<input type="hidden" 
+						name="seqPryEstadoProceso" 
+						id="seqPryEstadoProceso" 
+						value="{$objFormularioProyecto->seqPryEstadoProceso}">
+
+				</td>
+				<td></td>
+				<td align="right">
+					{if $txtTutorDesembolso != ""}
+						<b>Tutor de Desembolso: </b>{$txtTutorDesembolso}
+					{else}
+						&nbsp;
+					{/if}
+				</td>
+			</tr>-->
+		</table>
+
+		<div id="pestanasProyectosPostulacion" class="yui-navset" style="width:100%; text-align:left;">
+			<ul class="yui-nav">
+				<li class="selected"><a href="#datosHogar"><em>Datos del Proyecto</em></a></li>
+				<li><a href="#documentos"><em>Recibo de Documentos</em></a></li>
+				<!--<li><a href="#xxxxxx"><em>xxxxxx</em></a></li>
+				<li><a href="#yyyyyy"><em>yyyyyy</em></a></li>-->
+			</ul>
+			<div class="yui-content">
+				<!-- DATOS DEL PROYECTO -->
+				<div id="datosHogar" style="height:520px;"><p>
+				<!-- ESTADO DEL PROCESO -->
+		<table cellspacing="0" cellpadding="2" border="0" width="100%" height="25px">
+			<tr bgcolor="#E4E4E4">
+				<td width="140px"><b>Estado del proceso</b></td>
+				<td width="280px">{if $seqPryEstadoProceso == "1"} {$arrEstadoProceso.2} {else} {$arrEstadoProceso.$seqPryEstadoProceso} {/if}
+					<input type="hidden" name="seqPryEstadoProceso" id="seqPryEstadoProceso" value="1">Inscrito
+				</td>
+				<td width="140px"><b>Fecha de Inscripción</b></td>
+				<td>{$objFormularioProyecto->fchInscripcion}&nbsp;</td>
+			</tr>
+			<tr><td height="5px"></td></tr>
+		</table>
+
+	<table cellspacing="0" cellpadding="2" border="0" width="100%">
+
+	<tr><td class="tituloTabla" colspan="4">DATOS DEL PROYECTO<img src="recursos/imagenes/blank.gif" onload="escondetxtDescEquipamientoComunal(); escondeCamposTipoPersona(); escondeLineaOpv(); escondeOperador()"></td></tr>
+			<tr><!-- NIT DEL PROYECTO -->
+				<th class="tituloCampo">NIT del Proyecto</th>
+				<td>{if $arrPrivilegios.editar == 1}
+						{assign var=soloLectura value=""}
+					{else}
+						{assign var=soloLectura value="readonly"}
+					{/if}
+					<input type="text" 
+							name="numNitProyecto" 
+							id="numNitProyecto" 
+							value="{$numNitProyecto}"
+							onFocus="this.style.backgroundColor = '#ADD8E6';" 
+							onBlur="soloNumeros( this ); this.style.backgroundColor = '#FFFFFF'; "
+							onkeyup="formatoSeparadores(this)" onchange="formatoSeparadores(this)"
+							style="width:100px; text-align: right;"
+							{$soloLectura}
+				/></td>
+				<!-- NOMBRE DEL PROYECTO -->
+				<th class="tituloCampo">Nombre del Proyecto</th>
+				<td><input name="txtNombreProyecto" type="text" id="txtNombreProyecto" value="{$objFormularioProyecto->txtNombreProyecto}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+
+			</tr>
+			<tr>
+			<!-- TIPO DE ESQUEMA -->
+				<th class="tituloCampo" width="25%">Tipo de Esquema</th>
+				<td width="25%">
+					<select name="seqTipoEsquema"
+							id="seqTipoEsquema"
+							style="width:200px"
+							onChange="obtenerModalidad(this); escondeLineaOpv(); escondeOperador()">
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoEsquema key=seqTipoEsquema item=txtTipoEsquema}
+							<option value="{$seqTipoEsquema}" {if $objFormularioProyecto->seqTipoEsquema == $seqTipoEsquema} selected {/if}>{$txtTipoEsquema}</option>
+							{/foreach}
+					</select>
+				</td>
+
+			<!-- TIPO DE MODALIDAD -->
+				<th class="tituloCampo" width="25%">Tipo de Modalidad</th>
+				<td id="tdModalidad" width="25%">
+					<select name="seqTipoModalidad"
+							id="seqTipoModalidad"
+							style="width:200px;" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoModalidad key=seqTipoModalidad item=txtTipoModalidad}
+							<option value="{$seqTipoModalidad}" {if $objFormularioProyecto->seqTipoModalidad == $seqTipoModalidad} selected {/if}>{$txtTipoModalidad}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<tr id="lineaOpv">
+				<!-- NOMBRE DE LA OPV -->
+				<th class="tituloCampo">Nombre de la OPV</th>
+				<td colspan="3" >
+					<select name="seqOpv"
+							id="seqOpv"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrOpv key=seqOpv item=txtNombreOpv}
+								<option value="{$seqOpv}" {if $objFormularioProyecto->seqOpv == $seqOpv} selected {/if}>{$txtNombreOpv}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<tr id="lineaTDirigida">
+				<!-- OPERADOR -->
+				<th class="tituloCampo">Operador</th>
+				<td colspan='3'><input name="txtNombreOperador" id="txtNombreOperador" type="text" value="{$objFormularioProyecto->txtNombreOperador}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<tr>
+				<!-- TIPO DE PROYECTO -->
+				<th class="tituloCampo">Tipo de Proyecto</th>
+				<td>
+					<select name="seqTipoProyecto"
+							id="seqTipoProyecto"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoProyecto key=seqTipoProyecto item=txtTipoProyecto}
+								<option value="{$seqTipoProyecto}" {if $objFormularioProyecto->seqTipoProyecto == $seqTipoProyecto} selected {/if}>{$txtTipoProyecto}</option>
+							{/foreach}
+					</select>
+				</td>
+				<!-- DESCRIPCION DEL PROYECTO -->
+				<th class="tituloCampo" rowspan="3" valign="top">Descripci&oacute;n del Proyecto</th>
+				<td rowspan="3">
+					<textarea name="txtDescripcionProyecto" type="text" rows="4" id="txtDescripcionProyecto" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/>{$objFormularioProyecto->txtDescripcionProyecto}</textarea>
+				</td>
+			</tr>
+
+			<!-- TIPO DE URBANIZACION -->
+			<tr>
+				<th class="tituloCampo">Tipo de Urbanizaci&oacute;n</th>
+				<td>
+					<select name="seqTipoUrbanizacion"
+							id="seqTipoUrbanizacion"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoUrbanizacion key=seqTipoUrbanizacion item=txtTipoUrbanizacion}
+								<option value="{$seqTipoUrbanizacion}" {if $objFormularioProyecto->seqTipoUrbanizacion == $seqTipoUrbanizacion} selected {/if}>{$txtTipoUrbanizacion}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<!-- TIPO DE SOLUCION -->
+			<tr>
+				<th class="tituloCampo">Tipo de Soluci&oacute;n</th>
+				<td>
+					<select name="seqTipoSolucion"
+							id="seqTipoSolucion"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoSolucion key=seqTipoSolucion item=txtTipoSolucion}
+								<option value="{$seqTipoSolucion}" {if $objFormularioProyecto->seqTipoSolucion == $seqTipoSolucion} selected {/if}>{$txtTipoSolucion}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<!-- LOCALIDAD DEL PROYECTO -->
+				<th class="tituloCampo">Localidad</th>
+				<td>
+					<select name="seqLocalidad"
+							id="seqlocalidad"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrLocalidad key=seqLocalidad item=txtLocalidad}
+								<option value="{$seqLocalidad}" {if $objFormularioProyecto->seqLocalidad == $seqLocalidad} selected {/if}>{$txtLocalidad}</option>
+							{/foreach}
+					</select>
+				</td>
+				<!-- DIRECCION DEL PROYECTO -->
+				<th class="tituloCampo"><a href="#" id="DireccionSolucion" onClick="recogerDireccion( 'txtDireccion', 'objDireccionOcultoSolucion' )">Direcci&oacute;n</a></th>
+				<td><input type="text" 
+							name="txtDireccion" 
+							id="txtDireccion" 
+							value="{$objFormularioProyecto->txtDireccion}" 
+							style="width:100%; background-color:#ADD8E6;"
+							readonly
+					/>
+				<input type="hidden" id="txtLatitudLongitud" name="txtLatitudLongitud" value="{$objFormularioProyecto->txtLatitudLongitud}"></td>
+			</tr>
+
+			<tr>
+				<!-- NUMERO DE SOLUCIONES -->
+				<th class="tituloCampo">N&uacute;mero Soluciones</th>
+				<td><input name="valNumeroSoluciones" type="text" id="valNumeroSoluciones" value="{$objFormularioProyecto->valNumeroSoluciones}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/></td>
+				<!-- AREA CONSTRUIDA -->
+				<th class="tituloCampo">Area Construida</th>
+				<td><input name="valAreaConstruida" type="text" id="valAreaConstruida" value="{$objFormularioProyecto->valAreaConstruida}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/>&nbsp;m²</td>
+			</tr>
+
+			<tr>
+				<!-- COSTO DEL PROYECTO -->
+				<th class="tituloCampo">Costo del Proyecto</th>
+				<td>$ <input name="valCostoProyecto" type="text" id="valCostoProyecto" value="{$objFormularioProyecto->valCostoProyecto}" onBlur="soloNumeros( this ); this.style.backgroundColor = '#FFFFFF';" onBlur="sinCaracteresEspeciales( this );" style="width:90px;"/></td>
+				<!-- AREA LOTE -->
+				<!--<th class="tituloCampo">Area Lote</th>
+				<td><input name="valAreaLote" type="text" id="valAreaLote" value="{$objFormularioProyecto->valAreaLote}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/>&nbsp;m²</td>-->
+				<th class="tituloCampo">Chip Lote</th>
+				<td><input name="txtChipLote" type="text" id="txtChipLote" value="{$objFormularioProyecto->txtChipLote}" onBlur="sinCaracteresEspeciales( this );" style="width:95px;"/></td>
+			</tr>
+
+			<!-- EQUIPAMIENTO COMUNAL -->
+			<tr>
+				<th class="tituloCampo">Tiene Equipamiento Comunal? </th>
+				<td colspan="3" align="left">
+					Si <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="1" {if $objFormularioProyecto->bolEquipamientoComunal == 1} checked {/if} /> 
+					No <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="0" {if $objFormularioProyecto->bolEquipamientoComunal == 0} checked {/if}/> 
+				</td>
+			</tr>
+
+			<!-- DESCRIPCION DE EQUIPAMIENTO COMUNAL -->
+			<tr id="lineaDescEquipamientoComunal" name="lineaDescEquipamientoComunal" style="display:none">
+				<th class="tituloCampo" valign="top">Descripci&oacute;n Equipamiento Comunal</th>
+				<td colspan="3">
+					<textarea id="txtDescEquipamientoComunal" name="txtDescEquipamientoComunal" type="text" rows="4" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/>{$objFormularioProyecto->txtDescEquipamientoComunal}</textarea>
+				</td>
+			</tr>
+
+		<tr><td class="tituloTabla" colspan="4">DATOS DEL OFERENTE</td></tr>
+
+		<!-- OFERENTE -->
+			<tr>
+				<th class="tituloCampo">Nombre</th>
+				<td colspan="3">
+					<select name="seqOferente"
+							id="seqOferente"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrOferente key=seqOferente item=txtNombreOferente}
+								<option value="{$seqOferente}" {if $objFormularioProyecto->seqOferente == $seqOferente} selected {/if}>{$txtNombreOferente}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<tr><td class="tituloTabla" colspan="2">LICENCIA DE URBANISMO</td>
+				<td class="tituloTabla" colspan="2">LICENCIA DE CONSTRUCCION</td></tr>
+			<tr>
+				<!-- LICENCIA DE URBANISMO -->
+				<th class="tituloCampo">No. Licencia de Urbanismo</th>
+				<td><input name="txtLicenciaUrbanismo" type="text" id="txtLicenciaUrbanismo" value="{$objFormularioProyecto->txtLicenciaUrbanismo}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+				<!-- LICENCIA DE CONSTRUCCION -->
+				<th class="tituloCampo">No. Licencia de Construcci&oacute;n</th>
+				<td><input name="txtLicenciaConstruccion" type="text" id="txtLicenciaConstruccion" value="{$objFormularioProyecto->txtLicenciaConstruccion}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<!-- FECHA DE LICENCIA DE URBANISMO -->
+			<tr>
+				<th class="tituloCampo">Fecha Licencia</th>
+				<td>
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaUrbanismo1" type="text" id="fchLicenciaUrbanismo1" value="{$objFormularioProyecto->fchLicenciaUrbanismo1}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaUrbanismo1' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+				<!-- FECHA DE LICENCIA DE CONSTRUCCION -->
+				<th class="tituloCampo">Fecha Licencia</th>
+				<td>
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaConstruccion1" type="text" id="fchLicenciaConstruccion1" value="{$objFormularioProyecto->fchLicenciaConstruccion1}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaConstruccion1' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+			</tr>
+
+			<!-- VIGENCIA DE LICENCIA DE URBANISMO -->
+			<tr>
+				<th class="tituloCampo">Vigencia</th>
+				<td><input name="valVigenciaLicenciaUrbanismo" type="text" id="valVigenciaLicenciaUrbanismo" value="{$objFormularioProyecto->valVigenciaLicenciaUrbanismo}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/></td>
+				<!-- VIGENCIA DE LICENCIA DE CONSTRUCCION -->
+				<th class="tituloCampo">Vigencia</th>
+				<td><input name="valVigenciaLicenciaConstruccion" type="text" id="valVigenciaLicenciaConstruccion" value="{$objFormularioProyecto->valVigenciaLicenciaConstruccion}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/></td>
+			</tr>
+
+			<!-- FECHA DE LICENCIA DE URBANISMO (PRIMERA AMPLIACION)-->
+			<tr style="display:none">
+				<th class="tituloCampo">Fecha Ampliaci&oacute;n 1</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaUrbanismo2" type="text" id="fchLicenciaUrbanismo2" value="{$objFormularioProyecto->fchLicenciaUrbanismo2}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaUrbanismo2' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>(TR Oculto)
+				</td>
+			</tr>
+
+			<!-- FECHA DE LICENCIA DE URBANISMO (SEGUNDA AMPLIACION)-->
+			<tr style="display:none">
+				<th class="tituloCampo">Fecha Ampliaci&oacute;n 2</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaUrbanismo3" type="text" id="fchLicenciaUrbanismo3" value="{$objFormularioProyecto->fchLicenciaUrbanismo3}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaUrbanismo3' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>(TR Oculto)
+				</td>
+			</tr>
+
+			<!-- FECHA DE LICENCIA DE URBANISMO (PRIMERA AMPLIACION)-->
+			<tr style="display:none">
+				<th class="tituloCampo">Fecha Ampliaci&oacute;n 1</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaConstruccion2" type="text" id="fchLicenciaConstruccion2" value="{$objFormularioProyecto->fchLicenciaConstruccion2}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaConstruccion2' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>(TR Oculto)
+				</td>
+			</tr>
+
+			<!-- FECHA DE LICENCIA DE URBANISMO (SEGUNDA AMPLIACION)-->
+			<tr style="display:none">
+				<th class="tituloCampo">Fecha Ampliaci&oacute;n 2</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaConstruccion3" type="text" id="fchLicenciaConstruccion3" value="{$objFormularioProyecto->fchLicenciaConstruccion3}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaConstruccion3' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>(TR Oculto)
+				</td>
+			</tr>
+
+			<tr><td class="tituloTabla" colspan="4">DATOS DEL INTERVENTOR</td></tr>
+			
+			<!-- NOMBRE INTERVENTOR -->
+			<tr>
+				<th class="tituloCampo">Nombre</th>
+				<td colspan="3"><input name="txtNombreInterventor" type="text" id="txtNombreInterventor" value="{$objFormularioProyecto->txtNombreInterventor}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+		<!-- TIPO DE PERSONA INTERVENTOR -->
+		<tr>
+			<th class="tituloCampo">Tipo de Persona</th>
+			<td colspan="3" align="left">
+			Natural <input name="bolTipoPersonaInterventor" type="radio" id="bolTipoPersonaInterventor" onClick="escondeCamposTipoPersona()" value="1" {if $objFormularioProyecto->bolTipoPersonaInterventor == 1} checked {/if} /> 
+			Jur&iacute;dica <input name="bolTipoPersonaInterventor" type="radio" onClick="escondeCamposTipoPersona()" id="bolTipoPersonaInterventor" value="0" {if $objFormularioProyecto->bolTipoPersonaInterventor == 0} checked {/if}/> 
+			</td>
+		</tr>
+
+		<tr id="lineaPersonaNatural" name="lineaPersonaNatural" style="display:none">
+			<!-- CEDULA INTERVENTOR (Persona Natural) -->
+			<th class="tituloCampo">Cedula</th>
+			<td><input name="numCedulaInterventor" type="text" id="numCedulaInterventor" value=" {$objFormularioProyecto->numCedulaInterventor}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			<!-- TARJETA PROFESIONAL INTERVENTOR (Persona Natural)-->
+			<th class="tituloCampo">Tarjeta Profesional</th>
+			<td><input name="numTProfesionalInterventor" type="text" id="numTProfesionalInterventor" value="{$objFormularioProyecto->numTProfesionalInterventor}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+		</tr>
+
+		<!-- NIT INTERVENTOR -->
+		<tr id="lineaPersonaJuridica" name="lineaPersonaJuridica" style="display:none">
+			<th class="tituloCampo">NIT</th>
+			<td colspan="3"><input name="numNitInterventor" type="text" id="numNitInterventor" value=" {$objFormularioProyecto->numNitInterventor}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+		</tr>
+	</table>
+				
+	</div>
+	<div id="documentos" style="height:379px;"><p>
+
+			<!-- DOCUMENTACION PARA LA POSTULACION INDIVIDUAL -->
+
+			<table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF">
+				<!-- 01 - FOTOCOPIA DEL CERTIFICADO DE EXISTENCIA Y REPRESENTACIÓN LEGAL -->
+				<tr>
+					<td><input type="checkbox" name="bolFotCertExiRepLegal" id="bolFotCertExiRepLegal" value="1"
+							{if $claProyecto->arrSolicitud.bolFotCertExiRepLegal == 1} checked {/if}
+						></td>
+					<td>Fotocopia del certificado de existencia y representación legal</td>
+					<td><input type="text" name="descFotCertExiRepLegal" id="descFotCertExiRepLegal" value="{$claProyecto->descFotCertExiRepLegal}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				<!-- 02 - FOTOCOPIA DE LA CÉDULA DEL REPRESENTANTE LEGAL -->
+				<tr>
+					<td><input type="checkbox" name="bolFotCedRepLegal" id="bolFotCedRepLegal" value="1"
+							{if $claProyecto->arrSolicitud.bolFotCedRepLegal == 1} checked {/if}
+						></td>
+					<td>Fotocopia de la cédula del representante legal</td>
+					<td><input type="text" name="descFotCedRepLegal" id="descFotCedRepLegal" value="{$claProyecto->arrSolicitud.descFotCedRepLegal}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- 03 - FOTOCOPIA DEL RUT -->
+				<tr>
+					<td><input type="checkbox" name="bolFotocopiaRut" id="bolFotocopiaRut" value="1"
+							{if $claProyecto->arrSolicitud.bolFotocopiaRut == 1} checked {/if}
+						></td>
+					<td>Fotocopia del RUT</td>
+					<td><input type="text" name="descFotocopiaRut" id="descFotocopiaRut" value="{$claProyecto->arrSolicitud.descFotocopiaRut}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- 04 - FOTOCOPIA DEL RIT -->
+				<tr>
+					<td><input type="checkbox" name="bolFotocopiaRit" id="bolFotocopiaRit" value="1"
+							{if $claProyecto->arrSolicitud.bolFotocopiaRit == 1} checked {/if}
+						></td>
+					<td>Fotocopia del RIT</td>
+					<td><input type="text" name="descFotocopiaRit" id="descFotocopiaRit" value="{$claProyecto->arrSolicitud.descFotocopiaRit}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- 05 - REGISTRO DE ENAJENADOR EXPEDIDO POR LA SUBSECRETARÍA DE INSPECCIÓN, VIGILANCIA Y CONTROL DE VIVIENDA DE LA SDHT -->
+				<tr>
+					<td><input type="checkbox" name="bolRegistroEnajenador" id="bolRegistroEnajenador" value="1"
+							{if $claProyecto->arrSolicitud.bolRegistroEnajenador == 1} checked {/if}
+						></td>
+					<td>Registro de Enajenador expedido por la Subsecretaría de Inspección, Vigilancia y Control de Vivienda de la SDHT</td>
+					<td><input type="text" name="descRegistroEnajenador" id="descRegistroEnajenador" value="{$claProyecto->arrSolicitud.descRegistroEnajenador}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- 06 - PORTAFOLIO DE PROYECTOS CONSTRUIDOS Y TECNOLOGÍAS CONSTRUCTIVAS UTILIZADAS, SI EXISTIERAN PROYECTOS PREVIAMENTE DESARROLLADOS -->
+				<tr>
+					<td><input type="checkbox" name="bolPortafolioProyectos" id="bolPortafolioProyectos" value="1"
+							{if $claProyecto->arrSolicitud.bolPortafolioProyectos == 1} checked {/if}
+						></td>
+					<td>Portafolio de proyectos construidos y tecnologías constructivas utilizadas, si existieran proyectos previamente desarrollados</td>
+					<td><input type="text" name="descPortafolioProyectos" id="descPortafolioProyectos" value="{$claProyecto->arrSolicitud.descPortafolioProyectos}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- 07 - DOCUMENTOS QUE ACREDITEN LA CAPACIDAD FINANCIERA, DE ACUERDO CON LAS CARACTERÍSTICAS DEL PROYECTO -->
+				<tr>
+					<td><input type="checkbox" name="bolDocAcredCapacFinan" id="bolDocAcredCapacFinan" value="1"
+							{if $claProyecto->arrSolicitud.bolDocAcredCapacFinan == 1} checked {/if}
+						></td>
+					<td>Documentos que acrediten la capacidad financiera, de acuerdo con las características del proyecto</td>
+					<td><input type="text" name="descDocAcredCapacFinan" id="descDocAcredCapacFinan" value="{$claProyecto->arrSolicitud.descDocAcredCapacFinan}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+					/></td>
+				</tr>
+			</table>
+			
+			<!-- DOCUMENTACION PARA LA POSTULACION COLECTIVA-->
+			
+			<table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF">
+				<!-- 01 - FOTOCOPIA DEL CERTIFICADO DE EXISTENCIA Y REPRESENTACIÓN LEGAL -->
+				<tr>
+					<td><input type="checkbox" name="bolFotCertExiRepLegal" id="bolFotCertExiRepLegal" value="1"
+							{if $claProyecto->arrSolicitud.bolFotCertExiRepLegal == 1} checked {/if}
+						></td>
+					<td>Fotocopia del certificado de existencia y representación legal</td>
+					<td><input type="text" name="descFotCertExiRepLegal" id="descFotCertExiRepLegal" value="{$claProyecto->descFotCertExiRepLegal}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				<!-- 02 - FOTOCOPIA DE LA CÉDULA DEL REPRESENTANTE LEGAL OPV -->
+				<tr>
+					<td><input type="checkbox" name="bolFotCedRepLegalOpv" id="bolFotCedRepLegalOpv" value="1"
+							{if $claProyecto->arrSolicitud.bolFotCedRepLegalOpv == 1} checked {/if}
+						></td>
+					<td>Fotocopia de la cédula del representante legal</td>
+					<td><input type="text" name="descFotCedRepLegalOpv" id="descFotCedRepLegalOpv" value="{$claProyecto->arrSolicitud.descFotCedRepLegalOpv}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- FOTOCOPIA DEL RUT -->
+				<tr>
+					<td><input type="checkbox" name="bolFotocopiaRut" id="bolFotocopiaRut" value="1"
+							{if $claProyecto->arrSolicitud.bolFotocopiaRut == 1} checked {/if}
+						></td>
+					<td>Fotocopia del RUT</td>
+					<td><input type="text" name="descFotocopiaRut" id="descFotocopiaRut" value="{$claProyecto->arrSolicitud.descFotocopiaRut}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- FOTOCOPIA DEL RIT -->
+				<tr>
+					<td><input type="checkbox" name="bolFotocopiaRit" id="bolFotocopiaRit" value="1"
+							{if $claProyecto->arrSolicitud.bolFotocopiaRit == 1} checked {/if}
+						></td>
+					<td>Fotocopia del RIT</td>
+					<td><input type="text" name="descFotocopiaRit" id="descFotocopiaRit" value="{$claProyecto->arrSolicitud.descFotocopiaRit}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- REGISTRO DE ENAJENADOR EXPEDIDO POR LA SUBSECRETARÍA DE INSPECCIÓN, VIGILANCIA Y CONTROL DE VIVIENDA DE LA SDHT -->
+				<tr>
+					<td><input type="checkbox" name="bolRegistroEnajenador" id="bolRegistroEnajenador" value="1"
+							{if $claProyecto->arrSolicitud.bolRegistroEnajenador == 1} checked {/if}
+						></td>
+					<td>Registro de Enajenador expedido por la Subsecretaría de Inspección, Vigilancia y Control de Vivienda de la SDHT</td>
+					<td><input type="text" name="descRegistroEnajenador" id="descRegistroEnajenador" value="{$claProyecto->arrSolicitud.descRegistroEnajenador}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- PORTAFOLIO DE PROYECTOS CONSTRUIDOS Y TECNOLOGÍAS CONSTRUCTIVAS UTILIZADAS, SI EXISTIERAN PROYECTOS PREVIAMENTE DESARROLLADOS -->
+				<tr>
+					<td><input type="checkbox" name="bolPortafolioProyectos" id="bolPortafolioProyectos" value="1"
+							{if $claProyecto->arrSolicitud.bolPortafolioProyectos == 1} checked {/if}
+						></td>
+					<td>Portafolio de proyectos construidos y tecnologías constructivas utilizadas, si existieran proyectos previamente desarrollados</td>
+					<td><input type="text" name="descPortafolioProyectos" id="descPortafolioProyectos" value="{$claProyecto->arrSolicitud.descPortafolioProyectos}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+						/></td>
+				</tr>
+				
+				<!-- DOCUMENTOS QUE ACREDITEN LA CAPACIDAD FINANCIERA, DE ACUERDO CON LAS CARACTERÍSTICAS DEL PROYECTO -->
+				<tr>
+					<td><input type="checkbox" name="bolDocAcredCapacFinan" id="bolDocAcredCapacFinan" value="1"
+							{if $claProyecto->arrSolicitud.bolDocAcredCapacFinan == 1} checked {/if}
+						></td>
+					<td>Documentos que acrediten la capacidad financiera, de acuerdo con las características del proyecto</td>
+					<td><input type="text" name="descDocAcredCapacFinan" id="descDocAcredCapacFinan" value="{$claProyecto->arrSolicitud.descDocAcredCapacFinan}" onFocus="this.style.backgroundColor = '#ADD8E6';" onBlur="javascript: sinCaracteresEspeciales( this ); this.style.backgroundColor = '#FFFFFF';" style="width:300px" class="inputLogin"
+					/></td>
+				</tr>
+			</table>
+</p></div>
+</div>
+</div>
+</div>
+
+<!-- SEGUIMIENTO AL HOGAR -->
+<div id="seg" style="height:401px; overflow:auto;">
+	{include file="seguimientoProyectos/seguimientoFormulario.tpl"}
+	<div id="contenidoBusqueda" >
+		{include file="seguimientoProyectos/buscarSeguimiento.tpl"}
+	</div>
+</div>
+
+<!-- ACTOS ADMINISTRATIVOS -->
+<!--<div id="aad" style="height:401px;"><p>
+	{include file="subsidios/actosAdministrativos.tpl"}
+</p></div>-->
+</div>
+</div>
+<input type="hidden" id="seqProyectoEditar" name="seqProyectoEditar" value="{$objFormularioProyecto->seqProyecto}">
+<input type="hidden" name="txtArchivo" value="./contenidos/proyectos/salvarActualizacion.php">
+<input type="hidden" name="txtCiudadanoAtendido" value="{$txtCiudadanoAtendido}">
+<input type="hidden" name="numDocumentoAtendido" value="{$numDocumento}">
+
+</form>
+
+<div id="postulacionProyectosTabView"></div>
+<div id="objDireccionOculto" style="display:none"></div>
+<div id="objDireccionOcultoSolucion" style="display:none"></div>

@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/SDV/!svn/ver/298/librerias/nusoap
+END
+nusoapmime.php
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/SDV/!svn/ver/298/librerias/nusoap/nusoapmime.php
+END
+class.wsdlcache.php
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/SDV/!svn/ver/85/librerias/nusoap/class.wsdlcache.php
+END
+class.nusoap_base.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/SDV/!svn/ver/298/librerias/nusoap/class.nusoap_base.php
+END
+class.wsdl.php
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/SDV/!svn/ver/298/librerias/nusoap/class.wsdl.php
+END
+changelog
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/SDV/!svn/ver/298/librerias/nusoap/changelog
+END
+class.soap_transport_http.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/SDV/!svn/ver/298/librerias/nusoap/class.soap_transport_http.php
+END
+class.soapclient.php
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/SDV/!svn/ver/298/librerias/nusoap/class.soapclient.php
+END
+class.soap_parser.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/SDV/!svn/ver/298/librerias/nusoap/class.soap_parser.php
+END
+class.soap_server.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/SDV/!svn/ver/298/librerias/nusoap/class.soap_server.php
+END
+class.xmlschema.php
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/SDV/!svn/ver/298/librerias/nusoap/class.xmlschema.php
+END
+nusoap.php
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/SDV/!svn/ver/298/librerias/nusoap/nusoap.php
+END
+class.soap_val.php
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/SDV/!svn/ver/85/librerias/nusoap/class.soap_val.php
+END
+class.soap_fault.php
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/SDV/!svn/ver/85/librerias/nusoap/class.soap_fault.php
+END

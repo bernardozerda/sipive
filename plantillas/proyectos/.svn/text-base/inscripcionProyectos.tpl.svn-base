@@ -1,0 +1,528 @@
+
+<!--
+	FORMULARIO DE CREACION DE PROYECTOS DE VIVIENDA
+	@author Jaison Ospina
+	@version 0.1 Agosto de 2013
+-->
+
+	<form onSubmit="someterFormulario( 'mensajes', this, './{$arrConfiguracion.carpetas.contenidos}/administracion/salvarProyectoVivienda.php', false, true); return false;" autocomplete=off>	
+
+		<table cellspacing="0" cellpadding="0" border="0" width="100%">
+			<tr><td class="tituloTabla" height="20px" colspan="2">Formulario de Proyectos de Vivienda</td></tr>
+		</table>
+		<table cellspacing="2" cellpadding="0" border="0" width="100%">
+
+			<!------------------------------------------------ SEPARADOR -------------------------------------------------->
+			<tr><td class="tituloTabla" colspan="4">DATOS DEL PROYECTO<img src="recursos/imagenes/blank.gif" onload="escondetxtDescEquipamientoComunal();escondeCamposTipoPersona()"></td></tr>
+			
+			
+			<tr>
+			<!-- TIPO DE ESQUEMA -->
+				<th class="tituloCampo" width="25%">Tipo de Esquema</th>
+				<td width="25%">
+					<select name="seqTipoEsquema"
+							id="seqTipoEsquema"
+							style="width:200px"
+							onChange="EscondeTipoOrganizacion()">
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoEsquema key=seqTipoEsquema item=txtTipoEsquema}
+							<option value="{$seqTipoEsquema}" {if $objProyectoVivienda->seqTipoEsquema == $seqTipoEsquema} selected {/if}>{$txtTipoEsquema}</option>
+							{/foreach}
+					</select>
+				</td>
+
+			<!-- TIPO DE ORGANIZACION -->
+				<th class="tituloCampo" width="25%">Tipo de Organizaci&oacute;n</th>
+				<td width="25%">
+					<select name="seqTipoOrganizacion"
+							id="seqTipoOrganizacion"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoOrganizacion key=seqTipoOrganizacion item=txtTipoOrganizacion}
+							<option value="{$seqTipoOrganizacion}" {if $objProyectoVivienda->seqTipoOrganizacion == $seqTipoOrganizacion} selected {/if}>{$txtTipoOrganizacion}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+			
+			<!-- NOMBRE DEL PROYECTO -->
+			<tr>
+				<th class="tituloCampo">Nombre del Proyecto</th>
+				<td colspan="3"><input name="txtNombreProyecto" type="text" id="txtNombreProyecto" value="{$objProyectoVivienda->txtNombreProyecto}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<tr>
+				<!-- TIPO DE PROYECTO -->
+				<th class="tituloCampo">Tipo de Proyecto</th>
+				<td>
+					<select name="seqTipoProyecto"
+							id="seqTipoProyecto"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoProyecto key=seqTipoProyecto item=txtTipoProyecto}
+								<option value="{$seqTipoProyecto}" {if $objProyectoVivienda->seqTipoProyecto == $seqTipoProyecto} selected {/if}>{$txtTipoProyecto}</option>
+							{/foreach}
+					</select>
+				</td>
+				<!-- DESCRIPCION DEL PROYECTO -->
+				<th class="tituloCampo" rowspan="3" valign="top">Descripci&oacute;n del Proyecto</th>
+				<td rowspan="3">
+					<textarea name="txtDescripcionProyecto" type="text" rows="4" id="txtDescripcionProyecto" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/>{$objProyectoVivienda->txtDescripcionProyecto}</textarea>
+				</td>
+			</tr>
+
+			<!-- TIPO DE URBANIZACION -->
+			<tr>
+				<th class="tituloCampo">Tipo de Urbanizaci&oacute;n</th>
+				<td>
+					<select name="seqTipoUrbanizacion"
+							id="seqTipoUrbanizacion"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoUrbanizacion key=seqTipoUrbanizacion item=txtTipoUrbanizacion}
+								<option value="{$seqTipoUrbanizacion}" {if $objProyectoVivienda->seqTipoUrbanizacion == $seqTipoUrbanizacion} selected {/if}>{$txtTipoUrbanizacion}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<!-- TIPO DE SOLUCION -->
+			<tr>
+				<th class="tituloCampo">Tipo de Soluci&oacute;n</th>
+				<td>
+					<select name="seqTipoSolucion"
+							id="seqTipoSolucion"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoSolucion key=seqTipoSolucion item=txtTipoSolucion}
+								<option value="{$seqTipoSolucion}" {if $objProyectoVivienda->seqTipoSolucion == $seqTipoSolucion} selected {/if}>{$txtTipoSolucion}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<!-- NUMERO DE SOLUCIONES -->
+				<th class="tituloCampo">N&uacute;mero Soluciones</th>
+				<td><input name="valNumeroSoluciones" type="text" id="valNumeroSoluciones" value="{$objProyectoVivienda->valNumeroSoluciones}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/></td>
+				<!-- AREA CONSTRUIDA -->
+				<th class="tituloCampo">Area Construida</th>
+				<td><input name="valAreaConstruida" type="text" id="valAreaConstruida" value="{$objProyectoVivienda->valAreaConstruida}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/>&nbsp;m²</td>
+			</tr>
+
+			<tr>
+				<!-- COSTO DEL PROYECTO -->
+				<th class="tituloCampo">Costo del Proyecto</th>
+				<td>$ <input name="valCostoProyecto" type="text" id="valCostoProyecto" value="{$objProyectoVivienda->valCostoProyecto}" onBlur="sinCaracteresEspeciales( this );" style="width:90px;"/></td>
+				<!-- AREA LOTE -->
+				<th class="tituloCampo">Area Lote</th>
+				<td><input name="valAreaLote" type="text" id="valAreaLote" value="{$objProyectoVivienda->valAreaLote}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/>&nbsp;m²</td>
+			</tr>
+
+			<!-- EQUIPAMIENTO COMUNAL -->
+			<tr>
+				<th class="tituloCampo">Equipamiento Comunal</th>
+				<td colspan="3" align="left">
+					Si <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="1" {if $objProyectoVivienda->bolEquipamientoComunal == 1} checked {/if} /> 
+					No <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="0" {if $objProyectoVivienda->bolEquipamientoComunal == 0} checked {/if}/> 
+				</td>
+			</tr>
+
+			<!-- DESCRIPCION DE EQUIPAMIENTO COMUNAL -->
+			<tr id="lineaDescEquipamientoComunal" name="lineaDescEquipamientoComunal" style="display:none">
+				<th class="tituloCampo" valign="top">Descripci&oacute;n Equipamiento Comunal</th>
+				<td colspan="3">
+					<textarea name="txtDescEquipamientoComunal" type="text" rows="4" id="txtDescEquipamientoComunal"onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/>{$objProyectoVivienda->txtDescEquipamientoComunal}</textarea>
+				</td>
+			</tr>
+
+			<!------------------------------------------------ SEPARADOR -------------------------------------------------->
+			<tr><td class="tituloTabla" colspan="4">Datos del Oferente</td></tr>
+
+			<!-- OFERENTE -->
+			<tr>
+				<th class="tituloCampo">Nombre</th>
+				<td colspan="3"><input name="txtNombreOferente" type="text" id="txtNombreOferente" value="{$objProyectoVivienda->txtNombreOferente}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<!-- TIPO DE DOCUMENTO OFERENTE -->
+			<tr>
+				<th class="tituloCampo">Tipo Documento</th>
+				<td colspan="3">
+					<select name="seqTipoDocumentoOferente"
+							id="seqTipoDocumentoOferente"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoDocumento key=seqTipoDocumento item=txtTipoDocumento}
+								<option value="{$seqTipoDocumento}" {if $objProyectoVivienda->seqTipoDocumento == $seqTipoDocumento} selected {/if}>{$txtTipoDocumento}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<!-- DOCUMENTO -->
+			<tr>
+				<th class="tituloCampo">No. Documento</th>
+				<td colspan="3"><input name="numDocumentoOferente" type="text" id="numDocumentoOferente" value="{$objProyectoVivienda->numDocumentoOferente}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<!-- REPRESENTANTE LEGAL OFERENTE -->
+			<tr>
+				<th class="tituloCampo">Representante Legal</th>
+				<td colspan="3"><input name="txtNombreRepLegalOferente" type="text" id="txtNombreRepLegalOferente" value="{$objProyectoVivienda->txtNombreRepLegalOferente}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">No. Documento Rep. Legal</th>
+				<td colspan="3"><input name="numDocumentoRepLegalOferente" type="text" id="numDocumentoRepLegalOferente" value="{$objProyectoVivienda->numDocumentoRepLegalOferente}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+			<!------------------------------------------------ SEPARADOR -------------------------------------------------->
+			<tr><td height="5px" colspan="4"></td></tr>
+			<tr><td class="tituloTabla" colspan="4">Licencia de Urbanismo</td></tr>
+			<tr><td height="5px" colspan="4"></td></tr>
+
+			<!-- LICENCIA DE URBANISMO -->
+			<tr>
+				<th class="tituloCampo">No. Licencia</th>
+				<td colspan="3"><input name="txtLicenciaUrbanismo" type="text" id="txtLicenciaUrbanismo" value="{$objProyectoVivienda->txtLicenciaUrbanismo}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<!-- FECHA DE LICENCIA DE URBANISMO -->
+			<tr>
+				<th class="tituloCampo">Fecha Licencia</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaUrbanismo1" type="text" id="fchLicenciaUrbanismo1" value="{$objProyectoVivienda->fchLicenciaUrbanismo1}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaUrbanismo1' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+			</tr>
+			
+			<!-- VIGENCIA DE LICENCIA DE URBANISMO -->
+			<tr>
+				<th class="tituloCampo">Vigencia</th>
+				<td colspan="3"><input name="valVigenciaLicenciaUrbanismo" type="text" id="valVigenciaLicenciaUrbanismo" value="{$objProyectoVivienda->valVigenciaLicenciaUrbanismo}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/></td>
+			</tr>
+
+			<!-- FECHA DE LICENCIA DE URBANISMO (PRIMERA AMPLIACION)-->
+			<tr style="display:none">
+				<th class="tituloCampo">Fecha Ampliaci&oacute;n 1</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaUrbanismo2" type="text" id="fchLicenciaUrbanismo2" value="{$objProyectoVivienda->fchLicenciaUrbanismo2}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaUrbanismo2' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>(TR Oculto)
+				</td>
+			</tr>
+			
+			<!-- FECHA DE LICENCIA DE URBANISMO (SEGUNDA AMPLIACION)-->
+			<tr style="display:none">
+				<th class="tituloCampo">Fecha Ampliaci&oacute;n 2</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaUrbanismo3" type="text" id="fchLicenciaUrbanismo3" value="{$objProyectoVivienda->fchLicenciaUrbanismo3}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaUrbanismo3' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>(TR Oculto)
+				</td>
+			</tr>
+			
+			<!------------------------------------------------ SEPARADOR -------------------------------------------------->
+			<tr><td height="5px" colspan="4"></td></tr>
+			<tr><td class="tituloTabla" colspan="4">Licencia de Construcci&oacute;n</td></tr>
+			<tr><td height="5px" colspan="4"></td></tr>
+
+			<!-- LICENCIA DE CONSTRUCCION -->
+			<tr>
+				<th class="tituloCampo">No. Licencia</th>
+				<td colspan="3"><input name="txtLicenciaConstruccion" type="text" id="txtLicenciaConstruccion" value="{$objProyectoVivienda->txtLicenciaConstruccion}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<!-- FECHA DE LICENCIA DE CONSTRUCCION -->
+			<tr>
+				<th class="tituloCampo">Fecha Licencia</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaConstruccion1" type="text" id="fchLicenciaConstruccion1" value="{$objProyectoVivienda->fchLicenciaConstruccion1}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaConstruccion1' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+			</tr>
+
+			<!-- VIGENCIA DE LICENCIA DE CONSTRUCCION -->
+			<tr>
+				<th class="tituloCampo">Vigencia</th>
+				<td colspan="3"><input name="valVigenciaLicenciaConstruccion" type="text" id="valVigenciaLicenciaConstruccion" value="{$objProyectoVivienda->valVigenciaLicenciaConstruccion}" onBlur="sinCaracteresEspeciales( this );" style="width:77px;"/></td>
+			</tr>
+			
+			<!-- FECHA DE LICENCIA DE URBANISMO (PRIMERA AMPLIACION)-->
+			<tr style="display:none">
+				<th class="tituloCampo">Fecha Ampliaci&oacute;n 1</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaConstruccion2" type="text" id="fchLicenciaConstruccion2" value="{$objProyectoVivienda->fchLicenciaConstruccion2}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaConstruccion2' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>(TR Oculto)
+				</td>
+			</tr>
+			
+			<!-- FECHA DE LICENCIA DE URBANISMO (SEGUNDA AMPLIACION)-->
+			<tr style="display:none">
+				<th class="tituloCampo">Fecha Ampliaci&oacute;n 2</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchLicenciaConstruccion3" type="text" id="fchLicenciaConstruccion3" value="{$objProyectoVivienda->fchLicenciaConstruccion3}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchLicenciaConstruccion3' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>(TR Oculto)
+				</td>
+			</tr>
+
+			<!------------------------------------------------ SEPARADOR -------------------------------------------------->
+			<tr><td height="5px" colspan="4"></td></tr>
+			<tr><td class="tituloTabla" colspan="4">Datos Interventor</td></tr>
+			<tr><td height="5px" colspan="4"></td></tr>
+
+			<!-- NOMBRE INTERVENTOR -->
+			<tr>
+				<th class="tituloCampo">Nombre</th>
+				<td colspan="3"><input name="txtNombreInterventor" type="text" id="txtNombreInterventor" value="{$objProyectoVivienda->txtNombreInterventor}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<!-- TIPO DE PERSONA INTERVENTOR -->
+			<tr>
+				<th class="tituloCampo">Tipo de Persona</th>
+				<td colspan="3" align="left">
+					Natural <input name="bolTipoPersonaInterventor" type="radio" id="bolTipoPersonaInterventor" onClick="escondeCamposTipoPersona()" value="1" {if $objProyectoVivienda->bolTipoPersonaInterventor == 1} checked {/if} /> 
+					Jur&iacute;dica <input name="bolTipoPersonaInterventor" type="radio" onClick="escondeCamposTipoPersona()" id="bolTipoPersonaInterventor" value="0" {if $objProyectoVivienda->bolTipoPersonaInterventor == 0} checked {/if}/> 
+				</td>
+			</tr>
+
+			<!-- CEDULA INTERVENTOR -->
+			<tr id="lineaCedulaInterventor" name="lineaCedulaInterventor" style="display:none">
+				<th class="tituloCampo">Cedula</th>
+				<td colspan="3"><input name="numCedulaInterventor" type="text" id="numCedulaInterventor" value=" {$objProyectoVivienda->numCedulaInterventor}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<!-- TARJETA PROFESIONAL INTERVENTOR -->
+			<tr id="lineaTProfesionalInterventor" name="lineaTProfesionalInterventor" style="display:none">
+				<th class="tituloCampo">Tarjeta Profesional</th>
+				<td colspan="3"><input name="numTProfesionalInterventor" type="text" id="numTProfesionalInterventor" value="{$objProyectoVivienda->numTProfesionalInterventor}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<!-- NIT INTERVENTOR -->
+			<tr id="lineaNitInterventor" name="lineaNitInterventor" style="display:none">
+				<th class="tituloCampo">NIT</th>
+				<td colspan="3"><input name="numNitInterventor" type="text" id="numNitInterventor" value=" {$objProyectoVivienda->numNitInterventor}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<!------------------------------------------------ SEPARADOR -------------------------------------------------->
+			<tr><td height="5px" colspan="4"></td></tr>
+			<tr><td class="tituloTabla" colspan="4">Seguimiento a Obras</td></tr>
+			<tr><td height="5px" colspan="4"></td></tr>
+
+			<!-- FECHA INICIO SEGUIMIENTO A OBRAS -->
+			<tr>
+				<th class="tituloCampo">Fecha Inicio</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchInicioSeguimientoObras" type="text" id="fchInicioSeguimientoObras" value="{$objProyectoVivienda->fchInicioSeguimientoObras}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchInicioSeguimientoObras' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+			</tr>
+
+			<!-- FECHA FIN SEGUIMIENTO A OBRAS -->
+			<tr>
+				<th class="tituloCampo">Fecha Fin</th>
+				<td colspan="3">
+					<!-- OBJETO QUE RECIBE LA FECHA QUE SE SELECCIONA EN EL CALENDARIO -->
+					<input name="fchFinSeguimientoObras" type="text" id="fchFinSeguimientoObras" value="{$objProyectoVivienda->fchFinSeguimientoObras}" size="12" readonly /> 
+					<!-- MUESTRA EL OBJETO CALENDARIO -->
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchFinSeguimientoObras' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+			</tr>
+
+			<!-- DESCRIPCION DEL SEGUIMIENTO -->
+			<tr>
+				<th class="tituloCampo" valign="top">Descripci&oacute;n</th>
+				<td colspan="3">
+					<textarea name="txtDescripcionSeguimientoObras" type="text" rows="4" id="txtDescripcionSeguimientoObras"onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/>{$objProyectoVivienda->txtDescripcionSeguimientoObras}</textarea>
+				</td>
+			</tr>
+			
+			<!-------------------------------------------------------------------------------------------------------------
+			---------------------------------- INFORMACION JURIDICA (PESTAÑA 2) -------------------------------------------
+			<!------------------------------------------------------------------------------------------------------------>
+			
+			<!------------------------------------------------ SEPARADOR -------------------------------------------------->
+			
+			<!------------------------------------------------ SEPARADOR -------------------------------------------------->
+			<!--<tr><td height="5px" colspan="4"></td></tr>
+			<tr><td class="tituloTabla" colspan="4">Otra Informaci&oacute;n</td></tr>
+			<tr><td height="5px" colspan="4"></td></tr>
+
+			<tr>
+				<th class="tituloCampo">Aseguradora</th>
+				<td colspan="3">
+					<select name="seqAseguradora"
+							id="seqAseguradora"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrAseguradora key=seqAseguradora item=txtAseguradora}
+								<option value="{$seqAseguradora}" {if $objProyectoVivienda->seqAseguradora == $seqAseguradora} selected {/if}>{$txtAseguradora}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Total Subsidios</th>
+				<td colspan="3"><input name="valTotalSubsidios" type="text" id="valTotalSubsidios" value="{$objProyectoVivienda->valTotalSubsidios}" onBlur="sinCaracteresEspeciales( this );" style="width:60px;"/></td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">No. SFV Afiliados</th>
+				<td colspan="3"><input name="numSFVAplicados" type="text" id="numSFVAplicados" value="{$objProyectoVivienda->numSFVAplicados}" onBlur="sinCaracteresEspeciales( this );" style="width:60px;"/></td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Modalidad</th>
+				<td colspan="3">
+					<select name="seqModalidad"
+							id="seqModalidad"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrModalidad key=seqModalidad item=txtModalidad}
+								<option value="{$seqModalidad}" {if $objProyectoVivienda->seqModalidad == $seqModalidad} selected {/if}>{$txtModalidad}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<tr><td height="5px" colspan="4"></td></tr>
+			<tr><td class="tituloTabla" colspan="4">Datos de la P&oacute;liza</td></tr>
+			<tr><td height="5px" colspan="4"></td></tr>
+
+			<tr>
+				<th class="tituloCampo">P&oacute;liza</th>
+				<td colspan="3"><input name="valPoliza" type="text" id="valPoliza" value="{$objProyectoVivienda->valPoliza}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Tipo P&oacute;liza</th>
+				<td colspan="3">
+					<select name="seqTipoPoliza"
+							id="seqTipoPoliza"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoPoliza key=seqTipoPoliza item=txtTipoPoliza}
+								<option value="{$seqTipoPoliza}" {if $objProyectoVivienda->seqTipoPoliza == $seqTipoPoliza} selected {/if}>{$txtTipoPoliza}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Vigencia</th>
+				<td colspan="3"><input name="valVigenciaPoliza" type="text" id="valVigenciaPoliza" value="{$objProyectoVivienda->valVigenciaPoliza}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Fecha Aprobación</th>
+				<td colspan="3">
+					<input name="fchAprobacionPoliza" type="text" id="fchAprobacionPoliza" value="{$objProyectoVivienda->fchAprobacionPoliza}" size="12" readonly /> 
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchAprobacionPoliza' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+			</tr>
+
+			<tr><td height="5px" colspan="4"></td></tr>
+			<tr><td class="tituloTabla" colspan="4">Datos del Contrato</td></tr>
+			<tr><td height="5px" colspan="4"></td></tr>
+
+			<tr>
+				<th class="tituloCampo">No. Contrato</th>
+				<td colspan="3"><input name="numContrato" type="text" id="numContrato" value="{$objProyectoVivienda->numContrato}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Tipo Contrato</th>
+				<td colspan="3">
+					<select name="seqTipoContrato"
+							id="seqTipoContrato"
+							style="width:200px" >
+							<option value="0">Seleccione una opción</option>
+							{foreach from=$arrTipoContrato key=seqTipoContrato item=txtTipoContrato}
+								<option value="{$seqTipoContrato}" {if $objProyectoVivienda->seqTipoContrato == $seqTipoContrato} selected {/if}>{$txtTipoContrato}</option>
+							{/foreach}
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Contratista</th>
+				<td colspan="3"><input name="txtContratista" type="text" id="txtContratista" value="{$objProyectoVivienda->txtContratista}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo" valign="top">Objeto Contrato</th>
+				<td colspan="3">
+					<textarea name="txtObjetoContrato" type="text" rows="4" id="txtObjetoContrato"onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/>{$objProyectoVivienda->txtObjetoContrato}</textarea>
+				</td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Valor Contrato</th>
+				<td colspan="3">$ <input name="valContrato" type="text" id="valContrato" value="{$objProyectoVivienda->valContrato}" onBlur="sinCaracteresEspeciales( this );" style="width:90px;"/></td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Plazo Contrato</th>
+				<td colspan="3"><input name="numPlazoContrato" type="text" id="numPlazoContrato" value="{$objProyectoVivienda->numPlazoContrato}" onBlur="sinCaracteresEspeciales( this );" style="width:200px;"/></td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">Inicio</th>
+				<td>
+					<input name="fchInicioContrato" type="text" id="fchInicioContrato" value="{$objProyectoVivienda->fchInicioContrato}" size="12" readonly /> 
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchInicioContrato' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+				<th class="tituloCampo">Fin</th>
+				<td>
+					<input name="fchFinContrato" type="text" id="fchFinContrato" value="{$objProyectoVivienda->fchFinContrato}" size="12" readonly /> 
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchFinContrato' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+			</tr>
+
+			<tr>
+				<th class="tituloCampo">No. Resoluci&oacute;n</th>
+				<td colspan="3"><input name="seqResolucion" type="text" id="seqResolucion" value="{$objProyectoVivienda->seqResolucion}" onBlur="sinCaracteresEspeciales( this );" style="width:90px;"/></td>
+			</tr>
+			<tr>
+				<th class="tituloCampo">Fecha Resoluci&oacute;n</th>
+				<td colspan="3">
+					<input name="fchResolucion" type="text" id="fchResolucion" value="{$objProyectoVivienda->fchResolucion}" size="12" readonly /> 
+					<a href="#" onClick="javascript: calendarioPopUp( 'fchResolucion' ); "><img src="recursos/imagenes/calendar_icon.gif"></a>
+				</td>
+			</tr>-->
+
+			<!------------------------------------------------ SEPARADOR -------------------------------------------------->
+			<tr><td height="5px" colspan="4"></td></tr>
+			<tr><td class="tituloTabla" colspan="4">Estado del Proyecto de Vivienda</td></tr>
+			<tr><td height="5px" colspan="4"></td></tr>
+			
+			<!-- ESTADO: ACTIVO O INACTIVO -->
+			<tr>
+				<td colspan="4" align="center">
+					Activo <input name="bolActivo" type="radio" id="bolActivo" value="1" {if $objProyectoVivienda->bolActivo == 1} checked {/if} /> 
+					Inactivo <input name="bolActivo" type="radio" id="bolActivo" value="0" {if $objProyectoVivienda->bolActivo == 0} checked {/if}/> 
+				</td>
+			</tr>
+		</table>	
+
+		<!-- BOTON DE SALVAR / EDITAR -->
+		<table cellspacing="2" cellpadding="0" border="0" width="100%">	
+			<tr><td align="right" style="padding-top: 5px; padding-right: 25px;">
+				<input name="btnSalvar" type="submit" id="btnSalvar" value="Guardar" />
+				<input name="seqEditar" type="hidden" id="seqEditar" value="{$seqEditar}">
+			</td></tr>
+		</table>
+	</form>

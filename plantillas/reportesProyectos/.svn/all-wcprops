@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos
+END
+cambioWSelect.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/cambioWSelect.tpl
+END
+previewReportador.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/previewReportador.tpl
+END
+adicionCondiciones.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/adicionCondiciones.tpl
+END
+reporteador.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/reporteador.tpl
+END
+listadoExportables.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/listadoExportables.tpl
+END
+reporteInscritosGeneradoGenerado.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/reporteInscritosGeneradoGenerado.tpl
+END
+ayudaReporteador.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/ayudaReporteador.tpl
+END
+baseReportes.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/baseReportes.tpl
+END
+inicioReportes.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/inicioReportes.tpl
+END
+reporteIscritosPostulados.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/reporteIscritosPostulados.tpl
+END
+formatoResumenPrograma.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/sdv/!svn/ver/161/plantillas/reportesProyectos/formatoResumenPrograma.tpl
+END

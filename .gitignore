@@ -48,3 +48,4 @@ Temporary Items
 *.settings
 librerias/smarty/templates_c
 recursos/descargas
+recursos/archivos/lecturaConfiguracion.php

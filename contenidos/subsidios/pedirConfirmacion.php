@@ -221,7 +221,9 @@ if ($bolConfirmacion == true) {
         imprimirMensajes($arrErrores, array());
     } else {
 
-        if ($claFormulario->seqTipoEsquema == 1) {
+    	if ($claFormulario->seqEstadoProceso == 35 and $claFormulario->seqPlanGobierno == 3) {
+    		$_POST['seqEstadoProceso'] = 37;
+    	}else{
             // revisa si los cambios son en campos que afectan la calificacion
             // de ser asi, se altera el estado del proceso para que quede en 
             // 37. Inscripcion - Hogar Actualizado

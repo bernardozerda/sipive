@@ -49,3 +49,5 @@ Temporary Items
 librerias/smarty/templates_c
 recursos/descargas
 recursos/archivos/lecturaConfiguracion.php
+*.xml
+*.iml

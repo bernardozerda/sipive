@@ -914,6 +914,7 @@ if (empty($arrErrores)) {
     }
 
     $claSeguimiento = new Seguimiento;
+    var_dump($claCiduadanoNuevo);
     $txtCambios = $claSeguimiento->cambiosPostulacion($_POST['seqFormulario'], $claFormulario, $claFormularioNuevo);
 
     $sql = "

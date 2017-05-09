@@ -1,0 +1,5 @@
+#20160701 Disable server signature
+ServerSignature Off
+
+#20160701 Forbid Directory Listing
+Options -Indexes

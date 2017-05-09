@@ -38,7 +38,7 @@
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/cookie/cookie-min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/paginator/paginator-min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/datasource/datasource-min.js"></script>
-				<script language="JavaScript" type="text/javascript" src="./librerias/yui/datatable/datatable-min.js"></script>
+            <script language="JavaScript" type="text/javascript" src="./librerias/yui/datatable/datatable-min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/autocomplete/autocomplete-min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/json/json-min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/swf/swf-min.js"></script>

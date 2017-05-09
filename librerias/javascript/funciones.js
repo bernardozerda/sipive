@@ -44,6 +44,13 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
                     // si hubo pantalla de bloque al usuario, se oculta
                     if (bolCargando == 1) {
                         objCargando.hide();
+                        $(document).ready(function () {
+                            $('#example').DataTable({
+                                "pagingType": "full_numbers",
+                                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                                "order": [[1, "desc"]]
+                            });
+                        });
                     }
                 }
             };
@@ -965,8 +972,8 @@ function agregarMiembroHogarBp() {
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqNivelEducativo' name='hogar[" + objNumDocumento.value + "][seqNivelEducativo]' value='" + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-anosAprobados' name='hogar[" + objNumDocumento.value + "][anosAprobados]' value='" + objAnosAprobados.options[objAnosAprobados.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-anosAprobados' name='hogar[" + objNumDocumento.value + "][seqSalud]' value='" + objSeqSalud.options[objSeqSalud.selectedIndex ].value + "'>";
-  // txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-afiliacionSalud' name='hogar[" + objNumDocumento.value + "][afiliacionSalud]' value='" + objAfiliacionSalud.options[ objAfiliacionSalud.selectedIndex ].value + "'>";
-   // txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqSalud' name='hogar[" + objNumDocumento.value + "][seqSalud]' value='" + objSalud.options[ objSalud.selectedIndex ].value + "'>";
+    // txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-afiliacionSalud' name='hogar[" + objNumDocumento.value + "][afiliacionSalud]' value='" + objAfiliacionSalud.options[ objAfiliacionSalud.selectedIndex ].value + "'>";
+    // txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqSalud' name='hogar[" + objNumDocumento.value + "][seqSalud]' value='" + objSalud.options[ objSalud.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-bolBeneficiario' name='hogar[" + objNumDocumento.value + "][bolBeneficiario]' value='" + objBeneficiario.options[ objBeneficiario.selectedIndex ].value + "'>";
     txtInsertar += "</table> ";
 
@@ -1261,7 +1268,7 @@ function agregarMiembroHogar() {
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqNivelEducativo' name='hogar[" + objNumDocumento.value + "][seqNivelEducativo]' value='" + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-anosAprobados' name='hogar[" + objNumDocumento.value + "][anosAprobados]' value='" + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqSalud' name='hogar[" + objNumDocumento.value + "][seqSalud]' value='" + objSeqSalud.options[ objSeqSalud.selectedIndex ].value + "'>";
-   // txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-afiliacionSalud' name='hogar[" + objNumDocumento.value + "][afiliacionSalud]' value='" + objAfiliacionSalud.options[ objAfiliacionSalud.selectedIndex ].value + "'>";
+    // txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-afiliacionSalud' name='hogar[" + objNumDocumento.value + "][afiliacionSalud]' value='" + objAfiliacionSalud.options[ objAfiliacionSalud.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqTipoVictima' name='hogar[" + objNumDocumento.value + "][seqTipoVictima]' value='" + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqGrupoLgtbi' name='hogar[" + objNumDocumento.value + "][seqGrupoLgtbi]' value='" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].value + "'>";
     txtInsertar += "</table> ";
@@ -2035,12 +2042,12 @@ function modificarMiembroHogar(numDocumento) {
                 }
             }
 
-           if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqSalud") {
+            if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqSalud") {
                 for (j = 0; j < document.getElementById("seqSalud").length; j++) {
                     document.getElementById("seqSalud").selectedIndex = (document.getElementById("seqSalud").options[ j ].value == document.getElementById(numDocumentoSinPuntos + "-seqSalud").value) ? j : document.getElementById("seqSalud").selectedIndex;
                 }
             }
-           
+
 
             if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqTipoVictima") {
                 for (j = 0; j < document.getElementById("seqTipoVictima").length; j++) {
@@ -3024,23 +3031,23 @@ function verCambiosFormulario(seqFormulario, seqSeguimiento) {
     // Objeto de respuesta si es satisfactoria la carga
     var handleSuccess =
             function (o) {
-    	
-		    	var tmpObj = null;
-		        tmpObj = document.getElementById('cambios_mask');
-		        while (tmpObj != null) {
-		            //alert( tmpObj );
-		            eliminarObjeto("cambios_mask");
-		            tmpObj = document.getElementById('cambios_mask');
-		        }
-    	
-		        var tmpObj = null;
-		        tmpObj = document.getElementById('cambios_c');
-		        while (tmpObj != null) {
-		            //alert( tmpObj );
-		            eliminarObjeto("cambios_c"); 
-		            tmpObj = document.getElementById('cambios_c');
-		        }
-    	
+
+                var tmpObj = null;
+                tmpObj = document.getElementById('cambios_mask');
+                while (tmpObj != null) {
+                    //alert( tmpObj );
+                    eliminarObjeto("cambios_mask");
+                    tmpObj = document.getElementById('cambios_mask');
+                }
+
+                var tmpObj = null;
+                tmpObj = document.getElementById('cambios_c');
+                while (tmpObj != null) {
+                    //alert( tmpObj );
+                    eliminarObjeto("cambios_c");
+                    tmpObj = document.getElementById('cambios_c');
+                }
+
                 if (o.responseText !== undefined) {
 
                     var objConfiguracion = {

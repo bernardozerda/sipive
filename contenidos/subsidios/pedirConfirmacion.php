@@ -49,10 +49,10 @@ $arrCamposCalificacion[] = "seqCondicionEspecial3";
 $arrCamposCalificacion[] = "fchNacimiento";
 $arrCamposCalificacion[] = "seqNivelEducativo";
 $arrCamposCalificacion[] = "estadoCivil";
-
-//$arrCamposCalificacion[] = "anosAprobados";
-//$arrCamposCalificacion[] = "afiliacionSalud";
+$arrCamposCalificacion[] = "anosAprobados";
+$arrCamposCalificacion[] = "seqSalud";
 $arrCamposCalificacion[] = "objCiudadano";
+$arrCamposCalificacion[] = "seqEstadoProceso";
 
 /* * **********************************************************************************************************
  * VERIFICACION DE CAMBIOS AL FORMULARIO DE INSCRIPCION
@@ -149,7 +149,7 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
         if ($_POST['hogar'][$numDocumento]['anosAprobados'] == 0) {
             $arrErrores[] = "Debe seleccionar años aprobados";
         }
-        if ($_POST['hogar'][$numDocumento]['afiliacionSalud'] == 0) {
+        if ($_POST['hogar'][$numDocumento]['seqSalud'] == 0) {
             $arrErrores[] = "Debe seleccionar el tipo de afiliación";
         }
 
@@ -221,7 +221,9 @@ if ($bolConfirmacion == true) {
         imprimirMensajes($arrErrores, array());
     } else {
 
-        if ($claFormulario->seqTipoEsquema == 1) {
+        if ($claFormulario->seqEstadoProceso == 35 and $claFormulario->seqPlanGobierno == 3) {
+            $_POST['seqEstadoProceso'] = 37;
+        } else {
             // revisa si los cambios son en campos que afectan la calificacion
             // de ser asi, se altera el estado del proceso para que quede en 
             // 37. Inscripcion - Hogar Actualizado
@@ -261,28 +263,7 @@ if ($bolConfirmacion == true) {
         $claSmarty->display("subsidios/pedirConfirmacion.tpl");
     }
 } else {
-    //echo $_POST['numTelefono1'];
-    /* if ( validarTelefonoFijo($_POST['numTelefono1']) == false) {
-      $arrErrores[] = "el numero telefonico esta mal!!!";
-      imprimirMensajes( $arrErrores , array( ) );
-      } */
-    // Telefono o celular
-    /* $exregfijo = "/^[0-9]{7}$/";
-      $exregcel = "/^[3]{1}[0-9]{9}$/";
-      if ($_POST['numTelefono1'] == "" and $_POST['numCelular'] == "") {
-      $arrErrores[] = "El ciudadano debe tener un telefono de contacto";
-      } else {
-      if ($_POST['numTelefono1'] != "" && $_POST['numTelefono1'] != 0) {
-      if (!preg_match($exregfijo, $_POST['numTelefono1'])) {
-      $arrErrores[] = "El Numero Telefonico no puede ser menor ni mayor a 7 digitos";
-      }
-      }
-      if ($_POST['numCelular'] != "" && $_POST['numCelular'] != 0) {
-      if (!preg_match($exregcel, $_POST['numCelular'])) {
-      $arrErrores[] = "El Numero celular no puede ser menor ni mayor a 10 digitos y debe empezar por 3";
-      }
-      }
-      } */
+  
     if (trim($_POST['txtComentario']) == "") {
         $arrErrores[] = "Debe digitar el campo de comentarios";
     }
@@ -324,26 +305,26 @@ if ($bolConfirmacion == true) {
         $txtCambios = $claSeguimiento->cambiosPostulacion($_POST['seqFormulario'], $claFormulario, $claFormularioNuevo);
 
         $sql = "
-			 INSERT INTO T_SEG_SEGUIMIENTO ( 
-				seqFormulario, 
-				fchMovimiento, 
-				seqUsuario, 
-				txtComentario, 
-				txtCambios, 
-				numDocumento, 
-				txtNombre, 
-				seqGestion
-			 ) VALUES (
-				" . $_POST['seqFormulario'] . ",
-				now(),
-				" . $_SESSION['seqUsuario'] . ",
-				\"" . ereg_replace("\n", "", $_POST['txtComentario']) . "\",
-				\"$txtCambios\",
-				" . $_POST['numDocumento'] . ",
-				\"" . $txtNombre . "\",
-				" . $_POST['seqGestion'] . "
-			 )					
-		  ";
+                INSERT INTO T_SEG_SEGUIMIENTO ( 
+                       seqFormulario, 
+                       fchMovimiento, 
+                       seqUsuario, 
+                       txtComentario, 
+                       txtCambios, 
+                       numDocumento, 
+                       txtNombre, 
+                       seqGestion
+                ) VALUES (
+                       " . $_POST['seqFormulario'] . ",
+                       now(),
+                       " . $_SESSION['seqUsuario'] . ",
+                       \"" . ereg_replace("\n", "", $_POST['txtComentario']) . "\",
+                       \"$txtCambios\",
+                       " . $_POST['numDocumento'] . ",
+                       \"" . $txtNombre . "\",
+                       " . $_POST['seqGestion'] . "
+                )					
+         ";
         try {
             $aptBd->execute($sql);
             $seqSeguimiento = $aptBd->Insert_ID();

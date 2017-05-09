@@ -1,47 +1,7 @@
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
 <link rel="stylesheet" href="recursos/estilos/bootstrap.min.css" >
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-<!--<link href="recursos/estilos/layout.css" rel="stylesheet" type="text/css" />
-        <link href="recursos/estilos/menu.css" rel="stylesheet" type="text/css" />
-<div id="menu" class="yuimenubar yuimenubarnav">
-    <div class="bd">
-        <ul class="first-of-type">
-{foreach name=menuPrincipal from=$arrMenu key=seqPadre item=objPadre}
-    <li class="yuimenubaritem first-of-type">
-        <a class="yuimenubaritemlabel" href="#menu-{$objPadre->txtEspanol}"
-    {if $objPadre->txtEspanol|lower == 'inicio' }
-        onClick="location.reload(true);"
-    {else}
-        onClick="cargarContenido('contenido', './contenidos/{$objPadre->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqPadre}', false);"
-    {/if}
-    >{$objPadre->txtEspanol}</a>
-    {if not empty( $objPadre->hijos ) }
-        <div id="menu-{$objPadre->txtEspanol}" class="yuimenu">
-            <div class="bd">
-                <ul>
-        {foreach from=$objPadre->hijos key=seqHijo item=objHijo}
-            <li class="yuimenuitem">
-                <a class="yuimenuitemlabel" href="#menu-{$objHijo->txtEspanol}" 
-                   onClick="cargarContenido('contenido', './contenidos/{$objHijo->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqHijo}', false);"
-                   >{$objHijo->txtEspanol}</a>
-            </li>
-        {/foreach}
-    </ul>
-</div>
-</div>
-    {/if}
 
-</li>
-{/foreach}
-<li style="position: relative; float: right;"> 
-    <a href="#" id="ayuda" onClick="popUpAyuda()">
-        <img src="./recursos/imagenes/ayuda.png" width="22px" height="22px">
-    </a>
-</li>
-</ul>
-</div>
-</div>-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">

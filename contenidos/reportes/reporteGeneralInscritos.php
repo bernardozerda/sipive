@@ -129,17 +129,17 @@ $sql = "
           WHEN frm.valTotalRecursos BETWEEN 20000000 AND 25000000
           THEN
              '$20M -< $25M'
-          WHEN frm.valTotalRecursos BETWEEN 25000000 AND 30336020
+          WHEN frm.valTotalRecursos BETWEEN 25000000 AND 25820095
           THEN
-             '$25M -< $30336020'
-          WHEN frm.valTotalRecursos >= 30336020
+             '$25M -< $25820095'
+          WHEN frm.valTotalRecursos >= 25820095
           THEN
-             '> $30336020'
+             '> $25820095'
        END
           AS 'Rango Cierre Financiero',
        IF(
              (    tvh.txtDesplazado = 'Victima'
-              AND frm.valTotalRecursos >= 30336020
+              AND frm.valTotalRecursos >= 25820095
               AND (   frm.seqModalidad = 1            #Adquisición de Vivienda
                    OR frm.seqModalidad = 5                      #Arrendamiento
                    OR frm.seqModalidad = 6      #Adquisición de Vivienda Nueva
@@ -151,7 +151,7 @@ $sql = "
           OR frm.seqModalidad = 3               #Mejoramiento de Habitabilidad
           OR frm.seqModalidad = 7                #Construcción en Sitio Propio
           OR frm.seqModalidad = 2                                #Construcción
-          OR     frm.valTotalRecursos >= 30336020
+          OR     frm.valTotalRecursos >= 25820095
              AND (   frm.seqModalidad = 1             #Adquisición de Vivienda
                   OR frm.seqModalidad = 5                       #Arrendamiento
                   OR frm.seqModalidad = 6       #Adquisición de Vivienda Nueva

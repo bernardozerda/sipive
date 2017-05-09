@@ -627,7 +627,7 @@
                                     {assign var=lgbt               value=$objCiudadano->bolLgbt}
                                     {assign var=nivelEducativo     value=$objCiudadano->seqNivelEducativo}
                                     {assign var=anosAprobados      value=$objCiudadano->numAnosAprobados}
-                                    {assign var=seqSalud      value=$objCiudadano->seqSalud}
+                                    {assign var=seqSalud           value=$objCiudadano->seqSalud}
                                     {assign var=ocupacion          value=$objCiudadano->seqOcupacion}
                                     {if $objCiudadano->seqTipoVictima ==2}
                                         {assign var=victima  value='OK'}

@@ -732,12 +732,10 @@ class FormularioSubsidios {
                         seqModalidad  =   \"" . $this->seqModalidad . "\",
                         seqPlanGobierno  =   \"" . $this->seqPlanGobierno . "\",
                         seqBancoCuentaAhorro  =   \"" . $this->seqBancoCuentaAhorro . "\",
-                        fchAperturaCuentaAhorro  =   \"" . $this->fchAperturaCuentaAhorro . "\",
                         bolInmovilizadoCuentaAhorro  =   \"" . $this->bolInmovilizadoCuentaAhorro . "\",
                         valSaldoCuentaAhorro  =   \"" . $valSaldoCuentaAhorroFormatUpd . "\",
                         txtSoporteCuentaAhorro  =   \"" . $this->txtSoporteCuentaAhorro . "\",
                         seqBancoCuentaAhorro2  =  \"" . $this->seqBancoCuentaAhorro2 . "\",
-                        fchAperturaCuentaAhorro2  =   \"" . $this->fchAperturaCuentaAhorro2 . "\",
                         bolInmovilizadoCuentaAhorro2  =   \"" . $this->bolInmovilizadoCuentaAhorro2 . "\",
                         valSaldoCuentaAhorro2  =   \"" . $valSaldoCuentaAhorro2FormatUpd . "\",
                         txtSoporteCuentaAhorro2  =   \"" . $this->txtSoporteCuentaAhorro2 . "\",
@@ -763,9 +761,6 @@ class FormularioSubsidios {
                         seqVivienda  =   \"" . $this->seqVivienda . "\",
                         valArriendo  =   \"" . $this->valArriendo . "\",
                         bolPromesaFirmada  =   \"" . $this->bolPromesaFirmada . "\",
-                        fchInscripcion  =   \"" . $fechaInscripcion . "\",
-                        fchPostulacion  =   \"" . $this->fchPostulacion . "\",
-                        fchVencimiento  =   \"" . $this->fchVencimiento . "\",
                         bolIntegracionSocial  =   \"" . $this->bolIntegracionSocial . "\",
                         bolSecSalud  =   \"" . $this->bolSecSalud . "\",
                         bolSecEducacion =   \"" . $this->bolSecEducacion . "\",
@@ -776,23 +771,67 @@ class FormularioSubsidios {
                         numAdultosNucleo  =   \"" . $this->numAdultosNucleo . "\",
                         numNinosNucleo  =   \"" . $this->numNinosNucleo . "\",
                         seqUsuario  =   \"" . $this->seqUsuario . "\",
-			seqLocalidad  =   \"" . $this->seqLocalidad . "\",
+			            seqLocalidad  =   \"" . $this->seqLocalidad . "\",
                         seqCiudad  =    \"" . $this->seqCiudad . "\",
                         valIngresoHogar  =   \"" . $valIngresoHogarFormat . "\",
                         txtDireccionSolucion = \"" . $this->txtDireccionSolucion . "\",
                         seqPuntoAtencion = \"" . $this->seqPuntoAtencion . "\",
-                        fchAprobacionCredito = \"" . $this->fchAprobacionCredito . "\",
                         txtFormulario = \"" . $this->txtFormulario . "\",
-                        fchUltimaActualizacion = \"" . $this->fchUltimaActualizacion . "\",
                         seqProyecto = \"" . $this->seqProyecto . "\",
                         txtSoporteSubsidioNacional = \"" . $this->txtSoporteSubsidioNacional . "\",
-			seqEntidadSubsidio = \"" . $this->seqEntidadSubsidio . "\",
-                        fchArriendoDesde = \"" . $this->fchArriendoDesde . "\",
+			            seqEntidadSubsidio = \"" . $this->seqEntidadSubsidio . "\",
                         numHacinamiento = \"" . $this->numHacinamiento . "\",
                         numHabitaciones = \"" . $this->numHabitaciones . "\",
-						
                         txtComprobanteArriendo = \"" . $this->txtComprobanteArriendo . "\", ";
-		
+
+        if(trim($this->fchAperturaCuentaAhorro) != "" and trim($this->fchAperturaCuentaAhorro) != "0000-00-00 00:00:00" and trim($this->fchAperturaCuentaAhorro) != "0000-00-00") {
+            $sql .= " fchAperturaCuentaAhorro = \"" . $this->fchAperturaCuentaAhorro . "\", ";
+        }else{
+            $sql .= " fchAperturaCuentaAhorro = NULL, ";
+        }
+
+        if(trim($this->fchAperturaCuentaAhorro2) != "" and trim($this->fchAperturaCuentaAhorro2) != "0000-00-00 00:00:00" and trim($this->fchAperturaCuentaAhorro2) != "0000-00-00") {
+            $sql .= " fchAperturaCuentaAhorro2 = \"" . $this->fchAperturaCuentaAhorro2 . "\", ";
+        }else{
+            $sql .= " fchAperturaCuentaAhorro2 = NULL, ";
+        }
+
+        if(trim($fechaInscripcion) != "" and trim($fechaInscripcion) != "0000-00-00 00:00:00" and trim($fechaInscripcion) != "0000-00-00") {
+            $sql .= " fchInscripcion = \"" . $fechaInscripcion . "\", ";
+        }else{
+            $sql .= " fchInscripcion = NULL, ";
+        }
+
+        if(trim($this->fchPostulacion) != "" and trim($this->fchPostulacion) != "0000-00-00 00:00:00" and trim($this->fchPostulacion) != "0000-00-00") {
+            $sql .= " fchPostulacion = \"" . $this->fchPostulacion . "\", ";
+        }else{
+            $sql .= " fchPostulacion = NULL, ";
+        }
+
+        if(trim($this->fchVencimiento) != "" and trim($this->fchVencimiento) != "0000-00-00 00:00:00" and trim($this->fchVencimiento) != "0000-00-00") {
+            $sql .= " fchVencimiento = \"" . $this->fchVencimiento . "\", ";
+        }else{
+            $sql .= " fchVencimiento = NULL, ";
+        }
+
+        if(trim($this->fchAprobacionCredito) != "" and trim($this->fchAprobacionCredito) != "0000-00-00 00:00:00" and trim($this->fchAprobacionCredito) != "0000-00-00") {
+            $sql .= " fchAprobacionCredito = \"" . $this->fchAprobacionCredito . "\", ";
+        }else{
+            $sql .= " fchAprobacionCredito = NULL, ";
+        }
+
+        if(trim($this->fchUltimaActualizacion) != "" and trim($this->fchUltimaActualizacion) != "0000-00-00 00:00:00" and trim($this->fchUltimaActualizacion) != "0000-00-00") {
+            $sql .= " fchUltimaActualizacion = \"" . $this->fchUltimaActualizacion . "\", ";
+        }else{
+            $sql .= " fchUltimaActualizacion = NULL, ";
+        }
+
+        if(trim($this->fchArriendoDesde) != "" and trim($this->fchArriendoDesde) != "0000-00-00 00:00:00" and trim($this->fchArriendoDesde) != "0000-00-00") {
+            $sql .= " fchArriendoDesde = \"" . $this->fchArriendoDesde . "\", ";
+        }else{
+            $sql .= " fchArriendoDesde = NULL, ";
+        }
+
 		if (trim($this->seqSisben) != "") {
             $sql .= " seqSisben = \"" . $this->seqSisben . "\", ";
         }
@@ -809,22 +848,26 @@ class FormularioSubsidios {
         if (($estadoActual == 15 || $etapaActual == 5) && ($flagActualizar == 1)) {
             $a = "FORMULARIO CERRADO, NO SE ACTUALIZA ESQUEMA, ESTADO Y BOLCERRADO";
         } else {
-            $sql .= "seqTipoEsquema = \"" . $this->seqTipoEsquema . "\",
-								bolCerrado  =   \"" . $this->bolCerrado . "\",
-								seqEstadoProceso  =   \"" . $this->seqEstadoProceso . "\", ";
+            $sql .= "
+                seqTipoEsquema = \"" . $this->seqTipoEsquema . "\",
+                bolCerrado  =   \"" . $this->bolCerrado . "\",
+                seqEstadoProceso  =   \"" . $this->seqEstadoProceso . "\", 
+            ";
         }
-        $sql .= "fchVigencia = \"" . $this->fchVigencia . "\"
-                    WHERE
-                        seqFormulario = $seqFormulario
-                ";
-        /* if($_SESSION['seqUsuario'] == 251){
-          echo $sql;
-          } */
+
+        if(trim($this->fchVigencia) != "" and trim($this->fchVigencia) != "0000-00-00 00:00:00" and trim($this->fchVigencia) != "0000-00-00") {
+            $sql .= " fchVigencia = \"" . $this->fchVigencia . "\" ";
+        }else{
+            $sql .= " fchVigencia = NULL ";
+        }
+
+        $sql .= "WHERE seqFormulario = $seqFormulario";
+
         try {
             $aptBd->execute($sql);
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se ha podido actualizar la informacion del formulario [$seqFormulario]";
-            //				pr( $objError->getMessage() );
+            //pr( $objError->getMessage() );
         }
 
         if (empty($arrErrores)) {

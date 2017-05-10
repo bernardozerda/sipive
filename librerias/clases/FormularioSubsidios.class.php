@@ -867,7 +867,7 @@ class FormularioSubsidios {
             $aptBd->execute($sql);
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se ha podido actualizar la informacion del formulario [$seqFormulario]";
-            //pr( $objError->getMessage() );
+            pr( $objError->getMessage() );
         }
 
         if (empty($arrErrores)) {

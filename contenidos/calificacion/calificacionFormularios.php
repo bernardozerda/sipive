@@ -15,7 +15,7 @@ $sql = "
         FROM 
                 T_FRM_MODALIDAD INNER JOIN T_FRM_PLAN_GOBIERNO ON (T_FRM_MODALIDAD.seqPlanGobierno = T_FRM_PLAN_GOBIERNO.seqPlanGobierno)
         WHERE
-                T_FRM_MODALIDAD.seqPlanGobierno = 2
+                T_FRM_MODALIDAD.seqPlanGobierno = 3
         ORDER BY
                 seqModalidad
 	";
@@ -25,16 +25,6 @@ while ($objRes->fields) {
     $objRes->MoveNext();
 }
 
-// Fechas de Calificacion
-/* $sql = "
-  SELECT
-  date_format(fchCalificacion,'%Y-%m-%d') AS fechaCalificacion, COUNT(*) AS cuantos
-  FROM
-  t_frm_calificacion_plan2
-  GROUP BY
-  fechaCalificacion
-  ORDER BY
-  fechaCalificacion"; */
 $sql = "
 		SELECT 
 			fchCalificacion AS fechaCalificacion, COUNT(*) AS cuantos

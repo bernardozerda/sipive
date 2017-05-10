@@ -17,8 +17,6 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
 
     $arrErrores = array();
-	
-	
 
     /* * ************************************************************************************************************
      * VALIDACION DE LOS CAMPOS OBLIGATORIOS Y REGLAS DE NEGOCIO
@@ -97,33 +95,6 @@
         $arrErrores[] = "Seleccione el barrio";
     }
 
-    // Formatos de expresion regular para telefonos fijos y celular
-    /*$txtFormatoFijo = "/^[0-9]{7}$/";
-    $txtFormatoCelular = "/^[3]{1}[0-9]{9}$/";
-
-    // Telefono Fijo 1
-    if (is_numeric($_POST['numTelefono1']) == true) {
-        if (!preg_match($txtFormatoFijo, trim($_POST['numTelefono1']))) {
-            $arrErrores[] = "El número telefonico fijo 1 debe tener 7 digitos";
-        }
-    }
-
-    // Telefono Fijo 2
-    if (is_numeric($_POST['numTelefono2']) == true) {
-        if (!preg_match($txtFormatoFijo, trim($_POST['numTelefono2']))) {
-            $arrErrores[] = "El número telefonico fijo 2 debe tener 7 digitos";
-        }
-    }
-
-    // Telefono Celular
-    if (is_numeric($_POST['numCelular']) == false and is_numeric($_POST['numTelefono1']) == false) {
-        $arrErrores[] = "Debe registrar un telefono fijo o celular de contacto";
-    } elseif (is_numeric($_POST['numCelular']) == true) {
-        if (!preg_match($txtFormatoCelular, trim($_POST['numCelular']))) {
-            $arrErrores[] = "El número telefonico celular debe tener 10 digitos y debe iniciar con el número 3";
-        }
-    }*/
-	
     $txtFormatoFijo    = "/^[0-9]{7}$/";
     $txtFormatoCelular = "/^[3]{1}[0-9]{9}$/";
 
@@ -139,23 +110,6 @@
     		$arrErrores[] = "El número telefonico fijo 1 debe tener 7 digitos";
     	}
     }
-    
-// 	$exregfijo = "/^[0-9]{7}$/";
-// 	$exregcel = "/^[3]{1}[0-9]{9}$/";
-// 	if ($_POST['numTelefono1'] == "" and $_POST['numCelular'] == "") {
-// 		$arrErrores[] = "El ciudadano debe tener un telefono de contacto";
-// 	} else {
-// 		if ($_POST['numTelefono1'] != "" || $_POST['numTelefono1'] != 0) {
-// 			if (!preg_match($exregfijo, $_POST['numTelefono1'])) {
-// 				$arrErrores[] = "El Numero Telefonico no puede ser menor ni mayor a 7 digitos";
-// 			}
-// 		}
-// 		if ($_POST['numCelular'] != "" || $_POST['numCelular'] != 0) {
-// 			if (!preg_match($exregcel, $_POST['numCelular'])) {
-// 				$arrErrores[] = "El Numero celular no puede ser menor ni mayor a 10 digitos y debe empezar por 3";
-// 			}
-// 		}
-// 	}
 
     // Valor del arriendo
     $_POST['valArriendo'] = mb_ereg_replace("[^0-9]", "", $_POST['valArriendo']);
@@ -177,9 +131,7 @@
 
     // Ingresos del hogar
     $_POST['valIngresoHogar'] = mb_ereg_replace("[^0-9]", "", $_POST['valIngresoHogar']);
-    //	if( intval( $_POST['valIngresoHogar'] ) == 0 ){
-    //		$arrErrores[] = "Debe digitar un valor en el campo de ingresos";
-    //	}
+
     // Si tiene valor ahorrado debe seleccionar en cual banco 
     $_POST['valSaldoCuentaAhorro'] = mb_ereg_replace("[^0-9]", "", $_POST['valSaldoCuentaAhorro']);
     if (intval($_POST['valSaldoCuentaAhorro']) != 0 and intval($_POST['seqBancoCuentaAhorro']) == 1) {
@@ -436,9 +388,9 @@
 			$claCiudadanoNuevo = new Ciudadano();
 			  $claFormularioNuevo = new FormularioSubsidios();
 			  $claSeguimiento = new Seguimiento();
-			  
+
 			  // Datos Ciudadano Existente
-			  
+
 			   $claCiudadano->numDocumento = $_POST['numDocumento'];
                 $claCiudadano->seqTipoDocumento = $_POST['seqTipoDocumento'];
                 $claCiudadano->txtNombre1 = trim($_POST['txtNombre1']);
@@ -459,7 +411,7 @@
                 $claCiudadano->seqOcupacion = $_POST['seqOcupacion'];
                 $claCiudadano->valIngresos = $_POST['valIngresoHogar'];
                 $claCiudadano->seqParentesco = 1;
-			  
+
 			  // coloca los datoa del post en el formulario
 			  $claFormularioNuevo->seqFormulario                = $_POST['seqFormulario'];
 			  $claFormularioNuevo->txtDireccion                 = $_POST['txtDireccion'];
@@ -471,67 +423,66 @@
 			  $claFormularioNuevo->txtCorreo                    = $_POST['txtCorreo'];
 			  $claFormularioNuevo->txtMatriculaInmobiliaria     = $_POST['txtMatriculaInmobiliaria'];
 			  $claFormularioNuevo->txtChip                      = $_POST['txtChip'];
-			  $claFormularioNuevo->bolViabilizada               = $_POST['bolViabilizada'];
-			  $claFormularioNuevo->bolIdentificada              = $_POST['bolIdentificada'];
-			  $claFormularioNuevo->bolDesplazado                = $_POST['bolDesplazado'];
+			  $claFormularioNuevo->bolViabilizada               = intval($_POST['bolViabilizada']);
+			  $claFormularioNuevo->bolIdentificada              = intval($_POST['bolIdentificada']);
+			  $claFormularioNuevo->bolDesplazado                = intval($_POST['bolDesplazado']);
 			  $claFormularioNuevo->seqSolucion                  = $_POST['seqSolucion'];
-			  $claFormularioNuevo->valPresupuesto               = $_POST['valPresupuesto'];
-			  $claFormularioNuevo->valAvaluo                    = $_POST['valAvaluo'];
-			  $claFormularioNuevo->valTotal                     = $_POST['valTotal'];
+			  $claFormularioNuevo->valPresupuesto               = intval($_POST['valPresupuesto']);
+			  $claFormularioNuevo->valAvaluo                    = intval($_POST['valAvaluo']);
+			  $claFormularioNuevo->valTotal                     = intval($_POST['valTotal']);
 			  $claFormularioNuevo->seqModalidad                 = $_POST['seqModalidad'];
 			  $claFormularioNuevo->seqPlanGobierno              = $_POST['seqPlanGobierno'];
 			  $claFormularioNuevo->seqBancoCuentaAhorro         = $_POST['seqBancoCuentaAhorro'];
 			  $claFormularioNuevo->fchAperturaCuentaAhorro      = $_POST['fchAperturaCuentaAhorro'];
 			  $claFormularioNuevo->bolInmovilizadoCuentaAhorro  = intval( $_POST['bolInmovilizadoCuentaAhorro'] );
-			  $claFormularioNuevo->valSaldoCuentaAhorro         = $_POST['valSaldoCuentaAhorro'];
+			  $claFormularioNuevo->valSaldoCuentaAhorro         = intval($_POST['valSaldoCuentaAhorro']);
 			  $claFormularioNuevo->txtSoporteCuentaAhorro       = $_POST['txtSoporteCuentaAhorro'];
 			  $claFormularioNuevo->seqBancoCuentaAhorro2        = $_POST['seqBancoCuentaAhorro2'];
 			  $claFormularioNuevo->fchAperturaCuentaAhorro2     = $_POST['fchAperturaCuentaAhorro2'];
 			  $claFormularioNuevo->bolInmovilizadoCuentaAhorro2 = intval( $_POST['bolInmovilizadoCuentaAhorro2'] );
-			  $claFormularioNuevo->valSaldoCuentaAhorro2        = $_POST['valSaldoCuentaAhorro2'];
+			  $claFormularioNuevo->valSaldoCuentaAhorro2        = intval($_POST['valSaldoCuentaAhorro2']);
 			  $claFormularioNuevo->txtSoporteCuentaAhorro2      = $_POST['txtSoporteCuentaAhorro2'];
-			  $claFormularioNuevo->valSubsidioNacional          = $_POST['valSubsidioNacional'];
+			  $claFormularioNuevo->valSubsidioNacional          = intval($_POST['valSubsidioNacional']);
 			  $claFormularioNuevo->txtSoporteSubsidioNacional   = $_POST['txtSoporteSubsidioNacional'];
 			  $claFormularioNuevo->txtSoporteSubsidio           = $_POST['txtSoporteSubsidio'];
-			  $claFormularioNuevo->valAporteLote                = $_POST['valAporteLote'];
+			  $claFormularioNuevo->valAporteLote                = intval($_POST['valAporteLote']);
 			  $claFormularioNuevo->txtSoporteAporteLote         = $_POST['txtSoporteLote'];
 			  $claFormularioNuevo->seqCesantias                 = 1;
-			  $claFormularioNuevo->valSaldoCesantias            = $_POST['valSaldoCesantias'];
+			  $claFormularioNuevo->valSaldoCesantias            = intval($_POST['valSaldoCesantias']);
 			  $claFormularioNuevo->txtSoporteCesantias          = $_POST['txtSoporteCesantias'];
-			  $claFormularioNuevo->valAporteAvanceObra          = $_POST['valAporteAvanceObra'];
+			  $claFormularioNuevo->valAporteAvanceObra          = intval($_POST['valAporteAvanceObra']);
 			  $claFormularioNuevo->txtSoporteAvanceObra         = $_POST['txtSoporteAvanceObra'];
-			  $claFormularioNuevo->valAporteMateriales          = $_POST['valAporteMateriales'];
+			  $claFormularioNuevo->valAporteMateriales          = intval($_POST['valAporteMateriales']);
 			  $claFormularioNuevo->txtSoporteAporteMateriales   = $_POST['txtSoporteAporteMateriales'];
 			  $claFormularioNuevo->seqEmpresaDonante            = $_POST['seqEmpresaDonante'];
-			  $claFormularioNuevo->valDonacion                  = $_POST['valDonacion'];
+			  $claFormularioNuevo->valDonacion                  = intval($_POST['valDonacion']);
 			  $claFormularioNuevo->txtSoporteDonacion           = $_POST['txtSoporteDonacion'];
 			  $claFormularioNuevo->seqBancoCredito              = $_POST['seqBancoCredito'];
-			  $claFormularioNuevo->valCredito                   = $_POST['valCredito'];
+			  $claFormularioNuevo->valCredito                   = intval($_POST['valCredito']);
 			  $claFormularioNuevo->txtSoporteCredito            = $_POST['txtSoporteCredito'];
-			  $claFormularioNuevo->valTotalRecursos             = $_POST['valSaldoCuentaAhorro'] + $_POST['valSubsidioNacional'] + $_POST['valCredito'] +$_POST['valDonacion'];
-			  $claFormularioNuevo->valAspiraSubsidio            = $_POST['valAspiraSubsidio'];
+			  $claFormularioNuevo->valTotalRecursos             = intval($_POST['valSaldoCuentaAhorro'] + $_POST['valSubsidioNacional'] + $_POST['valCredito'] +$_POST['valDonacion']);
+			  $claFormularioNuevo->valAspiraSubsidio            = intval(['valAspiraSubsidio']);
 			  $claFormularioNuevo->seqVivienda                  = $_POST['seqVivienda'];
-			  $claFormularioNuevo->valArriendo                  = $_POST['valArriendo'];
-			  $claFormularioNuevo->bolPromesaFirmada            = $_POST['bolPromesaFirmada'];
-			  //if ($claFormularioNuevo->seqEstadoProceso == 35){
-				//$claFormularioNuevo->fchInscripcion             = $claFormulario->fchInscripcion;
-				$claFormularioNuevo->fchInscripcion             = $_POST['fchInscripcion'];
-			  //}
+			  $claFormularioNuevo->valArriendo                  = intval($_POST['valArriendo']);
+			  $claFormularioNuevo->bolPromesaFirmada            = intval($_POST['bolPromesaFirmada']);
+              $claFormularioNuevo->fchInscripcion             = $_POST['fchInscripcion'];
 			  $claFormularioNuevo->fchPostulacion               = $claFormulario->fchPostulacion;
 			  $claFormularioNuevo->fchVencimiento               = $claFormulario->fchVencimiento;
-			  //$claFormularioNuevo->bolIntegracionSocial         = $_POST['bolIntegracionSocial'];
-			  $claFormularioNuevo->bolSecSalud                  = $_POST['bolSecSalud'];
-			  $claFormularioNuevo->bolSecEducacion              = $_POST['bolSecEducacion'];
-			  //$claFormularioNuevo->bolIpes                      = $_POST['bolIpes'];
+			  $claFormularioNuevo->bolIntegracionSocial         = intval($_POST['bolIntegracionSocial']);
+			  $claFormularioNuevo->bolSecSalud                  = intval($_POST['bolSecSalud']);
+			  $claFormularioNuevo->bolSecEducacion              = intval($_POST['bolSecEducacion']);
+			  $claFormularioNuevo->bolIpes                      = intval($_POST['bolIpes']);
+              $claFormularioNuevo->bolSecMujer                  = intval($_POST['bolSecMujer']);
+              $claFormularioNuevo->bolAltaCon                  = intval($_POST['bolAltaCon']);
 			  $claFormularioNuevo->txtOtro                      = $_POST['txtOtro'];
 			  $claFormularioNuevo->numAdultosNucleo             = $numAdultos;
 			  $claFormularioNuevo->numNinosNucleo               = $numNinos;
 			  $claFormularioNuevo->seqUsuario                   = $_SESSION['seqUsuario'];
 			  $claFormularioNuevo->seqPuntoAtencion             = $_SESSION['seqPuntoAtencion'];
-			  $claFormularioNuevo->bolCerrado                   = $_POST['bolCerrado'];
+			  $claFormularioNuevo->bolCerrado                   = intval($_POST['bolCerrado']);
 			  $claFormularioNuevo->seqLocalidad                 = $_POST['seqLocalidad'];
 			  $claFormularioNuevo->seqCiudad                    = $_POST['seqCiudad'];
-			  $claFormularioNuevo->valIngresoHogar              = $_POST['valIngresoHogar'];
+			  $claFormularioNuevo->valIngresoHogar              = intval($_POST['valIngresoHogar']);
 			  $claFormularioNuevo->seqEstadoProceso             = $_POST['seqEstadoProceso'];
 			  $claFormularioNuevo->txtDireccionSolucion         = $_POST['txtDireccionSolucion'];
 			  $claFormularioNuevo->fchAprobacionCredito         = $_POST['fchAprobacionCredito'];
@@ -543,15 +494,19 @@
 			  $claFormularioNuevo->numCortes                    = 0;
 			  $claFormularioNuevo->seqPeriodo                   = 1;
 			  $claFormularioNuevo->fchArriendoDesde             = $_POST['fchArriendoDesde'];
-			  $claFormularioNuevo->bolSancion                   = $_POST['bolSancion'];
+			  $claFormularioNuevo->bolSancion                   = intval($_POST['bolSancion']);
 			  $claFormularioNuevo->fchVigencia                  = $claFormulario->fchVigencia;
 			  $claFormularioNuevo->seqUpz                       = $_POST['seqUpz'];
 			  $claFormularioNuevo->seqBarrio                    = $_POST['seqBarrio'];
 			  $claFormularioNuevo->seqSisben                    = $_POST['seqSisben'];
 			  $claFormularioNuevo->fchNotificacion              = $claFormulario->fchNotificacion;
 			  $claFormularioNuevo->txtComprobanteArriendo       = $_POST['txtComprobanteArriendo'];
+
+              $claFormularioNuevo->numAdultosNucleo             = intval($_POST['numAdultosNucleo']);
+              $claFormularioNuevo->numNinosNucleo               = intval($_POST['numNinosNucleo']);
+              $claFormularioNuevo->seqProyecto                  = intval($_POST['seqProyecto']);
 			  $claFormularioNuevo->numPuntajeSisben             = 0;
-//var_dump($claFormularioNuevo);
+
 			  // edita los datos del formulario
 			  $claFormularioNuevo->editarFormulario( $_POST['seqFormulario'] );
 			  $seqFormulario = $_POST['seqFormulario'];

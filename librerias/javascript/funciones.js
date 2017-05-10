@@ -1248,6 +1248,12 @@ function agregarMiembroHogar() {
     }
     objNumDocumento.value = txtResultado;
 
+    //alert( objAnosAprobados.selectedIndex );
+
+    if(objAnosAprobados.selectedIndex == -1){
+        objAnosAprobados.selectedIndex = 0;
+    }
+
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-txtNombre1' name='hogar[" + objNumDocumento.value + "][txtNombre1]' value='" + objNombre1.value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-txtNombre2' name='hogar[" + objNumDocumento.value + "][txtNombre2]' value='" + objNombre2.value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-txtApellido1' name='hogar[" + objNumDocumento.value + "][txtApellido1]' value='" + objApellido1.value + "'>";
@@ -4221,7 +4227,7 @@ function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
         this.cancel();
 
         direccionGenerada.innerHTML = txtDireccionForm.value;
-        mostrarMapa(txtDireccionForm);
+        //mostrarMapa(txtDireccionForm);
 
         var objCiudad = document.getElementById("seqCiudad");
         if (objCiudad != null) {

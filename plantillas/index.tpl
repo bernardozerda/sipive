@@ -51,7 +51,7 @@
             <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
             <script src="librerias/jquery/jquery.dataTables.min.js"></script>
             <script src="librerias/jquery/dataTables.bootstrap.min.js"></script>
-            <link rel="stylesheet" href="recursos/estilos/jquery-ui.css"/> 
+            {*<link rel="stylesheet" href="recursos/estilos/jquery-ui.css"/> *}
 
             <link rel="stylesheet" href="librerias/jquery/css/dataTables.bootstrap.min.css"/> 
     </head>

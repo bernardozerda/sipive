@@ -606,25 +606,23 @@ if (empty($arrErrores)) {
     try {
         if ($_POST['seqPlanGobierno'] != 3) {
             $_POST['valAspiraSubsidio'] = mb_ereg_replace("[^0-9]", "", $_POST['valAspiraSubsidio']);
-            $valAspiraSubsidio = 0;
-            $sql = "
-            SELECT valSubsidio
-            FROM T_FRM_VALOR_SUBSIDIO
-            WHERE seqSolucion = " . $_POST['seqSolucion'] . "
-              AND seqModalidad = " . $_POST['seqModalidad'] . "
-         ";
-            $objRes = $aptBd->execute($sql);
-            if ($objRes->RecordCount() > 0) {
-                $valAspiraSubsidio = $objRes->fields['valSubsidio'];
-                if (( intval($_POST['valAspiraSubsidio']) < $valAspiraSubsidio ) and trim($_POST['txtSoporteSubsidio']) == "") {
-                    $arrErrores[] = "No puede cambiar el valor tope del subsidio sin dar un soporte para este cambio, diligencie el campo 'Soporte Cambio'";
+            if(intval($_POST['valAspiraSubsidio']) != 0) {
+                $valAspiraSubsidio = 0;
+                $sql = "
+                    SELECT valSubsidio
+                    FROM T_FRM_VALOR_SUBSIDIO
+                    WHERE seqSolucion = " . $_POST['seqSolucion'] . "
+                      AND seqModalidad = " . $_POST['seqModalidad'] . "
+                 ";
+                $objRes = $aptBd->execute($sql);
+                if ($objRes->RecordCount() > 0) {
+                    $valAspiraSubsidio = $objRes->fields['valSubsidio'];
+                    if ((intval($_POST['valAspiraSubsidio']) < $valAspiraSubsidio) and trim($_POST['txtSoporteSubsidio']) == "") {
+                        $arrErrores[] = "No puede cambiar el valor tope del subsidio sin dar un soporte para este cambio, diligencie el campo 'Soporte Cambio'";
+                    }
+                } else {
+                    $arrErrores[] = "No se ha podido establecer el valor del subsidio con base en la modalidad y la solucion seleccionada";
                 }
-                /* Con el cambio del valor indexado esta validación no aplica
-                  if( intval( $_POST['valAspiraSubsidio'] ) > $valAspiraSubsidio ){
-                  $arrErrores[] = "El valor del subsidio al que se aspira nunca puede superar el limite establecido";
-                  } */
-            } else {
-                $arrErrores[] = "No se ha podido establecer el valor del subsidio con base en la modalidad y la solucion seleccionada";
             }
         }
     } catch (Exception $objError) {
@@ -810,11 +808,11 @@ if (empty($arrErrores)) {
     $claFormularioNuevo->fchPostulacion = $claFormulario->fchPostulacion;
     $claFormularioNuevo->fchVencimiento = $claFormulario->fchVencimiento;
     $claFormularioNuevo->bolIntegracionSocial = $_POST['bolIntegracionSocial'];
-    $claFormularioNuevo->bolSecSalud = $_POST['bolSecSalud'];
-    $claFormularioNuevo->bolSecEducacion = $_POST['bolSecEducacion'];
-    $claFormularioNuevo->bolSecMujer = $_POST['bolSecMujer'];
-    $claFormularioNuevo->bolIpes = $_POST['bolIpes'];
-    $claFormularioNuevo->bolAltaCon = $_POST['bolAltaCon'];
+    $claFormularioNuevo->bolSecSalud = intval($_POST['bolSecSalud']);
+    $claFormularioNuevo->bolSecEducacion = intval($_POST['bolSecEducacion']);
+    $claFormularioNuevo->bolSecMujer = intval($_POST['bolSecMujer']);
+    $claFormularioNuevo->bolIpes = intval($_POST['bolIpes']);
+    $claFormularioNuevo->bolAltaCon = intval($_POST['bolAltaCon']);
     $claFormularioNuevo->txtOtro = $_POST['txtOtro'];
     $claFormularioNuevo->numAdultosNucleo = $numAdultos;
     $claFormularioNuevo->numNinosNucleo = $numNinos;
@@ -850,6 +848,9 @@ if (empty($arrErrores)) {
     $claFormularioNuevo->flagActualizar = 1;
     $claFormularioNuevo->numHabitaciones = $_POST['numCohabitacion'];
     $claFormularioNuevo->numHacinamiento = $_POST['numHacinamiento'];
+
+//    pr($claFormularioNuevo);
+//    die();
 
     // edita los datos del formulario
     $claFormularioNuevo->editarFormulario($_POST['seqFormulario']);
@@ -914,7 +915,7 @@ if (empty($arrErrores)) {
     }
 
     $claSeguimiento = new Seguimiento;
-    var_dump($claCiduadanoNuevo);
+    //var_dump($claCiduadanoNuevo);
     $txtCambios = $claSeguimiento->cambiosPostulacion($_POST['seqFormulario'], $claFormulario, $claFormularioNuevo);
 
     $sql = "
@@ -931,8 +932,8 @@ if (empty($arrErrores)) {
 				\"" . $_POST['seqFormulario'] . "\",
 				now(),
 				\"" . $_SESSION['seqUsuario'] . "\",
-				\"" . ereg_replace("\n", "", $_POST['txtComentario']) . "\",
-				\"" . ereg_replace("\"", "", $txtCambios) . "\",
+				\"" . mb_ereg_replace("\n", "", $_POST['txtComentario']) . "\",
+				\"" . mb_ereg_replace("\"", "", $txtCambios) . "\",
 				\"" . $_POST['numDocumento'] . "\",
 				\"" . $txtNombre . "\",
 				\"" . $_POST['seqGestion'] . "\"

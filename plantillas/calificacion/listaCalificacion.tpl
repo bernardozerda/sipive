@@ -1,6 +1,6 @@
 <center>
     <center>
-        <h3>Información de Calificación</h3>
+        <h3><img src="recursos/imagenes/Back.png" onclick="">Información de Calificación</h3>
         <div style="width: 100%" >
             <p>
             <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%" >

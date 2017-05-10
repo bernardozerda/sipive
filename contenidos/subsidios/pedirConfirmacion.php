@@ -15,7 +15,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
 
-$bolConfirmacion = true;
+$bolConfirmacion = false;
 $arrErrores = array();
 $arrMensajes = array();
 $arrCamposLibres = array();
@@ -28,16 +28,11 @@ $arrCamposLibres[] = "txtDireccion";
 $arrCamposLibres[] = "numTelefono1";
 $arrCamposLibres[] = "numTelefono2";
 $arrCamposLibres[] = "numCelular";
-$arrCamposLibres[] = "seqLocalidad";
-$arrCamposLibres[] = "txtCorreo";
 $arrCamposLibres[] = "seqCiudad";
 $arrCamposLibres[] = "seqLocalidad";
 $arrCamposLibres[] = "seqBarrio";
+$arrCamposLibres[] = "txtCorreo";
 $arrCamposLibres[] = "seqUpz";
-$arrCamposLibres[] = "seqVivienda";
-$arrCamposLibres[] = "valArriendo";
-$arrCamposLibres[] = "fchArriendoDesde";
-$arrCamposLibres[] = "txtComprobanteArriendo";
 
 $arrCamposCalificacion[] = "valIngresoHogar";
 $arrCamposCalificacion[] = "valTotalRecursos";
@@ -57,12 +52,10 @@ $arrCamposCalificacion[] = "seqEstadoProceso";
 /* * **********************************************************************************************************
  * VERIFICACION DE CAMBIOS AL FORMULARIO DE INSCRIPCION
  * ********************************************************************************************************** */
-//var_dump($_POST);
+
 if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarInscripcion.php") {
 
     $estadoActual = $_POST['seqEstadoProceso'];
-    //echo "Estado: ". $estadoActual;
-
     if ($estadoActual == 12 || $estadoActual == 35) {
         // Cambios en los datos del ciudadano
         foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
@@ -137,37 +130,27 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
     $claFormulario = new FormularioSubsidios();
     $claFormulario->cargarFormulario($_POST['seqFormulario']);
 
-
-
     // Verifica cambios en los ciudadanos que estan en el post y en la clase
     // ademas verifica si un ciudadano ha sido eliminado del formulario
     $arrCedulasFormulario = array();
     foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
         $numDocumento = $objCiudadano->numDocumento;
         $arrCedulasFormulario[] = $numDocumento;
-
-        if ($_POST['hogar'][$numDocumento]['anosAprobados'] == 0) {
-            $arrErrores[] = "Debe seleccionar años aprobados";
-        }
-        if ($_POST['hogar'][$numDocumento]['seqSalud'] == 0) {
-            $arrErrores[] = "Debe seleccionar el tipo de afiliación";
-        }
-
         if (isset($_POST['hogar'][$numDocumento])) {
             foreach ($objCiudadano as $txtClave => $txtValor) {
-                //echo $txtValor."******".$_POST['hogar'][$numDocumento][$txtClave]." ->".$txtClave."<br>";
                 if (isset($_POST['hogar'][$numDocumento][$txtClave])) {
                     if (trim($txtValor) != trim($_POST['hogar'][$numDocumento][$txtClave])) {
-
                         $arrCamposCambiados[] = $txtClave;
                         $bolConfirmacion = true;
+                        //echo $txtClave . " ==> POST " . $_POST['hogar'][$numDocumento][$txtClave] . " ==> CLASE " .  $txtValor . "<br>";
                     }
                 }
             }
         } else {
-            $arrCamposCambiados[] = "objCiudadano"; // Ciudadano eliminado
+            $arrCamposCambiados[] = "objCiudadano";
             $bolConfirmacion = true;
             $eliminados = true;
+            //echo "Ciudadano eliminado <br>";
         }
     }
 
@@ -176,6 +159,7 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
         if (!in_array($numDocumento, $arrCedulasFormulario)) {
             $bolConfirmacion = true;
             $adicionados = true;
+            //echo "Ciudadano adicionado<br>";
         }
     }
 
@@ -193,7 +177,6 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
                     }
                     if ($txtValor != $valFormateado) {
                         if ($_SESSION['seqUsuario'] == 251) {
-                            //  echo $txtClave . 'txtValor: ' . $txtValor . '-->' . $valFormateado . '<br>';
                             echo htmlentities($objCiudadano->txtApellido1);
                         }
                         if ($txtClave == 'seqEstadoProceso' || $txtClave == 'valAspiraSubsidio' || $txtClave == 'seqBancoCuentaAhorro2') {
@@ -201,6 +184,7 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
                         } else {
                             $arrCamposCambiados[] = $txtClave;
                             $bolConfirmacion = true;
+                            //echo $txtClave . 'txtValor: ' . $txtValor . '-->' . $valFormateado . '<br>';
                         }
                     }
                 }
@@ -214,9 +198,7 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
  * ********************************************************************************************************** */
 
 if ($bolConfirmacion == true) {
-    //echo "bolSancion".$_POST["bolSancion"]."<br>";
     if ($_POST["bolSancion"] == 1) {
-
         $arrErrores[] = "No se puede modificar la postulacion del hogar debido a que esta Sancionado.";
         imprimirMensajes($arrErrores, array());
     } else {
@@ -229,16 +211,12 @@ if ($bolConfirmacion == true) {
             // 37. Inscripcion - Hogar Actualizado
             if ($eliminados == true || $adicionados == true) {
                 $_POST['seqEstadoProceso'] = 37;
-                //$_POST['seqTipoEsquema'] = 0;
-                //break;
             }
             if (count($arrCamposCambiados) > 0) {
                 foreach ($arrCamposCambiados as $txtCampo) {
-                    //echo "eliminados: ".$eliminados;
                     if (in_array($txtCampo, $arrCamposCalificacion)) {
                         $bolRetorno = true;
                         $_POST['seqEstadoProceso'] = 37;
-                        //$_POST['seqTipoEsquema'] = 0;
                         break;
                     }
                 }
@@ -277,6 +255,7 @@ if ($bolConfirmacion == true) {
     }
 
     if (empty($arrErrores)) {
+
         // modificacion del formulario de los campos libres
         $sql = "UPDATE T_FRM_FORMULARIO SET ";
         foreach ($arrCamposLibres as $txtCampo) {
@@ -318,7 +297,7 @@ if ($bolConfirmacion == true) {
                        " . $_POST['seqFormulario'] . ",
                        now(),
                        " . $_SESSION['seqUsuario'] . ",
-                       \"" . ereg_replace("\n", "", $_POST['txtComentario']) . "\",
+                       \"" . mb_ereg_replace("\n", "", $_POST['txtComentario']) . "\",
                        \"$txtCambios\",
                        " . $_POST['numDocumento'] . ",
                        \"" . $txtNombre . "\",
@@ -338,9 +317,7 @@ if ($bolConfirmacion == true) {
                     ". Conserve este número para su referencia.";
         }
 
-        imprimirMensajes($arrErrores, $arrMensajes);
-    } else {
-        imprimirMensajes($arrErrores, $arrMensajes);
     }
+    imprimirMensajes($arrErrores, $arrMensajes);
 }
 ?>

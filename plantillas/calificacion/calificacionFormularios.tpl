@@ -56,7 +56,7 @@
                     <td  align="center"><b>{$fechaCalificacion}</b>&nbsp;</td>
                     <td  align="center">{$cuantos}</td>
                     <td align="center"><a href="#" onclick="cargarContenido('contenido','./contenidos/calificacion/listaCalificacion.php?fecha={$fechaCalificacion}','',true);"><img src="recursos/imagenes/list.png" width="24px"/></a></td>
-                    <td align="center"><a href="contenidos/calificacion/xlsCalifica.php?fchCal={$fechaCalificacion}" target='_blank'><img src="recursos/imagenes/excel-48.png" width="24px"/></a></td>
+                    <td align="center"><a href="contenidos/calificacion/expCalificacion.php?fchCal={$fechaCalificacion}" target='_blank'><img src="recursos/imagenes/excel-48.png" width="24px"/></a></td>
 
                 </tr>
             {/foreach}

@@ -1,7 +1,5 @@
 <link rel="stylesheet" href="recursos/estilos/bootstrap.min.css" >
-
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
-
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">

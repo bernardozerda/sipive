@@ -2191,7 +2191,16 @@ function pedirConfirmacion(txtDestino, objFormulario, txtArchivo) {
 
                     // Acion de someter el formulario
                     var handleSubmit = function () {
+                        eliminarObjeto("tablaMensajes");
                         this.submit();
+                        YAHOO.util.Event.onContentReady(
+                            "tablaMensajes",
+                            function(){
+                                var txtMensajes = YAHOO.util.Dom.get('mensajes').innerHTML;
+                                $('#buscarCedula').trigger('click');
+                                YAHOO.util.Dom.get('mensajes').innerHTML = txtMensajes;
+                            }
+                        );
                     };
 
                     // Cancela la accion de someter el formulario y cierra el cuadro de dialogo

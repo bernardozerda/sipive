@@ -12,339 +12,359 @@ and open the template in the editor.
     <body>
         <?php
         $txtPrefijoRuta = "../../";
-        //include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
+        include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
+
         include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
-        //include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
         include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
+        include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "calificacion.class.php" );
+        $claCalificacion = new calificacion();
         header("Content-Type: application/vnd.ms-excel");
         header("Expires: 0");
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("content-disposition: attachment;filename=INFORME_CONTENCIÓN.xls");
+        header("content-disposition: attachment;filename=calificacion.xls");
+        $ejecutaConsultaPersonalizada = false;
 
-        $BLE = 0.126068530021477;
-        $RSA = 0.056714663235212;
-        $COH = 0.0257404623225348;
-        $HACN = 0.0140357946404073;
-        $IPC = 0.104725855763458;
-        $TDE = 0.119735280461787;
-        $HN12 = 0.103783693112852;
-        $MCF = 0.0580534449590349;
-        $HAMY = 0.176583828666114;
-        $CDISC = 0.115289225123407;
-        $HPGE = 0.00741477557908034;
-        $HN18 = 0.0535747453719212;
-        $HCF = 0.00559338877519907;
-        $PLGTBI = 0.00306882008097353;
-        $PPGD = 0.0296174918865405;
+        $formularios = "";
+        
+        if ($_FILES['fileDocumentos']['error'] == 0) {
+            $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileDocumentos']['tmp_name']));
+            $separado_por_comas = implode(",", $arrDocumentos);
+            $ejecutaConsultaPersonalizada = true;
+            //  echo count($arrDocumentos);
+        }
+        $separado_por_comas = "12271908	,
+80267466	,
+5683984	,
+13950548	,
+93470944	,
+75001157	,
+5830137	,
+46667044	,
+11389620	,
+14278236	,
+15663206	,
+7504874	,
+98415878	,
+5867182	,
+17774751	,
+5968269	,
+5946175	,
+6667609	,
+1118168014	,
+4586397	,
+93290869	,
+35512186	,
+25219619	,
+36178686	,
+35600560	,
+28104739	,
+35602438	,
+37310861	,
+28611639	,
+52789992	,
+1014207711	,
+34960070	,
+52879497	,
+28878832	,
+28929479	,
+42547458	,
+57440509	,
+33647106	,
+28880676	,
+29286567	,
+36289451	,
+52962049	,
+36312479	,
+41447360	,
+28204593	,
+1026255322	,
+35252181	,
+36953693	,
+1056302019	,
+40366301	,
+1026289138	,
+52955477	,
+1111334741	,
+52703431	,
+52365108	,
+1030631607	,
+31585726	,
+1081810934	,
+52960441	,
+69029493	,
+1023880219	,
+28645817	,
+57428319	,
+28685156	,
+50910241	,
+1098708874	,
+1018453046	,
+37652289	,
+1026565837	,
+53012859	,
+1074576159	,
+29352850	,
+31321806	,
+1106332878	,
+41577175	,
+52120658	,
+41477695	,
+1049021526	,
+1002678668	,
+35852143	,
+20166084	,
+20870798	,
+53092115	,
+35461330	,
+21095128	,
+59166467	,
+1005822641	,
+69802473	,
+53037740	,
+1108932616	,
+1065000278	,
+40977047	,
+52202189	,
+24080110	,
+52539149	,
+52420131	,
+1193250884";
+        //echo "<br>".$separado_por_comas;
+        $formularios = $claCalificacion->validarFormularios($separado_por_comas);
+        if ($ejecutaConsultaPersonalizada) {
+            $validar = explode("Error!", $formularios);
+            if (count($validar) > 1) {
+                echo $formularios;
+                exit();
+            }
+        }
+        if ($formularios != "") {
+            $arrayCalificacion = $claCalificacion->obtenerDatosCalificacion($ejecutaConsultaPersonalizada, $formularios);
+            $claCalificacion->obtenerValorIndicadores();
+            $valSeg = "";
+            //$fecha = date('Y-m-d H:i:s');
+            $fecha = '2017-05-10 19:26:25';
+            // echo $formularios;        exit();
+            ?>
 
-        $sql = "SELECT frm.seqFormulario, numDocumento,  count(seqCiudadano) as cant, concat(txtNombre1, ' ',  txtNombre2, ' ', txtApellido1, ' ', txtApellido2 ) as nombre,
-                group_concat(concat('<tr><td>',ucwords(txtNombre1), ' ',  txtNombre2, ' ', txtApellido1, ' ', txtApellido2, '</td> <td>', YEAR(CURDATE())-YEAR(fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(fchNacimiento,'%m-%d'), 0, -1) ),'</td></tr>')  AS edades, 
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where YEAR(CURDATE())-YEAR(ciu1.fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(ciu1.fchNacimiento,'%m-%d'), 0, -1) >=15 and hog1.seqFormulario = hog.seqFormulario ) AS cantMayor,
-                (SELECT count(*)
-                FROM t_ciu_ciudadano    ciu1
-                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
-                WHERE       YEAR(CURDATE())
-                  - YEAR(ciu1.fchNacimiento)
-                  + IF(
-                       DATE_FORMAT(CURDATE(), '%m-%d') >
-                          DATE_FORMAT(ciu1.fchNacimiento, '%m-%d'),
-                       0,
-                       -1) >= 15 and 
-                        YEAR(CURDATE())
-                  - YEAR(ciu1.fchNacimiento)
-                  + IF(
-                       DATE_FORMAT(CURDATE(), '%m-%d') >
-                          DATE_FORMAT(ciu1.fchNacimiento, '%m-%d'),
-                       0,
-                       -1) < 60
-              AND hog1.seqFormulario = hog.seqFormulario)
-          AS adultos,
-          (SELECT sum(numAnosAprobados)
-        FROM t_ciu_ciudadano    ciu1
-             LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
-        WHERE      hog1.seqParentesco =1 
-              AND hog1.seqFormulario = hog.seqFormulario)
-          AS aprobadosJefe,
-                (SELECT sum(numAnosAprobados) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where YEAR(CURDATE())-YEAR(ciu1.fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(ciu1.fchNacimiento,'%m-%d'), 0, -1) >15 and hog1.seqFormulario = hog.seqFormulario ) AS aprobados,
-                (select count(*) FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where hog1.seqFormulario = hog.seqFormulario and seqSalud in(1, 2) ) as afiliacion, 
-                numHabitaciones as cohabitacion, numHacinamiento as dormitorios, sum(valIngresos) as ingresos,
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where YEAR(CURDATE())-YEAR(ciu1.fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(ciu1.fchNacimiento,'%m-%d'), 0, -1) <= 12 and hog1.seqFormulario = hog.seqFormulario ) AS cantMenores,
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where seqParentesco = 3 and hog1.seqFormulario = hog.seqFormulario ) AS cantHijos,
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                 WHERE     seqSexo = 2
-              AND hog1.seqFormulario = hog.seqFormulario)
-              AND ( seqCondicionEspecial IN (1)
-                   OR seqCondicionEspecial2 IN (1)
-                   OR seqCondicionEspecial3 IN (1)) AS mujerCabHogar,
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where seqParentesco = 2 and hog1.seqFormulario = hog.seqFormulario ) AS conyugueHogar,
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where YEAR(CURDATE())-YEAR(ciu1.fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(ciu1.fchNacimiento,'%m-%d'), 0, -1) > 59 and hog1.seqFormulario = hog.seqFormulario ) AS cantadultoMayor,
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where  hog1.seqFormulario = hog.seqFormulario and (seqCondicionEspecial in( 3 ) or seqCondicionEspecial2 in( 3 )  or seqCondicionEspecial3 in(3 ))) AS cantCondEspecial,
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where seqEtnia > 1 and hog1.seqFormulario = hog.seqFormulario ) AS condicionEtnica,
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where YEAR(CURDATE())-YEAR(ciu1.fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(ciu1.fchNacimiento,'%m-%d'), 0, -1) > 12 and  YEAR(CURDATE())-YEAR(ciu1.fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(ciu1.fchNacimiento,'%m-%d'), 0, -1) < 19 and hog1.seqFormulario = hog.seqFormulario ) AS adolecentes,
-                 (SELECT count(*)
-        FROM t_ciu_ciudadano    ciu1
-             LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
-        WHERE  seqSexo = 1
-        AND (   seqCondicionEspecial IN (1)
-                   OR seqCondicionEspecial2 IN (1)
-                   OR seqCondicionEspecial3 IN (1))
-              AND hog1.seqFormulario = hog.seqFormulario)
-          AS hombreCabHogar,
-                (SELECT count(*) 
-                FROM t_ciu_ciudadano ciu1 left join t_frm_hogar hog1 using(seqCiudadano)
-                where seqGrupoLgtbi > 0 and hog1.seqFormulario = hog.seqFormulario ) AS grupoLgtbi,
-                bolIntegracionSocial, bolSecEducacion, bolSecMujer, bolSecSalud, bolAltaCon, bolIpes
-                FROM t_frm_formulario frm 
-                left join t_frm_hogar hog using(seqFormulario)
-                left join t_ciu_ciudadano ciu using(seqCiudadano)
-                #where seqPlanGobierno = 3
-                where frm.seqFormulario in (4708	,
-12189	,
-21128	,
-37426	,
-79925	,
-139478	,
-177853	,
-177936	,
-198056	,
-205057	,
-215494	,
-216171	,
-216482	,
-219422	,
-222573	,
-225974	,
-238569	,
-240440	,
-240790	,
-242243	,
-244747	,
-245319	,
-245499	,
-250415	,
-251003	,
-253368	,
-253380	,
-253428	,
-254772	,
-257215	,
-259598	,
-265048	,
-267936	,
-269402	,
-273274	,
-276497	,
-278325	,
-279172	,
-280232	,
-280343	,
-280627	,
-283678	,
-286337	,
-298000	,
-298270	,
-305524	,
-308994	,
-311265	,
-326179	,
-329563	,
-334199	,
-336506	,
-336530	,
-336534	,
-336536	,
-336542	,
-336544	,
-336547	,
-336551	,
-336566	,
-336567	,
-336569	,
-336571	,
-336572	,
-336573	,
-336574	,
-336577	,
-336588	,
-336589	,
-336591	,
-336592	,
-216176	
-) 
- group by frm.seqFormulario  order by  frm.seqFormulario";
+            <table border="1">
+                <tr>
+                    <th colspan="6">Datos Básicos</th>
+                    <th colspan="3">Datos Educación</th>
+                    <th colspan="4">Habitabilidad</th>
+                    <th>Ingresos</th> 
+                    <th colspan="2">Dependencia economica</th>
+                    <th colspan="2">Nivel I</th>
+                    <th colspan="3">Nivel II</th>
+                    <th colspan="4">Nivel III</th>
+                    <th >Total</th>
+                </tr>
+                <tr>
+                    <th>Documento</th>
+                    <th>Formulario</th>
+                    <th>Postulante Principal</th>
+                    <!--<th>Información del hogar</th>-->
+                    <th>Cant Integrantes</th>
+                    <th>Ingresos <br>Hogar</th>               
+                    <th> <b>> </b>15 Años</th>
+                    <th>Suma Educación</th>
+                    <th <?= $style ?>>Educación</th>
+                    <th>Integrantes <br/> Con Regimen <br/> Subsidiado</th>
+                    <th >Total<br/>Regimen<br/>Subsidiado</th>
+                    <th>Cohabitación</th>
+                    <th>Hacinamiento</th>
+                    <th>Ingresos</th> 
+                    <th>Personas entre <br> 15-59 años</th>
+                    <th>Total</th>
+                    <th>Hogar con <br>menores</th>
+                    <th>Mujer cabeza<br>de hogar </th>
+                    <th>Adulto Mayor</th>
+                    <th>Discapacidad</th>
+                    <th>Etnia</th>
+                    <th>Cant Adolecentes</th>
+                    <th>Hombre cabeza<br>de hogar </th>
+                    <th>Población <br>LGTBI</th>
+                    <th>Programas<br>Gobierno<br>Distrital</th>
+                    <td>BLE </td>
+                    <td>RSA</td>
+                    <td>COH</td>
+                    <td>HACN</td>
+                    <td>totalIngresos</td>
+                    <td>TDE</td>
+                    <td>HN12</td>
+                    <td>MCF</td>
+                    <td>HAMY</td>
+                    <td>CDISC</td>
+                    <td>HPGE</td>
+                    <td>HN18</td>
+                    <td>HCF</td>
+                    <td>PLGTBI</td>
+                    <td>PPGD</td>
+                    <th>Total</th>
+                </tr>
 
-        //echo $sql . "<br>";
-        $objRes1 = $aptBd->execute($sql);
-        //var_dump($objRes1);
-        $int = 0;
-        ?>
-        <table border="1">
-            <tr>
-                <th colspan="6">Datos Básicos</th>
-                <th colspan="3">Datos Educación</th>
-                <th colspan="4">Habitabilidad</th>
-                <th>Ingresos</th> 
-                <th colspan="2">Dependencia economica</th>
-                <th colspan="2">Nivel I</th>
-                <th colspan="3">Nivel II</th>
-                <th colspan="4">Nivel III</th>
-                <th >Total</th>
-            </tr>
-            <tr>
-                <th>Documento</th>
-                <th>Formulario</th>
-                <th>Postulante Principal</th>
-                <th>Información del hogar</th>
-                <th>Cant Integrantes</th>
-                <th>Ingresos <br>Hogar</th>               
-                <th> <b>> </b>15 Años</th>
-                <th>Suma Educación</th>
-                <th <?= $style ?>>Educación</th>
-                <th>Integrantes <br/> Con Regimen <br/> Subsidiado</th>
-                <th >Total<br/>Regimen<br/>Subsidiado</th>
-                <th>Cohabitación</th>
-                <th>Hacinamiento</th>
-                <th>Ingresos</th> 
-                <th>Personas entre <br> 15-59 años</th>
-                <th>Total</th>
-                <th>Hogar con <br>menores</th>
-                <th>Mujer cabeza<br>de hogar </th>
-                <th>Adulto Mayor</th>
-                <th>Discapacidad</th>
-                <th>Etnia</th>
-                <th>Cant Adolecentes</th>
-                <th>Hombre cabeza<br>de hogar </th>
-                <th>Población <br>LGTBI</th>
-                <th>Programas<br>Gobierno<br>Distrital</th>
-                <th>Total</th>
-            </tr>
-            <?php
-            $cont = 1;
-            while ($objRes1->fields) {
-                if ($objRes1->fields['cant'] != 0) {
-                    $educacion = number_format($objRes1->fields['aprobados'] / $objRes1->fields['cantMayor']);
-                    if ($educacion < 9 || $objRes1->fields['cantMayor'] == 0) {
-                        $educacion = 1;
-                    } else {
+                <?php
+                foreach ($arrayCalificacion as $key => $value) {
+                    $sqlIndicadores = "";
+                    if ($value['cant'] != 0) {
+                        //$formularios .= $value['seqFormulario'] . ",";
+                        $idCalificacion = $claCalificacion->insertarCalificacion($value['seqFormulario'], $value['fchUltimaActualizacion'], $value['cant'], $value['edades'], $value['ingresos'], $fecha);
+                        /*                         * ************************************Bajo logro educativo*********************************************** */
+                        $calcEducacion = ($value['aprobados'] / ($value['cantMayor']));
                         $educacion = 0;
-                    }
-                    $style = " style='color: red; font-weight: bold; text-align: center;' ";
-                    /*                     * ************************************Calculo Regimen Subsidiado*********************************************** */
-                    $saludSubsidiados = 0;
-
-                    $saludSubsidiados = ($objRes1->fields['afiliacion'] / $objRes1->fields['cant']);
-
-                    /*                     * ******************************************* Cohabitacion **************************************************** */
-                    $cohabitacion = 0;
-                    if ($objRes1->fields['cohabitacion'] > 0 && $objRes1->fields['cant'] >= 2) {
-                        $cohabitacion = 1;
-                    }
-                    /*                     * ****************************************** Hacinamaoento **************************************************** */
-
-                    $dormitorios = $objRes1->fields['dormitorios'];
-                    if ($dormitorios != 0) {
-                        $hacinamiento = ($objRes1->fields['cant'] / $dormitorios);
-                        if ($hacinamiento > 3) {
-                            $hacinamiento = 1;
+                        if ($calcEducacion < 9) {
+                            $educacion = 1;
+                        } else if ($value['cantMayor'] == 0) {
+                            $educacion = 1;
                         } else {
-                            $hacinamiento = 0;
+                            $educacion = 0;
                         }
-                    } else
-                        $hacinamiento = 1;
+                        $sqlIndicadores .= "(" . $value['cantMayor'] . ", 0, 0, " . $calcEducacion . ", " . $educacion . ", " . ($claCalificacion->BLE * ($educacion * 100)) . ", " . $idCalificacion . ",1),";
+                        /*                         * ************************************Calculo Regimen Subsidiado*********************************************** */
+                        $saludSubsidiados = 0;
 
-                    /*                     * *************************************Ingresos********************************************* */
-                    $ingresos = $objRes1->fields['ingresos'] / $objRes1->fields['cant'];
-                    $arrConfiguracion['constantes']['salarioMinimo'] . "/" . ($ingresos + 1000);
-                    $totalIngresos = ($arrConfiguracion['constantes']['salarioMinimo']) / ($ingresos + 1000);
-                    /*                     * *************************************Dependencia Economica********************************************* */
+                        $saludSubsidiados = ($value['afiliacion'] / $value['cant']);
 
-                    $dependenciaEcon = 0;
-                    $adultos = $objRes1->fields['adultos'] / $objRes1->fields['cant'];
-                    //echo "<br>".$objRes1->fields['aprobadosJefe']; 
-                    if ($adultos > 2 && $objRes1->fields['aprobadosJefe'] < 3) {
-                        $dependenciaEcon = 1;
+                        $sqlIndicadores .= "(" . $value['afiliacion'] . ", 0, 0, " . $saludSubsidiados . ", null, " . ($claCalificacion->RSA * ($saludSubsidiados * 100)) . ", " . $idCalificacion . ",2),";
+
+                        /*                         * ******************************************* Cohabitacion **************************************************** */
+                        $cohabitacion = 0;
+                        if ($value['cohabitacion'] > 1) {
+                            $cohabitacion = 1;
+                        }
+                        //  echo "cohabitacion ->".$cohabitacion." coha base->".$value['cohabitacion']." miembros ->".$value['cant']." formulario ->".$value['seqFormulario']."<br>";
+                        $sqlIndicadores .= "(" . $value['cohabitacion'] . ", 0, 0, null, " . $cohabitacion . ", " . ($claCalificacion->COH * ($cohabitacion * 100)) . ", " . $idCalificacion . ",3),";
+                        /*                         * ****************************************** Hacinamaoento **************************************************** */
+
+                        $dormitorios = $value['dormitorios'];
+                        $hacinamiento = 0;
+                        $calchacinamiento = 0;
+                        if ($dormitorios != 0) {
+                            $calchacinamiento = ($value['cant'] / $dormitorios);
+                            if ($calchacinamiento >= 4) {
+                                $hacinamiento = 1;
+                            } else {
+                                $hacinamiento = 0;
+                            }
+                        } else
+                            $hacinamiento = 1;
+                        $sqlIndicadores .= "(" . $dormitorios . ", 0, 0, " . $calchacinamiento . ", " . $hacinamiento . ", " . ($claCalificacion->HACN * ($hacinamiento * 100)) . ", " . $idCalificacion . ",4),";
+
+                        /*                         * *************************************Ingresos********************************************* */
+                        $ingresos = $value['ingresos'] / $value['cant'];
+                        $arrConfiguracion['constantes']['salarioMinimo'] . "/" . ($ingresos + 1000);
+                        $totalIngresos = ($arrConfiguracion['constantes']['salarioMinimo']) / ($ingresos + 1000);
+
+                        $sqlIndicadores .= "(" . $ingresos . ", 0, 0, " . $totalIngresos . ", null, " . (100 * (1 - exp(-$totalIngresos / 52.05))) . ", " . $idCalificacion . ",5),";
+                        /*                         * *************************************Dependencia Economica********************************************* */
+
+                        $dependenciaEcon = 0;
+                        $adultos = $value['adultos'] / $value['cant'];
+                        //echo "<br>".$value['aprobadosJefe']; 
+                        if ($adultos > 2 && $value['aprobadosJefe'] < 3) {
+                            $dependenciaEcon = 1;
+                        }
+                        $sqlIndicadores .= "(" . $adultos . ", 0, 0, null, " . $dependenciaEcon . ", " . ($claCalificacion->TDE * ($dependenciaEcon * 100)) . ", " . $idCalificacion . ",6),";
+                        /*                         * *************************************Nivel I Menores********************************************* */
+                        $menores = $value['cantMenores'] / $value['cant'];
+                        $sqlIndicadores .= "(" . $value['cantMenores'] . ", 0, 0, null, " . $menores . ", " . ($claCalificacion->HN12 * ($menores * 100)) . ", " . $idCalificacion . ",7),";
+                        /*                         * *************************************Nivel I ********************************************* */
+                        $monoparentalFem = 0;
+                        // echo "<br>".$value['mujerCabHogar']." == 1 &&". $value['conyugueHogar']." == 0 && ".$value['cantHijos']." > 0";
+                        if ($value['mujerCabHogar'] == 1 && $value['conyugueHogar'] == 0 && $value['cantHijos'] > 0) {
+                            $monoparentalFem = 1;
+                        }
+                        $sqlIndicadores .= "(" . $value['cantHijos'] . ", " . $value['mujerCabHogar'] . ", " . $value['conyugueHogar'] . ", null, " . $monoparentalFem . ", " . ($claCalificacion->MCF * ($monoparentalFem * 100)) . ", " . $idCalificacion . ",8),";
+
+                        /*                         * ************************************Nivel II ********************************************* */
+
+                        /*                         * ************************************adulto mayor ********************************************* */
+                        $cantAdultoMayor = $value['cantadultoMayor'] / $value['cant'];
+                        $sqlIndicadores .= "(" . $value['cantadultoMayor'] . ", 0, 0, null, " . $cantAdultoMayor . ", " . ($claCalificacion->HAMY * ($cantAdultoMayor * 100)) . ", " . $idCalificacion . ",9),";
+                        /*                         * ************************************discapacidad********************************************* */
+                        $discapacidad = $value['cantCondEspecial'] / $value['cant'];
+                        $sqlIndicadores .= "(" . $value['cantCondEspecial'] . ", 0, 0, null, " . $discapacidad . ", " . ($claCalificacion->CDISC * ($discapacidad * 100)) . ", " . $idCalificacion . ",10),";
+                        /*                         * ************************************grupo etnico ********************************************* */
+                        $grupoEtnico = 0;
+                        if ($value['condicionEtnica'] > 0) {
+                            $grupoEtnico = 1;
+                        }
+                        $sqlIndicadores .= "(" . $value['condicionEtnica'] . ", 0, 0, null, " . $grupoEtnico . ", " . ($claCalificacion->HPGE * ($grupoEtnico * 100)) . ", " . $idCalificacion . ",11),";
+
+                        /*                         * ************************************Nivel III ********************************************* */
+
+                        /*                         * ************************************ Adolecentes ********************************************* */
+                        $cantAdolecentes = $value['adolecentes'] / $value['cant'];
+                        //  echo "<br>".$value['seqFormulario']. "->" ."hn18 ->".$claCalificacion->HN18. "*" ."cantidad*100".($cantAdolecentes * 100);
+                        $sqlIndicadores .= "(" . $value['adolecentes'] . ", 0, 0, null, " . $cantAdolecentes . ", " . ($claCalificacion->HN18 * ($cantAdolecentes * 100)) . ", " . $idCalificacion . ",12),";
+
+                        /*                         * ************************************ hombre Cabeza de Hogar ********************************************* */
+                        $monoparentalMasc = 0;
+                        if ($value['hombreCabHogar'] == 1 && $value['conyugueHogar'] == 0 && $value['cantHijos'] > 0) {
+                            $monoparentalMasc = 1;
+                        }
+                        $sqlIndicadores .= "(" . $value['cantHijos'] . ", " . $value['hombreCabHogar'] . ", " . $value['conyugueHogar'] . ", null, " . $monoparentalMasc . ", " . ($claCalificacion->HCF * ($monoparentalMasc * 100)) . ", " . $idCalificacion . ",13),";
+
+                        /*                         * ************************************ Grupo LGTBI ********************************************* */
+                        $grupoLGTBI = 0;
+                        if ($value['grupoLgtbi'] > 0) {
+                            $grupoLGTBI = 1;
+                        }
+                        $sqlIndicadores .= "(" . $value['grupoLgtbi'] . ", 0, 0, null, " . $grupoLGTBI . ", " . ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) . ", " . $idCalificacion . ",14),";
+                        /*                         * ************************************ Participa en programas del Gobierno Distrital ********************************************* */
+                        $programa = 0;
+
+                        if ($value['bolIntegracionSocial'] > 0 || $value['bolSecMujer'] > 0 || $value['bolIpes'] > 0) {
+                            $programa = 1;
+                        }
+                        $sqlIndicadores .= "(" . $value['bolIntegracionSocial'] . ", " . $value['bolSecMujer'] . ", " . $value['bolIpes'] . ", null, " . $programa . ", " . ($claCalificacion->PPGD * ($programa * 100)) . ", " . $idCalificacion . ",15);";
+
+                        $insertInd = $claCalificacion->insertarIndicadores($sqlIndicadores);
+                        //if ($insertInd) {
+                        $formula = ($claCalificacion->BLE * ($educacion * 100)) + ($claCalificacion->RSA * ($saludSubsidiados * 100)) + ($claCalificacion->COH * ($cohabitacion * 100)) + ($claCalificacion->HACN * ($hacinamiento * 100)) + (100 * (1 - exp(-$totalIngresos / 52.05))) + ($claCalificacion->TDE * ($dependenciaEcon * 100)) + ($claCalificacion->HN12 * ($menores * 100)) + ($claCalificacion->MCF * ($monoparentalFem * 100)) + ($claCalificacion->HAMY * ($cantAdultoMayor * 100)) + ($claCalificacion->CDISC * ($discapacidad * 100)) + ($claCalificacion->HPGE * ($grupoEtnico * 100)) + ($claCalificacion->HN18 * ($cantAdolecentes * 100)) + ($claCalificacion->HCF * ($monoparentalMasc * 100)) + ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) + ($claCalificacion->PPGD * ($programa * 100));
+                        //echo "<br>".$formula;
+                        //}
+
+                        $valSeg .= "(
+                            " . $value['seqFormulario'] . ", 
+                            NOW(), 
+                            " . $_SESSION['seqUsuario'] . ", 
+                            'Calificacion hogares inscritos ', 
+                            '', 
+                            " . $value['numDocumento'] . ", 
+                            '" . $value['nombre'] . "', 
+                            35, 
+                            1
+                         ),";
+                        // echo "<br>***" . $formularios;
                     }
-                    /*                     * *************************************Nivel I Menores********************************************* */
-                    $menores = $objRes1->fields['cantMenores'] / $objRes1->fields['cant'];
-
-                    /*                     * *************************************Nivel I ********************************************* */
-                    $monoparentalFem = 0;
-                    // echo "<br>".$objRes1->fields['mujerCabHogar']." == 1 &&". $objRes1->fields['conyugueHogar']." == 0 && ".$objRes1->fields['cantHijos']." > 0";
-                    if ($objRes1->fields['mujerCabHogar'] == 1 && $objRes1->fields['conyugueHogar'] == 0 && $objRes1->fields['cantHijos'] > 0) {
-                        $monoparentalFem = 1;
-                    }
-
-                    /*                     * ************************************Nivel II ********************************************* */
-                    $cantAdultoMayor = $objRes1->fields['cantadultoMayor'] / $objRes1->fields['cant'];
-                    $discapacidad = $objRes1->fields['cantCondEspecial'] / $objRes1->fields['cant'];
-                    $grupoEtnico = 0;
-                    if ($objRes1->fields['condicionEtnica'] > 0) {
-                        $grupoEtnico = 1;
-                    }
-                    /*                     * ************************************Nivel III ********************************************* */
-                    $cantAdolecentes = $objRes1->fields['adolecentes'] / $objRes1->fields['cant'];
-
-                    $monoparentalMasc = 0;
-                    if ($objRes1->fields['hombreCabHogar'] == 1 && $objRes1->fields['conyugueHogar'] == 0 && $objRes1->fields['cantHijos'] > 0) {
-                        $monoparentalMasc = 1;
-                    }
-                    $grupoLGTBI = 0;
-                    if ($objRes1->fields['grupoLgtbi'] > 0) {
-                        $grupoLGTBI = 1;
-                    }
-
-                    $programa = 0;
-
-                    if ($objRes1->fields['bolIntegracionSocial'] > 0 || $objRes1->fields['bolSecMujer'] > 0 || $objRes1->fields['bolIpes'] > 0) {
-                        $programa = 1;
-                    }
-                    $formula = ($BLE * ($educacion * 100)) + ($RSA * ($saludSubsidiados * 100)) + ($COH * ($cohabitacion * 100)) + ($HACN * ($hacinamiento * 100)) + (100 * (1 - exp(-$totalIngresos / 52.05))) + ($TDE * ($dependenciaEcon * 100)) + ($HN12 * ($menores * 100)) + ($MCF * ($monoparentalFem * 100)) + ($HAMY * ($cantAdultoMayor * 100)) + ($CDISC * ($discapacidad * 100)) + ($HPGE * ($grupoEtnico * 100)) + ($HN18 * ($cantAdolecentes * 100)) + ($HCF * ($monoparentalMasc * 100)) + ($PLGTBI * ($grupoLGTBI * 100)) + ($PPGD * ($programa * 100));
+                    $claCalificacion->obtenerValorIndicadores();
                     ?>
                     <tr style="text-align: center">
-                        <td><?= $objRes1->fields['numDocumento'] ?></td>
-                        <td><?= $objRes1->fields['seqFormulario'] ?></td>
-                        <td><?= $objRes1->fields['nombre'] ?></td>
-                        <td>
+                        <td><?= $value['numDocumento'] ?></td>
+                        <td><?= $value['seqFormulario'] ?></td>
+                        <td><?= $value['nombre'] ?></td>
+                        <!--<td>
                             <table>
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Edad</th>
                                 </tr>
-                                    <?= ucwords(strtolower(str_replace(",", "", $objRes1->fields['edades']))) ?>
+                                <?= ucwords(strtolower(str_replace(",", "", $value['edades']))) ?>
                             </table>
-                        </td>
+                        </td>-->
 
-                        <td><?= $objRes1->fields['cant'] ?></td>
-                        <td><?= $objRes1->fields['ingresos'] ?></td>
-                        <td><?= $objRes1->fields['cantMayor'] ?></td>
-                        <td><?= $objRes1->fields['aprobados'] ?></td>
+                        <td><?= $value['cant'] ?></td>
+                        <td><?= $value['ingresos'] ?></td>
+                        <td><?= $value['cantMayor'] ?></td>
+                        <td><?= $value['aprobados'] ?></td>
                         <td <?= $style ?>><?= $educacion ?></td>
-                        <td><?= $objRes1->fields['afiliacion'] ?></td>
+                        <td><?= $value['afiliacion'] ?></td>
                         <td <?= $style ?>><?= $saludSubsidiados ?></td>
                         <td <?= $style ?>><?= $cohabitacion ?></td>
                         <td <?= $style ?>><?= $hacinamiento ?></td>
                         <td <?= $style ?>><?= $totalIngresos ?></td>
-                        <td <?= $style ?>><?= $objRes1->fields['adultos'] ?></td>
+                        <td <?= $style ?>><?= $value['adultos'] ?></td>
                         <td <?= $style ?>><?= $dependenciaEcon ?></td>
                         <td <?= $style ?>><?= $menores ?></td>            
                         <td <?= $style ?>><?= $monoparentalFem ?></td>  
@@ -355,31 +375,48 @@ and open the template in the editor.
                         <td <?= $style ?>><?= $monoparentalMasc ?></td>
                         <td <?= $style ?>><?= $grupoLGTBI ?></td>
                         <td <?= $style ?>><?= $programa ?></td>
-                       <!-- <td><?= ($BLE * ($educacion * 100)) ?></td>
-                        <td><?= ($RSA * ($saludSubsidiados * 100)) ?></td>
-                        <td><?= ($COH * ($cohabitacion * 100)) ?></td>
-                         <td><?= ($HACN * ($hacinamiento * 100)) ?></td>
-                         <td><?= (100 * (1 - exp(-$totalIngresos / 52.05))) ?></td>
-                         <td><?= ($TDE * ($dependenciaEcon * 100)) ?></td>
-                         <td><?= ($HN12 * ($menores * 100)) ?></td>
-                         <td><?= ($MCF * ($monoparentalFem * 100)) ?></td>
-                         <td><?= ($HAMY * ($cantAdultoMayor * 100)) ?></td>
-                         <td><?= ($CDISC * ($discapacidad * 100)) ?></td>
-                         <td><?= ($HPGE * ($grupoEtnico * 100)) ?></td>
-                         <td><?= ($HN18 * ($cantAdolecentes * 100)) ?></td>
-                         <td><?= ($HCF * ($monoparentalMasc * 100)) ?></td>
-                          <td><?= ($PLGTBI * ($grupoLGTBI * 100)) ?></td>
-                         <td><?= ($PPGD * ($programa * 100)) ?></td>-->
+                        <td><?= ($claCalificacion->BLE * ($educacion * 100)) ?></td>
+                        <td><?= ($claCalificacion->RSA * ($saludSubsidiados * 100)) ?></td>
+                        <td><?= ($claCalificacion->COH * ($cohabitacion * 100)) ?></td>
+                        <td><?= ($claCalificacion->HACN * ($hacinamiento * 100)) ?></td>
+                        <td><?= (100 * (1 - exp(-$totalIngresos / 52.05))) ?></td>
+                        <td><?= ($claCalificacion->TDE * ($dependenciaEcon * 100)) ?></td>
+                        <td><?= ($claCalificacion->HN12 * ($menores * 100)) ?></td>
+                        <td><?= ($claCalificacion->MCF * ($monoparentalFem * 100)) ?></td>
+                        <td><?= ($claCalificacion->HAMY * ($cantAdultoMayor * 100)) ?></td>
+                        <td><?= ($claCalificacion->CDISC * ($discapacidad * 100)) ?></td>
+                        <td><?= ($claCalificacion->HPGE * ($grupoEtnico * 100)) ?></td>
+                        <td><?= ($claCalificacion->HN18 * ($cantAdolecentes * 100)) ?></td>
+                        <td><?= ($claCalificacion->HCF * ($monoparentalMasc * 100)) ?></td>
+                        <td><?= ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) ?></td>
+                        <td><?= ($claCalificacion->PPGD * ($programa * 100)) ?></td>
 
-                        <td <?= $style ?>><?= $formula ?></td>
+                        <td <?= $style ?>><?= number_format($formula, 30, '.', ',') ?></td>
                     </tr>
-        <?php
-        // echo "<br>" . $objRes1->fields['seqFormulario'];
-    }
-    $cont++;
-    $objRes1->MoveNext();
-}
-?>
+                    <?php
+                }
+
+                $formularios = substr_replace($formularios, '', -1, 1);
+//                $cambioEstado = $claCalificacion->cambiarEstado($formularios);
+//                $seg = false;
+                // echo "<br>++++++++".$cambioEstado;
+//
+//                if ($cambioEstado) {
+//
+//                    $seg = $claCalificacion->insertarSeguimiento($valSeg);
+//                }
+//                if ($seg) {
+//                    echo "<p class='alert alert-danger'><b>Se almacenaron los datos con exito</b></p>";
+//                }
+            } else {
+                echo "<p class='alert alert-danger'><b>No existen formularios en estado Hogar actualizado</b></p>";
+            }
+
+            //var_dump($objRes1);
+            $int = 0;
+            ?>
+
+
         </table>
     </body>
 </html>

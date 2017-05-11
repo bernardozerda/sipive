@@ -51,3 +51,4 @@ recursos/descargas
 recursos/archivos/lecturaConfiguracion.php
 *.xml
 *.iml
+*.idea*

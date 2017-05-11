@@ -22,7 +22,7 @@ $seqFormulario = $claCiudadano->formularioVinculado($_GET['documento']);
 $claFormulario->cargarFormulario($seqFormulario);
 $contenido ="";
 if ($_GET['tipo'] == 2) {
-    $contenido .= '<p>&nbsp;</p><p>Bogota D.C. ' . "NO INSCRITO - APLICATIVO 2017 <p><p>&nbsp;</p>";
+    $contenido .= '<p>&nbsp;</p><p>Bogota D.C. ' .$hoy. '</p>';
 }else{
     $contenido .= '<p>&nbsp;</p><p>Bogota D.C. ' . "<p><p>&nbsp;</p>";
 }

@@ -50,7 +50,7 @@
 				/>
 			</td>
 			<td>
-				<input type="button" class="buscarCedula" value="Buscar" onClick="{$txtFuncion}">
+				<input type="button" id="buscarCedula" class="buscarCedula" value="Buscar" onClick="{$txtFuncion}">
 			</td>
 		</tr>
 	</table>

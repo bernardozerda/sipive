@@ -1,5 +1,6 @@
 <?php
 
+require_once 'Ciudadano.class.php';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -71,14 +72,40 @@ class calificacion {
 
         global $aptBd;
         $NoEstado = 0;
+        $error = "";
+        //$separado_por_comas = substr_replace($separado_por_comas, ' ', -1, 1);
+        //echo $separado_por_comas; exit();
         if ($separado_por_comas != "") {
-            $sql = "SELECT DISTINCT(seqFormulario), numDocumento from T_FRM_FORMULARIO"
-                    . " LEFT JOIN T_FRM_HOGAR USING(seqFormulario)"
-                    . " LEFT JOIN T_CIU_CIUDADANO USING(seqCiudadano)"
-                    . " WHERE numDocumento IN(" . $separado_por_comas . ") AND seqEstadoProceso NOT IN (6, 37) "
-                    . "GROUP BY seqFormulario";
-            $objRes = $aptBd->execute($sql);
-            $NoEstado = $aptBd->Affected_Rows();
+            $documents = explode(",", $separado_por_comas);
+            $salt = 0;
+            foreach ($documents as $key => $value) {
+
+                if (trim($value) == "") {
+                    $salt++;
+                    $error = "<p class='alert alert-danger'>Error! Existe " . $salt . " salto(s) de linea invalido en el documento</b>";
+                } else {
+
+                    if (is_numeric($value)) {
+                        $seqFormulario = Ciudadano::formularioVinculado($value);
+                        if ($seqFormulario) {
+                            $arrSeqFormularios[] = $seqFormulario;
+                        } else {
+                            $error .= "<p class='alert alert-danger'>Error! El documento $value no tiene asignado un formulario";
+                        }
+                    }
+                }
+            }
+            if ($error != "") {
+                return $error . "</p>";
+            } else {
+                $sql = "SELECT DISTINCT(seqFormulario), numDocumento from T_FRM_FORMULARIO"
+                        . " LEFT JOIN T_FRM_HOGAR USING(seqFormulario)"
+                        . " LEFT JOIN T_CIU_CIUDADANO USING(seqCiudadano)"
+                        . " WHERE numDocumento IN(" . $separado_por_comas . ") AND seqEstadoProceso NOT IN (6, 37) and seqParentesco = 1 "
+                        . "GROUP BY seqFormulario";
+                $objRes = $aptBd->execute($sql);
+                $NoEstado = $aptBd->Affected_Rows();
+            }
         }
 
         // echo ($NoEstado);
@@ -90,13 +117,13 @@ class calificacion {
                 $objRes->MoveNext();
             }
             return $error . "</p>";
-        } else {
+        } else if (!isset($error)) {
             $sql = "SELECT DISTINCT(seqFormulario) from T_FRM_FORMULARIO"
                     . " INNER JOIN T_FRM_HOGAR USING(seqFormulario)"
                     . " INNER JOIN T_CIU_CIUDADANO USING(seqCiudadano)"
                     . " WHERE seqEstadoProceso IN (37) ";
             if ($separado_por_comas != "") {
-                $sql .= "  numDocumento IN(" . $separado_por_comas . ")";
+                $sql .= "  and numDocumento IN(" . $separado_por_comas . ")";
             }
             $sql .= "GROUP BY seqFormulario";
             $objRes = $aptBd->execute($sql);
@@ -117,7 +144,7 @@ class calificacion {
     public function obtenerDatosCalificacion($ejecutaConsultaPersonalizada, $formularios) {
 
         global $aptBd;
-
+        //$formularios = substr_replace($formularios, ' ', -1, 1);
         $sql = "SELECT frm.seqFormulario,
                 ciu.numDocumento,
                 frm.fchUltimaActualizacion,
@@ -311,7 +338,7 @@ class calificacion {
         }
         $sql .= " GROUP BY frm.seqFormulario
          ORDER BY frm.seqFormulario";
-
+//echo $sql; exit();
         try {
             $objRes = $aptBd->execute($sql);
             $datos = array();
@@ -333,10 +360,11 @@ class calificacion {
         try {
             //echo "*****<br>".$sql;
             $aptBd->execute($sql);
-            return $aptBd->Insert_ID();
+            $datoID = $aptBd->Insert_ID();
         } catch (Exception $objError) {
-            return $objError->msg;
+            $datoID = $objError->msg;
         }
+        return $datoID;
     }
 
     public function cambiarEstado($formularios) {
@@ -382,7 +410,7 @@ class calificacion {
          bolMostrar
       ) VALUES ";
         $seguimientos = substr_replace($seguimientos, ';', -1, 1);
-        //echo $sql .= $seguimientos;
+        $sql .= $seguimientos;
 
         try {
             $aptBd->execute($sql);

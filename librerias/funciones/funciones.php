@@ -184,8 +184,8 @@ function obtenerNombres($txtTabla, $txtCampo, $txtValor) {
         case $txtTabla != "":
             if ($txtValor != "Ninguno" and trim($txtValor) != "" and trim($txtValor) != "null") {
                 $txtSelect = "txt" . substr($txtCampo, 3);
-                $txtSelect = ereg_replace("[0-9]", "", $txtSelect);
-                $txtCampo = ereg_replace("[0-9]", "", $txtCampo);
+                $txtSelect = mb_ereg_replace("[0-9]", "", $txtSelect);
+                $txtCampo = mb_ereg_replace("[0-9]", "", $txtCampo);
                 if (isset($arrConversiones[$txtCampo])) {
                     $txtCampo = $arrConversiones[$txtCampo];
                 }

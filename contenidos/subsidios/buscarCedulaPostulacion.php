@@ -1,13 +1,15 @@
 <?php
 
     /**
-     * AQUI SE REALIZA LA BUSQUEDA DE LA CEDULA	
+     * AQUI SE REALIZA LA BUSQUEDA DE LA CEDULA
      * PARA SABER SI SE MUESTRA EL FORMULARIO DE INSCRIPCION
      * O SI SE MUESTRA EL FORMULARIO DEPOSTULACION
      * @author Bernardo Zerda
      * @version 1.0 Mayo de 2009
      * @version 2.0 Enero 2014
+     * @version 3.0 Mayo 2017
      */
+
     $txtPrefijoRuta = "../../";
 
     include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
@@ -32,8 +34,11 @@
         // Quita los puntos del documento
         $_POST['cedula'] = mb_ereg_replace("[^0-9]", "", $_POST['cedula']);
 
+
+
+
         // Informacion de los select que hay en el formulario
-        $arrTipoDocumento = obtenerDatosTabla("T_CIU_TIPO_DOCUMENTO", array("seqTipoDocumento", "txtTipoDocumento"), "seqTipoDocumento", "", "txtTipoDocumento");
+        $arrTipoDocumento = obtenerDatosTabla("T_CIU_TIPO_DOCUMENTO", array("seqTipoDocumento", "txtTipoDocumento"), "seqTipoDocumento", "seqTipoDocumento <> 6", "txtTipoDocumento");
         $arrTipoVictima = obtenerDatosTabla("T_FRM_TIPOVICTIMA", array("seqTipoVictima", "txtTipoVictima"), "seqTipoVictima", "seqTipoVictima <> 0", "txtTipoVictima");
         $arrGrupoLgtbi = obtenerDatosTabla("T_FRM_GRUPO_LGTBI", array("seqGrupoLgtbi", "txtGrupoLgtbi"), "seqGrupoLgtbi", "seqGrupoLgtbi <> 0", "txtGrupoLgtbi");
         $arrSexo = obtenerDatosTabla("T_CIU_SEXO", array("seqSexo", "txtSexo"), "seqSexo", "", "txtSexo");
@@ -64,7 +69,7 @@
         $arrGrupoGestion = obtenerDatosTabla("T_SEG_GRUPO_GESTION", array("seqGrupoGestion", "txtGrupoGestion"), "seqGrupoGestion", "seqGrupoGestion NOT IN ( 15,5,10,12,17,20 )", "txtGrupoGestion");
         $arrPlanGobierno = obtenerDatosTabla( "T_FRM_PLAN_GOBIERNO" , array( "seqPlanGobierno" , "txtPlanGobierno" ) , "seqPlanGobierno" , "" , "txtPlanGobierno" );
 		//$arrUnidadProyecto = obtenerDatosTabla("T_PRY_UNIDAD_PROYECTO", array("seqUnidadProyecto", "txtNombreUnidad", "seqProyecto", "seqFormulario"), "seqUnidadProyecto", "bolActivo = 1", "txtNombreUnidad");
-        
+
         $sql = "
             SELECT 
                 seqModalidad,
@@ -79,7 +84,7 @@
             $arrValorSubsidio[$objRes->fields['seqModalidad']][$objRes->fields['seqSolucion']] = $objRes->fields['valSubsidio'];
             $objRes->MoveNext();
         }
-		
+
         /*******************************************************************************************************
          * VERIFICACION DE LA EXISTENCIA DEL CIUDADANO
          * **************************************************************************************************** */
@@ -92,16 +97,16 @@
         if ($seqFormulario == 0) {
             $arrErrores[] = "No existe el registro para el documento consultado [" . $_POST['cedula'] . "']";
         } else {
-            
+
             $claFormulario->cargarFormulario($seqFormulario);
-                
+
             $claFormulario->seqEtapa = obtenerCampo("T_FRM_ESTADO_PROCESO", $claFormulario->seqEstadoProceso, "seqEtapa", "seqEstadoProceso");
-            
+
             if($claFormulario->seqEtapa == 1){
             	$txtPlantilla = "";
             	$arrErrores[] = "Hogar en etapa de inscripción, ingrese por Proceso --> Inscripción";
             }else{
-            	$txtPlantilla = "postulacionIndividual/postulacion.tpl";
+            	$txtPlantilla = "subsidios/postulacion.tpl";
             }
             $txtImpresion = "imprimirPostulacionCEM( document.frmIndividual , './contenidos/postulacionIndividual/pedirConfirmacion.php' )";
 
@@ -113,7 +118,7 @@
 			} else {
 				$arrUnidadProyecto = obtenerDatosTabla("T_PRY_UNIDAD_PROYECTO", array("seqUnidadProyecto", "txtNombreUnidad", "seqProyecto", "seqFormulario"), "seqUnidadProyecto", "bolActivo = 1 AND seqProyecto = " . $claFormulario->seqProyectoHijo . "", "txtNombreUnidad");
 			}
-			
+
 			// Conjuntos Residenciales para cargarlos segun el proyecto con el que venga(Proyectos Hijo)
 			if($claFormulario->seqProyecto != ''){
 				$sql = "
@@ -181,7 +186,7 @@
 		}
 
         if( empty( $arrErrores ) ){
-        
+
             /**************************************************************************************************************
              * ASIGNACION DE VARIABLES A LA PLANTILLA
              * ************************************************************************************************************ */
@@ -234,12 +239,12 @@
             if ($txtPlantilla != "") {
                 $claSmarty->display($txtPlantilla);
             }
-        
+
         } else {
-            
+
             imprimirMensajes($arrErrores);
-            
+
         }
-        
+
     } // FIN POST CEDULA
 ?>

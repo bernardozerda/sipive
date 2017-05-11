@@ -1753,7 +1753,7 @@ class Reportes {
     }
 
     public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array()) {
-        
+
         if ($this) {
             $arrErrores = $this->arrErrores;
         } else {
@@ -3011,33 +3011,33 @@ class Reportes {
         if (empty($this->arrErrores)) {
             try {
                 $sql = "
-						SELECT 
-						  hvi.numActo as Numero,
-						  hvi.fchActo as Fecha,
-						  ciu.numDocumento as Documento,
-						  UPPER( CONCAT( ciu.txtNombre1 , ' ' , ciu.txtNombre2 , ' ' , ciu.txtApellido1 , ' ' , ciu.txtApellido2 ) ) as Nombre,
-						  moa.txtModalidad as Modalidad,
-						  UPPER( CONCAT( sol.txtDescripcion , ' ( ' , sol.txtSolucion , ' )' ) ) as Solucion,
-						  frm.valAspiraSubsidio as ValorSubsidio,
-						  CONCAT( eta.txtEtapa , ' - ' , epr.txtEstadoProceso ) as EstadoProceso,
-						  des.fchActualizacionEscrituracion as FechaActualizacionEscrituracion
-						FROM T_FRM_FORMULARIO frm
-						INNER JOIN T_FRM_HOGAR hog ON frm.seqFormulario = hog.seqFormulario
-						INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
-						INNER JOIN T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
-						INNER JOIN T_FRM_SOLUCION sol ON sol.seqSolucion = frm.seqSolucion
-						INNER JOIN T_FRM_ESTADO_PROCESO epr ON frm.seqEstadoProceso = epr.seqEstadoProceso
-						INNER JOIN T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
-						INNER JOIN T_DES_DESEMBOLSO des ON frm.seqFormulario = des.seqFormulario
-						INNER JOIN T_AAD_FORMULARIO_ACTO fac ON  frm.seqFormulario = fac.seqFormulario
-						INNER JOIN T_AAD_HOGARES_VINCULADOS hvi ON fac.seqFormularioActo = hvi.seqFormularioActo
-						INNER JOIN T_AAD_ACTO_ADMINISTRATIVO aad ON ( hvi.numActo = aad.numActo AND hvi.fchActo = aad.fchActo )
-						WHERE hog.seqParentesco = 1	
-						  AND aad.seqTipoActo = 1
-						  AND des.fchActualizacionEscrituracion >= '$fchDesde 00:00:00'
-						  AND des.fchActualizacionEscrituracion <= '$fchHasta 23:59:59'
-						  AND frm.seqEstadoProceso IN (26,27,28,29,30)
-						GROUP BY frm.seqFormulario, hvi.numActo, hvi.fchActo	    		
+                    SELECT 
+                      hvi.numActo as Numero,
+                      hvi.fchActo as Fecha,
+                      ciu.numDocumento as Documento,
+                      UPPER( CONCAT( ciu.txtNombre1 , ' ' , ciu.txtNombre2 , ' ' , ciu.txtApellido1 , ' ' , ciu.txtApellido2 ) ) as Nombre,
+                      moa.txtModalidad as Modalidad,
+                      UPPER( CONCAT( sol.txtDescripcion , ' ( ' , sol.txtSolucion , ' )' ) ) as Solucion,
+                      frm.valAspiraSubsidio as ValorSubsidio,
+                      CONCAT( eta.txtEtapa , ' - ' , epr.txtEstadoProceso ) as EstadoProceso,
+                      des.fchActualizacionEscrituracion as FechaActualizacionEscrituracion
+                    FROM T_FRM_FORMULARIO frm
+                    INNER JOIN T_FRM_HOGAR hog ON frm.seqFormulario = hog.seqFormulario
+                    INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
+                    INNER JOIN T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
+                    INNER JOIN T_FRM_SOLUCION sol ON sol.seqSolucion = frm.seqSolucion
+                    INNER JOIN T_FRM_ESTADO_PROCESO epr ON frm.seqEstadoProceso = epr.seqEstadoProceso
+                    INNER JOIN T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
+                    INNER JOIN T_DES_DESEMBOLSO des ON frm.seqFormulario = des.seqFormulario
+                    INNER JOIN T_AAD_FORMULARIO_ACTO fac ON  frm.seqFormulario = fac.seqFormulario
+                    INNER JOIN T_AAD_HOGARES_VINCULADOS hvi ON fac.seqFormularioActo = hvi.seqFormularioActo
+                    INNER JOIN T_AAD_ACTO_ADMINISTRATIVO aad ON ( hvi.numActo = aad.numActo AND hvi.fchActo = aad.fchActo )
+                    WHERE hog.seqParentesco = 1	
+                      AND aad.seqTipoActo = 1
+                      AND des.fchActualizacionEscrituracion >= '$fchDesde 00:00:00'
+                      AND des.fchActualizacionEscrituracion <= '$fchHasta 23:59:59'
+                      AND frm.seqEstadoProceso IN (26,27,28,29,30)
+                    GROUP BY frm.seqFormulario, hvi.numActo, hvi.fchActo	    		
 		    		";
                 $arrResultado = array();
                 $objRes = $aptBd->execute($sql);
@@ -3581,7 +3581,7 @@ ORDER BY aad.fchActo DESC;
     }
 
     public function Caracterizacion() {
-        
+
 
         global $aptBd;
 

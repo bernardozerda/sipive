@@ -6,7 +6,7 @@
  * @version 1.0 Abril 2009
  */
 session_start();
-//var_dump($_SESSION);
+
 if ($_SESSION['seqUsuario'] == 302 || $_SESSION['seqUsuario'] == 348 || $_SESSION['seqUsuario'] == 394 || $_SESSION['seqUsuario'] == 178 || $_SESSION['seqUsuario'] == 251) {
     $tiempoSesion = 7200;
 } else {
@@ -35,12 +35,13 @@ if ($bolMatarSesion) {
     if (file_exists("./autenticacion.php")) {
         header("Location: " . $txtPrefijo . "autenticacion.php");
     } else {
-        echo "Sesion Vencida <a href='#' onClick='location.reload();'>Continuar</a>";
+        echo "<div id='matarSesion'></div>";
         exit(0);
     }
+
 } else {
 
-    // si todo esta en orden se renueva la vigencia de la cookie por los minutos que se hayan defonodo como timeout
+    // si esta las cosas bien se renueva la vigencia de la cookie por los minutos que se hayan definido como timeout
     setcookie("sdhtsdv", 1, time() + TIMEOUT, "/", null, false, false); // Cookie Real
     setcookie("validar", time() + TIMEOUT, time() + TIMEOUT, "/", null, false, false); // Cookie para validar el tiempo de vida de la sesion
 }

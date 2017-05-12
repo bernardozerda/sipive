@@ -35,7 +35,6 @@ $arrCamposLibres[] = "txtCorreo";
 $arrCamposLibres[] = "seqUpz";
 
 $arrCamposCalificacion[] = "valIngresoHogar";
-$arrCamposCalificacion[] = "valTotalRecursos";
 $arrCamposCalificacion[] = "seqEtnia";
 $arrCamposCalificacion[] = "seqParentesco";
 $arrCamposCalificacion[] = "seqCondicionEspecial";
@@ -47,7 +46,19 @@ $arrCamposCalificacion[] = "estadoCivil";
 $arrCamposCalificacion[] = "anosAprobados";
 $arrCamposCalificacion[] = "seqSalud";
 $arrCamposCalificacion[] = "objCiudadano";
-$arrCamposCalificacion[] = "seqEstadoProceso";
+$arrCamposCalificacion[] = "bolIntegracionSocial";
+$arrCamposCalificacion[] = "bolSecMujer";
+$arrCamposCalificacion[] = "bolIpes";
+$arrCamposCalificacion[] = "numCohabitacion";
+$arrCamposCalificacion[] = "numHacinamiento";
+$arrCamposCalificacion[] = "fechaNac";
+$arrCamposCalificacion[] = "seqGrupoLgtbi";
+$arrCamposCalificacion[] = "tipoDocumento";
+$arrCamposCalificacion[] = "seqTipoVictima";
+
+
+
+//$arrCamposCalificacion[] = "seqEstadoProceso";
 
 /* * **********************************************************************************************************
  * VERIFICACION DE CAMBIOS AL FORMULARIO DE INSCRIPCION

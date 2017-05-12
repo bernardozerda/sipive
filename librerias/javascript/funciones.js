@@ -2196,9 +2196,13 @@ function pedirConfirmacion(txtDestino, objFormulario, txtArchivo) {
                         YAHOO.util.Event.onContentReady(
                             "tablaMensajes",
                             function(){
-                                var txtMensajes = YAHOO.util.Dom.get('mensajes').innerHTML;
-                                $('#buscarCedula').trigger('click');
-                                YAHOO.util.Dom.get('mensajes').innerHTML = txtMensajes;
+                                var objMensajes = YAHOO.util.Dom.get('mensajes');
+                                var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
+                                if( objTablaMensajes.className == "msgOk"){
+                                    var txtMensajes = objMensajes.innerHTML;
+                                    $('#buscarCedula').trigger('click');
+                                    objMensajes.innerHTML = txtMensajes;
+                                }
                             }
                         );
                     };

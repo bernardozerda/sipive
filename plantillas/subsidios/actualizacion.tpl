@@ -4,7 +4,7 @@
     TAMBIEN SE USA PARA EL ESQUEMA DE CASA EN MANO
     EN LA FASE DE POSTULACION
 *************************************************************** -->
- {assign var=victima value=''}
+{assign var=victima value=''}
 {if $objFormulario->seqEstadoProceso != 6}
     {assign var=seqEstadoProceso value=$objFormulario->seqEstadoProceso}
 {else}
@@ -338,13 +338,13 @@
                                                             >
                                                         <option value="0">Ninguno</option>
                                                         {foreach from=$arrParentesco key=seqParentesco item=arrRegistro}
-							    <option value="{$seqParentesco}"
-                                                            	{if $arrRegistro.bolActivo == 0}
+                                                            <option value="{$seqParentesco}"
+                                                                    {if $arrRegistro.bolActivo == 0}
                                                                         style="color:#666666"
                                                                         disabled
                                                                     {/if}	
-                                                            >																					{$arrRegistro.txtParentesco}															      </option>
-							{/foreach}
+                                                                    >																					{$arrRegistro.txtParentesco}															      </option>
+                                                        {/foreach}
                                                     </select>
                                                 </td>
                                                 <!-- ESTADO CIVIL -->
@@ -583,7 +583,7 @@
                                                             id="seqSalud" 
                                                             style="width:90%;"
                                                             >                                                        
-                                                       {foreach from=$arrSalud key=seqSalud item=txtSalud}
+                                                        {foreach from=$arrSalud key=seqSalud item=txtSalud}
                                                             <option value="{$seqSalud}">{$txtSalud}</option>
                                                         {/foreach}                                                      
                                                     </select>
@@ -764,12 +764,8 @@
                                     <td align="center" height="20px" width="584px">
                                         <b>Total Ingresos Hogar</b>
                                     </td>
-                                    <td style="padding-right:7px" align="right" id="valTotalMostrar">
-                                        {if intval( $objFormulario->valIngresoHogar ) == 0}
-                                            $ {$valTotal|number_format:0:',':'.'}
-                                        {else}
-                                            $ {$objFormulario->valIngresoHogar|number_format:0:',':'.'}
-                                        {/if}
+                                    <td style="padding-right:7px" align="right" id="valTotalMostrar">                                        
+                                        $ {$valTotal|number_format:0:',':'.'}                                       
                                     </td>
                                     <td width="18px">&nbsp;</td>
                                     {if intval( $objFormulario->valIngresoHogar ) == 0}
@@ -1032,9 +1028,9 @@
                                                 <option value="{$seqSisben}"
                                                         {if $objFormulario->seqSisben == $seqSisben} selected {/if}
                                                         {if $arrRegistro.bolActivo == 0}
-                                                        	 	style="color:#666666"
-                                                    			disabled
-                                                    	  {/if}	
+                                                            style="color:#666666"
+                                                            disabled
+                                                        {/if}	
                                                         >{$arrRegistro.txtSisben}</option>
                                             {/foreach}
                                         </select>
@@ -1961,54 +1957,54 @@
                                     <td>&nbsp;</td>
                                 <input type="hidden" name="valTotalRecursos" id="valTotalRecursos" value="{$objFormulario->valTotalRecursos}">
                                 </tr>
-                                
-                                    <tr bgcolor="#E0E0E0">
 
-                                        {assign var=seqModalidad value=$objFormulario->seqModalidad}
-                                        {assign var=seqSolucion value=$objFormulario->seqSolucion}
+                                <tr bgcolor="#E0E0E0">
 
-                                        {if $objFormulario->valAspiraSubsidio == 0 || $objFormulario->valAspiraSubsidio == ""}
-                                            {assign var=valSubsidio value=$arrValorSubsidio.$seqModalidad.$seqSolucion}
-                                            {if $valSubsidio == ""}
-                                                {assign var=valSubsidio value=0}
-                                            {/if}
-                                        {else}
-                                            {assign var=valSubsidio value=$objFormulario->valAspiraSubsidio}
+                                    {assign var=seqModalidad value=$objFormulario->seqModalidad}
+                                    {assign var=seqSolucion value=$objFormulario->seqSolucion}
+
+                                    {if $objFormulario->valAspiraSubsidio == 0 || $objFormulario->valAspiraSubsidio == ""}
+                                        {assign var=valSubsidio value=$arrValorSubsidio.$seqModalidad.$seqSolucion}
+                                        {if $valSubsidio == ""}
+                                            {assign var=valSubsidio value=0}
                                         {/if}
+                                    {else}
+                                        {assign var=valSubsidio value=$objFormulario->valAspiraSubsidio}
+                                    {/if}
 
-                                        <!-- VALOR AL QUE ASPIRA DEL SUBSIDIO -->
-                                        <td class="tituloTabla" height="25px" align="top">Subsidio/Aporte estimado</td>
-                                        <td align="right" style="padding-right:10px" id="tdValSubsidio"  height="25px" align="top">
-                                            $ <input	type="text" 
-                                                     name="valAspiraSubsidio"
-                                                     id="valAspiraSubsidio" 
-                                                     value="0" 
-                                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                     onBlur="soloNumeros(this);
-                                                             this.style.backgroundColor = '#FFFFFF';
-                                                             sumarTotalRecursos();"  
-                                                     onKeyUp="formatoSeparadores(this)"
-                                                     onChange="formatoSeparadores(this)"
-                                                     style="width:100px; text-align:right;"
-                                                     {if $objFormulario->seqTipoEsquema == 1}
-                                                         readonly
-                                                     {/if}
-                                                     />
-                                        </td>
-                                        <td class="tituloTabla"  height="25px" align="top"> Soporte Cambios</td>
-                                        <td style="padding-left: 10px;"  height="25px" align="top">
-                                            <input	type="text" 
-                                                   name="txtSoporteSubsidio" 
-                                                   id="txtSoporteSubsidio" 
-                                                   value="{$objFormulario->txtSoporteSubsidio}" 
-                                                   onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                   onBlur="sinCaracteresEspeciales(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"  
-                                                   style="width:300px;" 
-                                                   />
-                                        </td>
-                                    </tr>
-                                
+                                    <!-- VALOR AL QUE ASPIRA DEL SUBSIDIO -->
+                                    <td class="tituloTabla" height="25px" align="top">Subsidio/Aporte estimado</td>
+                                    <td align="right" style="padding-right:10px" id="tdValSubsidio"  height="25px" align="top">
+                                        $ <input	type="text" 
+                                                 name="valAspiraSubsidio"
+                                                 id="valAspiraSubsidio" 
+                                                 value="0" 
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                                                 onBlur="soloNumeros(this);
+                                                         this.style.backgroundColor = '#FFFFFF';
+                                                         sumarTotalRecursos();"  
+                                                 onKeyUp="formatoSeparadores(this)"
+                                                 onChange="formatoSeparadores(this)"
+                                                 style="width:100px; text-align:right;"
+                                                 {if $objFormulario->seqTipoEsquema == 1}
+                                                     readonly
+                                                 {/if}
+                                                 />
+                                    </td>
+                                    <td class="tituloTabla"  height="25px" align="top"> Soporte Cambios</td>
+                                    <td style="padding-left: 10px;"  height="25px" align="top">
+                                        <input	type="text" 
+                                               name="txtSoporteSubsidio" 
+                                               id="txtSoporteSubsidio" 
+                                               value="{$objFormulario->txtSoporteSubsidio}" 
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                                               onBlur="sinCaracteresEspeciales(this);
+                                                       this.style.backgroundColor = '#FFFFFF';"  
+                                               style="width:300px;" 
+                                               />
+                                    </td>
+                                </tr>
+
                             </table>
                             </p></div>
                     </div>

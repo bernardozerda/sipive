@@ -107,8 +107,7 @@ class calificacion {
                 $NoEstado = $aptBd->Affected_Rows();
             }
         }
-
-        // echo ($NoEstado);
+        ///echo ($NoEstado); echo $error;
         if ($NoEstado > 0) {
             $error = "<p class='alert alert-danger'>Error! Los siguientes Documentos no tienen el <b>Estado: Hogar Actualizado</b>";
             $error .= "<br><br>";
@@ -117,7 +116,7 @@ class calificacion {
                 $objRes->MoveNext();
             }
             return $error . "</p>";
-        } else if (!isset($error)) {
+        } else if (!isset($error) || $error == 0) {
             $sql = "SELECT DISTINCT(seqFormulario) from T_FRM_FORMULARIO"
                     . " INNER JOIN T_FRM_HOGAR USING(seqFormulario)"
                     . " INNER JOIN T_CIU_CIUDADANO USING(seqCiudadano)"
@@ -383,7 +382,7 @@ class calificacion {
     public function insertarIndicadores($indicadores) {
         global $aptBd;
 
-        $sql = "INSERT INTO t_frm_calificacion_operaciones(cantidadMiembros,cantJefeHogar,cantConyugue,calculo,resultado,total, seqCalificacion,seqIndicador) VALUES";
+        $sql = "INSERT INTO t_frm_calificacion_operaciones(cantidadMiembros,cantJefeHogar,tipo, cantConyugue,cantAnos,calculo,resultado,total, seqCalificacion,seqIndicador) VALUES";
         $sql .= $indicadores;
 
         try {
@@ -441,6 +440,275 @@ group by seqCalificacion;";
             return $objError->msg;
         }
         return $datos;
+    }
+
+    public function obtenerResumenCalificacion($fecha) {
+
+        $sql = "SELECT seqFormulario,
+       numDocumento,
+       concat(txtNombre1,
+              ' ',
+              txtNombre2,
+              ' ',
+              txtApellido1,
+              ' ',
+              txtApellido2)
+          AS postulante, 
+          frm.numTelefono1,
+          frm.numTelefono2,
+          frm.numCelular, 
+          txtTipoVictima,
+          mo.txtModalidad,
+          #cal.infHogar,
+       cal.cantMiembrosHogar,
+       CASE WHEN op.seqIndicador = 1 THEN op.cantidadMiembros END
+          AS miembros15,
+       CASE WHEN op.seqIndicador = 1 THEN op.cantAnos END AS anosAprobados,
+       CASE WHEN op.seqIndicador = 1 THEN op.calculo END  AS calculoEducacion,
+       CASE WHEN op.seqIndicador = 1 THEN op.resultado END
+          AS dicotomiaEducacion,
+       CASE WHEN op.seqIndicador = 1 THEN op.total END    AS totalEducacion,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 2)
+          AS miembroSubsidiados,
+       (SELECT calculo
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 2)
+          AS calculoSubsidiados,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 2)
+          AS totalSubsidiados,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 3)
+          AS cohabitacion,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 3)
+          AS dicotomiaCohabitacion,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 3)
+          AS totalCohabitacion,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 4)
+          AS dormitorios,
+       (SELECT calculo
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 4)
+          AS calculoHacinamiento,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 4)
+          AS totalHacinamiento,
+       cal.totalIngresos  AS ingresosHogar,
+       (SELECT calculo
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 5)
+          AS calculoIngresos,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 5)
+          AS totalIngresos,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 6)
+          AS miembroOcupados,
+       (SELECT calculo
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 6)
+          AS calculosDependencia,
+       (SELECT cantAnos
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 6)
+          AS aprobadosPostulante,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 6)
+          AS dicotomiaDependencia,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 6)
+          AS totalDependencia,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 7)
+          AS cantMenores,
+       (SELECT calculo
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 7)
+          AS calculosMenores,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 7)
+          AS totalMenores,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 8)
+          AS cantHijos,
+       (SELECT cantJefeHogar
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 8
+              AND op2.tipo = 1)
+          AS mujerCabezaHogar,
+       (SELECT cantConyugue
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 8)
+          AS PersonaConyugue,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 8)
+          AS dicotomiaMujeCab,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 8)
+          AS totalMujerCabHogar,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 9)
+          AS cantAdultoMayor,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 9)
+          AS calculoAdultoMayor,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 9)
+          AS totalAdultoMayor,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 10)
+          AS cantCondEspecial,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 10)
+          AS calculoCondEspecial,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 10)
+          AS totalCondEspecial,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 11)
+          AS cantGrupoEtnico,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 11)
+          AS calculoGrupoEtnico,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 11)
+          AS totalGrupoEtnico,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 12)
+          AS cantAdolencentes,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 12)
+          AS calculoAdolencentes,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 12)
+          AS totalAdolencentes,
+       (SELECT cantJefeHogar
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 13
+              AND op2.tipo = 2)
+          AS hombreCabezaHogar,
+       (SELECT cantConyugue
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 13)
+          AS PersonaConyugue,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 13)
+          AS dicotomiaHombreCab,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 13)
+          AS totalHombeCabHogar,
+       (SELECT cantidadMiembros
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 14)
+          AS cantLGTBI,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 14)
+          AS calculoLGTBI,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 14)
+          AS totalLGTBI,
+       (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 15)
+          AS dicotomiaPrograma,
+       (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 15)
+          AS totalPrograma,
+       sum(op.total)
+FROM t_frm_calificacion_plan3    cal
+     LEFT JOIN t_frm_calificacion_operaciones op USING (seqCalificacion)
+     LEFT JOIN t_frm_formulario frm USING (seqFormulario)
+     LEFT JOIN t_frm_hogar hog USING (seqFormulario)
+     LEFT JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
+     LEFT JOIN t_frm_tipovictima vic USING(seqTipoVictima)
+     LEFT JOIN t_frm_modalidad mo USING(seqModalidad)
+where fchCalificacion like '" . $fecha . "'
+and seqParentesco = 1
+group by seqFormulario";
+        //echo $sql; die();
+        return $sql;
     }
 
 }

@@ -7832,7 +7832,7 @@ function popUpAyuda( ) {
         );
 
         // Encabezado
-        objAyuda.setHeader("Ayuda SDVE");
+        objAyuda.setHeader("Ayuda SIPIVE");
 
         // cuerpo del panel
         objAyuda.setBody(o.responseText);

@@ -36,7 +36,7 @@
                 <!-- First dropdown menu here-->
 
                 <!-- D<ropdown ending here-->
-                <li style="left: 12%;">
+                <li style="left: 8%;">
                     <a>
                         <select name="proyecto" id="proyecto" class="selector"
                                 onChange="cargarContenido('bodyHtml', './index.php', 'proyecto=' + this.options[ this.selectedIndex ].value, true);">
@@ -49,7 +49,7 @@
                     </a>
                     
                 </li>
-                <li style="left: 10%;"><a href="#" id="ayuda" onClick="popUpAyuda()">
+                <li style="left: 8%;"><a href="#" id="ayuda" onClick="popUpAyuda()">
                         <img src="./recursos/imagenes/library.png" width="14px" >
                     </a></li>
             </ul>           

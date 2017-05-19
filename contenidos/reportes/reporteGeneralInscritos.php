@@ -69,8 +69,8 @@ $sql = "
                 (frm.fchInscripcion         > '2013-05-11')
             ) AND (
                 ciu.fchNacimiento <> '0000-00-00' AND 
-                frm.seqEstadoProceso <> 5  AND           #Renuncia 
-                frm.seqEstadoProceso <> 8  AND           #Inhabilitado 
+                frm.seqEstadoProceso <> 5  AND          #Renuncia 
+                frm.seqEstadoProceso <> 8  AND          #Inhabilitado 
                 frm.seqEstadoProceso <> 13 AND          #Inscrito Inhabilitado 
                 frm.seqEstadoProceso <> 14 AND          #Renuncia
                 frm.seqEstadoProceso <> 18 AND          #Renuncia 
@@ -115,7 +115,8 @@ $sql = "
         IF(
             (    
                 tvh.txtDesplazado = 'Victima' AND 
-                frm.valTotalRecursos >= 25820095 AND (   
+                frm.valTotalRecursos >= 25820095 AND 
+                (   
                     frm.seqModalidad = 1  OR #Adquisición de Vivienda 
                     frm.seqModalidad = 5  OR #Arrendamiento
                     frm.seqModalidad = 6  OR #Adquisición de Vivienda Nueva
@@ -135,9 +136,9 @@ $sql = "
                 frm.seqModalidad = 1  OR  #Adquisición de Vivienda
                 frm.seqModalidad = 5  OR  #Arrendamiento
                 frm.seqModalidad = 6  OR  #Adquisición de Vivienda Nueva
-                frm.seqModalidad = 11 OR #Adquisición de Vivienda Usada
-                frm.seqModalidad = 12 OR #Con cierre financiero (plan3)
-                frm.seqModalidad = 13 OR #Leasing (plan3)
+                frm.seqModalidad = 11 OR  #Adquisición de Vivienda Usada
+                frm.seqModalidad = 12 OR  #Con cierre financiero (plan3)
+                frm.seqModalidad = 13     #Leasing (plan3)
             ),    
             'CON CIERRE',
             'SIN CIERRE'

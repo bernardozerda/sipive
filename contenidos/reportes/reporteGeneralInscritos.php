@@ -143,7 +143,10 @@ $sql = "
               AND (   frm.seqModalidad = 1            #Adquisición de Vivienda
                    OR frm.seqModalidad = 5                      #Arrendamiento
                    OR frm.seqModalidad = 6      #Adquisición de Vivienda Nueva
-                   OR frm.seqModalidad = 11))   #Adquisición de Vivienda Usada
+                   OR frm.seqModalidad = 11
+                   OR frm.seqModalidad = 12     #Con cierre financiero (plan3)
+                  OR frm.seqModalidad = 13     #Leasing (plan3)
+                   ))   #Adquisición de Vivienda Usada
           OR frm.seqModalidad = 10            #Mejoramiento en Redensificación
           OR frm.seqModalidad = 4                    #Mejoramiento Estructural
           OR frm.seqModalidad = 8                    #Mejoramiento Estructural
@@ -155,7 +158,10 @@ $sql = "
              AND (   frm.seqModalidad = 1             #Adquisición de Vivienda
                   OR frm.seqModalidad = 5                       #Arrendamiento
                   OR frm.seqModalidad = 6       #Adquisición de Vivienda Nueva
-                  OR frm.seqModalidad = 11),    #Adquisición de Vivienda Usada
+                  OR frm.seqModalidad = 11     #Adquisición de Vivienda Usada
+                  OR frm.seqModalidad = 12     #Con cierre financiero (plan3)
+                  OR frm.seqModalidad = 13     #Leasing (plan3)
+                  ),    
           'CON CIERRE',
           'SIN CIERRE')
           AS 'cierre financiero',
@@ -233,9 +239,9 @@ $sql = "
           ON frm.seqEmpresaDonante = edo.seqEmpresaDonante
  WHERE    $txtCondicion ";
 
-//echo $sql;die();
+echo $sql;die();
 $objRes = $aptBd->execute($sql);
-$txtNombreArchivo = "reporteGenralInscritos" . date("Ymd_His") . ".xls";
+$txtNombreArchivo = "reporteGenralInscritos";
 
 $claReportes = new Reportes;
 $claReportes->obtenerReportesGeneral($objRes, $txtNombreArchivo);

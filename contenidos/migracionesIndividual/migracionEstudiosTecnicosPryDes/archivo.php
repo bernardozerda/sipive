@@ -18,7 +18,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                 <form method="post" action="migrar.php" enctype="multipart/form-data" id="formcargar" class="form-signin">
                     <div class="form-group">
                         <h4 class="form-signin-heading">Seleccione el archivo</h4>
-						Ingrese en un archivo de texto los documentos para legalizar<br><br>
+                        Ingrese en un archivo de texto los documentos para legalizar<br><br>
                         <input name="archivo" type="file" id="archivo">
                     </div>
                     <br><p align="center"><button type="submit" name = "subir" class="btn btn-primary">Cargar</button></p>

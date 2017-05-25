@@ -1,114 +1,85 @@
 <?php
 
-	/**
-	 * ESTE ES EL CODIGO QUE MUESTRA LOS INDICADORES POR PERFILES
-	 * 
-	 */
-	
-	if( !file_exists( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" ) ){
-		$txtPrefijoRuta = "../../";
-		include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
-	    include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
-	    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
-	    include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
-	    include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
-	}
-	
-	$seqProyecto  = $_SESSION['seqProyecto'];
-	$bolIndicador = false;
-	$txtPlantilla = "sinInicio.tpl";
-	$seqGrupo  	  = 0;
-	$txtSecuencialesGrupos = implode( " , ", array_keys( $_SESSION[ 'arrGrupos' ][ $seqProyecto ] ) );
-	
-	if( isset( $_POST[ "seqGrupo" ] ) ){
-		$seqGrupo = $_POST[ "seqGrupo" ];
-	}
-	
-	$sql = "
-			SELECT 
-				seqGrupo, 
-				txtGrupo
-			FROM T_COR_GRUPO
-			WHERE seqGrupo IN ( $txtSecuencialesGrupos )
-			";
-	$objRes 	= $aptBd->execute( $sql );
-	$arrGruposUsuario  = array( );
-	while( $objRes->fields ){
-		$arrGruposUsuario[ $objRes->fields[ 'seqGrupo' ] ] = $objRes->fields[ 'txtGrupo' ];
-		$objRes->MoveNext();
-	}
-	
-	if( $seqGrupo == 0 ){
-		switch( true ){
-			
-			// Indicadores Tutores de Desembolso
-			// Coordinadores = 7
-			// Tutores Desembolso = 8
-			// Directivos = 18
-			case ( in_array( 7 , array_keys( $arrGruposUsuario ) ) ):
-			case ( in_array( 8 , array_keys( $arrGruposUsuario ) ) ):
-			case ( in_array( 18 , array_keys( $arrGruposUsuario ) ) ):
-				$txtContenidoIndicadores = "crm/indicadoresTutoresDesembolsoListener.tpl";
-				$claSmarty->assign( "seqGrupoSeleccionado" , 8 );
-				$bolIndicador = true;
-			break;
+/**
+ * ESTE ES EL CODIGO QUE MUESTRA LOS INDICADORES POR PERFILES
+ * 
+ */
+if (!file_exists($txtPrefijoRuta . "recursos/archivos/verificarSesion.php")) {
+    $txtPrefijoRuta = "../../";
+    include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
+    include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
+    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
+    include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
+    include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
+//include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CRMProyecto.class.php" );
+} else {
+    $txtPrefijoRuta = "";
+    include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
+    include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 
-			// Indicadores para el grupo Solicitud Desembolso
-			// Grupo Desembolso = 9
-			case ( in_array( 9 , array_keys( $arrGruposUsuario ) ) ):
-				$txtContenidoIndicadores = "crm/indicadoresSolicitudDesembolsoBase.tpl";
-				$claSmarty->assign( "seqGrupoSeleccionado" , 9 );
-				$bolIndicador = true;
-			break;
-			
-			
-			
-		}
-	}else{
-		
-		switch( true ){
-			
-			// Indicadores Tutores de Desembolso
-			// Coordinadores = 7
-			// Tutores Desembolso = 8
-			// Directivos = 18
-			case ( $seqGrupo == 7 and in_array( 7 , array_keys( $arrGruposUsuario ) ) ):
-			case ( $seqGrupo == 8 and in_array( 8 , array_keys( $arrGruposUsuario ) ) ):
-			case ( $seqGrupo == 18 and in_array( 18 , array_keys( $arrGruposUsuario ) ) ):
-				$txtContenidoIndicadores = "crm/indicadoresTutoresDesembolsoListener.tpl";
-				$claSmarty->assign( "seqGrupoSeleccionado" , 8 );
-				$bolIndicador = true;
-			break;
-			
-			// Indicadores para el grupo tutores
-			// Grupo Desembolso = 8
-			case ( $seqGrupo == 8 and in_array( 8 , array_keys( $arrGruposUsuario ) ) ):
-				$txtContenidoIndicadores = "crm/indicadoresTutoresDesembolsoListener.tpl";
-				$claSmarty->assign( "seqGrupoSeleccionado" , 8 );
-				$bolIndicador = true;
-			break;
-			
-			// Indicadores para el grupo Solicitud Desembolso
-			// Grupo Desembolso = 9
-			case ( $seqGrupo == 9 and in_array( 9 , array_keys( $arrGruposUsuario ) ) ):
-				$txtContenidoIndicadores = "crm/indicadoresSolicitudDesembolsoBase.tpl";
-				$claSmarty->assign( "seqGrupoSeleccionado" , 9 );
-				$bolIndicador = true;
-			break;
-			
-		}
-		
-	}
-	$bolIndicador = false;
-	if( $bolIndicador === true ){
-		$txtPlantilla = "crm/baseIndicadores.tpl";
-	}
-	$claSmarty->assign( "txtContenidoIndicadores" , $txtContenidoIndicadores );
-	$claSmarty->assign( "arrGruposUsuario" 		  , $arrGruposUsuario );	
-	$claSmarty->assign( "txtArchivoInicio" 		  ,  $txtPlantilla );
-	
-	if( $seqGrupo ){
-		$claSmarty->display( $txtPlantilla );
-	}
+    include 'librerias/clases/CRMProyecto.class.php';
+}
 
+$claCrm = new CRMProyecto;
+
+$txtPlantilla = "crm/panel/panel.tpl";
+
+$arrEstado = array();
+
+$arrEstado[62] = "Revisión Documental";
+$arrEstado[17] = "Cargue Información Solución";
+$arrEstado[19] = "Captura datos Escrituracion";
+$arrEstado[22] = "Cargue Datos Escrituración";
+$arrEstado[23] = "Migración Estudios Técnicos";
+$arrEstado[25] = "Generación Certificado Habitabilidad";
+$arrEstado[26] = "Estudio de Titulos";
+$arrEstado[27] = "Cargue Datos Estudio Títulos";
+$arrEstado[31] = "Consolidación Documental";
+$arrEstado[29] = "Cierre Legalizado";
+
+$listEstados = "62,17,19,22,23,25,26,27,31,29";
+//$arrProyectos = $claCrm->obtenerListaProyectos();
+$arrayGroupProyect = $claCrm->obtenerGroupProyectos($listEstados, $arrEstado);
+$arrDatosProyectos = $claCrm->obtenerDatosProyectos($listEstados, $arrEstado);
+$totalUnidades = $claCrm->totalUnidades(1);
+$totalPorVincular = $claCrm->totalUnidades(2);
+$totalPostuladas = $claCrm->totalUnidades(3);
+$totalVinculadas = $claCrm->totalUnidades(4);
+$totalUnidadesXProy = $claCrm->totalUnidadesPorProyecto(1);
+$totalPorVincularXProy = $claCrm->totalUnidadesPorProyecto(2);
+$totalPostuladasXProy = $claCrm->totalUnidadesPorProyecto(3);
+$totalVinculadasXProy = $claCrm->totalUnidadesPorProyecto(4);
+$totalLegalizadasXProy = $claCrm->totalUnidadesPorProyecto(5);
+//var_dump($arrayGroupProyect);
+$totalLegalizadas =  $claCrm->totalLegalizadas(0);
+//echo($totalLegalizadas[0]['cant']);
+$sumaTotalLegalizados = 0;
+foreach ($arrayGroupProyect as $key => $value) {
+    foreach ($arrEstado as $keyEstado => $valueEstado) {
+        $valueEstado = str_replace(" ", "", $valueEstado);
+        $valueEstado = $claCrm->quitarTildes($valueEstado);
+        $sumaTotalLegalizados +=$value['val'.$valueEstado];
+    }
+}
+//print_r($sumaTotalLegalizados);
+$arrayCantProy = Array();
+
+
+$claSmarty->assign("arrEstados", $arrEstado);
+$claSmarty->assign("arrGroupProyecto", $arrayGroupProyect);
+$claSmarty->assign("arrProyecto", $arrDatosProyectos);
+$claSmarty->assign("totalUnidades", $totalUnidades);
+$claSmarty->assign("totalPorVincular", $totalPorVincular);
+$claSmarty->assign("totalPostuladas", $totalPostuladas);
+$claSmarty->assign("totalVinculadas", $totalVinculadas);
+$claSmarty->assign("totalPorLegalizar", $sumaTotalLegalizados);
+$claSmarty->assign("totalLegalizadas", $totalLegalizadas[0]['cant']);
+$claSmarty->assign("totalUnidadesXProy", $totalUnidadesXProy);
+$claSmarty->assign("totalPorVincularXProy", $totalPorVincularXProy);
+$claSmarty->assign("totalPostuladasXProy", $totalPostuladasXProy);
+$claSmarty->assign("totalVinculadasXProy", $totalVinculadasXProy);
+$claSmarty->assign("totalLegalizadasXProy", $totalLegalizadasXProy);
+
+$claSmarty->assign("txtArchivoInicio", $txtPlantilla);
 ?>
+

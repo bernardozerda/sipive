@@ -438,13 +438,13 @@ function obtenerDatos(seqProyecto) {
             },
             success: function (response) {
                 objCargando.hide();
-                // cargarContenido("proyectos", "/contenidos/proyectos/reportes/fichaTecnicaProyectos.php", "seqProyecto=" + seqProyecto, true);
                 $("#divDatos").html(response);
-
             }
         });
-        //alert(seqProyecto);
-        //var callObj = YAHOO.util.Connect.asyncRequest("POST", "./contenidos/proyectos/reportes/fichaTecnicaProyectos.php", callback, "seqProyecto=" + seqProyecto);
+        
 
     }
+}
+function exportarExcel(estado, proyecto, tipo) {    
+    location.href = './contenidos/crm/reportes/reporteTableroExcel.php?seqEstado='+estado+'&seqProyecto='+proyecto+'&tipo='+tipo;
 }

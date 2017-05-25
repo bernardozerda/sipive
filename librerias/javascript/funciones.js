@@ -170,7 +170,7 @@ function soloLetras(objLimpiar) {
 }
 
 /**
- * SOLO PERMANECE EL PRIMER FRAGMENTO DEL CAMPO 
+ * SOLO PERMANECE EL PRIMER FRAGMENTO DEL CAMPO
  * @author Jaison Ospina
  * @param object objLimpiar
  * @return Void
@@ -1185,8 +1185,6 @@ function agregarMiembroHogar() {
         }
     }
 
-
-
     // Ciudadano
     var txtNombreCiudadano = ucwords(objNombre1.value.toString().toLowerCase() + " " + objNombre2.value.toString().toLowerCase() + " " + objApellido1.value.toString().toLowerCase() + " " + objApellido2.value.toString().toLowerCase());
 
@@ -1248,8 +1246,6 @@ function agregarMiembroHogar() {
     }
     objNumDocumento.value = txtResultado;
 
-    //alert( objAnosAprobados.selectedIndex );
-
     if(objAnosAprobados.selectedIndex == -1){
         objAnosAprobados.selectedIndex = 0;
     }
@@ -1274,7 +1270,6 @@ function agregarMiembroHogar() {
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqNivelEducativo' name='hogar[" + objNumDocumento.value + "][seqNivelEducativo]' value='" + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-anosAprobados' name='hogar[" + objNumDocumento.value + "][anosAprobados]' value='" + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqSalud' name='hogar[" + objNumDocumento.value + "][seqSalud]' value='" + objSeqSalud.options[ objSeqSalud.selectedIndex ].value + "'>";
-    // txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-afiliacionSalud' name='hogar[" + objNumDocumento.value + "][afiliacionSalud]' value='" + objAfiliacionSalud.options[ objAfiliacionSalud.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqTipoVictima' name='hogar[" + objNumDocumento.value + "][seqTipoVictima]' value='" + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqGrupoLgtbi' name='hogar[" + objNumDocumento.value + "][seqGrupoLgtbi]' value='" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].value + "'>";
     txtInsertar += "</table> ";
@@ -1352,264 +1347,6 @@ function agregarMiembroHogar() {
     objNvlEducativo.selectedIndex = 0;
     objAnosAprobados.selectedIndex = 0;
     objSeqSalud.selectedIndex = 0;
-    objSeqTipoVictima.selectedIndex = 0;
-    objSeqGrupoLgtbi.selectedIndex = 0;
-
-    mostrarOcultar('agregarMiembro');
-
-    return true;
-
-}
-
-function agregarMiembroHogarPostulacion() {
-
-    var arrAbreviacionesTipoDocumento = new Array();
-    arrAbreviacionesTipoDocumento[ 1 ] = "C.C.";
-    arrAbreviacionesTipoDocumento[ 2 ] = "C.E.";
-    arrAbreviacionesTipoDocumento[ 3 ] = "T.I.";
-    arrAbreviacionesTipoDocumento[ 4 ] = "R.C.";
-    arrAbreviacionesTipoDocumento[ 5 ] = "PAS.";
-    arrAbreviacionesTipoDocumento[ 6 ] = "NIT.";
-    arrAbreviacionesTipoDocumento[ 7 ] = "N.U.I.";
-
-    // Variable a recoger del nuevo miembro del hogar
-    var objNombre1 = document.getElementById("nombre1");
-    var objNombre2 = document.getElementById("nombre2");
-    var objApellido1 = document.getElementById("apellido1");
-    var objApellido2 = document.getElementById("apellido2");
-    var objTpoDocumento = document.getElementById("tipoDocumento");
-    var objNumDocumento = document.getElementById("numeroDoc");
-    var objParentesco = document.getElementById("parentesco");
-    var objFchNacimiento = document.getElementById("fechaNac");
-    var objCondEspecial = document.getElementById("condicionEspecial");
-    var objCondEspecial2 = document.getElementById("condicionEspecial2");
-    var objCondEspecial3 = document.getElementById("condicionEspecial3");
-    var objCondEtnica = document.getElementById("condicionEtnica");
-    var objEstCivil = document.getElementById("estadoCivil");
-    var objOcupacion = document.getElementById("ocupacion");
-    var objSexo = document.getElementById("sexo");
-    var objLgtb = document.getElementById("bolLgtb");
-    var objIngresos = document.getElementById("ingresos");
-    var objNvlEducativo = document.getElementById("nivelEducativo");
-    var objSeqTipoVictima = document.getElementById("seqTipoVictima");
-    var objSeqGrupoLgtbi = document.getElementById("seqGrupoLgtbi");
-
-
-
-    // Celda que contiene los miembros del hogar
-    var objHogar = document.getElementById("datosHogar");
-
-    // Primer Apellido no puede estar vacio
-    if (objApellido1.value == "") {
-        alert("El primer apellido no puede estar vac" + String.fromCharCode(237) + "o");
-        objApellido1.focus();
-        return false;
-    }
-
-    // Primer Nombre no puede estar vacio
-    if (objNombre1.value == "") {
-        alert("El primer nombre no puede estar vac" + String.fromCharCode(237) + "o");
-        objNombre1.focus();
-        return false;
-    }
-
-    // Tiene que tener numero de documento
-    if (objNumDocumento.value == "") {
-        alert("No puede registrar una persona sin el numero de docuemnto");
-        objNumDocumento.focus();
-        return false;
-    }
-
-    // Valida que la fecha sea correcta
-    if (!esFechaValida(objFchNacimiento)) {
-        objFchNacimiento.focus()
-        return false;
-    }
-
-    // Debe tener ingresos mensuales
-    if (objIngresos.value == "") {
-        alert("Debe registrar el ingreso mensual del ciudadano");
-        objIngresos.focus();
-        return false;
-    }
-
-    // Debe tener parentesco
-    if (objParentesco.selectedIndex == 0) {
-        alert("Debe registrar el parentezco del ciudadano");
-        objParentesco.focus();
-        return false;
-    }
-
-    // Debe tener estado civil
-    if (objEstCivil.selectedIndex == 0) {
-        alert("Debe registrar el estado civil del ciudadano");
-        objEstCivil.focus();
-        return false;
-    }
-
-    // Validacion de cedula -- Si ya esta incluido
-    var arrMiembros = objHogar.getElementsByTagName("table");
-    for (i = 0; i < arrMiembros.length; i++) {
-        if (objNumDocumento.value == arrMiembros[ i ].id) {
-            alert("Ya esta registrada una persona con cedula " + objNumDocumento.value);
-            return false;
-        }
-    }
-
-    // Ciudadano
-    var txtNombreCiudadano = ucwords(objNombre1.value.toString().toLowerCase() + " " + objNombre2.value.toString().toLowerCase() + " " + objApellido1.value.toString().toLowerCase() + " " + objApellido2.value.toString().toLowerCase());
-
-    // Abreviacion del tipo de documento
-    var seqTipoDocumento = objTpoDocumento.options[ objTpoDocumento.selectedIndex ].value;
-    var txtTipoDocumento = arrAbreviacionesTipoDocumento[ seqTipoDocumento ];
-    var txtParentesco = objParentesco.options[ objParentesco.selectedIndex ].text;
-    var txtOcupacion = objOcupacion.options[ objOcupacion.selectedIndex ].text;
-    txtOcupacion = txtOcupacion.toString().toLowerCase();
-    txtOcupacion = ucwords(txtOcupacion);
-
-    var txtInsertar = "";
-    txtInsertar += "<table cellpadding='0' cellspacing='0' border='0' width='100%' id='" + objNumDocumento.value + "'> ";
-    txtInsertar += "	<tr onMouseOver='this.style.background = \"#E4E4E4\";' onMouseOut='this.style.background = \"#F9F9F9\"; ' style='cursor:pointer'> ";
-    txtInsertar += "		<td align='center' width='18px' height='22px'> ";
-    txtInsertar += "			<div style='width:12px; height:14px; cursor:pointer; border: 1px solid #999999;' ";
-    txtInsertar += "				 onClick='desplegarDetallesMiembroHogar(\"" + objNumDocumento.value + "\")' ";
-    txtInsertar += "				 onMouseOver='this.style.backgroundColor=\"#ADD8E6\";' ";
-    txtInsertar += "				 onMouseOut='this.style.backgroundColor=\"#F9F9F9\";' ";
-    txtInsertar += "				 id='masDetalles" + objNumDocumento.value + "' ";
-    txtInsertar += "			>+</div>   ";
-    txtInsertar += "		</td> ";
-    txtInsertar += "		<td width='282px' style='padding-left:5px;'>" + txtNombreCiudadano + "</td> ";
-    txtInsertar += "		<td width='140px' align='right'  style='padding-right: 15px'>" + txtTipoDocumento + " " + objNumDocumento.value + "</td> ";
-    txtInsertar += "		<td width='260px'>" + txtParentesco + "</td> ";
-    txtInsertar += "		<td align='right' style='padding-right:7px'>$ " + objIngresos.value + "</td> ";
-    txtInsertar += "		<td align='center' width='18px' height='22px'> ";
-    txtInsertar += "			<div	style='width:12px; height:14px; cursor:pointer; border: 1px solid #999999;' ";
-    txtInsertar += "					onClick='modificarMiembroHogar(\"" + objNumDocumento.value + "\")' ";
-    txtInsertar += "					onMouseOver='this.style.backgroundColor=\"#ADD8E6\";' ";
-    txtInsertar += "					onMouseOut='this.style.backgroundColor=\"#F9F9F9\";' ";
-    txtInsertar += "			>E</div> ";
-    txtInsertar += "		</td> ";
-    txtInsertar += "		<td align='center' width='18px' height='22px'> ";
-    txtInsertar += "			<div	style='width:12px; height:14px; cursor:pointer; border: 1px solid #999999;' ";
-    txtInsertar += "					onClick='quitarMiembroHogar(\"" + objNumDocumento.value + "\");' ";
-    txtInsertar += "					onMouseOver='this.style.backgroundColor=\"#FFA4A4\";' ";
-    txtInsertar += "					onMouseOut='this.style.backgroundColor=\"#F9F9F9\";' ";
-    txtInsertar += "			>X</div>   ";
-    txtInsertar += "		</td> ";
-    txtInsertar += "	</tr> ";
-
-    var txtTexto = objIngresos.value;
-    var txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objIngresos.value = txtResultado;
-
-    txtInsertar += "<input type='hidden' id='parentesco-" + objNumDocumento.value + "' value='" + objParentesco.options[ objParentesco.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='ingreso-" + objNumDocumento.value + "' value='" + objIngresos.value + "'>";
-
-    txtTexto = objNumDocumento.value;
-    txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objNumDocumento.value = txtResultado;
-
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-txtNombre1' name='hogar[" + objNumDocumento.value + "][txtNombre1]' value='" + objNombre1.value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-txtNombre2' name='hogar[" + objNumDocumento.value + "][txtNombre2]' value='" + objNombre2.value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-txtApellido1' name='hogar[" + objNumDocumento.value + "][txtApellido1]' value='" + objApellido1.value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-txtApellido2' name='hogar[" + objNumDocumento.value + "][txtApellido2]' value='" + objApellido2.value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqTipoDocumento' name='hogar[" + objNumDocumento.value + "][seqTipoDocumento]' value='" + objTpoDocumento.options[ objTpoDocumento.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-numDocumento' name='hogar[" + objNumDocumento.value + "][numDocumento]' value='" + objNumDocumento.value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqParentesco' name='hogar[" + objNumDocumento.value + "][seqParentesco]' value='" + objParentesco.options[ objParentesco.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-fchNacimiento' name='hogar[" + objNumDocumento.value + "][fchNacimiento]' value='" + objFchNacimiento.value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqCondicionEspecial' name='hogar[" + objNumDocumento.value + "][seqCondicionEspecial]' value='" + objCondEspecial.options[ objCondEspecial.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqCondicionEspecial2' name='hogar[" + objNumDocumento.value + "][seqCondicionEspecial2]' value='" + objCondEspecial2.options[ objCondEspecial2.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqCondicionEspecial3' name='hogar[" + objNumDocumento.value + "][seqCondicionEspecial3]' value='" + objCondEspecial3.options[ objCondEspecial3.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqEtnia' name='hogar[" + objNumDocumento.value + "][seqEtnia]' value='" + objCondEtnica.options[ objCondEtnica.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqEstadoCivil' name='hogar[" + objNumDocumento.value + "][seqEstadoCivil]' value='" + objEstCivil.options[ objEstCivil.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqOcupacion' name='hogar[" + objNumDocumento.value + "][seqOcupacion]' value='" + objOcupacion.options[ objOcupacion.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqSexo' name='hogar[" + objNumDocumento.value + "][seqSexo]' value='" + objSexo.options[ objSexo.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-bolLgtb' name='hogar[" + objNumDocumento.value + "][bolLgtb]' value='" + objLgtb.options[ objLgtb.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-valIngresos' name='hogar[" + objNumDocumento.value + "][valIngresos]' value='" + objIngresos.value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqNivelEducativo' name='hogar[" + objNumDocumento.value + "][seqNivelEducativo]' value='" + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqTipoVictima' name='hogar[" + objNumDocumento.value + "][seqTipoVictima]' value='" + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + objNumDocumento.value + "-seqGrupoLgtbi' name='hogar[" + objNumDocumento.value + "][seqGrupoLgtbi]' value='" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].value + "'>";
-    txtInsertar += "</table> ";
-
-    txtInsertar += "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"display:none\" id=\"detalles" + objNumDocumento.value + "\"> ";
-    txtInsertar += "	<tr> ";
-    txtInsertar += "		<td colspan=\"6\"> ";
-    txtInsertar += "			<table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"border: 1px solid #999999;\"> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Estado Civil:</b> " + objEstCivil.options[ objEstCivil.selectedIndex ].text + "</td> ";
-    txtInsertar += "					<td><b>Condici&oacute;n &Eacute;tnica:</b> " + ucwords(objCondEtnica.options[ objCondEtnica.selectedIndex ].text.toString().toLowerCase()) + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Sexo:</b> " + objSexo.options[ objSexo.selectedIndex ].text + "</td> ";
-    txtInsertar += "					<td><b>Condici&oacute;n Especial 1:</b> " + objCondEspecial.options[ objCondEspecial.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Fecha de Nacimiento:</b> " + objFchNacimiento.value + "</td> ";
-    txtInsertar += "					<td><b>Condici&oacute;n Especial 2:</b> " + objCondEspecial2.options[ objCondEspecial2.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Nivel Educativo:</b> " + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].text + "</td> ";
-    txtInsertar += "					<td><b>Condici&oacute;n Especial 3:</b> " + objCondEspecial3.options[ objCondEspecial3.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    if (objLgtb.options[ objLgtb.selectedIndex ].value == 0) {
-        txtInsertar += "<td><b>LGTBI:</b> " + objLgtb.options[ objLgtb.selectedIndex ].text + "</td>";
-    } else {
-        txtInsertar += "<td><b>LGTBI:</b> " + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].text + "</td> ";
-    }
-    txtInsertar += "					<td><b>Tipo de V&iacute;ctima:</b> " + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td colspan='3'><b>Ocupaci&oacute;n:</b> " + txtOcupacion + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "			</table> ";
-    txtInsertar += "		</td> ";
-    txtInsertar += "	</tr> ";
-    txtInsertar += "</table> ";
-
-    objHogar.innerHTML += txtInsertar;
-
-    // Sumando el ingreso del miembro del hogar
-    var objTotalValor = document.getElementById("valIngresoHogar");
-    var objTotalMostrar = document.getElementById("valTotalMostrar");
-
-    var arrMiembros = objHogar.getElementsByTagName("table");
-    objTotalValor.value = 0;
-    for (i = 0; i < arrMiembros.length; i++) {
-        if (parseInt(arrMiembros[ i ].id)) {
-            varValorFormat = objTotalValor.value.replace(/[.,,]/g, '');
-            valorMiembroSumar = document.getElementById("ingreso-" + arrMiembros[ i ].id).value.replace(/[.,,]/g, '');
-            objTotalValor.value = parseInt(varValorFormat) + parseInt(valorMiembroSumar);
-        }
-    }
-
-    objTotalMostrar.innerHTML = "$ " + dar_formato(objTotalValor.value);
-
-    // Reiniciar el formulario de agregar miembro de hogar
-    objNombre1.value = "";
-    objNombre2.value = "";
-    objApellido1.value = "";
-    objApellido2.value = "";
-    objTpoDocumento.selectedIndex = 0;
-    objNumDocumento.value = "";
-    objParentesco.selectedIndex = 0;
-    objFchNacimiento.value = "";
-    objCondEspecial.selectedIndex = 0;
-    objCondEtnica.selectedIndex = 0;
-    objEstCivil.selectedIndex = 0;
-    objOcupacion.selectedIndex = 0;
-    objSexo.selectedIndex = 0;
-    objLgtb.selectedIndex = 0;
-    objIngresos.value = "";
-    objNvlEducativo.selectedIndex = 0;
     objSeqTipoVictima.selectedIndex = 0;
     objSeqGrupoLgtbi.selectedIndex = 0;
 
@@ -2198,7 +1935,7 @@ function pedirConfirmacion(txtDestino, objFormulario, txtArchivo) {
                             function(){
                                 var objMensajes = YAHOO.util.Dom.get('mensajes');
                                 var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
-                                if( objTablaMensajes.className == "msgOk"){
+                                if( objTablaMensajes.className == "msgOk") {
                                     var txtMensajes = objMensajes.innerHTML;
                                     $('#buscarCedula').trigger('click');
                                     objMensajes.innerHTML = txtMensajes;
@@ -2350,6 +2087,77 @@ function obtenerTipoSolucionDesplazado(objDesplazado, txtIdModalidad) {
     );
 
 }
+
+function datosPestanaPostulacion(txtModo){
+
+    var objMensajes = YAHOO.util.Dom.get('mensajes');
+    var txtParametros =
+            "modo="           + txtModo                   + "&" +
+            "parametro="       + $( "#" + idSelect ).val() + "&" +
+            "seqFormulario="   + seqFormulario             + "&" +
+            "seqModalidad="    + seqModalidad              + "&" +
+            "seqPlanGobierno=" + seqPlanGobierno           + "&" +
+            "seqProyecto="     + seqProyecto               + "&" +
+            "seqProyectoHijo=" + seqProyectoHijo;
+
+    var objCargando = obtenerObjetoCargando();
+        objCargando.show();
+
+    var fncSuccess = function(o){
+
+        YAHOO.util.Dom.get('mensajes').innerHTML = o.responseText;
+
+        // var objRespuesta =  jQuery.parseJSON(o.responseText);
+        //
+        // if(txtModo == "modalidad"){
+        //
+        //     $("#seqSolucion").empty();
+        //     for( key in objRespuesta.solucion){
+        //         $("#seqSolucion").append(
+        //             $('<option>', {
+        //                 value: key,
+        //                 text: objRespuesta.solucion[key]
+        //             })
+        //         );
+        //     }
+        //     if( $('#seqSolucion').children('option').length == 2){
+        //         $('#seqSolucion').val(key).prop('selected', true);
+        //     }
+        //
+        //     $("#seqProyecto").empty();
+        //     for( key in objRespuesta.proyecto){
+        //         $("#seqProyecto").append(
+        //             $('<option>', {
+        //                 value: key,
+        //                 text: objRespuesta.proyecto[key]
+        //             })
+        //         );
+        //     }
+        //
+        // }
+
+        objCargando.hide();
+    }
+
+    var fncFailure = function(o){
+        alert( o.status + " " + o.statusText );
+        objCargando.hide();
+    }
+
+    var callback = {
+        success: fncSuccess,
+        failure: fncFailure
+    };
+
+    YAHOO.util.Connect.asyncRequest(
+        "POST",
+        "./contenidos/subsidios/datosPestanaPostulacion.php",
+        callback,
+        txtParametros
+    );
+}
+
+
 
 function obtenerTipoSolucion(objModalidad) {
 
@@ -2657,8 +2465,8 @@ function calendarioPopUp(idInputDestino) {
     var objPanel = new YAHOO.widget.Panel(
             "calendar",
             {
-                width: "195px",
-                height: "230px",
+                width: "200px",
+                height: "280px",
                 fixedcenter: true,
                 close: true,
                 draggable: true,

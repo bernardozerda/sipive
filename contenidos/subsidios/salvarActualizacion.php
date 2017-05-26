@@ -32,6 +32,13 @@ $victima = '';
  * VALIDACIONES GENERALES
  * **************************************************************************************************** */
 
+
+// Solo grupo informadores puede modificar datos
+$seqProyecto = $_SESSION['seqProyecto'];
+if( ! isset( $_SESSION['arrGrupos'][$seqProyecto][5] ) ){
+    $arrErrores[] = "No tiene privilegios para modificar la información";
+}
+
 // Grupo de Gestion 
 if ($_POST['seqGrupoGestion'] == 0) {
     $arrErrores[] = "Seleccione el grupo de la gestión realizada";

@@ -37,7 +37,7 @@ if (!isset($_POST['cedula'])) {
 
     // Informacion de los select que hay en el formulario
     $arrTipoDocumento = obtenerDatosTabla("T_CIU_TIPO_DOCUMENTO", array("seqTipoDocumento", "txtTipoDocumento"), "seqTipoDocumento", "", "txtTipoDocumento");
-    $arrTipoVictima = obtenerDatosTabla("T_FRM_TIPOVICTIMA", array("seqTipoVictima", "txtTipoVictima"), "seqTipoVictima", "seqTipoVictima <> 0", "txtTipoVictima");
+        $arrTipoVictima = obtenerDatosTabla("T_FRM_TIPOVICTIMA", array("seqTipoVictima", "txtTipoVictima"), "seqTipoVictima", "seqTipoVictima <> 0", "txtTipoVictima");
     $arrGrupoLgtbi = obtenerDatosTabla("T_FRM_GRUPO_LGTBI", array("seqGrupoLgtbi", "txtGrupoLgtbi"), "seqGrupoLgtbi", "seqGrupoLgtbi <> 0", "txtGrupoLgtbi");
     $arrSexo = obtenerDatosTabla("T_CIU_SEXO", array("seqSexo", "txtSexo"), "seqSexo", "", "txtSexo");
     $arrEstadoCivil = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil"), "seqEstadoCivil", "", "txtEstadoCivil");
@@ -206,6 +206,7 @@ if (!isset($_POST['cedula'])) {
 //        echo "<br> tipo victima: ".$key.$value;
 //        
 //    }
+    $Smmlv = $arrConfiguracion['constantes']['salarioMinimo'];
     $claSmarty->assign("arrActosAsociados", $arrActosAsociados);
     $claSmarty->assign("arrRegistros", $arrSeguimiento);
     $claSmarty->assign("numDocumento", $_POST['cedula']);
@@ -244,6 +245,7 @@ if (!isset($_POST['cedula'])) {
     $claSmarty->assign("txtImpresion", $txtImpresion);
     $claSmarty->assign("nombreConjunto", $nombreConjunto);
     $claSmarty->assign("nombreUnidad", $nombreUnidad);
+    $claSmarty->assign("smmlv", $Smmlv);
     //$claSmarty->assign("esCoordinador", $esCoordinador);
 
     if ($txtPlantilla != "") {

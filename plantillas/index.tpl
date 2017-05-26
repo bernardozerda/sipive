@@ -22,6 +22,7 @@
             <link rel="stylesheet" type="text/css" href="./librerias/yui/paginator/assets/skins/sam/paginator.css"/>
             <link rel="stylesheet" type="text/css" href="./librerias/yui/autocomplete/assets/skins/sam/autocomplete.css"/>
             <link rel="stylesheet" type="text/css" href="./librerias/yui/treeview/assets/skins/sam/treeview.css" />
+           
             <!-- INCLUSIONES JAVASCRIPT -->	
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/element/element-min.js"></script>
@@ -44,13 +45,18 @@
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/swf/swf-min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/charts/charts-min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/treeview/treeview-min.js"></script>
+             
+            <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/javascript/funciones.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/javascript/funcionesSubsidios.js"></script>
+            <script language="JavaScript" type="text/javascript" src="./librerias/javascript/funcionesProyectos.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/javascript/marquee.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/javascript/listenerIndex.js"></script>
-            <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+            
+           
             <script src="librerias/jquery/jquery.dataTables.min.js"></script>
             <script src="librerias/jquery/dataTables.bootstrap.min.js"></script>
+            <script src="librerias/javascript/dataTable.js"></script>
             {*<link rel="stylesheet" href="recursos/estilos/jquery-ui.css"/> *}
 
             <link rel="stylesheet" href="librerias/jquery/css/dataTables.bootstrap.min.css"/> 

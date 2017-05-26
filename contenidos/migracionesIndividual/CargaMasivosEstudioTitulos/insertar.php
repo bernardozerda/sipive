@@ -3,6 +3,7 @@
 include_once "../lib/mysqli/shared/ez_sql_core.php";
 include_once "../lib/mysqli/ez_sql_mysqli.php";
 //include_once "../generarExcel.php";
+include '../migrarTablero.php';
 
 $observacion1 = 'PROPIETARIOS SON BENEFICIARIOS DEL SDV';
 $observacion2 = 'ESTADO CIVIL COINCIDENTE';
@@ -26,8 +27,8 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     $lineas = file($nombreArchivo);
     //var_dump($lineas);    exit();
     $registros = 0;
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipiveJul17', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidiosJul17', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     $intV = 1;
     $intNV = 1;
     $band = 0;
@@ -194,16 +195,19 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $registros++;
         }
     }
-    $arrSeqDesembolso = obtenerDesembolso($idHogar);
-    // var_dump($arrSeqDesembolso);    exit();
-    asignarDesembolso($arrViabilizados, $arrSeqDesembolso, $intV, 1);
-    asignarDesembolso($arrNoViabilizados, $arrSeqDesembolso, $intNV, 2);
+    $validar = validarDocumentos($idHogar, $db, 28, 27, "Escrituración");
+    if ($validar) {
+        $arrSeqDesembolso = obtenerDesembolso($idHogar);
+        // var_dump($arrSeqDesembolso);    exit();
+        asignarDesembolso($arrViabilizados, $arrSeqDesembolso, $intV, 1);
+        asignarDesembolso($arrNoViabilizados, $arrSeqDesembolso, $intNV, 2);
+    }
 } else {
     echo "Error de subida";
 }
 
 function obtenerDesembolso($numFormulario) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
 
 //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
     $consulta = "
@@ -246,7 +250,7 @@ function asignarDesembolso($arreglo, $desembolso, $cantidad, $tipo) {
 
 function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $cantF, $tipo) {
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     $consulta = " SELECT seqDesembolso, seqEstudioTitulos FROM t_des_estudio_titulos WHERE seqDesembolso IN(" . $idSeqDesembolso . ")";
     $resultado = $db->get_results($consulta);
     $dato = Array();
@@ -307,13 +311,13 @@ function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
                        '" . $arreglo['bolSubsidioFonvivienda'][$int] . "',
                        '" . $arreglo['numResolucionFonvivienda'][$int] . "',
                        '" . $arreglo['numAnoResolucionFonvivienda'][$int] . "',
-                       '" . utf8_encode($arreglo['txtAprobo'][$int]) . "',
+                       '" . $arreglo['txtAprobo'][$int] . "',
                        '" . $arreglo['fchCreacion'][$int] . "',
                        '" . $arreglo['fchActualizacion'][$int] . "',
                        '" . $arreglo['txtCiudadTitulo'][$int] . "',
                        '" . $arreglo['txtCiudadIdentificacion'][$int] . "',
                        '" . $arreglo['txtCiudadMatricula'][$int] . "',
-                       '" . utf8_encode($arreglo['txtElaboro'][$int]) . "'";
+                       '" . $arreglo['txtElaboro'][$int] . "'";
 
                 $valores .= "),";
                 $ArrImpresion['seqFormulario'][$int] = $value;
@@ -347,13 +351,13 @@ function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
                        '" . $arreglo['bolSubsidioFonvivienda'][$int] . "',
                        '" . $arreglo['numResolucionFonvivienda'][$int] . "',
                        '" . $arreglo['numAnoResolucionFonvivienda'][$int] . "',
-                       '" . utf8_encode($arreglo['txtAprobo'][$int]) . "',
+                       '" . $arreglo['txtAprobo'][$int] . "',
                        '" . $arreglo['fchCreacion'][$int] . "',
                        '" . $arreglo['fchActualizacion'][$int] . "',
                        '" . $arreglo['txtCiudadTitulo'][$int] . "',
                        '" . $arreglo['txtCiudadIdentificacion'][$int] . "',
                        '" . $arreglo['txtCiudadMatricula'][$int] . "',
-                       '" . utf8_encode($arreglo['txtElaboro'][$int]) . "'";
+                       '" . $arreglo['txtElaboro'][$int] . "'";
                     $valores .= "),";
                     $ArrImpresion['seqFormulario'][$ex] = $value;
                     $ArrImpresion['seqDesembolso'][$ex] = $arreglo['seqDesembolso'][$int];
@@ -372,7 +376,7 @@ function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
             $int++;
         }
     }
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
     //echo $valores;
     if ($valores != "") {
@@ -398,7 +402,7 @@ function insertarAdjuntosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
 
 
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     $consulta = " SELECT seqDesembolso, seqEstudioTitulos FROM T_DES_ESTUDIO_TITULOS WHERE seqDesembolso IN(" . $idSeqDesembolso . ")";
 
     $resultado = $db->get_results($consulta);
@@ -414,7 +418,7 @@ function insertarAdjuntosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
 
     $seqEstudioTitulosSearch = substr_replace($seqEstudioTitulosSearch, '', -1, 1);
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     $consulta = " SELECT seqAdjuntoTitulos, seqEstudioTitulos FROM t_des_adjuntos_titulos WHERE seqEstudioTitulos IN(" . $seqEstudioTitulosSearch . ")";
     $resultado1 = $db->get_results($consulta);
     $datoET = Array();
@@ -440,38 +444,38 @@ function insertarAdjuntosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
         if ($seqAdjuntosTitulo == "") {
             if ($seqEstudioTitulos != "") {
                 if ($arreglo['beneficiarios'][$int] != "") {
-                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['beneficiarios'][$int]) . "'),";
+                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . $arreglo['beneficiarios'][$int] . "'),";
                 }
                 if ($arreglo['estado'][$int] != "") {
-                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['estado'][$int]) . "'),";
+                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . $arreglo['estado'][$int] . "'),";
                 }
                 if ($arreglo['constitucion'][$int] != "") {
-                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['constitucion'][$int]) . "'),";
+                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . $arreglo['constitucion'][$int] . "'),";
                 }
                 if ($arreglo['resticciones'][$int] != "") {
-                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['resticciones'][$int]) . "'),";
+                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . $arreglo['resticciones'][$int] . "'),";
                 }
                 if ($arreglo['patrimonio'][$int] != "") {
-                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['patrimonio'][$int]) . "'),";
+                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . $arreglo['patrimonio'][$int] . "'),";
                 }
                 if ($arreglo['propietarios'][$int] != "") {
-                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['propietarios'][$int]) . "'),";
+                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . $arreglo['propietarios'][$int] . "'),";
                 }
                 if ($arreglo['compraVenta'][$int] != "") {
-                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['compraVenta'][$int]) . "'),";
+                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . $arreglo['compraVenta'][$int] . "'),";
                 }
                 if ($arreglo['noEscritura'][$int] != "") {
-                    $valueObs2 .= "(1," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['noEscritura'][$int]) . "'),";
+                    $valueObs2 .= "(1," . $seqEstudioTitulos . ",'" . $arreglo['noEscritura'][$int] . "'),";
                 }
                 if ($arreglo['folio'][$int] != "") {
-                    $valueObs2 .= "(1," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['folio'][$int]) . "'),";
+                    $valueObs2 .= "(1," . $seqEstudioTitulos . ",'" . $arreglo['folio'][$int] . "'),";
                 }
                 if ($arreglo['certificado'][$int] != "") {
-                    $valueObs2 .= "(1," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['certificado'][$int]) . "'),";
+                    $valueObs2 .= "(1," . $seqEstudioTitulos . ",'" . $arreglo['certificado'][$int] . "'),";
                 }
 
                 if ($arreglo['observacion'][$int] != "") {
-                    $valueObs3 .= "(2," . $seqEstudioTitulos . ",'" . utf8_encode($arreglo['observacion'][$int]) . "'),";
+                    $valueObs3 .= "(2," . $seqEstudioTitulos . ",'" . $arreglo['observacion'][$int] . "'),";
                 }
             } else {
                 $existen .= $arreglo['seqFormulario'][$int] . ", ";
@@ -501,12 +505,12 @@ function insertarAdjuntosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
 }
 
 function generarLinks($arreglo, $tipo) {
-
+    $arrFormularioArchivo = array();
     $titulo = " Impresion ";
     if ($tipo == 1) {
-        $titulo .=" Impresion Aprobados ";
+        $titulo .= " Impresion Aprobados ";
     } else
-        $titulo .=" Impresion NO Aprobados ";
+        $titulo .= " Impresion NO Aprobados ";
 
     $tabla = "<p><table>";
     $tabla .= "<tr><td colspan='5'>" . $titulo . "</td></tr>";
@@ -519,12 +523,13 @@ function generarLinks($arreglo, $tipo) {
     $tabla .= "</tr>";
     $int = 1;
     foreach ($arreglo['seqDesembolso'] as $key => $value) {
+        array_push($arrFormularioArchivo, trim($arreglo['seqFormulario'][$int]));
         $tabla .= "<tr>";
         $tabla .= "<td>" . $arreglo['seqFormulario'][$int] . "</td>";
         $tabla .= "<td>" . $arreglo['seqDesembolso'][$int] . "</td>";
         $tabla .= "<td>" . $arreglo['txtElaboro'][$int] . "</td>";
         $tabla .= "<td>" . $arreglo['txtAprobo'][$int] . "</td>";
-        $tabla .= "<td><a href='http://".$_SERVER['HTTP_HOST']."/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "' target='_blank'>http://".$_SERVER['HTTP_HOST']."/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "</a></td>";
+        $tabla .= "<td><a href='http://".$_SERVER['HTTP_HOST']."/sdv/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "' target='_blank'>http://".$_SERVER['HTTP_HOST']."/sdv/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "</a></td>";
         $tabla .= "</tr>";
         $int++;
     }
@@ -538,23 +543,42 @@ function generarLinks($arreglo, $tipo) {
     $tabla .= "<th>Comentario</th>";
     $tabla .= "</tr>";
     $int = 1;
+    $aprobado = "";
+    $noAprobado = "";
     foreach ($arreglo['seqDesembolso'] as $key1 => $value1) {
 
-        $tabla .= "<tr>";
-        $tabla .= "<td>" . $arreglo['numdocumento'][$int] . "</td>";
+        // $tabla .= "<tr>";
+        //$tabla .= "<td>" . $arreglo['numdocumento'][$int] . "</td>";
         if ($tipo == 1) {
-            $tabla .= "<td>29</td>";
-            $tabla .= "<td> POR MIGRACION MASIVA ESTUDIO DE TITULOS </td>";
+            $aprobado .= $arreglo['seqFormulario'][$int] . ",";
+            // $tabla .= "<td>29</td>";
+            // $tabla .= "<td> POR MIGRACION MASIVA ESTUDIO DE TITULOS </td>";
         } else {
-            $tabla .= "<td>28</td>";
-            $tabla .= "<td> POR MIGRACION MASIVA ESTUDIO DE TITULOS </td>";
+            $noAprobado .= $arreglo['seqFormulario'][$int] . ",";
+            // $tabla .= "<td>28</td>";
+            //$tabla .= "<td> POR MIGRACION MASIVA ESTUDIO DE TITULOS </td>";
         }
 
-        $tabla .= "</tr>";
+        // $tabla .= "</tr>";
         $int++;
     }
-    echo $tabla .= "</table></p>";
-    // crearExcel();
+    if (!empty($aprobado)) {
+        $insert1 = substr_replace($aprobado, '', -1, 1);
+//        $consulta = "UPDATE t_frm_formulario set seqEstadoProceso = 31 where seqFormulario IN(" . $insert1 . ")";
+//        $db->get_results($consulta);
+        migrarInformacion($insert1, $db, 31, 27);
+    }
+    if (!empty($noAprobado)) {
+//        $insert1 = substr_replace($noAprobado, '', -1, 1);
+//        $consulta = "UPDATE t_frm_formulario set seqEstadoProceso = 28 where seqFormulario IN(" . $insert1 . ")";
+//        $db->get_results($consulta);
+        $insert1 = substr_replace($noAprobado, '', -1, 1);
+        migrarInformacion($insert1, $db, 28, 27);
+    }
+
+
+//    $separado_por_comas = implode(",", $arrFormularioArchivo);
+//    migrarInformacion($separado_por_comas, $db, 28, 27);
 }
 
 ?>

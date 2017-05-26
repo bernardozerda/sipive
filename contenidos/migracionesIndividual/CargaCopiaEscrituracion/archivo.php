@@ -12,7 +12,7 @@ include '../../../recursos/archivos/verificarSesion.php';
     <body> 
         <div id="contenidos" class="container">
             <div class="hero-unit-header" style="background-color: #289bae; color: white; text-align: center">
-                Módulo de carga de datos de Escrituración a primera Escrituracion
+                Módulo de carga de datos de Escrituracion a primera escrituracion
             </div>
             <div class="well">
                 <form method="post" action="insertar.php" enctype="multipart/form-data" id="formcargar" class="form-signin">

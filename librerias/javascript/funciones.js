@@ -1246,7 +1246,7 @@ function agregarMiembroHogar() {
     }
     objNumDocumento.value = txtResultado;
 
-    if(objAnosAprobados.selectedIndex == -1){
+    if (objAnosAprobados.selectedIndex == -1) {
         objAnosAprobados.selectedIndex = 0;
     }
 
@@ -1916,100 +1916,105 @@ function sumarTotal() {
 
 function pedirConfirmacion(txtDestino, objFormulario, txtArchivo) {
 
-    if (navigator.onLine) {
-
-        eliminarObjeto("dlgPedirConfirmacionListener");
-
-        someterFormulario(txtDestino, objFormulario, txtArchivo, false, true);
-
-        YAHOO.util.Event.onContentReady(
-                "dlgPedirConfirmacionListener",
-                function () {
-
-                    // Acion de someter el formulario
-                    var handleSubmit = function () {
-                        eliminarObjeto("tablaMensajes");
-                        this.submit();
-                        YAHOO.util.Event.onContentReady(
-                            "tablaMensajes",
-                            function(){
-                                var objMensajes = YAHOO.util.Dom.get('mensajes');
-                                var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
-                                if( objTablaMensajes.className == "msgOk") {
-                                    var txtMensajes = objMensajes.innerHTML;
-                                    $('#buscarCedula').trigger('click');
-                                    objMensajes.innerHTML = txtMensajes;
-                                }
-                            }
-                        );
-                    };
-
-                    // Cancela la accion de someter el formulario y cierra el cuadro de dialogo
-                    var handleCancel = function () {
-                        this.cancel();
-                    };
-
-                    // Cuando da Submit al formulario del dialogo este es la funcion que contesta
-                    var handleSuccess = function (o) {
-                        var response = o.responseText;
-                        response = response.split("<!")[0];
-                        document.getElementById("mensajes").innerHTML = response;
-                        var tmpObj = null;
-                        tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
-                        while (tmpObj != null) {
-                            //alert( tmpObj );
-                            eliminarObjeto("dlgPedirConfirmacion_mask");
-                            tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
-                        }
-                    };
-
-                    // Cuando se da submit y la accion falla este es el mensaje
-                    var handleFailure = function (o) {
-                        alert("Submission failed: " + o.status);
-                    };
-
-                    // Objeto de configuracion
-                    var objConfiguracion = {
-                        width: "300px",
-                        fixedcenter: true,
-                        close: false,
-                        draggable: false,
-                        modal: true,
-                        buttons: [{
-                                text: "Salvar Información",
-                                handler: handleSubmit,
-                                isDefault: true
-                            },
-                            /*{
-                             text:"Salvar InformaciÃ³n Parcial", 
-                             handler:handleSubmit, 
-                             isDefault:false
-                             },*/
-                            {
-                                text: "Cancelar",
-                                handler: handleCancel
-                            }
-                        ],
-                        constraintoviewport: true
-                    };
-
-                    // Instancia el cuadro de dialogo
-                    var dialog1 = new YAHOO.widget.Dialog("dlgPedirConfirmacion", objConfiguracion);
-
-                    // Objeto callback del formulario para manejar la respuesta de este
-                    dialog1.callback = {
-                        success: handleSuccess,
-                        failure: handleFailure
-                    };
-
-                    // Muestra el cuadro de dialogo
-                    dialog1.render();
-                    dialog1.show();
-
-                }
-        );
+   if (document.getElementById("agregarMiembro") != null && document.getElementById("agregarMiembro").style.display != "none") {
+        divs = document.getElementsByClassName('count');
+        $("#mensajes").html("<div class = 'msgError'>Alerta. Por favor verifique que los miembreo de hoga se encuentren agregados correctamente!!!</div>");
     } else {
-        alert('Por favor verifique la conexión a internet y de nuevo haga clic en Salvar Acualización');
+        if (navigator.onLine) {
+
+            eliminarObjeto("dlgPedirConfirmacionListener");
+
+            someterFormulario(txtDestino, objFormulario, txtArchivo, false, true);
+
+            YAHOO.util.Event.onContentReady(
+                    "dlgPedirConfirmacionListener",
+                    function () {
+
+                        // Acion de someter el formulario
+                        var handleSubmit = function () {
+                            eliminarObjeto("tablaMensajes");
+                            this.submit();
+                            YAHOO.util.Event.onContentReady(
+                                    "tablaMensajes",
+                                    function () {
+                                        var objMensajes = YAHOO.util.Dom.get('mensajes');
+                                        var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
+                                        if (objTablaMensajes.className == "msgOk") {
+                                            var txtMensajes = objMensajes.innerHTML;
+                                            $('#buscarCedula').trigger('click');
+                                            objMensajes.innerHTML = txtMensajes;
+                                        }
+                                    }
+                            );
+                        };
+
+                        // Cancela la accion de someter el formulario y cierra el cuadro de dialogo
+                        var handleCancel = function () {
+                            this.cancel();
+                        };
+
+                        // Cuando da Submit al formulario del dialogo este es la funcion que contesta
+                        var handleSuccess = function (o) {
+                            var response = o.responseText;
+                            response = response.split("<!")[0];
+                            document.getElementById("mensajes").innerHTML = response;
+                            var tmpObj = null;
+                            tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
+                            while (tmpObj != null) {
+                                //alert( tmpObj );
+                                eliminarObjeto("dlgPedirConfirmacion_mask");
+                                tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
+                            }
+                        };
+
+                        // Cuando se da submit y la accion falla este es el mensaje
+                        var handleFailure = function (o) {
+                            alert("Submission failed: " + o.status);
+                        };
+
+                        // Objeto de configuracion
+                        var objConfiguracion = {
+                            width: "300px",
+                            fixedcenter: true,
+                            close: false,
+                            draggable: false,
+                            modal: true,
+                            buttons: [{
+                                    text: "Salvar Información",
+                                    handler: handleSubmit,
+                                    isDefault: true
+                                },
+                                /*{
+                                 text:"Salvar InformaciÃ³n Parcial", 
+                                 handler:handleSubmit, 
+                                 isDefault:false
+                                 },*/
+                                {
+                                    text: "Cancelar",
+                                    handler: handleCancel
+                                }
+                            ],
+                            constraintoviewport: true
+                        };
+
+                        // Instancia el cuadro de dialogo
+                        var dialog1 = new YAHOO.widget.Dialog("dlgPedirConfirmacion", objConfiguracion);
+
+                        // Objeto callback del formulario para manejar la respuesta de este
+                        dialog1.callback = {
+                            success: handleSuccess,
+                            failure: handleFailure
+                        };
+
+                        // Muestra el cuadro de dialogo
+                        dialog1.render();
+                        dialog1.show();
+
+                    }
+            );
+        } else {
+            alert('Por favor verifique la conexión a internet y de nuevo haga clic en Salvar Acualización');
+        }
     }
 
 }
@@ -2088,22 +2093,22 @@ function obtenerTipoSolucionDesplazado(objDesplazado, txtIdModalidad) {
 
 }
 
-function datosPestanaPostulacion(txtModo){
+function datosPestanaPostulacion(txtModo) {
 
     var objMensajes = YAHOO.util.Dom.get('mensajes');
     var txtParametros =
-            "modo="           + txtModo                   + "&" +
-            "parametro="       + $( "#" + idSelect ).val() + "&" +
-            "seqFormulario="   + seqFormulario             + "&" +
-            "seqModalidad="    + seqModalidad              + "&" +
-            "seqPlanGobierno=" + seqPlanGobierno           + "&" +
-            "seqProyecto="     + seqProyecto               + "&" +
+            "modo=" + txtModo + "&" +
+            "parametro=" + $("#" + idSelect).val() + "&" +
+            "seqFormulario=" + seqFormulario + "&" +
+            "seqModalidad=" + seqModalidad + "&" +
+            "seqPlanGobierno=" + seqPlanGobierno + "&" +
+            "seqProyecto=" + seqProyecto + "&" +
             "seqProyectoHijo=" + seqProyectoHijo;
 
     var objCargando = obtenerObjetoCargando();
-        objCargando.show();
+    objCargando.show();
 
-    var fncSuccess = function(o){
+    var fncSuccess = function (o) {
 
         YAHOO.util.Dom.get('mensajes').innerHTML = o.responseText;
 
@@ -2139,8 +2144,8 @@ function datosPestanaPostulacion(txtModo){
         objCargando.hide();
     }
 
-    var fncFailure = function(o){
-        alert( o.status + " " + o.statusText );
+    var fncFailure = function (o) {
+        alert(o.status + " " + o.statusText);
         objCargando.hide();
     }
 
@@ -2150,11 +2155,11 @@ function datosPestanaPostulacion(txtModo){
     };
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/subsidios/datosPestanaPostulacion.php",
-        callback,
-        txtParametros
-    );
+            "POST",
+            "./contenidos/subsidios/datosPestanaPostulacion.php",
+            callback,
+            txtParametros
+            );
 }
 
 

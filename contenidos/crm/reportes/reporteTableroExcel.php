@@ -21,7 +21,7 @@ function informeProyectosActo() {
     $tipo = $_GET['tipo'];
     $conexion = mysql_connect("localhost", "sdht_usuario", "Ochochar*1");
     mysql_set_charset('utf8', $conexion);
-    mysql_select_db("sdht_sipive", $conexion);
+    mysql_select_db("sdv_capacitacion", $conexion);
     require_once '../../../librerias/phpExcel/Classes/PHPExcel.php';
     require_once '../../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php';
 

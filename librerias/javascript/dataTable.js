@@ -100,7 +100,7 @@ function analizarSimulador() {
     if (totalPenCierre < 0) {
         $('#divLeftP').html('UD podrá tomar Menor Valor del Credito o de los Ahorros');
         
-    } else if($("#simVictima").val() != 'true' && totalPenCierre >0){
+    } else if($("#simVictima").val() != 'true' && totalPenCierre >0 && smmlvTotalSubsidios> 0){
             $('#divLeftP').html('UD no dispone de recursos adicionales. Se sugiere optar por un crédito para alcanzar el cierre financiero o en caso de continuar la opción de Leasing no podrá aplicar el Subsidio reportado');
         
     }else if(totalPenCierre <= 0 && simPiveAporte == 0){

@@ -1,6 +1,6 @@
 <div class="modal-wrapper" id="popup">
     <div class="popup-contenedor">
-        <div><h1>Simulador SDHT Sipive</h1>                                  
+        <div><h1>SiPIVE - Simulador Aporte SDHT </h1>                                  
             <table class="responstable" >
                 <tbody>
                     {assign var=maxNumSalarios value =70}
@@ -48,13 +48,13 @@
                         <td colspan="5"><p><b style="color: red; font-size: 14px">ATENCIÓN!!! ESTA INFORMACIÓN NO QUEDARÁ REGISTRADA EN LA BASE DE DATOS DE SIPIVE!</b></p></td>
                     </tr>
                     <tr>
-                        <th style="text-align: center;"><b>&nbsp;</b></th>
+                        <th style="text-align: center;" colspan="2"><b>&nbsp;</b></th>
                         <th style="text-align: center;" width="20%">Valor en Pesos(<b>$</b>)</th>
                         <th style="text-align: center;">Equivalencia en SMMLV</th>
                     </tr>
                     <tr>
                         {assign var=simRecursosP value = $totalAhorro/$smmlv}
-                        <td><b>Ahorros</b></td>
+                        <td colspan="2"><b>Ahorros</b></td>
                         <td width="20%"><input type="text" id="simAhorro" value="{$totalAhorro|number_format:0:',':'.'}" 
                                                onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                onBlur="soloNumeros(this);
@@ -66,7 +66,7 @@
                     </tr>
                     <tr>
                         {assign var=simRecursosSub value = $objFormulario->valSubsidioNacional/$smmlv}
-                        <td><b>Valor Subsidio: AVC / FOVIS / SFV</b></td>
+                        <td colspan="2"><b>Valor Subsidio: AVC / FOVIS / SFV</b></td>
                         <td> <input type="text" id="simValSubsidioNacional"  value="{$objFormulario->valSubsidioNacional|number_format:'0':'.':'.'}" 
                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                     onBlur="soloNumeros(this);
@@ -78,7 +78,7 @@
                     </tr>
                     <tr>
                         {assign var=simRecursosP value = $simRecursosP+$objFormulario->valSaldoCesantias/$smmlv}
-                        <td><b>Cesantías</b></td>
+                        <td colspan="2"><b>Cesantías</b></td>
                         <td ><input type="text" id="simValCesantias"  value="{$objFormulario->valSaldoCesantias|number_format:'0':'.':'.'}" 
                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                     onBlur="soloNumeros(this);
@@ -90,7 +90,7 @@
                     </tr>
                     <tr>
                         {assign var=simRecursosP value = $simRecursosP+$objFormulario->valCredito/$smmlv}
-                        <td><b>Crédito</b></td>
+                        <td colspan="2"><b>Crédito</b></td>
                         <td><input type="text" id="simValCredito"  value="{$objFormulario->valCredito|number_format:'0':'.':'.'}" 
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="soloNumeros(this);
@@ -102,7 +102,7 @@
                     </tr>
                     <tr>
                         {assign var=simRecursosSub value = $simRecursosSub+$objFormulario->valDonacion/$smmlv}
-                        <td><b>Donación / Rec. Económico</b></td>
+                        <td colspan="2"><b>Donación / Rec. Económico</b></td>
                         <td ><input type="text" id="simValDonacion"  value="{$objFormulario->valDonacion|number_format:'0':'.':'.'}" 
                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                     onBlur="soloNumeros(this);
@@ -113,17 +113,17 @@
                         <td><b id="simSmmDonacion">{$objFormulario->valDonacion/$smmlv|number_format:'3':'.':'.'}</b></td>
                     </tr>
                     <tr>                                         
-                        <td colspan="3"></td>
+                        <td colspan="4"></td>
                     </tr>
                     <tr>
                         {assign var=simTotalAhorro value = $totalAhorro+$objFormulario->valSaldoCesantias+$objFormulario->valCredito}
                         {assign var=simTotalSubsidio value = $objFormulario->valSubsidioNacional+$objFormulario->valDonacion}
-                        <td><b>Total Recursos Propios</b></td>
+                        <td colspan="2"><b>Total Recursos Propios</b></td>
                         <td ><b id="simTotalAhorro">${$simTotalAhorro|number_format:0:',':'.'}</b></td>
                         <td><b id="simTotalRecP">{$simTotalAhorro/$smmlv|number_format:3:',':'.'}</b></td>
                     </tr>
                     <tr>
-                        <td><b>Total Subsidios / VUR</b></td>
+                        <td colspan="2"><b>Total Subsidios / VUR</b></td>
                         <td ><b id="simTotalSubsidios">${$simTotalSubsidio|number_format:0:',':'.'}</b></td>
                         <td><b id="smmlvTotalSubsidios">{$simTotalSubsidio/$smmlv|number_format:3:',':'.'}</b></td>
                     </tr>
@@ -136,22 +136,22 @@
                         {else}
                             {assign var=simPiveVictima value = $simRetorno-$simRecursosSub}
                         {/if}
-                        <td><b>Vr. Estimado Aporte SDHT</b></td>
+                        <td colspan="2"><b>Vr. Estimado Aporte SDHT</b></td>
                         <td><b id="simTotalAporte">{$simPiveVictima*$smmlv|number_format:0:',':'.'}</b></td>
                         <td><b id="smmTotalAporte">{$simPiveVictima|number_format:3:',':'.'}</b></td>
                     </tr>
                     <tr>
                         {assign var="TotalAdqVivienda" value =$simPiveVictima+$simTotalSubsidio/$smmlv+$simTotalAhorro/$smmlv}
-                        <td><b>Vr. Total para Adquisición de Vivienda</b></td>
+                        <td colspan="2"><b>Vr. Total para Adquisición de Vivienda</b></td>
                         <td><b id="simTotalAdqVivienda">{$TotalAdqVivienda*$smmlv|number_format:0:',':'.'}</b></td>
                         <td><b id="smmTotalAdqVivienda">{$TotalAdqVivienda|number_format:3:',':'.'}</b></td>
                     </tr>
                     <tr>                                         
-                        <td colspan="3"></td>
+                        <td colspan="4"></td>
                     </tr>
                     <tr>
                         {assign var="TotalAdqVivienda" value =$maxNumSalarios-$TotalAdqVivienda}
-                        <td><b>Valor Pendiente Cierre Financiero</b></td>
+                        <td colspan="2"><b>Valor Pendiente Cierre Financiero</b></td>
                         {if $TotalAdqVivienda <0}                        
                             <td><b id="totalPenCierre" style="color: red;">{$TotalAdqVivienda*$smmlv|number_format:0:',':'.'}</b></td>
                             <td><b id="smmPenCierre" style="color: red;">{$TotalAdqVivienda|number_format:3:',':'.'}</b></td>
@@ -164,7 +164,7 @@
                         <td colspan="4">
                             <fieldset style="border-radius: 5px;">
                                 <legend style="text-align: left;"><h2>Sugerencia</h2></legend>
-                                <div id="divLeftP" class="divLeftP" style="text-align: left; margin-top: 10px; margin-left: 10px; font-weight: bold; font-size: 13px;">
+                                <div id="divLeftP" class="divLeftP" style="text-align: left; margin-top: 10px; margin-left: 10px; font-weight: bold; font-size: 13px; width: 80%">
                                     {if $simPiveVictima == 0}
                                         UD podrá tomar Menor Valor del Credito o de los Ahorros
                                        <!-- UD puede optar por subsidio nivel central (Mi Casa Ya)  -->

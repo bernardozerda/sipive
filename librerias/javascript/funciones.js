@@ -1893,100 +1893,105 @@ function sumarTotal() {
 
 function pedirConfirmacion(txtDestino, objFormulario, txtArchivo) {
 
-    if (navigator.onLine) {
-
-        eliminarObjeto("dlgPedirConfirmacionListener");
-
-        someterFormulario(txtDestino, objFormulario, txtArchivo, false, true);
-
-        YAHOO.util.Event.onContentReady(
-                "dlgPedirConfirmacionListener",
-                function () {
-
-                    // Acion de someter el formulario
-                    var handleSubmit = function () {
-                        eliminarObjeto("tablaMensajes");
-                        this.submit();
-                        YAHOO.util.Event.onContentReady(
-                            "tablaMensajes",
-                            function(){
-                                var objMensajes = YAHOO.util.Dom.get('mensajes');
-                                var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
-                                if( objTablaMensajes.className == "msgOk") {
-                                    var txtMensajes = objMensajes.innerHTML;
-                                    $('#buscarCedula').trigger('click');
-                                    objMensajes.innerHTML = txtMensajes;
-                                }
-                            }
-                        );
-                    };
-
-                    // Cancela la accion de someter el formulario y cierra el cuadro de dialogo
-                    var handleCancel = function () {
-                        this.cancel();
-                    };
-
-                    // Cuando da Submit al formulario del dialogo este es la funcion que contesta
-                    var handleSuccess = function (o) {
-                        var response = o.responseText;
-                        response = response.split("<!")[0];
-                        document.getElementById("mensajes").innerHTML = response;
-                        var tmpObj = null;
-                        tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
-                        while (tmpObj != null) {
-                            //alert( tmpObj );
-                            eliminarObjeto("dlgPedirConfirmacion_mask");
-                            tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
-                        }
-                    };
-
-                    // Cuando se da submit y la accion falla este es el mensaje
-                    var handleFailure = function (o) {
-                        alert("Submission failed: " + o.status);
-                    };
-
-                    // Objeto de configuracion
-                    var objConfiguracion = {
-                        width: "300px",
-                        fixedcenter: true,
-                        close: false,
-                        draggable: false,
-                        modal: true,
-                        buttons: [{
-                                text: "Salvar Información",
-                                handler: handleSubmit,
-                                isDefault: true
-                            },
-                            /*{
-                             text:"Salvar InformaciÃ³n Parcial", 
-                             handler:handleSubmit, 
-                             isDefault:false
-                             },*/
-                            {
-                                text: "Cancelar",
-                                handler: handleCancel
-                            }
-                        ],
-                        constraintoviewport: true
-                    };
-
-                    // Instancia el cuadro de dialogo
-                    var dialog1 = new YAHOO.widget.Dialog("dlgPedirConfirmacion", objConfiguracion);
-
-                    // Objeto callback del formulario para manejar la respuesta de este
-                    dialog1.callback = {
-                        success: handleSuccess,
-                        failure: handleFailure
-                    };
-
-                    // Muestra el cuadro de dialogo
-                    dialog1.render();
-                    dialog1.show();
-
-                }
-        );
+   if (document.getElementById("agregarMiembro") != null && document.getElementById("agregarMiembro").style.display != "none") {
+        divs = document.getElementsByClassName('count');
+        $("#mensajes").html("<div class = 'msgError'>Alerta. Por favor verifique que los miembreo de hoga se encuentren agregados correctamente!!!</div>");
     } else {
-        alert('Por favor verifique la conexión a internet y de nuevo haga clic en Salvar Acualización');
+        if (navigator.onLine) {
+
+            eliminarObjeto("dlgPedirConfirmacionListener");
+
+            someterFormulario(txtDestino, objFormulario, txtArchivo, false, true);
+
+            YAHOO.util.Event.onContentReady(
+                    "dlgPedirConfirmacionListener",
+                    function () {
+
+                        // Acion de someter el formulario
+                        var handleSubmit = function () {
+                            eliminarObjeto("tablaMensajes");
+                            this.submit();
+                            YAHOO.util.Event.onContentReady(
+                                    "tablaMensajes",
+                                    function () {
+                                        var objMensajes = YAHOO.util.Dom.get('mensajes');
+                                        var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
+                                        if (objTablaMensajes.className == "msgOk") {
+                                            var txtMensajes = objMensajes.innerHTML;
+                                            $('#buscarCedula').trigger('click');
+                                            objMensajes.innerHTML = txtMensajes;
+                                        }
+                                    }
+                            );
+                        };
+
+                        // Cancela la accion de someter el formulario y cierra el cuadro de dialogo
+                        var handleCancel = function () {
+                            this.cancel();
+                        };
+
+                        // Cuando da Submit al formulario del dialogo este es la funcion que contesta
+                        var handleSuccess = function (o) {
+                            var response = o.responseText;
+                            response = response.split("<!")[0];
+                            document.getElementById("mensajes").innerHTML = response;
+                            var tmpObj = null;
+                            tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
+                            while (tmpObj != null) {
+                                //alert( tmpObj );
+                                eliminarObjeto("dlgPedirConfirmacion_mask");
+                                tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
+                            }
+                        };
+
+                        // Cuando se da submit y la accion falla este es el mensaje
+                        var handleFailure = function (o) {
+                            alert("Submission failed: " + o.status);
+                        };
+
+                        // Objeto de configuracion
+                        var objConfiguracion = {
+                            width: "300px",
+                            fixedcenter: true,
+                            close: false,
+                            draggable: false,
+                            modal: true,
+                            buttons: [{
+                                    text: "Salvar Información",
+                                    handler: handleSubmit,
+                                    isDefault: true
+                                },
+                                /*{
+                                 text:"Salvar InformaciÃ³n Parcial",
+                                 handler:handleSubmit,
+                                 isDefault:false
+                                 },*/
+                                {
+                                    text: "Cancelar",
+                                    handler: handleCancel
+                                }
+                            ],
+                            constraintoviewport: true
+                        };
+
+                        // Instancia el cuadro de dialogo
+                        var dialog1 = new YAHOO.widget.Dialog("dlgPedirConfirmacion", objConfiguracion);
+
+                        // Objeto callback del formulario para manejar la respuesta de este
+                        dialog1.callback = {
+                            success: handleSuccess,
+                            failure: handleFailure
+                        };
+
+                        // Muestra el cuadro de dialogo
+                        dialog1.render();
+                        dialog1.show();
+
+                    }
+            );
+        } else {
+            alert('Por favor verifique la conexión a internet y de nuevo haga clic en Salvar Acualización');
+        }
     }
 
 }
@@ -2065,7 +2070,7 @@ function obtenerTipoSolucionDesplazado(objDesplazado, txtIdModalidad) {
 
 }
 
-function datosPestanaPostulacion(txtModo){
+function datosPestanaPostulacion(txtModo) {
 
     var txtParametros =
             "modo="            + txtModo                     + "&" +
@@ -2248,8 +2253,8 @@ function datosPestanaPostulacion(txtModo){
         objCargando.hide();
     }
 
-    var fncFailure = function(o){
-        alert( o.status + " " + o.statusText );
+    var fncFailure = function (o) {
+        alert(o.status + " " + o.statusText);
         objCargando.hide();
     }
 
@@ -2301,6 +2306,44 @@ function obtenerTipoSolucion(objModalidad) {
             "seqSolucion",
             function () {
                 document.getElementById("seqSolucion").focus();
+            }
+    );
+}
+
+function obtenerConjuntoResidencial(objProyectoPadre) {
+
+    document.getElementById("tdConjuntoResidencial").innerHTML = "";
+
+    cargarContenido(
+            'tdConjuntoResidencial',
+            './contenidos/subsidios/conjuntoResidencial.php',
+            'proyectoPadre=' + objProyectoPadre.options[ objProyectoPadre.selectedIndex ].value,
+            true
+            );
+
+    YAHOO.util.Event.onContentReady(
+            "seqProyectoHijo",
+            function () {
+                document.getElementById("seqProyectoHijo").focus();
+            }
+    );
+}
+
+function obtenerUnidadProyecto(objProyecto) {
+
+    document.getElementById("tdUnidadProyecto").innerHTML = "";
+
+    cargarContenido(
+            'tdUnidadProyecto',
+            './contenidos/subsidios/unidadProyecto.php',
+            'proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
+            true
+            );
+
+    YAHOO.util.Event.onContentReady(
+            "seqUnidadProyecto",
+            function () {
+                document.getElementById("seqUnidadProyecto").focus();
             }
     );
 }
@@ -9559,111 +9602,73 @@ function confirmaRemoverLineaFormulario(formObj) {
     }
 }
 
-// function obtenerDatosProyecto(objSelect, seqPlanGobierno) {
-//
-//     var mensajes = YAHOO.util.Dom.get('mensajes');
-//
-//     var fncExito = function (objRespuesta) {
-//
-//         eval(objRespuesta.responseText);
-//
-//         var objDireccionSolucion = YAHOO.util.Dom.get('txtDireccionSolucion');
-//         var objMatriculaInmobiliaria = YAHOO.util.Dom.get('txtMatriculaInmobiliaria');
-//         var objChip = YAHOO.util.Dom.get('txtChip');
-//         var objEsquema = YAHOO.util.Dom.get('seqTipoEsquema');
-//         objDireccionSolucion.value = txtDireccion;
-//         objMatriculaInmobiliaria.value = txtMatriculaInmobiliaria;
-//         objChip.value = txtChip;
-//         objEsquema.value = seqTipoEsquema;
-//         /*
-//          // FUNCIONA PERFECTO
-//          if(objEsquema.value == 1){
-//          document.getElementById("divEsqIndiv").style.display = "block";
-//          document.getElementById("divEsqOtros").style.display = "none";
-//          document.getElementById("divEsqDefault").style.display = "none";
-//          } else {
-//          document.getElementById("divEsqIndiv").style.display = "none";
-//          document.getElementById("divEsqOtros").style.display = "block";
-//          document.getElementById("divEsqDefault").style.display = "none";
-//          }*/
-//         if (objEsquema.value == 1) {
-//             if (document.getElementById("seqProyecto").value == 4) {
-//                 document.getElementById("divEsqIndiv").style.display = "none";
-//                 document.getElementById("divEsqOtros").style.display = "block";
-//                 document.getElementById("divEsqDefault").style.display = "none";
-//                 objMatriculaInmobiliaria.readOnly = false;
-//                 objChip.readOnly = false;
-//             } else {
-//                 document.getElementById("divEsqIndiv").style.display = "block";
-//                 document.getElementById("divEsqOtros").style.display = "none";
-//                 document.getElementById("divEsqDefault").style.display = "none";
-//                 objMatriculaInmobiliaria.readOnly = true;
-//                 objChip.readOnly = true;
-//             }
-//         } else {
-//             document.getElementById("divEsqIndiv").style.display = "none";
-//             document.getElementById("divEsqOtros").style.display = "block";
-//             document.getElementById("divEsqDefault").style.display = "none";
-//             objMatriculaInmobiliaria.readOnly = false;
-//             objChip.readOnly = false;
-//         }
-//     }
-//
-//     var fncFalla = function (objRespuesta) {
-//         alert(objRespuesta.status + ": " + objRespuesta.statusText);
-//     }
-//
-//     var objRetorno = {
-//         success: fncExito,
-//         failure: fncFalla
-//     }
-//
-//     YAHOO.util.Connect.asyncRequest(
-//             "POST",
-//             "./contenidos/postulacionIndividual/datosProyectos.php",
-//             objRetorno,
-//             "seqProyecto=" + objSelect.options[ objSelect.selectedIndex ].value + "&seqPlanGobierno=" + seqPlanGobierno
-//             );
-//
-// }
-//
-// function obtenerUnidadProyecto(objProyecto) {
-//
-//     document.getElementById("tdUnidadProyecto").innerHTML = "";
-//
-//     cargarContenido(
-//         'tdUnidadProyecto',
-//         './contenidos/subsidios/unidadProyecto.php',
-//         'proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
-//         true
-//     );
-//
-//     YAHOO.util.Event.onContentReady(
-//         "seqUnidadProyecto",
-//         function () {
-//             document.getElementById("seqUnidadProyecto").focus();
-//         }
-//     );
-// }
-//
-// function obtenerConjuntoResidencial(objProyectoPadre) {
-//
-//     document.getElementById("tdConjuntoResidencial").innerHTML = "";
-//
-//     cargarContenido(
-//         'tdConjuntoResidencial',
-//         './contenidos/subsidios/conjuntoResidencial.php',
-//         'proyectoPadre=' + objProyectoPadre.options[ objProyectoPadre.selectedIndex ].value,
-//         true
-//     );
-//
-//     YAHOO.util.Event.onContentReady(
-//         "seqProyectoHijo",
-//         function () {
-//             document.getElementById("seqProyectoHijo").focus();
-//         }
-//     );
-// }
+function obtenerDatosProyecto(objSelect, seqPlanGobierno) {
+
+    var mensajes = YAHOO.util.Dom.get('mensajes');
+
+    var fncExito = function (objRespuesta) {
+
+        eval(objRespuesta.responseText);
+
+        var objDireccionSolucion = YAHOO.util.Dom.get('txtDireccionSolucion');
+        var objMatriculaInmobiliaria = YAHOO.util.Dom.get('txtMatriculaInmobiliaria');
+        var objChip = YAHOO.util.Dom.get('txtChip');
+        var objEsquema = YAHOO.util.Dom.get('seqTipoEsquema');
+        objDireccionSolucion.value = txtDireccion;
+        objMatriculaInmobiliaria.value = txtMatriculaInmobiliaria;
+        objChip.value = txtChip;
+        objEsquema.value = seqTipoEsquema;
+        /*
+         // FUNCIONA PERFECTO
+         if(objEsquema.value == 1){
+         document.getElementById("divEsqIndiv").style.display = "block";
+         document.getElementById("divEsqOtros").style.display = "none";
+         document.getElementById("divEsqDefault").style.display = "none";
+         } else {
+         document.getElementById("divEsqIndiv").style.display = "none";
+         document.getElementById("divEsqOtros").style.display = "block";
+         document.getElementById("divEsqDefault").style.display = "none";
+         }*/
+        if (objEsquema.value == 1) {
+            if (document.getElementById("seqProyecto").value == 4) {
+                document.getElementById("divEsqIndiv").style.display = "none";
+                document.getElementById("divEsqOtros").style.display = "block";
+                document.getElementById("divEsqDefault").style.display = "none";
+                objMatriculaInmobiliaria.readOnly = false;
+                objChip.readOnly = false;
+            } else {
+                document.getElementById("divEsqIndiv").style.display = "block";
+                document.getElementById("divEsqOtros").style.display = "none";
+                document.getElementById("divEsqDefault").style.display = "none";
+                objMatriculaInmobiliaria.readOnly = true;
+                objChip.readOnly = true;
+            }
+        } else {
+            document.getElementById("divEsqIndiv").style.display = "none";
+            document.getElementById("divEsqOtros").style.display = "block";
+            document.getElementById("divEsqDefault").style.display = "none";
+            objMatriculaInmobiliaria.readOnly = false;
+            objChip.readOnly = false;
+        }
+    }
+
+    var fncFalla = function (objRespuesta) {
+        alert(objRespuesta.status + ": " + objRespuesta.statusText);
+    }
+
+    var objRetorno = {
+        success: fncExito,
+        failure: fncFalla
+    }
+
+    YAHOO.util.Connect.asyncRequest(
+            "POST",
+            "./contenidos/postulacionIndividual/datosProyectos.php",
+            objRetorno,
+            "seqProyecto=" + objSelect.options[ objSelect.selectedIndex ].value + "&seqPlanGobierno=" + seqPlanGobierno
+            );
+
+}
 
 function removerLineaFormulario(obj) {
     var oTr = obj;

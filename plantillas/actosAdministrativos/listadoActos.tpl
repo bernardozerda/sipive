@@ -19,7 +19,7 @@
             {/foreach}   
          </div>
    {/foreach}  
-	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><div style="border-width: 1px;  border-style: dotted; border-width: 1px;"><table><tr><td align="center"><img src='recursos/imagenes/alerta-icono-pequeno.jpg'></td></tr><tr><td style="color:#FF0000; text-align:justify">Confirmar la inclusi&oacute;n de todos los hogares relacionados en los diferentes art&iacute;culos del acto administrativo (Hogares vulnerables y v&iacute;ctimas / proyectos, seg&uacute;n corresponda)</td></tr></table></div>   
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><div style="border-width: 1px;  border-style: dotted; border-width: 1px;"><table><tr><td align="center"><img src='/recursos/imagenes/alerta-icono-pequeno.jpg'></td></tr><tr><td style="color:#FF0000; text-align:justify">Confirmar la inclusi&oacute;n de todos los hogares relacionados en los diferentes art&iacute;culos del acto administrativo (Hogares vulnerables y v&iacute;ctimas / proyectos, seg&uacute;n corresponda)</td></tr></table></div>   
 {else}
 
    <div class="msgError">No hay registros</div>

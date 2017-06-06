@@ -5,7 +5,7 @@
 function conecta() {
     $conexion = mysql_connect("localhost", "sdht_usuario", "Ochochar*1");
     mysql_set_charset('utf8', $conexion);
-    mysql_select_db("sdht_sipive", $conexion);
+    mysql_select_db("sipive", $conexion);
     return $conexion;
 }
 

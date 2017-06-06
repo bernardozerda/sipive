@@ -358,7 +358,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                         '$txtPintura',
                         '$txtOtros',
                         '$txtObservacionOtros',
-                        $numContadorAgua,
+                        '$numContadorAgua',
                         '$txtEstadoConexionAgua',
                         '$txtDescripcionAgua',
                         $numContadorEnergia,

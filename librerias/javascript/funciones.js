@@ -253,16 +253,14 @@ function soloLetrasNumeros(objLimpiar) {
  * @version 1.0 Marzo 29 2009
  */
 function soloNumeros(objLimpiar) {
-
     var txtTexto = objLimpiar.value;
     var txtResultado = "";
     var txtCaracter = "";
     for (i = 0; i < txtTexto.length; i++) {
         txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9\.]/, ""); // todo lo que no sea numero es removido
+        txtResultado += txtCaracter.replace(/[^0-9\.]/, "");
     }
     objLimpiar.value = txtResultado;
-
 }
 
 function soloNit(objLimpiar) {
@@ -272,7 +270,7 @@ function soloNit(objLimpiar) {
     var txtCaracter = "";
     for (i = 0; i < txtTexto.length; i++) {
         txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9\-]/, ""); // todo lo que no sea numero es removido
+        txtResultado += txtCaracter.replace(/[^0-9\-]/, "");
     }
     objLimpiar.value = txtResultado;
 }
@@ -1089,13 +1087,13 @@ function agregarMiembroHogarBp() {
 function agregarMiembroHogar() {
 
     var arrAbreviacionesTipoDocumento = new Array();
-    arrAbreviacionesTipoDocumento[ 1 ] = "C.C.";
-    arrAbreviacionesTipoDocumento[ 2 ] = "C.E.";
-    arrAbreviacionesTipoDocumento[ 3 ] = "T.I.";
-    arrAbreviacionesTipoDocumento[ 4 ] = "R.C.";
-    arrAbreviacionesTipoDocumento[ 5 ] = "PAS.";
-    arrAbreviacionesTipoDocumento[ 6 ] = "NIT.";
-    arrAbreviacionesTipoDocumento[ 7 ] = "N.U.I.";
+        arrAbreviacionesTipoDocumento[ 1 ] = "C.C.";
+        arrAbreviacionesTipoDocumento[ 2 ] = "C.E.";
+        arrAbreviacionesTipoDocumento[ 3 ] = "T.I.";
+        arrAbreviacionesTipoDocumento[ 4 ] = "R.C.";
+        arrAbreviacionesTipoDocumento[ 5 ] = "PAS.";
+        arrAbreviacionesTipoDocumento[ 6 ] = "NIT.";
+        arrAbreviacionesTipoDocumento[ 7 ] = "N.U.I.";
 
     // Variable a recoger del nuevo miembro del hogar
     var objNombre1 = document.getElementById("nombre1");
@@ -1123,6 +1121,15 @@ function agregarMiembroHogar() {
 
     if (objAnosAprobados == null || objAnosAprobados == "") {
         selectAnidados(objNumDocumento, 0);
+    }
+
+    // Si el nivel educativo es ninguno no valida los anios aprobados
+    if($("#nivelEducativo").val() != 1) {
+        if ($("#anosAprobados").val() == "" || $("#anosAprobados").val() == 0) {
+            alert("Seleccione los a" + String.fromCharCode(241) + "os aprobados");
+            objAnosAprobados.focus();
+            return false;
+        }
     }
 
     // Celda que contiene los miembros del hogar
@@ -1231,7 +1238,7 @@ function agregarMiembroHogar() {
     var txtResultado = "";
     for (i = 0; i < txtTexto.length; i++) {
         txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
+        txtResultado += txtCaracter.replace(/[^0-9]/, "");
     }
     objIngresos.value = txtResultado;
 
@@ -1242,7 +1249,7 @@ function agregarMiembroHogar() {
     txtResultado = "";
     for (i = 0; i < txtTexto.length; i++) {
         txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
+        txtResultado += txtCaracter.replace(/[^0-9]/, "");
     }
     objNumDocumento.value = txtResultado;
 
@@ -1351,6 +1358,24 @@ function agregarMiembroHogar() {
     objSeqGrupoLgtbi.selectedIndex = 0;
 
     mostrarOcultar('agregarMiembro');
+
+    // Actualizar el valor de bolDesplazado
+    // Si hay un solo ciudadano con la condicion de
+    // desplazamiento forzado, el select se marca como 1 = SI
+    // 0 = NO de lo contrario
+    var arrTablas = $("#datosHogar").find("table");
+    var numDesplazado = 0;
+    for(i=0; i < arrTablas.length; i++) {
+        if(parseInt(arrTablas[i].id)){
+            if( $("#" + arrTablas[i].id + "-seqTipoVictima").val() == 2 ){
+                numDesplazado = 1;
+            }
+        }
+    }
+    $("#bolDesplazado").val(numDesplazado);
+
+    // Recalcular el valor del subsidio
+    valorSubsidio();
 
     return true;
 
@@ -1536,124 +1561,46 @@ function dar_formato(num) {
 
 function sumarTotalRecursos() {
 
-    var objSaldoCuenta = document.getElementById("valSaldoCuentaAhorro");
-    var objSaldoCuenta2 = document.getElementById("valSaldoCuentaAhorro2");
-    var objSubsidio = document.getElementById("valSubsidioNacional");
-    var objAporteLote = document.getElementById("valAporteLote");
-    var objCesantias = document.getElementById("valSaldoCesantias");
-    var objAvanceObra = document.getElementById("valAporteAvanceObra");
-    var objMateriales = document.getElementById("valAporteMateriales");
-    var objCredito = document.getElementById("valCredito");
-    var objDonacion = document.getElementById("valDonacion");
+    if( $("#valSaldoCuentaAhorro").val()  == ""){ $("#valSaldoCuentaAhorro").val(0);  }
+    if( $("#valSaldoCuentaAhorro2").val() == ""){ $("#valSaldoCuentaAhorro2").val(0); }
+    if( $("#valSaldoCesantias").val()     == ""){ $("#valSaldoCesantias").val(0);     }
+    if( $("#valCredito").val()            == ""){ $("#valCredito").val(0);            }
+    if( $("#valSubsidioNacional").val()   == ""){ $("#valSubsidioNacional").val(0);   }
+    if( $("#valDonacion").val()           == ""){ $("#valDonacion").val(0);           }
+    if( $("#valAspiraSubsidio").val()     == ""){ $("#valAspiraSubsidio").val(0);     }
 
-    var txtTexto = objSaldoCuenta.value;
-    var txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objSaldoCuenta.value = txtResultado;
+    var numSaldoCuenta    = parseInt($("#valSaldoCuentaAhorro").val().replace(/[^0-9]/g,''));
+    var numSaldoCuenta2   = parseInt($("#valSaldoCuentaAhorro2").val().replace(/[^0-9]/g,''));
+    var numCesantias      = parseInt($("#valSaldoCesantias").val().replace(/[^0-9]/g,''));
+    var numCredito        = parseInt($("#valCredito").val().replace(/[^0-9]/g,''));
+    var numSubsidioNal    = parseInt($("#valSubsidioNacional").val().replace(/[^0-9]/g,''));
+    var numVUR            = parseInt($("#valDonacion").val().replace(/[^0-9]/g,''));
+    var numAspiraSubsidio = parseInt($("#valAspiraSubsidio").val().replace(/[^0-9]/g,''));
 
-    txtTexto = objSaldoCuenta2.value;
-    txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objSaldoCuenta2.value = txtResultado;
+    var numSuma = numSaldoCuenta + numSaldoCuenta2 + numCesantias + numCredito + numSubsidioNal + numVUR
 
-    txtTexto = objSubsidio.value;
-    txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objSubsidio.value = txtResultado;
+    $("#valSaldoCuentaAhorro").val(numSaldoCuenta);
+    $("#valSaldoCuentaAhorro2").val(numSaldoCuenta2);
+    $("#valSaldoCesantias").val(numCesantias);
+    $("#valCredito").val(numCredito);
+    $("#valSubsidioNacional").val(numSubsidioNal);
+    $("#valDonacion").val(numVUR);
+    $("#valAspiraSubsidio").val(numAspiraSubsidio);
+    $("#valTotalRecursos").val(numSuma);
+    $("#valTotalEstimado").val(numSuma + numAspiraSubsidio);
+    $("#valTotalEstimadoSMMLV").val( parseFloat( (numSuma + numAspiraSubsidio) / $("#SMMLV").val() ).toFixed(2) );
 
-    txtTexto = objAporteLote.value;
-    txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objAporteLote.value = txtResultado;
-
-    txtTexto = objCesantias.value;
-    txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objCesantias.value = txtResultado;
-
-    txtTexto = objAvanceObra.value;
-    txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objAvanceObra.value = txtResultado;
-
-    txtTexto = objMateriales.value;
-    txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objMateriales.value = txtResultado;
-
-    txtTexto = objCredito.value;
-    txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objCredito.value = txtResultado;
-
-    txtTexto = objDonacion.value;
-    txtResultado = "";
-    for (i = 0; i < txtTexto.length; i++) {
-        txtCaracter = txtTexto.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
-    }
-    objDonacion.value = txtResultado;
-
-    objSaldoCuenta.value = (objSaldoCuenta.value == "") ? 0 : objSaldoCuenta.value;
-    objSaldoCuenta2.value = (objSaldoCuenta2.value == "") ? 0 : objSaldoCuenta2.value;
-    objSubsidio.value = (objSubsidio.value == "") ? 0 : objSubsidio.value;
-    objAporteLote.value = (objAporteLote.value == "") ? 0 : objAporteLote.value;
-    objCesantias.value = (objCesantias.value == "") ? 0 : objCesantias.value;
-    objAvanceObra.value = (objAvanceObra.value == "") ? 0 : objAvanceObra.value;
-    objMateriales.value = (objMateriales.value == "") ? 0 : objMateriales.value;
-    objCredito.value = (objCredito.value == "") ? 0 : objCredito.value;
-    objDonacion.value = (objDonacion.value == "") ? 0 : objDonacion.value;
-
-    var valSuma = 0;
-    var objMostrar = document.getElementById("totalRecursosMostrar");
-    var objTotalRecursos = document.getElementById("valTotalRecursos");
-
-    var formSaldoCuenta = objSaldoCuenta.value.replace(/[.,,]/g, '');
-    var formSaldoCuenta2 = objSaldoCuenta2.value.replace(/[.,,]/g, '');
-    var formSubsidio = objSubsidio.value.replace(/[.,,]/g, '');
-    var formAporteLote = objAporteLote.value.replace(/[.,,]/g, '');
-    var formCesantias = objCesantias.value.replace(/[.,,]/g, '');
-    var formAvanceObra = objAvanceObra.value.replace(/[.,,]/g, '');
-    var formMateriales = objMateriales.value.replace(/[.,,]/g, '');
-    var formCredito = objCredito.value.replace(/[.,,]/g, '');
-    var formDonacion = objDonacion.value.replace(/[.,,]/g, '');
-
-    valSuma += parseInt(formSaldoCuenta);
-    valSuma += parseInt(formSaldoCuenta2);
-    valSuma += parseInt(formSubsidio);
-    valSuma += parseInt(formAporteLote);
-    valSuma += parseInt(formCesantias);
-    valSuma += parseInt(formAvanceObra);
-    valSuma += parseInt(formMateriales);
-    valSuma += parseInt(formCredito);
-    valSuma += parseInt(formDonacion);
-
-    objMostrar.innerHTML = "<b>$ " + dar_formato(valSuma) + "</b>";
-    objTotalRecursos.value = valSuma;
+    formatoSeparadores(YAHOO.util.Dom.get("valSaldoCuentaAhorro"));
+    formatoSeparadores(YAHOO.util.Dom.get("valSaldoCuentaAhorro2"));
+    formatoSeparadores(YAHOO.util.Dom.get("valSaldoCesantias"));
+    formatoSeparadores(YAHOO.util.Dom.get("valCredito"));
+    formatoSeparadores(YAHOO.util.Dom.get("valSubsidioNacional"));
+    formatoSeparadores(YAHOO.util.Dom.get("valTotalRecursos"));
+    formatoSeparadores(YAHOO.util.Dom.get("valDonacion"));
+    formatoSeparadores(YAHOO.util.Dom.get("valAspiraSubsidio"));
+    formatoSeparadores(YAHOO.util.Dom.get("valTotalRecursos"));
+    formatoSeparadores(YAHOO.util.Dom.get("valTotalEstimado"));
+    formatoSeparadores(YAHOO.util.Dom.get("valTotalRecursos"));
 
 }
 
@@ -1663,7 +1610,7 @@ function modificarMiembroHogar(numDocumento) {
     var txtResultado = "";
     for (i = 0; i < numDocumento.length; i++) {
         txtCaracter = numDocumento.charAt(i);
-        txtResultado += txtCaracter.replace(/[^0-9]/, ""); // todo lo que no sea numero es removido
+        txtResultado += txtCaracter.replace(/[^0-9]/, "");
     }
 
     numDocumentoSinPuntos = txtResultado;
@@ -1832,14 +1779,44 @@ function asignarValorSubsidio(objTipoSolucion, bolDesplazado) {
     var bolDesplazado = document.getElementById("bolDesplazado").value;
 
     var objValSubsidio = document.getElementById("tdValSubsidio");
-    if (objValSubsidio != null) {
+    if( objValSubsidio != null ){
         cargarContenido(
-                "tdValSubsidio",
-                "./contenidos/subsidios/valorSubsidio.php",
-                "modalidad=" + seqModalidad + "&solucion=" + seqSolucion + "&desplazado=" + bolDesplazado,
-                false
-                );
+            "tdValSubsidio",
+            "./contenidos/subsidios/valorSubsidio.php",
+            "modalidad=" + seqModalidad + "&solucion=" + seqSolucion + "&desplazado=" + bolDesplazado,
+            false
+        );
     }
+
+}
+
+function valorSubsidio() {
+
+    var jParametros = {
+        seqFormulario: $("#seqFormulario").val(),
+        bolDesplazado: $("#bolDesplazado").val(),
+        seqPlanGobierno: $("#seqPlanGobierno").val(),
+        seqModalidad: $("#seqModalidad").val(),
+        seqTipoEsquema: $("#seqTipoEsquema").val(),
+        seqProyecto: $("#seqProyecto").val(),
+        seqProyectoHijo: $("#seqProyectoHijo").val(),
+        seqUnidadProyecto: $("#seqUnidadProyecto").val(),
+        valSubsidioNacional: $("#valSubsidioNacional").val(),
+        valDonacion: $("#valDonacion").val()
+    }
+
+    $.ajax({
+        url: "./contenidos/postulacion/valorSubsidio.php",
+        type: "POST",
+        data: jQuery.param(jParametros),
+        success: function(respuesta){
+            $("#valAspiraSubsidio").val(respuesta);
+            sumarTotalRecursos();
+        },
+        error: function(error){
+            alert("Falló el calculo de valor del aporte / subsidio");
+        }
+    });
 
 }
 
@@ -2090,51 +2067,183 @@ function obtenerTipoSolucionDesplazado(objDesplazado, txtIdModalidad) {
 
 function datosPestanaPostulacion(txtModo){
 
-    var objMensajes = YAHOO.util.Dom.get('mensajes');
     var txtParametros =
-            "modo="           + txtModo                   + "&" +
-            "parametro="       + $( "#" + idSelect ).val() + "&" +
-            "seqFormulario="   + seqFormulario             + "&" +
-            "seqModalidad="    + seqModalidad              + "&" +
-            "seqPlanGobierno=" + seqPlanGobierno           + "&" +
-            "seqProyecto="     + seqProyecto               + "&" +
-            "seqProyectoHijo=" + seqProyectoHijo;
+            "modo="            + txtModo                     + "&" +
+            "seqFormulario="   + $("#seqFormulario").val()   + "&" +
+            "seqModalidad="    + $("#seqModalidad").val()    + "&" +
+            "seqTipoEsquema="  + $("#seqTipoEsquema").val()  + "&" +
+            "seqPlanGobierno=" + $("#seqPlanGobierno").val() + "&" +
+            "seqProyecto="     + $("#seqProyecto").val()     + "&" +
+            "seqProyectoHijo=" + $("#seqProyectoHijo").val();
 
     var objCargando = obtenerObjetoCargando();
         objCargando.show();
 
     var fncSuccess = function(o){
 
-        YAHOO.util.Dom.get('mensajes').innerHTML = o.responseText;
+        try {
+            var objRespuesta = jQuery.parseJSON(o.responseText);
+        }catch(ex){
+            YAHOO.util.Dom.get('mensajes').innerHTML = o.responseText;
+            txtModo = false;
+        }
 
-        // var objRespuesta =  jQuery.parseJSON(o.responseText);
-        //
-        // if(txtModo == "modalidad"){
-        //
-        //     $("#seqSolucion").empty();
-        //     for( key in objRespuesta.solucion){
-        //         $("#seqSolucion").append(
-        //             $('<option>', {
-        //                 value: key,
-        //                 text: objRespuesta.solucion[key]
-        //             })
-        //         );
-        //     }
-        //     if( $('#seqSolucion').children('option').length == 2){
-        //         $('#seqSolucion').val(key).prop('selected', true);
-        //     }
-        //
-        //     $("#seqProyecto").empty();
-        //     for( key in objRespuesta.proyecto){
-        //         $("#seqProyecto").append(
-        //             $('<option>', {
-        //                 value: key,
-        //                 text: objRespuesta.proyecto[key]
-        //             })
-        //         );
-        //     }
-        //
-        // }
+        if(txtModo == "modalidad"){
+
+            // solucion
+            $("#seqSolucion").empty();
+            for( i=0; i < objRespuesta.solucion.length; i++ ){
+                $("#seqSolucion").append(
+                    $('<option>', {
+                        value: objRespuesta.solucion[i].valor,
+                        text: objRespuesta.solucion[i].texto
+                    })
+                );
+            }
+            if( $('#seqSolucion').children('option').length == 2){
+                $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
+            }
+
+            // esquema
+            $("#seqTipoEsquema").empty();
+            for( i=0; i < objRespuesta.esquema.length; i++ ){
+                $("#seqTipoEsquema").append(
+                    $('<option>', {
+                        value: objRespuesta.esquema[i].valor,
+                        text: objRespuesta.esquema[i].texto
+                    })
+                );
+            }
+            $('#seqTipoEsquema').val(objRespuesta.esquema[0].valor).prop('selected', true);
+
+            // proyecto
+            $("#seqProyecto").empty();
+            for( i=0; i < objRespuesta.proyecto.length; i++ ){
+                $("#seqProyecto").append(
+                    $('<option>', {
+                        value: objRespuesta.proyecto[i].valor,
+                        text: objRespuesta.proyecto[i].texto
+                    })
+                );
+            }
+
+            // conjuntos
+            $("#seqProyectoHijo").empty();
+            for( i=0; i < objRespuesta.conjuntos.length; i++ ){
+                $("#seqProyectoHijo").append(
+                    $('<option>', {
+                        value: objRespuesta.conjuntos[i].valor,
+                        text: objRespuesta.conjuntos[i].texto
+                    })
+                );
+            }
+
+            // unidades
+            $("#seqUnidadProyecto").empty();
+            for( i=0; i < objRespuesta.unidades.length; i++ ){
+                $("#seqUnidadProyecto").append(
+                    $('<option>', {
+                        value: objRespuesta.unidades[i].valor,
+                        text: objRespuesta.unidades[i].texto
+                    })
+                );
+            }
+
+            // direccion + matricula + chip
+            $('#txtDireccionSolucion').val(objRespuesta.direccion);
+            $('#txtMatriculaInmobiliaria').val(objRespuesta.matricula);
+            $('#txtChip').val(objRespuesta.chip);
+
+        }
+
+        if(txtModo == "esquema"){
+
+            // proyecto
+            $("#seqProyecto").empty();
+            for( i=0; i < objRespuesta.proyecto.length; i++ ){
+                $("#seqProyecto").append(
+                    $('<option>', {
+                        value: objRespuesta.proyecto[i].valor,
+                        text: objRespuesta.proyecto[i].texto
+                    })
+                );
+            }
+
+            // conjuntos
+            $("#seqProyectoHijo").empty();
+            for( i=0; i < objRespuesta.conjuntos.length; i++ ){
+                $("#seqProyectoHijo").append(
+                    $('<option>', {
+                        value: objRespuesta.conjuntos[i].valor,
+                        text: objRespuesta.conjuntos[i].texto
+                    })
+                );
+            }
+
+            // unidades
+            $("#seqUnidadProyecto").empty();
+            for( i=0; i < objRespuesta.unidades.length; i++ ){
+                $("#seqUnidadProyecto").append(
+                    $('<option>', {
+                        value: objRespuesta.unidades[i].valor,
+                        text: objRespuesta.unidades[i].texto
+                    })
+                );
+            }
+
+            // direccion + matricula + chip
+            $('#txtDireccionSolucion').val(objRespuesta.direccion);
+            $('#txtMatriculaInmobiliaria').val(objRespuesta.matricula);
+            $('#txtChip').val(objRespuesta.chip);
+
+        }
+
+        if(txtModo == "proyecto"){
+
+            // conjuntos
+            $("#seqProyectoHijo").empty();
+            for( i=0; i < objRespuesta.conjuntos.length; i++ ){
+                $("#seqProyectoHijo").append(
+                    $('<option>', {
+                        value: objRespuesta.conjuntos[i].valor,
+                        text: objRespuesta.conjuntos[i].texto
+                    })
+                );
+            }
+
+            // unidades
+            $("#seqUnidadProyecto").empty();
+            for( i=0; i < objRespuesta.unidades.length; i++ ){
+                $("#seqUnidadProyecto").append(
+                    $('<option>', {
+                        value: objRespuesta.unidades[i].valor,
+                        text: objRespuesta.unidades[i].texto
+                    })
+                );
+            }
+
+            // direccion + matricula + chip
+            $('#txtDireccionSolucion').val(objRespuesta.direccion);
+            $('#txtMatriculaInmobiliaria').val(objRespuesta.matricula);
+            $('#txtChip').val(objRespuesta.chip);
+
+        }
+
+        if(txtModo == "conjuntos"){
+            // unidades
+            $("#seqUnidadProyecto").empty();
+            for( i=0; i < objRespuesta.unidades.length; i++ ){
+                $("#seqUnidadProyecto").append(
+                    $('<option>', {
+                        value: objRespuesta.unidades[i].valor,
+                        text: objRespuesta.unidades[i].texto
+                    })
+                );
+            }
+
+        }
+
+        valorSubsidio();
 
         objCargando.hide();
     }
@@ -2151,10 +2260,28 @@ function datosPestanaPostulacion(txtModo){
 
     YAHOO.util.Connect.asyncRequest(
         "POST",
-        "./contenidos/subsidios/datosPestanaPostulacion.php",
+        "./contenidos/postulacion/datosPestanaPostulacion.php",
         callback,
         txtParametros
     );
+}
+
+/**
+ * HACE LOS CALCULOS PERTIENENTES EN LA PESTAÑA DE
+ * INFORMACION FINANCIERA EN EL FORMULARIO DE POSTUALCION
+ * PARA PLAN DE GOBIERNO 2 Y 3
+ * @param objInput
+ */
+function campoPostulacionFinanciera(objInput){
+
+    objInput.style.backgroundColor = '#FFFFFF'; sumarTotalRecursos();
+
+
+
+
+
+
+
 }
 
 
@@ -2174,44 +2301,6 @@ function obtenerTipoSolucion(objModalidad) {
             "seqSolucion",
             function () {
                 document.getElementById("seqSolucion").focus();
-            }
-    );
-}
-
-function obtenerConjuntoResidencial(objProyectoPadre) {
-
-    document.getElementById("tdConjuntoResidencial").innerHTML = "";
-
-    cargarContenido(
-            'tdConjuntoResidencial',
-            './contenidos/subsidios/conjuntoResidencial.php',
-            'proyectoPadre=' + objProyectoPadre.options[ objProyectoPadre.selectedIndex ].value,
-            true
-            );
-
-    YAHOO.util.Event.onContentReady(
-            "seqProyectoHijo",
-            function () {
-                document.getElementById("seqProyectoHijo").focus();
-            }
-    );
-}
-
-function obtenerUnidadProyecto(objProyecto) {
-
-    document.getElementById("tdUnidadProyecto").innerHTML = "";
-
-    cargarContenido(
-            'tdUnidadProyecto',
-            './contenidos/subsidios/unidadProyecto.php',
-            'proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
-            true
-            );
-
-    YAHOO.util.Event.onContentReady(
-            "seqUnidadProyecto",
-            function () {
-                document.getElementById("seqUnidadProyecto").focus();
             }
     );
 }
@@ -9470,73 +9559,111 @@ function confirmaRemoverLineaFormulario(formObj) {
     }
 }
 
-function obtenerDatosProyecto(objSelect, seqPlanGobierno) {
-
-    var mensajes = YAHOO.util.Dom.get('mensajes');
-
-    var fncExito = function (objRespuesta) {
-
-        eval(objRespuesta.responseText);
-
-        var objDireccionSolucion = YAHOO.util.Dom.get('txtDireccionSolucion');
-        var objMatriculaInmobiliaria = YAHOO.util.Dom.get('txtMatriculaInmobiliaria');
-        var objChip = YAHOO.util.Dom.get('txtChip');
-        var objEsquema = YAHOO.util.Dom.get('seqTipoEsquema');
-        objDireccionSolucion.value = txtDireccion;
-        objMatriculaInmobiliaria.value = txtMatriculaInmobiliaria;
-        objChip.value = txtChip;
-        objEsquema.value = seqTipoEsquema;
-        /*
-         // FUNCIONA PERFECTO
-         if(objEsquema.value == 1){
-         document.getElementById("divEsqIndiv").style.display = "block";
-         document.getElementById("divEsqOtros").style.display = "none";
-         document.getElementById("divEsqDefault").style.display = "none";
-         } else {
-         document.getElementById("divEsqIndiv").style.display = "none";
-         document.getElementById("divEsqOtros").style.display = "block";
-         document.getElementById("divEsqDefault").style.display = "none";
-         }*/
-        if (objEsquema.value == 1) {
-            if (document.getElementById("seqProyecto").value == 4) {
-                document.getElementById("divEsqIndiv").style.display = "none";
-                document.getElementById("divEsqOtros").style.display = "block";
-                document.getElementById("divEsqDefault").style.display = "none";
-                objMatriculaInmobiliaria.readOnly = false;
-                objChip.readOnly = false;
-            } else {
-                document.getElementById("divEsqIndiv").style.display = "block";
-                document.getElementById("divEsqOtros").style.display = "none";
-                document.getElementById("divEsqDefault").style.display = "none";
-                objMatriculaInmobiliaria.readOnly = true;
-                objChip.readOnly = true;
-            }
-        } else {
-            document.getElementById("divEsqIndiv").style.display = "none";
-            document.getElementById("divEsqOtros").style.display = "block";
-            document.getElementById("divEsqDefault").style.display = "none";
-            objMatriculaInmobiliaria.readOnly = false;
-            objChip.readOnly = false;
-        }
-    }
-
-    var fncFalla = function (objRespuesta) {
-        alert(objRespuesta.status + ": " + objRespuesta.statusText);
-    }
-
-    var objRetorno = {
-        success: fncExito,
-        failure: fncFalla
-    }
-
-    YAHOO.util.Connect.asyncRequest(
-            "POST",
-            "./contenidos/postulacionIndividual/datosProyectos.php",
-            objRetorno,
-            "seqProyecto=" + objSelect.options[ objSelect.selectedIndex ].value + "&seqPlanGobierno=" + seqPlanGobierno
-            );
-
-}
+// function obtenerDatosProyecto(objSelect, seqPlanGobierno) {
+//
+//     var mensajes = YAHOO.util.Dom.get('mensajes');
+//
+//     var fncExito = function (objRespuesta) {
+//
+//         eval(objRespuesta.responseText);
+//
+//         var objDireccionSolucion = YAHOO.util.Dom.get('txtDireccionSolucion');
+//         var objMatriculaInmobiliaria = YAHOO.util.Dom.get('txtMatriculaInmobiliaria');
+//         var objChip = YAHOO.util.Dom.get('txtChip');
+//         var objEsquema = YAHOO.util.Dom.get('seqTipoEsquema');
+//         objDireccionSolucion.value = txtDireccion;
+//         objMatriculaInmobiliaria.value = txtMatriculaInmobiliaria;
+//         objChip.value = txtChip;
+//         objEsquema.value = seqTipoEsquema;
+//         /*
+//          // FUNCIONA PERFECTO
+//          if(objEsquema.value == 1){
+//          document.getElementById("divEsqIndiv").style.display = "block";
+//          document.getElementById("divEsqOtros").style.display = "none";
+//          document.getElementById("divEsqDefault").style.display = "none";
+//          } else {
+//          document.getElementById("divEsqIndiv").style.display = "none";
+//          document.getElementById("divEsqOtros").style.display = "block";
+//          document.getElementById("divEsqDefault").style.display = "none";
+//          }*/
+//         if (objEsquema.value == 1) {
+//             if (document.getElementById("seqProyecto").value == 4) {
+//                 document.getElementById("divEsqIndiv").style.display = "none";
+//                 document.getElementById("divEsqOtros").style.display = "block";
+//                 document.getElementById("divEsqDefault").style.display = "none";
+//                 objMatriculaInmobiliaria.readOnly = false;
+//                 objChip.readOnly = false;
+//             } else {
+//                 document.getElementById("divEsqIndiv").style.display = "block";
+//                 document.getElementById("divEsqOtros").style.display = "none";
+//                 document.getElementById("divEsqDefault").style.display = "none";
+//                 objMatriculaInmobiliaria.readOnly = true;
+//                 objChip.readOnly = true;
+//             }
+//         } else {
+//             document.getElementById("divEsqIndiv").style.display = "none";
+//             document.getElementById("divEsqOtros").style.display = "block";
+//             document.getElementById("divEsqDefault").style.display = "none";
+//             objMatriculaInmobiliaria.readOnly = false;
+//             objChip.readOnly = false;
+//         }
+//     }
+//
+//     var fncFalla = function (objRespuesta) {
+//         alert(objRespuesta.status + ": " + objRespuesta.statusText);
+//     }
+//
+//     var objRetorno = {
+//         success: fncExito,
+//         failure: fncFalla
+//     }
+//
+//     YAHOO.util.Connect.asyncRequest(
+//             "POST",
+//             "./contenidos/postulacionIndividual/datosProyectos.php",
+//             objRetorno,
+//             "seqProyecto=" + objSelect.options[ objSelect.selectedIndex ].value + "&seqPlanGobierno=" + seqPlanGobierno
+//             );
+//
+// }
+//
+// function obtenerUnidadProyecto(objProyecto) {
+//
+//     document.getElementById("tdUnidadProyecto").innerHTML = "";
+//
+//     cargarContenido(
+//         'tdUnidadProyecto',
+//         './contenidos/subsidios/unidadProyecto.php',
+//         'proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
+//         true
+//     );
+//
+//     YAHOO.util.Event.onContentReady(
+//         "seqUnidadProyecto",
+//         function () {
+//             document.getElementById("seqUnidadProyecto").focus();
+//         }
+//     );
+// }
+//
+// function obtenerConjuntoResidencial(objProyectoPadre) {
+//
+//     document.getElementById("tdConjuntoResidencial").innerHTML = "";
+//
+//     cargarContenido(
+//         'tdConjuntoResidencial',
+//         './contenidos/subsidios/conjuntoResidencial.php',
+//         'proyectoPadre=' + objProyectoPadre.options[ objProyectoPadre.selectedIndex ].value,
+//         true
+//     );
+//
+//     YAHOO.util.Event.onContentReady(
+//         "seqProyectoHijo",
+//         function () {
+//             document.getElementById("seqProyectoHijo").focus();
+//         }
+//     );
+// }
 
 function removerLineaFormulario(obj) {
     var oTr = obj;

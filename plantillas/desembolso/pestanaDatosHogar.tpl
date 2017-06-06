@@ -130,11 +130,11 @@
 			<td colspan="5">{$claFormulario->txtCorreo}</td>
 	    </tr>
 		<tr align="left">
-	        <th>Valor Subsidio</th>
+	        <th>{if $claFormulario->seqPlanGobierno == 2}Valor Subsidio{else}Valor estimado del aporte{/if}</th>
 	        <td colspan="5">$ {$claFormulario->valAspiraSubsidio|number_format:0:',':'.'}</td>
 		</tr>
 		<tr align="left">
-            <th>Vigencia Subsidio</th>
+            <th>{if $claFormulario->seqPlanGobierno == 2}Vigencia Subsidio{else}Vigencia del aporte{/if}</th>
             <td colspan="5">
             	{assign var=txtFormatoFecha value="%d de %B de %Y"}
                 {if $claFormulario->fchVigencia != '0000-00-00'}
@@ -171,7 +171,7 @@
 	        {assign var=seqTipoDocumento value=$objCiudadano->seqTipoDocumento}
 	        {assign var=seqParentesco value=$objCiudadano->seqParentesco}
 	        <tr>
-	            <td>{$arrParentesco.$seqParentesco}</td>
+	            <td>{$arrParentesco.$seqParentesco.txtParentesco}</td>
 	            <td>{$arrTipoDocumento.$seqTipoDocumento|utf8_decode|lower|ucwords|utf8_encode}</td>
 				<td>{$objCiudadano->numDocumento}</td>
 	            <td>

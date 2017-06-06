@@ -56,29 +56,28 @@
 					<td>
 						<table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 8px; border-bottom: 1px solid #999999;">
 							<tr>
-								<!--<td><b>Documento de Identidad:</b> {$arrTipoDocumento.$seqTipoDocumento|lower|ucwords} {$objCiudadano->numDocumento|number_format:0:',':'.'}</td>-->
-								<td><b>Documento de Identidad:</b> {$arrTipoDocumento.$seqTipoDocumento|lower|ucwords} {$objCiudadano->numDocumento}</td>
+								<td><b>Documento de Identidad:</b> {$arrTipoDocumento.$seqTipoDocumento} {$objCiudadano->numDocumento|number_format:0:',':'.'}</td>
 								<td><b>Fecha de Nacimiento:</b> {$objCiudadano->fchNacimiento}</td>
-								<td><b>Parentesco:</b> {$arrParentesco.$seqParentesco|lower|ucwords}</td>
+								<td><b>Parentesco:</b> {$arrParentesco.$seqParentesco}</td>
 							</tr>
 							<tr>
-								<td><b>Estado Civil:</b> {$arrEstadoCivil.$seqEstadoCivil|lower|ucwords}</td>
-								<td><b>Sexo:</b> {$arrSexo.$seqSexo|lower|ucwords}</td>
+								<td><b>Estado Civil:</b> {$arrEstadoCivil.$seqEstadoCivil}</td>
+								<td><b>Sexo:</b> {$arrSexo.$seqSexo}</td>
 								<td><b>LGTB:</b> {if $objCiudadano->bolLgtb == 1} Si {else} No {/if}</td>
 							</tr>
 							<tr>
-								<td><b>Condici&oacute;n Especial 1:</b> {$arrCondicionEspecial.$seqCondicionEspecial1|lower|ucwords}</td>
-								<td><b>Condici&oacute;n Especial 2:</b> {$arrCondicionEspecial.$seqCondicionEspecial2|lower|ucwords}</td>
-								<td><b>Condici&oacute;n Especial 3:</b> {$arrCondicionEspecial.$seqCondicionEspecial3|lower|ucwords}</td>
+								<td><b>Condici&oacute;n Especial 1:</b> {$arrCondicionEspecial.$seqCondicionEspecial1}</td>
+								<td><b>Condici&oacute;n Especial 2:</b> {$arrCondicionEspecial.$seqCondicionEspecial2}</td>
+								<td><b>Condici&oacute;n Especial 3:</b> {$arrCondicionEspecial.$seqCondicionEspecial3}</td>
 							</tr>
 							<tr>
-								<td><b>Ocupaci&oacute;n:</b> {$arrOcupacion.$seqOcupacion|lower|ucwords}</td>
-								<td><b>Nivel Educativo:</b> {$arrNivelEducativo.$seqNivelEducativo|lower|ucwords}</td>
-								<td><b>Etnia:</b> {$arrEtnia.$seqEtnia|lower|ucwords}</td>
+								<td><b>Ocupaci&oacute;n:</b> {$arrOcupacion.$seqOcupacion}</td>
+								<td><b>Nivel Educativo:</b> {$arrNivelEducativo.$seqNivelEducativo}</td>
+								<td><b>Años aprobados:</b> {$objCiudadano->numAnosAprobados}</td>
+
 							</tr>
 							<tr>
-								<td><b>Caja de Compensaci&oacute;n</b> {$arrCajaCompensacion.$seqCajaCompensacion|lower|ucwords}</td>
-								<td><b>Salud:</b> {$arrSalud.$seqSalud|lower|ucwords}</td>
+								<td><b>Salud:</b> {$arrSalud.$seqSalud}</td>
 								<td><b>Beneficiario:</b> {if $objCiudadano->bolBeneficiario == 1} Si {else} No {/if}</td>
 							</tr>
 							<tr>
@@ -108,8 +107,14 @@
 					<table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 8px;">
 						<tr>
 							<td width="44%"><b>Total Ingresos del Hogar:</b> $ {$objFormulario->valIngresoHogar|number_format:0:',':'.'}</td>
-							<td width="30%"><b>Desplazamiento:</b> {if $objFormulario->bolDesplazado == 1} Si {else} No {/if}</td>
-							<td><b>Sisben:</b> {$arrSisben.$seqSisben|lower|ucwords}</td>
+							<td width="30%"><strong>Condición del hogar: </strong>
+								{if $objFormulario->bolDesplazado == 1}
+									Victima
+								{else}
+									Vulnerable
+								{/if}
+							</td>
+							<td><b>Sisben:</b> {$arrSisben.$seqSisben}</td>
 						</tr>
 					</table>
 				</td>
@@ -139,9 +144,14 @@
 		</table>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 8px;">	
 			<tr>
-				<td><b>Modalidad:</b> {$arrModalidad.$seqModalidad|lower|ucwords}</td>
+				<td><b>Modalidad:</b> {$arrModalidad.$seqModalidad}</td>
 				<td><b>Soluci&oacute;n</b> {$arrSolucion.$seqModalidad.$seqSolucion}</td>
-				<td><b>Valor Subsidio:</b> $ {$objFormulario->valAspiraSubsidio|number_format:0:',':'.'}</td>
+				{if $objFormulario->seqPlanGobierno == 2}
+					<td><b>Valor Subsidio:</b> $ {$objFormulario->valAspiraSubsidio|number_format:0:',':'.'}</td>
+				{else}
+					<td><b>Valor Estimado Aporte:</b> $ {$objFormulario->valAspiraSubsidio|number_format:0:',':'.'}</td>
+				{/if}
+
 			</tr>
 			{if $objFormulario->seqModalidad == 5}
 				<tr>
@@ -189,21 +199,21 @@
 		</table>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 8px;">		
 			<tr>
-				<td><b>Ahorro 1:</b> {$arrBanco.$seqBancoCuentaAhorro|lower|ucwords}</td>
+				<td><b>Ahorro 1:</b> {$arrBanco.$seqBancoCuentaAhorro}</td>
 				<td><b>Valor:</b> $ {$objFormulario->valSaldoCuentaAhorro|number_format:0:',':'.'}</td>
 				<td><b>Soporte:</b> {$objFormulario->txtSoporteCuentaAhorro|strtoupper}</td>
 				<td><b>Fecha Apertura:</b> {$objFormulario->fchAperturaCuentaAhorro}</td>
 				<td><b>Valor Inmobilizado:</b> {if $objFormulario->bolInmovilizadoCuentaAhorro == 1} Si {else} No {/if}</td>
 			</tr>
 			<tr>
-				<td><b>Ahorro 2:</b> {$arrBanco.$seqBancoCuentaAhorro2|lower|ucwords}</td>
+				<td><b>Ahorro 2:</b> {$arrBanco.$seqBancoCuentaAhorro2}</td>
 				<td><b>Valor:</b> $ {$objFormulario->valSaldoCuentaAhorro2|number_format:0:',':'.'}</td>
 				<td><b>Soporte:</b> {$objFormulario->txtSoporteCuentaAhorro2|strtoupper}</td>
 				<td><b>Fecha Apertura:</b> {$objFormulario->fchAperturaCuentaAhorro2}</td>
 				<td><b>Valor Inmobilizado:</b> {if $objFormulario->bolInmovilizadoCuentaAhorro2 == 1} Si {else} No {/if}</td>
 			</tr>
 			<tr>
-				<td><b>Cr&eacute;dito:</b> {$arrBanco.$seqBancoCredito|lower|ucwords}</td>
+				<td><b>Cr&eacute;dito:</b> {$arrBanco.$seqBancoCredito}</td>
 				<td><b>Valor:</b> $ {$objFormulario->valCredito|number_format:0:',':'.'}</td>
 				<td><b>Soporte:</b> {$objFormulario->txtSoporteCredito|strtoupper}</td>
 				<td><b>Fecha Vencimiento:</b> {$objFormulario->fchAprobacionCredito}</td>
@@ -224,28 +234,7 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td><b>Aporte Lote o Terreno</b></td>
-				<td><b>Valor:</b> $ {$objFormulario->valAporteLote|number_format:0:',':'.'}</td>
-				<td><b>Soporte:</b> {$objFormulario->txtSoporteAporteLote|strtoupper}</td>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><b>Aporte Avance Obra</b></td>
-				<td><b>Valor:</b> $ {$objFormulario->valAporteAvanceObra|number_format:0:',':'.'}</td>
-				<td><b>Soporte:</b> {$objFormulario->txtSoporteAvanceObra|strtoupper}</td>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><b>Aporte Materiales</b></td>
-				<td><b>Valor:</b> $ {$objFormulario->valAporteMateriales|number_format:0:',':'.'}</td>
-				<td><b>Soporte:</b> {$objFormulario->txtSoporteAporteMateriales|strtoupper}</td>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><b>Donaci&oacute;n: {$arrDonantes.$seqEntidadDonante}</b></td>
+				<td><b>Donaci&oacute;n / VUR: {$arrDonantes.$seqEntidadDonante}</b></td>
 				<td><b>Valor:</b> $ {$objFormulario->valDonacion|number_format:0:',':'.'}</td>
 				<td><b>Soporte:</b> {$objFormulario->txtSoporteDonacion|strtoupper}</td>
 				<td>&nbsp;</td>
@@ -287,7 +276,7 @@
 				*Toda informacion suministrada es veridica y es bajo la gravedad del juramento
 				*Autoriza para que, por cualquier medio, se verifique la información aquí contenida. 
 				El diligenciamiento de este formulario representa la postulacion al sistema de informacion para soluciones de vivienda de la Secretaria
-				Distrital del Habitat y no implica el otorgamiento de un subsidio.
+				Distrital del Habitat y no implica el otorgamiento de un {if $objFormulario->seqPlanGobierno == 2}subsidio{else}aporte{/if}.
 				{if $objFormulario->seqModalidad == 3 or $objFormulario->seqModalidad == 4}
 					* Al menos un miembro del Hogar habita actualmente en la vivienda objeto del subsidio.
 				{/if}

@@ -17,9 +17,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es-es" lang="es-es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="title" content="Subsidios de Vivienda">
-            <meta name="keywords" content="subsidio,vivienda,social,prioritaria,bogota,habitat,asignacion,credito" />
-            <meta name="description" content="Sistema de informacion de subsidios de vivienda">
+        <meta name="title" content="SIPIVE">
+            <meta name="keywords" content="pive,subsidio,vivienda,social,prioritaria,bogota,habitat,asignacion,credito" />
+            <meta name="description" content="SIPIVE">
                 <meta http-equiv="Content-Language" content="es">
                     <meta name="robots" content="index,  nofollow" />
                     <title>SDV - SDHT</title>
@@ -36,7 +36,7 @@
                                             </td>
                                             {if $seqCasaMano == 0}
                                                 <td align="center" valign="middle" style="{$txtFuente12} padding:10px;">
-                                                    <b>Subsidio Distrital de Vivienda</b><br>
+                                                    <b>Secretaría Distrital de Hábitat</b><br>
                                                         <b>Proceso de Desembolso. Recibo de Documentación</b><br>
                                                             <span style="{$txtFuente10}">
                                                                 Fecha de Radicaci&oacute;n: {$txtFecha}<br>
@@ -45,8 +45,8 @@
                                                             </td>
                                                         {else}
                                                             <td align="center" valign="middle" style="{$txtFuente12} padding:10px;">
-                                                                <b>Subsidio Distrital de Vivienda</b><br>
-                                                                    <b>Esquema de Inscripci&oacute;n Casa en Mano.<br>Recibo de Documentación</b><br>
+                                                                <b>Secretaría Distrital de Hábitat</b><br>
+                                                                    <b>Programa PIVE.<br>Recibo de Documentación</b><br>
                                                                         <span style="{$txtFuente10}">
                                                                             Fecha de Radicaci&oacute;n: {$txtFecha}<br>
                                                                                 No. Registro: {$numRegistro|number_format:0:'.':','}
@@ -66,7 +66,7 @@
                                                                         <tr>
                                                                             <td style="border-bottom: 1px dotted #999999;"><b>Modalidad</b></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.modalidad}&nbsp;</td>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Valor del Subsidio</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Valor estimado del aporte</b></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.valor}&nbsp;</td>
                                                                         </tr>
                                                                         {if $seqCasaMano == 0}
@@ -348,7 +348,7 @@
 
                                                                                         </td>
                                                                                         <td align="center" valign="middle" style="padding:10px; {$txtFuente12}">
-                                                                                            <b>Subsidio Distrital de Vivienda</b><br>
+                                                                                            <b>Secretaría Distrital de Hábitat</b><br>
                                                                                                 <b>Proceso de Desembolso. Recibo de Documentación</b><br>
                                                                                                     <span style="{$txtFuente10}">Fecha de Radicaci&oacute;n: {$txtFecha}</span>
                                                                                                     </td>

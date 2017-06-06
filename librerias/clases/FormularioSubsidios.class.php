@@ -89,7 +89,7 @@ class FormularioSubsidios {
     public $txtFormulario;
     public $fchUltimaActualizacion;
     public $seqProyecto;
-    public $seqProyectoHijo; // Conjunto Residencial (Opcional)
+    public $seqProyectoHijo;
     public $numCortes;
     public $seqPeriodo;
     public $fchArriendoDesde;
@@ -113,9 +113,9 @@ class FormularioSubsidios {
         $this->seqFormulario = 0;
         $this->txtDireccion = "";
         $this->seqTipoDireccion = 0;
-        $this->numTelefono1 = "";
-        $this->numTelefono2 = "";
-        $this->numCelular = "";
+        $this->numTelefono1 = 0;
+        $this->numTelefono2 = 0;
+        $this->numCelular = 0;
         $this->txtBarrio = "";
         $this->txtCorreo = "";
         $this->txtMatriculaInmobiliaria = "";
@@ -124,80 +124,80 @@ class FormularioSubsidios {
         $this->seqTipoFinanciacion = 1;
         $this->bolViabilizada = 0;
         $this->bolIdentificada = 0;
-        $this->bolDesplazado = "";
-        $this->seqSolucion = "";
-        $this->valPresupuesto = "";
-        $this->valAvaluo = "";
-        $this->valTotal = "";
-        $this->seqModalidad = "";
-        $this->seqPlanGobierno = "";
+        $this->bolDesplazado = 0;
+        $this->seqSolucion = 0;
+        $this->valPresupuesto = 0;
+        $this->valAvaluo = 0;
+        $this->valTotal = 0;
+        $this->seqModalidad = 0;
+        $this->seqPlanGobierno = 0;
         $this->seqBancoCuentaAhorro = 1;
-        $this->fchAperturaCuentaAhorro = "";
-        $this->bolInmovilizadoCuentaAhorro = "";
-        $this->valSaldoCuentaAhorro = "";
+        $this->fchAperturaCuentaAhorro = null;
+        $this->bolInmovilizadoCuentaAhorro = 0;
+        $this->valSaldoCuentaAhorro = 0;
         $this->txtSoporteCuentaAhorro = "";
         $this->seqBancoCuentaAhorro2 = 1;
-        $this->fchAperturaCuentaAhorro2 = "";
-        $this->bolInmovilizadoCuentaAhorro2 = "";
-        $this->valSaldoCuentaAhorro2 = "";
+        $this->fchAperturaCuentaAhorro2 = null;
+        $this->bolInmovilizadoCuentaAhorro2 = 0;
+        $this->valSaldoCuentaAhorro2 = 0;
         $this->txtSoporteCuentaAhorro2 = "";
-        $this->valSubsidioNacional = "";
+        $this->valSubsidioNacional = 0;
         $this->txtSoporteSubsidioNacional = "";
         $this->txtSoporteSubsidio = "";
-        $this->valAporteLote = "";
+        $this->valAporteLote = 0;
         $this->txtSoporteAporteLote = "";
-        $this->seqCesantias = "";
-        $this->valSaldoCesantias = "";
+        $this->seqCesantias = 1;
+        $this->valSaldoCesantias = 0;
         $this->txtSoporteCesantias = "";
-        $this->valAporteAvanceObra = "";
+        $this->valAporteAvanceObra = 0;
         $this->txtSoporteAvanceObra = "";
-        $this->valAporteMateriales = "";
+        $this->valAporteMateriales = 0;
         $this->txtSoporteAporteMateriales = "";
         $this->seqEmpresaDonante = 1;
-        $this->valDonacion = "";
+        $this->valDonacion = 0;
         $this->txtSoporteDonacion = "";
-        $this->seqBancoCredito = "";
-        $this->valCredito = "";
+        $this->seqBancoCredito = 1;
+        $this->valCredito = 0;
         $this->txtSoporteCredito = "";
-        $this->valTotalRecursos = "";
-        $this->valAspiraSubsidio = "";
-        $this->seqVivienda = "";
-        $this->valArriendo = "";
-        $this->bolPromesaFirmada = "";
-        $this->fchInscripcion = "";
-        $this->fchPostulacion = "";
-        $this->fchVencimiento = "";
-        $this->bolIntegracionSocial = "";
-        $this->bolSecSalud = "";
-        $this->bolSecEducacion = "";
-        $this->bolSecMujer = "";
-        $this->bolIpes = "";
-        $this->bolAltaCon = "";
+        $this->valTotalRecursos = 0;
+        $this->valAspiraSubsidio = 0;
+        $this->seqVivienda = 0;
+        $this->valArriendo = 0;
+        $this->bolPromesaFirmada = 0;
+        $this->fchInscripcion = null;
+        $this->fchPostulacion = null;
+        $this->fchVencimiento = null;
+        $this->bolIntegracionSocial = 0;
+        $this->bolSecSalud = 0;
+        $this->bolSecEducacion = 0;
+        $this->bolSecMujer = 0;
+        $this->bolIpes = 0;
+        $this->bolAltaCon = 0;
         $this->txtOtro = "";
         $this->numAdultosNucleo = 0;
         $this->numNinosNucleo = 0;
         $this->seqUsuario = 0;
         $this->seqPuntoAtencion = 0;
         $this->bolCerrado = 0;
-        $this->seqLocalidad = 0;
+        $this->seqLocalidad = 1;
         $this->seqCiudad = 0;
         $this->valIngresoHogar = 0;
         $this->seqEstadoProceso = 0;
         $this->txtDireccionSolucion = "";
-        $this->fchAprobacionCredito = "";
+        $this->fchAprobacionCredito = null;
         $this->txtFormulario = "";
-        $this->fchUltimaActualizacion = "";
+        $this->fchUltimaActualizacion = null;
         $this->seqProyecto = 37;
-        $this->seqProyectoHijo = "";
+        $this->seqProyectoHijo = 0;
         $this->numCortes = 0;
-        $this->seqPeriodo = 1;
-        $this->fchArriendoDesde = "";
+        $this->seqPeriodo = 0;
+        $this->fchArriendoDesde = null;
         $this->bolSancion = 0;
-        $this->fchVigencia = "";
-        $this->seqUpz = "";
-        $this->seqBarrio = "";
+        $this->fchVigencia = null;
+        $this->seqUpz = 0;
+        $this->seqBarrio = 0;
         $this->seqSisben = 1;
-        $this->fchNotificacion = "";
+        $this->fchNotificacion = null;
         $this->txtComprobanteArriendo = "";
         $this->numPuntajeSisben = 0;
         $this->seqTipoEsquema = 0;
@@ -422,136 +422,139 @@ class FormularioSubsidios {
     public function cargarFormulario($seqFormulario) {
         global $aptBd;
 
-        $this->arrCiudadano = array();
-
         // Obtiene los ciudadanos suscritos al formulario ( Hogar )
         $sql = "
-                    SELECT 
-                        seqCiudadano,
-                        bolSoporteDocumento,
-                        seqParentesco
-                    FROM 
-                        T_FRM_HOGAR
-                    WHERE 
-                        seqFormulario = $seqFormulario
-                    ORDER BY 
-                        seqParentesco	
-                ";
-        //echo $sql;
-
+            SELECT 
+                seqCiudadano,
+                bolSoporteDocumento,
+                seqParentesco
+            FROM T_FRM_HOGAR
+            WHERE seqFormulario = $seqFormulario
+            ORDER BY seqParentesco	
+        ";
         $objRes = $aptBd->execute($sql);
+        $this->arrCiudadano = array();
         while ($objRes->fields) {
-            $claCiudadano = new Ciudadano;
+            $claCiudadano = new Ciudadano();
             $claCiudadano->cargarCiudadano($objRes->fields['seqCiudadano']);
             $claCiudadano->bolSoporteDocumento = $objRes->fields['bolSoporteDocumento'];
             $claCiudadano->seqParentesco = $objRes->fields['seqParentesco'];
-            $this->arrCiudadano[$objRes->fields['seqCiudadano']] = $claCiudadano;
+            if(empty($claCiudadano->arrErrores)) {
+                $this->arrCiudadano[$objRes->fields['seqCiudadano']] = $claCiudadano;
+            }else{
+                foreach($claCiudadano->arrErrores as $txtError){
+                    $this->arrErrores[] = $txtError;
+                }
+            }
             $objRes->MoveNext();
         }
 
         // Obtiene los datos del formulario
-        if (!empty($this->arrCiudadano)) {
+        if (empty($this->arrErrores) and (!empty($this->arrCiudadano))) {
             $sql = "
-                   SELECT
-                      seqFormulario,
-                      txtDireccion,
-                      seqTipoDireccion,
-                      numTelefono1,
-                      numTelefono2,
-                      numCelular,
-                      txtBarrio,
-                      txtCorreo,
-                      txtMatriculaInmobiliaria,
-                      txtChip,
-                      seqUnidadProyecto,
-                      seqTipoFinanciacion,
-                      bolViabilizada,
-                      bolIdentificada,
-                      bolDesplazado,
-                      seqSolucion,
-                      valPresupuesto,
-                      valAvaluo,
-                      valTotal,
-                      seqModalidad,
-                      seqPlanGobierno,
-                      seqBancoCuentaAhorro,
-                      fchAperturaCuentaAhorro,
-                      bolInmovilizadoCuentaAhorro,
-                      valSaldoCuentaAhorro,
-                      txtSoporteCuentaAhorro,
-                      seqBancoCuentaAhorro2,
-                      fchAperturaCuentaAhorro2,
-                      bolInmovilizadoCuentaAhorro2,
-                      valSaldoCuentaAhorro2,
-                      txtSoporteCuentaAhorro2,
-                      valSubsidioNacional,
-                      txtSoporteSubsidio,
-                      valAporteLote,
-                      txtSoporteAporteLote,
-                      seqCesantias,
-                      valSaldoCesantias,
-                      txtSoporteCesantias,
-                      valAporteAvanceObra,
-                      txtSoporteAvanceObra,
-                      valAporteMateriales,
-                      txtSoporteAporteMateriales,
-                      seqEmpresaDonante,
-                      valDonacion,
-                      txtSoporteDonacion,
-                      seqBancoCredito,
-                      valCredito,
-                      txtSoporteCredito,
-                      valTotalRecursos,
-                      valAspiraSubsidio,
-                      seqVivienda,
-                      valArriendo,
-                      bolPromesaFirmada,
-                      fchInscripcion,
-                      fchPostulacion,
-                      fchVencimiento,
-                      bolIntegracionSocial,
-                      bolSecSalud,
-                      bolSecEducacion,
-                      bolSecMujer,
-                      bolIpes,
-                      bolAltaCon, 
-                      txtOtro,
-                      numAdultosNucleo,
-                      numNinosNucleo,
-                      seqUsuario,
-                      bolCerrado,
-                      seqLocalidad,
-                      seqCiudad,
-                      valIngresoHogar,
-                      seqEstadoProceso,
-                      txtDireccionSolucion,
-                      seqPuntoAtencion,
-                      fchAprobacionCredito,
-                      txtFormulario,
-                      fchUltimaActualizacion,
-                      seqProyecto,
-                    seqProyectoHijo,
-                      txtSoporteSubsidioNacional,
-                      fchArriendoDesde,
-                      txtComprobanteArriendo,
-                      seqBarrio,
-                      seqUpz,
-                      seqSisben,
-                      numCortes,
-                      fchNotificacion,
-                      seqPeriodo,
-                      bolSancion,
-                      fchVigencia,
-                      numPuntajeSisben,
-                      seqTipoEsquema,
-                      seqEntidadSubsidio,
-                      numHacinamiento,
-                      numHabitaciones
-                   FROM T_FRM_FORMULARIO
-                   WHERE seqFormulario = $seqFormulario
-                    ";
+              SELECT
+                seqFormulario,
+                txtDireccion,
+                numTelefono1,
+                numTelefono2,
+                numCelular,
+                txtMatriculaInmobiliaria,
+                txtChip,
+                seqUnidadProyecto,
+                bolViabilizada,
+                bolIdentificada,
+                bolDesplazado,
+                seqSolucion,
+                valPresupuesto,
+                valAvaluo,
+                valTotal,
+                seqModalidad,
+                seqBancoCuentaAhorro,
+                fchAperturaCuentaAhorro,
+                bolInmovilizadoCuentaAhorro,
+                valSaldoCuentaAhorro,
+                txtSoporteCuentaAhorro,
+                seqBancoCuentaAhorro2,
+                fchAperturaCuentaAhorro2,
+                bolInmovilizadoCuentaAhorro2,
+                valSaldoCuentaAhorro2,
+                txtSoporteCuentaAhorro2,
+                valSubsidioNacional,
+                seqEntidadSubsidio,
+                txtSoporteSubsidio,
+                valAporteLote,
+                txtSoporteAporteLote,
+                seqCesantias,
+                valSaldoCesantias,
+                txtSoporteCesantias,
+                valAporteAvanceObra,
+                txtSoporteAvanceObra,
+                valAporteMateriales,
+                txtSoporteAporteMateriales,
+                valDonacion,
+                txtSoporteDonacion,
+                seqBancoCredito,
+                valCredito,
+                txtSoporteCredito,
+                valTotalRecursos,
+                valAspiraSubsidio,
+                seqVivienda,
+                valArriendo,
+                bolPromesaFirmada,
+                fchInscripcion,
+                fchPostulacion,
+                fchVencimiento,
+                bolIntegracionSocial,
+                bolSecSalud,
+                bolSecEducacion,
+                bolSecMujer,
+                bolAltaCon,
+                bolIpes,
+                txtOtro,
+                seqSisben,
+                numAdultosNucleo,
+                numNinosNucleo,
+                seqUsuario,
+                bolCerrado,
+                seqLocalidad,
+                valIngresoHogar,
+                seqEstadoProceso,
+                txtDireccionSolucion,
+                txtCorreo,
+                seqEmpresaDonante,
+                seqPuntoAtencion,
+                fchAprobacionCredito,
+                txtBarrio,
+                txtFormulario,
+                numCortes,
+                fchNotificacion,
+                fchUltimaActualizacion,
+                seqProyecto,
+                seqProyectoHijo,
+                seqTipoFinanciacion,
+                seqPeriodo,
+                txtSoporteSubsidioNacional,
+                fchArriendoDesde,
+                txtComprobanteArriendo,
+                bolSancion,
+                fchVigencia,
+                seqCiudad,
+                numPuntajeSisben,
+                seqPlanGobierno,
+                seqTipoDireccion,
+                seqBarrio,
+                seqUpz,
+                seqTipoEsquema,
+                numHabitaciones,
+                numHacinamiento
+              FROM T_FRM_FORMULARIO
+              WHERE seqFormulario = $seqFormulario
+            ";
             $objRes = $aptBd->execute($sql);
             if ($objRes->fields) {
+                foreach($objRes->fields as $txtCalve => $txtValor){
+                    $objRes->fields[$txtCalve] = trim($txtValor);
+                }
                 $this->seqFormulario = $objRes->fields['seqFormulario'];
                 $this->txtDireccion = $objRes->fields['txtDireccion'];
                 $this->seqTipoDireccion = $objRes->fields['seqTipoDireccion'];
@@ -574,12 +577,12 @@ class FormularioSubsidios {
                 $this->seqModalidad = $objRes->fields['seqModalidad'];
                 $this->seqPlanGobierno = $objRes->fields['seqPlanGobierno'];
                 $this->seqBancoCuentaAhorro = $objRes->fields['seqBancoCuentaAhorro'];
-                $this->fchAperturaCuentaAhorro = $objRes->fields['fchAperturaCuentaAhorro'];
+                $this->fchAperturaCuentaAhorro = (esFechaValida($objRes->fields['fchAperturaCuentaAhorro']))? $objRes->fields['fchAperturaCuentaAhorro'] : null;
                 $this->bolInmovilizadoCuentaAhorro = $objRes->fields['bolInmovilizadoCuentaAhorro'];
                 $this->valSaldoCuentaAhorro = $objRes->fields['valSaldoCuentaAhorro'];
                 $this->txtSoporteCuentaAhorro = $objRes->fields['txtSoporteCuentaAhorro'];
                 $this->seqBancoCuentaAhorro2 = $objRes->fields['seqBancoCuentaAhorro2'];
-                $this->fchAperturaCuentaAhorro2 = $objRes->fields['fchAperturaCuentaAhorro2'];
+                $this->fchAperturaCuentaAhorro2 = (esFechaValida($objRes->fields['fchAperturaCuentaAhorro2']))? $objRes->fields['fchAperturaCuentaAhorro2'] : null;
                 $this->bolInmovilizadoCuentaAhorro2 = $objRes->fields['bolInmovilizadoCuentaAhorro2'];
                 $this->valSaldoCuentaAhorro2 = $objRes->fields['valSaldoCuentaAhorro2'];
                 $this->txtSoporteCuentaAhorro2 = $objRes->fields['txtSoporteCuentaAhorro2'];
@@ -605,9 +608,9 @@ class FormularioSubsidios {
                 $this->seqVivienda = $objRes->fields['seqVivienda'];
                 $this->valArriendo = $objRes->fields['valArriendo'];
                 $this->bolPromesaFirmada = $objRes->fields['bolPromesaFirmada'];
-                $this->fchInscripcion = $objRes->fields['fchInscripcion'];
-                $this->fchPostulacion = $objRes->fields['fchPostulacion'];
-                $this->fchVencimiento = $objRes->fields['fchVencimiento'];
+                $this->fchInscripcion = (esFechaValida($objRes->fields['fchInscripcion']))? $objRes->fields['fchInscripcion'] : null;
+                $this->fchPostulacion = (esFechaValida($objRes->fields['fchPostulacion']))? $objRes->fields['fchPostulacion'] : null;
+                $this->fchVencimiento = (esFechaValida($objRes->fields['fchVencimiento']))? $objRes->fields['fchVencimiento'] : null;
                 $this->bolIntegracionSocial = $objRes->fields['bolIntegracionSocial'];
                 $this->bolSecSalud = $objRes->fields['bolSecSalud'];
                 $this->bolSecEducacion = $objRes->fields['bolSecEducacion'];
@@ -625,26 +628,27 @@ class FormularioSubsidios {
                 $this->seqEstadoProceso = $objRes->fields['seqEstadoProceso'];
                 $this->txtDireccionSolucion = $objRes->fields['txtDireccionSolucion'];
                 $this->seqPuntoAtencion = $objRes->fields['seqPuntoAtencion'];
-                $this->fchAprobacionCredito = $objRes->fields['fchAprobacionCredito'];
+                $this->fchAprobacionCredito = (esFechaValida($objRes->fields['fchAprobacionCredito']))? $objRes->fields['fchAprobacionCredito'] : null;
                 $this->txtFormulario = $objRes->fields['txtFormulario'];
-                $this->fchUltimaActualizacion = $objRes->fields['fchUltimaActualizacion'];
+                $this->fchUltimaActualizacion = (esFechaValida($objRes->fields['fchUltimaActualizacion']))? $objRes->fields['fchUltimaActualizacion'] : null;
                 $this->seqProyecto = $objRes->fields['seqProyecto'];
                 $this->seqProyectoHijo = $objRes->fields['seqProyectoHijo'];
                 $this->txtSoporteSubsidioNacional = $objRes->fields['txtSoporteSubsidioNacional'];
-                $this->fchArriendoDesde = $objRes->fields['fchArriendoDesde'];
+                $this->fchArriendoDesde = (esFechaValida($objRes->fields['fchArriendoDesde']))? $objRes->fields['fchArriendoDesde'] : null;
                 $this->txtComprobanteArriendo = $objRes->fields['txtComprobanteArriendo'];
                 $this->seqBarrio = $objRes->fields['seqBarrio'];
                 $this->seqUpz = $objRes->fields['seqUpz'];
                 $this->seqSisben = $objRes->fields['seqSisben'];
                 $this->numCortes = $objRes->fields['numCortes'];
-                $this->fchNotificacion = $objRes->fields['fchNotificacion'];
+                $this->fchNotificacion = (esFechaValida($objRes->fields['fchNotificacion']))? $objRes->fields['fchNotificacion'] : null;
                 $this->seqPeriodo = $objRes->fields['seqPeriodo'];
                 $this->bolSancion = $objRes->fields['bolSancion'];
-                $this->fchVigencia = $objRes->fields['fchVigencia'];
+                $this->fchVigencia = (esFechaValida($objRes->fields['fchVigencia']))? $objRes->fields['fchVigencia'] : null;
                 $this->seqTipoEsquema = $objRes->fields['seqTipoEsquema'];
                 $this->seqEntidadSubsidio = $objRes->fields['seqEntidadSubsidio'];
                 $this->numHacinamiento = $objRes->fields['numHacinamiento'];
-                $this->numHabitaciones = $objRes->fields['numHabitaciones'];                                     
+                $this->numHabitaciones = $objRes->fields['numHabitaciones'];
+                $this->numPuntajeSisben = $objRes->fields['numPuntajeSisben'];
             } else {
                 $this->arrErrores[] = "No se encuentra el formulario [$seqFormulario]";
             }
@@ -877,7 +881,7 @@ class FormularioSubsidios {
 					UPDATE 
 						T_PRY_UNIDAD_PROYECTO 
 					SET 
-						seqFormulario = '' 
+						seqFormulario = 0 
 					WHERE 
 						seqFormulario = \"" . strtoupper($this->seqFormulario) . "\"
 					";
@@ -902,7 +906,7 @@ class FormularioSubsidios {
 					UPDATE 
 						T_PRY_UNIDAD_PROYECTO 
 					SET 
-						seqFormulario = '' 
+						seqFormulario = 0
 					WHERE 
 						seqFormulario = \"" . strtoupper($this->seqFormulario) . "\"
 					";
@@ -1209,7 +1213,6 @@ class FormularioSubsidios {
              ";
         $aptBd->execute($sql);
     }
-
 }
 
 // Fin de clase

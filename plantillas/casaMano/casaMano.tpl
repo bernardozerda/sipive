@@ -10,7 +10,7 @@
     {assign var="txtRojo"     value="#ffd7d7"}
     {assign var="txtAmarillo" value="#ffffd7"}
       
-    <div id="regresar" hidden></div>    
+    <div id="regresar" hidden></div>
     
 <!-- CONTROLES PARA EL MODULO -->
     <div id="controles" 
@@ -18,7 +18,7 @@
          align="center"
     >
         <table border="{$numBorde}" cellpadding="0" cellspacing="{$numPadding}" width="100%">
-            <tr align="center" style="vertical-align: bottom;">
+            <tr align="center" style="vertical-align: middle;">
                 <td width="{$numAncho}">
                     <strong>Registro de la Oferta</strong>
                 </td>
@@ -273,7 +273,7 @@
                     SOLO SI ESTA EN EL ESTADO DE HOGAR POSTULADO
                 -->
                 
-                {if $claFormulario->seqEstadoProceso == 37}
+                {if $claFormulario->seqEstadoProceso == 37 || $claFormulario->seqEstadoProceso == 43}
                     <tr align="center" style="vertical-align: bottom;">
                         <td width="{$numAncho}">
                             <button onClick="cambioCEM( 

@@ -10,7 +10,7 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php" );	
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );	
     
-	setlocale(LC_TIME, 'spanish');
+	setlocale(LC_TIME, 'America/Bogota');
 	$txtFecha = ucwords( strftime("%A %#d de %B del %Y") ) ." " . date( "H:i:s" ); 
 	
 	// Tipos de documento
@@ -352,6 +352,6 @@
 	$claSmarty->assign( "arrDonantes" , $arrDonantes );
 	$claSmarty->assign( "txtUsuarioSistema" , $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido'] ); 
 	$claSmarty->display( "subsidios/formatoPostulacionImprimir.tpl" );
-//	pr( $claFormulario );
+
 ?>
 

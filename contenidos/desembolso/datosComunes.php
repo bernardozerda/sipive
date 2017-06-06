@@ -227,14 +227,20 @@
 
     // Ciudad
     $sql = "
-			SELECT 
-				seqCiudad,
-				concat(txtCiudad,', ', txtDepartamento) as txtCiudad
-			FROM 
-				T_FRM_CIUDAD
-			ORDER BY 
-				txtCiudad
-		";
+		(SELECT 
+		  seqCiudad,
+		  concat(txtDepartamento ,' - ', txtCiudad) as txtCiudad
+		FROM T_FRM_CIUDAD
+		WHERE seqCiudad = 149
+		ORDER BY txtCiudad)
+		UNION
+		(SELECT 
+			seqCiudad,
+			concat(txtDepartamento ,' - ', txtCiudad) as txtCiudad
+		FROM T_FRM_CIUDAD
+		WHERE seqCiudad <> 149
+		ORDER BY txtCiudad)
+	";
     $objRes = $aptBd->execute($sql);
     while ($objRes->fields) {
         $arrCiudad[$objRes->fields['seqCiudad']] = $objRes->fields['txtCiudad'];

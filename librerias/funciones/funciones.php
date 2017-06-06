@@ -533,4 +533,346 @@ function obtenerDatosTabla($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion 
     return $arrDatos;
 }
 
+/**
+ * FUNCION QUE RETORNA LOS PROYECTOS DISPONIBLES PARA
+ * MOSTRAR EN UNA POSTULACION DE HOGARES PLAN 2 O PLAN 3
+ * @author Bernardo Zerda
+ * @param String txtTabla
+ * @version 1.0 Mayo de 2017
+ */
+function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno){
+    global $aptBd;
+
+    $arrReglas = array();
+    $arrProyectos = array();
+
+    // Para estas modalidades se buscan los proyectos con unidades disponibles para mostrar
+    $arrReglas['unidad'][6]  = 6;
+    $arrReglas['unidad'][12] = 12;
+    $arrReglas['unidad'][13] = 13;
+
+    // Para estas modalidades se buscan los proyectos con un tipo de esquema y modalidad de proyecto particular
+    $arrReglas['proyecto'][7] = 7;
+    $arrReglas['proyecto'][8] = 8;
+    $arrReglas['proyecto'][9] = 9;
+
+    /*********************************************************************************************/
+
+    // Plan Gobierno 2 - Adquisicion - Individual
+    $arrPryModalidad[2][6][1][] = 1; // adquisicion individual
+
+    // Plan Gobierno 2 - construccion en sitio propio - colectivo opv
+    $arrPryModalidad[2][7][2][] = 2; // Adquisición Colectivo OPV
+
+    // Plan Gobierno 2 - mejoramiento estructural - territorial dirigido
+    $arrPryModalidad[2][8][4][] = 5; // Mejoramiento Estructural
+
+    // Plan Gobierno 2 - mejoramiento habitacional - territorial dirigido
+    $arrPryModalidad[2][9][4][] = 4; // Habitacional
+
+    // Plan Gobierno 3 - Adquisicion cierre financiero - proyectos sdht
+    $arrPryModalidad[3][12][9][] = 11;  // proyectos sdht
+
+    // Plan Gobierno 3 - Adquisicion cierre financiero - proyecto no sdht
+    $arrPryModalidad[3][12][10][] = 12; // proyecto no sdht
+
+    // Plan Gobierno 3 - Adquisicion cierre financiero - retorno reubicacion
+    $arrPryModalidad[3][12][11][] = 13; //  retorno reubicacion
+
+    // Plan Gobierno 3 - Adquisicion Leasing - proyectos no sdht
+    $arrPryModalidad[3][13][10][] = 12;  // proyecto no sdht
+
+    // Segun la modalidad buscamos los proyectos que
+    // tengan cargados unidades y que esten disponibles
+    if( isset($arrReglas['unidad'][$seqModalidad]) ){
+
+        // buscando los proyectos que no tienen hijos
+        $sql = "
+            SELECT
+              pro.seqProyecto,
+              pro.txtNombreProyecto
+            FROM t_pry_proyecto pro
+            WHERE pro.seqProyecto <> 37
+              AND pro.seqProyectoPadre IS NULL
+              AND bolActivo = 1
+            ORDER BY pro.txtNombreProyecto
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $txtProyecto = $objRes->fields['txtNombreProyecto'];
+
+            // tiene unidades habitacionales asociadas y disponibles
+            $sql = "
+                select count(seqProyecto) as cuenta
+                from t_pry_unidad_proyecto
+                where bolActivo = 1
+                  and seqPlanGobierno = " . $seqPlanGobierno . "
+                  and seqModalidad = " . $seqModalidad . "
+                  and seqProyecto = " . $seqProyecto . "
+                  and (seqFormulario = 0
+                    or seqFormulario = ''
+                    or seqFormulario is NULL
+                    or seqFormulario = " . $seqFormulario . "
+                  )
+            ";
+            $objRes1 = $aptBd->execute($sql);
+
+            if($objRes1->fields['cuenta'] > 0){
+                $arrProyectos[$seqProyecto] = $txtProyecto;
+            }else{
+
+                // los proyectos hijos tienen unidades habitacionales asociadas y disponibles
+                $sql = "
+                    SELECT COUNT(seqProyecto) as cuenta
+                    FROM t_pry_unidad_proyecto
+                    WHERE bolActivo = 1
+                      and seqPlanGobierno = " . $seqPlanGobierno . "
+                      and seqModalidad = " . $seqModalidad . "
+                      and (seqFormulario = 0
+                        or seqFormulario = ''
+                        or seqFormulario is NULL
+                        or seqFormulario = ".$seqFormulario."
+                    ) AND seqProyecto IN (
+                      SELECT seqProyecto
+                      FROM t_pry_proyecto
+                      WHERE seqProyectoPadre = " . $seqProyecto . "
+                    )
+                ";
+                $objRes1 = $aptBd->execute($sql);
+                if($objRes1->fields['cuenta'] > 0){
+                    $arrProyectos[$seqProyecto] = $txtProyecto;
+                }
+            }
+            $objRes->MoveNext();
+        }
+
+
+    // Para las modalidades de mejoramientos se tiene en cuenta el esquema
+    // la modalidad del proyecto porque estos no tienen unidades habitacionales
+    // es decir, registros en t_pry_unidad_proyecto
+    }elseif (isset($arrReglas['proyecto'][$seqModalidad])){
+        if( isset($arrPryModalidad[$seqPlanGobierno][$seqModalidad][$seqTipoEsquema])){
+            $sql = "
+                SELECT
+                  pro.seqProyecto,
+                  pro.txtNombreProyecto
+                FROM t_pry_proyecto pro
+                WHERE pro.bolActivo = 1
+                  AND pro.seqProyecto <> 37
+                  AND pro.seqPlanGobierno = ".$seqPlanGobierno."
+                  AND pro.seqProyectoPadre IS NULL
+                  AND pro.seqTipoEsquema = ".$seqTipoEsquema."
+                  AND pro.seqPryTipoModalidad IN (".implode(",",$arrPryModalidad[$seqPlanGobierno][$seqModalidad][$seqTipoEsquema]).")
+                ORDER BY pro.txtNombreProyecto
+            ";
+            $objRes = $aptBd->execute($sql);
+            while($objRes->fields){
+                $seqProyecto = $objRes->fields['seqProyecto'];
+                $txtProyecto = $objRes->fields['txtNombreProyecto'];
+                $arrProyectos[$seqProyecto] = $txtProyecto;
+                $objRes->MoveNext();
+            }
+        }
+    }
+
+    //pr( $arrProyectos );
+
+    return $arrProyectos;
+}
+
+/**
+ * FUNCION QUE RETORNA LOS PROYECTOS HIJOS DISPONIBLES PARA
+ * MOSTRAR EN UNA POSTULACION DE HOGARES PLAN 2 O PLAN 3
+ * @author Bernardo Zerda
+ * @param String txtTabla
+ * @version 1.0 Mayo de 2017
+ */
+function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqPlanGobierno, $seqProyecto){
+    global $aptBd;
+    $sql = "
+        SELECT DISTINCT
+          pro.seqProyecto,
+          pro.txtNombreProyecto
+        FROM T_PRY_PROYECTO pro
+          INNER JOIN t_pry_unidad_proyecto upr on pro.seqProyecto = upr.seqProyecto
+        WHERE pro.bolActivo = 1
+        AND pro.seqProyectoPadre = ".$seqProyecto."
+        AND upr.seqPlanGobierno = " . $seqPlanGobierno . "
+        AND upr.seqModalidad = " . $seqModalidad . "
+        AND (upr.seqFormulario = 0
+          OR upr.seqFormulario = ''
+          OR upr.seqFormulario IS NULL
+          OR upr.seqFormulario = ".$seqFormulario."
+        )
+    ";
+    $objRes = $aptBd->execute($sql);
+    $arrProyectosHijos = array();
+    while ($objRes->fields) {
+        $arrProyectosHijos[$objRes->fields['seqProyecto']] = $objRes->fields['txtNombreProyecto'];
+        $objRes->MoveNext();
+    }
+    return $arrProyectosHijos;
+}
+
+/**
+ * FUNCION QUE RETORNA LAS UNIDADES DISPONIBLES PARA
+ * MOSTRAR EN UNA POSTULACION DE HOGARES PLAN 2 O PLAN 3
+ * @author Bernardo Zerda
+ * @param String txtTabla
+ * @version 1.0 Mayo de 2017
+ */
+function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqPlanGobierno, $seqProyectoHijo){
+    global $aptBd;
+    $sql = "
+        SELECT
+          upr.seqUnidadProyecto,
+          upr.txtNombreUnidad
+        FROM t_pry_unidad_proyecto upr
+        WHERE upr.bolActivo = 1
+          AND upr.seqProyecto = ".$seqProyectoHijo."
+          AND upr.seqPlanGobierno = " . $seqPlanGobierno . "
+          AND upr.seqModalidad = " . $seqModalidad . "
+          AND (upr.seqFormulario = 0
+            OR upr.seqFormulario = ''
+            OR upr.seqFormulario IS NULL
+            OR upr.seqFormulario = ".$seqFormulario."
+          )
+    ";
+    $objRes = $aptBd->execute($sql);
+    $arrUnidades = array();
+    while ($objRes->fields) {
+        $arrUnidades[$objRes->fields['seqUnidadProyecto']] = $objRes->fields['txtNombreUnidad'];
+        $objRes->MoveNext();
+    }
+    return $arrUnidades;
+}
+
+
+/**
+ * OBTIENE LAS SOLUCIONES SEGUN LA MODALIDAD ESPECIFICADA
+ * @author Bernardo Zerda
+ * @param String txtTabla
+ * @version 1.0 Mayo de 2017
+ */
+function obtenerSolucion($seqModalidad){
+    global $aptBd;
+    $arrSolucion = array();
+    $txtValidacion = "";
+    if( $seqModalidad == 1 ){
+        $txtValidacion = " AND seqSolucion <> 1";
+    }
+    $sql = "
+		SELECT 
+			seqSolucion,
+			txtSolucion
+		FROM 
+			T_FRM_SOLUCION
+		WHERE 
+			seqModalidad = " . $seqModalidad . "
+			$txtValidacion
+	";
+    $objRes = $aptBd->execute( $sql );
+    while( $objRes->fields ){
+        $arrSolucion[ $objRes->fields['seqSolucion'] ] = $objRes->fields['txtSolucion'];
+        $objRes->MoveNext();
+    }
+    return $arrSolucion;
+}
+
+
+/**
+ * REALIZA EL CALCULO DE VALOR DEL SUBSIDIO QUE LE CORRESPONDE
+ */
+function valorSubsidio($claFormulario){
+    global $arrConfiguracion;
+
+    $valVivienda = 70; // SMMLV
+    $valTope     = ($claFormulario->seqTipoEsquema == 11)? 26 : 35; // SMMLV 26 para retorno reubicacion y 35 para el resto
+    $valSubsidio = 0;
+
+    if($claFormulario->seqPlanGobierno == 2){
+        if( $claFormulario->seqModalidad == 6){
+            $arrValor = obtenerDatosTabla(
+                "T_PRY_UNIDAD_PROYECTO",
+                array("0","valSDVEAprobado"),
+                "0",
+                "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
+            );
+            $valSubsidio = $arrValor[0];
+        }else{
+            $arrValor = obtenerDatosTabla("T_PRY_PROYECTO",array("0","valMaximoSubsidio","valNumeroSoluciones"),"0","seqProyecto = " . $claFormulario->seqProyecto);
+            if(intval($arrValor[0]['valNumeroSoluciones']) != 0){
+                $valSubsidio = intval(($arrValor[0]['valMaximoSubsidio'] / $arrValor[0]['valNumeroSoluciones']));
+            }
+        }
+    }else{
+        $valSubsidioNAL = intval($claFormulario->valSubsidioNacional) / $arrConfiguracion['constantes']['salarioMinimo'];
+        $valVUR         = intval($claFormulario->valDonacion)         / $arrConfiguracion['constantes']['salarioMinimo'];
+
+        if($claFormulario->seqModalidad == 12){
+            $valDiferenciaSubsidios = ($valTope - $valSubsidioNAL < 0)? 0 : $valTope - $valSubsidioNAL;
+            if($claFormulario->bolDesplazado == 0){
+                if( ($valSubsidioNAL + $valVUR + $valDiferenciaSubsidios) > $valVivienda ){
+                    if( $valVivienda - ($valSubsidioNAL + $valVUR) < 0 ){
+                        $valSubsidio = 0;
+                    }else{
+                        $valSubsidio = $valVivienda - ($valSubsidioNAL + $valVUR);
+                    }
+                }else{
+                    $valSubsidio = $valDiferenciaSubsidios;
+                }
+            } else {
+                if( $valVivienda - ($valSubsidioNAL + $valVUR) < 0 ){
+                    $valSubsidio = 0;
+                }else{
+                    $valSubsidio = $valVivienda - ($valSubsidioNAL + $valVUR);
+                }
+            }
+        }
+        $valSubsidio = ($valSubsidio > $valTope)? $valTope : $valSubsidio;
+        $valSubsidio = ($valSubsidio * $arrConfiguracion['constantes']['salarioMinimo']);
+    }
+    return $valSubsidio;
+}
+
+function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno){
+    global $aptBd;
+
+    // Adquisicion
+    $arrEsquema[2][6][] = 1; // individual
+
+    // construccion en sitio propio
+    $arrEsquema[2][7][] = 2; // colectivo opv
+
+    // mejoramiento estructural
+    $arrEsquema[2][8][] = 4; // territorial dirigido
+
+    // mejoramiento habitacional
+    $arrEsquema[2][9][] = 4; // territorial dirigido
+
+    // mejoramiento en redensificacion
+    $arrEsquema[2][10][] = 4; // territorial dirigido
+
+    // Adquisicion cierre financiero
+    $arrEsquema[3][12][] = 9;  // proyectos sdht
+    $arrEsquema[3][12][] = 10; // proyecto no sdht
+    $arrEsquema[3][12][] = 11; // retorno reubicacion
+
+    // Leasing
+    $arrEsquema[3][13][] = 9;  // proyectos sdht
+
+    // obtiene los esquemas segun modalidad y plan de gobierno
+    $arrTipoEsquemas = obtenerDatosTabla(
+        "t_pry_tipo_esquema",
+        array("seqTipoEsquema","txtTipoEsquema"),
+        "seqTipoEsquema",
+        "estado = 1 and seqTipoEsquema IN (".implode(",",$arrEsquema[$seqPlanGobierno][$seqModalidad]).")",
+        "txtTipoEsquema"
+    );
+
+    return $arrTipoEsquemas;
+}
+
 ?>

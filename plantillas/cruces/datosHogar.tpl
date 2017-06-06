@@ -75,7 +75,7 @@
 	        {assign var=seqTipoDocumento value=$objCiudadano->seqTipoDocumento}
 	        {assign var=seqParentesco value=$objCiudadano->seqParentesco}
 	        <tr>
-	            <td>{$arrParentesco.$seqParentesco}</td>
+	            <td>{$arrParentesco.$seqParentesco.txtParentesco}</td>
 	            <td>{$arrTipoDocumento.$seqTipoDocumento|utf8_decode|lower|ucwords|utf8_encode}</td>
 				<td>{$objCiudadano->numDocumento}</td>
 	            <td>

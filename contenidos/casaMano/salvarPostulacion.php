@@ -22,7 +22,7 @@
    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php" );
 
   $arrErrores = array(); // Todos los errores van aqui
-    
+
     /**********************************************************************************************************************
 	 * VALIDACIONES DEL FORMULARIO - PESTAÑA DE COMPOSICION FAMILIAR
 	 **********************************************************************************************************************/
@@ -53,11 +53,25 @@
 				$arrErrores[] = "El ciudadano $txtNombre debe tener un estado civil.";
 			}
 			
-			// solo puede haber un postulante principal
-			if( $arrCiudadano['seqParentesco'] == 1 ){ 
-				$numCabezaFamilia++; // si es postulante principal ( solo debe haber 1 )
-			}
-			
+
+            // Parentesco
+            if( $arrCiudadano['seqParentesco'] == 0 ){
+                $arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " debe tener parentesco";
+            }elseif( $arrCiudadano['seqParentesco'] == 1 ){
+                $numCabezaFamilia++; // si es Jefe de Hogar ( solo debe existir un miembro con parentesco 1 )
+                if( $arrCiudadano['seqTipoDocumento'] != 1 ){
+                    if( $arrCiudadano['seqTipoDocumento'] != 2 ){
+                        $arrErrores[] = "El tipo de documento seleccionado para el postulante principal no es válido";
+                    }
+                }
+            }else{
+                $seqParentesco = $arrCiudadano['seqParentesco'];
+                $arrParentescos = obtenerDatosTabla("t_ciu_parentesco",array("seqParentesco","txtParentesco"),"seqParentesco","bolActivo = 1");
+                if(!isset($arrParentescos[$seqParentesco])){
+                    $arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " debe tener parentesco válido";
+                }
+            }
+
 			// solo puede haber una persona con condicion Especial Jefe de Hogar
 			if( $arrCiudadano['seqCondicionEspecial'] == 1 ){
 				if ( $arrCiudadano['seqParentesco'] != 1 ){
@@ -70,15 +84,12 @@
 				$numCedula++; // si es cedula de ciudadania ( por lo menos 1 colombiano mayor de edad )
 			}
 			
-            // Estados Civiles que no se pueden usar
-			if( $arrCiudadano['seqEstadoCivil'] == 1 or
-				$arrCiudadano['seqEstadoCivil'] == 3 or
-				$arrCiudadano['seqEstadoCivil'] == 4 or
-				$arrCiudadano['seqEstadoCivil'] == 5  ){
-				$arrErrores[] = "No puede utilizar el estado civil " . 
-                                obtenerNombres("T_CIU_ESTADO_CIVIL", "seqEstadoCivil", $arrCiudadano['seqEstadoCivil']) . 
-                                " para el ciudadano " . $txtNombre;	
-			}
+            // Estado Civil
+            $arrEstadosCiviles = obtenerDatosTabla("t_ciu_estado_civil",array("seqEstadoCivil","txtEstadoCivil"),"seqEstadoCivil","bolActivo = 1");
+            $seqEstadoCivil = $arrCiudadano['seqEstadoCivil'];
+            if( ! isset($arrEstadosCiviles[$seqEstadoCivil] ) ){
+                $arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " no tiene un estado civil válido";
+            }
 			
 			// Si es mayor de edad compare contra la fecha de postulacion si debe tener cedula
 			list( $ano , $mes , $dia ) = split( "[-\/]" , $arrCiudadano['fchNacimiento'] );
@@ -93,7 +104,8 @@
 				
 				// tipos de documento invalidos para un mayor de edad
 				$arrDocumentos[] = 6; // NIT
-				$arrDocumentos[] = 4; // TARJETA DE IDENTIDAD	
+				$arrDocumentos[] = 7; // NUIP
+				$arrDocumentos[] = 4; // TARJETA DE IDENTIDAD
 				$arrDocumentos[] = 3; // REGISTRO CIVIL
 				
 				// tipos de documento invalidos para un menor de edad
@@ -180,34 +192,53 @@
         if( intval( $_POST['seqLocalidad'] ) == 0 ){
             $arrErrores[] = "Debe seleccionar una localidad";
         }
-        if( trim( $_POST['txtBarrio'] ) == "" or trim( mb_strtoupper( $_POST['txtBarrio'] ) ) == "FUERA DE BOGOTA" ){
+        if( intval($_POST['seqBarrio']) == 0 ){
             $arrErrores[] = "Debe seleccionar un barrio perteneciente a la localidad";
         }
     }else{ // fuera de bogota
         if( intval( $_POST['seqLocalidad'] ) == 0 ){
             $arrErrores[] = "Debe seleccionar la localidad 'Fuera de Bogota'";
         }
-        if( trim( $_POST['txtBarrio'] ) == "" or trim( mb_strtoupper( $_POST['txtBarrio'] ) ) != "FUERA DE BOGOTA" ){
+        if( inteval($_POST['seqBarrio']) == 1142 ){
             $arrErrores[] = "Debe seleccionar el barrio 'Fuera de Bogota' ";
         }
     }
-    
-    // numero de telefono
-	if( intval( $_POST['numTelefono1'] ) == 0 ){
-		$arrErrores[] = "El formulario debe tener por lo menos un tel&eacute;fono de contacto";
-	}	
-    
-    $_POST['numTelefono2'] = ( $_POST['numTelefono2'] == "" )? 0 : $_POST['numTelefono2'];
-	$_POST['numCelular']   = ( $_POST['numCelular'] == "" )? 0 : $_POST['numCelular'];
-    
-    // Correo electronico del beneficiario del giro
-    if( trim( $_POST['txtCorreo'] ) == "" ){        
-        $arrErrores[] = "Indique el correo electr&oacute;nico";
+
+    // Formatos de expresion regular para telefonos fijos y celular
+    $txtFormatoFijo    = "/^[0-9]{7}$/";
+    $txtFormatoCelular = "/^[3]{1}[0-9]{9}$/";
+
+    // Telefono Fijo 1
+    if( is_numeric( $_POST['numTelefono1'] ) == true and intval( $_POST['numTelefono1'] ) != 0 ){
+        if ( ! preg_match( $txtFormatoFijo , trim( $_POST['numTelefono1'] ) ) ) {
+            $arrErrores[] = "El número telefonico fijo 1 debe tener 7 digitos";
+        }
+    }
+
+    // Telefono Celular
+    if( is_numeric( $_POST['numCelular'] ) == true and intval( $_POST['numCelular'] ) != 0 ) {
+        if ( ! preg_match( $txtFormatoCelular , trim( $_POST['numCelular'] ) ) ) {
+            $arrErrores[] = "El número telefonico celular debe tener 10 digitos y debe iniciar con el número 3";
+        }
+    }
+
+    // Debe haber telefono fijo o numero celular
+    if( intval( $_POST['numCelular'] ) == 0 and intval( $_POST['numTelefono1'] ) == 0 ){
+        $arrErrores[] = "Debe registrar un telefono fijo o celular de contacto";
+    }
+
+    // Si hay correo electronico debe ser valido
+    if( trim( $_POST['txtCorreo'] ) != "" ){
+        if( ! mb_ereg( "^[0-9a-zA-Z._\-]+\@[a-zA-Z0-9._\-]+\.([a-zA-z]{2,4})(([\.]{1})([a-zA-Z]{2}))?$" , trim( $_POST['txtCorreo'] ) ) ){
+            $arrErrores[] = "No es un correo electrónico válido";
+        }
     }
     
     // Valor del sisben
-    if( trim( $_POST['seqSisben'] ) == 0 ){        
-        $arrErrores[] = "Indique el nivel del sisben";
+    $arrSisben = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben"), "seqSisben","bolActivo = 1");
+    $seqSisben = intval( $_POST['seqSisben'] );
+    if( ! isset( $arrSisben[$seqSisben ] ) ){
+        $arrErrores[] = "Indique un nivel del sisben válido";
     }
     
     /**********************************************************************************************************************
@@ -267,12 +298,12 @@
         }
     }
     
-    // valor del aporte en lote
-    if( intval( $_POST['valAporteLote'] ) != 0 ){
-        if( trim( $_POST['txtSoporteLote'] ) == "" ){
-            $arrErrores[] = "Indique el soporte para el aporte en lotes o terrenos";
-        }
-    }
+//    // valor del aporte en lote
+//    if( intval( $_POST['valAporteLote'] ) != 0 ){
+//        if( trim( $_POST['txtSoporteLote'] ) == "" ){
+//            $arrErrores[] = "Indique el soporte para el aporte en lotes o terrenos";
+//        }
+//    }
     
     // valor del saldo de cesantias
     if( intval( $_POST['valSaldoCesantias'] ) != 0 ){
@@ -281,12 +312,12 @@
         }
     }
     
-    // valor del aporte en avance de obra
-    if( intval( $_POST['valAporteAvanceObra'] ) != 0 ){
-        if( trim( $_POST['txtSoporteAvanceObra'] ) == "" ){
-            $arrErrores[] = "Indique el soporte para el aporte en avance de obra";
-        }
-    }
+//    // valor del aporte en avance de obra
+//    if( intval( $_POST['valAporteAvanceObra'] ) != 0 ){
+//        if( trim( $_POST['txtSoporteAvanceObra'] ) == "" ){
+//            $arrErrores[] = "Indique el soporte para el aporte en avance de obra";
+//        }
+//    }
     
     // valor del credito
     if( intval( $_POST['valCredito'] ) != 0 ){
@@ -299,14 +330,14 @@
         
     }
     
-    // valor del aporte en materiales
-    if( intval( $_POST['valAporteMateriales'] ) != 0 ){
-        if( trim( $_POST['txtSoporteAporteMateriales'] ) == "" ){
-            $arrErrores[] = "Indique el soporte para el aporte en materiales";
-        }
-    }
+//    // valor del aporte en materiales
+//    if( intval( $_POST['valAporteMateriales'] ) != 0 ){
+//        if( trim( $_POST['txtSoporteAporteMateriales'] ) == "" ){
+//            $arrErrores[] = "Indique el soporte para el aporte en materiales";
+//        }
+//    }
     
-    // valor de la donacion
+    // valor de la donacion (VUR)
     if( intval( $_POST['valDonacion'] ) != 0 ){
         if( intval( $_POST['seqEmpresaDonante'] ) == 0 ){
             $arrErrores[] = "Indique la empresa que ha realizado la donaci&oacute;n";
@@ -317,38 +348,38 @@
     }
     
     // Valores para la consulta del valor del subsidio
-    $seqSolucion = $_POST['seqSolucion'];
-    $seqModalidad = $_POST['seqModalidad'];
-
-    // Si es desplazado - adquisicion de vivienda - tipo 2 o VIS
-    // el valor del subsidio debe ser el maximo (como en tipo 1)
-    // por eso se alteran los valores
-    // no se altera el post para que se guarden los valores
-    // de modalidad y solucion seleccionados por el usuario
-    if( $_POST[ "bolDesplazado" ] == 1 and $_POST[ "seqModalidad" ] == 1 and $_POST[ "seqSolucion" ] != 2 ){
-        $seqSolucion = 2;
-        $seqModalidad = 1;
-    }
-
-        $_POST['valAspiraSubsidio'] = mb_ereg_replace("[^0-9]", "", $_POST['valAspiraSubsidio'] );
-    
-    // Obtiene el valor del subsidio segun modalidad y tipo de solucion seleccionada	
-    $valSubsidio = 0;
-    $sql = "
-        SELECT valSubsidio
-        FROM T_FRM_VALOR_SUBSIDIO
-        WHERE seqSolucion = ". $seqSolucion ."
-          AND seqModalidad = ". $seqModalidad ."
-    ";
-    $objRes = $aptBd->execute( $sql );
-    if( $objRes->fields ){
-        $valSubsidio = $objRes->fields['valSubsidio'];
-    }
-
-    // si el valor del subsidio es menor se debe colocar una justificacion
-    if( ( $_POST['valAspiraSubsidio'] < $valSubsidio ) and trim( $_POST['txtSoporteSubsidio'] ) == "" ){
-        $arrErrores[] = "No puede cambiar el valor tope del subsidio sin dar un soporte para este cambio, diligencie el campo 'Soporte Cambio'";
-    }
+//    $seqSolucion = $_POST['seqSolucion'];
+//    $seqModalidad = $_POST['seqModalidad'];
+//
+//    // Si es desplazado - adquisicion de vivienda - tipo 2 o VIS
+//    // el valor del subsidio debe ser el maximo (como en tipo 1)
+//    // por eso se alteran los valores
+//    // no se altera el post para que se guarden los valores
+//    // de modalidad y solucion seleccionados por el usuario
+//    if( $_POST[ "bolDesplazado" ] == 1 and $_POST[ "seqModalidad" ] == 1 and $_POST[ "seqSolucion" ] != 2 ){
+//        $seqSolucion = 2;
+//        $seqModalidad = 1;
+//    }
+//
+//        $_POST['valAspiraSubsidio'] = mb_ereg_replace("[^0-9]", "", $_POST['valAspiraSubsidio'] );
+//
+//    // Obtiene el valor del subsidio segun modalidad y tipo de solucion seleccionada
+//    $valSubsidio = 0;
+//    $sql = "
+//        SELECT valSubsidio
+//        FROM T_FRM_VALOR_SUBSIDIO
+//        WHERE seqSolucion = ". $seqSolucion ."
+//          AND seqModalidad = ". $seqModalidad ."
+//    ";
+//    $objRes = $aptBd->execute( $sql );
+//    if( $objRes->fields ){
+//        $valSubsidio = $objRes->fields['valSubsidio'];
+//    }
+//
+//    // si el valor del subsidio es menor se debe colocar una justificacion
+//    if( ( $_POST['valAspiraSubsidio'] < $valSubsidio ) and trim( $_POST['txtSoporteSubsidio'] ) == "" ){
+//        $arrErrores[] = "No puede cambiar el valor tope del subsidio sin dar un soporte para este cambio, diligencie el campo 'Soporte Cambio'";
+//    }
 
     /* el valor del subsidio nunca puede ser mayor al establecido en la solucion
     if( $_POST['valAspiraSubsidio'] > $valSubsidio ){
@@ -359,7 +390,7 @@
     /**********************************************************************************************************************
 	 * SALVANDO EL REGISTRO DE LA POSTULACION
 	 **********************************************************************************************************************/
-        
+
     // Salvar el registro si no hay errores
 	if( empty( $arrErrores ) ){
         
@@ -373,7 +404,7 @@
          $txtFormato = "/^[0-9]{2}[-][0-9]{3,6}$/"; // dos digitos de tutor y hasta seis de numero de formulario
          $txtFormulario = trim( $_POST['txtFormulario'] );
          if( preg_match( $txtFormato , $txtFormulario ) ){
-             $arrFormulario = split( "-" , $txtFormulario );
+             $arrFormulario = mb_split( "-" , $txtFormulario );
              $numFormulario = intval( $arrFormulario[ 1 ] );
              $numSiguiente = FormularioSubsidios::tutorSecuencia( $txtFormulario );
              if( $numFormulario != $numSiguiente ){
@@ -385,6 +416,9 @@
       }
         
       if( empty( $arrErrores ) ){
+
+          $_POST['cedula'] = $_POST['numDocumento'];
+
           $objCasaMano->salvar( $_POST );
           $arrErrores = $objCasaMano->arrErrores;
       }

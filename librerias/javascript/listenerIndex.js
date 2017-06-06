@@ -1402,29 +1402,29 @@
 	 */
 	 
 	 function barrioAutocomplete( arrAutocomplete ){
-		
-		var objLocalidad = YAHOO.util.Dom.get( arrAutocomplete[2] ); 
+
+		var objLocalidad = YAHOO.util.Dom.get( arrAutocomplete[2] );
 		var seqLocalidad = objLocalidad.options[ objLocalidad.selectedIndex ].value;
-				
-	 	var objDataSource = new YAHOO.util.XHRDataSource("./contenidos/subsidios/barrioAutocomplete.php?seqLocalidad=" + seqLocalidad + "&" ); 
+
+	 	var objDataSource = new YAHOO.util.XHRDataSource("./contenidos/subsidios/barrioAutocomplete.php?seqLocalidad=" + seqLocalidad + "&" );
 	 		objDataSource.responseType 		= YAHOO.util.XHRDataSource.TYPE_TEXT;
 		    objDataSource.responseSchema 	= { recordDelim: "\n", fieldDelim: "\t" };
 		    objDataSource.maxCacheEntries 	= 0;
 		    objDataSource.flushCache();
-		
+
 		var objAutocomplete = new YAHOO.widget.AutoComplete( arrAutocomplete[0] , arrAutocomplete[1] , objDataSource );
-	    	objAutocomplete.maxResultsDisplayed 	= 20; 
+	    	objAutocomplete.maxResultsDisplayed 	= 20;
 	    	objAutocomplete.minQueryLength 			= 2;
-	    	objAutocomplete.autoHighlight 			= true;  
-	    	objAutocomplete.useShadow 				= true; 
+	    	objAutocomplete.autoHighlight 			= true;
+	    	objAutocomplete.useShadow 				= true;
 	    	objAutocomplete.forceSelection 			= true;
 	    	objAutocomplete.queryQuestionMark 		= false;
 	    	objAutocomplete.allowBrowserAutocomplete = false;
 	    	objAutocomplete.queryDelay = 0;
-	    	
+
 	    eliminarObjeto( "barrioListener" );
 	    YAHOO.util.Event.onContentReady( "barrioListener" , barrioAutocomplete , [ 'txtBarrio' , 'barrioContainer' , 'seqLocalidad'] );
-	    
+
 	    return {
 	        oDS: objDataSource,
 	        oAC: objAutocomplete

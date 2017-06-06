@@ -27,8 +27,7 @@
     // carga los datos del hogar
     $claFormulario = new FormularioSubsidios();
     $claFormulario->cargarFormulario( $_POST['seqFormulario'] );
-    $claFormulario->txtBarrio = $arrBarrio[ $claFormulario->seqBarrio ];
-    
+
     // obtieene los permisos para saber a donde puede entrar
     $claCasaMano = new CasaMano();
     
@@ -37,7 +36,17 @@
         $arrCasaMano = $claCasaMano->cargar( $_POST['seqFormulario'] , $_POST['seqCasaMano'] );
         $objCasaMano = array_shift( $arrCasaMano );
     }
-    
+
+    $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $objCasaMano->objRegistroOferta->seqLocalidad, "txtBarrio");
+
+    $arrTextoBarrio = obtenerDatosTabla(
+        "T_FRM_BARRIO",
+        array("seqLocalidad","seqBarrio"),
+        "seqLocalidad",
+        "seqLocalidad = " . $objCasaMano->objRegistroOferta->seqLocalidad . " and txtBarrio = '" . $objCasaMano->objRegistroOferta->txtBarrio . "'"
+    );
+    $objCasaMano->objRegistroOferta->seqBarrio = $arrTextoBarrio[$objCasaMano->objRegistroOferta->seqLocalidad];
+
     $bolPermiso = $claCasaMano->puedeIngresar( $arrFlujoHogar , $claFormulario );
     if( $bolPermiso == true ){
         
@@ -63,6 +72,7 @@
       $arrActos = $claActosAdministrativos->cronologia( $numDocumento );
       
       $claSmarty->assign( "arrActos" , $arrActos );
+      $claSmarty->assign( "arrBarrio" , $arrBarrio );
       $claSmarty->assign( "txtTutor" , $txtTutor );
       $claSmarty->assign( "arrFlujoHogar" , $arrFlujoHogar );
       $claSmarty->assign( "arrRegistros" , $arrRegistros );

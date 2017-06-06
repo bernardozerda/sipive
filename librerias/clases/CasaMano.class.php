@@ -5,84 +5,100 @@
      * EL ESQUEMA DE CASA EN MANO
      */
      
-   class CasaMano {
-         
-      public $arrFases;
+    class CasaMano {
 
-      public $seqCasaMano;
-      public $seqFormulario;
-      public $fchRegistroVivienda;
+        public $arrFases;
 
-      public $bolRevisionJuridica;
-      public $fchRevisionJuridica;
-      public $numDiasRevisionJuridica;
-      public $txtRevisionJuridica;
-      public $numDiasLimiteRevsionJuridica;
+        public $seqCasaMano;
+        public $seqFormulario;
+        public $fchRegistroVivienda;
 
-      public $bolRevisionTecnica;
-      public $fchRevisionTecnica;
-      public $numDiasRevisionTecnica;
-      public $txtRevisionTecnica;
-      public $numDiasLimiteRevsionTecnica;
+        public $bolRevisionJuridica;
+        public $fchRevisionJuridica;
+        public $numDiasRevisionJuridica;
+        public $txtRevisionJuridica;
+        public $numDiasLimiteRevsionJuridica;
 
-      public $bolPrimeraVerificacion;
-      public $fchPrimeraVerificacion;
-      public $seqPrimeraVerificacion;
-      public $fchPostulacion;
-      public $bolSegundaVerificacion;
-      public $fchSegundaVerificacion;
-      public $seqSegundaVerificacion;
+        public $bolRevisionTecnica;
+        public $fchRevisionTecnica;
+        public $numDiasRevisionTecnica;
+        public $txtRevisionTecnica;
+        public $numDiasLimiteRevsionTecnica;
 
-      public $objRegistroOferta;
-      public $objRevisionJuridica;
-      public $objRevisionTecnica;
-      public $objPostulacion;
-      public $objPrimeraVerificacion;
-      public $objSegundaVerificacion;
+        public $bolPrimeraVerificacion;
+        public $fchPrimeraVerificacion;
+        public $seqPrimeraVerificacion;
+        public $fchPostulacion;
+        public $bolSegundaVerificacion;
+        public $fchSegundaVerificacion;
+        public $seqSegundaVerificacion;
 
-      public $arrMensajes;
-      public $arrErrores;
+        public $objRegistroOferta;
+        public $objRevisionJuridica;
+        public $objRevisionTecnica;
+        public $objPostulacion;
+        public $objPrimeraVerificacion;
+        public $objSegundaVerificacion;
+
+        public $arrMensajes;
+        public $arrErrores;
                  
-      function CasaMano() {
+        function CasaMano() {
 
-         $this->arrFases = array();
+            $this->arrFases = array();
 
-         $this->arrFases['cem']['modalidad'] = array( 6,11 );
+            // postulacion individual
+            // proyectos de la SDHT
+            $this->arrFases['pin']['modalidad'] = array(6,9,12);
+            $this->arrFases['pin']['esquema']   = array(1,4,9);
 
-         $this->arrFases['cem']['panelHogar']['grupos']       = array( 23,15,14,7,8,31,32,33 );
-         $this->arrFases['cem']['panelHogar']['permisos']     = array( 37,43,44,45,46,47,48,15,16,53 );
+            $this->arrFases['pin']['postulacion']['grupos']    = array( 6,7,8 );
+            $this->arrFases['pin']['postulacion']['permisos']  = array( 46,6,54,15,16 );
+            $this->arrFases['pin']['postulacion']['atras']     = array( 46 );
+            $this->arrFases['pin']['postulacion']['adelante']  = array( 46,6,54 );
+            $this->arrFases['pin']['postulacion']['salvar']    = "./contenidos/casaMano/salvarPostulacion.php";
+            $this->arrFases['pin']['postulacion']['plantilla'] = "casaMano/postulacion.tpl";
 
-         $this->arrFases['cem']['registroOferta']['grupos']    = array( 23,7,8,31,15,14 );
-         $this->arrFases['cem']['registroOferta']['permisos']  = array( 37,43,44,45,46,47,48,15,53 );
-         $this->arrFases['cem']['registroOferta']['atras']     = array();
-         $this->arrFases['cem']['registroOferta']['adelante']  = array( 37,43,44 );
-         $this->arrFases['cem']['registroOferta']['salvar']    = "./contenidos/casaMano/salvarRegistroOferta.php";
-         $this->arrFases['cem']['registroOferta']['plantilla'] = "desembolso/busquedaOferta.tpl";
+            // proyectos fuera de la SDHT
+            // retorno o reubicación
+            $this->arrFases['cem']['modalidad'] = array( 6,11,12 );
+            $this->arrFases['cem']['esquema'] = array( 5,10,11 );
 
-         $this->arrFases['cem']['revisionJuridica']['grupos']    = array( 23,8,14,32 );
-         $this->arrFases['cem']['revisionJuridica']['permisos']  = array( 44,45,46,47,48,15 );
-         $this->arrFases['cem']['revisionJuridica']['atras']     = array( 37,43 );
-         $this->arrFases['cem']['revisionJuridica']['adelante']  = array( 44 );
-         $this->arrFases['cem']['revisionJuridica']['salvar']    = "./contenidos/casaMano/salvarRevisionJuridica.php";
-         $this->arrFases['cem']['revisionJuridica']['plantilla'] = "desembolso/revisionJuridica.tpl";
+            $this->arrFases['cem']['panelHogar']['grupos']       = array( 6,7,8,14,13 );
+            $this->arrFases['cem']['panelHogar']['permisos']     = array( 37,43,44,45,46,47,48,15,16 );
+            $this->arrFases['cem']['panelHogar']['plantilla'] = "casaMano/casaMano.tpl";
 
-         $this->arrFases['cem']['revisionTecnica']['grupos']    = array( 23,8,15,33 );
-         $this->arrFases['cem']['revisionTecnica']['permisos']  = array( 44,45,46,47,48,15 );
-         $this->arrFases['cem']['revisionTecnica']['atras']     = array( );
-         $this->arrFases['cem']['revisionTecnica']['adelante']  = array( 44 );
-         $this->arrFases['cem']['revisionTecnica']['salvar']    = "./contenidos/casaMano/salvarRevisionTecnica.php";
-         $this->arrFases['cem']['revisionTecnica']['plantilla'] = "desembolso/revisionTecnica.tpl";
+            $this->arrFases['cem']['registroOferta']['grupos']    = array( 6,7,8,14,13 );
+            $this->arrFases['cem']['registroOferta']['permisos']  = array( 37,43,44,45,46,47,48,15,16 );
+            $this->arrFases['cem']['registroOferta']['atras']     = array();
+            $this->arrFases['cem']['registroOferta']['adelante']  = array( 37,43,44 );
+            $this->arrFases['cem']['registroOferta']['salvar']    = "./contenidos/casaMano/salvarRegistroOferta.php";
+            $this->arrFases['cem']['registroOferta']['plantilla'] = "desembolso/busquedaOferta.tpl";
 
-         $this->arrFases['cem']['postulacion']['grupos']    = array( 23,7,8 );
-         $this->arrFases['cem']['postulacion']['permisos']  = array( 44,46,47,48,15 );
-         $this->arrFases['cem']['postulacion']['atras']     = array( 37,44 );
-         $this->arrFases['cem']['postulacion']['adelante']  = array( 46,47 );
-         $this->arrFases['cem']['postulacion']['salvar']    = "./contenidos/casaMano/salvarPostulacion.php";
-         $this->arrFases['cem']['postulacion']['plantilla'] = "casaMano/postulacion.tpl";
+            $this->arrFases['cem']['revisionJuridica']['grupos']    = array( 13,7,8 );
+            $this->arrFases['cem']['revisionJuridica']['permisos']  = array( 44,45,46,47,48,15,16 );
+            $this->arrFases['cem']['revisionJuridica']['atras']     = array( 37,43 );
+            $this->arrFases['cem']['revisionJuridica']['adelante']  = array( 44 );
+            $this->arrFases['cem']['revisionJuridica']['salvar']    = "./contenidos/casaMano/salvarRevisionJuridica.php";
+            $this->arrFases['cem']['revisionJuridica']['plantilla'] = "desembolso/revisionJuridica.tpl";
 
-         // este fnciona para mirar los permisos de quienes pueden obtener los pdf
-         $this->arrFases['cem']['exportarPdf']['grupos']         = array( 23,8,14 );
-         $this->arrFases['cem']['habitabilidadPdf']['grupos']    = array( 23,8,15 );
+            $this->arrFases['cem']['revisionTecnica']['grupos']    = array( 14,7,8 );
+            $this->arrFases['cem']['revisionTecnica']['permisos']  = array( 44,45,46,47,48,15,16 );
+            $this->arrFases['cem']['revisionTecnica']['atras']     = array( 37,43 );
+            $this->arrFases['cem']['revisionTecnica']['adelante']  = array( 44 );
+            $this->arrFases['cem']['revisionTecnica']['salvar']    = "./contenidos/casaMano/salvarRevisionTecnica.php";
+            $this->arrFases['cem']['revisionTecnica']['plantilla'] = "desembolso/revisionTecnica.tpl";
+
+            $this->arrFases['cem']['postulacion']['grupos']    = array( 6,7,8 );
+            $this->arrFases['cem']['postulacion']['permisos']  = array( 46,47,48,15,16 );
+            $this->arrFases['cem']['postulacion']['atras']     = array( 37,44 );
+            $this->arrFases['cem']['postulacion']['adelante']  = array( 46,47 );
+            $this->arrFases['cem']['postulacion']['salvar']    = "./contenidos/casaMano/salvarPostulacion.php";
+            $this->arrFases['cem']['postulacion']['plantilla'] = "casaMano/postulacion.tpl";
+
+            // este fnciona para mirar los permisos de quienes pueden obtener los pdf
+            $this->arrFases['cem']['exportarPdf']['grupos']         = array( 6,8,14 );
+            $this->arrFases['cem']['habitabilidadPdf']['grupos']    = array( 6,8,14 );
 
          $this->seqCasaMano             = 0;
          $this->seqFormulario           = 0;
@@ -108,12 +124,12 @@
          $this->fchSegundaVerificacion  = null;
          $this->seqSegundaVerificacion  = null;
 
-         $this->objRegistroOferta      = NULL;
-         $this->objRevisionJuridica    = NULL;
-         $this->objRevisionTecnica     = NULL;
-         $this->objPostulacion         = NULL;
-         $this->objPrimeraVerificacion = NULL;
-         $this->objSegundaVerificacion = NULL;
+         $this->objRegistroOferta      = null;
+         $this->objRevisionJuridica    = null;
+         $this->objRevisionTecnica     = null;
+         $this->objPostulacion         = null;
+         $this->objPrimeraVerificacion = null;
+         $this->objSegundaVerificacion = null;
 
          $this->arrErrores = array();
          $this->arrMensajes = array();
@@ -604,7 +620,7 @@
                                          "n&uacute;mero para su referencia.";
              } catch ( Exception $objError ){
                  $this->arrErrores[] = "No se ha podido registrar el seguimiento, contacte al administrador del sistema";
-                 //$this->arrErrores[] = $objError->msg;
+                 $this->arrErrores[] = $objError->getMessage();
              }		
          }
       }
@@ -676,7 +692,7 @@
                      $this->arrErrores[] = "No se ha podido adicionar el registro de casa en mano";
                  }
 				 if( empty ( $this->arrErrores ) ){
-					$aptBd->execute( $sqlEsquema );
+					//$aptBd->execute( $sqlEsquema );
 				 }
 
              }else{
@@ -684,34 +700,34 @@
                  // actualizando el registro de casa en mano
                  switch( $arrPost['txtFase'] ){
                      case "registroOferta":
-                         $arrCampos['fchRegistroVivienda'] = date( "Y-m-d H:i:s" );
+                         $arrCampos['fchRegistroVivienda'] = "'" . date( "Y-m-d H:i:s" ) . "'";
                          break;
                      case "revisionJuridica":
-                         $arrCampos['bolRevisionJuridica'] = ( $arrPost['txtConcepto'] == "" )? "" : $arrPost['txtConcepto'];
-                         $arrCampos['fchRevisionJuridica'] = date( "Y-m-d H:i:s" );
-                         $arrCampos['txtRevisionJuridica'] = $arrPost['concepto'];                            
+                         $arrCampos['bolRevisionJuridica'] = ( $arrPost['txtConcepto'] == "" )? "''" : "'" . $arrPost['txtConcepto'] . "'";
+                         $arrCampos['fchRevisionJuridica'] = "'" . date( "Y-m-d H:i:s" ) . "'";
+                         $arrCampos['txtRevisionJuridica'] = "'" . $arrPost['concepto'] . "'";
                          break;
                      case "revisionTecnica":
-                         $arrCampos['bolRevisionTecnica'] = ( $arrPost['txtConcepto'] == "" )? "" : $arrPost['txtConcepto'];
-                         $arrCampos['fchRevisionTecnica'] = $arrPost['fchVisita'];
-                         $arrCampos['txtRevisionTecnica'] = $arrPost['txtDescripcionVivienda'];                            
+                         $arrCampos['bolRevisionTecnica'] = ( $arrPost['txtConcepto'] == "" )? "''" : "'" . $arrPost['txtConcepto'] . "'";
+                         $arrCampos['fchRevisionTecnica'] = "'" . $arrPost['fchVisita'] . "'";
+                         $arrCampos['txtRevisionTecnica'] = "'" . $arrPost['txtDescripcionVivienda'] . "'";
                          break;
                      case "primeraVerificacion":
-                         $arrCampos['bolPrimeraVerificacion'] = $arrPost['bolResultado'];
-                         $arrCampos['fchPrimeraVerificacion'] = $arrPost['fchCruce'];
-                         $arrCampos['seqPrimeraVerificacion'] = $arrPost['seqCruce'];
+                         $arrCampos['bolPrimeraVerificacion'] = "'" . $arrPost['bolResultado'] . "'";
+                         $arrCampos['fchPrimeraVerificacion'] = "'" . $arrPost['fchCruce'] . "'";
+                         $arrCampos['seqPrimeraVerificacion'] = "'" . $arrPost['seqCruce'] . "'";
                          break;
                      case "postulacion":
                          if( $this->objPostulacion->bolCerrado == 0 and $arrPost['bolCerrado'] == 1 ){
-                             $arrCampos['fchPostulacion'] = $arrPost['fchPostulacion'];
+                             $arrCampos['fchPostulacion'] = "'" . $arrPost['fchPostulacion'] . "'";
                          }else{
-                             $arrCampos['fchPostulacion'] = "";
+                             $arrCampos['fchPostulacion'] = "NULL";
                          }
                          break;
                      case "segundaVerificacion":
-                         $arrCampos['bolSegundaVerificacion'] = $arrPost['bolResultado'];
-                         $arrCampos['fchSegundaVerificacion'] = $arrPost['fchCruce'];
-                         $arrCampos['seqSegundaVerificacion'] = $arrPost['seqCruce'];                            
+                         $arrCampos['bolSegundaVerificacion'] = "'" . $arrPost['bolResultado'] . "'";
+                         $arrCampos['fchSegundaVerificacion'] = "'" . $arrPost['fchCruce'] . "'";
+                         $arrCampos['seqSegundaVerificacion'] = "'" . $arrPost['seqCruce'] . "'";
                          break;
                  }
 
@@ -719,7 +735,7 @@
 
                      $sql = "UPDATE T_CEM_CASA_MANO SET ";
                      foreach( $arrCampos as $txtCampo => $txtValor ){
-                         $sql.= $txtCampo . " = '" . $txtValor . "',";
+                         $sql.= $txtCampo . " = " . $txtValor . ",";
                          $this->$txtCampo = $txtValor;
                      }
                      $sql = trim( $sql , "," );
@@ -730,6 +746,7 @@
                          $aptBd->execute( $sql );
                      } catch ( Exception $objError ){
                          $this->arrErrores[] = "No se ha podido actualizar el registro de casa en mano";
+                         $this->arrErrores[] = $objError->getMessage();
                      }
                  }
 
@@ -799,7 +816,6 @@
                      $sql = "
 				 UPDATE T_FRM_FORMULARIO SET
 					 seqEstadoProceso = 46,
-					 seqTipoEsquema = 5
 					 $txtModalidad
 				 WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
 			 ";
@@ -840,6 +856,16 @@
          // Lenguaje para la conversion de fechas
          date_default_timezone_set("America/Bogota");
 
+         $arrTextoBarrio = obtenerDatosTabla(
+             "T_FRM_BARRIO",
+             array("seqBarrio","txtBarrio"),
+             "seqBarrio",
+             "seqLocalidad = " . $arrPost['seqLocalidad'] . " and seqBarrio = " . $arrPost['seqBarrio']
+         );
+         $seqBarrio = $arrPost['seqBarrio'];
+         $arrPost['txtBarrio'] = $arrTextoBarrio[$seqBarrio];
+         unset($arrPost['seqBarrio']);
+
          // Obtiene el registro de la oferta que 
          // esta asociada con el registro de casa en mano
          $sql = "
@@ -870,43 +896,69 @@
          unset( $arrPost['documentos'] );
          unset( $arrPost['nombre'] );
 
+          foreach($arrPost as $txtCampo => $txtValor){
+              switch (mb_substr($txtCampo, 0, 3)) {
+                  case "num":
+                      $txtValor = doubleval(mb_ereg_replace("[^0-9]", "", $txtValor));
+                      break;
+                  case "val":
+                      $txtValor = doubleval(mb_ereg_replace("[^0-9]", "", $txtValor));
+                      break;
+                  case "seq":
+                      $txtValor = doubleval(mb_ereg_replace("[^0-9]", "", $txtValor));
+                      break;
+                  case "txt":
+                      $txtValor = "'" . trim($txtValor) . "'";
+                      break;
+                  case "fch":
+                      $txtValor = (esFechaValida($txtValor)) ? "'" . $txtValor . "'" : "NULL";
+                      break;
+                  default:
+                      $txtValor = "'" . trim($txtValor) . "'";
+                      break;
+              }
+              $arrPost[$txtCampo] = $txtValor;
+          }
+
          // Si no existe registro de vivienda lo inserta
          if( $seqRegistroOferta == 0 ){
 
-             $arrPost['fchCreacion'] = date( "Y-m-d H:i:s" );
-             $arrPost['fchActualizacion'] = NULL;
+             $arrPost['fchCreacion'] = "'" . date( "Y-m-d H:i:s" ) . "'";
+             $arrPost['fchActualizacion'] = "NULL";
 
              $sql = "INSERT INTO T_CEM_REGISTRO_VIVIENDA (";
              $sql.= implode( "," , array_keys( $arrPost ) ) . ") VALUES (";
-             $sql.= "'" . implode( "','" , $arrPost ) . "')";
+             $sql.= implode( "," , $arrPost ) . ")";
 
-			 $sqlInmueble = "UPDATE T_FRM_FORMULARIO SET txtDireccionSolucion = '".$arrPost['txtDireccionInmueble']."' WHERE seqFormulario = ".$formu."";
+			 $sqlInmueble = "UPDATE T_FRM_FORMULARIO SET txtDireccionSolucion = ".$arrPost['txtDireccionInmueble']." WHERE seqFormulario = ".$formu."";
 			 
              try{
                  $aptBd->execute( $sql );
                  $seqRegistroOferta = $aptBd->Insert_ID();
              } catch ( Exception $objError ){
                  $this->arrErrores[] = "No se ha podido adicionar el registro de la vivienda";
+                 $this->arrErrores[] = $objError->getMessage();
              }
 			 
 			 try{
                  $aptBd->execute( $sqlInmueble );
              } catch ( Exception $objError ){
                  $this->arrErrores[] = "No se ha podido actualizar el inmueble en el formulario";
+                 $this->arrErrores[] = $objError->getMessage();
              }
 
          } else {
 
-             $arrPost['fchActualizacion'] = date( "Y-m-d H:i:s" );
+             $arrPost['fchActualizacion'] = "'" . date( "Y-m-d H:i:s" ) . "'";
 
              $sql = "UPDATE T_CEM_REGISTRO_VIVIENDA SET ";
              foreach( $arrPost as $txtCampo => $txtValor ){
-                 $sql.= $txtCampo . " = '" . $txtValor . "',";
+                 $sql.= $txtCampo . " = " . $txtValor . ",";
              }
              $sql = trim( $sql , "," );
              $sql.= "WHERE seqCasaMano = " . $arrPost['seqCasaMano'];
 
-			 $sqlInmueble = "UPDATE T_FRM_FORMULARIO SET txtDireccionSolucion = '".$arrPost['txtDireccionInmueble']."' WHERE seqFormulario = ".$formu."";
+			 $sqlInmueble = "UPDATE T_FRM_FORMULARIO SET txtDireccionSolucion = ".$arrPost['txtDireccionInmueble']." WHERE seqFormulario = ".$formu."";
 			 
 			 $sqlEstadoProceso = "UPDATE T_FRM_FORMULARIO SET seqEstadoProceso = '".$estadoProceso."' WHERE seqFormulario = ".$formu."";
 			 
@@ -916,7 +968,7 @@
 				 $aptBd->execute( $sqlEstadoProceso );
              } catch ( Exception $objError ){
                  $this->arrErrores[] = "No se ha podido actualizar el registro de la vivienda";
-                 //$objError->msg
+                 $this->arrErrores[] = $objError->getMessage();
              }
 
          }
@@ -1114,31 +1166,56 @@
          unset( $arrPost['textoArchivoCargado'] );
          unset( $arrPost['observacion'] );
 
+          foreach($arrPost as $txtCampo => $txtValor){
+              switch (mb_substr($txtCampo, 0, 3)) {
+                  case "num":
+                      $txtValor = doubleval(mb_ereg_replace("[^0-9]", "", $txtValor));
+                      break;
+                  case "val":
+                      $txtValor = doubleval(mb_ereg_replace("[^0-9]", "", $txtValor));
+                      break;
+                  case "seq":
+                      $txtValor = doubleval(mb_ereg_replace("[^0-9]", "", $txtValor));
+                      break;
+                  case "txt":
+                      $txtValor = "'" . trim($txtValor) . "'";
+                      break;
+                  case "fch":
+                      $txtValor = (esFechaValida($txtValor)) ? "'" . $txtValor . "'" : "NULL";
+                      break;
+                  default:
+                      $txtValor = "'" . trim($txtValor) . "'";
+                      break;
+              }
+              $arrPost[$txtCampo] = $txtValor;
+          }
+
+
          // Si no existe registro de vivienda lo inserta
          if( $seqTecnico == 0 ){
 
-             $arrPost['fchCreacion'] = date( "Y-m-d H:i:s" );
-             $arrPost['fchActualizacion'] = NULL;
+             $arrPost['fchCreacion'] = "'" . date( "Y-m-d H:i:s" ) . "'";
+             $arrPost['fchActualizacion'] = "NULL";
 
              $sql = "INSERT INTO T_CEM_TECNICO (";
              $sql.= implode( "," , array_keys( $arrPost ) ) . ") VALUES (";
-             $sql.= "'" . implode( "','" , $arrPost ) . "')";
+             $sql.= implode( "," , $arrPost ) . ")";
 
              try { 
                  $aptBd->execute( $sql );
                  $seqTecnico = $aptBd->Insert_ID();
              } catch ( Exception $objError ){
                  $this->arrErrores[] = "No se ha podido adicionar el registro técnico";
-                 //$objError->msg
+                 $this->arrErrores[] = $objError->getMessage();
              }
 
          } else {
 
-             $arrPost['fchActualizacion'] = date( "Y-m-d H:i:s" );
+             $arrPost['fchActualizacion'] = "'" . date( "Y-m-d H:i:s" ) . "'";
 
              $sql = "UPDATE T_CEM_TECNICO SET ";
              foreach( $arrPost as $txtCampo => $txtValor ){
-                 $sql.= $txtCampo . " = '" . $txtValor . "',";
+                 $sql.= $txtCampo . " = " . $txtValor . ",";
              }
              $sql = trim( $sql , "," );
              $sql.= "WHERE seqCasaMano = " . $arrPost['seqCasaMano'];
@@ -1160,6 +1237,7 @@
            if( $aptDir = opendir( $txtPrefijoRuta ."recursos/imagenes/desembolsos" ) ){
 
                    // Elimina de la carpeta los archivos que no esten en el arreglo que viene del formulario
+               $seqFormulario = 0;
               while( ( $txtArchivo = readdir( $aptDir ) ) !== false ){
                  if( $txtArchivo != "." and $txtArchivo != ".." ){
                     $numFormulario = intval( substr( $txtArchivo , 0 , strpos( $txtArchivo , "_" ) ) );
@@ -1239,7 +1317,6 @@
         
       public function salvarPostulacion( $arrPost ){
          global $aptBd;
-		  pr($arrPost);die();
 
          $seqFormulario = $arrPost['seqFormulario'];
 
@@ -1369,7 +1446,7 @@
                  unset( $arrPost['nombre'] );
                  unset( $arrPost['fchPostulacion'] );
                  unset( $arrPost['seqFormulario'] );
-                 unset( $arrPost['seqEstadoProceso'] );
+                 //unset( $arrPost['seqEstadoProceso'] );
 
                  foreach( $arrPost as $txtClave => $txtValor ){
                      $this->objPostulacion->$txtClave = $txtValor;
@@ -1723,47 +1800,69 @@
        * SABER SI PUEDE O NO INGRESAR A CADA PANTALLA
        * @param array $arrFlujoHogar // contiene flujo y fase para ver los permisos
        */
-       public function puedeIngresar( $arrFlujoHogar, $claFormulario ){
+    public function puedeIngresar( $arrFlujoHogar ){
 
-         $bolPermiso  = false;                       // Determina si tiene o no permisos
-         $txtFlujo    = $arrFlujoHogar['flujo'];     // Determina e flujo de casa en mano
-         $txtFase     = $arrFlujoHogar['fase'];      // Determina la fase del modulo de casa en mano
-         $seqProyecto = $_SESSION['seqProyecto'];    // Es el identificador del proyect (SDV=3)
-         $arrEstados  = estadosProceso();            // Los estados del proceso
+        $bolPermiso  = false;                       // Determina si tiene o no permisos
+        $txtFlujo    = $arrFlujoHogar['flujo'];     // Determina e flujo
+        $txtFase     = $arrFlujoHogar['fase'];      // Determina la fase
+        $seqProyecto = $_SESSION['seqProyecto'];    // Es el identificador del proyecto (SDV=3)
+        $arrEstados  = estadosProceso();            // Los estados del proceso
 
-         $seqEstadoProceso = $claFormulario->seqEstadoProceso; // El estado actual del proceso
+        $seqEstadoProceso = $this->objPostulacion->seqEstadoProceso; // El estado actual del proceso
 
-         if( in_array( $claFormulario->seqModalidad , $this->arrFases['cem']['modalidad'] ) ){
+        if (
+            in_array($this->objPostulacion->seqModalidad, $this->arrFases[$txtFlujo]['modalidad']) and
+            in_array($this->objPostulacion->seqTipoEsquema, $this->arrFases[$txtFlujo]['esquema'])
+        ) {
 
-             // Verifica los permisos para grupos de usuarios
-             foreach( $_SESSION['arrGrupos'][ $seqProyecto ] as $seqGrupo ){
-                 if( in_array( $seqGrupo , $this->arrFases[ $txtFlujo ][ $txtFase ]['grupos'] ) ){
-                     $bolPermiso = true;
-                 }
-             }
+            // Verifica los permisos para grupos de usuarios
+            foreach ($_SESSION['arrGrupos'][$seqProyecto] as $seqGrupo) {
+                if (in_array($seqGrupo, $this->arrFases[$txtFlujo][$txtFase]['grupos'])) {
+                    $bolPermiso = true;
+                }
+            }
 
-             // si pertenece a los grupos autorizados para usar el modulo
-             if( $bolPermiso == true ){
 
-                 // Verifica si el hogar tiene permisos
-                 $bolPermiso = false;
-                 if( in_array( $seqEstadoProceso , $this->arrFases[ $txtFlujo ][ $txtFase ]['permisos'] ) ){
-                     $bolPermiso = true;
-                 } else {
-                     $this->arrErrores[] = "El hogar esta registrado con el estado del proceso \"" . 
-                                           $arrEstados[ $seqEstadoProceso ] . 
-                                           "\" que no es permitido para el uso del modulo ";
-                 }
-             } else {
-                 $this->arrErrores[] = "No tiene los privilegios de grupo suficientes para poder usar este módulo";
-             }
-         } else {
-             $this->arrErrores[] = "El hogar no pertenece a la modalidad de adquisición de vivienda nueva o usada";
-         }
+            // si pertenece a los grupos autorizados para usar el modulo
+            if ($bolPermiso == true) {
 
-         return $bolPermiso;
-         
-       }
+                // Verifica si el hogar tiene permisos
+                $bolPermiso = false;
+                if (in_array($seqEstadoProceso, $this->arrFases[$txtFlujo][$txtFase]['permisos'])) {
+                    $bolPermiso = true;
+                } else {
+                    $this->arrErrores[] =
+                        "El hogar esta registrado con el estado del proceso \"" . $arrEstados[$seqEstadoProceso] .
+                        "\" que no es permitido para el uso del modulo ";
+                }
+            } else {
+                $this->arrErrores[] = "No tiene los privilegios de grupo suficientes para poder usar este módulo";
+            }
+        } else {
+            $arrModalidad = obtenerDatosTabla(
+                "T_FRM_MODALIDAD",
+                array("seqModalidad", "txtModalidad"),
+                "seqModalidad",
+                "seqModalidad = " . $this->objPostulacion->seqModalidad
+            );
+            $arrTipoEsquema = obtenerDatosTabla(
+                "T_PRY_TIPO_ESQUEMA",
+                array("seqTipoEsquema", "txtTipoEsquema"),
+                "seqTipoEsquema",
+                "seqTipoEsquema = " . $this->objPostulacion->seqTipoEsquema
+            );
+
+
+
+            $this->arrErrores[] =
+                "El hogar no pertenece a las modalidades o esquemas permitidos para el ingreso, " .
+                "la modalidad actual es \"" . $arrModalidad[$this->objPostulacion->seqModalidad] .
+                "\" y el esquema es " . $arrTipoEsquema[$this->objPostulacion->seqTipoEsquema];
+        }
+
+        return $bolPermiso;
+
+    }
         
    }
 

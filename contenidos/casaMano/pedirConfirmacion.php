@@ -10,21 +10,18 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php" );
-    
-    // Viene en seqformularioeditar desde la plantilla de postulacion
-    if( ( ! isset( $_POST['seqFormulario'] ) ) and intval( $_POST['seqFormularioEditar'] ) != 0 ){
-        $_POST['seqFormulario'] = $_POST['seqFormularioEditar'];
-        unset( $_POST['seqFormularioEditar'] );
-    }
-    
-    if( ( ! isset( $_POST['cedula'] ) ) and intval( $_POST['numDocumentoAtendido'] ) != 0 ){
-        $_POST['cedula'] = $_POST['numDocumentoAtendido'];
-        unset( $_POST['numDocumentoAtendido'] );
-    }
-    
+
     // declaracion de variables necesarias
     $bolCambios = false;
     $arrErrores = array();
+
+    // CORRECCION DE CAMPOS MAL NOMBRADOS EN LA PLANTILLA
+    //(aun no se puede corregir en la plantilla como tal porque debe cambiarse actualizacion.tpl y esta en desarrollo ocupada)
+    foreach($_POST['hogar'] as $numDocumento => $arrCiudadano){
+        $_POST['hogar'][$numDocumento]['numAnosAprobados'] = $_POST['hogar'][$numDocumento]['anosAprobados'];
+        unset( $_POST['hogar'][$numDocumento]['anosAprobados'] );
+    }
+
     $claCasaMano = new CasaMano();
     $claFormulario = new FormularioSubsidios();
     
@@ -58,9 +55,9 @@
     if( intval( $_POST['seqEstadoProceso'] ) != intval( $claFormulario->seqEstadoProceso ) ){
         $bolCambios = true;
     }
-    
+
     if( $bolCambios === true ){
-    
+
         // Mensaje cuando hay cambios
         $txtMensaje = "Es necesario que confirme la acci&oacute;n que esta apunto de realizar:";
         $txtMensaje.= "<div class='msgOk' style='font-size:12px;'> Desea cambiar los datos del registro para el documento ".$objCiudadano->numDocumento." ?</div>";
@@ -80,9 +77,12 @@
             $sql = "
                 UPDATE T_FRM_FORMULARIO SET
                     txtDireccion = '" . $_POST['txtDireccion'] . "',
-                    numTelefono1 = '" . $_POST['txtDireccion'] . "',
-                    numTelefono2 = '" . $_POST['txtDireccion'] . "',
-                    numCelular   = '" . $_POST['txtDireccion'] . "'
+                    numTelefono1 = '" . $_POST['numTelefono1'] . "',
+                    numTelefono2 = '" . $_POST['numTelefono2'] . "',
+                    numCelular   = '" . $_POST['numCelular'] . "',
+                    txtCorreo    = '" . $_POST['txtCorreo'] . "',
+                    seqCiudad    = '" . $_POST['seqCiudad'] . "',
+                    seqLocalidad = '" . $_POST['seqLocalidad'] . "'
                 WHERE seqFormulario = " . $_POST['seqFormulario'] . "
             ";
             $aptBd->execute( $sql );

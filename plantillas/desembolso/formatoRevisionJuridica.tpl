@@ -26,8 +26,8 @@
                {/if}
             </td>
 				<td align="center" valign="middle" style="padding:20px; {$txtFuente12}">
-					<b>Subsidio Distrital de Vivienda</b><br>
-					<b>Revisión de oferta para adquisición de vivienda</b><br>
+					<b>Secretaría Distrital de Hábitat</b><br>
+					<b>Revisión Jurídica para adquisición de vivienda</b><br>
 					<span style="{$txtFuente10}">
 						Fecha de Radicaci&oacute;n: {$txtFecha}<br>
 						No. Registro: {$numRegistro|number_format:0:'.':','}
@@ -53,7 +53,7 @@
 				<td>{$arrTipoDocumento.$tipoDocVendedor} {$claDesembolso->numDocumentoVendedor|number_format:0:'.':','}</td>
 			</tr>
 			<tr>
-				<td colspan="2"><b>Resolución de Asignación del Subsidio Distrital De Vivienda</b></td>
+				<td colspan="2"><b>Resolución de Asignación</b></td>
 				<td>{$claDesembolso->arrJuridico.numResolucion} del {$claDesembolso->arrJuridico.fchResolucion}</td>
 			</tr>
 		</table>

@@ -10,10 +10,10 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$objPadre->txtEspanol} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                {if $objPadre->txtEspanol|lower != 'inicio' and  $objPadre->txtEspanol|lower != 'proceso' and  $objPadre->txtEspanol|lower != 'esquemas' and  $objPadre->txtEspanol|lower != 'administracion'}   
+                                {if $objPadre->txtEspanol|lower != 'inicio' and  $objPadre->txtEspanol|lower != 'proceso' and  $objPadre->txtEspanol|lower != 'esquemas' and  $objPadre->txtEspanol|lower != 'administracion' and $objPadre->txtCodigo != ""}   
                                     <li><a href="#menu-{$objPadre->txtEspanol}"                                                                             
                                            onClick="cargarContenido('contenido', './contenidos/{$objPadre->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqPadre}', false);"
-                                           >{$objPadre->txtEspanol} </a> </li>
+                                            >{$objPadre->txtEspanol} **{$objPadre->txtCodigo}</a> </li>
                                     {/if}
                                     {foreach from=$objPadre->hijos key=seqHijo item=objHijo}
                                     <li><a href="#menu-{$objHijo->txtEspanol}" onClick="cargarContenido('contenido', './contenidos/{$objHijo->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqHijo}', false);">{$objHijo->txtEspanol} </a> </li>
@@ -47,7 +47,7 @@
                             {/foreach}
                         </select>
                     </a>
-                    
+
                 </li>
                 <li style="left: 8%;"><a href="#" id="ayuda" onClick="popUpAyuda()">
                         <img src="./recursos/imagenes/library.png" width="14px" >

@@ -201,7 +201,7 @@
 	                    T_COR_PROYECTO_GRUPO egr,
 	                    T_COR_MENU men
 	                WHERE   men.seqMenu > 1
-						AND per.seqProyectoGrupo = egr.seqProyectoGrupo
+                            AND per.seqProyectoGrupo = egr.seqProyectoGrupo
 	                    AND per.seqMenu = men.seqMenu
 	                    AND egr.seqProyecto = $seqProyecto
 	                    $txtCondicion
@@ -284,13 +284,13 @@
         * @version 1.0 abril 2009
         */
         public function obtenerHijos( $seqProyecto , $seqPadre ){
-             
+            
             global $aptBd;
             $arrMenuHijos = array();
             
             if( is_numeric( $seqProyecto ) and $seqProyecto > 1 ){
             
-	            $sql = "
+	              $sql = "
 	                SELECT
 	                    men.seqMenu
 	                FROM

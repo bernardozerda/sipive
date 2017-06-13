@@ -315,7 +315,7 @@
 
                             <div id="escritura"							
                                  {if $claDesembolso->txtPropiedad == "Escritura" || $claDesembolso->txtPropiedad == "escritura"|| $claDesembolso->txtPropiedad == ""}
-                                     style="display:;"
+                                     style="display:inline;"
                                  {else}
                                      style="display:none;"
                                  {/if}
@@ -364,7 +364,7 @@
                             <!-- OPCIONES PARA SENTENCIA -->
                             <div id="sentencia"
                                  {if $claDesembolso->txtPropiedad == "sentencia"}
-                                     style="display:;"
+                                     style="display:inline;"
                                  {else}
                                      style="display:none;"
                                  {/if}
@@ -404,7 +404,7 @@
                             <!-- OPCIONES PARA RESOLUCION -->
                             <div id="resolucion"
                                  {if $claDesembolso->txtPropiedad == "resolucion"}
-                                     style="display:;"
+                                     style="display:inline;"
                                  {else}
                                      style="display:none;"
                                  {/if}

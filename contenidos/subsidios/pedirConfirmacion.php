@@ -35,7 +35,6 @@ $arrCamposLibres[] = "txtCorreo";
 $arrCamposLibres[] = "seqUpz";
 
 $arrCamposCalificacion[] = "valIngresoHogar";
-$arrCamposCalificacion[] = "valTotalRecursos";
 $arrCamposCalificacion[] = "seqEtnia";
 $arrCamposCalificacion[] = "seqParentesco";
 $arrCamposCalificacion[] = "seqCondicionEspecial";
@@ -47,7 +46,19 @@ $arrCamposCalificacion[] = "estadoCivil";
 $arrCamposCalificacion[] = "anosAprobados";
 $arrCamposCalificacion[] = "seqSalud";
 $arrCamposCalificacion[] = "objCiudadano";
-$arrCamposCalificacion[] = "seqEstadoProceso";
+$arrCamposCalificacion[] = "bolIntegracionSocial";
+$arrCamposCalificacion[] = "bolSecMujer";
+$arrCamposCalificacion[] = "bolIpes";
+$arrCamposCalificacion[] = "numCohabitacion";
+$arrCamposCalificacion[] = "numHacinamiento";
+$arrCamposCalificacion[] = "fechaNac";
+$arrCamposCalificacion[] = "seqGrupoLgtbi";
+$arrCamposCalificacion[] = "tipoDocumento";
+$arrCamposCalificacion[] = "seqTipoVictima";
+
+
+
+//$arrCamposCalificacion[] = "seqEstadoProceso";
 
 /* * **********************************************************************************************************
  * VERIFICACION DE CAMBIOS AL FORMULARIO DE INSCRIPCION
@@ -142,7 +153,7 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
                     if (trim($txtValor) != trim($_POST['hogar'][$numDocumento][$txtClave])) {
                         $arrCamposCambiados[] = $txtClave;
                         $bolConfirmacion = true;
-                        //echo $txtClave . " ==> POST " . $_POST['hogar'][$numDocumento][$txtClave] . " ==> CLASE " .  $txtValor . "<br>";
+                        echo $txtClave . " ==> POST " . $_POST['hogar'][$numDocumento][$txtClave] . " ==> CLASE " .  $txtValor . "<br>";
                     }
                 }
             }
@@ -184,7 +195,7 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
                         } else {
                             $arrCamposCambiados[] = $txtClave;
                             $bolConfirmacion = true;
-                            //echo $txtClave . 'txtValor: ' . $txtValor . '-->' . $valFormateado . '<br>';
+                            echo $txtClave . ' ==> txtValor: ' . $txtValor . ' ==> ' . $valFormateado . '<br>';
                         }
                     }
                 }

@@ -7,18 +7,18 @@
             <ul class="nav navbar-nav">
                 {foreach name=menuPrincipal from=$arrMenu key=seqPadre item=objPadre}
                     {if not empty( $objPadre->hijos ) }                    
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$objPadre->txtEspanol} <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    {if $objPadre->txtEspanol|lower != 'inicio' and  $objPadre->txtEspanol|lower != 'proceso' and  $objPadre->txtEspanol|lower != 'esquemas' and  $objPadre->txtEspanol|lower != 'administracion'}   
-                                        <li><a href="#menu-{$objPadre->txtEspanol}"                                                                             
-                                               onClick="cargarContenido('contenido', './contenidos/{$objPadre->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqPadre}', false);"
-                                               >{$objPadre->txtEspanol} </a> </li>
-                                        {/if}
-                                        {foreach from=$objPadre->hijos key=seqHijo item=objHijo}
-                                        <li><a href="#menu-{$objHijo->txtEspanol}" onClick="cargarContenido('contenido', './contenidos/{$objHijo->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqHijo}', false);">{$objHijo->txtEspanol} </a> </li>
-                                        {/foreach}
-                                </ul>                            
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$objPadre->txtEspanol} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                {if $objPadre->txtEspanol|lower != 'inicio' and  $objPadre->txtEspanol|lower != 'proceso' and  $objPadre->txtEspanol|lower != 'esquemas' and  $objPadre->txtEspanol|lower != 'administracion' and $objPadre->txtCodigo != ""}   
+                                    <li><a href="#menu-{$objPadre->txtEspanol}"                                                                             
+                                           onClick="cargarContenido('contenido', './contenidos/{$objPadre->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqPadre}', false);"
+                                            >{$objPadre->txtEspanol} **{$objPadre->txtCodigo}</a> </li>
+                                    {/if}
+                                    {foreach from=$objPadre->hijos key=seqHijo item=objHijo}
+                                    <li><a href="#menu-{$objHijo->txtEspanol}" onClick="cargarContenido('contenido', './contenidos/{$objHijo->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqHijo}', false);">{$objHijo->txtEspanol} </a> </li>
+                                    {/foreach}
+                            </ul>                            
                         </li>
                     {else}
 
@@ -36,7 +36,7 @@
                 <!-- First dropdown menu here-->
 
                 <!-- D<ropdown ending here-->
-                <li style="left: 12%;">
+                <li style="left: 8%;">
                     <a>
                         <select name="proyecto" id="proyecto" class="selector"
                                 onChange="cargarContenido('bodyHtml', './index.php', 'proyecto=' + this.options[ this.selectedIndex ].value, true);">
@@ -47,7 +47,11 @@
                             {/foreach}
                         </select>
                     </a>
+
                 </li>
+                <li style="left: 8%;"><a href="#" id="ayuda" onClick="popUpAyuda()">
+                        <img src="./recursos/imagenes/library.png" width="14px" >
+                    </a></li>
             </ul>           
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

@@ -32,6 +32,13 @@ $victima = '';
  * VALIDACIONES GENERALES
  * **************************************************************************************************** */
 
+
+// Solo grupo informadores puede modificar datos
+$seqProyecto = $_SESSION['seqProyecto'];
+if( ! isset( $_SESSION['arrGrupos'][$seqProyecto][5] ) ){
+    $arrErrores[] = "No tiene privilegios para modificar la información";
+}
+
 // Grupo de Gestion 
 if ($_POST['seqGrupoGestion'] == 0) {
     $arrErrores[] = "Seleccione el grupo de la gestión realizada";
@@ -434,12 +441,12 @@ if (empty($arrErrores)) {
       $arrErrores[] = "La modalidad de postulacion seleccionada no es v&aacute;lida";
       } */
 
-    // Valida la Modalidad a la cual se pasa y asigna el Plan de Gobierno para los formularios abiertos
-    if ($_POST['bolCerrado'] == 0) {
-        if ($_POST['seqModalidad'] == 6 || $_POST['seqModalidad'] == 7 || $_POST['seqModalidad'] == 8 ||
-                $_POST['seqModalidad'] == 9 || $_POST['seqModalidad'] == 10 || $_POST['seqModalidad'] == 11) {
-            $_POST['seqPlanGobierno'] = 2;
-        }
+    $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD",array("seqModalidad","seqPlanGobierno","txtModalidad"),"seqModalidad");
+    $arrPlanGobierno = obtenerDatosTabla("T_FRM_PLAN_GOBIERNO",array("seqPlanGobierno","txtPlanGobierno"),"seqPlanGobierno");
+
+    // Valida que la Modalidad corresponda al plan de gobierno
+    if( $_POST['seqPlanGobierno'] != $arrModalidad[ $_POST['seqModalidad'] ]['seqPlanGobierno'] ){
+        $arrErrores[] = "La modalidad " . $arrModalidad[ $_POST['seqModalidad'] ]['txtModalidad'] . " no corresponde al plan de gobierno " . $arrPlanGobierno[ $_POST['seqPlanGobierno'] ];
     }
 
     // solucion
@@ -962,7 +969,7 @@ if (empty($arrErrores)) {
     $txtEstilo = "msgError";
 }
 
-echo "<table cellpadding='0' cellspacing='0' border='0' width='100%' id='tablaMensajes' style='padding:5px'>";
+echo "<table cellpadding='0' cellspacing='0' border='0' width='100%' id='tablaMensajes' class='$txtEstilo' style='padding:5px'>";
 foreach ($arrMensajes as $txtMensaje) {
     echo "<tr><td class='$txtEstilo'><li>$txtMensaje</li></td></tr>";
     //print_r($txtMensaje);

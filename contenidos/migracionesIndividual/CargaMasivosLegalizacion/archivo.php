@@ -17,11 +17,11 @@ include '../../../recursos/archivos/verificarSesion.php';
             <div class="well">
                 <form method="post" action="insertar.php" enctype="multipart/form-data" id="formcargar" class="form-signin">
                     <div class="form-group">
-						<h4 class="form-signin-heading">Seleccione el Archivo</h4>
+                        <h4 class="form-signin-heading">Seleccione el Archivo</h4>
                         Ingrese en un archivo de texto los documentos para legalizar<br><br>
-						<input name="archivo" type="file" id="archivo">
+                        <input name="archivo" type="file" id="archivo">
                     </div>
-					<br><p align="center"><button type="submit" name = "subir" class="btn btn-primary">Cargar</button></p>
+                    <br><p align="center"><button type="submit" name = "subir" class="btn btn-primary">Cargar</button></p>
                 </form>
             </div>
         </div> <!-- /container -->

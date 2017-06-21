@@ -122,7 +122,7 @@
 	 * @author Bernardo Zerda
 	 */
 	
-	setInterval( "alertaVencimientoSesion()" , ( ( YAHOO.util.Event.POLL_INTERVAL / 4 ) * 1000 ) );
+	setInterval( "alertaVencimientoSesion()" , ( ( YAHOO.util.Event.POLL_INTERVAL / 2 ) * 1000 ) );
 	
 	function alertaVencimientoSesion(){
 		
@@ -139,20 +139,20 @@
 		// de manera que si se trata de modificar el valor la sesion seguira
 		// viva con el valor de la cookie real 
 		var numExpiraSesion = YAHOO.util.Cookie.get( "validar" );
-		
-		// tiempo restante de vida en minutos
+
+		// tiempo restante de vida en segundos
 		var numTiempoVida = Math.round( numExpiraSesion - numTimeStamp );
-		
+
 		// Cuando quede menos de la cuarta parte de tiempo de vida de la
 		// sesion el sistema muestra un popup que avida que por el tiempo
 		// de inactividad se va a cerrar la sesion
-		if( numTiempoVida <= ( YAHOO.util.Event.POLL_INTERVAL / 4 ) && numTiempoVida > 0  ){
+		if( numTiempoVida <= (YAHOO.util.Event.POLL_INTERVAL * 2)  && numTiempoVida > 0  ){
 			
 			var txtMensaje  = "<div style='text-align:center' class='msgError'>";
-				txtMensaje += "Le quedan menos de " + Math.round( ( numTiempoVida / 60 ) )+ " minutos de vida a su sesi&oacute;n ";
+				txtMensaje += "Le quedan menos de " + (numTiempoVida +1) + " segundos de vida a su sesi&oacute;n ";
 				txtMensaje += "debe salvar los cambios que haya hecho para no perder la informaci&oacute;n";
 			 	txtMensaje += "</div>";
-			 	 
+
 			var objAviso = 
 				new YAHOO.widget.SimpleDialog(
 					"aviso",
@@ -176,6 +176,12 @@
 		
 		
 	}
+
+	YAHOO.util.Event.onContentReady("matarSesion",function(o){
+		YAHOO.util.Dom.get("contenido").innerHTML = "";
+		location.reload(true);
+	});
+
 
 	function buscarCedulaListener(){
 		
@@ -1396,29 +1402,29 @@
 	 */
 	 
 	 function barrioAutocomplete( arrAutocomplete ){
-		
-		var objLocalidad = YAHOO.util.Dom.get( arrAutocomplete[2] ); 
+
+		var objLocalidad = YAHOO.util.Dom.get( arrAutocomplete[2] );
 		var seqLocalidad = objLocalidad.options[ objLocalidad.selectedIndex ].value;
-				
-	 	var objDataSource = new YAHOO.util.XHRDataSource("./contenidos/subsidios/barrioAutocomplete.php?seqLocalidad=" + seqLocalidad + "&" ); 
+
+	 	var objDataSource = new YAHOO.util.XHRDataSource("./contenidos/subsidios/barrioAutocomplete.php?seqLocalidad=" + seqLocalidad + "&" );
 	 		objDataSource.responseType 		= YAHOO.util.XHRDataSource.TYPE_TEXT;
 		    objDataSource.responseSchema 	= { recordDelim: "\n", fieldDelim: "\t" };
 		    objDataSource.maxCacheEntries 	= 0;
 		    objDataSource.flushCache();
-		
+
 		var objAutocomplete = new YAHOO.widget.AutoComplete( arrAutocomplete[0] , arrAutocomplete[1] , objDataSource );
-	    	objAutocomplete.maxResultsDisplayed 	= 20; 
+	    	objAutocomplete.maxResultsDisplayed 	= 20;
 	    	objAutocomplete.minQueryLength 			= 2;
-	    	objAutocomplete.autoHighlight 			= true;  
-	    	objAutocomplete.useShadow 				= true; 
+	    	objAutocomplete.autoHighlight 			= true;
+	    	objAutocomplete.useShadow 				= true;
 	    	objAutocomplete.forceSelection 			= true;
 	    	objAutocomplete.queryQuestionMark 		= false;
 	    	objAutocomplete.allowBrowserAutocomplete = false;
 	    	objAutocomplete.queryDelay = 0;
-	    	
+
 	    eliminarObjeto( "barrioListener" );
 	    YAHOO.util.Event.onContentReady( "barrioListener" , barrioAutocomplete , [ 'txtBarrio' , 'barrioContainer' , 'seqLocalidad'] );
-	    
+
 	    return {
 	        oDS: objDataSource,
 	        oAC: objAutocomplete

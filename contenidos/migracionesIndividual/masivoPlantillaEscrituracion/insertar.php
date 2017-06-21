@@ -1,7 +1,14 @@
+<head>
+    <!-- Estilos CSS -->
+    <link href="../../../librerias/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../librerias/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <!--        <link href="../../../librerias/bootstrap/css/bootstrap-theme.css" rel="stylesheet">-->
+</head>
 <?php
 include '../../../recursos/archivos/verificarSesion.php';
 include_once "../lib/mysqli/shared/ez_sql_core.php";
 include_once "../lib/mysqli/ez_sql_mysqli.php";
+include '../migrarTablero.php';
 
 
 $arrViabilizados = Array();
@@ -10,12 +17,12 @@ $idHogar = "";
 
 if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name'])) {
     $nombreArchivo = $_FILES['archivo']['tmp_name'];
-
+    $arrFormularioArchivo = array();
     $lineas = file($nombreArchivo);
     //var_dump($lineas);    exit();
     $registros = 0;
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     $intV = 1;
     $intNV = 1;
     $band = 0;
@@ -37,7 +44,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             }
             $estrato = explode(" ", $datos[37]);
 
-
+            array_push($arrFormularioArchivo, trim($datos[2]));
             $seqFormulario = $datos[2];
             $txtEscrituraPublica = $datos[39];
             $numEscrituraPublica = $datos[38];
@@ -254,7 +261,11 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
         $registros++;
     }
 //echo "<br>".$idHogar;
-    $arrSeqDesembolso = verificarRegistrosExistentes($arrViabilizados, $idDesembolso, $documento, $intV);
+    $separado_por_comas = implode(",", $arrFormularioArchivo);
+    $validar = validarDocumentos($separado_por_comas, $db, 23, 22, "Estudio de Predio");
+    if ($validar) {
+        $arrSeqDesembolso = verificarRegistrosExistentes($arrViabilizados, $idDesembolso, $documento, $intV);
+    }
     //asignarEscrituracion($arrViabilizados, $idDesembolso, $intV);
 } else {
     echo "Error de subida";
@@ -262,7 +273,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
 
 function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $documento, $cantF) {
     // $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     $consulta = " SELECT seqDesembolso, seqEscrituracion FROM t_des_escrituracion WHERE seqDesembolso IN(" . $idSeqDesembolso . ")";
     $resultado = $db->get_results($consulta);
     $dato = Array();
@@ -277,7 +288,7 @@ function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $documento, $c
 }
 
 function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $documento) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
     $sqlCiu = "SELECT numDocumento, CONCAT(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2) AS nombre FROM t_ciu_ciudadano WHERE numDocumento IN(" . $documento . ")";
     $resultado = $db->get_results($sqlCiu);
@@ -285,7 +296,6 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
     foreach ($resultado as $res) {
         $datoCiu[$res->numDocumento] = $res->nombre;
     }
-
 
     $valores = "";
     $valSeg = "";
@@ -455,15 +465,15 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
 
 
                 $valores .= "),";
-                $valSeg .="(
+                $valSeg .= "(
                             " . $arreglo['seqFormulario'][$int] . ", 
                             NOW(), 
                             " . $_SESSION['seqUsuario'] . ", 
-                            'DOCUMENTACION ENTREGADA PARA LEGALIZACION SDVE ', 
+                            'CARGUE DATOS ESCRITURACION ', 
                             '', 
                             " . $arreglo['numDocumento'][$int] . ", 
                             '$nombreCiu', 
-                            35, 
+                            63, 
                             1
                          ),";
             }
@@ -547,15 +557,15 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
                         NOW(),
                         NOW()";
                     $valores .= "),";
-                    $valSeg .="(
+                    $valSeg .= "(
                             " . $arreglo['seqFormulario'][$int] . ", 
                             NOW(), 
                             " . $_SESSION['seqUsuario'] . ", 
-                            'DOCUMENTACION ENTREGADA PARA LEGALIZACION SDVE ', 
+                            'CARGUE DATOS ESCRITURACION ', 
                             '', 
                             " . $arreglo['numDocumento'][$int] . ", 
                             '$nombreCiu', 
-                            35, 
+                           63, 
                             1
                          ),";
 
@@ -570,7 +580,7 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
             $int++;
         }
     }
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
     //echo $valores;
     $valores = substr_replace($valores, ';', -1, 1);
@@ -582,6 +592,7 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
         $queryCiu = $sqlSeg . $valSeg;
         $result = $db->query($queryCiu);
         $formular = substr_replace($formular, '', -1, 1);
+        migrarInformacion2($formular, $db, 23, 22, "Estudio de Predio");
         generarFlujo($formular);
     }
 
@@ -610,7 +621,7 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
                         <td><?= $arreglo['numDocumento'][$int] ?></td>
                         <td><?= $arreglo['seqDesembolso'][$int] ?></td>
                         <td><?= $arreglo['seqFormulario'][$int] ?></td>
-                        <td><a href="http://<?php echo $_SERVER['HTTP_HOST']?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?>">http://<?php echo $_SERVER['HTTP_HOST']?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?></a></td>
+                        <td><a href="https://<?= $_SERVER['HTTP_HOST'] ?>/sdv/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?>">https://<?= $_SERVER['HTTP_HOST'] ?>/sdv/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?></a></td>
                     </tr>
 
 
@@ -626,7 +637,7 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
 }
 
 function generarFlujo($formularios) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
     $sqlFlujo = "SELECT seqFormulario FROM T_DES_FLUJO WHERE seqFormulario IN(" . $formularios . ")";
     $resultFlujo = $db->get_results($sqlFlujo);

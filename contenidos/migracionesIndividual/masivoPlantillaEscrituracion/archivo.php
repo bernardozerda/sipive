@@ -35,7 +35,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                             <h4 class="modal-title">Columnas Archivo</h4>
                         </div>
                         <div class="modal-body">
-                            <p id="body" style="display: none">Documento - desembolso - formulario - vendedor - docVendedor - barrio - localidad - vJuridico - vTecnico - seqTipoDoc - 
+                            <p id="body" style="display: none; text-align: justify">Documento - desembolso - formulario - vendedor - docVendedor - barrio - localidad - vJuridico - vTecnico - seqTipoDoc - 
                                 compraVivienda - tipoPredio - telVendedor - tipoDoc - estrato - ciudad - fchCreaEsc - fchActEsc - telVen2 - propiedad - 
                                 correoVen - seqCiudad - ciudad2 - seqSubsidio - seqProySol - Direccion del inmueble - Escritura - Fecha de la escritura - 
                                 Notaria - Matricula Inmobiliaria - Chip - Cedula Catastral - Area(mts) Lote - Area(mts) Construida - Avaluo del inmueble - 

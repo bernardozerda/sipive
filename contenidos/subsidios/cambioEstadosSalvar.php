@@ -205,7 +205,7 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
             $claFormulario->fchPostulacion = "";
             $claFormulario->fchVigencia = "0000-00-00";
             $claFormulario->fchUltimaActualizacion = date( "Y-m-d H:i:s" );
-            $claFormulario->seqPlanGobierno = 2; // Bogota Humana
+            $claFormulario->seqPlanGobierno = 3; // Bogota Mejor Para Todos
             $claFormulario->seqTipoEsquema = 1; // Individual
             $claFormulario->seqModalidad = 6; // Adquisición de Vivienda Nueva
             $claFormulario->seqSolucion = 13; // Solución correspondiente a la modalidad Vivienda Nueva
@@ -369,7 +369,7 @@ if (empty($arrErrores)) {
         	$claFormulario->seqSolucion     = 13; // 70 SMMLV
         	$claFormulario->seqTipoEsquema  = 1;  // Individual
         	$claFormulario->seqPlanGobierno = 2;  // Bogotá Humana
-        	$claFormulario->seqProyecto     = 32; // INDIVIDUAL PROYECTO SDVE
+        	//$claFormulario->seqProyecto     = 32; // INDIVIDUAL PROYECTO SDVE
         }
 
         $claFormulario->editarFormulario($seqFormulario);

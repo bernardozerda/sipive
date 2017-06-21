@@ -1094,7 +1094,7 @@ input[type="color"],
     height: 20px;
     padding: 4px 6px;
     margin-bottom: 10px;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 20px;
     color: #555555;
     vertical-align: middle;
@@ -1196,7 +1196,8 @@ input[type="file"] {
 }
 
 select {
-    width: 220px;
+    width: inherit;
+   /* width: 220px;*/
     background-color: #ffffff;
     border: 1px solid #cccccc;
 }

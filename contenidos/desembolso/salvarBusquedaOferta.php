@@ -22,7 +22,18 @@
    /*
     * CAMPOS OBLIGATORIOS PARA EL FORMULARIO 
     */
-    
+
+    $arrBarrio = obtenerDatosTabla(
+        "T_FRM_BARRIO",
+        array("seqBarrio","txtBarrio"),
+        "seqBarrio",
+        "seqBarrio = " . $_POST['seqBarrio']
+    );
+    $seqBario = $_POST['seqBarrio'];
+    $txtBarrio = $arrBarrio[ $seqBario ];
+    $_POST['txtBarrio'] = $txtBarrio;
+    unset( $_POST['seqBarrio'] );
+
    // Para modalidad de arrendamiento la etiqueta cambia
    $txtEtiqueta = ( $claFormulario->seqModalidad != 5 )? "Vendedor" : "Arrendador";
     
@@ -171,7 +182,7 @@
 
       // Guarda los cambios
       $claDesembolso = new Desembolso;		 		
-      
+
       if( $txtFase == "busquedaOferta" ){
          $arrErrores = $claDesembolso->salvarBusquedaOferta( $_POST , $txtFase );
       } else {
@@ -180,7 +191,7 @@
 		  if( $claFormulario->seqTipoEsquema == 1 ){
               $arrErrores = $claDesembolso->salvarBusquedaOferta( $_POST , $txtFase );
           }*/
-          
+
          $arrErrores = $claDesembolso->salvarEscrituracion( $_POST , $txtFase );
       }
 

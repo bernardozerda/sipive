@@ -76,13 +76,17 @@
         		seqPermiso,
         		seqUsuario,
         		txtDescripcion,
-        		fchAccion
+        		fchAccion,
+        		ipUsuario,
+        		maquinaUsuario
         	) VALUES (
         		" . $this->arrAcciones[ $txtAccion ][ 'seqAccion' ] . ",
         		$seqPermiso,
         		$seqUsuario,
-        		\"" . ereg_replace( '\"' , '' , $txtDescripcion ) . "\",
-        		NOW()
+        		\"" . mb_ereg_replace( '\"' , '' , $txtDescripcion ) . "\",
+        		NOW(),
+        		'". $_SERVER['REMOTE_ADDR'] ."',
+        		'". gethostbyaddr($_SERVER['REMOTE_ADDR']) ."'
         	)
         ";		
 
@@ -90,6 +94,7 @@
 	    		$aptBd->execute( $sql );
 	    	} catch ( Exception $objError ) {
 	    		$arrErrores[] = "No se pudo registrar la actividad del usuario";
+	    		pr($arrErrores); die();
 	    	}
 	    	
 	    	return $arrErrores;

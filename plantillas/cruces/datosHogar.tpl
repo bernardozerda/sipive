@@ -12,6 +12,7 @@
 {assign var=seqBancoCredito       value=$claFormulario->seqBancoCredito}
 {assign var=seqEntidadDonante     value=$claFormulario->seqEmpresaDonante}
 {assign var=bolDesplazado         value=$claFormulario->bolDesplazado}
+{assign var=seqBarrio		      value=$claFormulario->seqBarrio}
 
 
 <p><div style="background-color: white; height:25px; padding-top:10px;">
@@ -28,8 +29,8 @@
 	        <td width="180px">{$arrModalidad.$seqModalidad|utf8_decode|lower|ucwords|utf8_encode}</td>
 	        <th width="80px">Soluci&oacute;n</th>
 	        <td>
-	        	{$arrSolucionDescripcion.$seqModalidad.$seqSolucion|utf8_decode|upper|utf8_encode}
-	            ({$arrSolucion.$seqModalidad.$seqSolucion|utf8_decode|lower|ucwords|utf8_encode})
+	        	{$arrSolucion.$seqSolucion.txtDescripcion}
+	            ({$arrSolucion.$seqSolucion.txtSolucion})
 	        </td>
 	    </tr>
 	    <tr align="left">
@@ -42,7 +43,7 @@
 	    </tr>
 	    <tr align="left">
 	        <th>Barrio</th>
-	        <td colspan="3">{$claFormulario->txtBarrio|utf8_decode|lower|ucwords|utf8_encode}</td>
+	        <td colspan="3">{$arrBarrio.$seqBarrio|utf8_decode|lower|ucwords|utf8_encode}</td>
 	        <th>Localidad</th>
 	        <td>{$arrLocalidad.$seqLocalidad|utf8_decode|lower|ucwords|utf8_encode}</td>
 	    </tr>
@@ -75,7 +76,7 @@
 	        {assign var=seqTipoDocumento value=$objCiudadano->seqTipoDocumento}
 	        {assign var=seqParentesco value=$objCiudadano->seqParentesco}
 	        <tr>
-	            <td>{$arrParentesco.$seqParentesco}</td>
+	            <td>{$arrParentesco.$seqParentesco.txtParentesco}</td>
 	            <td>{$arrTipoDocumento.$seqTipoDocumento|utf8_decode|lower|ucwords|utf8_encode}</td>
 				<td>{$objCiudadano->numDocumento}</td>
 	            <td>

@@ -4,16 +4,17 @@ ob_start();
 date_default_timezone_set('America/Bogota');
 
 function generarLinksImpresion($arraydocs) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
-    header("Content-Description: File Transfer");
-    header("Content-Type: application/force-download");
-    header("Content-type: application/vnd.ms-excel; charset=UTF-8");
-    header("Pragma: public");
-    header("Expires: 0");
-    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-    header("Cache-Control: private", false);
-    header("Content-Disposition: attachment; filename=\"prueba.xls\";");
-    header("Content-Transfer-Encoding: binary");
+    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
+//    header("Content-Description: File Transfer");
+//    header("Content-Type: application/force-download");
+//    header("Content-type: application/vnd.ms-excel; charset=UTF-8");
+//    header("Pragma: public");
+//    header("Expires: 0");
+//    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+//    header("Cache-Control: private", false);
+//    header("Content-Disposition: attachment; filename=\"prueba.xls\";");
+//    header("Content-Transfer-Encoding: binary");
 
 
     $consulta_pre = "SELECT ciu.numDocumento AS numDocumento,
@@ -26,20 +27,20 @@ function generarLinksImpresion($arraydocs) {
        prytec.seqUnidadProyecto seqUnidadProyecto,
        und.txtNombreUnidad txtNombreUnidad,
        pry.txtNombreProyecto AS txtNombreProyecto
-  FROM ((((((sipive.t_pry_unidad_proyecto und
-             INNER JOIN sipive.t_frm_formulario frm
+  FROM ((((((sdht_subsidios.t_pry_unidad_proyecto und
+             INNER JOIN sdht_subsidios.t_frm_formulario frm
                 ON (und.seqFormulario = frm.seqFormulario))
-            INNER JOIN sipive.t_frm_hogar hog
+            INNER JOIN sdht_subsidios.t_frm_hogar hog
                ON (hog.seqFormulario = frm.seqFormulario))
-           INNER JOIN sipive.t_ciu_ciudadano ciu
+           INNER JOIN sdht_subsidios.t_ciu_ciudadano ciu
               ON (hog.seqCiudadano = ciu.seqCiudadano))
-          LEFT OUTER JOIN sipive.t_des_desembolso des
+          LEFT OUTER JOIN sdht_subsidios.t_des_desembolso des
              ON (des.seqFormulario = frm.seqFormulario))
-         LEFT OUTER JOIN sipive.t_des_tecnico destec
+         LEFT OUTER JOIN sdht_subsidios.t_des_tecnico destec
             ON (destec.seqDesembolso = des.seqDesembolso))
-        INNER JOIN sipive.t_pry_proyecto pry
+        INNER JOIN sdht_subsidios.t_pry_proyecto pry
            ON (und.seqProyecto = pry.seqProyecto))
-       INNER JOIN sipive.t_pry_tecnico prytec
+       INNER JOIN sdht_subsidios.t_pry_tecnico prytec
           ON (prytec.seqUnidadProyecto = und.seqUnidadProyecto)
  WHERE (ciu.numDocumento IN ($arraydocs));";
     ?>
@@ -64,7 +65,7 @@ function generarLinksImpresion($arraydocs) {
             <td>' . $resultado->numDocumento . '</td>
             <td>' . $resultado->txtNombreProyecto . '</td>
             <td>' . $resultado->txtNombreUnidad . '</td>
-            <td> <a href="'.$_SERVER['HTTP_HOST'].'/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '">http://'.$_SERVER['HTTP_HOST'].'/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '</a> </td>
+              <td> <a href="'.$_SERVER['HTTP_HOST'].'/sdv/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '">http://'.$_SERVER['HTTP_HOST'].'/sdv/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '</a> </td>
         <tr>';
             }
         }

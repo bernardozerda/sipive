@@ -12,7 +12,11 @@ function marcarTodos() {
 }
 
 jQuery(function () {
-    jQuery("#accordion").accordion();
+    try {
+        jQuery("#accordion").accordion();
+    }catch(o){
+
+    }
 });
 
 $(document).ready(function () {

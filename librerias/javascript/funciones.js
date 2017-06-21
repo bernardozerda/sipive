@@ -9888,7 +9888,7 @@ function mostrarToolTip(){
 
     var callObj = YAHOO.util.Connect.asyncRequest(
         "POST",
-        "./contenidos/casaMano/textoConvenio",
+        "./contenidos/casaMano/textoConvenio.php",
         callback,
         "seqConvenio=" + objSelect.options[selectedIndex].value
     );

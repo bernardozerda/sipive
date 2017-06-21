@@ -7,9 +7,8 @@
                <p>{$txtMensaje}</p>
 					{foreach from=$arrPost key=txtClave item=txtValor}
 						{if not is_array( $txtValor )}
-							<input type="hidden" name="{$txtClave}" value="{$txtValor}">
+                            <input type="hidden" name="{$txtClave}" value="{$txtValor}">
 						{else}
-                            
                             {if isset( $arrPost.hogar )}
                                 {foreach from=$arrPost.hogar key=numDocumento item=arrCiudadano}
                                     {foreach from=$arrCiudadano key=txtClave item=txtValor}

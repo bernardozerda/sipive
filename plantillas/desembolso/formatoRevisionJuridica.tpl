@@ -3,6 +3,8 @@
 {assign var=txtCompraVivienda 	value=$claDesembolso->txtCompraVivienda}
 {assign var=txtPropiedad 		value=$claDesembolso->txtPropiedad}
 
+
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es-es" lang="es-es">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,7 +15,7 @@
 		<meta name="robots" content="index,  nofollow" />
 		<title>SDV - SDHT</title>
 	</head>
-	<body onLoad="window.print();">
+	<body  > <!-- onLoad="window.print();" -->
 		
 		<!-- TITULO DE LA CARTA DE IMPRESION -->
 		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border: 1px solid #999999;">
@@ -40,8 +42,8 @@
 		</table>
 		
 		<!-- IDENTIFICACION DE LAS PARTES -->
-		<table cellspacing="0" cellpadding="4" border="0" width="100%" style="{$txtFuente10}">
-			<tr><td colspan="3" style="padding:5px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Identificación de las partes</b></td></tr>
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">
+			<tr><td colspan="3" style="padding:3px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Identificación de las partes</b></td></tr>
 			<tr>
 				<td><b>Promitente Comprador</b></td>
 				<td>{$claCiudadano->txtNombre1} {$claCiudadano->txtNombre2} {$claCiudadano->txtApellido1} {$claCiudadano->txtApellido2}</td>
@@ -59,8 +61,8 @@
 		</table>
 		
 		<!-- IDENTIFICACION DEL INMUEBLE -->
-		<table cellspacing="0" cellpadding="3" border="0" width="100%" style="{$txtFuente10}">
-			<tr><td colspan="7" style="padding:5px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Identificación del Inmueble</b></td></tr>
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">
+			<tr><td colspan="7" style="padding:3px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Identificación del Inmueble</b></td></tr>
 			<tr>
 				<td><b>Dirección</b></td>
 				<td colspan="5">{$claDesembolso->txtDireccionInmueble}</td>
@@ -84,8 +86,8 @@
 		</table>
 		
 		<!-- ANOTACION -->
-		<table cellspacing="0" cellpadding="2" border="0" width="100%" style="{$txtFuente10}">
-			<tr><td align="justify" style="padding-left:10px;padding-right:10px;padding-top:5px;padding-bottom:5px;border-top: 1px dotted #999999;">
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">
+			<tr><td align="justify" style="border-top: 1px dotted #999999;">
 				{if $txtPropiedad neq ""}
 					La descripción de cabida y linderos reposan en la 
 					{if $txtPropiedad eq "escritura"}
@@ -100,66 +102,94 @@
 				
 			</td></tr>
 		</table>
-		
-		<!-- OBSERVACIONES -->
-		<table cellspacing="0" cellpadding="4" border="0" width="100%" style="{$txtFuente10}">
-			<tr><td colspan="7" style="padding:5px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Observaciones</b></td></tr>
-			<tr><td align="justify" style="padding-left:10px;padding-right:10px;padding-top:5px;padding-bottom:5px;">
-				{$claDesembolso->arrJuridico.txtObservaciones}
-			</td></tr>
-		</table>
-		
+
 		<!-- LIBERTAD -->
-		<table cellspacing="0" cellpadding="4" border="0" width="100%" style="{$txtFuente10}">
-			<tr><td colspan="7" style="padding:5px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Libertad</b></td></tr>
-			<tr><td align="justify" style="padding-left:10px;padding-right:10px;padding-top:5px;padding-bottom:5px;">
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">
+			<tr><td colspan="7" style="padding:3px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Libertad</b></td></tr>
+			<tr><td align="justify">
 				{$claDesembolso->arrJuridico.txtLibertad}
 			</td></tr>
 		</table>
 		
 		<!-- DOCUMENTOS ANALIZADOS -->
 		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">
-			<tr><td colspan="7" style="padding:5px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Documentos Analizados</b></td></tr>
-			<tr><td align="justify" style="padding-left:10px;padding-right:10px;padding-top:5px;">
-				<ol>
+			<tr><td colspan="7" style="padding:3px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Documentos Analizados</b></td></tr>
+			<tr><td align="justify">
+				<ol style="margin: 0px; padding: 0px; margin-left: 10px; padding-left: 10px;">
 					{foreach from=$claDesembolso->arrJuridico.documento item=txtDocumento}
 						<li>{$txtDocumento}</li>
 					{/foreach}
 				</ol>
 			</td></tr>
 		</table>
-		
+
+		<!-- OBSERVACIONES -->
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">
+			<tr><td colspan="7" style="padding:3px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Observaciones</b></td></tr>
+			<tr><td align="justify">
+                    {$claDesembolso->arrJuridico.txtObservaciones}
+				</td></tr>
+		</table>
+
+		<!-- COMENTARIOS -->
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">
+			<tr><td colspan="7" style="padding:3px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Concepto</b></td></tr>
+			<tr><td align="justify">
+                    {$claDesembolso->arrJuridico.txtConcepto}
+				</td></tr>
+		</table>
+
 		<!-- RECOMENDACIONES -->
 		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">
-			<tr><td colspan="7" style="padding:5px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Recomendaciones</b></td></tr>
-			<tr><td align="justify" style="padding-left:10px;padding-right:10px;padding-top:5px;">
-				<ol>
+			<tr><td colspan="7" style="padding:3px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Recomendaciones</b></td></tr>
+			<tr><td align="justify">
+				<ol style="margin: 0px; padding: 0px; margin-left: 10px; padding-left: 10px;">
 					{foreach name=recomendaciones from=$claDesembolso->arrJuridico.recomendacion item=txtRecomendacion}
 						<li>{$txtRecomendacion}</li>
 					{/foreach}
-					
-					{if $claFormulario->seqModalidad == 1 || $claFormulario->seqModalidad == 6 || $claFormulario->seqModalidad == 11}
-                  <li>EL PRECIO DE COMPRA NO DEBE SUPERAR LOS 70 SMMLV.</li>
-                  <li>SI HAY VIABILIDAD TÉCNICA, PARA LA POSULACI&Oacute;N, SE FIRMAR&Aacute; LA PROMESA DE COMPRA VENTA QUE ENTREGAR&Aacute; EL TUTOR ASIGNADO.</li>
-                  <li>EN LA ESCRITURA PÚBLICA DEBERÁ IR PROTOCOLIZADA LA CARTA DE ASIGNACIÓN DEL SUBSIDIO DISTRITAL DE VIVIENDA.</li>
-                  <li>ANTES DE LA FIRMA DE LA ESCRITURA PÚBLICA EL HOGAR BENEFICIARIO DEBERÁ ALLEGAR EL BORRADOR DE LA MINUTA PARA SU REVISIÓN Y APROBACIÓN.</li>
-                  <li>AL MOMENTO DE FIRMAR ESCRITURA PÚBLICA EL VENDEDOR DEBERÁ ESTAR A PAZ Y SALVO CON EL IMPUESTO PREDIAL DE LOS ÚLTIMOS CINCO AÑOS, CUANDO APLIQUE.</li>
-                  <li>AL MOMENTO DE FIRMAR ESCRITURAS PÚBLICAS EL VENDEDOR DEBERÁ ESTAR A PAZ Y SALVO CON LOS SERVICIOS PÚBLICOS BÁSICOS Y NO DEBERÁ TENER CRÉDITOS A SU CARGO EN CODENSA Y ACUEDUCTO, CUANDO APLIQUE.</li>
-                  <li>VERIFICAR QUE LOS NOMBRES, CEDULAS Y TIPO DE VIVIENDA DEL HOGAR BENEFICIARIO DEL SDV ESTÉN ESCRITOS EN FORMA CORRECTA.</li>
-                  <li>ACTUALIZAR EL NOMBRE DEL TITULAR EN LOS RECIBOS DE AGUA Y LUZ, CUANDO APLIQUE.</li>
-					{/if}
+
+                    {if $claFormulario->seqModalidad == 1 || $claFormulario->seqModalidad == 6 || $claFormulario->seqModalidad == 11 || $claFormulario->seqModalidad == 12}
+						<li>EL PRECIO DE COMPRA NO DEBE SUPERAR LOS 70 SMMLV.</li>
+						<li>SI HAY VIABILIDAD TÉCNICA, PARA LA POSULACI&Oacute;N, SE FIRMAR&Aacute; LA PROMESA DE COMPRA
+							VENTA QUE ENTREGAR&Aacute; EL TUTOR ASIGNADO.
+						</li>
+						<li>EN LA ESCRITURA PÚBLICA DEBERÁ IR PROTOCOLIZADA LA CARTA DE ASIGNACIÓN DEL {if $claFormulario->seqModalidad == 12}APORTE{else}SUBSIDIO{/if}
+							DISTRITAL DE VIVIENDA.
+						</li>
+						<li>ANTES DE LA FIRMA DE LA ESCRITURA PÚBLICA EL HOGAR BENEFICIARIO DEBERÁ ALLEGAR EL BORRADOR
+							DE LA MINUTA PARA SU REVISIÓN Y APROBACIÓN.
+						</li>
+						<li>AL MOMENTO DE FIRMAR ESCRITURA PÚBLICA EL VENDEDOR DEBERÁ ESTAR A PAZ Y SALVO CON EL
+							IMPUESTO PREDIAL DE LOS ÚLTIMOS CINCO AÑOS, CUANDO APLIQUE.
+						</li>
+						<li>AL MOMENTO DE FIRMAR ESCRITURAS PÚBLICAS EL VENDEDOR DEBERÁ ESTAR A PAZ Y SALVO CON LOS
+							SERVICIOS PÚBLICOS BÁSICOS Y NO DEBERÁ TENER CRÉDITOS A SU CARGO EN CODENSA Y ACUEDUCTO,
+							CUANDO APLIQUE.
+						</li>
+						<li>VERIFICAR QUE LOS NOMBRES, CEDULAS Y TIPO DE VIVIENDA DEL HOGAR BENEFICIARIO DEL {if $claFormulario->seqModalidad == 12}APORTE{else}SDV{/if} ESTÉN
+							ESCRITOS EN FORMA CORRECTA.
+						</li>
+						<li>ACTUALIZAR EL NOMBRE DEL TITULAR EN LOS RECIBOS DE AGUA Y LUZ, CUANDO APLIQUE.</li>
+
+						{if $claFormulario->seqModalidad == 12}
+							<li>LA ESCRITURA PÚBLICA DEBERÁ SER SUSCRITA POR TODOS LOS INTEGRANTES DEL HOGAR
+								BENEFICIARIOS
+								DEL APORTE MAYORES DE EDAD EN CAPACIDAD DE OBLIGARSE POR SÍ MISMOS. CUANDO ALGÚN MIEMBRO
+								DEL HOGAR NO DESEE SUSCRIBIRLA INFORMARÁ POR ESCRITO A LA SECRETARÍA DISTRITAL DE DICHA
+								SITUACIÓN.
+							</li>
+						{/if}
+
+						<li>
+							INCLUIR AL MOMENTO DE LA ESCRITURACIÓN LAS RESTRICCIONES DE LEY POR ADQUIRIR VIVIENDA CON
+							RECURSOS DEL {if $claFormulario->seqModalidad == 12}APORTE{else}SDV{/if} DISTRITAL.
+						</li>
+
+                    {/if}
 				</ol>
 			</td></tr>
 		</table>
-		
-		<!-- COMENTARIOS -->
-		<table cellspacing="0" cellpadding="4" border="0" width="100%" style="{$txtFuente10}">
-			<tr><td colspan="7" style="padding:5px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Concepto</b></td></tr>
-			<tr><td align="justify" style="padding-left:10px;padding-right:10px;padding-top:5px;padding-bottom:5px;">
-				{$claDesembolso->arrJuridico.txtConcepto}
-			</td></tr>
-		</table>
-		
+
 		<!-- FIRMA DE LA CARTA -->
 		<table cellspacing="0" cellpadding="4" border="0" width="100%" style="border-top: 1px solid #999999; {$txtFuente12}">
 			<tr><td style="padding:5px; {$txtFuente12}">Cordialmente</td></tr>

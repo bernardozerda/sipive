@@ -197,5 +197,9 @@ switch ($reporte) {
             echo '<span style="color:#c10;text-align:center;"><b>Selecione un archivo en filtros->Datos!</b></span>';
         }
         break;
+
+    case "encuestasPive":
+        $claReporte->encuestasPive();
+        break;
 }
 ?>

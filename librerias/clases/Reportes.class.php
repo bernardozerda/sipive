@@ -3872,6 +3872,239 @@ WHERE ( tdo.seqTipoDocumento =1 OR tdo.seqTipoDocumento =2 OR tdo.seqTipoDocumen
         obtenerRegistroCiudadano($arrDocumentos);
     }
 
+    public function encuestasPive(){
+
+        global $aptBd;
+
+        $this->arrErrores = array();
+
+        $arrTitulos['formulario'][1] = "seqFormulario";
+        $arrTitulos['formulario'][2] = "NombreEncuesta";
+        $arrTitulos['formulario'][3] = "NombreCargue";
+        $arrTitulos['formulario'][4] = "FechaAplicacion";
+        $arrTitulos['formulario'][5] = "FechaCarga";
+        $arrTitulos['formulario'][6] = "TipoDocumentoPostulantePrincipal";
+        $arrTitulos['formulario'][7] = "DocumentoPostulantePrincipal";
+        $arrTitulos['formulario'][8] = "NombrePostulantePrincipal";
+        $arrTitulos['formulario'][9] = "FormularioEncuesta";
+        $arrTitulos['formulario'][10] = "txtUsuarioSistema";
+        $arrTitulos['formulario'][11] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] CÉDULA DE CIUDADANÍA";
+        $arrTitulos['formulario'][12] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] TARJETA DE IDENTIDAD";
+        $arrTitulos['formulario'][13] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] REGISTRO CIVIL";
+        $arrTitulos['formulario'][14] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] NO TIENE";
+        $arrTitulos['formulario'][15] = "[ NUMERO_DOC ] NUMERO DE DOCUMENTO";
+        $arrTitulos['formulario'][16] = "[ P13_1 ] PRIMER NOMBRE";
+        $arrTitulos['formulario'][17] = "[ P13_2 ] SEGUNDO NOMBRE";
+        $arrTitulos['formulario'][18] = "[ P13_3 ] PRIMER APELLIDO";
+        $arrTitulos['formulario'][19] = "[ P13_4 ] SEGUNDO APELLIDO";
+        $arrTitulos['formulario'][20] = "[ P26 ] ¿CUÁNTOS HOGARES CONVIVEN EN ESTA VIVIENDA?";
+        $arrTitulos['formulario'][21] = "[ P29 ] ¿EN CUÁNTOS DE ESTOS CUARTOS DUERMEN LAS PERSONAS DE ESTE HOGAR?";
+        $arrTitulos['ciudadano'][22] = "[ N_ORDEN ] ORDEN DEL CIUDADANO";
+        $arrTitulos['ciudadano'][23] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] CÉDULA DE CIUDADANÍA";
+        $arrTitulos['ciudadano'][24] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] TARJETA DE IDENTIDAD";
+        $arrTitulos['ciudadano'][25] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] REGISTRO CIVIL";
+        $arrTitulos['ciudadano'][26] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] NO TIENE";
+        $arrTitulos['ciudadano'][27] = "[ P31_1 ] PRIMER NOMBRE";
+        $arrTitulos['ciudadano'][28] = "[ P31_2 ] SEGUNDO NOMBRE";
+        $arrTitulos['ciudadano'][29] = "[ P31_3 ] PRIMER APELLIDO";
+        $arrTitulos['ciudadano'][30] = "[ P31_4 ] SEGUNDO APELLIDO";
+        $arrTitulos['ciudadano'][31] = "[ NUM_DOCUM ] NUMERO DE DOCUMENTO";
+        $arrTitulos['ciudadano'][32] = "[ P340A ] CUÁNTO RECIBE MENSUALMENTE EN PROMEDIO POR LOS SIGUIENTES CONCEPTOS / [ P340A ] TRABAJO ASALARIADO";
+        $arrTitulos['ciudadano'][33] = "[ P340B ] CUÁNTO RECIBE MENSUALMENTE EN PROMEDIO POR LOS SIGUIENTES CONCEPTOS / [ P340B ] TRABAJO INDEPENDIENTE";
+        $arrTitulos['ciudadano'][34] = "[ P340C ] CUÁNTO RECIBE MENSUALMENTE EN PROMEDIO POR LOS SIGUIENTES CONCEPTOS / [ P340C ] PENSIONES (JUBILACIÓN, INVALIDEZ, VEJEZ, ETC.)";
+        $arrTitulos['ciudadano'][35] = "SUMA INGRESO CIUDADANO";
+        $arrTitulos['ciudadano'][36] = "SUMA INGRESO HOGAR";
+
+        if($_FILES['fileSecuenciales']['error'] != 4) {
+            switch ($_FILES['fileSecuenciales']['error']) {
+                case UPLOAD_ERR_INI_SIZE:
+                    $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" Excede el tamaño permitido";
+                    break;
+                case UPLOAD_ERR_FORM_SIZE:
+                    $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" Excede el tamaño permitido";
+                    break;
+                case UPLOAD_ERR_PARTIAL:
+                    $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" no fue completamente cargado, intente de nuevo, si el error persiste contacte al administrador";
+                    break;
+                default:
+                    $arrExtensiones = array("txt", "csv");
+                    $numPunto = strpos($_FILES['fileSecuenciales']['name'], ".") + 1;
+                    $numRestar = (strlen($_FILES['fileSecuenciales']['name']) - $numPunto) * -1;
+                    $txtExtension = substr($_FILES['fileSecuenciales']['name'], $numRestar);
+                    if (!in_array(strtolower($txtExtension), $arrExtensiones)) {
+                        $this->arrErrores[] = "Tipo de Archivo no permitido $txtExtension ";
+                    }
+                    break;
+            }
+        }
+
+        if( empty( $this->arrErrores )){
+
+            $arrDocumentos = array();
+            if( $_FILES['fileSecuenciales']['error'] != UPLOAD_ERR_NO_FILE ){
+                $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileSecuenciales']['tmp_name']));
+                foreach ($arrDocumentos as $numLinea => $numDocumento) {
+                    if (doubleval($numDocumento) != 0) {
+                        $arrFormularios[] = Ciudadano::formularioVinculado( doubleval($numDocumento) );
+                    }
+                }
+            }else{
+//                $arrDocumentos[] = 26344065;
+//                foreach ($arrDocumentos as $numLinea => $numDocumento) {
+//                    if (doubleval($numDocumento) != 0) {
+//                        $arrFormularios[] = Ciudadano::formularioVinculado( doubleval($numDocumento) );
+//                    }
+//                }
+            }
+
+            // Titulos
+            $arrDatos[0][0]  = $arrTitulos['formulario'];
+            $arrDatos[0][0] += $arrTitulos['ciudadano'];
+
+            $txtCondicion = "";
+            if( ! empty( $arrDocumentos ) ) {
+                $txtCondicion = "and apl.seqFormulario IN (" . implode(",", $arrFormularios) . ")";
+            }
+
+            // Variables del ciudadano a extraer
+            $sql = "
+                select
+                  apl.seqFormulario,
+                  aci.numOrden,
+                  IF(
+                    pre.txtPregunta = res.txtRespuesta,
+                    CONCAT( '[ ', pre.txtIdentificador , ' ] ', pre.txtPregunta ),
+                    CONCAT( '[ ', pre.txtIdentificador , ' ] ', pre.txtPregunta , ' / [ ', res.txtIdentificador , ' ] ', res.txtRespuesta  )
+                  ) as txtPregunta,
+                  aci.valRespuesta
+                from t_enc_aplicacion apl
+                inner join t_enc_diseno dis on apl.seqDiseno = dis.seqDiseno 
+                inner join t_cor_usuario usu on apl.seqUsuarioCarga = usu.seqUsuario
+                inner join t_frm_hogar hog on apl.seqFormulario = hog.seqFormulario 
+                inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+                inner join t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
+                left join t_enc_aplicacion_ciudadano aci on apl.seqAplicacion = aci.seqAplicacion
+                left join t_enc_respuesta res on aci.seqRespuesta = res.seqRespuesta
+                left join t_enc_pregunta pre on res.seqPregunta = pre.seqPregunta
+                where apl.bolActiva = 1
+                  and dis.bolActivo = 1
+                  and apl.seqDiseno = 1
+                  and hog.seqParentesco = 1
+                  and res.txtIdentificador in ('N_ORDEN','P31_1','P31_2','P31_3','P31_4','TIPO_DOCUMENTO','NUM_DOCUM','P340A','P340B','P340C')
+                  $txtCondicion
+                order by 
+                  apl.seqFormulario, aci.numOrden, aci.seqAplicacionCiudadano
+            ";
+            $objRes = $aptBd->execute($sql);
+            while( $objRes->fields ){
+                $seqFormulario = $objRes->fields['seqFormulario'];
+                $numOrden = $objRes->fields['numOrden'];
+                unset($objRes->fields['seqFormulario']);
+                unset($objRes->fields['numOrden']);
+                $numColumna = intval(array_shift(array_keys($arrTitulos['ciudadano'],$objRes->fields['txtPregunta'])));
+                $arrDatos[$seqFormulario][$numOrden][$numColumna] = $objRes->fields['valRespuesta'];
+                $objRes->MoveNext();
+            }
+
+            $sql = "
+                select
+                  apl.seqFormulario,
+                  dis.txtDiseno as NombreEncuesta,
+                  apl.txtNombreCargue as NombreCargue,
+                  apl.fchAplicacion as FechaAplicacion,  
+                  apl.fchCarga as FechaCarga, 
+                  tdo.txtTipoDocumento as TipoDocumentoPostulantePrincipal,
+                  ciu.numDocumento as DocumentoPostulantePrincipal,
+                  CONCAT( TRIM(ciu.txtNombre1), ' ' ,TRIM(ciu.txtNombre2), ' ' ,TRIM(ciu.txtApellido1), ' ' ,TRIM(ciu.txtApellido2) ) as NombrePostulantePrincipal,
+                  apl.txtFormulario as FormularioEncuesta,
+                  CONCAT( usu.txtNombre, ' ' , usu.txtApellido ) as txtUsuarioSistema,
+                  IF(
+                    pre.txtPregunta = res.txtRespuesta,
+                    CONCAT( '[ ', pre.txtIdentificador , ' ] ', pre.txtPregunta ),
+                    CONCAT( '[ ', pre.txtIdentificador , ' ] ', pre.txtPregunta , ' / [ ', res.txtIdentificador , ' ] ', res.txtRespuesta  )
+                  ) as txtPregunta,
+                  afo.valRespuesta
+                from t_enc_aplicacion apl
+                inner join t_enc_diseno dis on apl.seqDiseno = dis.seqDiseno 
+                inner join t_cor_usuario usu on apl.seqUsuarioCarga = usu.seqUsuario
+                inner join t_frm_hogar hog on apl.seqFormulario = hog.seqFormulario 
+                inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+                inner join t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
+                left join t_enc_aplicacion_formulario afo on apl.seqAplicacion = afo.seqAplicacion
+                left join t_enc_respuesta res on afo.seqRespuesta = res.seqRespuesta
+                left join t_enc_pregunta pre on res.seqPregunta = pre.seqPregunta
+                where apl.bolActiva = 1
+                  and dis.bolActivo = 1
+                  and apl.seqDiseno = 1
+                  and hog.seqParentesco = 1
+                  and res.txtIdentificador in ('P13_1','P13_2','P13_3','P13_4','TIPO_DOCUMENTO','NUMERO_DOC','P26','P29')
+                  $txtCondicion
+                order by 
+                  apl.seqFormulario,afo.seqAplicacionFormulario            
+            ";
+            $objRes = $aptBd->execute($sql);
+            while( $objRes->fields ){
+                $seqFormulario = $objRes->fields['seqFormulario'];
+                foreach($objRes->fields as $txtCampo => $txtValor){
+                    $numColumna = intval(array_shift(array_keys($arrTitulos['formulario'],$txtCampo)));
+                    if($numColumna == 0){
+                        $numColumna = intval(array_shift(array_keys($arrTitulos['formulario'],$objRes->fields['txtPregunta'])));
+                    }
+                    foreach($arrDatos[$seqFormulario] as $numOrden => $arrColumnas ){
+                        $arrDatos[$seqFormulario][$numOrden][$numColumna] = $txtValor;
+                        ksort($arrDatos[$seqFormulario][$numOrden]);
+                    }
+                }
+                $objRes->MoveNext();
+            }
+
+            foreach($arrDatos as $seqFormulario => $arrOrden){
+                if($seqFormulario != 0) {
+                    $arrSuma[$seqFormulario] = 0;
+                    foreach ($arrOrden as $numOrden => $arrColumnas) {
+                        $arrDatos[$seqFormulario][$numOrden][35] = doubleval($arrColumnas[32]) + doubleval($arrColumnas[33]) + doubleval($arrColumnas[34]);
+                        $arrSuma[$seqFormulario] += doubleval($arrDatos[$seqFormulario][$numOrden][35]);
+                    }
+                }
+            }
+
+            foreach($arrDatos as $seqFormulario => $arrOrden){
+                if($seqFormulario != 0) {
+                    foreach ($arrOrden as $numOrden => $arrColumnas) {
+                        $arrDatos[$seqFormulario][$numOrden][36] = $arrSuma[$seqFormulario];
+                    }
+                }
+            }
+
+        }
+
+        $txtNombreArchivo = "encuestasPive_" . date("Ymd_His") . ".xls";
+
+        header("Content-disposition: attachment; filename=$txtNombreArchivo");
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/vnd.ms-excel; charset=utf-8;");
+        header("Content-Transfer-Encoding: binary");
+        header("Pragma: no-cache");
+        header("Expires: 1");
+
+        foreach($arrDatos as $seqFormulario => $arrOrden){
+            foreach($arrOrden as $numOrden => $arrColumnas){
+                foreach($arrDatos[0][0] as $numColumna => $txtTitulo){
+                    if($arrColumnas[$numColumna] != ""){
+                        echo utf8_decode($arrColumnas[$numColumna]);
+                    }
+                    echo "\t";
+                }
+                echo "\r\n";
+            }
+        }
+
+        //return true;
+
+    }
+
+
+
 }
 
 // fin clase reportes

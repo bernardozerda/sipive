@@ -1,13 +1,15 @@
 <!-- **********************************************************
+<!-- **********************************************************
     PLANTILLA UNICA DE POSTULACION
 *************************************************************** -->
 
 {assign var=numAltoPestanaPrincipal  value="550px"}
 {assign var=numAltoPestanaSecundaria value="450px"}
+{assign var=claFormulario value=$claCasaMano->objPostulacion}
 
 <form name="frmIndividual"
       id="frmIndividual"
-      onSubmit="someterFormulario('mensajes',this,'./contenidos/casaMano/pedirConfirmacion.php',false,true); return false;"
+      onSubmit="pedirConfirmacion('mensajes',this,'./contenidos/casaMano/pedirConfirmacion.php'); return false;"
       autocomplete=off
 >
 
@@ -18,7 +20,7 @@
     <table cellspacing="0" cellpadding="3" border="0" width="100%" style="padding-bottom: 5px;">
         <tr>
             <td width="150px" align="center">
-                <a href="#" onClick="alert('función imprimir')">
+                <a href="#" onClick="imprimirPostulacionCEM(document.frmIndividual , './contenidos/casaMano/pedirConfirmacion.php');">
                     Imprimir Formulario
                 </a>
             </td>
@@ -29,6 +31,7 @@
                 <input type="checkbox"
                        name="bolCerrado"
                        id="bolCerrado"
+                       onClick="alertaFormularioCerrado(this, {$claFormulario->bolCerrado}, {$smarty.session.privilegios.cambiar});"
                        value="1"
                         {if $claFormulario->bolCerrado == 1} checked {/if}
                         {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} disabled {/if}
@@ -61,79 +64,77 @@
             <div id="frm" style="height:{$numAltoPestanaPrincipal};">
 
                 <!-- TABLA DE ESTADO DEL PROCESO Y NUMERO DEL FORMULARIO -->
-                <p>
-                    <table cellspacing="0" cellpadding="3" border="0" width="100%">
-                        <tr>
-                            <td style="width:100px;">
-                                <b>Estado</b>
-                            </td>
-                            <td align="left">
-                                {if in_array( $claFormulario->seqEstadoProceso , $arrEstadosFlujo.adelante )}
-                                    <select name="seqEstadoProceso"
-                                            id="seqEstadoProceso"
-                                            onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                            style="width:350px"
-                                    >
-                                        <!-- ESTADOS DEL PROCESO DE RETORNO -->
-                                        <optgroup label="Retorno">
-                                            {foreach from=$arrEstadosFlujo.atras item=seqEstado}
-                                                <option value="{$seqEstado}">{$arrEstados.$seqEstado}</option>
-                                            {/foreach}
-                                        </optgroup>
+                <table cellspacing="0" cellpadding="3" border="0" width="100%">
+                    <tr>
+                        <td style="width:100px;">
+                            <b>Estado</b>
+                        </td>
+                        <td align="left">
+                            {if in_array( $claFormulario->seqEstadoProceso , $arrEstadosFlujo.adelante )}
+                                <select name="seqEstadoProceso"
+                                        id="seqEstadoProceso"
+                                        onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                        style="width:350px"
+                                >
+                                    <!-- ESTADOS DEL PROCESO DE RETORNO -->
+                                    <optgroup label="Retorno">
+                                        {foreach from=$arrEstadosFlujo.atras item=seqEstado}
+                                            <option value="{$seqEstado}">{$arrEstados.$seqEstado}</option>
+                                        {/foreach}
+                                    </optgroup>
 
-                                        <!-- ESTADOS DEL PROCESO DE AVANCE -->
-                                        <optgroup label="Avance">
-                                            {foreach from=$arrEstadosFlujo.adelante item=seqEstado}
-                                                <option value="{$seqEstado}"
-                                                        {if $seqEstado == $claFormulario->seqEstadoProceso} selected {/if}
-                                                >
-                                                    {$arrEstados.$seqEstado}
-                                                </option>
-                                            {/foreach}
-                                        </optgroup>
-                                    </select>
-                                {else}
-                                    {assign var=seqEstadoProceso value=$claFormulario->seqEstadoProceso}
-                                    {$arrEstados.$seqEstadoProceso}
-                                    <input type="hidden"
-                                           name="seqEstadoProceso"
-                                           id="seqEstadoProceso"
-                                           value="{$seqEstadoProceso}"
-                                    >
-                                {/if}
-                            </td>
-                            <td style="width:100px;">
-                                <strong>Plan de Gobierno</strong>
-                            </td>
-                            <td align="left" style="width:200px;">
-                                {assign var=seqPlanGobierno value=$claFormulario->seqPlanGobierno}
-                                {$arrPlanGobierno.$seqPlanGobierno}
+                                    <!-- ESTADOS DEL PROCESO DE AVANCE -->
+                                    <optgroup label="Avance">
+                                        {foreach from=$arrEstadosFlujo.adelante item=seqEstado}
+                                            <option value="{$seqEstado}"
+                                                    {if $seqEstado == $claFormulario->seqEstadoProceso} selected {/if}
+                                            >
+                                                {$arrEstados.$seqEstado}
+                                            </option>
+                                        {/foreach}
+                                    </optgroup>
+                                </select>
+                            {else}
+                                {assign var=seqEstadoProceso value=$claFormulario->seqEstadoProceso}
+                                {$arrEstados.$seqEstadoProceso}
                                 <input type="hidden"
-                                       name="seqPlanGobierno"
-                                       id="seqPlanGobierno"
-                                       value="{$claFormulario->seqPlanGobierno}"
+                                       name="seqEstadoProceso"
+                                       id="seqEstadoProceso"
+                                       value="{$seqEstadoProceso}"
                                 >
-                            </td>
-                        </tr>
-                        <tr>
-                            <!-- NUMERO DEL FORMULARIO -->
-                            <td><b>No.Formulario</b></td>
-                            <td align="left">
-                                <input type="text"
-                                       name="txtFormulario"
-                                       id="txtFormulario"
-                                       value="{$claFormulario->txtFormulario}"
-                                       onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                       onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
-                                       style="width:100px;"
-                                        {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} disabled {/if}
-                                >
-                            </td>
-                            <td colspan="2">&nbsp;</td>
-                        </tr>
-                    </table>
-                </p>
+                            {/if}
+                        </td>
+                        <td style="width:100px;">
+                            <strong>Plan de Gobierno</strong>
+                        </td>
+                        <td align="left" style="width:200px;">
+                            {assign var=seqPlanGobierno value=$claFormulario->seqPlanGobierno}
+                            {$arrPlanGobierno.$seqPlanGobierno}
+                            <input type="hidden"
+                                   name="seqPlanGobierno"
+                                   id="seqPlanGobierno"
+                                   value="{$claFormulario->seqPlanGobierno}"
+                            >
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- NUMERO DEL FORMULARIO -->
+                        <td><b>No.Formulario</b></td>
+                        <td align="left">
+                            <input type="text"
+                                   name="txtFormulario"
+                                   id="txtFormulario"
+                                   value="{$claFormulario->txtFormulario}"
+                                   onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                   onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                   style="width:100px;"
+                                    {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} disabled {/if}
+                            >
+                        </td>
+                        <td colspan="2">&nbsp;</td>
+                    </tr>
+                </table>
 
                 <!-- SUB - PESTANAS DEL FORMULARIO DE POSTULACION -->
                 <div id="pestanasPostulacion" class="yui-navset" style="width:100%; text-align:left;">
@@ -146,7 +147,7 @@
                     <div class="yui-content">
 
                         <!-- COMPOSICION FAMILIAR -->
-                        <div id="composicion" style="height:{$numAltoPestanaSecundaria}; overflow:auto;">
+                        <div id="composicion" style="background-color:white;height:{$numAltoPestanaSecundaria}; overflow:auto;">
                             <p>
                                 <!-- TABLA PARA LAS FECHAS DE INSCRIPCION, POSTULACION, ULTIMA ACTUALIZACION -->
                                 <table cellpadding="5" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF">
@@ -449,10 +450,9 @@
                                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                                     id="bolLgtb"
                                                                     style="width:90%;"
-                                                                    disabled
                                                             >
-                                                                <option value="0">No</option>
-                                                                <option value="1">Si</option>
+                                                                <option value="0" disabled>No</option>
+                                                                <option value="1" disabled>Si</option>
                                                             </select>
                                                         </td>
                                                         <td>Nivel Educativo</td>
@@ -484,11 +484,11 @@
                                                                    style="width:90%; text-align: right; padding-right: 10px;"
                                                             />
                                                         </td>
-                                                        <td> Años Aprobados</td>
+                                                        <td>Años Aprobados</td>
                                                         <td align="center">
                                                             <select onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                                    id="anosAprobados"
+                                                                    id="numAnosAprobados"
                                                                     style="width:90%;"
                                                             >
                                                                 <option value="0">0</option>
@@ -514,24 +514,23 @@
                                                     <tr>
                                                         <!-- AFILIACION A SALUD -->
                                                         <td>Afiliación a Salud</td>
-                                                        <td align="center">
+                                                        <td align="center" colspan="3">
                                                             <select onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                                     id="seqSalud"
-                                                                    style="width:90%;"
+                                                                    style="width:96%;"
                                                             >
                                                                 {foreach from=$arrSalud key=seqSalud item=txtSalud}
                                                                     <option value="{$seqSalud}">{$txtSalud}</option>
                                                                 {/foreach}
                                                             </select>
                                                         </td>
-                                                        <td>&nbsp;</td>
-                                                        <td>&nbsp;</td>
                                                     </tr>
                                                     <tr>
                                                         <!-- AGREGAR AL FORMULARIO -->
                                                         <td colspan="4" align="right" height="25px" valign="top" style="padding-right:10px">
                                                             <a href="#" onClick="agregarMiembroHogar();">Agregar</a>
+                                                            <input type="hidden" id="cajaCompensacion" value="1">
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -570,14 +569,14 @@
 
                                         <table cellpadding="0" cellspacing="0" border="0" width="100%" id="{$objCiudadano->numDocumento}">
                                             <tr onMouseOver="this.style.background = '#E4E4E4';"
-                                                onMouseOut="this.style.background = '#F9F9F9';"
+                                                onMouseOut="this.style.background = '#FFFFFF';"
                                                 style="cursor:pointer"
                                             >
                                                 <td align="center" width="18px" height="22px">
                                                     <div style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;"
                                                          onClick="desplegarDetallesMiembroHogar('{$objCiudadano->numDocumento}')"
                                                          onMouseOver="this.style.backgroundColor = '#ADD8E6';"
-                                                         onMouseOut="this.style.backgroundColor = '#F9F9F9';"
+                                                         onMouseOut="this.style.backgroundColor = '#FFFFFF';"
                                                          id="masDetalles{$objCiudadano->numDocumento}"
                                                     >+</div>
                                                 </td>
@@ -607,14 +606,14 @@
                                                         <div	style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;"
                                                                 onClick="modificarMiembroHogar('{$objCiudadano->numDocumento}')"
                                                                 onMouseOver="this.style.backgroundColor = '#ADD8E6';"
-                                                                onMouseOut="this.style.backgroundColor = '#F9F9F9';"
+                                                                onMouseOut="this.style.backgroundColor = '#FFFFFF';"
                                                         >E</div>
                                                     </td>
                                                     <td align="center" width="18px" height="22px">
                                                         <div	style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;"
                                                                 onClick="quitarMiembroHogar('{$objCiudadano->numDocumento}');"
                                                                 onMouseOver="this.style.backgroundColor = '#FFA4A4';"
-                                                                onMouseOut="this.style.backgroundColor = '#F9F9F9'"
+                                                                onMouseOut="this.style.backgroundColor = '#FFFFFF'"
                                                         >X</div>
                                                     </td>
                                                 {/if}
@@ -643,26 +642,28 @@
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-bolLgtb" name="hogar[{$objCiudadano->numDocumento}][bolLgtb]" value="{$objCiudadano->bolLgtb}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqTipoVictima" name="hogar[{$objCiudadano->numDocumento}][seqTipoVictima]" value="{$objCiudadano->seqTipoVictima}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqNivelEducativo" name="hogar[{$objCiudadano->numDocumento}][seqNivelEducativo]" value="{$objCiudadano->seqNivelEducativo}">
-                                            <input type="hidden" id="{$objCiudadano->numDocumento}-anosAprobados" name="hogar[{$objCiudadano->numDocumento}][anosAprobados]" value="{$objCiudadano->numAnosAprobados}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-numAnosAprobados" name="hogar[{$objCiudadano->numDocumento}][numAnosAprobados]" value="{$objCiudadano->numAnosAprobados}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqSalud" name="hogar[{$objCiudadano->numDocumento}][seqSalud]" value="{$objCiudadano->seqSalud}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqCajaCompensacion" name="hogar[{$objCiudadano->numDocumento}][seqCajaCompensacion]" value="{$objCiudadano->seqCajaCompensacion}">
                                         </table>
 
                                         <!-- TABLA DE DETALLES DEL CIUDADANO -->
                                         <table cellpadding="0" cellspacing="0" border="0" width="100%" style="display:none;" id="detalles{$objCiudadano->numDocumento}">
                                             <tr>
                                                 <td colspan="6">
-                                                    <table cellpadding="2" cellspacing="0" border="0" width="100%" style="border: 1px solid #999999;">
+                                                    <table cellpadding="2" cellspacing="0" border="0" width="100%" style="border: 1px solid #999999; padding: 3px;">
                                                         <tr>
+                                                            <td><b>Fecha de Nacimiento:</b> {$objCiudadano->fchNacimiento}</td>
                                                             <td><b>Estado Civil:</b> {$arrEstadoCivil.$estadoCivil.txtEstadoCivil}</td>
-                                                            <td><b>Condición Étnica:</b>{if isset($arrCondicionEtnica.$codicionEtnica)} {$arrCondicionEtnica.$codicionEtnica} {else} Ninguna {/if}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td width="50%"><b>Sexo:</b> {$arrSexo.$sexo}</td>
+                                                            <td><b>Condición Étnica:</b>{if isset($arrCondicionEtnica.$codicionEtnica)} {$arrCondicionEtnica.$codicionEtnica} {else} Ninguna {/if}</td>
                                                             <td><b>Condición Especial 1:</b>{if isset($arrCondicionEspecial.$condicionEspecial)} {$arrCondicionEspecial.$condicionEspecial}{else}Ninguna{/if}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td><b>Fecha de Nacimiento:</b> {$objCiudadano->fchNacimiento}</td>
+                                                            <td width="50%"><b>Sexo:</b> {$arrSexo.$sexo}</td>
                                                             <td><b>Condición Especial 2:</b>{if isset($arrCondicionEspecial.$condicionEspecial2)} {$arrCondicionEspecial.$condicionEspecial2}{else}Ninguna{/if}</td>
+
                                                         </tr>
                                                         <tr>
                                                             <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if}</td>
@@ -718,670 +719,664 @@
                         </div>
 
                         <!-- DATOS DEL HOGAR -->
-                        <div id="hogar" style="height:409px;"><p>
+                        <div id="hogar" style="background-color:white; height:{$numAltoPestanaSecundaria}">
                             <p>
-                            <table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF"
-                                   style="border: 1px dotted #999999; padding:5px">
-                                <tr>
-                                    <!-- VIVIENDA ACTUAL -->
-                                    <td width="130px">Vivienda Actual</td>
-                                    <td width="210px">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqVivienda"
-                                                id="seqVivienda"
-                                                style="width:260px;"
-                                        >
-                                            {foreach from=$arrVivienda key=seqVivienda item=txtVivienda}
-                                                <option value="{$seqVivienda}"
-                                                        {if $claFormulario->seqVivienda == $seqVivienda} selected {/if}
-                                                >{$txtVivienda}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
+                                <p>
+                                    <table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF"
+                                           style="border: 1px dotted #999999; padding:5px">
+                                        <tr>
+                                            <!-- VIVIENDA ACTUAL -->
+                                            <td width="130px">Vivienda Actual</td>
+                                            <td width="210px">
+                                                <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                        name="seqVivienda"
+                                                        id="seqVivienda"
+                                                        style="width:260px;"
+                                                >
+                                                    {foreach from=$arrVivienda key=seqVivienda item=txtVivienda}
+                                                        <option value="{$seqVivienda}"
+                                                                {if $claFormulario->seqVivienda == $seqVivienda} selected {/if}
+                                                        >{$txtVivienda}</option>
+                                                    {/foreach}
+                                                </select>
+                                            </td>
 
-                                    <!-- SI PAGA ARRIENDO, CUANTO PAGA -->
-                                    <td>Valor del Arriendo</td>
-                                    <td width="210px">
-                                        $ <input type="text"
-                                                 name="valArriendo"
-                                                 id="valArriendo"
-                                                 value="{$claFormulario->valArriendo}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
-                                                 style="width:249px;"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- FECHA DESDE LA QUE PAGA ARRIENDO -->
-                                    <td>
-                                        Paga Arriendo Desde
-                                    </td>
-                                    <td>
-                                        <input type="text"
-                                               name="fchArriendoDesde"
-                                               id="fchArriendoDesde"
-                                               value="{if $claFormulario->fchArriendoDesde != '0000-00-00'}{$claFormulario->fchArriendoDesde}{/if}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:80px;"
-                                               readonly
-                                        />
-                                        <a onClick="calendarioPopUp('fchArriendoDesde')" href="#">Calendario</a>&nbsp;
-                                        <a onClick="document.getElementById('fchArriendoDesde').value = '';" href="#">Limpiar</a>
-                                    </td>
-                                    <td>
-                                        Comprobante Arriendo
-                                    </td>
-                                    <td>
-                                        <select name="txtComprobanteArriendo"
-                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                style="width:260px;"
-                                        >
-                                            <option value="">SELECCIONE</option>
-                                            <option value="no" {if $claFormulario->txtComprobanteArriendo == "no"} selected {/if}>No</option>
-                                            <option value="si" {if $claFormulario->txtComprobanteArriendo == "si"} selected {/if}>Si</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- DIRECCION DE RESIDENCIA -->
-                                    <td>
-                                        <a href="#" id="Direccion"
-                                           onClick="recogerDireccion('txtDireccion', 'objDireccionOculto')">Dirección</a>
-                                    </td>
-                                    <td colspan="3">
-                                        <input type="text"
-                                               name="txtDireccion"
-                                               id="txtDireccion"
-                                               value="{$claFormulario->txtDireccion}"
-                                               style="width:680px;"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                               readonly
-                                        />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- CIUDAD -->
-                                    <td>Ciudad</td>
-                                    <td>
-                                        <select
-                                                name="seqCiudad"
-                                                id="seqCiudad"
-                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                style="width:260px;"
-                                                onChange="cambiarCiudad(this);"
-                                        >
-                                            <option value="">Seleccione</option>
-                                            {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
-                                                <option value="{$seqCiudad}"
-                                                        {if $claFormulario->seqCiudad == $seqCiudad} selected {/if}
-                                                > {$txtCiudad}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
+                                            <!-- SI PAGA ARRIENDO, CUANTO PAGA -->
+                                            <td>Valor del Arriendo</td>
+                                            <td width="210px">
+                                                $ <input type="text"
+                                                         name="valArriendo"
+                                                         id="valArriendo"
+                                                         value="{$claFormulario->valArriendo|number_format:0:'.':'.'}"
+                                                         onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                         onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                         onkeyup="formatoSeparadores(this);"
+                                                         style="width:249px;"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <!-- FECHA DESDE LA QUE PAGA ARRIENDO -->
+                                            <td>
+                                                Paga Arriendo Desde
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       name="fchArriendoDesde"
+                                                       id="fchArriendoDesde"
+                                                       value="{$claFormulario->fchArriendoDesde}"
+                                                       onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                       onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                       style="width:80px;"
+                                                       readonly
+                                                />
+                                                <a onClick="calendarioPopUp('fchArriendoDesde')" href="#">Calendario</a>&nbsp;
+                                                <a onClick="document.getElementById('fchArriendoDesde').value = '';" href="#">Limpiar</a>
+                                            </td>
+                                            <td>
+                                                Comprobante Arriendo
+                                            </td>
+                                            <td>
+                                                <select name="txtComprobanteArriendo"
+                                                        onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                        style="width:260px;"
+                                                >
+                                                    <option value="">SELECCIONE</option>
+                                                    <option value="no" {if $claFormulario->txtComprobanteArriendo == "no"} selected {/if}>No</option>
+                                                    <option value="si" {if $claFormulario->txtComprobanteArriendo == "si"} selected {/if}>Si</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <!-- DIRECCION DE RESIDENCIA -->
+                                            <td>
+                                                <a href="#" id="Direccion"
+                                                   onClick="recogerDireccion('txtDireccion', 'objDireccionOculto')">Dirección</a>
+                                            </td>
+                                            <td colspan="3">
+                                                <input type="text"
+                                                       name="txtDireccion"
+                                                       id="txtDireccion"
+                                                       value="{$claFormulario->txtDireccion}"
+                                                       style="width:665px;"
+                                                       onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                       onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                       readonly
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <!-- CIUDAD -->
+                                            <td>Ciudad</td>
+                                            <td>
+                                                <select
+                                                        name="seqCiudad"
+                                                        id="seqCiudad"
+                                                        onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                        style="width:260px;"
+                                                        onChange="cambiarCiudad(this);"
+                                                >
+                                                    <option value="">Seleccione</option>
+                                                    {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
+                                                        <option value="{$seqCiudad}"
+                                                                {if $claFormulario->seqCiudad == $seqCiudad} selected {/if}
+                                                        > {$txtCiudad}</option>
+                                                    {/foreach}
+                                                </select>
+                                            </td>
 
-                                    <!-- LOCALIDAD -->
-                                    <td>Localidad</td>
-                                    <td id="tdlocalidad">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                onChange="obtenerBarrio(this);"
-                                                name="seqLocalidad"
-                                                id="seqLocalidad"
-                                                style="width:260px;"
-                                        >
-                                            <option value="1" selected>Seleccione{$seqLocalidad}
-                                                a{$claFormulario->seqLocalidad}</option>
-                                            {if intval( $claFormulario->seqCiudad ) != 0}
-                                                {if intval( $claFormulario->seqCiudad ) == 149} <!-- BOGOTA -->
+                                            <!-- LOCALIDAD -->
+                                            <td>Localidad</td>
+                                            <td id="tdlocalidad">
+                                                <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                        onChange="obtenerBarrio(this);"
+                                                        name="seqLocalidad"
+                                                        id="seqLocalidad"
+                                                        style="width:260px;"
+                                                >
+                                                    <option value="1" selected>Seleccione una</option>
                                                     {foreach from=$arrLocalidad key=seqLocalidad item=txtLocalidad}
-                                                        {if intval( $seqLocalidad ) != 22}
-                                                            <option value="{$seqLocalidad}"
-                                                                    {if $claFormulario->seqLocalidad == $seqLocalidad}
+                                                        <option value="{$seqLocalidad}"
+                                                                {if $claFormulario->seqLocalidad == $seqLocalidad}
+                                                                    selected
+                                                                {/if}
+                                                        >
+                                                            {$txtLocalidad}
+                                                        </option>
+                                                    {/foreach}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <!-- BARRIO -->
+                                            <td valign="top" height="22px">Barrio</td>
+                                            <td valign="top" align="left" id="tdBarrio">
+                                                <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                        onChange="obtenerUpz(this);"
+                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                        name="seqBarrio"
+                                                        id="seqBarrio"
+                                                        style="width:260px;"
+                                                >
+                                                    <option value="0">Seleccione</option>
+                                                    {if intval( $claFormulario->seqLocalidad ) != 0}
+                                                        {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
+                                                            <option value="{$seqBarrio}"
+                                                                    {if $claFormulario->seqBarrio == $seqBarrio}
                                                                         selected
                                                                     {/if}
                                                             >
-                                                                {$txtLocalidad}
+                                                                {$txtBarrio}
                                                             </option>
+                                                        {/foreach}
+                                                    {/if}
+                                                </select>
+                                            </td>
+                                            <td id="tdupz">
+                                                &nbsp;<input type='hidden' readonly id='seqUpz' name='seqUpz' value="{$claFormulario->seqUpz}">
+                                            </td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td>N° Hogares en la vivienda</td>
+                                            <td><input type="number" name="numHabitaciones" autofocus="" size="4" maxlength="3"
+                                                       min="0" step="1" style="width: 40px"
+                                                       value="{$claFormulario->numHabitaciones}"></td>
+                                            <td>Número Dormitorios</td>
+                                            <td><input type="number" name="numHacinamiento" autofocus="" size="4" maxlength="3"
+                                                       min="0" step="1" style="width: 40px"
+                                                       value="{$claFormulario->numHacinamiento}"></td>
+                                        </tr>
+
+                                        <!-- TELEFONO 1 TELEFONO 2 Y CELULAR -->
+                                        <tr>
+                                            <td>Teléfonos</td>
+                                            <td>
+                                                <input type="text"
+                                                       name="numTelefono1"
+                                                       id="numTelefono1"
+                                                       value="{$claFormulario->numTelefono1}"
+                                                       onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                       onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
+                                                       style="width:122px;"
+                                                /> ó
+                                                <input type="text"
+                                                       name="numTelefono2"
+                                                       id="numTelefono2"
+                                                       value="{$claFormulario->numTelefono2}"
+                                                       onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                       onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
+                                                       style="width:122px;"
+                                                />
+                                            </td>
+                                            <td>Teléfono Celular</td>
+                                            <td>
+                                                <input type="text"
+                                                       name="numCelular"
+                                                       id="numCelular"
+                                                       value="{$claFormulario->numCelular}"
+                                                       onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                       onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
+                                                       style="width:260px;"
+                                                />
+                                            </td>
+                                        </tr>
+
+                                        <!-- CORREO ELECTRONICO -->
+                                        <tr>
+                                            <td>Correo Electr&oacute;nico</td>
+                                            <td colspan="3">
+                                                <input type="text"
+                                                       name="txtCorreo"
+                                                       id="txtCorreo"
+                                                       value="{$claFormulario->txtCorreo}"
+                                                       onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                       onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                                       style="width:680px;"
+                                                       class="inputLogin"
+                                                />
+                                            </td>
+                                        </tr>
+
+                                        <!-- SISBEN y DESPLAZAMIENTO FORZADO -->
+                                        <tr>
+                                            <td>Sisben </td>
+                                            <td>
+                                                <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                        name="seqSisben"
+                                                        id="seqSisben"
+                                                        style="width:260px;"
+                                                ><option value="0" selected>SELECCIONE</option>
+                                                    {foreach from=$arrSisben key=seqSisben item=arrRegistro}
+                                                        {if $claFormulario->seqPlanGobierno == 3}
+                                                            {if $arrRegistro.bolActivo == 1}
+                                                                <option value="{$seqSisben}"
+                                                                        {if $claFormulario->seqSisben == $seqSisben} selected {/if}
+                                                                >{$arrRegistro.txtSisben}</option>
+                                                            {/if}
+                                                        {else}
+                                                            {if intval($seqSisben) != 9}
+                                                                <option value="{$seqSisben}"
+                                                                        {if $claFormulario->seqSisben == $seqSisben} selected {/if}
+                                                                >{$arrRegistro.txtSisben}</option>
+                                                            {/if}
                                                         {/if}
                                                     {/foreach}
-                                                {else} <!-- FUERA DE BOGOTA -->
-                                                    <option value="22"
-                                                            {if $claFormulario->seqLocalidad == 22}
-                                                                selected
-                                                            {/if}
+                                                </select>
+                                                </select>
+                                            </td>
+                                            <td>Desplazamiento forzado</td>
+                                            <td>
+                                                <!-- SI HAY AL MENOS UN CIUDADNO CON HECHO VICTIMIZANTE "DESPLAZAMIENTO FORZADO" SE MARCA COMO SI -->
+                                                <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           name="bolDesplazado"
+                                                           id="bolDesplazado"
+                                                           style="width:260px;"
+                                                >
+                                                    <option value="0" {if $numVictima == 0} selected {/if} disabled>No</option>
+                                                    <option value="1" {if $numVictima == 1} selected {/if} disabled>Si</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </p>
+
+                                <!-- TABLA RED DE SERVICIOS -->
+                                <p>
+                                    <table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" style="border: 1px dotted #999999; padding:5px">
+                                        <tr>
+                                            <!-- INTEGRACION SOCIAL -->
+                                            <td width="110px">Integraci&oacute;n Social</td>
+                                            <td style="padding-left:10px;">
+                                                <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           name="bolIntegracionSocial"
+                                                           id="bolIntegracionSocial"
+                                                           style="width:100%;"
+                                                >
+                                                    <option value="0" {if $claFormulario->bolIntegracionSocial != 1} selected {/if} >No</option>
+                                                    <option value="1" {if $claFormulario->bolIntegracionSocial == 1} selected {/if} >Si</option>
+                                                </select>
+                                            </td>
+
+                                            <!-- SEC SALUD -->
+                                            {if $claFormulario->seqPlanGobierno != 3}
+                                                <td width="110px" align="right">Sec. Salud</td>
+                                                <td style="padding-left:10px;">
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                               name="bolSecSalud"
+                                                               id="bolSecSalud"
+                                                               style="width:100%;"
                                                     >
-                                                        Fuera de Bogotá
-                                                    </option>
-                                                {/if}
-                                            {/if}
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- BARRIO -->
-                                    <td valign="top" height="22px">Barrio</td>
-                                    <td valign="top" align="left" id="tdBarrio">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onChange="obtenerUpz(this);"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqBarrio"
-                                                id="seqBarrio"
-                                                style="width:260px;"
-                                        >
-                                            <option value="0">Seleccione</option>
-                                            {if intval( $claFormulario->seqLocalidad ) != 0}
-                                                {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
-                                                    <option value="{$seqBarrio}"
-                                                            {if $claFormulario->seqBarrio == $seqBarrio}
-                                                                selected
-                                                            {/if}
+                                                        <option value="0" {if $claFormulario->bolSecSalud != 1} selected {/if} >No</option>
+                                                        <option value="1" {if $claFormulario->bolSecSalud == 1} selected {/if} >Si</option>
+                                                    </select>
+                                                </td>
+
+                                                <!-- SEC EDUCACION -->
+                                                <td width="110px" align="right">Sec. Educacion</td>
+                                                <td style="padding-left:10px;">
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                               name="bolSecEducacion"
+                                                               id="bolSecEducacion"
+                                                               style="width:100%;"
                                                     >
-                                                        {$txtBarrio}
-                                                    </option>
-                                                {/foreach}
+                                                        <option value="0" {if $claFormulario->bolSecEducacion != 1} selected {/if} >No</option>
+                                                        <option value="1" {if $claFormulario->bolSecEducacion == 1} selected {/if} >Si</option>
+                                                    </select>
+                                                </td>
+                                                <input type="hidden" name="bolSecMujer" value="{$claFormulario->bolSecMujer|@intval}">
+                                            {else}
+                                                <td width="110px" align="center">Sec. de la Mujer</td>
+                                                <td style="padding-left:10px;">
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                               name="bolSecMujer"
+                                                               id="bolSecMujer"
+                                                               style="width:100%;"
+                                                    >
+                                                        <option value="0" {if $claFormulario->bolSecMujer != 1} selected {/if} >No</option>
+                                                        <option value="1" {if $claFormulario->bolSecMujer == 1} selected {/if} >Si</option>
+                                                    </select>
+                                                </td>
+                                                <input type="hidden" name="bolSecSalud" value="{$claFormulario->bolSecSalud|@intval}">
+                                                <input type="hidden" name="bolSecEducacion" value="{$claFormulario->bolSecEducacion|@intval}">
                                             {/if}
-                                        </select>
-                                    </td>
-                                    <td id="tdupz">
-                                        &nbsp;<input type='hidden' readonly id='seqUpz' name='seqUpz' value="{$claFormulario->seqUpz}">
-                                    </td>
-                                    <td>&nbsp;</td>
-                                </tr>
 
-                                <!-- TELEFONO 1 TELEFONO 2 Y CELULAR -->
-                                <tr>
-                                    <td>Teléfonos</td>
-                                    <td>
-                                        <input type="text"
-                                               name="numTelefono1"
-                                               id="numTelefono1"
-                                               value="{$claFormulario->numTelefono1}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:122px;"
-                                        /> ó
-                                        <input type="text"
-                                               name="numTelefono2"
-                                               id="numTelefono2"
-                                               value="{$claFormulario->numTelefono2}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:122px;"
-                                        />
-                                    </td>
-                                    <td>Teléfono Celular</td>
-                                    <td>
-                                        <input type="text"
-                                               name="numCelular"
-                                               id="numCelular"
-                                               value="{$claFormulario->numCelular}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:260px;"
-                                        />
-                                    </td>
-                                </tr>
-
-                                <!-- CORREO ELECTRONICO -->
-                                <tr>
-                                    <td>Correo Electr&oacute;nico</td>
-                                    <td colspan="3">
-                                        <input type="text"
-                                               name="txtCorreo"
-                                               id="txtCorreo"
-                                               value="{$claFormulario->txtCorreo}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:680px;"
-                                               class="inputLogin"
-                                        />
-                                    </td>
-                                </tr>
-
-                                <!-- SISBEN y DESPLAZAMIENTO FORZADO -->
-                                <tr>
-                                    <td>Sisben </td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqSisben"
-                                                id="seqSisben"
-                                                style="width:260px;"
-                                        ><option value="0" selected>SELECCIONE</option>
-                                            {foreach from=$arrSisben key=seqSisben item=arrRegistro}
-                                                {if $claFormulario->seqPlanGobierno == 3}
-                                                    <option value="{$seqSisben}"
-                                                            {if $claFormulario->seqSisben == $seqSisben} selected {/if}
-                                                            {if $arrRegistro.bolActivo == 0} disabled {/if}
-                                                    >{$arrRegistro.txtSisben}</option>
-                                                {else}
-                                                    {if intval($seqSisben) != 9}
-                                                        <option value="{$seqSisben}"
-                                                                {if $claFormulario->seqSisben == $seqSisben} selected {/if}
-                                                        >{$arrRegistro.txtSisben}</option>
-                                                    {/if}
-                                                {/if}
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                    <td>Desplazamiento forzado</td>
-                                    <td>
-                                        <!-- SI HAY AL MENOS UN CIUDADNO CON HECHO VICTIMIZANTE "DESPLAZAMIENTO FORZADO" SE MARCA COMO SI -->
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                   name="bolDesplazado"
-                                                   id="bolDesplazado"
-                                                   style="width:260px;"
-                                        >
-                                            <option value="0" {if $numVictima == 0} selected {/if} disabled>No</option>
-                                            <option value="1" {if $numVictima == 1} selected {/if} disabled>Si</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                            </p>
-
-                            <!-- TABLA RED DE SERVICIOS -->
-                            <p>
-                            <table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" style="border: 1px dotted #999999; padding:5px">
-                                <tr>
-                                    <!-- INTEGRACION SOCIAL -->
-                                    <td width="110px">Integraci&oacute;n Social</td>
-                                    <td style="padding-left:10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                   name="bolIntegracionSocial"
-                                                   id="bolIntegracionSocial"
-                                                   style="width:100%;"
-                                        >
-                                            <option value="0" {if $claFormulario->bolIntegracionSocial != 1} selected {/if} >No</option>
-                                            <option value="1" {if $claFormulario->bolIntegracionSocial == 1} selected {/if} >Si</option>
-                                        </select>
-                                    </td>
-
-                                    <!-- SEC SALUD -->
-                                    {if $claFormulario->seqPlanGobierno != 3}
-                                        <td width="110px" align="right">Sec. Salud</td>
-                                        <td style="padding-left:10px;">
-                                            <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                       onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                       name="bolSecSalud"
-                                                       id="bolSecSalud"
-                                                       style="width:100%;"
-                                            >
-                                                <option value="0" {if $claFormulario->bolSecSalud != 1} selected {/if} >No</option>
-                                                <option value="1" {if $claFormulario->bolSecSalud == 1} selected {/if} >Si</option>
-                                            </select>
-                                        </td>
-
-                                        <!-- SEC EDUCACION -->
-                                        <td width="110px" align="right">Sec. Educacion</td>
-                                        <td style="padding-left:10px;">
-                                            <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                       onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                       name="bolSecEducacion"
-                                                       id="bolSecEducacion"
-                                                       style="width:100%;"
-                                            >
-                                                <option value="0" {if $claFormulario->bolSecEducacion != 1} selected {/if} >No</option>
-                                                <option value="1" {if $claFormulario->bolSecEducacion == 1} selected {/if} >Si</option>
-                                            </select>
-                                        </td>
-                                        <input type="hidden" name="bolSecMujer" value="{$claFormulario->bolSecMujer|@intval}">
-                                    {else}
-                                        <td width="110px" align="center">Sec. de la Mujer</td>
-                                        <td style="padding-left:10px;">
-                                            <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                       onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                       name="bolSecMujer"
-                                                       id="bolSecMujer"
-                                                       style="width:100%;"
-                                            >
-                                                <option value="0" {if $claFormulario->bolSecMujer != 1} selected {/if} >No</option>
-                                                <option value="1" {if $claFormulario->bolSecMujer == 1} selected {/if} >Si</option>
-                                            </select>
-                                        </td>
-                                        <input type="hidden" name="bolSecSalud" value="{$claFormulario->bolSecSalud|@intval}">
-                                        <input type="hidden" name="bolSecEducacion" value="{$claFormulario->bolSecEducacion|@intval}">
-                                    {/if}
-
-                                    <!-- IPES -->
-                                    <td width="110px" align="right">IPES</td>
-                                    <td style="padding-left:10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                   name="bolIpes"
-                                                   id="bolIpes"
-                                                   style="width:100%;"
-                                        >
-                                            <option value="0" {if $claFormulario->bolIpes != 1} selected {/if} >No</option>
-                                            <option value="1" {if $claFormulario->bolIpes == 1} selected {/if} >Si</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <input type="hidden" name="txtOtro" value="{$claFormulario->txtOtro}">
-                            </table>
-                            </p>
+                                            <!-- IPES -->
+                                            <td width="110px" align="right">IPES</td>
+                                            <td style="padding-left:10px;">
+                                                <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           name="bolIpes"
+                                                           id="bolIpes"
+                                                           style="width:100%;"
+                                                >
+                                                    <option value="0" {if $claFormulario->bolIpes != 1} selected {/if} >No</option>
+                                                    <option value="1" {if $claFormulario->bolIpes == 1} selected {/if} >Si</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <input type="hidden" name="txtOtro" value="{$claFormulario->txtOtro}">
+                                    </table>
+                                </p>
                             </p>
                         </div>
 
                         <!-- DATOS DE POSUTLACION -->
-                        <div id="modalidad" style="height:410px;"><p>
-                            <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666;">
+                        <div id="modalidad" style="background-color:white; height:{$numAltoPestanaSecundaria};">
+                            <p>
+                                <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666;">
 
-                                <!-- MODALIDAD DEL SUBSIDIO y TIPO DE SOLUCION -->
-                                <tr>
-                                    <td width="150px">Modalidad Solución</td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqModalidad"
-                                                id="seqModalidad"
-                                                style="width:100%;"
-                                                onChange="datosPestanaPostulacion('modalidad');"
-                                        >
-                                            <option value="0">Seleccione</option>
-                                            {foreach from=$arrModalidad key=seqModalidad item=txtModalidad}
-                                                <option value="{$seqModalidad}"
-                                                        {if $claFormulario->seqModalidad == $seqModalidad} selected {/if}
-                                                >
-                                                    {$txtModalidad}
-                                                </option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                    <td width="100px">Tipo Solución</td>
-                                    <td id="tdTipoSolucion" align="left">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqSolucion"
-                                                id="seqSolucion"
-                                                style="width:100%;"
-                                        >
-                                            <option value="1">NINGUNA</option>
-                                            {if intval( $claFormulario->seqModalidad ) != 0}
-                                                {foreach from=$arrSolucion key=seqSolucion item=arrDatos}
-                                                    {if $claFormulario->seqModalidad == $arrDatos.seqModalidad}
-                                                        <option value="{$seqSolucion}"
-                                                                {if $claFormulario->seqSolucion == $seqSolucion}
-                                                                    selected
-                                                                {/if}
-                                                        >
-                                                            {$arrDatos.txtSolucion}
-                                                        </option>
-                                                    {/if}
+                                    <!-- MODALIDAD DEL SUBSIDIO y TIPO DE SOLUCION -->
+                                    <tr>
+                                        <td width="150px">Modalidad Solución</td>
+                                        <td>
+                                            <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    name="seqModalidad"
+                                                    id="seqModalidad"
+                                                    style="width:100%;"
+                                                    onChange="datosPestanaPostulacion('modalidad');"
+                                            >
+                                                <option value="0">Seleccione</option>
+                                                {foreach from=$arrModalidad key=seqModalidad item=txtModalidad}
+                                                    <option value="{$seqModalidad}"
+                                                            {if $claFormulario->seqModalidad == $seqModalidad} selected {/if}
+                                                    >
+                                                        {$txtModalidad}
+                                                    </option>
                                                 {/foreach}
-                                            {/if}
-                                        </select>
-                                    </td>
-                                </tr>
+                                            </select>
+                                        </td>
+                                        <td width="100px">Tipo Solución</td>
+                                        <td id="tdTipoSolucion" align="left">
+                                            <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    name="seqSolucion"
+                                                    id="seqSolucion"
+                                                    style="width:100%;"
+                                            >
+                                                <option value="1">NINGUNA</option>
+                                                {if intval( $claFormulario->seqModalidad ) != 0}
+                                                    {foreach from=$arrSolucion key=seqSolucion item=arrDatos}
+                                                        {if $claFormulario->seqModalidad == $arrDatos.seqModalidad}
+                                                            <option value="{$seqSolucion}"
+                                                                    {if $claFormulario->seqSolucion == $seqSolucion}
+                                                                        selected
+                                                                    {/if}
+                                                            >
+                                                                {$arrDatos.txtSolucion}
+                                                            </option>
+                                                        {/if}
+                                                    {/foreach}
+                                                {/if}
+                                            </select>
+                                        </td>
+                                    </tr>
 
-                                <!-- TIPO ESQUEMA -->
-                                <tr>
-                                    <td>Tipo Esquema</td>
-                                    <td colspan="3" align="left">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                onChange="datosPestanaPostulacion('esquema');"
-                                                name="seqTipoEsquema"
-                                                id="seqTipoEsquema"
-                                                style="width:100%"
-                                        >
-                                            <option value="0" selected>NINGUNO</option>
-                                            {foreach from=$arrTipoEsquemas key=seqTipoEsquema item=txtTipoEsquema}
-                                                <option value="{$seqTipoEsquema}"
-                                                        {if $claFormulario->seqTipoEsquema == $seqTipoEsquema} selected {/if}
-                                                >
-                                                    {$txtTipoEsquema}
+                                    <!-- TIPO ESQUEMA -->
+                                    <tr>
+                                        <td>Tipo Esquema</td>
+                                        <td colspan="3" align="left">
+                                            <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    onChange="datosPestanaPostulacion('esquema');"
+                                                    name="seqTipoEsquema"
+                                                    id="seqTipoEsquema"
+                                                    style="width:100%"
+                                            >
+                                                <option value="0" selected>NINGUNO</option>
+                                                {foreach from=$arrTipoEsquemas key=seqTipoEsquema item=txtTipoEsquema}
+                                                    <option value="{$seqTipoEsquema}"
+                                                            {if $claFormulario->seqTipoEsquema == $seqTipoEsquema} selected {/if}
+                                                    >
+                                                        {$txtTipoEsquema}
+                                                    </option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <!-- PROYECTO -->
+                                    <tr>
+                                        <td>Proyecto</td>
+                                        <td id="tdProyecto" colspan="3" align="left">
+                                            <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    onChange="datosPestanaPostulacion('proyecto');"
+                                                    name="seqProyecto"
+                                                    id="seqProyecto"
+                                                    style="width:100%"
+                                            >
+                                                <option value="37" selected>NINGUNO</option>
+                                                {foreach from=$arrProyectos key=seqProyecto item=txtNombreProyecto}
+                                                    <option value="{$seqProyecto}"
+                                                            {if $claFormulario->seqProyecto == $seqProyecto} selected {/if}
+                                                    >
+                                                        {$txtNombreProyecto}
+                                                    </option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <!-- CONJUNTOS RESIDENCIALES (PROYECTOS HIJO) -->
+                                    <tr>
+                                        <td>Conjuntos Residenciales</td>
+                                        <td id="tdConjuntoResidencial" colspan="3" align="left">
+                                            <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    onChange="datosPestanaPostulacion('conjuntos');"
+                                                    name="seqProyectoHijo"
+                                                    id="seqProyectoHijo"
+                                                    style="width:100%"
+                                            >
+                                                <option value='0' selected>NINGUNO</option>
+                                                {foreach from=$arrProyectosHijos key=seqProyecto item=txtNombreProyecto}
+                                                    <option value="{$seqProyecto}"
+                                                            {if $claFormulario->seqProyectoHijo == $seqProyecto} selected {/if}
+                                                    >
+                                                        {$txtNombreProyecto}
+                                                    </option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <!-- UNIDADES RESIDENCIALES -->
+                                    <tr>
+                                        <td>Unidad Residencial</td>
+                                        <td id="tdUnidadProyecto" align="left" colspan="3">
+                                            <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    onChange="valorSubsidio();"
+                                                    name="seqUnidadProyecto"
+                                                    id="seqUnidadProyecto"
+                                                    style="width:100%;"
+                                            >
+                                                <option value="1">NINGUNA</option>
+                                                {foreach from=$arrUnidadProyecto key=seqUnidadProyecto item=txtNombre}
+                                                    <option value="{$seqUnidadProyecto}"
+                                                            {if $claFormulario->seqUnidadProyecto == $seqUnidadProyecto} selected {/if}
+                                                    >
+                                                        {$txtNombre}
+                                                    </option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <!-- DIRECCION SOLUCION -->
+                                    <tr>
+                                        <td width="130px">
+                                            <a href="#" id="DireccionSolucion"
+                                               onClick="recogerDireccion('txtDireccionSolucion', 'objDireccionOcultoSolucion')">Dirección
+                                                Solución</a>
+                                        </td>
+                                        <td colspan="3" align="left">
+                                            <input type="text"
+                                                   name="txtDireccionSolucion"
+                                                   id="txtDireccionSolucion"
+                                                   value="{$claFormulario->txtDireccionSolucion}"
+                                                   style="width:100%;"
+                                                   onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                   readonly
+                                            />
+                                        </td>
+                                    </tr>
+
+                                    <!-- NUMERO DE MATRICULA INMOBILIARIA Y CHIP -->
+                                    <tr>
+                                        <td>Matricula Inmobiliaria</td>
+                                        <td>
+                                            <input type="text"
+                                                   name="txtMatriculaInmobiliaria"
+                                                   id="txtMatriculaInmobiliaria"
+                                                   value="{$claFormulario->txtMatriculaInmobiliaria}"
+                                                   onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                   onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                                   style="width:260px;"
+                                            />
+                                        </td>
+                                        <td>CHIP</td>
+                                        <td>
+                                            <input type="text"
+                                                   name="txtChip"
+                                                   id="txtChip"
+                                                   value="{$claFormulario->txtChip}"
+                                                   onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                   onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                                   style="width:100%;"
+                                            />
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666">
+
+                                    <!-- TIENE PROMESA DE COMPRA VENTA FIRMADA -->
+                                    <tr>
+                                        <td width="350px">¿ Tiene una {if $arrFlujoHogar.flujo == "pin"}separación{else}promesa de compra-venta{/if} firmada ?</td>
+                                        <td>
+                                            <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    name="bolPromesaFirmada"
+                                                    id="bolPromesaFirmada"
+                                                    style="width:100px;"
+                                            >
+                                                <option value="0" {if $claFormulario->bolPromesaFirmada != 1} selected {/if}>
+                                                    No
                                                 </option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
-
-                                <!-- PROYECTO -->
-                                <tr>
-                                    <td>Proyecto</td>
-                                    <td id="tdProyecto" colspan="3" align="left">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                onChange="datosPestanaPostulacion('proyecto');"
-                                                name="seqProyecto"
-                                                id="seqProyecto"
-                                                style="width:100%"
-                                        >
-                                            <option value="37" selected>NINGUNO</option>
-                                            {foreach from=$arrProyectos key=seqProyecto item=txtNombreProyecto}
-                                                <option value="{$seqProyecto}"
-                                                        {if $claFormulario->seqProyecto == $seqProyecto} selected {/if}
-                                                >
-                                                    {$txtNombreProyecto}
+                                                <option value="1" {if $claFormulario->bolPromesaFirmada == 1} selected {/if}>
+                                                    Si
                                                 </option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
+                                            </select>
+                                        </td>
+                                        <td>&nbsp;</td>
+                                    </tr>
 
-                                <!-- CONJUNTOS RESIDENCIALES (PROYECTOS HIJO) -->
-                                <tr>
-                                    <td>Conjuntos Residenciales</td>
-                                    <td id="tdConjuntoResidencial" colspan="3" align="left">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                onChange="datosPestanaPostulacion('conjuntos');"
-                                                name="seqProyectoHijo"
-                                                id="seqProyectoHijo"
-                                                style="width:100%"
-                                        >
-                                            <option value='0' selected>NINGUNO</option>
-                                            {foreach from=$arrProyectosHijos key=seqProyecto item=txtNombreProyecto}
-                                                <option value="{$seqProyecto}"
-                                                        {if $claFormulario->seqProyectoHijo == $seqProyecto} selected {/if}
-                                                >
-                                                    {$txtNombreProyecto}
+                                    <!-- TIENE IDENTIFICADA UNA SOLUCION DE VIVIENDA VIABILIZADA POR LA SDHT -->
+                                    <tr>
+                                        <td>¿ Tiene identificada una solución viabilizada por la SDHT ?</td>
+                                        <td>
+                                            <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    name="bolIdentificada"
+                                                    id="bolIdentificada"
+                                                    style="width:100px;"
+                                            >
+                                                <option value="0" {if $claFormulario->bolIdentificada != 1} selected {/if}>
+                                                    No
                                                 </option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
-
-                                <!-- UNIDADES RESIDENCIALES -->
-                                <tr>
-                                    <td>Unidad Residencial</td>
-                                    <td id="tdUnidadProyecto" align="left" colspan="3">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                onChange="valorSubsidio();"
-                                                name="seqUnidadProyecto"
-                                                id="seqUnidadProyecto"
-                                                style="width:100%;"
-                                        >
-                                            <option value="1">NINGUNA</option>
-                                            {foreach from=$arrUnidadProyecto key=seqUnidadProyecto item=txtNombre}
-                                                <option value="{$seqUnidadProyecto}"
-                                                        {if $claFormulario->seqUnidadProyecto == $seqUnidadProyecto} selected {/if}
-                                                >
-                                                    {$txtNombre}
+                                                <option value="1" {if $claFormulario->bolIdentificada == 1} selected {/if}>
+                                                    Si
                                                 </option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
+                                            </select>
+                                        </td>
+                                        <td>&nbsp;</td>
+                                    </tr>
 
-                                <!-- DIRECCION SOLUCION -->
-                                <tr>
-                                    <td width="130px">
-                                        <a href="#" id="DireccionSolucion"
-                                           onClick="recogerDireccion('txtDireccionSolucion', 'objDireccionOcultoSolucion')">Dirección
-                                            Solución</a>
-                                    </td>
-                                    <td colspan="3" align="left">
-                                        <input type="text"
-                                               name="txtDireccionSolucion"
-                                               id="txtDireccionSolucion"
-                                               value="{$claFormulario->txtDireccionSolucion}"
-                                               style="width:100%;"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                               readonly
-                                        />
-                                    </td>
-                                </tr>
+                                    <!-- PERTENECE A UN PLAN DE VIVIENDA VIABILIZADA POR LA SDHT -->
+                                    <tr>
+                                        <td>¿ Pertenece a un plan de vivienda viabilizada por la SDHT</td>
+                                        <td>
+                                            <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    name="bolViabilizada"
+                                                    id="bolViabilizada"
+                                                    style="width:100px;"
+                                            >
+                                                <option value="0" {if $claFormulario->bolViabilizada != 1} selected {/if}>
+                                                    No
+                                                </option>
+                                                <option value="1" {if $claFormulario->bolViabilizada == 1} selected {/if}>
+                                                    Si
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666">
+                                    <tr>
+                                        <!-- VALOR DEL PRESUPUESTO -->
+                                        <td width="120px">Presupuesto</td>
+                                        <td width="120px">
+                                            $ <input type="text"
+                                                     name="valPresupuesto"
+                                                     id="valPresupuesto"
+                                                     value="{$claFormulario->valPresupuesto|number_format:0:'.':'.'}"
+                                                     onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                     onKeyUp="sumarTotal();"
+                                                     style="width:100px;"
+                                            />
+                                        </td>
 
-                                <!-- NUMERO DE MATRICULA INMOBILIARIA Y CHIP -->
-                                <tr>
-                                    <td>Matricula Inmobiliaria</td>
-                                    <td>
-                                        <input type="text"
-                                               name="txtMatriculaInmobiliaria"
-                                               id="txtMatriculaInmobiliaria"
-                                               value="{$claFormulario->txtMatriculaInmobiliaria}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:260px;"
-                                        />
-                                    </td>
-                                    <td>CHIP</td>
-                                    <td>
-                                        <input type="text"
-                                               name="txtChip"
-                                               id="txtChip"
-                                               value="{$claFormulario->txtChip}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:100%;"
-                                        />
-                                    </td>
-                                </tr>
-                            </table>
-                            <br>
-                            <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666">
+                                        <!-- VALOR DEL AVALUO  -->
+                                        <td>Aval&uacute;o</td>
+                                        <td width="120px">
+                                            $ <input type="text"
+                                                     name="valAvaluo"
+                                                     id="valAvaluo"
+                                                     value="{$claFormulario->valAvaluo|number_format:0:'.':'.'}"
+                                                     onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                     onKeyUp="sumarTotal();"
+                                                     style="width:100px;"
+                                            />
+                                        </td>
 
-                                <!-- TIENE PROMESA DE COMPRA VENTA FIRMADA -->
-                                <tr>
-                                    <td width="350px">¿ Tiene una promesa de compra - venta firmada ?</td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="bolPromesaFirmada"
-                                                id="bolPromesaFirmada"
-                                                style="width:100px;"
-                                        >
-                                            <option value="0" {if $claFormulario->bolPromesaFirmada != 1} selected {/if}>
-                                                No
-                                            </option>
-                                            <option value="1" {if $claFormulario->bolPromesaFirmada == 1} selected {/if}>
-                                                Si
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td>&nbsp;</td>
-                                </tr>
-
-                                <!-- TIENE IDENTIFICADA UNA SOLUCION DE VIVIENDA VIABILIZADA POR LA SDHT -->
-                                <tr>
-                                    <td>¿ Tiene Identificada una solución Viabilizada por la SDHT ?</td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="bolIdentificada"
-                                                id="bolIdentificada"
-                                                style="width:100px;"
-                                        >
-                                            <option value="0" {if $claFormulario->bolIdentificada != 1} selected {/if}>
-                                                No
-                                            </option>
-                                            <option value="1" {if $claFormulario->bolIdentificada == 1} selected {/if}>
-                                                Si
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td>&nbsp;</td>
-                                </tr>
-
-                                <!-- PERTENECE A UN PLAN DE VIVIENDA VIABILIZADA POR LA SDHT -->
-                                <tr>
-                                    <td>Pertenece a un Plan de Vivienda Viabilizada por la SDHT</td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="bolViabilizada"
-                                                id="bolViabilizada"
-                                                style="width:100px;"
-                                        >
-                                            <option value="0" {if $claFormulario->bolViabilizada != 1} selected {/if}>
-                                                No
-                                            </option>
-                                            <option value="1" {if $claFormulario->bolViabilizada == 1} selected {/if}>
-                                                Si
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                            </table>
-                            <br>
-
-
-                            <table cellpadding="3" cellspacing="0" border="0" width="100%"
-                                   style="border: 1px dotted #666666">
-                                <tr>
-                                    <!-- VALOR DEL PRESUPUESTO -->
-                                    <td width="120px">Presupuesto</td>
-                                    <td width="120px">
-                                        $ <input type="text"
-                                                 name="valPresupuesto"
-                                                 id="valPresupuesto"
-                                                 value="{$claFormulario->valPresupuesto|number_format:0:'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF'; sumarTotal();"
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
-                                                 style="width:100px;"
-                                        />
-                                    </td>
-
-                                    <!-- VALOR DEL AVALUO  -->
-                                    <td>Aval&uacute;o</td>
-                                    <td width="120px">
-                                        $ <input type="text"
-                                                 name="valAvaluo"
-                                                 id="valAvaluo"
-                                                 value="{$claFormulario->valAvaluo|number_format:0:'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF'; sumarTotal();"
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
-                                                 style="width:100px;"
-                                        />
-                                    </td>
-
-                                    <!-- VALOR TOTAL  -->
-                                    <td>Total</td>
-                                    <td width="134px">
-                                        $ <input type="text"
-                                                 name="valTotal"
-                                                 id="valTotal"
-                                                 value="{$claFormulario->valTotal}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="soloNumeros(this);
-                  this.style.backgroundColor = '#FFFFFF';"
-                                                 style="width:90%;"
-                                                 readonly
-                                        />
-                                    </td>
-                                </tr>
-                            </table>
-
-                            </p></div>
+                                        <!-- VALOR TOTAL  -->
+                                        <td>Total</td>
+                                        <td width="134px">
+                                            $ <input type="text"
+                                                     name="valTotal"
+                                                     id="valTotal"
+                                                     value="{$claFormulario->valTotal}"
+                                                     onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                     style="width:90%;"
+                                                     readonly
+                                            />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </p>
+                        </div>
 
                         <!-- INFORMACION FINANCIERA -->
-                        <div id="financiera" style="height:407px;">
+                        <div id="financiera" style="background-color:white; height:{$numAltoPestanaSecundaria};">
                             <p>
                             <table cellpadding="1" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF">
 
@@ -1396,8 +1391,8 @@
                                                  id="valSaldoCuentaAhorro"
                                                  value="{$claFormulario->valSaldoCuentaAhorro|number_format:'0':'.':'.'}"
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF'; sumarTotalRecursos();"
-                                                 onKeyUp="formatoSeparadores(this)"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
                                                  style="padding-right: 5px; width:100px; text-align:right;" />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL AHORRO -->
@@ -1445,11 +1440,6 @@
                                 </tr>
 
                                 <tr><!-- FECHA APERTURA CUENTA AHORRO -->
-                                    {if $claFormulario->fchAperturaCuentaAhorro == '0000-00-00'}
-                                        {assign var=fchAperturaCuentaAhorro value=""}
-                                    {else}
-                                        {assign var=fchAperturaCuentaAhorro value=$claFormulario->fchAperturaCuentaAhorro}
-                                    {/if}
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>Fecha Apertura</td>
@@ -1457,7 +1447,7 @@
                                         <input type="text"
                                                name="fchAperturaCuentaAhorro"
                                                id="fchAperturaCuentaAhorro"
-                                               value="{$fchAperturaCuentaAhorro}"
+                                               value="{$claFormulario->fchAperturaCuentaAhorro}"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                onBlur="sinCaracteresEspeciales(this);
                                                            this.style.backgroundColor = '#FFFFFF';"
@@ -1477,8 +1467,8 @@
                                                  id="valSaldoCuentaAhorro2"
                                                  value="{$claFormulario->valSaldoCuentaAhorro2|number_format:'0':'.':'.'}"
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF'; sumarTotalRecursos();"
-                                                 onKeyUp="formatoSeparadores(this)"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
                                                  style="padding-right: 5px; width:100px; text-align:right;" />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL AHORRO -->
@@ -1525,11 +1515,6 @@
                                 </tr>
 
                                 <tr><!-- FECHA APERTURA CUENTA AHORRO -->
-                                    {if $claFormulario->fchAperturaCuentaAhorro2 == '0000-00-00'}
-                                        {assign var=fchAperturaCuentaAhorro2 value=""}
-                                    {else}
-                                        {assign var=fchAperturaCuentaAhorro2 value=$claFormulario->fchAperturaCuentaAhorro2}
-                                    {/if}
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>Fecha Apertura</td>
@@ -1537,7 +1522,7 @@
                                         <input type="text"
                                                name="fchAperturaCuentaAhorro2"
                                                id="fchAperturaCuentaAhorro2"
-                                               value="{$fchAperturaCuentaAhorro2}"
+                                               value="{$claFormulario->fchAperturaCuentaAhorro2}"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                onBlur="sinCaracteresEspeciales(this);
                                                            this.style.backgroundColor = '#FFFFFF';"
@@ -1558,8 +1543,8 @@
                                                  id="valSaldoCesantias"
                                                  value="{$claFormulario->valSaldoCesantias|number_format:'0':'.':'.'}"
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF'; sumarTotalRecursos();"
-                                                 onKeyUp="formatoSeparadores(this)"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
                                                  style="padding-right: 5px; width:100px;text-align:right;" />
                                     </td>
                                     <!-- SOPORTE CESANTIAS -->
@@ -1570,8 +1555,7 @@
                                                id="txtSoporteCesantias"
                                                value="{$claFormulario->txtSoporteCesantias}"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                               this.style.backgroundColor = '#FFFFFF';"
+                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
                                                style="width:300px;" />
                                     </td>
                                 </tr>
@@ -1584,8 +1568,8 @@
                                                  id="valCredito"
                                                  value="{$claFormulario->valCredito|number_format:'0':'.':'.'}"
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF'; sumarTotalRecursos();"
-                                                 onKeyUp="formatoSeparadores(this)"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
                                                  style="padding-right: 5px; width:100px;text-align:right;" />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL CREDITO -->
@@ -1624,12 +1608,6 @@
                                 </tr>
 
                                 <tr><!-- FECHA APROBACION CREDITO -->
-                                    {if $claFormulario->fchAprobacionCredito == '0000-00-00'}
-                                        {assign var=fchAprobacionCredito value=""}
-                                    {else}
-                                        {assign var=fchAprobacionCredito value=$claFormulario->fchAprobacionCredito}
-                                    {/if}
-
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>Fecha Vencimiento</td>
@@ -1637,10 +1615,9 @@
                                         <input type="text"
                                                name="fchAprobacionCredito"
                                                id="fchAprobacionCredito"
-                                               value="{$fchAprobacionCredito}"
+                                               value="{$claFormulario->fchAprobacionCredito}"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                               this.style.backgroundColor = '#FFFFFF';"
+                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
                                                style="width:100px;"
                                                maxlength="10"
                                                readonly />
@@ -1665,8 +1642,8 @@
                                                  id="valSubsidioNacional"
                                                  value="{$claFormulario->valSubsidioNacional|number_format:'0':'.':'.'}"
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF'; sumarTotalRecursos();"
-                                                 onKeyUp="formatoSeparadores(this)"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
                                                  style="padding-right: 5px; width:100px;text-align:right;"
                                         />
                                     </td>
@@ -1696,8 +1673,7 @@
                                                id="txtSoporteSubsidioNacional"
                                                value="{$claFormulario->txtSoporteSubsidioNacional}"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
                                                style="width:300px;" />
                                     </td>
                                 </tr>
@@ -1712,8 +1688,8 @@
                                                  id="valDonacion"
                                                  value="{$claFormulario->valDonacion|number_format:'0':'.':'.'}"
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF'; sumarTotalRecursos();"
-                                                 onKeyUp="formatoSeparadores(this)"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
                                                  style="padding-right: 5px; width:100px;text-align:right;" />
                                     </td>
 
@@ -1745,15 +1721,56 @@
                                                id="txtSoporteDonacion"
                                                value="{$claFormulario->txtSoporteDonacion}"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
                                                style="width:300px;" />
                                     </td>
                                 </tr>
 
-                                <tr bgcolor="#E0E0E0">
+                                <!-- muestra los campos del leasing si corresponde -->
+                                {if $claFormulario->seqPlanGobierno == 3 and $claFormulario->seqModalidad == 13}
+                                    {assign var=bolCamposLeasing value=""}
+                                    {assign var=bolCamposNoLeasing value="none"}
+                                {else}
+                                    {assign var=bolCamposLeasing value="none"}
+                                    {assign var=bolCamposNoLeasing value=""}
+                                {/if}
+
+                                <tr bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                    <!-- SUMA DE RECURSOS PROPIOS -->
+                                    <td class="tituloTabla" style="padding-top:5px;">Recursos propios</td>
+                                    <td align="right" style="padding-top:5px; padding-right:5px">
+                                        $ <input type="text"
+                                                 id="valSumaRecursosPropios"
+                                                 value="{$valSumaRecursosPropios|number_format:'0':',':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                 readonly
+                                        >
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                    <!-- SUMA DE SUBSIDIOS -->
+                                    <td class="tituloTabla" style="padding-top:5px;">Valor Subsidios + (Donacion y/o VUR)</td>
+                                    <td align="right" style="padding-top:5px; padding-right:5px">
+                                        $ <input type="text"
+                                                 id="valSumaSubsidios"
+                                                 value="{$valSumaSubsidios|number_format:'0':',':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                 readonly
+                                        >
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+
+                                </tr>
+                                <tr bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
                                     <!-- TOTAL RECURSOS ECONOMICOS -->
-                                    <td class="tituloTabla" style="padding-top:5px;">Recursos Propios</td>
+                                    <td class="tituloTabla" style="padding-top:5px;">Total recursos del hogar</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">
                                         $ <input type="text"
                                                  name="valTotalRecursos"
@@ -1769,8 +1786,109 @@
                                     <td>&nbsp;</td>
                                 </tr>
 
-                                <tr bgcolor="#E0E0E0">
+                                <!-- CAMPOS DE LA MODALIDAD DE LEASING  -->
+                                <tr style="display: {$bolCamposLeasing};">
 
+                                    <!-- VIABILIDAD LEASING -->
+                                    <td>Viabilidad leasing por entidad financiera</td>
+                                    <td style="padding-right: 5px;" align="right">
+                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                   name="bolViabilidadLeasing"
+                                                   id="bolViabilidadLeasing"
+                                                   style="width:100px;" >
+                                            <option value="1" {if $claFormulario->bolViabilidadLeasing == 1} selected {/if}>Si</option>
+                                            <option value="0" {if $claFormulario->bolViabilidadLeasing == 0} selected {/if}>No</option>
+                                        </select>
+                                    </td>
+
+                                    <!-- ENTIDAD QUE HACE EL LEASING -->
+                                    <td>Convenio</td>
+                                    <td style="padding-left: 10px;">
+                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                   name="seqConvenio"
+                                                   id="seqConvenio"
+                                                   onChange="mostrarToolTip()"
+                                                   style="width:250px;">
+                                            <option value="1">Ninguno</option>
+                                            {foreach from=$arrConvenio key=seqConvenio item=arrRegistro}
+                                                <option value="{$seqConvenio}"
+                                                        {if $claFormulario->seqConvenio == $seqConvenio} selected {/if}
+                                                >{$arrRegistro.txtNombre}</option>
+                                            {/foreach}
+                                        </select>
+                                        <img src="./recursos/imagenes/ayuda.png"
+                                             style="width: 15px; height: 15px;"
+                                             title=""
+                                             id="seqConvenioToolTip"
+                                             onMouseOver="mostrarToolTip();"
+                                        >
+                                    </td>
+
+                                </tr>
+                                <tr style="display: {$bolCamposLeasing};">
+                                    <!-- VALOR -->
+                                    <td>Valor del aporte en la carta</td>
+                                    <td align="right" style="padding-right: 5px;">
+                                        $ <input type="text"
+                                                 name="valCartaLeasing"
+                                                 id="valCartaLeasing"
+                                                 value="{$claFormulario->valCartaLeasing|number_format:'0':'.':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                 readonly
+                                        />
+                                    </td>
+
+                                    <!-- SOPORTE LEASING -->
+                                    <td>Soporte</td>
+                                    <td align="center">
+                                        <input type="text"
+                                               name="txtSoporteLeasing"
+                                               id="txtSoporteLeasing"
+                                               value="{$claFormulario->txtSoporteLeasing}"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                               style="width:300px;" />
+                                    </td>
+                                </tr>
+                                <tr style="display: {$bolCamposLeasing};">
+                                    <!-- FECHA APROBACION LEASING -->
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>Fecha Aprobación</td>
+                                    <td style="padding-left:11px;">
+                                        <input type="text"
+                                               name="fchAprobacionLeasing"
+                                               id="fchAprobacionLeasing"
+                                               value="{$claFormulario->fchAprobacionLeasing}"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                               style="width:100px;"
+                                               maxlength="10"
+                                               readonly />
+                                        <a onClick="calendarioPopUp('fchAprobacionLeasing')" href="#">Calendario</a>&nbsp;&nbsp;
+                                        <a onClick="document.getElementById('fchAprobacionLeasing').value = '';" href="#">Limpiar</a>
+                                    </td>
+                                </tr>
+                                <tr style="display: {$bolCamposLeasing};">
+                                    <!-- DURACION DEL LEASING -->
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>Duración</td>
+                                    <td align="left" style="padding-left:11px;">
+                                        <input type="text"
+                                               name="numDuracionLeasing"
+                                               id="numDuracionLeasing"
+                                               value="{$claFormulario->numDuracionLeasing}"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="formatoSeparadores(this); this.style.backgroundColor = '#FFFFFF';"
+                                               style="width:50px;" /> Meses
+                                    </td>
+                                </tr>
+                                <tr>
                                     <!-- VALOR AL QUE ASPIRA DEL SUBSIDIO -->
                                     <td class="tituloTabla" height="25px" align="top">
                                         Valor
@@ -1780,7 +1898,7 @@
                                             Estimado del Aporte
                                         {/if}
                                     </td>
-                                    <td align="right" style="padding-right:5px" id="tdValSubsidio" height="25px" align="top">
+                                    <td bgcolor="#E0E0E0" align="right" style="padding-right:5px" id="tdValSubsidio" height="25px" align="top">
                                         $ <input type="text"
                                                  name="valAspiraSubsidio"
                                                  id="valAspiraSubsidio"
@@ -1793,10 +1911,10 @@
                                     </td>
 
                                     {if $claFormulario->seqPlanGobierno == 2}
-                                        <td class="tituloTabla" height="25px" align="top">
+                                        <td bgcolor="#E0E0E0" class="tituloTabla" height="25px" align="top">
                                             Soporte Cambio
                                         </td>
-                                        <td style="padding-left: 10px;" height="25px" align="top">
+                                        <td bgcolor="#E0E0E0" style="padding-left: 10px;" height="25px" align="top">
                                             <input type="text"
                                                    name="txtSoporteSubsidio"
                                                    id="txtSoporteSubsidio"
@@ -1808,46 +1926,11 @@
                                             />
                                         </td>
                                     {else}
-                                        <td>&nbsp;</td>
-                                        <td>&nbsp;</td>
+                                        <td bgcolor="#E0E0E0">&nbsp;</td>
+                                        <td bgcolor="#E0E0E0">&nbsp;</td>
                                         <input type="hidden" name="txtSoporteSubsidio" value="{$claFormulario->txtSoporteSubsidio}">
                                     {/if}
                                 </tr>
-
-                                <tr bgcolor="#E0E0E0">
-
-                                    <!-- Suma de los valores recursos mas subsidio -->
-                                    <td class="tituloTabla" height="25px" align="top">
-                                        Valor Total Estimado
-                                    </td>
-                                    <td align="right" style="padding-right:5px" id="tdValSubsidio" height="25px" align="top">
-                                        $ <input type="text"
-                                                 id="valTotalEstimado"
-                                                 value="{$valSumaRecursos|number_format:0:'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 style="padding-right: 5px; width:100px; text-align:right;"
-                                                 readonly
-                                        />
-                                    </td>
-                                    <td class="tituloTabla" height="25px" align="top">
-                                        <input type="text"
-                                               id="valTotalEstimadoSMMLV"
-                                               value="{$valSumaRecursosSMMLV|number_format:2:'.':'.'}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                               style="padding-right: 5px; width:100px; text-align:right;"
-                                               readonly
-                                        />
-                                    </td>
-                                    <td style="padding-left: 10px;" height="25px" align="top">
-                                        <strong>SMMLV ($ {$valSalarioMinimo|number_format:0:'.':'.'})</strong>
-                                        <input type="hidden" id="SMMLV" value="{$valSalarioMinimo}">
-                                    </td>
-                                </tr>
-
-
-
                             </table>
                             </p>
                         </div>
@@ -1856,7 +1939,7 @@
             </div>
 
             <!-- SEGUIMIENTO AL HOGAR -->
-            <div id="seg" style="height:401px; overflow:auto;">
+            <div id="seg" style="height:{$numAltoPestanaSecundaria}; overflow:auto;">
                 {include file="seguimiento/seguimientoFormulario.tpl"}
                 <div id="contenidoBusqueda">
                     {include file="seguimiento/buscarSeguimiento.tpl"}
@@ -1864,33 +1947,29 @@
             </div>
 
             <!-- ACTOS ADMINISTRATIVOS -->
-            <div id="aad" style="height:401px;">
-                <p>
-                    {include file="subsidios/actosAdministrativos.tpl"}
-                </p>
+            <div id="aad" style="height:{$numAltoPestanaSecundaria};">
+                {include file="subsidios/actosAdministrativos.tpl"}
             </div>
         </div>
     </div>
-
-
-
-    <input type="hidden" name="numDocumento" value="{$numDocumento}">
 
     <!-- VARIABLES QUE YA NO SE USAN PERO SE COLOCAN PARA RESPETAR LOS VALORES DEL OBJETO -->
     <input type="hidden" id="valAporteLote"        name="valAporteLote"        value="{$claFormulario->valAporteLote}">
     <input type="hidden" id="valAporteAvanceObra"  name="valAporteAvanceObra"  value="{$claFormulario->valAporteAvanceObra}">
     <input type="hidden" id="valAporteMateriales"  name="valAporteMateriales"  value="{$claFormulario->valAporteMateriales}">
+    <input type="hidden" id="seqCesantias"         name="seqCesantias"         value="{$claFormulario->seqCesantias}">
+    <input type="hidden" id="seqPuntoAtencion"     name="seqPuntoAtencion"     value="{$claFormulario->seqPuntoAtencion}">
+    <input type="hidden" id="seqPeriodo"           name="seqPeriodo"           value="{$claFormulario->seqPeriodo}">
 
-    {if isset( $txtArchivoCEM ) && trim( $txtArchivoCEM ) != ""}
-        <input type="hidden" name="seqCasaMano" value="{$seqCasaMano}">
-        <input type="hidden" name="txtFase" value="{$arrFlujoHogar.fase}">
-        <input type="hidden" name="txtFlujo" value="{$arrFlujoHogar.flujo}">
-    {/if}
 
     <!-- VARIABLES ADICIONALES INMODIFICABLES NECESARIAS -->
-    <input type="hidden" id="seqFormulario"        name="seqFormulario" value="{$seqFormulario}">
-    <input type="hidden" id="numDocumento"         name="numDocumento"  value="{$numDocumento}">
-    <input type="hidden"                           name="txtArchivo"    value="./contenidos/casaMano/salvarPostulacion.php">
+    <input type="hidden" id="seqCasaMano"   name="seqCasaMano"   value="{$claCasaMano->seqCasaMano}">
+    <input type="hidden" id="seqFormulario" name="seqFormulario" value="{$claFormulario->seqFormulario}">
+    <input type="hidden" id="cedula"        name="cedula"        value="{$arrPost.cedula}">
+    <input type="hidden" id="txtFase"       name="txtFase"       value="{$arrFlujoHogar.fase}">
+    <input type="hidden" id="txtFlujo"      name="txtFlujo"      value="{$arrFlujoHogar.flujo}">
+    <input type="hidden"                    name="txtArchivo"    value="{$txtArchivo}">
+    <input type="hidden" id="seqUsuario"    name="seqUsuario"    value="{$smarty.session.seqUsuario}">
 
 </form>
 

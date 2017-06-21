@@ -1,4 +1,4 @@
-    <?php
+<?php
 
     /**
      * SALVA LOS DATOS DE REGISTRO DE OFERTA EN EL ESQUEMA
@@ -18,8 +18,6 @@
     include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php");
     include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php");
 
-    //pr($_POST);die();
-
     // Verifica los permisos de creacion / edicion
     if (intval($_POST['seqCasaMano']) == 0) {
         if ($_SESSION["privilegios"]["crear"] != 1) {
@@ -34,18 +32,14 @@
     $claFormulario = new FormularioSubsidios();
     $claFormulario->cargarFormulario($_POST['seqFormulario']);
 
-    /*
-     * SEGUN LA MODALIDAD PIDE ALGUNOS CAMPOS COMO OBLIGATORIOS
-     * PARA ARRENDAMIENTO SON DIFERENTES
-     */
+    /****************************************************************************************************************
+     * VALIDACIONES DE LA PESTAÑA DE DATOS DEL INMUEBLE
+     ***************************************************************************************************************/
 
-    // FLUJO DE DATOS DE ESCRITURA PUBLICA Y FASE BUSQUEDA DE OFERTA
-    $txtEtiqueta = ($claFormulario->seqModalidad != 5) ? "Vendedor" : "Arrendador";
-
-    $arrObligatorios['txtNombreVendedor'] = "Nombre del $txtEtiqueta";
-    $arrObligatorios['numDocumentoVendedor'] = "Documento del $txtEtiqueta";
+    $arrObligatorios['txtNombreVendedor'] = "Nombre del Vendedor";
+    $arrObligatorios['numDocumentoVendedor'] = "Documento del Vendedor";
     $arrObligatorios['txtCompraVivienda'] = "Tipo de Vivienda";
-    $arrObligatorios['numTelefonoVendedor'] = "N&uacute;mero de Tel&eacute;fono del $txtEtiqueta";
+    $arrObligatorios['numTelefonoVendedor'] = "N&uacute;mero de Tel&eacute;fono del Vendedor";
     $arrObligatorios['txtCorreoVendedor'] = "Correo Electr&oacute;nico";
     $arrObligatorios['txtDireccionInmueble'] = "Direcci&oacute;n del Inmueble";
     $arrObligatorios['seqCiudad'] = "Ciudad";
@@ -84,79 +78,93 @@
         }
     }
 
-    if ($claFormulario->seqModalidad != 5) { // OTRAS MODALIDADES DIFERENTES A ARRIENDO
+    /****************************************************************************************************************
+     * VALIDACIONES DE LA PESTAÑA DE RECIBO DE DOCUMENTOS
+     ***************************************************************************************************************/
 
-
-        $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
-        $arrObligatorios['numBoletinCatastral'] = "Boletin Catastral";
-
-        // desplazado
-        if ($claFormulario->bolDesplazado == 1) {
+    // Retorno o reubicacion
+    if( $claFormulario->seqTipoEsquema == 11 ){
+        if ($_POST['txtCompraVivienda'] != "nueva") {
+            $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
+            $arrObligatorios['numAltoRiesgo'] = "Certificado de riesgo";
             $arrObligatorios['numHabitabilidad'] = "Certificado de Habitabilidad";
+            $arrObligatorios['numBoletinCatastral'] = "Boletin Catastral";
+            $arrObligatorios['numLicenciaConstruccion'] = "Licencia de Construcci&oacute;n";
+            $arrObligatorios['numUltimoPredial'] = "Ultimo Recibo Predial";
+            $arrObligatorios['numActaEntrega'] = "Certificado de Constructora de Entrega Inmueble";
+        }else{
+            $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
+            $arrObligatorios['numAltoRiesgo'] = "Certificado de riesgo";
+            $arrObligatorios['numHabitabilidad'] = "Certificado de Habitabilidad";
+            $arrObligatorios['numBoletinCatastral'] = "Boletin Catastral";
+            $arrObligatorios['numUltimoPredial'] = "Último Recibo Predial";
+            $arrObligatorios['numUltimoReciboAgua'] = "Último recibo de acueducto y alcantarillado";
+            $arrObligatorios['numUltimoReciboEnergia'] = "Último recibo de Energ&iacute;a";
         }
+    }elseif( $claFormulario->seqTipoEsquema == 10 ) { // proyectos fuera de la secretaría
 
         if ($_POST['txtCompraVivienda'] == "nueva") {
+            $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
+            $arrObligatorios['numAltoRiesgo'] = "Certificado de riesgo";
+            $arrObligatorios['numBoletinCatastral'] = "Boletin Catastral";
             $arrObligatorios['numLicenciaConstruccion'] = "Licencia de Construcci&oacute;n";
-        } else { // Vivienda Usada
-            $arrObligatorios['numEscrituraPublica'] = "Escritura P&uacute;blica";
             $arrObligatorios['numUltimoPredial'] = "Ultimo Recibo Predial";
-            $arrObligatorios['numUltimoReciboAgua'] = "Ultimo Recibo de Agua";
-            $arrObligatorios['numUltimoReciboEnergia'] = "Ultimo Recibo de Energia";
+            $arrObligatorios['numActaEntrega'] = "Certificado de Constructora de Entrega Inmueble";
+        }else{
+            $arrErrores[] = "No puede tomar la opción de vivienda usada bajo el esquema de proyectos fuera de la secreataría";
         }
 
-        if ($_POST['documentos'] == "persona") {
-            $arrObligatorios['numFotocopiaVendedor'] = "Fotocopia Cédula del Vendedor";
-        } else {
-            $arrObligatorios['numFotocopiaVendedor'] = "Fotocopia Cedula del Representante Legal";
-            $arrObligatorios['numRut'] = "Fotocopia del RUT";
-            $arrObligatorios['numRit'] = "Fotocopia del RIT";
-        }
+    } else{
+        $arrErrores[] = "Esquema no permitido para el recibo de documentos ";
+    }
 
-    } else { // OBLIGATORIOS PARA LA MODALIDAD DE ARRENDAMIENTO EN LA FASE DE ESCRITURACION
-
-        $arrObligatorios["numContratoArrendamiento"] = "Contrato de Arrendamiento";
-        $arrObligatorios["numAperturaCAP"] = "Certificado Apertura CAP";
-        $arrObligatorios["numCedulaArrendador"] = "Cédula Arrendador";
-        $arrObligatorios["numCuentaArrendador"] = "Certificación Cuenta Arrendador";
-        $arrObligatorios["numServiciosPublicos"] = "Tres Recibos de Servicios Públicos";
-        $arrObligatorios["numRetiroRecursos"] = "Autorizacion de retiro de recursos";
-
+    if ($_POST['documentos'] == "persona") {
+        $arrObligatorios['numFotocopiaVendedor'] = "Fotocopia Cédula del Vendedor";
+    } else {
+        $arrObligatorios['numFotocopiaVendedor'] = "Fotocopia Cedula del Representante Legal";
+        $arrObligatorios['numRut'] = "Fotocopia del RUT";
+        $arrObligatorios['numRit'] = "Fotocopia del RIT";
     }
 
     // Si no hay errores se pasa a validar que los datos obligatorios esten diligenciados
-//    foreach ($arrObligatorios as $txtClave => $txtValor) {
-//        if (isset($_POST[$txtClave])) {
-//            $bolError = false;
-//            //echo "#". $_POST[ $txtClave ] ."#";
-//            switch (substr($txtClave, 0, 3)) {
-//                case "num":
-//                    $bolError = (intval($_POST[$txtClave]) == 0) ? true : false;
-//                    break;
-//                case "seq":
-//                    $bolError = (intval($_POST[$txtClave]) == 0) ? true : false;
-//                    break;
-//                case "fch":
-//                    $bolError = (!esFechaValida(trim($_POST[$txtClave])));
-//                    break;
-//                case "txt":
-//                    $bolError = (trim($_POST[$txtClave]) == "") ? true : false;
-//                    break;
-//                default:
-//                    $bolError = (trim($_POST[$txtClave]) == "") ? true : false;
-//                    break;
-//            }
-//            if ($bolError == true) {
-//                $arrErrores[] = "Debe dar un valor v&aacute;lido para el campo " . $arrObligatorios[$txtClave];
-//            }
-//        } else {
-//            $arrErrores[] = "Debe dar un valor v&aacute;lido para el campo " . $arrObligatorios[$txtClave];
-//        }
-//    }
+    if(empty($arrErrores)) {
+        foreach ($arrObligatorios as $txtClave => $txtValor) {
+            if (isset($_POST[$txtClave])) {
+                $bolError = false;
+                switch (substr($txtClave, 0, 3)) {
+                    case "num":
+                        $bolError = (intval($_POST[$txtClave]) == 0) ? true : false;
+                        break;
+                    case "seq":
+                        $bolError = (intval($_POST[$txtClave]) == 0) ? true : false;
+                        break;
+                    case "fch":
+                        $bolError = (!esFechaValida(trim($_POST[$txtClave])));
+                        break;
+                    case "txt":
+                        $bolError = (trim($_POST[$txtClave]) == "") ? true : false;
+                        break;
+                    default:
+                        $bolError = (trim($_POST[$txtClave]) == "") ? true : false;
+                        break;
+                }
+                if ($bolError == true) {
+                    $arrErrores[] = "Debe dar un valor v&aacute;lido para el campo " . $arrObligatorios[$txtClave];
+                }
+            } else {
+                $arrErrores[] = "Debe dar un valor v&aacute;lido para el campo " . $arrObligatorios[$txtClave];
+            }
+        }
+    }
 
     // El valor del inmueble no debe superar ls 70 smmlv
     if (intval($_POST['numValorInmueble']) > ($arrConfiguracion['constantes']['salarioMinimo'] * 70)) {
         $arrErrores[] = "El Valor del Inmueble supera el l&iacute;mite permitido";
     }
+
+    /****************************************************************************************************************
+     * SALVA EL REGISTRO
+     ***************************************************************************************************************/
 
     // Salvar el registro si no hay errores
     if (empty($arrErrores)) {
@@ -166,27 +174,31 @@
 
         if (!empty($claCasaMano->arrErrores)) {
             $arrErrores = $claCasaMano->arrErrores;
+        }else{
+            $arrMensajes = $claCasaMano->arrMensajes;
         }
 
     }
 
-    /**
-     * IMPRESION DE LOS MENSAJES GENERADOS POR EL CODIGO
-     */
+    /****************************************************************************************************************
+     * IMPRIMIENDO MENSAJES
+     ***************************************************************************************************************/
 
-    if (empty($arrErrores)) {
-        $arrMensajes = $claCasaMano->arrMensajes;
-        $txtEstilo = "msgOk";
-    } else {
-        $arrMensajes = $arrErrores;
-        $txtEstilo = "msgError";
-    }
+    imprimirMensajes($arrErrores,$arrMensajes);
 
-    echo "<table cellpadding='0' cellspacing='0' border='0' width='100%' id='tablaMensajes' style='padding:5px' class='$txtEstilo'>";
-    foreach ($arrMensajes as $txtMensaje) {
-        echo "<tr><td class='$txtEstilo'><li>$txtMensaje</li></td></tr>";
-    }
-    echo "</table>";
-    echo "<div id='tablaMensajes'><input type='hidden' id='casaMano' value='$seqCasaMano'></div>";
+//    if (empty($arrErrores)) {
+//        $arrMensajes = $claCasaMano->arrMensajes;
+//        $txtEstilo = "msgOk";
+//    } else {
+//        $arrMensajes = $arrErrores;
+//        $txtEstilo = "msgError";
+//    }
+//
+//    echo "<table cellpadding='0' cellspacing='0' border='0' width='100%' id='tablaMensajes' style='padding:5px' class='$txtEstilo'>";
+//    foreach ($arrMensajes as $txtMensaje) {
+//        echo "<tr><td class='$txtEstilo'><li>$txtMensaje</li></td></tr>";
+//    }
+//    echo "</table>";
+//    echo "<div id='tablaMensajes'><input type='hidden' id='casaMano' value='$seqCasaMano'></div>";
 
-    ?>
+?>

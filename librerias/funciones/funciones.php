@@ -72,6 +72,7 @@ function esSoloLetrasNumeros($txtCadena) {
  */
 function imprimirMensajes($arrErrores, $arrMensajes = array(), $idDivOculto = "") {
     global $claSmarty;
+
     if (empty($arrErrores)) {
         $claSmarty->assign("arrImprimir", $arrMensajes);
         $claSmarty->assign("estilo", "msgOk");
@@ -82,7 +83,6 @@ function imprimirMensajes($arrErrores, $arrMensajes = array(), $idDivOculto = ""
     if ($idDivOculto != "") {
         $claSmarty->assign("idDivOculto", $idDivOculto);
     }
-
     $claSmarty->display("mensajes.tpl");
 }
 
@@ -108,7 +108,7 @@ function proximoVencimiento($numDias) {
  */
 function esFechaValida($fchFecha) {
     if (trim($fchFecha) != "") {
-        list( $ano, $mes, $dia ) = split("[\/-]", $fchFecha);
+        list( $ano, $mes, $dia ) = mb_split("[\/-]", $fchFecha);
         if (!@checkdate($mes, $dia, $ano)) {
             return false;
         }
@@ -731,6 +731,7 @@ function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqPlanGobie
           upr.txtNombreUnidad
         FROM t_pry_unidad_proyecto upr
         WHERE upr.bolActivo = 1
+          AND upr.seqUnidadProyecto <> 1
           AND upr.seqProyecto = ".$seqProyectoHijo."
           AND upr.seqPlanGobierno = " . $seqPlanGobierno . "
           AND upr.seqModalidad = " . $seqModalidad . "
@@ -830,9 +831,12 @@ function valorSubsidio($claFormulario){
                     $valSubsidio = $valVivienda - ($valSubsidioNAL + $valVUR);
                 }
             }
+            $valSubsidio = ($valSubsidio > $valTope)? $valTope : $valSubsidio;
+            $valSubsidio = ($valSubsidio * $arrConfiguracion['constantes']['salarioMinimo']);
+        }elseif($claFormulario->seqModalidad == 13){
+            $valSubsidio = mb_ereg_replace("[^0-9]","" , $claFormulario->valCartaLeasing);
         }
-        $valSubsidio = ($valSubsidio > $valTope)? $valTope : $valSubsidio;
-        $valSubsidio = ($valSubsidio * $arrConfiguracion['constantes']['salarioMinimo']);
+
     }
     return $valSubsidio;
 }
@@ -874,5 +878,45 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno){
 
     return $arrTipoEsquemas;
 }
+
+function obtenerTextoConvenio($seqConvenio){
+    $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtNombre","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio");
+    $txtConvenio = "Sin Convenio Seleccionado";
+    if( intval( $seqConvenio ) > 1 ){
+        $txtConvenio =
+            "<strong>Nombre:</strong> " . $arrConvenio[$seqConvenio]['txtNombre'] . "<br>" .
+            "<strong>Banco:</strong> " . $arrConvenio[$seqConvenio]['txtBanco'] . "<br>" .
+            "<strong>Cupos:</strong> " . number_format($arrConvenio[$seqConvenio]['numCupos'],0,".",".") . "<br>" .
+            "<strong>Ocupados:</strong> " . number_format($arrConvenio[$seqConvenio]['numOcupados'],0,".",".") . "<br>" .
+            "<strong>Disponibles:</strong> " . number_format($arrConvenio[$seqConvenio]['numDisponibles'],0,".",".") . "<br>" .
+            "<strong>Valor unitario:</strong> $ " . number_format($arrConvenio[$seqConvenio]['valCupos'],0,".",".") . "<br>";
+    }
+    return "{\"convenio\":\"" . $txtConvenio . "\",\"valor\":\"" . $arrConvenio[$seqConvenio]['valCupos'] . "\"}";
+}
+
+function regularizarCampo($txtClave, $txtValor){
+    switch( substr($txtClave,0,3) ){
+        case "num":
+            $txtValor = doubleval(mb_ereg_replace("[^0-9]","", $txtValor));
+            break;
+        case "val":
+            $txtValor = doubleval(mb_ereg_replace("[^0-9]","", $txtValor));
+            break;
+        case "seq":
+            $txtValor = doubleval(mb_ereg_replace("[^0-9]","", $txtValor));
+            break;
+        case "bol":
+            $txtValor = intval(mb_ereg_replace("[^0-9]","", $txtValor));
+            break;
+        case "fch":
+            $txtValor = esFechaValida($txtValor)? $txtValor : null;
+            break;
+        case "txt":
+            $txtValor = trim($txtValor);
+            break;
+    }
+    return $txtValor;
+}
+
 
 ?>

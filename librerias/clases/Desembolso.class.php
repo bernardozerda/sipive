@@ -953,8 +953,8 @@ class Desembolso {
 						'" . $arrPost['numOtros'] . "',
 						'" . $arrPost['txtViabilizoJuridico'] . "',
 						'" . $arrPost['txtViabilizoTecnico'] . "',
-						'" . $arrPost['bolViabilizoJuridico'] . "',
-						'" . $arrPost['bolViabilizoTecnico'] . "',
+						'" . intval($arrPost['bolViabilizoJuridico']) . "',
+						'" . intval($arrPost['bolViabilizoTecnico']) . "',
 						'" . $arrPost['txtNombreVendedor'] . "',
 						'" . $arrPost['numDocumentoVendedor'] . "',
 						'" . $arrPost['txtDireccionInmueble'] . "',
@@ -1020,7 +1020,7 @@ class Desembolso {
             try {
                 $aptBd->execute($sql);
             } catch (Exception $objError) {
-                $arrErrores[] = $objError->msg;
+                $arrErrores[] = $objError->getMessage();
             }
         } else {
 
@@ -1034,6 +1034,9 @@ class Desembolso {
                     $txtCampos = "fchActualizacionEscrituracion = '" . date("Y-m-d H:i:s") . "'";
                 }
             }
+
+            $fchSentencia = ( esFechaValida( $arrPost['fchSentencia'] ))? "'" . $arrPost['fchSentencia'] . "'" : "NULL";
+            $fchResolucion = ( esFechaValida( $arrPost['fchResolucion'] ))? "'" . $arrPost['fchResolucion'] . "'" : "NULL";
 
             $sql = "
 					UPDATE T_DES_ESCRITURACION SET
@@ -1062,8 +1065,8 @@ class Desembolso {
 						numOtros	=	'" . $arrPost['numOtros'] . "',
 						txtViabilizoJuridico	=	'" . $arrPost['txtViabilizoJuridico'] . "',
 						txtViabilizoTecnico	=	'" . $arrPost['txtViabilizoTecnico'] . "',
-						bolViabilizoJuridico	=	'" . $arrPost['bolViabilizoJuridico'] . "',
-						bolViabilizoTecnico	=	'" . $arrPost['bolViabilizoTecnico'] . "',
+						bolViabilizoJuridico	=	'" . intval($arrPost['bolViabilizoJuridico'] ). "',
+						bolViabilizoTecnico	=	'" . intval($arrPost['bolViabilizoTecnico'] ). "',
 						txtNombreVendedor	=	'" . $arrPost['txtNombreVendedor'] . "',
 						numDocumentoVendedor	=	'" . $arrPost['numDocumentoVendedor'] . "',
 						txtDireccionInmueble	=	'" . $arrPost['txtDireccionInmueble'] . "',
@@ -1073,10 +1076,10 @@ class Desembolso {
 						numNotaria	=	'" . $arrPost['numNotaria'] . "',
 						fchEscritura	=	'" . $arrPost['fchEscritura'] . "',
 						numAvaluo	=	'" . $arrPost['numAvaluo'] . "',
-						valInmueble	=	'" . $arrPost['valInmueble'] . "',
+						valInmueble	=	'" . intval($arrPost['valInmueble']) . "',
 						txtMatriculaInmobiliaria	=	'" . strtoupper($arrPost['txtMatriculaInmobiliaria']) . "',
 						numValorInmueble	=	'" . $arrPost['numValorInmueble'] . "',
-						bolPoseedor	=	'" . $arrPost['bolPoseedor'] . "',
+						bolPoseedor	=	'" . intval($arrPost['bolPoseedor']) . "',
 						txtChip	=	'" . strtoupper($arrPost['txtChip']) . "',
 						numActaEntrega = '" . $arrPost['numActaEntrega'] . "',
 						txtActaEntrega = '" . $arrPost['txtActaEntrega'] . "',
@@ -1104,22 +1107,22 @@ class Desembolso {
 						txtTipoDocumentos = '" . $arrPost['documentos'] . "',
 						txtCiudad = '" . $arrPost['txtCiudad'] . "',
 						txtPropiedad = '" . $arrPost['txtPropiedad'] . "',
-						fchSentencia = '" . $arrPost['fchSentencia'] . "',
-						numJuzgado = '" . $arrPost['numJuzgado'] . "',
+						fchSentencia = " . $fchSentencia .",
+						numJuzgado = '" . intval($arrPost['numJuzgado']) . "',
 						txtCiudadSentencia = '" . $arrPost['txtCiudadSentencia'] . "',
-						numResolucion = '" . $arrPost['numResolucion'] . "',
-						fchResolucion = '" . $arrPost['fchResolucion'] . "',
+						numResolucion = '" . intval($arrPost['numResolucion']) . "',
+						fchResolucion = " . $fchResolucion . ",
 						txtEntidad = '" . $arrPost['txtEntidad'] . "',
 						txtCiudadResolucion = '" . $arrPost['txtCiudadResolucion'] . "',
-						numContratoArrendamiento = '" . $arrPost['numContratoArrendamiento'] . "',
-						numAperturaCAP = '" . $arrPost['numAperturaCAP'] . "',
+						numContratoArrendamiento = '" . intval($arrPost['numContratoArrendamiento'] ). "',
+						numAperturaCAP = '" . intval($arrPost['numAperturaCAP']) . "',
 						txtAperturaCAP = '" . $arrPost['txtAperturaCAP'] . "',
-						numCedulaArrendador = '" . $arrPost['numCedulaArrendador'] . "',
-						numCuentaArrendador = '" . $arrPost['numCuentaArrendador'] . "',
+						numCedulaArrendador = '" . intval($arrPost['numCedulaArrendador'] ). "',
+						numCuentaArrendador = '" . intval($arrPost['numCuentaArrendador']) . "',
 						txtCuentaArrendador = '" . $arrPost['txtCuentaArrendador'] . "',
-						numRetiroRecursos = '" . $arrPost['numRetiroRecursos'] . "',
+						numRetiroRecursos = '" . intval($arrPost['numRetiroRecursos']) . "',
 						txtRetiroRecursos = '" . $arrPost['txtRetiroRecursos'] . "',
-						numServiciosPublicos = '" . $arrPost['numServiciosPublicos'] . "',
+						numServiciosPublicos = '" . intval($arrPost['numServiciosPublicos']) . "',
 						txtServiciosPublicos = '" . $arrPost['txtServiciosPublicos'] . "',
 						txtCorreoVendedor = '" . $arrPost['txtCorreoVendedor'] . "',
 						seqCiudad = '" . $arrPost['seqCiudad'] . "',

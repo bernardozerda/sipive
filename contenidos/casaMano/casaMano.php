@@ -19,6 +19,7 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php" );
+    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ActosAdministrativos2.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
 
     if( empty( $_POST ) ){
@@ -41,8 +42,8 @@
         }else{
 
             // obtiene la informacion del hogar
-            $claCasaMano->seqFormulario = $seqFormulario;
-            $claCasaMano->cargarPostulacion();
+            $arrCasaMano = $claCasaMano->cargar($seqFormulario);
+            $claCasaMano = end($arrCasaMano);
 
             // enrutamiento para el flujo del proceso
             // directo al formulario de postulacion si es
@@ -69,6 +70,9 @@
                 $txtPlantilla = $claCasaMano->arrFases["cem"]["panelHogar"]["plantilla"];
                 $arrEstadosFlujo = array();
             }
+            $txtFlujo = $arrFlujoHogar['flujo'];
+            $txtFase  = $arrFlujoHogar['fase'];
+            $txtArchivo = $claCasaMano->arrFases[$txtFlujo][$txtFase]['salvar'];
         }
 
         // obtieene los permisos para saber a donde puede entrar
@@ -84,20 +88,22 @@
             $arrTipoVictima = obtenerDatosTabla("T_FRM_TIPOVICTIMA", array("seqTipoVictima", "txtTipoVictima"), "seqTipoVictima", "seqTipoVictima <> 0", "txtTipoVictima");
             $arrGrupoLgtbi = obtenerDatosTabla("T_FRM_GRUPO_LGTBI", array("seqGrupoLgtbi", "txtGrupoLgtbi"), "seqGrupoLgtbi", "seqGrupoLgtbi <> 0", "txtGrupoLgtbi");
             $arrSexo = obtenerDatosTabla("T_CIU_SEXO", array("seqSexo", "txtSexo"), "seqSexo", "", "txtSexo");
-            $arrEstadoCivil = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil", "bolActivo"), "seqEstadoCivil", "", "txtEstadoCivil");
+            $arrEstadoCivil = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil", "bolActivo"), "seqEstadoCivil", "", "bolActivo DESC, txtEstadoCivil");
             $arrVivienda = obtenerDatosTabla("T_FRM_VIVIENDA", array("seqVivienda", "txtVivienda"), "seqVivienda", "", "txtVivienda");
             $arrTipoFinanciacion = obtenerDatosTabla("T_FRM_TIPO_FINANCIACION", array("seqTipoFinanciacion", "txtTipoFinanciacion"), "seqTipoFinanciacion", "", "seqTipoFinanciacion");
             $arrSisben = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben", "bolActivo"), "seqSisben","","bolActivo DESC");
             $arrBanco = obtenerDatosTabla("T_FRM_BANCO", array("seqBanco", "txtBanco"), "seqBanco", "seqBanco > 1", "txtBanco");
             $arrEstados = estadosProceso();
-            $arrParentesco = obtenerDatosTabla("T_CIU_PARENTESCO", array("seqParentesco", "txtParentesco", "bolActivo"), "seqParentesco", "", "txtParentesco");
+            $arrParentesco = obtenerDatosTabla("T_CIU_PARENTESCO", array("seqParentesco", "txtParentesco", "bolActivo"), "seqParentesco", "", "bolActivo DESC, txtParentesco");
             $arrCondicionEspecial = obtenerDatosTabla("T_CIU_CONDICION_ESPECIAL", array("seqCondicionEspecial", "txtCondicionEspecial"), "seqCondicionEspecial", "seqCondicionEspecial <> 6", "txtCondicionEspecial");
             $arrCondicionEtnica = obtenerDatosTabla("T_CIU_ETNIA", array("seqEtnia", "txtEtnia"), "seqEtnia", "seqEtnia > 1", "txtEtnia");
             $arrOcupacion = obtenerDatosTabla("T_CIU_OCUPACION", array("seqOcupacion", "txtOcupacion"), "seqOcupacion", "seqOcupacion <> 20", "txtOcupacion");
-            $arrCiudad = obtenerDatosTabla("T_FRM_CIUDAD", array("seqCiudad", "CONCAT( txtDepartamento , ' - ' , txtCiudad ) as txtCiudad"), "seqCiudad", "", "txtCiudad");
-            $arrLocalidad = obtenerDatosTabla("T_FRM_LOCALIDAD", array("seqLocalidad", "txtLocalidad"), "seqLocalidad", "seqLocalidad <> 1");
+            $arrCiudad = obtenerDatosTabla("V_FRM_CIUDAD", array("seqCiudad", "txtCiudad"), "seqCiudad", "seqCiudad = 149", "txtCiudad");
+            $arrCiudad += obtenerDatosTabla("V_FRM_CIUDAD", array("seqCiudad", "txtCiudad"), "seqCiudad", "seqCiudad <> 149", "txtCiudad");
+            $txtCondicion = ($claCasaMano->objPostulacion->seqCiudad == 149)? "seqLocalidad not in (1,22)" : "seqLocalidad in (22)";
+            $arrLocalidad = obtenerDatosTabla("T_FRM_LOCALIDAD", array("seqLocalidad", "txtLocalidad"), "seqLocalidad", $txtCondicion);
             natsort($arrLocalidad);
-            $arrSolucion = obtenerDatosTabla("T_FRM_SOLUCION", array("seqSolucion", "txtSolucion", "seqModalidad"), "seqSolucion", "seqSolucion <> 1");
+            $arrSolucion = obtenerDatosTabla("T_FRM_SOLUCION", array("seqSolucion", "txtSolucion", "txtDescripcion", "seqModalidad"), "seqSolucion", "seqSolucion <> 1 and seqModalidad = " . $claCasaMano->objPostulacion->seqModalidad);
             $arrNivelEducativo = obtenerDatosTabla("T_CIU_NIVEL_EDUCATIVO", array("seqNivelEducativo", "txtNivelEducativo"), "seqNivelEducativo", "seqNivelEducativo > 1", "txtNivelEducativo");
             $arrSalud = obtenerDatosTabla("T_CIU_SALUD", array("seqSalud", "txtSalud"), "seqSalud", "", "txtSalud");
             $arrDonantes = obtenerDatosTabla("T_FRM_EMPRESA_DONANTE", array("seqEmpresaDonante", "txtEmpresaDonante"), "seqEmpresaDonante", "seqEmpresaDonante > 1", "txtEmpresaDonante");
@@ -108,24 +114,86 @@
             $arrTipoEsquemas = obtenerTipoEsquema($claCasaMano->objPostulacion->seqModalidad, $claCasaMano->objPostulacion->seqPlanGobierno);
             $arrProyectos = obtenerProyectosPostulacion($claCasaMano->objPostulacion->seqFormulario,$claCasaMano->objPostulacion->seqModalidad,$claCasaMano->objPostulacion->seqTipoEsquema, $claCasaMano->objPostulacion->seqPlanGobierno);
             $arrProyectosHijos = obtenerProyectosHijosPostulacion($claCasaMano->objPostulacion->seqFormulario,$claCasaMano->objPostulacion->seqModalidad,$claCasaMano->objPostulacion->seqPlanGobierno,$claCasaMano->objPostulacion->seqProyecto);
-            $arrUnidadProyecto = obtenerUnidadesPostulacion($claCasaMano->objPostulacion->seqFormulario,$claCasaMano->objPostulacion->seqModalidad,$claCasaMano->objPostulacion->seqPlanGobierno,$claCasaMano->objPostulacion->seqProyectoHijo);
+            if($claCasaMano->objPostulacion->seqProyectoHijo != 0) {
+                $seqProyecto = $claCasaMano->objPostulacion->seqProyectoHijo;
+            }else{
+                $seqProyecto = $claCasaMano->objPostulacion->seqProyecto;
+            }
+            $arrUnidadProyecto = obtenerUnidadesPostulacion($claCasaMano->objPostulacion->seqFormulario, $claCasaMano->objPostulacion->seqModalidad, $claCasaMano->objPostulacion->seqPlanGobierno, $seqProyecto);
             $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $claCasaMano->objPostulacion->seqLocalidad, "txtBarrio");
+            $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtNombre","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio", "seqConvenio <> 1 and numDisponibles > 0", "txtNombre");
 
             // Calculo del valor del subsidio
-            $claCasaMano->objPostulacion->valAspiraSubsidio = valorSubsidio($claFormulario);
+            $claCasaMano->objPostulacion->valAspiraSubsidio = valorSubsidio($claCasaMano->objPostulacion);
 
-            // Suma de recursos
-            $valSumaRecursos = $claCasaMano->objPostulacion->valAspiraSubsidio + $claCasaMano->objPostulacion->valTotalRecursos;
-            $valSumaRecursosSMMLV = number_format($valSumaRecursos / $arrConfiguracion['constantes']['salarioMinimo'],2,".",".");
+            // Suma de recursos propios
+            $valSumaRecursosPropios =
+                $claCasaMano->objPostulacion->valSaldoCuentaAhorro +
+                $claCasaMano->objPostulacion->valSaldoCuentaAhorro2 +
+                $claCasaMano->objPostulacion->valSaldoCesantias +
+                $claCasaMano->objPostulacion->valCredito;
+
+            // Suma de subsidios
+            $valSumaSubsidios =
+                $claCasaMano->objPostulacion->valSubsidioNacional +
+                $claCasaMano->objPostulacion->valDonacion;
+
+            // Total recursos
+            $claCasaMano->objPostulacion->valTotalRecursos = $valSumaRecursosPropios + $valSumaSubsidios;
 
             // Seguimientos para el hogar
             $claSeguimiento->seqFormulario = $claCasaMano->objPostulacion->seqFormulario;
             $arrSeguimiento = $claSeguimiento->obtenerRegistros(100);
 
-            $claSmarty->assign("arrEstadosFlujo", $arrEstadosFlujo);
-            $claSmarty->assign("claFormulario", $claCasaMano->objPostulacion);
-            $claSmarty->assign("arrCasaMano" , $claCasaMano->cargar( $seqFormulario ) );
+            // obtiene la informacion de la pestana de actos administrativos
+            $arrActos = array();
+            foreach ($claCasaMano->objPostulacion->arrCiudadano as $objCiudadano) {
+                if( $objCiudadano->seqParentesco == 1 ){
+                    $numDocumento = $objCiudadano->numDocumento;
+                    break;
+                }
+            }
 
+            $claActosAdministrativos = new ActoAdministrativo();
+            $arrActos = $claActosAdministrativos->cronologia($numDocumento);
+
+            /*******************************************************************************************************
+             * INFORMACION ACTO INDEXACION -- ESTOS ACTOS SON DEL MODULO DE PROYECTOS
+             * **************************************************************************************************** */
+            $sqlActoUnidad =  "
+                SELECT 
+                    uac.seqUnidadActo, 
+                    uac.numActo, 
+                    uac.fchActo, 
+                    uac.txtDescripcion, 
+                    uvi.valIndexado
+                FROM T_PRY_AAD_UNIDAD_ACTO uac
+                INNER JOIN T_PRY_AAD_UNIDADES_VINCULADAS uvi ON uac.seqUnidadActo = uvi.seqUnidadActo
+                WHERE seqTipoActoUnidad = 2 
+                AND uvi.seqUnidadProyecto = (
+                      SELECT seqUnidadProyecto 
+                      FROM T_FRM_FORMULARIO 
+                      WHERE seqFormulario = $seqFormulario
+                )
+            ";
+            $objRes = $aptBd->execute( $sqlActoUnidad );
+            while( $objRes->fields ){
+                $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['seqUnidadActo']		= $objRes->fields['seqUnidadActo'];
+                $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['numActo']			= $objRes->fields['numActo'];
+                $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['fchActo']			= formatoFechaTextoFecha($objRes->fields['fchActo']);
+                $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['txtDescripcion']	= $objRes->fields['txtDescripcion'];
+                $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['valIndexado']		= $objRes->fields['valIndexado'];
+                $objRes->MoveNext();
+            }
+
+            // ASIGNACION DE VARIABLES A LA PLANTILLA
+            $claSmarty->assign("arrActos", $arrActos);
+            $claSmarty->assign("arrConvenio", $arrConvenio);
+            $claSmarty->assign("arrActosAsociados", $arrActosAsociados);
+            $claSmarty->assign("arrFlujoHogar", $arrFlujoHogar);
+            $claSmarty->assign("arrEstadosFlujo", $arrEstadosFlujo);
+            $claSmarty->assign("claCasaMano", $claCasaMano);
+            $claSmarty->assign("arrCasaMano" , $arrCasaMano );
             $claSmarty->assign("arrPost" , $_POST );
             $claSmarty->assign("arrTipoDocumento", $arrTipoDocumento);
             $claSmarty->assign("arrTipoVictima", $arrTipoVictima);
@@ -155,11 +223,10 @@
             $claSmarty->assign("arrUnidadProyecto", $arrUnidadProyecto);
             $claSmarty->assign("arrPlanGobierno", $arrPlanGobierno);
             $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
-            $claSmarty->assign("valSumaRecursos", $valSumaRecursos);
-            $claSmarty->assign("valSumaRecursosSMMLV", $valSumaRecursosSMMLV);
-            $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);
+            $claSmarty->assign("valSumaRecursosPropios", $valSumaRecursosPropios);
+            $claSmarty->assign("valSumaSubsidios", $valSumaSubsidios);
+            $claSmarty->assign("txtArchivo",$txtArchivo);
             $claSmarty->assign("arrRegistros", $arrSeguimiento);
-
 
             $claSmarty->display( $txtPlantilla );
 

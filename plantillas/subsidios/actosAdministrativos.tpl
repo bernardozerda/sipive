@@ -3,9 +3,20 @@
 
     <ul>
         {foreach from=$arrActos item=arrActo}
-            <li{$txtEstilo}> </li>
-            <li {$txtEstilo}>
-                <strong>{$arrActo.acto.nombre}</strong> {$arrActo.acto.numero} del {$arrActo.acto.fecha}{if $esCoordinador == 1} <span> <b>Estado</b>: {$arrActo.acto.seqEstadoProceso}</span>{/if}
+            <li>
+
+                <strong>{$arrActo.acto.nombre}</strong>
+                {$arrActo.acto.numero} del {$arrActo.acto.fecha}
+
+
+
+                {if $esCoordinador == 1}
+                    <strong>Estado:</strong>
+                    {$arrActo.acto.seqEstadoProceso}
+                {/if}
+
+
+
                 <!-- /****************************************************************************************************/
                 // Cambios Generados por Ing Liliana Basto
                 // Inserción de icono para Actualizar Acto Administrativos

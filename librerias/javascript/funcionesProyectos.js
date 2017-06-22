@@ -72,16 +72,6 @@ function almacenarIncripcion() {
     }
 }
 
-
-
-jQuery(function () {
-    try {
-        jQuery("#accordion").accordion();
-    }catch(o){
-
-    }
-});
-
 function adicionarOferente() {
 
     $("#seqProyectoOferente option").each(function () {

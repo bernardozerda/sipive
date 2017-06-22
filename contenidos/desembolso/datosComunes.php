@@ -266,6 +266,7 @@
 */
     
 	$claSmarty->assign( "arrGrupoGestion"        , $arrGrupoGestion );
+	$claSmarty->assign( "arrBarrio"              , $arrBarrio );
 	$claSmarty->assign( "arrEstados"             , $arrEstados );
 	$claSmarty->assign( "arrModalidad"           , $arrModalidad );
 	$claSmarty->assign( "arrSolucion"            , $arrSolucion );

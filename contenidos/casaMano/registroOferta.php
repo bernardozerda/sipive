@@ -14,9 +14,11 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CRM.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php" );
-    
+
     include( "../desembolso/datosComunes.php" );
-    
+
+    $arrParentesco = obtenerDatosTabla("T_CIU_PARENTESCO", array("seqParentesco", "txtParentesco", "bolActivo"), "seqParentesco", "", "bolActivo DESC, txtParentesco");
+
     // simula el flujo del hogar en desembolsos para efectos de la plantilla
     $arrFlujoHogar['flujo'] = "cem";
     $arrFlujoHogar['fase']  = "registroOferta";
@@ -32,7 +34,7 @@
     $claCasaMano = new CasaMano();
     
     $objCasaMano = null;
-    if( intval( $_POST['seqFormulario'] ) != 0 and intval( $_POST['seqCasaMano'] ) != 0 ){
+    if( intval( $_POST['seqFormulario'] ) != 0 ){
         $arrCasaMano = $claCasaMano->cargar( $_POST['seqFormulario'] , $_POST['seqCasaMano'] );
         $objCasaMano = array_shift( $arrCasaMano );
     }
@@ -47,7 +49,8 @@
     );
     $objCasaMano->objRegistroOferta->seqBarrio = $arrTextoBarrio[$objCasaMano->objRegistroOferta->seqLocalidad];
 
-    $bolPermiso = $claCasaMano->puedeIngresar( $arrFlujoHogar , $claFormulario );
+
+    $bolPermiso = $objCasaMano->puedeIngresar( $arrFlujoHogar );
     if( $bolPermiso == true ){
         
         // Obtienr los ultimos seguimientos
@@ -72,6 +75,7 @@
       $arrActos = $claActosAdministrativos->cronologia( $numDocumento );
       
       $claSmarty->assign( "arrActos" , $arrActos );
+      $claSmarty->assign( "arrParentesco" , $arrParentesco );
       $claSmarty->assign( "arrBarrio" , $arrBarrio );
       $claSmarty->assign( "txtTutor" , $txtTutor );
       $claSmarty->assign( "arrFlujoHogar" , $arrFlujoHogar );

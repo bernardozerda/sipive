@@ -63,7 +63,15 @@
 		if( is_array( $claDesembolso->arrEscrituracion ) ){
 			 foreach( $claDesembolso->arrEscrituracion as $txtClave => $txtValor ){
 				$claDesembolso->$txtClave = $txtValor;
-			 }  
+			 }
+			 $arrBarrio = obtenerDatosTabla(
+			 	"T_FRM_BARRIO",
+				array("seqBarrio","txtBarrio"),
+				"txtBarrio",
+				"txtBarrio like '" . $claDesembolso->arrEscrituracion['txtBarrio'] . "'"
+			 );
+			 $txtBarrio = strtoupper($claDesembolso->arrEscrituracion['txtBarrio']);
+             $claDesembolso->seqBarrio = $arrBarrio[ $txtBarrio ];
 		 }
       }
       $claSmarty->assign( "claDesembolso" , $claDesembolso );

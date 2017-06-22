@@ -325,7 +325,18 @@
 	
 	$claFormulario = new FormularioSubsidios;
 	$claFormulario->cargarFormulario( $_GET['seqFormulario'] );
-	
+
+	$arrTipoVictima = obtenerDatosTabla("T_FRM_TIPOVICTIMA",array("seqTipoVictima","txtTipoVictima"),"seqTipoVictima");
+	$arrCondicionEtnica = obtenerDatosTabla("T_CIU_ETNIA", array("seqEtnia", "txtEtnia"), "seqEtnia");
+	$arrGrupoLgtbi = obtenerDatosTabla("T_FRM_GRUPO_LGTBI", array("seqGrupoLgtbi", "txtGrupoLgtbi"), "seqGrupoLgtbi");
+	$arrCiudad = obtenerDatosTabla("V_FRM_CIUDAD", array("seqCiudad", "txtCiudad"), "seqCiudad");
+	$arrTipoEsquema = obtenerDatosTabla("T_PRY_TIPO_ESQUEMA", array("seqTipoEsquema", "txtTipoEsquema"), "seqTipoEsquema");
+
+	$claSmarty->assign( "arrTipoEsquema" , $arrTipoEsquema );
+	$claSmarty->assign( "arrCiudad" , $arrCiudad );
+	$claSmarty->assign( "arrGrupoLgtbi" , $arrGrupoLgtbi );
+	$claSmarty->assign( "arrCondicionEtnica" , $arrCondicionEtnica );
+	$claSmarty->assign( "arrTipoVictima" , $arrTipoVictima );
 	$claSmarty->assign( "fchImpresion" , $txtFecha );
 	$claSmarty->assign( "objFormulario" , $claFormulario );
 	$claSmarty->assign( "arrTipoDocumento" , $arrTipoDocumento );

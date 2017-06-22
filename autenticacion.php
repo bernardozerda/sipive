@@ -68,18 +68,7 @@ if (isset($_POST['btnSalvar']) and intval($_POST['btnSalvar']) == 1) {
     // $_SESSION['codigo']." !=". $_POST['codigo'];
     // Valida el codigo Captcha
     if (( $_SESSION['codigo'] != $_POST['codigo'] ) or empty($_SESSION['codigo'])) {
-
-
         $arrErrores['codigo'] = "El codigo no coincide";
-        // INICIO GUARDA DIRECCION IP Y DIRECCION MAC DEL INTENTO DE AUTENTICACION (TEMPORAL)
-        if ($_POST['usuario'] == 'obonillaq') {
-            $hostName = gethostbyaddr($_SERVER['REMOTE_ADDR']);
-            $REMOTE_ADDR = $hostname;
-            $ip = $REMOTE_ADDR;
-            $ipLocal = GetHostByName($ip);
-            // Insert
-            mysql_query("INSERT INTO T_COR_INTENTO (txtUsuario, txtClaveDigitada, txtDireccionIP, txtHostName, txtTipo, fchIntento) VALUES ('" . $_POST['usuario'] . "', '" . $_POST['clave'] . "', '" . $ipLocal . "', '" . $hostName . "', 'captcha', NOW())");
-        }
     }
 
     /**
@@ -111,7 +100,6 @@ if (isset($_POST['btnSalvar']) and intval($_POST['btnSalvar']) == 1) {
                 if (empty($arrErrores)) {
                     $claRegistro->registrarActividad("Usuario Bloqueado", 0, 0, "Usuario: " . $_POST['usuario'] . " Mensaje: Usuario Bloqueado");
                 } else {
-
                     $claRegistro->registrarActividad("Usuario Bloqueado", 0, 0, "Usuario: " . $_POST['usuario'] . " Mensaje: Fallo el bloqueo del usuario, posible error en la tabla ");
                 }
             }

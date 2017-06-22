@@ -50,7 +50,13 @@ if ($fechaFin) {
 }
 
 $arrCondiciones[] = "ciu.numDocumento >= 0";
-$arrCondiciones[] = "frm.bolCerrado = 0";
+
+if( empty( $arrSeqFormularios ) ) {
+    $arrCondiciones[] = "frm.bolCerrado = 0";
+}else{
+    $arrCondiciones[] = "frm.seqFormulario IN (" . implode(",",$arrSeqFormularios) . ")";
+}
+
 $arrCondiciones[] = "hog.seqParentesco = 1";
 
 $txtCondicion = implode(" and ", $arrCondiciones);
@@ -204,9 +210,11 @@ $sql = "
     WHERE $txtCondicion ";
 
 //echo $sql;die();
+
 $objRes = $aptBd->execute($sql);
 $txtNombreArchivo = "reporteGenralInscritos" . date("Ymd_His") . ".xls";
 
 $claReportes = new Reportes;
 $claReportes->obtenerReportesGeneral($objRes, $txtNombreArchivo);
+
 ?>

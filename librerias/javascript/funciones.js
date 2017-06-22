@@ -44,13 +44,15 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
                     // si hubo pantalla de bloque al usuario, se oculta
                     if (bolCargando == 1) {
                         objCargando.hide();
-                        $(document).ready(function () {
-                            $('#example').DataTable({
-                                "pagingType": "full_numbers",
-                                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                                "order": [[2, "desc"]]
-                            });
-                        });
+                        tablas();
+//                        $(document).ready(function () {
+//                            $("#accordion").accordion();
+//                            $('#example').DataTable({
+//                                "pagingType": "full_numbers",
+//                                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+//                                "order": [[2, "desc"]]
+//                            });
+//                        });
                     }
                 }
             };

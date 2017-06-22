@@ -72,6 +72,7 @@ class calificacion {
 
         global $aptBd;
         $NoEstado = 0;
+        $NoEstado1 = 0;
         $error = "";
         //$separado_por_comas = substr_replace($separado_por_comas, ' ', -1, 1);
         //echo $separado_por_comas; exit();
@@ -101,15 +102,44 @@ class calificacion {
                 $sql = "SELECT DISTINCT(seqFormulario), numDocumento from T_FRM_FORMULARIO"
                         . " LEFT JOIN T_FRM_HOGAR USING(seqFormulario)"
                         . " LEFT JOIN T_CIU_CIUDADANO USING(seqCiudadano)"
-                        . " WHERE numDocumento IN(" . $separado_por_comas . ") AND seqEstadoProceso NOT IN (6, 37) and seqParentesco = 1 "
+                        . " WHERE numDocumento IN(" . $separado_por_comas . ") AND seqEstadoProceso NOT IN (6, 37) and seqParentesco = 1  and seqPlanGobierno NOT IN(3) "
                         . "GROUP BY seqFormulario";
                 $objRes = $aptBd->execute($sql);
                 $NoEstado = $aptBd->Affected_Rows();
+                if ($NoEstado == 0) {
+                    $sql = "SELECT DISTINCT(seqFormulario), numDocumento from T_FRM_FORMULARIO"
+                            . " LEFT JOIN T_FRM_HOGAR USING(seqFormulario)"
+                            . " LEFT JOIN T_CIU_CIUDADANO USING(seqCiudadano)"
+                            . " WHERE numDocumento IN(" . $separado_por_comas . ") AND seqPlanGobierno NOT IN(3)"
+                            . "GROUP BY seqFormulario";
+                    $objRes = $aptBd->execute($sql);
+                    $NoEstado = $aptBd->Affected_Rows();
+                }
+                if ($NoEstado == 0) {
+                    $sql = "SELECT DISTINCT(seqFormulario), numDocumento
+                            FROM t_frm_formulario    frm
+                                 LEFT JOIN t_frm_hogar hog USING (seqFormulario)
+                                 LEFT JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
+                            WHERE  numDocumento IN(" . $separado_por_comas . ") AND   seqEstadoProceso IN (37)
+                                  AND (   numHabitaciones IS NULL
+                                       OR numHacinamiento IS NULL
+                                       OR bolSecMujer IS NULL
+                                       OR bolSecSalud IS NULL
+                                       OR bolAltaCon IS NULL
+                                       OR bolIpes IS NULL)
+                            GROUP BY frm.seqFormulario";
+                    $objRes = $aptBd->execute($sql);
+                    $NoEstado1 = $aptBd->Affected_Rows();
+                }
             }
         }
         ///echo ($NoEstado); echo $error;
-        if ($NoEstado > 0) {
-            $error = "<p class='alert alert-danger'>Error! Los siguientes Documentos no tienen el <b>Estado: Hogar Actualizado</b>";
+        if ($NoEstado > 0 || $NoEstado1 > 0) {
+            if ($NoEstado > 0){
+                $error = "<p class='alert alert-danger'>Error! Los siguientes Documentos no tienen el <b>Estado: Hogar Actualizado o no se encuentran en el plan de gobierno Bogotá Mejor para Todos!</b>";
+            }else{
+                $error = "<p class='alert alert-danger'>Error! Los siguientes Documentos no tienen el <b>la informacion de la inscripción completa!</b>";
+            }
             $error .= "<br><br>";
             while ($objRes->fields) {
                 $error .= $objRes->fields['numDocumento'] . "<br>";
@@ -144,7 +174,7 @@ class calificacion {
 
         global $aptBd;
         //$formularios = substr_replace($formularios, ' ', -1, 1);
-        $sql = "SELECT frm.seqFormulario,
+         $sql = "SELECT frm.seqFormulario,
                 ciu.numDocumento,
                 frm.fchUltimaActualizacion,
                 count(seqCiudadano) AS cant,

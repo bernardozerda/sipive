@@ -35,7 +35,7 @@ $victima = '';
 
 // Solo grupo informadores puede modificar datos
 $seqProyecto = $_SESSION['seqProyecto'];
-if( ! isset( $_SESSION['arrGrupos'][$seqProyecto][5] ) ){
+if (!isset($_SESSION['arrGrupos'][$seqProyecto][5])) {
     $arrErrores[] = "No tiene privilegios para modificar la información";
 }
 
@@ -52,6 +52,14 @@ if ($_POST['seqGestion'] == 0) {
 // Comentarios
 if ($_POST['txtComentario'] == "") {
     $arrErrores[] = "Por favor diligencie el campo de comentarios";
+}
+if ($_POST['seqPlanGobierno'] == 3) {
+    if ($_POST['numCohabitacion'] == "") {
+        $arrErrores[] = "Por favor diligencie el campo N° Hogares que hábitan la vivienda";
+    }
+    if ($_POST['numHacinamiento'] == "") {
+        $arrErrores[] = "Por favor diligencie el campo Número Dormitorios";
+    }
 }
 
 // si el formulario esta cerrado solo los que tienen privilegios de cambiar informacion pueden salvar
@@ -118,8 +126,8 @@ if (empty($arrErrores)) {
                         $arrErrores[] = "El tipo de documento seleccionado para el postulante principal no es válido";
                     }
                 }
-            }elseif ( $arrCiudadano['seqParentesco'] == 13 or $arrCiudadano['seqParentesco'] == 12 ){
-            	$arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " tiene seleccionado un parentesco que no es válido";
+            } elseif ($arrCiudadano['seqParentesco'] == 13 or $arrCiudadano['seqParentesco'] == 12) {
+                $arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " tiene seleccionado un parentesco que no es válido";
             }
 
             // Solo puede haber una persona con condicion Especial Jefe de Hogar
@@ -357,31 +365,31 @@ if (empty($arrErrores)) {
     if (intval($_POST['seqBarrio']) == 0) {
         $arrErrores[] = "Debe seleccionar una barrio diferente";
     }
-    
+
     // Sisben
-    $arrSisbenInactivos = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben","txtSisben"), "seqSisben","bolActivo = 0");
+    $arrSisbenInactivos = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben"), "seqSisben", "bolActivo = 0");
     $seqPostSisben = intval($_POST['seqSisben']);
-    if($seqPostSisben == 0 ){
-    	$arrErrores[] = "Seleccione un valor para la pregunta ¿Tiene Sisben?";
-    }elseif(isset($arrSisbenInactivos[$seqPostSisben])){
-    	$arrErrores[] = "El valor seleccionado para la pregunta ¿Tiene Sisben? no es válido";
+    if ($seqPostSisben == 0) {
+        $arrErrores[] = "Seleccione un valor para la pregunta ¿Tiene Sisben?";
+    } elseif (isset($arrSisbenInactivos[$seqPostSisben])) {
+        $arrErrores[] = "El valor seleccionado para la pregunta ¿Tiene Sisben? no es válido";
     }
 
-    $txtFormatoFijo    = "/^[0-9]{7}$/";
+    $txtFormatoFijo = "/^[0-9]{7}$/";
     $txtFormatoCelular = "/^[3]{1}[0-9]{9}$/";
-    
+
     // Telefono Celular
-    if ( ! preg_match( $txtFormatoCelular , trim( $_POST['numCelular'] ) ) ) {
-    	$arrErrores[] = "El número telefonico celular debe tener 10 digitos y debe iniciar con el número 3";
+    if (!preg_match($txtFormatoCelular, trim($_POST['numCelular']))) {
+        $arrErrores[] = "El número telefonico celular debe tener 10 digitos y debe iniciar con el número 3";
     }
-    
+
     // Telefono Fijo 1
-    if( is_numeric( $_POST['numTelefono1'] ) == true and intval( $_POST['numTelefono1'] ) != 0 ){
-    	if ( ! preg_match( $txtFormatoFijo , trim( $_POST['numTelefono1'] ) ) ) {
-    		$arrErrores[] = "El número telefonico fijo 1 debe tener 7 digitos";
-    	}
+    if (is_numeric($_POST['numTelefono1']) == true and intval($_POST['numTelefono1']) != 0) {
+        if (!preg_match($txtFormatoFijo, trim($_POST['numTelefono1']))) {
+            $arrErrores[] = "El número telefonico fijo 1 debe tener 7 digitos";
+        }
     }
-    
+
     // Formatos de expresion regular para telefonos fijos y celular
     /* $txtFormatoFijo    = "/^[0-9]{7}$/";
       $txtFormatoCelular = "/^[3]{1}[0-9]{9}$/";
@@ -441,12 +449,12 @@ if (empty($arrErrores)) {
       $arrErrores[] = "La modalidad de postulacion seleccionada no es v&aacute;lida";
       } */
 
-    $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD",array("seqModalidad","seqPlanGobierno","txtModalidad"),"seqModalidad");
-    $arrPlanGobierno = obtenerDatosTabla("T_FRM_PLAN_GOBIERNO",array("seqPlanGobierno","txtPlanGobierno"),"seqPlanGobierno");
+    $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "seqPlanGobierno", "txtModalidad"), "seqModalidad");
+    $arrPlanGobierno = obtenerDatosTabla("T_FRM_PLAN_GOBIERNO", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno");
 
     // Valida que la Modalidad corresponda al plan de gobierno
-    if( $_POST['seqPlanGobierno'] != $arrModalidad[ $_POST['seqModalidad'] ]['seqPlanGobierno'] ){
-        $arrErrores[] = "La modalidad " . $arrModalidad[ $_POST['seqModalidad'] ]['txtModalidad'] . " no corresponde al plan de gobierno " . $arrPlanGobierno[ $_POST['seqPlanGobierno'] ];
+    if ($_POST['seqPlanGobierno'] != $arrModalidad[$_POST['seqModalidad']]['seqPlanGobierno']) {
+        $arrErrores[] = "La modalidad " . $arrModalidad[$_POST['seqModalidad']]['txtModalidad'] . " no corresponde al plan de gobierno " . $arrPlanGobierno[$_POST['seqPlanGobierno']];
     }
 
     // solucion
@@ -613,7 +621,7 @@ if (empty($arrErrores)) {
     try {
         if ($_POST['seqPlanGobierno'] != 3) {
             $_POST['valAspiraSubsidio'] = mb_ereg_replace("[^0-9]", "", $_POST['valAspiraSubsidio']);
-            if(intval($_POST['valAspiraSubsidio']) != 0) {
+            if (intval($_POST['valAspiraSubsidio']) != 0) {
                 $valAspiraSubsidio = 0;
                 $sql = "
                     SELECT valSubsidio
@@ -858,7 +866,6 @@ if (empty($arrErrores)) {
 
 //    pr($claFormularioNuevo);
 //    die();
-
     // edita los datos del formulario
     $claFormularioNuevo->editarFormulario($_POST['seqFormulario']);
 

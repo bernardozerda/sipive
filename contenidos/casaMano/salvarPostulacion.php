@@ -287,6 +287,16 @@ if (trim($_POST['txtCorreo']) != "") {
     }
 }
 
+// Hogares que viven en la misma vivienda
+if (intval($_POST['numHabitacion']) == 0) {
+    $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
+}
+
+// Cantidad de dormitorios
+if (intval($_POST['numDormitorios']) == 0) {
+    $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+}
+
 // Valor del sisben
 $seqSisben = intval($_POST['seqSisben']);
 if (!isset($arrSisben[$seqSisben])) {

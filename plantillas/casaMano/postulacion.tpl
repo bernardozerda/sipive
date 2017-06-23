@@ -558,6 +558,7 @@
                                         {assign var=lgbt               value=$objCiudadano->bolLgbt}
                                         {assign var=nivelEducativo     value=$objCiudadano->seqNivelEducativo}
                                         {assign var=ocupacion          value=$objCiudadano->seqOcupacion}
+                                        {assign var=salud              value=$objCiudadano->seqSalud}
 
                                         <!-- SI HAY AL MENOS UN CIUDADANO CON HECHO VICTIMIZANTE "DESPLAZAMIENTO FORZADO" -->
                                         {if $objCiudadano->seqTipoVictima == 2}
@@ -666,19 +667,15 @@
 
                                                         </tr>
                                                         <tr>
-                                                            <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if}</td>
+                                                            <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if} ({$objCiudadano->numAnosAprobados} años aprobados)</td>
                                                             <td><b>Condición Especial 3:</b> {if isset($arrCondicionEspecial.$condicionEspecial3)} {$arrCondicionEspecial.$condicionEspecial3}{else}Ninguna{/if}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>
-                                                                <b>LGTBI:</b>
-                                                                {if $objCiudadano->bolLgtb == 1}
-                                                                    {$arrGrupoLgtbi.$grupoLgtbi}
-                                                                {else}
-                                                                    No
-                                                                {/if}
-                                                            </td>
-                                                            <td><b>Tipo de Victima:</b> {if isset($arrTipoVictima.$tipoVictima)}{$arrTipoVictima.$tipoVictima}{else}Ninguno{/if}</td>
+                                                            <td>LGTBI: {if $objCiudadano->bolLgtb == 1}Si{else}No{/if} ({$arrGrupoLgtbi.$grupoLgbti})</td>
+                                                            <td><b>Hecho Victimizante:</b> {if isset($arrTipoVictima.$tipoVictima)}{$arrTipoVictima.$tipoVictima}{else}Ninguno{/if}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3"><b>Afiliación a Salud:</b> {$arrOcupacion.$salud}</td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3"><b>Ocupación:</b> {$arrOcupacion.$ocupacion}</td>
@@ -1735,7 +1732,7 @@
                                     {assign var=bolCamposNoLeasing value=""}
                                 {/if}
 
-                                <tr bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                <tr id="trNoLeasing1" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
                                     <!-- SUMA DE RECURSOS PROPIOS -->
                                     <td class="tituloTabla" style="padding-top:5px;">Recursos propios</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">
@@ -1751,7 +1748,7 @@
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                 </tr>
-                                <tr bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                <tr id="trNoLeasing2" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
                                     <!-- SUMA DE SUBSIDIOS -->
                                     <td class="tituloTabla" style="padding-top:5px;">Valor Subsidios + (Donacion y/o VUR)</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">
@@ -1768,7 +1765,7 @@
                                     <td>&nbsp;</td>
 
                                 </tr>
-                                <tr bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                <tr id="trNoLeasing3" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
                                     <!-- TOTAL RECURSOS ECONOMICOS -->
                                     <td class="tituloTabla" style="padding-top:5px;">Total recursos del hogar</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">

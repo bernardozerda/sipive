@@ -1007,28 +1007,36 @@ function agregarMiembroHogar() {
     txtInsertar += "		<td colspan=\"6\"> ";
     txtInsertar += "			<table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"border: 1px solid #999999;\"> ";
     txtInsertar += "				<tr> ";
+    txtInsertar += "					<td><b>Fecha de Nacimiento:</b> " + objFchNacimiento.value + "</td> ";
     txtInsertar += "					<td><b>Estado Civil:</b> " + objEstCivil.options[ objEstCivil.selectedIndex ].text + "</td> ";
-    txtInsertar += "					<td><b>Condici&oacute;n &Eacute;tnica:</b> " + ucwords(objCondEtnica.options[ objCondEtnica.selectedIndex ].text.toString().toLowerCase()) + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Sexo:</b> " + objSexo.options[ objSexo.selectedIndex ].text + "</td> ";
+    txtInsertar += "					<td><b>Condici&oacute;n &Eacute;tnica:</b> " + ucwords(objCondEtnica.options[ objCondEtnica.selectedIndex ].text.toString().toLowerCase()) + "</td> ";
     txtInsertar += "					<td><b>Condici&oacute;n Especial 1:</b> " + objCondEspecial.options[ objCondEspecial.selectedIndex ].text + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Fecha de Nacimiento:</b> " + objFchNacimiento.value + "</td> ";
+    txtInsertar += "					<td><b>Sexo:</b> " + objSexo.options[ objSexo.selectedIndex ].text + "</td> ";
     txtInsertar += "					<td><b>Condici&oacute;n Especial 2:</b> " + objCondEspecial2.options[ objCondEspecial2.selectedIndex ].text + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Nivel Educativo:</b> " + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].text + "</td> ";
+    txtInsertar += "					<td><b>Nivel Educativo:</b> " + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].text + " (" + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + " años aprobados)</td> ";
     txtInsertar += "					<td><b>Condici&oacute;n Especial 3:</b> " + objCondEspecial3.options[ objCondEspecial3.selectedIndex ].text + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
-    if (objLgtb.options[ objLgtb.selectedIndex ].value == 0) {
-        txtInsertar += "<td><b>LGTBI:</b> " + objLgtb.options[ objLgtb.selectedIndex ].text + "</td>";
+
+    txtInsertar += "<td><b>LGTBI:</b> ";
+    if (objLgtb.options[ objLgtb.selectedIndex ].value == 1) {
+        txtInsertar += "Si";
     } else {
-        txtInsertar += "<td><b>LGTBI:</b> " + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].text + "</td> ";
+        txtInsertar += "No";
     }
-    txtInsertar += "					<td><b>Tipo de V&iacute;ctima:</b> " + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].text + "</td> ";
+    txtInsertar += " (" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].text + ")";
+    txtInsertar += "</td>";
+
+    txtInsertar += "					<td><b>Hecho Victimizante:</b> " + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].text + "</td> ";
+    txtInsertar += "				</tr> ";
+    txtInsertar += "				<tr> ";
+    txtInsertar += "					<td colspan='3'><b>Afiliación a Salud</b> " + objSeqSalud.options[ objSeqSalud.selectedIndex ].text + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
     txtInsertar += "					<td colspan='3'><b>Ocupaci&oacute;n:</b> " + txtOcupacion + "</td> ";
@@ -1896,6 +1904,23 @@ function datosPestanaPostulacion(txtModo) {
             $('#txtDireccionSolucion').val(objRespuesta.direccion);
             $('#txtMatriculaInmobiliaria').val(objRespuesta.matricula);
             $('#txtChip').val(objRespuesta.chip);
+
+            // cuando es leasing entonces muestra los campos de informacion financiera correspondientes
+            if( $("#seqModalidad").val() == 13 ){
+                $("#trNoLeasing1").removeAttr("style").hide();
+                $("#trNoLeasing2").removeAttr("style").hide();
+                $("#trNoLeasing3").removeAttr("style").hide();
+                $("#trNoLeasing4").removeAttr("style").hide();
+                $("#trLeasing1").removeAttr("style").show();
+                $("#trLeasing2").removeAttr("style").show();
+            }else {
+                $("#trNoLeasing1").removeAttr("style").show();
+                $("#trNoLeasing2").removeAttr("style").show();
+                $("#trNoLeasing3").removeAttr("style").show();
+                $("#trNoLeasing4").removeAttr("style").show();
+                $("#trLeasing1").removeAttr("style").hide();
+                $("#trLeasing2").removeAttr("style").hide();
+            }
 
         }
 

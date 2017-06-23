@@ -1829,7 +1829,7 @@
                                 </tr>
                                 <tr style="display: {$bolCamposLeasing};">
                                     <!-- VALOR -->
-                                    <td>Valor del aporte en la carta</td>
+                                    <td>Valor del aporte según convenio</td>
                                     <td align="right" style="padding-right: 5px;">
                                         $ <input type="text"
                                                  name="valCartaLeasing"

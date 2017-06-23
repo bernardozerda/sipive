@@ -1787,7 +1787,7 @@
                                 </tr>
 
                                 <!-- CAMPOS DE LA MODALIDAD DE LEASING  -->
-                                <tr style="display: {$bolCamposLeasing};">
+                                <tr id="trLeasing1" style="display: {$bolCamposLeasing};">
 
                                     <!-- VIABILIDAD LEASING -->
                                     <td>Viabilidad leasing por entidad financiera</td>
@@ -1827,7 +1827,7 @@
                                     </td>
 
                                 </tr>
-                                <tr style="display: {$bolCamposLeasing};">
+                                <tr id="trLeasing2" style="display: {$bolCamposLeasing};">
                                     <!-- VALOR -->
                                     <td>Valor del aporte según convenio</td>
                                     <td align="right" style="padding-right: 5px;">
@@ -1842,41 +1842,7 @@
                                         />
                                     </td>
 
-                                    <!-- SOPORTE LEASING -->
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text"
-                                               name="txtSoporteLeasing"
-                                               id="txtSoporteLeasing"
-                                               value="{$claFormulario->txtSoporteLeasing}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:300px;" />
-                                    </td>
-                                </tr>
-                                <tr style="display: {$bolCamposLeasing};">
-                                    <!-- FECHA APROBACION LEASING -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Fecha Aprobación</td>
-                                    <td style="padding-left:11px;">
-                                        <input type="text"
-                                               name="fchAprobacionLeasing"
-                                               id="fchAprobacionLeasing"
-                                               value="{$claFormulario->fchAprobacionLeasing}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:100px;"
-                                               maxlength="10"
-                                               readonly />
-                                        <a onClick="calendarioPopUp('fchAprobacionLeasing')" href="#">Calendario</a>&nbsp;&nbsp;
-                                        <a onClick="document.getElementById('fchAprobacionLeasing').value = '';" href="#">Limpiar</a>
-                                    </td>
-                                </tr>
-                                <tr style="display: {$bolCamposLeasing};">
-                                    <!-- DURACION DEL LEASING -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                    <!-- DURACION LEASING -->
                                     <td>Duración</td>
                                     <td align="left" style="padding-left:11px;">
                                         <input type="text"

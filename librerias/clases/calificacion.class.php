@@ -584,7 +584,7 @@ group by seqCalificacion;";
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 7)
           AS cantMenores,
-       (SELECT calculo
+       (SELECT resultado
         FROM t_frm_calificacion_operaciones op2
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 7)

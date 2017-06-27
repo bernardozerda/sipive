@@ -544,7 +544,7 @@
                                                 <td align="center">
                                                     <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                            id="anosAprobados" 
+                                                            id="numAnosAprobados"
                                                             style="width:90%;"
                                                             >
                                                         <option value="0">Ninguno</option>  
@@ -630,7 +630,7 @@
                                     {assign var=tipoVictima        value=$objCiudadano->seqTipoVictima}
                                     {assign var=lgbt               value=$objCiudadano->bolLgbt}
                                     {assign var=nivelEducativo     value=$objCiudadano->seqNivelEducativo}
-                                    {assign var=anosAprobados      value=$objCiudadano->numAnosAprobados}
+                                    {assign var=numAnosAprobados   value=$objCiudadano->numAnosAprobados}
                                     {assign var=seqSalud           value=$objCiudadano->seqSalud}
                                     {assign var=ocupacion          value=$objCiudadano->seqOcupacion}
                                     {if $objCiudadano->seqTipoVictima ==2}
@@ -718,9 +718,9 @@
                                         <input type="hidden" id="{$objCiudadano->numDocumento}-bolLgtb" name="hogar[{$objCiudadano->numDocumento}][bolLgtb]" value="{$objCiudadano->bolLgtb}">
                                         <input type="hidden" id="{$objCiudadano->numDocumento}-seqTipoVictima" name="hogar[{$objCiudadano->numDocumento}][seqTipoVictima]" value="{$objCiudadano->seqTipoVictima}">
                                         <input type="hidden" id="{$objCiudadano->numDocumento}-seqNivelEducativo" name="hogar[{$objCiudadano->numDocumento}][seqNivelEducativo]" value="{$objCiudadano->seqNivelEducativo}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-anosAprobados" name="hogar[{$objCiudadano->numDocumento}][anosAprobados]" value="{$objCiudadano->numAnosAprobados}">
+                                        <input type="hidden" id="{$objCiudadano->numDocumento}-numAnosAprobados" name="hogar[{$objCiudadano->numDocumento}][numAnosAprobados]" value="{$objCiudadano->numAnosAprobados}">
                                         <input type="hidden" id="{$objCiudadano->numDocumento}-seqSalud" name="hogar[{$objCiudadano->numDocumento}][seqSalud]" value="{$objCiudadano->seqSalud}">
-
+                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqCajaCompensacion" name="hogar[{$objCiudadano->numDocumento}][seqCajaCompensacion]" value="{$objCiudadano->seqCajaCompensacion}">
                                     </table>
 
                                     <!-- TABLA DE DETALLES DEL CIUDADANO -->    
@@ -741,10 +741,6 @@
                                                         <td><b>Condición Especial 2:</b>{if isset($arrCondicionEspecial.$condicionEspecial2)} {$arrCondicionEspecial.$condicionEspecial2}{else}Ninguna{/if}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if}</td>
-                                                        <td><b>Condición Especial 3:</b> {if isset($arrCondicionEspecial.$condicionEspecial3)} {$arrCondicionEspecial.$condicionEspecial3}{else}Ninguna{/if}</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>
                                                             <b>LGTBI:</b> 
                                                             {if $objCiudadano->bolLgtb == 1}
@@ -753,7 +749,22 @@
                                                                 No 
                                                             {/if}
                                                         </td>
+
+                                                        <td><b>Condición Especial 3:</b> {if isset($arrCondicionEspecial.$condicionEspecial3)} {$arrCondicionEspecial.$condicionEspecial3}{else}Ninguna{/if}</td>
+                                                    </tr>
+                                                    <tr>                                                        
                                                         <td><b>Tipo de Victima:</b> {if isset($arrTipoVictima.$tipoVictima)}{$arrTipoVictima.$tipoVictima}{else}Ninguno{/if}</td>
+                                                        <td><b>Afiliación Salud:</b>
+                                                            {foreach from=$arrSalud key=seqSalud item=txtSalud}
+                                                                {if $seqSalud == $objCiudadano->seqSalud}
+                                                                    {$txtSalud}
+                                                                {/if}
+                                                            {/foreach} 
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if}</td>
+                                                        <td><b>Años Aporbados:</b> {$objCiudadano->numAnosAprobados}</td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3"><b>Ocupación:</b> {$arrOcupacion.$ocupacion}</td>

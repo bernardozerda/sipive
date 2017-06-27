@@ -24,8 +24,8 @@ and open the template in the editor.
 
         if ($_FILES['fileDocumentos']['error'] == 0) {
             $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileDocumentos']['tmp_name']));
-             $salt = 0;
-      
+            $salt = 0;
+
             $separado_por_comas = implode(",", ($arrDocumentos));
             $ejecutaConsultaPersonalizada = true;
             //  echo count($arrDocumentos);
@@ -60,7 +60,7 @@ and open the template in the editor.
                     } else {
                         $educacion = 0;
                     }
-                    $sqlIndicadores .= "(" . $value['cantMayor'] . ", 0, 0, 0, ".$value['aprobados'].", " . $calcEducacion . ", " . $educacion . ", " . ($claCalificacion->BLE * ($educacion * 100)) . ", " . $idCalificacion . ",1),";
+                    $sqlIndicadores .= "(" . $value['cantMayor'] . ", 0, 0, 0, " . $value['aprobados'] . ", " . $calcEducacion . ", " . $educacion . ", " . ($claCalificacion->BLE * ($educacion * 100)) . ", " . $idCalificacion . ",1),";
                     /*                     * ************************************Calculo Regimen Subsidiado*********************************************** */
                     $saludSubsidiados = 0;
 
@@ -96,16 +96,20 @@ and open the template in the editor.
                     $arrConfiguracion['constantes']['salarioMinimo'] . "/" . ($ingresos + 1000);
                     $totalIngresos = ($arrConfiguracion['constantes']['salarioMinimo']) / ($ingresos + 1000);
 
-                    $sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0," . $totalIngresos . ", null, " . (100 * (1 - exp(-$totalIngresos / 52.05))) . ", " . $idCalificacion . ",5),";
+                    $sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0," . $totalIngresos . ", null, " . $claCalificacion->IPC * (100 * (1 - exp(-$totalIngresos / 52.05))) . ", " . $idCalificacion . ",5),";
                     /*                     * *************************************Dependencia Economica********************************************* */
 
                     $dependenciaEcon = 0;
-                    $adultos = $value['adultos'] / $value['cant'];
+                    if ($value['adultos'] > 0) {
+                        $adultos = $value['cant'] / $value['adultos'];
+                    }else{
+                        $adultos = 3.5;
+                    }
                     //echo "<br>".$value['aprobadosJefe']; 
-                    if ($adultos > 2 && $value['aprobadosJefe'] < 3) {
+                    if ($adultos > 3 && $value['aprobadosJefe'] <= 2) {
                         $dependenciaEcon = 1;
                     }
-                    $sqlIndicadores .= "(" . $value['adultos'] . ", 0, 0, 0,".$value['aprobadosJefe'].", ".$adultos.", " . $dependenciaEcon . ", " . ($claCalificacion->TDE * ($dependenciaEcon * 100)) . ", " . $idCalificacion . ",6),";
+                    $sqlIndicadores .= "(" . $value['adultos'] . ", 0, 0, 0," . $value['aprobadosJefe'] . ", " . $adultos . ", " . $dependenciaEcon . ", " . ($claCalificacion->TDE * ($dependenciaEcon * 100)) . ", " . $idCalificacion . ",6),";
                     /*                     * *************************************Nivel I Menores********************************************* */
                     $menores = $value['cantMenores'] / $value['cant'];
                     $sqlIndicadores .= "(" . $value['cantMenores'] . ", 0, 0, 0, 0, null, " . $menores . ", " . ($claCalificacion->HN12 * ($menores * 100)) . ", " . $idCalificacion . ",7),";
@@ -113,13 +117,13 @@ and open the template in the editor.
                     $monoparentalFem = 0;
                     // echo "<br>".$value['mujerCabHogar']." == 1 &&". $value['conyugueHogar']." == 0 && ".$value['cantHijos']." > 0";
                     $tipo = 0;
-                    if ($value['mujerCabHogar'] == 1){
+                    if ($value['mujerCabHogar'] == 1) {
                         $tipo = 1;
                     }
                     if ($value['mujerCabHogar'] == 1 && $value['conyugueHogar'] == 0 && $value['cantHijos'] > 0) {
                         $monoparentalFem = 1;
                     }
-                    $sqlIndicadores .= "(" . $value['cantHijos'] . ", " . $value['mujerCabHogar'] . ", ".$tipo.", " . $value['conyugueHogar'] . ", 0, null, " . $monoparentalFem . ", " . ($claCalificacion->MCF * ($monoparentalFem * 100)) . ", " . $idCalificacion . ",8),";
+                    $sqlIndicadores .= "(" . $value['cantHijos'] . ", " . $value['mujerCabHogar'] . ", " . $tipo . ", " . $value['conyugueHogar'] . ", 0, null, " . $monoparentalFem . ", " . ($claCalificacion->MCF * ($monoparentalFem * 100)) . ", " . $idCalificacion . ",8),";
 
                     /*                     * ************************************Nivel II ********************************************* */
 
@@ -146,13 +150,13 @@ and open the template in the editor.
                     /*                     * ************************************ hombre Cabeza de Hogar ********************************************* */
                     $monoparentalMasc = 0;
                     $tipo = 0;
-                    if($value['hombreCabHogar'] == 1){
+                    if ($value['hombreCabHogar'] == 1) {
                         $tipo = 2;
                     }
                     if ($value['hombreCabHogar'] == 1 && $value['conyugueHogar'] == 0 && $value['cantHijos'] > 0) {
                         $monoparentalMasc = 1;
                     }
-                    $sqlIndicadores .= "(" . $value['cantHijos'] . ", " . $value['hombreCabHogar'] . ", ".$tipo.", " . $value['conyugueHogar'] . ", 0, null, " . $monoparentalMasc . ", " . ($claCalificacion->HCF * ($monoparentalMasc * 100)) . ", " . $idCalificacion . ",13),";
+                    $sqlIndicadores .= "(" . $value['cantHijos'] . ", " . $value['hombreCabHogar'] . ", " . $tipo . ", " . $value['conyugueHogar'] . ", 0, null, " . $monoparentalMasc . ", " . ($claCalificacion->HCF * ($monoparentalMasc * 100)) . ", " . $idCalificacion . ",13),";
 
                     /*                     * ************************************ Grupo LGTBI ********************************************* */
                     $grupoLGTBI = 0;
@@ -162,14 +166,17 @@ and open the template in the editor.
                     $sqlIndicadores .= "(" . $value['grupoLgtbi'] . ", 0, 0, 0, 0, null, " . $grupoLGTBI . ", " . ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) . ", " . $idCalificacion . ",14),";
                     /*                     * ************************************ Participa en programas del Gobierno Distrital ********************************************* */
                     $programa = 0;
-
+                    
                     if ($value['bolIntegracionSocial'] > 0 || $value['bolSecMujer'] > 0 || $value['bolIpes'] > 0) {
                         $programa = 1;
                     }
-                  $sqlIndicadores .= "(" . $value['bolIntegracionSocial'] . ", " . $value['bolSecMujer'] . ", 0, " . $value['bolIpes'] . ", 0, null, " . $programa . ", " . ($claCalificacion->PPGD * ($programa * 100)) . ", " . $idCalificacion . ",15);";
+                    if( $value['bolSecMujer'] == ""){
+                         $value['bolSecMujer'] = 0;
+                    }
+                    $sqlIndicadores .= "(" . $value['bolIntegracionSocial'] . ", " . $value['bolSecMujer'] . ", 0, " . $value['bolIpes'] . ", 0, null, " . $programa . ", " . ($claCalificacion->PPGD * ($programa * 100)) . ", " . $idCalificacion . ",15);";
                     $insertInd = $claCalificacion->insertarIndicadores($sqlIndicadores);
                     if ($insertInd) {
-                        $formula = ($claCalificacion->BLE * ($educacion * 100)) + ($claCalificacion->RSA * ($saludSubsidiados * 100)) + ($claCalificacion->COH * ($cohabitacion * 100)) + ($claCalificacion->HACN * ($hacinamiento * 100)) + (100 * (1 - exp(-$totalIngresos / 52.05))) + ($claCalificacion->TDE * ($dependenciaEcon * 100)) + ($claCalificacion->HN12 * ($menores * 100)) + ($claCalificacion->MCF * ($monoparentalFem * 100)) + ($claCalificacion->HAMY * ($cantAdultoMayor * 100)) + ($claCalificacion->CDISC * ($discapacidad * 100)) + ($claCalificacion->HPGE * ($grupoEtnico * 100)) + ($claCalificacion->HN18 * ($cantAdolecentes * 100)) + ($claCalificacion->HCF * ($monoparentalMasc * 100)) + ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) + ($claCalificacion->PPGD * ($programa * 100));
+                        $formula = ($claCalificacion->BLE * ($educacion * 100)) + ($claCalificacion->RSA * ($saludSubsidiados * 100)) + ($claCalificacion->COH * ($cohabitacion * 100)) + ($claCalificacion->HACN * ($hacinamiento * 100)) + ($claCalificacion->IPC * (100 * (1 - exp(-$totalIngresos / 52.05)))) + ($claCalificacion->TDE * ($dependenciaEcon * 100)) + ($claCalificacion->HN12 * ($menores * 100)) + ($claCalificacion->MCF * ($monoparentalFem * 100)) + ($claCalificacion->HAMY * ($cantAdultoMayor * 100)) + ($claCalificacion->CDISC * ($discapacidad * 100)) + ($claCalificacion->HPGE * ($grupoEtnico * 100)) + ($claCalificacion->HN18 * ($cantAdolecentes * 100)) + ($claCalificacion->HCF * ($monoparentalMasc * 100)) + ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) + ($claCalificacion->PPGD * ($programa * 100));
                         //echo "<br>".$formula;
                         $valSeg .= "(
                             " . $value['seqFormulario'] . ", 
@@ -188,17 +195,17 @@ and open the template in the editor.
                 }
             }
             $formularios = substr_replace($formularios, '', -1, 1);
-            $cambioEstado = $claCalificacion->cambiarEstado($formularios);
+            //$cambioEstado = $claCalificacion->cambiarEstado($formularios);
             $seg = false;
             // echo "<br>++++++++".$cambioEstado;
 
-            if ($cambioEstado) {
+            /* if ($cambioEstado) {
 
-                $seg = $claCalificacion->insertarSeguimiento($valSeg);
-            }
-            if ($seg) {
-                echo "<p class='alert alert-danger'><b>Se almacenaron los datos con exito</b></p>";
-            }
+              $seg = $claCalificacion->insertarSeguimiento($valSeg);
+              }
+              if ($seg) {
+              echo "<p class='alert alert-danger'><b>Se almacenaron los datos con exito</b></p>";
+              } */
         } else {
             echo "<p class='alert alert-danger'><b>No existen formularios en estado Hogar actualizado</b></p>";
         }

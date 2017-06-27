@@ -730,7 +730,7 @@ class Seguimiento {
                     $objCiudadano->txtNombre2 . " " .
                     $objCiudadano->txtApellido1 . " " .
                     $objCiudadano->txtApellido2 . " [ " .
-                    $objCiudadano->numDocumento . " ] <span class='msgError'>Eliminado</span>" . $this->txtSalto;
+                    $objCiudadano->numDocumento . " ] <span class=\'msgError\'>Eliminado</span>" . $this->txtSalto;
             }
         }
 
@@ -742,7 +742,7 @@ class Seguimiento {
                     $arrMiembro['txtNombre2'] . " " .
                     $arrMiembro['txtApellido1'] . " " .
                     $arrMiembro['txtApellido2'] . " [ " .
-                    $arrMiembro['numDocumento'] . " ] <span class='msgOk'>Adicionado</span>" . $this->txtSalto;
+                    $arrMiembro['numDocumento'] . " ] <span class=\'msgOk\'>Adicionado</span>" . $this->txtSalto;
             }
         }
 
@@ -3914,7 +3914,8 @@ class Seguimiento {
                 return true;
             } catch (Exception $objError) {
                 $this->arrErrores[] = "No se ha podido registrar el seguimiento, contacte al administrador del sistema";
-                //$this->arrErrores[] = $objError->getMessage();
+                $this->arrErrores[] = $objError->getMessage();
+                $this->arrErrores[] = $sql;
                 return false;
             }
         }else{

@@ -1375,7 +1375,7 @@ class CasaMano
             // Ciudadanos eliminados y actualizados
             foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
                 $numDocumento = $objCiudadano->numDocumento;
-                if (!empty($objCiudadano->arrErrores)) {
+                if (empty($objCiudadano->arrErrores)) {
                     if (isset($arrPost['hogar'][$numDocumento])) {
                         foreach ($objCiudadano as $txtClave => $txtValor) {
                             $objCiudadano->$txtClave = regularizarCampo($txtClave, $arrPost['hogar'][$numDocumento][$txtClave]);
@@ -1396,19 +1396,16 @@ class CasaMano
 
                 foreach ($arrPost['hogar'] as $numDocumento => $arrDatos) {
                     $seqCiudadano = Ciudadano::ciudadanoExiste($arrDatos['seqTipoDocumento'], $arrDatos['numDocumento']);
-
                     $objCiudadano = new Ciudadano();
                     if ($seqCiudadano != 0) {
                         $objCiudadano->cargarCiudadano($seqCiudadano);
                     }
-
                     foreach ($objCiudadano as $txtClave => $txtValor) {
                         if( isset( $arrDatos[$txtClave] )) {
                             $objCiudadano->$txtClave = regularizarCampo($txtClave, $arrDatos[$txtClave]);
 
                         }
                     }
-
                     if ($seqCiudadano == 0) {
                         $objCiudadano->guardarCiudadano();
                     } else {
@@ -1416,11 +1413,15 @@ class CasaMano
                     }
 
                     if (empty($objCiudadano->arrErrores)) {
+                        $seqCiudadano = $objCiudadano->seqCiudadano;
                         $claFormulario->arrCiudadano[$seqCiudadano] = $objCiudadano;
                     } else {
                         $this->arrErrores += $objCiudadano->arrErrores;
                     }
                 }
+
+                //pr($claFormulario->arrCiudadano);
+
                 $claFormulario->relacionarCiudadanoFormulario();
                 if (!empty($claFormulario->arrErrores)) {
                     $this->arrErrores += $claFormulario->arrErrores;

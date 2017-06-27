@@ -163,7 +163,6 @@ class Ciudadano {
                     numAnosAprobados,
                     numDocumento,
                     seqCajaCompensacion,
-                    seqCiudadano,
                     seqCondicionEspecial,
                     seqCondicionEspecial2,
                     seqCondicionEspecial3,

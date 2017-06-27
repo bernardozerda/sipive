@@ -114,7 +114,7 @@
         {assign var=seqBancoCredito value=$objFormulario->seqBancoCredito}
         {assign var=seqEntidadDonante value=$objFormulario->seqEmpresaDonante}
         {assign var=seqTipoEsquema value=$objFormulario->seqTipoEsquema}
-        {assign var=seqBancoLeasing value=$objFormulario->seqBancoLeasing}
+        {assign var=seqConvenio value=$objFormulario->seqConvenio}
 
 		<table cellspacing="0" cellpadding="2" border="0" width="100%" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 9px;">
 			<tr><td bgcolor="#CECECE" style="padding-left:10px;" align="center"><b>DATOS DEL HOGAR</b></td></tr>
@@ -245,25 +245,27 @@
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 			</tr>
-			<tr>
-				<td><b>Entidad Leasing:</b> $ {$arrBanco.$seqBancoLeasing}</td>
-				<td><b>Valor:</b> $ {$objFormulario->valCartaLeasing|number_format:0:',':'.'}</td>
-				<td><b>Soporte:</b> {$objFormulario->txtSoporteLeasing}</td>
-				<td><b>Fecha Aprobación:</b> {$objFormulario->fchAprobacionLEasing}</td>
-				<td><b>Duración:</b> {$objFormulario->numDuracionLeasing} Meses</td>
-			</tr>
-			<tr>
 
-				<td><b>Viabilidad Leasing (Si aplica): {if $objFormulario->bolViabilidadLeasing == 1} Si {else} No {/if} </b></td>
-			</tr>
-
-			<tr>
-				<td bgcolor="#E4E4E4"><b>Total Recursos Econ&oacute;micos</b></td>
-				<td bgcolor="#E4E4E4" align="right" style="padding-right:17px;">$ {$objFormulario->valTotalRecursos|number_format:0:',':'.'}</td>
-				<td bgcolor="#E4E4E4">&nbsp;</td>
-				<td bgcolor="#E4E4E4">&nbsp;</td>
-				<td bgcolor="#E4E4E4">&nbsp;</td>
-			</tr>
+			{if $objFormulario->seqModalidad == 13}
+				<tr>
+					<td><b>Viabilidad Leasing (Si aplica): {if $objFormulario->bolViabilidadLeasing == 1} Si {else} No {/if} </b></td>
+				</tr>
+				<tr>
+					<td><b>Entidad Leasing:</b> {$arrConvenio.$seqConvenio}</td>
+					<td><b>Valor:</b> $ {$objFormulario->valCartaLeasing|number_format:0:',':'.'}</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td><b>Duración:</b> {$objFormulario->numDuracionLeasing} Meses</td>
+				</tr>
+			{else}
+				<tr>
+					<td bgcolor="#E4E4E4"><b>Total Recursos Econ&oacute;micos</b></td>
+					<td bgcolor="#E4E4E4" align="right" style="padding-right:17px;">$ {$objFormulario->valTotalRecursos|number_format:0:',':'.'}</td>
+					<td bgcolor="#E4E4E4">&nbsp;</td>
+					<td bgcolor="#E4E4E4">&nbsp;</td>
+					<td bgcolor="#E4E4E4">&nbsp;</td>
+				</tr>
+            {/if}
 		</table>
 		
 		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 9px;">
@@ -306,9 +308,7 @@
 				El diligenciamiento de este formulario representa la postulación al sistema de información para soluciones
 				de vivienda de la Secretaria Distrital del Hábitat y no implica el otorgamiento del Aporte Distrital.
 			</td></tr>
-			
+
 		</table>
-		
-		
 	</body>
 	</html>

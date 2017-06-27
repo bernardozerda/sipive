@@ -148,7 +148,7 @@ if (empty($arrErrores)) {
 
             if ($_POST['seqPlanGobierno'] == 3) {
                 // echo "<br> <br>".$arrCiudadano['seqNivelEducativo'];
-                if ($_POST['valIngresoHogar'] > 0 && $arrCiudadano['seqNivelEducativo'] != 1 && $arrCiudadano['anosAprobados'] == 0) {
+                if ($_POST['valIngresoHogar'] > 0 && $arrCiudadano['seqNivelEducativo'] != 1 && $arrCiudadano['numAnosAprobados'] == 0) {
                     $arrErrores[] = "El ciudadano debe seleccionar el numero de años aprobados";
                 }
 
@@ -156,8 +156,6 @@ if (empty($arrErrores)) {
                     $arrErrores[] = "El ciudadano debe seleccionar si se encuentra afiliado a la salud";
                 }
             }
-
-
 
             // Si es el caso de unión marital de hecho, deben existir solo 2 personas con ese estado civil en el hogar
             // Author: Jaison Ospina - Enero 21
@@ -727,7 +725,7 @@ if (empty($arrErrores)) {
         $claCiudadanoNuevo->seqCondicionEspecial3 = $arrCiudadano['seqCondicionEspecial3'];
         $claCiudadanoNuevo->seqSexo = $arrCiudadano['seqSexo'];
         $claCiudadanoNuevo->bolLgtb = $arrCiudadano['bolLgtb'];
-        $claCiudadanoNuevo->numAnosAprobados = $arrCiudadano['anosAprobados'];
+        $claCiudadanoNuevo->numAnosAprobados = $arrCiudadano['numAnosAprobados'];
         $claCiudadanoNuevo->seqSalud = $arrCiudadano['seqSalud'];
         $claCiudadanoNuevo->seqTipoVictima = $arrCiudadano['seqTipoVictima'];
         $claCiudadanoNuevo->seqGrupoLgtbi = $arrCiudadano['seqGrupoLgtbi'];

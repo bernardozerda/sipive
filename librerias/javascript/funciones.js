@@ -919,6 +919,14 @@ function agregarMiembroHogar() {
         return false;
     }
 
+    // Afiliacion a salud
+    if (objSeqSalud.selectedIndex == 0) {
+        alert("Debe seleccionar la afiliacion a salud");
+        objSeqSalud.focus();
+        return false;
+    }
+
+
     // Validacion de cedula -- Si ya esta incluido
     var arrMiembros = objHogar.getElementsByTagName("table");
     for (i = 0; i < arrMiembros.length; i++) {
@@ -995,7 +1003,7 @@ function agregarMiembroHogar() {
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-bolLgtb' name='hogar[" + numDocumento + "][bolLgtb]' value='" + objLgtb.options[ objLgtb.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-valIngresos' name='hogar[" + numDocumento + "][valIngresos]' value='" + valIngresos + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqNivelEducativo' name='hogar[" + numDocumento + "][seqNivelEducativo]' value='" + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + numDocumento + "-anosAprobados' name='hogar[" + numDocumento + "][anosAprobados]' value='" + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + "'>";
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-numAnosAprobados' name='hogar[" + numDocumento + "][numAnosAprobados]' value='" + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqSalud' name='hogar[" + numDocumento + "][seqSalud]' value='" + objSeqSalud.options[ objSeqSalud.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqTipoVictima' name='hogar[" + numDocumento + "][seqTipoVictima]' value='" + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqGrupoLgtbi' name='hogar[" + numDocumento + "][seqGrupoLgtbi]' value='" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].value + "'>";
@@ -1007,28 +1015,36 @@ function agregarMiembroHogar() {
     txtInsertar += "		<td colspan=\"6\"> ";
     txtInsertar += "			<table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"border: 1px solid #999999;\"> ";
     txtInsertar += "				<tr> ";
+    txtInsertar += "					<td><b>Fecha de Nacimiento:</b> " + objFchNacimiento.value + "</td> ";
     txtInsertar += "					<td><b>Estado Civil:</b> " + objEstCivil.options[ objEstCivil.selectedIndex ].text + "</td> ";
-    txtInsertar += "					<td><b>Condici&oacute;n &Eacute;tnica:</b> " + ucwords(objCondEtnica.options[ objCondEtnica.selectedIndex ].text.toString().toLowerCase()) + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Sexo:</b> " + objSexo.options[ objSexo.selectedIndex ].text + "</td> ";
+    txtInsertar += "					<td><b>Condici&oacute;n &Eacute;tnica:</b> " + ucwords(objCondEtnica.options[ objCondEtnica.selectedIndex ].text.toString().toLowerCase()) + "</td> ";
     txtInsertar += "					<td><b>Condici&oacute;n Especial 1:</b> " + objCondEspecial.options[ objCondEspecial.selectedIndex ].text + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Fecha de Nacimiento:</b> " + objFchNacimiento.value + "</td> ";
+    txtInsertar += "					<td><b>Sexo:</b> " + objSexo.options[ objSexo.selectedIndex ].text + "</td> ";
     txtInsertar += "					<td><b>Condici&oacute;n Especial 2:</b> " + objCondEspecial2.options[ objCondEspecial2.selectedIndex ].text + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Nivel Educativo:</b> " + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].text + "</td> ";
+    txtInsertar += "					<td><b>Nivel Educativo:</b> " + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].text + " (" + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + " años aprobados)</td> ";
     txtInsertar += "					<td><b>Condici&oacute;n Especial 3:</b> " + objCondEspecial3.options[ objCondEspecial3.selectedIndex ].text + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
-    if (objLgtb.options[ objLgtb.selectedIndex ].value == 0) {
-        txtInsertar += "<td><b>LGTBI:</b> " + objLgtb.options[ objLgtb.selectedIndex ].text + "</td>";
+
+    txtInsertar += "<td><b>LGTBI:</b> ";
+    if (objLgtb.options[ objLgtb.selectedIndex ].value == 1) {
+        txtInsertar += "Si";
+        txtInsertar += " (" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].text + ")";
     } else {
-        txtInsertar += "<td><b>LGTBI:</b> " + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].text + "</td> ";
+        txtInsertar += "No";
     }
-    txtInsertar += "					<td><b>Tipo de V&iacute;ctima:</b> " + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].text + "</td> ";
+    txtInsertar += "</td>";
+
+    txtInsertar += "					<td><b>Hecho Victimizante:</b> " + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].text + "</td> ";
+    txtInsertar += "				</tr> ";
+    txtInsertar += "				<tr> ";
+    txtInsertar += "					<td colspan='3'><b>Afiliación a Salud</b> " + objSeqSalud.options[ objSeqSalud.selectedIndex ].text + "</td> ";
     txtInsertar += "				</tr> ";
     txtInsertar += "				<tr> ";
     txtInsertar += "					<td colspan='3'><b>Ocupaci&oacute;n:</b> " + txtOcupacion + "</td> ";
@@ -1306,7 +1322,10 @@ function sumarTotalRecursos() {
 
     // Valor del aporte
     if( $("#valAspiraSubsidio").val() == ""){ $("#valAspiraSubsidio").val(0); }
-    if( $("#valCartaLeasing").val()   == ""){ $("#valCartaLeasing").val(0);   }
+
+    if( document.getElementById('valCartaLeasing') != null ){
+        if( $("#valCartaLeasing").val()   == ""){ $("#valCartaLeasing").val(0);   }
+    }
 
     // limpiando caracteres en los valores utiles para sumas
     var numSaldoCuenta    = parseInt($("#valSaldoCuentaAhorro").val().replace(/[^0-9]/g,''));
@@ -1316,8 +1335,9 @@ function sumarTotalRecursos() {
     var numSubsidioNal    = parseInt($("#valSubsidioNacional").val().replace(/[^0-9]/g,''));
     var numVUR            = parseInt($("#valDonacion").val().replace(/[^0-9]/g,''));
     var numAspiraSubsidio = parseInt($("#valAspiraSubsidio").val().replace(/[^0-9]/g,''));
-    var numCartaLeasing   = parseInt($("#valCartaLeasing").val().replace(/[^0-9]/g,''));
-
+    if( document.getElementById('valCartaLeasing') != null ) {
+        var numCartaLeasing = parseInt($("#valCartaLeasing").val().replace(/[^0-9]/g, ''));
+    }
     // Realizando las sumas
     var numSumaRecursosPropios = numSaldoCuenta + numSaldoCuenta2 + numCesantias + numCredito;
     var numSumaSubsidios       = numSubsidioNal + numVUR;
@@ -1334,7 +1354,9 @@ function sumarTotalRecursos() {
     $("#valSumaSubsidios").val( numSumaSubsidios );
     $("#valAspiraSubsidio").val(numAspiraSubsidio);
     $("#valTotalRecursos").val(numTotalRecursos);
-    $("#valCartaLeasing").val(numCartaLeasing);
+    if( document.getElementById('valCartaLeasing') != null ) {
+        $("#valCartaLeasing").val(numCartaLeasing);
+    }
 
     // formateando los valores sumados
     formatoSeparadores(YAHOO.util.Dom.get("valSaldoCuentaAhorro"));
@@ -1347,8 +1369,9 @@ function sumarTotalRecursos() {
     formatoSeparadores(YAHOO.util.Dom.get("valSumaSubsidios"));
     formatoSeparadores(YAHOO.util.Dom.get("valAspiraSubsidio"));
     formatoSeparadores(YAHOO.util.Dom.get("valTotalRecursos"));
-    formatoSeparadores(YAHOO.util.Dom.get("valCartaLeasing"));
-
+    if( document.getElementById('valCartaLeasing') != null ) {
+        formatoSeparadores(YAHOO.util.Dom.get("valCartaLeasing"));
+    }
 }
 
 
@@ -1896,6 +1919,23 @@ function datosPestanaPostulacion(txtModo) {
             $('#txtDireccionSolucion').val(objRespuesta.direccion);
             $('#txtMatriculaInmobiliaria').val(objRespuesta.matricula);
             $('#txtChip').val(objRespuesta.chip);
+
+            // cuando es leasing entonces muestra los campos de informacion financiera correspondientes
+            if( $("#seqModalidad").val() == 13 ){
+                $("#trNoLeasing1").removeAttr("style").hide();
+                $("#trNoLeasing2").removeAttr("style").hide();
+                $("#trNoLeasing3").removeAttr("style").hide();
+                $("#trNoLeasing4").removeAttr("style").hide();
+                $("#trLeasing1").removeAttr("style").show();
+                $("#trLeasing2").removeAttr("style").show();
+            }else {
+                $("#trNoLeasing1").removeAttr("style").show();
+                $("#trNoLeasing2").removeAttr("style").show();
+                $("#trNoLeasing3").removeAttr("style").show();
+                $("#trNoLeasing4").removeAttr("style").show();
+                $("#trLeasing1").removeAttr("style").hide();
+                $("#trLeasing2").removeAttr("style").hide();
+            }
 
         }
 
@@ -6590,16 +6630,18 @@ function preguntarAntes() {
 }
 
 function formatoSeparadores(input) {
-    var num = input.value.replace(/\./g, '');
-    if (!isNaN(num)) {
-        num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g, '$1.');
-        num = num.split('').reverse().join('').replace(/^[\.]/, '');
-        input.value = num;
-    } else {
-        alert('Solo se permiten numeros');
-        input.value = input.value.replace(/[^\d\.]*/g, '');
-        input.focus();
-    }
+    try {
+        var num = input.value.replace(/\./g, '');
+        if (!isNaN(num)) {
+            num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g, '$1.');
+            num = num.split('').reverse().join('').replace(/^[\.]/, '');
+            input.value = num;
+        } else {
+            alert('Solo se permiten numeros');
+            input.value = input.value.replace(/[^\d\.]*/g, '');
+            input.focus();
+        }
+    }catch(o){}
 }
 
 function espia() {

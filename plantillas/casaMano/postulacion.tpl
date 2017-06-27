@@ -520,6 +520,7 @@
                                                                     id="seqSalud"
                                                                     style="width:96%;"
                                                             >
+                                                                <option value="0">NINGUNO</option>
                                                                 {foreach from=$arrSalud key=seqSalud item=txtSalud}
                                                                     <option value="{$seqSalud}">{$txtSalud}</option>
                                                                 {/foreach}
@@ -558,6 +559,7 @@
                                         {assign var=lgbt               value=$objCiudadano->bolLgbt}
                                         {assign var=nivelEducativo     value=$objCiudadano->seqNivelEducativo}
                                         {assign var=ocupacion          value=$objCiudadano->seqOcupacion}
+                                        {assign var=salud              value=$objCiudadano->seqSalud}
 
                                         <!-- SI HAY AL MENOS UN CIUDADANO CON HECHO VICTIMIZANTE "DESPLAZAMIENTO FORZADO" -->
                                         {if $objCiudadano->seqTipoVictima == 2}
@@ -666,19 +668,15 @@
 
                                                         </tr>
                                                         <tr>
-                                                            <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if}</td>
+                                                            <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if} ({$objCiudadano->numAnosAprobados} años aprobados)</td>
                                                             <td><b>Condición Especial 3:</b> {if isset($arrCondicionEspecial.$condicionEspecial3)} {$arrCondicionEspecial.$condicionEspecial3}{else}Ninguna{/if}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>
-                                                                <b>LGTBI:</b>
-                                                                {if $objCiudadano->bolLgtb == 1}
-                                                                    {$arrGrupoLgtbi.$grupoLgtbi}
-                                                                {else}
-                                                                    No
-                                                                {/if}
-                                                            </td>
-                                                            <td><b>Tipo de Victima:</b> {if isset($arrTipoVictima.$tipoVictima)}{$arrTipoVictima.$tipoVictima}{else}Ninguno{/if}</td>
+                                                            <td><b>LGTBI:</b> {if $objCiudadano->bolLgtb == 1}Si ({$arrGrupoLgtbi.$grupoLgbti}){else}No{/if} </td>
+                                                            <td><b>Hecho Victimizante:</b> {if isset($arrTipoVictima.$tipoVictima)}{$arrTipoVictima.$tipoVictima}{else}Ninguno{/if}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3"><b>Afiliación a Salud:</b> {$arrSalud.$salud}</td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3"><b>Ocupación:</b> {$arrOcupacion.$ocupacion}</td>
@@ -1735,7 +1733,7 @@
                                     {assign var=bolCamposNoLeasing value=""}
                                 {/if}
 
-                                <tr bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                <tr id="trNoLeasing1" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
                                     <!-- SUMA DE RECURSOS PROPIOS -->
                                     <td class="tituloTabla" style="padding-top:5px;">Recursos propios</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">
@@ -1751,7 +1749,7 @@
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                 </tr>
-                                <tr bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                <tr id="trNoLeasing2" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
                                     <!-- SUMA DE SUBSIDIOS -->
                                     <td class="tituloTabla" style="padding-top:5px;">Valor Subsidios + (Donacion y/o VUR)</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">
@@ -1768,7 +1766,7 @@
                                     <td>&nbsp;</td>
 
                                 </tr>
-                                <tr bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                <tr id="trNoLeasing3" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
                                     <!-- TOTAL RECURSOS ECONOMICOS -->
                                     <td class="tituloTabla" style="padding-top:5px;">Total recursos del hogar</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">
@@ -1787,7 +1785,7 @@
                                 </tr>
 
                                 <!-- CAMPOS DE LA MODALIDAD DE LEASING  -->
-                                <tr style="display: {$bolCamposLeasing};">
+                                <tr id="trLeasing1" style="display: {$bolCamposLeasing};">
 
                                     <!-- VIABILIDAD LEASING -->
                                     <td>Viabilidad leasing por entidad financiera</td>
@@ -1827,9 +1825,9 @@
                                     </td>
 
                                 </tr>
-                                <tr style="display: {$bolCamposLeasing};">
+                                <tr id="trLeasing2" style="display: {$bolCamposLeasing};">
                                     <!-- VALOR -->
-                                    <td>Valor del aporte en la carta</td>
+                                    <td>Valor del aporte según convenio</td>
                                     <td align="right" style="padding-right: 5px;">
                                         $ <input type="text"
                                                  name="valCartaLeasing"
@@ -1842,41 +1840,7 @@
                                         />
                                     </td>
 
-                                    <!-- SOPORTE LEASING -->
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text"
-                                               name="txtSoporteLeasing"
-                                               id="txtSoporteLeasing"
-                                               value="{$claFormulario->txtSoporteLeasing}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:300px;" />
-                                    </td>
-                                </tr>
-                                <tr style="display: {$bolCamposLeasing};">
-                                    <!-- FECHA APROBACION LEASING -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Fecha Aprobación</td>
-                                    <td style="padding-left:11px;">
-                                        <input type="text"
-                                               name="fchAprobacionLeasing"
-                                               id="fchAprobacionLeasing"
-                                               value="{$claFormulario->fchAprobacionLeasing}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:100px;"
-                                               maxlength="10"
-                                               readonly />
-                                        <a onClick="calendarioPopUp('fchAprobacionLeasing')" href="#">Calendario</a>&nbsp;&nbsp;
-                                        <a onClick="document.getElementById('fchAprobacionLeasing').value = '';" href="#">Limpiar</a>
-                                    </td>
-                                </tr>
-                                <tr style="display: {$bolCamposLeasing};">
-                                    <!-- DURACION DEL LEASING -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                    <!-- DURACION LEASING -->
                                     <td>Duración</td>
                                     <td align="left" style="padding-left:11px;">
                                         <input type="text"

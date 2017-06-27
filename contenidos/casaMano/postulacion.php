@@ -39,7 +39,7 @@
     $objCasaMano->objPostulacion->txtMatriculaInmobiliaria = $objCasaMano->objRegistroOferta->txtMatriculaInmobiliaria;
     $objCasaMano->objPostulacion->txtChip = $objCasaMano->objRegistroOferta->txtChip;
     
-    $bolPermiso = $claCasaMano->puedeIngresar( $arrFlujoHogar , $objCasaMano->objPostulacion );
+    $bolPermiso = $objCasaMano->puedeIngresar( $arrFlujoHogar );
     if( $bolPermiso == true ){
     
         // Obtienr los ultimos seguimientos
@@ -52,8 +52,8 @@
 		$txtTutor = $claCRM->obtenerTutorHogar( $_POST['seqFormulario'] );
         
         // Los estados de avance y retorno para esta fase
-        $arrEstadosCEM['atras']    = $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['atras'];
-        $arrEstadosCEM['adelante'] = $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['adelante'];
+        $arrEstadosCEM['atras']    = $objCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['atras'];
+        $arrEstadosCEM['adelante'] = $objCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['adelante'];
         
         /*
          * REQUISITOS DE LA PLANTILLA
@@ -167,13 +167,13 @@
         $claSmarty->assign( "seqCasaMano" , intval( $_POST['seqCasaMano'] ) );
         $claSmarty->assign( "numDocumento" , $_POST['cedula'] );
         $claSmarty->assign( "arrEstadosCEM" , $arrEstadosCEM );
-        $claSmarty->assign( "txtArchivoCEM" , $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['salvar'] );
+        $claSmarty->assign( "txtArchivoCEM" , $objCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['salvar'] );
 		$claSmarty->assign("arrBarrio", $arrBarrio);
         $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);
         $claSmarty->assign("valSumaRecursos", $valSumaRecursos);
         $claSmarty->assign("valSumaRecursosSMMLV", $valSumaRecursosSMMLV);
 
-        $claSmarty->display( $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['plantilla'] );        
+        $claSmarty->display( $objCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['plantilla'] );
     } else {
         
         $arrMensaje = $claCasaMano->arrErrores;

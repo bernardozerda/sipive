@@ -520,6 +520,7 @@
                                                                     id="seqSalud"
                                                                     style="width:96%;"
                                                             >
+                                                                <option value="0">NINGUNO</option>
                                                                 {foreach from=$arrSalud key=seqSalud item=txtSalud}
                                                                     <option value="{$seqSalud}">{$txtSalud}</option>
                                                                 {/foreach}
@@ -671,11 +672,11 @@
                                                             <td><b>Condición Especial 3:</b> {if isset($arrCondicionEspecial.$condicionEspecial3)} {$arrCondicionEspecial.$condicionEspecial3}{else}Ninguna{/if}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>LGTBI: {if $objCiudadano->bolLgtb == 1}Si{else}No{/if} ({$arrGrupoLgtbi.$grupoLgbti})</td>
+                                                            <td><b>LGTBI:</b> {if $objCiudadano->bolLgtb == 1}Si ({$arrGrupoLgtbi.$grupoLgbti}){else}No{/if} </td>
                                                             <td><b>Hecho Victimizante:</b> {if isset($arrTipoVictima.$tipoVictima)}{$arrTipoVictima.$tipoVictima}{else}Ninguno{/if}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="3"><b>Afiliación a Salud:</b> {$arrOcupacion.$salud}</td>
+                                                            <td colspan="3"><b>Afiliación a Salud:</b> {$arrSalud.$salud}</td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3"><b>Ocupación:</b> {$arrOcupacion.$ocupacion}</td>

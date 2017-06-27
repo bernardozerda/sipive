@@ -68,6 +68,8 @@ $arrCamposCalificacion["ciudadano"]["seqCondicionEspecial2"] = "Condicion Especi
 $arrCamposCalificacion["ciudadano"]["seqCondicionEspecial3"] = "Condicion Especial 3";
 $arrCamposCalificacion["ciudadano"]["fchNacimiento"] = "Fecha de Nacimiento";
 $arrCamposCalificacion["ciudadano"]["seqNivelEducativo"] = "Nivel Educativo";
+$arrCamposCalificacion["ciudadano"]["numAnosAprobados"] = "Años Aprobados";
+$arrCamposCalificacion["ciudadano"]["seqSalud"] = "Afiliacion a salud";
 
 /**********************************************************************************************************************
  * LIMPIEZA DE CARACTERES
@@ -90,6 +92,9 @@ if (!empty($_POST['hogar'])) {
 
     $numCabezaFamilia = 0;
     $numCondicionJefeHogar = 0;
+    $numCondicionJefeHogarSinIngreso = 0;
+    $numCuentaUnionMarital = 0;
+    $numCuentaCasado = 0;
     $numCedula = 0;
     foreach ($_POST['hogar'] as $numDocumento => $arrCiudadano) {
 
@@ -118,6 +123,17 @@ if (!empty($_POST['hogar'])) {
             }
         }
 
+        if ($_POST['seqPlanGobierno'] == 3) {
+            // echo "<br> <br>".$arrCiudadano['seqNivelEducativo'];
+            if ($_POST['valIngresoHogar'] > 0 and $arrCiudadano['seqNivelEducativo'] != 1 and $arrCiudadano['numAnosAprobados'] == 0) {
+                $arrErrores[] = "El ciudadano debe seleccionar el numero de años aprobados";
+            }
+
+            if ($arrCiudadano['seqSalud'] == 0) {
+                $arrErrores[] = "El ciudadano debe seleccionar si se encuentra afiliado a la salud";
+            }
+        }
+
         // Parentesco
         if ($arrCiudadano['seqParentesco'] == 0) {
             $arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " debe tener parentesco";
@@ -134,17 +150,25 @@ if (!empty($_POST['hogar'])) {
         }
 
         // solo puede haber una persona con condicion Especial "Madre / Padre Cabeza de Familia"
-        if ($arrCiudadano['seqCondicionEspecial'] == 1) {
-            $numCondicionJefeHogar++;
+        if (( $arrCiudadano['seqCondicionEspecial'] == 1 ) || ( $arrCiudadano['seqCondicionEspecial2'] == 1 ) || ( $arrCiudadano['seqCondicionEspecial3'] == 1 )) {
+            if ($arrCiudadano['valIngresos'] > 0) {
+                $numCondicionJefeHogar++; // Cuenta los miembros del hogar que cuentan con la condición 'Madre / Padre cabeza de Familia'
+            } else {
+                $numCondicionJefeHogarSinIngreso++; // Cuenta los miembros del hogar que cuentan con la condición 'Madre / Padre cabeza de Familia' sin Ingreso
+            }
         }
 
-        if ($arrCiudadano['seqCondicionEspecial2'] == 1) {
-            $numCondicionJefeHogar++;
+        // Debe haber minimo dos personas con estado civil casado
+        if ($arrCiudadano['seqEstadoCivil'] == 6) {
+            $numCuentaCasado ++;
         }
 
-        if ($arrCiudadano['seqCondicionEspecial3'] == 1) {
-            $numCondicionJefeHogar++;
+
+        // Debe haber minimo dos personas con estado civil union marital
+        if ($arrCiudadano['seqEstadoCivil'] == 7) {
+            $numCuentaUnionMarital ++;
         }
+
 
         // por lo menos debe haber una cedula de ciudadania
         if ($arrCiudadano['seqTipoDocumento'] == 1) {
@@ -197,12 +221,21 @@ if (!empty($_POST['hogar'])) {
         case $numCondicionJefeHogar > 1:
             $arrErrores[] = "Solo puede haber un miembro de hogar con la condición especial de \"Madre / Padre cabeza de Familia\"";
             break;
+        case $numCondicionJefeHogarSinIngreso > 0:
+            $arrErrores[] = "La persona con la condición especial 'Madre / Padre cabeza de Familia' debe tener ingresos";
+            break;
         case $numCedula == 0:
             $arrErrores[] = "Debe haber por lo menos un mayor de edad colombiano dentro del nucleo familiar";
             break;
+        case $numCuentaCasado % 2 != 0:
+            $arrErrores[] = "Verificar estado civil, debe existir otra persona con estado civil 'Casado' en el hogar";
+            break;
+        case $numCuentaUnionMarital % 2 != 0:
+            $arrErrores[] = "Verificar estado civil, debe existir otra persona con estado civil 'Unión Marital de hecho' en el hogar";
+            break;
     }
 
-    // si es independiente debe indicar ingresos
+    // si es vulnerable debe indicar ingresos
     if (intval($_POST['bolDesplazado']) == 0) {
         if (intval($_POST['valIngresoHogar']) == 0) {
             $arrErrores[] = "El ingreso del hogar no puede sumar cero";
@@ -288,12 +321,12 @@ if (trim($_POST['txtCorreo']) != "") {
 }
 
 // Hogares que viven en la misma vivienda
-if (intval($_POST['numHabitacion']) == 0) {
+if (intval($_POST['numHabitaciones']) == 0) {
     $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
 }
 
 // Cantidad de dormitorios
-if (intval($_POST['numDormitorios']) == 0) {
+if (intval($_POST['numHacinamiento']) == 0) {
     $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
 }
 
@@ -332,10 +365,6 @@ if( in_array( $_POST['seqTipoEsquema'] , $arrEsquemaUnidades) ){
     if( intval($_POST['seqUnidadProyecto']) == 0 or intval($_POST['seqUnidadProyecto']) == 1 ){
         $arrErrores[] = "Debe seleccionar una unidad habitacional de la lista";
     }
-}
-
-if (trim($_POST['txtDireccionSolucion']) == "") {
-    $arrErrores[] = "Indique la dirección de la soluci&oacute;n de vivienda";
 }
 
 if (intval($_POST['seqSolucion']) == 1) {
@@ -422,13 +451,7 @@ if( $_POST['seqModalidad'] == 13 and $_POST['seqEstadoProceso'] == 54){
         $arrErrores[] = "Seleccione un convenio para el leasing";
     }
     if( $_POST['valCartaLeasing'] == 0 ){
-        $arrErrores[] = "El valor de las carta de leasing no es válido";
-    }
-    if( $_POST['txtSoporteLeasing'] == "" ){
-        $arrErrores[] = "Indique cuál es el soporte de la carta de leasing";
-    }
-    if( esFechaValida($_POST['fchAprobacionLeasing']) ){
-        $arrErrores[] = "Seleccione la fecha de aprobación de leasing";
+        $arrErrores[] = "El valor de la carta de leasing no es válido";
     }
     if( $_POST['numDuracionLeasing'] == 0 ){
         $arrErrores[] = "Indique el numero de meses que dura el leasing";
@@ -471,7 +494,7 @@ if (empty($arrErrores)) {
 
         // Revisa cambios en las variables de calificacion en el formulario
         foreach( $arrCamposCalificacion['formulario'] as $txtClave => $txtValor){
-            if( $claCasaMano->objPostulacion->$txtClave != $_POST[$txtClave] ) {
+            if ($claCasaMano->objPostulacion->$txtClave != $_POST[$txtClave]) {
                 $arrMensajes[] = "Ha modificado datos sensibles a la calificacion de hogares ($txtValor), el hogar será devuelto a etapa de inscripcion";
                 $bolCambiosCalificacion = true;
             }
@@ -480,12 +503,15 @@ if (empty($arrErrores)) {
         // Revisa cambios en las variables de calificacion en los ciudadanos
         foreach( $arrCamposCalificacion['ciudadano'] as $txtClave => $txtValor ) {
             foreach ($claCasaMano->objPostulacion->arrCiudadano as $seqCiudadano => $objCiudadano ){
-                if( $objCiudadano->$txtClave != $_POST['hogar'][$objCiudadano->numDocumento][$txtClave] ) {
-                    $arrMensajes[] =
-                        "Ha modificado datos sensibles a la calificacion del ciudadano " .
-                        number_format($objCiudadano->numDocumento) .
-                        "($txtValor), el hogar será devuelto a etapa de inscripcion";
-                    $bolCambiosCalificacion = true;
+                $numDocumento = $objCiudadano->numDocumento;
+                if( isset( $_POST['hogar'][ $numDocumento ] ) ){
+                    if( $objCiudadano->$txtClave != $_POST['hogar'][$numDocumento][$txtClave] ) {
+                        $arrMensajes[] =
+                            "Ha modificado datos sensibles a la calificacion del ciudadano " .
+                            number_format($objCiudadano->numDocumento) .
+                            " ($txtValor), el hogar será devuelto a etapa de inscripcion";
+                        $bolCambiosCalificacion = true;
+                    }
                 }
             }
         }
@@ -555,10 +581,7 @@ if (empty($arrErrores)) {
 
 if (empty($arrErrores)) {
     $_POST['fchUltimaActualizacion'] = date("Y-m-d H:i:s");
-
     $claCasaMano->salvar($_POST);
-
-
     $arrErrores = $claCasaMano->arrErrores;
     foreach($claCasaMano->arrMensajes as $txtMensaje){
         $arrMensajes[] = $txtMensaje;

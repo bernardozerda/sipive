@@ -919,6 +919,14 @@ function agregarMiembroHogar() {
         return false;
     }
 
+    // Afiliacion a salud
+    if (objSeqSalud.selectedIndex == 0) {
+        alert("Debe seleccionar la afiliacion a salud");
+        objSeqSalud.focus();
+        return false;
+    }
+
+
     // Validacion de cedula -- Si ya esta incluido
     var arrMiembros = objHogar.getElementsByTagName("table");
     for (i = 0; i < arrMiembros.length; i++) {
@@ -995,7 +1003,7 @@ function agregarMiembroHogar() {
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-bolLgtb' name='hogar[" + numDocumento + "][bolLgtb]' value='" + objLgtb.options[ objLgtb.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-valIngresos' name='hogar[" + numDocumento + "][valIngresos]' value='" + valIngresos + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqNivelEducativo' name='hogar[" + numDocumento + "][seqNivelEducativo]' value='" + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + numDocumento + "-anosAprobados' name='hogar[" + numDocumento + "][anosAprobados]' value='" + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + "'>";
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-numAnosAprobados' name='hogar[" + numDocumento + "][numAnosAprobados]' value='" + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqSalud' name='hogar[" + numDocumento + "][seqSalud]' value='" + objSeqSalud.options[ objSeqSalud.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqTipoVictima' name='hogar[" + numDocumento + "][seqTipoVictima]' value='" + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqGrupoLgtbi' name='hogar[" + numDocumento + "][seqGrupoLgtbi]' value='" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].value + "'>";
@@ -1027,10 +1035,10 @@ function agregarMiembroHogar() {
     txtInsertar += "<td><b>LGTBI:</b> ";
     if (objLgtb.options[ objLgtb.selectedIndex ].value == 1) {
         txtInsertar += "Si";
+        txtInsertar += " (" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].text + ")";
     } else {
         txtInsertar += "No";
     }
-    txtInsertar += " (" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].text + ")";
     txtInsertar += "</td>";
 
     txtInsertar += "					<td><b>Hecho Victimizante:</b> " + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].text + "</td> ";

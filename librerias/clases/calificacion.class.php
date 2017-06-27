@@ -486,8 +486,11 @@ group by seqCalificacion;";
           AS postulante, 
           frm.numTelefono1,
           frm.numTelefono2,
-          frm.numCelular, 
-          txtTipoVictima,
+          frm.numCelular,
+          CASE  bolDesplazado WHEN 1 THEN 'Victima' 
+       WHEN 0 THEN 'Vulnerable' END 
+          AS victima,
+          #txtTipoVictima,
           mo.txtModalidad,
           #cal.infHogar,
        cal.cantMiembrosHogar,

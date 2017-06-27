@@ -1322,7 +1322,10 @@ function sumarTotalRecursos() {
 
     // Valor del aporte
     if( $("#valAspiraSubsidio").val() == ""){ $("#valAspiraSubsidio").val(0); }
-    if( $("#valCartaLeasing").val()   == ""){ $("#valCartaLeasing").val(0);   }
+
+    if( document.getElementById('valCartaLeasing') != null ){
+        if( $("#valCartaLeasing").val()   == ""){ $("#valCartaLeasing").val(0);   }
+    }
 
     // limpiando caracteres en los valores utiles para sumas
     var numSaldoCuenta    = parseInt($("#valSaldoCuentaAhorro").val().replace(/[^0-9]/g,''));
@@ -1332,8 +1335,9 @@ function sumarTotalRecursos() {
     var numSubsidioNal    = parseInt($("#valSubsidioNacional").val().replace(/[^0-9]/g,''));
     var numVUR            = parseInt($("#valDonacion").val().replace(/[^0-9]/g,''));
     var numAspiraSubsidio = parseInt($("#valAspiraSubsidio").val().replace(/[^0-9]/g,''));
-    var numCartaLeasing   = parseInt($("#valCartaLeasing").val().replace(/[^0-9]/g,''));
-
+    if( document.getElementById('valCartaLeasing') != null ) {
+        var numCartaLeasing = parseInt($("#valCartaLeasing").val().replace(/[^0-9]/g, ''));
+    }
     // Realizando las sumas
     var numSumaRecursosPropios = numSaldoCuenta + numSaldoCuenta2 + numCesantias + numCredito;
     var numSumaSubsidios       = numSubsidioNal + numVUR;
@@ -1350,7 +1354,9 @@ function sumarTotalRecursos() {
     $("#valSumaSubsidios").val( numSumaSubsidios );
     $("#valAspiraSubsidio").val(numAspiraSubsidio);
     $("#valTotalRecursos").val(numTotalRecursos);
-    $("#valCartaLeasing").val(numCartaLeasing);
+    if( document.getElementById('valCartaLeasing') != null ) {
+        $("#valCartaLeasing").val(numCartaLeasing);
+    }
 
     // formateando los valores sumados
     formatoSeparadores(YAHOO.util.Dom.get("valSaldoCuentaAhorro"));
@@ -1363,8 +1369,9 @@ function sumarTotalRecursos() {
     formatoSeparadores(YAHOO.util.Dom.get("valSumaSubsidios"));
     formatoSeparadores(YAHOO.util.Dom.get("valAspiraSubsidio"));
     formatoSeparadores(YAHOO.util.Dom.get("valTotalRecursos"));
-    formatoSeparadores(YAHOO.util.Dom.get("valCartaLeasing"));
-
+    if( document.getElementById('valCartaLeasing') != null ) {
+        formatoSeparadores(YAHOO.util.Dom.get("valCartaLeasing"));
+    }
 }
 
 
@@ -6623,16 +6630,18 @@ function preguntarAntes() {
 }
 
 function formatoSeparadores(input) {
-    var num = input.value.replace(/\./g, '');
-    if (!isNaN(num)) {
-        num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g, '$1.');
-        num = num.split('').reverse().join('').replace(/^[\.]/, '');
-        input.value = num;
-    } else {
-        alert('Solo se permiten numeros');
-        input.value = input.value.replace(/[^\d\.]*/g, '');
-        input.focus();
-    }
+    try {
+        var num = input.value.replace(/\./g, '');
+        if (!isNaN(num)) {
+            num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g, '$1.');
+            num = num.split('').reverse().join('').replace(/^[\.]/, '');
+            input.value = num;
+        } else {
+            alert('Solo se permiten numeros');
+            input.value = input.value.replace(/[^\d\.]*/g, '');
+            input.focus();
+        }
+    }catch(o){}
 }
 
 function espia() {

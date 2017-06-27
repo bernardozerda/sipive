@@ -486,8 +486,11 @@ group by seqCalificacion;";
           AS postulante, 
           frm.numTelefono1,
           frm.numTelefono2,
-          frm.numCelular, 
-          txtTipoVictima,
+          frm.numCelular,
+          CASE  bolDesplazado WHEN 1 THEN 'Victima' 
+       WHEN 0 THEN 'Vulnerable' END 
+          AS victima,
+          #txtTipoVictima,
           mo.txtModalidad,
           #cal.infHogar,
        cal.cantMiembrosHogar,
@@ -584,7 +587,7 @@ group by seqCalificacion;";
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 7)
           AS cantMenores,
-       (SELECT calculo
+       (SELECT resultado
         FROM t_frm_calificacion_operaciones op2
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 7)

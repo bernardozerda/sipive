@@ -26,20 +26,18 @@
     
     // obtieene los permisos para saber a donde puede entrar
     $claCasaMano = new CasaMano();
-    
-    $objCasaMano = null;
     if( intval( $_POST['seqFormulario'] ) != 0 and intval( $_POST['seqCasaMano'] ) != 0 ){
         $arrCasaMano = $claCasaMano->cargar( $_POST['seqFormulario'] , $_POST['seqCasaMano'] );
-        $objCasaMano = array_shift( $arrCasaMano );
+        $claCasaMano = array_shift( $arrCasaMano );
     }
-    //pr($objCasaMano);
+    //pr($claCasaMano);
     // datos que vienen del registro de oferta y que no hay que pedir de nuevo en postulacion
-    $objCasaMano->objPostulacion->txtBarrio = $arrBarrio[ $objCasaMano->objPostulacion->seqBarrio ];
-    $objCasaMano->objPostulacion->txtDireccionSolucion = $objCasaMano->objRegistroOferta->txtDireccionInmueble;
-    $objCasaMano->objPostulacion->txtMatriculaInmobiliaria = $objCasaMano->objRegistroOferta->txtMatriculaInmobiliaria;
-    $objCasaMano->objPostulacion->txtChip = $objCasaMano->objRegistroOferta->txtChip;
+    $claCasaMano->objPostulacion->txtBarrio = $arrBarrio[ $claCasaMano->objPostulacion->seqBarrio ];
+    $claCasaMano->objPostulacion->txtDireccionSolucion = $claCasaMano->objRegistroOferta->txtDireccionInmueble;
+    $claCasaMano->objPostulacion->txtMatriculaInmobiliaria = $claCasaMano->objRegistroOferta->txtMatriculaInmobiliaria;
+    $claCasaMano->objPostulacion->txtChip = $claCasaMano->objRegistroOferta->txtChip;
     
-    $bolPermiso = $objCasaMano->puedeIngresar( $arrFlujoHogar );
+    $bolPermiso = $claCasaMano->puedeIngresar( $arrFlujoHogar );
     if( $bolPermiso == true ){
     
         // Obtienr los ultimos seguimientos
@@ -52,32 +50,8 @@
 		$txtTutor = $claCRM->obtenerTutorHogar( $_POST['seqFormulario'] );
         
         // Los estados de avance y retorno para esta fase
-        $arrEstadosCEM['atras']    = $objCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['atras'];
-        $arrEstadosCEM['adelante'] = $objCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['adelante'];
-        
-        /*
-         * REQUISITOS DE LA PLANTILLA
-         */
-        
-        // Modalidades de subsidio
-        // viene declarada en datosComunes asi que la quito para decalrarla con el plan de gobierno que corresponde
-        /*unset( $arrModalidad ); 
-        $sql = "
-            SELECT 
-                seqModalidad,
-                txtModalidad
-            FROM 
-                T_FRM_MODALIDAD
-            WHERE 
-                seqPlanGobierno = " . $objCasaMano->objPostulacion->seqPlanGobierno . "
-            ORDER BY
-                txtModalidad
-        ";
-        $objRes = $aptBd->execute( $sql );
-        while( $objRes->fields ){
-            $arrModalidad[ $objRes->fields['seqModalidad'] ] = $objRes->fields['txtModalidad'];
-            $objRes->MoveNext();
-        }	*/
+        $arrEstadosCEM['atras']    = $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['atras'];
+        $arrEstadosCEM['adelante'] = $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['adelante'];
 
          // Obtiene el postulante principal
         $claFormulario = new FormularioSubsidios();
@@ -96,10 +70,10 @@
         $arrUnidadProyecto = obtenerUnidadesPostulacion($claFormulario->seqFormulario,$claFormulario->seqModalidad,$claFormulario->seqPlanGobierno,$claFormulario->seqProyectoHijo);
         $arrParentesco = obtenerDatosTabla("T_CIU_PARENTESCO", array("seqParentesco", "txtParentesco", "bolActivo"), "seqParentesco", "", "txtParentesco");
 
-        $objCasaMano->objPostulacion->valAspiraSubsidio = valorSubsidio($objCasaMano->objPostulacion);
+        $claCasaMano->objPostulacion->valAspiraSubsidio = valorSubsidio($claCasaMano->objPostulacion);
 
         // Suma de recursos
-        $valSumaRecursos = $objCasaMano->objPostulacion->valAspiraSubsidio + $objCasaMano->objPostulacion->valTotalRecursos;
+        $valSumaRecursos = $claCasaMano->objPostulacion->valAspiraSubsidio + $claCasaMano->objPostulacion->valTotalRecursos;
         $valSumaRecursosSMMLV = number_format($valSumaRecursos / $arrConfiguracion['constantes']['salarioMinimo'],2,".",".");
 
         // obtiene la informacion de la pestana de actos administrativos
@@ -128,7 +102,9 @@
 		$arrDonantes                 = obtenerDatosTabla("T_FRM_EMPRESA_DONANTE", array( "seqEmpresaDonante" , "txtEmpresaDonante" ) , "seqEmpresaDonante" , "seqEmpresaDonante <> 1" );
 		$arrEntidadSubsidio 		 = obtenerDatosTabla("T_FRM_ENTIDAD_SUBSIDIO", array("seqEntidadSubsidio", "txtEntidadSubsidio"), "seqEntidadSubsidio", "", "seqEntidadSubsidio");
 		$arrBarrio                   = obtenerDatosTabla("T_FRM_BARRIO", array( "seqBarrio" , "txtBarrio" ) , "seqBarrio" , "seqBarrio <> 1" );
+        $arrPlanGobierno             = obtenerDatosTabla( "T_FRM_PLAN_GOBIERNO" , array( "seqPlanGobierno" , "txtPlanGobierno" ) , "seqPlanGobierno" , "" , "txtPlanGobierno" );
 
+		$claSmarty->assign("arrPlanGobierno", $arrPlanGobierno);
 		$claSmarty->assign("arrProyectosHijos", $arrProyectosHijos);
         $claSmarty->assign( "arrTipoEsquemas" , $arrTipoEsquemas );
         $claSmarty->assign( "arrModalidad" , $arrModalidad );
@@ -161,19 +137,19 @@
 		$claSmarty->assign("arrTipoVictima", $arrTipoVictima);
         $claSmarty->assign("arrGrupoLgtbi", $arrGrupoLgtbi);
         $claSmarty->assign( "arrEstados" , $arrEstados );
-		$claSmarty->assign( "objFormulario" , $objCasaMano->objPostulacion );
+		$claSmarty->assign( "claCasaMano" , $claCasaMano );
 		$claSmarty->assign( "objCiudadano", $objCiudadano);
         $claSmarty->assign( "seqFormulario" , $_POST['seqFormulario'] );
         $claSmarty->assign( "seqCasaMano" , intval( $_POST['seqCasaMano'] ) );
         $claSmarty->assign( "numDocumento" , $_POST['cedula'] );
         $claSmarty->assign( "arrEstadosCEM" , $arrEstadosCEM );
-        $claSmarty->assign( "txtArchivoCEM" , $objCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['salvar'] );
+        $claSmarty->assign( "txtArchivoCEM" , $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['salvar'] );
 		$claSmarty->assign("arrBarrio", $arrBarrio);
         $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);
         $claSmarty->assign("valSumaRecursos", $valSumaRecursos);
         $claSmarty->assign("valSumaRecursosSMMLV", $valSumaRecursosSMMLV);
 
-        $claSmarty->display( $objCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['plantilla'] );
+        $claSmarty->display( $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['plantilla'] );
     } else {
         
         $arrMensaje = $claCasaMano->arrErrores;

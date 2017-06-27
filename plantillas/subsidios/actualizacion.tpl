@@ -603,6 +603,7 @@
                                                          onClick="agregarMiembroHogar();"
                                                          />&nbsp;
                                                     <a href="#" onClick="agregarMiembroHogar();">Agregar</a>
+                                                    <input type="hidden" id="cajaCompensacion" value="1">
                                                 </td>
                                             </tr>
                                         </table>

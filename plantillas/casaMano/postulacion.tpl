@@ -1918,14 +1918,19 @@
     </div>
 
     <!-- VARIABLES QUE YA NO SE USAN PERO SE COLOCAN PARA RESPETAR LOS VALORES DEL OBJETO -->
-    <input type="hidden" id="valAporteLote"        name="valAporteLote"        value="{$claFormulario->valAporteLote}">
-    <input type="hidden" id="valAporteAvanceObra"  name="valAporteAvanceObra"  value="{$claFormulario->valAporteAvanceObra}">
-    <input type="hidden" id="valAporteMateriales"  name="valAporteMateriales"  value="{$claFormulario->valAporteMateriales}">
-    <input type="hidden" id="seqCesantias"         name="seqCesantias"         value="{$claFormulario->seqCesantias}">
-    <input type="hidden" id="seqPuntoAtencion"     name="seqPuntoAtencion"     value="{$claFormulario->seqPuntoAtencion}">
-    <input type="hidden" id="seqPeriodo"           name="seqPeriodo"           value="{$claFormulario->seqPeriodo}">
-    <input type="hidden" id="seqUsuario"           name="seqUsuario"           value="{$claFormulario->seqUsuario}">
-    <input type="hidden" id="txtBarrio"            name="txtBarrio"            value="{$claFormulario->txtBarrio}">
+    <input type="hidden" id="valAporteLote"              name="valAporteLote"              value="{$claFormulario->valAporteLote}">
+    <input type="hidden" id="txtSoporteAporteLote"       name="txtSoporteAporteLote"       value="{$claFormulario->txtSoporteAporteLote}">
+    <input type="hidden" id="valAporteAvanceObra"        name="valAporteAvanceObra"        value="{$claFormulario->valAporteAvanceObra}">
+    <input type="hidden" id="txtSoporteAvanceObra"       name="txtSoporteAvanceObra"       value="{$claFormulario->txtSoporteAvanceObra}">
+    <input type="hidden" id="valAporteMateriales"        name="valAporteMateriales"        value="{$claFormulario->valAporteMateriales}">
+    <input type="hidden" id="txtSoporteAporteMateriales" name="txtSoporteAporteMateriales" value="{$claFormulario->txtSoporteAporteMateriales}">
+    <input type="hidden" id="seqCesantias"               name="seqCesantias"               value="{$claFormulario->seqCesantias}">
+    <input type="hidden" id="seqPuntoAtencion"           name="seqPuntoAtencion"           value="{$claFormulario->seqPuntoAtencion}">
+    <input type="hidden" id="seqPeriodo"                 name="seqPeriodo"                 value="{$claFormulario->seqPeriodo}">
+    <input type="hidden" id="seqUsuario"                 name="seqUsuario"                 value="{$claFormulario->seqUsuario}">
+    <input type="hidden" id="numAdultosNucleo"           name="numAdultosNucleo"           value="{$claFormulario->numAdultosNucleo}">
+    <input type="hidden" id="numCortes"                  name="numCortes"                  value="{$claFormulario->numCortes}">
+    <input type="hidden" id="txtBarrio"                  name="txtBarrio"                  value="{$claFormulario->txtBarrio}">
 
     <!-- VARIABLES ADICIONALES INMODIFICABLES NECESARIAS -->
     <input type="hidden" id="seqCasaMano"   name="seqCasaMano"   value="{$claCasaMano->seqCasaMano}">

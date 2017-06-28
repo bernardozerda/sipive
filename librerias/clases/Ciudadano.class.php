@@ -138,10 +138,10 @@ class Ciudadano {
             $this->seqSexo = intval($objRes->fields['seqSexo']);
             $this->seqTipoDocumento = intval($objRes->fields['seqTipoDocumento']);
             $this->seqTipoVictima = intval($objRes->fields['seqTipoVictima']);
-            $this->txtApellido1 = ucwords(trim(strtolower($objRes->fields['txtApellido1'])));
-            $this->txtApellido2 = ucwords(trim(strtolower($objRes->fields['txtApellido2'])));
-            $this->txtNombre1 = ucwords(trim(strtolower($objRes->fields['txtNombre1'])));
-            $this->txtNombre2 = ucwords(trim(strtolower($objRes->fields['txtNombre2'])));
+            $this->txtApellido1 = trim($objRes->fields['txtApellido1']);
+            $this->txtApellido2 = trim($objRes->fields['txtApellido2']);
+            $this->txtNombre1 = trim($objRes->fields['txtNombre1']);
+            $this->txtNombre2 = trim($objRes->fields['txtNombre2']);
             $this->valIngresos = doubleval($objRes->fields['valIngresos']);;
 
         } else {

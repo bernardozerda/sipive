@@ -59,6 +59,17 @@ $txtCondicion = ($_POST['seqPlanGobierno'] != 3)? "seqSisben <> 9" : "bolActivo 
 $arrSisben = obtenerDatosTabla("t_frm_sisben", array("seqSisben", "txtSisben"), "seqSisben", $txtCondicion);
 $arrModalidad = obtenerDatosTabla("t_frm_modalidad", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $_POST['seqPlanGobierno']);
 
+$arrIgnorarCampos[] = "txtDireccion";
+$arrIgnorarCampos[] = "txtDireccionSolucion";
+$arrIgnorarCampos[] = "numTelefono1";
+$arrIgnorarCampos[] = "numTelefono2";
+$arrIgnorarCampos[] = "numCelular";
+$arrIgnorarCampos[] = "seqCiudad";
+$arrIgnorarCampos[] = "seqUpz";
+$arrIgnorarCampos[] = "seqLocalidad";
+$arrIgnorarCampos[] = "seqBarrio";
+$arrIgnorarCampos[] = "txtCorreo";
+
 // Variables que si se cambian, debe irse a etapa de inscripcion.
 $arrCamposCalificacion["formulario"]["valIngresoHogar"] = "Ingresos del hogar";
 $arrCamposCalificacion["ciudadano"]["seqEtnia"] = "Condición Étnica";
@@ -70,6 +81,10 @@ $arrCamposCalificacion["ciudadano"]["fchNacimiento"] = "Fecha de Nacimiento";
 $arrCamposCalificacion["ciudadano"]["seqNivelEducativo"] = "Nivel Educativo";
 $arrCamposCalificacion["ciudadano"]["numAnosAprobados"] = "Años Aprobados";
 $arrCamposCalificacion["ciudadano"]["seqSalud"] = "Afiliacion a salud";
+
+$seqEstadoProceso = $_POST['seqEstadoProceso'];
+$arrEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array("seqEstadoProceso","seqEtapa"),"seqEstadoProceso","seqEstadoProceso = " . $seqEstadoProceso);
+$seqEtapa = $arrEtapa[$seqEstadoProceso];
 
 /**********************************************************************************************************************
  * LIMPIEZA DE CARACTERES
@@ -252,212 +267,215 @@ if (!empty($_POST['hogar'])) {
 /**********************************************************************************************************************
  * VALIDACIONES DEL FORMULARIO - DATOS DEL HOGAR
  **********************************************************************************************************************/
+if( $seqEtapa == 1 or $seqEtapa == 2 ) {
 
-// Vive en arriendo, entonces tiene que tener los datos necesarios
-if (intval($_POST['seqVivienda']) == 1) {
-    if (intval($_POST['valArriendo']) == 0) {
-        $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
+    // Vive en arriendo, entonces tiene que tener los datos necesarios
+    if (intval($_POST['seqVivienda']) == 1) {
+        if (intval($_POST['valArriendo']) == 0) {
+            $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
+        }
+        if (!esFechaValida($_POST['fchArriendoDesde'])) {
+            $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
+        }
+        if (trim($_POST['txtComprobanteArriendo']) == "") {
+            $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
+        }
     }
-    if (!esFechaValida($_POST['fchArriendoDesde'])) {
-        $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
+
+    // direccion de residencia actual
+    if (trim($_POST['txtDireccion']) == "") {
+        $arrErrores[] = "Indique la dirección donde reside actualmente";
     }
-    if (trim($_POST['txtComprobanteArriendo']) == "") {
-        $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
+
+    // ciudad y validaciones relacionadas
+    if (intval($_POST['seqCiudad']) == 0) {
+        $arrErrores[] = "Indique la ciudad de residencia";
+    } elseif (intval($_POST['seqCiudad']) == 149) { // vive en bogota
+        if (intval($_POST['seqLocalidad']) == 0) {
+            $arrErrores[] = "Debe seleccionar una localidad";
+        }
+        if (intval($_POST['seqBarrio']) == 0) {
+            $arrErrores[] = "Debe seleccionar un barrio perteneciente a la localidad";
+        }
+    } else { // fuera de bogota
+        if (intval($_POST['seqLocalidad']) == 0) {
+            $arrErrores[] = "Debe seleccionar la localidad 'Fuera de Bogota'";
+        }
+        if (intval($_POST['seqBarrio']) != 1142) {
+            $arrErrores[] = "Debe seleccionar el barrio 'Fuera de Bogota'";
+        }
     }
-}
 
-// direccion de residencia actual
-if (trim($_POST['txtDireccion']) == "") {
-    $arrErrores[] = "Indique la dirección donde reside actualmente";
-}
+    // Formatos de expresion regular para telefonos fijos y celular
+    $txtFormatoFijo = "/^[0-9]{7,10}$/";
+    $txtFormatoCelular = "/^[3]{1}[0-9]{9}$/";
 
-// ciudad y validaciones relacionadas
-if (intval($_POST['seqCiudad']) == 0) {
-    $arrErrores[] = "Indique la ciudad de residencia";
-} elseif (intval($_POST['seqCiudad']) == 149) { // vive en bogota
-    if (intval($_POST['seqLocalidad']) == 0) {
-        $arrErrores[] = "Debe seleccionar una localidad";
+    // Telefono Fijo 1
+    if (is_numeric($_POST['numTelefono1']) == true and intval($_POST['numTelefono1']) != 0) {
+        if (!preg_match($txtFormatoFijo, trim($_POST['numTelefono1']))) {
+            $arrErrores[] = "El número telefonico fijo 1 debe tener entre 7 y 10 digitos";
+        }
     }
-    if (intval($_POST['seqBarrio']) == 0) {
-        $arrErrores[] = "Debe seleccionar un barrio perteneciente a la localidad";
+
+    // Telefono Celular
+    if (is_numeric($_POST['numCelular']) == true and intval($_POST['numCelular']) != 0) {
+        if (!preg_match($txtFormatoCelular, trim($_POST['numCelular']))) {
+            $arrErrores[] = "El número telefonico celular debe tener 10 digitos y debe iniciar con el número 3";
+        }
     }
-} else { // fuera de bogota
-    if (intval($_POST['seqLocalidad']) == 0) {
-        $arrErrores[] = "Debe seleccionar la localidad 'Fuera de Bogota'";
+
+    // Debe haber telefono fijo o numero celular
+    if (intval($_POST['numCelular']) == 0 and intval($_POST['numTelefono1']) == 0) {
+        $arrErrores[] = "Debe registrar un telefono fijo o celular de contacto";
     }
-    if (intval($_POST['seqBarrio']) != 1142) {
-        $arrErrores[] = "Debe seleccionar el barrio 'Fuera de Bogota'";
+
+    // Si hay correo electronico debe ser valido
+    if (trim($_POST['txtCorreo']) != "") {
+        if (!mb_ereg("^[0-9a-zA-Z._\-]+\@[a-zA-Z0-9._\-]+\.([a-zA-z]{2,4})(([\.]{1})([a-zA-Z]{2}))?$", trim($_POST['txtCorreo']))) {
+            $arrErrores[] = "No es un correo electrónico válido";
+        }
     }
-}
 
-// Formatos de expresion regular para telefonos fijos y celular
-$txtFormatoFijo = "/^[0-9]{7,10}$/";
-$txtFormatoCelular = "/^[3]{1}[0-9]{9}$/";
-
-// Telefono Fijo 1
-if (is_numeric($_POST['numTelefono1']) == true and intval($_POST['numTelefono1']) != 0) {
-    if (!preg_match($txtFormatoFijo, trim($_POST['numTelefono1']))) {
-        $arrErrores[] = "El número telefonico fijo 1 debe tener entre 7 y 10 digitos";
+    // Hogares que viven en la misma vivienda
+    if (intval($_POST['numHabitaciones']) == 0) {
+        $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
     }
-}
 
-// Telefono Celular
-if (is_numeric($_POST['numCelular']) == true and intval($_POST['numCelular']) != 0) {
-    if (!preg_match($txtFormatoCelular, trim($_POST['numCelular']))) {
-        $arrErrores[] = "El número telefonico celular debe tener 10 digitos y debe iniciar con el número 3";
+    // Cantidad de dormitorios
+    if (intval($_POST['numHacinamiento']) == 0) {
+        $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
     }
-}
 
-// Debe haber telefono fijo o numero celular
-if (intval($_POST['numCelular']) == 0 and intval($_POST['numTelefono1']) == 0) {
-    $arrErrores[] = "Debe registrar un telefono fijo o celular de contacto";
-}
-
-// Si hay correo electronico debe ser valido
-if (trim($_POST['txtCorreo']) != "") {
-    if (!mb_ereg("^[0-9a-zA-Z._\-]+\@[a-zA-Z0-9._\-]+\.([a-zA-z]{2,4})(([\.]{1})([a-zA-Z]{2}))?$", trim($_POST['txtCorreo']))) {
-        $arrErrores[] = "No es un correo electrónico válido";
+    // Valor del sisben
+    $seqSisben = intval($_POST['seqSisben']);
+    if (!isset($arrSisben[$seqSisben])) {
+        $arrErrores[] = "Indique un nivel del sisben válido";
     }
-}
-
-// Hogares que viven en la misma vivienda
-if (intval($_POST['numHabitaciones']) == 0) {
-    $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
-}
-
-// Cantidad de dormitorios
-if (intval($_POST['numHacinamiento']) == 0) {
-    $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
-}
-
-// Valor del sisben
-$seqSisben = intval($_POST['seqSisben']);
-if (!isset($arrSisben[$seqSisben])) {
-    $arrErrores[] = "Indique un nivel del sisben válido";
 }
 
 /**********************************************************************************************************************
  * VALIDACIONES DEL FORMULARIO - DATOS DE LA POSTULACION
  **********************************************************************************************************************/
-if( ! isset( $arrModalidad[ $_POST['seqModalidad'] ] ) ){
-    $arrErrores[] = "La modalidad seleccionada no es válida";
-}
+if( $seqEtapa == 1 or $seqEtapa == 2 ) {
+    if (!isset($arrModalidad[$_POST['seqModalidad']])) {
+        $arrErrores[] = "La modalidad seleccionada no es válida";
+    }
 
-// esquemas que deben tener proyectos seleccionados
-// si no deben tener direccion matricula y chip digitados
-if( in_array( $_POST['seqTipoEsquema'] , $arrProyectoEsquema) ){
-    if( intval($_POST['seqProyecto']) == 0 or intval($_POST['seqProyecto']) == 37 ){
-        $arrErrores[] = "Debe seleccionar un proyecto de la lista";
+    // esquemas que deben tener proyectos seleccionados
+    // si no deben tener direccion matricula y chip digitados
+    if (in_array($_POST['seqTipoEsquema'], $arrProyectoEsquema)) {
+        if (intval($_POST['seqProyecto']) == 0 or intval($_POST['seqProyecto']) == 37) {
+            $arrErrores[] = "Debe seleccionar un proyecto de la lista";
+        }
+    } else {
+        if (trim($_POST['txtDireccionSolucion']) == "") {
+            $arrErrores[] = "Debe digitar la direccion de la solución";
+        }
+        if (trim($_POST['txtMatriculaInmobiliaria']) == "") {
+            $arrErrores[] = "Debe digitar la matricula inmobiliaria de la solución";
+        }
+        if (trim($_POST['txtChip']) == "") {
+            $arrErrores[] = "Debe digitar el chip de la solución";
+        }
     }
-}else{
-    if( trim( $_POST['txtDireccionSolucion'] ) == "" ){
-        $arrErrores[] = "Debe digitar la direccion de la solución";
+
+    if (in_array($_POST['seqTipoEsquema'], $arrEsquemaUnidades)) {
+        if (intval($_POST['seqUnidadProyecto']) == 0 or intval($_POST['seqUnidadProyecto']) == 1) {
+            $arrErrores[] = "Debe seleccionar una unidad habitacional de la lista";
+        }
     }
-    if( trim( $_POST['txtMatriculaInmobiliaria'] ) == "" ){
-        $arrErrores[] = "Debe digitar la matricula inmobiliaria de la solución";
+
+    if (intval($_POST['seqSolucion']) == 1) {
+        $arrErrores[] = "Indique el tipo de la solución de vivienda";
     }
-    if( trim( $_POST['txtChip'] ) == "" ){
-        $arrErrores[] = "Debe digitar el chip de la solución";
+
+    // se solicita promesa firmada cuando se este colocando en el estado POSTULACION - HOGAR POSTULADO
+    if ($_POST['seqEstadoProceso'] == 54) {
+        if (intval($_POST['bolPromesaFirmada']) == 0) {
+            $arrErrores[] = "No puede continuar si no tiene una promesa de compra-venta firmada";
+        }
     }
 }
-
-if( in_array( $_POST['seqTipoEsquema'] , $arrEsquemaUnidades) ){
-    if( intval($_POST['seqUnidadProyecto']) == 0 or intval($_POST['seqUnidadProyecto']) == 1 ){
-        $arrErrores[] = "Debe seleccionar una unidad habitacional de la lista";
-    }
-}
-
-if (intval($_POST['seqSolucion']) == 1) {
-    $arrErrores[] = "Indique el tipo de la solución de vivienda";
-}
-
-// se solicita promesa firmada cuando se este colocando en el estado POSTULACION - HOGAR POSTULADO
-if( $_POST['seqEstadoProceso'] == 54 ){
-    if (intval($_POST['bolPromesaFirmada']) == 0) {
-        $arrErrores[] = "No puede continuar si no tiene una promesa de compra-venta firmada";
-    }
-}
-
 /**********************************************************************************************************************
  * VALIDACIONES DEL FORMULARIO - DATOS FINANCIEROS
  **********************************************************************************************************************/
+if( $seqEtapa == 1 or $seqEtapa == 2 ) {
+    // Validaciones para el ahorro
+    if (intval($_POST['valSaldoCuentaAhorro']) != 0) {
+        if (intval($_POST['seqBancoCuentaAhorro']) == 1) {
+            $arrErrores[] = "Indique el banco de la cuenta de ahorro";
+        }
+        if (trim($_POST['txtSoporteCuentaAhorro']) == "") {
+            $arrErrores[] = "Indique el soporte para la cuenta de ahorro";
+        }
+        if (!esFechaValida($_POST['fchAperturaCuentaAhorro'])) {
+            $arrErrores[] = "Indique la fecha de apertura de la cuenta de ahorro";
+        }
+    }
 
-// Validaciones para el ahorro
-if (intval($_POST['valSaldoCuentaAhorro']) != 0) {
-    if (intval($_POST['seqBancoCuentaAhorro']) == 1) {
-        $arrErrores[] = "Indique el banco de la cuenta de ahorro";
+    // Validacion para la otra cuenta de ahorro
+    if (intval($_POST['valSaldoCuentaAhorro2']) != 0) {
+        if (intval($_POST['seqBancoCuentaAhorro2']) == 1) {
+            $arrErrores[] = "Indique el banco del campo otro ahorro";
+        }
+        if (trim($_POST['txtSoporteCuentaAhorro2']) == "") {
+            $arrErrores[] = "Indique el soporte del campo otro ahorro";
+        }
+        if (!esFechaValida($_POST['fchAperturaCuentaAhorro2'])) {
+            $arrErrores[] = "Indique la fecha del campo otro ahorro";
+        }
     }
-    if (trim($_POST['txtSoporteCuentaAhorro']) == "") {
-        $arrErrores[] = "Indique el soporte para la cuenta de ahorro";
+
+    // valor del subsidio nacional
+    if (intval($_POST['valSubsidioNacional']) != 0) {
+        if (trim($_POST['txtSoporteSubsidioNacional']) == "") {
+            $arrErrores[] = "Indique el soporte para el subsidio nacional";
+        }
     }
-    if (!esFechaValida($_POST['fchAperturaCuentaAhorro'])) {
-        $arrErrores[] = "Indique la fecha de apertura de la cuenta de ahorro";
+
+    // valor del saldo de cesantias
+    if (intval($_POST['valSaldoCesantias']) != 0) {
+        if (trim($_POST['txtSoporteCesantias']) == "") {
+            $arrErrores[] = "Indique el soporte para el aporte de cesantias";
+        }
+    }
+
+    // valor del credito
+    if (intval($_POST['valCredito']) != 0) {
+        if (intval($_POST['seqBancoCredito']) == 1) {
+            $arrErrores[] = "Indique el banco que otorga el credito";
+        }
+        if (trim($_POST['txtSoporteCredito']) == "") {
+            $arrErrores[] = "Indique el soporte para el credito";
+        }
+    }
+
+    // valor de la donacion (VUR)
+    if (intval($_POST['valDonacion']) != 0) {
+        if (intval($_POST['seqEmpresaDonante']) == 0) {
+            $arrErrores[] = "Indique la empresa que ha realizado la donaci&oacute;n";
+        }
+        if (trim($_POST['txtSoporteDonacion']) == "") {
+            $arrErrores[] = "Indique el soporte para la donaci&oacute;n";
+        }
+    }
+
+    // validaciones para la modalidad de leasing
+    if ($_POST['seqModalidad'] == 13 and $_POST['seqEstadoProceso'] == 54) {
+        if ($_POST['bolViabilidadLeasing'] == 0) {
+            $arrErrores[] = "La solucion debe estar viabilizada por una entidad de un convenio de leasing";
+        }
+        if ($_POST['seqConvenio'] == 1) {
+            $arrErrores[] = "Seleccione un convenio para el leasing";
+        }
+        if ($_POST['valCartaLeasing'] == 0) {
+            $arrErrores[] = "El valor de la carta de leasing no es válido";
+        }
+        if ($_POST['numDuracionLeasing'] == 0) {
+            $arrErrores[] = "Indique el numero de meses que dura el leasing";
+        }
     }
 }
-
-// Validacion para la otra cuenta de ahorro
-if (intval($_POST['valSaldoCuentaAhorro2']) != 0) {
-    if (intval($_POST['seqBancoCuentaAhorro2']) == 1) {
-        $arrErrores[] = "Indique el banco del campo otro ahorro";
-    }
-    if (trim($_POST['txtSoporteCuentaAhorro2']) == "") {
-        $arrErrores[] = "Indique el soporte del campo otro ahorro";
-    }
-    if (!esFechaValida($_POST['fchAperturaCuentaAhorro2'])) {
-        $arrErrores[] = "Indique la fecha del campo otro ahorro";
-    }
-}
-
-// valor del subsidio nacional
-if (intval($_POST['valSubsidioNacional']) != 0) {
-    if (trim($_POST['txtSoporteSubsidioNacional']) == "") {
-        $arrErrores[] = "Indique el soporte para el subsidio nacional";
-    }
-}
-
-// valor del saldo de cesantias
-if (intval($_POST['valSaldoCesantias']) != 0) {
-    if (trim($_POST['txtSoporteCesantias']) == "") {
-        $arrErrores[] = "Indique el soporte para el aporte de cesantias";
-    }
-}
-
-// valor del credito
-if (intval($_POST['valCredito']) != 0) {
-    if (intval($_POST['seqBancoCredito']) == 1) {
-        $arrErrores[] = "Indique el banco que otorga el credito";
-    }
-    if (trim($_POST['txtSoporteCredito']) == "") {
-        $arrErrores[] = "Indique el soporte para el credito";
-    }
-}
-
-// valor de la donacion (VUR)
-if (intval($_POST['valDonacion']) != 0) {
-    if (intval($_POST['seqEmpresaDonante']) == 0) {
-        $arrErrores[] = "Indique la empresa que ha realizado la donaci&oacute;n";
-    }
-    if (trim($_POST['txtSoporteDonacion']) == "") {
-        $arrErrores[] = "Indique el soporte para la donaci&oacute;n";
-    }
-}
-
-// validaciones para la modalidad de leasing
-if( $_POST['seqModalidad'] == 13 and $_POST['seqEstadoProceso'] == 54){
-    if( $_POST['bolViabilidadLeasing'] == 0 ){
-        $arrErrores[] = "La solucion debe estar viabilizada por una entidad de un convenio de leasing";
-    }
-    if( $_POST['seqConvenio'] == 1 ){
-        $arrErrores[] = "Seleccione un convenio para el leasing";
-    }
-    if( $_POST['valCartaLeasing'] == 0 ){
-        $arrErrores[] = "El valor de la carta de leasing no es válido";
-    }
-    if( $_POST['numDuracionLeasing'] == 0 ){
-        $arrErrores[] = "Indique el numero de meses que dura el leasing";
-    }
-}
-
 /**********************************************************************************************************************
  * VALIDACIONES ESPECIALES
  **********************************************************************************************************************/
@@ -516,14 +534,25 @@ if (empty($arrErrores)) {
             }
         }
 
-        $seqEstadoProceso = $_POST['seqEstadoProceso'];
-        $arrEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array("seqEstadoProceso","seqEtapa"),"seqEstadoProceso","seqEstadoProceso = " . $seqEstadoProceso);
-        $seqEtapa = $arrEtapa[$seqEstadoProceso];
+        // Estando en etapa de inscripcion y postulacion
+        // si se modifican datos sensibles a la calificacion
+        // el estado del proceso se regresa a inscripcion
         if( $bolCambiosCalificacion == true ){
             if($seqEtapa == 1 or $seqEtapa == 2) {
                 $_POST['seqEstadoProceso'] = 37;
-            }else{
-                $arrErrores[] = "Esta intentando modificar variables que alteran la calificación en una etapa posterior a la postulación, no se realizará el cambio";
+            }
+        }
+
+        // Si esta en etapas posteriores a postulacion (asignacion / desembolso)
+        // solo podrá cambiar los datos de contacto y los datos de conformacion del hogar
+        // los demas datos se sobreescriben con lo que hay en la base de datos
+        if( $seqEtapa != 1 and $seqEtapa != 2 ){
+            foreach( $claCasaMano->objPostulacion as $txtClave => $txtValor ){
+                if($txtClave != "arrCiudadano"){
+                    if( ! in_array($txtClave,$arrIgnorarCampos) ) {
+                        $_POST[$txtClave] = $txtValor;
+                    }
+                }
             }
         }
 

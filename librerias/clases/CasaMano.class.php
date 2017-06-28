@@ -54,7 +54,10 @@ class CasaMano
         $this->arrFases['pin']['esquema'] = array(1, 4, 9);
 
         $this->arrFases['pin']['postulacion']['grupos'] = array(6, 7, 8);
-        $this->arrFases['pin']['postulacion']['permisos'] = array(46, 6, 54, 15, 16);
+        $this->arrFases['pin']['postulacion']['permitido']['etapas'] = array(2,3,4,5);
+        $this->arrFases['pin']['postulacion']['permitido']['estados'] = array();
+        $this->arrFases['pin']['postulacion']['prohibido']['etapas'] = array(1);
+        $this->arrFases['pin']['postulacion']['prohibido']['estados'] = array();
         $this->arrFases['pin']['postulacion']['atras'] = array(46);
         $this->arrFases['pin']['postulacion']['adelante'] = array(46, 6, 54);
         $this->arrFases['pin']['postulacion']['salvar'] = "./contenidos/casaMano/salvarPostulacion.php";
@@ -66,31 +69,47 @@ class CasaMano
         $this->arrFases['cem']['esquema'] = array(5, 10, 11);
 
         $this->arrFases['cem']['panelHogar']['grupos'] = array(6, 7, 8, 14, 13);
-        $this->arrFases['cem']['panelHogar']['permisos'] = array(37, 43, 44, 45, 46, 47, 48, 15, 16);
+        $this->arrFases['cem']['panelHogar']['permitido']['etapas'] = array(2,3,4,5);
+        $this->arrFases['cem']['panelHogar']['permitido']['estados'] = array();
+        $this->arrFases['cem']['panelHogar']['prohibido']['etapas'] = array(1);
+        $this->arrFases['cem']['panelHogar']['prohibido']['estados'] = array();
         $this->arrFases['cem']['panelHogar']['plantilla'] = "casaMano/casaMano.tpl";
 
         $this->arrFases['cem']['registroOferta']['grupos'] = array(6, 7, 8, 14, 13);
-        $this->arrFases['cem']['registroOferta']['permisos'] = array(37, 43, 44, 45, 46, 47, 48, 15, 16);
+        $this->arrFases['cem']['registroOferta']['permitido']['etapas'] = array();
+        $this->arrFases['cem']['registroOferta']['permitido']['estados'] = array(37, 43, 44, 45, 46, 47, 48, 15, 16);
+        $this->arrFases['cem']['registroOferta']['prohibido']['etapas'] = array();
+        $this->arrFases['cem']['registroOferta']['prohibido']['estados'] = array();
         $this->arrFases['cem']['registroOferta']['atras'] = array();
         $this->arrFases['cem']['registroOferta']['adelante'] = array(37, 43, 44);
         $this->arrFases['cem']['registroOferta']['salvar'] = "./contenidos/casaMano/salvarRegistroOferta.php";
         $this->arrFases['cem']['registroOferta']['plantilla'] = "casaMano/busquedaOferta.tpl";
 
         $this->arrFases['cem']['revisionJuridica']['grupos'] = array(13, 7, 8);
-        $this->arrFases['cem']['revisionJuridica']['permisos'] = array(44, 45, 46, 47, 48, 15, 16);
+        $this->arrFases['cem']['revisionJuridica']['permitido']['etapas'] = array();
+        $this->arrFases['cem']['revisionJuridica']['permitido']['estados'] = array(44, 45, 46, 47, 48, 15, 16);
+        $this->arrFases['cem']['revisionJuridica']['prohibido']['etapas'] = array();
+        $this->arrFases['cem']['revisionJuridica']['prohibido']['estados'] = array();
         $this->arrFases['cem']['revisionJuridica']['atras'] = array(37, 43);
         $this->arrFases['cem']['revisionJuridica']['adelante'] = array(44);
         $this->arrFases['cem']['revisionJuridica']['salvar'] = "./contenidos/casaMano/salvarRevisionJuridica.php";
         $this->arrFases['cem']['revisionJuridica']['plantilla'] = "desembolso/revisionJuridica.tpl";
 
         $this->arrFases['cem']['revisionTecnica']['grupos'] = array(14, 7, 8);
-        $this->arrFases['cem']['revisionTecnica']['permisos'] = array(44, 45, 46, 47, 48, 15, 16);
+        $this->arrFases['cem']['revisionTecnica']['permitido']['etapas'] = array(2,3,4,5);
+        $this->arrFases['cem']['revisionTecnica']['permitido']['estados'] = array();
+        $this->arrFases['cem']['revisionTecnica']['prohibido']['etapas'] = array(1);
+        $this->arrFases['cem']['revisionTecnica']['prohibido']['estados'] = array();
         $this->arrFases['cem']['revisionTecnica']['atras'] = array(37, 43);
         $this->arrFases['cem']['revisionTecnica']['adelante'] = array(44);
         $this->arrFases['cem']['revisionTecnica']['salvar'] = "./contenidos/casaMano/salvarRevisionTecnica.php";
         $this->arrFases['cem']['revisionTecnica']['plantilla'] = "desembolso/revisionTecnica.tpl";
 
         $this->arrFases['cem']['postulacion']['grupos'] = array(6, 7, 8);
+        $this->arrFases['cem']['postulacion']['permitido']['etapas'] = array(2,3,4,5);
+        $this->arrFases['cem']['postulacion']['permitido']['estados'] = array();
+        $this->arrFases['cem']['postulacion']['prohibido']['etapas'] = array(1);
+        $this->arrFases['cem']['postulacion']['prohibido']['estados'] = array();
         $this->arrFases['cem']['postulacion']['permisos'] = array(46, 47, 48, 15, 16);
         $this->arrFases['cem']['postulacion']['atras'] = array(37, 44);
         $this->arrFases['cem']['postulacion']['adelante'] = array(46, 47);
@@ -1714,57 +1733,52 @@ class CasaMano
     public function puedeIngresar($arrFlujoHogar)
     {
 
-        $bolPermiso = false;                       // Determina si tiene o no permisos
-        $txtFlujo = $arrFlujoHogar['flujo'];     // Determina e flujo
-        $txtFase = $arrFlujoHogar['fase'];      // Determina la fase
-        $seqProyecto = $_SESSION['seqProyecto'];    // Es el identificador del proyecto (SDV=3)
-        $arrEstados = estadosProceso();            // Los estados del proceso
+        $bolPermiso  = false;                    // Determina si tiene o no permisos
+        $txtFlujo    = $arrFlujoHogar['flujo'];  // Determina e flujo
+        $txtFase     = $arrFlujoHogar['fase'];   // Determina la fase
+        $seqProyecto = $_SESSION['seqProyecto']; // Es el identificador del proyecto (SDV=3)
+        $arrEstados  = estadosProceso();         // Los estados del proceso
+        $arrEtapas   = obtenerDatosTabla("T_FRM_ETAPA",array("seqEtapa","txtEtapa"),"seqEtapa");
 
-        $seqEstadoProceso = $this->objPostulacion->seqEstadoProceso; // El estado actual del proceso
+        $seqEstadoProceso = $this->objPostulacion->seqEstadoProceso; // Estado actual del proceso
+        $seqEtapa = obtenerDatosTabla(                               // Etapa actual del proceso
+            "T_FRM_ETAPA",
+            array("seqEtapa","txtEtapa"),
+            "seqEtapa",
+            "seqEstadoProceso = " . $this->objPostulacion->seqEstadoProceso
+        );
 
+        // Jerarquia de las validaciones de ingreso:
+        // - Modalidad y esquema
+        // - Etapas permitidas
+        // - Estados del proceso permitidos
+        // - Etapas prohibidas
+        // - Estados prohibidos
         if (
             in_array($this->objPostulacion->seqModalidad, $this->arrFases[$txtFlujo]['modalidad']) and
             in_array($this->objPostulacion->seqTipoEsquema, $this->arrFases[$txtFlujo]['esquema'])
         ) {
-
-            // Verifica los permisos para grupos de usuarios
-            foreach ($_SESSION['arrGrupos'][$seqProyecto] as $seqGrupo) {
-                if (in_array($seqGrupo, $this->arrFases[$txtFlujo][$txtFase]['grupos'])) {
+            if( ! empty( $this->arrFases[$txtFlujo][$txtFase]['permitidos']['etapas'] ) ) {                             // Etapas permitidos
+                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['permitidos']['etapas'])) {
+                    $bolPermiso = true;
+                }
+            }elseif( ! empty( $this->arrFases[$txtFlujo][$txtFase]['permitidos']['estados'] ) ){                        // Estados permitidos
+                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['permitidos']['estados'])) {
                     $bolPermiso = true;
                 }
             }
-
-
-            // si pertenece a los grupos autorizados para usar el modulo
-            if ($bolPermiso == true) {
-
-                // Verifica si el hogar tiene permisos
-                $bolPermiso = false;
-                if (in_array($seqEstadoProceso, $this->arrFases[$txtFlujo][$txtFase]['permisos'])) {
-                    $bolPermiso = true;
-                } else {
-                    $this->arrErrores[] =
-                        "El hogar esta registrado con el estado del proceso \"" . $arrEstados[$seqEstadoProceso] .
-                        "\" que no es permitido para el uso del modulo ";
+            if( ! empty( $this->arrFases[$txtFlujo][$txtFase]['prohibidos']['etapas'] ) ) {                             // Etapas prohibidas
+                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['prohibidos']['etapas'])) {
+                    $bolPermiso = false;
+                    $this->arrErrores[] = "El hogar no pertenece a las etapas permitidas para el ingreso, la etapa actual es \"" . $arrEtapas[ $seqEtapa ] . "\"";
                 }
-            } else {
-                $this->arrErrores[] = "No tiene los privilegios de grupo suficientes para poder usar este módulo";
+            }elseif( ! empty( $this->arrFases[$txtFlujo][$txtFase]['prohibidos']['estados'] ) ){                        // Estados prohibidos
+                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['prohibidos']['estados'])) {
+                    $bolPermiso = false;
+                    $this->arrErrores[] = "El hogar no pertenece a los estados del proceso permitidos para el ingreso, el estado actual es \"" . $arrEstados[ $seqEstadoProceso ] . "\"";
+                }
             }
-        } else {
-            $arrModalidad = obtenerDatosTabla(
-                "T_FRM_MODALIDAD",
-                array("seqModalidad", "txtModalidad"),
-                "seqModalidad",
-                "seqModalidad = " . $this->objPostulacion->seqModalidad
-            );
-            $arrTipoEsquema = obtenerDatosTabla(
-                "T_PRY_TIPO_ESQUEMA",
-                array("seqTipoEsquema", "txtTipoEsquema"),
-                "seqTipoEsquema",
-                "seqTipoEsquema = " . $this->objPostulacion->seqTipoEsquema
-            );
-
-
+        }else{
             $this->arrErrores[] =
                 "El hogar no pertenece a las modalidades o esquemas permitidos para el ingreso, " .
                 "la modalidad actual es \"" . $arrModalidad[$this->objPostulacion->seqModalidad] .

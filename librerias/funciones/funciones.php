@@ -797,7 +797,7 @@ function valorSubsidio($claFormulario){
         if( $claFormulario->seqModalidad == 6){
             $arrValor = obtenerDatosTabla(
                 "T_PRY_UNIDAD_PROYECTO",
-                array("0","valSDVEAprobado"),
+                array("0","valSDVEActual"),
                 "0",
                 "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
             );

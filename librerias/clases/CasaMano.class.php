@@ -1436,6 +1436,16 @@ class CasaMano
                     }
                 }
             }
+
+            $claFormulario->txtBarrio = array_shift(
+                obtenerDatosTabla(
+                    "T_FRM_BARRIO",
+                    array("seqBarrio","txtBarrio"),
+                    "seqBarrio",
+                    "seqBarrio = " . $claFormulario->seqBarrio
+                )
+            );
+
             $claFormulario->editarFormulario($arrPost['seqFormulario']);
             if (!empty($claFormulario->arrErrores)) {
                 $this->arrErrores += $claFormulario->arrErrores;

@@ -1924,7 +1924,8 @@
     <input type="hidden" id="seqCesantias"         name="seqCesantias"         value="{$claFormulario->seqCesantias}">
     <input type="hidden" id="seqPuntoAtencion"     name="seqPuntoAtencion"     value="{$claFormulario->seqPuntoAtencion}">
     <input type="hidden" id="seqPeriodo"           name="seqPeriodo"           value="{$claFormulario->seqPeriodo}">
-
+    <input type="hidden" id="seqUsuario"           name="seqUsuario"           value="{$claFormulario->seqUsuario}">
+    <input type="hidden" id="txtBarrio"            name="txtBarrio"            value="{$claFormulario->txtBarrio}">
 
     <!-- VARIABLES ADICIONALES INMODIFICABLES NECESARIAS -->
     <input type="hidden" id="seqCasaMano"   name="seqCasaMano"   value="{$claCasaMano->seqCasaMano}">
@@ -1933,7 +1934,6 @@
     <input type="hidden" id="txtFase"       name="txtFase"       value="{$arrFlujoHogar.fase}">
     <input type="hidden" id="txtFlujo"      name="txtFlujo"      value="{$arrFlujoHogar.flujo}">
     <input type="hidden"                    name="txtArchivo"    value="{$txtArchivo}">
-    <input type="hidden" id="seqUsuario"    name="seqUsuario"    value="{$smarty.session.seqUsuario}">
 
 </form>
 

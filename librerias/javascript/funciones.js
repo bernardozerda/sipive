@@ -858,12 +858,18 @@ function agregarMiembroHogar() {
     var valIngresos = objIngresos.value.replace(/[^0-9]/g,"");
 
     // Si el nivel educativo es ninguno no valida los anios aprobados
-    if($("#nivelEducativo").val() != 1) {
-        if(objAnosAprobados != null) {
-            if ($("#numAnosAprobados").val() == "" || $("#numAnosAprobados").val() == 0) {
-                alert("Seleccione los a" + String.fromCharCode(241) + "os aprobados");
-                objAnosAprobados.focus();
-                return false;
+    if( $("#nivelEducativo").val() == 0 ){
+        alert("Seleccione el nivel educativo");
+        objNvlEducativo.focus();
+        return false;
+    }else {
+        if ($("#nivelEducativo").val() != 1) {
+            if (objAnosAprobados != null) {
+                if ($("#numAnosAprobados").val() == "" || $("#numAnosAprobados").val() == 0) {
+                    alert("Seleccione los a" + String.fromCharCode(241) + "os aprobados");
+                    objAnosAprobados.focus();
+                    return false;
+                }
             }
         }
     }
@@ -1011,47 +1017,45 @@ function agregarMiembroHogar() {
     txtInsertar += "</table> ";
 
     txtInsertar += "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"display:none\" id=\"detalles" + numDocumento + "\"> ";
-    txtInsertar += "	<tr> ";
-    txtInsertar += "		<td colspan=\"6\"> ";
-    txtInsertar += "			<table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"border: 1px solid #999999;\"> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Fecha de Nacimiento:</b> " + objFchNacimiento.value + "</td> ";
-    txtInsertar += "					<td><b>Estado Civil:</b> " + objEstCivil.options[ objEstCivil.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Condici&oacute;n &Eacute;tnica:</b> " + ucwords(objCondEtnica.options[ objCondEtnica.selectedIndex ].text.toString().toLowerCase()) + "</td> ";
-    txtInsertar += "					<td><b>Condici&oacute;n Especial 1:</b> " + objCondEspecial.options[ objCondEspecial.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Sexo:</b> " + objSexo.options[ objSexo.selectedIndex ].text + "</td> ";
-    txtInsertar += "					<td><b>Condici&oacute;n Especial 2:</b> " + objCondEspecial2.options[ objCondEspecial2.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td><b>Nivel Educativo:</b> " + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].text + " (" + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + " años aprobados)</td> ";
-    txtInsertar += "					<td><b>Condici&oacute;n Especial 3:</b> " + objCondEspecial3.options[ objCondEspecial3.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-
+    txtInsertar += "<tr> ";
+    txtInsertar += "<td colspan=\"6\"> ";
+    txtInsertar += "<table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"border: 1px solid #999999;\"> ";
+    txtInsertar += "<tr> ";
+    txtInsertar += "<td><b>Estado Civil:</b> " + objEstCivil.options[ objEstCivil.selectedIndex ].text + "</td> ";
+    txtInsertar += "<td><b>Condici&oacute;n &Eacute;tnica:</b> " + ucwords(objCondEtnica.options[ objCondEtnica.selectedIndex ].text.toString().toLowerCase()) + "</td> ";
+    txtInsertar += "</tr> ";
+    txtInsertar += "<tr> ";
+    txtInsertar += "<td><b>Sexo:</b> " + objSexo.options[ objSexo.selectedIndex ].text + "</td> ";
+    txtInsertar += "<td><b>Condici&oacute;n Especial 1:</b> " + objCondEspecial.options[ objCondEspecial.selectedIndex ].text + "</td> ";
+    txtInsertar += "</tr> ";
+    txtInsertar += "<tr> ";
+    txtInsertar += "<td><b>Fecha de Nacimiento:</b> " + objFchNacimiento.value + "</td> ";
+    txtInsertar += "<td><b>Condici&oacute;n Especial 2:</b> " + objCondEspecial2.options[ objCondEspecial2.selectedIndex ].text + "</td> ";
+    txtInsertar += "</tr> ";
+    txtInsertar += "<tr> ";
     txtInsertar += "<td><b>LGTBI:</b> ";
     if (objLgtb.options[ objLgtb.selectedIndex ].value == 1) {
-        txtInsertar += "Si";
-        txtInsertar += " (" + objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].text + ")";
+        txtInsertar += objSeqGrupoLgtbi.options[ objSeqGrupoLgtbi.selectedIndex ].text;
     } else {
         txtInsertar += "No";
     }
     txtInsertar += "</td>";
-
-    txtInsertar += "					<td><b>Hecho Victimizante:</b> " + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td colspan='3'><b>Afiliación a Salud</b> " + objSeqSalud.options[ objSeqSalud.selectedIndex ].text + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "				<tr> ";
-    txtInsertar += "					<td colspan='3'><b>Ocupaci&oacute;n:</b> " + txtOcupacion + "</td> ";
-    txtInsertar += "				</tr> ";
-    txtInsertar += "			</table> ";
-    txtInsertar += "		</td> ";
-    txtInsertar += "	</tr> ";
+    txtInsertar += "<td><b>Condici&oacute;n Especial 3:</b> " + objCondEspecial3.options[ objCondEspecial3.selectedIndex ].text + "</td> ";
+    txtInsertar += "</tr> ";
+    txtInsertar += "<tr> ";
+    txtInsertar += "<td><b>Hecho Victimizante:</b> " + objSeqTipoVictima.options[ objSeqTipoVictima.selectedIndex ].text + "</td> ";
+    txtInsertar += "<td colspan='3'><b>Afiliación a Salud</b> " + objSeqSalud.options[ objSeqSalud.selectedIndex ].text + "</td> ";
+    txtInsertar += "</tr> ";
+    txtInsertar += "<tr> ";
+    txtInsertar += "<td><b>Nivel Educativo:</b> " + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].text + "</td>";
+    txtInsertar += "<td><b>A&ntilde;os Aprobados:</b> " + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + "</td>";
+    txtInsertar += "</tr> ";
+    txtInsertar += "<tr> ";
+    txtInsertar += "<td colspan='3'><b>Ocupaci&oacute;n:</b> " + txtOcupacion + "</td> ";
+    txtInsertar += "</tr> ";
+    txtInsertar += "</table> ";
+    txtInsertar += "</td> ";
+    txtInsertar += "</tr> ";
     txtInsertar += "</table> ";
 
     objHogar.innerHTML += txtInsertar;
@@ -9861,15 +9865,16 @@ function selectAnidados(documento, valor) {
 
     var apr = "numAnosAprobados";
     var options = {
-        1: ["0"],
-        2: ["1", "2", "3", "4"],
-        3: ["5"],
-        4: ["6", "7", "8", "9", "10"],
-        5: ["11"],
-        6: ["6", "7", "8", "9", "10", "11"],
-        7: ["11"],
-        8: ["11"],
-        9: ["11"],
+        0:  ["0"],
+        1:  ["0"],
+        2:  ["1", "2", "3", "4"],
+        3:  ["5"],
+        4:  ["6", "7", "8", "9", "10"],
+        5:  ["11"],
+        6:  ["6", "7", "8", "9", "10", "11"],
+        7:  ["11"],
+        8:  ["11"],
+        9:  ["11"],
         12: ["11"]
     }
 

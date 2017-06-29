@@ -463,6 +463,7 @@
                                                                     id="nivelEducativo"
                                                                     style="width:90%;"
                                                             >
+                                                                <option value="0" selected>Seleccione Uno</option>
                                                                 <option value="1">Ninguno</option>
                                                                 {foreach from=$arrNivelEducativo key=seqNivelEducativo item=txtNivelEducativo}
                                                                     <option value="{$seqNivelEducativo}">{$txtNivelEducativo}</option>
@@ -653,30 +654,37 @@
                                         <table cellpadding="0" cellspacing="0" border="0" width="100%" style="display:none;" id="detalles{$objCiudadano->numDocumento}">
                                             <tr>
                                                 <td colspan="6">
-                                                    <table cellpadding="2" cellspacing="0" border="0" width="100%" style="border: 1px solid #999999; padding: 3px;">
+                                                    <table cellpadding="2" cellspacing="0" border="0" width="100%" style="border: 1px solid #999999;">
                                                         <tr>
-                                                            <td><b>Fecha de Nacimiento:</b> {$objCiudadano->fchNacimiento}</td>
                                                             <td><b>Estado Civil:</b> {$arrEstadoCivil.$estadoCivil.txtEstadoCivil}</td>
-                                                        </tr>
-                                                        <tr>
                                                             <td><b>Condición Étnica:</b>{if isset($arrCondicionEtnica.$codicionEtnica)} {$arrCondicionEtnica.$codicionEtnica} {else} Ninguna {/if}</td>
-                                                            <td><b>Condición Especial 1:</b>{if isset($arrCondicionEspecial.$condicionEspecial)} {$arrCondicionEspecial.$condicionEspecial}{else}Ninguna{/if}</td>
                                                         </tr>
                                                         <tr>
                                                             <td width="50%"><b>Sexo:</b> {$arrSexo.$sexo}</td>
-                                                            <td><b>Condición Especial 2:</b>{if isset($arrCondicionEspecial.$condicionEspecial2)} {$arrCondicionEspecial.$condicionEspecial2}{else}Ninguna{/if}</td>
-
+                                                            <td><b>Condición Especial 1:</b>{if isset($arrCondicionEspecial.$condicionEspecial)} {$arrCondicionEspecial.$condicionEspecial}{else}Ninguna{/if}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if} ({$objCiudadano->numAnosAprobados} años aprobados)</td>
+                                                            <td><b>Fecha de Nacimiento:</b> {$objCiudadano->fchNacimiento}</td>
+                                                            <td><b>Condición Especial 2:</b>{if isset($arrCondicionEspecial.$condicionEspecial2)} {$arrCondicionEspecial.$condicionEspecial2}{else}Ninguna{/if}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>LGTBI:</b>
+                                                                {if $objCiudadano->bolLgtb == 1}
+                                                                    {$arrGrupoLgtbi.$grupoLgbti}
+                                                                {else}
+                                                                    No
+                                                                {/if}
+                                                            </td>
                                                             <td><b>Condición Especial 3:</b> {if isset($arrCondicionEspecial.$condicionEspecial3)} {$arrCondicionEspecial.$condicionEspecial3}{else}Ninguna{/if}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td><b>LGTBI:</b> {if $objCiudadano->bolLgtb == 1}Si ({$arrGrupoLgtbi.$grupoLgbti}){else}No{/if} </td>
                                                             <td><b>Hecho Victimizante:</b> {if isset($arrTipoVictima.$tipoVictima)}{$arrTipoVictima.$tipoVictima}{else}Ninguno{/if}</td>
+                                                            <td colspan="3"><b>Afiliación a Salud:</b> {$arrSalud.$salud}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="3"><b>Afiliación a Salud:</b> {$arrSalud.$salud}</td>
+                                                            <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if}</td>
+                                                            <td><b>Años Aporbados:</b> {$objCiudadano->numAnosAprobados}</td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3"><b>Ocupación:</b> {$arrOcupacion.$ocupacion}</td>

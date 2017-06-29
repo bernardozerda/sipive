@@ -518,6 +518,7 @@
                                                             id="nivelEducativo" 
                                                             style="width:90%;"
                                                             >
+                                                        <option value="0" selected>Seleccione Uno</option>
                                                         <option value="1">Ninguno</option>
                                                         {foreach from=$arrNivelEducativo key=seqNivelEducativo item=txtNivelEducativo}
                                                             <option value="{$seqNivelEducativo}">{$txtNivelEducativo}</option>

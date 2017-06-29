@@ -222,6 +222,16 @@ class FormularioSubsidios {
     public function guardarFormulario() {
         global $aptBd;
 
+        $this->fchAperturaCuentaAhorro = ( esFechaValida( $this->fchAperturaCuentaAhorro ) )? "'" . $this->fchAperturaCuentaAhorro . "'" : "NULL";
+        $this->fchAperturaCuentaAhorro2 = ( esFechaValida( $this->fchAperturaCuentaAhorro2 ) )? "'" . $this->fchAperturaCuentaAhorro2 . "'" : "NULL";
+        $this->fchInscripcion = ( esFechaValida( $this->fchInscripcion ) )? "'" . $this->fchInscripcion . "'" : "NULL";
+        $this->fchPostulacion = ( esFechaValida( $this->fchPostulacion ) )? "'" . $this->fchPostulacion . "'" : "NULL";
+        $this->fchVencimiento = ( esFechaValida( $this->fchVencimiento ) )? "'" . $this->fchVencimiento . "'" : "NULL";
+        $this->fchUltimaActualizacion = ( esFechaValida( $this->fchUltimaActualizacion ) )? "'" . $this->fchUltimaActualizacion . "'" : "NULL";
+        $this->fchArriendoDesde = ( esFechaValida( $this->fchArriendoDesde ) )? "'" . $this->fchArriendoDesde . "'" : "NULL";
+        $this->fchNotificacion = ( esFechaValida( $this->fchNotificacion ) )? "'" . $this->fchNotificacion . "'" : "NULL";
+        $this->fchVigencia = ( esFechaValida( $this->fchVigencia ) )? "'" . $this->fchVigencia . "'" : "NULL";
+
         $sql = "
             INSERT INTO T_FRM_FORMULARIO (
                txtDireccion,
@@ -317,7 +327,8 @@ class FormularioSubsidios {
                numHabitaciones,
                bolViabilidadLeasing,
                numDuracionLeasing,
-               valCartaLeasing
+               valCartaLeasing,
+               temporal
             ) VALUES (
                \"" . $this->txtDireccion . "\",
                \"" . $this->seqTipoDireccion . "\",
@@ -340,12 +351,12 @@ class FormularioSubsidios {
                \"" . $this->seqModalidad . "\",
                \"" . $this->seqPlanGobierno . "\",
                \"" . $this->seqBancoCuentaAhorro . "\",
-               \"" . $this->fchAperturaCuentaAhorro . "\",
+               " . $this->fchAperturaCuentaAhorro . ",
                \"" . $this->bolInmovilizadoCuentaAhorro . "\",
                \"" . mb_ereg_replace("[^0-9]", "", $this->valSaldoCuentaAhorro) . "\",
                \"" . $this->txtSoporteCuentaAhorro . "\",				
                \"" . $this->seqBancoCuentaAhorro2 . "\",
-               \"" . $this->fchAperturaCuentaAhorro2 . "\",
+               " . $this->fchAperturaCuentaAhorro2 . ",
                \"" . $this->bolInmovilizadoCuentaAhorro2 . "\",
                \"" . mb_ereg_replace("[^0-9]", "", $this->valSaldoCuentaAhorro2) . "\",
                \"" . $this->txtSoporteCuentaAhorro2 . "\",
@@ -371,9 +382,9 @@ class FormularioSubsidios {
                \"" . $this->seqVivienda . "\",
                \"" . mb_ereg_replace("[^0-9]", "", $this->valArriendo) . "\",
                \"" . $this->bolPromesaFirmada . "\",
-               \"" . $this->fchInscripcion . "\",
-               \"" . $this->fchPostulacion . "\",
-               \"" . $this->fchVencimiento . "\",
+               " . $this->fchInscripcion . ",
+               " . $this->fchPostulacion . ",
+               " . $this->fchVencimiento . ",
                \"" . $this->bolIntegracionSocial . "\",
                \"" . $this->bolSecSalud . "\",
                \"" . $this->bolSecEducacion . "\",
@@ -392,27 +403,28 @@ class FormularioSubsidios {
                \"" . $this->txtDireccionSolucion . "\",
                \"" . $this->seqPuntoAtencion . "\",
                \"" . $this->txtFormulario . "\",
-               \"" . $this->fchUltimaActualizacion . "\",
+               " . $this->fchUltimaActualizacion . ",
                \"" . $this->seqProyecto . "\",
                \"" . $this->seqProyectoHijo . "\",
                \"" . $this->txtSoporteSubsidioNacional . "\",
-               \"" . $this->fchArriendoDesde . "\",
+               " . $this->fchArriendoDesde . ",
                \"" . $this->txtComprobanteArriendo . "\",
                \"" . $this->seqBarrio . "\",
                \"" . $this->seqUpz . "\",
                \"" . $this->seqSisben . "\",
                \"" . $this->numCortes . "\",
-               \"" . $this->fchNotificacion . "\",
+               " . $this->fchNotificacion . ",
                \"" . $this->seqPeriodo . "\",
                \"" . $this->bolSancion . "\",
-               \"" . $this->fchVigencia . "\",
+               " . $this->fchVigencia . ",
                \"" . $this->numPuntajeSisben . "\",
                \"" . $this->seqTipoEsquema . "\",
                \"" . $this->numHacinamiento . "\",
                \"" . $this->numHabitaciones . "\",    
                \"" . $this->bolViabilidadLeasing . "\",
                \"" . $this->numDuracionLeasing . "\",
-               \"" . $this->valCartaLeasing . "\"
+               \"" . $this->valCartaLeasing . "\",
+               0
             )		
         ";
 
@@ -422,6 +434,7 @@ class FormularioSubsidios {
         } catch (Exception $objError) {
             $this->seqFormulario = 0;
             $this->arrErrores[] = "No se pudo salvar el registro del formulario, reporte este error al administrador";
+            //$this->arrErrores[] = $objError->getMessage();
         }
 
         return $this->seqFormulario;

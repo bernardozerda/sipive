@@ -139,7 +139,12 @@ if (!empty($_POST['hogar'])) {
         }
 
         if ($_POST['seqPlanGobierno'] == 3) {
-            // echo "<br> <br>".$arrCiudadano['seqNivelEducativo'];
+
+            // Nivel Educativo y años aprobados
+            if( intval( $_POST['seqNivelEducativo'] ) == 0 ){
+                $arrErrores[] = "Seleccione un nivel educativo";
+            }
+
             if ($_POST['valIngresoHogar'] > 0 and $arrCiudadano['seqNivelEducativo'] != 1 and $arrCiudadano['numAnosAprobados'] == 0) {
                 $arrErrores[] = "El ciudadano debe seleccionar el numero de años aprobados";
             }

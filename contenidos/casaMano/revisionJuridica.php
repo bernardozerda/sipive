@@ -88,7 +88,7 @@ if ($bolPermiso == true) {
     $claSmarty->display("casaMano/fasesCEM.tpl");
 
 } else {
-    $arrMensaje = $claCasaMano->arrErrores;
+    $arrMensaje = $objCasaMano->arrErrores;
     $claSmarty->assign("estilo", "msgError");
     $claSmarty->assign("arrImprimir", $arrMensaje);
     $claSmarty->display("mensajes.tpl");

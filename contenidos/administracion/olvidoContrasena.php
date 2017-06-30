@@ -107,7 +107,7 @@ if (empty($arrErrores)) {
                         </td></tr>
                         <tr>
 							<td style='padding:5px' width='30px' align='center'>
-								<img src='https://www.habitatbogota.gov.co/sipive/recursos/imagenes/escudo_bogota.png'>
+								<img src='http://sdv.habitatbogota.gov.co/sipive/recursos/imagenes/escudo_bogota.png'>
 							</td>
 							<td style='padding:10px'>
 	                            Secretar&iacute;a Distrital del H&aacute;bitat<br>

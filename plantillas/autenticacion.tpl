@@ -147,7 +147,7 @@
                <!-- ACCESO PARA FUNCIONARIOS -->
                <div class="span5" style="height: 470px; width:518px; padding-left: 18%; ">
                   
-                  <div class="thumbnail" style="height: 420px;">
+                  <div class="thumbnail" style="height: 450px;">
                      <div class="caption">
                          <h3 style="text-align: center">Acceso para funcionarios</h3>
                         <p>
@@ -227,10 +227,16 @@
                                        <button type="submit" class="btn" style="width: 200px;">
                                           Entrar
                                        </button>
-                                       <!-- <span class="help-block">
-                                       <a href="#olvidoClave" role="button" data-toggle="modal">&iquest;Olvid&oacute; su contrase&ntilde;a?</a>
-                                       </span>-->
                                        <input type="hidden" name="btnSalvar" value="1">
+                                    </div>
+                                 </div>
+
+                                 <!-- Link Olvido de clave -->
+                                 <div class="control-group">
+                                    <div class="controls">
+                                       <span class="help-block">
+                                          <a href="#olvidoClave" role="button" data-toggle="modal">&iquest;Olvid&oacute; su contrase&ntilde;a?</a>
+                                       </span>
                                     </div>
                                  </div>
 

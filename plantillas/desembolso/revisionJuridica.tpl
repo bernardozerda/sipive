@@ -157,9 +157,17 @@
 					<!-- DESCRIPCION DE CABIDA Y LINDEROS -->
 					<tr>
 						<th colspan="4" style="padding:5px; padding-left:5px; padding-right:20px;" align="left">
-							La descripci&oacute;n de cabida y linderos reposan en la escritura p&uacute;blica 
-							{$claDesembolso->txtEscritura} del {$claDesembolso->fchEscritura}, elevada ante la notaria 
-							{$claDesembolso->numNotaria} del circulo de {$claDesembolso->txtCiudad}
+							La descripci&oacute;n de cabida y linderos reposan en la {$claDesembolso->txtPropiedad}
+							{if $claDesembolso->txtPropiedad == "escritura"}
+								p&uacute;blica {$claDesembolso->txtEscritura} del {$claDesembolso->fchEscritura}, elevada
+								ante la notaria {$claDesembolso->numNotaria} del circulo de {$claDesembolso->txtCiudad}
+							{elseif $claDesembolso->txtPropiedad == "sentencia"}
+								con fecha {$claDesembolso->fchSentencia} del juzgado {$claDesembolso->numJuzgado}
+								de la ciudad de {$claDesembolso->txtCiudadSentencia|ucwords}
+							{else}
+								número {$claDesembolso->numResolucion} del {$claDesembolso->fchResolucion}
+								emitida por {$claDesembolso->txtEntidad|ucwords} de la ciudada de {$claDesembolso->txtCiudadResolucion|ucwords}
+							{/if}
 						</th>
 					</tr>
 				</table>

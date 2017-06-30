@@ -54,7 +54,7 @@ $claDesembolso = $objCasaMano->objRegistroOferta;
 
 $claDesembolso->arrTecnico = $objCasaMano->objRevisionTecnica;
 
-$bolPermiso = $objCasaMano->puedeIngresar($arrFlujoHogar, $claFormulario);
+$bolPermiso = $objCasaMano->puedeIngresar($arrFlujoHogar);
 if ($bolPermiso == true) {
 
     // Obtienr los ultimos seguimientos
@@ -97,7 +97,7 @@ if ($bolPermiso == true) {
 
 } else {
 
-    $arrMensaje = $claCasaMano->arrErrores;
+    $arrMensaje = $objCasaMano->arrErrores;
     $claSmarty->assign("estilo", "msgError");
     $claSmarty->assign("arrImprimir", $arrMensaje);
     $claSmarty->display("mensajes.tpl");

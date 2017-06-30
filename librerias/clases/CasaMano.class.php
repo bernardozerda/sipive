@@ -1741,12 +1741,12 @@ class CasaMano
         $arrEtapas   = obtenerDatosTabla("T_FRM_ETAPA",array("seqEtapa","txtEtapa"),"seqEtapa");
 
         $seqEstadoProceso = $this->objPostulacion->seqEstadoProceso; // Estado actual del proceso
-        $seqEtapa = obtenerDatosTabla(                               // Etapa actual del proceso
-            "T_FRM_ETAPA",
-            array("seqEtapa","txtEtapa"),
-            "seqEtapa",
+        $seqEtapa = array_shift(obtenerDatosTabla(
+            "T_FRM_ESTADO_PROCESO",
+            array("seqEstadoProceso","seqEtapa"),
+            "seqEstadoProceso",
             "seqEstadoProceso = " . $this->objPostulacion->seqEstadoProceso
-        );
+        ));
 
         // Jerarquia de las validaciones de ingreso:
         // - Modalidad y esquema
@@ -1758,22 +1758,22 @@ class CasaMano
             in_array($this->objPostulacion->seqModalidad, $this->arrFases[$txtFlujo]['modalidad']) and
             in_array($this->objPostulacion->seqTipoEsquema, $this->arrFases[$txtFlujo]['esquema'])
         ) {
-            if( ! empty( $this->arrFases[$txtFlujo][$txtFase]['permitidos']['etapas'] ) ) {                             // Etapas permitidos
-                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['permitidos']['etapas'])) {
+            if( ! empty( $this->arrFases[$txtFlujo][$txtFase]['permitido']['etapas'] ) ) {// Etapas permitidos
+                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['permitido']['etapas'])) {
                     $bolPermiso = true;
                 }
-            }elseif( ! empty( $this->arrFases[$txtFlujo][$txtFase]['permitidos']['estados'] ) ){                        // Estados permitidos
-                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['permitidos']['estados'])) {
+            }elseif( ! empty( $this->arrFases[$txtFlujo][$txtFase]['permitido']['estados'] ) ){                        // Estados permitidos
+                if (in_array($seqEstadoProceso, $this->arrFases[$txtFlujo][$txtFase]['permitido']['estados'])) {
                     $bolPermiso = true;
                 }
             }
-            if( ! empty( $this->arrFases[$txtFlujo][$txtFase]['prohibidos']['etapas'] ) ) {                             // Etapas prohibidas
-                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['prohibidos']['etapas'])) {
+            if( ! empty( $this->arrFases[$txtFlujo][$txtFase]['prohibido']['etapas'] ) ) {                             // Etapas prohibidas
+                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['prohibido']['etapas'])) {
                     $bolPermiso = false;
                     $this->arrErrores[] = "El hogar no pertenece a las etapas permitidas para el ingreso, la etapa actual es \"" . $arrEtapas[ $seqEtapa ] . "\"";
                 }
-            }elseif( ! empty( $this->arrFases[$txtFlujo][$txtFase]['prohibidos']['estados'] ) ){                        // Estados prohibidos
-                if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['prohibidos']['estados'])) {
+            }elseif( ! empty( $this->arrFases[$txtFlujo][$txtFase]['prohibido']['estados'] ) ){                        // Estados prohibidos
+                if (in_array($seqEstadoProceso, $this->arrFases[$txtFlujo][$txtFase]['prohibido']['estados'])) {
                     $bolPermiso = false;
                     $this->arrErrores[] = "El hogar no pertenece a los estados del proceso permitidos para el ingreso, el estado actual es \"" . $arrEstados[ $seqEstadoProceso ] . "\"";
                 }
@@ -1786,7 +1786,6 @@ class CasaMano
         }
 
         return $bolPermiso;
-
     }
 
 }

@@ -342,6 +342,7 @@ class CasaMano
              ";
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
+                $this->objRegistroOferta = new stdClass();
                 foreach ($objRes->fields as $txtCampo => $txtValor) {
                     $this->objRegistroOferta->$txtCampo = regularizarCampo($txtCampo,$txtValor);
                 }

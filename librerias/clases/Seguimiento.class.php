@@ -702,9 +702,11 @@ class Seguimiento {
      */
     public function cambiosPostulacion($arrPost) {
 
+        $seqFormulario = (is_array($arrPost) == true)? $arrPost['seqFormulario'] : $arrPost;
+
         // Formulario actual en la base de datos
         $claFormulario = new FormularioSubsidios();
-        $claFormulario->cargarFormulario($arrPost['seqFormulario']);
+        $claFormulario->cargarFormulario($seqFormulario);
 
         // Registro de campos cambiados
         $txtCambiosHogar = "";
@@ -735,14 +737,16 @@ class Seguimiento {
         }
 
         // Determina cuando un ciudadano fue adicionado
-        foreach ($arrPost['hogar'] as $numDocumento => $arrMiembro) {
-            if (!in_array($numDocumento, $arrCedulasFormulario)) {
-                $txtCambiosHogar .=
-                    $arrMiembro['txtNombre1'] . " " .
-                    $arrMiembro['txtNombre2'] . " " .
-                    $arrMiembro['txtApellido1'] . " " .
-                    $arrMiembro['txtApellido2'] . " [ " .
-                    $arrMiembro['numDocumento'] . " ] <span class=\'msgOk\'>Adicionado</span>" . $this->txtSalto;
+        if( isset( $arrPost['hogar'] ) ) {
+            foreach ($arrPost['hogar'] as $numDocumento => $arrMiembro) {
+                if (!in_array($numDocumento, $arrCedulasFormulario)) {
+                    $txtCambiosHogar .=
+                        $arrMiembro['txtNombre1'] . " " .
+                        $arrMiembro['txtNombre2'] . " " .
+                        $arrMiembro['txtApellido1'] . " " .
+                        $arrMiembro['txtApellido2'] . " [ " .
+                        $arrMiembro['numDocumento'] . " ] <span class=\'msgOk\'>Adicionado</span>" . $this->txtSalto;
+                }
             }
         }
 
@@ -750,9 +754,11 @@ class Seguimiento {
         unset($claFormulario->arrCiudadano);
         foreach ($claFormulario as $txtClave => $txtValor) {
             if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                if (isset($arrPost[$txtClave]) || is_null($arrPost[$txtClave])) {
-                    $arrPost[$txtClave] = regularizarCampo($txtClave,$arrPost[$txtClave]);
-                    $txtCambiosFormulario .= $this->compararValores($txtClave, $txtValor, $arrPost[$txtClave], 2);
+                if( isset( $arrPost[$txtClave] ) ) {
+                    if (isset($arrPost[$txtClave]) || is_null($arrPost[$txtClave])) {
+                        $arrPost[$txtClave] = regularizarCampo($txtClave, $arrPost[$txtClave]);
+                        $txtCambiosFormulario .= $this->compararValores($txtClave, $txtValor, $arrPost[$txtClave], 2);
+                    }
                 }
             }
         }

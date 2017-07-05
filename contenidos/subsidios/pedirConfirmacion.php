@@ -153,7 +153,7 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
                     if (trim($txtValor) != trim($_POST['hogar'][$numDocumento][$txtClave])) {
                         $arrCamposCambiados[] = $txtClave;
                         $bolConfirmacion = true;
-                        echo $txtClave . " ==> POST " . $_POST['hogar'][$numDocumento][$txtClave] . " ==> CLASE " .  $txtValor . "<br>";
+                        //echo $txtClave . " ==> POST " . $_POST['hogar'][$numDocumento][$txtClave] . " ==> CLASE " .  $txtValor . "<br>";
                     }
                 }
             }
@@ -195,7 +195,7 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
                         } else {
                             $arrCamposCambiados[] = $txtClave;
                             $bolConfirmacion = true;
-                            echo $txtClave . ' ==> txtValor: ' . $txtValor . ' ==> ' . $valFormateado . '<br>';
+                            //echo $txtClave . ' ==> txtValor: ' . $txtValor . ' ==> ' . $valFormateado . '<br>';
                         }
                     }
                 }

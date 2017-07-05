@@ -579,21 +579,21 @@
                                                     </select>
                                                 </td>
                                             </tr>
-                                            <tr >
+                                            <tr>
+                                                <!-- AFILIACION A SALUD -->
                                                 <td>Afiliación a Salud</td>
-                                                <td align="center">
-                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                            onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                            id="seqSalud" 
-                                                            style="width:90%;"
-                                                            >                                                        
+                                                <td align="center" colspan="3">
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            id="seqSalud"
+                                                            style="width:96%;"
+                                                    >
+                                                        <option value="0">NINGUNO</option>
                                                         {foreach from=$arrSalud key=seqSalud item=txtSalud}
                                                             <option value="{$seqSalud}">{$txtSalud}</option>
-                                                        {/foreach}                                                      
+                                                        {/foreach}
                                                     </select>
                                                 </td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
                                             </tr>
                                             <tr>
                                                 <!-- AGREGAR AL FORMULARIO -->

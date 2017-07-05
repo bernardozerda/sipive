@@ -1068,7 +1068,7 @@
                                         </select>
                                     </td>		
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td>Acta de Voluntariedad.<br>Retorno/Reubicación?</td>
                                     <td>
                                         <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
@@ -1086,7 +1086,7 @@
                                             {/if}
                                         </select>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </table></p>
 
                             <!-- TABLA RED DE SERVICIOS -->
@@ -1998,6 +1998,7 @@
     <input type="hidden" id="seqFormulario" name="seqFormulario" value="{$seqFormulario}">
     <input type="hidden" name="txtArchivo" value="./contenidos/subsidios/salvarActualizacion.php">
     <input type="hidden" name="numDocumento" value="{$numDocumento}">
+    <input type="hidden" id="bolAltaCon" name="bolAltaCon" value="{$claFormulario->bolAltaCon}">
 
     {if isset( $txtArchivoCEM ) && trim( $txtArchivoCEM ) != ""}
         <input type="hidden" name="seqCasaMano" value="{$seqCasaMano}">

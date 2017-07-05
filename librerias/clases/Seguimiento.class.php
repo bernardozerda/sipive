@@ -702,11 +702,9 @@ class Seguimiento {
      */
     public function cambiosPostulacion($arrPost) {
 
-        $seqFormulario = (is_array($arrPost) == true)? $arrPost['seqFormulario'] : $arrPost;
-
         // Formulario actual en la base de datos
         $claFormulario = new FormularioSubsidios();
-        $claFormulario->cargarFormulario($seqFormulario);
+        $claFormulario->cargarFormulario($arrPost['seqFormulario']);
 
         // Registro de campos cambiados
         $txtCambiosHogar = "";
@@ -871,8 +869,10 @@ class Seguimiento {
                 }
                 break;
             default:
-                $txtValorAnterior = strtolower(trim($txtValorAnterior));
-                $txtValorNuevo = strtolower(trim($txtValorNuevo));
+                if( ! is_array( $txtValorAnterior ) and ! is_array( $txtValorNuevo ) ){
+                    $txtValorAnterior = strtolower(trim($txtValorAnterior));
+                    $txtValorNuevo = strtolower(trim($txtValorNuevo));
+                }
 
                 if ($txtValorAnterior != $txtValorNuevo) {
                     $txtCambios .= $txtSeparador . $txtClave . ", Valor Anterior: $txtValorAnterior, Valor Nuevo: $txtValorNuevo" . $txtSalto;

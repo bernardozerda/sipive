@@ -49,7 +49,7 @@ $arrCamposCalificacion[] = "objCiudadano";
 $arrCamposCalificacion[] = "bolIntegracionSocial";
 $arrCamposCalificacion[] = "bolSecMujer";
 $arrCamposCalificacion[] = "bolIpes";
-$arrCamposCalificacion[] = "numCohabitacion";
+$arrCamposCalificacion[] = "numHabitaciones";
 $arrCamposCalificacion[] = "numHacinamiento";
 $arrCamposCalificacion[] = "fechaNac";
 $arrCamposCalificacion[] = "seqGrupoLgtbi";
@@ -208,6 +208,8 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
  * MOSTRAR EL CUADRO DE CONFIRMACION DE DATOS
  * ********************************************************************************************************** */
 
+//var_dump( $bolConfirmacion ); die();
+
 if ($bolConfirmacion == true) {
     if ($_POST["bolSancion"] == 1) {
         $arrErrores[] = "No se puede modificar la postulacion del hogar debido a que esta Sancionado.";
@@ -292,7 +294,7 @@ if ($bolConfirmacion == true) {
 
         // obtiene los cambios para dejar el registro
         $claSeguimiento = new Seguimiento;
-        $txtCambios = $claSeguimiento->cambiosPostulacion($_POST['seqFormulario'], $claFormulario, $claFormularioNuevo);
+        $txtCambios = $claSeguimiento->cambiosPostulacion($_POST);
 
         $sql = "
                 INSERT INTO T_SEG_SEGUIMIENTO ( 

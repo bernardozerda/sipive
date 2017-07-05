@@ -972,7 +972,7 @@
                                 </tr>
                                 <tr>
                                     <td>N° Hogares que hábitan la vivienda</td>
-                                    <td><input type="number" name="numCohabitacion" autofocus="" size="4" maxlength="3" min="0" step="1" style="width: 40px" value="{$objFormulario->numHabitaciones}"></td>
+                                    <td><input type="number" name="numHabitaciones" autofocus="" size="4" maxlength="3" min="0" step="1" style="width: 40px" value="{$objFormulario->numHabitaciones}"></td>
                                     <td>Número Dormitorios</td>
                                     <td><input type="number" name="numHacinamiento" autofocus="" size="4" maxlength="3" min="0" step="1" style="width: 40px" value="{$objFormulario->numHacinamiento}"></td>
                                 </tr>

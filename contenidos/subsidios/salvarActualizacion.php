@@ -54,7 +54,7 @@ if ($_POST['txtComentario'] == "") {
     $arrErrores[] = "Por favor diligencie el campo de comentarios";
 }
 if ($_POST['seqPlanGobierno'] == 3) {
-    if ($_POST['numCohabitacion'] == "") {
+    if ($_POST['numHabitaciones'] == "") {
         $arrErrores[] = "Por favor diligencie el campo N° Hogares que hábitan la vivienda";
     }
     if ($_POST['numHacinamiento'] == "") {
@@ -865,8 +865,12 @@ if (empty($arrErrores)) {
     $claFormularioNuevo->seqTipoEsquema = $_POST['seqTipoEsquema'];
     $claFormularioNuevo->numPuntajeSisben = 0;
     $claFormularioNuevo->flagActualizar = 1;
-    $claFormularioNuevo->numHabitaciones = $_POST['numCohabitacion'];
+    $claFormularioNuevo->numHabitaciones = $_POST['numHabitaciones'];
     $claFormularioNuevo->numHacinamiento = $_POST['numHacinamiento'];
+
+    $claSeguimiento = new Seguimiento;
+    //var_dump($claCiduadanoNuevo);
+    $txtCambios = $claSeguimiento->cambiosPostulacion($_POST);
 
 //    pr($claFormularioNuevo);
 //    die();
@@ -932,9 +936,7 @@ if (empty($arrErrores)) {
         }
     }
 
-    $claSeguimiento = new Seguimiento;
-    //var_dump($claCiduadanoNuevo);
-    $txtCambios = $claSeguimiento->cambiosPostulacion($_POST['seqFormulario'], $claFormulario, $claFormularioNuevo);
+
 
     $sql = "
 			INSERT INTO T_SEG_SEGUIMIENTO ( 

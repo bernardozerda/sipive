@@ -141,7 +141,7 @@
 		$claSmarty->assign( "objCiudadano", $objCiudadano);
         $claSmarty->assign( "seqFormulario" , $_POST['seqFormulario'] );
         $claSmarty->assign( "seqCasaMano" , intval( $_POST['seqCasaMano'] ) );
-        $claSmarty->assign( "numDocumento" , $_POST['cedula'] );
+        $claSmarty->assign( "arrPost" , $_POST );
         $claSmarty->assign( "arrEstadosCEM" , $arrEstadosCEM );
         $claSmarty->assign( "txtArchivoCEM" , $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['salvar'] );
 		$claSmarty->assign("arrBarrio", $arrBarrio);

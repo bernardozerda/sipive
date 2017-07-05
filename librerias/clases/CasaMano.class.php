@@ -1452,6 +1452,7 @@ class CasaMano
             foreach ($claFormulario as $txtClave => $txtValor) {
                 if ($txtClave != "arrCiudadano") {
                     if(isset( $arrPost[$txtClave] ) || is_null($arrPost[$txtClave])) {
+                        //echo "$txtClave ==> " . $claFormulario->$txtClave . " ==> " . $arrPost[$txtClave] . "<br>";
                         $claFormulario->$txtClave = regularizarCampo($txtClave, $arrPost[$txtClave]);
                     }
                 }

@@ -70,7 +70,7 @@
                             <b>Estado</b>
                         </td>
                         <td align="left">
-                            {if in_array( $claFormulario->seqEstadoProceso , $arrEstadosFlujo.adelante )}
+                            {if is_array($arrEstadosFlujo.adelante) && in_array( $claFormulario->seqEstadoProceso , $arrEstadosFlujo.adelante )}
                                 <select name="seqEstadoProceso"
                                         id="seqEstadoProceso"
                                         onFocus="this.style.backgroundColor = '#ADD8E6';"

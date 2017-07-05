@@ -949,7 +949,7 @@
 
                                         <!-- SISBEN y DESPLAZAMIENTO FORZADO -->
                                         <tr>
-                                            <td>Sisben </td>
+                                            <td>Tiene Sisben</td>
                                             <td>
                                                 <select onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                         onBlur="this.style.backgroundColor = '#FFFFFF';"
@@ -1939,6 +1939,7 @@
     <input type="hidden" id="numAdultosNucleo"           name="numAdultosNucleo"           value="{$claFormulario->numAdultosNucleo}">
     <input type="hidden" id="numCortes"                  name="numCortes"                  value="{$claFormulario->numCortes}">
     <input type="hidden" id="txtBarrio"                  name="txtBarrio"                  value="{$claFormulario->txtBarrio}">
+    <input type="hidden" id="bolAltaCon"                 name="bolAltaCon"                 value="{$claFormulario->bolAltaCon}">
 
     <!-- VARIABLES ADICIONALES INMODIFICABLES NECESARIAS -->
     <input type="hidden" id="seqCasaMano"   name="seqCasaMano"   value="{$claCasaMano->seqCasaMano}">

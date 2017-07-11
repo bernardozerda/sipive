@@ -812,7 +812,7 @@ class FormularioSubsidios {
             $aptBd->execute($sql);
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se ha podido actualizar la informacion del formulario [$seqFormulario]";
-            //$this->arrErrores[] = $objError->getMessage();
+            $this->arrErrores[] = $objError->getMessage();
         }
 
         // Actualiza la unidad del proyecto

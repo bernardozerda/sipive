@@ -99,7 +99,7 @@ if ($bolConfirmacion == true) {
 
     foreach ($claFormulario as $txtClave => $txtValor) {
         if ($txtClave != "arrCiudadano") {
-            if( ( isset( $_POST[$txtClave] ) || is_null($_POST[$txtClave]) ) and ( in_array( $txtClave , $claSeguimiento->arrIgnorarCampos ) )  ) {
+            if( array_key_exists( $txtClave , $_POST ) and in_array( $txtClave , $claSeguimiento->arrIgnorarCampos )  ) {
                 $claFormulario->$txtClave = regularizarCampo($txtClave, $_POST[$txtClave]);
             }
         }

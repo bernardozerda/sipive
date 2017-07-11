@@ -768,7 +768,7 @@ class Seguimiento {
             if (isset($arrPost['hogar'][$numDocumento])) {
                 foreach ($objCiudadano as $txtClave => $txtValor) {
                     if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                        if (isset($arrPost['hogar'][$numDocumento][$txtClave])) {
+                        if (array_key_exists($numDocumento,$arrPost['hogar']) and array_key_exists($txtClave,$arrPost['hogar'][$numDocumento])) {
                             $arrPost['hogar'][$numDocumento][$txtClave] = regularizarCampo($txtClave,$arrPost['hogar'][$numDocumento][$txtClave]);
                             $txtCambiosHogar .= $this->compararValores($txtClave, $txtValor, $arrPost['hogar'][$numDocumento][$txtClave],2);
                         }
@@ -802,11 +802,9 @@ class Seguimiento {
         unset($claFormulario->arrCiudadano);
         foreach ($claFormulario as $txtClave => $txtValor) {
             if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                if( isset( $arrPost[$txtClave] ) ) {
-                    if (isset($arrPost[$txtClave]) || is_null($arrPost[$txtClave])) {
-                        $arrPost[$txtClave] = regularizarCampo($txtClave, $arrPost[$txtClave]);
-                        $txtCambiosFormulario .= $this->compararValores($txtClave, $txtValor, $arrPost[$txtClave], 2);
-                    }
+                if( array_key_exists( $txtClave, $arrPost ) ) {
+                    $arrPost[$txtClave] = regularizarCampo($txtClave, $arrPost[$txtClave]);
+                    $txtCambiosFormulario .= $this->compararValores($txtClave, $txtValor, $arrPost[$txtClave], 2);
                 }
             }
         }

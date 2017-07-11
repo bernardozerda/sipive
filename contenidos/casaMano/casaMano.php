@@ -75,10 +75,12 @@
             $txtArchivo = $claCasaMano->arrFases[$txtFlujo][$txtFase]['salvar'];
         }
 
-        // obtieene los permisos para saber a donde puede entrar
-        $bolPermiso = $claCasaMano->puedeIngresar( $arrFlujoHogar );
-        if( $bolPermiso == false ){
-            $arrErrores = $claCasaMano->arrErrores;
+        if( empty($arrErrores) ) {
+            // obtieene los permisos para saber a donde puede entrar
+            $bolPermiso = $claCasaMano->puedeIngresar($arrFlujoHogar);
+            if ($bolPermiso == false) {
+                $arrErrores = $claCasaMano->arrErrores;
+            }
         }
 
         if( empty( $arrErrores ) ){

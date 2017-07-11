@@ -1281,29 +1281,29 @@ function comprobarSiBisisesto(anio) {
 //Autor :  Roberto Herrero & Daniel
 //Web: http://www.indomita.org
 //Asunto : Dar formato a un nï¿½mero
-// function dar_formato(num) {
-//     var cadena = "";
-//     var aux;
-//     var cont = 1, m, k;
-//     if (num < 0)
-//         aux = 1;
-//     else
-//         aux = 0;
-//     num = num.toString();
-//     for (m = num.length - 1; m >= 0; m--) {
-//         cadena = num.charAt(m) + cadena;
-//         if (cont % 3 == 0 && m > aux)
-//             cadena = "." + cadena;
-//         else
-//             cadena = cadena;
-//         if (cont == 3)
-//             cont = 1;
-//         else
-//             cont++;
-//     }
-//     cadena = cadena.replace(/.,/, ",");
-//     return cadena;
-// }
+function dar_formato(num) {
+    var cadena = "";
+    var aux;
+    var cont = 1, m, k;
+    if (num < 0)
+        aux = 1;
+    else
+        aux = 0;
+    num = num.toString();
+    for (m = num.length - 1; m >= 0; m--) {
+        cadena = num.charAt(m) + cadena;
+        if (cont % 3 == 0 && m > aux)
+            cadena = "." + cadena;
+        else
+            cadena = cadena;
+        if (cont == 3)
+            cont = 1;
+        else
+            cont++;
+    }
+    cadena = cadena.replace(/.,/, ",");
+    return cadena;
+}
 
 
 function sumarTotalRecursos() {
@@ -1851,6 +1851,8 @@ function datosPestanaPostulacion(txtModo) {
 
     var fncSuccess = function(o){
 
+        var bolCalcularAporte = true;
+
         try {
             var objRespuesta = jQuery.parseJSON(o.responseText);
         }catch(ex){
@@ -2030,7 +2032,59 @@ function datosPestanaPostulacion(txtModo) {
 
         }
 
-        valorSubsidio();
+        if( txtModo == "inscripcion" ){
+
+            bolCalcularAporte = false;
+
+            // solucion
+            $("#seqSolucion").empty();
+            for( i=0; i < objRespuesta.solucion.length; i++ ){
+                $("#seqSolucion").append(
+                    $('<option>', {
+                        value: objRespuesta.solucion[i].valor,
+                        text: objRespuesta.solucion[i].texto
+                    })
+                );
+            }
+            if( $('#seqSolucion').children('option').length == 2){
+                $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
+            }
+
+        }
+
+        if( txtModo == "actualizacion" ){
+
+            // solucion
+            $("#seqSolucion").empty();
+            for( i=0; i < objRespuesta.solucion.length; i++ ){
+                $("#seqSolucion").append(
+                    $('<option>', {
+                        value: objRespuesta.solucion[i].valor,
+                        text: objRespuesta.solucion[i].texto
+                    })
+                );
+            }
+            if( $('#seqSolucion').children('option').length == 2){
+                $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
+            }
+
+            // esquema
+            $("#seqTipoEsquema").empty();
+            for( i=0; i < objRespuesta.esquema.length; i++ ){
+                $("#seqTipoEsquema").append(
+                    $('<option>', {
+                        value: objRespuesta.esquema[i].valor,
+                        text: objRespuesta.esquema[i].texto
+                    })
+                );
+            }
+            $('#seqTipoEsquema').val(objRespuesta.esquema[0].valor).prop('selected', true);
+
+        }
+
+        if( bolCalcularAporte == true ) {
+            valorSubsidio();
+        }
 
         objCargando.hide();
     }
@@ -6665,73 +6719,72 @@ function espia() {
     YAHOO.util.Connect.asyncRequest("POST", "./espia.php", cb, datosFormulario);
 }
 
-/**
- * Funcion que pregunta si desea adelantar el grupo familiar
- * @author Jaison Ospina
- * @author Jose Camilo Bernal
- * @author Bernardo Zerad
- * @version 1.0 Jul 2013 
- * @version 1.1 Ene 2014
- */
-
-function preguntarGrupoFamiliar() {
-
-    var objFormulario = YAHOO.util.Dom.get("frmInscripcion");
-    var objEstadoProceso = YAHOO.util.Dom.get("seqEstadoProceso");
-
-    espia();
-
-    var txtMensaje = "<div style='text-align:left'>";
-    txtMensaje += "<span class='msgError' style='font-size:12px';>Desea Adelantar la actualizacón del Hogar?</span>";
-    txtMensaje += "</div>";
-
-    // COMPORTAMIENTO SI SE PRESIONA -- SI -- EN EL CUADRO
-    var handleYes = function () {
-        objEstadoProceso.value = 36; // nscripcion - Hogar Actualizado
-        pedirConfirmacion('mensajes', objFormulario, './contenidos/subsidios/pedirConfirmacion.php');
-        this.cancel();
-    }
-
-    // COMPORTAMIENTO SI SE PRESIONA -- NO -- EN EL CUADRO
-    var handleNo = function () {
-        pedirConfirmacion('mensajes', objFormulario, './contenidos/subsidios/pedirConfirmacion.php');
-        this.cancel();
-    }
-
-    var objAtributos = {
-        width: "330px",
-        effect: {
-            effect: YAHOO.widget.ContainerEffect.FADE,
-            duration: 0.75
-        },
-        fixedcenter: true,
-        zIndex: 1,
-        visible: false,
-        modal: true,
-        draggable: true,
-        close: false,
-        text: txtMensaje,
-        buttons: [
-            {
-                text: "Actualizar",
-                handler: handleYes
-            },
-            {
-                text: "No Actualizar",
-                handler: handleNo,
-                isDefault: true
-            }
-        ]
-    }
-
-    // INSTANCIA EL OBJETO DIALOGO
-    var objDialogo1 = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
-
-    // Muestra el cuadro de dialogo
-    objDialogo1.setHeader("Actualización del Hogar");
-    objDialogo1.render(document.body);
-    objDialogo1.show();
-}
+// /**
+//  * Funcion que pregunta si desea adelantar el grupo familiar
+//  * @author Jaison Ospina
+//  * @author Jose Camilo Bernal
+//  * @author Bernardo Zerad
+//  * @version 1.0 Jul 2013
+//  * @version 1.1 Ene 2014
+//  */
+// function preguntarGrupoFamiliar() {
+//
+//     var objFormulario = YAHOO.util.Dom.get("frmInscripcion");
+//     var objEstadoProceso = YAHOO.util.Dom.get("seqEstadoProceso");
+//
+//     espia();
+//
+//     var txtMensaje = "<div style='text-align:left'>";
+//     txtMensaje += "<span class='msgError' style='font-size:12px';>Desea Adelantar la actualizacón del Hogar?</span>";
+//     txtMensaje += "</div>";
+//
+//     // COMPORTAMIENTO SI SE PRESIONA -- SI -- EN EL CUADRO
+//     var handleYes = function () {
+//         objEstadoProceso.value = 36; // nscripcion - Hogar Actualizado
+//         pedirConfirmacion('mensajes', objFormulario, './contenidos/subsidios/pedirConfirmacion.php');
+//         this.cancel();
+//     }
+//
+//     // COMPORTAMIENTO SI SE PRESIONA -- NO -- EN EL CUADRO
+//     var handleNo = function () {
+//         pedirConfirmacion('mensajes', objFormulario, './contenidos/subsidios/pedirConfirmacion.php');
+//         this.cancel();
+//     }
+//
+//     var objAtributos = {
+//         width: "330px",
+//         effect: {
+//             effect: YAHOO.widget.ContainerEffect.FADE,
+//             duration: 0.75
+//         },
+//         fixedcenter: true,
+//         zIndex: 1,
+//         visible: false,
+//         modal: true,
+//         draggable: true,
+//         close: false,
+//         text: txtMensaje,
+//         buttons: [
+//             {
+//                 text: "Actualizar",
+//                 handler: handleYes
+//             },
+//             {
+//                 text: "No Actualizar",
+//                 handler: handleNo,
+//                 isDefault: true
+//             }
+//         ]
+//     }
+//
+//     // INSTANCIA EL OBJETO DIALOGO
+//     var objDialogo1 = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
+//
+//     // Muestra el cuadro de dialogo
+//     objDialogo1.setHeader("Actualización del Hogar");
+//     objDialogo1.render(document.body);
+//     objDialogo1.show();
+// }
 
 /* *************************************************************************************
  * Funciones que contralan los combos dependientes de Ciudad, Barrio, Localidad y  UPZ *

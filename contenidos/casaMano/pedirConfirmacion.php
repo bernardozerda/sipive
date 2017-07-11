@@ -39,11 +39,9 @@
         $_POST['bolCerrado'] = intval($_POST['bolCerrado']);
     }
 
-
-
     // detecta los cambios en el formulario
     $bolCambios = $claCasaMano->cambios( $_POST );
-    if( $bolCambios != "" ){
+    if( $bolCambios == true ){
         // Mensaje cuando hay cambios
         $txtMensaje = "<h2>Confirme que desea cambiar <br>los datos para el hogar de:</h2>";
         $txtMensaje.= "<h3>" . $_POST['nombre'] . " [ " . number_format($objCiudadano->numDocumento,0,'.','.') . " ]</h3>";

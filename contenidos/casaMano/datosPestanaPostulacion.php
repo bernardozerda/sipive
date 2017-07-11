@@ -162,6 +162,45 @@ switch( $_POST['modo'] ){
         }
 
         break;
+    case "inscripcion":
+
+        // solucion
+        $arrSolucion = obtenerSolucion($_POST['seqModalidad']);
+        $arrDatosPostulacion['solucion'][0]['valor'] = 1;
+        $arrDatosPostulacion['solucion'][0]['texto'] = "NINGUNA";
+        $i = 1;
+        foreach($arrSolucion as $seqSolucion => $txtSolucion){
+            $arrDatosPostulacion['solucion'][$i]['valor'] = $seqSolucion;
+            $arrDatosPostulacion['solucion'][$i]['texto'] = $txtSolucion;
+            $i++;
+        }
+
+        break;
+    case "actualizacion":
+
+        // solucion
+        $arrSolucion = obtenerSolucion($_POST['seqModalidad']);
+        $arrDatosPostulacion['solucion'][0]['valor'] = 1;
+        $arrDatosPostulacion['solucion'][0]['texto'] = "NINGUNA";
+        $i = 1;
+        foreach($arrSolucion as $seqSolucion => $txtSolucion){
+            $arrDatosPostulacion['solucion'][$i]['valor'] = $seqSolucion;
+            $arrDatosPostulacion['solucion'][$i]['texto'] = $txtSolucion;
+            $i++;
+        }
+
+        // esquema
+        $arrTipoEsquemas = obtenerTipoEsquema($_POST['seqModalidad'], $_POST['seqPlanGobierno']);
+        $arrDatosPostulacion['esquema'][0]['valor'] = 0;
+        $arrDatosPostulacion['esquema'][0]['texto'] = "NINGUNO";
+        $i = 1;
+        foreach($arrTipoEsquemas as $seqTipoEsquema => $txtTipoEsquema){
+            $arrDatosPostulacion['esquema'][$i]['valor'] = $seqTipoEsquema;
+            $arrDatosPostulacion['esquema'][$i]['texto'] = $txtTipoEsquema;
+            $i++;
+        }
+
+        break;
 }
 
 $txtJson = json_encode($arrDatosPostulacion);

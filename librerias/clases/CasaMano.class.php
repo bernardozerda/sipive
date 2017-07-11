@@ -1756,7 +1756,8 @@ class CasaMano
         // - Estados del proceso permitidos
         // - Etapas prohibidas
         // - Estados prohibidos
-        if (
+        if ( is_array($this->arrFases[$txtFlujo]['modalidad']) and
+            is_array($this->arrFases[$txtFlujo]['esquema']) and
             in_array($this->objPostulacion->seqModalidad, $this->arrFases[$txtFlujo]['modalidad']) and
             in_array($this->objPostulacion->seqTipoEsquema, $this->arrFases[$txtFlujo]['esquema'])
         ) {

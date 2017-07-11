@@ -868,14 +868,16 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno){
     $arrEsquema[3][13][] = 9;  // proyectos sdht
 
     // obtiene los esquemas segun modalidad y plan de gobierno
-    $arrTipoEsquemas = obtenerDatosTabla(
-        "t_pry_tipo_esquema",
-        array("seqTipoEsquema","txtTipoEsquema"),
-        "seqTipoEsquema",
-        "estado = 1 and seqTipoEsquema IN (".implode(",",$arrEsquema[$seqPlanGobierno][$seqModalidad]).")",
-        "txtTipoEsquema"
-    );
-
+    $arrTipoEsquemas = array();
+    if( isset( $arrEsquema[$seqPlanGobierno][$seqModalidad] ) ) {
+        $arrTipoEsquemas = obtenerDatosTabla(
+            "t_pry_tipo_esquema",
+            array("seqTipoEsquema", "txtTipoEsquema"),
+            "seqTipoEsquema",
+            "estado = 1 and seqTipoEsquema IN (" . implode(",", $arrEsquema[$seqPlanGobierno][$seqModalidad]) . ")",
+            "txtTipoEsquema"
+        );
+    }
     return $arrTipoEsquemas;
 }
 

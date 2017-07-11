@@ -4,7 +4,7 @@
 			<div class="hd">Se solicita atención del usuario...</div>
 			<div class="bd" style="text-align:center">
 				<form method="POST" action="{$txtArchivo}">
-               <p>{$txtMensaje}</p>
+                <p>{$txtMensaje}</p>
 					{foreach from=$arrPost key=txtClave item=txtValor}
 						{if not is_array( $txtValor )}
                             <input type="hidden" name="{$txtClave}" value="{$txtValor}">
@@ -24,7 +24,7 @@
                             {/if}
 						{/if}
 					{/foreach}
-               <input type="hidden" name="bolBorrar" id="bolBorrar" value="0">
+                <input type="hidden" name="bolBorrar" id="bolBorrar" value="0">
 				</form>
 			</div>
 		</div>

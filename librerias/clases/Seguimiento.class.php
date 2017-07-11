@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 /**
  * CLASE QUE REALIZA TODAS LAS OPERACIONES DE SEGUIMIENTO
@@ -24,9 +24,6 @@ class Seguimiento {
     private $txtSalto;
 
     function Seguimiento() {
-
-        $this->txtSeparador = "\t";
-        $this->txtSalto = "\n";
 
         $this->txtSeparador = str_repeat("&nbsp;", 5);
         $this->txtSalto = "<br>";
@@ -112,10 +109,14 @@ class Seguimiento {
         $this->arrConversionCampos['seqCiudad']['tabla'] = "T_FRM_CIUDAD";
         $this->arrConversionCampos['seqBarrio']['nombre'] = "Barrio";
         $this->arrConversionCampos['seqBarrio']['tabla'] = "T_FRM_BARRIO";
+        $this->arrConversionCampos['seqPlanGobierno']['nombre'] = "Plan de Gobierno";
+        $this->arrConversionCampos['seqPlanGobierno']['tabla'] = "T_FRM_PLAN_GOBIERNO";
         $this->arrConversionCampos['seqPuntoAtencion']['nombre'] = "Punto Atencion";
         $this->arrConversionCampos['seqPuntoAtencion']['tabla'] = "T_FRM_PUNTO_ATENCION";
         $this->arrConversionCampos['seqSisben']['nombre'] = "Sisben";
         $this->arrConversionCampos['seqSisben']['tabla'] = "T_FRM_SISBEN";
+        $this->arrConversionCampos['seqUpz']['nombre'] = "UPZ";
+        $this->arrConversionCampos['seqUpz']['tabla'] = "T_FRM_UPZ";
         $this->arrConversionCampos['seqVivienda']['nombre'] = "Vivienda Actual";
         $this->arrConversionCampos['seqVivienda']['tabla'] = "T_FRM_VIVIENDA";
         $this->arrConversionCampos['txtBarrio']['nombre'] = "Barrio";
@@ -279,6 +280,7 @@ class Seguimiento {
         $this->arrTipoDato['seqProyectoHijo'] = 'numero';
         $this->arrTipoDato['seqUnidadProyecto'] = 'numero';
         $this->arrTipoDato['seqTipoEsquema'] = 'numero';
+        $this->arrTipoDato['seqPlanGobierno'] = 'numero';
         $this->arrTipoDato['seqPuntoAtencion'] = 'numero';
         $this->arrTipoDato['seqSalud'] = 'numero';
         $this->arrTipoDato['seqSexo'] = 'numero';
@@ -698,7 +700,55 @@ class Seguimiento {
     }
 
     /**
-     * MIRA LOS CAMBIOS EN EL FORMULARIO DE POSTULACION / INSCRIPCION
+     * OBTIENE EL TEXTO DE CAMBIOS PARA EL FORMULARIO DE INSCRIPCION (EL PEQUEÑO)
+     * EN ESTE CASO NO HAY NADA CON QUE COMPARAR CON LA BASE DE DATOS
+     */
+    public function cambiosInscripcion($arrPost){
+
+        $seqFormulario = $arrPost['seqFormulario'];
+        unset( $arrPost['seqFormulario'] );
+
+        // Formulario actual en la base de datos
+        $claFormulario = new FormularioSubsidios();
+        $claFormulario->cargarFormulario($seqFormulario);
+
+
+        // CIUDADANO ADICIONADO (SOLO HAY UNO)
+        foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
+            $txtCambiosHogar .= str_repeat( $this->txtSeparador , 2 ) .
+                $objCiudadano->txtNombre1 . " " .
+                $objCiudadano->txtNombre2 . " " .
+                $objCiudadano->txtApellido1 . " " .
+                $objCiudadano->txtApellido2 . " [ " .
+                $objCiudadano->numDocumento . " ] <span class=\'msgOk\'>Adicionado</span>" . $this->txtSalto;
+        }
+
+        // Cambios en los datos del formulario
+        unset($claFormulario->arrCiudadano);
+        foreach ($claFormulario as $txtClave => $txtValor) {
+            if( isset( $arrPost[$txtClave] ) ) {
+                if (isset($arrPost[$txtClave]) || is_null($arrPost[$txtClave])) {
+                    $arrPost[$txtClave] = regularizarCampo($txtClave, $arrPost[$txtClave]);
+                    $txtCambiosFormulario .= $this->compararValores($txtClave, null, $arrPost[$txtClave], 2);
+                }
+            }
+        }
+
+        $txtCambios = "";
+        if( trim($txtCambiosHogar) != "" ){
+            $txtCambios .= "<b>[ " . $claFormulario->seqFormulario . " ] Cambios en el hogar</b>" . $this->txtSalto . $txtCambiosHogar;
+        }
+
+        if( trim($txtCambiosFormulario) != "" ){
+            $txtCambios .= "<b>[ " . $claFormulario->seqFormulario . " ] Cambios en el formulario</b>" . $this->txtSalto . $txtCambiosFormulario;
+        }
+
+        return $txtCambios;
+    }
+
+
+    /**
+     * MIRA LOS CAMBIOS EN EL FORMULARIO DE POSTULACION / ACTUALIZACION
      */
     public function cambiosPostulacion($arrPost) {
 
@@ -718,7 +768,7 @@ class Seguimiento {
             if (isset($arrPost['hogar'][$numDocumento])) {
                 foreach ($objCiudadano as $txtClave => $txtValor) {
                     if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                        if (isset($arrPost['hogar'][$numDocumento][$txtClave])) {
+                        if (array_key_exists($numDocumento,$arrPost['hogar']) and array_key_exists($txtClave,$arrPost['hogar'][$numDocumento])) {
                             $arrPost['hogar'][$numDocumento][$txtClave] = regularizarCampo($txtClave,$arrPost['hogar'][$numDocumento][$txtClave]);
                             $txtCambiosHogar .= $this->compararValores($txtClave, $txtValor, $arrPost['hogar'][$numDocumento][$txtClave],2);
                         }
@@ -752,11 +802,9 @@ class Seguimiento {
         unset($claFormulario->arrCiudadano);
         foreach ($claFormulario as $txtClave => $txtValor) {
             if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                if( isset( $arrPost[$txtClave] ) ) {
-                    if (isset($arrPost[$txtClave]) || is_null($arrPost[$txtClave])) {
-                        $arrPost[$txtClave] = regularizarCampo($txtClave, $arrPost[$txtClave]);
-                        $txtCambiosFormulario .= $this->compararValores($txtClave, $txtValor, $arrPost[$txtClave], 2);
-                    }
+                if( array_key_exists( $txtClave, $arrPost ) ) {
+                    $arrPost[$txtClave] = regularizarCampo($txtClave, $arrPost[$txtClave]);
+                    $txtCambiosFormulario .= $this->compararValores($txtClave, $txtValor, $arrPost[$txtClave], 2);
                 }
             }
         }
@@ -3921,7 +3969,7 @@ class Seguimiento {
             } catch (Exception $objError) {
                 $this->arrErrores[] = "No se ha podido registrar el seguimiento, contacte al administrador del sistema";
                 $this->arrErrores[] = $objError->getMessage();
-                $this->arrErrores[] = $sql;
+//                $this->arrErrores[] = $sql;
                 return false;
             }
         }else{

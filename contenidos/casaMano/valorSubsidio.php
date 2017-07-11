@@ -7,6 +7,7 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 
+	$claFormulario = new stdClass();
 	foreach($_POST as $txtClave => $txtValor){
 		$claFormulario->$txtClave = $txtValor;
 	}

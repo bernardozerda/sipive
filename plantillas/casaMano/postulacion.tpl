@@ -7,8 +7,8 @@
 {assign var=numAltoPestanaSecundaria value="450px"}
 {assign var=claFormulario value=$claCasaMano->objPostulacion}
 
-<form name="frmIndividual"
-      id="frmIndividual"
+<form name="frmPostulacion"
+      id="frmPostulacion"
       onSubmit="pedirConfirmacion('mensajes',this,'./contenidos/casaMano/pedirConfirmacion.php'); return false;"
       autocomplete=off
 >
@@ -213,7 +213,9 @@
                                                                     style="width:90%;"
                                                             >
                                                                 {foreach from=$arrTipoDocumento key=seqTipoDocumento item=txtTipoDocumento}
-                                                                    <option value="{$seqTipoDocumento}">{$txtTipoDocumento}</option>
+                                                                    {if $seqTipoDocumento != 6}
+                                                                        <option value="{$seqTipoDocumento}">{$txtTipoDocumento}</option>
+                                                                    {/if}
                                                                 {/foreach}
                                                             </select>
                                                         </td>
@@ -604,7 +606,7 @@
                                                 <td align="right" style="padding-right:7px">
                                                     $ {$objCiudadano->valIngresos|number_format:0:',':'.'}
                                                 </td>
-                                                {if $claFormulario->bolSancion neq 1}
+                                                {if $claFormulario->bolSancion != 1}
                                                     <td align="center" width="18px" height="22px">
                                                         <div	style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;"
                                                                 onClick="modificarMiembroHogar('{$objCiudadano->numDocumento}')"
@@ -710,6 +712,7 @@
                                             {/if}
                                         </td>
                                         <td width="18px">&nbsp;</td>
+                                        <td width="18px">&nbsp;</td>
                                         {if intval( $claFormulario->valIngresoHogar ) == 0}
                                             <input type="hidden" name="valIngresoHogar" id="valIngresoHogar"
                                                    value="{$valTotal}">
@@ -717,7 +720,6 @@
                                             <input type="hidden" name="valIngresoHogar" id="valIngresoHogar"
                                                    value="{$claFormulario->valIngresoHogar}">
                                         {/if}
-                                        <td width="18px">&nbsp;</td>
                                     </tr>
                                 </table>
 
@@ -770,7 +772,7 @@
                                                 <input type="text"
                                                        name="fchArriendoDesde"
                                                        id="fchArriendoDesde"
-                                                       value="{$claFormulario->fchArriendoDesde}"
+                                                       value="{if esFechaValida($objFormulario->fchArriendoDesde)}{$objFormulario->fchArriendoDesde}{/if}"
                                                        onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                        style="width:80px;"

@@ -1,86 +1,32 @@
-
-<!-- ********************************************************** 
-    PLANTILLA DE ACTUALIZACION Y POSTLACION,
-    TAMBIEN SE USA PARA EL ESQUEMA DE CASA EN MANO
-    EN LA FASE DE POSTULACION
+<!-- **********************************************************
+    PLANTILLA DE ACTUALIZACION - SOLO ETAPA DE INSCRIPCION
 *************************************************************** -->
-{assign var=victima value=''}
-{if $objFormulario->seqEstadoProceso != 6}
-    {assign var=seqEstadoProceso value=$objFormulario->seqEstadoProceso}
-{else}
-    {assign var=seqEstadoProceso value=37}
-{/if}
 
-
-<!-- si es por el esquema de casa en mano la funcion de submit es diferente -->
-{if isset( $txtArchivoCEM ) && trim( $txtArchivoCEM ) != ""}
-
-    <!-- CASA EN MANO -->
-    {assign var=txtFuncion value="someterFormulario('mensajes',this,'./contenidos/casaMano/pedirConfirmacion.php',false,true)"}
-    {assign var=txtImpresion value="imprimirPostulacionCEM( document.frmPostulacion , './contenidos/casaMano/pedirConfirmacion.php' );"}
-{else}
-
-    <!-- OTRO ESQUEMA -->
-    {assign var=txtFuncion   value="pedirConfirmacion('mensajes',this,'./contenidos/subsidios/pedirConfirmacion.php')"}
-{/if}
-{assign var=txtTipoVictima1 value = ""}
-{assign var=seqTipoVictima1 value = ""}
-{assign var=totalAhorro value = 0}
-<form name="frmPostulacion" 
-      id="frmPostulacion"
-      onSubmit="{$txtFuncion};
-              return false;" 
-      autocomplete=off 
+<form name="frmActualizacion"
+      id="frmActualizacion"
+      onSubmit="pedirConfirmacion('mensajes',this,'./contenidos/subsidios/pedirConfirmacion.php'); return false;"
       >	
 
     <!-- CODGIO PARA EL SEGUIMIENTO Y BOTON SUBMIT DEL FORMULARIO -->
     {include file='subsidios/pedirSeguimiento.tpl'}
 
     <!-- TABLA PARA IMPRIMIR EL FORMULARIO DE POSTULACION -->
-    <table cellspacing="0" cellpadding="0" border="0" width="100%" style="z-index:999999;">
+    <table cellspacing="0" cellpadding="5" border="0" width="100%">
         <tr>
-            <td width="150px" align="center">
-                {if $txtImpresion != ""}
-                    <a href="#" onClick="javascript: {$txtImpresion};">
-                        Imprimir Formulario
-                    </a>
-                {/if}    
-            </td>
-            <td align="center">
-                {if $txtImpresion != ""}
-                    Cerrar Postulaci&oacute;n 
-                    <input type="checkbox"
-                           name="bolCerrado"
-                           id="bolCerrado"
-                           value="1"
-                           {if $objFormulario->bolCerrado == 1} checked {/if}
-                           >
-                {else}
-                    <strong>
-                        {if $objFormulario->bolCerrado == 1} 
-                            Formulario Cerrado
-                        {else}
-                            Formulario Abierto
-                        {/if}
-                    </strong>
-                    <input type="hidden"
-                           name="bolCerrado"
-                           id="bolCerrado"
-                           value="{$objFormulario->bolCerrado}"
-                           >
-                {/if}
+            <td width="150px" align="left" style="padding-left: 10px;">
+                <a href="#" onClick="imprimirPostulacionCEM( document.frmActualizacion , './contenidos/subsidios/pedirConfirmacion.php' );">
+                    Imprimir Formulario
+                </a>
             </td>
             <td align="right" style="padding-right: 10px;" width="250px">
-                {if $smarty.session.privilegios.crear == 1 || $smarty.session.privilegios.editar == 1}
-                    <input type="submit" name="salvar" id="salvar" value="Salvar Actualizaci&oacute;n">
-                {/if}
+                <input type="submit" name="salvar" id="salvar" value="Salvar Actualización">
             </td>
         </tr>
     </table>
 
     <!-- SI TIENE SANCION SE MUESTRA -->
-    {if $objFormulario->bolSancion eq 1}
-        <p style="background-color: #FF0000; color:white;">HOGAR SANCIONADO</p>
+    {if $objFormulario->bolSancion == 1}
+        <p style="background-color: #FF0000; color:white; padding:5px;">HOGAR SANCIONADO</p>
     {/if}
     <input type="hidden" value="{$objFormulario->bolSancion}" id="bolSancion" name="bolSancion">
 
@@ -97,108 +43,37 @@
             <div id="frm" style="height:510px;">
 
                 <!-- TABLA DE ESTADO DEL PROCESO Y NUMERO DEL FORMULARIO -->
-                <p>
-                <table cellspacing="0" cellpadding="3" border="0">
+                <table cellspacing="0" cellpadding="5" border="0" width="100%">
                     <tr>
-                        <td style="width:100px;">
+                        <td style="width:50px;">
                             <b>Estado</b>
                         </td>
-                        <td style="width:350px;" align="left">
-                            {if $objFormulario->seqEstadoProceso == 36}
-                                {$arrEstado.36}
-                                <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                        onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                        name="seqEstadoProceso"
-                                        id="seqEstadoProceso"
-                                        style="width:350px; display:none"
-                                        >
-                                    <!--<option value="36" {if $seqEstadoProceso == 36} selected {/if}>
-                                    {$arrEstado.36}
-                                </option>-->
-                                    <option value="37" {if $seqEstadoProceso == 37} selected {/if}>
-                                        {$arrEstado.37}
-                                    </option>
-                                </select>
-                            {elseif $objFormulario->seqEstadoProceso == 37}
-                                <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                        onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                        name="seqEstadoProceso"
-                                        id="seqEstadoProceso"
-                                        style="width:350px"
-                                        >
-                                    <option value="37" {if $seqEstadoProceso == 37} selected {/if}>
-                                        {$arrEstado.37}
-                                    </option>
-                                </select>
-                            {elseif isset( $arrEstadosCEM ) && is_array( $arrEstadosCEM ) && in_array( $objFormulario->seqEstadoProceso , $arrEstadosCEM.adelante )}
-                                <select name="seqEstadoProceso" 
-                                        id="seqEstadoProceso"
-                                        onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                        style="width:350px"
-                                        >    
-                                    <!-- ESTADOS DEL PROCESO DE RETORNO -->
-                                    <optgroup label="Retorno">
-                                        {foreach from=$arrEstadosCEM.atras item=seqEstado}
-                                            <option value="{$seqEstado}">{$arrEstados.$seqEstado}</option>	
-                                        {/foreach}
-                                    </optgroup>
-
-                                    <!-- ESTADOS DEL PROCESO DE AVANCE -->
-                                    <optgroup label="Avance">
-                                        {foreach from=$arrEstadosCEM.adelante item=seqEstado}
-                                            <option value="{$seqEstado}"
-                                                    {if $seqEstado == $objFormulario->seqEstadoProceso} selected {/if}
-                                                    >
-                                                {$arrEstados.$seqEstado}
-                                            </option>
-                                        {/foreach}
-                                    </optgroup>
-                                </select>
-                            {else}
-                                {$arrEstado.$seqEstadoProceso}
-                                <input type="hidden" 
-                                       name="seqEstadoProceso" 
-                                       id="seqEstadoProceso" 
-                                       value="{$seqEstadoProceso}"
-                                       >
-                            {/if}	
-                        </td>
-                        <td align="right">
-                            {if $txtTutorDesembolso != ""}
-                                <b>Tutor de Desembolso: </b> {$txtTutorDesembolso}
-                            {else}
-                                &nbsp;
-                            {/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <!-- NUMERO DEL FORMULARIO -->
-                        <td><b>No.Formulario</b></td>
                         <td align="left">
-                            {if $txtImpresion != ""}
-                                <input type="text" 
-                                       name="txtFormulario" 
-                                       id="txtFormulario" 
-                                       value="{$objFormulario->txtFormulario}"
-                                       onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                       onBlur="sinCaracteresEspeciales(this);
-                                               this.style.backgroundColor = '#FFFFFF';" 
-                                       style="width:100px;"
-                                       />
-                            {else}
-                                {$objFormulario->txtFormulario}
-                                <input type="hidden" 
-                                       name="txtFormulario" 
-                                       id="txtFormulario" 
-                                       value="{$objFormulario->txtFormulario}"
-                                       >
+                            {assign var=seqEstadoProceso value=$objFormulario->seqEstadoProceso}
+                            {$arrEstado.$seqEstadoProceso}
+                            {if $seqEstadoProceso == 36}
+                                {assign var=seqEstadoProceso value=37}
                             {/if}
+                            <input type="hidden"
+                                   name="seqEstadoProceso"
+                                   id="seqEstadoProceso"
+                                   value="{$seqEstadoProceso}"
+                                   >
                         </td>
-                        <td>&nbsp;</td>
+                        <td style="width:100px;">
+                            <strong>Plan de Gobierno</strong>
+                        </td>
+                        <td align="left" style="width:200px;">
+                            {assign var=seqPlanGobierno value=$objFormulario->seqPlanGobierno}
+                            {$arrPlanGobierno.$seqPlanGobierno}
+                            <input type="hidden"
+                                   name="seqPlanGobierno"
+                                   id="seqPlanGobierno"
+                                   value="{$objFormulario->seqPlanGobierno}"
+                            >
+                        </td>
                     </tr>
                 </table>
-                </p>
 
                 <!-- SUB - PESTANAS DEL FORMULARIO DE POSTULACION -->
                 <div id="pestanasPostulacion" class="yui-navset" style="width:100%; text-align:left;">
@@ -207,36 +82,55 @@
                         <li><a href="#datosHogar"><em>Datos del Hogar</em></a></li>
                         <li><a href="#modalidad"><em>Datos de la Postulación</em></a></li>
                         <li><a href="#financiera"><em>Información Financiera</em></a></li>
-                        <!--<li><a href="#simulador"><em>Simulador</em></a></li>-->
                     </ul>            
                     <div class="yui-content">
 
                         <!-- COMPOSICION FAMILIAR -->				    
                         <div id="composicion" style="height:420px; overflow:auto;"><p>
 
-                                <!-- TABLA PARA LAS FECHAS DE INSCRIPCION, POSTULACION, ULTIMA ACTUALIZACION -->
-                            <table cellpadding="3" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF">
+                            <!-- TABLA PARA LAS FECHAS DE INSCRIPCION, POSTULACION, ULTIMA ACTUALIZACION -->
+                            <table cellpadding="5" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF">
                                 <tr>
                                     <td class="tituloTabla">Fecha de Inscripción:</td>
                                     <td class="tituloTabla">Fecha de Postulación:</td>
                                     <td class="tituloTabla">Última Actualización:</td>
-                                    <td class="tituloTabla">Vigencia de SDV:</td>
+                                    <td class="tituloTabla">Vigencia del Aporte:</td>
                                 </tr>
-                                <tr>			        			
-                                    <td style="padding-left:10px">{$objFormulario->fchInscripcion}</td>                                                                
-                                    <td style="padding-left:10px">{$objFormulario->fchPostulacion}
-                                        <input type="hidden" name="fchPostulacion" id="fchPostulacion" value="{$objFormulario->fchPostulacion}"/></td>
-                                    <td style="padding-left:10px">{$objFormulario->fchUltimaActualizacion}</td>                                
-                                    <td style="padding-left:10px">{$objFormulario->fchVigencia}</td>
+                                <tr>
+                                    <td style="padding-left:10px">
+                                        {if esFechaValida($objFormulario->fchInscripcion)}
+                                            {$objFormulario->fchInscripcion}
+                                        {/if}
+                                    </td>
+                                    <td style="padding-left:10px">
+                                        {if esFechaValida($objFormulario->fchPostulacion)}
+                                            {$objFormulario->fchPostulacion}
+                                        {/if}
+                                    </td>
+                                    <td style="padding-left:10px">
+                                        {if esFechaValida($objFormulario->fchUltimaActualizacion)}
+                                            {$objFormulario->fchUltimaActualizacion}
+                                        {/if}
+                                    </td>
+                                    <td style="padding-left:10px">
+                                        {if esFechaValida($objFormulario->fchVigencia)}
+                                            {$objFormulario->fchVigencia}
+                                        {/if}
+                                    </td>
                                 </tr>
                             </table>
+
+                            <input type="hidden" name="fchInscripcion"         id="fchInscripcion"         value="{$objFormulario->fchInscripcion}"        />
+                            <input type="hidden" name="fchPostulacion"         id="fchPostulacion"         value="{$objFormulario->fchPostulacion}"        />
+                            <input type="hidden" name="fchUltimaActualizacion" id="fchUltimaActualizacion" value="{$objFormulario->fchUltimaActualizacion}"/>
+                            <input type="hidden" name="fchVigencia"            id="fchVigencia"            value="{$objFormulario->fchVigencia}"           />
 
                             <!-- TABLA PARA AGREGAR UN MIEMBRO DE HOGAR -->
                             <p>
                             <table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF">
                                 <tr>
                                     <td style="padding-right:15px;" align="right" height="20px" valign="middle" bgcolor="#E4E4E4">
-                                        {if $objFormulario->bolSancion neq 1}
+                                        {if $objFormulario->bolSancion != 1}
                                             <a href="#" 
                                                onClick="mostrarOcultar('agregarMiembro');
                                                        document.getElementById('tipoDocumento').focus();"
@@ -273,7 +167,6 @@
                                                            onBlur="soloNumeros(this);
                                                                    this.style.backgroundColor = '#FFFFFF';" 
                                                            onKeyUp="formatoSeparadores(this)"
-                                                           onChange="formatoSeparadores(this)"
                                                            style="width:90%;" 
                                                            >
                                                 </td>
@@ -346,7 +239,9 @@
                                                                         style="color:#666666"
                                                                         disabled
                                                                     {/if}	
-                                                                    >																					{$arrRegistro.txtParentesco}															      </option>
+                                                                    >
+                                                                {$arrRegistro.txtParentesco}
+                                                            </option>
                                                         {/foreach}
                                                     </select>
                                                 </td>
@@ -359,14 +254,14 @@
                                                             style="width:90%;"
                                                             >
                                                         <option value="0">Ninguno</option>
-                                                        {foreach from=$arrEstadoCivil key=seqEstadoCivil item=txtEstadoCivil}
+                                                        {foreach from=$arrEstadoCivil key=seqEstadoCivil item=arrRegistro}
                                                             <option value="{$seqEstadoCivil}"
-                                                                    {if $seqEstadoCivil == 1 || $seqEstadoCivil == 3 || $seqEstadoCivil == 4 || $seqEstadoCivil == 5}
+                                                                    {if $arrRegistro.bolActivo == 0}
                                                                         style="color:#666666"
                                                                         disabled
                                                                     {/if}
                                                                     >
-                                                                {$txtEstadoCivil}
+                                                                {$arrRegistro.txtEstadoCivil}
                                                             </option>
                                                         {/foreach}
                                                     </select>
@@ -541,7 +436,7 @@
                                                            style="width:90%; text-align: right;"
                                                            />
                                                 </td>
-                                                <td> Años Aprobados</td>
+                                                <td>Años Aprobados</td>
                                                 <td align="center">
                                                     <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';" 
@@ -549,18 +444,6 @@
                                                             style="width:90%;"
                                                             >
                                                         <option value="0">Ninguno</option>  
-                                                        <option value="1">1</option> 
-                                                        <option value="2">2</option> 
-                                                        <option value="3">3</option> 
-                                                        <option value="4">4</option> 
-                                                        <option value="5">5</option> 
-                                                        <option value="6">6</option> 
-                                                        <option value="7">7</option> 
-                                                        <option value="8">8</option> 
-                                                        <option value="9">9</option> 
-                                                        <option value="10">10</option> 
-                                                        <option value="11">11</option>                                                        
-
                                                     </select>
                                                 </td>
                                             </tr>
@@ -616,8 +499,12 @@
                             <!-- IMPRIMIR LOS MIEMBROS DE HOGAR CON TODOS LOS DATOS -->
                             <div id="datosHogar">
 
+                                {assign var=numVictima  value=0}
+                                {assign var=txtTipoVictima1 value = ""}
+                                {assign var=seqTipoVictima1 value = ""}
                                 {assign var=valTotal value=0}
-                                {assign var=modalidad      value=""}
+                                {assign var=modalidad value=""}
+
                                 {foreach from=$objFormulario->arrCiudadano item=objCiudadano key=seqCiudadano}
 
                                     {assign var=tipoDocumento      value=$objCiudadano->seqTipoDocumento}
@@ -635,14 +522,15 @@
                                     {assign var=numAnosAprobados   value=$objCiudadano->numAnosAprobados}
                                     {assign var=seqSalud           value=$objCiudadano->seqSalud}
                                     {assign var=ocupacion          value=$objCiudadano->seqOcupacion}
-                                    {if $objCiudadano->seqTipoVictima ==2}
-                                        {assign var=victima  value='OK'}
+
+                                    {if $objCiudadano->seqTipoVictima == 2}
+                                        {assign var=numVictima value=1}
                                     {/if}
-                                    {if $objCiudadano->seqTipoVictima >0}
+                                    {if $objCiudadano->seqTipoVictima > 0}
                                         {assign var=txtTipoVictima1   value=$objCiudadano->txtTipoVictima}
                                         {assign var=seqTipoVictima1   value=$objCiudadano->seqTipoVictima}
                                     {/if}
-                                    {assign var=valIngresosCiudadano value=$objCiudadano->valIngresos|replace:'[^0-9]':''}
+                                    {assign var=valIngresosCiudadano value=$objCiudadano->valIngresos}
                                     {math equation="x + y" x=$valTotal y=$valIngresosCiudadano assign=valTotal}
 
                                     <table cellpadding="0" cellspacing="0" border="0" width="100%" id="{$objCiudadano->numDocumento}">
@@ -679,7 +567,7 @@
                                             <td align="right" style="padding-right:7px">
                                                 $ {$objCiudadano->valIngresos|number_format:0:',':'.'}
                                             </td>
-                                            {if $objFormulario->bolSancion neq 1}
+                                            {if $objFormulario->bolSancion != 1}
                                                 <td align="center" width="18px" height="22px">
                                                     <div	style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;" 
                                                          onClick="modificarMiembroHogar('{$objCiudadano->numDocumento}')"
@@ -731,7 +619,7 @@
                                             <td colspan="6">
                                                 <table cellpadding="2" cellspacing="0" border="0" width="100%" style="border: 1px solid #999999;">
                                                     <tr>
-                                                        <td><b>Estado Civil:</b> {$arrEstadoCivil.$estadoCivil}</td>
+                                                        <td><b>Estado Civil:</b> {$arrEstadoCivil.$estadoCivil.txtEstadoCivil}</td>
                                                         <td><b>Condición Étnica:</b>{if isset($arrCondicionEtnica.$codicionEtnica)} {$arrCondicionEtnica.$codicionEtnica} {else} Ninguna {/if}</td>
                                                     </tr>
                                                     <tr>
@@ -788,12 +676,13 @@
                                         $ {$valTotal|number_format:0:',':'.'}                                       
                                     </td>
                                     <td width="18px">&nbsp;</td>
+                                    <td width="18px">&nbsp;</td>
                                     {if intval( $objFormulario->valIngresoHogar ) == 0}
-                                    <input type="hidden" name="valIngresoHogar" id="valIngresoHogar" value="{$valTotal}">
-                                {else}
-                                    <input type="hidden" name="valIngresoHogar" id="valIngresoHogar" value="{$objFormulario->valIngresoHogar}">
-                                {/if}
-                                <td width="18px">&nbsp;</td>
+                                        <input type="hidden" name="valIngresoHogar" id="valIngresoHogar" value="{$valTotal}">
+                                    {else}
+                                        <input type="hidden" name="valIngresoHogar" id="valIngresoHogar" value="{$objFormulario->valIngresoHogar}">
+                                    {/if}
+
                                 </tr>
                             </table>	
 
@@ -826,10 +715,10 @@
                                         $ <input type="text" 
                                                  name="valArriendo" 
                                                  id="valArriendo" 
-                                                 value="{$objFormulario->valArriendo}" 
+                                                 value="{$objFormulario->valArriendo|number_format:0:'.':'.'}"
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';" 
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="formatoSeparadores(this)"
                                                  style="width:249px;" />
                                     </td>
                                 </tr>
@@ -842,7 +731,7 @@
                                         <input type="text" 
                                                name="fchArriendoDesde" 
                                                id="fchArriendoDesde" 
-                                               value="{if $objFormulario->fchArriendoDesde != '0000-00-00'}{$objFormulario->fchArriendoDesde}{/if}" 
+                                               value="{if esFechaValida($objFormulario->fchArriendoDesde)}{$objFormulario->fchArriendoDesde}{/if}"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                onBlur="this.style.backgroundColor = '#FFFFFF';" 
                                                style="width:80px;" 
@@ -971,17 +860,21 @@
                                     <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td>N° Hogares que hábitan la vivienda</td>
-                                    <td><input type="number" name="numHabitaciones" autofocus="" size="4" maxlength="3" min="0" step="1" style="width: 40px" value="{$objFormulario->numHabitaciones}"></td>
+                                    <td>N° Hogares en la vivienda</td>
+                                    <td><input type="number" name="numHabitaciones" autofocus="" size="4" maxlength="2"
+                                               min="0" step="1" style="width: 40px"
+                                               value="{$objFormulario->numHabitaciones}"></td>
                                     <td>Número Dormitorios</td>
-                                    <td><input type="number" name="numHacinamiento" autofocus="" size="4" maxlength="3" min="0" step="1" style="width: 40px" value="{$objFormulario->numHacinamiento}"></td>
+                                    <td><input type="number" name="numHacinamiento" autofocus="" size="4" maxlength="2"
+                                               min="0" step="1" style="width: 40px"
+                                               value="{$objFormulario->numHacinamiento}"></td>
                                 </tr>
 
                                 <!-- TELEFONO 1 TELEFONO 2 Y CELULAR -->
                                 <tr> 
                                     <td>Teléfonos</td>
                                     <td>
-                                        <input	type="text" 
+                                        <input type="text"
                                                name="numTelefono1" 
                                                id="numTelefono1" 
                                                value="{$objFormulario->numTelefono1}" 
@@ -991,7 +884,7 @@
                                                        this.style.backgroundColor = '#FFFFFF';" 
                                                style="width:122px;" 
                                                /> ó
-                                        <input	type="text" 
+                                        <input  type="text"
                                                name="numTelefono2" 
                                                id="numTelefono2" 
                                                value="{$objFormulario->numTelefono2}" 
@@ -1063,30 +956,11 @@
                                                 id="bolDesplazado" 
                                                 style="width:260px;"
                                                 >
-                                            <option value="0" {if $victima != 'OK' } selected {/if} disabled>No</option>
-                                            <option value="1" {if $victima == 'OK'} selected {/if} disabled>Si</option>
+                                            <option value="0" {if $numVictima != 1} selected {/if} disabled>No</option>
+                                            <option value="1" {if $numVictima == 1} selected {/if} disabled>Si</option>
                                         </select>
                                     </td>		
                                 </tr>
-                                <!-- <tr>
-                                    <td>Acta de Voluntariedad.<br>Retorno/Reubicación?</td>
-                                    <td>
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                name="bolAltaCon" 
-                                                id="bolAltaCon" 
-                                                style="width:260px;"
-                                                >
-                                            {if $victima == 'OK'}
-                                                <option value="0" selected>No</option>
-                                                <option value="1" >Si</option>
-                                            {else}
-                                                <option value="0"  selected  >No</option>
-                                                <option value="1"  disabled>Si</option>
-                                            {/if}
-                                        </select>
-                                    </td>
-                                </tr> -->
                             </table></p>
 
                             <!-- TABLA RED DE SERVICIOS -->
@@ -1133,74 +1007,51 @@
                                     </td>
                                 </tr>
                             </table></p>
-                            </p></div>
+                            </p>
+                        </div>
 
                         <!-- MODALIDAD Y VIVIENDA -->				        
                         <div id="modalidad" style="height:410px;"><p>
                             <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666;">
 
-                                <!-- PLAN DE GOBIERNO -->
-                                {if $objFormulario->seqEtapa >= 4} 
-                                    <input type="hidden" name="seqPlanGobierno" id="seqPlanGobierno" value="{$objFormulario->seqPlanGobierno}">
-                                {elseif $objFormulario->seqPlanGobierno == 2}                                    
-                                    <input type="hidden" name="seqPlanGobierno" id="seqPlanGobierno" value="2">
-                                {elseif $objFormulario->seqPlanGobierno == 3}
-                                    <input type="hidden" name="seqPlanGobierno" id="seqPlanGobierno" value="{$objFormulario->seqPlanGobierno}"> 
-                                {/if}
-
-
                                 <!-- MODALIDAD DEL SUBSIDIO y TIPO DE SOLUCION -->
                                 <tr>
-                                    <td>Modalidad Solución</td>
-                                    <td width="260px">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                name="seqModalidad" 
-                                                id="seqModalidad" 
-                                                style="width:260px;"
-                                                onChange="obtenerTipoSolucion(this)"
-                                                >
+                                    <td width="150px">Modalidad Solución</td>
+                                    <td>
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="seqModalidad"
+                                                id="seqModalidad"
+                                                style="width:100%;"
+                                                onChange="datosPestanaPostulacion('actualizacion');"
+                                        >
                                             <option value="0">Seleccione</option>
-                                            {foreach from=$arrModalidad key=seqModalidad item=arrDatos}
+                                            {foreach from=$arrModalidad key=seqModalidad item=txtModalidad}
                                                 <option value="{$seqModalidad}"
-                                                        {if $objFormulario->seqModalidad == $seqModalidad} 
-                                                            selected 
-                                                            {assign var=modalidad value=$arrDatos.txtModalidad}
-                                                        {/if}
-                                                        {if $arrDatos.seqPlanGobierno == 1 }
-                                                            disabled
-                                                        {/if}
-                                                        {if $arrDatos.seqPlanGobierno == 2 and $objFormulario->seqPlanGobierno == 3 }
-                                                            disabled
-                                                        {/if}
-                                                        {if $arrDatos.seqPlanGobierno == 3 and $objFormulario->seqPlanGobierno == 2 }
-                                                            disabled
-                                                        {/if}
-                                                        >
-                                                    {$arrDatos.txtModalidad}                       
+                                                        {if $objFormulario->seqModalidad == $seqModalidad} selected {/if}
+                                                >
+                                                    {$txtModalidad}
                                                 </option>
                                             {/foreach}
                                         </select>
-                                        <input type='hidden' id='seqPlanGobierno' name='seqPlanGobierno' value='{$objFormulario->seqPlanGobierno}'>
                                     </td>
-                                    <td width="90px">Tipo Solución</td>
+                                    <td width="100px">Tipo Solución</td>
                                     <td id="tdTipoSolucion" align="left">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                onChange="asignarValorSubsidio(this, 'bolDesplazado');"
-                                                name="seqSolucion" 
-                                                id="seqSolucion" 
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="seqSolucion"
+                                                id="seqSolucion"
                                                 style="width:100%;"
-                                                >
+                                        >
                                             <option value="1">NINGUNA</option>
-                                            {if intval( $objFormulario->seqModalidad ) != 0}                           
+                                            {if intval( $objFormulario->seqModalidad ) != 0}
                                                 {foreach from=$arrSolucion key=seqSolucion item=arrDatos}
                                                     {if $objFormulario->seqModalidad == $arrDatos.seqModalidad}
                                                         <option value="{$seqSolucion}"
-                                                                {if $objFormulario->seqSolucion == $seqSolucion} 
-                                                                    selected 
+                                                                {if $objFormulario->seqSolucion == $seqSolucion}
+                                                                    selected
                                                                 {/if}
-                                                                >
+                                                        >
                                                             {$arrDatos.txtSolucion}
                                                         </option>
                                                     {/if}
@@ -1210,98 +1061,25 @@
                                     </td>
                                 </tr>
 
-                                <!-- PROYECTO -->
+                                <!-- TIPO ESQUEMA -->
                                 <tr>
-                                    <td>Proyecto</td>
-                                    <td id="tdProyecto" colspan="3" align="left">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                onChange="obtenerDatosProyecto(this, {$objFormulario->seqPlanGobierno});"
-                                                name="seqProyecto" 
-                                                id="seqProyecto" 
-                                                style="width:100%"
-                                                >
-                                            <optgroup label="Bogota Humana">
-                                                <option value='0'>Ninguno</option>
-                                                {foreach from=$arrProyecto key=seqProyecto item=txtProyecto}
-                                                    <option value="{$seqProyecto}"
-                                                            {if $objFormulario->seqProyecto == $seqProyecto} 
-                                                                selected 
-                                                            {/if}
-                                                            >{$txtProyecto}</option>
-                                                {/foreach}
-                                            </optgroup>
-                                        </select>
-                                        <input type="hidden" name="seqProyectoHijo" id="seqProyectoHijo" value ="{$objFormulario->seqProyectoHijo}">
-                                        <input type="hidden" name="seqUnidadProyecto" id="seqUnidadProyecto" value ="{$objFormulario->seqUnidadProyecto}">
-                                        <input type="hidden" name="seqTipoFinanciacion" id="seqTipoFinanciacion" value ="{$objFormulario->seqTipoFinanciacion}">
-                                    </td>
-                                </tr>
-                                <!-- UNIDAD RESIDENCIAL :: Jaison Ospina :: 13-01-2016 -->
-                                {if $nombreConjunto != ''}
-                                    <tr>
-                                        <td>Conjunto Residencial</td>
-                                        <td colspan="3" align="left">{$nombreConjunto}</td>
-                                    </tr>
-                                {/if}
-                                <!-- UNIDAD RESIDENCIAL :: Jaison Ospina :: 13-01-2016 -->
-                                {if $nombreUnidad != ''}
-                                    <tr>
-                                        <td>Unidad Residencial</td>
-                                        <td colspan="3" align="left">{$nombreUnidad}</td>
-                                    </tr>
-                                {/if}
-                                <!-- DIRECCION SOLUCION-->                             
-                                <tr>
-                                    <td>
-                                        {if $objFormulario->seqTipoEsquema == 1 }
-                                            <div id="divEsqDefault">Dirección Solución</div>
-                                        {else}
-                                            <div id="divEsqDefault"><a href="#" id="DireccionSolucion" onClick="recogerDireccion('txtDireccionSolucion', 'objDireccionOcultoSolucion')">Dirección Solución</a></div>
-                                        {/if}
-                                        <div id="divEsqIndiv" style="display:none">Dirección Solución</div>
-                                        <div id="divEsqOtros" style="display:none"><a href="#" id="DireccionSolucion" onClick="recogerDireccion('txtDireccionSolucion', 'objDireccionOcultoSolucion')">Dirección Solución</a></div>
-                                    </td>
+                                    <td>Tipo Esquema</td>
                                     <td colspan="3" align="left">
-                                        <input type="text" 
-                                               name="txtDireccionSolucion" 
-                                               id="txtDireccionSolucion" 
-                                               value="{$objFormulario->txtDireccionSolucion}" 
-                                               style="width:100%;"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                               readonly
-                                               />
-                                    </td>
-                                </tr>
-
-                                <!-- NUMERO DE MATRICULA INMOBILIARIA Y CHIP -->
-                                <tr>
-                                    <td>Matricula Inmobiliaria</td>
-                                    <td>
-                                        <input type="text" 
-                                               name="txtMatriculaInmobiliaria" 
-                                               id="txtMatriculaInmobiliaria" 
-                                               value="{$objFormulario->txtMatriculaInmobiliaria}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';" 
-                                               style="width:260px;"
-
-                                               />
-                                    </td>
-                                    <td>CHIP</td>
-                                    <td>
-                                        <input type="text" 
-                                               name="txtChip" 
-                                               id="txtChip" 
-                                               value="{$objFormulario->txtChip}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';" 
-                                               style="width:100%;"
-
-                                               />
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="seqTipoEsquema"
+                                                id="seqTipoEsquema"
+                                                style="width:100%"
+                                        >
+                                            <option value="0" selected>NINGUNO</option>
+                                            {foreach from=$arrTipoEsquemas key=seqTipoEsquema item=txtTipoEsquema}
+                                                <option value="{$seqTipoEsquema}"
+                                                        {if $objFormulario->seqTipoEsquema == $seqTipoEsquema} selected {/if}
+                                                >
+                                                    {$txtTipoEsquema}
+                                                </option>
+                                            {/foreach}
+                                        </select>
                                     </td>
                                 </tr>
                             </table>
@@ -1359,63 +1137,8 @@
                                     <td>&nbsp;</td>
                                 </tr>
                             </table>
-                            <br>
-
-                            {if trim( $txtArchivoCEM ) == ""}
-                                <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666">
-                                    <tr>	
-                                        <!-- VALOR DEL PRESUPUESTO -->
-                                        <td width="120px">Presupuesto</td>
-                                        <td width="120px">
-                                            $ <input	type="text" 
-                                                     name="valPresupuesto" 
-                                                     id="valPresupuesto" 
-                                                     value="{$objFormulario->valPresupuesto|number_format:0:'.':'.'}" 
-                                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                     onBlur="soloNumeros(this);
-                                                             this.style.backgroundColor = '#FFFFFF';
-                                                             sumarTotal();" 
-                                                     onKeyUp="formatoSeparadores(this)"
-                                                     onChange="formatoSeparadores(this)"
-                                                     style="width:100px;"
-                                                     />
-                                        </td>
-
-                                        <!-- VALOR DEL AVALUO  -->
-                                        <td>Aval&uacute;o</td>
-                                        <td  width="120px">
-                                            $ <input type="text" 
-                                                     name="valAvaluo" 
-                                                     id="valAvaluo" 
-                                                     value="{$objFormulario->valAvaluo|number_format:0:'.':'.'}" 
-                                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                     onBlur="soloNumeros(this);
-                                                             this.style.backgroundColor = '#FFFFFF';
-                                                             sumarTotal();" 
-                                                     onKeyUp="formatoSeparadores(this)"
-                                                     onChange="formatoSeparadores(this)"
-                                                     style="width:100px;"
-                                                     />
-                                        </td>
-
-                                        <!-- VALOR TOTAL  -->
-                                        <td>Total</td>
-                                        <td  width="134px">
-                                            $ <input	type="text" 
-                                                     name="valTotal" 
-                                                     id="valTotal" 
-                                                     value="{$objFormulario->valTotal}" 
-                                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                     onBlur="soloNumeros(this);
-                                                             this.style.backgroundColor = '#FFFFFF';" 
-                                                     style="width:90%;"
-                                                     readonly
-                                                     />
-                                        </td>
-                                    </tr>
-                                </table>
-                            {/if}
-                            </p></div>
+                            </p>
+                        </div>
 
                         <!-- INFORMACION FINANCIERA -->				       
                         <div id="financiera" style="height:407px;"><p>
@@ -1424,16 +1147,13 @@
                                     <!-- TIENE AHORRO -->
                                     <td>Ahorro 1</td>
                                     <td align="right" style="padding-right: 5px;">
-                                        $ <input	type="text" 
+                                        $ <input type="text"
                                                  name="valSaldoCuentaAhorro" 
                                                  id="valSaldoCuentaAhorro" 
                                                  value="{$objFormulario->valSaldoCuentaAhorro|number_format:'0':'.':'.'}" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();"
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
                                                  style="width:100px; text-align:right;" 
                                                  />
                                     </td>
@@ -1483,11 +1203,6 @@
                                 </tr>
                                 <tr>
                                     <!-- FECHA APERTURA CUENTA AHORRO -->
-                                    {if $objFormulario->fchAperturaCuentaAhorro == '0000-00-00'}
-                                        {assign var=fchAperturaCuentaAhorro value=""}
-                                    {else}
-                                        {assign var=fchAperturaCuentaAhorro value=$objFormulario->fchAperturaCuentaAhorro}
-                                    {/if}
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>Fecha Apertura</td>
@@ -1495,7 +1210,7 @@
                                         <input type="text" 
                                                name="fchAperturaCuentaAhorro" 
                                                id="fchAperturaCuentaAhorro" 
-                                               value="{$fchAperturaCuentaAhorro}" 
+                                               value="{$objFormulario->fchAperturaCuentaAhorro}"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                onBlur="sinCaracteresEspeciales(this);
                                                        this.style.backgroundColor = '#FFFFFF';"  
@@ -1511,16 +1226,13 @@
                                     <!-- TIENE OTRO AHORRO -->
                                     <td>Ahorro 2</td>
                                     <td align="right" style="padding-right: 5px;">
-                                        $ <input	type="text" 
+                                        $ <input type="text"
                                                  name="valSaldoCuentaAhorro2" 
                                                  id="valSaldoCuentaAhorro2" 
                                                  value="{$objFormulario->valSaldoCuentaAhorro2|number_format:'0':'.':'.'}" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();" 
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
                                                  style="width:100px; text-align:right;" 
                                                  />
                                     </td>
@@ -1568,14 +1280,8 @@
                                                />
                                     </td>
                                 </tr>
-                                {assign var=totalAhorro value = $objFormulario->valSaldoCuentaAhorro+$objFormulario->valSaldoCuentaAhorro2}
                                 <tr>
                                     <!-- FECHA APERTURA CUENTA AHORRO -->
-                                    {if $objFormulario->fchAperturaCuentaAhorro2 == '0000-00-00'}
-                                        {assign var=fchAperturaCuentaAhorro2 value=""}
-                                    {else}
-                                        {assign var=fchAperturaCuentaAhorro2 value=$objFormulario->fchAperturaCuentaAhorro2}
-                                    {/if}
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>Fecha Apertura</td>
@@ -1583,7 +1289,7 @@
                                         <input	type="text" 
                                                name="fchAperturaCuentaAhorro2" 
                                                id="fchAperturaCuentaAhorro2" 
-                                               value="{$fchAperturaCuentaAhorro2}" 
+                                               value="{$objFormulario->fchAperturaCuentaAhorro2}"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                onBlur="sinCaracteresEspeciales(this);
                                                        this.style.backgroundColor = '#FFFFFF';"  
@@ -1596,19 +1302,117 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <!-- SUBSIDIO NACIONAL -->
-                                    <td>Valor Subsidio: AVC / FOVIS / SFV</td>
+                                    <!-- CESANTIAS -->
+                                    <td>Cesant&iacute;as</td>
                                     <td align="right" style="padding-right: 5px;">
-                                        $ <input	type="text" 
+                                        $ <input	type="text"
+                                                    name="valSaldoCesantias"
+                                                    id="valSaldoCesantias"
+                                                    value="{$objFormulario->valSaldoCesantias|number_format:'0':'.':'.'}"
+                                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                    onKeyUp="sumarTotalRecursos();"
+                                                    style="width:100px;text-align:right;"
+                                        />
+                                    </td>
+
+                                    <!-- SOPORTE CESANTIAS -->
+                                    <td>Soporte</td>
+                                    <td align="center">
+                                        <input type="text"
+                                               name="txtSoporteCesantias"
+                                               id="txtSoporteCesantias"
+                                               value="{$objFormulario->txtSoporteCesantias}"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="sinCaracteresEspeciales(this);
+                                                       this.style.backgroundColor = '#FFFFFF';"
+                                               style="width:300px;"
+                                        />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <!-- TIENE CREDITO -->
+                                    <td>Cr&eacute;dito</td>
+                                    <td align="right" style="padding-right: 5px;">
+                                        $ <input type="text"
+                                                 name="valCredito"
+                                                 id="valCredito"
+                                                 value="{$objFormulario->valCredito|number_format:'0':'.':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
+                                                 style="width:100px;text-align:right;"
+                                        />
+                                    </td>
+
+                                    <!-- BANCO DONDE TIENE EL CREDITO -->
+                                    <td>Entidad</td>
+                                    <td align="center">
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="seqBancoCredito"
+                                                id="seqBancoCredito"
+                                                style="width:300px;"
+                                        >
+                                            <option value="1">Sin Credito</option>
+                                            {foreach from=$arrBanco key=seqBanco item=txtBanco}
+                                                <option value="{$seqBanco}"
+                                                        {if $objFormulario->seqBancoCredito == $seqBanco} selected {/if}
+                                                >{$txtBanco}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <!-- SOPORTE CREDITO -->
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>Soporte</td>
+                                    <td align="center">
+                                        <input type="text"
+                                               name="txtSoporteCredito"
+                                               id="txtSoporteCredito"
+                                               value="{$objFormulario->txtSoporteCredito}"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="sinCaracteresEspeciales(this);
+                                                       this.style.backgroundColor = '#FFFFFF';"
+                                               style="width:300px;"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <!-- FECHA APROBACION CREDITO -->
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>Fecha Vencimiento</td>
+                                    <td style="padding-left:11px;">
+                                        <input type="text"
+                                               name="fchAprobacionCredito"
+                                               id="fchAprobacionCredito"
+                                               value="{$objFormulario->fchAprobacionCredito}"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="sinCaracteresEspeciales(this);
+                                                       this.style.backgroundColor = '#FFFFFF';"
+                                               style="width:100px;"
+                                               maxlength="10"
+                                               readonly
+                                        />
+                                        <a onClick="calendarioPopUp('fchAprobacionCredito')" href="#">Calendario</a>&nbsp;&nbsp;
+                                        <a onClick="document.getElementById('fchAprobacionCredito').value = '';" href="#">Limpiar</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <!-- SUBSIDIO NACIONAL -->
+                                    <td>Valor Aporte: AVC / FOVIS / SFV</td>
+                                    <td align="right" style="padding-right: 5px;">
+                                        $ <input type="text"
                                                  name="valSubsidioNacional" 
                                                  id="valSubsidioNacional" 
                                                  value="{$objFormulario->valSubsidioNacional|number_format:'0':'.':'.'}" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();"  
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
                                                  style="width:100px;text-align:right;" 
                                                  />
                                     </td>
@@ -1642,248 +1446,37 @@
                                                />
                                     </td>
                                 </tr>
-                                <tr>
-                                    <!-- APORTE LOTE -->
-                                    <td>Acuerdo Pago / Lote / Terreno</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input	type="text" 
-                                                 name="valAporteLote" 
-                                                 id="valAporteLote" 
-                                                 value="{$objFormulario->valAporteLote|number_format:'0':'.':'.'}" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();"  
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
-                                                 style="width:100px;text-align:right;" 
-                                                 />
-                                    </td>
 
-                                    <!-- SOPORTE APORTE LOTE -->
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text" 
-                                               name="txtSoporteLote" 
-                                               id="txtSoporteLote" 
-                                               value="{$objFormulario->txtSoporteAporteLote}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"  
-                                               style="width:300px;" 
-                                               />
-                                    </td>
-                                </tr>	
-                                <tr>
-                                    <!-- CESANTIAS -->
-                                    <td>Cesant&iacute;as</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input	type="text" 
-                                                 name="valSaldoCesantias" 
-                                                 id="valSaldoCesantias" 
-                                                 value="{$objFormulario->valSaldoCesantias|number_format:'0':'.':'.'}" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();"  
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
-                                                 style="width:100px;text-align:right;" 
-                                                 />
-                                    </td>
-
-                                    <!-- SOPORTE CESANTIAS -->
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text" 
-                                               name="txtSoporteCesantias" 
-                                               id="txtSoporteCesantias" 
-                                               value="{$objFormulario->txtSoporteCesantias}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"  
-                                               style="width:300px;" 
-                                               />
-                                    </td>
-                                </tr>	
-                                <tr>
-                                    <!-- APORTE AVANCE DE OBRA -->
-                                    <td>Aporte Avance de Obra</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input	type="text" 
-                                                 name="valAporteAvanceObra" 
-                                                 id="valAporteAvanceObra" 
-                                                 value="{$objFormulario->valAporteAvanceObra|number_format:'0':'.':'.'}" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();"  
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
-                                                 style="width:100px;text-align:right;" 
-                                                 />
-                                    </td>
-
-                                    <!-- SOPORTE AVANCE OBRA -->
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text" 
-                                               name="txtSoporteAvanceObra" 
-                                               id="txtSoporteAvanceObra" 
-                                               value="{$objFormulario->txtSoporteAvanceObra}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"  
-                                               style="width:300px;" 
-                                               />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- TIENE CREDITO -->
-                                    <td>Cr&eacute;dito</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input type="text" 
-                                                 name="valCredito" 
-                                                 id="valCredito" 
-                                                 value="{$objFormulario->valCredito|number_format:'0':'.':'.'}" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();"  
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
-                                                 style="width:100px;text-align:right;" 
-                                                 />
-                                    </td>
-
-                                    <!-- BANCO DONDE TIENE EL CREDITO -->
-                                    <td>Entidad</td>
-                                    <td align="center">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="soloNumeros(this);
-                                                        this.style.backgroundColor = '#FFFFFF';"  
-                                                name="seqBancoCredito" 
-                                                id="seqBancoCredito" 
-                                                style="width:300px;"
-                                                >
-                                            <option value="1">Sin Credito</option>
-                                            {foreach from=$arrBanco key=seqBanco item=txtBanco}
-                                                <option value="{$seqBanco}"
-                                                        {if $objFormulario->seqBancoCredito == $seqBanco} selected {/if}
-                                                        >{$txtBanco}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- SOPORTE CREDITO -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text" 
-                                               name="txtSoporteCredito" 
-                                               id="txtSoporteCredito" 
-                                               value="{$objFormulario->txtSoporteCredito}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"  
-                                               style="width:300px;" 
-                                               /> 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- FECHA APROBACION CREDITO -->
-                                    {if $objFormulario->fchAprobacionCredito == '0000-00-00'}
-                                        {assign var=fchAprobacionCredito value=""}
-                                    {else}
-                                        {assign var=fchAprobacionCredito value=$objFormulario->fchAprobacionCredito}
-                                    {/if}
-
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Fecha Vencimiento</td>
-                                    <td style="padding-left:11px;">
-                                        <input type="text" 
-                                               name="fchAprobacionCredito" 
-                                               id="fchAprobacionCredito" 
-                                               value="{$fchAprobacionCredito}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"  
-                                               style="width:100px;"
-                                               maxlength="10" 
-                                               readonly
-                                               /> 
-                                        <a onClick="calendarioPopUp('fchAprobacionCredito')" href="#">Calendario</a>&nbsp;&nbsp;
-                                        <a onClick="document.getElementById('fchAprobacionCredito').value = '';" href="#">Limpiar</a>
-                                    </td>
-                                </tr>				
-                                <tr>
-                                    <!-- APORTE AVANCE DE OBRA -->
-                                    <td>Aporte Materiales</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input	type="text" 
-                                                 name="valAporteMateriales" 
-                                                 id="valAporteMateriales" 
-                                                 value="{$objFormulario->valAporteMateriales|number_format:'0':'.':'.'}" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();"  
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
-                                                 style="width:100px;text-align:right;" 
-                                                 />
-                                    </td>
-
-                                    <!-- SOPORTE AVANCE OBRA -->
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text" 
-                                               name="txtSoporteAporteMateriales" 
-                                               id="txtSoporteAporteMateriales" 
-                                               value="{$objFormulario->txtSoporteAporteMateriales}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"  
-                                               style="width:300px;" 
-                                               />
-                                    </td>
-                                </tr>
                                 <tr>
                                     <!-- TIENE DONACIONES -->
                                     <td>Donaci&oacute;n / Rec. Económico</td>
                                     <td align="right" style="padding-right: 5px;">
-                                        $ <input type="text" 
-                                                 name="valDonacion" 
-                                                 id="valDonacion" 
-                                                 value="{$objFormulario->valDonacion|number_format:'0':'.':'.'}" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();"  
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
-                                                 style="width:100px;text-align:right;" 
-                                                 />
+                                        $ <input type="text"
+                                                 name="valDonacion"
+                                                 id="valDonacion"
+                                                 value="{$objFormulario->valDonacion|number_format:'0':'.':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
+                                                 style="width:100px;text-align:right;"
+                                        />
                                     </td>
 
                                     <!-- DE DONDE PROVIENE LA DONACION -->
                                     <td>Entidad Donante</td>
                                     <td style="padding-left: 10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="soloNumeros(this);
-                                                        this.style.backgroundColor = '#FFFFFF';"  
-                                                name="seqEmpresaDonante" 
-                                                id="seqEmpresaDonante" 
-                                                style="width:300px;"
-                                                >
+                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                   onBlur="soloNumeros(this);
+                                                        this.style.backgroundColor = '#FFFFFF';"
+                                                   name="seqEmpresaDonante"
+                                                   id="seqEmpresaDonante"
+                                                   style="width:300px;"
+                                        >
                                             <option value="1">Ninguna</option>
                                             {foreach from=$arrDonantes key=seqEmpresaDonante item=txtEmpresaDonante}
                                                 <option value="{$seqEmpresaDonante}"
                                                         {if $objFormulario->seqEmpresaDonante == $seqEmpresaDonante} selected {/if}
-                                                        >{$txtEmpresaDonante}</option>
+                                                >{$txtEmpresaDonante}</option>
                                             {/foreach}
                                         </select>
                                     </td>
@@ -1894,74 +1487,66 @@
                                     <td>&nbsp;</td>
                                     <td>Soporte</td>
                                     <td align="center">
-                                        <input type="text" 
-                                               name="txtSoporteDonacion" 
-                                               id="txtSoporteDonacion" 
-                                               value="{$objFormulario->txtSoporteDonacion}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                                        <input type="text"
+                                               name="txtSoporteDonacion"
+                                               id="txtSoporteDonacion"
+                                               value="{$objFormulario->txtSoporteDonacion}"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"  
-                                               style="width:300px;" 
-                                               /> 
+                                                       this.style.backgroundColor = '#FFFFFF';"
+                                               style="width:300px;"
+                                        />
                                     </td>
                                 </tr>
-                                <tr bgcolor="#E0E0E0">
+                                <tr id="trNoLeasing1" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                    <!-- SUMA DE RECURSOS PROPIOS -->
+                                    <td class="tituloTabla" style="padding-top:5px;">Recursos propios</td>
+                                    <td align="right" style="padding-top:5px; padding-right:5px">
+                                        $ <input type="text"
+                                                 id="valSumaRecursosPropios"
+                                                 value="{$valSumaRecursosPropios|number_format:'0':',':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                 readonly
+                                        >
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr id="trNoLeasing2" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                    <!-- SUMA DE SUBSIDIOS -->
+                                    <td class="tituloTabla" style="padding-top:5px;">Valor Subsidios + (Donacion y/o VUR)</td>
+                                    <td align="right" style="padding-top:5px; padding-right:5px">
+                                        $ <input type="text"
+                                                 id="valSumaSubsidios"
+                                                 value="{$valSumaSubsidios|number_format:'0':',':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                 readonly
+                                        >
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
 
+                                </tr>
+                                <tr id="trNoLeasing3" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
                                     <!-- TOTAL RECURSOS ECONOMICOS -->
-                                    <td class="tituloTabla">Total Recursos</td>
-                                    <td id="totalRecursosMostrar" align="right" style="padding-right:10px">
-                                        <b>$ {$objFormulario->valTotalRecursos|number_format:'0':'.':','}</b>
+                                    <td class="tituloTabla" style="padding-top:5px;">Total recursos del hogar</td>
+                                    <td align="right" style="padding-top:5px; padding-right:5px">
+                                        $ <input type="text"
+                                                 name="valTotalRecursos"
+                                                 id="valTotalRecursos"
+                                                 value="{$objFormulario->valTotalRecursos|number_format:'0':',':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                 readonly
+                                        >
                                     </td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
-                                <input type="hidden" name="valTotalRecursos" id="valTotalRecursos" value="{$objFormulario->valTotalRecursos}">
-                                </tr>
-
-                                <tr bgcolor="#E0E0E0">
-
-                                    {assign var=seqModalidad value=$objFormulario->seqModalidad}
-                                    {assign var=seqSolucion value=$objFormulario->seqSolucion}
-
-                                    {if $objFormulario->valAspiraSubsidio == 0 || $objFormulario->valAspiraSubsidio == ""}
-                                        {assign var=valSubsidio value=$arrValorSubsidio.$seqModalidad.$seqSolucion}
-                                        {if $valSubsidio == ""}
-                                            {assign var=valSubsidio value=0}
-                                        {/if}
-                                    {else}
-                                        {assign var=valSubsidio value=$objFormulario->valAspiraSubsidio}
-                                    {/if}
-
-                                    <!-- VALOR AL QUE ASPIRA DEL SUBSIDIO -->
-                                    <td class="tituloTabla" height="25px" align="top">Subsidio/Aporte estimado</td>
-                                    <td align="right" style="padding-right:10px" id="tdValSubsidio"  height="25px" align="top">
-                                        $ <input	type="text" 
-                                                 name="valAspiraSubsidio"
-                                                 id="valAspiraSubsidio" 
-                                                 value="0" 
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                 onBlur="soloNumeros(this);
-                                                         this.style.backgroundColor = '#FFFFFF';
-                                                         sumarTotalRecursos();"  
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 onChange="formatoSeparadores(this)"
-                                                 style="width:100px; text-align:right;"
-                                                 {if $objFormulario->seqTipoEsquema == 1}
-                                                     readonly
-                                                 {/if}
-                                                 />
-                                    </td>
-                                    <td class="tituloTabla"  height="25px" align="top"> Soporte Cambios</td>
-                                    <td style="padding-left: 10px;"  height="25px" align="top">
-                                        <input	type="text" 
-                                               name="txtSoporteSubsidio" 
-                                               id="txtSoporteSubsidio" 
-                                               value="{$objFormulario->txtSoporteSubsidio}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"  
-                                               style="width:300px;" 
-                                               />
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td colspan="4" align="right">
@@ -1971,7 +1556,6 @@
                             </table>
                             </p></div>
                             {include file="subsidios/simulador.tpl"}                  
-
                     </div>
                 </div>
             </div>
@@ -1994,17 +1578,10 @@
         </div>
     </div>
 
-    <input type="hidden" id="seqTipoEsquema" name="seqTipoEsquema" value="{$objFormulario->seqTipoEsquema}" />
     <input type="hidden" id="seqFormulario" name="seqFormulario" value="{$seqFormulario}">
     <input type="hidden" name="txtArchivo" value="./contenidos/subsidios/salvarActualizacion.php">
-    <input type="hidden" name="numDocumento" value="{$numDocumento}">
-    <input type="hidden" id="bolAltaCon" name="bolAltaCon" value="{$claFormulario->bolAltaCon}">
-
-    {if isset( $txtArchivoCEM ) && trim( $txtArchivoCEM ) != ""}
-        <input type="hidden" name="seqCasaMano" value="{$seqCasaMano}">
-        <input type="hidden" name="txtFase" value="{$arrFlujoHogar.fase}">
-        <input type="hidden" name="txtFlujo" value="{$arrFlujoHogar.flujo}">
-    {/if}
+    <input type="hidden" name="numDocumento" value="{$arrPost.cedula}">
+    <input type="hidden" id="valAspiraSubsidio" value="{$objFormulario->valAspiraSubsidio}">
 
 </form>
 

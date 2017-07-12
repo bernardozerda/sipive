@@ -28,6 +28,12 @@ foreach( $_POST as $txtCampo => $txtValor ){
 
 // Nombre y cedula de quien fue atendido
 $txtNombreAtendido = Ciudadano::obtenerNombre($_POST['numDocumento']);
+if( $txtNombreAtendido == "" ){
+    $txtNombreAtendido  = trim($_POST['txtNombre1']) . " ";
+    $txtNombreAtendido .= ( trim( $_POST['txtNombre2'] == "" ) )? "" : trim( $_POST['txtNombre2'] ) . " ";
+    $txtNombreAtendido .= trim($_POST['txtApellido1']) . " ";
+    $txtNombreAtendido .= ( trim( $_POST['txtApellido2'] == "" ) )? "" : trim( $_POST['txtApellido2'] ) . " ";
+}
 $numDocumentoAtendido = $_POST['numDocumento'];
 
 /************************************************************************************************************
@@ -69,6 +75,7 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
  * MOSTRAR EL CUADRO DE CONFIRMACION DE DATOS
  * ********************************************************************************************************** */
 
+//echo $txtCambios;
 //var_dump($bolConfirmacion); die();
 
 if ($bolConfirmacion == true) {

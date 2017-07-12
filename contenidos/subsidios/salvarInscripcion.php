@@ -83,6 +83,48 @@
     // fecha de nacimiento
     if( ! esFechaValida( $_POST['fchNacimiento'] ) ){
         $arrErrores[] = "Seleccione una fecha de nacimiento válida";
+    }else{
+
+        // validaciones relacionadas con la fecha de nacimiento
+        $numEdad = strtotime($_POST['fchNacimiento']);
+
+        // se compara si es mayor de edad al momento de la actualizacion
+        if (($numEdad <= $numMayorEdad) and in_array($_POST['seqTipoDocumento'], $arrDocumentosMenorEdad)) {
+            $arrErrores[] = "Tipo de documento errado para " .
+                $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
+                $_POST['txtApellido1'] . " " . $_POST['txtApellido2'] .
+                " porque según su fecha de nacimiento es mayor de edad";
+        }
+
+        // se compara si es menor de edad al momento de la actualizacion
+        if (($numEdad > $numMayorEdad) and in_array($_POST['seqTipoDocumento'], $arrDocumentosMayorEdad)) {
+            $arrErrores[] = "Tipo de documento errado para " .
+                $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
+                $_POST['txtApellido1'] . " " . $_POST['txtApellido2'] .
+                " porque segun su fecha de nacimiento es menor de edad";
+        }
+
+        // se compara si es menor de 65 años y tenga condicion especial mayor 65 anos
+        if (($numEdad > $numTerceraEdad) and ($_POST["seqCondicionEspecial"] == $numCondicionEspecialMayor65 or
+                $_POST["seqCondicionEspecial2"] == $numCondicionEspecialMayor65 or
+                $_POST["seqCondicionEspecial3"] == $numCondicionEspecialMayor65)
+        ) {
+            $arrErrores[] = "Condicion especial errada para " .
+                $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
+                $_POST['txtApellido1'] . " " . $_POST['txtApellido2'] .
+                " porque segun su fecha de nacimiento tiene menos de 65 años y se le esta asignando la condicion especial de Mayor de 65 Años";
+        }
+
+        // se compara si es tercera edad al momento de la actualizacion
+        if (($numEdad <= $numTerceraEdad) and ($_POST['seqCondicionEspecial'] != $numCondicionEspecialMayor65 and
+                $_POST['seqCondicionEspecial2'] != $numCondicionEspecialMayor65 and
+                $_POST['seqCondicionEspecial3'] != $numCondicionEspecialMayor65)
+        ) {
+            $arrErrores[] = "Debe tener condicion especial de Mayor de 65 años para el ciudadano " .
+                $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
+                $_POST['txtApellido1'] . " " . $_POST['txtApellido2'];
+        }
+
     }
 
     // Nivel Educativo y años aprobados
@@ -114,11 +156,6 @@
     // Direccion
     if ($_POST['txtDireccion'] == "") {
         $arrErrores[] = "Debe dar una dirección para el hogar";
-    }
-
-    // Ciudad
-    if (intval($_POST['seqCiudad']) == 0) {
-        $arrErrores[] = "Debe seleccionar una ciudad";
     }
 
     // ciudad y validaciones relacionadas
@@ -157,7 +194,7 @@
     // Telefono Fijo 2
     if( is_numeric( $_POST['numTelefono2'] ) == true and intval( $_POST['numTelefono2'] ) != 0 ){
         if ( ! ( preg_match( $txtFormatoFijo , trim( $_POST['numTelefono2'] ) ) || preg_match( $txtFormatoCelular , trim( $_POST['numTelefono2'] ) ) ) ) {
-            $arrErrores[] = "El número telefonico fijo 1 debe tener 7 o 10 digitos";
+            $arrErrores[] = "El número telefonico fijo 2 debe tener 7 o 10 digitos";
         }
     }
 
@@ -171,44 +208,6 @@
     // Solucion
     if (intval($_POST['seqSolucion']) == 1) {
         $arrErrores[] = "Debe seleccionar la solución que corresponda a la modalidad seleccionada";
-    }
-
-    // validaciones relacionadas con la fecha de nacimiento
-    $numEdad = strtotime($_POST['fchNacimiento']);
-
-    // se compara si es mayor de edad al momento de la actualizacion
-    if (( $numEdad <= $numMayorEdad ) and in_array($_POST['seqTipoDocumento'], $arrDocumentosMenorEdad)) {
-        $arrErrores[] = "Tipo de documento errado para " .
-            $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
-            $_POST['txtApellido1'] . " " . $_POST['txtApellido2'] .
-            " porque según su fecha de nacimiento es mayor de edad";
-    }
-
-    // se compara si es menor de edad al momento de la actualizacion
-    if (( $numEdad > $numMayorEdad ) and in_array($_POST['seqTipoDocumento'], $arrDocumentosMayorEdad)) {
-        $arrErrores[] = "Tipo de documento errado para " .
-            $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
-            $_POST['txtApellido1'] . " " . $_POST['txtApellido2'] .
-            " porque segun su fecha de nacimiento es menor de edad";
-    }
-
-    // se compara si es menor de 65 años y tenga condicion especial mayor 65 anos
-    if (( $numEdad > $numTerceraEdad ) and ( $_POST["seqCondicionEspecial"] == $numCondicionEspecialMayor65 or
-            $_POST["seqCondicionEspecial2"] == $numCondicionEspecialMayor65 or
-            $_POST["seqCondicionEspecial3"] == $numCondicionEspecialMayor65 )) {
-        $arrErrores[] = "Condicion especial errada para " .
-            $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
-            $_POST['txtApellido1'] . " " . $_POST['txtApellido2'] .
-            " porque segun su fecha de nacimiento tiene menos de 65 años y se le esta asignando la condicion especial de Mayor de 65 Años";
-    }
-
-    // se compara si es tercera edad al momento de la actualizacion
-    if (( $numEdad <= $numTerceraEdad ) and ( $_POST['seqCondicionEspecial'] != $numCondicionEspecialMayor65 and
-            $_POST['seqCondicionEspecial2'] != $numCondicionEspecialMayor65 and
-            $_POST['seqCondicionEspecial3'] != $numCondicionEspecialMayor65 )) {
-        $arrErrores[] = "Debe tener condicion especial de Mayor de 65 años para el ciudadano " .
-            $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
-            $_POST['txtApellido1'] . " " . $_POST['txtApellido2'];
     }
 
     /****************************************************************************************************************
@@ -281,6 +280,14 @@
             $claFormulario->seqEstadoProceso = $_POST['seqEstadoProceso'];
             $claFormulario->seqLocalidad = $_POST['seqLocalidad'];
             $claFormulario->seqModalidad = $_POST['seqModalidad'];
+
+            // para las modalidades de cierre financiero y leasing  el esquema
+            // se obliga a que sea proyecto de la sdht
+            // las otras modalidades quedan con valor neutro
+            if( $claFormulario->seqModalidad == 12 or $claFormulario->seqModalidad == 13 ){
+                $claFormulario->seqTipoEsquema = 9;
+            }
+
             $claFormulario->seqPlanGobierno = $_POST['seqPlanGobierno'];
             $claFormulario->seqPuntoAtencion = $_SESSION['seqPuntoAtencion'];
             $claFormulario->seqSolucion = $_POST['seqSolucion'];

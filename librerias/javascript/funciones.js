@@ -4021,7 +4021,7 @@ function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
         var bolAlerta = false;
         if( YAHOO.util.Dom.get('radTipoDireccion').checked ){
             if( YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0,1) == "-" ){
-                alert( "Parece que desea usar el campo de dirección rural en lugar de una urbana para esta dirección" );
+                alert( "Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'" );
                 bolAlerta = true;
             }else{
                 if(

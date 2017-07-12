@@ -422,18 +422,18 @@ if (empty($arrErrores)) {
     // Validaciones para el ahorro
     if (intval($_POST['valSaldoCuentaAhorro']) != 0) {
         if (intval($_POST['seqBancoCuentaAhorro']) == 1) {
-            $arrErrores[] = "Indique el banco de la cuenta de ahorro";
+            $arrErrores[] = "Indique el banco de la cuenta de ahorro 1";
         }
         if (trim($_POST['txtSoporteCuentaAhorro']) == "") {
-            $arrErrores[] = "Indique el soporte para la cuenta de ahorro";
+            $arrErrores[] = "Indique el soporte para la cuenta de ahorro 1";
         }
         if (!esFechaValida($_POST['fchAperturaCuentaAhorro'])) {
-            $arrErrores[] = "Indique la fecha de apertura de la cuenta de ahorro";
+            $arrErrores[] = "Indique la fecha de apertura de la cuenta de ahorro 1";
         }
     }else{
         if (($_POST['seqBancoCuentaAhorro'] != 1 ) || ( $_POST['txtSoporteCuentaAhorro'] != "" ) || ( $_POST['fchAperturaCuentaAhorro'] != "" )) {
             if ((intval($_POST['valSaldoCuentaAhorro']) == 0 ) || ( intval($_POST['valSaldoCuentaAhorro']) == "" )) {
-                $arrErrores[] = "Debe indicar un valor del ahorro";
+                $arrErrores[] = "Debe indicar un valor del ahorro 1";
             }
         }
     }
@@ -441,18 +441,18 @@ if (empty($arrErrores)) {
     // Validacion para la otra cuenta de ahorro
     if (intval($_POST['valSaldoCuentaAhorro2']) != 0) {
         if (intval($_POST['seqBancoCuentaAhorro2']) == 1) {
-            $arrErrores[] = "Indique el banco del campo otro ahorro";
+            $arrErrores[] = "Indique el banco del campo ahorro 2";
         }
         if (trim($_POST['txtSoporteCuentaAhorro2']) == "") {
-            $arrErrores[] = "Indique el soporte del campo otro ahorro";
+            $arrErrores[] = "Indique el soporte del campo ahorro 2";
         }
         if (!esFechaValida($_POST['fchAperturaCuentaAhorro2'])) {
-            $arrErrores[] = "Indique la fecha del campo otro ahorro";
+            $arrErrores[] = "Indique la fecha del campo ahorro 2";
         }
     }else{
         if (($_POST['seqBancoCuentaAhorro2'] != 1 ) || ( $_POST['txtSoporteCuentaAhorro2'] != "" ) || ( $_POST['fchAperturaCuentaAhorro2'] != "" )) {
             if ((intval($_POST['valSaldoCuentaAhorro2']) == 0 ) || ( intval($_POST['valSaldoCuentaAhorro2']) == "" )) {
-                $arrErrores[] = "Debe indicar un valor del otro ahorro";
+                $arrErrores[] = "Debe indicar un valor del ahorro 2";
             }
         }
     }
@@ -492,31 +492,31 @@ if (empty($arrErrores)) {
     // valor del subsidio nacional
     if (intval($_POST['valSubsidioNacional']) != 0) {
         if (trim($_POST['txtSoporteSubsidioNacional']) == "") {
-            $arrErrores[] = "Indique el soporte para el subsidio nacional";
+            $arrErrores[] = "Indique el soporte para el subsidio AVC / FOVIS / SFV";
         }
         if (intval($_POST['seqEntidadSubsidio']) == 1) {
-            $arrErrores[] = "Indique la entidad que otorga el subsidio nacional";
+            $arrErrores[] = "Indique la entidad que otorga el subsidio AVC / FOVIS / SFV";
         }
     }else{
         if (($_POST['seqEntidadSubsidio'] != 1 ) || ( $_POST['txtSoporteSubsidioNacional'] != "" )) {
             if ((intval($_POST['valSubsidioNacional']) == 0 ) || ( intval($_POST['valSubsidioNacional']) == "" )) {
-                $arrErrores[] = "Debe indicar un valor del Subsidio Nacional";
+                $arrErrores[] = "Debe indicar un valor del Subsidio AVC / FOVIS / SFV";
             }
         }
     }
 
     // valor de la donacion (VUR)
     if (intval($_POST['valDonacion']) != 0) {
-        if (intval($_POST['seqEmpresaDonante']) == 0) {
-            $arrErrores[] = "Indique la empresa que ha realizado la donaci&oacute;n";
+        if (intval($_POST['seqEmpresaDonante']) == 1) {
+            $arrErrores[] = "Indique la empresa que ha realizado la donaci&oacute;n / Rec. Económico / VUR";
         }
         if (trim($_POST['txtSoporteDonacion']) == "") {
-            $arrErrores[] = "Indique el soporte para la donaci&oacute;n";
+            $arrErrores[] = "Indique el soporte para la donaci&oacute;n / Rec. Económico / VUR";
         }
     }else{
         if (($_POST['seqEmpresaDonante'] != 1 ) || ( $_POST['txtSoporteDonacion'] != "" )) {
             if ((intval($_POST['valDonacion']) == 0 ) || ( intval($_POST['valDonacion']) == "" )) {
-                $arrErrores[] = "Debe indicar un valor de la donacion";
+                $arrErrores[] = "Debe indicar un valor de la donación / Rec. Económico / VUR";
             }
         }
     }

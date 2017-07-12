@@ -29,14 +29,14 @@
                         <td><b>$</b>{$valTotal|number_format:0:',':'.'}</td>
                         <td>{$valTotal/$valSMMLV} SMMLV</td>
                         <th width="25%x"><b>Tipo de Cierre Financiero</b></th>
-                        <!--<td colspan="2">{if $victima == 1}N/A{else $objFormulario->bolAltaCon} {/if}</td> -->
+                        <!--<td colspan="2">{if $numVictima == 1}N/A{else $objFormulario->bolAltaCon} {/if}</td> -->
                     </tr>
                     <tr>
                         <th><b>Grupo</b></th>
                        <!--<td>{$seqTipoVictima1}</td>-->
-                        <td>{if $victima == 1}1 {else}0 {/if}</td>
+                        <td>{if $numVictima == 1}1 {else}0 {/if}</td>
                         <td>
-                            {if $victima == 1}
+                            {if $numVictima == 1}
                                 <b>Victima</b>
                             {else}
                                 <b>Vulnerable</b>
@@ -135,7 +135,7 @@
                         {assign var=simMaxSubsidio value = $valSMMLV*70}
                         {assign var=simRetorno value = 35}
                         {assign var=simPiveVictima value = 0}
-                        {if $victima ==1}
+                        {if $numVictima ==1}
                             {assign var=simPiveVictima value = $simRetorno-0}
                         {else}
                             {assign var=simPiveVictima value = $simRetorno-$simRecursosSub}

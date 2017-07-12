@@ -1404,7 +1404,7 @@
                                 </tr>
                                 <tr>
                                     <!-- SUBSIDIO NACIONAL -->
-                                    <td>Valor Aporte: AVC / FOVIS / SFV</td>
+                                    <td>Valor Subsidio: AVC / FOVIS / SFV</td>
                                     <td align="right" style="padding-right: 5px;">
                                         $ <input type="text"
                                                  name="valSubsidioNacional" 
@@ -1449,7 +1449,7 @@
 
                                 <tr>
                                     <!-- TIENE DONACIONES -->
-                                    <td>Donaci&oacute;n / Rec. Económico</td>
+                                    <td>Donaci&oacute;n / Rec. Económico / VUR</td>
                                     <td align="right" style="padding-right: 5px;">
                                         $ <input type="text"
                                                  name="valDonacion"

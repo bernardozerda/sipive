@@ -299,11 +299,11 @@ if (empty($arrErrores)) {
         }
 
         // si es vulnerable debe indicar ingresos
-        if (intval($_POST['bolDesplazado']) == 0) {
-            if (intval($_POST['valIngresoHogar']) == 0) {
-                $arrErrores[] = "El ingreso del hogar no puede sumar cero";
-            }
-        }
+//        if (intval($_POST['bolDesplazado']) == 0) {
+//            if (intval($_POST['valIngresoHogar']) == 0) {
+//                $arrErrores[] = "El ingreso del hogar no puede sumar cero";
+//            }
+//        }
 
     } else {
         $arrErrores[] = "Debe haber por lo menos una persona dentro del grupo familiar";
@@ -391,10 +391,10 @@ if (empty($arrErrores)) {
         $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
     }
 
-    // Cantidad de dormitorios
-    if (intval($_POST['numHacinamiento']) == 0) {
-        $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
-    }
+    // Cantidad de dormitorios (pueden ser cero - dormitorio 'cambuche')
+//    if (intval($_POST['numHacinamiento']) == 0) {
+//        $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+//    }
 
     /******************************************************************************************************
      * VALIDACIONES PARA LA PESTANA DE DATOS DE LA POSTULACION
@@ -615,6 +615,7 @@ if (empty($arrErrores)) {
             )
         );
 
+        $claFormulario->seqEstadoProceso = 37;
         $claFormulario->editarFormulario($_POST['seqFormulario']);
         if (!empty($claFormulario->arrErrores)) {
             $arrErrores = $claFormulario->arrErrores;

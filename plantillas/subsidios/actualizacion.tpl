@@ -51,9 +51,6 @@
                         <td align="left">
                             {assign var=seqEstadoProceso value=$objFormulario->seqEstadoProceso}
                             {$arrEstado.$seqEstadoProceso}
-                            {if $seqEstadoProceso == 36}
-                                {assign var=seqEstadoProceso value=37}
-                            {/if}
                             <input type="hidden"
                                    name="seqEstadoProceso"
                                    id="seqEstadoProceso"
@@ -431,8 +428,7 @@
                                                            onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                            onBlur="soloNumeros(this);
                                                                    this.style.backgroundColor = '#FFFFFF';" 
-                                                           onkeyup="formatoSeparadores(this)"
-                                                           onchange="formatoSeparadores(this)"
+                                                           onkeyup="alertaDigitacionCampo('ingresos',0);"
                                                            style="width:90%; text-align: right;"
                                                            />
                                                 </td>
@@ -456,6 +452,7 @@
                                                             id="ocupacion" 
                                                             style="width:96%;"
                                                             >
+                                                        <option value="20">NINGUNA</option>
                                                         {foreach from=$arrOcupacion key=seqOcupacion item=txtOcupacion}
                                                             <option value="{$seqOcupacion}">{$txtOcupacion}</option>
                                                         {/foreach}
@@ -861,11 +858,13 @@
                                 </tr>
                                 <tr>
                                     <td>N° Hogares en la vivienda</td>
-                                    <td><input type="number" name="numHabitaciones" autofocus="" size="4" maxlength="2"
+                                    <td><input type="number" id="numHabitaciones" name="numHabitaciones" autofocus="" size="4" maxlength="2"
+                                               onChange="alertaDigitacionCampo('numHabitaciones',{$objFormulario->numHabitaciones})"
                                                min="0" step="1" style="width: 40px"
                                                value="{$objFormulario->numHabitaciones}"></td>
                                     <td>Número Dormitorios</td>
-                                    <td><input type="number" name="numHacinamiento" autofocus="" size="4" maxlength="2"
+                                    <td><input type="number" id="numHacinamiento" name="numHacinamiento" autofocus="" size="4" maxlength="2"
+                                               onChange="alertaDigitacionCampo('numHacinamiento',{$objFormulario->numHacinamiento})"
                                                min="0" step="1" style="width: 40px"
                                                value="{$objFormulario->numHacinamiento}"></td>
                                 </tr>
@@ -1071,10 +1070,11 @@
                                                 id="seqTipoEsquema"
                                                 style="width:100%"
                                         >
-                                            <option value="0" selected>NINGUNO</option>
+                                            <option value="0" selected disabled>NINGUNO</option>
                                             {foreach from=$arrTipoEsquemas key=seqTipoEsquema item=txtTipoEsquema}
                                                 <option value="{$seqTipoEsquema}"
                                                         {if $objFormulario->seqTipoEsquema == $seqTipoEsquema} selected {/if}
+                                                        disabled
                                                 >
                                                     {$txtTipoEsquema}
                                                 </option>
@@ -1582,6 +1582,9 @@
     <input type="hidden" name="txtArchivo" value="./contenidos/subsidios/salvarActualizacion.php">
     <input type="hidden" name="numDocumento" value="{$arrPost.cedula}">
     <input type="hidden" id="valAspiraSubsidio" value="{$objFormulario->valAspiraSubsidio}">
+
+    <!-- valor que se usa para la advertencia de ingresos del hogar -->
+    <input type="hidden" id="valSMMLV" value="{$valSMMLV}">
 
 </form>
 

@@ -472,11 +472,6 @@
                                     style="width:260px;"
                                     >
                                 <option value="1" selected>Seleccione</option>
-                                {foreach from=$arrLocalidad key=seqLocalidad item=txtLocalidad}
-                                    <option value="{$seqLocalidad}">
-                                        {$txtLocalidad}
-                                    </option>
-                                {/foreach}
                             </select>
                         </td>                  
                     </tr>

@@ -4017,19 +4017,39 @@ function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
     }
 
     var aceptar = function () {
-        direccionGenerada = document.getElementById(txtDivDireccionGenerada);
-        txtDireccionForm.value.replace(/s{2,}/g, ' ');
-        txtDireccionForm.value = direccionGenerada.innerHTML;
-        this.cancel();
 
-        direccionGenerada.innerHTML = txtDireccionForm.value;
-        //mostrarMapa(txtDireccionForm);
-
-        var objCiudad = document.getElementById("seqCiudad");
-        if (objCiudad != null) {
-            objCiudad.focus();
+        var bolAlerta = false;
+        if( YAHOO.util.Dom.get('radTipoDireccion').checked ){
+            if( YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0,1) == "-" ){
+                alert( "Parece que desea usar el campo de dirección rural en lugar de una urbana para esta dirección" );
+                bolAlerta = true;
+            }else{
+                if(
+                    YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
+                    YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
+                    YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
+                    YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
+                ){
+                    alert( "Complete la dirección" );
+                    bolAlerta = true;
+                }
+            }
         }
 
+        if( bolAlerta == false ) {
+            direccionGenerada = document.getElementById(txtDivDireccionGenerada);
+            txtDireccionForm.value.replace(/s{2,}/g, ' ');
+            txtDireccionForm.value = direccionGenerada.innerHTML;
+            this.cancel();
+
+            direccionGenerada.innerHTML = txtDireccionForm.value;
+            //mostrarMapa(txtDireccionForm);
+
+            var objCiudad = document.getElementById("seqCiudad");
+            if (objCiudad != null) {
+                objCiudad.focus();
+            }
+        }
     }
 
     var cancelar = function () {

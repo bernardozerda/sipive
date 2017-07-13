@@ -882,7 +882,7 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno){
 }
 
 function obtenerTextoConvenio($seqConvenio){
-    $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtNombre","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio");
+    $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtConvenio","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio");
     $txtConvenio = "Sin Convenio Seleccionado";
     if( intval( $seqConvenio ) > 1 ){
         $txtConvenio =

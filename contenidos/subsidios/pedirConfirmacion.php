@@ -112,6 +112,7 @@ if ($bolConfirmacion == true) {
         }
     }
 
+    $claFormulario->fchUltimaActualizacion = date("Y-m-d H:i:s");
     $claFormulario->editarFormulario($_POST['seqFormulario']);
     if( ! empty( $claFormulario->arrErrores ) ) {
         $arrErrores = $claFormulario->arrErrores;

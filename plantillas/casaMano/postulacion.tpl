@@ -1823,7 +1823,7 @@
                                             {foreach from=$arrConvenio key=seqConvenio item=arrRegistro}
                                                 <option value="{$seqConvenio}"
                                                         {if $claFormulario->seqConvenio == $seqConvenio} selected {/if}
-                                                >{$arrRegistro.txtNombre}</option>
+                                                >{$arrRegistro.txtConvenio}</option>
                                             {/foreach}
                                         </select>
                                         <img src="./recursos/imagenes/ayuda.png"

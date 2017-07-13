@@ -123,7 +123,7 @@
             }
             $arrUnidadProyecto = obtenerUnidadesPostulacion($claCasaMano->objPostulacion->seqFormulario, $claCasaMano->objPostulacion->seqModalidad, $claCasaMano->objPostulacion->seqPlanGobierno, $seqProyecto);
             $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $claCasaMano->objPostulacion->seqLocalidad, "txtBarrio");
-            $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtNombre","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio", "seqConvenio <> 1 and numDisponibles > 0", "txtNombre");
+            $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtConvenio","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio", "seqConvenio <> 1 and numDisponibles > 0", "txtConvenio");
 
             // Calculo del valor del subsidio
             $claCasaMano->objPostulacion->valAspiraSubsidio = valorSubsidio($claCasaMano->objPostulacion);

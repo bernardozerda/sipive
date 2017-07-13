@@ -118,9 +118,10 @@ WHERE T_FRM_HOGAR.seqParentesco = 1 AND T_DES_ESCRITURACION.seqFormulario IN (" 
         $objPHPExcel->createSheet(1);
         $objPHPExcel->getSheet(1)->SetCellValue("AZ2", "SI");
         $objPHPExcel->getSheet(1)->SetCellValue("AZ3", "NO");
+        $objPHPExcel->getSheet(1)->SetCellValue("AZ4", "NO APLICA");
         $objPHPExcel->addNamedRange(
                 new PHPExcel_NamedRange(
-                'seleccion', $objPHPExcel->getSheet(1), 'AZ2:AZ3'
+                'seleccion', $objPHPExcel->getSheet(1), 'AZ2:AZ4'
                 )
         );
         //Creacion de rango de seleccion de desplegable (SI - NO Aplica)

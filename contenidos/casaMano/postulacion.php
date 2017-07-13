@@ -69,6 +69,7 @@
         $arrProyectosHijos = obtenerProyectosHijosPostulacion($claFormulario->seqFormulario,$claFormulario->seqModalidad,$claFormulario->seqPlanGobierno,$claFormulario->seqProyecto);
         $arrUnidadProyecto = obtenerUnidadesPostulacion($claFormulario->seqFormulario,$claFormulario->seqModalidad,$claFormulario->seqPlanGobierno,$claFormulario->seqProyectoHijo);
         $arrParentesco = obtenerDatosTabla("T_CIU_PARENTESCO", array("seqParentesco", "txtParentesco", "bolActivo"), "seqParentesco", "", "txtParentesco");
+        $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtConvenio","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio", "seqConvenio <> 1 and numDisponibles > 0", "txtConvenio");
 
         $claCasaMano->objPostulacion->valAspiraSubsidio = valorSubsidio($claCasaMano->objPostulacion);
 
@@ -104,7 +105,10 @@
 		$arrBarrio                   = obtenerDatosTabla("T_FRM_BARRIO", array( "seqBarrio" , "txtBarrio" ) , "seqBarrio" , "seqBarrio <> 1" );
         $arrPlanGobierno             = obtenerDatosTabla( "T_FRM_PLAN_GOBIERNO" , array( "seqPlanGobierno" , "txtPlanGobierno" ) , "seqPlanGobierno" , "" , "txtPlanGobierno" );
 
+
+
 		$claSmarty->assign("arrPlanGobierno", $arrPlanGobierno);
+		$claSmarty->assign("arrConvenio", $arrConvenio);
 		$claSmarty->assign("arrProyectosHijos", $arrProyectosHijos);
         $claSmarty->assign( "arrTipoEsquemas" , $arrTipoEsquemas );
         $claSmarty->assign( "arrModalidad" , $arrModalidad );
@@ -141,7 +145,7 @@
 		$claSmarty->assign( "objCiudadano", $objCiudadano);
         $claSmarty->assign( "seqFormulario" , $_POST['seqFormulario'] );
         $claSmarty->assign( "seqCasaMano" , intval( $_POST['seqCasaMano'] ) );
-        $claSmarty->assign( "numDocumento" , $_POST['cedula'] );
+        $claSmarty->assign( "arrPost" , $_POST );
         $claSmarty->assign( "arrEstadosCEM" , $arrEstadosCEM );
         $claSmarty->assign( "txtArchivoCEM" , $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['salvar'] );
 		$claSmarty->assign("arrBarrio", $arrBarrio);

@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set("America/Bogota");
+
 $txtPrefijoRuta = "../../";
 
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
@@ -34,6 +36,10 @@ $arrRegistros = $claSeguimiento->obtenerRegistros(100);
 // carga el egiastro de desembolso   
 $claDesembolso = new Desembolso();
 $claDesembolso->cargarDesembolso($seqFormulario);
+
+$claDesembolso->arrTitulos['fchEscrituraIdentificacionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($claDesembolso->arrTitulos['fchEscrituraIdentificacion']))));
+$claDesembolso->arrTitulos['fchEscrituraTituloTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($claDesembolso->arrTitulos['fchEscrituraTitulo']))));
+$claDesembolso->arrTitulos['fchMatriculaTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($claDesembolso->arrTitulos['fchMatricula']))));
 
 // Obtiene el postulante principal
 foreach ($claFormulario->arrCiudadano as $objCiudadano) {

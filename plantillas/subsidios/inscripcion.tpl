@@ -1,4 +1,9 @@
 
+<!-- **********************************************************
+    FORMULARIO DE INSCRIPCION - FORMULARIO PEQUEÑO -
+    SOLO INSCRIPCION POR PRIMERA VEZ
+*************************************************************** -->
+
 <form name="frmInscripcion" id="frmInscripcion" onSubmit="return false;" autocomplete=off>
 
     <!-- CODGIO PARA EL POP UP DE SEGUIMIENTO -->
@@ -8,14 +13,12 @@
     <table cellspacing="0" cellpadding="2" border="0" width="100%" bgcolor="#E4E4E4">
         <tr> 
             <td height="25px" valign="middle" align="right" style="padding-right:10px; padding-left:10px;" bgcolor="#E4E4E4" colspan="4">
-                {if $smarty.session.privilegios.crear == 1 || $smarty.session.privilegios.editar == 1}
-                    <input type="submit" 
-                           name="salvar" 
-                           id="salvar" 
-                           value="Salvar Inscripci&oacute;n" 
-                           onClick="preguntarGrupoFamiliar()"
-                           />
-                {/if}
+                <input type="submit"
+                       name="salvar"
+                       id="salvar"
+                       value="Salvar Inscripción"
+                       onClick="pedirConfirmacion('mensajes',this.form,'./contenidos/subsidios/pedirConfirmacion.php')"
+                       />
                 <input type="hidden" 
                        id="seqFormulario" 
                        name="seqFormulario" 
@@ -40,25 +43,19 @@
         <div class="yui-content">
 
             <!-- FORMULARIO -->	    
-            <div id="frm" style="height:550px;">
+            <div id="frm" style="height:450px;">
 
                 <!-- ESTADO DEL PROCESO -->
-                <table cellspacing="0" cellpadding="2" border="0" width="100%" height="25px">
+                <table cellspacing="0" cellpadding="2" border="0" width="100%" height="30px">
                     <tr bgcolor="#E4E4E4"> 
                         <td width="140px"><b>Estado del proceso</b></td>
-                        <td width="280px">
-                            {if intval( $objFormulario->seqEstadoProceso ) == 0} 
-                                {assign var=seqEstadoProceso value="36"}
-                            {else} 
-                                {assign var=seqEstadoProceso value=$objFormulario->seqEstadoProceso}
-                            {/if}
-                            {$arrEstado.$seqEstadoProceso} 
-                            <input type="hidden" name="seqEstadoProceso" id="seqEstadoProceso" value="{$seqEstadoProceso}">
+                        <td>
+                            {$arrEstado.36}
+                            <input type="hidden" name="seqEstadoProceso" id="seqEstadoProceso" value="36">
                         </td>
-                        <td width="140px"><b>Fecha de Inscripción</b></td>
-                        <td><input type='hidden' id='fchInscripcion' name='fchInscripcion' value="{$objFormulario->fchInscripcion}">{$objFormulario->fchInscripcion}&nbsp;</td>
                     </tr>
-                </table><br>
+                </table>
+                <br>
                 <table cellspacing="0" cellpadding="2" border="0" width="100%">
 
                     <!-- TIPO DOCUMENTO Y NUMERO DE DOCUMENTO -->
@@ -68,22 +65,9 @@
                             <input type="text" 
                                    name="numDocumento" 
                                    id="numDocumento" 
-                                   value="{$numDocumento}"
-                                   onFocus="
-                                           this.style.backgroundColor = '#ADD8E6';
-                                           ponerPlaceholder('numTelefono1', 'Fijo 1');
-                                           ponerPlaceholder('numTelefono2', 'Fijo 2');
-                                           ponerPlaceholder('numCelular', 'Celular');
-                                   " 
-                                   onBlur="
-                                           soloNumeros(this);
-                                           this.style.backgroundColor = '#FFFFFF';
-                                   "
-                                   style="
-                                   width:100px; 
-                                   text-align: right;
-                                   "
-
+                                   value="{$arrPost.cedula|number_format:0:'.':'.'}"
+                                   style="width:100px; text-align: right;"
+                                   readonly
                                    />
                         </td>
                         <td width="120px">Tipo Documento</td>
@@ -96,9 +80,6 @@
                                     >
                                 {foreach from=$arrTipoDocumento key=seqTipoDocumento item=txtTipoDocumento}
                                     <option value="{$seqTipoDocumento}"
-                                            {if $objCiudadano->seqTipoDocumento == $seqTipoDocumento} 
-                                                selected 
-                                            {/if}
                                             {if $seqTipoDocumento != 1 && $seqTipoDocumento != 2 && $seqTipoDocumento !=5}
                                                 disabled
                                             {/if}   
@@ -117,7 +98,7 @@
                             <input type="text" 
                                    name="txtApellido1" 
                                    id="txtApellido1" 
-                                   value="{$objCiudadano->txtApellido1}" 
+                                   value=""
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="soloLetras(this);
                                            this.style.backgroundColor = '#FFFFFF';" 
@@ -129,7 +110,7 @@
                             <input type="text" 
                                    name="txtApellido2" 
                                    id="txtApellido2" 
-                                   value="{$objCiudadano->txtApellido2}" 
+                                   value=""
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="soloLetras(this);
                                            this.style.backgroundColor = '#FFFFFF';" 
@@ -145,7 +126,7 @@
                             <input type="text" 
                                    name="txtNombre1" 
                                    id="txtNombre1" 
-                                   value="{$objCiudadano->txtNombre1}" 
+                                   value=""
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="soloLetrasEspacio(this);
                                            this.style.backgroundColor = '#FFFFFF';" 
@@ -157,7 +138,7 @@
                             <input type="text" 
                                    name="txtNombre2" 
                                    id="txtNombre2" 
-                                   value="{$objCiudadano->txtNombre2}" 
+                                   value=""
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="soloLetras(this);
                                            this.style.backgroundColor = '#FFFFFF';" 
@@ -166,6 +147,7 @@
                         </td>
                     </tr>
 
+                    <!-- FECHA DE NACIMIENTO Y ESTADO CIVIL -->
                     <tr>
                         <td>Fecha de Nacimiento</td>
                         <td>
@@ -189,24 +171,18 @@
                                     id="seqEstadoCivil"
                                     style="width:260px;"
                             >
-                                {foreach from=$arrEstadoCivil key=seqEstadoCivil item=txtEstadoCivil}
+                                {foreach from=$arrEstadoCivil key=seqEstadoCivil item=arrRegistro}
                                     <option value="{$seqEstadoCivil}"
-                                            {if $objCiudadano->seqEstadoCivil == $seqEstadoCivil}
-                                                selected
-                                            {/if}
-                                            {if $seqEstadoCivil == 1 || $seqEstadoCivil == 3 || $seqEstadoCivil == 4 || $seqEstadoCivil == 5}
-                                                style="color:#666666"
-                                                disabled
-                                            {/if}
+                                            {if $arrRegistro.bolActivo == 0} disabled {/if}
                                     >
-                                        {$txtEstadoCivil}
+                                        {$arrRegistro.txtEstadoCivil}
                                     </option>
                                 {/foreach}
                             </select>
                         </td>
                     </tr>
 
-                    <!-- SEXO  Y ESTADO CIVIL -->
+                    <!-- SEXO Y CONDICION ESPECIAL -->
                     <tr> 
                         <td>Sexo</td>
                         <td>
@@ -217,11 +193,7 @@
                                     style="width:260px;"
                                     >
                                 {foreach from=$arrSexo key=seqSexo item=txtSexo}
-                                    <option value="{$seqSexo}"
-                                            {if $objCiudadano->seqSexo == $seqSexo} 
-                                                selected 
-                                            {/if}
-                                            >
+                                    <option value="{$seqSexo}">
                                         {$txtSexo}
                                     </option>
                                 {/foreach}
@@ -237,11 +209,7 @@
                             >
                                 <option value="6">Ninguna</option>
                                 {foreach from=$arrCondicionEspecial key=seqCondicionEspecial item=txtCondicionEspecial}
-                                    <option value="{$seqCondicionEspecial}"
-                                            {if $objCiudadano->seqCondicionEspecial == $seqCondicionEspecial}
-                                                selected
-                                            {/if}
-                                    >
+                                    <option value="{$seqCondicionEspecial}">
                                         {$txtCondicionEspecial}
                                     </option>
                                 {/foreach}
@@ -249,7 +217,7 @@
                         </td>
                     </tr>			
 
-                    <!-- CONDICION ETNICA Y CONDICION ESPECIAL 1 -->
+                    <!-- CONDICION ETNICA Y CONDICION ESPECIAL 2 -->
                     <tr>
                         <td>Condici&oacute;n Étnica</td>
                         <td>
@@ -261,11 +229,7 @@
                                     >
                                 <option value="1">NINGUNA</option>
                                 {foreach from=$arrCondicionEtnica key=seqEtnia item=txtEtnia}
-                                    <option value="{$seqEtnia}"
-                                            {if $objCiudadano->seqEtnia == $seqEtnia} 
-                                                selected 
-                                            {/if}
-                                            >
+                                    <option value="{$seqEtnia}">
                                         {$txtEtnia}
                                     </option>
                                 {/foreach}
@@ -281,11 +245,7 @@
                             >
                                 <option value="6">Ninguna</option>
                                 {foreach from=$arrCondicionEspecial key=seqCondicionEspecial item=txtCondicionEspecial}
-                                    <option value="{$seqCondicionEspecial}"
-                                            {if $objCiudadano->seqCondicionEspecial2 == $seqCondicionEspecial}
-                                                selected
-                                            {/if}
-                                    >
+                                    <option value="{$seqCondicionEspecial}">
                                         {$txtCondicionEspecial}
                                     </option>
                                 {/foreach}
@@ -293,7 +253,7 @@
                         </td>
                     </tr>
 
-                    <!-- CONDICION ESPECIAL 2 y CONDICION ESPECIAL 3 -->
+                    <!-- NIVEL EDUCATIVO y CONDICION ESPECIAL 3 -->
                     <tr>
                         <td>Nivel Educativo</td>
                         <td>
@@ -307,11 +267,7 @@
                                 <option value="0" selected>Seleccione Uno</option>
                                 <option value="1">Ninguno</option>
                                 {foreach from=$arrNivelEducativo key=seqNivelEducativo item=txtNivelEducativo}
-                                    <option value="{$seqNivelEducativo}"
-                                            {if $objCiudadano->seqNivelEducativo == $seqNivelEducativo}
-                                                selected
-                                            {/if}
-                                    >
+                                    <option value="{$seqNivelEducativo}">
                                         {$txtNivelEducativo}
                                     </option>
                                 {/foreach}
@@ -327,11 +283,7 @@
                                     >
                                 <option value="6">Ninguna</option>
                                 {foreach from=$arrCondicionEspecial key=seqCondicionEspecial item=txtCondicionEspecial}
-                                    <option value="{$seqCondicionEspecial}"
-                                            {if $objCiudadano->seqCondicionEspecial3 == $seqCondicionEspecial} 
-                                                selected 
-                                            {/if}
-                                            >
+                                    <option value="{$seqCondicionEspecial}">
                                         {$txtCondicionEspecial}
                                     </option>
                                 {/foreach}
@@ -339,7 +291,7 @@
                         </td>
                     </tr>
 
-                    <!-- NIVEL EDUCATIVO y CORREO -->
+                    <!-- AÑOS APROBADOS y CORREO -->
                     <tr>
                         <td>Años Aprobados</td>
                         <td>
@@ -357,7 +309,7 @@
                             <input type="text" 
                                    name="txtCorreo" 
                                    id="txtCorreo" 
-                                   value="{$objFormulario->txtCorreo}" 
+                                   value=""
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="sinCaracteresEspeciales(this);
                                            this.style.backgroundColor = '#FFFFFF';" 
@@ -367,7 +319,7 @@
                         </td>
                     </tr>
 
-                    <!-- LGTBI Y HOGAR VICTIMA (DESPLAZADO) -->
+                    <!-- GRUPO LGTBI Y HECHO VICTIMIZANTE -->
                     <tr>
                         <td>Grupo LGTBI </td>
                         <td>
@@ -380,11 +332,7 @@
                                     >
                                 <option value="0">Ninguno</option>
                                 {foreach from=$arrGrupoLgtbi key=seqGrupoLgtbi item=txtGrupoLgtbi}
-                                    <option value="{$seqGrupoLgtbi}"
-                                            {if $objCiudadano->seqGrupoLgtbi == $seqGrupoLgtbi} 
-                                                selected 
-                                            {/if}
-                                            >
+                                    <option value="{$seqGrupoLgtbi}">
                                         {$txtGrupoLgtbi}
                                     </option>
                                 {/foreach}
@@ -401,11 +349,7 @@
                                     >
                                 <option value="0">Ninguno</option>
                                 {foreach from=$arrTipoVictima key=seqTipoVictima item=txtTipoVictima}
-                                    <option value="{$seqTipoVictima}"
-                                            {if $objCiudadano->seqTipoVictima == $seqTipoVictima} 
-                                                selected 
-                                            {/if}
-                                            >
+                                    <option value="{$seqTipoVictima}">
                                         {$txtTipoVictima}
                                     </option>
                                 {/foreach}
@@ -414,7 +358,7 @@
                         </td>
                     </tr>
 
-                    <!-- GRUPO LGTBI Y HOGAR VICTIMA -->
+                    <!-- LGTBI Y HOGAR VICTIMA -->
                     <tr>
                         <td>LGTBI</td>
                         <td>
@@ -454,11 +398,7 @@
                                     >
                                 <option value="20">NINGUNA</option>
                                 {foreach from=$arrOcupacion key=seqOcupacion item=txtOcupacion}
-                                    <option value="{$seqOcupacion}"
-                                            {if $objCiudadano->seqOcupacion == $seqOcupacion} 
-                                                selected 
-                                            {/if}
-                                            >
+                                    <option value="{$seqOcupacion}">
                                         {$txtOcupacion}
                                     </option>
                                 {/foreach}
@@ -491,7 +431,7 @@
                             <input type="text" 
                                    name="txtDireccion" 
                                    id="txtDireccion" 
-                                   value="{$objFormulario->txtDireccion}"
+                                   value=""
                                    style="width:100%;"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="sinCaracteresEspeciales(this);
@@ -516,11 +456,7 @@
                                     > 
                                 <option value="0">Seleccione</option>
                                 {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
-                                    <option value="{$seqCiudad}" 
-                                            {if $objFormulario->seqCiudad == $seqCiudad} 
-                                                selected 
-                                            {/if}
-                                            > 
+                                    <option value="{$seqCiudad}">
                                         {$txtCiudad}
                                     </option>
                                 {/foreach}
@@ -536,29 +472,6 @@
                                     style="width:260px;"
                                     >
                                 <option value="1" selected>Seleccione</option>
-                                {if intval( $objFormulario->seqCiudad ) != 0}
-                                    {if intval( $objFormulario->seqCiudad ) == 149} <!-- BOGOTA -->
-                                        {foreach from=$arrLocalidad key=seqLocalidad item=txtLocalidad}
-                                            {if intval( $seqLocalidad ) != 22}
-                                                <option value="{$seqLocalidad}"
-                                                        {if $objFormulario->seqLocalidad == $seqLocalidad} 
-                                                            selected 
-                                                        {/if}
-                                                        >                    
-                                                    {$txtLocalidad}
-                                                </option>
-                                            {/if}
-                                        {/foreach}
-                                    {else} <!-- FUERA DE BOGOTA -->
-                                        <option value="22"
-                                                {if $objFormulario->seqLocalidad == 22} 
-                                                    selected 
-                                                {/if}
-                                                >                    
-                                            Fuera de Bogotá
-                                        </option>
-                                    {/if}
-                                {/if}
                             </select>
                         </td>                  
                     </tr>
@@ -575,21 +488,15 @@
                                     style="width:260px;"
                                     >
                                 <option value="0">Seleccione</option>
-                                {if intval( $objFormulario->seqLocalidad ) != 0}
-                                    {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
-                                        <option value="{$seqBarrio}" 
-                                                {if $objFormulario->seqBarrio == $seqBarrio} 
-                                                    selected 
-                                                {/if}
-                                                >
-                                            {$txtBarrio}
-                                        </option>            
-                                    {/foreach}
-                                {/if}
+                                {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
+                                    <option value="{$seqBarrio}">
+                                        {$txtBarrio}
+                                    </option>
+                                {/foreach}
                             </select>
                         </td>
                         <td id="tdupz" colspan="2">
-                            <input type='hidden' readonly id='seqUpz' name='seqUpz' value="{$objFormulario->seqUpz}">
+                            <input type='hidden' readonly id='seqUpz' name='seqUpz' value="">
                         </td>
                     </tr>
 
@@ -600,7 +507,7 @@
                             <input type="text" 
                                    name="numTelefono1" 
                                    id="numTelefono1" 
-                                   value="{$objFormulario->numTelefono1}" 
+                                   value=""
                                    maxlength="7" 
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="soloNumeros(this);
@@ -611,7 +518,7 @@
                             <input type="text" 
                                    name="numTelefono2" 
                                    id="numTelefono2" 
-                                   value="{$objFormulario->numTelefono2}" 
+                                   value=""
                                    maxlength="10" 
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="soloNumeros(this);
@@ -622,7 +529,7 @@
                             <input type="text"          
                                    name="numCelular" 
                                    id="numCelular" 
-                                   value="{$objFormulario->numCelular}" 
+                                   value=""
                                    maxlength="10" 
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="soloNumeros(this);
@@ -630,43 +537,6 @@
                                    style="width:96px;" 
                                    placeholder="Celular"
                                    >    
-                        </td>
-                    </tr>
-
-                    <!-- VIVIENDA ACTUAL  Y VALOR ARRENDAMIENTO -->
-                    <tr>
-                        <td>Vivienda Actual </td>
-                        <td>
-                            <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                    onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                    name="seqVivienda" 
-                                    id="seqVivienda" 
-                                    style="width:260px;"
-                                    >
-                                {foreach from=$arrVivienda key=seqVivienda item=txtVivienda}
-                                    <option value="{$seqVivienda}"
-                                            {if $objFormulario->seqVivienda == $seqVivienda} 
-                                                selected 
-                                            {/if}
-                                            >
-                                        {$txtVivienda}
-                                    </option>
-                                {/foreach}
-                            </select>
-                        </td>
-                        <td height="25px" valign="bottom">Valor Arriendo</td>
-                        <td height="25px" valign="bottom" align="left">$
-                            <input type="text"
-                                   name="valArriendo" 
-                                   id="valArriendo" 
-                                   value="{$objFormulario->valArriendo}" 
-                                   onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                   onBlur="soloNumeros(this);
-                                           this.style.backgroundColor = '#FFFFFF';" 
-                                   onKeyUp="formatoSeparadores(this)" 
-                                   onChange="formatoSeparadores(this)"
-                                   style="width:100px; text-align:right"
-                                   >
                         </td>
                     </tr>
 
@@ -679,22 +549,12 @@
                                     name="seqModalidad" 
                                     id="seqModalidad" 
                                     style="width:260px;"
-                                    onChange="obtenerTipoSolucion(this)"
+                                    onChange="datosPestanaPostulacion('inscripcion');"
                                     >
                                 <option value="0">Seleccione</option>
-                                {foreach from=$arrModalidad key=seqModalidad item=arrDatos}
-                                    <option value="{$seqModalidad}"
-                                            {if $objFormulario->seqModalidad == $seqModalidad} 
-                                                selected 
-                                            {/if}
-                                            {if $arrDatos.seqPlanGobierno == 1}
-                                                disabled
-                                            {/if}
-                                            {if $arrDatos.seqPlanGobierno == 2}
-                                                disabled
-                                            {/if}
-                                            >
-                                        {$arrDatos.txtModalidad}
+                                {foreach from=$arrModalidad key=seqModalidad item=txtModalidad}
+                                    <option value="{$seqModalidad}">
+                                        {$txtModalidad}
                                     </option>
                                 {/foreach}
                             </select>
@@ -703,192 +563,33 @@
                         <td>Solución</td>
                         <td id="tdTipoSolucion">
                             <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                    onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                    onChange="asignarValorSubsidio(this, 'bolDesplazado');"
-                                    name="seqSolucion" 
+                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                    name="seqSolucion"
                                     id="seqSolucion" 
                                     style="width:260px;"
                                     >
                                 <option value="1">NINGUNA</option>
-                                {if intval( $objFormulario->seqModalidad ) != 0}                           
-                                    {foreach from=$arrSolucion key=seqSolucion item=arrDatos}
-                                        {if $objFormulario->seqModalidad == $arrDatos.seqModalidad}
-                                            <option value="{$seqSolucion}"
-                                                    {if $objFormulario->seqSolucion == $seqSolucion} 
-                                                        selected 
-                                                    {/if}
-                                                    >
-                                                {$arrDatos.txtSolucion}
-                                            </option>
-                                        {/if}
-                                    {/foreach}
-                                {/if}
                             </select>
                             <input type="hidden" name="seqUnidadProyecto" id="seqUnidadProyecto" value="1" >
                         </td>
                     </tr>
 
-                    <!-- INGRESOS DEL HOGAR -->
+                    <!-- INGRESOS DEL CIUDADANO Y DEL HOGAR -->
                     <tr> 
                         <td>Ingresos </td>
                         <td align="left" colspan="3">
                             $ <input type="text" 
                                      name="valIngresoHogar" 
                                      id="valIngresoHogar" 
-                                     value="{$objFormulario->valIngresoHogar|string_format:"%d"}" 
+                                     value="0"
                                      onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                     onBlur="soloNumeros(this);
-                                             this.style.backgroundColor = '#FFFFFF';"
-                                     onKeyUp="formatoSeparadores(this)" onchange="formatoSeparadores(this)"
+                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                     onKeyUp="formatoSeparadores(this)"
                                      style="width:100px; text-align:right"
                                      >
                         </td>
                     </tr>
 
-                    <!-- TIENE AHORRO y DONDE TIENE EL AHORRO -->
-                    <tr> 
-                        <TD>Valor Ahorro </TD>
-                        <td align="left">
-                            $ <input type="text" 
-                                     name="valSaldoCuentaAhorro" 
-                                     id="valSaldoCuentaAhorro" 
-                                     value="{$objFormulario->valSaldoCuentaAhorro|string_format:"%d"}" 
-                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                     onBlur="soloNumeros(this);
-                                             this.style.backgroundColor = '#FFFFFF';"
-                                     onKeyUp="formatoSeparadores(this)" onchange="formatoSeparadores(this)"
-                                     style="width:100px; text-align:right" 
-                                     >
-                        </td>
-                        <td>Banco Ahorro</td>
-                        <td>
-                            <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                    onBlur="this.style.backgroundColor = '#FFFFFF';"  
-                                    name="seqBancoCuentaAhorro" 
-                                    id="seqBancoCuentaAhorro" 
-                                    style="width:260px;"
-                                    >
-                                <option value="1">Ninguno</option>
-                                {foreach from=$arrBanco key=seqBanco item=txtBanco}
-                                    <option value="{$seqBanco}"
-                                            {if $objFormulario->seqBancoCuentaAhorro == $seqBanco} 
-                                                selected 
-                                            {/if}
-                                            >
-                                        {$txtBanco}
-                                    </option>
-                                {/foreach}
-                            </select>
-                            <input type="hidden" name="seqBancoCuentaAhorro2" id="seqBancoCuentaAhorro2" value ="{$objFormulario->seqBancoCuentaAhorro2}">
-                            <input type="hidden" name="seqEntidadSubsidio" id="seqEntidadSubsidio" value ="{$objFormulario->seqEntidadSubsidio}">
-                        </td>
-                    </tr>
-
-                    <!-- TIENE CREDITO Y DONDE TIENE EL CREDITO -->
-                    <tr> 
-                        <td>Valor Credito </td>
-                        <td align="left">
-                            $ <input type="text" 
-                                     name="valCredito" 
-                                     id="valCredito" 
-                                     value="{$objFormulario->valCredito|string_format:"%d"}" 
-                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                     onBlur="soloNumeros(this);
-                                             this.style.backgroundColor = '#FFFFFF';"  
-                                     onKeyUp="formatoSeparadores(this)" onchange="formatoSeparadores(this)"
-                                     style="width:100px; text-align:right" 
-                                     >
-                        </td>
-                        <td>Banco Credito</td>
-                        <td>
-                            <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                    onBlur="soloNumeros(this);
-                                            this.style.backgroundColor = '#FFFFFF';"  
-                                    name="seqBancoCredito" 
-                                    id="seqBancoCredito" 
-                                    style="width:260px;"
-                                    >
-                                <option value="1">Sin Credito</option>
-                                {foreach from=$arrBanco key=seqBanco item=txtBanco}
-                                    <option value="{$seqBanco}"
-                                            {if $objFormulario->seqBancoCredito == $seqBanco} 
-                                                selected 
-                                            {/if}
-                                            >
-                                        {$txtBanco}
-                                    </option>
-                                {/foreach}
-                            </select>
-                        </td>
-                    </tr>
-
-                    <!-- TIENE SUBSIDIO -->
-                    <tr>
-                        <td>Valor Subsidio: AVC / FOVIS / SFV</td>
-                        <td align="left">
-                            $ <input type="text" 
-                                     name="valSubsidioNacional" 
-                                     id="valSubsidioNacional" 
-                                     value="{$objFormulario->valSubsidioNacional|string_format:"%d"}" 
-                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                     onBlur="soloNumeros(this);
-                                             this.style.backgroundColor = '#FFFFFF';"
-                                     onKeyUp="formatoSeparadores(this)" 
-                                     onChange="formatoSeparadores(this)"
-                                     style="width:100px; text-align:right"
-                                     >
-                        </td>
-                        <td>Soporte (No. Carta)</td>
-                        <td>
-                            <input type="text" 
-                                   name="txtSoporteSubsidioNacional" 
-                                   id="txtSoporteSubsidioNacional" 
-                                   value="{$objFormulario->txtSoporteSubsidioNacional}" 
-                                   onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                   onBlur="sinCaracteresEspeciales(this);
-                                           this.style.backgroundColor = '#FFFFFF';"  
-                                   style="width:260px;"
-                                   >
-                        </td>
-                    </tr>
-
-                    <!-- TIENE DONACIONES Y DONDE TIENE LA DONACION -->
-                    <tr> 
-                        <td>Donaci&oacute;n / Rec. Econ&oacute;mico </td>
-                        <td align="left">
-                            $ <input	type="text" 
-                                     name="valDonacion" 
-                                     id="valDonacion" 
-                                     value="{$objFormulario->valDonacion|string_format:"%d"}" 
-                                     onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                     onBlur="soloNumeros(this);
-                                             this.style.backgroundColor = '#FFFFFF';"  
-                                     onKeyUp="formatoSeparadores(this)" 
-                                     onChange="formatoSeparadores(this)"
-                                     style="width:100px; text-align:right" 
-                                     >
-                        </td>
-                        <td>Entidad</td>
-                        <td>
-                            <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                    onBlur="soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"  
-                                    name="seqEmpresaDonante" 
-                                    id="seqEmpresaDonante" 
-                                    style="width:260px;"
-                                    >
-                                <option value="1">Ninguna</option>
-                                {foreach from=$arrDonantes key=seqEmpresaDonante item=txtEmpresaDonante}
-                                    <option value="{$seqEmpresaDonante}"
-                                            {if $objFormulario->seqEmpresaDonante == $seqEmpresaDonante} 
-                                                selected 
-                                            {/if}
-                                            >
-                                        {$txtEmpresaDonante}
-                                    </option>
-                                {/foreach}
-                            </select>
-                        </td>
-                    </tr>
                 </table>
             </div>
 

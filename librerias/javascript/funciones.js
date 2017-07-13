@@ -1281,29 +1281,29 @@ function comprobarSiBisisesto(anio) {
 //Autor :  Roberto Herrero & Daniel
 //Web: http://www.indomita.org
 //Asunto : Dar formato a un nï¿½mero
-// function dar_formato(num) {
-//     var cadena = "";
-//     var aux;
-//     var cont = 1, m, k;
-//     if (num < 0)
-//         aux = 1;
-//     else
-//         aux = 0;
-//     num = num.toString();
-//     for (m = num.length - 1; m >= 0; m--) {
-//         cadena = num.charAt(m) + cadena;
-//         if (cont % 3 == 0 && m > aux)
-//             cadena = "." + cadena;
-//         else
-//             cadena = cadena;
-//         if (cont == 3)
-//             cont = 1;
-//         else
-//             cont++;
-//     }
-//     cadena = cadena.replace(/.,/, ",");
-//     return cadena;
-// }
+function dar_formato(num) {
+    var cadena = "";
+    var aux;
+    var cont = 1, m, k;
+    if (num < 0)
+        aux = 1;
+    else
+        aux = 0;
+    num = num.toString();
+    for (m = num.length - 1; m >= 0; m--) {
+        cadena = num.charAt(m) + cadena;
+        if (cont % 3 == 0 && m > aux)
+            cadena = "." + cadena;
+        else
+            cadena = cadena;
+        if (cont == 3)
+            cont = 1;
+        else
+            cont++;
+    }
+    cadena = cadena.replace(/.,/, ",");
+    return cadena;
+}
 
 
 function sumarTotalRecursos() {
@@ -1851,6 +1851,8 @@ function datosPestanaPostulacion(txtModo) {
 
     var fncSuccess = function(o){
 
+        var bolCalcularAporte = true;
+
         try {
             var objRespuesta = jQuery.parseJSON(o.responseText);
         }catch(ex){
@@ -2030,7 +2032,65 @@ function datosPestanaPostulacion(txtModo) {
 
         }
 
-        valorSubsidio();
+        if( txtModo == "inscripcion" ){
+
+            bolCalcularAporte = false;
+
+            // solucion
+            $("#seqSolucion").empty();
+            for( i=0; i < objRespuesta.solucion.length; i++ ){
+                $("#seqSolucion").append(
+                    $('<option>', {
+                        value: objRespuesta.solucion[i].valor,
+                        text: objRespuesta.solucion[i].texto
+                    })
+                );
+            }
+            if( $('#seqSolucion').children('option').length == 2){
+                $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
+            }
+
+        }
+
+        if( txtModo == "actualizacion" ){
+
+            // solucion
+            $("#seqSolucion").empty();
+            for( i=0; i < objRespuesta.solucion.length; i++ ){
+                $("#seqSolucion").append(
+                    $('<option>', {
+                        value: objRespuesta.solucion[i].valor,
+                        text: objRespuesta.solucion[i].texto
+                    })
+                );
+            }
+            if( $('#seqSolucion').children('option').length == 2){
+                $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
+            }
+
+            // esquema
+            $("#seqTipoEsquema").empty();
+            for( i=0; i < objRespuesta.esquema.length; i++ ){
+                $("#seqTipoEsquema").append(
+                    $('<option>', {
+                        value: objRespuesta.esquema[i].valor,
+                        text: objRespuesta.esquema[i].texto,
+                        disabled: true
+                    })
+                );
+
+            }
+            if( $("#seqModalidad").val() == 12 || $("#seqModalidad").val() == 13 ) {
+                $('#seqTipoEsquema').val(9).prop('selected', true);
+            }else{
+                $('#seqTipoEsquema').val(objRespuesta.esquema[0].valor).prop('selected', true);
+            }
+
+        }
+
+        if( bolCalcularAporte == true ) {
+            valorSubsidio();
+        }
 
         objCargando.hide();
     }
@@ -3643,7 +3703,7 @@ function desembolsoEstudioTitulos(seqFormulario) {
                     var wndFormato;
                     try {
 
-                        var txtUrl = "./contenidos/desembolso/formatoEstudioTitulos.php";
+                        var txtUrl = "./contenidos/desembolso/formatoEstudioTitulosformatoEstudioTitulos.php";
                         txtUrl += "?seqFormulario=" + seqFormulario;
 
                         var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
@@ -3957,19 +4017,39 @@ function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
     }
 
     var aceptar = function () {
-        direccionGenerada = document.getElementById(txtDivDireccionGenerada);
-        txtDireccionForm.value.replace(/s{2,}/g, ' ');
-        txtDireccionForm.value = direccionGenerada.innerHTML;
-        this.cancel();
 
-        direccionGenerada.innerHTML = txtDireccionForm.value;
-        //mostrarMapa(txtDireccionForm);
-
-        var objCiudad = document.getElementById("seqCiudad");
-        if (objCiudad != null) {
-            objCiudad.focus();
+        var bolAlerta = false;
+        if( YAHOO.util.Dom.get('radTipoDireccion').checked ){
+            if( YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0,1) == "-" ){
+                alert( "Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'" );
+                bolAlerta = true;
+            }else{
+                if(
+                    YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
+                    YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
+                    YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
+                    YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
+                ){
+                    alert( "Complete la dirección" );
+                    bolAlerta = true;
+                }
+            }
         }
 
+        if( bolAlerta == false ) {
+            direccionGenerada = document.getElementById(txtDivDireccionGenerada);
+            txtDireccionForm.value.replace(/s{2,}/g, ' ');
+            txtDireccionForm.value = direccionGenerada.innerHTML;
+            this.cancel();
+
+            direccionGenerada.innerHTML = txtDireccionForm.value;
+            //mostrarMapa(txtDireccionForm);
+
+            var objCiudad = document.getElementById("seqCiudad");
+            if (objCiudad != null) {
+                objCiudad.focus();
+            }
+        }
     }
 
     var cancelar = function () {
@@ -6665,73 +6745,72 @@ function espia() {
     YAHOO.util.Connect.asyncRequest("POST", "./espia.php", cb, datosFormulario);
 }
 
-/**
- * Funcion que pregunta si desea adelantar el grupo familiar
- * @author Jaison Ospina
- * @author Jose Camilo Bernal
- * @author Bernardo Zerad
- * @version 1.0 Jul 2013 
- * @version 1.1 Ene 2014
- */
-
-function preguntarGrupoFamiliar() {
-
-    var objFormulario = YAHOO.util.Dom.get("frmInscripcion");
-    var objEstadoProceso = YAHOO.util.Dom.get("seqEstadoProceso");
-
-    espia();
-
-    var txtMensaje = "<div style='text-align:left'>";
-    txtMensaje += "<span class='msgError' style='font-size:12px';>Desea Adelantar la actualizacón del Hogar?</span>";
-    txtMensaje += "</div>";
-
-    // COMPORTAMIENTO SI SE PRESIONA -- SI -- EN EL CUADRO
-    var handleYes = function () {
-        objEstadoProceso.value = 36; // nscripcion - Hogar Actualizado
-        pedirConfirmacion('mensajes', objFormulario, './contenidos/subsidios/pedirConfirmacion.php');
-        this.cancel();
-    }
-
-    // COMPORTAMIENTO SI SE PRESIONA -- NO -- EN EL CUADRO
-    var handleNo = function () {
-        pedirConfirmacion('mensajes', objFormulario, './contenidos/subsidios/pedirConfirmacion.php');
-        this.cancel();
-    }
-
-    var objAtributos = {
-        width: "330px",
-        effect: {
-            effect: YAHOO.widget.ContainerEffect.FADE,
-            duration: 0.75
-        },
-        fixedcenter: true,
-        zIndex: 1,
-        visible: false,
-        modal: true,
-        draggable: true,
-        close: false,
-        text: txtMensaje,
-        buttons: [
-            {
-                text: "Actualizar",
-                handler: handleYes
-            },
-            {
-                text: "No Actualizar",
-                handler: handleNo,
-                isDefault: true
-            }
-        ]
-    }
-
-    // INSTANCIA EL OBJETO DIALOGO
-    var objDialogo1 = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
-
-    // Muestra el cuadro de dialogo
-    objDialogo1.setHeader("Actualización del Hogar");
-    objDialogo1.render(document.body);
-    objDialogo1.show();
-}
+// /**
+//  * Funcion que pregunta si desea adelantar el grupo familiar
+//  * @author Jaison Ospina
+//  * @author Jose Camilo Bernal
+//  * @author Bernardo Zerad
+//  * @version 1.0 Jul 2013
+//  * @version 1.1 Ene 2014
+//  */
+// function preguntarGrupoFamiliar() {
+//
+//     var objFormulario = YAHOO.util.Dom.get("frmInscripcion");
+//     var objEstadoProceso = YAHOO.util.Dom.get("seqEstadoProceso");
+//
+//     espia();
+//
+//     var txtMensaje = "<div style='text-align:left'>";
+//     txtMensaje += "<span class='msgError' style='font-size:12px';>Desea Adelantar la actualizacón del Hogar?</span>";
+//     txtMensaje += "</div>";
+//
+//     // COMPORTAMIENTO SI SE PRESIONA -- SI -- EN EL CUADRO
+//     var handleYes = function () {
+//         objEstadoProceso.value = 36; // nscripcion - Hogar Actualizado
+//         pedirConfirmacion('mensajes', objFormulario, './contenidos/subsidios/pedirConfirmacion.php');
+//         this.cancel();
+//     }
+//
+//     // COMPORTAMIENTO SI SE PRESIONA -- NO -- EN EL CUADRO
+//     var handleNo = function () {
+//         pedirConfirmacion('mensajes', objFormulario, './contenidos/subsidios/pedirConfirmacion.php');
+//         this.cancel();
+//     }
+//
+//     var objAtributos = {
+//         width: "330px",
+//         effect: {
+//             effect: YAHOO.widget.ContainerEffect.FADE,
+//             duration: 0.75
+//         },
+//         fixedcenter: true,
+//         zIndex: 1,
+//         visible: false,
+//         modal: true,
+//         draggable: true,
+//         close: false,
+//         text: txtMensaje,
+//         buttons: [
+//             {
+//                 text: "Actualizar",
+//                 handler: handleYes
+//             },
+//             {
+//                 text: "No Actualizar",
+//                 handler: handleNo,
+//                 isDefault: true
+//             }
+//         ]
+//     }
+//
+//     // INSTANCIA EL OBJETO DIALOGO
+//     var objDialogo1 = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
+//
+//     // Muestra el cuadro de dialogo
+//     objDialogo1.setHeader("Actualización del Hogar");
+//     objDialogo1.render(document.body);
+//     objDialogo1.show();
+// }
 
 /* *************************************************************************************
  * Funciones que contralan los combos dependientes de Ciudad, Barrio, Localidad y  UPZ *
@@ -10008,3 +10087,168 @@ function alertaFormularioCerrado( objBolCerrado , bolCerradoBaseDatos, bolPermis
 
 
 }
+
+/**
+ *
+ * @param txtCampo
+ * @param txtValor
+ */
+function alertaDigitacionCampo(txtCampo,txtValor){
+
+    var objAlerta = YAHOO.util.Dom.get(txtCampo);
+    var txtMensaje = "";
+    var valRetorno = txtValor;
+    var bolAlerta = false;
+
+    // verifica con los datos vivos (no los de la BD
+    // si lo que se esta digitando supera los 2 salarios minimos
+    // tomados de la lecturaConfiguracion a travez de un input hidden
+    if( txtCampo == 'ingresos' ){
+
+        var valDigitado = 0;
+        var valSalarioHogarRestante = 0;
+        var valNuevaSuma = 0;
+
+        var numDocumento = 0;
+        var objValIngresoHogar = null;
+        var objSMMLV = null;
+        var objDatosHogar = null;
+        var arrTablasCiudadanos = null;
+        var objIngresoCiudadano = null;
+
+        // obtiene el valor digitado
+        objAlerta.value = ( objAlerta.value == "" )? 0 : objAlerta.value;
+        valDigitado = parseInt( objAlerta.value.replace(/[^0-9]/g,'') );
+
+        // obtiene la suma de ingresos del resto del hogar
+        // dado que cuando se presiona el boton de edicion
+        // los datos del ciudadano ya no son accesibles
+        objValIngresoHogar = YAHOO.util.Dom.get('valIngresoHogar');
+        objSMMLV = YAHOO.util.Dom.get('valSMMLV');
+        objDatosHogar = YAHOO.util.Dom.get('datosHogar');
+        arrTablasCiudadanos = objDatosHogar.getElementsByTagName('table');
+        for( i = 0 ; i < arrTablasCiudadanos.length ; i++ ){
+            if( arrTablasCiudadanos[i].id != "" && ( ! isNaN( arrTablasCiudadanos[i].id ) ) ){
+                numDocumento = arrTablasCiudadanos[i].id;
+                objIngresoCiudadano = YAHOO.util.Dom.get( numDocumento + '-valIngresos' );
+                valSalarioHogarRestante = parseInt(valSalarioHogarRestante + objIngresoCiudadano.value);
+            }
+        }
+
+        // En caso de cancelar este es el valor original que tenia el ciudadano
+        valRetorno =  parseInt(objValIngresoHogar.value.replace(/[^0-9]/g,'')) - valSalarioHogarRestante;
+
+        // Ingreso de los miembros de hogar
+        valNuevaSuma = parseInt( valDigitado + valSalarioHogarRestante );
+
+        // Si la suma supera los dos salarios minimos
+        if( valNuevaSuma > parseInt( objSMMLV.value * 2 ) ){
+            bolAlerta = true;
+            txtMensaje = "<li class='msgError'>El valor del ingreso que esta digitando lleva a que el hogar, en conjunto, supere los dos (2) SMMLV, ¿quiere continuar?</li>";
+        }
+
+        formatoSeparadores(objAlerta);
+    }
+
+    // no se permite el valor de cero hogares que habitan la vivienda
+    // por encima de 10 se muestra una advertencia
+    if( txtCampo == 'numHabitaciones' ){
+        if( parseInt( objAlerta.value.replace(/[^0-9]/g,'') ) > 10 ){
+            bolAlerta = true;
+            txtMensaje = "<li class='msgError'>Esta afirmando que hay mas de 10 hogares en la misma vivienda, ¿quiere continuar?</li>";
+        }
+    }
+
+    // si el numero de dormitorios supera los miembros de hogar se
+    // muestra una advertencia
+    if( txtCampo == 'numHacinamiento' ){
+
+        var objDatosHogar = null;
+        var arrTablasCiudadanos = null;
+        var numMiembros = 0;
+        var objAgregarMiembro = YAHOO.util.Dom.get("agregarMiembro");
+
+        // verifica que no haya un ciudadano en modo de edicion en el formulario
+        if( objAgregarMiembro != null && objAgregarMiembro.style.display != "none" ){
+            bolAlerta = true;
+            txtMensaje = "<li class='msgError'>Por favor verifique que los miembros de hogar se encuentren agregados correctamente.</li>";
+        }
+
+        // cuenta los miembros de hogar
+        objDatosHogar = YAHOO.util.Dom.get('datosHogar');
+        arrTablasCiudadanos = objDatosHogar.getElementsByTagName('table');
+        for( i = 0 ; i < arrTablasCiudadanos.length ; i++ ){
+            if( arrTablasCiudadanos[i].id != "" && ( ! isNaN( arrTablasCiudadanos[i].id ) ) ){
+                numMiembros = numMiembros + 1;
+            }
+        }
+
+        // si el numero de habitaciones supera el numero de miembros del hogar
+        if( ( parseInt( objAlerta.value.replace(/[^0-9]/g,'') ) > numMiembros ) && txtMensaje == "" ){
+            bolAlerta = true;
+            txtMensaje = "<li class='msgError'>Hay mas dormitorios que miembros de hogar, ¿quiere continuar?</li>";
+        }
+
+
+    }
+
+
+
+
+
+
+    if( bolAlerta == true ){
+
+        var handleOk = function () {
+            this.cancel();
+        }
+
+        var handleErr = function () {
+            objAlerta.value = valRetorno;
+            formatoSeparadores(objAlerta);
+            this.cancel();
+        }
+
+        var objAtributos = {
+            width: "330px",
+            effect: {
+                effect: YAHOO.widget.ContainerEffect.FADE,
+                duration: 0
+            },
+            fixedcenter: true,
+            zIndex: 1,
+            visible: false,
+            modal: true,
+            draggable: false,
+            close: false,
+            text: txtMensaje,
+            icon: YAHOO.widget.SimpleDialog.ICON_WARN,
+            buttons: [
+                {
+                    text: "Aceptar",
+                    handler: handleOk,
+                    isDefault: true
+                },
+                {
+                    text: "Cancelar",
+                    handler: handleErr
+                }
+            ]
+        }
+
+        // INSTANCIA EL OBJETO DIALOGO
+        var objDialogo1 = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
+
+        // Muestra el cuadro de dialogo
+        objDialogo1.setHeader("Atención");
+        objDialogo1.render(document.body);
+        objDialogo1.show();
+    }
+
+
+
+
+}
+
+
+

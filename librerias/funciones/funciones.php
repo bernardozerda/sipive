@@ -184,8 +184,8 @@ function obtenerNombres($txtTabla, $txtCampo, $txtValor) {
         case $txtTabla != "":
             if ($txtValor != "Ninguno" and trim($txtValor) != "" and trim($txtValor) != "null") {
                 $txtSelect = "txt" . substr($txtCampo, 3);
-                $txtSelect = ereg_replace("[0-9]", "", $txtSelect);
-                $txtCampo = ereg_replace("[0-9]", "", $txtCampo);
+                $txtSelect = mb_ereg_replace("[0-9]", "", $txtSelect);
+                $txtCampo = mb_ereg_replace("[0-9]", "", $txtCampo);
                 if (isset($arrConversiones[$txtCampo])) {
                     $txtCampo = $arrConversiones[$txtCampo];
                 }
@@ -868,23 +868,25 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno){
     $arrEsquema[3][13][] = 9;  // proyectos sdht
 
     // obtiene los esquemas segun modalidad y plan de gobierno
-    $arrTipoEsquemas = obtenerDatosTabla(
-        "t_pry_tipo_esquema",
-        array("seqTipoEsquema","txtTipoEsquema"),
-        "seqTipoEsquema",
-        "estado = 1 and seqTipoEsquema IN (".implode(",",$arrEsquema[$seqPlanGobierno][$seqModalidad]).")",
-        "txtTipoEsquema"
-    );
-
+    $arrTipoEsquemas = array();
+    if( isset( $arrEsquema[$seqPlanGobierno][$seqModalidad] ) ) {
+        $arrTipoEsquemas = obtenerDatosTabla(
+            "t_pry_tipo_esquema",
+            array("seqTipoEsquema", "txtTipoEsquema"),
+            "seqTipoEsquema",
+            "estado = 1 and seqTipoEsquema IN (" . implode(",", $arrEsquema[$seqPlanGobierno][$seqModalidad]) . ")",
+            "txtTipoEsquema"
+        );
+    }
     return $arrTipoEsquemas;
 }
 
 function obtenerTextoConvenio($seqConvenio){
-    $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtNombre","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio");
+    $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtConvenio","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio");
     $txtConvenio = "Sin Convenio Seleccionado";
     if( intval( $seqConvenio ) > 1 ){
         $txtConvenio =
-            "<strong>Nombre:</strong> " . $arrConvenio[$seqConvenio]['txtNombre'] . "<br>" .
+            "<strong>Nombre:</strong> " . $arrConvenio[$seqConvenio]['txtConvenio'] . "<br>" .
             "<strong>Banco:</strong> " . $arrConvenio[$seqConvenio]['txtBanco'] . "<br>" .
             "<strong>Cupos:</strong> " . number_format($arrConvenio[$seqConvenio]['numCupos'],0,".",".") . "<br>" .
             "<strong>Ocupados:</strong> " . number_format($arrConvenio[$seqConvenio]['numOcupados'],0,".",".") . "<br>" .

@@ -1452,6 +1452,7 @@ class CasaMano
             foreach ($claFormulario as $txtClave => $txtValor) {
                 if ($txtClave != "arrCiudadano") {
                     if(isset( $arrPost[$txtClave] ) || is_null($arrPost[$txtClave])) {
+                        //echo "$txtClave ==> " . $claFormulario->$txtClave . " ==> " . $arrPost[$txtClave] . "<br>";
                         $claFormulario->$txtClave = regularizarCampo($txtClave, $arrPost[$txtClave]);
                     }
                 }
@@ -1755,7 +1756,8 @@ class CasaMano
         // - Estados del proceso permitidos
         // - Etapas prohibidas
         // - Estados prohibidos
-        if (
+        if ( is_array($this->arrFases[$txtFlujo]['modalidad']) and
+            is_array($this->arrFases[$txtFlujo]['esquema']) and
             in_array($this->objPostulacion->seqModalidad, $this->arrFases[$txtFlujo]['modalidad']) and
             in_array($this->objPostulacion->seqTipoEsquema, $this->arrFases[$txtFlujo]['esquema'])
         ) {

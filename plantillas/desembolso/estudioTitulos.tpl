@@ -156,7 +156,7 @@
 							</a></i></u> del 
 							<u><i><a href="#" id="fecha2" onClick="calendarioDesembolso( ['fecha1','fecha2'] , 'variables' );" >
 								{if $claDesembolso->arrTitulos.fchEscrituraTitulo != ""}
-									{$claDesembolso->arrTitulos.fchEscrituraTituloTexto|date_format:"%d de %B del %Y"}
+									{$claDesembolso->arrTitulos.fchEscrituraTituloTexto}
 								{else}
 									Fecha Escritura
 								{/if}

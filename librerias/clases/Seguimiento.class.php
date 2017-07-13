@@ -3947,7 +3947,19 @@ class Seguimiento {
 
         if (empty($this->arrErrores)) {
 
+            // pr($arrPost);
+
             $txtCambios = $this->$txtFuncion($arrPost);
+
+            // LAS ORIENTACIONES REALIZADAS POR EL INFORMADOR
+            // A LOS HOGARES QUE SE REGISTREN CON LA GESTIÓN
+            // -- ORIENTACION PROGRAMA "MI CASA YA" --
+            // NO SERAN OBJETO DE VALIDACION DEL FORMULARIO
+            // PERO SI GUARDARAN LOS DATOS DE CONTACTO
+            // SI REALIZAN CAMBIOS AL RESTO DE DATOS SERAN IGNORADOS
+            if (intval($arrPost['seqGestion']) == 107) {
+                $txtCambios = "";
+            }
 
             $sql = "
                  INSERT INTO T_SEG_SEGUIMIENTO (

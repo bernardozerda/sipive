@@ -31,6 +31,25 @@ $arrDocumentosMayorEdad[] = 1; // Cedula Ciudadania
 $arrDocumentosMayorEdad[] = 2; // Cedula extranjeria
 $arrDocumentosMayorEdad[] = 6; // NIT
 
+// Variables que si se cambian, debe irse a estado inscrito - hogar actualizado
+$arrCamposCalificacion["formulario"]["valIngresoHogar"] = "Ingresos del hogar";
+$arrCamposCalificacion["formulario"]["numHabitaciones"] = "N° Hogares en la vivienda";
+$arrCamposCalificacion["formulario"]["numHacinamiento"] = "N° Dormitorios";
+$arrCamposCalificacion["formulario"]["bolIntegracionSocial"] = "Integración Social";
+$arrCamposCalificacion["formulario"]["bolSecMujer"] = "Secretaría de la Mujer";
+$arrCamposCalificacion["formulario"]["bolIpes"] = "IPES";
+$arrCamposCalificacion["ciudadano"]["seqEtnia"] = "Condición Étnica";
+$arrCamposCalificacion["ciudadano"]["seqParentesco"] = "Parentesco";
+$arrCamposCalificacion["ciudadano"]["seqCondicionEspecial"] = "Condicion Especial";
+$arrCamposCalificacion["ciudadano"]["seqCondicionEspecial2"] = "Condicion Especial 2";
+$arrCamposCalificacion["ciudadano"]["seqCondicionEspecial3"] = "Condicion Especial 3";
+$arrCamposCalificacion["ciudadano"]["fchNacimiento"] = "Fecha de Nacimiento";
+$arrCamposCalificacion["ciudadano"]["seqNivelEducativo"] = "Nivel Educativo";
+$arrCamposCalificacion["ciudadano"]["numAnosAprobados"] = "Años Aprobados";
+$arrCamposCalificacion["ciudadano"]["seqSalud"] = "Afiliacion a salud";
+$arrCamposCalificacion["ciudadano"]["bolLgtb"] = "LGTBI";
+
+
 $arrEstadosCiviles = obtenerDatosTabla("t_ciu_estado_civil", array("seqEstadoCivil", "txtEstadoCivil"), "seqEstadoCivil", "bolActivo = 1");
 $arrParentescos = obtenerDatosTabla("t_ciu_parentesco", array("seqParentesco", "txtParentesco"), "seqParentesco", "bolActivo = 1");
 $arrSisben = obtenerDatosTabla("t_frm_sisben", array("seqSisben", "txtSisben"), "seqSisben", $txtCondicion);
@@ -524,6 +543,58 @@ if (empty($arrErrores)) {
 } // si no hay errores generales
 
 /***********************************************************************************************************************
+ * VERIFICA SI HAY CAMBIOS EN LAS VARIBLES DE CALIFICACION
+ ***********************************************************************************************************************/
+
+if( empty($arrErrores ) and $_POST['seqEstadoProceso'] != 37 ) {
+
+    // valida los cambios en las variables de calificacion
+    // elimina ciudadanos
+    $bolCambiosCalificacion = false;
+    $arrCedulasFormulario = array();
+    foreach ($claFormulario->arrCiudadano as $objCiudadano) {
+        $numDocumento = $objCiudadano->numDocumento;
+        $arrCedulasFormulario[] = $numDocumento;
+        if (!isset($_POST['hogar'][$numDocumento])) {
+            $arrMensajes[] = "Ha modificado datos sensibles a la calificacion de hogares (eliminar ciudadanos), el hogar será devuelto a etapa de inscripcion - hogar actualizado";
+            $bolCambiosCalificacion = true;
+        }
+    }
+
+    // Determina cuando un ciudadano fue adicionado
+    foreach ($_POST['hogar'] as $numDocumento => $arrMiembro) {
+        if (!in_array($numDocumento, $arrCedulasFormulario)) {
+            $arrMensajes[] = "Ha modificado datos sensibles a la calificacion de hogares (adicion de ciudadano), el hogar será devuelto a etapa de inscripcion - hogar actualizado";
+            $bolCambiosCalificacion = true;
+        }
+    }
+
+    // Revisa cambios en las variables de calificacion en el formulario
+    foreach ($arrCamposCalificacion['formulario'] as $txtClave => $txtValor) {
+        if ($claFormulario->$txtClave != $_POST[$txtClave]) {
+            $arrMensajes[] = "Ha modificado datos sensibles a la calificacion de hogares ($txtValor), el hogar será devuelto a etapa de inscripcion - hogar actualizado";
+            $bolCambiosCalificacion = true;
+        }
+    }
+
+    // Revisa cambios en las variables de calificacion en los ciudadanos
+    foreach ($arrCamposCalificacion['ciudadano'] as $txtClave => $txtValor) {
+        foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
+            $numDocumento = $objCiudadano->numDocumento;
+            if (isset($_POST['hogar'][$numDocumento])) {
+                if ($objCiudadano->$txtClave != $_POST['hogar'][$numDocumento][$txtClave]) {
+                    $arrMensajes[] =
+                        "Ha modificado datos sensibles a la calificacion del ciudadano " .
+                        number_format($objCiudadano->numDocumento) .
+                        " ($txtValor), el hogar será devuelto a etapa de inscripcion - hogar actualizado";
+                    $bolCambiosCalificacion = true;
+                }
+            }
+        }
+    }
+}
+
+/***********************************************************************************************************************
  * PROCESAMIENTO DE LOS DATOS
  ***********************************************************************************************************************/
 
@@ -615,13 +686,21 @@ if (empty($arrErrores)) {
             )
         );
 
-        $claFormulario->seqEstadoProceso = 37;
+        // Estando en etapa de inscripcion y postulacion
+        // si se modifican datos sensibles a la calificacion
+        // el estado del proceso se regresa a INSCRIPCION HOGAR ACTUALIZADO
+        if( $bolCambiosCalificacion == true ){
+            $claFormulario->seqEstadoProceso = 37;
+        }
+
         $claFormulario->fchUltimaActualizacion = date("Y-m-d H:i:s");
         $claFormulario->editarFormulario($_POST['seqFormulario']);
         if (!empty($claFormulario->arrErrores)) {
             $arrErrores = $claFormulario->arrErrores;
         }else{
-            $arrMensajes = $claSeguimiento->arrMensajes;
+            foreach( $claSeguimiento->arrMensajes as $txtMensaje ){
+                $arrMensajes[] = $txtMensaje;
+            }
         }
     }
 }

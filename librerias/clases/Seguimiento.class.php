@@ -101,6 +101,10 @@ class Seguimiento {
         $this->arrConversionCampos['numTelefono1']['tabla'] = "";
         $this->arrConversionCampos['numTelefono2']['nombre'] = "Telefono 2";
         $this->arrConversionCampos['numTelefono2']['tabla'] = "";
+        $this->arrConversionCampos['numHabitaciones']['nombre'] = "N° Hogares en la vivienda";
+        $this->arrConversionCampos['numHabitaciones']['tabla'] = "";
+        $this->arrConversionCampos['numHacinamiento']['nombre'] = "Número Dormitorios";
+        $this->arrConversionCampos['numHacinamiento']['tabla'] = "";
         $this->arrConversionCampos['seqEstadoProceso']['nombre'] = "Estado del proceso";
         $this->arrConversionCampos['seqEstadoProceso']['tabla'] = "T_FRM_ESTADO_PROCESO";
         $this->arrConversionCampos['seqLocalidad']['nombre'] = "Localidad";
@@ -109,6 +113,10 @@ class Seguimiento {
         $this->arrConversionCampos['seqCiudad']['tabla'] = "T_FRM_CIUDAD";
         $this->arrConversionCampos['seqBarrio']['nombre'] = "Barrio";
         $this->arrConversionCampos['seqBarrio']['tabla'] = "T_FRM_BARRIO";
+        $this->arrConversionCampos['seqConvenio']['nombre'] = "Convenio";
+        $this->arrConversionCampos['seqConvenio']['tabla'] = "T_FRM_CONVENIO";
+        $this->arrConversionCampos['seqEntidadSubsidio']['nombre'] = "Entidad Subsidio";
+        $this->arrConversionCampos['seqEntidadSubsidio']['tabla'] = "T_FRM_ENTIDAD_SUBSIDIO";
         $this->arrConversionCampos['seqPlanGobierno']['nombre'] = "Plan de Gobierno";
         $this->arrConversionCampos['seqPlanGobierno']['tabla'] = "T_FRM_PLAN_GOBIERNO";
         $this->arrConversionCampos['seqPuntoAtencion']['nombre'] = "Punto Atencion";
@@ -250,6 +258,8 @@ class Seguimiento {
         $this->arrTipoDato['numCelular'] = 'numero';
         $this->arrTipoDato['numCortes'] = 'numero';
         $this->arrTipoDato['numDocumento'] = 'numero';
+        $this->arrTipoDato['numHabitaciones'] = 'numero';
+        $this->arrTipoDato['numHacinamiento'] = 'numero';
         $this->arrTipoDato['numNinosNucleo'] = 'numero';
         $this->arrTipoDato['numPuntajeSisben'] = 'numero';
         $this->arrTipoDato['numTelefono1'] = 'numero';

@@ -13,7 +13,7 @@
                                 {if $objPadre->txtEspanol|lower != 'inicio' and  $objPadre->txtEspanol|lower != 'proceso' and  $objPadre->txtEspanol|lower != 'esquemas' and  $objPadre->txtEspanol|lower != 'administracion' and $objPadre->txtCodigo != ""}   
                                     <li><a href="#menu-{$objPadre->txtEspanol}"                                                                             
                                            onClick="cargarContenido('contenido', './contenidos/{$objPadre->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqPadre}', false);"
-                                            >{$objPadre->txtEspanol} **{$objPadre->txtCodigo}</a> </li>
+                                            >{$objPadre->txtEspanol}</a> </li>
                                     {/if}
                                     {foreach from=$objPadre->hijos key=seqHijo item=objHijo}
                                     <li><a href="#menu-{$objHijo->txtEspanol}" onClick="cargarContenido('contenido', './contenidos/{$objHijo->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqHijo}', false);">{$objHijo->txtEspanol} </a> </li>

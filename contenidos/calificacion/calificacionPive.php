@@ -11,7 +11,6 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-     
         $txtPrefijoRuta = "../../";
         include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
         include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
@@ -34,7 +33,7 @@ and open the template in the editor.
 //        }
 
         if (isset($_FILES["fileDocumentos"]) && is_uploaded_file($_FILES['fileDocumentos']['tmp_name'])) {
-          
+
             $nombreArchivo = $_FILES['fileDocumentos']['tmp_name'];
             $lineas = file($nombreArchivo);
             foreach ($lineas as $linea_num => $linea) {

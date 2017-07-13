@@ -69,6 +69,17 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
     $txtCambios = $claSeguimiento->cambiosPostulacion( $_POST );
     $bolConfirmacion = ( trim($txtCambios) == "" )? false : true;
 
+    // LAS ORIENTACIONES REALIZADAS POR EL INFORMADOR
+    // A LOS HOGARES QUE SE REGISTREN CON LA GESTIÓN
+    // -- ORIENTACION PROGRAMA "MI CASA YA" --
+    // NO SERAN OBJETO DE VALIDACION DEL FORMULARIO
+    // PERO SI GUARDARAN LOS DATOS DE CONTACTO
+    // SI REALIZAN CAMBIOS AL RESTO DE DATOS SERAN IGNORADOS
+    if( $_POST['seqGestion'] == 107 ){
+        $bolConfirmacion = false;
+    }
+
+
 }
 
 /* * **********************************************************************************************************

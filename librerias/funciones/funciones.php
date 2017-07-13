@@ -886,7 +886,7 @@ function obtenerTextoConvenio($seqConvenio){
     $txtConvenio = "Sin Convenio Seleccionado";
     if( intval( $seqConvenio ) > 1 ){
         $txtConvenio =
-            "<strong>Nombre:</strong> " . $arrConvenio[$seqConvenio]['txtNombre'] . "<br>" .
+            "<strong>Nombre:</strong> " . $arrConvenio[$seqConvenio]['txtConvenio'] . "<br>" .
             "<strong>Banco:</strong> " . $arrConvenio[$seqConvenio]['txtBanco'] . "<br>" .
             "<strong>Cupos:</strong> " . number_format($arrConvenio[$seqConvenio]['numCupos'],0,".",".") . "<br>" .
             "<strong>Ocupados:</strong> " . number_format($arrConvenio[$seqConvenio]['numOcupados'],0,".",".") . "<br>" .

@@ -429,6 +429,11 @@ if (empty($arrErrores)) {
         $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
     }
 
+    // Advertencia para el ingreso del hogar en cero
+    if (intval($_POST['valIngresoHogar']) == 0) {
+        $arrMensajes[] = "Para el Total Ingresos Hogar se ha digitado el valor de Cero (0)";
+    }
+
     /******************************************************************************************************
      * VALIDACIONES PARA LA PESTANA DE DATOS DE LA POSTULACION
      * **************************************************************************************************** */

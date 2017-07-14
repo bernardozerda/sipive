@@ -10149,7 +10149,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         // Si la suma supera los dos salarios minimos
         if( valNuevaSuma > parseInt( objSMMLV.value * 2 ) ){
             bolAlerta = true;
-            txtMensaje = "<li class='msgError'>El valor del ingreso que esta digitando lleva a que el hogar, en conjunto, supere los dos (2) SMMLV, ¿quiere continuar?</li>";
+            txtMensaje = "<li class='msgError'>Con el valor ingreso digitado el Total de Ingresos Hogar supera los Dos (2) SMMLV. Sugerir al hogar tomar información de los beneficios del Gobierno Nacional - Min-Vivienda. ¿Es un dato válido?</li>";
         }
 
         formatoSeparadores(objAlerta);
@@ -10160,7 +10160,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
     if( txtCampo == 'numHabitaciones' ){
         if( parseInt( objAlerta.value.replace(/[^0-9]/g,'') ) > 10 ){
             bolAlerta = true;
-            txtMensaje = "<li class='msgError'>Esta afirmando que hay mas de 10 hogares en la misma vivienda, ¿quiere continuar?</li>";
+            txtMensaje = "<li class='msgError'>El valor digitado en número de hogares es mayor de 10 hogares en la misma vivienda. , ¿Es un dato válido?</li>";
         }
     }
 
@@ -10191,7 +10191,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         // si el numero de habitaciones supera el numero de miembros del hogar
         if( ( parseInt( objAlerta.value.replace(/[^0-9]/g,'') ) > numMiembros ) && txtMensaje == "" ){
             bolAlerta = true;
-            txtMensaje = "<li class='msgError'>Hay mas dormitorios que miembros de hogar, ¿quiere continuar?</li>";
+            txtMensaje = "<li class='msgError'>El número de dormitorios es mayor al total de miembros del hogar, ¿Es un dato válido?</li>";
         }
 
 

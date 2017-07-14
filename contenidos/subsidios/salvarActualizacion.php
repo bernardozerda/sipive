@@ -332,17 +332,36 @@ if (empty($arrErrores)) {
      * VALIDACIONES PARA LA PESTANA DE DATOS DEL HOGAR
      ******************************************************************************************************/
 
-    // Vive en arriendo, entonces tiene que tener los datos necesarios
-    if (intval($_POST['seqVivienda']) == 1) {
-        if (intval($_POST['valArriendo']) == 0) {
-            $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
-        }
-        if (!esFechaValida($_POST['fchArriendoDesde'])) {
-            $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
-        }
-        if (trim($_POST['txtComprobanteArriendo']) == "") {
-            $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
-        }
+    switch(intval($_POST['seqVivienda'])){
+        case 1:
+            if (intval($_POST['valArriendo']) == 0) {
+                $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
+            }
+            if (!esFechaValida($_POST['fchArriendoDesde'])) {
+                $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
+            }
+            if (trim($_POST['txtComprobanteArriendo']) == "") {
+                $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
+            }
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
+        case 2:
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
+        case 4:
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
+        case 6:
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
     }
 
     // direccion de residencia
@@ -409,11 +428,6 @@ if (empty($arrErrores)) {
     if (intval($_POST['numHabitaciones']) == 0) {
         $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
     }
-
-    // Cantidad de dormitorios (pueden ser cero - dormitorio 'cambuche')
-//    if (intval($_POST['numHacinamiento']) == 0) {
-//        $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
-//    }
 
     /******************************************************************************************************
      * VALIDACIONES PARA LA PESTANA DE DATOS DE LA POSTULACION
@@ -545,8 +559,8 @@ if (empty($arrErrores)) {
 /***********************************************************************************************************************
  * VERIFICA SI HAY CAMBIOS EN LAS VARIBLES DE CALIFICACION
  ***********************************************************************************************************************/
-
-if( empty($arrErrores ) and $_POST['seqEstadoProceso'] != 37 ) {
+$seqEtapa = array_shift( obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array( "seqEstadoProceso" , "seqEtapa" ) , "seqEstadoProceso" ) );
+if( empty($arrErrores ) and ( $seqEtapa != 1 or $_POST['seqEstadoProceso'] == 38 )   ) {
 
     // valida los cambios en las variables de calificacion
     // elimina ciudadanos
@@ -604,6 +618,16 @@ if (empty($arrErrores)) {
     $claSeguimiento = new Seguimiento();
     $claFormulario = new FormularioSubsidios();
     $claFormulario->cargarFormulario($_POST['seqFormulario']);
+
+    // Estando en etapa de inscripcion y postulacion
+    // si se modifican datos sensibles a la calificacion
+    // el estado del proceso se regresa a INSCRIPCION HOGAR ACTUALIZADO
+    if( $bolCambiosCalificacion == true or $_POST['seqEstadoProceso'] == 35 or $_POST['seqEstadoProceso'] ==  36 ){
+        $claFormulario->seqEstadoProceso = 37;
+        $_POST['seqEstadoProceso'] = 37;
+    }else{
+        $claFormulario->seqEstadoProceso = $_POST['seqEstadoProceso'];
+    }
 
     $claSeguimiento->arrIgnorarCampos = array();
     $_POST['nombre'] = Ciudadano::obtenerNombre($_POST['numDocumento']);
@@ -670,7 +694,7 @@ if (empty($arrErrores)) {
 
         // cambios en el formulario
         foreach ($claFormulario as $txtClave => $txtValor) {
-            if ($txtClave != "arrCiudadano") {
+            if ($txtClave != "arrCiudadano" and $txtClave != "seqEstadoProceso") { // la logica para el cambio de estado esta en la linea 625
                 if( array_key_exists($txtClave, $_POST) ) {
                     $claFormulario->$txtClave = regularizarCampo($txtClave, $_POST[$txtClave]);
                 }
@@ -686,13 +710,7 @@ if (empty($arrErrores)) {
             )
         );
 
-        // Estando en etapa de inscripcion y postulacion
-        // si se modifican datos sensibles a la calificacion
-        // el estado del proceso se regresa a INSCRIPCION HOGAR ACTUALIZADO
-        if( $bolCambiosCalificacion == true ){
-            $claFormulario->seqEstadoProceso = 37;
-        }
-
+        $claFormulario->fchInscripcion = ( ! esFechaValida( $claFormulario->fchInscripcion ) )? date("Y-m-d H:i:s") : $claFormulario->fchInscripcion;
         $claFormulario->fchUltimaActualizacion = date("Y-m-d H:i:s");
         $claFormulario->editarFormulario($_POST['seqFormulario']);
         if (!empty($claFormulario->arrErrores)) {

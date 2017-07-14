@@ -544,8 +544,8 @@
                                                      >+</div>  
                                             </td>
                                             <td width="282px" style="padding-left:5px;">
-                                                {$objCiudadano->txtNombre1} {$objCiudadano->txtNombre2} 
-                                                {$objCiudadano->txtApellido1} {$objCiudadano->txtApellido2}
+                                                {$objCiudadano->txtNombre1|ucwords} {$objCiudadano->txtNombre2|ucwords}
+                                                {$objCiudadano->txtApellido1|ucwords} {$objCiudadano->txtApellido2|ucwords}
                                             </td>
                                             <td width="140px" align="right" style="padding-right: 15px">
                                                 {if $tipoDocumento == 1}     C.C.

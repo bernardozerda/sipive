@@ -831,6 +831,83 @@ class Seguimiento {
         return $txtCambios;
     }
 
+        public function cambiosCambioEstados($seqFormulario, $objAnterior, $objNuevo) {
+
+            $txtSeparador = $this->txtSeparador;
+            $txtSalto = $this->txtSalto;
+
+            $txtCambios = "<b>[ " . $seqFormulario . " ] Cambios en el hogar</b>" . $txtSalto;
+
+            // detecta cuidadanos nuevos y cambios en cada ciudadano
+            if (is_object($objNuevo)) {
+                foreach ($objNuevo->arrCiudadano as $seqCiudadano => $objCiudadano) {
+                    $txtCambios .= $txtSeparador . "<b>" .
+                        $objCiudadano->txtNombre1 . " " .
+                        $objCiudadano->txtNombre2 . " " .
+                        $objCiudadano->txtApellido1 . " " .
+                        $objCiudadano->txtApellido2 . " [ " .
+                        $objCiudadano->numDocumento . " ]</b> ";
+
+                    if (!isset($objAnterior->arrCiudadano[$seqCiudadano])) {
+                        $txtCambios .= "<span class='msgOk'>Adicionado</span>" . $txtSalto;
+                    } else {
+                        $txtCambios .= $txtSalto;
+                        foreach ($objCiudadano as $txtClave => $txtValorNuevo) {
+                            if (!in_array($txtClave, $this->arrIgnorarCampos)) {
+                                $txtValorAnterior = $objAnterior->arrCiudadano[$seqCiudadano]->$txtClave;
+                                if (($txtClave == "seqCiudadano") && ($txtValorNuevo == 0)) {
+                                    $txtCambios .= "";
+                                } else {
+                                    $txtCambios .= $this->compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, 2);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Para detectar ciudadanos eliminados
+            $sqlEstado = "SELECT seqEstadoProceso FROM T_FRM_FORMULARIO WHERE seqFormulario = " . $seqFormulario;
+            $exeEstado = mysql_query($sqlEstado);
+            $rowEstado = mysql_fetch_array($exeEstado);
+            if ($rowEstado['seqEstadoProceso'] == 35 || $rowEstado['seqEstadoProceso'] == 36) {
+                $a = "no haga nada";
+            } else {
+                if (is_object($objAnterior)) {
+                    foreach ($objAnterior->arrCiudadano as $seqCiudadano => $objCiudadano) {
+                        if (!isset($objNuevo->arrCiudadano[$seqCiudadano])) {
+                            $txtCambios .= $txtSeparador . "<b>" .
+                                $objCiudadano->txtNombre1 . " " .
+                                $objCiudadano->txtNombre2 . " " .
+                                $objCiudadano->txtApellido1 . " " .
+                                $objCiudadano->txtApellido2 . " [ " .
+                                $objCiudadano->numDocumento . " ]</b> ";
+                            $txtCambios .= "<span class='msgError'>Eliminado</span>" . $txtSalto;
+                        }
+                    }
+                }
+            }
+
+            // Cambios en el formulario
+            unset($objAnterior->arrCiudadano);
+            unset($objNuevo->arrCiudadano);
+
+            $txtCambios .= "<b>[ " . $seqFormulario . " ] Cambios en el formulario</b>" . $txtSalto;
+            if (is_object($objNuevo)) {
+                foreach ($objNuevo as $txtClave => $txtValorNuevo) {
+                    $txtClave = trim($txtClave);
+                    if (!in_array($txtClave, $this->arrIgnorarCampos)) {
+                        $txtValorAnterior = $objAnterior->$txtClave;
+                        $txtCambios .= $this->compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, 1);
+                    }
+                }
+            }
+
+            return $txtCambios;
+        }
+
+
+
     /**
      * COMPARACION DE VALORES
      */

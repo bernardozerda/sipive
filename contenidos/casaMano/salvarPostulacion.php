@@ -303,17 +303,36 @@ if (!empty($_POST['hogar'])) {
  **********************************************************************************************************************/
 if( $seqEtapa == 1 or $seqEtapa == 2 ) {
 
-    // Vive en arriendo, entonces tiene que tener los datos necesarios
-    if (intval($_POST['seqVivienda']) == 1) {
-        if (intval($_POST['valArriendo']) == 0) {
-            $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
-        }
-        if (!esFechaValida($_POST['fchArriendoDesde'])) {
-            $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
-        }
-        if (trim($_POST['txtComprobanteArriendo']) == "") {
-            $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
-        }
+    switch(intval($_POST['seqVivienda'])){
+        case 1:
+            if (intval($_POST['valArriendo']) == 0) {
+                $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
+            }
+            if (!esFechaValida($_POST['fchArriendoDesde'])) {
+                $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
+            }
+            if (trim($_POST['txtComprobanteArriendo']) == "") {
+                $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
+            }
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
+        case 2:
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
+        case 4:
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
+        case 6:
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
     }
 
     // direccion de residencia actual

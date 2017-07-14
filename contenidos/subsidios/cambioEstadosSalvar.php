@@ -201,9 +201,9 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
         // para paso a inscrito
         if ($arrDatos['estado'] == 36) {
             //$claFormulario->txtFormulario = "";
-            //$claFormulario->fchInscripcion = date( "Y-m-d H:i:s" );
+            $claFormulario->fchInscripcion = "";
             $claFormulario->fchPostulacion = "";
-            $claFormulario->fchVigencia = "0000-00-00";
+            $claFormulario->fchVigencia = "";
             $claFormulario->fchUltimaActualizacion = date( "Y-m-d H:i:s" );
             $claFormulario->seqPlanGobierno = 3; // Bogota Mejor Para Todos
             $claFormulario->seqTipoEsquema = 1; // Individual
@@ -376,7 +376,7 @@ if (empty($arrErrores)) {
         if (empty($claFormulario->arrErrores)) {
 
             $claSeguimiento = new Seguimiento();
-            $txtCambios = $claSeguimiento->cambiosPostulacion($seqFormulario, $claFormularioActual, $claFormulario);
+            $txtCambios = $claSeguimiento->cambiosCambioEstados($seqFormulario, $claFormularioActual, $claFormulario);
 
             $sql = "
 					INSERT INTO T_SEG_SEGUIMIENTO (

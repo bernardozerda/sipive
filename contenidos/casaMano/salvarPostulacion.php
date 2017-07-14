@@ -81,6 +81,8 @@ $arrCamposCalificacion["ciudadano"]["fchNacimiento"] = "Fecha de Nacimiento";
 $arrCamposCalificacion["ciudadano"]["seqNivelEducativo"] = "Nivel Educativo";
 $arrCamposCalificacion["ciudadano"]["numAnosAprobados"] = "Años Aprobados";
 $arrCamposCalificacion["ciudadano"]["seqSalud"] = "Afiliacion a salud";
+$arrCamposCalificacion["esquemas"][] = 1;
+$arrCamposCalificacion["esquemas"][] = 9;
 
 $seqEstadoProceso = $_POST['seqEstadoProceso'];
 $arrEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array("seqEstadoProceso","seqEtapa"),"seqEstadoProceso","seqEstadoProceso = " . $seqEstadoProceso);
@@ -230,7 +232,7 @@ if (!empty($_POST['hogar'])) {
 
         // Averigua si la cedula que se esta procesando pertenece a otro formulario
         // si es asi, obtiene la cedula del postulante principal de aquel formulario y emite el error
-        $seqFormulario = $claCiudadano->formularioVinculado2($numDocumento, $arrCiudadano['seqTipoDocumento'], false, false);
+        $seqFormulario = Ciudadano::formularioVinculado2($numDocumento, $arrCiudadano['seqTipoDocumento'], false, false);
         if( $seqFormulario != 0 and $_POST['seqFormulario'] != $seqFormulario ){
             $sql = "
                         SELECT numDocumento
@@ -285,11 +287,11 @@ if (!empty($_POST['hogar'])) {
     }
 
     // si es vulnerable debe indicar ingresos
-    if (intval($_POST['bolDesplazado']) == 0) {
-        if (intval($_POST['valIngresoHogar']) == 0) {
-            $arrErrores[] = "El ingreso del hogar no puede sumar cero";
-        }
-    }
+//    if (intval($_POST['bolDesplazado']) == 0) {
+//        if (intval($_POST['valIngresoHogar']) == 0) {
+//            $arrErrores[] = "El ingreso del hogar no puede sumar cero";
+//        }
+//    }
 
 } else { // no hay miembros de hogar
 
@@ -645,7 +647,9 @@ if (empty($arrErrores)) {
         // el estado del proceso se regresa a inscripcion
         if( $bolCambiosCalificacion == true ){
             if($seqEtapa == 1 or $seqEtapa == 2) {
-                $_POST['seqEstadoProceso'] = 37;
+                if( in_array( $claCasaMano->objPostulacion->seqTipoEsquema , $arrCamposCalificacion["esquema"] ) ){
+                    $_POST['seqEstadoProceso'] = 37;
+                }
             }
         }
 

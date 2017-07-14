@@ -69,9 +69,9 @@ class CasaMano
         $this->arrFases['cem']['esquema'] = array(5, 10, 11);
 
         $this->arrFases['cem']['panelHogar']['grupos'] = array(6, 7, 8, 14, 13);
-        $this->arrFases['cem']['panelHogar']['permitido']['etapas'] = array(2,3,4,5);
+        $this->arrFases['cem']['panelHogar']['permitido']['etapas'] = array(1,2,3,4,5);
         $this->arrFases['cem']['panelHogar']['permitido']['estados'] = array();
-        $this->arrFases['cem']['panelHogar']['prohibido']['etapas'] = array(1);
+        $this->arrFases['cem']['panelHogar']['prohibido']['etapas'] = array();
         $this->arrFases['cem']['panelHogar']['prohibido']['estados'] = array();
         $this->arrFases['cem']['panelHogar']['plantilla'] = "casaMano/casaMano.tpl";
 

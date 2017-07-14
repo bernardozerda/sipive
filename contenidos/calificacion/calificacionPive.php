@@ -11,6 +11,7 @@ and open the template in the editor.
     </head>
     <body>
         <?php
+     
         $txtPrefijoRuta = "../../";
         include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
         include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
@@ -21,14 +22,32 @@ and open the template in the editor.
         $ejecutaConsultaPersonalizada = false;
         $separado_por_comas = "";
         $formularios = "";
+        $arrDocumentosArchivo = array();
 
-        if ($_FILES['fileDocumentos']['error'] == 0) {
-            $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileDocumentos']['tmp_name']));
+//        if ($_FILES['fileDocumentos']['error'] == 0) {
+//            $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileDocumentos']['tmp_name']));
+//            $salt = 0;
+//
+//            $separado_por_comas = implode(",", ($arrDocumentos));
+//            $ejecutaConsultaPersonalizada = true;
+//            //  echo count($arrDocumentos);
+//        }
+
+        if (isset($_FILES["fileDocumentos"]) && is_uploaded_file($_FILES['fileDocumentos']['tmp_name'])) {
+          
+            $nombreArchivo = $_FILES['fileDocumentos']['tmp_name'];
+            $lineas = file($nombreArchivo);
+            foreach ($lineas as $linea_num => $linea) {
+                $linea = str_replace("\n", "", $linea);
+                $linea = str_replace("\r", "", $linea);
+                if (!empty($linea)) {
+                    array_push($arrDocumentosArchivo, trim($linea));
+                }
+            }
             $salt = 0;
-
-            $separado_por_comas = implode(",", ($arrDocumentos));
+//
+            $separado_por_comas = implode(",", ($arrDocumentosArchivo));
             $ejecutaConsultaPersonalizada = true;
-            //  echo count($arrDocumentos);
         }
         $formularios = $claCalificacion->validarFormularios($separado_por_comas);
         if ($ejecutaConsultaPersonalizada) {
@@ -102,7 +121,7 @@ and open the template in the editor.
                     $dependenciaEcon = 0;
                     if ($value['adultos'] > 0) {
                         $adultos = $value['cant'] / $value['adultos'];
-                    }else{
+                    } else {
                         $adultos = 3.5;
                     }
                     //echo "<br>".$value['aprobadosJefe']; 
@@ -166,12 +185,12 @@ and open the template in the editor.
                     $sqlIndicadores .= "(" . $value['grupoLgtbi'] . ", 0, 0, 0, 0, null, " . $grupoLGTBI . ", " . ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) . ", " . $idCalificacion . ",14),";
                     /*                     * ************************************ Participa en programas del Gobierno Distrital ********************************************* */
                     $programa = 0;
-                    
+
                     if ($value['bolIntegracionSocial'] > 0 || $value['bolSecMujer'] > 0 || $value['bolIpes'] > 0) {
                         $programa = 1;
                     }
-                    if( $value['bolSecMujer'] == ""){
-                         $value['bolSecMujer'] = 0;
+                    if ($value['bolSecMujer'] == "") {
+                        $value['bolSecMujer'] = 0;
                     }
                     $sqlIndicadores .= "(" . $value['bolIntegracionSocial'] . ", " . $value['bolSecMujer'] . ", 0, " . $value['bolIpes'] . ", 0, null, " . $programa . ", " . ($claCalificacion->PPGD * ($programa * 100)) . ", " . $idCalificacion . ",15);";
                     $insertInd = $claCalificacion->insertarIndicadores($sqlIndicadores);

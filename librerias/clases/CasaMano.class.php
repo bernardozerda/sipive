@@ -59,7 +59,7 @@ class CasaMano
         $this->arrFases['pin']['postulacion']['prohibido']['etapas'] = array(1);
         $this->arrFases['pin']['postulacion']['prohibido']['estados'] = array();
         $this->arrFases['pin']['postulacion']['atras'] = array(46);
-        $this->arrFases['pin']['postulacion']['adelante'] = array(46, 6, 54);
+        $this->arrFases['pin']['postulacion']['adelante'] = array(46, 6, 47);
         $this->arrFases['pin']['postulacion']['salvar'] = "./contenidos/casaMano/salvarPostulacion.php";
         $this->arrFases['pin']['postulacion']['plantilla'] = "casaMano/postulacion.tpl";
 
@@ -112,7 +112,7 @@ class CasaMano
         $this->arrFases['cem']['postulacion']['prohibido']['estados'] = array();
         $this->arrFases['cem']['postulacion']['permisos'] = array(46, 47, 48, 15, 16);
         $this->arrFases['cem']['postulacion']['atras'] = array(37, 46);
-        $this->arrFases['cem']['postulacion']['adelante'] = array(46, 6, 54);
+        $this->arrFases['cem']['postulacion']['adelante'] = array(46, 6, 47);
         $this->arrFases['cem']['postulacion']['salvar'] = "./contenidos/casaMano/salvarPostulacion.php";
         $this->arrFases['cem']['postulacion']['plantilla'] = "casaMano/postulacion.tpl";
 

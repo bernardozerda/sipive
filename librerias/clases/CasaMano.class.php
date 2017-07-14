@@ -111,8 +111,8 @@ class CasaMano
         $this->arrFases['cem']['postulacion']['prohibido']['etapas'] = array(1);
         $this->arrFases['cem']['postulacion']['prohibido']['estados'] = array();
         $this->arrFases['cem']['postulacion']['permisos'] = array(46, 47, 48, 15, 16);
-        $this->arrFases['cem']['postulacion']['atras'] = array(37, 44);
-        $this->arrFases['cem']['postulacion']['adelante'] = array(46, 47);
+        $this->arrFases['cem']['postulacion']['atras'] = array(37, 46);
+        $this->arrFases['cem']['postulacion']['adelante'] = array(46, 6, 54);
         $this->arrFases['cem']['postulacion']['salvar'] = "./contenidos/casaMano/salvarPostulacion.php";
         $this->arrFases['cem']['postulacion']['plantilla'] = "casaMano/postulacion.tpl";
 

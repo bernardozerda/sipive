@@ -1070,11 +1070,13 @@
                                                 id="seqTipoEsquema"
                                                 style="width:100%"
                                         >
-                                            <option value="0" selected disabled>NINGUNO</option>
+                                            <option value="0" selected {if ! isset( $smarty.session.arrGrupos.3.6 ) } disabled {/if}>NINGUNO</option>
                                             {foreach from=$arrTipoEsquemas key=seqTipoEsquema item=txtTipoEsquema}
                                                 <option value="{$seqTipoEsquema}"
                                                         {if $objFormulario->seqTipoEsquema == $seqTipoEsquema} selected {/if}
-                                                        disabled
+                                                        {if ! isset( $smarty.session.arrGrupos.3.6 ) }
+                                                            disabled
+                                                        {/if}
                                                 >
                                                     {$txtTipoEsquema}
                                                 </option>
@@ -1585,6 +1587,13 @@
 
     <!-- valor que se usa para la advertencia de ingresos del hogar -->
     <input type="hidden" id="valSMMLV" value="{$valSMMLV}">
+    {if isset( $smarty.session.arrGrupos.3.6 ) }
+        <input type="hidden" id="bolActivarModalidad" value="1">
+    {else}
+        <input type="hidden" id="bolActivarModalidad" value="0">
+    {/if}
+
+
 
 </form>
 

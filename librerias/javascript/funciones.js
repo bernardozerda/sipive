@@ -2068,6 +2068,11 @@ function datosPestanaPostulacion(txtModo) {
                 $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
             }
 
+            var bolDesactivarModalidad = true;
+            if( $("#bolActivarModalidad").val() == 1 ){
+                bolDesactivarModalidad = false;
+            }
+
             // esquema
             $("#seqTipoEsquema").empty();
             for( i=0; i < objRespuesta.esquema.length; i++ ){
@@ -2075,7 +2080,7 @@ function datosPestanaPostulacion(txtModo) {
                     $('<option>', {
                         value: objRespuesta.esquema[i].valor,
                         text: objRespuesta.esquema[i].texto,
-                        disabled: true
+                        disabled: bolDesactivarModalidad
                     })
                 );
 

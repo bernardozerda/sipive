@@ -81,7 +81,7 @@
          $claActosAdministrativos = new ActoAdministrativo();
          $arrActos = $claActosAdministrativos->cronologia( $numDocumento );
 
-        $arrTipoEsquemas             = obtenerTipoEsquema($claFormulario->seqModalidad, $claFormulario->seqPlanGobierno);
+        $arrTipoEsquemas             = obtenerTipoEsquema($claFormulario->seqModalidad, $claFormulario->seqPlanGobierno, $claFormulario->bolDesplazado);
         $arrEstadoCivil              = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil", "bolActivo"), "seqEstadoCivil", "", "txtEstadoCivil");
         $arrEstadoCivilNombres       = obtenerDatosTabla( "T_CIU_ESTADO_CIVIL" , array( "seqEstadoCivil" , "txtEstadoCivil" ) , "seqEstadoCivil" );
         $arrCondicionEspecial        = obtenerDatosTabla( "T_CIU_CONDICION_ESPECIAL" , array( "seqCondicionEspecial" , "CONCAT( seqCondicionEspecial , ' - ' , txtCondicionEspecial ) as nombre" ) , "seqCondicionEspecial" , "seqCondicionEspecial <> 6" );

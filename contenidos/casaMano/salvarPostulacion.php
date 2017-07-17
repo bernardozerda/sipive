@@ -278,10 +278,10 @@ if (!empty($_POST['hogar'])) {
         case $numCuentaUnionMarital % 2 != 0:
             $arrErrores[] = "Verificar estado civil, debe existir otra persona con estado civil 'Unión Marital de hecho' en el hogar";
             break;
-        case $numVictimas == 0 and $_POST['bolDesplazado'] = 1:
+        case $numVictimas == 0 and $_POST['bolDesplazado'] == 1:
             $arrErrores[] = "No hay victimas que acrediten la condicion de desplazado de este hogar";
             break;
-        case $numVictimas > 0 and $_POST['bolDesplazado'] = 0:
+        case $numVictimas > 0 and $_POST['bolDesplazado'] == 0:
             $arrErrores[] = "Hay desplazamiento forzado en el hogar, debe acreditar la condicion de victima";
             break;
     }

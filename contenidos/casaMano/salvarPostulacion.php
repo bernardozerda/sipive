@@ -729,10 +729,16 @@ if (empty($arrErrores)) {
 
     // Si es un informador no puede modificar datos
     $seqProyecto = $_SESSION['seqProyecto'];
-    if( ! isset( $_SESSION['arrGrupos'][$seqProyecto][20] ) ) {
-        if (isset($_SESSION['arrGrupos'][$seqProyecto][5])) {
-            $arrErrores[] = "No tiene privilegios para modificar la información";
+    $arrGruposPermitidos[] = 20;
+    $arrGruposPermitidos[] = 6;
+    $bolPuedeModificar = false;
+    foreach( $_SESSION['arrGrupos'][$seqProyecto] as $seqGrupo => $numGrupo ){
+        if( in_array( $seqGrupo , $arrGruposPermitidos ) ){
+            $bolPuedeModificar = true;
         }
+    }
+    if( $bolPuedeModificar == false ){
+        $arrErrores[] = "No tiene privilegios para modificar la información";
     }
 
 }

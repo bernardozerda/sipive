@@ -156,6 +156,9 @@
                 }
             }
 
+            // obtiene la etapa para efectos de los permisos
+            $claCasaMano->objPostulacion->seqEtapa = array_shift(obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array("seqEstadoProceso","seqEtapa"),"seqEstadoProceso","seqEstadoProceso = " . $claCasaMano->objPostulacion->seqEstadoProceso));
+
             $claActosAdministrativos = new ActoAdministrativo();
             $arrActos = $claActosAdministrativos->cronologia($numDocumento);
 

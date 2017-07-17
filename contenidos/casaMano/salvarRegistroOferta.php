@@ -88,7 +88,6 @@
             $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
             $arrObligatorios['numAltoRiesgo'] = "Certificado de riesgo";
             $arrObligatorios['numHabitabilidad'] = "Certificado de Habitabilidad";
-            $arrObligatorios['numBoletinCatastral'] = "Boletin Catastral";
             $arrObligatorios['numLicenciaConstruccion'] = "Licencia de Construcci&oacute;n";
             $arrObligatorios['numUltimoPredial'] = "Ultimo Recibo Predial";
             $arrObligatorios['numActaEntrega'] = "Certificado de Constructora de Entrega Inmueble";
@@ -105,7 +104,6 @@
         if ($_POST['txtCompraVivienda'] == "nueva") {
             $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
             $arrObligatorios['numAltoRiesgo'] = "Certificado de riesgo";
-            $arrObligatorios['numBoletinCatastral'] = "Boletin Catastral";
             $arrObligatorios['numLicenciaConstruccion'] = "Licencia de Construcci&oacute;n";
             $arrObligatorios['numUltimoPredial'] = "Ultimo Recibo Predial";
             $arrObligatorios['numActaEntrega'] = "Certificado de Constructora de Entrega Inmueble";

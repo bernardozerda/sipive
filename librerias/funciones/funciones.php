@@ -793,15 +793,17 @@ function valorSubsidio($claFormulario){
     $valTope     = ($claFormulario->seqTipoEsquema == 11)? 26 : 35; // SMMLV 26 para retorno reubicacion y 35 para el resto
     $valSubsidio = 0;
 
-    if($claFormulario->seqPlanGobierno == 2){
-        if( $claFormulario->seqModalidad == 6){
+    if($claFormulario->seqPlanGobierno == 2) {
+        if ($claFormulario->seqModalidad == 6) {
             $arrValor = obtenerDatosTabla(
                 "T_PRY_UNIDAD_PROYECTO",
-                array("0","valSDVEActual"),
+                array("0", "valSDVEActual"),
                 "0",
                 "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
             );
             $valSubsidio = $arrValor[0];
+        }elseif( $claFormulario->seqModalidad == 8 or $claFormulario->seqModalidad == 9 or $claFormulario->seqModalidad == 10 ){
+            $valSubsidio = $claFormulario->valAspiraSubsidio;
         }else{
             $arrValor = obtenerDatosTabla("T_PRY_PROYECTO",array("0","valMaximoSubsidio","valNumeroSoluciones"),"0","seqProyecto = " . $claFormulario->seqProyecto);
             if(intval($arrValor[0]['valNumeroSoluciones']) != 0){

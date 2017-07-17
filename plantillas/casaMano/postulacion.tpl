@@ -20,7 +20,7 @@
     <table cellspacing="0" cellpadding="3" border="0" width="100%" style="padding-bottom: 5px;">
         <tr>
             <td width="150px" align="center">
-                <a href="#" onClick="imprimirPostulacionCEM(document.frmIndividual , './contenidos/casaMano/pedirConfirmacion.php');">
+                <a href="#" onClick="imprimirPostulacionCEM(document.frmPostulacion , './contenidos/casaMano/pedirConfirmacion.php');">
                     Imprimir Formulario
                 </a>
             </td>
@@ -1880,7 +1880,10 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  style="padding-right: 5px; width:100px; text-align:right;"
-                                                 readonly
+                                                 onkeyup="formatoSeparadores(this)"
+                                                 {if $claFormulario->seqModalidad != 8 && $claFormulario->seqModalidad != 9 && $claFormulario->seqModalidad != 10}
+                                                    readonly
+                                                 {/if}
                                         />
                                     </td>
 

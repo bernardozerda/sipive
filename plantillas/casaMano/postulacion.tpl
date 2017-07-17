@@ -772,7 +772,7 @@
                                                 <input type="text"
                                                        name="fchArriendoDesde"
                                                        id="fchArriendoDesde"
-                                                       value="{if esFechaValida($objFormulario->fchArriendoDesde)}{$objFormulario->fchArriendoDesde}{/if}"
+                                                       value="{if esFechaValida($claFormulario->fchArriendoDesde)}{$claFormulario->fchArriendoDesde}{/if}"
                                                        onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                        style="width:80px;"

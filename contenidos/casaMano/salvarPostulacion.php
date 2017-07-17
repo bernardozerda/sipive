@@ -729,8 +729,10 @@ if (empty($arrErrores)) {
 
     // Si es un informador no puede modificar datos
     $seqProyecto = $_SESSION['seqProyecto'];
-    if (isset($_SESSION['arrGrupos'][$seqProyecto][5])) {
-        $arrErrores[] = "No tiene privilegios para modificar la información";
+    if( ! isset( $_SESSION['arrGrupos'][$seqProyecto][20] ) ) {
+        if (isset($_SESSION['arrGrupos'][$seqProyecto][5])) {
+            $arrErrores[] = "No tiene privilegios para modificar la información";
+        }
     }
 
 }

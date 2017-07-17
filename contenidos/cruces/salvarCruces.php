@@ -433,6 +433,8 @@
 					
                     unset($arrPost['seqEstadoProceso']);
 
+                    $arrPost['txtFlujo'] = "cem";
+
                     $objCasaMano->salvar($arrPost);
 
                     foreach ($objCasaMano->arrErrores as $txtError) {

@@ -96,9 +96,9 @@ class CasaMano
         $this->arrFases['cem']['revisionJuridica']['plantilla'] = "desembolso/revisionJuridica.tpl";
 
         $this->arrFases['cem']['revisionTecnica']['grupos'] = array(14, 7, 8);
-        $this->arrFases['cem']['revisionTecnica']['permitido']['etapas'] = array(2,3,4,5);
-        $this->arrFases['cem']['revisionTecnica']['permitido']['estados'] = array();
-        $this->arrFases['cem']['revisionTecnica']['prohibido']['etapas'] = array(1);
+        $this->arrFases['cem']['revisionTecnica']['permitido']['etapas'] = array();
+        $this->arrFases['cem']['revisionTecnica']['permitido']['estados'] = array(44, 45, 46, 47, 48, 15, 16);
+        $this->arrFases['cem']['revisionTecnica']['prohibido']['etapas'] = array();
         $this->arrFases['cem']['revisionTecnica']['prohibido']['estados'] = array();
         $this->arrFases['cem']['revisionTecnica']['atras'] = array(37, 43);
         $this->arrFases['cem']['revisionTecnica']['adelante'] = array(44);

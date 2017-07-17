@@ -841,7 +841,7 @@ function valorSubsidio($claFormulario){
     return $valSubsidio;
 }
 
-function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno){
+function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     global $aptBd;
 
     // Adquisicion
@@ -862,7 +862,11 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno){
     // Adquisicion cierre financiero
     $arrEsquema[3][12][] = 9;  // proyectos sdht
     $arrEsquema[3][12][] = 10; // proyecto no sdht
-    $arrEsquema[3][12][] = 11; // retorno reubicacion
+
+    // solo si es victima puede optar por el esquema de retorno / reubicacion
+    if( $bolDesplazado == 1 ) {
+        $arrEsquema[3][12][] = 11; // retorno reubicacion
+    }
 
     // Leasing
     $arrEsquema[3][13][] = 9;  // proyectos sdht

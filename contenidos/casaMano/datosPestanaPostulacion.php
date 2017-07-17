@@ -37,7 +37,7 @@ switch( $_POST['modo'] ){
         }
 
         // esquema
-        $arrTipoEsquemas = obtenerTipoEsquema($_POST['seqModalidad'], $_POST['seqPlanGobierno']);
+        $arrTipoEsquemas = obtenerTipoEsquema($_POST['seqModalidad'], $_POST['seqPlanGobierno'], $_POST['bolDesplazado']);
         $arrDatosPostulacion['esquema'][0]['valor'] = 0;
         $arrDatosPostulacion['esquema'][0]['texto'] = "NINGUNO";
         $i = 1;
@@ -190,7 +190,7 @@ switch( $_POST['modo'] ){
         }
 
         // esquema
-        $arrTipoEsquemas = obtenerTipoEsquema($_POST['seqModalidad'], $_POST['seqPlanGobierno']);
+        $arrTipoEsquemas = obtenerTipoEsquema($_POST['seqModalidad'], $_POST['seqPlanGobierno'], $_POST['bolDesplazado']);
         $arrDatosPostulacion['esquema'][0]['valor'] = 0;
         $arrDatosPostulacion['esquema'][0]['texto'] = "NINGUNO";
         $i = 1;

@@ -1119,6 +1119,32 @@ function agregarMiembroHogar() {
     }
     $("#bolDesplazado").val(numDesplazado);
 
+    // numDesplazado (Vulnerable) = 0
+    // numDesplazado (Desplazado) = 1
+    if(numDesplazado == 0){
+        if( $("#seqTipoEsquema").val() == 11 ){
+            $("#seqTipoEsquema").val(0);
+        }
+        $("#seqTipoEsquema > option").each(function() {
+            if( this.value == 11 ){
+                $(this).remove();
+            }
+        });
+    }else{
+        var bolDesactivarModalidad = true;
+        if( $("#bolActivarModalidad").val() == 1 ){
+            bolDesactivarModalidad = false;
+        }
+        $("#seqTipoEsquema").append(
+            $('<option>', {
+                value: 11,
+                text: "Opción Retorno / Reubicación",
+                disabled: bolDesactivarModalidad
+            })
+        );
+    }
+
+
     // Recalcular el valor del subsidio
     valorSubsidio();
 
@@ -1837,14 +1863,17 @@ function obtenerTipoSolucionDesplazado(objDesplazado, txtIdModalidad) {
 
 function datosPestanaPostulacion(txtModo) {
 
+    var objDesplazado = YAHOO.util.Dom.get("bolDesplazado");
+
     var txtParametros =
-            "modo="            + txtModo                     + "&" +
-            "seqFormulario="   + $("#seqFormulario").val()   + "&" +
-            "seqModalidad="    + $("#seqModalidad").val()    + "&" +
-            "seqTipoEsquema="  + $("#seqTipoEsquema").val()  + "&" +
-            "seqPlanGobierno=" + $("#seqPlanGobierno").val() + "&" +
-            "seqProyecto="     + $("#seqProyecto").val()     + "&" +
-            "seqProyectoHijo=" + $("#seqProyectoHijo").val();
+        "modo="            + txtModo                     + "&" +
+        "seqFormulario="   + $("#seqFormulario").val()   + "&" +
+        "seqModalidad="    + $("#seqModalidad").val()    + "&" +
+        "seqTipoEsquema="  + $("#seqTipoEsquema").val()  + "&" +
+        "seqPlanGobierno=" + $("#seqPlanGobierno").val() + "&" +
+        "seqProyecto="     + $("#seqProyecto").val()     + "&" +
+        "seqProyectoHijo=" + $("#seqProyectoHijo").val() + "&" +
+        "bolDesplazado="   + objDesplazado.options[ objDesplazado.selectedIndex ].value; // jQuery retorna NULL porque los option son disabled
 
     var objCargando = obtenerObjetoCargando();
         objCargando.show();

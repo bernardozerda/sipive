@@ -47,8 +47,9 @@
         "seqLocalidad",
         "seqLocalidad = " . $objCasaMano->objRegistroOferta->seqLocalidad . " and txtBarrio = '" . $objCasaMano->objRegistroOferta->txtBarrio . "'"
     );
-    $objCasaMano->objRegistroOferta->seqBarrio = $arrTextoBarrio[$objCasaMano->objRegistroOferta->seqLocalidad];
 
+    $objCasaMano->objRegistroOferta = ( is_object($objCasaMano->objRegistroOferta) )? $objCasaMano->objRegistroOferta : new stdClass();
+    $objCasaMano->objRegistroOferta->seqBarrio = $arrTextoBarrio[$objCasaMano->objRegistroOferta->seqLocalidad];
 
     $bolPermiso = $objCasaMano->puedeIngresar( $arrFlujoHogar );
     if( $bolPermiso == true ){

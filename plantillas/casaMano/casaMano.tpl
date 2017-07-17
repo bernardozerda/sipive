@@ -106,7 +106,7 @@
                                     {$objCasaMano->numDiasRevisionJuridica}
                                 </div>
                             {else}
-                                {if in_array( $claFormulario->seqEstadoProceso , $objCasaMano->arrFases.cem.revisionJuridica.permisos ) && $smarty.foreach.fases.last == 1}
+                                {if in_array( $claFormulario->seqEstadoProceso , $objCasaMano->arrFases.cem.revisionJuridica.permitido.estados ) && $smarty.foreach.fases.last == 1}
                                     <button style="cursor: pointer;"
                                             onClick="cambioCEM('./contenidos/casaMano/revisionJuridica.php','seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}&modificar={$smarty.foreach.fases.last}');">
                                         <img src="./recursos/imagenes/plus_icon.gif">
@@ -168,7 +168,19 @@
                                     {$objCasaMano->numDiasRevisionTecnica}
                                 </div>
                             {else}
-                                {if in_array( $claFormulario->seqEstadoProceso , $objCasaMano->arrFases.cem.revisionTecnica.permisos ) && $smarty.foreach.fases.last == 1}
+                                {assign var=bolIngresoTecnica value=0}
+                                {if is_array( $objCasaMano->arrFases.cem.revisionTecnica.permitido.etapas ) &&
+                                    in_array( $claFormulario->seqEtapa, $objCasaMano->arrFases.cem.revisionTecnica.permitido.etapas ) &&
+                                    $smarty.foreach.fases.last == 1}
+                                    {assign var=bolIngresoTecnica value=1}
+                                {else}
+                                    {if is_array( $objCasaMano->arrFases.cem.revisionTecnica.permitido.estados ) &&
+                                        in_array( $claFormulario->seqEstadoProceso , $objCasaMano->arrFases.cem.revisionTecnica.permitido.estados ) &&
+                                        $smarty.foreach.fases.last == 1}
+                                        {assign var=bolIngresoTecnica value=1}
+                                    {/if}
+                                {/if}
+                                {if $bolIngresoTecnica == 1}
                                     <button style="cursor: pointer;"
                                             onClick="cambioCEM('./contenidos/casaMano/revisionTecnica.php','seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}&modificar={$smarty.foreach.fases.last}');">
                                         <img src="./recursos/imagenes/plus_icon.gif">

@@ -583,6 +583,21 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
             $arrErrores[] = "Indique el numero de meses que dura el leasing";
         }
     }
+
+    // validacion del soporte y valor del subsidio para plan de gobierno 2
+    if( $_POST['seqPlanGobierno'] == 2 ){
+        if( $_POST['seqModalidad'] == 8 or $_POST['seqModalidad'] == 9 or $_POST['seqModalidad'] == 10 ){
+            if( $_POST['valAspiraSubsidio'] == 0 ){
+                $arrErrores[] = "Indique el valor del subsidio";
+            }
+            if( $_POST['valAspiraSubsidio'] != 0 and $_POST['txtSoporteSubsidio'] == "" ){
+                $arrErrores[] = "Indique el soporte para el valor del subsidio";
+            }
+        }
+    }
+
+
+
 }
 /**********************************************************************************************************************
  * VALIDACIONES ESPECIALES

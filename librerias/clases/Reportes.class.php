@@ -3405,182 +3405,6 @@ ORDER BY aad.fchActo DESC;
         $this->obtenerReportesGeneral($objRes, "reporteEpigrafeAAD");
     }
 
-    public function reporteGeneralInscritos() {
-        global $aptBd;
-
-        $sql = "
-               SELECT frm.seqFormulario,
-       frm.txtFormulario,
-       upper(concat(ciu.txtNombre1,
-                    ' ',
-                    ciu.txtNombre2,
-                    ' ',
-                    ciu.txtApellido1,
-                    ' ',
-                    ciu.txtApellido2))
-          AS 'Nombre',
-       ciu.numDocumento AS 'Documento',
-       concat(eta.txtEtapa, ' - ', epr.txtEstadoProceso)
-          AS 'Estado del Proceso',
-       frm.seqEstadoProceso AS seqEstado,
-       IF(
-             ((frm.fchUltimaActualizacion > '2013-05-11')
-          OR     (frm.fchInscripcion > '2013-05-11'))
-             AND (ciu.fchNacimiento <> '0000-00-00'
-			      AND frm.seqEstadoProceso <> 5                      #Renuncia
-                  AND frm.seqEstadoProceso <> 8                  #Inhabilitado
-                  AND frm.seqEstadoProceso <> 13        #Inscrito Inhabilitado
-                  AND frm.seqEstadoProceso <> 14                     #Renuncia
-                  AND frm.seqEstadoProceso <> 18                     #Renuncia
-                  AND frm.seqEstadoProceso <> 35            #Inscrito Inactivo
-                  AND frm.seqEstadoProceso <> 39        #Inscrito Inhabilitado
-                  AND frm.seqEstadoProceso <> 52),               #Inhabilitado
-          'ACTIVO',
-          'INACTIVO')
-          AS 'Activo / Inactivo',
-       tvh.txtDesplazado AS 'Hogar Victima',
-       moa.txtModalidad AS 'Modalidad',
-       frm.seqModalidad AS 'SeqModalidad',
-       CASE
-          WHEN frm.seqModalidad = 1 THEN 'Adquisición de Vivienda Nueva'
-          WHEN frm.seqModalidad = 2 THEN 'Construcción en Sitio Propio'
-          WHEN frm.seqModalidad = 3 THEN 'Mejoramiento Habitacional'
-          WHEN frm.seqModalidad = 5 THEN 'Adquisición de Vivienda Nueva'
-          ELSE moa.txtModalidad
-       END
-          AS 'NModalidad',
-       frm.valTotalRecursos AS 'Total Recursos Hogar',
-       CASE
-          WHEN frm.valTotalRecursos = 0
-          THEN
-             '$0'
-          WHEN frm.valTotalRecursos BETWEEN 0 AND 2500000
-          THEN
-             '$1 -< $2.5M'
-          WHEN frm.valTotalRecursos BETWEEN 2500000 AND 5000000
-          THEN
-             '$2.5M -< $5M'
-		  WHEN frm.valTotalRecursos BETWEEN 5000000 AND 10000000
-          THEN
-             '$5M -< $10M' 
-          WHEN frm.valTotalRecursos BETWEEN 10000000 AND 15000000
-          THEN
-             '$10M -< $15M'
-          WHEN frm.valTotalRecursos BETWEEN 15000000 AND 20000000
-          THEN
-             '$15M -< $20M'
-          WHEN frm.valTotalRecursos BETWEEN 20000000 AND 25000000
-          THEN
-             '$20M -< $25M'
-          WHEN frm.valTotalRecursos BETWEEN 25000000 AND 30336020
-          THEN
-             '$25M -< $30336020'
-          WHEN frm.valTotalRecursos >= 30336020
-          THEN
-             '> $30336020'
-       END
-          AS 'Rango Cierre Financiero',
-       IF(
-             (    tvh.txtDesplazado = 'Victima'
-              AND frm.valTotalRecursos >= 30336020
-              AND (   frm.seqModalidad = 1            #Adquisición de Vivienda
-                   OR frm.seqModalidad = 5                      #Arrendamiento
-                   OR frm.seqModalidad = 6      #Adquisición de Vivienda Nueva
-                   OR frm.seqModalidad = 11))   #Adquisición de Vivienda Usada
-          OR frm.seqModalidad = 10            #Mejoramiento en Redensificación
-          OR frm.seqModalidad = 4                    #Mejoramiento Estructural
-          OR frm.seqModalidad = 8                    #Mejoramiento Estructural
-          OR frm.seqModalidad = 9                   #Mejoramiento Habitacional
-          OR frm.seqModalidad = 3               #Mejoramiento de Habitabilidad
-          OR frm.seqModalidad = 7                #Construcción en Sitio Propio
-          OR frm.seqModalidad = 2                                #Construcción
-          OR     frm.valTotalRecursos >= 30336020
-             AND (   frm.seqModalidad = 1             #Adquisición de Vivienda
-                  OR frm.seqModalidad = 5                       #Arrendamiento
-                  OR frm.seqModalidad = 6       #Adquisición de Vivienda Nueva
-                  OR frm.seqModalidad = 11),    #Adquisición de Vivienda Usada
-          'CON CIERRE',
-          'SIN CIERRE')
-          AS 'cierre financiero',
-       eta.txtEtapa AS 'Etapa',
-       DATE_FORMAT(ciu.fchNacimiento, '%d-%m-%Y') AS 'Fecha de Nacimiento',
-       DATE_FORMAT(frm.fchInscripcion, '%d-%m-%Y') AS 'Fecha de Inscripcion',
-       DATE_FORMAT(frm.fchUltimaActualizacion, '%d-%m-%Y')
-          AS 'Fecha Ultima Actualizacion',
-       upper(concat(usu.txtNombre, ' ', usu.txtApellido)) AS 'Usuario',
-       loc.txtLocalidad AS 'Localidad',
-       frm.numTelefono1 AS 'Telefono Fijo 1',
-       frm.numTelefono2 AS 'Telefono Fijo 2',
-       frm.numCelular AS 'Telefono Celular',
-       frm.txtCorreo AS 'Correo Electronico',
-       pun.txtPuntoAtencion AS 'Punto de Atencion',
-       IF(frm.bolCerrado = 1, 'SI', 'NO') AS 'Formulario Cerrado',
-       pro.txtNombreProyecto AS 'Proyecto',
-       upper(frm.txtMatriculaInmobiliaria) AS 'Matricula Inmobiliaria',
-       frm.valIngresoHogar AS 'Ingresos del Hogar',
-       frm.valSaldoCuentaAhorro AS 'Saldo Cuenta Ahorro 1',
-       ba1.txtBanco AS 'Banco Cuenta Ahorro 1',
-       upper(frm.txtSoporteCuentaAhorro) AS 'Soporte Cuenta Ahorro 1',
-       IF(frm.bolInmovilizadoCuentaAhorro = 1, 'SI', 'NO')
-          AS 'Cuenta Ahorro 1 Inmobilizada',
-       DATE_FORMAT(frm.fchAperturaCuentaAhorro, '%d-%m-%Y')
-          AS 'Fecha Apertura Cuenta Ahorro 1',
-       frm.valSaldoCuentaAhorro2 AS 'Saldo Cuenta Ahorro 2',
-       ba2.txtBanco AS 'Banco Cuenta Ahorro 2',
-       upper(frm.txtSoporteCuentaAhorro2) AS 'Soporte Cuenta Ahorro 2',
-       IF(frm.bolInmovilizadoCuentaAhorro2 = 1, 'SI', 'NO')
-          AS 'Cuenta Ahorro 2 Inmobilizada',
-       DATE_FORMAT(frm.fchAperturaCuentaAhorro2, '%d-%m-%Y')
-          AS 'Fecha Apertura Cuenta Ahorro 2',
-       frm.valSubsidioNacional AS 'Valor Subsidio (AVC / FOVIS / SFV)',
-       upper(frm.txtSoporteSubsidioNacional)
-          AS 'Soporte Subsidio (AVC / FOVIS / SFV)',
-       ccf.txtEntidadSubsidio AS 'Entidad Subsidio (AVC / FOVIS / SFV)',
-       frm.valAporteLote AS 'Valor Aporte Lote',
-       frm.valSaldoCesantias AS 'Valor Cesantias',
-       upper(frm.txtSoporteCesantias) AS 'Soporte Cesantias',
-       frm.valAporteAvanceObra AS 'Valor Aporte Avance Obra',
-       upper(frm.txtSoporteAvanceObra) AS 'Soporte Avance Obra',
-       frm.valCredito AS 'Valor Credito',
-       bcr.txtBanco AS 'Banco Credito',
-       upper(frm.txtSoporteCredito) AS 'Soporte Credito',
-       DATE_FORMAT(frm.fchAprobacionCredito, '%d-%m-%Y')
-          AS 'Fecha Vencimiento del Credito',
-       frm.valAporteMateriales AS 'Valor Aporte Materiales',
-       upper(frm.txtSoporteAporteMateriales) AS 'Soporte Aporte Materiales',
-       frm.valDonacion AS 'Valor Donacion / V.U.R.',
-       edo.txtEmpresaDonante AS 'Empresa Donante / V.U.R.',
-       upper(frm.txtSoporteDonacion) AS 'Soporte Donacion / V.U.R.',
-       upper(frm.txtSoporteSubsidio) AS 'Soporte Cambio Valor Subsidio',
-       frm.valTotalRecursos AS 'Total Recursos Hogar'
-  FROM T_FRM_FORMULARIO frm
-       INNER JOIN T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
-       INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
-       INNER JOIN T_FRM_ESTADO_PROCESO epr
-          ON frm.seqEstadoProceso = epr.seqEstadoProceso
-       INNER JOIN T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
-       INNER JOIN T_COR_USUARIO usu ON frm.seqUsuario = usu.seqUsuario
-       INNER JOIN T_FRM_LOCALIDAD loc ON frm.seqLocalidad = loc.seqLocalidad
-       INNER JOIN T_FRM_TIPO_VICTIMA_HOGAR tvh
-          ON frm.bolDesplazado = tvh.bolDesplazado
-       INNER JOIN T_FRM_PUNTO_ATENCION pun
-          ON frm.seqPuntoAtencion = pun.seqPuntoAtencion
-       INNER JOIN T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
-       LEFT JOIN T_PRY_PROYECTO pro ON frm.seqProyecto = pro.seqProyecto
-       INNER JOIN T_FRM_BANCO ba1 ON frm.seqBancoCuentaAhorro = ba1.seqBanco
-       INNER JOIN T_FRM_BANCO ba2 ON frm.seqBancoCuentaAhorro2 = ba2.seqBanco
-       INNER JOIN T_FRM_ENTIDAD_SUBSIDIO ccf
-          ON frm.seqEntidadSubsidio = ccf.seqEntidadSubsidio
-       INNER JOIN T_FRM_BANCO bcr ON frm.seqBancoCredito = bcr.seqBanco
-       INNER JOIN T_FRM_EMPRESA_DONANTE edo
-          ON frm.seqEmpresaDonante = edo.seqEmpresaDonante
- WHERE     (ciu.numDocumento >= 0 AND frm.bolCerrado = 0 AND 1 = 1)
-       AND numDocumento > 0
-       AND hog.seqParentesco = 1  ;";
-        $objRes = $aptBd->execute($sql);
-        $this->obtenerReportesGeneral($objRes, "reporteGeneralInscritos");
-    }
-
     public function Caracterizacion() {
 
 
@@ -3972,95 +3796,7 @@ ORDER BY aad.fchActo DESC;
         $arrErrores = &$this->arrErrores;
 
         if (empty($arrErrores)) {
-
-
-            /* $sql = "SELECT frm.seqFormulario AS 'id Hogar',
-              (SELECT ciu1.numDocumento
-              FROM T_FRM_HOGAR hog1
-              INNER JOIN T_CIU_CIUDADANO ciu1
-              ON hog1.seqCiudadano = ciu1.seqCiudadano
-              WHERE     hog1.seqFormulario = hog.seqFormulario
-              AND hog1.seqParentesco = 1)
-              AS 'CC Postulante Principal',
-              tdo.txtTipoDocumento AS 'Tipo Documento',
-              (SELECT UPPER(CONCAT(ciu1.txtNombre1,
-              ' ',
-              ciu1.txtNombre2,
-              ' ',
-              ciu1.txtApellido1,
-              ' ',
-              ciu1.txtApellido2))
-              FROM T_FRM_HOGAR hog1
-              INNER JOIN T_CIU_CIUDADANO ciu1
-              ON hog1.seqCiudadano = ciu1.seqCiudadano
-              WHERE     hog1.seqFormulario = hog.seqFormulario
-              AND hog1.seqParentesco = 1)
-              AS 'Nombre',
-              frm.txtFormulario AS 'Formulario',
-              frm.seqProyecto AS 'Proyecto Padre',
-              frm.seqProyectoHijo AS 'Proyecto Hijo',
-              pry.txtNombreProyecto AS 'Proyecto',
-              frm.seqUnidadproyecto,
-              und.txtNombreunidad AS 'Unidad Proyecto',
-              und.valSDVEAprobado AS 'Valor Aprobado',
-              und.valSDVEActual AS 'Valor Actual',
-              tec.txtexistencia AS 'Viabilidad Tecnica',
-              concat('Res. ', aad.numActo) AS 'Resolucion Vinculacion',
-              year(aad.fchActo) AS 'Año',
-              aad.fchActo AS 'Fecha Resolucion',
-              CONCAT(eta.txtEtapa, ' - ', epr.txtEstadoProceso) AS 'Estado del Proceso',
-              frm.valAspiraSubsidio AS 'Valor Subsidio',
-              IF(frm.SeqProyectoHijo = '', upper(pry.txtNombreComercial), upper(prh.txtNombreComercial)) as 'Nombre Comercial',
-              und.txtNombreunidad AS 'Descripcion de la Unidad',
-              GROUP_CONCAT(
-              DISTINCT (upper(concat(CONVERT(ciu.txtNombre1 USING utf8),
-              ' ',
-              CONVERT(ciu.txtNombre2 USING utf8),
-              ' ',
-              CONVERT(ciu.txtApellido1 USING utf8),
-              ' ',
-              CONVERT(ciu.txtApellido2 USING utf8)))),
-              '  ',
-              CONVERT(tdo.txtTipoDocumento USING utf8),
-              '  ',
-              ciu.numDocumento,
-              '  ',
-              civ.txtEstadocivil,
-              '  ' SEPARATOR' -- ') AS 'Miembros Mayores de Edad'
-              FROM T_FRM_FORMULARIO frm
-              LEFT JOIN T_PRY_PROYECTO pry ON (frm.seqProyecto = pry.seqProyecto)
-              LEFT JOIN T_PRY_PROYECTO prh ON (frm.seqProyectoHijo = prh.seqProyecto)
-              LEFT JOIN T_PRY_UNIDAD_PROYECTO und ON (frm.seqFormulario = und.seqFormulario)
-              LEFT JOIN T_FRM_ESTADO_PROCESO epr ON (frm.seqEstadoProceso = epr.seqEstadoProceso)
-              LEFT JOIN T_FRM_ETAPA eta ON (epr.seqEtapa = eta.seqEtapa)
-              INNER JOIN T_FRM_VALOR_SUBSIDIO vsu ON (frm.seqModalidad = vsu.seqModalidad) AND (vsu.seqSolucion = frm.seqSolucion)
-              LEFT JOIN T_FRM_HOGAR hog ON (frm.seqFormulario = hog.seqFormulario)
-              LEFT JOIN T_CIU_CIUDADANO ciu ON (hog.seqCiudadano = ciu.seqCiudadano)
-              INNER JOIN T_CIU_PARENTESCO par ON (par.seqParentesco = hog.seqParentesco)
-              INNER JOIN T_CIU_ESTADO_CIVIL civ ON (civ.seqEstadoCivil = ciu.seqEstadoCivil)
-              INNER JOIN T_CIU_TIPO_DOCUMENTO tdo ON (ciu.seqTipoDocumento = tdo.seqTipoDocumento)
-              LEFT JOIN T_PRY_TECNICO tec ON (und.seqUnidadProyecto = tec.seqUnidadProyecto)
-              LEFT JOIN T_AAD_FORMULARIO_ACTO fac ON (frm.seqFormulario = fac.seqFormulario)
-              LEFT JOIN T_AAD_HOGARES_VINCULADOS hvi ON (fac.seqFormularioActo = hvi.seqFormularioActo)
-
-              INNER JOIN
-              (SELECT *
-              FROM T_AAD_ACTO_ADMINISTRATIVO
-              ORDER BY T_AAD_ACTO_ADMINISTRATIVO.fchActo desc)
-              AS aad ON ( hvi.numActo =
-              aad.numActo
-              AND hvi.fchActo =
-              aad.fchActo)
-
-              WHERE   (
-              tdo.seqTipoDocumento =1
-              OR tdo.seqTipoDocumento =2
-              OR tdo.seqTipoDocumento =5
-              )
-              AND frm.seqFormulario IN (". $this->seqFormularios ." )
-              GROUP BY frm.seqFormulario
-              "; */
-
+            
             $sql = "select frm.seqFormulario AS 'id Hogar',
 ciu.numDocumento 'CC Postulante Principal',
 tdo.txtTipoDocumento AS 'Tipo Documento',
@@ -4135,6 +3871,239 @@ WHERE ( tdo.seqTipoDocumento =1 OR tdo.seqTipoDocumento =2 OR tdo.seqTipoDocumen
    
         obtenerRegistroCiudadano($arrDocumentos);
     }
+
+    public function encuestasPive(){
+
+        global $aptBd;
+
+        $this->arrErrores = array();
+
+        $arrTitulos['formulario'][1] = "seqFormulario";
+        $arrTitulos['formulario'][2] = "NombreEncuesta";
+        $arrTitulos['formulario'][3] = "NombreCargue";
+        $arrTitulos['formulario'][4] = "FechaAplicacion";
+        $arrTitulos['formulario'][5] = "FechaCarga";
+        $arrTitulos['formulario'][6] = "TipoDocumentoPostulantePrincipal";
+        $arrTitulos['formulario'][7] = "DocumentoPostulantePrincipal";
+        $arrTitulos['formulario'][8] = "NombrePostulantePrincipal";
+        $arrTitulos['formulario'][9] = "FormularioEncuesta";
+        $arrTitulos['formulario'][10] = "txtUsuarioSistema";
+        $arrTitulos['formulario'][11] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] CÉDULA DE CIUDADANÍA";
+        $arrTitulos['formulario'][12] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] TARJETA DE IDENTIDAD";
+        $arrTitulos['formulario'][13] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] REGISTRO CIVIL";
+        $arrTitulos['formulario'][14] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] NO TIENE";
+        $arrTitulos['formulario'][15] = "[ NUMERO_DOC ] NUMERO DE DOCUMENTO";
+        $arrTitulos['formulario'][16] = "[ P13_1 ] PRIMER NOMBRE";
+        $arrTitulos['formulario'][17] = "[ P13_2 ] SEGUNDO NOMBRE";
+        $arrTitulos['formulario'][18] = "[ P13_3 ] PRIMER APELLIDO";
+        $arrTitulos['formulario'][19] = "[ P13_4 ] SEGUNDO APELLIDO";
+        $arrTitulos['formulario'][20] = "[ P26 ] ¿CUÁNTOS HOGARES CONVIVEN EN ESTA VIVIENDA?";
+        $arrTitulos['formulario'][21] = "[ P29 ] ¿EN CUÁNTOS DE ESTOS CUARTOS DUERMEN LAS PERSONAS DE ESTE HOGAR?";
+        $arrTitulos['ciudadano'][22] = "[ N_ORDEN ] ORDEN DEL CIUDADANO";
+        $arrTitulos['ciudadano'][23] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] CÉDULA DE CIUDADANÍA";
+        $arrTitulos['ciudadano'][24] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] TARJETA DE IDENTIDAD";
+        $arrTitulos['ciudadano'][25] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] REGISTRO CIVIL";
+        $arrTitulos['ciudadano'][26] = "[ TIPO_DOCUMENTO ] TIPO DE DOCUMENTO / [ TIPO_DOCUMENTO ] NO TIENE";
+        $arrTitulos['ciudadano'][27] = "[ P31_1 ] PRIMER NOMBRE";
+        $arrTitulos['ciudadano'][28] = "[ P31_2 ] SEGUNDO NOMBRE";
+        $arrTitulos['ciudadano'][29] = "[ P31_3 ] PRIMER APELLIDO";
+        $arrTitulos['ciudadano'][30] = "[ P31_4 ] SEGUNDO APELLIDO";
+        $arrTitulos['ciudadano'][31] = "[ NUM_DOCUM ] NUMERO DE DOCUMENTO";
+        $arrTitulos['ciudadano'][32] = "[ P340A ] CUÁNTO RECIBE MENSUALMENTE EN PROMEDIO POR LOS SIGUIENTES CONCEPTOS / [ P340A ] TRABAJO ASALARIADO";
+        $arrTitulos['ciudadano'][33] = "[ P340B ] CUÁNTO RECIBE MENSUALMENTE EN PROMEDIO POR LOS SIGUIENTES CONCEPTOS / [ P340B ] TRABAJO INDEPENDIENTE";
+        $arrTitulos['ciudadano'][34] = "[ P340C ] CUÁNTO RECIBE MENSUALMENTE EN PROMEDIO POR LOS SIGUIENTES CONCEPTOS / [ P340C ] PENSIONES (JUBILACIÓN, INVALIDEZ, VEJEZ, ETC.)";
+        $arrTitulos['ciudadano'][35] = "SUMA INGRESO CIUDADANO";
+        $arrTitulos['ciudadano'][36] = "SUMA INGRESO HOGAR";
+
+        if($_FILES['fileSecuenciales']['error'] != 4) {
+            switch ($_FILES['fileSecuenciales']['error']) {
+                case UPLOAD_ERR_INI_SIZE:
+                    $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" Excede el tamaño permitido";
+                    break;
+                case UPLOAD_ERR_FORM_SIZE:
+                    $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" Excede el tamaño permitido";
+                    break;
+                case UPLOAD_ERR_PARTIAL:
+                    $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" no fue completamente cargado, intente de nuevo, si el error persiste contacte al administrador";
+                    break;
+                default:
+                    $arrExtensiones = array("txt", "csv");
+                    $numPunto = strpos($_FILES['fileSecuenciales']['name'], ".") + 1;
+                    $numRestar = (strlen($_FILES['fileSecuenciales']['name']) - $numPunto) * -1;
+                    $txtExtension = substr($_FILES['fileSecuenciales']['name'], $numRestar);
+                    if (!in_array(strtolower($txtExtension), $arrExtensiones)) {
+                        $this->arrErrores[] = "Tipo de Archivo no permitido $txtExtension ";
+                    }
+                    break;
+            }
+        }
+
+        if( empty( $this->arrErrores )){
+
+            $arrDocumentos = array();
+            if( $_FILES['fileSecuenciales']['error'] != UPLOAD_ERR_NO_FILE ){
+                $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileSecuenciales']['tmp_name']));
+                foreach ($arrDocumentos as $numLinea => $numDocumento) {
+                    if (doubleval($numDocumento) != 0) {
+                        $arrFormularios[] = Ciudadano::formularioVinculado( doubleval($numDocumento) );
+                    }
+                }
+            }else{
+//                $arrDocumentos[] = 26344065;
+//                foreach ($arrDocumentos as $numLinea => $numDocumento) {
+//                    if (doubleval($numDocumento) != 0) {
+//                        $arrFormularios[] = Ciudadano::formularioVinculado( doubleval($numDocumento) );
+//                    }
+//                }
+            }
+
+            // Titulos
+            $arrDatos[0][0]  = $arrTitulos['formulario'];
+            $arrDatos[0][0] += $arrTitulos['ciudadano'];
+
+            $txtCondicion = "";
+            if( ! empty( $arrDocumentos ) ) {
+                $txtCondicion = "and apl.seqFormulario IN (" . implode(",", $arrFormularios) . ")";
+            }
+
+            // Variables del ciudadano a extraer
+            $sql = "
+                select
+                  apl.seqFormulario,
+                  aci.numOrden,
+                  IF(
+                    pre.txtPregunta = res.txtRespuesta,
+                    CONCAT( '[ ', pre.txtIdentificador , ' ] ', pre.txtPregunta ),
+                    CONCAT( '[ ', pre.txtIdentificador , ' ] ', pre.txtPregunta , ' / [ ', res.txtIdentificador , ' ] ', res.txtRespuesta  )
+                  ) as txtPregunta,
+                  aci.valRespuesta
+                from t_enc_aplicacion apl
+                inner join t_enc_diseno dis on apl.seqDiseno = dis.seqDiseno 
+                inner join t_cor_usuario usu on apl.seqUsuarioCarga = usu.seqUsuario
+                inner join t_frm_hogar hog on apl.seqFormulario = hog.seqFormulario 
+                inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+                inner join t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
+                left join t_enc_aplicacion_ciudadano aci on apl.seqAplicacion = aci.seqAplicacion
+                left join t_enc_respuesta res on aci.seqRespuesta = res.seqRespuesta
+                left join t_enc_pregunta pre on res.seqPregunta = pre.seqPregunta
+                where apl.bolActiva = 1
+                  and dis.bolActivo = 1
+                  and apl.seqDiseno = 1
+                  and hog.seqParentesco = 1
+                  and res.txtIdentificador in ('N_ORDEN','P31_1','P31_2','P31_3','P31_4','TIPO_DOCUMENTO','NUM_DOCUM','P340A','P340B','P340C')
+                  $txtCondicion
+                order by 
+                  apl.seqFormulario, aci.numOrden, aci.seqAplicacionCiudadano
+            ";
+            $objRes = $aptBd->execute($sql);
+            while( $objRes->fields ){
+                $seqFormulario = $objRes->fields['seqFormulario'];
+                $numOrden = $objRes->fields['numOrden'];
+                unset($objRes->fields['seqFormulario']);
+                unset($objRes->fields['numOrden']);
+                $numColumna = intval(array_shift(array_keys($arrTitulos['ciudadano'],$objRes->fields['txtPregunta'])));
+                $arrDatos[$seqFormulario][$numOrden][$numColumna] = $objRes->fields['valRespuesta'];
+                $objRes->MoveNext();
+            }
+
+            $sql = "
+                select
+                  apl.seqFormulario,
+                  dis.txtDiseno as NombreEncuesta,
+                  apl.txtNombreCargue as NombreCargue,
+                  apl.fchAplicacion as FechaAplicacion,  
+                  apl.fchCarga as FechaCarga, 
+                  tdo.txtTipoDocumento as TipoDocumentoPostulantePrincipal,
+                  ciu.numDocumento as DocumentoPostulantePrincipal,
+                  CONCAT( TRIM(ciu.txtNombre1), ' ' ,TRIM(ciu.txtNombre2), ' ' ,TRIM(ciu.txtApellido1), ' ' ,TRIM(ciu.txtApellido2) ) as NombrePostulantePrincipal,
+                  apl.txtFormulario as FormularioEncuesta,
+                  CONCAT( usu.txtNombre, ' ' , usu.txtApellido ) as txtUsuarioSistema,
+                  IF(
+                    pre.txtPregunta = res.txtRespuesta,
+                    CONCAT( '[ ', pre.txtIdentificador , ' ] ', pre.txtPregunta ),
+                    CONCAT( '[ ', pre.txtIdentificador , ' ] ', pre.txtPregunta , ' / [ ', res.txtIdentificador , ' ] ', res.txtRespuesta  )
+                  ) as txtPregunta,
+                  afo.valRespuesta
+                from t_enc_aplicacion apl
+                inner join t_enc_diseno dis on apl.seqDiseno = dis.seqDiseno 
+                inner join t_cor_usuario usu on apl.seqUsuarioCarga = usu.seqUsuario
+                inner join t_frm_hogar hog on apl.seqFormulario = hog.seqFormulario 
+                inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+                inner join t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
+                left join t_enc_aplicacion_formulario afo on apl.seqAplicacion = afo.seqAplicacion
+                left join t_enc_respuesta res on afo.seqRespuesta = res.seqRespuesta
+                left join t_enc_pregunta pre on res.seqPregunta = pre.seqPregunta
+                where apl.bolActiva = 1
+                  and dis.bolActivo = 1
+                  and apl.seqDiseno = 1
+                  and hog.seqParentesco = 1
+                  and res.txtIdentificador in ('P13_1','P13_2','P13_3','P13_4','TIPO_DOCUMENTO','NUMERO_DOC','P26','P29')
+                  $txtCondicion
+                order by 
+                  apl.seqFormulario,afo.seqAplicacionFormulario            
+            ";
+            $objRes = $aptBd->execute($sql);
+            while( $objRes->fields ){
+                $seqFormulario = $objRes->fields['seqFormulario'];
+                foreach($objRes->fields as $txtCampo => $txtValor){
+                    $numColumna = intval(array_shift(array_keys($arrTitulos['formulario'],$txtCampo)));
+                    if($numColumna == 0){
+                        $numColumna = intval(array_shift(array_keys($arrTitulos['formulario'],$objRes->fields['txtPregunta'])));
+                    }
+                    foreach($arrDatos[$seqFormulario] as $numOrden => $arrColumnas ){
+                        $arrDatos[$seqFormulario][$numOrden][$numColumna] = $txtValor;
+                        ksort($arrDatos[$seqFormulario][$numOrden]);
+                    }
+                }
+                $objRes->MoveNext();
+            }
+
+            foreach($arrDatos as $seqFormulario => $arrOrden){
+                if($seqFormulario != 0) {
+                    $arrSuma[$seqFormulario] = 0;
+                    foreach ($arrOrden as $numOrden => $arrColumnas) {
+                        $arrDatos[$seqFormulario][$numOrden][35] = doubleval($arrColumnas[32]) + doubleval($arrColumnas[33]) + doubleval($arrColumnas[34]);
+                        $arrSuma[$seqFormulario] += doubleval($arrDatos[$seqFormulario][$numOrden][35]);
+                    }
+                }
+            }
+
+            foreach($arrDatos as $seqFormulario => $arrOrden){
+                if($seqFormulario != 0) {
+                    foreach ($arrOrden as $numOrden => $arrColumnas) {
+                        $arrDatos[$seqFormulario][$numOrden][36] = $arrSuma[$seqFormulario];
+                    }
+                }
+            }
+
+        }
+
+        $txtNombreArchivo = "encuestasPive_" . date("Ymd_His") . ".xls";
+
+        header("Content-disposition: attachment; filename=$txtNombreArchivo");
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/vnd.ms-excel; charset=utf-8;");
+        header("Content-Transfer-Encoding: binary");
+        header("Pragma: no-cache");
+        header("Expires: 1");
+
+        foreach($arrDatos as $seqFormulario => $arrOrden){
+            foreach($arrOrden as $numOrden => $arrColumnas){
+                foreach($arrDatos[0][0] as $numColumna => $txtTitulo){
+                    if($arrColumnas[$numColumna] != ""){
+                        echo utf8_decode($arrColumnas[$numColumna]);
+                    }
+                    echo "\t";
+                }
+                echo "\r\n";
+            }
+        }
+
+        //return true;
+
+    }
+
+
 
 }
 

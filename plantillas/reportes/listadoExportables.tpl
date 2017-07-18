@@ -59,9 +59,10 @@
 {assign var=reporteBasedeDatosPoblacional	value=$arrExportables.reporteBasedeDatosPoblacional}
 {assign var=InformacionSolucion				value=$arrExportables.InformacionSolucion}
 {assign var=plantillaestudiotitulos 		value=$arrExportables.plantillaestudiotitulos}
-{assign var=plantillaEscrituracion 		value=$arrExportables.plantillaEscrituracion}
-{assign var=informeProyectos 		value=$arrExportables.informeProyectos}
-{assign var=reporteInformacionCvp 		value=$arrExportables.reporteInformacionCvp}
+{assign var=plantillaEscrituracion 		    value=$arrExportables.plantillaEscrituracion}
+{assign var=informeProyectos 		        value=$arrExportables.informeProyectos}
+{assign var=reporteInformacionCvp 		    value=$arrExportables.reporteInformacionCvp}
+{assign var=encuestasPive        		    value=$arrExportables.encuestasPive}
 
 <form id="listadoExportable" >
     <center>
@@ -1083,6 +1084,23 @@
                     </td>
                 </tr>
             {/if}
+
+            {if $encuestasPive == 1}
+                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                    <td class="tituloCampo" align="left" width="60%">Encuestas PIVE (para cruces)</td>
+                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                        <a onclick="someterFormulario(
+                                        'mensajes',
+                                        'listadoExportable',
+                                        './contenidos/reportes/ReportesExportables.php?reporte=encuestasPive',
+                                        true,
+                                        false)"
+                           href="#">Exportable</a>
+                    </td>
+                </tr>
+            {/if}
+
+
         </center>
         <input type="hidden" id="txtComentario" name="txtComentario" />
     </form>

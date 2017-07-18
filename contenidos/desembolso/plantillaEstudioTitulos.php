@@ -16,7 +16,7 @@ function plantillaestudiotitulos($seqFormularios) {
 //conexion
     $conexion = mysql_connect("localhost", "sdht_usuario", "Ochochar*1");
     mysql_set_charset('utf8', $conexion);
-    mysql_select_db("sdht_subsidios", $conexion);
+    mysql_select_db("sipive", $conexion);
 
     //sql
     $sql = "SELECT T_DES_ESCRITURACION.seqFormulario AS 'ID HOGAR', T_CIU_CIUDADANO.numDocumento AS 'CC POSTULANTE PRINCIPAL', T_CIU_TIPO_DOCUMENTO.txtTipoDocumento AS 'TIPO DE DOCUMENTO', UPPER(CONCAT(T_CIU_CIUDADANO.txtNombre1, ' ', T_CIU_CIUDADANO.txtNombre2, ' ', T_CIU_CIUDADANO.txtApellido1, ' ', T_CIU_CIUDADANO.txtApellido2)) AS 'NOMBRE POSTULANTE PRINCIPAL', T_PRY_PROYECTO.txtNombreProyecto AS 'PROYECTO', T_DES_ESCRITURACION.txtNombreVendedor AS 'PROPIETARIO', T_FRM_FORMULARIO.seqUnidadProyecto AS 'seqUnidadProyecto', T_PRY_UNIDAD_PROYECTO.txtNombreUnidad AS 'txtnombreunidad', T_DES_ESCRITURACION.txtDireccionInmueble AS 'DIRECCION INMUEBLE', T_PRY_TECNICO.txtexistencia AS 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD', T_DES_ESCRITURACION.txtEscritura AS 'ESCRITURA REGISTRADA', T_DES_ESCRITURACION.fchEscritura AS 'FECHA ESCRITURA', T_DES_ESCRITURACION.numNotaria AS 'NOTARIA', T_DES_ESCRITURACION.txtCiudad AS 'CIUDAD NOTARIA', T_DES_ESCRITURACION.txtMatriculaInmobiliaria AS 'FOLIO DE MATRICULA', T_DES_ESCRITURACION.numValorInmueble AS 'VALOR INMUEBLE', T_AAD_HOGARES_VINCULADOS.numActo AS 'NUMERO DEL ACTO', DATE_FORMAT(T_AAD_HOGARES_VINCULADOS.fchacto,'%d-%m-%Y') AS 'FECHA DEL ACTO', '' AS 'No. ESCRITURA', '' AS 'FECHA ESCRITURA (D/M/A)', '' AS 'NOTARIA', '' AS 'CIUDAD NOTARIA', '' AS 'FOLIO DE MATRICULA', '' AS 'ZONA OFICINA REGISTRO', '' AS 'CIUDAD OFICINA REGISTRO', '' AS 'FECHA FOLIO (D/M/A)', '' AS 'RESOLUCION DE VINCULACION COINCIDENTE', '' AS 'BENEFICIARIOS DEL SDV COINCIDENTES', '' AS 'NOMBRE Y CEDULA DE LOS PROPIETARIOS EN EL CTL INCIDENTES', '' AS 'CONSTITUCION PATRIMONIO FAMILIA', '' AS 'INDAGACION AFECTACION A VIVIENDA FAMILIAR', '' AS 'RESTRICCIONES', '' AS 'ESTADO CIVIL COINCIDENTE', '' AS 'CARTA DE VINCULACION Y/O RESOLUCION PROTOCOLIZADA', '' AS 'No. DE ANOTACION CTL COMPRAVENTA', '' AS 'SE CANCELA HIPOTECA MAYOR EXTENSION (SI LA HUBIERE)', '' AS 'PATRIMONIO DE FAMILIA REGISTRADO', '' AS 'PROHIBICION DE TRANSFERENCIA Y DERECHO DE PREFERENCIA REGISTRADOS', '' AS 'IMPRESION DE CONSULTA FONVIVIENDA (HOGARES VICTIMAS)', '' AS 'ELABORO', '' AS 'APROBO', '' AS 'SE VIABILIZA JURIDICAMENTE', '' AS 'OBSERVACION'
@@ -39,13 +39,13 @@ ORDER BY ah.fchActo DESC) AS T_AAD_HOGARES_VINCULADOS1 USING (numActo)
 WHERE T_FRM_HOGAR.seqParentesco = 1 AND T_DES_ESCRITURACION.seqFormulario IN (" . $seqFormularios . ") AND seqTipoActo = 1 "
             . " GROUP BY T_DES_ESCRITURACION.seqFormulario order by  T_DES_ESCRITURACION.seqEscrituracion, T_AAD_FORMULARIO_ACTO.seqFormularioActo desc";
 
-  // echo $sql;
+//   echo $sql;
 //    die();
     $resultdl = mysql_query($sql, $conexion) or die(mysql_error());
     //echo $resultdl; die();
     $registros = mysql_num_rows($resultdl);
     $columnas = mysql_num_fields($resultdl);
-
+//echo $registros;
     if ($registros > 0) {
 
 
@@ -118,9 +118,10 @@ WHERE T_FRM_HOGAR.seqParentesco = 1 AND T_DES_ESCRITURACION.seqFormulario IN (" 
         $objPHPExcel->createSheet(1);
         $objPHPExcel->getSheet(1)->SetCellValue("AZ2", "SI");
         $objPHPExcel->getSheet(1)->SetCellValue("AZ3", "NO");
+        $objPHPExcel->getSheet(1)->SetCellValue("AZ4", "NO APLICA");
         $objPHPExcel->addNamedRange(
                 new PHPExcel_NamedRange(
-                'seleccion', $objPHPExcel->getSheet(1), 'AZ2:AZ3'
+                'seleccion', $objPHPExcel->getSheet(1), 'AZ2:AZ4'
                 )
         );
         //Creacion de rango de seleccion de desplegable (SI - NO Aplica)

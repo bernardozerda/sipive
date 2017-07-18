@@ -17,17 +17,40 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
 
     $arrErrores = array();
+    $numFechaHoy = time();
+    $numMayorEdad = strtotime("-18 year", $numFechaHoy); // Timestamp de nacimiento de mayor de edad
+    $numTerceraEdad = strtotime("-65 year", $numFechaHoy); // Timestamp de nacimiento de terera edad
 
-    /* * ************************************************************************************************************
+    // tipos de documento validos para un menor de edad
+    $arrDocumentosMenorEdad[] = 4; // Tarjeta de Identidad
+    $arrDocumentosMenorEdad[] = 3; // Registro Civil
+
+    // tipos de documento validos para un menor de edad
+    $arrDocumentosMayorEdad[] = 1; // Cedula Ciudadania
+    $arrDocumentosMayorEdad[] = 2; // Cedula extranjeria
+
+    // Identificador de la condicion especial
+    $numCondicionEspecialMayor65 = 2;
+
+    // Regularizar los campos del post
+    foreach ( $_POST as $txtCampo => $txtValor ){
+        $_POST[ $txtCampo ] = regularizarCampo( $txtCampo , $txtValor );
+    }
+
+    /**************************************************************************************************************
      * VALIDACION DE LOS CAMPOS OBLIGATORIOS Y REGLAS DE NEGOCIO
      * ************************************************************************************************************ */
+
+    if($_SESSION['privilegios']['crear'] != 1) {
+        $arrErrores[] = "No tiene permisos para crear registros";
+    }
 
     // Grupo de Gestion 
     if (intval($_POST['seqGrupoGestion']) == 0) {
         $arrErrores[] = "Seleccione el grupo de la gestión realizada";
     }
 
-    // Grstion
+    // Gestion
     if (intval($_POST['seqGestion']) == 0) {
         $arrErrores[] = "Seleccione la gestión realizada";
     }
@@ -38,7 +61,6 @@
     }
 
     // Documento
-    $_POST['numDocumento'] = mb_ereg_replace("[^0-9]", "", $_POST['numDocumento']);
     if (intval($_POST['numDocumento']) == 0) {
         $arrErrores[] = "El Documento no puede estar vacio";
     }
@@ -58,21 +80,77 @@
         $arrErrores[] = "El ciudadano debe tener primer apellido";
     }
 
+    // fecha de nacimiento
+    if( ! esFechaValida( $_POST['fchNacimiento'] ) ){
+        $arrErrores[] = "Seleccione una fecha de nacimiento válida";
+    }else{
+
+        // validaciones relacionadas con la fecha de nacimiento
+        $numEdad = strtotime($_POST['fchNacimiento']);
+
+        // se compara si es mayor de edad al momento de la actualizacion
+        if (($numEdad <= $numMayorEdad) and in_array($_POST['seqTipoDocumento'], $arrDocumentosMenorEdad)) {
+            $arrErrores[] = "Tipo de documento errado para " .
+                $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
+                $_POST['txtApellido1'] . " " . $_POST['txtApellido2'] .
+                " porque según su fecha de nacimiento es mayor de edad";
+        }
+
+        // se compara si es menor de edad al momento de la actualizacion
+        if (($numEdad > $numMayorEdad) and in_array($_POST['seqTipoDocumento'], $arrDocumentosMayorEdad)) {
+            $arrErrores[] = "Tipo de documento errado para " .
+                $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
+                $_POST['txtApellido1'] . " " . $_POST['txtApellido2'] .
+                " porque segun su fecha de nacimiento es menor de edad";
+        }
+
+        // se compara si es menor de 65 años y tenga condicion especial mayor 65 anos
+        if (($numEdad > $numTerceraEdad) and ($_POST["seqCondicionEspecial"] == $numCondicionEspecialMayor65 or
+                $_POST["seqCondicionEspecial2"] == $numCondicionEspecialMayor65 or
+                $_POST["seqCondicionEspecial3"] == $numCondicionEspecialMayor65)
+        ) {
+            $arrErrores[] = "Condicion especial errada para " .
+                $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
+                $_POST['txtApellido1'] . " " . $_POST['txtApellido2'] .
+                " porque segun su fecha de nacimiento tiene menos de 65 años y se le esta asignando la condicion especial de Mayor de 65 Años";
+        }
+
+        // se compara si es tercera edad al momento de la actualizacion
+        if (($numEdad <= $numTerceraEdad) and ($_POST['seqCondicionEspecial'] != $numCondicionEspecialMayor65 and
+                $_POST['seqCondicionEspecial2'] != $numCondicionEspecialMayor65 and
+                $_POST['seqCondicionEspecial3'] != $numCondicionEspecialMayor65)
+        ) {
+            $arrErrores[] = "Debe tener condicion especial de Mayor de 65 años para el ciudadano " .
+                $_POST['txtNombre1'] . " " . $_POST['txtNombre2'] . " " .
+                $_POST['txtApellido1'] . " " . $_POST['txtApellido2'];
+        }
+
+    }
+
+    // Nivel Educativo y años aprobados
+    if( intval( $_POST['seqNivelEducativo'] ) == 0 ){
+        $arrErrores[] = "Seleccione un nivel educativo";
+    }elseif( intval( $_POST['seqNivelEducativo'] ) != 1 and intval( $_POST['numAnosAprobados'] ) == 0 ){
+        $arrErrores[] = "Seleccione los años aprobados según el nivel educativo seleccionado";
+    }
+
     // Estado civil
-    if (in_array($_POST['seqEstadoCivil'], array(0, 1, 3, 4, 5))) {
+    $arrEstadoCivil = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil"), "seqEstadoCivil", "bolActivo = 1");
+    $seqEstadoCivil = $_POST['seqEstadoCivil'];
+    if( ! isset( $arrEstadoCivil[ $seqEstadoCivil ] ) ){
         $arrErrores[] = "No puede utilizar este estado civil para el ciudadano.";
     }
 
     // Si hay correo electronico debe ser valido
     if (trim($_POST['txtCorreo']) != "") {
-        if (!ereg("^[0-9a-zA-Z._\-]+\@[a-zA-Z0-9._\-]+\.([a-zA-z]{2,4})(([\.]{1})([a-zA-Z]{2}))?$", trim($_POST['txtCorreo']))) {
+        if (!mb_ereg("^[0-9a-zA-Z._\-]+\@[a-zA-Z0-9._\-]+\.([a-zA-z]{2,4})(([\.]{1})([a-zA-Z]{2}))?$", trim($_POST['txtCorreo']))) {
             $arrErrores[] = "No es un correo electrónico válido";
         }
     }
 
-    //localidad
-    if (intval($_POST['seqLocalidad']) == 0) {
-        $arrErrores[] = "El Campo Localidad no puede estar vacio";
+    // afiliacion a salud
+    if( intval( $_POST['seqSalud'] ) == 0 ){
+        $arrErrores[] = "Seleccione la afiliación a salud";
     }
 
     // Direccion
@@ -80,21 +158,24 @@
         $arrErrores[] = "Debe dar una dirección para el hogar";
     }
 
-    // Ciudad
+    // ciudad y validaciones relacionadas
     if (intval($_POST['seqCiudad']) == 0) {
-        $arrErrores[] = "Debe seleccionar una ciudad";
+        $arrErrores[] = "Indique la ciudad de residencia";
+    } elseif (intval($_POST['seqCiudad']) == 149) { // vive en bogota
+        if (intval($_POST['seqLocalidad']) == 0) {
+            $arrErrores[] = "Debe seleccionar una localidad";
+        }
+        if (intval($_POST['seqBarrio']) == 0) {
+            $arrErrores[] = "Debe seleccionar un barrio perteneciente a la localidad";
+        }
+    } else { // fuera de bogota
+        if (intval($_POST['seqLocalidad']) == 0) {
+            $arrErrores[] = "Debe seleccionar la localidad 'Fuera de Bogota'";
+        }
+        if (intval($_POST['seqBarrio']) != 1142) {
+            $arrErrores[] = "Debe seleccionar el barrio 'Fuera de Bogota'";
+        }
     }
-
-    // Localidad
-    if (intval($_POST['seqLocalidad']) == 1 or intval($_POST['seqLocalidad']) == 0) {
-        $arrErrores[] = "Seleccione una localidad";
-    }
-
-    // Barrio
-    if (intval($_POST['seqBarrio']) == 0) {
-        $arrErrores[] = "Seleccione el barrio";
-    }
-
     $txtFormatoFijo    = "/^[0-9]{7}$/";
     $txtFormatoCelular = "/^[3]{1}[0-9]{9}$/";
 
@@ -102,8 +183,7 @@
     if ( ! preg_match( $txtFormatoCelular , trim( $_POST['numCelular'] ) ) ) {
     	$arrErrores[] = "El número telefonico celular debe tener 10 digitos y debe iniciar con el número 3";
     }
-    
-    
+
     // Telefono Fijo 1
     if( is_numeric( $_POST['numTelefono1'] ) == true and intval( $_POST['numTelefono1'] ) != 0 ){
     	if ( ! preg_match( $txtFormatoFijo , trim( $_POST['numTelefono1'] ) ) ) {
@@ -111,17 +191,18 @@
     	}
     }
 
-    // Valor del arriendo
-    $_POST['valArriendo'] = mb_ereg_replace("[^0-9]", "", $_POST['valArriendo']);
-    if (intval($_POST['seqVivienda']) == 1) {
-        if (intval($_POST['valArriendo']) == 0) {
-            $arrErrores[] = "De indicar el valor del arrendamiento para el hogar";
+    // Telefono Fijo 2
+    if( is_numeric( $_POST['numTelefono2'] ) == true and intval( $_POST['numTelefono2'] ) != 0 ){
+        if ( ! ( preg_match( $txtFormatoFijo , trim( $_POST['numTelefono2'] ) ) || preg_match( $txtFormatoCelular , trim( $_POST['numTelefono2'] ) ) ) ) {
+            $arrErrores[] = "El número telefonico fijo 2 debe tener 7 o 10 digitos";
         }
     }
 
-    // Modalidad (usar solo las de plan de gobierno bogota humana)
-    if (in_array(intval($_POST['seqModalidad']), array(0, 1, 5, 2, 3, 4))) {
-        $arrErrores[] = "Debe seleccionar una modalidad de subsidio valida";
+    // Modalidad
+    $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad", "seqPlanGobierno"), "seqModalidad", "seqPlanGobierno = 3", "seqPlanGobierno DESC, txtModalidad");
+    $seqModalidad = $_POST['seqModalidad'];
+    if( ! isset( $arrModalidad[ $seqModalidad ] ) ){
+        $arrErrores[] = "Debe seleccionar una modalidad válida";
     }
 
     // Solucion
@@ -129,445 +210,135 @@
         $arrErrores[] = "Debe seleccionar la solución que corresponda a la modalidad seleccionada";
     }
 
-    // Ingresos del hogar
-    $_POST['valIngresoHogar'] = mb_ereg_replace("[^0-9]", "", $_POST['valIngresoHogar']);
+    /****************************************************************************************************************
+     * INSERTANDO LA INFORMACION
+     ***************************************************************************************************************/
 
-    // Si tiene valor ahorrado debe seleccionar en cual banco 
-    $_POST['valSaldoCuentaAhorro'] = mb_ereg_replace("[^0-9]", "", $_POST['valSaldoCuentaAhorro']);
-    if (intval($_POST['valSaldoCuentaAhorro']) != 0 and intval($_POST['seqBancoCuentaAhorro']) == 1) {
-        $arrErrores[] = "Debe indicar el banco en donde están los recursos del ahorro";
-    }
+    if (empty($arrErrores)) {
 
-    // Si tiene valor de credito debe seleccionar en que banco
-    $_POST['valCredito'] = mb_ereg_replace("[^0-9]", "", $_POST['valCredito']);
-    if (intval($_POST['valCredito']) != 0 and intval($_POST['seqBancoCredito']) == 1) {
-        $arrErrores[] = "Debe indicar el banco en donde tiene el crédito";
-    }
+        $claCiudadano = new Ciudadano();
+        $claFormulario = new FormularioSubsidios();
 
-    // Si tiene valor Subsidio Nacional debe ingresar el No. Carta soporte del subsidio
-    $_POST['valSubsidioNacional'] = mb_ereg_replace("[^0-9]", "", $_POST['valSubsidioNacional']);
-    if (intval($_POST['valSubsidioNacional']) != 0 and trim($_POST['txtSoporteSubsidioNacional']) == "") {
-        $arrErrores[] = "Debe indicar el soporte del subsidio nacional";
-    }
-
-    // Si tiene valor de donacion debe indicar la empresa
-    $_POST['valDonacion'] = mb_ereg_replace("[^0-9]", "", $_POST['valDonacion']);
-    if (intval($_POST['valDonacion']) != 0 and intval($_POST['seqEmpresaDonante']) == 1) {
-        $arrErrores[] = "Debe indicar que empresa ha dado la donación o reconocimiento económico";
-    }
-	
-	// Si tiene seleccionado un banco para el ahorro, el valor del ahorro debe ser mayor a 0
-	if (intval($_POST['seqBancoCuentaAhorro']) != 1 and intval($_POST['valSaldoCuentaAhorro']) == 0){
-		$arrErrores[] = "El valor del ahorro debe ser mayor a 0";
-	}
-	
-	// Si tiene seleccionado un banco para el credito, el valor del credito debe ser mayor a 0
-	if (intval($_POST['seqBancoCredito']) != 1 and intval($_POST['valCredito']) == 0){
-		$arrErrores[] = "El valor del crédito debe ser mayor a 0";
-	}
-	
-	// Si tiene algun soporte de subsidio nacional, el valor del subsidio nacional debe ser mayor a 0
-	if (intval($_POST['txtSoporteSubsidioNacional']) != "" and intval($_POST['valSubsidioNacional']) == 0){
-		$arrErrores[] = "El valor del subsidio nacional debe ser mayor a 0";
-	}
-	
-	// Si tiene seleccionada una emtidad para la donación, el valor de la donación debe ser mayor a 0
-	if (intval($_POST['seqEmpresaDonante']) != 1 and intval($_POST['valDonacion']) == 0){
-		$arrErrores[] = "El valor de la Donación - Reconocimiento Económico debe ser mayor a 0";
-	}
-
-    // Verifica que no haya otra persona con el mismo nombre
-    if (intval($_POST['seqFormulario']) == 0) {
+        // Verifica que no haya otra persona con el mismo nombre
         $sql = "
-                SELECT
-                seqCiudadano
-                FROM T_CIU_CIUDADANO
-                WHERE TRIM( txtNombre1 ) LIKE \"" . trim($_POST['txtNombre1']) . "\"
-                  AND TRIM( txtNombre2 ) LIKE \"" . trim($_POST['txtNombre2']) . "\"
-                  AND TRIM( txtApellido1 ) LIKE \"" . trim($_POST['txtApellido1']) . "\"
-                  AND TRIM( txtApellido2 ) LIKE \"" . trim($_POST['txtApellido2']) . "\"
-            ";
+            SELECT
+              seqCiudadano
+            FROM T_CIU_CIUDADANO
+            WHERE TRIM( txtNombre1 ) LIKE \"" . trim($_POST['txtNombre1']) . "\"
+              AND TRIM( txtNombre2 ) LIKE \"" . trim($_POST['txtNombre2']) . "\"
+              AND TRIM( txtApellido1 ) LIKE \"" . trim($_POST['txtApellido1']) . "\"
+              AND TRIM( txtApellido2 ) LIKE \"" . trim($_POST['txtApellido2']) . "\"
+        ";
         $objRes = $aptBd->execute($sql);
         if ($objRes->RecordCount() > 0) {
             $arrMensajes[] = "Existe otra persona con el mismo nombre pero con otro numero de documento";
         }
-    }
 
-    // calcula el valor del subsidio
-    $_POST['valSubsidio'] = 0;
-    $sql = "
-            SELECT valSubsidio
-            FROM T_FRM_VALOR_SUBSIDIO
-            WHERE seqSolucion = " . intval($_POST['seqSolucion']) . "
-              AND seqModalidad = " . intval($_POST['seqModalidad']) . "
-        ";
-    $objRes = $aptBd->execute($sql);
-    if ($objRes->fields) {
-        $_POST['valSubsidio'] = $objRes->fields['valSubsidio'];
-    }
+        // Colocando los datos del ciudadano
+        $claCiudadano->bolLgtb = $_POST['bolLgtb'];
+        $claCiudadano->fchNacimiento = $_POST['fchNacimiento'];
+        $claCiudadano->numAnosAprobados = $_POST['numAnosAprobados'];
+        $claCiudadano->numDocumento = $_POST['numDocumento'];
+        $claCiudadano->seqCondicionEspecial = $_POST['seqCondicionEspecial'];
+        $claCiudadano->seqCondicionEspecial2 = $_POST['seqCondicionEspecial2'];
+        $claCiudadano->seqCondicionEspecial3 = $_POST['seqCondicionEspecial3'];
+        $claCiudadano->seqEstadoCivil = $_POST['seqEstadoCivil'];
+        $claCiudadano->seqEtnia = $_POST['seqEtnia'];
+        $claCiudadano->seqGrupoLgtbi = $_POST['seqGrupoLgtbi'];
+        $claCiudadano->seqNivelEducativo = $_POST['seqNivelEducativo'];
+        $claCiudadano->seqOcupacion = $_POST['seqOcupacion'];
+        $claCiudadano->seqSalud = $_POST['seqSalud'];
+        $claCiudadano->seqSexo = $_POST['seqSexo'];
+        $claCiudadano->seqTipoDocumento = $_POST['seqTipoDocumento'];
+        $claCiudadano->seqTipoVictima = $_POST['seqTipoVictima'];
+        $claCiudadano->txtApellido1 = $_POST['txtApellido1'];
+        $claCiudadano->txtApellido2 = $_POST['txtApellido2'];
+        $claCiudadano->txtNombre1 = $_POST['txtNombre1'];
+        $claCiudadano->txtNombre2 = $_POST['txtNombre2'];
+        $claCiudadano->valIngresos = $_POST['valIngresoHogar'];
+        $claCiudadano->seqParentesco = 1; // Postulante principal
 
-    /* * **************************************************************************************************************
-     * INSERTANDO LA INFORMACION
-     * ************************************************************************************************************* */
+        $seqCiudadano = $claCiudadano->ciudadanoExiste($_POST['seqTipoDocumento'], $_POST['numDocumento']);
+        if ($seqCiudadano == 0) {
+            $seqCiudadano = $claCiudadano->guardarCiudadano();
+        } else {
+            $claCiudadano->seqCiudadano = $seqCiudadano;
+            $claCiudadano->editarCiudadano($seqCiudadano);
+        }
 
-    $claCiudadano = new Ciudadano();
-    $claFormulario = new FormularioSubsidios();
-    $claSeguimiento = new Seguimiento();
+        if( empty( $claCiudadano->arrErrores ) ){
 
-    // Insertando el hogar
-    if (empty($arrErrores)) {
-        if (intval($_POST['seqFormulario']) == 0) {
+            $claFormulario->arrCiudadano[$seqCiudadano] = $claCiudadano;
+            $claFormulario->bolDesplazado = $_POST['bolDesplazado'];
+            $claFormulario->fchInscripcion = date("Y-m-d H:i:s");
+            $claFormulario->fchUltimaActualizacion = date("Y-m-d H:i:s");
+            $claFormulario->numCelular = $_POST['numCelular'];
+            $claFormulario->numTelefono1 = $_POST['numTelefono1'];
+            $claFormulario->numTelefono2 = $_POST['numTelefono2'];
+            $claFormulario->seqBarrio = $_POST['seqBarrio'];
+            $claFormulario->seqCiudad = $_POST['seqCiudad'];
+            $claFormulario->seqEstadoProceso = $_POST['seqEstadoProceso'];
+            $claFormulario->seqLocalidad = $_POST['seqLocalidad'];
+            $claFormulario->seqModalidad = $_POST['seqModalidad'];
 
-            // el usuario debe poder crear registros
-            if ($_SESSION['privilegios']['crear'] == 1) {
-                $claCiudadano->numDocumento = $_POST['numDocumento'];
-                $claCiudadano->seqTipoDocumento = $_POST['seqTipoDocumento'];
-                $claCiudadano->txtNombre1 = trim($_POST['txtNombre1']);
-                $claCiudadano->txtNombre2 = trim($_POST['txtNombre2']);
-                $claCiudadano->txtApellido1 = trim($_POST['txtApellido1']);
-                $claCiudadano->txtApellido2 = trim($_POST['txtApellido2']);
-                $claCiudadano->fchNacimiento = "";
-                $claCiudadano->seqSexo = $_POST['seqSexo'];
-                $claCiudadano->seqEstadoCivil = $_POST['seqEstadoCivil'];
-                $claCiudadano->seqEtnia = $_POST['seqEtnia'];
-                $claCiudadano->seqCondicionEspecial = $_POST['seqCondicionEspecial'];
-                $claCiudadano->seqCondicionEspecial2 = $_POST['seqCondicionEspecial2'];
-                $claCiudadano->seqCondicionEspecial3 = $_POST['seqCondicionEspecial3'];
-                $claCiudadano->seqNivelEducativo = $_POST['seqNivelEducativo'];
-                $claCiudadano->seqGrupoLgtbi = $_POST['seqGrupoLgtbi'];
-                $claCiudadano->bolLgtb = $_POST['bolLgtb'];
-                $claCiudadano->seqTipoVictima = $_POST['seqTipoVictima'];
-                $claCiudadano->seqOcupacion = $_POST['seqOcupacion'];
-                $claCiudadano->valIngresos = $_POST['valIngresoHogar'];
-                $claCiudadano->seqParentesco = 1;
-
-                $seqCiudadano = $claCiudadano->ciudadanoExiste($_POST['seqTipoDocumento'], $_POST['numDocumento']);
-                if ($seqCiudadano == 0) {
-                    $seqCiudadano = $claCiudadano->guardarCiudadano();
-                } else {
-                    $claCiudadano->editarCiudadano($seqCiudadano);
-                }
-
-                if (intval($seqCiudadano) != 0) {
-
-                    $valTotalRecursos =
-                            $_POST['valSaldoCuentaAhorro'] +
-                            $_POST['valSubsidioNacional'] +
-                            $_POST['valCredito'] +
-                            $_POST['valDonacion'];
-							
-						
-
-                    $claFormulario->txtDireccion = $_POST['txtDireccion'];
-                    $claFormulario->seqTipoDireccion = $_POST['seqTipoDireccion'];
-                    $claFormulario->numTelefono1 = $_POST['numTelefono1'];
-                    $claFormulario->numTelefono2 = $_POST['numTelefono2'];
-                    $claFormulario->numCelular = $_POST['numCelular'];
-                    $claFormulario->txtBarrio = obtenerNombres("T_FRM_BARRIO", "seqBarrio", $_POST['seqBarrio']);
-                    $claFormulario->txtCorreo = $_POST['txtCorreo'];
-                    $claFormulario->txtMatriculaInmobiliaria = "";
-                    $claFormulario->txtChip = "";
-                    $claFormulario->bolViabilizada = 0;
-                    $claFormulario->bolIdentificada = 0;
-                    $claFormulario->bolDesplazado = $_POST['bolDesplazado'];
-                    $claFormulario->seqSolucion = $_POST['seqSolucion'];
-                    $claFormulario->valPresupuesto = 0;
-                    $claFormulario->valAvaluo = 0;
-                    $claFormulario->valTotal = 0;
-                    $claFormulario->seqModalidad = $_POST['seqModalidad'];
-                    $claFormulario->seqPlanGobierno = $_POST['seqPlanGobierno'];
-                    $claFormulario->seqBancoCuentaAhorro = $_POST['seqBancoCuentaAhorro'];
-                    $claFormulario->fchAperturaCuentaAhorro = "";
-                    $claFormulario->bolInmovilizadoCuentaAhorro = "";
-                    $claFormulario->valSaldoCuentaAhorro = $_POST['valSaldoCuentaAhorro'];
-                    $claFormulario->txtSoporteCuentaAhorro = "";
-                    $claFormulario->seqBancoCuentaAhorro2 = 1;
-                    $claFormulario->fchAperturaCuentaAhorro2 = "";
-                    $claFormulario->bolInmovilizadoCuentaAhorro2 = "";
-                    $claFormulario->valSaldoCuentaAhorro2 = "";
-                    $claFormulario->txtSoporteCuentaAhorro2 = "";
-                    $claFormulario->valSubsidioNacional = $_POST['valSubsidioNacional'];
-                    $claFormulario->txtSoporteSubsidioNacional = $_POST['txtSoporteSubsidioNacional'];
-                    $claFormulario->txtSoporteSubsidio = "";
-                    $claFormulario->valAporteLote = 0;
-                    $claFormulario->txtSoporteAporteLote = "";
-                    $claFormulario->seqCesantias = 1;
-                    $claFormulario->valSaldoCesantias = 0;
-                    $claFormulario->txtSoporteCesantias = "";
-                    $claFormulario->valAporteAvanceObra = 0;
-                    $claFormulario->txtSoporteAvanceObra = "";
-                    $claFormulario->valAporteMateriales = 0;
-                    $claFormulario->txtSoporteAporteMateriales = "";
-                    $claFormulario->seqEmpresaDonante = $_POST['seqEmpresaDonante'];
-                    $claFormulario->valDonacion = $_POST['valDonacion'];
-                    $claFormulario->txtSoporteDonacion = "";
-                    $claFormulario->seqBancoCredito = $_POST['seqBancoCredito'];
-                    $claFormulario->valCredito = $_POST['valCredito'];
-                    $claFormulario->txtSoporteCredito = "";
-                    $claFormulario->valTotalRecursos = $valTotalRecursos;
-                    $claFormulario->valAspiraSubsidio = $_POST['valSubsidio'];
-                    $claFormulario->seqVivienda = $_POST['seqVivienda'];
-                    $claFormulario->valArriendo = $_POST['valArriendo'];
-                    $claFormulario->bolPromesaFirmada = 0;
-                    $claFormulario->fchInscripcion = date("Y-m-d H:i:s");
-                    $claFormulario->fchPostulacion = "";
-                    $claFormulario->fchVencimiento = "";
-                    $claFormulario->bolIntegracionSocial = 0;
-                    $claFormulario->bolSecSalud = 0;
-                    $claFormulario->bolSecEducacion = 0;
-                    $claFormulario->bolIpes = 0;
-                    $claFormulario->txtOtro = "";
-                    $claFormulario->numAdultosNucleo = 1;
-                    $claFormulario->numNinosNucleo = 0;
-                    $claFormulario->seqUsuario = $_SESSION['seqUsuario'];
-                    $claFormulario->seqPuntoAtencion = $_SESSION['seqPuntoAtencion'];
-                    $claFormulario->bolCerrado = 0;
-                    $claFormulario->seqLocalidad = $_POST['seqLocalidad'];
-                    $claFormulario->seqCiudad = $_POST['seqCiudad'];
-                    $claFormulario->valIngresoHogar = $_POST['valIngresoHogar'];
-                    $claFormulario->seqEstadoProceso = $_POST['seqEstadoProceso'];
-                    $claFormulario->txtDireccionSolucion = "";
-                    $claFormulario->fchAprobacionCredito = "";
-                    $claFormulario->txtFormulario = "";
-                    $claFormulario->fchUltimaActualizacion = date("Y-m-d H:i:s");
-                    $claFormulario->seqProyecto = 37;
-					$claFormulario->seqUnidadProyecto = 0;
-					$claFormulario->seqProyectoHijo = 0;
-                    $claFormulario->numCortes = 0;
-                    $claFormulario->seqPeriodo = 1;
-                    $claFormulario->fchArriendoDesde = "";
-                    $claFormulario->bolSancion = 0;
-                    $claFormulario->fchVigencia = "";
-                    $claFormulario->seqUpz = $_POST['seqUpz'];
-                    $claFormulario->seqBarrio = $_POST['seqBarrio'];
-                    $claFormulario->seqSisben = 1;
-                    $claFormulario->fchNotificacion = "";
-                    $claFormulario->txtComprobanteArriendo = "";
-                    $claFormulario->numPuntajeSisben = 0;
-                    $claFormulario->seqTipoEsquema = 1;
-                    $claFormulario->arrCiudadano[$seqCiudadano] = $claCiudadano;
-//var_dump($claFormulario);
-                    $seqFormulario = $claFormulario->guardarFormulario();
-                    if ($seqFormulario != 0) {
-                        try {
-                            $sql = "
-                            INSERT INTO T_FRM_HOGAR (
-                              seqCiudadano,
-                              seqFormulario,
-                              bolSoporteDocumento,
-                              seqParentesco
-                            ) VALUES (
-                              $seqCiudadano,
-                              $seqFormulario,
-                              0,
-                              1
-                            )
-                         ";
-                            $aptBd->execute($sql);
-                        } catch (Exception $objError) {
-                            $arrErrores[] = "No se ha podido guardar la informacion del hogar, consulte al administrador.";
-                            //$claCiudadano->borrarCiudadano($seqCiudadano);
-                            $claFormulario->borrarFormulario($seqFormulario);
-                        }
-                    } else { // error al salvar el formulario
-                        $arrErrores[] = $claFormulario->arrErrores;
-                        $claCiudadano->borrarCiudadano($seqCiudadano);
-                    }
-                } else { // error al salvar el ciudadano
-                    $arrErrores[] = $claCiudadano->arrErrores;
-                }
-            } else { // sin permisos para crear
-                $arrErrores[] = "No tiene privilegios para realizar inscripciones";
+            // para las modalidades de cierre financiero y leasing  el esquema
+            // se obliga a que sea proyecto de la sdht
+            // las otras modalidades quedan con valor neutro
+            if( $claFormulario->seqModalidad == 12 or $claFormulario->seqModalidad == 13 ){
+                $claFormulario->seqTipoEsquema = 9;
             }
 
-            $claFormularioAnterior = new FormularioSubsidios();
-            $claFormularioAnterior->cargarFormulario(0);
+            $claFormulario->seqPlanGobierno = $_POST['seqPlanGobierno'];
+            $claFormulario->seqPuntoAtencion = $_SESSION['seqPuntoAtencion'];
+            $claFormulario->seqSolucion = $_POST['seqSolucion'];
+            $claFormulario->seqTipoDireccion = $_POST['seqTipoDireccion'];
+            $claFormulario->seqUpz = $_POST['seqUpz'];
+            $claFormulario->seqUsuario = $_SESSION['seqUsuario'];
+            $claFormulario->txtBarrio = obtenerNombres("T_FRM_BARRIO", "seqBarrio", $_POST['seqBarrio']);
+            $claFormulario->txtCorreo = $_POST['txtCorreo'];
+            $claFormulario->txtDireccion = $_POST['txtDireccion'];
+            $claFormulario->valIngresoHogar = $_POST['valIngresoHogar'];
 
-            $txtCambios = $claSeguimiento->cambiosPostulacion($seqFormulario, $claFormularioAnterior, $claFormulario);
-        } else {
-			$claCiudadanoNuevo = new Ciudadano();
-			  $claFormularioNuevo = new FormularioSubsidios();
-			  $claSeguimiento = new Seguimiento();
+            $seqFormulario = $claFormulario->guardarFormulario();
+            if( empty( $claFormulario->arrErrores ) ){
+                $claFormulario->relacionarCiudadanoFormulario();
+                if( ! empty($claFormulario->arrErrores) ){
+                    $claCiudadano->borrarCiudadano();
+                    $claFormulario->borrarFormulario($seqFormulario);
+                    $arrErrores = $claFormulario->arrErrores;
+                }
+            }else{
+                $claCiudadano->borrarCiudadano();
+                $arrErrores = $claFormulario->arrErrores;
+            }
 
-			  // Datos Ciudadano Existente
+        }else{
+            $claCiudadano->borrarCiudadano();
+            $arrErrores = $claCiudadano->arrErrores;
+        }
 
-			   $claCiudadano->numDocumento = $_POST['numDocumento'];
-                $claCiudadano->seqTipoDocumento = $_POST['seqTipoDocumento'];
-                $claCiudadano->txtNombre1 = trim($_POST['txtNombre1']);
-                $claCiudadano->txtNombre2 = trim($_POST['txtNombre2']);
-                $claCiudadano->txtApellido1 = trim($_POST['txtApellido1']);
-                $claCiudadano->txtApellido2 = trim($_POST['txtApellido2']);
-                $claCiudadano->fchNacimiento = "";
-                $claCiudadano->seqSexo = $_POST['seqSexo'];
-                $claCiudadano->seqEstadoCivil = $_POST['seqEstadoCivil'];
-                $claCiudadano->seqEtnia = $_POST['seqEtnia'];
-                $claCiudadano->seqCondicionEspecial = $_POST['seqCondicionEspecial'];
-                $claCiudadano->seqCondicionEspecial2 = $_POST['seqCondicionEspecial2'];
-                $claCiudadano->seqCondicionEspecial3 = $_POST['seqCondicionEspecial3'];
-                $claCiudadano->seqNivelEducativo = $_POST['seqNivelEducativo'];
-                $claCiudadano->seqGrupoLgtbi = $_POST['seqGrupoLgtbi'];
-                $claCiudadano->bolLgtb = $_POST['bolLgtb'];
-                $claCiudadano->seqTipoVictima = $_POST['seqTipoVictima'];
-                $claCiudadano->seqOcupacion = $_POST['seqOcupacion'];
-                $claCiudadano->valIngresos = $_POST['valIngresoHogar'];
-                $claCiudadano->seqParentesco = 1;
-
-			  // coloca los datoa del post en el formulario
-			  $claFormularioNuevo->seqFormulario                = $_POST['seqFormulario'];
-			  $claFormularioNuevo->txtDireccion                 = $_POST['txtDireccion'];
-			  $claFormularioNuevo->seqTipoDireccion             = 0;
-			  $claFormularioNuevo->numTelefono1                 = $_POST['numTelefono1'];
-			  $claFormularioNuevo->numTelefono2                 = $_POST['numTelefono2'];
-			  $claFormularioNuevo->numCelular                   = $_POST['numCelular'];
-			  $claFormularioNuevo->txtBarrio                    = obtenerNombres("T_FRM_BARRIO", "seqBarrio", $_POST['seqBarrio']);
-			  $claFormularioNuevo->txtCorreo                    = $_POST['txtCorreo'];
-			  $claFormularioNuevo->txtMatriculaInmobiliaria     = $_POST['txtMatriculaInmobiliaria'];
-			  $claFormularioNuevo->txtChip                      = $_POST['txtChip'];
-			  $claFormularioNuevo->bolViabilizada               = intval($_POST['bolViabilizada']);
-			  $claFormularioNuevo->bolIdentificada              = intval($_POST['bolIdentificada']);
-			  $claFormularioNuevo->bolDesplazado                = intval($_POST['bolDesplazado']);
-			  $claFormularioNuevo->seqSolucion                  = $_POST['seqSolucion'];
-			  $claFormularioNuevo->valPresupuesto               = intval($_POST['valPresupuesto']);
-			  $claFormularioNuevo->valAvaluo                    = intval($_POST['valAvaluo']);
-			  $claFormularioNuevo->valTotal                     = intval($_POST['valTotal']);
-			  $claFormularioNuevo->seqModalidad                 = $_POST['seqModalidad'];
-			  $claFormularioNuevo->seqPlanGobierno              = $_POST['seqPlanGobierno'];
-			  $claFormularioNuevo->seqBancoCuentaAhorro         = $_POST['seqBancoCuentaAhorro'];
-			  $claFormularioNuevo->fchAperturaCuentaAhorro      = $_POST['fchAperturaCuentaAhorro'];
-			  $claFormularioNuevo->bolInmovilizadoCuentaAhorro  = intval( $_POST['bolInmovilizadoCuentaAhorro'] );
-			  $claFormularioNuevo->valSaldoCuentaAhorro         = intval($_POST['valSaldoCuentaAhorro']);
-			  $claFormularioNuevo->txtSoporteCuentaAhorro       = $_POST['txtSoporteCuentaAhorro'];
-			  $claFormularioNuevo->seqBancoCuentaAhorro2        = $_POST['seqBancoCuentaAhorro2'];
-			  $claFormularioNuevo->fchAperturaCuentaAhorro2     = $_POST['fchAperturaCuentaAhorro2'];
-			  $claFormularioNuevo->bolInmovilizadoCuentaAhorro2 = intval( $_POST['bolInmovilizadoCuentaAhorro2'] );
-			  $claFormularioNuevo->valSaldoCuentaAhorro2        = intval($_POST['valSaldoCuentaAhorro2']);
-			  $claFormularioNuevo->txtSoporteCuentaAhorro2      = $_POST['txtSoporteCuentaAhorro2'];
-			  $claFormularioNuevo->valSubsidioNacional          = intval($_POST['valSubsidioNacional']);
-			  $claFormularioNuevo->txtSoporteSubsidioNacional   = $_POST['txtSoporteSubsidioNacional'];
-			  $claFormularioNuevo->txtSoporteSubsidio           = $_POST['txtSoporteSubsidio'];
-			  $claFormularioNuevo->valAporteLote                = intval($_POST['valAporteLote']);
-			  $claFormularioNuevo->txtSoporteAporteLote         = $_POST['txtSoporteLote'];
-			  $claFormularioNuevo->seqCesantias                 = 1;
-			  $claFormularioNuevo->valSaldoCesantias            = intval($_POST['valSaldoCesantias']);
-			  $claFormularioNuevo->txtSoporteCesantias          = $_POST['txtSoporteCesantias'];
-			  $claFormularioNuevo->valAporteAvanceObra          = intval($_POST['valAporteAvanceObra']);
-			  $claFormularioNuevo->txtSoporteAvanceObra         = $_POST['txtSoporteAvanceObra'];
-			  $claFormularioNuevo->valAporteMateriales          = intval($_POST['valAporteMateriales']);
-			  $claFormularioNuevo->txtSoporteAporteMateriales   = $_POST['txtSoporteAporteMateriales'];
-			  $claFormularioNuevo->seqEmpresaDonante            = $_POST['seqEmpresaDonante'];
-			  $claFormularioNuevo->valDonacion                  = intval($_POST['valDonacion']);
-			  $claFormularioNuevo->txtSoporteDonacion           = $_POST['txtSoporteDonacion'];
-			  $claFormularioNuevo->seqBancoCredito              = $_POST['seqBancoCredito'];
-			  $claFormularioNuevo->valCredito                   = intval($_POST['valCredito']);
-			  $claFormularioNuevo->txtSoporteCredito            = $_POST['txtSoporteCredito'];
-			  $claFormularioNuevo->valTotalRecursos             = intval($_POST['valSaldoCuentaAhorro'] + $_POST['valSubsidioNacional'] + $_POST['valCredito'] +$_POST['valDonacion']);
-			  $claFormularioNuevo->valAspiraSubsidio            = intval(['valAspiraSubsidio']);
-			  $claFormularioNuevo->seqVivienda                  = $_POST['seqVivienda'];
-			  $claFormularioNuevo->valArriendo                  = intval($_POST['valArriendo']);
-			  $claFormularioNuevo->bolPromesaFirmada            = intval($_POST['bolPromesaFirmada']);
-              $claFormularioNuevo->fchInscripcion             = $_POST['fchInscripcion'];
-			  $claFormularioNuevo->fchPostulacion               = $claFormulario->fchPostulacion;
-			  $claFormularioNuevo->fchVencimiento               = $claFormulario->fchVencimiento;
-			  $claFormularioNuevo->bolIntegracionSocial         = intval($_POST['bolIntegracionSocial']);
-			  $claFormularioNuevo->bolSecSalud                  = intval($_POST['bolSecSalud']);
-			  $claFormularioNuevo->bolSecEducacion              = intval($_POST['bolSecEducacion']);
-			  $claFormularioNuevo->bolIpes                      = intval($_POST['bolIpes']);
-              $claFormularioNuevo->bolSecMujer                  = intval($_POST['bolSecMujer']);
-              $claFormularioNuevo->bolAltaCon                  = intval($_POST['bolAltaCon']);
-			  $claFormularioNuevo->txtOtro                      = $_POST['txtOtro'];
-			  $claFormularioNuevo->numAdultosNucleo             = $numAdultos;
-			  $claFormularioNuevo->numNinosNucleo               = $numNinos;
-			  $claFormularioNuevo->seqUsuario                   = $_SESSION['seqUsuario'];
-			  $claFormularioNuevo->seqPuntoAtencion             = $_SESSION['seqPuntoAtencion'];
-			  $claFormularioNuevo->bolCerrado                   = intval($_POST['bolCerrado']);
-			  $claFormularioNuevo->seqLocalidad                 = $_POST['seqLocalidad'];
-			  $claFormularioNuevo->seqCiudad                    = $_POST['seqCiudad'];
-			  $claFormularioNuevo->valIngresoHogar              = intval($_POST['valIngresoHogar']);
-			  $claFormularioNuevo->seqEstadoProceso             = $_POST['seqEstadoProceso'];
-			  $claFormularioNuevo->txtDireccionSolucion         = $_POST['txtDireccionSolucion'];
-			  $claFormularioNuevo->fchAprobacionCredito         = $_POST['fchAprobacionCredito'];
-			  $claFormularioNuevo->txtFormulario                = $_POST['txtFormulario'];
-			  $claFormularioNuevo->fchUltimaActualizacion       = date( "y-m-d H:i:s" );
-			  $claFormularioNuevo->seqProyecto                  = $_POST['seqProyecto'];
-			  $claFormularioNuevo->seqUnidadProyecto            = 0;
-			  $claFormularioNuevo->seqProyectoHijo              = 0;
-			  $claFormularioNuevo->numCortes                    = 0;
-			  $claFormularioNuevo->seqPeriodo                   = 1;
-			  $claFormularioNuevo->fchArriendoDesde             = $_POST['fchArriendoDesde'];
-			  $claFormularioNuevo->bolSancion                   = intval($_POST['bolSancion']);
-			  $claFormularioNuevo->fchVigencia                  = $claFormulario->fchVigencia;
-			  $claFormularioNuevo->seqUpz                       = $_POST['seqUpz'];
-			  $claFormularioNuevo->seqBarrio                    = $_POST['seqBarrio'];
-			  $claFormularioNuevo->seqSisben                    = $_POST['seqSisben'];
-			  $claFormularioNuevo->fchNotificacion              = $claFormulario->fchNotificacion;
-			  $claFormularioNuevo->txtComprobanteArriendo       = $_POST['txtComprobanteArriendo'];
-
-              $claFormularioNuevo->numAdultosNucleo             = intval($_POST['numAdultosNucleo']);
-              $claFormularioNuevo->numNinosNucleo               = intval($_POST['numNinosNucleo']);
-              $claFormularioNuevo->seqProyecto                  = intval($_POST['seqProyecto']);
-			  $claFormularioNuevo->numPuntajeSisben             = 0;
-
-			  // edita los datos del formulario
-			  $claFormularioNuevo->editarFormulario( $_POST['seqFormulario'] );
-			  $seqFormulario = $_POST['seqFormulario'];
-			  // si hay errores los pasa al arreglo de errores
-			  if( ! empty( $claFormularioNuevo->arrErrores ) ){
-				 foreach( $claFormularioNuevo->arrErrores as $txtError ){
-					$arrErrores[] = $txtError;
-				 }
-			}
-			$claFormularioAnterior = new FormularioSubsidios();
-            $claFormularioAnterior->cargarFormulario($seqFormulario);
-
-			$txtCambios = $claSeguimiento->cambiosPostulacion($seqFormulario, $claFormularioAnterior, $claFormularioNuevo);
-			//echo $txtCambios;
-			//$txtCambios = "El Hogar se actualiza";
-		}
     }
-//print_r($arrErrores);
-    if (empty($arrErrores)) {
 
-        $sql = "
-             INSERT INTO T_SEG_SEGUIMIENTO ( 
-                seqFormulario, 
-                fchMovimiento, 
-                seqUsuario, 
-                txtComentario, 
-                txtCambios, 
-                numDocumento, 
-                txtNombre, 
-                seqGestion
-             ) VALUES (
-                \"" . $seqFormulario . "\",
-                now(),
-                \"" . $_SESSION['seqUsuario'] . "\",
-                \"" . mb_ereg_replace("\n", "", $_POST["txtComentario"]) . "\",
-                \"" . mb_ereg_replace("\"", "", $txtCambios) . "\",
-                \"" . $claCiudadano->numDocumento . "\",
-                \"" . $claCiudadano->txtNombre1 . " " . $claCiudadano->txtNombre2 . " " . $claCiudadano->txtApellido1 . " " . $claCiudadano->txtApellido2 . "\",
-                \"" . $_POST['seqGestion'] . "\"
-             )
-          ";
-		  //echo "<br>".$sql;
-        try {
-            $aptBd->execute($sql);
-        } catch (Exception $objError) {
-            $arrMensajes[] = "El formulario se ha salvado pero no ha quedado registro de la actividad, contacte al administrador";
+    if( empty( $arrErrores ) ){
+        $claSeguimiento = new Seguimiento();
+
+        $_POST['seqFormulario'] = $claFormulario->seqFormulario;
+        $_POST['cedula'] = $_POST['numDocumento'];
+        $_POST['nombre'] = trim($_POST['txtNombre1']) . " ";
+        $_POST['nombre'].= ( trim($_POST['txtNombre2']) == "")? "" : trim($_POST['txtNombre2']) . " ";
+        $_POST['nombre'].= trim($_POST['txtApellido1']) . " ";
+        $_POST['nombre'].= ( trim($_POST['txtApellido2']) == "")? "" : trim($_POST['txtApellido2']);
+
+        $claSeguimiento->salvarSeguimiento($_POST,"cambiosInscripcion");
+        if( ! empty( $claSeguimiento->arrErrores ) ){
+            $arrErrores = $claSeguimiento->arrErrores;
+        }else{
+            foreach ($claSeguimiento->arrMensajes as $txtMensaje) {
+                $arrMensajes[] = $txtMensaje;
+            }
         }
     }
 
-    if (empty($arrErrores)) {
-        $txtAccion = ( intval($_POST['seqFormulario']) != 0 ) ? "Actualizado" : "Ingresado";
-        $arrMensajes[] = "El formulario se ha $txtAccion, Cedula [ " . number_format($claCiudadano->numDocumento) . " ]";
-        $txtEstilo = "msgOk";
-    } else {
-        $arrMensajes = $arrErrores;
-        $txtEstilo = "msgError";
-    }
+    imprimirMensajes($arrErrores,$arrMensajes);
 
-    echo "<table cellpadding='0' cellspacing='0' border='0' width='100%' id='tablaMensajes' style='padding:5px'>";
-    foreach ($arrMensajes as $txtMensaje) {
-        echo "<tr><td class='$txtEstilo'><li>$txtMensaje</li></td></tr>";
-    }
-    echo "</table>";
 ?>

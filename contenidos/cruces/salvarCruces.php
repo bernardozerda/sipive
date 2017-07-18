@@ -350,7 +350,7 @@
                     break;
     */
                 // Esquema Casa en Mano
-                case $claFormulario->seqTipoEsquema == 5:
+                case $claFormulario->seqTipoEsquema == 5 || $claFormulario->seqTipoEsquema == 10 || $claFormulario->seqTipoEsquema == 11:
                     // Obtiene los registro de casa en mano del hogar
                     $claCasaMano = new CasaMano();
                     $arrCasaMano = $claCasaMano->cargar($seqFormulario);
@@ -432,6 +432,8 @@
 					
 					
                     unset($arrPost['seqEstadoProceso']);
+
+                    $arrPost['txtFlujo'] = "cem";
 
                     $objCasaMano->salvar($arrPost);
 

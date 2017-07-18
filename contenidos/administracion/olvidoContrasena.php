@@ -26,7 +26,7 @@ $arrErrores = array(); // donde se almacenan los errores
 // Esta expresion regular valida que el correo electronico escrito por el usuario
 // tenga una sintaxis correcta, si falla la sintaxis entra al error
 // Si no tiene:   Usuario__________@servidor_________.(com net info)__.(opcional)(co es uk, opcional) --> Muestra un error                          
-if (!ereg("^[0-9a-zA-Z._\-]+\@[a-zA-Z0-9._\-]+\.([a-zA-z]{2,4})(([\.]{1})([a-zA-Z]{2}))?$", trim($_POST['correo']))) {
+if (!mb_ereg("^[0-9a-zA-Z._\-]+\@[a-zA-Z0-9._\-]+\.([a-zA-z]{2,4})(([\.]{1})([a-zA-Z]{2}))?$", trim($_POST['correo']))) {
     $arrErrores[] = "No es un correo electr&oacute;nico v&aacute;lido";
 }
 
@@ -107,7 +107,7 @@ if (empty($arrErrores)) {
                         </td></tr>
                         <tr>
 							<td style='padding:5px' width='30px' align='center'>
-								<img src='https://www.habitatbogota.gov.co/sipive/recursos/imagenes/escudo_bogota.png'>
+								<img src='http://sdv.habitatbogota.gov.co/sipive/recursos/imagenes/escudo_bogota.png'>
 							</td>
 							<td style='padding:10px'>
 	                            Secretar&iacute;a Distrital del H&aacute;bitat<br>
@@ -117,7 +117,7 @@ if (empty($arrErrores)) {
                     </table>
                     </center>
                 ";
-            $txtMensajeHtml = eregi_replace("[\]", '', $txtMensajeHtml);
+            //$txtMensajeHtml = mb_eregi_replace("[\]", '', $txtMensajeHtml);
 
 
             // Este mensaje se usa si el cliente de correo del usuario no soporta html
@@ -147,7 +147,7 @@ if (empty($arrErrores)) {
             $mail->Port = $puerto;
             $mail->Username = $usuario;
             $mail->Password = $clave;
-            $mail->From = "subsidios@habitatbogota.gov.co";
+            $mail->From = "bzerdar@habitatbogota.gov.co";
             $mail->FromName = $nombre;
             $mail->Subject = $txtSubject;
             $mail->Body = $txtMensajeHtml;
@@ -162,54 +162,6 @@ if (empty($arrErrores)) {
                 $arrErrores[] = "No se ha podido enviar el correo al usuario seleccionado";
             }
 
-
-
-//                 //$objWebServiceMail = new soapclient('http://201.245.171.117/mailSdv/envioMail.php', false);
-//                 $objWebServiceMail = new soapclient('http://localhost/webser/envioMail.php', false);
-//
-//				 $errWebServiceMail = $objWebServiceMail->getError();
-//				 if ($errWebServiceMail) {
-//				 	$arrErrores[] = "Problemas con la carga del Web Service";
-//				 }
-//				 
-//				 $arrDatosMail = array(
-//					'txtSubject' 		=> $txtSubject, 
-//					'txtMensajeHtml' 	=> $txtMensajeHtml, 
-//					'txtMensajeTexto' 	=> $txtMensajeTexto,
-//					'txtCorreo' 		=> $txtCorreo,
-//					'txtNombre' 		=> $arrUsuario[ $seqUsuario ]->txtNombre,
-//					'txtApellido' 		=> $arrUsuario[ $seqUsuario ]->txtApellido
-//				);
-//				$txtRespuesta = $objWebServiceMail->call('enviarMail', array('arrDatosMail' => $arrDatosMail));
-//				
-//				if($txtRespuesta == 0){
-//					$arrErrores[] = "No se ha podido enviar el correo al usuario seleccionado";
-//				}else{
-//					
-//					// Usa la misma funcion de modificar el usuario
-//	                // con el fin de centralizar el cambio de clave de un usuario
-//	                // en una sola parte, ademas el metodo de cambio de clave es privado
-//	                
-//            $claAutenticacion = new Usuario();
-//            $arrErrores = $claAutenticacion->editarUsuario(
-//                    $seqUsuario, 
-//                    $arrUsuario[$seqUsuario]->txtNombre, 
-//                    $arrUsuario[$seqUsuario]->txtApellido, 
-//                    $arrUsuario[$seqUsuario]->txtUsuario, 
-//                    $txtClaveEncriptada, 
-//                    $txtCorreo, 
-//                    1, 
-//                    $arrUsuario[$seqUsuario]->numVencimiento, 
-//                    $arrPermisos, 
-//                    $arrPrivilegios
-//            );
-//	                
-//				}
-//				pr(htmlspecialchars($objWebServiceMail->request, ENT_QUOTES));
-//				pr(htmlspecialchars($objWebServiceMail->response, ENT_QUOTES));
-//				pr(htmlspecialchars($objWebServiceMail->debug_str, ENT_QUOTES));
-
-
             /**
              * FIN ENVIO MAIL
              */
@@ -220,9 +172,18 @@ if (empty($arrErrores)) {
 // muestra mensajes al usuario.
 if (empty($arrErrores)) {
     $arrMensajes[] = "Se ha generado una nueva clave, que ha sido enviada a <b>" . $_POST['correo'] . "</b>, una vez entre al sistema, se le solicitar&aacute; que la cambie";
-    ;
-    imprimirMensajes(array(), $arrMensajes);
+    //imprimirMensajes(array(), $arrMensajes);
+    echo "<div class='alert alert-success' role='alert'>";
+    foreach($arrMensajes as $txtMensajes){
+        echo "<li>$txtMensajes</li>";
+    }
+    echo "</div>";
 } else {
-    imprimirMensajes($arrErrores, array());
+    //imprimirMensajes($arrErrores, array());
+    echo "<div class='alert alert-danger' role='alert'>";
+    foreach($arrErrores as $txtMensajes){
+        echo "<li>$txtMensajes</li>";
+    }
+    echo "</div>";
 }
 ?>

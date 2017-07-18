@@ -114,9 +114,19 @@
      
     if( empty( $arrErrores ) ){
         $arrMensajes[] = "Su contrase&ntilde;a ha sido cambiada, puede cerrar esta ventana e intentar ingresar al aplicativo";
-        imprimirMensajes( array() , $arrMensajes );
+        //imprimirMensajes( array() , $arrMensajes );
+        echo "<div class='alert alert-success' role='alert'>";
+        foreach($arrMensajes as $txtMensajes){
+            echo "<li>$txtMensajes</li>";
+        }
+        echo "</div>";
     }else{
-        imprimirMensajes( $arrErrores , array() );
+        //imprimirMensajes( $arrErrores , array() );
+        echo "<div class='alert alert-danger' role='alert'>";
+        foreach($arrErrores as $txtMensajes){
+            echo "<li>$txtMensajes</li>";
+        }
+        echo "</div>";
     }
 
 

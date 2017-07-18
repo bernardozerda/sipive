@@ -8,24 +8,12 @@
     include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" ); 
     
     $arrLocalidad = array();
-    if( intval( $_POST['ciudad'] ) != 0 ){
-        $txtCondicion = ( intval( $_POST['ciudad'] ) == 149 )? "<>" : "=";
-        $sql = "
-            SELECT 
-                seqLocalidad,
-                txtLocalidad
-            FROM T_FRM_LOCALIDAD
-            WHERE seqLocalidad " . $txtCondicion . " 22
-            AND seqLocalidad > 1
-        ";
-        $objRes = $aptBd->execute( $sql );
-        while( $objRes->fields ){
-            $arrLocalidad[ $objRes->fields['seqLocalidad'] ] = $objRes->fields['txtLocalidad'];
-            $objRes->MoveNext();
-        }    
+    if( intval( $_POST['ciudad'] ) != 0 ) {
+        $txtCondicion = ($_POST['ciudad'] == 149)? "seqLocalidad not in (1,22)" : "seqLocalidad in (22)";
+        $arrLocalidad = obtenerDatosTabla("T_FRM_LOCALIDAD", array("seqLocalidad", "txtLocalidad"), "seqLocalidad", $txtCondicion);
+        natsort($arrLocalidad);
     }
-    natsort( $arrLocalidad );
-    
+
     echo "
     <select	onFocus=\"this.style.backgroundColor = '#ADD8E6';\" 
             onBlur=\"this.style.backgroundColor = '#FFFFFF';\" 
@@ -33,7 +21,7 @@
             name=\"seqLocalidad\" 
             id=\"seqLocalidad\" 
             style=\"width:260px;\"
-        ><option value='1'>0 - Desconocido</option>
+        ><option value=\"1\" selected>Seleccione una</option>
     ";
     foreach( $arrLocalidad as $seqLocalidad => $txtLocalidad ){
         echo "<option value=\"$seqLocalidad\">$txtLocalidad</option>";

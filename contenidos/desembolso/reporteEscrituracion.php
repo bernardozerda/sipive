@@ -156,7 +156,7 @@ $sql = "
 		LEFT JOIN T_PRY_PROYECTO con ON (T_FRM_FORMULARIO.seqProyectoHijo = con.seqProyecto)
 		LEFT JOIN T_PRY_UNIDAD_PROYECTO ON (T_FRM_FORMULARIO.seqUnidadProyecto = T_PRY_UNIDAD_PROYECTO.seqUnidadProyecto)
 	WHERE
-		$txtCondicion 
+		$txtCondicion and t_des_estudio_titulos.seqEstudioTitulos is not null
 	GROUP BY 
 		T_DES_ESCRITURACION.seqFormulario
 ";

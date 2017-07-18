@@ -227,8 +227,9 @@
                             id="seqCiudad" 
                             onFocus="this.style.backgroundColor = '#ADD8E6';" 
                             onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                            style="width:260px;" 
-                            onChange="cargarContenido('localidad', './contenidos/desembolso/cambiarLocalidad.php', 'ciudad=' + this.options[ this.selectedIndex ].value, true);"
+                            style="width:260px;"
+                            onChange="cambiarCiudad(this);"
+
                             ><option value="">Seleccione</option>
                             {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
                                 <option value="{$seqCiudad}" 
@@ -244,13 +245,13 @@
                 <!-- LOCALIDAD Y BARRIO -->
                 <tr>
                     <td>Localidad</td>
-                    <td id="localidad">
+                    <td id="tdlocalidad">
                         <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                 onBlur="this.style.backgroundColor = '#FFFFFF';" 
                                 name="seqLocalidad" 
                                 id="seqLocalidad" 
                                 style="width:260px"
-                                onChange="barrioAutocomplete(['txtBarrio', 'barrioContainer', 'seqLocalidad']);"
+                                onChange="obtenerBarrio(this);"
                                 >
                             <option value="0">0 - DESCONOCIDO</option>
                             {foreach from=$arrLocalidad key=seqLocalidad item=txtLocalidad}
@@ -261,22 +262,27 @@
                         </select>
                     </td>
                     <td>Barrio</td>
-                    <td colspan="3" valign="top" align="left">
-                        <div id="Barrio"> 
-                            <div id="barrioAutocomplete" style="width:200px;">
-                                <input	type="text" 
-                                       name="txtBarrio" 
-                                       id="txtBarrio"
-                                       onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                                   ponerPlaceholder(this.id, 'Barrio');" 
-                                       onBlur="javascript: sinCaracteresEspeciales(this);
-                                                                   this.style.backgroundColor = '#FFFFFF';"
-                                       style="width:200px"
-                                       value="{$claDesembolso->txtBarrio}"
-                                       />
-                                <div id="barrioContainer" style="width:200px"></div>
-                            </div>
-                        </div>
+                    <td colspan="3" valign="top" align="left" id="tdBarrio">
+                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                onChange="obtenerUpz(this);"
+                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                name="seqBarrio"
+                                id="seqBarrio"
+                                style="width:260px;"
+                        >
+                            <option value="0">Seleccione</option>
+                            {if intval( $claDesembolso->seqLocalidad ) != 0}
+                                {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
+                                    <option value="{$seqBarrio}"
+                                            {if $claDesembolso->seqBarrio == $seqBarrio}
+                                                selected
+                                            {/if}
+                                    >
+                                        {$txtBarrio}
+                                    </option>
+                                {/foreach}
+                            {/if}
+                        </select>
                     </td>
                 </tr>
 
@@ -309,7 +315,7 @@
 
                             <div id="escritura"							
                                  {if $claDesembolso->txtPropiedad == "Escritura" || $claDesembolso->txtPropiedad == "escritura"|| $claDesembolso->txtPropiedad == ""}
-                                     style="display:'';"
+                                     style="display:inline;"
                                  {else}
                                      style="display:none;"
                                  {/if}
@@ -358,7 +364,7 @@
                             <!-- OPCIONES PARA SENTENCIA -->
                             <div id="sentencia"
                                  {if $claDesembolso->txtPropiedad == "sentencia"}
-                                     style="display:'';"
+                                     style="display:inline;"
                                  {else}
                                      style="display:none;"
                                  {/if}
@@ -398,7 +404,7 @@
                             <!-- OPCIONES PARA RESOLUCION -->
                             <div id="resolucion"
                                  {if $claDesembolso->txtPropiedad == "resolucion"}
-                                     style="display:'';"
+                                     style="display:inline;"
                                  {else}
                                      style="display:none;"
                                  {/if}
@@ -1501,4 +1507,3 @@
 
 <!-- NO BORRAR, ESTE DIV ACTIVA EL TABVIEW -->
 <div id="seguimiento"></div>
-<div id="barrioListener"></div>

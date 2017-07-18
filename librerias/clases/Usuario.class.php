@@ -309,10 +309,10 @@
             if( empty( $arrErrores ) ){
                 $sql = "
                     UPDATE T_COR_USUARIO SET 
-                        txtNombre = \"" . ereg_replace( '\"' , '' , $txtNombre ) . "\" , 
-                        txtApellido = \"" . ereg_replace( '\"' , '' , $txtApellido ) . "\", 
-                        txtUsuario = \"" . ereg_replace( '\"' , '' , $txtUsuario ) . "\", 
-                        txtCorreo = \"" . ereg_replace( '\"' , '' , $txtCorreo ) . "\",
+                        txtNombre = \"" . mb_ereg_replace( '\"' , '' , $txtNombre ) . "\" , 
+                        txtApellido = \"" . mb_ereg_replace( '\"' , '' , $txtApellido ) . "\", 
+                        txtUsuario = \"" . mb_ereg_replace( '\"' , '' , $txtUsuario ) . "\", 
+                        txtCorreo = \"" . mb_ereg_replace( '\"' , '' , $txtCorreo ) . "\",
                         numVencimiento = " . $numVencimiento . ", 
                         bolActivo = " . $numEstado . ", 
                         fchVencimientoClave = \"" . $fchVencimiento . "\",

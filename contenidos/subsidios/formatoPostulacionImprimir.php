@@ -10,7 +10,7 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php" );	
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );	
     
-	setlocale(LC_TIME, 'spanish');
+	setlocale(LC_TIME, 'America/Bogota');
 	$txtFecha = ucwords( strftime("%A %#d de %B del %Y") ) ." " . date( "H:i:s" ); 
 	
 	// Tipos de documento
@@ -325,7 +325,20 @@
 	
 	$claFormulario = new FormularioSubsidios;
 	$claFormulario->cargarFormulario( $_GET['seqFormulario'] );
-	
+
+	$arrTipoVictima = obtenerDatosTabla("T_FRM_TIPOVICTIMA",array("seqTipoVictima","txtTipoVictima"),"seqTipoVictima");
+	$arrCondicionEtnica = obtenerDatosTabla("T_CIU_ETNIA", array("seqEtnia", "txtEtnia"), "seqEtnia");
+	$arrGrupoLgtbi = obtenerDatosTabla("T_FRM_GRUPO_LGTBI", array("seqGrupoLgtbi", "txtGrupoLgtbi"), "seqGrupoLgtbi");
+	$arrCiudad = obtenerDatosTabla("V_FRM_CIUDAD", array("seqCiudad", "txtCiudad"), "seqCiudad");
+	$arrTipoEsquema = obtenerDatosTabla("T_PRY_TIPO_ESQUEMA", array("seqTipoEsquema", "txtTipoEsquema"), "seqTipoEsquema");
+	$arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtNombre"), "seqConvenio", "", "txtNombre");
+
+	$claSmarty->assign( "arrConvenio" , $arrConvenio );
+	$claSmarty->assign( "arrTipoEsquema" , $arrTipoEsquema );
+	$claSmarty->assign( "arrCiudad" , $arrCiudad );
+	$claSmarty->assign( "arrGrupoLgtbi" , $arrGrupoLgtbi );
+	$claSmarty->assign( "arrCondicionEtnica" , $arrCondicionEtnica );
+	$claSmarty->assign( "arrTipoVictima" , $arrTipoVictima );
 	$claSmarty->assign( "fchImpresion" , $txtFecha );
 	$claSmarty->assign( "objFormulario" , $claFormulario );
 	$claSmarty->assign( "arrTipoDocumento" , $arrTipoDocumento );
@@ -352,6 +365,6 @@
 	$claSmarty->assign( "arrDonantes" , $arrDonantes );
 	$claSmarty->assign( "txtUsuarioSistema" , $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido'] ); 
 	$claSmarty->display( "subsidios/formatoPostulacionImprimir.tpl" );
-//	pr( $claFormulario );
+
 ?>
 

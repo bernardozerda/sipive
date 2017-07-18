@@ -19,8 +19,8 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     $lineas = file($nombreArchivo);
 //var_dump($lineas);    exit();
     $registros = 0;
-//$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipiveJul17', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+//$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidiosJul17', 'localhost');
+    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     $intV = 1;
     $intNV = 1;
     $band = 0;

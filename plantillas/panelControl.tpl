@@ -31,7 +31,10 @@
 		<script language="JavaScript" type="text/javascript" src="./librerias/yui/treeview/treeview-min.js" ></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/encripcion.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/funciones.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/funcionesProyectos.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/listeners.js"></script>
+
+		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 
 	</head>
 

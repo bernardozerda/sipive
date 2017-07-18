@@ -1,4 +1,5 @@
 <?php
+
 /**
  * AQUI SE REALIZA LA BUSQUEDA DEL PROYECTO
  * @author Jaison Ospina
@@ -14,35 +15,34 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 //include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "SeguimientoProyectos.class.php" );
 
 
-	$arrGrupoGestion				= array();	// Tipos de Gestión
-	// Arreglos de Proyecto
-	$arrTipoEsquema 				= array();	// Tipos de Esquema
-	$arrPryTipoModalidad 			= array();	// Tipos de Modalidad
-	$arrOpv 						= array();	// Lista de Opv's
-	//$arrTipoOrganizacion 			= array();	// Tipos de Organizacion
-	$arrTipoOperador 				= array();	// Tipos de Operador
-	//$arrOferente					= array();	// Lista de Oferentes
-	$arrTipoProyecto 				= array();	// Tipos de Proyecto
-	$arrTipoUrbanizacion 			= array();	// Tipos de Urbanizacion
-	$arrConstructor 				= array();	// lista de Constructores
-	$arrTipoSolucion 				= array();	// Tipos de Solucion
-	$arrTipoDocumento 				= array();	// Tipos de Documento
-	$arrLocalidad 					= array();	// Lista de Localidades
-	$arrEstadosProceso				= array();	// Lista de Estados del proceso
-	$arrFiducuaria					= array();	// Lista de Fiduciarias
-	$arrTipoModalidadDesembolso		= array();	// Lista de Estados del proceso
+$arrGrupoGestion = array(); // Tipos de Gestión
+// Arreglos de Proyecto
+$arrTipoEsquema = array(); // Tipos de Esquema
+$arrPryTipoModalidad = array(); // Tipos de Modalidad
+$arrOpv = array(); // Lista de Opv's
+//$arrTipoOrganizacion 			= array();	// Tipos de Organizacion
+$arrTipoOperador = array(); // Tipos de Operador
+//$arrOferente					= array();	// Lista de Oferentes
+$arrTipoProyecto = array(); // Tipos de Proyecto
+$arrTipoUrbanizacion = array(); // Tipos de Urbanizacion
+$arrConstructor = array(); // lista de Constructores
+$arrTipoSolucion = array(); // Tipos de Solucion
+$arrTipoDocumento = array(); // Tipos de Documento
+$arrLocalidad = array(); // Lista de Localidades
+$arrEstadosProceso = array(); // Lista de Estados del proceso
+$arrFiducuaria = array(); // Lista de Fiduciarias
+$arrTipoModalidadDesembolso = array(); // Lista de Estados del proceso
+// GRUPO GESTION ADMINISTRADOR
+$arrGrupoGestionAdministrador[] = 15;
+$arrGrupoGestionAdministrador[] = 5;
+$arrGrupoGestionAdministrador[] = 10;
+$arrGrupoGestionAdministrador[] = 12;
+$arrGrupoGestionAdministrador[] = 17;
+$arrGrupoGestionAdministrador[] = 20;
+$arrGrupoGestionAdministrador[] = 14;
 
-	// GRUPO GESTION ADMINISTRADOR
-	$arrGrupoGestionAdministrador[] = 15;
-	$arrGrupoGestionAdministrador[] = 5;
-	$arrGrupoGestionAdministrador[] = 10;
-	$arrGrupoGestionAdministrador[] = 12;
-	$arrGrupoGestionAdministrador[] = 17;
-	$arrGrupoGestionAdministrador[] = 20;
-	$arrGrupoGestionAdministrador[] = 14;
-
-	// Grupos de gestion
-	$sql = "
+// Grupos de gestion
+$sql = "
 			SELECT
 				seqGrupoGestion,
 				txtGrupoGestion
@@ -53,14 +53,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtGrupoGestion
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrGrupoGestion[$objRes->fields['seqGrupoGestion']] = $objRes->fields['txtGrupoGestion'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrGrupoGestion[$objRes->fields['seqGrupoGestion']] = $objRes->fields['txtGrupoGestion'];
+    $objRes->MoveNext();
+}
 
-	// Tipos de Esquema
-	$sql = "SELECT
+// Tipos de Esquema
+$sql = "SELECT
 				seqTipoEsquema,
 				txtTipoEsquema
 			FROM
@@ -70,14 +70,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtTipoEsquema
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrTipoEsquema[$objRes->fields['seqTipoEsquema']] = $objRes->fields['txtTipoEsquema'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrTipoEsquema[$objRes->fields['seqTipoEsquema']] = $objRes->fields['txtTipoEsquema'];
+    $objRes->MoveNext();
+}
 
-	// Tipos de Modalidad
-	$sql = "SELECT
+// Tipos de Modalidad
+$sql = "SELECT
 				seqPryTipoModalidad,
 				txtPryTipoModalidad
 			FROM
@@ -87,14 +87,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtPryTipoModalidad
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrPryTipoModalidad[$objRes->fields['seqPryTipoModalidad']] = $objRes->fields['txtPryTipoModalidad'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrPryTipoModalidad[$objRes->fields['seqPryTipoModalidad']] = $objRes->fields['txtPryTipoModalidad'];
+    $objRes->MoveNext();
+}
 
-	// Lista de Opv's
-	$sql = "SELECT
+// Lista de Opv's
+$sql = "SELECT
 				seqOpv,
 				txtNombreOpv
 			FROM
@@ -104,48 +104,30 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtNombreOpv
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrOpv[$objRes->fields['seqOpv']] = $objRes->fields['txtNombreOpv'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrOpv[$objRes->fields['seqOpv']] = $objRes->fields['txtNombreOpv'];
+    $objRes->MoveNext();
+}
 
-	// Tipos de Organizacion
-	/*$sql = "SELECT
-				seqTipoOrganizacion,
-				txtTipoOrganizacion
-			FROM
-				T_PRY_TIPO_ORGANIZACION
-			WHERE
-				estado = 1
-			ORDER BY
-				txtTipoOrganizacion
+
+// Lista de Oferentes
+$sql = "SELECT 
+            seqProyectoOferente, 
+            txtNombreOferente 
+        FROM 
+             t_pry_entidad_oferente
+	ORDER BY
+            txtNombreOferente
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrTipoOrganizacion[$objRes->fields['seqTipoOrganizacion']] = $objRes->fields['txtTipoOrganizacion'];
-		$objRes->MoveNext();
-	}*/
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrOferente[$objRes->fields['seqProyectoOferente']] = $objRes->fields['txtNombreOferente'];
+    $objRes->MoveNext();
+}
 
-	// Lista de Oferentes
-	/*$sql = "SELECT
-				seqOferente,
-				txtNombreOferente
-			FROM
-				T_PRY_OFERENTE
-			WHERE
-				bolActivo = 1
-			ORDER BY
-				txtNombreOferente
-		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrOferente[$objRes->fields['seqOferente']] = $objRes->fields['txtNombreOferente'];
-		$objRes->MoveNext();
-	}*/
-
-	// Tipos de Proyecto
-	$sql = "SELECT
+// Tipos de Proyecto
+$sql = "SELECT
 				seqTipoProyecto,
 				txtTipoProyecto
 			FROM
@@ -155,14 +137,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtTipoProyecto
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrTipoProyecto[$objRes->fields['seqTipoProyecto']] = $objRes->fields['txtTipoProyecto'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrTipoProyecto[$objRes->fields['seqTipoProyecto']] = $objRes->fields['txtTipoProyecto'];
+    $objRes->MoveNext();
+}
 
-	// Tipos de Urbanizacion
-	$sql = "SELECT
+// Tipos de Urbanizacion
+$sql = "SELECT
 				seqTipoUrbanizacion,
 				txtTipoUrbanizacion
 			FROM
@@ -172,14 +154,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtTipoUrbanizacion
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrTipoUrbanizacion[$objRes->fields['seqTipoUrbanizacion']] = $objRes->fields['txtTipoUrbanizacion'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrTipoUrbanizacion[$objRes->fields['seqTipoUrbanizacion']] = $objRes->fields['txtTipoUrbanizacion'];
+    $objRes->MoveNext();
+}
 
-	// Lista de Constructores
-	$sql = "SELECT
+// Lista de Constructores
+$sql = "SELECT
 				seqConstructor,
 				txtNombreConstructor
 			FROM
@@ -189,14 +171,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtNombreConstructor
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrConstructor[$objRes->fields['seqConstructor']] = $objRes->fields['txtNombreConstructor'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrConstructor[$objRes->fields['seqConstructor']] = $objRes->fields['txtNombreConstructor'];
+    $objRes->MoveNext();
+}
 
-	// Tipos de Solucion
-	$sql = "SELECT
+// Tipos de Solucion
+$sql = "SELECT
 				seqTipoSolucion,
 				txtTipoSolucion
 			FROM
@@ -206,14 +188,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				seqTipoSolucion
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrTipoSolucion[$objRes->fields['seqTipoSolucion']] = $objRes->fields['txtTipoSolucion'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrTipoSolucion[$objRes->fields['seqTipoSolucion']] = $objRes->fields['txtTipoSolucion'];
+    $objRes->MoveNext();
+}
 
-	// Tipos de documento
-	$sql = "
+// Tipos de documento
+$sql = "
 			SELECT
 				seqTipoDocumento,
 				txtTipoDocumento
@@ -222,14 +204,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtTipoDocumento
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrTipoDocumento[$objRes->fields['seqTipoDocumento']] = $objRes->fields['txtTipoDocumento'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrTipoDocumento[$objRes->fields['seqTipoDocumento']] = $objRes->fields['txtTipoDocumento'];
+    $objRes->MoveNext();
+}
 
-	// Lista de Localidades
-	$sql = "
+// Lista de Localidades
+$sql = "
 			SELECT
 				seqLocalidad,
 				txtLocalidad
@@ -238,14 +220,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				seqLocalidad
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrLocalidad[$objRes->fields['seqLocalidad']] = $objRes->fields['txtLocalidad'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrLocalidad[$objRes->fields['seqLocalidad']] = $objRes->fields['txtLocalidad'];
+    $objRes->MoveNext();
+}
 
-	// Tipos de Estado de Proceso
-	$sql = "
+// Tipos de Estado de Proceso
+$sql = "
 			SELECT
 				seqPryEstadoProceso,
 				txtPryEstadoProceso
@@ -254,14 +236,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				seqPryEstadoProceso
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrEstadosProceso[$objRes->fields['seqPryEstadoProceso']] = $objRes->fields['txtPryEstadoProceso'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrEstadosProceso[$objRes->fields['seqPryEstadoProceso']] = $objRes->fields['txtPryEstadoProceso'];
+    $objRes->MoveNext();
+}
 
-	// Tipos de Modalidad de Desembolso
-	$sql = "SELECT
+// Tipos de Modalidad de Desembolso
+$sql = "SELECT
 				seqTipoModalidadDesembolso,
 				txtTipoModalidadDesembolso
 			FROM
@@ -271,14 +253,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				seqTipoModalidadDesembolso
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrTipoModalidadDesembolso[$objRes->fields['seqTipoModalidadDesembolso']] = $objRes->fields['txtTipoModalidadDesembolso'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrTipoModalidadDesembolso[$objRes->fields['seqTipoModalidadDesembolso']] = $objRes->fields['txtTipoModalidadDesembolso'];
+    $objRes->MoveNext();
+}
 
-	// Lista de Fiduciarias
-	$sql = "SELECT
+// Lista de Fiduciarias
+$sql = "SELECT
 				seqFiduciaria,
 				txtNombreFiduciaria
 			FROM
@@ -288,14 +270,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtNombreFiduciaria
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrFiduciaria[$objRes->fields['seqFiduciaria']] = $objRes->fields['txtNombreFiduciaria'];
-		$objRes->MoveNext();
-	}
-	
-	// Tipos de Cuenta
-	$sql = "SELECT
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrFiduciaria[$objRes->fields['seqFiduciaria']] = $objRes->fields['txtNombreFiduciaria'];
+    $objRes->MoveNext();
+}
+
+// Tipos de Cuenta
+$sql = "SELECT
 				seqTipoCuenta,
 				txtTipoCuenta
 			FROM
@@ -305,14 +287,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				seqTipoCuenta
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrTipoCuenta[$objRes->fields['seqTipoCuenta']] = $objRes->fields['txtTipoCuenta'];
-		$objRes->MoveNext();
-	}
-	
-	// Tutores del Proyecto
-	$sql = "SELECT
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrTipoCuenta[$objRes->fields['seqTipoCuenta']] = $objRes->fields['txtTipoCuenta'];
+    $objRes->MoveNext();
+}
+
+// Tutores del Proyecto
+$sql = "SELECT
 				seqTutorProyecto,
 				txtNombreTutor
 			FROM
@@ -322,74 +304,55 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 			ORDER BY
 				txtNombreTutor
 		";
-	$objRes = $aptBd->execute($sql);
-	while ($objRes->fields) {
-		$arrTutorProyecto[$objRes->fields['seqTutorProyecto']] = $objRes->fields['txtNombreTutor'];
-		$objRes->MoveNext();
-	}
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $arrTutorProyecto[$objRes->fields['seqTutorProyecto']] = $objRes->fields['txtNombreTutor'];
+    $objRes->MoveNext();
+}
 
-	/*************************************************************************************/
-	//echo "RecordCount: ".$objRes->RecordCount()."<BR>";
-	include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ProyectoVivienda.class.php" );
-	$txtPlantilla = "proyectos/inscripcion.tpl";
-	/*if ($objRes->RecordCount() == 0) { // NUEVO PROYECTO
-		$txtPlantilla = "proyectos/inscripcion.tpl";
-		include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ProyectoVivienda.class.php" );
-		//include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "SeguimientoProyectos.class.php" );
-	} else { // PROYECTO EXISTENTE
-		$seqProyecto = $objRes->fields['seqProyecto'];
-		include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ProyectoVivienda.class.php" );
-		//include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "SeguimientoProyectos.class.php" );
-		$objFormularioProyecto = new ProyectoVivienda;
-		$arrProyectos = $objFormularioProyecto->cargarProyectoVivienda( $seqProyecto );
-		$objProyectoVivienda = new ProyectoVivienda;
-		if ( $objRes->fields['seqPryEstadoProceso'] == "1" || $objRes->fields['seqPryEstadoProceso'] == "2") {
-			$txtPlantilla = "proyectos/actualizacion.tpl";
-		} else if ($objRes->fields['seqPryEstadoProceso'] == "3") {
-			$txtPlantilla = "proyectos/elegibilidad.tpl";
-		} else if ($objRes->fields['seqPryEstadoProceso'] == "4") {
-			$txtPlantilla = "proyectos/desembolso.tpl";
-		}
-	}*/
+/* * ********************************************************************************** */
+//echo "RecordCount: ".$objRes->RecordCount()."<BR>";
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ProyectoVivienda.class.php" );
+$txtPlantilla = "proyectos/inscripcion.tpl";
 
-	if ($seqFormulario != "") {
-		$claSeguimientoProyectos = new SeguimientoProyectos;
-		$claSeguimientoProyectos->seqProyecto = $seqProyecto;
-		$arrRegistros = $claSeguimientoProyectos->obtenerRegistros(100);
-	}
 
-	//$claFormulario = new FormularioSubsidios;
-	//$txtActosAdministrativosJs = $claFormulario->obtenerActosAdministrativos();
+if ($seqFormulario != "") {
+    $claSeguimientoProyectos = new SeguimientoProyectos;
+    $claSeguimientoProyectos->seqProyecto = $seqProyecto;
+    $arrRegistros = $claSeguimientoProyectos->obtenerRegistros(100);
+}
 
-	$claSmarty->assign("valSalarioMinimo", 				$arrConfiguracion['constantes']['salarioMinimo'] );
-	$claSmarty->assign("numSubsidios", 					26);
-	$claSmarty->assign("numNitProyecto", 				$_POST['nit']);
-	$claSmarty->assign("objFormularioProyecto", 		$arrProyectos[$seqProyecto]);
+//$claFormulario = new FormularioSubsidios;
+//$txtActosAdministrativosJs = $claFormulario->obtenerActosAdministrativos();
 
-	$claSmarty->assign("arrTipoEsquema", 				$arrTipoEsquema);
-	$claSmarty->assign("arrPryTipoModalidad",			$arrPryTipoModalidad);
-	$claSmarty->assign("arrOpv", 						$arrOpv);
-	//$claSmarty->assign("arrTipoOrganizacion", 			$arrTipoOrganizacion);
-	//$claSmarty->assign("arrOferente", 					$arrOferente);
-	$claSmarty->assign("arrTipoProyecto", 				$arrTipoProyecto);
-	$claSmarty->assign("arrTipoUrbanizacion", 			$arrTipoUrbanizacion);
-	$claSmarty->assign("arrConstructor", 				$arrConstructor);
-	$claSmarty->assign("arrTipoSolucion", 				$arrTipoSolucion);
-	$claSmarty->assign("arrTipoDocumento", 				$arrTipoDocumento);
-	$claSmarty->assign("arrLocalidad", 					$arrLocalidad);
-	$claSmarty->assign("arrEstadosProceso", 			$arrEstadosProceso);
-	$claSmarty->assign("arrTipoModalidadDesembolso", 	$arrTipoModalidadDesembolso);
-	$claSmarty->assign("arrFiduciaria", 				$arrFiduciaria);
-	$claSmarty->assign("arrTipoCuenta", 				$arrTipoCuenta);
-	$claSmarty->assign("arrTutorProyecto", 				$arrTutorProyecto);
-	// Otros Arreglos
-	$claSmarty->assign("seqUsuario", 					$_SESSION['seqUsuario']);
-	$claSmarty->assign("arrGrupos", 					$_SESSION['arrGrupos']);
-	$claSmarty->assign("arrGrupoGestion", 				$arrGrupoGestion);
-	$claSmarty->assign("arrPrivilegios", 				$_SESSION['privilegios']);
+$claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);
+$claSmarty->assign("numSubsidios", 26);
+$claSmarty->assign("numNitProyecto", $_POST['nit']);
+$claSmarty->assign("objFormularioProyecto", $arrProyectos[$seqProyecto]);
 
-	if ($txtPlantilla != "") {
-		$claSmarty->display($txtPlantilla);
-	}
+$claSmarty->assign("arrTipoEsquema", $arrTipoEsquema);
+$claSmarty->assign("arrPryTipoModalidad", $arrPryTipoModalidad);
+$claSmarty->assign("arrOpv", $arrOpv);
+//$claSmarty->assign("arrTipoOrganizacion", 			$arrTipoOrganizacion);
+//$claSmarty->assign("arrOferente", 					$arrOferente);
+$claSmarty->assign("arrTipoProyecto", $arrTipoProyecto);
+$claSmarty->assign("arrTipoUrbanizacion", $arrTipoUrbanizacion);
+$claSmarty->assign("arrConstructor", $arrConstructor);
+$claSmarty->assign("arrTipoSolucion", $arrTipoSolucion);
+$claSmarty->assign("arrTipoDocumento", $arrTipoDocumento);
+$claSmarty->assign("arrLocalidad", $arrLocalidad);
+$claSmarty->assign("arrEstadosProceso", $arrEstadosProceso);
+$claSmarty->assign("arrTipoModalidadDesembolso", $arrTipoModalidadDesembolso);
+$claSmarty->assign("arrFiduciaria", $arrFiduciaria);
+$claSmarty->assign("arrTipoCuenta", $arrTipoCuenta);
+$claSmarty->assign("arrTutorProyecto", $arrTutorProyecto);
+// Otros Arreglos
+$claSmarty->assign("seqUsuario", $_SESSION['seqUsuario']);
+$claSmarty->assign("arrGrupos", $_SESSION['arrGrupos']);
+$claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
+$claSmarty->assign("arrPrivilegios", $_SESSION['privilegios']);
 
+if ($txtPlantilla != "") {
+    $claSmarty->display($txtPlantilla);
+}
 ?>

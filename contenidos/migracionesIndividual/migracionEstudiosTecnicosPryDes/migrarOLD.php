@@ -1,4 +1,5 @@
 <?php
+
 include "../lib/mysqli/shared/ez_sql_core.php";
 include "../lib/mysqli/ez_sql_mysqli.php";
 include "generarConsolidado.php";
@@ -7,7 +8,7 @@ include "generarLinksImpresion.php";
 date_default_timezone_set('America/Bogota');
 $arrDocumentosArchivo = array();
 
-$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sipive', 'localhost');
+$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
 
 $camposTecnico = "numLargoMultiple, numAnchoMultiple, numAreaMultiple, txtMultiple, numLargoAlcoba1, numAnchoAlcoba1, numAreaAlcoba1, txtAlcoba1, numLargoAlcoba2, numAnchoAlcoba2, numAreaAlcoba2, txtAlcoba2, numLargoAlcoba3, numAnchoAlcoba3, numAreaAlcoba3, txtAlcoba3, numLargoCocina, numAnchoCocina, numAreaCocina, txtCocina, numLargoBano1, numAnchoBano1, numAreaBano1, txtBano1, numLargoBano2, numAnchoBano2, numAreaBano2, txtBano2, numLargoLavanderia, numAnchoLavanderia, numAreaLavanderia, txtLavanderia, numLargoCirculaciones, numAnchoCirculaciones, numAreaCirculaciones, txtCirculaciones, numLargoPatio, numAnchoPatio, numAreaPatio, txtPatio, numAreaTotal, txtEstadoCimentacion, txtCimentacion, txtEstadoPlacaEntrepiso, txtPlacaEntrepiso, txtEstadoMamposteria, txtMamposteria, txtEstadoCubierta, txtCubierta, txtEstadoVigas, txtVigas, txtEstadoColumnas, txtColumnas, txtEstadoPanetes, txtPanetes, txtEstadoEnchapes, txtEnchapes, txtEstadoAcabados, txtAcabados, txtEstadoHidraulicas, txtHidraulicas, txtEstadoElectricas, txtElectricas, txtEstadoSanitarias, txtSanitarias, txtEstadoGas, txtGas, txtEstadoMadera, txtMadera, txtEstadoMetalica, txtMetalica, numLavadero, txtLavadero, numLavaplatos, txtLavaplatos, numLavamanos, txtLavamanos, numSanitario, txtSanitario, numDucha, txtDucha, txtEstadoVidrios, txtVidrios, txtEstadoPintura, txtPintura, txtOtros, txtObservacionOtros, numContadorAgua, txtEstadoConexionAgua, txtDescripcionAgua, numContadorEnergia, txtEstadoConexionEnergia, txtDescripcionEnergia, numContadorAlcantarillado, txtEstadoConexionAlcantarillado, txtDescripcionAlcantarillado, numContadorGas, txtEstadoConexionGas, txtDescripcionGas, numContadorTelefono, txtEstadoConexionTelefono, txtDescripcionTelefono, txtEstadoAndenes, txtDescripcionAndenes, txtEstadoVias, txtDescripcionVias, txtEstadoServiciosComunales, txtDescripcionServiciosComunales, txtDescripcionVivienda, txtNormaNSR98, txtRequisitos, txtExistencia, txtDescipcionNormaNSR98, txtDescripcionRequisitos, txtDescripcionExistencia, fchVisita, txtAprobo, fchCreacion, fchActualizacion";
 $camposAdjuntosTecnicos = "seqTipoAdjunto, txtNombreAdjunto, txtNombreArchivo";
@@ -33,15 +34,15 @@ function validarEstudioTecnico() {
     global $db;
 
     $sql = "SELECT t_des_tecnico.seqTecnico
-  FROM (((sipive.t_des_tecnico t_des_tecnico
-          INNER JOIN sipive.t_des_desembolso t_des_desembolso
+  FROM (((sdht_subsidios.t_des_tecnico t_des_tecnico
+          INNER JOIN sdht_subsidios.t_des_desembolso t_des_desembolso
              ON (t_des_tecnico.seqDesembolso = t_des_desembolso.seqDesembolso))
-         INNER JOIN sipive.t_frm_formulario t_frm_formulario
+         INNER JOIN sdht_subsidios.t_frm_formulario t_frm_formulario
             ON (t_des_desembolso.seqFormulario =
                    t_frm_formulario.seqFormulario))
-        INNER JOIN sipive.t_frm_hogar t_frm_hogar
+        INNER JOIN sdht_subsidios.t_frm_hogar t_frm_hogar
            ON (t_frm_hogar.seqFormulario = t_frm_formulario.seqFormulario))
-       INNER JOIN sipive.t_ciu_ciudadano t_ciu_ciudadano
+       INNER JOIN sdht_subsidios.t_ciu_ciudadano t_ciu_ciudadano
           ON (t_frm_hogar.seqCiudadano = t_ciu_ciudadano.seqCiudadano)
  WHERE t_ciu_ciudadano.numDocumento IN ($separado_por_comas);";
 
@@ -67,20 +68,20 @@ function obtenerValoresUtiles($documento, $campo) {
        prytec.seqUnidadProyecto seqUnidadProyecto,
        und.txtNombreUnidad txtNombreUnidad,
        pry.txtNombreProyecto AS txtNombreProyecto
-  FROM ((((((sipive.t_pry_unidad_proyecto und
-             INNER JOIN sipive.t_frm_formulario frm
+  FROM ((((((sdht_subsidios.t_pry_unidad_proyecto und
+             INNER JOIN sdht_subsidios.t_frm_formulario frm
                 ON (und.seqFormulario = frm.seqFormulario))
-            INNER JOIN sipive.t_frm_hogar hog
+            INNER JOIN sdht_subsidios.t_frm_hogar hog
                ON (hog.seqFormulario = frm.seqFormulario))
-           INNER JOIN sipive.t_ciu_ciudadano ciu
+           INNER JOIN sdht_subsidios.t_ciu_ciudadano ciu
               ON (hog.seqCiudadano = ciu.seqCiudadano))
-          LEFT OUTER JOIN sipive.t_des_desembolso des
+          LEFT OUTER JOIN sdht_subsidios.t_des_desembolso des
              ON (des.seqFormulario = frm.seqFormulario))
-         LEFT OUTER JOIN sipive.t_des_tecnico destec
+         LEFT OUTER JOIN sdht_subsidios.t_des_tecnico destec
             ON (destec.seqDesembolso = des.seqDesembolso))
-        INNER JOIN sipive.t_pry_proyecto pry
+        INNER JOIN sdht_subsidios.t_pry_proyecto pry
            ON (und.seqProyecto = pry.seqProyecto))
-       INNER JOIN sipive.t_pry_tecnico prytec
+       INNER JOIN sdht_subsidios.t_pry_tecnico prytec
           ON (prytec.seqUnidadProyecto = und.seqUnidadProyecto)
  WHERE (ciu.numDocumento IN ($documento));";
     global $db;
@@ -160,7 +161,7 @@ if (validarEstudioTecnico()) {
         }
         $registros++;
     }
-   
+
     echo "se han migrado $registros estudios tecnicos";
 
     //generarLinksImpresion($separado_por_comas);

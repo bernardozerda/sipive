@@ -803,7 +803,14 @@ function valorSubsidio($claFormulario){
             );
             $valSubsidio = $arrValor[0];
         }elseif( $claFormulario->seqModalidad == 8 or $claFormulario->seqModalidad == 9 or $claFormulario->seqModalidad == 10 ){
-            $valSubsidio = $claFormulario->valAspiraSubsidio;
+            $valSubsidio = array_shift(
+                obtenerDatosTabla(
+                    "T_FRM_FORMULARIO",
+                    array("seqFormulario","valAspiraSubsidio"),
+                    "seqFormulario",
+                    "seqFormulario = " . $claFormulario->seqFormulario
+                )
+            );
         }else{
             $arrValor = obtenerDatosTabla("T_PRY_PROYECTO",array("0","valMaximoSubsidio","valNumeroSoluciones"),"0","seqProyecto = " . $claFormulario->seqProyecto);
             if(intval($arrValor[0]['valNumeroSoluciones']) != 0){

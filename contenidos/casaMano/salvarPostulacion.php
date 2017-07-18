@@ -662,7 +662,7 @@ if (empty($arrErrores)) {
         // el estado del proceso se regresa a inscripcion
         if( $bolCambiosCalificacion == true ){
             if($seqEtapa == 1 or $seqEtapa == 2) {
-                if( in_array( $claCasaMano->objPostulacion->seqTipoEsquema , $arrCamposCalificacion["esquema"] ) ){
+                if( in_array( $claCasaMano->objPostulacion->seqTipoEsquema , $arrCamposCalificacion["esquemas"] ) ){
                     $_POST['seqEstadoProceso'] = 37;
                 }
             }

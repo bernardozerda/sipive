@@ -1408,7 +1408,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px; text-align:right;" />
+                                                 style="padding-right: 5px; width:100px; text-align:right;"
+                                                 {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL AHORRO -->
                                     <td>Entidad</td>
@@ -1484,7 +1486,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px; text-align:right;" />
+                                                 style="padding-right: 5px; width:100px; text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL AHORRO -->
                                     <td>Entidad</td>
@@ -1560,7 +1564,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px;text-align:right;" />
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- SOPORTE CESANTIAS -->
                                     <td>Soporte</td>
@@ -1585,7 +1591,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px;text-align:right;" />
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL CREDITO -->
                                     <td>Entidad</td>
@@ -1660,6 +1668,7 @@
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
                                                  style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
                                         />
                                     </td>
                                     <td>Entidad</td>
@@ -1705,7 +1714,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px;text-align:right;" />
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
 
                                     <!-- DE DONDE PROVIENE LA DONACION -->

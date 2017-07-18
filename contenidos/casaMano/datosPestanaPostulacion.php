@@ -110,7 +110,7 @@ switch( $_POST['modo'] ){
     case "proyecto":
 
         // conjuntos
-        $arrProyectosHijos = obtenerProyectosHijosPostulacion($_POST['seqFormulario'],$_POST['seqModalidad'],$_POST['seqPlanGobierno'],$_POST['seqProyecto']);
+        $arrProyectosHijos = obtenerProyectosHijosPostulacion($_POST['seqFormulario'],$_POST['seqModalidad'],$_POST['seqTipoEsquema'],$_POST['seqPlanGobierno'],$_POST['seqProyecto']);
         $arrDatosPostulacion['conjuntos'][0]['valor'] = 0;
         $arrDatosPostulacion['conjuntos'][0]['texto'] = "NINGUNO";
         $i = 1;
@@ -123,7 +123,7 @@ switch( $_POST['modo'] ){
         // unidades
         $arrDatosPostulacion['unidades'][0]['valor'] = 1;
         $arrDatosPostulacion['unidades'][0]['texto'] = "NINGUNA";
-        $arrUnidadProyecto = obtenerUnidadesPostulacion($_POST['seqFormulario'],$_POST['seqModalidad'],$_POST['seqPlanGobierno'],$_POST['seqProyecto']);
+        $arrUnidadProyecto = obtenerUnidadesPostulacion($_POST['seqFormulario'],$_POST['seqModalidad'],$_POST['seqTipoEsquema'],$_POST['seqPlanGobierno'],$_POST['seqProyecto']);
         $i = 1;
         foreach($arrUnidadProyecto as $seqUnidad => $txtUnidad){
             $arrDatosPostulacion['unidades'][$i]['valor'] = $seqUnidad;
@@ -153,7 +153,7 @@ switch( $_POST['modo'] ){
         // unidades
         $arrDatosPostulacion['unidades'][0]['valor'] = 1;
         $arrDatosPostulacion['unidades'][0]['texto'] = "NINGUNA";
-        $arrUnidadProyecto = obtenerUnidadesPostulacion($_POST['seqFormulario'],$_POST['seqModalidad'],$_POST['seqPlanGobierno'],$_POST['seqProyectoHijo']);
+        $arrUnidadProyecto = obtenerUnidadesPostulacion($_POST['seqFormulario'],$_POST['seqModalidad'],$_POST['seqTipoEsquema'],$_POST['seqPlanGobierno'],$_POST['seqProyectoHijo']);
         $i = 1;
         foreach($arrUnidadProyecto as $seqUnidad => $txtUnidad){
             $arrDatosPostulacion['unidades'][$i]['valor'] = $seqUnidad;

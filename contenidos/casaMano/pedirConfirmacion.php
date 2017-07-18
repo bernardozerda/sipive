@@ -41,6 +41,14 @@
 
     // detecta los cambios en el formulario
     $bolCambios = $claCasaMano->cambios( $_POST );
+
+    // EXISTE LA OPCION PARA EL GRUPO JURIDICO Y ADMINISTRADOR DEL SISTEMA
+    // FORZAR LA OPCION DE SALVAR EL SOLO SEGUIMIENTO A PESAR DE QUE
+    // HAYA CAMBIOS EN EL SISTEMA -- ESTO ESTA IMPLEMENTADO EN INSCRIPCION Y POSTULACION
+    if( intval( $_POST['bolSoloSeguimiento'] ) == 1){
+        $bolCambios = false;
+    }
+
     if( $bolCambios == true ){
         // Mensaje cuando hay cambios
         $txtMensaje = "<h2>Confirme que desea cambiar <br>los datos para el hogar de:</h2>";

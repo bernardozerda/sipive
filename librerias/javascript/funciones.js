@@ -10165,12 +10165,12 @@ function alertaDigitacionCampo(txtCampo,txtValor){
             if( arrTablasCiudadanos[i].id != "" && ( ! isNaN( arrTablasCiudadanos[i].id ) ) ){
                 numDocumento = arrTablasCiudadanos[i].id;
                 objIngresoCiudadano = YAHOO.util.Dom.get( numDocumento + '-valIngresos' );
-                valSalarioHogarRestante = parseInt(valSalarioHogarRestante + objIngresoCiudadano.value);
+                valSalarioHogarRestante = parseInt(valSalarioHogarRestante) + parseInt(objIngresoCiudadano.value);
             }
         }
 
         // En caso de cancelar este es el valor original que tenia el ciudadano
-        valRetorno =  parseInt(objValIngresoHogar.value.replace(/[^0-9]/g,'')) - valSalarioHogarRestante;
+        valRetorno =  parseInt(objValIngresoHogar.value.replace(/[^0-9]/g,'')) - parseInt(valSalarioHogarRestante);
 
         // Ingreso de los miembros de hogar
         valNuevaSuma = parseInt( valDigitado + valSalarioHogarRestante );

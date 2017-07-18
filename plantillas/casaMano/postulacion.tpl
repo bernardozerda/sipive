@@ -18,6 +18,13 @@
 
     <!-- TABLA PARA IMPRIMIR EL FORMULARIO DE POSTULACION -->
     <table cellspacing="0" cellpadding="3" border="0" width="100%" style="padding-bottom: 5px;">
+        {if isset( $smarty.session.arrGrupos.3.13 ) || isset( $smarty.session.arrGrupos.3.20 )}
+            <tr>
+                <td>
+                    <input type="checkbox" name="bolSoloSeguimiento" value="1"> Salvar solo el seguimiento
+                </td>
+            </tr>
+        {/if}
         <tr>
             <td width="150px" align="center">
                 <a href="#" onClick="imprimirPostulacionCEM(document.frmPostulacion , './contenidos/casaMano/pedirConfirmacion.php');">

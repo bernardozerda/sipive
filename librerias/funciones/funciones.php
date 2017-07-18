@@ -817,7 +817,7 @@ function valorSubsidio($claFormulario){
                 $valSubsidio = intval(($arrValor[0]['valMaximoSubsidio'] / $arrValor[0]['valNumeroSoluciones']));
             }
         }
-    }else{
+    }elseif( $claFormulario->seqPlanGobierno == 2 ){
         $valSubsidioNAL = intval($claFormulario->valSubsidioNacional) / $arrConfiguracion['constantes']['salarioMinimo'];
         $valVUR         = intval($claFormulario->valDonacion)         / $arrConfiguracion['constantes']['salarioMinimo'];
 
@@ -846,6 +846,15 @@ function valorSubsidio($claFormulario){
             $valSubsidio = mb_ereg_replace("[^0-9]","" , $claFormulario->valCartaLeasing);
         }
 
+    }else{
+        $valSubsidio = array_shift(
+            obtenerDatosTabla(
+                "T_FRM_FORMULARIO",
+                array("seqFormulario","valAspiraSubsidio"),
+                "seqFormulario",
+                "seqFormulario = " . $claFormulario->seqFormulario
+            )
+        );
     }
     return $valSubsidio;
 }

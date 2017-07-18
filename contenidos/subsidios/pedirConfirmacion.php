@@ -82,6 +82,13 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
 
 }
 
+// EXISTE LA OPCION PARA EL GRUPO JURIDICO Y ADMINISTRADOR DEL SISTEMA
+// FORZAR LA OPCION DE SALVAR EL SOLO SEGUIMIENTO A PESAR DE QUE
+// HAYA CAMBIOS EN EL SISTEMA -- ESTO ESTA IMPLEMENTADO EN INSCRIPCION Y POSTULACION
+if( intval( $_POST['bolSoloSeguimiento'] ) == 1){
+    $bolConfirmacion = false;
+}
+
 /* * **********************************************************************************************************
  * MOSTRAR EL CUADRO DE CONFIRMACION DE DATOS
  * ********************************************************************************************************** */

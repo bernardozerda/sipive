@@ -684,7 +684,7 @@ if (empty($arrErrores)) {
         // el numero de formulario se valida la primera vez que se pone, despues no lo puede cambiar
         if( $claCasaMano->objPostulacion->txtFormulario == "" ){
             if ( trim($_POST['txtFormulario']) != "") {
-                $txtFormato = "/^[0-9]{2}[-][0-9]{3,6}$/"; // dos digitos de tutor y hasta seis de numero de formulario
+                $txtFormato = "/^[0-9]{3}[-][0-9]{3,6}$/"; // dos digitos de tutor y hasta seis de numero de formulario
                 $txtFormulario = trim($_POST['txtFormulario']);
                 if (preg_match($txtFormato, $txtFormulario)) {
                     $arrFormulario = mb_split("-", $txtFormulario);

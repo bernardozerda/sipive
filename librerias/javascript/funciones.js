@@ -1956,7 +1956,16 @@ function datosPestanaPostulacion(txtModo) {
             $('#txtChip').val(objRespuesta.chip);
 
             // cuando es leasing entonces muestra los campos de informacion financiera correspondientes
+            // e inhabilita los campos de la pestaña financiera
             if( $("#seqModalidad").val() == 13 ){
+
+                $("#valSaldoCuentaAhorro").attr("readonly" , true);
+                $("#valSaldoCuentaAhorro2").attr("readonly" , true);
+                $("#valSaldoCesantias").attr("readonly" , true);
+                $("#valCredito").attr("readonly" , true);
+                $("#valSubsidioNacional").attr("readonly" , true);
+                $("#valDonacion").attr("readonly" , true);
+
                 $("#trNoLeasing1").removeAttr("style").hide();
                 $("#trNoLeasing2").removeAttr("style").hide();
                 $("#trNoLeasing3").removeAttr("style").hide();
@@ -1964,6 +1973,14 @@ function datosPestanaPostulacion(txtModo) {
                 $("#trLeasing1").removeAttr("style").show();
                 $("#trLeasing2").removeAttr("style").show();
             }else {
+
+                $("#valSaldoCuentaAhorro").attr("readonly" , false);
+                $("#valSaldoCuentaAhorro2").attr("readonly" , false);
+                $("#valSaldoCesantias").attr("readonly" , false);
+                $("#valCredito").attr("readonly" , false);
+                $("#valSubsidioNacional").attr("readonly" , false);
+                $("#valDonacion").attr("readonly" , false);
+
                 $("#trNoLeasing1").removeAttr("style").show();
                 $("#trNoLeasing2").removeAttr("style").show();
                 $("#trNoLeasing3").removeAttr("style").show();

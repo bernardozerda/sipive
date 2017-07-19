@@ -3754,7 +3754,7 @@ function desembolsoEstudioTitulos(seqFormulario) {
                     var wndFormato;
                     try {
 
-                        var txtUrl = "./contenidos/desembolso/formatoEstudioTitulosformatoEstudioTitulos.php";
+                        var txtUrl = "./contenidos/desembolso/formatoEstudioTitulos.php";
                         txtUrl += "?seqFormulario=" + seqFormulario;
 
                         var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";

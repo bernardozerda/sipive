@@ -41,7 +41,7 @@
                        onClick="alertaFormularioCerrado(this, {$claFormulario->bolCerrado}, {$smarty.session.privilegios.cambiar});"
                        value="1"
                         {if $claFormulario->bolCerrado == 1} checked {/if}
-                        {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} disabled {/if}
+                        {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} readonly {/if}
                 >
             </td>
             <td align="right" style="padding-right: 10px;">
@@ -136,7 +136,7 @@
                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
                                    onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
                                    style="width:100px;"
-                                    {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} disabled {/if}
+                                    {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} readonly {/if}
                             >
                         </td>
                         <td colspan="2">&nbsp;</td>

@@ -51,7 +51,8 @@ class CasaMano
         // postulacion individual
         // proyectos de la SDHT
         $this->arrFases['pin']['modalidad'] = array(1, 6, 9, 12, 13);
-        $this->arrFases['pin']['esquema'] = array(0, 1, 4, 9);
+        //$this->arrFases['pin']['esquema'] = array(0, 1, 4, 9);
+        $this->arrFases['pin']['esquema'] = array(0,1,2,3,4,6,7,8,9);
 
         $this->arrFases['pin']['postulacion']['grupos'] = array(6, 7, 8);
         $this->arrFases['pin']['postulacion']['permitido']['etapas'] = array(2,3,4,5);

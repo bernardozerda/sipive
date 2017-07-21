@@ -174,6 +174,6 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         $sql .= " AND und.seqProyecto =" . $proyecto;
     }
     
-echo $sql; die();
+//echo $sql; die();
     return $sql;
 }

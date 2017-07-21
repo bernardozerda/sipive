@@ -194,7 +194,7 @@ class CRMProyecto {
         //$rs = $aptBd->getAssoc($sql);
         $objRes = $aptBd->execute($sql);
         $datos = Array();
-        $
+     
                 $int = 0;
         while ($objRes->fields) {
             $datos[$int] = $objRes->fields;

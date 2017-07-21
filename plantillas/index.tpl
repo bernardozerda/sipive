@@ -110,13 +110,12 @@
             <div >
                 <center>
                     <div id="oScroll" style="width: 50%; margin-top: 5px; margin-bottom: 10px; height: 35px; right: 3%; font-weight: bold" class="alert alert-danger">
-                        <div id="scroll" ><MARQUEE DIRECTION=LEFT >
-                                La información que se registra debe ser soportada documentalmente.
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                            
-                                La sdht podrá verificar en cualquier momento la veracidad de la información.<br><br/><br/>
-                            </MARQUEE> </div><br/>
-
+                        <div id="scroll" ><MARQUEE DIRECTION=LEFT class="alert alert-danger" style="padding:5px;">
+                            La información que se registra debe ser soportada documentalmente.
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            La sdht podrá verificar en cualquier momento la veracidad de la información.<br><br/><br/>
+                        </MARQUEE> </div><br/>
                     </div>
                     <div style=" position: relative; float: left; width:100%">
                         <img src="./recursos/imagenes/pie_ws.png" /><br> 

@@ -173,7 +173,7 @@ class CRMProyecto {
                     INNER JOIN t_frm_formulario frm USING (seqFormulario)
                      WHERE seqEstadoProceso = 40 AND bolCerrado = 1";
         } else if ($valor == 6) {
-            $sql = "SELECT count(*) as cant , und.seqProyecto FROM t_pry_unidad_proyecto    und
+            $sql = "SELECT count(*) as cant  FROM t_pry_unidad_proyecto    und
                     INNER JOIN t_frm_formulario frm USING (seqFormulario)
                      WHERE bolCerrado = 1 AND (seqEstadoProceso = 62 OR seqEstadoProceso = 17
                     OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
@@ -188,7 +188,9 @@ class CRMProyecto {
         if ($valor != 7 && $valor != 6) {
             $sql .= " GROUP BY und.seqProyecto";
         }
-
+        
+        echo "<br>".$valor ."<br>";
+echo $sql;
 
         //$rs = $aptBd->getAssoc($sql);
         $objRes = $aptBd->execute($sql);

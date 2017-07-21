@@ -41,11 +41,11 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         if ($tipo == 3) {
             $fechaFin = calculaFecha("days", -3, $fec);
         } else if ($tipo == 2) {
-            $fechaIni = calculaFecha("days", -3, $fec);
-            $fechaFin = calculaFecha("days", -3, $fec);
+            $fechaIni = calculaFecha("days", -2, $fec);
+            $fechaFin = calculaFecha("days", -2, $fec);
         } else if ($tipo == 1) {
             $fechaIni = calculaFecha("days", 0, $fec);
-            $fechaFin = calculaFecha("days", -2, $fec);
+            $fechaFin = calculaFecha("days", -1, $fec);
         }
     } else if ($seqEstado == 19 || $seqEstado == 22) {
         $fec = date("y-m-d");
@@ -174,6 +174,6 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         $sql .= " AND und.seqProyecto =" . $proyecto;
     }
     
-//echo $sql; die();
+echo $sql; die();
     return $sql;
 }

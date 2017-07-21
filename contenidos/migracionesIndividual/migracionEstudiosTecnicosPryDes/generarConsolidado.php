@@ -3,7 +3,8 @@
 date_default_timezone_set('America/Bogota');
 
 function generarConsolidado($arraydocs) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    include '../conecta.php';
     header("Content-Description: File Transfer");
     header("Content-Type: application/force-download");
     header("Content-type: application/vnd.ms-excel; charset=UTF-8");

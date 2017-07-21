@@ -1,7 +1,6 @@
 <?php
 
-include_once "../lib/mysqli/shared/ez_sql_core.php";
-include_once "../lib/mysqli/ez_sql_mysqli.php";
+include_once '../conecta.php';
 //include_once "../generarExcel.php";
 include '../migrarTablero.php';
 
@@ -529,7 +528,7 @@ function generarLinks($arreglo, $tipo) {
         $tabla .= "<td>" . $arreglo['seqDesembolso'][$int] . "</td>";
         $tabla .= "<td>" . $arreglo['txtElaboro'][$int] . "</td>";
         $tabla .= "<td>" . $arreglo['txtAprobo'][$int] . "</td>";
-        $tabla .= "<td><a href='http://".$_SERVER['HTTP_HOST']."/sdv/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "' target='_blank'>http://".$_SERVER['HTTP_HOST']."/sdv/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "</a></td>";
+        $tabla .= "<td><a href='http://" . $_SERVER['HTTP_HOST'] . "/sdv/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "' target='_blank'>http://" . $_SERVER['HTTP_HOST'] . "/sdv/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "</a></td>";
         $tabla .= "</tr>";
         $int++;
     }

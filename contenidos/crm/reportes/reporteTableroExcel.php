@@ -21,11 +21,11 @@ function informeProyectosActo() {
     $tipo = $_GET['tipo'];
     $conexion = mysql_connect("localhost", "sdht_usuario", "Ochochar*1");
     mysql_set_charset('utf8', $conexion);
-    mysql_select_db("sdv_capacitacion", $conexion);
+    mysql_select_db("sipive", $conexion);
     require_once '../../../librerias/phpExcel/Classes/PHPExcel.php';
     require_once '../../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php';
 
-    PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
+    //PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
     $objPHPExcel = new PHPExcel();
 
     $style_header = array(

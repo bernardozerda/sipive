@@ -4,8 +4,9 @@ ob_start();
 date_default_timezone_set('America/Bogota');
 
 function generarLinksImpresion($arraydocs) {
+    include '../conecta.php';
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
+    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
 //    header("Content-Description: File Transfer");
 //    header("Content-Type: application/force-download");
 //    header("Content-type: application/vnd.ms-excel; charset=UTF-8");
@@ -65,7 +66,7 @@ function generarLinksImpresion($arraydocs) {
             <td>' . $resultado->numDocumento . '</td>
             <td>' . $resultado->txtNombreProyecto . '</td>
             <td>' . $resultado->txtNombreUnidad . '</td>
-              <td> <a href="'.$_SERVER['HTTP_HOST'].'/sdv/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '">http://'.$_SERVER['HTTP_HOST'].'/sdv/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '</a> </td>
+              <td> <a href="'.$_SERVER['HTTP_HOST'].'/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '">http://'.$_SERVER['HTTP_HOST'].'/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '</a> </td>
         <tr>';
             }
         }

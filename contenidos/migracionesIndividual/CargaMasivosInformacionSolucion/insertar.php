@@ -16,8 +16,7 @@ include '../../../recursos/archivos/verificarSesion.php';
             </div>
             <div class="well">
                 <?php
-                include_once "../lib/mysqli/shared/ez_sql_core.php";
-                include_once "../lib/mysqli/ez_sql_mysqli.php";
+                include '../conecta.php';
                 include '../migrarTablero.php';
 
                 function fechaCorrecta($fecha) {
@@ -37,7 +36,8 @@ include '../../../recursos/archivos/verificarSesion.php';
                     $nombreArchivo = $_FILES['archivo']['tmp_name'];
                     $lineas = file($nombreArchivo);
                     $registros = 0;
-                    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+
+                    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
                     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios_feb10', 'localhost');
                     // Recorre las líneas del archivo
                     $error = "";

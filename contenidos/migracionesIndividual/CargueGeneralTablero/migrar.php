@@ -50,13 +50,12 @@ if (isset($code)) {
 
             <div class="well">
                 <?php
-                include "../lib/mysqli/shared/ez_sql_core.php";
-                include "../lib/mysqli/ez_sql_mysqli.php";
+                include '../conecta.php';
 
                 date_default_timezone_set('America/Bogota');
                 $arrDocumentosArchivo = array();
-                $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-
+                // $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+                global $db;
 
                 if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name'])) {
                     $nombreArchivo = $_FILES['archivo']['tmp_name'];
@@ -77,7 +76,7 @@ if (isset($code)) {
 
                 // Valida si el documento cumple con los requisitos para ejecutar el cambio de estado y actualizar la fecha de radicación 
                 function validarDocumentos($separado_por_comas, $db, $code, $estadoV, $estadoT) {
-
+                    global $db;
                     $band = true;
                     $msg = "";
                     // Está consulta válida que los números de los documentos pertenezcan al postulante principal
@@ -129,7 +128,7 @@ if (isset($code)) {
                 /*                 * ********************************* Función Cambios de estado  ******************************************* */
 
                 function migrarInformacion($separado_por_comas, $db, $code, $estadoV) {
-
+                    global $db;
                     $datos = datosEstado($separado_por_comas, $db, $code, $estadoV);
 
                     $sql = $datos[0];
@@ -152,6 +151,7 @@ if (isset($code)) {
 			 ) VALUES";
                         $seqFormularios = "";
 
+
                         foreach ($resultados as $value) {
                             $update .= " WHEN " . $value->dato . " THEN " . $code . "";
                             $updateProy .= " WHEN " . $value->dato . " THEN NOW()";
@@ -172,12 +172,16 @@ if (isset($code)) {
                         $seqFormularios = substr_replace($seqFormularios, '', -2, 1);
                         $documentos = substr_replace($documentos, '', -1, 1);
                         //echo "<br>2. ****" . $seguimiento . "<br>";
+                        if ($code == 17 || $code == 26 || $code == 29) {
+                            $sqlDev = "update T_PRY_UNIDAD_PROYECTO set fchDevolucionExpediente='0000-00-00 00:00:00' where seqFormulario in(" . $seqFormularios . ")";
+                            $db->query($sqlDev);
+                        }
                         if (!empty($seguimiento)) {
                             $seguimiento = substr_replace($seguimiento, ';', -1, 1);
                         }
                         $update .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
                         $updateProy .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
-                        // echo $update;                        die();
+
                         if ($db->query($update)) {
                             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos"
                             . $documentos . "</p>";
@@ -190,7 +194,7 @@ if (isset($code)) {
                         } else {
                             echo "<p class='alert alert-danger'>Hubo un error al modificar la fecha de la Radicaci&oacute;n. Por favor consulte al administrador</p>";
                         }
-                        echo "<br> seguimiento ->" . $seguimiento;
+                        //echo "<br> seguimiento ->" . $seguimiento;
 
                         if ($db->query($seguimiento)) {
                             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la inserci&oacute;n de seguimiento de los siguientes documentos";
@@ -201,6 +205,7 @@ if (isset($code)) {
                 }
 
                 function datosEstado($separado_por_comas, $db, $code, $estadoV) {
+                    global $db;
                     $datos = Array();
                     if ($code == 17) {
                         $datos[0] = "SELECT seqFormulario as dato, numDocumento, 

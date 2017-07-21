@@ -13,7 +13,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Formulari
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Desembolso.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ActosAdministrativos2.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ActosAdministrativos.class.php" );
 
 include( "./datosComunes.php" );
 
@@ -54,7 +54,7 @@ $arrBeneficiario['valor'] = "\$ " . number_format($claFormulario->valAspiraSubsi
 
 // Obtiene los actos administrativos a los que se realaciona el postulante principal
 $claActosAdministrativos = new ActoAdministrativo;
-//$arrFormularioActo = $claActosAdministrativos->actoExisteCiudadano($arrBeneficiario['documento']);
+$arrFormularioActo = $claActosAdministrativos->actoExisteCiudadano($arrBeneficiario['documento']);
 
 // obtiene el ultimo acto adminsitrativo de asignacion
 $arrResolucionAsignacion = array();

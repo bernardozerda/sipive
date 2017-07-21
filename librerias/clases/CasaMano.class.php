@@ -50,8 +50,9 @@ class CasaMano
 
         // postulacion individual
         // proyectos de la SDHT
-        $this->arrFases['pin']['modalidad'] = array(6, 9, 12, 13);
-        $this->arrFases['pin']['esquema'] = array(1, 4, 9);
+        $this->arrFases['pin']['modalidad'] = array(1, 6, 9, 12, 13);
+        //$this->arrFases['pin']['esquema'] = array(0, 1, 4, 9);
+        $this->arrFases['pin']['esquema'] = array(0,1,2,3,4,6,7,8,9);
 
         $this->arrFases['pin']['postulacion']['grupos'] = array(6, 7, 8);
         $this->arrFases['pin']['postulacion']['permitido']['etapas'] = array(2,3,4,5);
@@ -59,7 +60,7 @@ class CasaMano
         $this->arrFases['pin']['postulacion']['prohibido']['etapas'] = array(1);
         $this->arrFases['pin']['postulacion']['prohibido']['estados'] = array();
         $this->arrFases['pin']['postulacion']['atras'] = array(46);
-        $this->arrFases['pin']['postulacion']['adelante'] = array(46, 6, 54);
+        $this->arrFases['pin']['postulacion']['adelante'] = array(46, 6, 47);
         $this->arrFases['pin']['postulacion']['salvar'] = "./contenidos/casaMano/salvarPostulacion.php";
         $this->arrFases['pin']['postulacion']['plantilla'] = "casaMano/postulacion.tpl";
 
@@ -69,9 +70,9 @@ class CasaMano
         $this->arrFases['cem']['esquema'] = array(5, 10, 11);
 
         $this->arrFases['cem']['panelHogar']['grupos'] = array(6, 7, 8, 14, 13);
-        $this->arrFases['cem']['panelHogar']['permitido']['etapas'] = array(2,3,4,5);
+        $this->arrFases['cem']['panelHogar']['permitido']['etapas'] = array(1,2,3,4,5);
         $this->arrFases['cem']['panelHogar']['permitido']['estados'] = array();
-        $this->arrFases['cem']['panelHogar']['prohibido']['etapas'] = array(1);
+        $this->arrFases['cem']['panelHogar']['prohibido']['etapas'] = array();
         $this->arrFases['cem']['panelHogar']['prohibido']['estados'] = array();
         $this->arrFases['cem']['panelHogar']['plantilla'] = "casaMano/casaMano.tpl";
 
@@ -96,9 +97,9 @@ class CasaMano
         $this->arrFases['cem']['revisionJuridica']['plantilla'] = "desembolso/revisionJuridica.tpl";
 
         $this->arrFases['cem']['revisionTecnica']['grupos'] = array(14, 7, 8);
-        $this->arrFases['cem']['revisionTecnica']['permitido']['etapas'] = array(2,3,4,5);
-        $this->arrFases['cem']['revisionTecnica']['permitido']['estados'] = array();
-        $this->arrFases['cem']['revisionTecnica']['prohibido']['etapas'] = array(1);
+        $this->arrFases['cem']['revisionTecnica']['permitido']['etapas'] = array();
+        $this->arrFases['cem']['revisionTecnica']['permitido']['estados'] = array(44, 45, 46, 47, 48, 15, 16);
+        $this->arrFases['cem']['revisionTecnica']['prohibido']['etapas'] = array();
         $this->arrFases['cem']['revisionTecnica']['prohibido']['estados'] = array();
         $this->arrFases['cem']['revisionTecnica']['atras'] = array(37, 43);
         $this->arrFases['cem']['revisionTecnica']['adelante'] = array(44);
@@ -110,9 +111,8 @@ class CasaMano
         $this->arrFases['cem']['postulacion']['permitido']['estados'] = array();
         $this->arrFases['cem']['postulacion']['prohibido']['etapas'] = array(1);
         $this->arrFases['cem']['postulacion']['prohibido']['estados'] = array();
-        $this->arrFases['cem']['postulacion']['permisos'] = array(46, 47, 48, 15, 16);
-        $this->arrFases['cem']['postulacion']['atras'] = array(37, 44);
-        $this->arrFases['cem']['postulacion']['adelante'] = array(46, 47);
+        $this->arrFases['cem']['postulacion']['atras'] = array(37, 46);
+        $this->arrFases['cem']['postulacion']['adelante'] = array(46, 6, 47);
         $this->arrFases['cem']['postulacion']['salvar'] = "./contenidos/casaMano/salvarPostulacion.php";
         $this->arrFases['cem']['postulacion']['plantilla'] = "casaMano/postulacion.tpl";
 

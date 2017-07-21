@@ -113,15 +113,15 @@
             $arrGrupoGestion = obtenerDatosTabla("T_SEG_GRUPO_GESTION", array("seqGrupoGestion", "txtGrupoGestion"), "seqGrupoGestion", "seqGrupoGestion NOT IN ( 15,5,10,12,17,20 )", "txtGrupoGestion");
             $arrPlanGobierno = obtenerDatosTabla( "T_FRM_PLAN_GOBIERNO" , array( "seqPlanGobierno" , "txtPlanGobierno" ) , "seqPlanGobierno" , "" , "txtPlanGobierno" );
             $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $claCasaMano->objPostulacion->seqPlanGobierno , "seqPlanGobierno DESC, txtModalidad");
-            $arrTipoEsquemas = obtenerTipoEsquema($claCasaMano->objPostulacion->seqModalidad, $claCasaMano->objPostulacion->seqPlanGobierno);
-            $arrProyectos = obtenerProyectosPostulacion($claCasaMano->objPostulacion->seqFormulario,$claCasaMano->objPostulacion->seqModalidad,$claCasaMano->objPostulacion->seqTipoEsquema, $claCasaMano->objPostulacion->seqPlanGobierno);
-            $arrProyectosHijos = obtenerProyectosHijosPostulacion($claCasaMano->objPostulacion->seqFormulario,$claCasaMano->objPostulacion->seqModalidad,$claCasaMano->objPostulacion->seqPlanGobierno,$claCasaMano->objPostulacion->seqProyecto);
+            $arrTipoEsquemas = obtenerTipoEsquema($claCasaMano->objPostulacion->seqModalidad, $claCasaMano->objPostulacion->seqPlanGobierno, $claCasaMano->objPostulacion->bolDesplazado);
+            $arrProyectos = obtenerProyectosPostulacion($claCasaMano->objPostulacion->seqFormulario,$claCasaMano->objPostulacion->seqModalidad, $claCasaMano->objPostulacion->seqTipoEsquema, $claCasaMano->objPostulacion->seqPlanGobierno);
+            $arrProyectosHijos = obtenerProyectosHijosPostulacion($claCasaMano->objPostulacion->seqFormulario,$claCasaMano->objPostulacion->seqModalidad,$claCasaMano->objPostulacion->seqTipoEsquema,$claCasaMano->objPostulacion->seqPlanGobierno,$claCasaMano->objPostulacion->seqProyecto);
             if($claCasaMano->objPostulacion->seqProyectoHijo != 0) {
                 $seqProyecto = $claCasaMano->objPostulacion->seqProyectoHijo;
             }else{
                 $seqProyecto = $claCasaMano->objPostulacion->seqProyecto;
             }
-            $arrUnidadProyecto = obtenerUnidadesPostulacion($claCasaMano->objPostulacion->seqFormulario, $claCasaMano->objPostulacion->seqModalidad, $claCasaMano->objPostulacion->seqPlanGobierno, $seqProyecto);
+            $arrUnidadProyecto = obtenerUnidadesPostulacion($claCasaMano->objPostulacion->seqFormulario, $claCasaMano->objPostulacion->seqModalidad, $claCasaMano->objPostulacion->seqTipoEsquema, $claCasaMano->objPostulacion->seqPlanGobierno, $seqProyecto);
             $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $claCasaMano->objPostulacion->seqLocalidad, "txtBarrio");
             $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtConvenio","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio", "seqConvenio <> 1 and numDisponibles > 0", "txtConvenio");
 
@@ -155,6 +155,9 @@
                     break;
                 }
             }
+
+            // obtiene la etapa para efectos de los permisos
+            $claCasaMano->objPostulacion->seqEtapa = array_shift(obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array("seqEstadoProceso","seqEtapa"),"seqEstadoProceso","seqEstadoProceso = " . $claCasaMano->objPostulacion->seqEstadoProceso));
 
             $claActosAdministrativos = new ActoAdministrativo();
             $arrActos = $claActosAdministrativos->cronologia($numDocumento);

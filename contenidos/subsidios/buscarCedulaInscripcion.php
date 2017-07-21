@@ -79,7 +79,7 @@ if (!isset($_POST['cedula'])) {
             if( $claFormulario->seqPlanGobierno == 3 ) {
 
                 // datos del formulario que dependen de los datos de la base de datos
-                $arrTipoEsquemas = obtenerTipoEsquema($claFormulario->seqModalidad, $claFormulario->seqPlanGobierno);
+                $arrTipoEsquemas = obtenerTipoEsquema($claFormulario->seqModalidad, $claFormulario->seqPlanGobierno, $claFormulario->bolDesplazado);
                 $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $claFormulario->seqLocalidad, "txtBarrio");
                 $arrSolucion = obtenerDatosTabla("T_FRM_SOLUCION", array("seqSolucion", "txtSolucion", "txtDescripcion", "seqModalidad"), "seqSolucion", "seqSolucion <> 1 and seqModalidad = " . $claFormulario->seqModalidad);
 

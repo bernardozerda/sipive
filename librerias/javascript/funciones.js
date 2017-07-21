@@ -1119,6 +1119,32 @@ function agregarMiembroHogar() {
     }
     $("#bolDesplazado").val(numDesplazado);
 
+    // numDesplazado (Vulnerable) = 0
+    // numDesplazado (Desplazado) = 1
+    if(numDesplazado == 0){
+        if( $("#seqTipoEsquema").val() == 11 ){
+            $("#seqTipoEsquema").val(0);
+        }
+        $("#seqTipoEsquema > option").each(function() {
+            if( this.value == 11 ){
+                $(this).remove();
+            }
+        });
+    }else{
+        var bolDesactivarModalidad = true;
+        if( $("#bolActivarModalidad").val() == 1 ){
+            bolDesactivarModalidad = false;
+        }
+        $("#seqTipoEsquema").append(
+            $('<option>', {
+                value: 11,
+                text: "Opción Retorno / Reubicación",
+                disabled: bolDesactivarModalidad
+            })
+        );
+    }
+
+
     // Recalcular el valor del subsidio
     valorSubsidio();
 
@@ -1837,14 +1863,17 @@ function obtenerTipoSolucionDesplazado(objDesplazado, txtIdModalidad) {
 
 function datosPestanaPostulacion(txtModo) {
 
+    var objDesplazado = YAHOO.util.Dom.get("bolDesplazado");
+
     var txtParametros =
-            "modo="            + txtModo                     + "&" +
-            "seqFormulario="   + $("#seqFormulario").val()   + "&" +
-            "seqModalidad="    + $("#seqModalidad").val()    + "&" +
-            "seqTipoEsquema="  + $("#seqTipoEsquema").val()  + "&" +
-            "seqPlanGobierno=" + $("#seqPlanGobierno").val() + "&" +
-            "seqProyecto="     + $("#seqProyecto").val()     + "&" +
-            "seqProyectoHijo=" + $("#seqProyectoHijo").val();
+        "modo="            + txtModo                     + "&" +
+        "seqFormulario="   + $("#seqFormulario").val()   + "&" +
+        "seqModalidad="    + $("#seqModalidad").val()    + "&" +
+        "seqTipoEsquema="  + $("#seqTipoEsquema").val()  + "&" +
+        "seqPlanGobierno=" + $("#seqPlanGobierno").val() + "&" +
+        "seqProyecto="     + $("#seqProyecto").val()     + "&" +
+        "seqProyectoHijo=" + $("#seqProyectoHijo").val() + "&" +
+        "bolDesplazado="   + objDesplazado.options[ objDesplazado.selectedIndex ].value; // jQuery retorna NULL porque los option son disabled
 
     var objCargando = obtenerObjetoCargando();
         objCargando.show();
@@ -1927,7 +1956,16 @@ function datosPestanaPostulacion(txtModo) {
             $('#txtChip').val(objRespuesta.chip);
 
             // cuando es leasing entonces muestra los campos de informacion financiera correspondientes
+            // e inhabilita los campos de la pestaña financiera
             if( $("#seqModalidad").val() == 13 ){
+
+                $("#valSaldoCuentaAhorro").attr("readonly" , true);
+                $("#valSaldoCuentaAhorro2").attr("readonly" , true);
+                $("#valSaldoCesantias").attr("readonly" , true);
+                $("#valCredito").attr("readonly" , true);
+                $("#valSubsidioNacional").attr("readonly" , true);
+                $("#valDonacion").attr("readonly" , true);
+
                 $("#trNoLeasing1").removeAttr("style").hide();
                 $("#trNoLeasing2").removeAttr("style").hide();
                 $("#trNoLeasing3").removeAttr("style").hide();
@@ -1935,6 +1973,14 @@ function datosPestanaPostulacion(txtModo) {
                 $("#trLeasing1").removeAttr("style").show();
                 $("#trLeasing2").removeAttr("style").show();
             }else {
+
+                $("#valSaldoCuentaAhorro").attr("readonly" , false);
+                $("#valSaldoCuentaAhorro2").attr("readonly" , false);
+                $("#valSaldoCesantias").attr("readonly" , false);
+                $("#valCredito").attr("readonly" , false);
+                $("#valSubsidioNacional").attr("readonly" , false);
+                $("#valDonacion").attr("readonly" , false);
+
                 $("#trNoLeasing1").removeAttr("style").show();
                 $("#trNoLeasing2").removeAttr("style").show();
                 $("#trNoLeasing3").removeAttr("style").show();
@@ -2068,6 +2114,11 @@ function datosPestanaPostulacion(txtModo) {
                 $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
             }
 
+            var bolDesactivarModalidad = true;
+            if( $("#bolActivarModalidad").val() == 1 ){
+                bolDesactivarModalidad = false;
+            }
+
             // esquema
             $("#seqTipoEsquema").empty();
             for( i=0; i < objRespuesta.esquema.length; i++ ){
@@ -2075,7 +2126,7 @@ function datosPestanaPostulacion(txtModo) {
                     $('<option>', {
                         value: objRespuesta.esquema[i].valor,
                         text: objRespuesta.esquema[i].texto,
-                        disabled: true
+                        disabled: bolDesactivarModalidad
                     })
                 );
 
@@ -3703,7 +3754,7 @@ function desembolsoEstudioTitulos(seqFormulario) {
                     var wndFormato;
                     try {
 
-                        var txtUrl = "./contenidos/desembolso/formatoEstudioTitulosformatoEstudioTitulos.php";
+                        var txtUrl = "./contenidos/desembolso/formatoEstudioTitulos.php";
                         txtUrl += "?seqFormulario=" + seqFormulario;
 
                         var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
@@ -10131,12 +10182,12 @@ function alertaDigitacionCampo(txtCampo,txtValor){
             if( arrTablasCiudadanos[i].id != "" && ( ! isNaN( arrTablasCiudadanos[i].id ) ) ){
                 numDocumento = arrTablasCiudadanos[i].id;
                 objIngresoCiudadano = YAHOO.util.Dom.get( numDocumento + '-valIngresos' );
-                valSalarioHogarRestante = parseInt(valSalarioHogarRestante + objIngresoCiudadano.value);
+                valSalarioHogarRestante = parseInt(valSalarioHogarRestante) + parseInt(objIngresoCiudadano.value);
             }
         }
 
         // En caso de cancelar este es el valor original que tenia el ciudadano
-        valRetorno =  parseInt(objValIngresoHogar.value.replace(/[^0-9]/g,'')) - valSalarioHogarRestante;
+        valRetorno =  parseInt(objValIngresoHogar.value.replace(/[^0-9]/g,'')) - parseInt(valSalarioHogarRestante);
 
         // Ingreso de los miembros de hogar
         valNuevaSuma = parseInt( valDigitado + valSalarioHogarRestante );
@@ -10144,7 +10195,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         // Si la suma supera los dos salarios minimos
         if( valNuevaSuma > parseInt( objSMMLV.value * 2 ) ){
             bolAlerta = true;
-            txtMensaje = "<li class='msgError'>El valor del ingreso que esta digitando lleva a que el hogar, en conjunto, supere los dos (2) SMMLV, ¿quiere continuar?</li>";
+            txtMensaje = "<li class='msgError'>Con el valor ingreso digitado el Total de Ingresos Hogar supera los Dos (2) SMMLV. Sugerir al hogar tomar información de los beneficios del Gobierno Nacional - Min-Vivienda. ¿Es un dato válido?</li>";
         }
 
         formatoSeparadores(objAlerta);
@@ -10155,7 +10206,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
     if( txtCampo == 'numHabitaciones' ){
         if( parseInt( objAlerta.value.replace(/[^0-9]/g,'') ) > 10 ){
             bolAlerta = true;
-            txtMensaje = "<li class='msgError'>Esta afirmando que hay mas de 10 hogares en la misma vivienda, ¿quiere continuar?</li>";
+            txtMensaje = "<li class='msgError'>El valor digitado en número de hogares es mayor de 10 hogares en la misma vivienda. , ¿Es un dato válido?</li>";
         }
     }
 
@@ -10186,7 +10237,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         // si el numero de habitaciones supera el numero de miembros del hogar
         if( ( parseInt( objAlerta.value.replace(/[^0-9]/g,'') ) > numMiembros ) && txtMensaje == "" ){
             bolAlerta = true;
-            txtMensaje = "<li class='msgError'>Hay mas dormitorios que miembros de hogar, ¿quiere continuar?</li>";
+            txtMensaje = "<li class='msgError'>El número de dormitorios es mayor al total de miembros del hogar, ¿Es un dato válido?</li>";
         }
 
 

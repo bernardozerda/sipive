@@ -27,6 +27,7 @@ $arrErrores = array(); // Todos los errores van aqui
 /**********************************************************************************************************************
  * ARREGLOS PARA LA VERIFICACION DE DATOS ACTIVOS / INACTIVOS
  **********************************************************************************************************************/
+
 $numMayorEdad = strtotime("-18 year", time());
 $numTerceraEdad = strtotime("-65 year", time());
 $numCondicionEspecialMayor65 = 2;
@@ -81,6 +82,8 @@ $arrCamposCalificacion["ciudadano"]["fchNacimiento"] = "Fecha de Nacimiento";
 $arrCamposCalificacion["ciudadano"]["seqNivelEducativo"] = "Nivel Educativo";
 $arrCamposCalificacion["ciudadano"]["numAnosAprobados"] = "Años Aprobados";
 $arrCamposCalificacion["ciudadano"]["seqSalud"] = "Afiliacion a salud";
+$arrCamposCalificacion["esquemas"][] = 1;
+$arrCamposCalificacion["esquemas"][] = 9;
 
 $seqEstadoProceso = $_POST['seqEstadoProceso'];
 $arrEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array("seqEstadoProceso","seqEtapa"),"seqEstadoProceso","seqEstadoProceso = " . $seqEstadoProceso);
@@ -230,7 +233,7 @@ if (!empty($_POST['hogar'])) {
 
         // Averigua si la cedula que se esta procesando pertenece a otro formulario
         // si es asi, obtiene la cedula del postulante principal de aquel formulario y emite el error
-        $seqFormulario = $claCiudadano->formularioVinculado2($numDocumento, $arrCiudadano['seqTipoDocumento'], false, false);
+        $seqFormulario = Ciudadano::formularioVinculado2($numDocumento, $arrCiudadano['seqTipoDocumento'], false, false);
         if( $seqFormulario != 0 and $_POST['seqFormulario'] != $seqFormulario ){
             $sql = "
                         SELECT numDocumento
@@ -276,20 +279,20 @@ if (!empty($_POST['hogar'])) {
         case $numCuentaUnionMarital % 2 != 0:
             $arrErrores[] = "Verificar estado civil, debe existir otra persona con estado civil 'Unión Marital de hecho' en el hogar";
             break;
-        case $numVictimas == 0 and $_POST['bolDesplazado'] = 1:
+        case $numVictimas == 0 and $_POST['bolDesplazado'] == 1:
             $arrErrores[] = "No hay victimas que acrediten la condicion de desplazado de este hogar";
             break;
-        case $numVictimas > 0 and $_POST['bolDesplazado'] = 0:
+        case $numVictimas > 0 and $_POST['bolDesplazado'] == 0:
             $arrErrores[] = "Hay desplazamiento forzado en el hogar, debe acreditar la condicion de victima";
             break;
     }
 
     // si es vulnerable debe indicar ingresos
-    if (intval($_POST['bolDesplazado']) == 0) {
-        if (intval($_POST['valIngresoHogar']) == 0) {
-            $arrErrores[] = "El ingreso del hogar no puede sumar cero";
-        }
-    }
+//    if (intval($_POST['bolDesplazado']) == 0) {
+//        if (intval($_POST['valIngresoHogar']) == 0) {
+//            $arrErrores[] = "El ingreso del hogar no puede sumar cero";
+//        }
+//    }
 
 } else { // no hay miembros de hogar
 
@@ -303,17 +306,36 @@ if (!empty($_POST['hogar'])) {
  **********************************************************************************************************************/
 if( $seqEtapa == 1 or $seqEtapa == 2 ) {
 
-    // Vive en arriendo, entonces tiene que tener los datos necesarios
-    if (intval($_POST['seqVivienda']) == 1) {
-        if (intval($_POST['valArriendo']) == 0) {
-            $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
-        }
-        if (!esFechaValida($_POST['fchArriendoDesde'])) {
-            $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
-        }
-        if (trim($_POST['txtComprobanteArriendo']) == "") {
-            $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
-        }
+    switch(intval($_POST['seqVivienda'])){
+        case 1:
+            if (intval($_POST['valArriendo']) == 0) {
+                $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
+            }
+            if (!esFechaValida($_POST['fchArriendoDesde'])) {
+                $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
+            }
+            if (trim($_POST['txtComprobanteArriendo']) == "") {
+                $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
+            }
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
+        case 2:
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
+        case 4:
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
+        case 6:
+            if (intval($_POST['numHacinamiento']) == 0) {
+                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+            }
+            break;
     }
 
     // direccion de residencia actual
@@ -562,6 +584,21 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
             $arrErrores[] = "Indique el numero de meses que dura el leasing";
         }
     }
+
+    // validacion del soporte y valor del subsidio para plan de gobierno 2
+    if( $_POST['seqPlanGobierno'] == 2 ){
+        if( $_POST['seqModalidad'] == 8 or $_POST['seqModalidad'] == 9 or $_POST['seqModalidad'] == 10 ){
+            if( $_POST['valAspiraSubsidio'] == 0 ){
+                $arrErrores[] = "Indique el valor del subsidio";
+            }
+            if( $_POST['valAspiraSubsidio'] != 0 and $_POST['txtSoporteSubsidio'] == "" ){
+                $arrErrores[] = "Indique el soporte para el valor del subsidio";
+            }
+        }
+    }
+
+
+
 }
 /**********************************************************************************************************************
  * VALIDACIONES ESPECIALES
@@ -626,18 +663,29 @@ if (empty($arrErrores)) {
         // el estado del proceso se regresa a inscripcion
         if( $bolCambiosCalificacion == true ){
             if($seqEtapa == 1 or $seqEtapa == 2) {
-                $_POST['seqEstadoProceso'] = 37;
+                if( in_array( $claCasaMano->objPostulacion->seqTipoEsquema , $arrCamposCalificacion["esquemas"] ) ){
+                    $_POST['seqEstadoProceso'] = 37;
+                }
             }
         }
 
         // Si esta en etapas posteriores a postulacion (asignacion / desembolso)
         // solo podrá cambiar los datos de contacto y los datos de conformacion del hogar
         // los demas datos se sobreescriben con lo que hay en la base de datos
+//        pr($_POST['hogar']);
         if( $seqEtapa != 1 and $seqEtapa != 2 ){
+            $arrMensajes = array();
             foreach( $claCasaMano->objPostulacion as $txtClave => $txtValor ){
                 if($txtClave != "arrCiudadano"){
                     if( ! in_array($txtClave,$arrIgnorarCampos) ) {
                         $_POST[$txtClave] = $txtValor;
+                    }
+                }else{
+                    foreach($claCasaMano->objPostulacion->$txtClave as $seqCiudadano => $objCiudadano){
+                        $numDocumento = $objCiudadano->numDocumento;
+                        foreach($objCiudadano as $txtCampo => $txtValue) {
+                            $_POST['hogar'][$numDocumento][$txtCampo] = $txtValue;
+                        }
                     }
                 }
             }
@@ -646,7 +694,7 @@ if (empty($arrErrores)) {
         // el numero de formulario se valida la primera vez que se pone, despues no lo puede cambiar
         if( $claCasaMano->objPostulacion->txtFormulario == "" ){
             if ( trim($_POST['txtFormulario']) != "") {
-                $txtFormato = "/^[0-9]{2}[-][0-9]{3,6}$/"; // dos digitos de tutor y hasta seis de numero de formulario
+                $txtFormato = "/^[0-9]{2,3}[-][0-9]{3,6}$/"; // dos digitos de tutor y hasta seis de numero de formulario
                 $txtFormulario = trim($_POST['txtFormulario']);
                 if (preg_match($txtFormato, $txtFormulario)) {
                     $arrFormulario = mb_split("-", $txtFormulario);
@@ -687,6 +735,20 @@ if (empty($arrErrores)) {
 
     }else {
         $arrErrores[] = "No tiene permisos para modificar registros";
+    }
+
+    // Si es un informador no puede modificar datos
+    $seqProyecto = $_SESSION['seqProyecto'];
+    $arrGruposPermitidos[] = 20;
+    $arrGruposPermitidos[] = 6;
+    $bolPuedeModificar = false;
+    foreach( $_SESSION['arrGrupos'][$seqProyecto] as $seqGrupo => $numGrupo ){
+        if( in_array( $seqGrupo , $arrGruposPermitidos ) ){
+            $bolPuedeModificar = true;
+        }
+    }
+    if( $bolPuedeModificar == false ){
+        $arrErrores[] = "No tiene privilegios para modificar la información";
     }
 
 }

@@ -84,11 +84,10 @@
 
     // Retorno o reubicacion
     if( $claFormulario->seqTipoEsquema == 11 ){
-        if ($_POST['txtCompraVivienda'] != "nueva") {
+        if ($_POST['txtCompraVivienda'] == "nueva") {
             $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
             $arrObligatorios['numAltoRiesgo'] = "Certificado de riesgo";
             $arrObligatorios['numHabitabilidad'] = "Certificado de Habitabilidad";
-            $arrObligatorios['numBoletinCatastral'] = "Boletin Catastral";
             $arrObligatorios['numLicenciaConstruccion'] = "Licencia de Construcci&oacute;n";
             $arrObligatorios['numUltimoPredial'] = "Ultimo Recibo Predial";
             $arrObligatorios['numActaEntrega'] = "Certificado de Constructora de Entrega Inmueble";
@@ -102,11 +101,9 @@
             $arrObligatorios['numUltimoReciboEnergia'] = "Último recibo de Energ&iacute;a";
         }
     }elseif( $claFormulario->seqTipoEsquema == 10 ) { // proyectos fuera de la secretaría
-
         if ($_POST['txtCompraVivienda'] == "nueva") {
             $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
             $arrObligatorios['numAltoRiesgo'] = "Certificado de riesgo";
-            $arrObligatorios['numBoletinCatastral'] = "Boletin Catastral";
             $arrObligatorios['numLicenciaConstruccion'] = "Licencia de Construcci&oacute;n";
             $arrObligatorios['numUltimoPredial'] = "Ultimo Recibo Predial";
             $arrObligatorios['numActaEntrega'] = "Certificado de Constructora de Entrega Inmueble";
@@ -185,20 +182,5 @@
      ***************************************************************************************************************/
 
     imprimirMensajes($arrErrores,$arrMensajes);
-
-//    if (empty($arrErrores)) {
-//        $arrMensajes = $claCasaMano->arrMensajes;
-//        $txtEstilo = "msgOk";
-//    } else {
-//        $arrMensajes = $arrErrores;
-//        $txtEstilo = "msgError";
-//    }
-//
-//    echo "<table cellpadding='0' cellspacing='0' border='0' width='100%' id='tablaMensajes' style='padding:5px' class='$txtEstilo'>";
-//    foreach ($arrMensajes as $txtMensaje) {
-//        echo "<tr><td class='$txtEstilo'><li>$txtMensaje</li></td></tr>";
-//    }
-//    echo "</table>";
-//    echo "<div id='tablaMensajes'><input type='hidden' id='casaMano' value='$seqCasaMano'></div>";
 
 ?>

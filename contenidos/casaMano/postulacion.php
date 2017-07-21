@@ -66,8 +66,8 @@
 		$arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $claFormulario->seqPlanGobierno , "seqPlanGobierno DESC, txtModalidad");
 		$arrSolucion = obtenerDatosTabla("T_FRM_SOLUCION", array("seqSolucion", "txtSolucion", "seqModalidad"), "seqSolucion", "seqSolucion <> 1");
         $arrProyectos = obtenerProyectosPostulacion($claFormulario->seqFormulario,$claFormulario->seqModalidad,$claFormulario->seqTipoEsquema, $claFormulario->seqPlanGobierno);
-        $arrProyectosHijos = obtenerProyectosHijosPostulacion($claFormulario->seqFormulario,$claFormulario->seqModalidad,$claFormulario->seqPlanGobierno,$claFormulario->seqProyecto);
-        $arrUnidadProyecto = obtenerUnidadesPostulacion($claFormulario->seqFormulario,$claFormulario->seqModalidad,$claFormulario->seqPlanGobierno,$claFormulario->seqProyectoHijo);
+        $arrProyectosHijos = obtenerProyectosHijosPostulacion($claFormulario->seqFormulario,$claFormulario->seqModalidad,$claFormulario->seqTipoEsquema,$claFormulario->seqPlanGobierno,$claFormulario->seqProyecto);
+        $arrUnidadProyecto = obtenerUnidadesPostulacion($claFormulario->seqFormulario,$claFormulario->seqModalidad,$claFormulario->seqTipoEsquema,$claFormulario->seqPlanGobierno,$claFormulario->seqProyectoHijo);
         $arrParentesco = obtenerDatosTabla("T_CIU_PARENTESCO", array("seqParentesco", "txtParentesco", "bolActivo"), "seqParentesco", "", "txtParentesco");
         $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtConvenio","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio", "seqConvenio <> 1 and numDisponibles > 0", "txtConvenio");
 
@@ -81,7 +81,7 @@
          $claActosAdministrativos = new ActoAdministrativo();
          $arrActos = $claActosAdministrativos->cronologia( $numDocumento );
 
-        $arrTipoEsquemas             = obtenerTipoEsquema($claFormulario->seqModalidad, $claFormulario->seqPlanGobierno);
+        $arrTipoEsquemas             = obtenerTipoEsquema($claFormulario->seqModalidad, $claFormulario->seqPlanGobierno, $claFormulario->bolDesplazado);
         $arrEstadoCivil              = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil", "bolActivo"), "seqEstadoCivil", "", "txtEstadoCivil");
         $arrEstadoCivilNombres       = obtenerDatosTabla( "T_CIU_ESTADO_CIVIL" , array( "seqEstadoCivil" , "txtEstadoCivil" ) , "seqEstadoCivil" );
         $arrCondicionEspecial        = obtenerDatosTabla( "T_CIU_CONDICION_ESPECIAL" , array( "seqCondicionEspecial" , "CONCAT( seqCondicionEspecial , ' - ' , txtCondicionEspecial ) as nombre" ) , "seqCondicionEspecial" , "seqCondicionEspecial <> 6" );

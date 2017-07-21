@@ -611,6 +611,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
                   and seqPlanGobierno = " . $seqPlanGobierno . "
                   and seqModalidad = " . $seqModalidad . "
                   and seqProyecto = " . $seqProyecto . "
+                  and seqTipoEsquema = " . $seqTipoEsquema . "
                   and (seqFormulario = 0
                     or seqFormulario = ''
                     or seqFormulario is NULL
@@ -630,6 +631,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
                     WHERE bolActivo = 1
                       and seqPlanGobierno = " . $seqPlanGobierno . "
                       and seqModalidad = " . $seqModalidad . "
+                      and seqTipoEsquema = " . $seqTipoEsquema . "
                       and (seqFormulario = 0
                         or seqFormulario = ''
                         or seqFormulario is NULL
@@ -677,8 +679,6 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
         }
     }
 
-    //pr( $arrProyectos );
-
     return $arrProyectos;
 }
 
@@ -689,7 +689,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
  * @param String txtTabla
  * @version 1.0 Mayo de 2017
  */
-function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqPlanGobierno, $seqProyecto){
+function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno, $seqProyecto){
     global $aptBd;
     $sql = "
         SELECT DISTINCT
@@ -701,6 +701,7 @@ function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqPla
         AND pro.seqProyectoPadre = ".$seqProyecto."
         AND upr.seqPlanGobierno = " . $seqPlanGobierno . "
         AND upr.seqModalidad = " . $seqModalidad . "
+        AND upr.seqTipoEsquema = " . $seqTipoEsquema . "
         AND (upr.seqFormulario = 0
           OR upr.seqFormulario = ''
           OR upr.seqFormulario IS NULL
@@ -723,7 +724,7 @@ function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqPla
  * @param String txtTabla
  * @version 1.0 Mayo de 2017
  */
-function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqPlanGobierno, $seqProyectoHijo){
+function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno, $seqProyectoHijo){
     global $aptBd;
     $sql = "
         SELECT
@@ -735,6 +736,7 @@ function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqPlanGobie
           AND upr.seqProyecto = ".$seqProyectoHijo."
           AND upr.seqPlanGobierno = " . $seqPlanGobierno . "
           AND upr.seqModalidad = " . $seqModalidad . "
+          AND upr.seqTipoEsquema = " . $seqTipoEsquema . "
           AND (upr.seqFormulario = 0
             OR upr.seqFormulario = ''
             OR upr.seqFormulario IS NULL
@@ -793,22 +795,31 @@ function valorSubsidio($claFormulario){
     $valTope     = ($claFormulario->seqTipoEsquema == 11)? 26 : 35; // SMMLV 26 para retorno reubicacion y 35 para el resto
     $valSubsidio = 0;
 
-    if($claFormulario->seqPlanGobierno == 2){
-        if( $claFormulario->seqModalidad == 6){
+    if($claFormulario->seqPlanGobierno == 2) {
+        if ($claFormulario->seqModalidad == 6) {
             $arrValor = obtenerDatosTabla(
                 "T_PRY_UNIDAD_PROYECTO",
-                array("0","valSDVEActual"),
+                array("0", "valSDVEActual"),
                 "0",
                 "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
             );
             $valSubsidio = $arrValor[0];
+        }elseif( $claFormulario->seqModalidad == 8 or $claFormulario->seqModalidad == 9 or $claFormulario->seqModalidad == 10 ){
+            $valSubsidio = array_shift(
+                obtenerDatosTabla(
+                    "T_FRM_FORMULARIO",
+                    array("seqFormulario","valAspiraSubsidio"),
+                    "seqFormulario",
+                    "seqFormulario = " . $claFormulario->seqFormulario
+                )
+            );
         }else{
             $arrValor = obtenerDatosTabla("T_PRY_PROYECTO",array("0","valMaximoSubsidio","valNumeroSoluciones"),"0","seqProyecto = " . $claFormulario->seqProyecto);
             if(intval($arrValor[0]['valNumeroSoluciones']) != 0){
                 $valSubsidio = intval(($arrValor[0]['valMaximoSubsidio'] / $arrValor[0]['valNumeroSoluciones']));
             }
         }
-    }else{
+    }elseif( $claFormulario->seqPlanGobierno == 3 ){
         $valSubsidioNAL = intval($claFormulario->valSubsidioNacional) / $arrConfiguracion['constantes']['salarioMinimo'];
         $valVUR         = intval($claFormulario->valDonacion)         / $arrConfiguracion['constantes']['salarioMinimo'];
 
@@ -837,11 +848,20 @@ function valorSubsidio($claFormulario){
             $valSubsidio = mb_ereg_replace("[^0-9]","" , $claFormulario->valCartaLeasing);
         }
 
+    }else{
+        $valSubsidio = array_shift(
+            obtenerDatosTabla(
+                "T_FRM_FORMULARIO",
+                array("seqFormulario","valAspiraSubsidio"),
+                "seqFormulario",
+                "seqFormulario = " . $claFormulario->seqFormulario
+            )
+        );
     }
     return $valSubsidio;
 }
 
-function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno){
+function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     global $aptBd;
 
     // Adquisicion
@@ -862,7 +882,11 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno){
     // Adquisicion cierre financiero
     $arrEsquema[3][12][] = 9;  // proyectos sdht
     $arrEsquema[3][12][] = 10; // proyecto no sdht
-    $arrEsquema[3][12][] = 11; // retorno reubicacion
+
+    // solo si es victima puede optar por el esquema de retorno / reubicacion
+    if( $bolDesplazado == 1 ) {
+        $arrEsquema[3][12][] = 11; // retorno reubicacion
+    }
 
     // Leasing
     $arrEsquema[3][13][] = 9;  // proyectos sdht

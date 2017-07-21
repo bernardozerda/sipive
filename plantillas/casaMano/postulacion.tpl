@@ -18,9 +18,16 @@
 
     <!-- TABLA PARA IMPRIMIR EL FORMULARIO DE POSTULACION -->
     <table cellspacing="0" cellpadding="3" border="0" width="100%" style="padding-bottom: 5px;">
+        {if isset( $smarty.session.arrGrupos.3.13 ) || isset( $smarty.session.arrGrupos.3.20 )}
+            <tr>
+                <td>
+                    <input type="checkbox" name="bolSoloSeguimiento" value="1"> Salvar solo el seguimiento
+                </td>
+            </tr>
+        {/if}
         <tr>
             <td width="150px" align="center">
-                <a href="#" onClick="imprimirPostulacionCEM(document.frmIndividual , './contenidos/casaMano/pedirConfirmacion.php');">
+                <a href="#" onClick="imprimirPostulacionCEM(document.frmPostulacion , './contenidos/casaMano/pedirConfirmacion.php');">
                     Imprimir Formulario
                 </a>
             </td>
@@ -34,7 +41,7 @@
                        onClick="alertaFormularioCerrado(this, {$claFormulario->bolCerrado}, {$smarty.session.privilegios.cambiar});"
                        value="1"
                         {if $claFormulario->bolCerrado == 1} checked {/if}
-                        {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} disabled {/if}
+                        {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} readonly {/if}
                 >
             </td>
             <td align="right" style="padding-right: 10px;">
@@ -129,7 +136,7 @@
                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
                                    onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
                                    style="width:100px;"
-                                    {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} disabled {/if}
+                                    {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} readonly {/if}
                             >
                         </td>
                         <td colspan="2">&nbsp;</td>
@@ -772,7 +779,7 @@
                                                 <input type="text"
                                                        name="fchArriendoDesde"
                                                        id="fchArriendoDesde"
-                                                       value="{if esFechaValida($objFormulario->fchArriendoDesde)}{$objFormulario->fchArriendoDesde}{/if}"
+                                                       value="{if esFechaValida($claFormulario->fchArriendoDesde)}{$claFormulario->fchArriendoDesde}{/if}"
                                                        onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                        style="width:80px;"
@@ -1401,7 +1408,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px; text-align:right;" />
+                                                 style="padding-right: 5px; width:100px; text-align:right;"
+                                                 {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL AHORRO -->
                                     <td>Entidad</td>
@@ -1477,7 +1486,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px; text-align:right;" />
+                                                 style="padding-right: 5px; width:100px; text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL AHORRO -->
                                     <td>Entidad</td>
@@ -1553,7 +1564,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px;text-align:right;" />
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- SOPORTE CESANTIAS -->
                                     <td>Soporte</td>
@@ -1578,7 +1591,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px;text-align:right;" />
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL CREDITO -->
                                     <td>Entidad</td>
@@ -1653,6 +1668,7 @@
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
                                                  style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
                                         />
                                     </td>
                                     <td>Entidad</td>
@@ -1698,7 +1714,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px;text-align:right;" />
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
 
                                     <!-- DE DONDE PROVIENE LA DONACION -->
@@ -1880,7 +1898,10 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  style="padding-right: 5px; width:100px; text-align:right;"
-                                                 readonly
+                                                 onkeyup="formatoSeparadores(this)"
+                                                 {if $claFormulario->seqModalidad != 8 && $claFormulario->seqModalidad != 9 && $claFormulario->seqModalidad != 10}
+                                                    readonly
+                                                 {/if}
                                         />
                                     </td>
 

@@ -18,34 +18,54 @@ include '../../../recursos/archivos/verificarSesion.php';
 
             <div class="well">
                 <?php
-                include "../lib/mysqli/shared/ez_sql_core.php";
-                include "../lib/mysqli/ez_sql_mysqli.php";
+                include '../conecta.php';
 
                 date_default_timezone_set('America/Bogota');
                 $arrDocumentosArchivo = array();
-                $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+
 
 
                 if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name'])) {
                     $nombreArchivo = $_FILES['archivo']['tmp_name'];
                     $lineas = file($nombreArchivo);
                     foreach ($lineas as $linea_num => $linea) {
-                        array_push($arrDocumentosArchivo, trim($linea));
+                        $linea = str_replace("\n", "", $linea);
+                        $linea = str_replace("\r", "", $linea);
+                        $linea = str_replace("\t", " ", $linea);
+                        if (!empty($linea)) {
+                            array_push($arrDocumentosArchivo, trim($linea));
+                        }
                     }
                 } else {
                     exit('debe seleccionar un archivo. <img border="0" src="../lib/back.png" width="30" height="30" style="cursor: pointer" onClick="history.back()">Volver');
                 }
+                $rad = explode("-", $_POST['numRadicado']);
+
+                if ($_POST['fchRadicado'] == "") {
+                    exit('Debe seleccionar una fecha de radicado. <img border="0" src="../lib/back.png" width="30" height="30" style="cursor: pointer" onClick="history.back()">Volver');
+                }
+                if ($_POST['numRadicado'] == "") {
+                    exit('Debe seleccionar un número de radicado. <img border="0" src="../lib/back.png" width="30" height="30" style="cursor: pointer" onClick="history.back()">Volver');
+                }
+                if (count($rad) != 3) {
+                    exit('El formato del número de radicado debe ser X-XX-XXXX <img border="0" src="../lib/back.png" width="30" height="30" style="cursor: pointer" onClick="history.back()">Volver');
+                }
+
+                $date = date_create($_POST['fchRadicado']);
+                $fecha = date_format($date, 'Y-m-d h:i:s');
+
+                $numRadicado = $_POST['numRadicado'];
                 //var_dump($arrDocumentosArchivo);
 
                 $separado_por_comas = implode(",", $arrDocumentosArchivo);
                 $validar = validarDocumentos($separado_por_comas, $db);
                 if ($validar) {
-                    migrarInformacion($separado_por_comas, $db);
+                    migrarInformacion($separado_por_comas, $db, $fecha, $numRadicado);
                 }
 
                 // Valida si el documento cumple con los requisitos para ejecutar el cambio de estado y actualizar la fecha de radicación 
                 function validarDocumentos($separado_por_comas, $db) {
-
+                    global $db;
                     $band = true;
                     $msg = "";
                     // Está consulta válida que los números de los documentos pertenezcan al postulante principal
@@ -80,7 +100,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                         if ($rows > 0) {
                             $val = "<b>Los siguientes documentos no tienen el estado de Asignaci&oacute;n-Asignado</b><br>";
                             foreach ($resultados as $value) {
-                                $val .= "<br>" . $value->numdocumento . ".";
+                                $val .= "<br>" . $value->numdocumento . "";
                             }
                             $val .= " <br><br> Por favor verifique los datos del hogar ";
                             $msg = "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
@@ -123,8 +143,8 @@ include '../../../recursos/archivos/verificarSesion.php';
                     return $band;
                 }
 
-                function migrarInformacion($separado_por_comas, $db) {
-
+                function migrarInformacion($separado_por_comas, $db, $fecha, $numRadicado) {
+                    global $db;
                     $sql = "SELECT seqFormulario, numDocumento
                         FROM t_frm_formulario
                         INNER JOIN t_frm_hogar hog USING (seqFormulario)
@@ -138,7 +158,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                     $cont = 0;
                     if ($rows > 0) {
                         $update = "UPDATE t_frm_formulario SET seqEstadoProceso = CASE seqFormulario";
-                        $updateProy = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = CASE seqFormulario";
+                        //$updateProy = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = CASE seqFormulario";
                         $seguimiento = "INSERT INTO T_SEG_SEGUIMIENTO ( 
 				seqFormulario, 
 				fchMovimiento, 
@@ -152,43 +172,46 @@ include '../../../recursos/archivos/verificarSesion.php';
 
                         foreach ($resultados as $value) {
                             $update .= " WHEN " . $value->seqFormulario . " THEN 62";
-                            $updateProy .= " WHEN " . $value->seqFormulario . " THEN NOW()";
+                            // $updateProy .= " WHEN " . $value->seqFormulario . " THEN '" . $fecha . "'";
                             $seguimiento .= "(
 				" . $value->seqFormulario . ",
 				now(),
 				" . $_SESSION['seqUsuario'] . ",
-				\"RADICACION EXPEDIENTES PARA LEGALIZACION SDVE\",
+				\"RADICACION EXPEDIENTES PARA LEGALIZACION SDVE CON NUMERO DE RADICADO- " . $numRadicado . "- FECHA - " . $fecha . "\",
 				" . $value->numDocumento . ",				
 				5,
                                  1
 			 ),";
-                            $seqFormularios .= $value->seqFormulario . ", ";
+                            $seqFormularios .= $value->seqFormulario . ",";
                             $documentos .= $value->numDocumento . ",";
                             $cont++;
                         }
-                        $seqFormularios = substr_replace($seqFormularios, '', -2, 1);
+                        $seqFormularios = substr_replace($seqFormularios, '', -1, 1);
                         $documentos = substr_replace($documentos, '', -1, 1);
                         if (!empty($seguimiento)) {
                             $seguimiento = substr_replace($seguimiento, ';', -1, 1);
                         }
 
                         $update .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
-                        $updateProy .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
+
+                        $updateRad = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = '" . $fecha . "', txtRadicadoForest = '" . $numRadicado . "' WHERE seqFormulario IN (" . $seqFormularios . ")";
                         if ($db->query($update)) {
+                            $documentos = str_replace(",", "<br>", $documentos);
                             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos"
                             . $documentos . "</p>";
                         } else {
-                            echo "<p class='alert alert-danger'>Hubo un error almodificar los estados de los documentos. Por favor consulte al administrador</p>";
+                            echo "<p class='alert alert-danger'>Hubo un error al modificar los estados de los documentos. Por favor consulte al administrador</p>";
                         }
-                        if (!empty($updateProy)) {
-                            if ($db->query($updateProy)) {
-                                echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de la fecha  de radicaci&oacute;n de los siguientes documentos"
+                        if (!empty($updateRad)) {
+                            if ($db->query($updateRad)) {
+                                $documentos = str_replace(",", "<br>", $documentos);
+                                echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de la fecha  de radicaci&oacute;n de los siguientes documentos: "
                                 . $documentos . "</p>";
                             } else {
                                 echo "<p class='alert alert-danger'>Hubo un error al modificar la fecha de la Radicaci&oacute;n. Por favor consulte al administrador</p>";
                             }
                         }
-                        echo "<br> seguimiento ->" . $seguimiento;
+                        // echo "<br> seguimiento ->" . $seguimiento;
                         $db->query($seguimiento);
                     }
                 }

@@ -1,6 +1,5 @@
 <?php
-include_once "../lib/mysqli/shared/ez_sql_core.php";
-include_once "../lib/mysqli/ez_sql_mysqli.php";
+include '../conecta.php';
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,7 +19,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
 //var_dump($lineas);    exit();
     $registros = 0;
 //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidiosJul17', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     $intV = 1;
     $intNV = 1;
     $band = 0;

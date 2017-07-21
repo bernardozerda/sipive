@@ -1,5 +1,7 @@
 <?php
 include '../../../recursos/archivos/verificarSesion.php';
+include '../conecta.php';
+include '../migrarTablero.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,7 +9,7 @@ include '../../../recursos/archivos/verificarSesion.php';
         <!-- Estilos CSS -->
         <link href="../../../librerias/bootstrap/css/bootstrap.css" rel="stylesheet">
         <link href="../../../librerias/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-        <link href="../../../librerias/bootstrap/css/bootstrap-theme.css" rel="stylesheet">
+
     </head>
     <body>
 
@@ -18,9 +20,6 @@ include '../../../recursos/archivos/verificarSesion.php';
 
             <div class="well">
                 <?php
-                include_once "../lib/mysqli/shared/ez_sql_core.php";
-                include_once "../lib/mysqli/ez_sql_mysqli.php";
-                include '../migrarTablero.php';
 
                 function doc2form($numDocumento) { // Recibe el documento y devuelve el formulario asociado
                     global $db;
@@ -53,8 +52,9 @@ include '../../../recursos/archivos/verificarSesion.php';
                 if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name'])) {
                     $nombreArchivo = $_FILES['archivo']['tmp_name'];
                     $lineas = file($nombreArchivo);
-                    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+                   
                     $validar = obternerDocumentos($lineas, $db, 40, 29, "Estudio de Titulos Aprobado");
+                   
                     $registros = 0;
 
                     if ($validar) {

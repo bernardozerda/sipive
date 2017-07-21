@@ -14,8 +14,7 @@
 </table>
 
 <?php
-include_once "./mysqli/shared/ez_sql_core.php";
-include_once "./mysqli/ez_sql_mysqli.php";
+include '../conecta.php';
 //$archivo = $_FILES["archivo"];
 
 $campos = "INSERT INTO t_pry_tecnico(
@@ -146,7 +145,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     $nombreArchivo = $_FILES['archivo']['tmp_name'];
     $lineas = file($nombreArchivo);
     $registros = 0;
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
     foreach ($lineas as $linea_num => $linea) {
         $datos = explode("\t", $linea);
         $ahora = date("Y-m-d H:i:s");

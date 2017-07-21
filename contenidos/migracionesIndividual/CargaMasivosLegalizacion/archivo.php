@@ -7,7 +7,7 @@ include '../../../recursos/archivos/verificarSesion.php';
         <!-- Estilos CSS -->        
         <link href="../../../librerias/bootstrap/css/bootstrap.css" rel="stylesheet">        
         <link href="../../../librerias/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-        <link href="../../../librerias/bootstrap/css/bootstrap-theme.css" rel="stylesheet">
+        
     </head>
     <body> 
         <div id="contenidos" class="container">

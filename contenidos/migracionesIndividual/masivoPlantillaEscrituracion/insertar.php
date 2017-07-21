@@ -6,8 +6,7 @@
 </head>
 <?php
 include '../../../recursos/archivos/verificarSesion.php';
-include_once "../lib/mysqli/shared/ez_sql_core.php";
-include_once "../lib/mysqli/ez_sql_mysqli.php";
+include '../conecta.php';
 include '../migrarTablero.php';
 
 
@@ -21,8 +20,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     $lineas = file($nombreArchivo);
     //var_dump($lineas);    exit();
     $registros = 0;
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+   
     $intV = 1;
     $intNV = 1;
     $band = 0;
@@ -272,8 +270,8 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
 }
 
 function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $documento, $cantF) {
-    // $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+     global $db;
+
     $consulta = " SELECT seqDesembolso, seqEscrituracion FROM t_des_escrituracion WHERE seqDesembolso IN(" . $idSeqDesembolso . ")";
     $resultado = $db->get_results($consulta);
     $dato = Array();
@@ -283,12 +281,12 @@ function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $documento, $c
             $dato[$intD] = $res->seqDesembolso;
             $intD++;
         }
-    }
+    }    
     insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $documento);
 }
 
 function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $documento) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    global $db;
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
     $sqlCiu = "SELECT numDocumento, CONCAT(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2) AS nombre FROM t_ciu_ciudadano WHERE numDocumento IN(" . $documento . ")";
     $resultado = $db->get_results($sqlCiu);
@@ -580,9 +578,8 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
             $int++;
         }
     }
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    //echo $valores;
+    
+     global $db;
     $valores = substr_replace($valores, ';', -1, 1);
     $valSeg = substr_replace($valSeg, ';', -1, 1);
     if ($valores != "") {
@@ -621,7 +618,7 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
                         <td><?= $arreglo['numDocumento'][$int] ?></td>
                         <td><?= $arreglo['seqDesembolso'][$int] ?></td>
                         <td><?= $arreglo['seqFormulario'][$int] ?></td>
-                        <td><a href="https://<?= $_SERVER['HTTP_HOST'] ?>/sdv/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?>">https://<?= $_SERVER['HTTP_HOST'] ?>/sdv/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?></a></td>
+                        <td><a href="http://<?= $_SERVER['HTTP_HOST'] ?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?>">http://<?= $_SERVER['HTTP_HOST'] ?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?></a></td>
                     </tr>
 
 
@@ -637,8 +634,8 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
 }
 
 function generarFlujo($formularios) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
+ global $db;
+   
     $sqlFlujo = "SELECT seqFormulario FROM T_DES_FLUJO WHERE seqFormulario IN(" . $formularios . ")";
     $resultFlujo = $db->get_results($sqlFlujo);
     $formFlujo = explode(",", $formularios);

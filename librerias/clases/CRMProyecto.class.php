@@ -189,8 +189,7 @@ class CRMProyecto {
             $sql .= " GROUP BY und.seqProyecto";
         }
         
-        echo "<br>".$valor ."<br>";
-echo $sql;
+ 
 
         //$rs = $aptBd->getAssoc($sql);
         $objRes = $aptBd->execute($sql);

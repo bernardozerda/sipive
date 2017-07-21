@@ -2,10 +2,14 @@
 
 @set_time_limit(300);
 
+chdir( getcwd() );
+include( "../../recursos/archivos/lecturaConfiguracion.php" );
+
 function conecta() {
-    $conexion = mysql_connect("localhost", "sdht_usuario", "Ochochar*1");
+    global $arrConfiguracion;
+    $conexion = mysql_connect($arrConfiguracion['baseDatos']['servidor'], $arrConfiguracion['baseDatos']['usuario'], $arrConfiguracion['baseDatos']['clave']);
     mysql_set_charset('utf8', $conexion);
-    mysql_select_db("sipive", $conexion);
+    mysql_select_db($arrConfiguracion['baseDatos']['nombre'], $conexion);
     return $conexion;
 }
 

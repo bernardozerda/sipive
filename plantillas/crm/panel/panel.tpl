@@ -11,10 +11,10 @@
 
 
     </head>
-    <body>
+    <body onload="tablas()">
         <div>
             <p>
-            <table class="table table-striped table-bordered" style="width: 85%">
+            <table class="table table-striped table-bordered" style="width: 85%; text-align: center">
                 <tr>
                     <th>Unidades y Hogares Vinculados</th>
                     <th>Total Unidades</th>
@@ -22,7 +22,9 @@
                     <th>Postulación</th>
                     <th>Vinculadas</th>
                     <th>Total Legalizadas</th>
-                    <th>Total Por legalizar</th>
+                    <th>Proceso Legalización</th>
+                    <th>Devolución Espedientes</th>
+                    <th>Pendientes Por legalizar</th>
                 </tr>
                 <tr >
                     <th><h6 style="font-weight: bolder;text-align: center">Total Proyectos</h6></th>
@@ -31,7 +33,9 @@
                     <td><h4 style="font-weight: bolder">{$totalPostuladas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalVinculadas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalLegalizadas}</h4></td>
-                    <td><h4 style="font-weight: bolder">{$totalPorLegalizar}</h4></td>
+                    <td><h4 style="font-weight: bolder">{$totalProcesoLeg}</h4></td>
+                    <td><h4 style="font-weight: bolder">{$totalDevExpedientes}</h4></td>
+                    <td><h4 style="font-weight: bolder">{$totalProcesoLeg-$totalDevExpedientes}</h4></td>
                 </tr>
             </table>
         </p>

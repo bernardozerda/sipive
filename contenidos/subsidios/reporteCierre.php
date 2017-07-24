@@ -136,6 +136,11 @@
 		  frm.valDonacion AS 'Valor Donacion / V.U.R.',
 		  edo.txtEmpresaDonante AS 'Empresa Donante / V.U.R.',
 		  UPPER(frm.txtSoporteDonacion) AS 'Soporte Donacion / V.U.R.',
+		  if( frm.bolViabilidadLeasing = 1 , 'SI' , 'NO' ) AS 'Viabilidad Leasing',
+		  con.txtConvenio AS 'Nombre Convenio', 
+		  con.txtBanco AS 'Banco Convenio',
+		  frm.valCartaLeasing AS 'Valor Carta Leasing',
+		  frm.numDuracionLeasing AS 'Duracion Leasing',
 		  frm.valTotalRecursos AS 'Total Recursos Hogar',
 		  frm.valAvaluo AS 'Avaluo',
 		  par.txtParentesco AS 'Parentesco',
@@ -158,6 +163,7 @@
 		INNER JOIN T_FRM_ENTIDAD_SUBSIDIO ccf ON frm.seqEntidadSubsidio = ccf.seqEntidadSubsidio
 		INNER JOIN T_FRM_BANCO bcr ON frm.seqBancoCredito = bcr.seqBanco
 		INNER JOIN T_FRM_EMPRESA_DONANTE edo ON frm.seqEmpresaDonante = edo.seqEmpresaDonante
+		LEFT JOIN V_FRM_CONVENIO con ON frm.seqConvenio = con.seqConvenio
 		WHERE $txtCondicion
 	";
 	//echo $sql;die();

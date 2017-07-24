@@ -570,18 +570,30 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     }
 
     // validaciones para la modalidad de leasing
-    if ($_POST['seqModalidad'] == 13 and $_POST['seqEstadoProceso'] == 54) {
+    if( $_POST['seqModalidad'] == 13 ) {
+        if ($_POST['seqEstadoProceso'] == 47 and $_POST['bolViabilidadLeasing'] == 0) {
+            $arrErrores[] = "Para postular el hogar debe tener la solución viabilizada por un convenio.";
+        }
         if ($_POST['bolViabilidadLeasing'] == 0) {
-            $arrErrores[] = "La solucion debe estar viabilizada por una entidad de un convenio de leasing";
-        }
-        if ($_POST['seqConvenio'] == 1) {
-            $arrErrores[] = "Seleccione un convenio para el leasing";
-        }
-        if ($_POST['valCartaLeasing'] == 0) {
-            $arrErrores[] = "El valor de la carta de leasing no es válido";
-        }
-        if ($_POST['numDuracionLeasing'] == 0) {
-            $arrErrores[] = "Indique el numero de meses que dura el leasing";
+            if ($_POST['seqConvenio'] != 1) {
+                $arrErrores[] = "No puede seleccionar un convenio si la solución no esta viabilizada";
+            }
+            if ($_POST['valCartaLeasing'] != 0) {
+                $arrErrores[] = "No puede indicar el valor del convenio si la solución no esta viabilizada";
+            }
+            if ($_POST['numDuracionLeasing'] != 0) {
+                $arrErrores[] = "No puede indicar la duración del convenio si la solución no esta viabilizada";
+            }
+        }else{
+            if ($_POST['seqConvenio'] == 1) {
+                $arrErrores[] = "Seleccione un convenio para el leasing";
+            }
+            if ($_POST['valCartaLeasing'] == 0) {
+                $arrErrores[] = "El valor de la carta de leasing no es válido";
+            }
+            if ($_POST['numDuracionLeasing'] == 0) {
+                $arrErrores[] = "Indique el numero de meses que dura el leasing";
+            }
         }
     }
 
@@ -596,8 +608,6 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
             }
         }
     }
-
-
 
 }
 /**********************************************************************************************************************

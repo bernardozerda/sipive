@@ -97,7 +97,7 @@
 		  frm.valAspiraSubsidio AS 'Valor Subsidio',
 		  UPPER(frm.txtSoporteSubsidio) AS 'Soporte Cambio Valor Subsidio',
 		  if(frm.bolCerrado = 1,'SI','NO') AS 'Formulario Cerrado',
-		  if(frm.seqPlanGobierno = 1,'Bogotá Positiva','Bogotá Humana') AS 'Plan de Gobierno',
+		  pgo.txtPlanGobierno AS 'Plan de Gobierno',
 		  esq.txtTipoEsquema AS 'Tipo de Esquema',
 		  moa.txtModalidad AS 'Modalidad',
 		  sol.txtSolucion AS 'Solucion de Vivienda',
@@ -164,6 +164,7 @@
 		INNER JOIN T_FRM_BANCO bcr ON frm.seqBancoCredito = bcr.seqBanco
 		INNER JOIN T_FRM_EMPRESA_DONANTE edo ON frm.seqEmpresaDonante = edo.seqEmpresaDonante
 		LEFT JOIN V_FRM_CONVENIO con ON frm.seqConvenio = con.seqConvenio
+		INNER JOIN t_frm_plan_gobierno pgo ON frm.seqPlanGobierno = pgo.seqPlanGobierno
 		WHERE $txtCondicion
 	";
 	//echo $sql;die();

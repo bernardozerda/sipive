@@ -133,7 +133,8 @@
                 $claCasaMano->objPostulacion->valSaldoCuentaAhorro +
                 $claCasaMano->objPostulacion->valSaldoCuentaAhorro2 +
                 $claCasaMano->objPostulacion->valSaldoCesantias +
-                $claCasaMano->objPostulacion->valCredito;
+                $claCasaMano->objPostulacion->valCredito +
+                $claCasaMano->objPostulacion->valAporteLote;
 
             // Suma de subsidios
             $valSumaSubsidios =

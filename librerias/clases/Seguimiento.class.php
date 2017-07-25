@@ -227,6 +227,10 @@ class Seguimiento {
         $this->arrConversionCampos['valSubsidioNacional']['tabla'] = "";
         $this->arrConversionCampos['valTotalRecursos']['nombre'] = "Valor Total Recursos";
         $this->arrConversionCampos['valTotalRecursos']['tabla'] = "";
+        $this->arrConversionCampos['valAporteLote']['nombre'] = "Acuerdo Pago Lote Terreno";
+        $this->arrConversionCampos['valAporteLote']['tabla'] = "";
+        $this->arrConversionCampos['txtSoporteAporteLote']['nombre'] = "Soporte Acuerdo Pago Lote Terreno";
+        $this->arrConversionCampos['txtSoporteAporteLote']['tabla'] = "";
 
         $this->arrTipoDato['bolBeneficiario'] = 'booleano';
         $this->arrTipoDato['bolCerrado'] = 'booleano';

@@ -54,6 +54,17 @@ if (is_numeric($valCedulaFormat) and $valCedulaFormat > 0) {
             $claDesembolso = new Desembolso;
             $claDesembolso->cargarDesembolso($seqFormulario);
 
+            $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $claDesembolso->seqLocalidad, "txtBarrio");
+
+            $claDesembolso->seqBarrio = array_shift(
+                obtenerDatosTabla(
+                    "T_FRM_BARRIO",
+                    array("seqBarrio","txtBarrio"),
+                    "txtBarrio",
+                    "txtBarrio = '" . $claDesembolso->txtBarrio . "' and seqLocalidad = " . $claDesembolso->seqLocalidad
+                )
+            );
+
             // Carga el tutor que tiene asignado ese hogar
             $claCRM = new CRM;
             $txtTutor = $claCRM->obtenerTutorHogar($seqFormulario);
@@ -148,6 +159,7 @@ if (is_numeric($valCedulaFormat) and $valCedulaFormat > 0) {
                 $esCoordinador = 1;
             }
             $claSmarty->assign("esCoordinador", $esCoordinador);
+            $claSmarty->assign("arrBarrio", $arrBarrio);
             $claSmarty->assign("claDesembolso", $claDesembolso);
             $claSmarty->assign("txtFase", $arrFlujoHogar['fase']);
             $claSmarty->assign("arrFlujoHogar", $arrFlujoHogar); // Flujo de datos aplicado al hogar

@@ -423,29 +423,30 @@
 			global $aptBd;
 			$arrAplicaciones = array();
 			$this->obtenerFormulario($numDocumento);
-
-			$sql = "
-				SELECT 
-					apl.seqAplicacion,
-					dis.txtDiseno,
-					apl.txtFormulario,
-					apl.fchAplicacion,
-					apl.fchCarga,
-					apl.bolActiva
-				FROM t_enc_aplicacion apl
-				INNER JOIN t_enc_diseno dis ON dis.seqDiseno = apl.seqDiseno
-				WHERE dis.bolActivo = 1
-				AND apl.seqFormulario = ".$this->arrSeqFormulario[$numDocumento]."
-				ORDER BY 
-				  apl.bolActiva DESC,
-				  apl.fchAplicacion DESC,
-				  apl.fchCarga DESC
-			";
-			$objRes = $aptBd->execute($sql);
-			while($objRes->fields){
-				$arrAplicaciones[] = $objRes->fields;
-				$objRes->MoveNext();
-			}
+            if( intval( $this->arrSeqFormulario[$numDocumento] ) != 0 ) {
+                $sql = "
+                    SELECT 
+                        apl.seqAplicacion,
+                        dis.txtDiseno,
+                        apl.txtFormulario,
+                        apl.fchAplicacion,
+                        apl.fchCarga,
+                        apl.bolActiva
+                    FROM t_enc_aplicacion apl
+                    INNER JOIN t_enc_diseno dis ON dis.seqDiseno = apl.seqDiseno
+                    WHERE dis.bolActivo = 1
+                    AND apl.seqFormulario = " . $this->arrSeqFormulario[$numDocumento] . "
+                    ORDER BY 
+                      apl.bolActiva DESC,
+                      apl.fchAplicacion DESC,
+                      apl.fchCarga DESC
+                ";
+                $objRes = $aptBd->execute($sql);
+                while ($objRes->fields) {
+                    $arrAplicaciones[] = $objRes->fields;
+                    $objRes->MoveNext();
+                }
+            }
 			return $arrAplicaciones;			
 		}
 		
@@ -710,43 +711,45 @@
                     $numCedula = intval($arrCiudadano[61]); // Numero del documento del ciudadano
                     $numEdad = intval($arrCiudadano[81]);   // Edad del ciudadano
 
+                    // si no se contesta la cedula entonces toma el orden del miembro de hogar
+                    if( intval($numCedula) == 0 ){
+                        $numCedula = $numOrden;
+                    }
+
                     // opercaiones con las edades
                     if( doubleval( $numCedula ) != 0 ){
-                        if( intval( $numEdad ) != 0 ){
 
-                            // edades
-                            $arrVariables['variables']['edades'][ $numCedula ] = $numEdad;
+                        // edades
+                        $arrVariables['variables']['edades'][ $numCedula ] = $numEdad;
 
-                            // cantMayor
-                            if( $numEdad >= 15 ){
-                                $arrVariables['variables']['cantMayor']++;
-                            }
-
-                            // adultos
-                            if( $numEdad >= 15 and $numEdad <= 60 ){
-                                $arrVariables['variables']['adultos']++;
-                            }
-
-                            // adolecente
-                            if( $numEdad >= 12 and $numEdad <= 19 ){
-                                $arrVariables['variables']['adolecentes']++;
-                            }
-
-                            // cantMenores
-                            if( $numEdad <= 12 ) {
-                                $arrVariables['variables']['cantMenores']++;
-                            }
-
-                            // cantadultoMayor
-                            if( $numEdad > 59 ) {
-                                $arrVariables['variables']['cantadultoMayor']++;
-                            }
-
-                        }else{
-                            $arrVariables['errores'][] = "No se ha contestado la pregunta EDAD para el ciudadano $numOrden de la encuesta";
+                        // cantMayor
+                        if( $numEdad >= 15 ){
+                            $arrVariables['variables']['cantMayor']++;
                         }
+
+                        // adultos
+                        if( $numEdad >= 15 and $numEdad <= 60 ){
+                            $arrVariables['variables']['adultos']++;
+                        }
+
+                        // adolecente
+                        if( $numEdad >= 12 and $numEdad <= 19 ){
+                            $arrVariables['variables']['adolecentes']++;
+                        }
+
+                        // cantMenores
+                        if( $numEdad <= 12 ) {
+                            $arrVariables['variables']['cantMenores']++;
+                        }
+
+                        // cantadultoMayor
+                        if( $numEdad > 59 ) {
+                            $arrVariables['variables']['cantadultoMayor']++;
+                        }
+
+
                     }else{
-                        $arrVariables['errores'][] = "No se ha contestado la pregunta NUMERO DE DOCUMENTO para el ciudadano $numOrden de la encuesta";
+                        $arrVariables['errores'][] = "No se ha contestado la pregunta NUMERO DE DOCUMENTO / ORDEN para el ciudadano $numOrden de la encuesta";
                     }
 
                     // años aprobados por el grupo familiar
@@ -864,16 +867,16 @@
                 $arrVariables['errores'][] = "No hay aplicaciones activas para el numero de documento $numDocumento";
             }
 
-//            $seqFormulario = Ciudadano::formularioVinculado($numDocumento);
-//            $claFormulario = new FormularioSubsidios();
-//            $claFormulario->cargarFormulario($seqFormulario);
-//
-//            $arrVariables['variables']['bolIntegracionSocial'] = $claFormulario->bolIntegracionSocial;
-//            $arrVariables['variables']['bolSecEducacion']      = $claFormulario->bolSecEducacion;
-//            $arrVariables['variables']['bolSecMujer']          = $claFormulario->bolSecMujer;
-//            $arrVariables['variables']['bolSecSalud']          = $claFormulario->bolSecSalud;
-//            $arrVariables['variables']['bolAltaCon']           = $claFormulario->bolAltaCon;
-//            $arrVariables['variables']['bolIpes']              = $claFormulario->bolIpes;
+            $seqFormulario = Ciudadano::formularioVinculado($numDocumento);
+            $claFormulario = new FormularioSubsidios();
+            $claFormulario->cargarFormulario($seqFormulario);
+
+            $arrVariables['variables']['bolIntegracionSocial'] = $claFormulario->bolIntegracionSocial;
+            $arrVariables['variables']['bolSecEducacion']      = $claFormulario->bolSecEducacion;
+            $arrVariables['variables']['bolSecMujer']          = $claFormulario->bolSecMujer;
+            $arrVariables['variables']['bolSecSalud']          = $claFormulario->bolSecSalud;
+            $arrVariables['variables']['bolAltaCon']           = $claFormulario->bolAltaCon;
+            $arrVariables['variables']['bolIpes']              = $claFormulario->bolIpes;
 
             return $arrVariables;
         }

@@ -820,7 +820,7 @@ group by seqIndicador;";
             $objRes = $aptBd->execute($sql);
             $datos = Array();
             while ($objRes->fields) {
-                $datos []= $objRes->fields;
+                $datos [] = $objRes->fields;
                 $objRes->MoveNext();
             }
             return $datos;
@@ -828,6 +828,31 @@ group by seqIndicador;";
             return $objError->msg;
         }
         return $datos;
+    }
+
+    public function datosSumaTotalCalificacion($formularios) {
+        global $aptBd;
+
+        $sql = "SELECT max(fchCalificacion), sum(total) as total
+           FROM t_frm_calificacion_plan3
+            left join t_frm_calificacion_operaciones using(seqCalificacion)
+            where seqFormulario in (" . $formularios . ") order by  fchCalificacion desc limit 1";
+
+        try {
+            $objRes = $aptBd->execute($sql);
+            $datos = array();
+            while ($objRes->fields) {
+                $datos[] = $objRes->fields;
+                $objRes->MoveNext();
+            }
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
+        $suma = 0;
+        foreach ($datos as $key => $value) {
+            $suma = $value['total'];
+        }
+        return $suma;
     }
 
 }

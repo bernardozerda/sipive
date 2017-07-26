@@ -30,8 +30,8 @@
     <br> 
 
     <br>
-    <h3>Información de Calificación</h3>
-    <div  >
+    <h3>Información de Calificación    <a href="#popup" class="popup-link"><img src="recursos/imagenes/simulador.png"  height="28px" /></a></h3>
+    <div> 
         <p>
         <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%" >
             <thead >
@@ -62,6 +62,7 @@
             {/foreach}
         </table>
     </div>
+    {include file="calificacion/simulador.tpl"}
  <script src="../../librerias/javascript/dataTable.js"></script> 
 
 </center>

@@ -1422,10 +1422,20 @@ Class ActoAdministrativo {
                     $arrIgnorar[] = "numPuntajeSisben";
                     $txtCamposSql = "";
                     $txtValorSql = "";
+
                     foreach ($objFormulario as $txtClave => $txtValor) {
                         if (!in_array($txtClave, $arrIgnorar)) {
+                            if( substr($txtClave,0,3) == "fch" ){
+                                if( ! esFechaValida( $txtValor ) ){
+                                    $txtValor = "NULL";
+                                }else{
+                                    $txtValor = "'" . $txtValor . "'";
+                                }
+                            }else{
+                                $txtValor = "'" . $txtValor . "'";
+                            }
                             $txtCamposSql .= trim($txtClave) . ",";
-                            $txtValorSql .= "'" . trim($txtValor) . "',";
+                            $txtValorSql .= trim($txtValor) . ",";
                         }
                     }
                     $txtCamposSql = trim($txtCamposSql, ",");
@@ -1449,6 +1459,8 @@ Class ActoAdministrativo {
                             break;
                     }
 
+                    $fchActoReferencia = ( esFechaValida( $fchActoReferencia ) )? "'" . $fchActoReferencia . "'" : "NULL";
+
                     $sql = "
                          INSERT INTO T_AAD_HOGARES_VINCULADOS ( 
                             seqFormularioActo, 
@@ -1463,12 +1475,14 @@ Class ActoAdministrativo {
                             '" . $arrActo['fchActo'] . "',
                             " . $arrActo['seqTipoActo'] . ",
                             $numActoReferencia,
-                            '$fchActoReferencia'
+                            $fchActoReferencia
                          )
                       ";
                     $aptBd->execute($sql);
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se pudo copiar el formulario del documento " . number_format($numDocumento) . " al modulo de actos administrativos ";
+                    $this->arrErrores[] = $objError->getMessage();
+                    $this->arrErrores[] = $sql;
                 }
 
                 if (empty($this->arrErrores)) {
@@ -1837,7 +1851,7 @@ Class ActoAdministrativo {
                                        txtIncorrecto,
                                        txtCorrecto,
                                        txtEstadoReposicion,
-                                       valIndexacion
+                                       valInd exacion
                                     ) VALUES 
                                        $txtValoresSql;
                                  ";

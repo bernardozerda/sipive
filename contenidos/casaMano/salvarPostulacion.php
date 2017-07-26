@@ -27,9 +27,9 @@ $arrErrores = array(); // Todos los errores van aqui
 /**********************************************************************************************************************
  * ARREGLOS PARA LA VERIFICACION DE DATOS ACTIVOS / INACTIVOS
  **********************************************************************************************************************/
-
 $numMayorEdad = strtotime("-18 year", time());
 $numTerceraEdad = strtotime("-65 year", time());
+
 $numCondicionEspecialMayor65 = 2;
 $bolCambiosCalificacion = false;
 
@@ -693,19 +693,20 @@ if (empty($arrErrores)) {
         // Si esta en etapas posteriores a postulacion (asignacion / desembolso)
         // solo podrá cambiar los datos de contacto y los datos de conformacion del hogar
         // los demas datos se sobreescriben con lo que hay en la base de datos
-//        pr($_POST['hogar']);
         if( $seqEtapa != 1 and $seqEtapa != 2 ){
             $arrMensajes = array();
-            foreach( $claCasaMano->objPostulacion as $txtClave => $txtValor ){
-                if($txtClave != "arrCiudadano"){
-                    if( ! in_array($txtClave,$arrIgnorarCampos) ) {
-                        $_POST[$txtClave] = $txtValor;
-                    }
-                }else{
-                    foreach($claCasaMano->objPostulacion->$txtClave as $seqCiudadano => $objCiudadano){
-                        $numDocumento = $objCiudadano->numDocumento;
-                        foreach($objCiudadano as $txtCampo => $txtValue) {
-                            $_POST['hogar'][$numDocumento][$txtCampo] = $txtValue;
+            if( $_SESSION['privilegios']['cambiar'] == 0 ) {
+                foreach ($claCasaMano->objPostulacion as $txtClave => $txtValor) {
+                    if ($txtClave != "arrCiudadano") {
+                        if (!in_array($txtClave, $arrIgnorarCampos)) {
+                            $_POST[$txtClave] = $txtValor;
+                        }
+                    } else {
+                        foreach ($claCasaMano->objPostulacion->$txtClave as $seqCiudadano => $objCiudadano) {
+                            $numDocumento = $objCiudadano->numDocumento;
+                            foreach ($objCiudadano as $txtCampo => $txtValue) {
+                                $_POST['hogar'][$numDocumento][$txtCampo] = $txtValue;
+                            }
                         }
                     }
                 }

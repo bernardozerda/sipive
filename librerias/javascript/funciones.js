@@ -1339,6 +1339,7 @@ function sumarTotalRecursos() {
     if( $("#valSaldoCuentaAhorro2").val() == ""){ $("#valSaldoCuentaAhorro2").val(0); }
     if( $("#valSaldoCesantias").val()     == ""){ $("#valSaldoCesantias").val(0);     }
     if( $("#valCredito").val()            == ""){ $("#valCredito").val(0);            }
+    if( $("#valAporteLote").val()         == ""){ $("#valAporteLote").val(0);         }
 
     // Subsidio + (Donaciones y/o VUR)
     if( $("#valSubsidioNacional").val()   == ""){ $("#valSubsidioNacional").val(0);   }
@@ -1362,6 +1363,7 @@ function sumarTotalRecursos() {
     var numSaldoCuenta2   = parseInt($("#valSaldoCuentaAhorro2").val().replace(/[^0-9]/g,''));
     var numCesantias      = parseInt($("#valSaldoCesantias").val().replace(/[^0-9]/g,''));
     var numCredito        = parseInt($("#valCredito").val().replace(/[^0-9]/g,''));
+    var numAporteLote     = parseInt($("#valAporteLote").val().replace(/[^0-9]/g,''));
     var numSubsidioNal    = parseInt($("#valSubsidioNacional").val().replace(/[^0-9]/g,''));
     var numVUR            = parseInt($("#valDonacion").val().replace(/[^0-9]/g,''));
     var numAspiraSubsidio = parseInt($("#valAspiraSubsidio").val().replace(/[^0-9]/g,''));
@@ -1369,7 +1371,7 @@ function sumarTotalRecursos() {
         var numCartaLeasing = parseInt($("#valCartaLeasing").val().replace(/[^0-9]/g, ''));
     }
     // Realizando las sumas
-    var numSumaRecursosPropios = numSaldoCuenta + numSaldoCuenta2 + numCesantias + numCredito;
+    var numSumaRecursosPropios = numSaldoCuenta + numSaldoCuenta2 + numCesantias + numCredito + numAporteLote;
     var numSumaSubsidios       = numSubsidioNal + numVUR;
     var numTotalRecursos       = numSumaRecursosPropios + numSumaSubsidios;
 
@@ -1378,6 +1380,7 @@ function sumarTotalRecursos() {
     $("#valSaldoCuentaAhorro2").val(numSaldoCuenta2);
     $("#valSaldoCesantias").val(numCesantias);
     $("#valCredito").val(numCredito);
+    $("#valAporteLote").val(numAporteLote);
     $("#valSubsidioNacional").val(numSubsidioNal);
     $("#valDonacion").val(numVUR);
     $("#valSumaRecursosPropios").val(numSumaRecursosPropios);
@@ -1393,6 +1396,7 @@ function sumarTotalRecursos() {
     formatoSeparadores(YAHOO.util.Dom.get("valSaldoCuentaAhorro2"));
     formatoSeparadores(YAHOO.util.Dom.get("valSaldoCesantias"));
     formatoSeparadores(YAHOO.util.Dom.get("valCredito"));
+    formatoSeparadores(YAHOO.util.Dom.get("valAporteLote"));
     formatoSeparadores(YAHOO.util.Dom.get("valSubsidioNacional"));
     formatoSeparadores(YAHOO.util.Dom.get("valDonacion"));
     formatoSeparadores(YAHOO.util.Dom.get("valSumaRecursosPropios"));
@@ -1963,6 +1967,7 @@ function datosPestanaPostulacion(txtModo) {
                 $("#valSaldoCuentaAhorro2").attr("readonly" , true);
                 $("#valSaldoCesantias").attr("readonly" , true);
                 $("#valCredito").attr("readonly" , true);
+                $("#valAporteLote").attr("readonly" , true);
                 $("#valSubsidioNacional").attr("readonly" , true);
                 $("#valDonacion").attr("readonly" , true);
 
@@ -1978,6 +1983,7 @@ function datosPestanaPostulacion(txtModo) {
                 $("#valSaldoCuentaAhorro2").attr("readonly" , false);
                 $("#valSaldoCesantias").attr("readonly" , false);
                 $("#valCredito").attr("readonly" , false);
+                $("#valAporteLote").attr("readonly" , false);
                 $("#valSubsidioNacional").attr("readonly" , false);
                 $("#valDonacion").attr("readonly" , false);
 

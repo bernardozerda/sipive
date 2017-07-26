@@ -7,7 +7,11 @@
  */
 include_once "lib/mysqli/shared/ez_sql_core.php";
 include_once "lib/mysqli/ez_sql_mysqli.php";
-include '../../recursos/archivos/lecturaConfiguracion.php';
 
-$db = new ezSQL_mysqli($arrConfiguracion['baseDatos']['clave'], $arrConfiguracion['baseDatos']['clave'], $arrConfiguracion['baseDatos']['nombre'], $arrConfiguracion['baseDatos']['servidor']);
+chdir( getcwd() );
+include( "../../../recursos/archivos/lecturaConfiguracion.php" );
+include( "../../../librerias/funciones/funciones.php" );
+
+
+$db = new ezSQL_mysqli($arrConfiguracion['baseDatos']['usuario'], $arrConfiguracion['baseDatos']['clave'], $arrConfiguracion['baseDatos']['nombre'], $arrConfiguracion['baseDatos']['servidor']);
 

@@ -120,7 +120,9 @@ include '../../../recursos/archivos/verificarSesion.php';
                                     INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
                                     INNER JOIN t_pry_proyecto pro USING(seqProyecto)
                                     WHERE ciu.numDocumento IN (" . $separado_por_comas . ")      
-                                    GROUP BY seqProyecto";
+                                    GROUP BY seqFormulario,
+                                    seqProyecto,
+                                    txtNombreProyecto";
                             $resultados = $db->get_results($sql);
                             $rows = count($resultados);
                             if ($rows > 1) {
@@ -194,7 +196,14 @@ include '../../../recursos/archivos/verificarSesion.php';
 
                         $update .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
 
-                        $updateRad = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = '" . $fecha . "', txtRadicadoForest = '" . $numRadicado . "' WHERE seqFormulario IN (" . $seqFormularios . ")";
+                        if( esFechaValida( $fecha ) ){
+                            $fecha = "'" . $fecha . "'";
+                        }else{
+                            $fecha = "NULL";
+                        }
+
+                        $updateRad = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = " . $fecha . ", txtRadicadoForest = '" . $numRadicado . "' WHERE seqFormulario IN (" . $seqFormularios . ")";
+
                         if ($db->query($update)) {
                             $documentos = str_replace(",", "<br>", $documentos);
                             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos"

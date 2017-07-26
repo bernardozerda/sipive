@@ -39,31 +39,31 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         $fec = date("y-m-d");
         $fch = "fchInformacionSolucion";
         if ($tipo == 3) {
-            $fechaFin = calculaFecha("days", -3, $fec);
+            $fechaFin = calculaFecha("days", -4, $fec);
         } else if ($tipo == 2) {
-            $fechaIni = calculaFecha("days", -2, $fec);
-            $fechaFin = calculaFecha("days", -2, $fec);
+            $fechaIni = calculaFecha("days", -3, $fec);
+            $fechaFin = calculaFecha("days", -3, $fec);
         } else if ($tipo == 1) {
             $fechaIni = calculaFecha("days", 0, $fec);
-            $fechaFin = calculaFecha("days", -1, $fec);
+            $fechaFin = calculaFecha("days", -2, $fec);
         }
     } else if ($seqEstado == 19 || $seqEstado == 22) {
         $fec = date("y-m-d");
         if ($seqEstado == 19) {
             $fch = "fchCreacionBusquedaOferta";
             if ($tipo == 3) {
-                $fechaFin = calculaFecha("days", -11, $fec);
+                $fechaFin = calculaFecha("days", -10, $fec);
             } else if ($tipo == 2) {
-                $fechaIni = calculaFecha("days", -10, $fec);
-                $fechaFin = calculaFecha("days", -11, $fec);
+                $fechaIni = calculaFecha("days", -8, $fec);
+                $fechaFin = calculaFecha("days", -9, $fec);
             } else if ($tipo == 1) {
                 $fechaIni = calculaFecha("days", 0, $fec);
-                $fechaFin = calculaFecha("days", -9, $fec);
+                $fechaFin = calculaFecha("days", -7, $fec);
             }
         } else {
             $fch = "fchCreacionEscrituracion";
             if ($tipo == 3) {
-                $fechaFin = calculaFecha("days", -3, $fec);
+                $fechaFin = calculaFecha("days", -4, $fec);
             } else if ($tipo == 2) {
                 $fechaIni = calculaFecha("days", -3, $fec);
                 $fechaFin = calculaFecha("days", -3, $fec);
@@ -76,7 +76,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         $fec = date("y-m-d");
         $fch = "esc.fchCreacionEscrituracion";
         if ($tipo == 3) {
-            $fechaFin = calculaFecha("days", -3, $fec);
+            $fechaFin = calculaFecha("days", -4, $fec);
         } else if ($tipo == 2) {
             $fechaIni = calculaFecha("days", -3, $fec);
             $fechaFin = calculaFecha("days", -3, $fec);
@@ -89,7 +89,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         if ($seqEstado == 25) {
             $fch = "tec.fchCreacion";
             if ($tipo == 3) {
-                $fechaFin = calculaFecha("days", -3, $fec);
+                $fechaFin = calculaFecha("days", -4, $fec);
             } else if ($tipo == 2) {
                 $fechaIni = calculaFecha("days", -3, $fec);
                 $fechaFin = calculaFecha("days", -3, $fec);
@@ -100,19 +100,19 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         } else {
             $fch = " tec.fchActualizacion";
             if ($tipo == 3) {
-                $fechaFin = calculaFecha("days", -11, $fec);
+                $fechaFin = calculaFecha("days", -10, $fec);
             } else if ($tipo == 2) {
-                $fechaIni = calculaFecha("days", -10, $fec);
-                $fechaFin = calculaFecha("days", -11, $fec);
+                $fechaIni = calculaFecha("days", -8, $fec);
+                $fechaFin = calculaFecha("days", -9, $fec);
             } else if ($tipo == 1) {
                 $fechaIni = calculaFecha("days", 0, $fec);
-                $fechaFin = calculaFecha("days", -9, $fec);
+                $fechaFin = calculaFecha("days", -7, $fec);
             }
         }
     } else if ($seqEstado == 27) {
         $fch = "fchInformacionTitulos";
         if ($tipo == 3) {
-            $fechaFin = calculaFecha("days", -3, $fec);
+            $fechaFin = calculaFecha("days", -4, $fec);
         } else if ($tipo == 2) {
             $fechaIni = calculaFecha("days", -3, $fec);
             $fechaFin = calculaFecha("days", -3, $fec);
@@ -128,14 +128,14 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
             $fch = "tit.fchActualizacion";
         }
         if ($tipo == 3) {
-                $fechaFin = calculaFecha("days", -11, $fec);
-            } else if ($tipo == 2) {
-                $fechaIni = calculaFecha("days", -10, $fec);
-                $fechaFin = calculaFecha("days", -11, $fec);
-            } else if ($tipo == 1) {
-                $fechaIni = calculaFecha("days", 0, $fec);
-                $fechaFin = calculaFecha("days", -9, $fec);
-            }
+            $fechaFin = calculaFecha("days", -10, $fec);
+        } else if ($tipo == 2) {
+            $fechaIni = calculaFecha("days", -8, $fec);
+            $fechaFin = calculaFecha("days", -9, $fec);
+        } else if ($tipo == 1) {
+            $fechaIni = calculaFecha("days", 0, $fec);
+            $fechaFin = calculaFecha("days", -7, $fec);
+        }
     }
 
     $sql = "SELECT pry.txtNombreProyecto, txtNombreUnidad, frm.seqFormulario, numDocumento, concat(txtNombre1, ' ', txtNombre1, ' ', txtApellido1, ' ', txtApellido2 ) AS postulante,
@@ -159,21 +159,20 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         $sql .= " INNER JOIN t_des_estudio_titulos  tit USING(seqDesembolso)";
     }
     $sql .= " INNER JOIN t_frm_estado_proceso USING(seqEstadoProceso)";
-    if($seqEstado != 26){
+    if ($seqEstado != 26) {
         $sql .= "where seqEstadoProceso = " . $seqEstado . " and seqParentesco = 1 ";
-    }else if($seqEstado == 26){
-        $sql.=" where seqParentesco = 1 AND (seqEstadoProceso = 28 or seqEstadoProceso = " . $seqEstado . ") ";
-    }               
+    } else if ($seqEstado == 26) {
+        $sql .= " where seqParentesco = 1 AND (seqEstadoProceso = 28 or seqEstadoProceso = " . $seqEstado . ") ";
+    }
     if ($tipo == 1 || $tipo == 2) {
         $sql .= "  AND  " . $fch . "  BETWEEN '" . $fechaFin . " 00:00' AND '" . $fechaIni . " 23:59'";
-    } else if ($tipo == 3) {        
-        $sql .= "  AND  (" . $fch . " < '" . $fechaFin . "' OR ". $fch ." IS NULL)";
-        
+    } else if ($tipo == 3) {
+        $sql .= "  AND  (" . $fch . " < '" . $fechaFin . "' OR " . $fch . " IS NULL)";
     }
     if ($proyecto != "") {
         $sql .= " AND und.seqProyecto =" . $proyecto;
     }
-    
-echo $sql; die();
+
+
     return $sql;
 }

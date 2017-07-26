@@ -1851,7 +1851,7 @@ Class ActoAdministrativo {
                                        txtIncorrecto,
                                        txtCorrecto,
                                        txtEstadoReposicion,
-                                       valIndexacion
+                                       valInd exacion
                                     ) VALUES 
                                        $txtValoresSql;
                                  ";

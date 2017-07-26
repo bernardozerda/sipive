@@ -37,8 +37,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                     $lineas = file($nombreArchivo);
                     $registros = 0;
 
-                    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-                    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios_feb10', 'localhost');
+                   global $db;
                     // Recorre las líneas del archivo
                     $error = "";
                     $queryUpdate = array();

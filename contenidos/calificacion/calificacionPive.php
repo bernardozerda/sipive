@@ -57,7 +57,7 @@ and open the template in the editor.
             }
         }
         if ($formularios != "") {
-            $arrayCalificacion = $claCalificacion->obtenerDatosCalificacion($ejecutaConsultaPersonalizada, $formularios);
+            $arrayCalificacion = $claCalificacion->obtenerDatosCalificacion($ejecutaConsultaPersonalizada, $formularios, true);
             $claCalificacion->obtenerValorIndicadores();
             $valSeg = "";
             // $fecha = '2017-05-10 19:26:25';

@@ -68,6 +68,27 @@ class calificacion {
         }
     }
 
+    public function listarIndicadores() {
+
+        global $aptBd;
+        $datos = array();
+        $sql = "SELECT * FROM T_FRM_CALIFICACION_INDICADOR";
+        try {
+            $objRes = $aptBd->execute($sql);
+            while ($objRes->fields) {
+                $prueba = trim($objRes->fields['sigIndicador']);
+                $prueba = str_replace(" ", "", $prueba);
+                $datos[] = $objRes->fields;
+                // echo   $this->$objRes->fields['sigIndicador']."<br>";
+                $this->$prueba = $objRes->fields['prcIndicador'];
+                $objRes->MoveNext();
+            }
+            return $datos;
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
+    }
+
     public function validarFormularios($separado_por_comas) {
 
         global $aptBd;
@@ -135,9 +156,9 @@ class calificacion {
         }
         ///echo ($NoEstado); echo $error;
         if ($NoEstado > 0 || $NoEstado1 > 0) {
-            if ($NoEstado > 0){
+            if ($NoEstado > 0) {
                 $error = "<p class='alert alert-danger'>Error! Los siguientes Documentos no tienen el <b>Estado: Hogar Actualizado o no se encuentran en el plan de gobierno Bogotá Mejor para Todos!</b>";
-            }else{
+            } else {
                 $error = "<p class='alert alert-danger'>Error! Los siguientes Documentos no tienen el <b>la informacion de la inscripción completa!</b>";
             }
             $error .= "<br><br>";
@@ -170,11 +191,11 @@ class calificacion {
         }
     }
 
-    public function obtenerDatosCalificacion($ejecutaConsultaPersonalizada, $formularios) {
+    public function obtenerDatosCalificacion($ejecutaConsultaPersonalizada, $formularios, $tipo) {
 
         global $aptBd;
         //$formularios = substr_replace($formularios, ' ', -1, 1);
-         $sql = "SELECT frm.seqFormulario,
+        $sql = "SELECT frm.seqFormulario,
                 ciu.numDocumento,
                 frm.fchUltimaActualizacion,
                 count(seqCiudadano) AS cant,
@@ -361,7 +382,10 @@ class calificacion {
          FROM t_frm_formulario    frm
               LEFT JOIN t_frm_hogar hog USING (seqFormulario)
               LEFT JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
-         WHERE seqEstadoProceso IN (37) AND seqPlanGobierno = 3";
+         WHERE   seqPlanGobierno = 3";
+        if ($tipo) {
+            $sql .= " and seqEstadoProceso IN (37) ";
+        }
         if ($ejecutaConsultaPersonalizada) {
             $sql .= " and frm.seqFormulario in (" . $formularios . ") ";
         }
@@ -742,6 +766,68 @@ and seqParentesco = 1
 group by seqFormulario";
         //echo $sql; die();
         return $sql;
+    }
+
+    public function datosUltimaCalificacion($formularios) {
+        global $aptBd;
+
+        $sql = "SELECT max(fchCalificacion), t_frm_calificacion_plan3.*, sum(total) as total, t_frm_calificacion_operaciones.* FROM t_frm_calificacion_plan3
+left join t_frm_calificacion_operaciones using(seqCalificacion)
+where seqFormulario in (" . $formularios . ")
+group by seqIndicador;";
+
+        try {
+            $objRes = $aptBd->execute($sql);
+            $datos = array();
+            while ($objRes->fields) {
+                $datos[] = $objRes->fields;
+                $objRes->MoveNext();
+            }
+            return $datos;
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
+        return $datos;
+    }
+
+    public function obtenerDatosSalud() {
+        global $aptBd;
+        $sql = "select *from t_ciu_salud order by seqSalud";
+
+        try {
+            $objRes = $aptBd->execute($sql);
+            $datos = array();
+            while ($objRes->fields) {
+                $datos[] = $objRes->fields;
+                $objRes->MoveNext();
+            }
+            return $datos;
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
+        return $datos;
+    }
+
+    function obtenerFormulario($documento) {
+        global $aptBd;
+        $documento = str_replace('.', '', $documento);
+        $sql = "SELECT DISTINCT(seqFormulario) from T_FRM_FORMULARIO"
+                . " INNER JOIN T_FRM_HOGAR USING(seqFormulario)"
+                . " INNER JOIN T_CIU_CIUDADANO USING(seqCiudadano)"
+                . " WHERE numDocumento = " . $documento . " Group by seqFormulario";
+
+        try {
+            $objRes = $aptBd->execute($sql);
+            $datos = Array();
+            while ($objRes->fields) {
+                $datos []= $objRes->fields;
+                $objRes->MoveNext();
+            }
+            return $datos;
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
+        return $datos;
     }
 
 }

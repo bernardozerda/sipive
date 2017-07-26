@@ -178,7 +178,7 @@ class CRMProyecto {
                      WHERE bolCerrado = 1 AND (seqEstadoProceso = 62 OR seqEstadoProceso = 17
                     OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
                     OR seqEstadoProceso = 26 OR seqEstadoProceso = 27 OR seqEstadoProceso = 28 OR seqEstadoProceso = 31
-                    OR seqEstadoProceso = 29)";
+                    OR seqEstadoProceso = 29 OR seqEstadoProceso = 24)";
         } else if ($valor == 7) {
             $sql = "SELECT count(*) as cant FROM t_pry_unidad_proyecto    und
                     INNER JOIN t_frm_formulario frm USING (seqFormulario)

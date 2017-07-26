@@ -33,9 +33,9 @@
                     <td><h4 style="font-weight: bolder">{$totalPostuladas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalVinculadas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalLegalizadas}</h4></td>
-                    <td><h4 style="font-weight: bolder">{$totalProcesoLeg}</h4></td>
+                    <td><h4 style="font-weight: bolder">{$totalPorLegalizar}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalDevExpedientes}</h4></td>
-                    <td><h4 style="font-weight: bolder">{$totalProcesoLeg-$totalDevExpedientes}</h4></td>
+                    <td><h4 style="font-weight: bolder">{$totalPorLegalizar-$totalDevExpedientes}</h4></td>
                 </tr>
             </table>
         </p>
@@ -70,7 +70,7 @@
                             <td align="center" style="cursor:pointer; cursor: hand"><div class="verde" onclick="exportarExcel({$seqEstado}, '', 1)">{$datos.$txtEstadoV}</div></td>
                             <td align="center" style="cursor:pointer; cursor: hand"><div class="amarillo" onclick="exportarExcel({$seqEstado}, '', 2)">{$datos.$txtEstadoA}</div></td>
                             <td align="center" style="cursor:pointer; cursor: hand"><div class="rojo"  onclick="exportarExcel({$seqEstado}, '', 3)">{$datos.$txtEstadoR}</div></td>
-                            <td align="center"><h4 style="font-weight: bolder;">{$datos.$txtEstadoVal}</h4></td>
+                            <td align="center"><h4 style="font-weight: bolder;">{$datos.$txtEstadoV+$datos.$txtEstadoA+$datos.$txtEstadoR}</h4></td>
                         </tr>
                     {/foreach}   
                 </table>
@@ -120,7 +120,7 @@
                                         <td align="center" style="cursor:pointer; cursor: hand"><div class="verde" onclick="exportarExcel({$seqEstado}, {$dato.seqProyecto}, 1)">{$dato.$txtEstadoV}</div></td>
                                         <td align="center" style="cursor:pointer; cursor: hand"><div class="amarillo" onclick="exportarExcel({$seqEstado}, {$dato.seqProyecto}, 2)">{$dato.$txtEstadoA}</div></td>
                                         <td align="center" style="cursor:pointer; cursor: hand"><div class="rojo"  onclick="exportarExcel({$seqEstado}, {$dato.seqProyecto}, 3)">{$dato.$txtEstadoR}</div></td>
-                                        <td align="center"><h4 style="font-weight: bolder">{$dato.$txtEstadoVal}</h4></td> 
+                                        <td align="center"><h4 style="font-weight: bolder">{$dato.$txtEstadoV+$dato.$txtEstadoA+$dato.$txtEstadoR}</h4></td> 
                                         {/foreach} 
                                 </tr>
                                 <tr>

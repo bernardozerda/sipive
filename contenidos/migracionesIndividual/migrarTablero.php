@@ -1,6 +1,5 @@
 <?php
 
-echo "migracions";
 /*
  * Clase que permite validar los documento o formularios en  un estado 
  */
@@ -17,12 +16,12 @@ function obternerDocumentos($lineas, $db, $code, $estadoV, $estadoT) {
 }
 
 function validarDocumentos($separado_por_comas, $db, $code, $estadoV, $estadoT) {
-
+    global $db;
     $band = true;
     $msg = "";
     // Está consulta válida que los números de los documentos pertenezcan al postulante principal
     //Está consulta válida que los números no tengán un estado diferente al estado proceso
-    $sql = "SELECT seqFormulario FROM t_frm_formulario frm                            
+     $sql = "SELECT seqFormulario FROM t_frm_formulario frm                            
                             WHERE seqEstadoProceso NOT IN(" . $estadoV . ")
                             and frm.seqFormulario IN(" . $separado_por_comas . ")";
     $resultados = $db->get_results($sql);
@@ -49,7 +48,7 @@ function validarDocumentos2($separado_por_comas, $db, $code, $estadoV, $estadoT)
     $band = true;
     $msg = "";
     // Está consulta válida que los números de los documentos pertenezcan al postulante principal
-     $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
+    $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
                             INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
                             WHERE seqParentesco NOT IN(1) 
@@ -69,8 +68,9 @@ function validarDocumentos2($separado_por_comas, $db, $code, $estadoV, $estadoT)
             die();
         }
     } else if ($band) {
+        global $db;
         //Está consulta válida que los números no tengán un estado diferente al estado proceso
-         $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
+        $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
                             INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
                             WHERE seqEstadoProceso NOT IN(" . $estadoV . ")
@@ -106,7 +106,7 @@ function validarDocumentos2($separado_por_comas, $db, $code, $estadoV, $estadoT)
  */
 
 function migrarInformacion($separado_por_comas, $db, $code, $estadoV) {
-
+    global $db;
     if (empty($_SESSION['seqUsuario'])) {
         session_start();
     }
@@ -186,6 +186,7 @@ function migrarInformacion($separado_por_comas, $db, $code, $estadoV) {
 }
 
 function datosEstado($separado_por_comas, $db, $code, $estadoV) {
+    global $db;
     $datos = Array();
     if ($code == 19) {
         $datos[0] = "SELECT seqFormulario as dato, numDocumento, 
@@ -260,7 +261,7 @@ function datosEstado($separado_por_comas, $db, $code, $estadoV) {
 }
 
 function migrarInformacion2($separado_por_comas, $db, $code, $estadoV) {
-
+    global $db;
     $datos = datosEstado($separado_por_comas, $db, $code, $estadoV);
     $sql = $datos[0];
     $resultados = $db->get_results($sql);

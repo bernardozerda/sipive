@@ -6,18 +6,29 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "calificacion.class.php" );
 
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Encuestas.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
 
 $claCalificacion = new calificacion();
+$claEncuestas = new Encuestas();
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+?>
+<style>
+    th{
+        text-align: left;
+    }
+</style>
+<?php
 $arrayIndicadores = $claCalificacion->listarIndicadores();
 
 include './calculoCalificacion.php';
-$formularios = $claCalificacion->obtenerFormulario($_POST['documento']);
+$documento = str_replace('.', '', $_POST['documento']);
+$formularios = $claCalificacion->obtenerFormulario($documento);
 
 $doc = "";
 foreach ($formularios as $keyF => $valueF) {
@@ -29,6 +40,8 @@ if ($doc == "") {
     die();
 }
 $arrayCalificacion = $claCalificacion->datosUltimaCalificacion($doc);
+$sumTotalCalificacion = $claCalificacion->datosSumaTotalCalificacion($doc); 
+//echo ($sumTotalCalificacion);
 $arraySalud = $claCalificacion->obtenerDatosSalud();
 
 $ejecutaConsultaPersonalizada = true;
@@ -36,8 +49,14 @@ $arraDatosActuales = $claCalificacion->obtenerDatosCalificacion($ejecutaConsulta
 
 $array = calcularCalificacion($arraDatosActuales);
 
+
+$arrayDatosEncuentas = $claEncuestas->obtenerVariablesCalificacion($documento);
+if(count($arrayDatosEncuentas['errores']) > 0){
+    echo $arrayDatosEncuentas['errores'][0];
+    Die();
+}
 $claCalificacion->obtenerValorIndicadores();
-$calBle = 0;
+$totalcalBle = 0;
 $totalRSA = 0;
 $totalCohabitacion;
 $totalHacinamiento = 0;
@@ -52,20 +71,38 @@ $totalHN18 = 0;
 $totalHCF = 0;
 $totalPLGTBI = 0;
 $totalPPGD = 0;
+
+$totalEnccalBle = 0;
+$totalEncRSA = 0;
+$totalEncCohabitacion;
+$totalEncHacinamiento = 0;
+$totalEncIPC = 0;
+$totalEncTDE = 0;
+$totalEncHN12 = 0;
+$totalEncMCF = 0;
+$totalEncHAMY = 0;
+$totalEncCDISC = 0;
+$totalEncHPGE = 0;
+$totalEncHN18 = 0;
+$totalEncHCF = 0;
+$totalEncPLGTBI = 0;
+$totalEncPPGD = 0;
+
 $ingresos1 = 0;
 $miembros1 = 0;
-$totalUltCal =0;
+$totalUltCal = 0;
 
 //var_dump($arraDatosActuales);
 if ($arrayIndicadores) {
     $cont = 0;
     ?>
+
     <table>
         <tr>
             <td>
                 <table class="table table-striped table-bordered" style="width: 85%; text-align: center">
                     <tr>
-                        <th colspan="4">Datos Hogar En SIPIVE</th>
+                        <th colspan="4" style="text-align: center">Datos Hogar En SIPIVE</th>
                     </tr>
 
                     <?php if ($arraDatosActuales) { ?>
@@ -81,7 +118,7 @@ if ($arrayIndicadores) {
                             } else {
                                 $educacion = 0;
                             }
-                            $calBle = ($claCalificacion->BLE * ($educacion * 100));
+                            $totalcalBle = ($claCalificacion->BLE * ($educacion * 100));
                             $saludSubsidiados = 0;
                             $saludSubsidiados = ($valueAct['afiliacion'] / $valueAct['cant']);
                             $totalRSA = $claCalificacion->RSA * ($saludSubsidiados * 100);
@@ -261,99 +298,195 @@ if ($arrayIndicadores) {
             <td>
                 <table class="table table-striped table-bordered" style="width: 85%; text-align: center">
                     <tr>
-                        <th colspan="4">Valores Nuevos</th>
+                        <th colspan="4" style="text-align: center">Datos Hogar Encuestas</th>
                     </tr>
-                    <?php if ($arraDatosActuales) { ?>
-                        <?php foreach ($arraDatosActuales as $keyAct => $valueAct) { ?>
-                            <tr>
-                                <th>Miembros de Hogar</th>
-                                <td><input id="cant"  name="cant" value="<?php echo $valueAct['cant'] ?>" size="3"/></td>
-                                <th>Ingresos</th>
-                                <td><input name="ingresos" id="ingresos" value="<?php echo $valueAct['ingresos'] ?>" size="10"/></td>
-                            </tr>
-                            <tr>
-                                <th>Miembros Mayores de edad</th>
-                                <td><input name="cantMayor" id="cantMayor" value="<?php echo $valueAct['cantMayor'] ?>" size="3"/></td>            
-                                <th>Miembros Adultos entre 15 y 60 años </th>
-                                <td><input name="adultos" id="adultos" value="<?php echo $valueAct['adultos'] ?>" size="3"/></td>
-                            </tr>
-                            <tr>
-                                <th>Años Aprobados Jefe </th>
-                                <td><input name="aprobadosJefe" id="aprobadosJefe" value="<?php echo $valueAct['aprobadosJefe'] ?>" size="3"/></td>           
-                                <th>Años Aprobados Miembros </th>
-                                <td><input name="aprobados" id="aprobados" value="<?php echo $valueAct['aprobados'] ?>" size="3"/></td>
-                            </tr>
-                            <tr>
-                                <th>Afiliación Salud</th>
-                                <td>
-                                    <select id="afiliacion" name="afiliacion" >
 
-                                        <?php
-                                        foreach ($arraySalud as $keySalud => $valueSalud) {
+                    <?php 
+                                        
+                    if ($arrayDatosEncuentas) {
+                        $calcEducacion = ($arrayDatosEncuentas['variables']['aprobados'] / ($arrayDatosEncuentas['variables']['cantMayor']));
+                        $educacion = 0;
+                        if ($calcEducacion < 9) {
+                            $educacion = 1;
+                        } else if ($arrayDatosEncuentas['variables']['cantMayor'] == 0) {
+                            $educacion = 1;
+                        } else {
+                            $educacion = 0;
+                        }
+                        $totalEnccalBle = ($claCalificacion->BLE * ($educacion * 100));
+                        $saludSubsidiados = 0;
+                        $saludSubsidiados = ($arrayDatosEncuentas['variables']['afiliacion'] / $arrayDatosEncuentas['variables']['cant']);
+                        $totalEncRSA = $claCalificacion->RSA * ($saludSubsidiados * 100);
 
-                                            $txtSalud = explode('(', $valueSalud['txtSalud']);
-                                            if (count($txtSalud) > 0) {
-                                                $txtSalud = $txtSalud[0];
-                                            } else {
-                                                $txtSalud = $valueSalud['txtSalud'];
-                                            }
-                                            ?>
-                                            <option value="<?php echo $valueSalud['seqSalud'] ?>" size="3" <?php if ($valueAct['afiliacion'] == $valueSalud['seqSalud']) echo 'selected' ?>><?php echo $txtSalud ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </td>           
-                                <th>cohabitacion</th>
-                                <td><input id="cohabitacion" name="cohabitacion" value="<?php echo $valueAct['cohabitacion'] ?>" size="3"/></td>
-                            </tr>
-                            <tr>
-                                <th>Cantidad Menores </th>
-                                <td><input name="cantMenores" id="cantMenores" value="<?php echo $valueAct['cantMenores'] ?>" size="3"/></td>            
-                                <th>Hijos</th>
-                                <td><input name="cantHijos" id="cantHijos" value="<?php echo $valueAct['cantHijos'] ?>" size="3"/></td>
-                            </tr>
-                            <tr>
-                                <th>mujer Cabeza de Hogar</th>
-                                <td><input id="" name="" value="<?php echo $valueAct['mujerCabHogar'] ?>" size="3"/></td>            
-                                <th>Conyugue</th>
-                                <td><?php echo $valueAct['conyugueHogar'] ?></td>
-                            </tr>
-                            <tr>
-                                <th>Cant Adulto Mayor</th>
-                                <td><?php echo $valueAct['cantadultoMayor'] ?></td>           
-                                <th>Cant Condicion Especial</th>
-                                <td><?php echo $valueAct['cantCondEspecial'] ?></td>
-                            </tr>
-                            <tr>
-                                <th>Condicion Etnica</th>
-                                <td><?php echo $valueAct['condicionEtnica'] ?></td>            
-                                <th>Adolecentes</th>
-                                <td><?php echo $valueAct['adolecentes'] ?></td>
-                            </tr>
-                            <tr>
-                                <th>hombre Cabeza de Hogar</th>
-                                <td><?php echo $valueAct['hombreCabHogar'] ?></td>
-                                <th>Grupo Lgtbi</th>
-                                <td><?php echo $valueAct['grupoLgtbi'] ?></td>
-                            </tr>
-                            <tr>
-                                <th>bolIntegracionSocial</th>
-                                <td><?php echo $valueAct['bolIntegracionSocial'] ?></td>
-                                <th>bolSecEducacion</th>
-                                <td><?php echo $valueAct['bolSecEducacion'] ?></td>
-                            </tr>
-                            <tr>
-                                <th>bolSecMujer</th>
-                                <td><?php echo $valueAct['bolSecMujer'] ?></td>
-                                <th>bolSecSalud</th>
-                                <td><?php echo $valueAct['bolSecSalud'] ?></td>
-                            </tr>
-                            <tr>
-                                <th>bolAltaCon</th>
-                                <td><?php echo $valueAct['bolAltaCon'] ?></td>
-                                <th>bolAltaCon</th>
-                                <td><?php echo $valueAct['bolAltaCon'] ?></td>
-                            </tr>
-                        <?php } ?>
+                        $cohabitacion = 0;
+                        if ($arrayDatosEncuentas['variables']['cohabitacion'] > 1) {
+                            $cohabitacion = 1;
+                        }
+                        $totalEncCohabitacion = $claCalificacion->COH * ($cohabitacion * 100);
+
+                        $dormitorios = $arrayDatosEncuentas['variables']['dormitorios'];
+                        $hacinamiento = 0;
+                        $calchacinamiento = 0;
+                        if ($dormitorios != 0) {
+                            $calchacinamiento = ($arrayDatosEncuentas['variables']['cant'] / $dormitorios);
+                            if ($calchacinamiento >= 4) {
+                                $hacinamiento = 1;
+                            } else {
+                                $hacinamiento = 0;
+                            }
+                        } else
+                            $hacinamiento = 1;
+
+                        $totalEncHacinamiento = $claCalificacion->HACN * ($hacinamiento * 100);
+
+                        $ingresos = $arrayDatosEncuentas['variables']['ingresos'] / $arrayDatosEncuentas['variables']['cant'];
+                        $arrConfiguracion['constantes']['salarioMinimo'] . "/" . ($ingresos + 1000);
+                        $totalEncIngresos = ($arrConfiguracion['constantes']['salarioMinimo']) / ($ingresos + 1000);
+                        $totalEncIPC = ($claCalificacion->IPC * (100 * (1 - exp(-$totalEncIngresos / 52.05))));
+
+                        $dependenciaEcon = 0;
+                        $adultos = 0;
+                        if ($arrayDatosEncuentas['variables']['adultos'] > 0) {
+                            $adultos = $arrayDatosEncuentas['variables']['cant'] / $arrayDatosEncuentas['variables']['adultos'];
+                        } else {
+                            $adultos = 3.5;
+                        }
+                        //echo "<br>".$value['aprobadosJefe']; 
+                        if ($adultos > 3 && $arrayDatosEncuentas['variables']['aprobadosJefe'] <= 2) {
+                            $dependenciaEcon = 1;
+                        }
+                        $totalEncTDE = ($claCalificacion->TDE * ($dependenciaEcon * 100));
+
+                        $menores = $arrayDatosEncuentas['variables']['cantMenores'] / $arrayDatosEncuentas['variables']['cant'];
+                        $totalEncHN12 = ($claCalificacion->HN12 * ($menores * 100));
+                        $monoparentalFem = 0;
+
+                        $tipo = 0;
+                        if ($arrayDatosEncuentas['variables']['mujerCabHogar'] == 1) {
+                            $tipo = 1;
+                        }
+                        if ($arrayDatosEncuentas['variables']['mujerCabHogar'] == 1 && $arrayDatosEncuentas['variables']['conyugueHogar'] == 0 && $arrayDatosEncuentas['variables']['cantHijos'] > 0) {
+                            $monoparentalFem = 1;
+                        }
+                        $totalEncMCF = ($claCalificacion->MCF * ($monoparentalFem * 100));
+
+                        $cantAdultoMayor = $arrayDatosEncuentas['variables']['cantadultoMayor'] / $arrayDatosEncuentas['variables']['cant'];
+                        $totalEncHAMY = $claCalificacion->HAMY * ($cantAdultoMayor * 100);
+
+                        $discapacidad = $arrayDatosEncuentas['variables']['cantCondEspecial'] / $arrayDatosEncuentas['variables']['cant'];
+                        $totalEncCDISC = ($claCalificacion->CDISC * ($discapacidad * 100));
+
+                        $grupoEtnico = 0;
+                        if ($arrayDatosEncuentas['variables']['condicionEtnica'] > 0) {
+                            $grupoEtnico = 1;
+                        }
+                        $totalEncHPGE = ($claCalificacion->HPGE * ($grupoEtnico * 100));
+
+                        $cantAdolecentes = $arrayDatosEncuentas['variables']['adolecentes'] / $arrayDatosEncuentas['variables']['cant'];
+
+                        $totalEncHN18 = ($claCalificacion->HN18 * ($cantAdolecentes * 100));
+
+                        $monoparentalMasc = 0;
+                        $tipo = 0;
+                        if ($arrayDatosEncuentas['variables']['hombreCabHogar'] == 1) {
+                            $tipo = 2;
+                        }
+                        if ($arrayDatosEncuentas['variables']['hombreCabHogar'] == 1 && $arrayDatosEncuentas['variables']['conyugueHogar'] == 0 && $arrayDatosEncuentas['variables']['cantHijos'] > 0) {
+                            $monoparentalMasc = 1;
+                        }
+                        $totalEncHCF = ($claCalificacion->HCF * ($monoparentalMasc * 100));
+
+
+                        $grupoLGTBI = 0;
+                        if ($arrayDatosEncuentas['variables']['grupoLgtbi'] > 0) {
+                            $grupoLGTBI = 1;
+                        }
+                        $totalEncPLGTBI = ($claCalificacion->PLGTBI * ($grupoLGTBI * 100));
+
+                        $programa = 0;
+
+                        if ($arrayDatosEncuentas['variables']['bolIntegracionSocial'] > 0 || $arrayDatosEncuentas['variables']['bolSecMujer'] > 0 || $arrayDatosEncuentas['variables']['bolIpes'] > 0) {
+                            $programa = 1;
+                        }
+                        if ($arrayDatosEncuentas['variables']['bolSecMujer'] == "") {
+                            $arrayDatosEncuentas['variables']['bolSecMujer'] = 0;
+                        }
+
+                        $totalEncPPGD = ($claCalificacion->PPGD * ($programa * 100));
+                        ?>
+                        <tr>
+                            <th>Miembros de Hogar</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['cant'] ?></td>
+                            <th>Ingresos</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['ingresos'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Miembros Mayores de edad</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['cantMayor'] ?></td>            
+                            <th>Miembros Adultos entre 15 y 60 años </th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['adultos'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Años Aprobados Jefe </th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['aprobadosJefe'] ?></td>           
+                            <th>Años Aprobados Miembros </th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['aprobados'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Afiliación Salud</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['afiliacion'] ?></td>           
+                            <th>cohabitacion</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['cohabitacion'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Camtidad Menores </th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['cantMenores'] ?></td>            
+                            <th>Hijos</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['cantHijos'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>mujer Cabeza de Hogar</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['mujerCabHogar'] ?></td>            
+                            <th>Conyugue</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['conyugueHogar'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Cant Adulto Mayor</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['cantadultoMayor'] ?></td>           
+                            <th>Cant Condicion Especial</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['cantCondEspecial'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Condicion Etnica</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['condicionEtnica'] ?></td>            
+                            <th>Adolecentes</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['adolecentes'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>hombre Cabeza de Hogar</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['hombreCabHogar'] ?></td>
+                            <th>Grupo Lgtbi</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['grupoLgtbi'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>bolIntegracionSocial</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['bolIntegracionSocial'] ?></td>
+                            <th>bolSecEducacion</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['bolSecEducacion'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>bolSecMujer</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['bolSecMujer'] ?></td>
+                            <th>bolSecSalud</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['bolSecSalud'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>bolAltaCon</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['bolAltaCon'] ?></td>
+                            <th>bolAltaCon</th>
+                            <td><?php echo $arrayDatosEncuentas['variables']['bolAltaCon'] ?></td>
+                        </tr>
+
                     <?php } ?>
                 </table>
             </td>
@@ -366,24 +499,21 @@ if ($arrayIndicadores) {
             <th>Valor Calificación</th>
             <th>total sistema</th>
         </tr>
-        <tr style="text-align: center">
-            <th>Indicador</th>
-            <th>Cantidad</th>           
-            <th>Total</th>
+        <tr>
+            <th style="text-align: center">Indicador</th>
+            <th style="text-align: center">Cantidad</th>           
+            <th style="text-align: center">Total Calificación</th>
+            <th style="text-align: center">Total SIPIVE Hoy</th>
+            <th style="text-align: center">Total Encuesta</th>
         </tr>
         <?php foreach ($arrayIndicadores as $key => $value) {
-                                                                  
-
             ?>
             <tr>
                 <td><?php echo $value['txtIndicador'] ?></td>
-                <?php if ($arrayCalificacion) { 
-     //var_dump($arrayCalificacion);
-                    ?>
+                <?php if ($arrayCalificacion) { ?>
                     <?php
                     foreach ($arrayCalificacion as $keyCal => $valueCal) {
-                        echo $valueCal['total'];
-                        $totalUltCal += $valueCal['total'];
+
                         $ingresos = $valueCal['totalIngresos'];
                         $miembros = $valueCal['cantMiembrosHogar'];
                         ?>
@@ -394,49 +524,64 @@ if ($arrayIndicadores) {
                         <?php } ?>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 1) { ?>
-                        <td style="text-align: center"><?php echo $calBle ?></td>
+                        <td style="text-align: center"><?php echo $totalcalBle ?></td>
+                        <td style="text-align: center"><?php echo $totalEnccalBle ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 2) { ?>
                         <td style="text-align: center"><?php echo $totalRSA ?></td>
+                        <td style="text-align: center"><?php echo $totalEncRSA ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 3) { ?>
                         <td style="text-align: center"><?php echo $totalCohabitacion ?></td>
+                        <td style="text-align: center"><?php echo $totalEncCohabitacion ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 4) { ?>
                         <td style="text-align: center"><?php echo $totalHacinamiento ?></td>
+                        <td style="text-align: center"><?php echo $totalEncHacinamiento ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 5) { ?>
                         <td style="text-align: center"><?php echo $totalIPC ?></td>
+                        <td style="text-align: center"><?php echo $totalEncIPC ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 6) { ?>
                         <td style="text-align: center"><?php echo $totalTDE ?></td>
+                        <td style="text-align: center"><?php echo $totalEncTDE ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 7) { ?>
                         <td style="text-align: center"><?php echo $totalHN12 ?></td>
+                        <td style="text-align: center"><?php echo $totalEncHN12 ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 8) { ?>
                         <td style="text-align: center"><?php echo $totalMCF ?></td>
+                        <td style="text-align: center"><?php echo $totalEncMCF ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 9) { ?>
                         <td style="text-align: center"><?php echo $totalHAMY ?></td>
+                        <td style="text-align: center"><?php echo $totalEncHAMY ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 10) { ?>
                         <td style="text-align: center"><?php echo $totalCDISC ?></td>
+                        <td style="text-align: center"><?php echo $totalEncCDISC ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 11) { ?>
                         <td style="text-align: center"><?php echo $totalHPGE ?></td>
+                        <td style="text-align: center"><?php echo $totalEncHPGE ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 12) { ?>
                         <td style="text-align: center"><?php echo $totalHN18 ?></td>
+                        <td style="text-align: center"><?php echo $totalEncHN18 ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 13) { ?>
                         <td style="text-align: center"><?php echo $totalHCF ?></td>
+                        <td style="text-align: center"><?php echo $totalEncHCF ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 14) { ?>
                         <td style="text-align: center"><?php echo $totalPLGTBI ?></td>
+                        <td style="text-align: center"><?php echo $totalEncPLGTBI ?></td>
                     <?php } ?>
                     <?php if ($value['seqIndicador'] == 15) { ?>
                         <td style="text-align: center"><?php echo $totalPPGD ?></td>
+                        <td style="text-align: center"><?php echo $totalEncPPGD ?></td>
                     <?php } ?>
                 <?php } ?>
             </tr>   
@@ -447,7 +592,9 @@ if ($arrayIndicadores) {
         <tr style="text-align: center">
             <th>Tota General</th>
             <th>&nbsp;</th>           
-            <th><?php echo $totalUltCal?></th>
+            <th><?php echo $sumTotalCalificacion ?></th>
+             <th><?php echo $totalcalBle+$totalRSA+$totalCohabitacion+$totalHacinamiento+$totalIPC+$totalTDE+$totalHN12+$totalMCF+$totalHAMY+$totalCDISC+$totalHPGE+$totalHN18+	$totalHCF+$totalPLGTBI+$totalPPGD; ?></th>
+              <th><?php echo $totalEnccalBle+$totalEncRSA+$totalEncCohabitacion+$totalEncHacinamiento+$totalEncIPC+$totalEncTDE+$totalEncHN12+$totalEncMCF+$totalEncHAMY+$totalEncCDISC+$totalEncHPGE+$totalEncHN18 ?></th>
         </tr>
         <?php
     }

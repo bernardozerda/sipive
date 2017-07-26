@@ -659,6 +659,225 @@
 				$objRes->MoveNext();
 			}
 		}
+
+        function obtenerVariablesCalificacion($numDocumento){
+
+            // inicializa el arreglo
+            $arrVariables['errores']                       = array();
+            $arrVariables['variables']['cant']             = 0; //
+            $arrVariables['variables']['edades']           = array(); //
+            $arrVariables['variables']['cantMayor']        = 0; //
+            $arrVariables['variables']['adultos']          = 0; //
+            $arrVariables['variables']['aprobadosJefe']    = 0; //
+            $arrVariables['variables']['aprobados']        = 0; //
+            $arrVariables['variables']['afiliacion']       = 0; //
+            $arrVariables['variables']['cohabitacion']     = 0; //
+            $arrVariables['variables']['dormitorios']      = 0; //
+            $arrVariables['variables']['ingresos']         = 0; //
+            $arrVariables['variables']['cantMenores']      = 0; //
+            $arrVariables['variables']['cantHijos']        = 0; //
+            $arrVariables['variables']['mujerCabHogar']    = 0; //
+            $arrVariables['variables']['conyugueHogar']    = 0; //
+            $arrVariables['variables']['cantadultoMayor']  = 0; //
+            $arrVariables['variables']['cantCondEspecial'] = 0; //
+            $arrVariables['variables']['condicionEtnica']  = 0; //
+            $arrVariables['variables']['adolecentes']      = 0; //
+            $arrVariables['variables']['hombreCabHogar']   = 0; //
+            $arrVariables['variables']['grupoLgtbi']       = 0; //
+            $arrVariables['variables']['bolIntegracionSocial'] = 0;
+            $arrVariables['variables']['bolSecEducacion']      = 0;
+            $arrVariables['variables']['bolSecMujer']          = 0;
+            $arrVariables['variables']['bolSecSalud']          = 0;
+            $arrVariables['variables']['bolAltaCon']           = 0;
+            $arrVariables['variables']['bolIpes']              = 0;
+
+            $bolJefeHogar = false; // detecta la existencia del jefe de hogar
+            $numCabezaHogar = 0; // 1 = hombre 2 o 3 = mujer
+
+            $arrAplicaciones = $this->listarAplicaciones($numDocumento);
+            if( ! empty($arrAplicaciones) ) {
+
+                // obtiene las respuestas del hogar en la encuesta
+                $this->obtenerEncuesta($arrAplicaciones[0]['seqAplicacion']);
+
+                // cantidad de miembros del hogar
+                $arrVariables['variables']['cant'] = count($this->arrAplicacion['ciudadano']);
+
+                // recorre los ciudadanos cargados en la encuesta
+                foreach( $this->arrAplicacion['ciudadano'] as $arrCiudadano ){
+
+                    $numOrden = intval($arrCiudadano[52]);  // Orden del ciudadano
+                    $numCedula = intval($arrCiudadano[61]); // Numero del documento del ciudadano
+                    $numEdad = intval($arrCiudadano[81]);   // Edad del ciudadano
+
+                    // opercaiones con las edades
+                    if( doubleval( $numCedula ) != 0 ){
+                        if( intval( $numEdad ) != 0 ){
+
+                            // edades
+                            $arrVariables['variables']['edades'][ $numCedula ] = $numEdad;
+
+                            // cantMayor
+                            if( $numEdad >= 15 ){
+                                $arrVariables['variables']['cantMayor']++;
+                            }
+
+                            // adultos
+                            if( $numEdad >= 15 and $numEdad <= 60 ){
+                                $arrVariables['variables']['adultos']++;
+                            }
+
+                            // adolecente
+                            if( $numEdad >= 12 and $numEdad <= 19 ){
+                                $arrVariables['variables']['adolecentes']++;
+                            }
+
+                            // cantMenores
+                            if( $numEdad <= 12 ) {
+                                $arrVariables['variables']['cantMenores']++;
+                            }
+
+                            // cantadultoMayor
+                            if( $numEdad > 59 ) {
+                                $arrVariables['variables']['cantadultoMayor']++;
+                            }
+
+                        }else{
+                            $arrVariables['errores'][] = "No se ha contestado la pregunta EDAD para el ciudadano $numOrden de la encuesta";
+                        }
+                    }else{
+                        $arrVariables['errores'][] = "No se ha contestado la pregunta NUMERO DE DOCUMENTO para el ciudadano $numOrden de la encuesta";
+                    }
+
+                    // años aprobados por el grupo familiar
+                    if( isset( $arrCiudadano[125] ) ) {
+
+                        // acumula los años aprobados por el grupo familiar
+                        $arrVariables['variables']['aprobados'] += intval($arrCiudadano[125]);
+
+                        // es jefe de hogar cuenta los años aprobados aparte
+                        if (isset($arrCiudadano[62])) {
+                            $arrVariables['variables']['aprobadosJefe'] = $arrCiudadano[125];
+                        }
+
+                    }else{
+                        $arrVariables['errores'][] = "No se ha encontrado respuesta para la pregunta de AÑOS APROBADOS para el ciudadano $numCedula";
+                    }
+
+                    // es jefe de hogar
+                    if (isset($arrCiudadano[62])) {
+
+                        // marca la existencia del jefe de hogar
+                        $bolJefeHogar = true;
+
+                        // identificacion de sexo para detectar si es hombre o mujer cabeza de hogar
+                        if(isset( $arrCiudadano[72] )){
+                            $numCabezaHogar = 1; // hombre
+                        }
+                        if(isset( $arrCiudadano[73] ) or isset( $arrCiudadano[74] )){
+                            $numCabezaHogar = 2; // mujer o intersexual
+                        }
+
+                    }
+
+
+                    // afilacion salud o no afiliado
+                    if( intval( $arrCiudadano[155] ) != 0 or intval( $arrCiudadano[156] ) != 0 ){
+                        $arrVariables['variables']['afiliacion']++;
+                    }
+
+                    // sumando ingresos del hogar
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[252] );
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[253] );
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[254] );
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[255] );
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[256] );
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[257] );
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[258] );
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[259] );
+
+                    // cantHijos
+                    if( intval( $arrCiudadano[64] ) != 0 ){
+                        $arrVariables['variables']['cantHijos']++;
+                    }
+
+                    // conyugueHogar
+                    if( intval( $arrCiudadano[63] ) != 0 ){
+                        $arrVariables['variables']['conyugueHogar']++;
+                    }
+
+                    // condiciones especiales
+                    if( intval( $arrCiudadano[161] ) != 0 ) {
+                        $arrVariables['variables']['cantCondEspecial']++;
+                    }
+
+                    // condicion etnica
+                    if(
+                        intval( $arrCiudadano[82] ) != 0 or
+                        intval( $arrCiudadano[83] ) != 0 or
+                        intval( $arrCiudadano[84] ) != 0 or
+                        intval( $arrCiudadano[85] ) != 0 or
+                        intval( $arrCiudadano[86] )
+                    ){
+                        $arrVariables['variables']['condicionEtnica']++;
+                    }
+
+                    // grupo lgtbi
+                    if(
+                        intval( $arrCiudadano[75] ) != 0 or
+                        intval( $arrCiudadano[76] ) != 0
+                    ){
+                        $arrVariables['variables']['grupoLgtbi']++;
+                    }
+
+                }
+
+                // cohabitacion
+                if( intval( $this->arrAplicacion['formulario'][35] ) != 0 ){
+                    $arrVariables['variables']['cohabitacion'] = $this->arrAplicacion['formulario'][35];
+                }else{
+                    $arrVariables['errores'][] = "No se ha encontrado respuesta para la pregunta de ¿CUÁNTOS HOGARES CONVIVEN EN ESTA VIVIENDA?";
+                }
+
+                // dormitorios
+                if( intval( $this->arrAplicacion['formulario'][38] ) != 0 ){
+                    $arrVariables['variables']['dormitorios'] = $this->arrAplicacion['formulario'][38];
+                }else{
+                    $arrVariables['errores'][] = "No se ha encontrado respuesta para la pregunta de ¿EN CUÁNTOS DE ESTOS CUARTOS DUERMEN LAS PERSONAS DE ESTE HOGAR?";
+                }
+
+                // determina si no habia nadie como jefe de hogar
+                if( $bolJefeHogar == false ){
+                    $arrVariables['errores'][] = "Ningún miembro de hogar esta marcado con el parentesco JEFE(A) DEL HOGAR";
+                }
+
+                // condicion de cabeza de hogar
+                if( $bolJefeHogar == true and $arrVariables['variables']['cantHijos'] > 0 and $arrVariables['variables']['conyugueHogar'] == 0 ){
+                    if( $numCabezaHogar == 1 ){
+                        $arrVariables['variables']['hombreCabHogar']++;
+                    }else{
+                        $arrVariables['variables']['mujerCabHogar']++;
+                    }
+                }
+
+            }else{
+                $arrVariables['errores'][] = "No hay aplicaciones activas para el numero de documento $numDocumento";
+            }
+
+//            $seqFormulario = Ciudadano::formularioVinculado($numDocumento);
+//            $claFormulario = new FormularioSubsidios();
+//            $claFormulario->cargarFormulario($seqFormulario);
+//
+//            $arrVariables['variables']['bolIntegracionSocial'] = $claFormulario->bolIntegracionSocial;
+//            $arrVariables['variables']['bolSecEducacion']      = $claFormulario->bolSecEducacion;
+//            $arrVariables['variables']['bolSecMujer']          = $claFormulario->bolSecMujer;
+//            $arrVariables['variables']['bolSecSalud']          = $claFormulario->bolSecSalud;
+//            $arrVariables['variables']['bolAltaCon']           = $claFormulario->bolAltaCon;
+//            $arrVariables['variables']['bolIpes']              = $claFormulario->bolIpes;
+
+            return $arrVariables;
+        }
+
 	}
 
 ?>

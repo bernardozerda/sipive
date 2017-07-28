@@ -88,7 +88,7 @@
 
 		// si no tiene el numero del vendedor quiere decir que no hay registro
 		// valido para desembolso, se asume que solo quiere hacer seguimientos
-		if( doubleval($claDesembolso->numDocumentoVendedor) == 0 ){
+		if( doubleval($claDesembolso->numDocumentoVendedor) == 0 and doubleval($_POST['numDocumentoVendedor']) == 0 ){
 			$bolCambios = false;
 		}
 

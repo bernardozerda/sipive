@@ -71,10 +71,12 @@ if (in_array($claFormulario->seqEstadoProceso, $claFlujoDesembolsos->arrFases[$_
     $claSmarty->assign("arrActos", $arrActos); //  Pestania de actos administrativos
     $claSmarty->assign("arrRegistros", $arrRegistros); // Registros de seguimiento
     if ($_POST['fase'] == "escrituracion") {
+
         if (is_array($claDesembolso->arrEscrituracion)) {
             foreach ($claDesembolso->arrEscrituracion as $txtClave => $txtValor) {
                 $claDesembolso->$txtClave = $txtValor;
             }
+
             $arrBarrio = obtenerDatosTabla(
                 "T_FRM_BARRIO",
                 array("seqBarrio", "txtBarrio"),
@@ -82,10 +84,11 @@ if (in_array($claFormulario->seqEstadoProceso, $claFlujoDesembolsos->arrFases[$_
                 "txtBarrio like '" . $claDesembolso->arrEscrituracion['txtBarrio'] . "' and seqLocalidad = " . $claDesembolso->arrEscrituracion['seqLocalidad']
             );
 
-            $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $claDesembolso->arrEscrituracion['seqLocalidad'], "txtBarrio");
-
             $txtBarrio = strtoupper($claDesembolso->arrEscrituracion['txtBarrio']);
             $claDesembolso->seqBarrio = $arrBarrio[$txtBarrio];
+
+            $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $claDesembolso->arrEscrituracion['seqLocalidad'], "txtBarrio");
+
         }
     }
     $claSmarty->assign("claDesembolso", $claDesembolso);

@@ -565,7 +565,7 @@ class Desembolso {
 						'" . doubleval($arrPost['numOtros'] ). "',
 						'" . $arrPost['txtViabilizoJuridico'] . "',
 						'" . $arrPost['txtViabilizoTecnico'] . "',
-						'" . intval($arrPost['bolViabilizoJuridico'] ). "*******',
+						'" . intval($arrPost['bolViabilizoJuridico'] ). "',
 						'" . intval($arrPost['bolViabilizoTecnico']) . "',
 						'" . $arrPost['txtNombreVendedor'] . "',
 						'" . doubleval($arrPost['numDocumentoVendedor'] ). "',

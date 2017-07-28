@@ -755,6 +755,25 @@
                     // años aprobados por el grupo familiar
                     if( isset( $arrCiudadano[125] ) ) {
 
+                        // Los años aprobados de acuerdo al nivel educativo
+                        switch(true){
+                            case isset( $arrCiudadano[120] ):  // basica secundaria
+                                $arrCiudadano[125] += 5;
+                                break;
+                            case isset( $arrCiudadano[121] ):  // tecnico
+                                $arrCiudadano[125] += 11;
+                                break;
+                            case isset( $arrCiudadano[122] ):  // tecnologo
+                                $arrCiudadano[125] += 11;
+                                break;
+                            case isset( $arrCiudadano[123] ):  // universitario
+                                $arrCiudadano[125] += 11;
+                                break;
+                            case isset( $arrCiudadano[124] ):  // postgrado
+                                $arrCiudadano[125] += 11;
+                                break;
+                        }
+
                         // acumula los años aprobados por el grupo familiar
                         $arrVariables['variables']['aprobados'] += intval($arrCiudadano[125]);
 

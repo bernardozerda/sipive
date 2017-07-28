@@ -747,6 +747,11 @@ class Desembolso {
                 $arrErrores[] = $objError->msg;
             }
         }
+
+        if( empty( $arrErrores )){
+            $arrErrores = $this->fechaUltimaActualizacion($arrPost['seqFormulario']);
+        }
+
         return $arrErrores;
     }
 
@@ -1143,6 +1148,10 @@ class Desembolso {
             }
         }
 
+        if( empty( $arrErrores )){
+            $arrErrores = $this->fechaUltimaActualizacion($arrPost['seqFormulario']);
+        }
+
         return $arrErrores;
     }
 
@@ -1302,6 +1311,11 @@ class Desembolso {
                 }
             }
         }
+
+        if( empty( $arrErrores )){
+            $arrErrores = $this->fechaUltimaActualizacion($arrPost['seqFormulario']);
+        }
+
         return $arrErrores;
     }
 
@@ -1554,6 +1568,10 @@ class Desembolso {
             }
         } else {
             $arrErrores[] = "La informacion del registro se salvo pero las imágenes no pudieron salvarse, falta la carpeta de imagenes";
+        }
+
+        if( empty( $arrErrores )){
+            $arrErrores = $this->fechaUltimaActualizacion($arrPost['seqFormulario']);
         }
 
         return $arrErrores;
@@ -1945,6 +1963,10 @@ class Desembolso {
                     }
                 }
             }
+        }
+
+        if( empty( $arrErrores )){
+            $arrErrores = $this->fechaUltimaActualizacion($arrPost['seqFormulario']);
         }
 
         return $arrErrores;
@@ -2409,6 +2431,11 @@ class Desembolso {
                 }
             } // END IF seqSolicitudEditar = 0
         } // END IF EMPTY ERRORES
+
+        if( empty( $arrErrores )){
+            $arrErrores = $this->fechaUltimaActualizacion($arrPost['seqFormulario']);
+        }
+
         return $arrErrores;
     }
 
@@ -3124,6 +3151,26 @@ class Desembolso {
         //var_dump( $bolCambios );
 
         return $bolCambios;
+    }
+
+    /**
+     * ACTUALIZA LA ULTIMA FECHA DE ACTUALIZACION DEL FORMULARIO
+     * @param $seqFormulario
+     */
+    private function fechaUltimaActualizacion( $seqFormulario ){
+        global $aptBd;
+        $arrErrores = array();
+        try {
+            $sql = "
+              UPDATE T_FRM_FORMULARIO SET 
+                fchUltimaActualizacion = NOW()
+              WHERE seqFormulario = $seqFormulario
+          ";
+            $aptBd->execute($sql);
+        } catch ( Exception $objError ){
+            $arrErrores[] = "Hubo problemas al intentar modificr la fecha de última actualización del formulario";
+            //$arrErrores[] = $objError->getMessage();
+        }
     }
 
 }

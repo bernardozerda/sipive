@@ -73,6 +73,11 @@ $arrIgnorarCampos[] = "txtCorreo";
 
 // Variables que si se cambian, debe irse a etapa de inscripcion.
 $arrCamposCalificacion["formulario"]["valIngresoHogar"] = "Ingresos del hogar";
+$arrCamposCalificacion["formulario"]["numHabitaciones"] = "N° Hogares en la vivienda";
+$arrCamposCalificacion["formulario"]["numHacinamiento"] = "N° Dormitorios";
+$arrCamposCalificacion["formulario"]["bolIntegracionSocial"] = "Integración Social";
+$arrCamposCalificacion["formulario"]["bolSecMujer"] = "Secretaría de la Mujer";
+$arrCamposCalificacion["formulario"]["bolIpes"] = "IPES";
 $arrCamposCalificacion["ciudadano"]["seqEtnia"] = "Condición Étnica";
 $arrCamposCalificacion["ciudadano"]["seqParentesco"] = "Parentesco";
 $arrCamposCalificacion["ciudadano"]["seqCondicionEspecial"] = "Condicion Especial";
@@ -82,6 +87,7 @@ $arrCamposCalificacion["ciudadano"]["fchNacimiento"] = "Fecha de Nacimiento";
 $arrCamposCalificacion["ciudadano"]["seqNivelEducativo"] = "Nivel Educativo";
 $arrCamposCalificacion["ciudadano"]["numAnosAprobados"] = "Años Aprobados";
 $arrCamposCalificacion["ciudadano"]["seqSalud"] = "Afiliacion a salud";
+$arrCamposCalificacion["ciudadano"]["bolLgtb"] = "LGTBI";
 $arrCamposCalificacion["esquemas"][] = 1;
 $arrCamposCalificacion["esquemas"][] = 9;
 

@@ -527,6 +527,17 @@ if (empty($arrErrores)) {
         }
     }
 
+    // acuerdo de pago
+    if (intval($_POST['valAporteLote']) != 0) {
+        if (trim($_POST['txtSoporteAporteLote']) == "") {
+            $arrErrores[] = "Indique el soporte para el Acuerdo de pago / Lote / Terreno";
+        }
+    }else{
+        if (trim($_POST['txtSoporteAporteLote']) != "") {
+            $arrErrores[] = "Debe indicar un valor del Acuerdo de pago / Lote / Terreno";
+        }
+    }
+
     // valor del subsidio nacional
     if (intval($_POST['valSubsidioNacional']) != 0) {
         if (trim($_POST['txtSoporteSubsidioNacional']) == "") {

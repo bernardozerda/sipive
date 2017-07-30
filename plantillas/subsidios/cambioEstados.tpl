@@ -142,7 +142,7 @@
 								<select name="seqEstadoProceso" style="width:310px">
                                     <option value="0">Seleccione un estado</option>
                                     {foreach from=$arrEstados key=seqEstado item=txtEstado}
-                                        <option value="{$seqEstado}">{$txtEstado}</option>
+                                        <option value="{$seqEstado}">[{$seqEstado}] {$txtEstado}</option>
                                     {/foreach}
 								</select>
 							</td>

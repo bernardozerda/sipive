@@ -753,7 +753,7 @@
                     }
 
                     // años aprobados por el grupo familiar
-                    if( isset( $arrCiudadano[125] ) and $numEdad >= 15 ) {
+                    if( isset( $arrCiudadano[125] ) ) {
 
                         // Los años aprobados de acuerdo al nivel educativo
                         switch(true){
@@ -775,7 +775,9 @@
                         }
 
                         // acumula los años aprobados por los mayores de 15 del grupo familiar
-                        $arrVariables['variables']['aprobados'] += intval($arrCiudadano[125]);
+                        if( $numEdad >= 15 ) {
+                            $arrVariables['variables']['aprobados'] += intval($arrCiudadano[125]);
+                        }
 
                         // es jefe de hogar cuenta los años aprobados aparte
                         if (isset($arrCiudadano[62])) {

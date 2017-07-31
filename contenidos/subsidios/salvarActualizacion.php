@@ -638,7 +638,10 @@ if (empty($arrErrores)) {
     // Estando en etapa de inscripcion y postulacion
     // si se modifican datos sensibles a la calificacion
     // el estado del proceso se regresa a INSCRIPCION HOGAR ACTUALIZADO
-    if( $bolCambiosCalificacion == true and $_POST['seqEstadoProceso'] != 35 and $_POST['seqEstadoProceso'] !=  36 ){
+    if( $bolCambiosCalificacion == true ){
+        $claFormulario->seqEstadoProceso = 37;
+        $_POST['seqEstadoProceso'] = 37;
+    }elseif( $_POST['seqEstadoProceso'] == 35 or $_POST['seqEstadoProceso'] ==  36 ) {
         $claFormulario->seqEstadoProceso = 37;
         $_POST['seqEstadoProceso'] = 37;
     }else{

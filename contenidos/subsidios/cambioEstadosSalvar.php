@@ -193,9 +193,9 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
 
         // para paso a riego
         if ($arrDatos['estado'] == 6) {
-            $claFormulario->txtFormulario = "";
-            $claFormulario->fchPostulacion = "";
-            $claFormulario->bolCerrado = 0;
+//            $claFormulario->txtFormulario = "";
+//            $claFormulario->fchPostulacion = "";
+//            $claFormulario->bolCerrado = 0;
         }
 
         // para paso a inscrito

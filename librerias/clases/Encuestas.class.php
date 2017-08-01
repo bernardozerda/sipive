@@ -899,6 +899,8 @@
             $arrVariables['variables']['bolAltaCon']           = $claFormulario->bolAltaCon;
             $arrVariables['variables']['bolIpes']              = $claFormulario->bolIpes;
 
+            $arrVariables['variables']['seqFormulario'] = $seqFormulario;
+
             return $arrVariables;
         }
 

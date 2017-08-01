@@ -536,17 +536,17 @@ function eliminarRegistro(seqRegistro, txtPregunta, txtArchivo) {
     var handleYes = function () {
 
         var txtParametros = "";
-        if (typeof (YAHOO.util.Dom.get("txtComentario")) != "undefined") {
+        if (typeof (YAHOO.util.Dom.get("txtComentario")) != "undefined" && YAHOO.util.Dom.get("txtComentario") != null) {
             var objComentario = YAHOO.util.Dom.get("txtComentario");
             txtParametros += "&txtComentario=" + objComentario.value;
         }
 
-        if (typeof (YAHOO.util.Dom.get("seqGestion")) != "undefined") {
+        if (typeof (YAHOO.util.Dom.get("seqGestion")) != "undefined" && YAHOO.util.Dom.get("seqGestion") != null ) {
             var objGestion = YAHOO.util.Dom.get("seqGestion");
             txtParametros += "&seqGestion=" + objGestion.options[ objGestion.selectedIndex ].value;
         }
 
-        if (typeof (YAHOO.util.Dom.get("borrarAAD")) != "undefined") {
+        if (typeof (YAHOO.util.Dom.get("borrarAAD")) != "undefined" && YAHOO.util.Dom.get("borrarAAD") != null ) {
             var objBorrarAAD = YAHOO.util.Dom.get("borrarAAD");
             txtParametros += "&bolBorrar=" + objBorrarAAD.checked;
         }

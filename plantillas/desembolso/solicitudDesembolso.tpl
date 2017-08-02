@@ -759,7 +759,7 @@
                                                 <input type="text"
                                                        name="txtSubsecretaria"
                                                        id="txtSubsecretaria"
-                                                       value="Mauricio Cortés Garzón"
+                                                       value="{$claDesembolso->arrSolicitud.txtSubsecretaria|upper}"
                                                        onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                        onBlur="javascript: sinCaracteresEspeciales(this);
                                                                this.style.backgroundColor = '#FFFFFF';"
@@ -773,7 +773,7 @@
                                                 <input type="text"
                                                        name="txtSubdireccion"
                                                        id="txtSubdireccion"
-                                                       value="Guillermo Eduardo Alfaro"
+                                                       value="{$claDesembolso->arrSolicitud.txtSubdireccion|upper}"
                                                        onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                        onBlur="javascript: sinCaracteresEspeciales(this);
                                                                this.style.backgroundColor = '#FFFFFF';"

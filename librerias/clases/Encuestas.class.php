@@ -761,16 +761,16 @@
                                 $arrCiudadano[125] += 5;
                                 break;
                             case isset( $arrCiudadano[121] ):  // tecnico
-                                $arrCiudadano[125] += 11;
+                                $arrCiudadano[125] = 11;
                                 break;
                             case isset( $arrCiudadano[122] ):  // tecnologo
-                                $arrCiudadano[125] += 11;
+                                $arrCiudadano[125] = 11;
                                 break;
                             case isset( $arrCiudadano[123] ):  // universitario
-                                $arrCiudadano[125] += 11;
+                                $arrCiudadano[125] = 11;
                                 break;
                             case isset( $arrCiudadano[124] ):  // postgrado
-                                $arrCiudadano[125] += 11;
+                                $arrCiudadano[125] = 11;
                                 break;
                         }
 
@@ -814,11 +814,6 @@
                     $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[252] );
                     $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[253] );
                     $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[254] );
-                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[255] );
-                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[256] );
-                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[257] );
-                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[258] );
-                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[259] );
 
                     // cantHijos
                     if( intval( $arrCiudadano[64] ) != 0 ){
@@ -848,8 +843,10 @@
 
                     // grupo lgtbi
                     if(
+                        intval( $arrCiudadano[74] ) != 0 or
                         intval( $arrCiudadano[75] ) != 0 or
-                        intval( $arrCiudadano[76] ) != 0
+                        intval( $arrCiudadano[76] ) != 0 or
+                        intval( $arrCiudadano[80] ) != 0
                     ){
                         $arrVariables['variables']['grupoLgtbi']++;
                     }

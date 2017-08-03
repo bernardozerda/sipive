@@ -2,7 +2,7 @@
 
 	<!-- Solo el administrador del sistema puede cargar encuestas -->
 	{assign var=seqProyectoAplicacion value=$smarty.session.seqProyecto}
-	{if isset( $smarty.session.arrGrupos.$seqProyectoAplicacion.20 )}
+	{if isset( $smarty.session.arrGrupos.$seqProyectoAplicacion.20 ) or isset($smarty.session.arrGrupos.$seqProyectoAplicacion.37)}
 		<p>
 			<fieldset style="width: 90%; border: 1px dotted #999999; padding:10px;">
 				<legend><strong> CARGA DE INFORMACIÓN DE LAS ENCUESTAS</strong> </legend>
@@ -69,8 +69,9 @@
 							<td><input type="file" name="ciudadano"></td>
 						</tr>
 						<tr>
-							<td colspan="2" align="center"><input type="submit"
-								name="cargar" value="Cargar Archivos"></td>
+							<td colspan="2" align="center">
+								<input type="submit" name="cargar" value="Cargar Archivos">
+							</td>
 						</tr>
 					</table>
 				</form>

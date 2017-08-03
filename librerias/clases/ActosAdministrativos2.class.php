@@ -100,6 +100,10 @@ Class TipoActoAdministrativo {
                             $objTipoActo->arrFormatoArchivo[2]['tipo'] = "texto";
                             $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Valor Correcto";
                             $objTipoActo->arrFormatoArchivo[3]['tipo'] = "texto";
+                            $objTipoActo->arrFormatoArchivo[4]['nombre'] = "Resolución Modificada";
+                            $objTipoActo->arrFormatoArchivo[4]['tipo'] = "texto";
+                            $objTipoActo->arrFormatoArchivo[5]['nombre'] = "Fecha Resolución Modificada";
+                            $objTipoActo->arrFormatoArchivo[5]['tipo'] = "fecha";
                             break;
                         case 3: // Resolucion de inhabilitados
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Identificador del Formulario";
@@ -186,39 +190,48 @@ Class TipoActoAdministrativo {
         $this->arrErrores = array();
         $arrTipoActoLibre = array(2, 3); // Tipos de acto en donde los textos pueden ser vacios
         unset($arrArchivo[0]); // Quita la fila de titulos
-        foreach ($arrArchivo as $numFila => $arrFila) {
-            foreach ($arrFila as $numColumna => $txtValor) {
-                $bolError = false;
-                switch ($this->arrFormatoArchivo[$numColumna]['tipo']) {
-                    case "textarea":
-                        $bolError = ( (!in_array($this->seqTipoActo, $arrTipoActoLibre) ) and trim($txtValor) == "" ) ? true : false;
-                        break;
-                    case "texto":
-                        $bolError = ( (!in_array($this->seqTipoActo, $arrTipoActoLibre) ) and trim($txtValor) == "" ) ? true : false;
-                        break;
-                    case "numero":
-                        $bolError = ( floatval($txtValor) == 0 ) ? true : false;
-                        break;
-                    case "fecha":
-                        $bolError = ( esFechaValida($txtValor) == true ) ? false : true;
-                        break;
-                    default:
-                        $bolError = ( (!in_array($this->seqTipoActo, $arrTipoActoLibre) ) and trim($txtValor) == "" ) ? true : false;
-                        break;
-                }
-
-                if ($bolError == false and isset($this->arrFormatoArchivo[$numColumna]['rango']) and ! empty($this->arrFormatoArchivo[$numColumna]['tipo'])) {
-                    if (!in_array(strtolower($txtValor), $this->arrFormatoArchivo[$numColumna]['rango'])) {
-                        $bolError = true;
+        if(!empty($arrArchivo)) {
+            foreach ($arrArchivo as $numFila => $arrFila) {
+                $this->cargarTipoActo($this->seqTipoActo);
+                foreach ($arrFila as $numColumna => $txtValor) {
+                    $bolError = false;
+                    switch ($this->arrFormatoArchivo[$numColumna]['tipo']) {
+                        case "textarea":
+                            $bolError = ((!in_array($this->seqTipoActo, $arrTipoActoLibre)) and trim($txtValor) == "") ? true : false;
+                            break;
+                        case "texto":
+                            $bolError = ((!in_array($this->seqTipoActo, $arrTipoActoLibre)) and trim($txtValor) == "") ? true : false;
+                            break;
+                        case "numero":
+                            $bolError = (floatval($txtValor) == 0) ? true : false;
+                            break;
+                        case "fecha":
+                            $bolError = (esFechaValida($txtValor) == true) ? false : true;
+                            break;
+                        default:
+                            $bolError = ((!in_array($this->seqTipoActo, $arrTipoActoLibre)) and trim($txtValor) == "") ? true : false;
+                            break;
                     }
-                }
-
-                if ($bolError == true) {
-                    $this->arrErrores[] = "Error en la linea " . ( $numFila + 1 ) . ", columna " .
+                    if ($bolError == false and isset($this->arrFormatoArchivo[$numColumna]['rango']) and !empty($this->arrFormatoArchivo[$numColumna]['tipo'])) {
+                        if (!in_array(strtolower($txtValor), $this->arrFormatoArchivo[$numColumna]['rango'])) {
+                            $bolError = true;
+                        }
+                    }
+                    if ($bolError == true) {
+                        $this->arrErrores[] = "Error en la linea " . ($numFila + 1) . ", columna " .
                             $this->arrFormatoArchivo[$numColumna]['nombre'] . ": El valor " .
                             $txtValor . " no es válido";
+                    }
+                    unset( $this->arrFormatoArchivo[$numColumna] );
+                }
+                if(!empty($this->arrFormatoArchivo)){
+                    foreach($this->arrFormatoArchivo as $numColumna => $arrDatos) {
+                        $this->arrErrores[] = "Error en la linea " . ($numFila + 1) . ", falta el valor para la columna " . $arrDatos['nombre'];
+                    }
                 }
             }
+        }else{
+            $this->arrErrores[] = "El archivo debe contener datos para al menos un hogar";
         }
     }
 
@@ -233,7 +246,9 @@ Class TipoActoAdministrativo {
         // Obtiene los formularios de los hogares vinculados en el archivo
         unset($arrArchivo[0]); // Quitar la columna de titulos
         foreach ($arrArchivo as $numLinea => $arrLinea) {
+
             $numDocumento = $arrLinea[0];
+
             if (!isset($arrFormularios[$numDocumento])) {
                 $claCiudadano = new Ciudadano();
                 if ($arrPost['seqTipoActo'] != 3) {
@@ -254,9 +269,11 @@ Class TipoActoAdministrativo {
                 switch ($arrPost['seqTipoActo']) {
                     case 2: // Resolucion de modificacion
                         $numRegistro = count($arrFormularios['datos'][$numDocumento]);
-                        $arrFormularios['datos'][$numDocumento][$numRegistro]['campo'] = $arrLinea[1];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['campo']      = $arrLinea[1];
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['incorrecto'] = $arrLinea[2];
-                        $arrFormularios['datos'][$numDocumento][$numRegistro]['correcto'] = $arrLinea[3];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['correcto']   = $arrLinea[3];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['resolucion'] = $arrLinea[4];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['fecha']      = $arrLinea[5];
                         break;
                     case 3: // Resolucion de inhabilitados
                         $seqFormulario = $numDocumento;
@@ -303,6 +320,25 @@ Class TipoActoAdministrativo {
 
                         break;
                     case 2: // Modificatoria
+
+                        $seqEtapa = array_shift(
+                            obtenerDatosTabla(
+                                "t_frm_estado_proceso",
+                                array("seqEstadoProceso","seqEtapa"),
+                                "seqEstadoProceso",
+                                "seqEstadoProceso = " . $objFormulario->seqEstadoProceso
+                            )
+                        );
+
+                        if($seqEtapa != 4 and $seqEtapa != 5){
+                            $txtEtapa = obtenerNombres("t_frm_etapa","seqEtapa",$seqEtapa);
+                            $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no puede ser modificado, el formulario se encuentra en etapa de " . $txtEtapa;
+                        }
+
+                        if ($objFormulario->bolCerrado == 0) {
+                            $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no puede ser modificado, el formulario se encuentra Abierto";
+                        }
+
                         if (isset($arrFormularios['datos'][$numDocumento])) {
                             foreach ($arrFormularios['datos'][$numDocumento] as $arrRegistro) {
                                 switch (strtolower($arrRegistro['campo'])) {
@@ -343,9 +379,50 @@ Class TipoActoAdministrativo {
                                         }
                                         break;
                                     case "unidad habitacional":
+                                        if (trim($arrRegistro['incorrecto']) == "") {
+                                            $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: No puede dejar este campo vacio";
+                                        }else{
+                                            $seqUnidadProyecto = array_shift(
+                                                obtenerDatosTabla(
+                                                    "T_PRY_UNIDAD_PROYECTO",
+                                                    array("txtNombreUnidad","seqUnidadProyecto"),
+                                                    "txtNombreUnidad",
+                                                    "txtNombreUnidad = '" . trim($arrRegistro['incorrecto']) ."'"
+                                                )
+                                            );
+                                            if( $seqUnidadProyecto != $objFormulario->seqUnidadProyecto ){
+                                                $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: " . trim($arrRegistro['incorrecto']) . " no es la unidad asociada actualmente";
+                                            }
+                                        }
                                         if (trim($arrRegistro['correcto']) == "") {
                                             $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: No puede dejar este campo vacio";
+                                        }else{
+                                            $seqUnidadProyecto = array_shift(
+                                                obtenerDatosTabla(
+                                                    "T_PRY_UNIDAD_PROYECTO",
+                                                    array("txtNombreUnidad","seqUnidadProyecto"),
+                                                    "txtNombreUnidad",
+                                                    "txtNombreUnidad = '" . trim($arrRegistro['correcto']) ."'"
+                                                )
+                                            );
+                                            $seqFormularioUnidad = array_shift(
+                                                obtenerDatosTabla(
+                                                    "T_PRY_UNIDAD_PROYECTO",
+                                                    array("seqUnidadProyecto","seqFormulario"),
+                                                    "seqUnidadProyecto",
+                                                    "seqUnidadProyecto = $seqUnidadProyecto"
+                                                )
+                                            );
+                                            if( intval($seqUnidadProyecto) == 0 ){
+                                                $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: No existe la unidad habitacional " . trim($arrRegistro['correcto']);
+                                            }else{
+                                                if( intval($seqFormularioUnidad) != 0 ){
+                                                    $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: La unidad habitacional " . trim($arrRegistro['correcto']) . " esta tomada por el hogar de " .  number_format(Ciudadano::documentoVinculado($seqFormularioUnidad),"0",".",",");
+                                                }
+                                            }
+
                                         }
+
                                         break;
                                     case "valor donacion":
                                         if (trim($arrRegistro['correcto']) == "") {
@@ -385,8 +462,20 @@ Class TipoActoAdministrativo {
                             }
                         }
 
-                        if ($objFormulario->bolCerrado == 0) {
-                            $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no puede ser asignado, el Formulario se encuentra Abierto ";
+                        $claActoModificado = new ActoAdministrativo();
+                        $arrActoModificado = $claActoModificado->cargarActoAdministrativo(intval($arrRegistro['resolucion']),$arrRegistro['fecha']);
+                        if( isset( $arrActoModificado[ intval($arrRegistro['resolucion']) . strtotime($arrRegistro['fecha']) ] ) ) {
+                            $objActoModificado = $arrActoModificado[intval($arrRegistro['resolucion']) . strtotime($arrRegistro['fecha'])];
+                            if( $objActoModificado->seqTipoActo == 1 ) {
+                                $objActoModificado->obtenerHogares($objFormulario->seqFormulario);
+                                if (empty($objActoModificado->arrHogares)) {
+                                    $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Resolución y Fecha (" . number_format($arrRegistro['resolucion']) . " del " . $arrRegistro['fecha'] . "): El hogar no esta vinculado a este acto administrativo";
+                                }
+                            }else{
+                                $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Resolución y Fecha (" . number_format($arrRegistro['resolucion']) . " del " . $arrRegistro['fecha'] . "): No es una acto adminsitrativo de asignación";
+                            }
+                        }else{
+                            $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Resolución y Fecha (" . number_format($arrRegistro['resolucion']) . " del " . $arrRegistro['fecha'] . "): No existe";
                         }
                         break;
                     case 3: // inhabilitados
@@ -1326,6 +1415,9 @@ Class ActoAdministrativo {
     public function salvarActo($arrActo, $arrArchivo) {
         global $aptBd;
 
+
+        /***************************************************************************************************************/
+
         $arrEstados = estadosProceso();
 
         // Salva el acto administrativo
@@ -1380,6 +1472,8 @@ Class ActoAdministrativo {
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['campo'] = $arrLinea[1];
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['incorrecto'] = $arrLinea[2];
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['correcto'] = $arrLinea[3];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['resolucion'] = $arrLinea[4];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['fecha'] = $arrLinea[5];
                         break;
                     case 3: // inhabilidades
                         $numDocumento = $arrLinea[1];
@@ -1412,7 +1506,6 @@ Class ActoAdministrativo {
             // INSERTA LA INFORMACION DEL ACTO ADMINISTRATIVO
             foreach ($arrFormularios['formularios'] as $numDocumento => $objFormulario) {
 
-
                 // Inserta la informacion del formulario y vinculacion de hogares
                 try {
 
@@ -1442,13 +1535,17 @@ Class ActoAdministrativo {
                     $txtValorSql = trim($txtValorSql, ",");
 
                     $sql = "INSERT INTO T_AAD_FORMULARIO_ACTO ( $txtCamposSql ) VALUES ( $txtValorSql )";
-                    //echo $sql;die();
+
                     $aptBd->execute($sql);
                     $seqFormularioActo = $aptBd->Insert_ID();
 
                     $numActoReferencia = 0;
                     $fchActoReferencia = "";
                     switch ($arrActo['seqTipoActo']) {
+                        case 2:
+                            $numActoReferencia = $arrFormularios['datos'][$numDocumento][0]['resolucion'];
+                            $fchActoReferencia = $arrFormularios['datos'][$numDocumento][0]['fecha'];
+                            break;
                         case 7:
                             $numActoReferencia = $arrFormularios['datos'][$numDocumento]['numero'];
                             $fchActoReferencia = $arrFormularios['datos'][$numDocumento]['fecha'];
@@ -1479,6 +1576,7 @@ Class ActoAdministrativo {
                          )
                       ";
                     $aptBd->execute($sql);
+
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se pudo copiar el formulario del documento " . number_format($numDocumento) . " al modulo de actos administrativos ";
                     $this->arrErrores[] = $objError->getMessage();
@@ -1546,6 +1644,9 @@ Class ActoAdministrativo {
                                   ";
                                     break;
                                 case 2: // modificatorias
+
+                                    //pr( $arrFormularios['datos'] );
+
                                     if (isset($arrFormularios['datos'][$objFormulario->seqFormulario][$objCiudadano->numDocumento])) {
                                         $txtValoresSql = "";
                                         foreach ($arrFormularios['datos'][$objFormulario->seqFormulario][$objCiudadano->numDocumento] as $arrRegistro) {
@@ -1565,24 +1666,25 @@ Class ActoAdministrativo {
                                            ),";
                                         }
                                         $txtValoresSql = trim($txtValoresSql, ",");
-                                        /* if (isset($arrFormularios['datos'][$objCiudadano->numDocumento])) {
-                                          foreach ($arrFormularios['datos'][$objCiudadano->numDocumento] as $arrRegtistro) {
-                                          $txtValoresSql .= "
-                                          (
-                                          $seqFormularioActo,
-                                          $seqCiduadanoActo,
-                                          " . $objCiudadano->seqParentesco . ",
-                                          '$txtInhabilidad',
-                                          '$txtCausa',
-                                          '$txtFuente',
-                                          '" . $arrRegtistro['campo'] . "',
-                                          '" . $arrRegtistro['incorrecto'] . "',
-                                          '" . $arrRegtistro['correcto'] . "',
-                                          '$txtEstadoReposicion',
-                                          $valIndexacion
-                                          )";
-                                          }
-                                          $txtValoresSql = trim($txtValoresSql, ","); */
+                                    }elseif( isset($arrFormularios['datos'][$objCiudadano->numDocumento]) ){
+                                        $txtValoresSql = "";
+                                        foreach ($arrFormularios['datos'][$objCiudadano->numDocumento] as $i => $arrRegistro) {
+                                            $txtValoresSql .= "
+                                           (
+                                              $seqFormularioActo,
+                                              $seqCiduadanoActo,
+                                              " . $objCiudadano->seqParentesco . ",
+                                              '$txtInhabilidad',
+                                              '$txtCausa',
+                                              '$txtFuente',
+                                              '" . $arrRegistro['campo'] . "',
+                                              '" . $arrRegistro['incorrecto'] . "',
+                                              '" . $arrRegistro['correcto'] . "',
+                                              '$txtEstadoReposicion',
+                                              $valIndexacion
+                                           ),";
+                                        }
+                                        $txtValoresSql = trim($txtValoresSql, ",");
                                     } else {
                                         $txtValoresSql = "
                                         (
@@ -1851,7 +1953,7 @@ Class ActoAdministrativo {
                                        txtIncorrecto,
                                        txtCorrecto,
                                        txtEstadoReposicion,
-                                       valInd exacion
+                                       valIndexacion
                                     ) VALUES 
                                        $txtValoresSql;
                                  ";
@@ -1859,6 +1961,7 @@ Class ActoAdministrativo {
                             $aptBd->execute($sql);
                         } catch (Exception $objError) {
                             $this->arrErrores[] = "No se pudo copiar el ciudadano del documento " . number_format($objCiudadano->numDocumento) . " al modulo de actos administrativos ";
+                            $this->arrErrores[] = $objError->getMessage();
                         }
                     }
                 }
@@ -2185,7 +2288,7 @@ Class ActoAdministrativo {
                                                         $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = " . $objFormulario->seqFormulario . " WHERE seqUnidadProyecto = " . $seqUnidadProyectoCorrecto . "";
                                                         $aptBd->execute($sql);
                                                         // Libera la unidad antigua
-                                                        $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = '' WHERE seqUnidadProyecto = " . $seqUnidadProyectoIncorrecto . "";
+                                                        $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = null WHERE seqUnidadProyecto = " . $seqUnidadProyectoIncorrecto . "";
                                                         $aptBd->execute($sql);
                                                     }
                                                 } else { // Cambia el proyecto o el conjunto residencial
@@ -2230,7 +2333,7 @@ Class ActoAdministrativo {
                                                             $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = " . $objFormulario->seqFormulario . " WHERE seqUnidadProyecto = " . $seqUnidadProyectoCorrecto . "";
                                                             $aptBd->execute($sql);
                                                             // Libera la unidad antigua
-                                                            $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = '' WHERE seqUnidadProyecto = " . $seqUnidadProyectoIncorrecto . "";
+                                                            $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = null WHERE seqUnidadProyecto = " . $seqUnidadProyectoIncorrecto . "";
                                                             $aptBd->execute($sql);
                                                             // Cambia la matricula inmobiliaria, chip y direccion del proyecto
                                                             $sql = "UPDATE T_FRM_FORMULARIO 
@@ -2270,7 +2373,7 @@ Class ActoAdministrativo {
                                                             $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = " . $objFormulario->seqFormulario . " WHERE seqUnidadProyecto = " . $seqUnidadProyectoCorrecto . "";
                                                             $aptBd->execute($sql);
                                                             // Libera la unidad antigua
-                                                            $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = '' WHERE seqUnidadProyecto = " . $seqUnidadProyectoIncorrecto . "";
+                                                            $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = null WHERE seqUnidadProyecto = " . $seqUnidadProyectoIncorrecto . "";
                                                             $aptBd->execute($sql);
                                                             // Cambia al nuevo conjunto residencial del formulario
                                                             if ($idProyectoNuevo == 31 || $idProyectoNuevo == 33 || $idProyectoNuevo == 34 || $idProyectoNuevo == 111 || $idProyectoNuevo == 112) {

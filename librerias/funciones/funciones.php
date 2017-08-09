@@ -819,6 +819,7 @@ function valorSubsidio($claFormulario){
                 $valSubsidio = intval(($arrValor[0]['valMaximoSubsidio'] / $arrValor[0]['valNumeroSoluciones']));
             }
         }
+        $valSubsidio = ( doubleval( $valSubsidio ) == 0 )? $claFormulario->valAspiraSubsidio : $valSubsidio;
     }elseif( $claFormulario->seqPlanGobierno == 3 ){
         $valSubsidioNAL = intval($claFormulario->valSubsidioNacional) / $arrConfiguracion['constantes']['salarioMinimo'];
         $valVUR         = intval($claFormulario->valDonacion)         / $arrConfiguracion['constantes']['salarioMinimo'];

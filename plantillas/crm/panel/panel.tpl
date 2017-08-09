@@ -23,19 +23,19 @@
                     <th>Vinculadas</th>
                     <th>Total Legalizadas</th>
                     <th>Proceso Legalización</th>
-                    <th>Devolución Espedientes</th>
+                    <th>Devolución Expedientes</th>
                     <th>Pendientes Por legalizar</th>
                 </tr>
                 <tr >
                     <th><h6 style="font-weight: bolder;text-align: center">Total Proyectos</h6></th>
                     <td><h4 style="font-weight: bolder">{$totalUnidades}</h4></td>
-                    <td><h4 style="font-weight: bolder">{$totalPorVincular}</h4></td>
+                    <td><h4 style="font-weight: bolder">{$totalUnidades-$totalPostuladas-$totalVinculadas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalPostuladas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalVinculadas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalLegalizadas}</h4></td>
-                    <td><h4 style="font-weight: bolder">{$totalPorLegalizar}</h4></td>
+                    <td><h4 style="font-weight: bolder">{$totalProcesoLeg}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalDevExpedientes}</h4></td>
-                    <td><h4 style="font-weight: bolder">{$totalPorLegalizar-$totalDevExpedientes}</h4></td>
+                    <td><h4 style="font-weight: bolder">{$totalVinculadas-$totalLegalizadas-$totalProcesoLeg}</h4></td>
                 </tr>
             </table>
         </p>
@@ -70,7 +70,7 @@
                             <td align="center" style="cursor:pointer; cursor: hand"><div class="verde" onclick="exportarExcel({$seqEstado}, '', 1)">{$datos.$txtEstadoV}</div></td>
                             <td align="center" style="cursor:pointer; cursor: hand"><div class="amarillo" onclick="exportarExcel({$seqEstado}, '', 2)">{$datos.$txtEstadoA}</div></td>
                             <td align="center" style="cursor:pointer; cursor: hand"><div class="rojo"  onclick="exportarExcel({$seqEstado}, '', 3)">{$datos.$txtEstadoR}</div></td>
-                            <td align="center"><h4 style="font-weight: bolder;">{$datos.$txtEstadoV+$datos.$txtEstadoA+$datos.$txtEstadoR}</h4></td>
+                            <td align="center"><h4 style="font-weight: bolder;">{$datos.$txtEstadoVal}</h4></td>
                         </tr>
                     {/foreach}   
                 </table>
@@ -120,7 +120,7 @@
                                         <td align="center" style="cursor:pointer; cursor: hand"><div class="verde" onclick="exportarExcel({$seqEstado}, {$dato.seqProyecto}, 1)">{$dato.$txtEstadoV}</div></td>
                                         <td align="center" style="cursor:pointer; cursor: hand"><div class="amarillo" onclick="exportarExcel({$seqEstado}, {$dato.seqProyecto}, 2)">{$dato.$txtEstadoA}</div></td>
                                         <td align="center" style="cursor:pointer; cursor: hand"><div class="rojo"  onclick="exportarExcel({$seqEstado}, {$dato.seqProyecto}, 3)">{$dato.$txtEstadoR}</div></td>
-                                        <td align="center"><h4 style="font-weight: bolder">{$dato.$txtEstadoV+$dato.$txtEstadoA+$dato.$txtEstadoR}</h4></td> 
+                                        <td align="center"><h4 style="font-weight: bolder">{$dato.$txtEstadoVal}</h4></td> 
                                         {/foreach} 
                                 </tr>
                                 <tr>
@@ -137,9 +137,12 @@
                                         <th>Postulación</th>
                                         <th>Vinculadas</th>
                                         <th>Legalizadas</th>
-                                        <th>Total</th>
+                                        <th>Proceso <br> Legalización</th>
+                                        <th>Devolución</th>
+                                        <th>Pendientes Por <br>Legalizar </th>
                                     </tr>
                                     <tr style="text-align: center;">
+                                        {assign var="pendLegXProy" value=0}
                                         <td>                                           
                                             {foreach name=outer1 item=contact1 from=$totalUnidadesXProy}
                                                 {if $dato.seqProyecto == $contact1.seqProyecto}   
@@ -170,6 +173,7 @@
                                                 {if $dato.seqProyecto == $contact2.seqProyecto}   
                                                     {foreach key=key2 item=item2 from=$contact2}
                                                         {if $key2 == 'cant'}  
+                                                            
                                                             {$item2} <br>
                                                         {/if}
                                                     {/foreach}
@@ -181,7 +185,8 @@
                                             {foreach name=outer3 item=contact3 from=$totalVinculadasXProy}
                                                 {if $dato.seqProyecto == $contact3.seqProyecto}   
                                                     {foreach key=key3 item=item3 from=$contact3}
-                                                        {if $key3 == 'cant'}  
+                                                        {if $key3 == 'cant'}
+                                                            {assign var="pendLegXProy" value=$pendLegXProy+$item3}
                                                             {$item3} <br>
                                                         {/if}
                                                     {/foreach}
@@ -194,6 +199,7 @@
                                                 {if $dato.seqProyecto == $contact4.seqProyecto}   
                                                     {foreach key=key4 item=item4 from=$contact4}
                                                         {if $key4 == 'cant'}  
+                                                            {assign var="pendLegXProy" value=$pendLegXProy-$item4}
                                                             {$item4} <br>
                                                         {/if}
                                                     {/foreach}
@@ -202,6 +208,20 @@
                                             &nbsp;
                                         </td>
                                         <td>{$totalVal}</td>
+                                          <td>
+                                            {foreach name=outer5 item=contact5 from=$totalDevExpedientesXProy}
+                                                {if $dato.seqProyecto == $contact5.seqProyecto}   
+                                                    {foreach key=key5 item=item5 from=$contact5}
+                                                        {if $key5 == 'cant'}  
+                                                            {assign var="pendLegXProy" value=$pendLegXProy-$item5}
+                                                            {$item5} <br>
+                                                        {/if}
+                                                    {/foreach}
+                                                {/if}
+                                            {/foreach}
+                                            &nbsp;
+                                        </td>
+                                        <td>{$pendLegXProy}</td>
                                     </tr>
                                 </table>
                             </div>

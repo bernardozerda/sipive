@@ -37,7 +37,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                     $lineas = file($nombreArchivo);
                     $registros = 0;
 
-                   global $db;
+                    global $db;
                     // Recorre las líneas del archivo
                     $error = "";
                     $queryUpdate = array();
@@ -124,12 +124,13 @@ include '../../../recursos/archivos/verificarSesion.php';
                     } // FIN RECORRE LINEAS
                     // EJECUTA LOS INSERTS Y UPDATES
                     if ($error == "") { // Si no hay errores se ejecutan los queries
-                        // INSERTS                        
+                        // INSERTS      
+                         global $db;
                         $separado_por_comas = implode(",", $arrFormularioArchivo);
-                        $validar = validarDocumentos($separado_por_comas, $db, 19, 17, "Remisión Datos Solución");
+                        $validar = validarDocumentos($separado_por_comas, $db, 27, 17, "Remisión Datos Solución");
                         if ($queryInsert != '' && $validar) {
                             $segmentoInsert = "INSERT INTO T_DES_DESEMBOLSO (seqFormulario, txtNombreVendedor, numDocumentoVendedor, txtBarrio, seqLocalidad, txtEscritura, numNotaria, fchEscritura, txtMatriculaInmobiliaria, bolViabilizoJuridico, bolviabilizoTecnico, txtChip, seqTipoDocumento, txtCompraVivienda, txtTipoPredio, numTelefonoVendedor, txtCedulaCatastral, txtTipoDocumentos, numEstrato, txtCiudad, fchCreacionBusquedaOferta, fchActualizacionBusquedaOferta, txtPropiedad, txtCorreoVendedor, seqCiudad, seqAplicacionSubsidio, seqProyectosSoluciones, txtDireccionInmueble) VALUES ";
-                            $queryInsert = $segmentoInsert . substr($queryInsert, 0, -2) . ";";
+                          $queryInsert = $segmentoInsert . substr($queryInsert, 0, -2) . ";";
                             $db->query($queryInsert);
                         }
                         // UPDATES
@@ -137,8 +138,9 @@ include '../../../recursos/archivos/verificarSesion.php';
                             $db->query($consultaUpdate);
                         }
 
-                        migrarInformacion($separado_por_comas, $db, 19, 17);
-
+                        //Se cambio de estado  19 a 27 por sol ING 31-07-2017
+                        migrarInformacion($separado_por_comas, $db, 27, 17);
+                        //migrarInformacion($separado_por_comas, $db, 19, 17);
                         //echo "<br><p class='alert alert-success'>Se migraron $registros registros a informaci&oacute;n de la soluci&oacute;n.</p>";
                     } else { // Si hay errores los muestra y no ejecuta nada
                         echo "<p class='alert alert-danger'>$error</p>";

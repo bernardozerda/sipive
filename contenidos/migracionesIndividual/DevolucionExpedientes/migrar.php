@@ -32,10 +32,10 @@ include '../../../recursos/archivos/verificarSesion.php';
                     foreach ($lineas as $linea_num => $linea) {
                         $linea = str_replace("\n", "", $linea);
                         $linea = str_replace("\r", "", $linea);
-                        $linea = str_replace("\t", " ", $linea);
+                        //$linea = str_replace("\t", " ", $linea);
 
                         if (!empty($linea)) {
-                            $arrayLineas = explode(" ", $linea);
+                            $arrayLineas = explode("\t", $linea);
                             if ($linea_num == 0 && $arrayLineas[0] != 'Documento' && $arrayLineas[1] != 'Comentario') {
                                 exit("Verifique los titulos del Archivo de texto debe se documento y  comentario");
                             } else if ($linea_num != 0 && !empty($arrayLineas[0])) {
@@ -44,13 +44,13 @@ include '../../../recursos/archivos/verificarSesion.php';
                             }
                         }
                     }
-                    
+
                     $separado_por_comas = substr_replace($separado_por_comas, '', -1, 1);
                 } else {
                     exit('debe seleccionar un archivo. <img border="0" src="../lib/back.png" width="30" height="30" style="cursor: pointer" onClick="history.back()">Volver');
                 }
                 $validar = validarDocumentos($separado_por_comas, $db, $arrDocumentosArchivo);
-                
+
                 if ($validar) {
                     migrarInformacion($separado_por_comas, $db, $fecha, $numRadicado, $arrDocumentosArchivo);
                 }
@@ -82,10 +82,10 @@ include '../../../recursos/archivos/verificarSesion.php';
                         }
                     } else if ($band) {
                         //Está consulta válida que los números no tengán un estado diferente a asignación-asignado
-                         $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
+                        $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
                             INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
-                            WHERE seqEstadoProceso NOT IN(62,23,28)
+                            WHERE seqEstadoProceso NOT IN(62,23,28,15)
                             and numDocumento IN(" . $separado_por_comas . ")";
                         $resultados = $db->get_results($sql);
                         $rows = count($resultados);
@@ -143,14 +143,14 @@ include '../../../recursos/archivos/verificarSesion.php';
                         INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
                         INNER JOIN t_pry_proyecto pro USING(seqProyecto)
                         INNER JOIN t_pry_unidad_proyecto und using(seqFormulario)
-                        WHERE seqEstadoProceso IN(62,23,28) AND seqParentesco = 1
+                        WHERE seqEstadoProceso IN(62,23,28,15) AND seqParentesco = 1
                         AND numDocumento IN(" . $separado_por_comas . ")";
                     $resultados = $db->get_results($sql);
                     $rows = count($resultados);
                     $documentos = "";
                     $cont = 0;
                     if ($rows > 0) {
-                        //$update = "UPDATE t_frm_formulario SET seqEstadoProceso = CASE seqFormulario";
+                        $update = "UPDATE t_frm_formulario SET seqEstadoProceso = CASE seqFormulario";
                         $updateProy = "UPDATE t_pry_unidad_proyecto SET fchDevolucionExpediente = CASE seqFormulario";
                         $seguimiento = "INSERT INTO T_SEG_SEGUIMIENTO ( 
 				seqFormulario, 
@@ -164,17 +164,17 @@ include '../../../recursos/archivos/verificarSesion.php';
                         $seqFormularios = "";
 
                         foreach ($resultados as $value) {
-                            // $update .= " WHEN " . $value->seqFormulario . " THEN 62";
+                            $update .= " WHEN " . $value->seqFormulario . " THEN 15";
                             $updateProy .= " WHEN " . $value->seqFormulario . " THEN NOW()";
                             foreach ($arrDocumentosArchivo as $keyDoc => $valueDoc) {
                                 //echo "<br>".$valueDoc;
-                                $arrDoc = explode(" ", $valueDoc);
+                                $arrDoc = explode("\t", $valueDoc);
                                 if ($arrDoc[0] == $value->numDocumento) {
-                                   $seguimiento .= "(
+                                    $seguimiento .= "(
 				" . $value->seqFormulario . ",
 				now(),
 				" . $_SESSION['seqUsuario'] . ",
-				 '".$arrDoc[1]."',
+				 '" . $arrDoc[1] . "',
 				" . $value->numDocumento . ",				
 				72,
                                  1
@@ -192,14 +192,14 @@ include '../../../recursos/archivos/verificarSesion.php';
                             $seguimiento = substr_replace($seguimiento, ';', -1, 1);
                         }
 
-                        //$update .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
+                        $update .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
                         $updateProy .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
-//                        if ($db->query($update)) {
-//                            echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos"
-//                            . $documentos . "</p>";
-//                        } else {
-//                            echo "<p class='alert alert-danger'>Hubo un error almodificar los estados de los documentos. Por favor consulte al administrador</p>";
-//                        }
+                        if ($db->query($update)) {
+                            echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos"
+                            . $documentos . "</p>";
+                        } else {
+                            echo "<p class='alert alert-danger'>Hubo un error almodificar los estados de los documentos. Por favor consulte al administrador</p>";
+                        }
                         $updateProy;
                         if (!empty($updateProy)) {
                             if ($db->query($updateProy)) {
@@ -209,11 +209,11 @@ include '../../../recursos/archivos/verificarSesion.php';
                                 echo "<p class='alert alert-danger'>Hubo un error al modificar la fecha de la Radicaci&oacute;n. Por favor consulte al administrador</p>";
                             }
                         }
-                        // echo "<br> seguimiento ->" . $seguimiento;
+                        //echo "<br> seguimiento ->" . $seguimiento;
                         $db->query($seguimiento);
-                    }else{
-                       echo  $msg = "<p class='alert alert-danger'>No exixte unidades vinculadas</p>";
-                       die();
+                    } else {
+                        echo $msg = "<p class='alert alert-danger'>No exixte unidades vinculadas</p>";
+                        die();
                     }
                 }
                 ?>

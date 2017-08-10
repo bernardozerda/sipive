@@ -4696,8 +4696,8 @@ function plantillaProyectoUnidadHabitacional( ) {
     var objPopUp = new YAHOO.widget.Panel(
             "pop",
             {
-                height: "450px",
-                width: "650px",
+                height: "500px",
+                width: "900px",
                 fixedcenter: true,
                 close: true,
                 draggable: true,
@@ -10302,10 +10302,11 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         objDialogo1.show();
     }
 
-
-
-
 }
 
+function tablaPlantillaProyectoUnidadHabitacional( idMostrar, idOcultar ){
+        mostrarOcultar(idMostrar);
+        document.getElementById(idOcultar).style.display = 'none';
+}
 
 

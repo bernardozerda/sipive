@@ -212,6 +212,12 @@ foreach ($arrGruposPertenece as $seqGrupo) {
         case 34: // Cruce Información Cvp
             $arrExportables["reporteInformacionCvp"] = 1;
             break;
+        case 37: // Carga Encuestas
+            $arrExportables["encuestasPive"] = 1;
+            break;
+        case 38: // Consulta encuestas
+            $arrExportables["encuestasPive"] = 1;
+            break;
     }
 }
 

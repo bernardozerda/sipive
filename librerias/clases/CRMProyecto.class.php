@@ -115,7 +115,7 @@ class CRMProyecto {
             $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_pry_proyecto pry USING(seqProyecto) 
                     WHERE und.bolActivo =1 and seqProyecto >0 and pry.seqTipoEsquema in(1,2)";
-                            } else if ($valor == 2) {
+        } else if ($valor == 2) {
             $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
                     WHERE frm.bolCerrado =0  OR (und.seqFormulario is null OR und.seqFormulario =0) and bolActivo =1 and und.seqProyecto >0";
@@ -123,7 +123,7 @@ class CRMProyecto {
             $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
                     WHERE frm.bolCerrado =1  and und.seqFormulario is not null
-                    and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16) and bolActivo =1 and und.seqProyecto >0";
+                    and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16 OR seqEstadoProceso = 47 ) and bolActivo =1 and und.seqProyecto >0";
         } else if ($valor == 4) {
             $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
@@ -154,12 +154,12 @@ class CRMProyecto {
         } else if ($valor == 2) {
             $sql = "SELECT count(*) as cant, und.seqProyecto FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
-                    WHERE frm.bolCerrado =0  OR und.seqFormulario is null and bolActivo =1";
+                    WHERE frm.bolCerrado =0  OR (und.seqFormulario IS NULL OR  und.seqFormulario = 0) and bolActivo =1";
         } else if ($valor == 3) {
             $sql = "SELECT count(*) as cant, und.seqProyecto FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
                     WHERE frm.bolCerrado =1  and und.seqFormulario is not null
-                    and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16) and bolActivo =1";
+                    and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16 OR seqEstadoProceso = 47) and bolActivo =1";
         } else if ($valor == 4) {
             $sql = "SELECT count(*) as cant, und.seqProyecto FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
@@ -183,19 +183,22 @@ class CRMProyecto {
             $sql = "SELECT count(*) as cant FROM t_pry_unidad_proyecto    und
                     INNER JOIN t_frm_formulario frm USING (seqFormulario)
                      WHERE fchDevolucionExpediente is not null and fchDevolucionExpediente != '0000-00-00 00:00:00' AND fchDevolucionExpediente != '' AND bolCerrado = 1 ";
+        } else if ($valor == 8) {
+            $sql = "SELECT count(*) as cant, und.seqProyecto FROM t_pry_unidad_proyecto und
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)
+                     WHERE fchDevolucionExpediente is not null and fchDevolucionExpediente != '0000-00-00 00:00:00' AND fchDevolucionExpediente != '' AND bolCerrado = 1 ";
         }
         $sql .= " and und.seqProyecto >0";
         if ($valor != 7 && $valor != 6) {
             $sql .= " GROUP BY und.seqProyecto";
         }
-        
- 
+
 
         //$rs = $aptBd->getAssoc($sql);
         $objRes = $aptBd->execute($sql);
         $datos = Array();
-     
-                $int = 0;
+
+        $int = 0;
         while ($objRes->fields) {
             $datos[$int] = $objRes->fields;
             $int++;

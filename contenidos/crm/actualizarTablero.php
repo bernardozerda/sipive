@@ -2,7 +2,7 @@
 
 @set_time_limit(300);
 
-chdir(getcwd());
+chdir(dirname(__DIR__) . "/crm/");
 include( "../../recursos/archivos/lecturaConfiguracion.php" );
 
 function conecta() {
@@ -14,6 +14,8 @@ function conecta() {
 }
 
 actualizarTablero();
+
+echo "Se ejecuto con Exito!!!";
 
 //modificarDatosTablero();
 
@@ -289,7 +291,7 @@ function modificarDatosTablero() {
 //                       }
 
                         mysql_query($sql, $conexion) or die(mysql_error());
-                        echo "Se ejecuto con Exito!!!"; 
+
                     }
 
                     //echo "<br>" . $sql;

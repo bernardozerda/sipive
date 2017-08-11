@@ -390,7 +390,7 @@ class Ciudadano {
             if ($objRes->fields) {
                 $seqFormulario = $objRes->fields['seqFormulario'];
             }else{
-                $this->arrErrores[] = "El numero de cedula $numCedula no se encuentra relacionado con ningpun formulario";
+                $this->arrErrores[] = "El numero de cedula $numCedula no se encuentra relacionado con ningún formulario";
             }
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo consultar la información del ciudadano $numCedula";

@@ -364,16 +364,16 @@
 						<td colspan="2">
 						<br/><br/>
 						{if $arrSolicitud.txtSubdireccion|trim != ""}
-								{$arrSolicitud.txtSubdireccion}<br>								
-								Subdirector de Recursos Públicos {if $arrSolicitud.bolSubdireccionEncargado == 1} (E) {/if}
+								{$arrSolicitud.txtSubdireccion|mb_strtolower|mb_strtoupper}<br>
+								SUBDIRECTOR DE RECURSOS PÚBLICOS {if $arrSolicitud.bolSubdireccionEncargado == 1} (E) {/if}
 								
 								{/if}
 							<br><br>
 							<span style="{$txtFuente10}">
-								Elaboró: {$txtUsuarioSesion} - Subdirección de Recursos Públicos<br>
+								ELABORÓ: {$txtUsuarioSesion|mb_strtolower|mb_strtoupper} - SUBDIRECCIÓN DE RECURSOS PÚBLICOS<br>
 							</span>
 							<span style="{$txtFuente10}">
-								Revisó: {$arrSolicitud.txtRevisoSubsecretaria} - Subdirección de Recursos Públicos 
+								REVISÓ: {$arrSolicitud.txtRevisoSubsecretaria|mb_strtolower|mb_strtoupper}
 							</span>
 						</td>
 					{if $arrSolicitud.txtSubdireccion|trim == ""}
@@ -383,8 +383,8 @@
 						<td valign="top">
 						<br/><br/>
 						{if $arrSolicitud.txtSubsecretaria != ""}
-								{$arrSolicitud.txtSubsecretaria}<br>
-								Subsecretario de Gestión Financiera {if $arrSolicitud.bolSubsecretariaEncargado == 1} (E) {/if}
+								{$arrSolicitud.txtSubsecretaria|mb_strtolower|mb_strtoupper}<br>
+								SUBSECRETARIO DE GESTIÓN FINANCIERA {if $arrSolicitud.bolSubsecretariaEncargado == 1} (E) {/if}
 							{/if}
 						</td>
 						

@@ -776,6 +776,54 @@ class Encuestas {
                     if (isset($arrCiudadano[62])) {
                         $arrVariables['variables']['aprobadosJefe'] = $arrCiudadano[125];
                     }
+
+
+                    // afilacion salud o no afiliado
+                    if( intval( $arrCiudadano[155] ) != 0 or intval( $arrCiudadano[156] ) != 0 ){
+                        $arrVariables['variables']['afiliacion']++;
+                    }
+
+                    // sumando ingresos del hogar
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[252] );
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[253] );
+                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[254] );
+
+                    // cantHijos
+                    if( intval( $arrCiudadano[64] ) != 0 ){
+                        $arrVariables['variables']['cantHijos']++;
+                    }
+
+                    // conyugueHogar
+                    if( intval( $arrCiudadano[63] ) != 0 ){
+                        $arrVariables['variables']['conyugueHogar']++;
+                    }
+
+                    // condiciones especiales
+                    if( intval( $arrCiudadano[161] ) != 0 ) {
+                        $arrVariables['variables']['cantCondEspecial']++;
+                    }
+
+                    // condicion etnica
+                    if(
+                        intval( $arrCiudadano[82] ) != 0 or
+                        intval( $arrCiudadano[83] ) != 0 or
+                        intval( $arrCiudadano[84] ) != 0 or
+                        intval( $arrCiudadano[85] ) != 0 or
+                        intval( $arrCiudadano[86] )
+                    ){
+                        $arrVariables['variables']['condicionEtnica']++;
+                    }
+
+                    // grupo lgtbi
+                    if(
+                        intval( $arrCiudadano[74] ) != 0 or
+                        intval( $arrCiudadano[75] ) != 0 or
+                        intval( $arrCiudadano[76] ) != 0 or
+                        intval( $arrCiudadano[80] ) != 0
+                    ){
+                        $arrVariables['variables']['grupoLgtbi']++;
+                    }
+
                 } else {
                     $arrVariables['errores'][] = "No se ha encontrado respuesta para la pregunta de AÑOS APROBADOS para el ciudadano $numCedula";
                 }

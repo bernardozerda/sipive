@@ -14,7 +14,7 @@
                     </td>
                 </tr>
             </table> 
-            <div id="destino">
+            <div id="destino" style="width: 95%; overflow: auto;">
             </div>
         </div>                                     
         <a class="popup-cerrar" href="#">X</a>

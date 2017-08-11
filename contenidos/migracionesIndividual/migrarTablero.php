@@ -21,7 +21,7 @@ function validarDocumentos($separado_por_comas, $db, $code, $estadoV, $estadoT) 
     $msg = "";
     // Está consulta válida que los números de los documentos pertenezcan al postulante principal
     //Está consulta válida que los números no tengán un estado diferente al estado proceso
-     $sql = "SELECT seqFormulario FROM t_frm_formulario frm                            
+    $sql = "SELECT seqFormulario FROM t_frm_formulario frm                            
                             WHERE seqEstadoProceso NOT IN(" . $estadoV . ")
                             and frm.seqFormulario IN(" . $separado_por_comas . ")";
     $resultados = $db->get_results($sql);
@@ -94,17 +94,6 @@ function validarDocumentos2($separado_por_comas, $db, $code, $estadoV, $estadoT)
     return $band;
 }
 
-/* SELECT seqFormulario, seqEstadoProceso FROM `t_frm_formulario` WHERE seqFormulario in(19500,
-  19505,
-  19539,
-  19507,
-  19520,
-  19525,
-  19545,
-  19534)
- * 
- */
-
 function migrarInformacion($separado_por_comas, $db, $code, $estadoV) {
     global $db;
     if (empty($_SESSION['seqUsuario'])) {
@@ -113,8 +102,7 @@ function migrarInformacion($separado_por_comas, $db, $code, $estadoV) {
 
     $datos = datosEstado($separado_por_comas, $db, $code, $estadoV);
     $sql = $datos[0];
-    // $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-    //echo $sql."<br>";
+
     $resultados = $db->get_results($sql);
     $rows = count($resultados);
     $documentos = "";
@@ -162,33 +150,22 @@ function migrarInformacion($separado_por_comas, $db, $code, $estadoV) {
         if ($db->query($update)) {
             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos"
             . $documentos . "</p>";
+            echo "<br>prueba";
         }
-//        else {
-//            echo "<p class='alert alert-danger'>Hubo un error almodificar los estados de los documentos. Por favor consulte al administrador</p>";
-//        }
-        //echo "<br>***".$updateProy."****<br>";
         if ($db->query($updateProy)) {
             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de la fecha  de radicaci&oacute;n de los siguientes documentos"
             . $documentos . "</p>";
         }
-//        else {
-//            echo "<p class='alert alert-danger'>Hubo un error al modificar la fecha de la Radicaci&oacute;n. Por favor consulte al administrador</p>";
-//        }
-        //echo "<br> seguimiento ->" . $seguimiento;
-
         if ($db->query($seguimiento)) {
             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la inserci&oacute;n de seguimiento de los siguientes documentos";
         }
-//        else {
-//            echo "<p class='alert alert-danger'>Hubo un error al insertar el seguimiento. Por favor consulte al administrador</p>";
-//        }
     }
 }
 
 function datosEstado($separado_por_comas, $db, $code, $estadoV) {
     global $db;
     $datos = Array();
-    if ($code == 19) {
+    if ($code == 27) {
         $datos[0] = "SELECT seqFormulario as dato, numDocumento, 
                     CONCAT(txtNombre1, ' ', txtNombre2, ' ', txtApellido1, ' ', txtApellido2) AS nombre
                             FROM t_frm_formulario frm
@@ -212,7 +189,7 @@ function datosEstado($separado_por_comas, $db, $code, $estadoV) {
 
         $datos[1] = "UPDATE t_des_escrituracion SET fchCreacionEscrituracion = CASE seqFormulario";
         $datos[2] = 63;
-        //$datos[3] = "CARGUE INFORMACION SOLUCION";
+        $datos[3] = "CARGUE DATOS ESCRITURACIÓN";
     }
     if ($code == 25) {
         $datos[0] = "SELECT seqFormulario as dato, numDocumento, 
@@ -239,7 +216,7 @@ function datosEstado($separado_por_comas, $db, $code, $estadoV) {
         $datos[1] = "UPDATE t_des_tecnico  tec INNER JOIN t_des_desembolso des USING (seqDesembolso)
                      inner join t_des_estudio_titulos tit using(seqDesembolso) SET tit.fchCreacion = CASE seqFormulario";
         $datos[2] = 16;
-        $datos[3] = "CARGUE MASIVO ESTUDO DE TITULOS";
+        $datos[3] = "CARGUE MASIVO ESTUDIO DE TITULOS";
     }
 
     if ($code == 40) {
@@ -261,7 +238,10 @@ function datosEstado($separado_por_comas, $db, $code, $estadoV) {
 }
 
 function migrarInformacion2($separado_por_comas, $db, $code, $estadoV) {
+
     global $db;
+    $band = false;
+
     $datos = datosEstado($separado_por_comas, $db, $code, $estadoV);
     $sql = $datos[0];
     $resultados = $db->get_results($sql);
@@ -271,6 +251,17 @@ function migrarInformacion2($separado_por_comas, $db, $code, $estadoV) {
     if ($rows > 0) {
         $update = "UPDATE t_frm_formulario SET seqEstadoProceso = CASE seqFormulario";
         $updateProy = $datos[1];
+        $seguimiento = "INSERT INTO T_SEG_SEGUIMIENTO ( 
+				seqFormulario, 
+				fchMovimiento, 
+				seqUsuario, 
+				txtComentario,				
+				numDocumento,
+                                txtNombre,
+				seqGestion,
+                                bolMostrar
+			 ) VALUES";
+        $seqFormularios = "";
 
         $seqFormularios = "";
 
@@ -278,6 +269,16 @@ function migrarInformacion2($separado_por_comas, $db, $code, $estadoV) {
             $update .= " WHEN " . $value->dato . " THEN " . $code . "";
             $updateProy .= " WHEN " . $value->dato . " THEN NOW()";
             $seqFormularios .= $value->dato . ", ";
+            $seguimiento .= "(
+				" . $value->dato . ",
+				now(),
+				" . $_SESSION['seqUsuario'] . ",
+				\"" . $datos[3] . "\",
+				" . $value->numDocumento . ",
+                                    '" . $value->nombre . "',
+				" . $datos[2] . ",
+                                 1
+			 ),";
             $documentos .= $value->numDocumento . ",";
             $cont++;
         }
@@ -286,33 +287,31 @@ function migrarInformacion2($separado_por_comas, $db, $code, $estadoV) {
 
         if (!empty($seguimiento)) {
             $seguimiento = substr_replace($seguimiento, ';', -1, 1);
+            $band = true;
         }
 
         $update .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
         $updateProy .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
-        // echo $update;                        die();
-        if ($db->query($update)) {
-            echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos"
-            . $documentos . "</p>";
+        try {
+            if ($db->query($update) !== false) {
+                echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos: "
+                . $documentos . "</p>";
+                $band = true;
+            }
+            if ($db->query($updateProy) !== false) {
+                echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de la fecha  de radicaci&oacute;n de los siguientes documentos: "
+                . $documentos . "</p>";
+                $band = true;
+            }
+            if ($db->query($seguimiento) !== false) {
+                $band = true;
+                echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la inserci&oacute;n de seguimiento de los siguientes documentos: : "
+                . $documentos . "</p>";
+            }
+        } catch (Exception $ex) {
+            echo "<p>" . $ex->getMessage() . "<p>";
         }
-//        else {
-//            echo "<p class='alert alert-danger'>Hubo un error almodificar los estados de los documentos. Por favor consulte al administrador</p>";
-//        }
-        //echo "<br>***".$updateProy."****<br>";
-        if ($db->query($updateProy)) {
-            echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de la fecha  de radicaci&oacute;n de los siguientes documentos"
-            . $documentos . "</p>";
-        }
-//        else {
-//            echo "<p class='alert alert-danger'>Hubo un error al modificar la fecha de la Radicaci&oacute;n. Por favor consulte al administrador</p>";
-//        }
-        // echo "<br> seguimiento ->" . $seguimiento;
-
-        if ($db->query($seguimiento)) {
-            echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la inserci&oacute;n de seguimiento de los siguientes documentos";
-        }
-//        else {
-//            echo "<p class='alert alert-danger'>Hubo un error al insertar el seguimiento. Por favor consulte al administrador</p>";
-//        }
     }
+
+    return $band;
 }

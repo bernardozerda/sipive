@@ -209,7 +209,8 @@ class calificacion {
                    AS nombre,
                 group_concat(
                    concat(
-                      '',
+                   numDocumento,
+                      ' - ',
                       ucwords(txtNombre1),
                       ' ',
                       txtNombre2,
@@ -771,9 +772,12 @@ group by seqFormulario";
     public function datosUltimaCalificacion($formularios) {
         global $aptBd;
 
-        $sql = "SELECT max(fchCalificacion), t_frm_calificacion_plan3.*, sum(total) as total, t_frm_calificacion_operaciones.* FROM t_frm_calificacion_plan3
+        $ultimaCalificacion = "SELECT distinct(max(fchCalificacion))as fecha FROM t_frm_calificacion_plan3 left join t_frm_calificacion_operaciones using(seqCalificacion) where seqFormulario in (" . $formularios . ")";
+        $objUltCal = $aptBd->execute($ultimaCalificacion);
+        $fecha = $objUltCal->fields['fecha'];
+        $sql = "SELECT  t_frm_calificacion_plan3.*, sum(total) as total, t_frm_calificacion_operaciones.* FROM t_frm_calificacion_plan3
 left join t_frm_calificacion_operaciones using(seqCalificacion)
-where seqFormulario in (" . $formularios . ")
+where seqFormulario in (" . $formularios . ") and fchCalificacion like '" . $fecha . "'
 group by seqIndicador;";
 
         try {
@@ -811,10 +815,10 @@ group by seqIndicador;";
     function obtenerFormulario($documento) {
         global $aptBd;
         $documento = str_replace('.', '', $documento);
-        $sql = "SELECT DISTINCT(seqFormulario) from T_FRM_FORMULARIO"
+        $sql = "SELECT DISTINCT(seqFormulario), numDocumento from T_FRM_FORMULARIO"
                 . " INNER JOIN T_FRM_HOGAR USING(seqFormulario)"
                 . " INNER JOIN T_CIU_CIUDADANO USING(seqCiudadano)"
-                . " WHERE numDocumento = " . $documento . " Group by seqFormulario";
+                . " WHERE numDocumento in (" . $documento . ") Group by seqFormulario";
 
         try {
             $objRes = $aptBd->execute($sql);
@@ -832,11 +836,13 @@ group by seqIndicador;";
 
     public function datosSumaTotalCalificacion($formularios) {
         global $aptBd;
-
+        $ultimaCalificacion = "SELECT distinct(max(fchCalificacion))as fecha FROM t_frm_calificacion_plan3 left join t_frm_calificacion_operaciones using(seqCalificacion) where seqFormulario in (" . $formularios . ")";
+        $objUltCal = $aptBd->execute($ultimaCalificacion);
+        $fecha = $objUltCal->fields['fecha'];
         $sql = "SELECT max(fchCalificacion), sum(total) as total
            FROM t_frm_calificacion_plan3
             left join t_frm_calificacion_operaciones using(seqCalificacion)
-            where seqFormulario in (" . $formularios . ") order by  fchCalificacion desc limit 1";
+            where seqFormulario in (" . $formularios . ") And fchCalificacion like '".$fecha."'";
 
         try {
             $objRes = $aptBd->execute($sql);

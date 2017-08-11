@@ -20,7 +20,7 @@ foreach ($array as $key => $value) {
 <html lang="es">
     <head>
         <!-- Estilos CSS -->        
-
+        <script language="JavaScript" type="text/javascript" src="librerias/javascript/funciones.js"></script>
         <link href="librerias/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
     </head>
@@ -46,16 +46,13 @@ foreach ($array as $key => $value) {
                 <?php } ?>
                 <?php if (in_array("8", $grupos)) { ?>
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=26');">Generaci&oacute;n Certificado Habitabilidad</a></li>
-                    <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=27');">Remisi&oacute;n Estudio de Titulos</a></li>
+                    <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=24');">Remisi&oacute;n Estudio de Titulos</a></li>
                 <?php } ?>
                 <?php if (in_array("1", $grupos) || in_array("8", $grupos)) { ?>
-
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargaMasivosEstudioTitulos/index.php');">Migraci&oacute;n Masiva de Estudio de Titulos</a></li>
-                <?php } ?>
-
-                <?php if (in_array("10", $grupos)) { ?>
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=29');">Conformaci&oacute;n Definitiva Documentaci&oacute;n</a></li>
-
+                <?php } ?>
+                <?php if (in_array("10", $grupos)) { ?>
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargaMasivosLegalizacion/index.php');" >Cargue Unidades Legalizadas</a></li>
                 <?php } ?>
                 <!--<li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargaCopiaDesembolso/index.php');">Migraci&oacute;n Masiva de desembolso a Primer desembolso</a></li>-->

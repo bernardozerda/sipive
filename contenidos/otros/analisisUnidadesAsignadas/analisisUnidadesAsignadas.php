@@ -5,8 +5,8 @@ mysql_select_db('sipive') or die('No se pudo seleccionar la base de datos');
 /* $link = mysql_connect('localhost', 'root', 'root') or die('No se pudo conectar: ' . mysql_error());
   mysql_select_db('sipive_feb10') or die('No se pudo seleccionar la base de datos'); */
 
-header("Content-Type: application/vnd.ms-excel");
-header("content-disposition: attachment;filename=analisisUnidadesAsignadas.xls");
+//header("Content-Type: application/vnd.ms-excel");
+//header("content-disposition: attachment;filename=analisisUnidadesAsignadas.xls");
 // Dibuja los titulos de la tabla
 // echo "\r\n";
     echo "Proyecto"."\t";

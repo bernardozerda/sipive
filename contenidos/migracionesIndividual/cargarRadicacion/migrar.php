@@ -68,6 +68,18 @@ include '../../../recursos/archivos/verificarSesion.php';
                     global $db;
                     $band = true;
                     $msg = "";
+                    $sql1 = "SELECT seqEstadoProceso, seqFormulario, fchRadicacion, txtRadicadoForest FROM sipive.t_frm_formulario 
+                            inner join t_frm_hogar using(seqFormulario)
+                            inner join t_ciu_ciudadano using(seqCiudadano)
+                            inner join t_pry_unidad_proyecto using(seqFormulario)
+                            where numDocumento in(" . $separado_por_comas . ")";
+                    $resultados1 = $db->get_results($sql1);
+                    $rows1 = count($resultados1);
+                    if ($rows1 <= 0) {
+                        $msg = "<p class='alert alert-danger'> Las cedulas registradas no se encuentran asociadas a ningun proyecto</p>";
+                        echo $msg;
+                        die();
+                    }
                     // Está consulta válida que los números de los documentos pertenezcan al postulante principal
                     $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
@@ -108,37 +120,6 @@ include '../../../recursos/archivos/verificarSesion.php';
                             if (!$band) {
                                 echo $msg;
                                 die();
-                            }
-                        } else if ($band) {
-                            //Está consulta válida que los documentos pertenezcan a un mismo proyecto
-                            $sql = "SELECT seqFormulario,
-                                    seqProyecto,
-                                    txtNombreProyecto,
-                                    GROUP_CONCAT(numDocumento,' del proyecto ', ucwords(txtNombreProyecto) SEPARATOR '<br> ') AS 'documentos'
-                                    FROM t_frm_formulario
-                                    INNER JOIN t_frm_hogar hog USING (seqFormulario)
-                                    INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
-                                    INNER JOIN t_pry_proyecto pro USING(seqProyecto)
-                                    WHERE ciu.numDocumento IN (" . $separado_por_comas . ")      
-                                    GROUP BY seqFormulario,
-                                    seqProyecto,
-                                    txtNombreProyecto";
-                            $resultados = $db->get_results($sql);
-                            $rows = count($resultados);
-                            if ($rows > 1) {
-                                $val = "<b>Los siguientes documentos no pertenecen a un mismo proyecto</b><br>";
-                                foreach ($resultados as $value) {
-                                    $val .= "<br>" . $value->documentos . ".";
-                                }
-                                $val .= " <br><br> Por favor verifique que los documentos a radicar pertenezcan al mismo proyecto ";
-                                $msg = "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
-                                $band = false;
-                                if (!$band) {
-                                    echo $msg;
-                                    die();
-                                } else {
-                                    return $band;
-                                }
                             }
                         }
                     }
@@ -196,13 +177,13 @@ include '../../../recursos/archivos/verificarSesion.php';
 
                         $update .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
 
-                        if( esFechaValida( $fecha ) ){
+                        if (esFechaValida($fecha)) {
                             $fecha = "'" . $fecha . "'";
-                        }else{
+                        } else {
                             $fecha = "NULL";
                         }
 
-                        $updateRad = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = " . $fecha . ", txtRadicadoForest = '" . $numRadicado . "' WHERE seqFormulario IN (" . $seqFormularios . ")";
+                        echo $updateRad = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = " . $fecha . ", txtRadicadoForest = '" . $numRadicado . "' WHERE seqFormulario IN (" . $seqFormularios . ")";
 
                         if ($db->query($update)) {
                             $documentos = str_replace(",", "<br>", $documentos);

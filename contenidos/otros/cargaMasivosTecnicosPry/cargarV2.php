@@ -233,7 +233,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
         $txtPintura = trim($datos [89]);
         $txtOtros = trim($datos [90]);
         $txtObservacionOtros = trim($datos [91]);
-        $numContadorAgua = (trim($datos [92]) == '') ? 0 : str_replace(",", ".", trim($datos [92]));
+        $numContadorAgua = trim($datos [92]);
         $txtEstadoConexionAgua = trim($datos [93]);
         $txtDescripcionAgua = trim($datos [94]);
         $numContadorEnergia = (trim($datos [95]) == '') ? 0 : str_replace(",", ".", trim($datos [95]));

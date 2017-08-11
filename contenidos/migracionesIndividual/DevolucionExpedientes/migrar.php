@@ -101,36 +101,37 @@ include '../../../recursos/archivos/verificarSesion.php';
                                 echo $msg;
                                 die();
                             }
-                        } else if ($band) {
-                            //Está consulta válida que los documentos pertenezcan a un mismo proyecto
-                            $sql = "SELECT seqFormulario,
-                                    seqProyecto,
-                                    txtNombreProyecto,
-                                    GROUP_CONCAT(numDocumento,' del proyecto ', ucwords(txtNombreProyecto) SEPARATOR '<br> ') AS 'documentos'
-                                    FROM t_frm_formulario
-                                    INNER JOIN t_frm_hogar hog USING (seqFormulario)
-                                    INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
-                                    INNER JOIN t_pry_proyecto pro USING(seqProyecto)
-                                    WHERE ciu.numDocumento IN (" . $separado_por_comas . ")      
-                                    GROUP BY seqProyecto";
-                            $resultados = $db->get_results($sql);
-                            $rows = count($resultados);
-                            if ($rows > 1) {
-                                $val = "<b>Los siguientes documentos no pertenecen a un mismo proyecto</b><br>";
-                                foreach ($resultados as $value) {
-                                    $val .= "<br>" . $value->documentos . ".";
-                                }
-                                $val .= " <br><br> Por favor verifique que los documentos a radicar pertenezcan al mismo proyecto ";
-                                $msg = "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
-                                $band = false;
-                                if (!$band) {
-                                    echo $msg;
-                                    die();
-                                } else {
-                                    return $band;
-                                }
-                            }
-                        }
+                        } 
+//                        else if ($band) {
+//                            //Está consulta válida que los documentos pertenezcan a un mismo proyecto
+//                            $sql = "SELECT seqFormulario,
+//                                    seqProyecto,
+//                                    txtNombreProyecto,
+//                                    GROUP_CONCAT(numDocumento,' del proyecto ', ucwords(txtNombreProyecto) SEPARATOR '<br> ') AS 'documentos'
+//                                    FROM t_frm_formulario
+//                                    INNER JOIN t_frm_hogar hog USING (seqFormulario)
+//                                    INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
+//                                    INNER JOIN t_pry_proyecto pro USING(seqProyecto)
+//                                    WHERE ciu.numDocumento IN (" . $separado_por_comas . ")      
+//                                    GROUP BY seqProyecto";
+//                            $resultados = $db->get_results($sql);
+//                            $rows = count($resultados);
+//                            if ($rows > 1) {
+//                                $val = "<b>Los siguientes documentos no pertenecen a un mismo proyecto</b><br>";
+//                                foreach ($resultados as $value) {
+//                                    $val .= "<br>" . $value->documentos . ".";
+//                                }
+//                                $val .= " <br><br> Por favor verifique que los documentos a radicar pertenezcan al mismo proyecto ";
+//                                $msg = "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
+//                                $band = false;
+//                                if (!$band) {
+//                                    echo $msg;
+//                                    die();
+//                                } else {
+//                                    return $band;
+//                                }
+//                            }
+//                        }
                     }
                     return $band;
                 }

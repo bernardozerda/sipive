@@ -289,6 +289,7 @@ function modificarDatosTablero() {
 //                       }
 
                         mysql_query($sql, $conexion) or die(mysql_error());
+                        echo "Se ejecuto con Exito!!!"; 
                     }
 
                     //echo "<br>" . $sql;

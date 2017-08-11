@@ -26,7 +26,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     $lineas = file($nombreArchivo);
     //var_dump($lineas);    exit();
     $registros = 0;
-   global $db;
+    global $db;
     $intV = 1;
     $intNV = 1;
     $band = 0;
@@ -193,10 +193,10 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $registros++;
         }
     }
-    $validar = validarDocumentos($idHogar, $db, 28, 27, "Escrituración");
+    $validar = validarDocumentos($idHogar, $db, 31, 24, "Escrituración");
     if ($validar) {
         $arrSeqDesembolso = obtenerDesembolso($idHogar);
-         //var_dump($arrSeqDesembolso);    exit();
+        //var_dump($arrSeqDesembolso);    exit();
         asignarDesembolso($arrViabilizados, $arrSeqDesembolso, $intV, 1);
         asignarDesembolso($arrNoViabilizados, $arrSeqDesembolso, $intNV, 2);
     }
@@ -371,7 +371,7 @@ function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
             $int++;
         }
     }
-  global $db;
+    global $db;
     if ($valores != "") {
         $valores = substr_replace($valores, ';', -1, 1);
         $query = $campos . $valores;
@@ -556,14 +556,14 @@ function generarLinks($arreglo, $tipo) {
         $insert1 = substr_replace($aprobado, '', -1, 1);
 //        $consulta = "UPDATE t_frm_formulario set seqEstadoProceso = 31 where seqFormulario IN(" . $insert1 . ")";
 //        $db->get_results($consulta);
-        migrarInformacion($insert1, $db, 31, 27);
+        migrarInformacion($insert1, $db, 31, 24);
     }
     if (!empty($noAprobado)) {
 //        $insert1 = substr_replace($noAprobado, '', -1, 1);
 //        $consulta = "UPDATE t_frm_formulario set seqEstadoProceso = 28 where seqFormulario IN(" . $insert1 . ")";
 //        $db->get_results($consulta);
         $insert1 = substr_replace($noAprobado, '', -1, 1);
-        migrarInformacion($insert1, $db, 28, 27);
+        migrarInformacion($insert1, $db, 28, 24);
     }
 
 

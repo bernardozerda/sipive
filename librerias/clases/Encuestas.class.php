@@ -507,6 +507,8 @@ class Encuestas {
     public function obtenerEncuesta($seqAplicacion) {
         global $aptBd;
 
+        $this->arrAplicacion = array();
+
         $sql = "
                 select
                         apl.txtNombreCargue,
@@ -522,8 +524,6 @@ class Encuestas {
 			";
         $objRes = $aptBd->execute($sql);
         while ($objRes->fields) {
-            //reinicio de liliana
-             //
             foreach ($objRes->fields as $txtCampo => $txtValor) {
                 $$txtCampo = iconv("UTF-8", "Windows-1252", $txtValor);
             }

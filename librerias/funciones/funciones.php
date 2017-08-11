@@ -611,6 +611,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
                   and seqPlanGobierno = " . $seqPlanGobierno . "
                   and seqModalidad = " . $seqModalidad . "
                   and seqProyecto = " . $seqProyecto . "
+                  and seqTipoEsquema = " . $seqTipoEsquema . "
                   and (seqFormulario = 0
                     or seqFormulario = ''
                     or seqFormulario is NULL
@@ -630,6 +631,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
                     WHERE bolActivo = 1
                       and seqPlanGobierno = " . $seqPlanGobierno . "
                       and seqModalidad = " . $seqModalidad . "
+                      and seqTipoEsquema = " . $seqTipoEsquema . "
                       and (seqFormulario = 0
                         or seqFormulario = ''
                         or seqFormulario is NULL
@@ -677,8 +679,6 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
         }
     }
 
-    //pr( $arrProyectos );
-
     return $arrProyectos;
 }
 
@@ -689,7 +689,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
  * @param String txtTabla
  * @version 1.0 Mayo de 2017
  */
-function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqPlanGobierno, $seqProyecto){
+function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno, $seqProyecto){
     global $aptBd;
     $sql = "
         SELECT DISTINCT
@@ -701,6 +701,7 @@ function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqPla
         AND pro.seqProyectoPadre = ".$seqProyecto."
         AND upr.seqPlanGobierno = " . $seqPlanGobierno . "
         AND upr.seqModalidad = " . $seqModalidad . "
+        AND upr.seqTipoEsquema = " . $seqTipoEsquema . "
         AND (upr.seqFormulario = 0
           OR upr.seqFormulario = ''
           OR upr.seqFormulario IS NULL
@@ -723,7 +724,7 @@ function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqPla
  * @param String txtTabla
  * @version 1.0 Mayo de 2017
  */
-function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqPlanGobierno, $seqProyectoHijo){
+function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno, $seqProyectoHijo){
     global $aptBd;
     $sql = "
         SELECT
@@ -735,6 +736,7 @@ function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqPlanGobie
           AND upr.seqProyecto = ".$seqProyectoHijo."
           AND upr.seqPlanGobierno = " . $seqPlanGobierno . "
           AND upr.seqModalidad = " . $seqModalidad . "
+          AND upr.seqTipoEsquema = " . $seqTipoEsquema . "
           AND (upr.seqFormulario = 0
             OR upr.seqFormulario = ''
             OR upr.seqFormulario IS NULL
@@ -802,7 +804,14 @@ function valorSubsidio($claFormulario){
                 "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
             );
             $valSubsidio = $arrValor[0];
-        }elseif( $claFormulario->seqModalidad == 8 or $claFormulario->seqModalidad == 9 or $claFormulario->seqModalidad == 10 ){
+        }else{
+            $arrValor = obtenerDatosTabla("T_PRY_PROYECTO",array("0","valMaximoSubsidio","valNumeroSoluciones"),"0","seqProyecto = " . $claFormulario->seqProyecto);
+            if(intval($arrValor[0]['valNumeroSoluciones']) != 0){
+                $valSubsidio = intval(($arrValor[0]['valMaximoSubsidio'] / $arrValor[0]['valNumeroSoluciones']));
+            }
+        }
+
+        if( doubleval( $valSubsidio ) == 0 ){
             $valSubsidio = array_shift(
                 obtenerDatosTabla(
                     "T_FRM_FORMULARIO",
@@ -811,13 +820,9 @@ function valorSubsidio($claFormulario){
                     "seqFormulario = " . $claFormulario->seqFormulario
                 )
             );
-        }else{
-            $arrValor = obtenerDatosTabla("T_PRY_PROYECTO",array("0","valMaximoSubsidio","valNumeroSoluciones"),"0","seqProyecto = " . $claFormulario->seqProyecto);
-            if(intval($arrValor[0]['valNumeroSoluciones']) != 0){
-                $valSubsidio = intval(($arrValor[0]['valMaximoSubsidio'] / $arrValor[0]['valNumeroSoluciones']));
-            }
         }
-    }elseif( $claFormulario->seqPlanGobierno == 2 ){
+
+    }elseif( $claFormulario->seqPlanGobierno == 3 ){
         $valSubsidioNAL = intval($claFormulario->valSubsidioNacional) / $arrConfiguracion['constantes']['salarioMinimo'];
         $valVUR         = intval($claFormulario->valDonacion)         / $arrConfiguracion['constantes']['salarioMinimo'];
 

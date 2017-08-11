@@ -10,7 +10,7 @@
    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "FormularioSubsidios.class.php" );
    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "Ciudadano.class.php" );
    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "ActosAdministrativos2.class.php" );
-   
+
    $arrErrores = array();
    $claTipoActo = new TipoActoAdministrativo();
    $arrTipoActo = $claTipoActo->cargarTipoActo( $_POST['seqTipoActo'] );
@@ -57,14 +57,12 @@
          $bolDiligenciado = true;
       }
    }
-   
-   
-   
+
    // Debe haber diligenciado al menos un campo de las caracteristicas
    if( $bolDiligenciado == false ){
       $arrErrores[] = "Diligencie los campos de información del acto admnistrativo";
    }
-   
+
    if( empty( $arrErrores ) ){
       
       // El acto admnistrativo no debe existir, no se admite edicion (por ahora)
@@ -93,7 +91,7 @@
             $arrArchivo = file( $_FILES['archivo']['tmp_name'] );
             foreach( $arrArchivo as $numFila => $txtLinea ){
                if( trim( $txtLinea ) != "" ){
-                  $arrLinea = split( "\t" , trim( $txtLinea ) );
+                  $arrLinea = mb_split( "\t" , trim( $txtLinea ) );
                   foreach( $arrLinea as $numColumna => $txtValor ){
                      $arrDatos[ $numFila ][ $numColumna ] = trim( $txtValor );
                   }
@@ -103,13 +101,13 @@
             // Validacion del archivo
             $objTipoActo->validarArchivo( $arrDatos );
             $arrErrores = $objTipoActo->arrErrores;
-            
+
             // Validaciones de negocio
             if( empty( $arrErrores ) ){
                $objTipoActo->validarDatos( $_POST , $arrDatos );
                $arrErrores = $objTipoActo->arrErrores;
             }
-            
+
             // salvar los datos
             if( empty( $arrErrores ) ){
                $claActo->salvarActo( $_POST , $arrDatos );

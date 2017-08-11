@@ -57,9 +57,11 @@
             <script src="librerias/jquery/jquery.dataTables.min.js"></script>
             <script src="librerias/jquery/dataTables.bootstrap.min.js"></script>
             <script src="librerias/javascript/dataTable.js"></script>
-            {*<link rel="stylesheet" href="recursos/estilos/jquery-ui.css"/> *}
+            <link rel="stylesheet" href="recursos/estilos/jquery-ui.css"/> 
 
             <link rel="stylesheet" href="librerias/jquery/css/dataTables.bootstrap.min.css"/> 
+            <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
+
     </head>
     <body class="yui-skin-sam" id="bodyHtml" topMargin="0"> 
 
@@ -81,52 +83,46 @@
                                 <div></div>
 
                         </div>
+                    </td>
+                    <tr>
+                        <td colspan="3">
+                            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td>{include file="menu.tpl"}</td>
 
-                        <tr>
-                            <td colspan="3">
-                                <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                                    <tr>
-                                        <td>{include file="menu.tpl"}</td>
-                                       
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>			
-
-                        <!-- MENSAJES -->
-                        <tr>
-                            <td height="20px" colspan="3" style="padding-left:10px;" id="mensajes"> &nbsp; </td>
-                        </tr>
-
-                        <!-- TODO EL CONTENIDO SE CARGA AQUI -->
-                        <tr>
-                            <td colspan="3" id="contenido" height="650px" align="left" valign="top" style="padding-left:10px; padding-top:5px; padding-bottom:5px; ">
-                                {include file="$txtArchivoInicio"}
-                            </td>
-                        </tr>
-                        </table>
-                        </center>
-                        <footer>
-                            <div  >
-                                <center>
-                                    <div id="oScroll" style="width: 52%; margin-top: 5px; margin-bottom: 10px; height: 35px" class="alert alert-danger">
-                                        <div id="scroll" >
-                                            La información que se registra debe ser soportada documentalmente.
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            La sdht podrá verificar en cualquier momento la veracidad de la información.<br><br/><br/>
-                                        </div><br/>
-
-                                    </div>
-                                    <div style=" position: relative; float: left; width:100%">
-                                        <img src="./recursos/imagenes/pie_ws.png" /><br> 
-                                    </div>
-
-
-                                    <!--<img src="./recursos/imagenes/background_menupie.png" width="450px" height="20px"/>-->
-                                </center>
-                            </div>
-                        </footer>
-                        </body>
-                        </html>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>			
+                    <!-- MENSAJES -->
+                    <tr>
+                        <td height="20px" colspan="3" style="padding-left:10px;" id="mensajes"> &nbsp; </td>
+                    </tr>
+                    <!-- TODO EL CONTENIDO SE CARGA AQUI -->
+                    <tr>
+                        <td colspan="3" id="contenido" height="550px" aign="left" valign="top" style="padding-left:10px; padding-top:5px; padding-bottom:5px;">
+                            {include file="$txtArchivoInicio"}
+                        </td>
+                    </tr>
+            </table>
+        </center>
+        <footer>           
+            <div >
+                <center>
+                    <div id="oScroll" style="width: 50%; margin-top: 5px; margin-bottom: 10px; height: 35px; right: 3%; font-weight: bold" class="alert alert-danger">
+                        <div id="scroll" ><MARQUEE DIRECTION=LEFT class="alert alert-danger" style="padding:5px;">
+                            La información que se registra debe ser soportada documentalmente.
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            La sdht podrá verificar en cualquier momento la veracidad de la información.<br><br/><br/>
+                        </MARQUEE> </div><br/>
+                    </div>
+                    <div style=" position: relative; float: left; width:100%">
+                        <img src="./recursos/imagenes/pie_ws.png" /><br> 
+                    </div>
+                    <!--<img src="./recursos/imagenes/background_menupie.png" width="450px" height="20px"/>-->
+                </center>
+            </div>
+        </footer>
+    </body>
+</html>

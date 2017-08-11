@@ -18,8 +18,7 @@ include '../../../recursos/archivos/verificarSesion.php';
 
             <div class="well">
                 <?php
-                include "../lib/mysqli/shared/ez_sql_core.php";
-                include "../lib/mysqli/ez_sql_mysqli.php";
+                include '../conecta.php';
                 include "generarConsolidado.php";
                 //include "generarLinksImpresion.php";
                 include '../migrarTablero.php';
@@ -27,9 +26,6 @@ include '../../../recursos/archivos/verificarSesion.php';
 
                 date_default_timezone_set('America/Bogota');
                 $arrDocumentosArchivo = array();
-
-                $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-                // $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
 
                 $camposTecnico = "numLargoMultiple, numAnchoMultiple, numAreaMultiple, txtMultiple, numLargoAlcoba1, numAnchoAlcoba1, numAreaAlcoba1, txtAlcoba1, numLargoAlcoba2, numAnchoAlcoba2, numAreaAlcoba2, txtAlcoba2, numLargoAlcoba3, numAnchoAlcoba3, numAreaAlcoba3, txtAlcoba3, numLargoCocina, numAnchoCocina, numAreaCocina, txtCocina, numLargoBano1, numAnchoBano1, numAreaBano1, txtBano1, numLargoBano2, numAnchoBano2, numAreaBano2, txtBano2, numLargoLavanderia, numAnchoLavanderia, numAreaLavanderia, txtLavanderia, numLargoCirculaciones, numAnchoCirculaciones, numAreaCirculaciones, txtCirculaciones, numLargoPatio, numAnchoPatio, numAreaPatio, txtPatio, numAreaTotal, txtEstadoCimentacion, txtCimentacion, txtEstadoPlacaEntrepiso, txtPlacaEntrepiso, txtEstadoMamposteria, txtMamposteria, txtEstadoCubierta, txtCubierta, txtEstadoVigas, txtVigas, txtEstadoColumnas, txtColumnas, txtEstadoPanetes, txtPanetes, txtEstadoEnchapes, txtEnchapes, txtEstadoAcabados, txtAcabados, txtEstadoHidraulicas, txtHidraulicas, txtEstadoElectricas, txtElectricas, txtEstadoSanitarias, txtSanitarias, txtEstadoGas, txtGas, txtEstadoMadera, txtMadera, txtEstadoMetalica, txtMetalica, numLavadero, txtLavadero, numLavaplatos, txtLavaplatos, numLavamanos, txtLavamanos, numSanitario, txtSanitario, numDucha, txtDucha, txtEstadoVidrios, txtVidrios, txtEstadoPintura, txtPintura, txtOtros, txtObservacionOtros, numContadorAgua, txtEstadoConexionAgua, txtDescripcionAgua, numContadorEnergia, txtEstadoConexionEnergia, txtDescripcionEnergia, numContadorAlcantarillado, txtEstadoConexionAlcantarillado, txtDescripcionAlcantarillado, numContadorGas, txtEstadoConexionGas, txtDescripcionGas, numContadorTelefono, txtEstadoConexionTelefono, txtDescripcionTelefono, txtEstadoAndenes, txtDescripcionAndenes, txtEstadoVias, txtDescripcionVias, txtEstadoServiciosComunales, txtDescripcionServiciosComunales, txtDescripcionVivienda, txtNormaNSR98, txtRequisitos, txtExistencia, txtDescipcionNormaNSR98, txtDescripcionRequisitos, txtDescripcionExistencia, fchVisita, txtAprobo, fchCreacion, fchActualizacion";
                 $camposAdjuntosTecnicos = "seqTipoAdjunto, txtNombreAdjunto, txtNombreArchivo";
@@ -56,7 +52,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                     $varRet = false;
                     $documentos = "";
 
-                    $sql = "SELECT T_DES_TECNICO.seqTecnico, numDocumento
+                     $sql = "SELECT T_DES_TECNICO.seqTecnico, numDocumento
 						FROM (((T_DES_TECNICO
 						INNER JOIN T_DES_DESEMBOLSO ON (T_DES_TECNICO.seqDesembolso = T_DES_DESEMBOLSO.seqDesembolso))
 						INNER JOIN T_FRM_FORMULARIO ON (T_DES_DESEMBOLSO.seqFormulario = T_FRM_FORMULARIO.seqFormulario))
@@ -81,7 +77,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                 }
 
                 function validarDocumentosET($separado_por_comas, $db, $code, $estadoV, $estadoT) {
-
+                    global $db;
                     $band = true;
                     $msg = "";
                     // Está consulta válida que los números de los documentos pertenezcan al postulante principal
@@ -131,6 +127,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                 }
 
                 function obtenerValoresUtiles($documento, $campo) {
+
                     $valor;
                     $consulta_pre = "SELECT ciu.numDocumento AS numDocumento,
                                     des.seqDesembolso AS seqDesembolso,
@@ -215,7 +212,7 @@ include '../../../recursos/archivos/verificarSesion.php';
 									WHERE seqTecnicoUnidad = $seqUnidadProyecto;";
                         if ($db->query($sqlTecnico)) {
                             $seqTecnico = $db->insert_id;
-                            $db->query("UPDATE T_DES_TECNICO SET fchCreacion = now(), fchActualizacion = now() WHERE seqTecnico = ".$seqTecnico);
+                            $db->query("UPDATE T_DES_TECNICO SET fchCreacion = now(), fchActualizacion = now() WHERE seqTecnico = " . $seqTecnico);
                             $sqlAdjuntosTecnicos = "INSERT INTO T_DES_ADJUNTOS_TECNICOS (seqTecnico, $camposAdjuntosTecnicos)
 									SELECT '$seqTecnico', $camposAdjuntosTecnicos
 									FROM T_PRY_ADJUNTOS_TECNICOS
@@ -241,9 +238,10 @@ include '../../../recursos/archivos/verificarSesion.php';
         <?php
 
         function generarLinksImpresion($arraydocs) {
-            $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-            //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');          
 
+            //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+            //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');          
+            global $db;
 
             $consulta_pre = "SELECT ciu.numDocumento AS numDocumento,
                             des.seqDesembolso AS seqDesembolso,
@@ -255,20 +253,20 @@ include '../../../recursos/archivos/verificarSesion.php';
                             prytec.seqUnidadProyecto seqUnidadProyecto,
                             und.txtNombreUnidad txtNombreUnidad,
                             pry.txtNombreProyecto AS txtNombreProyecto
-                       FROM ((((((sdht_subsidios.t_pry_unidad_proyecto und
-                                  INNER JOIN sdht_subsidios.t_frm_formulario frm
+                       FROM ((((((t_pry_unidad_proyecto und
+                                  INNER JOIN t_frm_formulario frm
                                      ON (und.seqFormulario = frm.seqFormulario))
-                                 INNER JOIN sdht_subsidios.t_frm_hogar hog
+                                 INNER JOIN t_frm_hogar hog
                                     ON (hog.seqFormulario = frm.seqFormulario))
-                                INNER JOIN sdht_subsidios.t_ciu_ciudadano ciu
+                                INNER JOIN t_ciu_ciudadano ciu
                                    ON (hog.seqCiudadano = ciu.seqCiudadano))
-                               LEFT OUTER JOIN sdht_subsidios.t_des_desembolso des
+                               LEFT OUTER JOIN t_des_desembolso des
                                   ON (des.seqFormulario = frm.seqFormulario))
-                              LEFT OUTER JOIN sdht_subsidios.t_des_tecnico destec
+                              LEFT OUTER JOIN t_des_tecnico destec
                                  ON (destec.seqDesembolso = des.seqDesembolso))
-                             INNER JOIN sdht_subsidios.t_pry_proyecto pry
+                             INNER JOIN t_pry_proyecto pry
                                 ON (und.seqProyecto = pry.seqProyecto))
-                            INNER JOIN sdht_subsidios.t_pry_tecnico prytec
+                            INNER JOIN t_pry_tecnico prytec
                                ON (prytec.seqUnidadProyecto = und.seqUnidadProyecto)
                       WHERE (ciu.numDocumento IN ($arraydocs));";
             ?>
@@ -293,7 +291,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                                 <td>' . $resultado->numDocumento . '</td>
                                 <td>' . $resultado->txtNombreProyecto . '</td>
                                 <td>' . $resultado->txtNombreUnidad . '</td>
-                                <td> <a href="https://' . $_SERVER['HTTP_HOST'] . '/sdv/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '">https://' . $_SERVER['HTTP_HOST'] . '/sdv/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '</a> </td>
+                                <td> <a href="http://' . $_SERVER['HTTP_HOST'] . '/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '">http://' . $_SERVER['HTTP_HOST'] . '/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '</a> </td>
                             <tr>';
                         }
                         migrarInformacion($arraydocs, $db, 25, 23);

@@ -111,8 +111,11 @@ class CRMProyecto {
         global $aptBd;
         $sql = "";
         if ($valor == 1) {
-            $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO WHERE bolActivo =1 and seqProyecto >0";
-        } else if ($valor == 2) {
+            //$sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO WHERE bolActivo =1 and seqProyecto >0";
+            $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
+                    LEFT JOIN t_pry_proyecto pry USING(seqProyecto) 
+                    WHERE und.bolActivo =1 and seqProyecto >0 and pry.seqTipoEsquema in(1,2)";
+                            } else if ($valor == 2) {
             $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
                     WHERE frm.bolCerrado =0  OR (und.seqFormulario is null OR und.seqFormulario =0) and bolActivo =1 and und.seqProyecto >0";
@@ -169,13 +172,30 @@ class CRMProyecto {
             $sql = "SELECT count(*) as cant, und.seqProyecto FROM t_pry_unidad_proyecto    und
                     INNER JOIN t_frm_formulario frm USING (seqFormulario)
                      WHERE seqEstadoProceso = 40 AND bolCerrado = 1";
+        } else if ($valor == 6) {
+            $sql = "SELECT count(*) as cant  FROM t_pry_unidad_proyecto    und
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)
+                     WHERE bolCerrado = 1 AND (seqEstadoProceso = 62 OR seqEstadoProceso = 17
+                    OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
+                    OR seqEstadoProceso = 26 OR seqEstadoProceso = 27 OR seqEstadoProceso = 28 OR seqEstadoProceso = 31
+                    OR seqEstadoProceso = 29 OR seqEstadoProceso = 24)";
+        } else if ($valor == 7) {
+            $sql = "SELECT count(*) as cant FROM t_pry_unidad_proyecto    und
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)
+                     WHERE fchDevolucionExpediente is not null and fchDevolucionExpediente != '0000-00-00 00:00:00' AND fchDevolucionExpediente != '' AND bolCerrado = 1 ";
         }
-        $sql .= " and und.seqProyecto >0 GROUP BY und.seqProyecto";
+        $sql .= " and und.seqProyecto >0";
+        if ($valor != 7 && $valor != 6) {
+            $sql .= " GROUP BY und.seqProyecto";
+        }
+        
+ 
+
         //$rs = $aptBd->getAssoc($sql);
         $objRes = $aptBd->execute($sql);
         $datos = Array();
-
-        $int = 0;
+     
+                $int = 0;
         while ($objRes->fields) {
             $datos[$int] = $objRes->fields;
             $int++;

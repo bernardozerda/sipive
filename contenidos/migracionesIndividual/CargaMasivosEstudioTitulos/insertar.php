@@ -1,19 +1,18 @@
 <?php
 
-include_once "../lib/mysqli/shared/ez_sql_core.php";
-include_once "../lib/mysqli/ez_sql_mysqli.php";
+include_once '../conecta.php';
 //include_once "../generarExcel.php";
 include '../migrarTablero.php';
 
 $observacion1 = 'PROPIETARIOS SON BENEFICIARIOS DEL SDV';
 $observacion2 = 'ESTADO CIVIL COINCIDENTE';
-$observacion3 = utf8_decode('CONSTITUCIÓN PATRIMONIO DE FAMILIA');
+$observacion3 = 'CONSTITUCIÓN PATRIMONIO DE FAMILIA';
 $observacion4 = 'RESTRICCIONES';
 $observacion5 = 'PATRIMONIO DE FAMILIA REGISTRADO';
-$observacion6 = utf8_decode('NOMBRE Y CÉDULA DE LOS PROPIETARIOS');
+$observacion6 = 'NOMBRE Y CÉDULA DE LOS PROPIETARIOS';
 $observacion7 = 'COMPRAVENTA REALIZADA CON SDV';
-$documentos1 = utf8_decode('ESCRITURA PÚBLICA');
-$documentos2 = utf8_decode('FOLIO DE MATRÍCULA INMOBILIARIA');
+$documentos1 = 'ESCRITURA PÚBLICA';
+$documentos2 = 'FOLIO DE MATRÍCULA INMOBILIARIA';
 $documentos3 = 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD VIABILIZADO';
 
 
@@ -27,8 +26,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     $lineas = file($nombreArchivo);
     //var_dump($lineas);    exit();
     $registros = 0;
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidiosJul17', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    global $db;
     $intV = 1;
     $intNV = 1;
     $band = 0;
@@ -183,7 +181,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrNoViabilizados['propietarios'][$intNV] = (trim($datos [28]) == 'SI') ? $observacion6 : '';
                     $arrNoViabilizados['compraVenta'][$intNV] = $observacion7;
                     $arrNoViabilizados['noEscritura'][$intNV] = (trim($datos [18]) == 'SI') ? $documentos1 : '';
-                    $arrNoViabilizados['folio'][$intNV] = (trim($datos [22]) == 'SI') ? $documentos2 : '';
+                    $arrNoViabilizados['folio'][$intNV] = (trim($datos [2]) == 'SI') ? $documentos2 : '';
                     $arrNoViabilizados['certificado'][$intNV] = (trim($datos [9]) == 'SI') ? $documentos3 : '';
                     $arrNoViabilizados['observacion'][$intNV] = ($txtConcepto);
                     $intNV++;
@@ -195,10 +193,10 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $registros++;
         }
     }
-    $validar = validarDocumentos($idHogar, $db, 28, 27, "Escrituración");
+    $validar = validarDocumentos($idHogar, $db, 31, 24, "Escrituración");
     if ($validar) {
         $arrSeqDesembolso = obtenerDesembolso($idHogar);
-        // var_dump($arrSeqDesembolso);    exit();
+        //var_dump($arrSeqDesembolso);    exit();
         asignarDesembolso($arrViabilizados, $arrSeqDesembolso, $intV, 1);
         asignarDesembolso($arrNoViabilizados, $arrSeqDesembolso, $intNV, 2);
     }
@@ -207,9 +205,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
 }
 
 function obtenerDesembolso($numFormulario) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-
-//$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
+    global $db;
     $consulta = "
         SELECT seqFormulario, seqDesembolso
             FROM T_DES_DESEMBOLSO
@@ -249,8 +245,7 @@ function asignarDesembolso($arreglo, $desembolso, $cantidad, $tipo) {
 }
 
 function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $cantF, $tipo) {
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    global $db;
     $consulta = " SELECT seqDesembolso, seqEstudioTitulos FROM t_des_estudio_titulos WHERE seqDesembolso IN(" . $idSeqDesembolso . ")";
     $resultado = $db->get_results($consulta);
     $dato = Array();
@@ -267,7 +262,7 @@ function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $cantF, $tipo)
 
 function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDesembolso) {
 
-
+    global $db;
     $campos = " INSERT INTO t_des_estudio_titulos(seqDesembolso,
                 numEscrituraIdentificacion,
                 fchEscrituraIdentificacion,
@@ -376,9 +371,7 @@ function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
             $int++;
         }
     }
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    //echo $valores;
+    global $db;
     if ($valores != "") {
         $valores = substr_replace($valores, ';', -1, 1);
         $query = $campos . $valores;
@@ -400,9 +393,7 @@ function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
 
 function insertarAdjuntosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDesembolso, $ArrImpresion) {
 
-
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    global $db;
     $consulta = " SELECT seqDesembolso, seqEstudioTitulos FROM T_DES_ESTUDIO_TITULOS WHERE seqDesembolso IN(" . $idSeqDesembolso . ")";
 
     $resultado = $db->get_results($consulta);
@@ -417,8 +408,7 @@ function insertarAdjuntosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
     }
 
     $seqEstudioTitulosSearch = substr_replace($seqEstudioTitulosSearch, '', -1, 1);
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    global $db;
     $consulta = " SELECT seqAdjuntoTitulos, seqEstudioTitulos FROM t_des_adjuntos_titulos WHERE seqEstudioTitulos IN(" . $seqEstudioTitulosSearch . ")";
     $resultado1 = $db->get_results($consulta);
     $datoET = Array();
@@ -529,7 +519,7 @@ function generarLinks($arreglo, $tipo) {
         $tabla .= "<td>" . $arreglo['seqDesembolso'][$int] . "</td>";
         $tabla .= "<td>" . $arreglo['txtElaboro'][$int] . "</td>";
         $tabla .= "<td>" . $arreglo['txtAprobo'][$int] . "</td>";
-        $tabla .= "<td><a href='http://".$_SERVER['HTTP_HOST']."/sdv/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "' target='_blank'>http://".$_SERVER['HTTP_HOST']."/sdv/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "</a></td>";
+        $tabla .= "<td><a href='http://" . $_SERVER['HTTP_HOST'] . "/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "' target='_blank'>http://" . $_SERVER['HTTP_HOST'] . "/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "</a></td>";
         $tabla .= "</tr>";
         $int++;
     }
@@ -566,14 +556,14 @@ function generarLinks($arreglo, $tipo) {
         $insert1 = substr_replace($aprobado, '', -1, 1);
 //        $consulta = "UPDATE t_frm_formulario set seqEstadoProceso = 31 where seqFormulario IN(" . $insert1 . ")";
 //        $db->get_results($consulta);
-        migrarInformacion($insert1, $db, 31, 27);
+        migrarInformacion($insert1, $db, 31, 24);
     }
     if (!empty($noAprobado)) {
 //        $insert1 = substr_replace($noAprobado, '', -1, 1);
 //        $consulta = "UPDATE t_frm_formulario set seqEstadoProceso = 28 where seqFormulario IN(" . $insert1 . ")";
 //        $db->get_results($consulta);
         $insert1 = substr_replace($noAprobado, '', -1, 1);
-        migrarInformacion($insert1, $db, 28, 27);
+        migrarInformacion($insert1, $db, 28, 24);
     }
 
 

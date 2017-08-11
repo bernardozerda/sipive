@@ -29,6 +29,7 @@ $arrErrores = array(); // Todos los errores van aqui
  **********************************************************************************************************************/
 $numMayorEdad = strtotime("-18 year", time());
 $numTerceraEdad = strtotime("-65 year", time());
+
 $numCondicionEspecialMayor65 = 2;
 $bolCambiosCalificacion = false;
 
@@ -72,6 +73,11 @@ $arrIgnorarCampos[] = "txtCorreo";
 
 // Variables que si se cambian, debe irse a etapa de inscripcion.
 $arrCamposCalificacion["formulario"]["valIngresoHogar"] = "Ingresos del hogar";
+$arrCamposCalificacion["formulario"]["numHabitaciones"] = "N° Hogares en la vivienda";
+$arrCamposCalificacion["formulario"]["numHacinamiento"] = "N° Dormitorios";
+$arrCamposCalificacion["formulario"]["bolIntegracionSocial"] = "Integración Social";
+$arrCamposCalificacion["formulario"]["bolSecMujer"] = "Secretaría de la Mujer";
+$arrCamposCalificacion["formulario"]["bolIpes"] = "IPES";
 $arrCamposCalificacion["ciudadano"]["seqEtnia"] = "Condición Étnica";
 $arrCamposCalificacion["ciudadano"]["seqParentesco"] = "Parentesco";
 $arrCamposCalificacion["ciudadano"]["seqCondicionEspecial"] = "Condicion Especial";
@@ -81,6 +87,7 @@ $arrCamposCalificacion["ciudadano"]["fchNacimiento"] = "Fecha de Nacimiento";
 $arrCamposCalificacion["ciudadano"]["seqNivelEducativo"] = "Nivel Educativo";
 $arrCamposCalificacion["ciudadano"]["numAnosAprobados"] = "Años Aprobados";
 $arrCamposCalificacion["ciudadano"]["seqSalud"] = "Afiliacion a salud";
+$arrCamposCalificacion["ciudadano"]["bolLgtb"] = "LGTBI";
 $arrCamposCalificacion["esquemas"][] = 1;
 $arrCamposCalificacion["esquemas"][] = 9;
 
@@ -305,36 +312,38 @@ if (!empty($_POST['hogar'])) {
  **********************************************************************************************************************/
 if( $seqEtapa == 1 or $seqEtapa == 2 ) {
 
-    switch(intval($_POST['seqVivienda'])){
-        case 1:
-            if (intval($_POST['valArriendo']) == 0) {
-                $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
-            }
-            if (!esFechaValida($_POST['fchArriendoDesde'])) {
-                $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
-            }
-            if (trim($_POST['txtComprobanteArriendo']) == "") {
-                $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
-            }
-            if (intval($_POST['numHacinamiento']) == 0) {
-                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
-            }
-            break;
-        case 2:
-            if (intval($_POST['numHacinamiento']) == 0) {
-                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
-            }
-            break;
-        case 4:
-            if (intval($_POST['numHacinamiento']) == 0) {
-                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
-            }
-            break;
-        case 6:
-            if (intval($_POST['numHacinamiento']) == 0) {
-                $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
-            }
-            break;
+    if($_POST['seqPlanGobierno'] == 3) {
+        switch (intval($_POST['seqVivienda'])) {
+            case 1:
+                if (intval($_POST['valArriendo']) == 0) {
+                    $arrErrores[] = "Indique el valor del arrendamiento que esta pagando";
+                }
+                if (!esFechaValida($_POST['fchArriendoDesde'])) {
+                    $arrErrores[] = "Indique una fecha v&aacute;lida para la fecha de inicio del pago de arriendo";
+                }
+                if (trim($_POST['txtComprobanteArriendo']) == "") {
+                    $arrErrores[] = "Indique si tiene o no comoprobantes de arriendo";
+                }
+                if (intval($_POST['numHacinamiento']) == 0) {
+                    $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+                }
+                break;
+            case 2:
+                if (intval($_POST['numHacinamiento']) == 0) {
+                    $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+                }
+                break;
+            case 4:
+                if (intval($_POST['numHacinamiento']) == 0) {
+                    $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+                }
+                break;
+            case 6:
+                if (intval($_POST['numHacinamiento']) == 0) {
+                    $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+                }
+                break;
+        }
     }
 
     // direccion de residencia actual
@@ -398,13 +407,10 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     }
 
     // Hogares que viven en la misma vivienda
-    if (intval($_POST['numHabitaciones']) == 0) {
-        $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
-    }
-
-    // Cantidad de dormitorios
-    if (intval($_POST['numHacinamiento']) == 0) {
-        $arrErrores[] = "Indique el numero de dormitorios que usa el hogar";
+    if($_POST['seqPlanGobierno'] == 3) {
+        if (intval($_POST['numHabitaciones']) == 0) {
+            $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
+        }
     }
 
 }
@@ -536,6 +542,17 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         }
     }
 
+    // acuerdo de pago
+    if (intval($_POST['valAporteLote']) != 0) {
+        if (trim($_POST['txtSoporteAporteLote']) == "") {
+            $arrErrores[] = "Indique el soporte para el Acuerdo de pago / Lote / Terreno";
+        }
+    }else{
+        if (trim($_POST['txtSoporteAporteLote']) != "") {
+            $arrErrores[] = "Debe indicar un valor del Acuerdo de pago / Lote / Terreno";
+        }
+    }
+
     // valor del subsidio nacional
     if (intval($_POST['valSubsidioNacional']) != 0) {
         if (trim($_POST['txtSoporteSubsidioNacional']) == "") {
@@ -569,18 +586,30 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     }
 
     // validaciones para la modalidad de leasing
-    if ($_POST['seqModalidad'] == 13 and $_POST['seqEstadoProceso'] == 54) {
+    if( $_POST['seqModalidad'] == 13 ) {
+        if ($_POST['seqEstadoProceso'] == 47 and $_POST['bolViabilidadLeasing'] == 0) {
+            $arrErrores[] = "Para postular el hogar debe tener la solución viabilizada por un convenio.";
+        }
         if ($_POST['bolViabilidadLeasing'] == 0) {
-            $arrErrores[] = "La solucion debe estar viabilizada por una entidad de un convenio de leasing";
-        }
-        if ($_POST['seqConvenio'] == 1) {
-            $arrErrores[] = "Seleccione un convenio para el leasing";
-        }
-        if ($_POST['valCartaLeasing'] == 0) {
-            $arrErrores[] = "El valor de la carta de leasing no es válido";
-        }
-        if ($_POST['numDuracionLeasing'] == 0) {
-            $arrErrores[] = "Indique el numero de meses que dura el leasing";
+            if ($_POST['seqConvenio'] != 1) {
+                $arrErrores[] = "No puede seleccionar un convenio si la solución no esta viabilizada";
+            }
+            if ($_POST['valCartaLeasing'] != 0) {
+                $arrErrores[] = "No puede indicar el valor del convenio si la solución no esta viabilizada";
+            }
+            if ($_POST['numDuracionLeasing'] != 0) {
+                $arrErrores[] = "No puede indicar la duración del convenio si la solución no esta viabilizada";
+            }
+        }else{
+            if ($_POST['seqConvenio'] == 1) {
+                $arrErrores[] = "Seleccione un convenio para el leasing";
+            }
+            if ($_POST['valCartaLeasing'] == 0) {
+                $arrErrores[] = "El valor de la carta de leasing no es válido";
+            }
+            if ($_POST['numDuracionLeasing'] == 0) {
+                $arrErrores[] = "Indique el numero de meses que dura el leasing";
+            }
         }
     }
 
@@ -595,8 +624,6 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
             }
         }
     }
-
-
 
 }
 /**********************************************************************************************************************
@@ -672,10 +699,20 @@ if (empty($arrErrores)) {
         // solo podrá cambiar los datos de contacto y los datos de conformacion del hogar
         // los demas datos se sobreescriben con lo que hay en la base de datos
         if( $seqEtapa != 1 and $seqEtapa != 2 ){
-            foreach( $claCasaMano->objPostulacion as $txtClave => $txtValor ){
-                if($txtClave != "arrCiudadano"){
-                    if( ! in_array($txtClave,$arrIgnorarCampos) ) {
-                        $_POST[$txtClave] = $txtValor;
+            $arrMensajes = array();
+            if( $_SESSION['privilegios']['cambiar'] == 0 ) {
+                foreach ($claCasaMano->objPostulacion as $txtClave => $txtValor) {
+                    if ($txtClave != "arrCiudadano") {
+                        if (!in_array($txtClave, $arrIgnorarCampos)) {
+                            $_POST[$txtClave] = $txtValor;
+                        }
+                    } else {
+                        foreach ($claCasaMano->objPostulacion->$txtClave as $seqCiudadano => $objCiudadano) {
+                            $numDocumento = $objCiudadano->numDocumento;
+                            foreach ($objCiudadano as $txtCampo => $txtValue) {
+                                $_POST['hogar'][$numDocumento][$txtCampo] = $txtValue;
+                            }
+                        }
                     }
                 }
             }
@@ -684,7 +721,7 @@ if (empty($arrErrores)) {
         // el numero de formulario se valida la primera vez que se pone, despues no lo puede cambiar
         if( $claCasaMano->objPostulacion->txtFormulario == "" ){
             if ( trim($_POST['txtFormulario']) != "") {
-                $txtFormato = "/^[0-9]{2}[-][0-9]{3,6}$/"; // dos digitos de tutor y hasta seis de numero de formulario
+                $txtFormato = "/^[0-9]{2,3}[-][0-9]{3,6}$/"; // dos digitos de tutor y hasta seis de numero de formulario
                 $txtFormulario = trim($_POST['txtFormulario']);
                 if (preg_match($txtFormato, $txtFormulario)) {
                     $arrFormulario = mb_split("-", $txtFormulario);

@@ -1278,6 +1278,32 @@
                                         <a onClick="document.getElementById('fchAprobacionCredito').value = '';" href="#">Limpiar</a>
                                     </td>
                                 </tr>
+                                <tr><!-- ACUERDO DE PAGO -->
+                                    <td>Acuerdo Pago / Lote / Terreno</td>
+                                    <td align="right" style="padding-right: 5px;">
+                                        $ <input type="text"
+                                                 name="valAporteLote"
+                                                 id="valAporteLote"
+                                                 value="{$objFormulario->valAporteLote|number_format:'0':'.':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
+                                                 style="width:100px;text-align:right;"
+                                        />
+                                    </td>
+                                    <!-- SOPORTE APORTE LOTE -->
+                                    <td>Soporte</td>
+                                    <td align="center">
+                                        <input type="text"
+                                               name="txtSoporteAporteLote"
+                                               id="txtSoporteAporteLote"
+                                               value="{$objFormulario->txtSoporteAporteLote}"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="sinCaracteresEspeciales(this);
+                                                       this.style.backgroundColor = '#FFFFFF';"
+                                               style="width:300px;" />
+                                    </td>
+                                </tr>
                                 <tr>
                                     <!-- SUBSIDIO NACIONAL -->
                                     <td>Valor Subsidio: AVC / FOVIS / SFV</td>

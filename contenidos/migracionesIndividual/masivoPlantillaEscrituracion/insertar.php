@@ -2,12 +2,13 @@
     <!-- Estilos CSS -->
     <link href="../../../librerias/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="../../../librerias/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <script language="JavaScript" type="text/javascript" src="../../../librerias/javascript/funcionesSubsidios.js"></script>
+   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <!--        <link href="../../../librerias/bootstrap/css/bootstrap-theme.css" rel="stylesheet">-->
 </head>
 <?php
 include '../../../recursos/archivos/verificarSesion.php';
-include_once "../lib/mysqli/shared/ez_sql_core.php";
-include_once "../lib/mysqli/ez_sql_mysqli.php";
+include '../conecta.php';
 include '../migrarTablero.php';
 
 
@@ -21,8 +22,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     $lineas = file($nombreArchivo);
     //var_dump($lineas);    exit();
     $registros = 0;
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+
     $intV = 1;
     $intNV = 1;
     $band = 0;
@@ -262,6 +262,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     }
 //echo "<br>".$idHogar;
     $separado_por_comas = implode(",", $arrFormularioArchivo);
+
     $validar = validarDocumentos($separado_por_comas, $db, 23, 22, "Estudio de Predio");
     if ($validar) {
         $arrSeqDesembolso = verificarRegistrosExistentes($arrViabilizados, $idDesembolso, $documento, $intV);
@@ -272,8 +273,8 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
 }
 
 function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $documento, $cantF) {
-    // $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    global $db;
+
     $consulta = " SELECT seqDesembolso, seqEscrituracion FROM t_des_escrituracion WHERE seqDesembolso IN(" . $idSeqDesembolso . ")";
     $resultado = $db->get_results($consulta);
     $dato = Array();
@@ -288,7 +289,7 @@ function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $documento, $c
 }
 
 function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $documento) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
+    global $db;
     //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
     $sqlCiu = "SELECT numDocumento, CONCAT(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2) AS nombre FROM t_ciu_ciudadano WHERE numDocumento IN(" . $documento . ")";
     $resultado = $db->get_results($sqlCiu);
@@ -580,9 +581,8 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
             $int++;
         }
     }
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
-    //echo $valores;
+
+    global $db;
     $valores = substr_replace($valores, ';', -1, 1);
     $valSeg = substr_replace($valSeg, ';', -1, 1);
     if ($valores != "") {
@@ -592,53 +592,28 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
         $queryCiu = $sqlSeg . $valSeg;
         $result = $db->query($queryCiu);
         $formular = substr_replace($formular, '', -1, 1);
-        migrarInformacion2($formular, $db, 23, 22, "Estudio de Predio");
-        generarFlujo($formular);
+        $migra = migrarInformacion2($formular, $db, 23, 22, "Estudio de Predio");
+
+        if ($migra) {
+            generarFlujos($formular);
+        }
     }
 
-    //  echo "<br>*".$query ."<br>";
     if ($existen != "") {
         $cantidaE = ($int) - $ex;
         // $existen = substr_replace(trim($existen), ';', -1, 1);
         echo "<p> Los formularios que se muestran a continuaci&oacute;n se encuentr&aacute;n previamente almacenados: <br><b> " . $existen . " </b><br> son en total <b>" . $cantidaE . " Registros </b> de un total de " . ($int - 1) . " Registros </p>";
     } else {
-        echo "<p><b>Se almacenaron los datos con exito</b></p>";
-        ?>
-        <table>
-            <tr>
-                <th>Documento</th>
-                <th>Desembolso</th>
-                <th>Formulario</th>
-                <th>Link</th>
-            </tr>
-            <?php
-            $int = 1;
-            foreach ($arreglo['seqFormulario'] as $key => $value) {
-                if ($arreglo['seqDesembolso'][$int] != "") {
-                    ?>
-
-                    <tr>
-                        <td><?= $arreglo['numDocumento'][$int] ?></td>
-                        <td><?= $arreglo['seqDesembolso'][$int] ?></td>
-                        <td><?= $arreglo['seqFormulario'][$int] ?></td>
-                        <td><a href="https://<?= $_SERVER['HTTP_HOST'] ?>/sdv/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?>">https://<?= $_SERVER['HTTP_HOST'] ?>/sdv/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?></a></td>
-                    </tr>
-
-
-                    <?php
-                }
-                $int++;
-            }
-            ?>
-        </table>
-
-        <?php
+        echo "<p><b>Se almacenaron los datos con exito link <a href='#' onclick='exportableExcel(".json_encode($arreglo).")' target='_blank'>link</a></b></p>";
+      echo "  <a href=\"javascript:void(0)\" onClick=\"cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/cargarRadicacion/index.php');\">Radicaci&oacute;n Expedientes</a></li>";
+        generarExcel($arreglo);
     }
 }
 
-function generarFlujo($formularios) {
-    $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-    //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdth_subsidiosentrega', 'localhost');
+function generarFlujos($formularios) {
+
+    global $db;
+
     $sqlFlujo = "SELECT seqFormulario FROM T_DES_FLUJO WHERE seqFormulario IN(" . $formularios . ")";
     $resultFlujo = $db->get_results($sqlFlujo);
     $formFlujo = explode(",", $formularios);
@@ -656,5 +631,36 @@ function generarFlujo($formularios) {
     }
 
     return true;
+}
+
+function generarExcel($arreglo) {
+    ?>
+    <table>
+        <tr>
+            <th>Documento</th>
+            <th>Desembolso</th>
+            <th>Formulario</th>
+            <th>Link</th>
+        </tr>
+        <?php
+        $int = 1;
+        foreach ($arreglo['seqFormulario'] as $key => $value) {
+            if ($arreglo['seqDesembolso'][$int] != "") {
+                ?>
+
+                <tr>
+                    <td><?= $arreglo['numDocumento'][$int] ?></td>
+                    <td><?= $arreglo['seqDesembolso'][$int] ?></td>
+                    <td><?= $arreglo['seqFormulario'][$int] ?></td>
+                    <td><a href="http://<?= $_SERVER['HTTP_HOST'] ?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?>">http://<?= $_SERVER['HTTP_HOST'] ?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?></a></td>
+                </tr>
+
+                <?php
+            }
+            $int++;
+        }
+        ?>?>
+    </table>
+    <?php
 }
 ?>

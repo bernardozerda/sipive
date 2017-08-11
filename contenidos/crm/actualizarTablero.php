@@ -2,14 +2,20 @@
 
 @set_time_limit(300);
 
+chdir(dirname(__DIR__) . "/crm/");
+include( "../../recursos/archivos/lecturaConfiguracion.php" );
+
 function conecta() {
-    $conexion = mysql_connect("localhost", "sdht_usuario", "Ochochar*1");
+    global $arrConfiguracion;
+    $conexion = mysql_connect($arrConfiguracion['baseDatos']['servidor'], $arrConfiguracion['baseDatos']['usuario'], $arrConfiguracion['baseDatos']['clave']);
     mysql_set_charset('utf8', $conexion);
-    mysql_select_db("sipive", $conexion);
+    mysql_select_db($arrConfiguracion['baseDatos']['nombre'], $conexion);
     return $conexion;
 }
 
 actualizarTablero();
+
+echo "Se ejecuto con Exito!!!";
 
 //modificarDatosTablero();
 
@@ -28,18 +34,18 @@ function variables($valor) {
         //$arrEstado[15] = "Vinculado";
         $arrEstado[62] = "Revisión Documental";
         $arrEstado[17] = "Cargue Información Solución";
-        $arrEstado[19] = "Captura datos Escrituracion";
+        $arrEstado[27] = "Captura datos Escrituracion";
         $arrEstado[22] = "Cargue Datos Escrituración";
         $arrEstado[23] = "Migración Estudios Técnicos";
         $arrEstado[25] = "Generación Certificado Habitabilidad";
         $arrEstado[26] = "Estudio de Titulos";
-        $arrEstado[27] = "Cargue Datos Estudio Títulos";
+        $arrEstado[24] = "Cargue Datos Estudio Títulos";
         $arrEstado[31] = "Consolidación Documental";
         $arrEstado[29] = "Cierre Legalizado";
 
         return $arrEstado;
     } else if ($valor == 2) {
-        $listEstados = "15,62,17,19,22,23,25,26,27,31,29,40";
+        $listEstados = "15,62,17,27,22,23,25,26,24,31,29,40";
         return $listEstados;
     } else {
         $arrEstadoCon = array();
@@ -70,7 +76,7 @@ function variables($valor) {
                              where  und.seqProyecto = **  AND und.seqProyecto>0 and seqEstadoProceso = ¬¬
                              GROUP BY color";
 
-        $arrEstadoCon[19] = "SELECT count(*) as cant, 
+        $arrEstadoCon[27] = "SELECT count(*) as cant, 
                                 case WHEN (datediff(DATE(NOW()), fchCreacionBusquedaOferta))between 0 and 7
                                 THEN 'verde'
                                 WHEN (datediff(DATE(NOW()), fchCreacionBusquedaOferta)) between 8 and 9
@@ -84,9 +90,9 @@ function variables($valor) {
                              where  und.seqProyecto = ** AND und.seqProyecto>0 and seqEstadoProceso = ¬¬
                              GROUP BY color";
         $arrEstadoCon[22] = "SELECT count(*) as cant, 
-                                case WHEN (datediff(DATE(NOW()), fchCreacionEscrituracion)) between 0 and 2
+                                case WHEN (datediff(DATE(NOW()), fchCreacionEscrituracion)) between 0 and 1
                                 THEN 'verde'
-                                WHEN (datediff(DATE(NOW()), fchCreacionEscrituracion)) between 3 and 3
+                                WHEN (datediff(DATE(NOW()), fchCreacionEscrituracion)) between 2 and 2
                                 THEN 'amarillo'
                                 ELSE 'rojo' 
                                 END
@@ -127,9 +133,9 @@ function variables($valor) {
                          GROUP BY color";
 
         $arrEstadoCon[26] = "SELECT count(*) as cant, 
-                        case WHEN (datediff(DATE(NOW()), tec.fchActualizacion))between 0 and 9
+                        case WHEN (datediff(DATE(NOW()), tec.fchActualizacion))between 0 and 7
                         THEN 'verde'
-                        WHEN (datediff(DATE(NOW()), tec.fchActualizacion)) between 10 and 11
+                        WHEN (datediff(DATE(NOW()), tec.fchActualizacion)) between 8 and 9
                         THEN 'amarillo'
                         ELSE 'rojo' 
                         END
@@ -141,7 +147,7 @@ function variables($valor) {
                           where  und.seqProyecto = ** AND und.seqProyecto>0 and (seqEstadoProceso = ¬¬ or seqEstadoProceso=28)
                          GROUP BY color";
 
-        $arrEstadoCon[27] = "SELECT count(*) as cant, 
+        $arrEstadoCon[24] = "SELECT count(*) as cant, 
                             case WHEN (datediff(DATE(NOW()), fchInformacionTitulos))between 0 and 2
                               THEN 'verde'
                               WHEN (datediff(DATE(NOW()), fchInformacionTitulos)) between 3 and 3
@@ -154,9 +160,9 @@ function variables($valor) {
                                where und.seqProyecto = ** AND und.seqProyecto>0 and seqEstadoProceso = ¬¬ 
                                GROUP BY color";
         $arrEstadoCon[31] = "SELECT count(*) as cant, 
-                        case WHEN (datediff(DATE(NOW()), tit.fchCreacion))between 0 and 9
+                        case WHEN (datediff(DATE(NOW()), tit.fchCreacion))between 0 and 7
                         THEN 'verde'
-                        WHEN (datediff(DATE(NOW()), tit.fchCreacion)) between 10 and 11
+                        WHEN (datediff(DATE(NOW()), tit.fchCreacion)) between 8 and 9
                         THEN 'amarillo'
                         ELSE 'rojo' 
                         END
@@ -169,9 +175,9 @@ function variables($valor) {
                          GROUP BY color";
 
         $arrEstadoCon[29] = "SELECT count(*) as cant, 
-                        case WHEN (datediff(DATE(NOW()), tit.fchActualizacion))between 0 and 9
+                        case WHEN (datediff(DATE(NOW()), tit.fchActualizacion))between 0 and 7
                         THEN 'verde'
-                        WHEN (datediff(DATE(NOW()), tit.fchActualizacion)) between 10 and 11
+                        WHEN (datediff(DATE(NOW()), tit.fchActualizacion)) between 8 and 9
                         THEN 'amarillo'
                         ELSE 'rojo' 
                         END
@@ -208,8 +214,8 @@ function actualizarTablero() {
         $sql .= "(SELECT DISTINCT (count(frm1.seqEstadoProceso))
                         FROM t_frm_formulario frm1
                         WHERE     frm1.seqProyecto = und.seqProyecto
-                              AND frm1.seqEstadoProceso = " . $key . ")
-                          AS 'val" . $value . "',";
+                              AND frm1.seqEstadoProceso = " . $key . ") and
+                        0 AS 'val" . $value . "',";
         $sql .= " 0  AS 'v" . $value . "', 0  AS 'a" . $value . "', 0  AS 'r" . $value . "',";
         $sqlUpdate .= " CHANGE v" . $value . " v" . $value . " INT,
                     CHANGE a" . $value . " a" . $value . " INT,
@@ -221,14 +227,14 @@ function actualizarTablero() {
                 INNER JOIN t_frm_formulario frm USING(seqFormulario) 
                 WHERE und.seqFormulario is not null 
                 and frm.seqEstadoProceso IN (" . $listEstados . ") AND und.bolActivo = 1
-                AND pry.seqTipoEsquema in (1,2) 
+                #AND pry.seqTipoEsquema in (1,2,8,9) 
                 and und.seqProyecto > 0 
                 GROUP BY und.seqProyecto                
                 ";
     $sqlUpdate = substr_replace($sqlUpdate, ';', -1, 1);
     //echo $sqlUpdate;
-    // echo $sql. "<br>";
-    //die();
+//    echo $sql . "<br>";
+//    die();
     $result = mysql_query($sql, $conexion) or die(mysql_error());
     mysql_query($sqlUpdate, $conexion) or die(mysql_error());
     modificarDatosTablero();
@@ -237,6 +243,7 @@ function actualizarTablero() {
 function modificarDatosTablero() {
     $conexion = conecta();
     $arrEstadoCon = variables(0);
+    //$arrEstadoCon."<br>"; 
     $arrEstado = variables(1);
     $sql = "SELECT * FROM t_pry_tablero_control";
     $query = mysql_query($sql, $conexion) or die(mysql_error());
@@ -258,7 +265,7 @@ function modificarDatosTablero() {
 
                     $value = str_replace("¬¬", $key, $value);
 
-                    // echo "<p>" . $value . "</p>";
+                  //  echo "<p>" . $value . "</p>";
 
                     $rs = mysql_query($value, $conexion) or die(mysql_error());
                     if (mysql_num_rows($rs) > 0) {
@@ -278,7 +285,13 @@ function modificarDatosTablero() {
                             mysql_query($sql, $conexion) or die(mysql_error());
                         }
                         $sql = "UPDATE t_pry_tablero_control SET val" . $variable . " = " . $total . " where seqProyecto = " . $row['seqProyecto'];
+
+//                       if($variable == 'EstudiodeTitulos'){
+//                           echo "<br>". $sql;
+//                       }
+
                         mysql_query($sql, $conexion) or die(mysql_error());
+
                     }
 
                     //echo "<br>" . $sql;

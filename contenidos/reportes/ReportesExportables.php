@@ -8,6 +8,9 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Reportes.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Encuestas.class.php" );
+
 
 $claReporte = new Reportes;
 $reporte = $_GET['reporte'];
@@ -199,7 +202,8 @@ switch ($reporte) {
         break;
 
     case "encuestasPive":
-        $claReporte->encuestasPive();
+//        $claReporte->encuestasPive();
+        $claReporte->encuestasPiveCruces();
         break;
 }
 ?>

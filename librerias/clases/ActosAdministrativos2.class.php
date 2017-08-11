@@ -100,6 +100,10 @@ Class TipoActoAdministrativo {
                             $objTipoActo->arrFormatoArchivo[2]['tipo'] = "texto";
                             $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Valor Correcto";
                             $objTipoActo->arrFormatoArchivo[3]['tipo'] = "texto";
+                            $objTipoActo->arrFormatoArchivo[4]['nombre'] = "Resolución Modificada";
+                            $objTipoActo->arrFormatoArchivo[4]['tipo'] = "texto";
+                            $objTipoActo->arrFormatoArchivo[5]['nombre'] = "Fecha Resolución Modificada";
+                            $objTipoActo->arrFormatoArchivo[5]['tipo'] = "fecha";
                             break;
                         case 3: // Resolucion de inhabilitados
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Identificador del Formulario";
@@ -186,39 +190,48 @@ Class TipoActoAdministrativo {
         $this->arrErrores = array();
         $arrTipoActoLibre = array(2, 3); // Tipos de acto en donde los textos pueden ser vacios
         unset($arrArchivo[0]); // Quita la fila de titulos
-        foreach ($arrArchivo as $numFila => $arrFila) {
-            foreach ($arrFila as $numColumna => $txtValor) {
-                $bolError = false;
-                switch ($this->arrFormatoArchivo[$numColumna]['tipo']) {
-                    case "textarea":
-                        $bolError = ( (!in_array($this->seqTipoActo, $arrTipoActoLibre) ) and trim($txtValor) == "" ) ? true : false;
-                        break;
-                    case "texto":
-                        $bolError = ( (!in_array($this->seqTipoActo, $arrTipoActoLibre) ) and trim($txtValor) == "" ) ? true : false;
-                        break;
-                    case "numero":
-                        $bolError = ( floatval($txtValor) == 0 ) ? true : false;
-                        break;
-                    case "fecha":
-                        $bolError = ( esFechaValida($txtValor) == true ) ? false : true;
-                        break;
-                    default:
-                        $bolError = ( (!in_array($this->seqTipoActo, $arrTipoActoLibre) ) and trim($txtValor) == "" ) ? true : false;
-                        break;
-                }
-
-                if ($bolError == false and isset($this->arrFormatoArchivo[$numColumna]['rango']) and ! empty($this->arrFormatoArchivo[$numColumna]['tipo'])) {
-                    if (!in_array(strtolower($txtValor), $this->arrFormatoArchivo[$numColumna]['rango'])) {
-                        $bolError = true;
+        if(!empty($arrArchivo)) {
+            foreach ($arrArchivo as $numFila => $arrFila) {
+                $this->cargarTipoActo($this->seqTipoActo);
+                foreach ($arrFila as $numColumna => $txtValor) {
+                    $bolError = false;
+                    switch ($this->arrFormatoArchivo[$numColumna]['tipo']) {
+                        case "textarea":
+                            $bolError = ((!in_array($this->seqTipoActo, $arrTipoActoLibre)) and trim($txtValor) == "") ? true : false;
+                            break;
+                        case "texto":
+                            $bolError = ((!in_array($this->seqTipoActo, $arrTipoActoLibre)) and trim($txtValor) == "") ? true : false;
+                            break;
+                        case "numero":
+                            $bolError = (floatval($txtValor) == 0) ? true : false;
+                            break;
+                        case "fecha":
+                            $bolError = (esFechaValida($txtValor) == true) ? false : true;
+                            break;
+                        default:
+                            $bolError = ((!in_array($this->seqTipoActo, $arrTipoActoLibre)) and trim($txtValor) == "") ? true : false;
+                            break;
                     }
-                }
-
-                if ($bolError == true) {
-                    $this->arrErrores[] = "Error en la linea " . ( $numFila + 1 ) . ", columna " .
+                    if ($bolError == false and isset($this->arrFormatoArchivo[$numColumna]['rango']) and !empty($this->arrFormatoArchivo[$numColumna]['tipo'])) {
+                        if (!in_array(strtolower($txtValor), $this->arrFormatoArchivo[$numColumna]['rango'])) {
+                            $bolError = true;
+                        }
+                    }
+                    if ($bolError == true) {
+                        $this->arrErrores[] = "Error en la linea " . ($numFila + 1) . ", columna " .
                             $this->arrFormatoArchivo[$numColumna]['nombre'] . ": El valor " .
                             $txtValor . " no es válido";
+                    }
+                    unset( $this->arrFormatoArchivo[$numColumna] );
+                }
+                if(!empty($this->arrFormatoArchivo)){
+                    foreach($this->arrFormatoArchivo as $numColumna => $arrDatos) {
+                        $this->arrErrores[] = "Error en la linea " . ($numFila + 1) . ", falta el valor para la columna " . $arrDatos['nombre'];
+                    }
                 }
             }
+        }else{
+            $this->arrErrores[] = "El archivo debe contener datos para al menos un hogar";
         }
     }
 
@@ -233,7 +246,9 @@ Class TipoActoAdministrativo {
         // Obtiene los formularios de los hogares vinculados en el archivo
         unset($arrArchivo[0]); // Quitar la columna de titulos
         foreach ($arrArchivo as $numLinea => $arrLinea) {
+
             $numDocumento = $arrLinea[0];
+
             if (!isset($arrFormularios[$numDocumento])) {
                 $claCiudadano = new Ciudadano();
                 if ($arrPost['seqTipoActo'] != 3) {
@@ -254,9 +269,11 @@ Class TipoActoAdministrativo {
                 switch ($arrPost['seqTipoActo']) {
                     case 2: // Resolucion de modificacion
                         $numRegistro = count($arrFormularios['datos'][$numDocumento]);
-                        $arrFormularios['datos'][$numDocumento][$numRegistro]['campo'] = $arrLinea[1];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['campo']      = $arrLinea[1];
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['incorrecto'] = $arrLinea[2];
-                        $arrFormularios['datos'][$numDocumento][$numRegistro]['correcto'] = $arrLinea[3];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['correcto']   = $arrLinea[3];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['resolucion'] = $arrLinea[4];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['fecha']      = $arrLinea[5];
                         break;
                     case 3: // Resolucion de inhabilitados
                         $seqFormulario = $numDocumento;
@@ -303,6 +320,25 @@ Class TipoActoAdministrativo {
 
                         break;
                     case 2: // Modificatoria
+
+                        $seqEtapa = array_shift(
+                            obtenerDatosTabla(
+                                "t_frm_estado_proceso",
+                                array("seqEstadoProceso","seqEtapa"),
+                                "seqEstadoProceso",
+                                "seqEstadoProceso = " . $objFormulario->seqEstadoProceso
+                            )
+                        );
+
+                        if($seqEtapa != 4 and $seqEtapa != 5){
+                            $txtEtapa = obtenerNombres("t_frm_etapa","seqEtapa",$seqEtapa);
+                            $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no puede ser modificado, el formulario se encuentra en etapa de " . $txtEtapa;
+                        }
+
+                        if ($objFormulario->bolCerrado == 0) {
+                            $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no puede ser modificado, el formulario se encuentra Abierto";
+                        }
+
                         if (isset($arrFormularios['datos'][$numDocumento])) {
                             foreach ($arrFormularios['datos'][$numDocumento] as $arrRegistro) {
                                 switch (strtolower($arrRegistro['campo'])) {
@@ -343,8 +379,126 @@ Class TipoActoAdministrativo {
                                         }
                                         break;
                                     case "unidad habitacional":
+                                        if (trim($arrRegistro['incorrecto']) == "") {
+                                            $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: No puede dejar este campo vacio";
+                                        }else{
+
+                                            $arrRegistro['incorrecto'] = mb_split("/",$arrRegistro['incorrecto']);
+                                            foreach($arrRegistro['incorrecto'] as $i => $txtValor){
+                                                $arrRegistro['incorrecto'][$i] = trim($txtValor);
+                                            }
+
+                                            $txtProyecto = $arrRegistro['incorrecto'][0];
+                                            $txtUnidad   = $arrRegistro['incorrecto'][1];
+
+                                            $arrProyecto = array();
+                                            $arrProyecto = obtenerDatosTabla(
+                                                "T_PRY_PROYECTO",
+                                                array("txtNombreProyecto" , "seqProyecto", "seqProyectoPadre"),
+                                                "txtNombreProyecto",
+                                                "txtNombreProyecto like '" . $txtProyecto ."'"
+                                            );
+
+                                            if( intval($arrProyecto[ $txtProyecto ]['seqProyectoPadre']) == 0 ){
+                                                $seqProyecto = intval($arrProyecto[ $txtProyecto ]['seqProyecto']);
+                                                $seqProyectoHijo = null;
+                                                $seqUnidadProyecto = array_shift(
+                                                    obtenerDatosTabla(
+                                                        "T_PRY_UNIDAD_PROYECTO",
+                                                        array("txtNombreUnidad","seqUnidadProyecto"),
+                                                        "txtNombreUnidad",
+                                                        "txtNombreUnidad like '" . $txtUnidad ."' and seqProyecto = " . $seqProyecto
+                                                    )
+                                                );
+                                            }else{
+                                                $seqProyecto = intval($arrProyecto[ $txtProyecto ]['seqProyectoPadre']);
+                                                $seqProyectoHijo = intval($arrProyecto[ $txtProyecto ]['seqProyecto']);
+                                                $seqUnidadProyecto = array_shift(
+                                                    obtenerDatosTabla(
+                                                        "T_PRY_UNIDAD_PROYECTO",
+                                                        array("txtNombreUnidad","seqUnidadProyecto"),
+                                                        "txtNombreUnidad",
+                                                        "txtNombreUnidad like '" . $txtUnidad ."' and seqProyecto = " . $seqProyectoHijo
+                                                    )
+                                                );
+                                            }
+
+                                            if( $seqProyecto != $objFormulario->seqProyecto ){
+                                                $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: " . trim($arrRegistro['incorrecto'][0]) . " no es el proyecto asociado actualmente";
+                                            }
+
+                                            if( intval($seqProyectoHijo) != intval($objFormulario->seqProyectoHijo) ) {
+                                                $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: " . trim($arrRegistro['incorrecto'][0]) . " no es el conjunto residencial asociado actualmente";
+                                            }
+
+                                            if( $seqUnidadProyecto != $objFormulario->seqUnidadProyecto ){
+                                                $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: " . trim($arrRegistro['incorrecto'][1]) . " no es la unidad asociada actualmente";
+                                            }
+
+                                        }
                                         if (trim($arrRegistro['correcto']) == "") {
                                             $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: No puede dejar este campo vacio";
+                                        }else{
+                                            $arrRegistro['correcto'] = mb_split("/",$arrRegistro['correcto']);
+                                            foreach($arrRegistro['correcto'] as $i => $txtValor){
+                                                $arrRegistro['correcto'][$i] = trim($txtValor);
+                                            }
+
+                                            $txtProyecto = $arrRegistro['correcto'][0];
+                                            $txtUnidad   = $arrRegistro['correcto'][1];
+
+                                            $arrProyecto = array();
+                                            $arrProyecto = obtenerDatosTabla(
+                                                "T_PRY_PROYECTO",
+                                                array("txtNombreProyecto" , "seqProyecto", "seqProyectoPadre"),
+                                                "txtNombreProyecto",
+                                                "txtNombreProyecto like '" . $txtProyecto ."'"
+                                            );
+
+                                            if( intval($arrProyecto[ $txtProyecto ]['seqProyectoPadre']) == 0 ){
+                                                $seqProyecto = intval($arrProyecto[ $txtProyecto ]['seqProyecto']);
+                                                $seqProyectoHijo = null;
+                                                $seqUnidadProyecto = array_shift(
+                                                    obtenerDatosTabla(
+                                                        "T_PRY_UNIDAD_PROYECTO",
+                                                        array("txtNombreUnidad","seqUnidadProyecto"),
+                                                        "txtNombreUnidad",
+                                                        "txtNombreUnidad like '" . $txtUnidad ."' and seqProyecto = " . $seqProyecto
+                                                    )
+                                                );
+                                            }else{
+                                                $seqProyecto = intval($arrProyecto[ $txtProyecto ]['seqProyectoPadre']);
+                                                $seqProyectoHijo = intval($arrProyecto[ $txtProyecto ]['seqProyecto']);
+                                                $seqUnidadProyecto = array_shift(
+                                                    obtenerDatosTabla(
+                                                        "T_PRY_UNIDAD_PROYECTO",
+                                                        array("txtNombreUnidad","seqUnidadProyecto"),
+                                                        "txtNombreUnidad",
+                                                        "txtNombreUnidad like '" . $txtUnidad ."' and seqProyecto = " . $seqProyectoHijo
+                                                    )
+                                                );
+                                            }
+
+                                            if( intval($seqProyecto) == 0 ){
+                                                $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: " . trim($arrRegistro['correcto'][0]) . " no se encontró el proyecto";
+                                            }
+
+                                            $seqFormularioUnidad = array_shift(
+                                                obtenerDatosTabla(
+                                                    "T_PRY_UNIDAD_PROYECTO",
+                                                    array("seqUnidadProyecto","seqFormulario"),
+                                                    "seqUnidadProyecto",
+                                                    "seqUnidadProyecto = $seqUnidadProyecto"
+                                                )
+                                            );
+
+                                            if( intval($seqUnidadProyecto) == 0 ){
+                                                $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: No existe la unidad habitacional " . trim($arrRegistro['correcto'][1]);
+                                            }else{
+                                                if( intval($seqFormularioUnidad) != 0 ){
+                                                    $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: La unidad habitacional " . trim($arrRegistro['correcto']) . " esta tomada por el hogar de " .  number_format(Ciudadano::documentoVinculado($seqFormularioUnidad),"0",".",",");
+                                                }
+                                            }
                                         }
                                         break;
                                     case "valor donacion":
@@ -385,8 +539,20 @@ Class TipoActoAdministrativo {
                             }
                         }
 
-                        if ($objFormulario->bolCerrado == 0) {
-                            $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no puede ser asignado, el Formulario se encuentra Abierto ";
+                        $claActoModificado = new ActoAdministrativo();
+                        $arrActoModificado = $claActoModificado->cargarActoAdministrativo(intval($arrRegistro['resolucion']),$arrRegistro['fecha']);
+                        if( isset( $arrActoModificado[ intval($arrRegistro['resolucion']) . strtotime($arrRegistro['fecha']) ] ) ) {
+                            $objActoModificado = $arrActoModificado[intval($arrRegistro['resolucion']) . strtotime($arrRegistro['fecha'])];
+                            if( $objActoModificado->seqTipoActo == 1 ) {
+                                $objActoModificado->obtenerHogares($objFormulario->seqFormulario);
+                                if (empty($objActoModificado->arrHogares)) {
+                                    $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Resolución y Fecha (" . number_format($arrRegistro['resolucion']) . " del " . $arrRegistro['fecha'] . "): El hogar no esta vinculado a este acto administrativo";
+                                }
+                            }else{
+                                $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Resolución y Fecha (" . number_format($arrRegistro['resolucion']) . " del " . $arrRegistro['fecha'] . "): No es una acto adminsitrativo de asignación";
+                            }
+                        }else{
+                            $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Resolución y Fecha (" . number_format($arrRegistro['resolucion']) . " del " . $arrRegistro['fecha'] . "): No existe";
                         }
                         break;
                     case 3: // inhabilitados
@@ -1358,6 +1524,7 @@ Class ActoAdministrativo {
             // Carga la informacion de los hogares contenidos en el archivo
             unset($arrArchivo[0]); // Quitar la columna de titulos
             foreach ($arrArchivo as $numLinea => $arrLinea) {
+
                 $numDocumento = $arrLinea[0];
                 if (!isset($arrFormularios[$numDocumento])) {
                     if ($arrActo['seqTipoActo'] != 3) {
@@ -1380,6 +1547,8 @@ Class ActoAdministrativo {
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['campo'] = $arrLinea[1];
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['incorrecto'] = $arrLinea[2];
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['correcto'] = $arrLinea[3];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['resolucion'] = $arrLinea[4];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['fecha'] = $arrLinea[5];
                         break;
                     case 3: // inhabilidades
                         $numDocumento = $arrLinea[1];
@@ -1412,7 +1581,6 @@ Class ActoAdministrativo {
             // INSERTA LA INFORMACION DEL ACTO ADMINISTRATIVO
             foreach ($arrFormularios['formularios'] as $numDocumento => $objFormulario) {
 
-
                 // Inserta la informacion del formulario y vinculacion de hogares
                 try {
 
@@ -1422,23 +1590,37 @@ Class ActoAdministrativo {
                     $arrIgnorar[] = "numPuntajeSisben";
                     $txtCamposSql = "";
                     $txtValorSql = "";
+
                     foreach ($objFormulario as $txtClave => $txtValor) {
                         if (!in_array($txtClave, $arrIgnorar)) {
+                            if( substr($txtClave,0,3) == "fch" ){
+                                if( ! esFechaValida( $txtValor ) ){
+                                    $txtValor = "NULL";
+                                }else{
+                                    $txtValor = "'" . $txtValor . "'";
+                                }
+                            }else{
+                                $txtValor = "'" . $txtValor . "'";
+                            }
                             $txtCamposSql .= trim($txtClave) . ",";
-                            $txtValorSql .= "'" . trim($txtValor) . "',";
+                            $txtValorSql .= trim($txtValor) . ",";
                         }
                     }
                     $txtCamposSql = trim($txtCamposSql, ",");
                     $txtValorSql = trim($txtValorSql, ",");
 
                     $sql = "INSERT INTO T_AAD_FORMULARIO_ACTO ( $txtCamposSql ) VALUES ( $txtValorSql )";
-                    //echo $sql;die();
+
                     $aptBd->execute($sql);
                     $seqFormularioActo = $aptBd->Insert_ID();
 
                     $numActoReferencia = 0;
                     $fchActoReferencia = "";
                     switch ($arrActo['seqTipoActo']) {
+                        case 2:
+                            $numActoReferencia = $arrFormularios['datos'][$numDocumento][0]['resolucion'];
+                            $fchActoReferencia = $arrFormularios['datos'][$numDocumento][0]['fecha'];
+                            break;
                         case 7:
                             $numActoReferencia = $arrFormularios['datos'][$numDocumento]['numero'];
                             $fchActoReferencia = $arrFormularios['datos'][$numDocumento]['fecha'];
@@ -1448,6 +1630,8 @@ Class ActoAdministrativo {
                             $fchActoReferencia = $arrFormularios['datos'][$numDocumento]['fecha'];
                             break;
                     }
+
+                    $fchActoReferencia = ( esFechaValida( $fchActoReferencia ) )? "'" . $fchActoReferencia . "'" : "NULL";
 
                     $sql = "
                          INSERT INTO T_AAD_HOGARES_VINCULADOS ( 
@@ -1463,10 +1647,11 @@ Class ActoAdministrativo {
                             '" . $arrActo['fchActo'] . "',
                             " . $arrActo['seqTipoActo'] . ",
                             $numActoReferencia,
-                            '$fchActoReferencia'
+                            $fchActoReferencia
                          )
                       ";
                     $aptBd->execute($sql);
+
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se pudo copiar el formulario del documento " . number_format($numDocumento) . " al modulo de actos administrativos ";
                 }
@@ -1532,6 +1717,9 @@ Class ActoAdministrativo {
                                   ";
                                     break;
                                 case 2: // modificatorias
+
+                                    //pr( $arrFormularios['datos'] );
+
                                     if (isset($arrFormularios['datos'][$objFormulario->seqFormulario][$objCiudadano->numDocumento])) {
                                         $txtValoresSql = "";
                                         foreach ($arrFormularios['datos'][$objFormulario->seqFormulario][$objCiudadano->numDocumento] as $arrRegistro) {
@@ -1551,24 +1739,25 @@ Class ActoAdministrativo {
                                            ),";
                                         }
                                         $txtValoresSql = trim($txtValoresSql, ",");
-                                        /* if (isset($arrFormularios['datos'][$objCiudadano->numDocumento])) {
-                                          foreach ($arrFormularios['datos'][$objCiudadano->numDocumento] as $arrRegtistro) {
-                                          $txtValoresSql .= "
-                                          (
-                                          $seqFormularioActo,
-                                          $seqCiduadanoActo,
-                                          " . $objCiudadano->seqParentesco . ",
-                                          '$txtInhabilidad',
-                                          '$txtCausa',
-                                          '$txtFuente',
-                                          '" . $arrRegtistro['campo'] . "',
-                                          '" . $arrRegtistro['incorrecto'] . "',
-                                          '" . $arrRegtistro['correcto'] . "',
-                                          '$txtEstadoReposicion',
-                                          $valIndexacion
-                                          )";
-                                          }
-                                          $txtValoresSql = trim($txtValoresSql, ","); */
+                                    }elseif( isset($arrFormularios['datos'][$objCiudadano->numDocumento]) ){
+                                        $txtValoresSql = "";
+                                        foreach ($arrFormularios['datos'][$objCiudadano->numDocumento] as $i => $arrRegistro) {
+                                            $txtValoresSql .= "
+                                           (
+                                              $seqFormularioActo,
+                                              $seqCiduadanoActo,
+                                              " . $objCiudadano->seqParentesco . ",
+                                              '$txtInhabilidad',
+                                              '$txtCausa',
+                                              '$txtFuente',
+                                              '" . $arrRegistro['campo'] . "',
+                                              '" . $arrRegistro['incorrecto'] . "',
+                                              '" . $arrRegistro['correcto'] . "',
+                                              '$txtEstadoReposicion',
+                                              $valIndexacion
+                                           ),";
+                                        }
+                                        $txtValoresSql = trim($txtValoresSql, ",");
                                     } else {
                                         $txtValoresSql = "
                                         (
@@ -1845,6 +2034,7 @@ Class ActoAdministrativo {
                             $aptBd->execute($sql);
                         } catch (Exception $objError) {
                             $this->arrErrores[] = "No se pudo copiar el ciudadano del documento " . number_format($objCiudadano->numDocumento) . " al modulo de actos administrativos ";
+                            $this->arrErrores[] = $objError->getMessage();
                         }
                     }
                 }
@@ -2084,193 +2274,104 @@ Class ActoAdministrativo {
                                             $txtCambios .= "seqProyecto, Valor Anterior: " . $seqProyectoIncorrecto . ", Valor Nuevo: " . $seqProyectoCorrecto . "\n";
                                             break;
                                         case "unidad habitacional":
-                                            ////////// SI EL CAMPO CORRECTO (UNIDAD) TIENE EL (PROYECTO - UNIDAD), DIVIDE EL CAMPO PARA TRATAMIENTO //////////
+
                                             $unidadCorrecta = $arrRegistro['correcto'];
-                                            $segmento = explode(" - ", $unidadCorrecta);
-                                            $segmentoConjunto = "";
-                                            $segmentoUnidad = "";
-                                            if ($segmento[0] != "" && $segmento[1] != "") { // Si tiene la estructura "Proyecto - Unidad"
-                                                $segmentoConjunto = trim($segmento[0]);
-                                                $segmentoUnidad = trim($segmento[1]);
-                                            } else {
-                                                $segmentoConjunto = "";
-                                                $segmentoUnidad = $arrRegistro['correcto'];
+                                            $segmento = explode("/", $unidadCorrecta);
+                                            $segmentoConjunto = trim($segmento[0]);
+                                            $segmentoUnidad = trim($segmento[1]);
+
+                                            $arrProyecto = array();
+                                            $arrProyecto = obtenerDatosTabla(
+                                                "T_PRY_PROYECTO",
+                                                array("txtNombreProyecto","seqProyecto","seqProyectoPadre"),
+                                                "txtNombreProyecto",
+                                                "txtNombreProyecto = '" . $segmentoConjunto ."'"
+                                            );
+
+                                            if( intval( $arrProyecto[$segmentoConjunto]['seqProyectoPadre'] ) == 0 ){
+                                                $seqProyecto = intval( $arrProyecto[$segmentoConjunto]['seqProyecto'] );
+                                                $seqProyectoHijo = 'null';
+                                                $seqUnidadProyecto = array_shift(
+                                                    obtenerDatosTabla(
+                                                        "T_PRY_UNIDAD_PROYECTO",
+                                                        array("txtNombreUnidad","seqUnidadProyecto"),
+                                                        "txtNombreUnidad",
+                                                        "txtNombreUnidad = '" . $segmentoUnidad ."' and seqProyecto = " . $seqProyecto
+                                                    )
+                                                );
+                                            }else{
+                                                $seqProyecto = intval( $arrProyecto[$segmentoConjunto]['seqProyectoPadre'] );
+                                                $seqProyectoHijo = intval( $arrProyecto[$segmentoConjunto]['seqProyecto'] );
+                                                $seqUnidadProyecto = array_shift(
+                                                    obtenerDatosTabla(
+                                                        "T_PRY_UNIDAD_PROYECTO",
+                                                        array("txtNombreUnidad","seqUnidadProyecto"),
+                                                        "txtNombreUnidad",
+                                                        "txtNombreUnidad = '" . $segmentoUnidad ."' and seqProyecto = " . $seqProyectoHijo
+                                                    )
+                                                );
                                             }
 
-                                            /////////////// CONSULTA PROYECTO, PROYECTO HIJO Y UNIDAD ASOCIADOS AL DOCUMENTO DEL ARCHIVO PLANO ///////////////
-                                            $sql = "SELECT 
-															seqProyecto, 
-															seqProyectoHijo,
-															seqUnidadProyecto
-														FROM T_FRM_FORMULARIO
-														WHERE seqFormulario = " . $objFormulario->seqFormulario . "
-													  ";
-                                            $objRes = $aptBd->execute($sql);
-                                            $seqProyectoActual = 0;
-                                            $seqProyectoHijoActual = 0;
-                                            $seqUnidadProyectoActual = 0;
-                                            if ($objRes->fields) {
-                                                $seqProyectoActual = $objRes->fields['seqProyecto'];
-                                                $seqProyectoHijoActual = $objRes->fields['seqProyectoHijo'];
-                                                $seqUnidadProyectoActual = $objRes->fields['seqUnidadProyecto'];
+                                            // Actualiza la unidad en el formulario
+                                            $sql = "
+                                                UPDATE T_FRM_FORMULARIO SET 
+                                                  seqProyecto = " . $seqProyecto . ",
+                                                  seqProyectoHijo = " . $seqProyectoHijo . ",
+                                                  seqUnidadProyecto = " . $seqUnidadProyecto . "
+                                                WHERE seqFormulario = " . $objFormulario->seqFormulario;
+                                            $aptBd->execute($sql);
+
+                                            // Actualiza el formulario el tabla unidad_proyecto
+                                            $sql = "
+                                                UPDATE T_PRY_UNIDAD_PROYECTO SET 
+                                                  seqFormulario = " . $objFormulario->seqFormulario . " 
+                                                WHERE seqUnidadProyecto = " . $seqUnidadProyecto;
+                                            $aptBd->execute($sql);
+
+                                            // Libera la unidad antigua
+                                            $unidadIncorrecta = $arrRegistro['incorrecto'];
+                                            $segmento = explode("/", $unidadIncorrecta);
+                                            $segmentoConjunto = trim($segmento[0]);
+                                            $segmentoUnidad = trim($segmento[1]);
+
+                                            $arrProyecto = array();
+                                            $arrProyecto = obtenerDatosTabla(
+                                                "T_PRY_PROYECTO",
+                                                array("txtNombreProyecto","seqProyecto","seqProyectoPadre"),
+                                                "txtNombreProyecto",
+                                                "txtNombreProyecto = '" . $segmentoConjunto ."'"
+                                            );
+
+                                            if( intval( $arrProyecto[$segmentoConjunto]['seqProyectoPadre'] ) == 0 ){
+                                                $seqProyecto = intval( $arrProyecto[$segmentoConjunto]['seqProyecto'] );
+                                                $seqProyectoHijo = null;
+                                                $seqUnidadProyecto = array_shift(
+                                                    obtenerDatosTabla(
+                                                        "T_PRY_UNIDAD_PROYECTO",
+                                                        array("txtNombreUnidad","seqUnidadProyecto"),
+                                                        "txtNombreUnidad",
+                                                        "txtNombreUnidad = '" . $segmentoUnidad ."' and seqProyecto = " . $seqProyecto
+                                                    )
+                                                );
+                                            }else{
+                                                $seqProyecto = intval( $arrProyecto[$segmentoConjunto]['seqProyectoPadre'] );
+                                                $seqProyectoHijo = intval( $arrProyecto[$segmentoConjunto]['seqProyecto'] );
+                                                $seqUnidadProyecto = array_shift(
+                                                    obtenerDatosTabla(
+                                                        "T_PRY_UNIDAD_PROYECTO",
+                                                        array("txtNombreUnidad","seqUnidadProyecto"),
+                                                        "txtNombreUnidad",
+                                                        "txtNombreUnidad = '" . $segmentoUnidad ."' and seqProyecto = " . $seqProyectoHijo
+                                                    )
+                                                );
                                             }
 
-                                            // 'idProyectoActual' cambia si es Proyecto Padre o Proyecto Hijo
-                                            if ($seqProyectoHijoActual == 0 || $seqProyectoHijoActual == '') {
-                                                $idProyectoActual = $seqProyectoActual;
-                                            } else {
-                                                $idProyectoActual = $seqProyectoHijoActual;
-                                            }
+                                            $sql = "
+                                                UPDATE T_PRY_UNIDAD_PROYECTO SET 
+                                                  seqFormulario = null 
+                                                WHERE seqUnidadProyecto = " . $seqUnidadProyecto;
+                                            $aptBd->execute($sql);
 
-                                            // Si el campo correcto tiene conjunto residencial
-                                            $idProyectoNuevo = 0;
-                                            $flagCambiaProyecto = 0;
-                                            if ($segmentoConjunto != "") {
-                                                if ($segmentoConjunto == "NOGAL") { // PARQUES DE BOGOTA - NOGAL
-                                                    $idProyectoNuevo = 31;
-                                                } else if ($segmentoConjunto == "CEREZO") { // PARQUES DE BOGOTA - CEREZO
-                                                    $idProyectoNuevo = 33;
-                                                } else if ($segmentoConjunto == "ARRAYAN") { // PARQUES DE BOGOTA - ARRAYAN
-                                                    $idProyectoNuevo = 34;
-                                                } else if ($segmentoConjunto == "FLAMENCO I") { // PARQUES DE VILLA JAVIER - FLAMENCO I
-                                                    $idProyectoNuevo = 111;
-                                                } else if ($segmentoConjunto == "FLAMENCO II") { // PARQUES DE VILLA JAVIER - FLAMENCO II 
-                                                    $idProyectoNuevo = 112;
-                                                } else { // EL SEGMENTO PERTENECE A UN PROYECTO
-                                                    $flagCambiaProyecto = 1;
-                                                }
-                                            }
-
-                                            if ($segmentoUnidad != "") { // LA UNIDAD ESTÁ VACÍA
-                                                if ($segmentoConjunto == '') { ///////////////////////////////// CASO 1. MISMO PROYECTO ///////////////////////
-                                                    // Consulta el consecutivo de la unidad habitacional (Valor Incorrecto)
-                                                    $sql = "SELECT seqUnidadProyecto FROM T_PRY_UNIDAD_PROYECTO 
-																WHERE txtNombreUnidad = '" . $arrRegistro['incorrecto'] . "' AND seqProyecto = $idProyectoActual";
-                                                    $objRes = $aptBd->execute($sql);
-                                                    $seqUnidadProyectoIncorrecto = 0;
-                                                    if ($objRes->fields) {
-                                                        $seqUnidadProyectoIncorrecto = $objRes->fields['seqUnidadProyecto'];
-                                                    }
-                                                    $sql = "SELECT seqUnidadProyecto, seqFormulario FROM T_PRY_UNIDAD_PROYECTO
-																WHERE txtNombreUnidad = '" . $segmentoUnidad . "' AND seqProyecto = $seqProyectoActual";
-                                                    $objRes = $aptBd->execute($sql);
-                                                    $seqUnidadProyectoCorrecto = 0;
-                                                    $seqFormularioAsignado = 0;
-                                                    if ($objRes->fields) {
-                                                        $seqUnidadProyectoCorrecto = $objRes->fields['seqUnidadProyecto'];
-                                                        $seqFormularioAsignado = $objRes->fields['seqFormulario'];
-                                                    }
-                                                    // Actualizando valores
-                                                    if ($seqFormularioAsignado > 0) {
-                                                        $this->arrErrores[] = "La Unidad " . $arrRegistro['correcto'] . " ya está asignada";
-                                                    } else {
-                                                        // Actualiza la unidad en el formulario
-                                                        $sql = "UPDATE T_FRM_FORMULARIO SET seqUnidadProyecto = " . $seqUnidadProyectoCorrecto . " WHERE seqFormulario = " . $objFormulario->seqFormulario . "";
-                                                        $aptBd->execute($sql);
-                                                        // Actualiza el formulario el tabla unidad_proyecto y libera la antigua unidad
-                                                        $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = " . $objFormulario->seqFormulario . " WHERE seqUnidadProyecto = " . $seqUnidadProyectoCorrecto . "";
-                                                        $aptBd->execute($sql);
-                                                        // Libera la unidad antigua
-                                                        $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = '' WHERE seqUnidadProyecto = " . $seqUnidadProyectoIncorrecto . "";
-                                                        $aptBd->execute($sql);
-                                                    }
-                                                } else { // Cambia el proyecto o el conjunto residencial
-                                                    if ($flagCambiaProyecto == 1) { ///////////////////////////////////// CASO 2. CAMBIA DE PROYECTO /////////////////////////////////////////////
-                                                        // Consulta el consecutivo de la unidad habitacional (Valor Incorrecto)
-                                                        $sql = "SELECT seqUnidadProyecto FROM T_PRY_UNIDAD_PROYECTO 
-																WHERE txtNombreUnidad = '" . $arrRegistro['incorrecto'] . "' AND seqProyecto = $idProyectoActual";
-                                                        $objRes = $aptBd->execute($sql);
-                                                        $seqUnidadProyectoIncorrecto = 0;
-                                                        if ($objRes->fields) {
-                                                            $seqUnidadProyectoIncorrecto = $objRes->fields['seqUnidadProyecto'];
-                                                        }
-                                                        // Consulta Proyecto
-                                                        $sql = "SELECT seqProyecto, txtMatriculaInmobiliariaLote, txtChipLote, txtDireccion FROM T_PRY_PROYECTO
-																	WHERE txtNombreProyecto = '" . $segmentoConjunto . "'";
-                                                        $objRes = $aptBd->execute($sql);
-                                                        $seqNuevoProyecto = 0;
-                                                        if ($objRes->fields) {
-                                                            $seqNuevoProyecto = $objRes->fields['seqProyecto'];
-                                                            $txtMatriculaInmobiliariaLote = $objRes->fields['txtMatriculaInmobiliariaLote'];
-                                                            $txtChipLote = $objRes->fields['txtChipLote'];
-                                                            $txtDireccion = $objRes->fields['txtDireccion'];
-                                                        }
-                                                        // Consulta la Unidad Proyecto
-                                                        $sql = "SELECT seqUnidadProyecto, seqFormulario FROM T_PRY_UNIDAD_PROYECTO
-																	WHERE txtNombreUnidad = '" . $segmentoUnidad . "' AND seqProyecto = $seqNuevoProyecto";
-                                                        $objRes = $aptBd->execute($sql);
-                                                        $seqUnidadProyectoCorrecto = 0;
-                                                        $seqFormularioAsignado = 0;
-                                                        if ($objRes->fields) {
-                                                            $seqUnidadProyectoCorrecto = $objRes->fields['seqUnidadProyecto'];
-                                                            $seqFormularioAsignado = $objRes->fields['seqFormulario'];
-                                                        }
-                                                        // Actualizando valores
-                                                        if ($seqFormularioAsignado > 0) {
-                                                            $this->arrErrores[] = "La Unidad " . $arrRegistro['correcto'] . " ya está asignada";
-                                                        } else {
-                                                            // Actualiza la unidad en el formulario
-                                                            $sql = "UPDATE T_FRM_FORMULARIO SET seqUnidadProyecto = " . $seqUnidadProyectoCorrecto . " WHERE seqFormulario = " . $objFormulario->seqFormulario . "";
-                                                            $aptBd->execute($sql);
-                                                            // Actualiza el formulario el tabla unidad_proyecto y libera la antigua unidad
-                                                            $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = " . $objFormulario->seqFormulario . " WHERE seqUnidadProyecto = " . $seqUnidadProyectoCorrecto . "";
-                                                            $aptBd->execute($sql);
-                                                            // Libera la unidad antigua
-                                                            $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = '' WHERE seqUnidadProyecto = " . $seqUnidadProyectoIncorrecto . "";
-                                                            $aptBd->execute($sql);
-                                                            // Cambia la matricula inmobiliaria, chip y direccion del proyecto
-                                                            $sql = "UPDATE T_FRM_FORMULARIO 
-																		SET seqProyecto = '" . $seqNuevoProyecto . "', 
-																		txtMatriculaInmobiliaria = '" . $txtMatriculaInmobiliariaLote . "', 
-																		txtChip = '" . $txtChipLote . "', 
-																		txtDireccionSolucion = '" . $txtDireccion . "' 
-																		WHERE seqFormulario = " . $objFormulario->seqFormulario . "";
-                                                            $aptBd->execute($sql);
-                                                        }
-                                                    } else { //////////////////////////// CASO 3. CAMBIA CONJUNTO RESIDENCIAL /////////////////////////////////
-                                                        // Consulta el consecutivo de la unidad habitacional (Valor Incorrecto)
-                                                        $sql = "SELECT seqUnidadProyecto FROM T_PRY_UNIDAD_PROYECTO 
-																WHERE txtNombreUnidad = '" . $arrRegistro['incorrecto'] . "' AND seqProyecto = $idProyectoActual";
-                                                        $objRes = $aptBd->execute($sql);
-                                                        $seqUnidadProyectoIncorrecto = 0;
-                                                        if ($objRes->fields) {
-                                                            $seqUnidadProyectoIncorrecto = $objRes->fields['seqUnidadProyecto'];
-                                                        }
-                                                        $sql = "SELECT seqUnidadProyecto, seqFormulario FROM T_PRY_UNIDAD_PROYECTO
-																	WHERE txtNombreUnidad = '" . $segmentoUnidad . "' AND seqProyecto = $idProyectoNuevo";
-                                                        $objRes = $aptBd->execute($sql);
-                                                        $seqUnidadProyectoCorrecto = 0;
-                                                        $seqFormularioAsignado = 0;
-                                                        if ($objRes->fields) {
-                                                            $seqUnidadProyectoCorrecto = $objRes->fields['seqUnidadProyecto'];
-                                                            $seqFormularioAsignado = $objRes->fields['seqFormulario'];
-                                                        }
-                                                        // Actualizando valores
-                                                        if ($seqFormularioAsignado > 0) {
-                                                            $this->arrErrores[] = "La Unidad " . $arrRegistro['correcto'] . " ya está asignada";
-                                                        } else {
-                                                            // Actualiza la unidad en el formulario
-                                                            $sql = "UPDATE T_FRM_FORMULARIO SET seqUnidadProyecto = " . $seqUnidadProyectoCorrecto . " WHERE seqFormulario = " . $objFormulario->seqFormulario . "";
-                                                            $aptBd->execute($sql);
-                                                            // Actualiza el formulario el tabla unidad_proyecto y libera la antigua unidad
-                                                            $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = " . $objFormulario->seqFormulario . " WHERE seqUnidadProyecto = " . $seqUnidadProyectoCorrecto . "";
-                                                            $aptBd->execute($sql);
-                                                            // Libera la unidad antigua
-                                                            $sql = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = '' WHERE seqUnidadProyecto = " . $seqUnidadProyectoIncorrecto . "";
-                                                            $aptBd->execute($sql);
-                                                            // Cambia al nuevo conjunto residencial del formulario
-                                                            if ($idProyectoNuevo == 31 || $idProyectoNuevo == 33 || $idProyectoNuevo == 34 || $idProyectoNuevo == 111 || $idProyectoNuevo == 112) {
-                                                                $sql = "UPDATE T_FRM_FORMULARIO 
-																			SET seqProyectoHijo = $idProyectoNuevo 
-																			WHERE seqFormulario = " . $objFormulario->seqFormulario . "";
-                                                                $aptBd->execute($sql);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            $flagCambiaProyecto = 0;
-                                            // seqUnidadProyecto por UnidadProyecto
                                             $txtCambios .= "UnidadProyecto, Valor Anterior: " . $arrRegistro['incorrecto'] . ", Valor Nuevo: " . $arrRegistro['correcto'] . "\n";
                                             break;
                                         case "documento":

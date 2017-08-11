@@ -536,17 +536,17 @@ function eliminarRegistro(seqRegistro, txtPregunta, txtArchivo) {
     var handleYes = function () {
 
         var txtParametros = "";
-        if (typeof (YAHOO.util.Dom.get("txtComentario")) != "undefined") {
+        if (typeof (YAHOO.util.Dom.get("txtComentario")) != "undefined" && YAHOO.util.Dom.get("txtComentario") != null) {
             var objComentario = YAHOO.util.Dom.get("txtComentario");
             txtParametros += "&txtComentario=" + objComentario.value;
         }
 
-        if (typeof (YAHOO.util.Dom.get("seqGestion")) != "undefined") {
+        if (typeof (YAHOO.util.Dom.get("seqGestion")) != "undefined" && YAHOO.util.Dom.get("seqGestion") != null ) {
             var objGestion = YAHOO.util.Dom.get("seqGestion");
             txtParametros += "&seqGestion=" + objGestion.options[ objGestion.selectedIndex ].value;
         }
 
-        if (typeof (YAHOO.util.Dom.get("borrarAAD")) != "undefined") {
+        if (typeof (YAHOO.util.Dom.get("borrarAAD")) != "undefined" && YAHOO.util.Dom.get("borrarAAD") != null ) {
             var objBorrarAAD = YAHOO.util.Dom.get("borrarAAD");
             txtParametros += "&bolBorrar=" + objBorrarAAD.checked;
         }
@@ -1339,6 +1339,7 @@ function sumarTotalRecursos() {
     if( $("#valSaldoCuentaAhorro2").val() == ""){ $("#valSaldoCuentaAhorro2").val(0); }
     if( $("#valSaldoCesantias").val()     == ""){ $("#valSaldoCesantias").val(0);     }
     if( $("#valCredito").val()            == ""){ $("#valCredito").val(0);            }
+    if( $("#valAporteLote").val()         == ""){ $("#valAporteLote").val(0);         }
 
     // Subsidio + (Donaciones y/o VUR)
     if( $("#valSubsidioNacional").val()   == ""){ $("#valSubsidioNacional").val(0);   }
@@ -1362,6 +1363,7 @@ function sumarTotalRecursos() {
     var numSaldoCuenta2   = parseInt($("#valSaldoCuentaAhorro2").val().replace(/[^0-9]/g,''));
     var numCesantias      = parseInt($("#valSaldoCesantias").val().replace(/[^0-9]/g,''));
     var numCredito        = parseInt($("#valCredito").val().replace(/[^0-9]/g,''));
+    var numAporteLote     = parseInt($("#valAporteLote").val().replace(/[^0-9]/g,''));
     var numSubsidioNal    = parseInt($("#valSubsidioNacional").val().replace(/[^0-9]/g,''));
     var numVUR            = parseInt($("#valDonacion").val().replace(/[^0-9]/g,''));
     var numAspiraSubsidio = parseInt($("#valAspiraSubsidio").val().replace(/[^0-9]/g,''));
@@ -1369,7 +1371,7 @@ function sumarTotalRecursos() {
         var numCartaLeasing = parseInt($("#valCartaLeasing").val().replace(/[^0-9]/g, ''));
     }
     // Realizando las sumas
-    var numSumaRecursosPropios = numSaldoCuenta + numSaldoCuenta2 + numCesantias + numCredito;
+    var numSumaRecursosPropios = numSaldoCuenta + numSaldoCuenta2 + numCesantias + numCredito + numAporteLote;
     var numSumaSubsidios       = numSubsidioNal + numVUR;
     var numTotalRecursos       = numSumaRecursosPropios + numSumaSubsidios;
 
@@ -1378,6 +1380,7 @@ function sumarTotalRecursos() {
     $("#valSaldoCuentaAhorro2").val(numSaldoCuenta2);
     $("#valSaldoCesantias").val(numCesantias);
     $("#valCredito").val(numCredito);
+    $("#valAporteLote").val(numAporteLote);
     $("#valSubsidioNacional").val(numSubsidioNal);
     $("#valDonacion").val(numVUR);
     $("#valSumaRecursosPropios").val(numSumaRecursosPropios);
@@ -1393,6 +1396,7 @@ function sumarTotalRecursos() {
     formatoSeparadores(YAHOO.util.Dom.get("valSaldoCuentaAhorro2"));
     formatoSeparadores(YAHOO.util.Dom.get("valSaldoCesantias"));
     formatoSeparadores(YAHOO.util.Dom.get("valCredito"));
+    formatoSeparadores(YAHOO.util.Dom.get("valAporteLote"));
     formatoSeparadores(YAHOO.util.Dom.get("valSubsidioNacional"));
     formatoSeparadores(YAHOO.util.Dom.get("valDonacion"));
     formatoSeparadores(YAHOO.util.Dom.get("valSumaRecursosPropios"));
@@ -1956,7 +1960,17 @@ function datosPestanaPostulacion(txtModo) {
             $('#txtChip').val(objRespuesta.chip);
 
             // cuando es leasing entonces muestra los campos de informacion financiera correspondientes
+            // e inhabilita los campos de la pestaña financiera
             if( $("#seqModalidad").val() == 13 ){
+
+                $("#valSaldoCuentaAhorro").attr("readonly" , true);
+                $("#valSaldoCuentaAhorro2").attr("readonly" , true);
+                $("#valSaldoCesantias").attr("readonly" , true);
+                $("#valCredito").attr("readonly" , true);
+                $("#valAporteLote").attr("readonly" , true);
+                $("#valSubsidioNacional").attr("readonly" , true);
+                $("#valDonacion").attr("readonly" , true);
+
                 $("#trNoLeasing1").removeAttr("style").hide();
                 $("#trNoLeasing2").removeAttr("style").hide();
                 $("#trNoLeasing3").removeAttr("style").hide();
@@ -1964,6 +1978,15 @@ function datosPestanaPostulacion(txtModo) {
                 $("#trLeasing1").removeAttr("style").show();
                 $("#trLeasing2").removeAttr("style").show();
             }else {
+
+                $("#valSaldoCuentaAhorro").attr("readonly" , false);
+                $("#valSaldoCuentaAhorro2").attr("readonly" , false);
+                $("#valSaldoCesantias").attr("readonly" , false);
+                $("#valCredito").attr("readonly" , false);
+                $("#valAporteLote").attr("readonly" , false);
+                $("#valSubsidioNacional").attr("readonly" , false);
+                $("#valDonacion").attr("readonly" , false);
+
                 $("#trNoLeasing1").removeAttr("style").show();
                 $("#trNoLeasing2").removeAttr("style").show();
                 $("#trNoLeasing3").removeAttr("style").show();
@@ -3737,7 +3760,7 @@ function desembolsoEstudioTitulos(seqFormulario) {
                     var wndFormato;
                     try {
 
-                        var txtUrl = "./contenidos/desembolso/formatoEstudioTitulosformatoEstudioTitulos.php";
+                        var txtUrl = "./contenidos/desembolso/formatoEstudioTitulos.php";
                         txtUrl += "?seqFormulario=" + seqFormulario;
 
                         var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
@@ -4673,8 +4696,8 @@ function plantillaProyectoUnidadHabitacional( ) {
     var objPopUp = new YAHOO.widget.Panel(
             "pop",
             {
-                height: "450px",
-                width: "650px",
+                height: "500px",
+                width: "900px",
                 fixedcenter: true,
                 close: true,
                 draggable: true,
@@ -10279,10 +10302,29 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         objDialogo1.show();
     }
 
+}
+function exportableExcel(array){
+    
+    var url = "../../migracionesIndividual/generarLinks.php"; // El script a dónde se realizará la petición.
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            "array": array
+        }, // Adjuntar los campos del formulario enviado.
+        success: function (data)
+        {
+            console.log("prueba");
+            return data;
+             //$("#destino").html(data);// Mostrar la respuestas del script PHP.
 
-
-
+        }
+    });
 }
 
+function tablaPlantillaProyectoUnidadHabitacional( idMostrar, idOcultar ){
+        mostrarOcultar(idMostrar);
+        document.getElementById(idOcultar).style.display = 'none';
+}
 
 

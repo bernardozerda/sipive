@@ -286,8 +286,8 @@
  			******************************************************************/	 
             
          $arrFases['postulacionIndividual']['escrituracion']['nombre'] = utf8_encode("Escrituracion");
-			$arrFases['postulacionIndividual']['escrituracion']['permisos']  = array( 15,26,27,28,29,40 );
-			$arrFases['postulacionIndividual']['escrituracion']['adelante']  = array( 15,27 );
+			$arrFases['postulacionIndividual']['escrituracion']['permisos']  = array( 15,17,19,23,26,27,28,29,40 );
+			$arrFases['postulacionIndividual']['escrituracion']['adelante']  = array( 15,17,19,23,27 );
 			$arrFases['postulacionIndividual']['escrituracion']['atras']     = array( );
 			$arrFases['postulacionIndividual']['escrituracion']['plantilla'] = "desembolso/busquedaOferta.tpl";
 			$arrFases['postulacionIndividual']['escrituracion']['codigo']    = "./contenidos/desembolso/busquedaOferta.php";
@@ -295,8 +295,8 @@
 			$arrFases['postulacionIndividual']['escrituracion']['imprimir']  = "desembolsoBusquedaOferta( $seqFormulario , 0 , 1 );";
             
          $arrFases['postulacionIndividual']['revisionTecnica']['nombre'] = utf8_encode("Revision Tecnica");
-			$arrFases['postulacionIndividual']['revisionTecnica']['permisos']  = array( 26,27,28,29,40 );
-			$arrFases['postulacionIndividual']['revisionTecnica']['adelante']  = array( 27,26 );
+			$arrFases['postulacionIndividual']['revisionTecnica']['permisos']  = array( 23,25,26,27,28,29,40 );
+			$arrFases['postulacionIndividual']['revisionTecnica']['adelante']  = array( 23,27,25,26 );
 			$arrFases['postulacionIndividual']['revisionTecnica']['atras']     = array( 15 );
 			$arrFases['postulacionIndividual']['revisionTecnica']['plantilla'] = "desembolso/revisionTecnica.tpl";
 			$arrFases['postulacionIndividual']['revisionTecnica']['codigo']    = "./contenidos/desembolso/revisionTecnica.php";
@@ -304,8 +304,8 @@
 			$arrFases['postulacionIndividual']['revisionTecnica']['imprimir']  = "desembolsoRevisionTecnica( $seqFormulario );";
             
          $arrFases['postulacionIndividual']['estudioTitulos']['nombre'] = utf8_encode("Estudio de Titulos");
-			$arrFases['postulacionIndividual']['estudioTitulos']['permisos']  = array( 26,28,29,40 );
-			$arrFases['postulacionIndividual']['estudioTitulos']['adelante']  = array( 26,28,29 );
+			$arrFases['postulacionIndividual']['estudioTitulos']['permisos']  = array( 26,28,29,31,40 );
+			$arrFases['postulacionIndividual']['estudioTitulos']['adelante']  = array( 26,28,31,29 );
 			$arrFases['postulacionIndividual']['estudioTitulos']['atras']     = array( 15,27 );
 			$arrFases['postulacionIndividual']['estudioTitulos']['plantilla'] = "desembolso/estudioTitulos.tpl";
 			$arrFases['postulacionIndividual']['estudioTitulos']['codigo']    = "./contenidos/desembolso/estudioTitulos.php";
@@ -313,8 +313,8 @@
 			$arrFases['postulacionIndividual']['estudioTitulos']['imprimir']  = "desembolsoEstudioTitulos( $seqFormulario );";
             
          $arrFases['postulacionIndividual']['legalizacion']['nombre'] = utf8_encode("Legalizacion Desembolso");
-			$arrFases['postulacionIndividual']['legalizacion']['permisos']  = array( 29,40 );
-			$arrFases['postulacionIndividual']['legalizacion']['adelante']  = array( 29,40 );
+			$arrFases['postulacionIndividual']['legalizacion']['permisos']  = array( 29,62,40 );
+			$arrFases['postulacionIndividual']['legalizacion']['adelante']  = array( 29,62,40 );
 			$arrFases['postulacionIndividual']['legalizacion']['atras']     = array( 15,28 );
 			$arrFases['postulacionIndividual']['legalizacion']['plantilla'] = "desembolso/solicitudDesembolso.tpl";
 			$arrFases['postulacionIndividual']['legalizacion']['codigo']    = "./contenidos/desembolso/solicitudDesembolso.php";

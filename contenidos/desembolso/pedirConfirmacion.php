@@ -64,7 +64,7 @@
     // Datos de desembolso para este hogar
     $claDesembolso = new Desembolso;
     $claDesembolso->cargarDesembolso( $seqFormulario );
-	
+
 	// Para ver cual es el flujo de validaciones que aplica
 	$claFlujoDesemboslos = new FlujoDesembolso( $seqFormulario );
 	$arrCodigo = $claFlujoDesemboslos->obtenerCodigo( $_POST['txtFlujo'] , $claFormulario->seqEstadoProceso , $txtFasePlantilla );
@@ -85,6 +85,13 @@
         }
         
 		$bolCambios = $claDesembolso->hayCambios( $_POST , $arrCodigo['fase'] );
+
+		// si no tiene el numero del vendedor quiere decir que no hay registro
+		// valido para desembolso, se asume que solo quiere hacer seguimientos
+		if( doubleval($claDesembolso->numDocumentoVendedor) == 0 and doubleval($_POST['numDocumentoVendedor']) == 0 ){
+			$bolCambios = false;
+		}
+
     }
     
 	// si no tiene flujo asignado se le asigna uno
@@ -103,7 +110,7 @@
 	
 	// el formulario lo requiere para salvar 
 	$_POST['seqFormulario'] = $seqFormulario;
-	
+
 	// Si hubo cambios en el formulario muestra el pop up de confirmacion
 	if( $bolCambios == true ){
 		

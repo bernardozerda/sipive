@@ -546,7 +546,7 @@ class ActoAdministrativo {
 					INNER JOIN T_AAD_TIPO_ACTO tip ON adm.seqTipoActo = tip.seqTipoActo
 					WHERE
 						hog.seqFormularioActo = $seqFormularioActo
-					GROUP BY adm.seqTipoActo, hog.fchActo";
+					-- GROUP BY adm.seqTipoActo, hog.fchActo";
         $objRes = $aptBd->execute($sql); 
         while ($objRes->fields) {
             $arrTemporal = &$arrDatos;

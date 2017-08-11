@@ -41,7 +41,7 @@
                        onClick="alertaFormularioCerrado(this, {$claFormulario->bolCerrado}, {$smarty.session.privilegios.cambiar});"
                        value="1"
                         {if $claFormulario->bolCerrado == 1} checked {/if}
-                        {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} disabled {/if}
+                        {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} readonly {/if}
                 >
             </td>
             <td align="right" style="padding-right: 10px;">
@@ -136,7 +136,7 @@
                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
                                    onBlur="sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
                                    style="width:100px;"
-                                    {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} disabled {/if}
+                                    {if $claFormulario->bolCerrado == 1 && $smarty.session.privilegios.cambiar == 0} readonly {/if}
                             >
                         </td>
                         <td colspan="2">&nbsp;</td>
@@ -680,7 +680,7 @@
                                                             <td>
                                                                 <b>LGTBI:</b>
                                                                 {if $objCiudadano->bolLgtb == 1}
-                                                                    {$arrGrupoLgtbi.$grupoLgbti}
+                                                                    {$arrGrupoLgtbi.$grupoLgtbi}
                                                                 {else}
                                                                     No
                                                                 {/if}
@@ -1408,7 +1408,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px; text-align:right;" />
+                                                 style="padding-right: 5px; width:100px; text-align:right;"
+                                                 {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL AHORRO -->
                                     <td>Entidad</td>
@@ -1484,7 +1486,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px; text-align:right;" />
+                                                 style="padding-right: 5px; width:100px; text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL AHORRO -->
                                     <td>Entidad</td>
@@ -1560,7 +1564,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px;text-align:right;" />
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- SOPORTE CESANTIAS -->
                                     <td>Soporte</td>
@@ -1574,7 +1580,6 @@
                                                style="width:300px;" />
                                     </td>
                                 </tr>
-
                                 <tr><!-- TIENE CREDITO -->
                                     <td>Cr&eacute;dito</td>
                                     <td align="right" style="padding-right: 5px;">
@@ -1585,7 +1590,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px;text-align:right;" />
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
                                     <!-- BANCO DONDE TIENE EL CREDITO -->
                                     <td>Entidad</td>
@@ -1604,7 +1611,6 @@
                                         </select>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <!-- SOPORTE CREDITO -->
                                     <td>&nbsp;</td>
@@ -1640,7 +1646,33 @@
                                         <a onClick="document.getElementById('fchAprobacionCredito').value = '';" href="#">Limpiar</a>
                                     </td>
                                 </tr>
-
+                                <tr><!-- ACUERDO DE PAGO -->
+                                    <td>Acuerdo Pago / Lote / Terreno</td>
+                                    <td align="right" style="padding-right: 5px;">
+                                        $ <input type="text"
+                                                 name="valAporteLote"
+                                                 id="valAporteLote"
+                                                 value="{$claFormulario->valAporteLote|number_format:'0':'.':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 onKeyUp="sumarTotalRecursos();"
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
+                                    </td>
+                                    <!-- SOPORTE APORTE LOTE -->
+                                    <td>Soporte</td>
+                                    <td align="center">
+                                        <input type="text"
+                                               name="txtSoporteAporteLote"
+                                               id="txtSoporteAporteLote"
+                                               value="{$claFormulario->txtSoporteAporteLote}"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="sinCaracteresEspeciales(this);
+                                                       this.style.backgroundColor = '#FFFFFF';"
+                                               style="width:300px;" />
+                                    </td>
+                                </tr>
                                 <tr><!-- SUBSIDIO NACIONAL -->
                                     <td>
                                         Valor
@@ -1660,6 +1692,7 @@
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
                                                  style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
                                         />
                                     </td>
                                     <td>Entidad</td>
@@ -1705,7 +1738,9 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  onKeyUp="sumarTotalRecursos();"
-                                                 style="padding-right: 5px; width:100px;text-align:right;" />
+                                                 style="padding-right: 5px; width:100px;text-align:right;"
+                                                {if $claFormulario->seqModalidad == 13} readonly {/if}
+                                        />
                                     </td>
 
                                     <!-- DE DONDE PROVIENE LA DONACION -->
@@ -1938,8 +1973,6 @@
     </div>
 
     <!-- VARIABLES QUE YA NO SE USAN PERO SE COLOCAN PARA RESPETAR LOS VALORES DEL OBJETO -->
-    <input type="hidden" id="valAporteLote"              name="valAporteLote"              value="{$claFormulario->valAporteLote}">
-    <input type="hidden" id="txtSoporteAporteLote"       name="txtSoporteAporteLote"       value="{$claFormulario->txtSoporteAporteLote}">
     <input type="hidden" id="valAporteAvanceObra"        name="valAporteAvanceObra"        value="{$claFormulario->valAporteAvanceObra}">
     <input type="hidden" id="txtSoporteAvanceObra"       name="txtSoporteAvanceObra"       value="{$claFormulario->txtSoporteAvanceObra}">
     <input type="hidden" id="valAporteMateriales"        name="valAporteMateriales"        value="{$claFormulario->valAporteMateriales}">

@@ -14,17 +14,17 @@ if (isset($code)) {
     if ($code == 22) {
         $titulo = "M&oacute;dulo Remisi&oacute;n Informaci&oacute;n Escrituraci&oacute;n";
         $estadoT = "Remisi&oacute;n Informaci&oacute;n Escrituraci&oacute;n";
-        $estadoV = 19;
+        $estadoV = 27;
     }
     if ($_GET['code'] == 26) {
         $titulo = "Generaci&oacute;n Certificado Habitabilidad";
         $estadoT = "Revisión Técnica Aprobada";
         $estadoV = 25;
     }
-    if ($_GET['code'] == 27) {
+    if ($_GET['code'] == 24) {
         $titulo = "Remisi&oacute;n Estudio de Titulos";
         $estadoT = "Escrituraci&oacute;n";
-        $estadoV = 26;
+        $estadoV = "26,28";
     }
     if ($_GET['code'] == 29) {
         $titulo = "Conformación Definitiva Documentaci&oacute;n";
@@ -50,26 +50,33 @@ if (isset($code)) {
 
             <div class="well">
                 <?php
-                include "../lib/mysqli/shared/ez_sql_core.php";
-                include "../lib/mysqli/ez_sql_mysqli.php";
-
+                include '../conecta.php';
+                global $db;
                 date_default_timezone_set('America/Bogota');
                 $arrDocumentosArchivo = array();
-                $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-
 
                 if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name'])) {
                     $nombreArchivo = $_FILES['archivo']['tmp_name'];
                     $lineas = file($nombreArchivo);
                     foreach ($lineas as $linea_num => $linea) {
-                        array_push($arrDocumentosArchivo, trim($linea));
+                         $linea = str_replace("\n", "", trim($linea));
+                         $linea = str_replace("\r", "", trim($linea));
+                         //$linea = str_replace("\t", "", trim($linea));
+                         
+                         if($linea != ''){                             
+                             array_push($arrDocumentosArchivo, $linea);
+                             
+                         }                        
                     }
                 } else {
                     exit('debe seleccionar un archivo. <img border="0" src="../lib/back.png" width="30" height="30" style="cursor: pointer" onClick="history.back()">Volver');
                 }
-                //var_dump($arrDocumentosArchivo);
-
-                $separado_por_comas = implode(",", $arrDocumentosArchivo);
+               
+            
+             $separado_por_comas = implode(",", $arrDocumentosArchivo);
+                
+             //  echo $rest = substr($separado_por_comas, -1);
+               
                 $validar = validarDocumentos($separado_por_comas, $db, $code, $estadoV, $estadoT);
                 if ($validar) {
                     migrarInformacion($separado_por_comas, $db, $code, $estadoV);
@@ -77,11 +84,11 @@ if (isset($code)) {
 
                 // Valida si el documento cumple con los requisitos para ejecutar el cambio de estado y actualizar la fecha de radicación 
                 function validarDocumentos($separado_por_comas, $db, $code, $estadoV, $estadoT) {
-
+                    global $db;
                     $band = true;
                     $msg = "";
                     // Está consulta válida que los números de los documentos pertenezcan al postulante principal
-                    $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
+                     $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
                             INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
                             WHERE seqParentesco NOT IN(1) 
@@ -101,6 +108,7 @@ if (isset($code)) {
                             die();
                         }
                     } else if ($band) {
+
                         //Está consulta válida que los números no tengán un estado diferente al estado proceso
                         $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
@@ -129,7 +137,7 @@ if (isset($code)) {
                 /*                 * ********************************* Función Cambios de estado  ******************************************* */
 
                 function migrarInformacion($separado_por_comas, $db, $code, $estadoV) {
-
+                    global $db;
                     $datos = datosEstado($separado_por_comas, $db, $code, $estadoV);
 
                     $sql = $datos[0];
@@ -152,6 +160,7 @@ if (isset($code)) {
 			 ) VALUES";
                         $seqFormularios = "";
 
+
                         foreach ($resultados as $value) {
                             $update .= " WHEN " . $value->dato . " THEN " . $code . "";
                             $updateProy .= " WHEN " . $value->dato . " THEN NOW()";
@@ -172,25 +181,24 @@ if (isset($code)) {
                         $seqFormularios = substr_replace($seqFormularios, '', -2, 1);
                         $documentos = substr_replace($documentos, '', -1, 1);
                         //echo "<br>2. ****" . $seguimiento . "<br>";
+//                        if ($code == 17 || $code == 26 || $code == 29) {
+//                            $sqlDev = "update T_PRY_UNIDAD_PROYECTO set fchDevolucionExpediente='0000-00-00 00:00:00' where seqFormulario in(" . $seqFormularios . ")";
+//                            $db->query($sqlDev);
+//                        }
                         if (!empty($seguimiento)) {
                             $seguimiento = substr_replace($seguimiento, ';', -1, 1);
                         }
                         $update .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
                         $updateProy .= " END WHERE seqFormulario IN (" . $seqFormularios . ")";
-                        // echo $update;                        die();
+
                         if ($db->query($update)) {
                             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos"
                             . $documentos . "</p>";
-                        } else {
-                            echo "<p class='alert alert-danger'>Hubo un error almodificar los estados de los documentos. Por favor consulte al administrador</p>";
                         }
                         if ($db->query($updateProy)) {
                             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de la fecha  de radicaci&oacute;n de los siguientes documentos"
                             . $documentos . "</p>";
-                        } else {
-                            echo "<p class='alert alert-danger'>Hubo un error al modificar la fecha de la Radicaci&oacute;n. Por favor consulte al administrador</p>";
                         }
-                        echo "<br> seguimiento ->" . $seguimiento;
 
                         if ($db->query($seguimiento)) {
                             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la inserci&oacute;n de seguimiento de los siguientes documentos";
@@ -201,6 +209,7 @@ if (isset($code)) {
                 }
 
                 function datosEstado($separado_por_comas, $db, $code, $estadoV) {
+                    global $db;
                     $datos = Array();
                     if ($code == 17) {
                         $datos[0] = "SELECT seqFormulario as dato, numDocumento, 
@@ -242,7 +251,7 @@ if (isset($code)) {
                         $datos[2] = 69;
                         $datos[3] = "CERTIFICADOS DE EXISTENCIA Y HABITABILIDAD GENERADO";
                     }
-                    if ($code == 27) {
+                    if ($code == 24) {
                         $datos[0] = "SELECT seqFormulario as dato, numDocumento,
                             CONCAT(txtNombre1, ' ', txtNombre2, ' ', txtApellido1, ' ', txtApellido2) AS nombre
                                     FROM t_frm_formulario

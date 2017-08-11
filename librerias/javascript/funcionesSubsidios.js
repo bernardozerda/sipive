@@ -441,10 +441,44 @@ function obtenerDatos(seqProyecto) {
                 $("#divDatos").html(response);
             }
         });
-        
+
 
     }
 }
-function exportarExcel(estado, proyecto, tipo) {    
-    location.href = './contenidos/crm/reportes/reporteTableroExcel.php?seqEstado='+estado+'&seqProyecto='+proyecto+'&tipo='+tipo;
+function exportarExcel(estado, proyecto, tipo) {
+    location.href = './contenidos/crm/reportes/reporteTableroExcel.php?seqEstado=' + estado + '&seqProyecto=' + proyecto + '&tipo=' + tipo;
+}
+function validarCalificacion() {
+    // var url = $("#txtArchivo").val();
+    var documento = $("#buscaCedulaConfirmacion").val();
+    var url = "./contenidos/calificacion/datosCalificacion.php"; // El script a dónde se realizará la petición.
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            "documento": documento
+        }, // Adjuntar los campos del formulario enviado.
+        success: function (data)
+        {
+            $("#destino").html(data); // Mostrar la respuestas del script PHP.
+
+        }
+    });
+}
+
+function exportableExcel(array){
+
+    var url = "../../migracionesIndividual/generarLinks.php"; // El script a dónde se realizará la petición.
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            "array": array
+        }, // Adjuntar los campos del formulario enviado.
+        success: function (data)
+        {
+            $("#destino").html(data); // Mostrar la respuestas del script PHP.
+
+        }
+    });
 }

@@ -22,8 +22,7 @@ include '../../../recursos/archivos/verificarSesion.php';
 
             <div class="well">
                 <?php
-                include_once "../lib/mysqli/shared/ez_sql_core.php";
-                include_once "../lib/mysqli/ez_sql_mysqli.php";
+                
 
                 function doc2form($numDocumento) { // Recibe el documento y devuelve el formulario asociado
                     global $db;
@@ -41,9 +40,8 @@ include '../../../recursos/archivos/verificarSesion.php';
                         return 0;
                     }
                 }
+                include '../conecta.php';
 
-                $db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios', 'localhost');
-                //$db = new ezSQL_mysqli('sdht_usuario', 'Ochochar*1', 'sdht_subsidios_feb10', 'localhost');
 
                 $error = "";
                 $archivo = $_FILES["archivo"];

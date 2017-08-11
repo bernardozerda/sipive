@@ -527,6 +527,17 @@ if (empty($arrErrores)) {
         }
     }
 
+    // acuerdo de pago
+    if (intval($_POST['valAporteLote']) != 0) {
+        if (trim($_POST['txtSoporteAporteLote']) == "") {
+            $arrErrores[] = "Indique el soporte para el Acuerdo de pago / Lote / Terreno";
+        }
+    }else{
+        if (trim($_POST['txtSoporteAporteLote']) != "") {
+            $arrErrores[] = "Debe indicar un valor del Acuerdo de pago / Lote / Terreno";
+        }
+    }
+
     // valor del subsidio nacional
     if (intval($_POST['valSubsidioNacional']) != 0) {
         if (trim($_POST['txtSoporteSubsidioNacional']) == "") {
@@ -565,11 +576,11 @@ if (empty($arrErrores)) {
  * VERIFICA SI HAY CAMBIOS EN LAS VARIBLES DE CALIFICACION
  ***********************************************************************************************************************/
 $seqEtapa = array_shift( obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array( "seqEstadoProceso" , "seqEtapa" ) , "seqEstadoProceso" ) );
-if( empty($arrErrores ) and ( $seqEtapa != 1 or $_POST['seqEstadoProceso'] == 38 )   ) {
+$bolCambiosCalificacion = false;
+if( empty($arrErrores ) and ( $seqEtapa != 1 or $_POST['seqEstadoProceso'] == 38 or $_POST['seqEstadoProceso'] == 53 )   ) {
 
     // valida los cambios en las variables de calificacion
     // elimina ciudadanos
-    $bolCambiosCalificacion = false;
     $arrCedulasFormulario = array();
     foreach ($claFormulario->arrCiudadano as $objCiudadano) {
         $numDocumento = $objCiudadano->numDocumento;
@@ -627,7 +638,10 @@ if (empty($arrErrores)) {
     // Estando en etapa de inscripcion y postulacion
     // si se modifican datos sensibles a la calificacion
     // el estado del proceso se regresa a INSCRIPCION HOGAR ACTUALIZADO
-    if( $bolCambiosCalificacion == true or $_POST['seqEstadoProceso'] == 35 or $_POST['seqEstadoProceso'] ==  36 ){
+    if( $bolCambiosCalificacion == true ){
+        $claFormulario->seqEstadoProceso = 37;
+        $_POST['seqEstadoProceso'] = 37;
+    }elseif( $_POST['seqEstadoProceso'] == 35 or $_POST['seqEstadoProceso'] ==  36 ) {
         $claFormulario->seqEstadoProceso = 37;
         $_POST['seqEstadoProceso'] = 37;
     }else{

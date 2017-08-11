@@ -38,7 +38,7 @@ function almacenarIncripcion() {
     //console.log($("#seqGrupoGestion").select());
     $.each($("#frmProyectos input.required"), function (index, value) {
         if (!$(value).val()) {
-            console.log($(this).attr("id"));
+            // console.log($(this).attr("id"));
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
             valid = false;
@@ -50,15 +50,23 @@ function almacenarIncripcion() {
         if ($(value).val() == 0) {
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-            console.log($(this).attr("id"));
+            // console.log($(this).attr("id"));
+            valid = false;
+        }
+    });
+    $.each($("#frmProyectos input[type=email].required"), function (index, value) {
+        var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+        console.log(caract.test($(value).val()));
+        if (caract.test($(value).val()) == false) {
+            $("#val_" + $(this).attr("id")).css("display", "inline");
+            $("#val_" + $(this).attr("id")).html("Correo erroneo! ");
             valid = false;
         }
     });
     if (valid) {
-        console.log("url -> " + url);
-        // var url = "./contenidos/proyectos/contenidos/datosOferente.php"; // El script a dónde se realizará la petición.
         var url = $("#txtArchivo").val();
 
+        // var url = "./contenidos/proyectos/contenidos/datosOferente.php"; // El script a dónde se realizará la petición.
         $.ajax({
             type: "POST",
             url: url,
@@ -74,19 +82,19 @@ function almacenarIncripcion() {
 
 function adicionarOferente() {
 
-    $("#seqProyectoOferente option").each(function () {
+    $("#seqOferente option").each(function () {
         console.log('opcion ' + $(this).text() + ' valor ' + $(this).attr('value'))
     });
     var intId = $("#buildyourform div").length + 1;
     var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"field" + intId + "\"/>");
-    var fName = "<table id='table"+intId+"'><tr><td width='53%'><label>Oferente(*)</label></td><td>";
-    var fType = "<select name=\"seqProyectoOferente[]\" class=\"fieldtype\" >";
-    $("#seqProyectoOferente option").each(function () {
+    var fName = "<table id='table" + intId + "'><tr><td width='30%'><label>Oferente(*)</label></td><td>";
+    var fType = "<select name=\"seqOferente[]\" id=\"seqOferente_" + intId + "\" class=\"required\" >";
+    $("#seqOferente option").each(function () {
         fType += "<option value=" + $(this).attr('value') + ">" + $(this).text() + "</option>";
     });
     fType += "</select>";
     fName += fType + "</td><td>";
-    fName += "<img src=\"recursos/imagenes/remove.png\" width=\"20px\" onclick=\"removerOferente(table" + intId + ")\"/>";
+    fName += "<img src=\"recursos/imagenes/remove.png\" width=\"22px\" onclick=\"removerOferente(table" + intId + ")\"/>";
     fName += "</td></tr></table>";
     fieldWrapper.append(fName);
     $("#buildyourform").append(fieldWrapper);
@@ -94,7 +102,6 @@ function adicionarOferente() {
 }
 
 function removerOferente(id) {
-    console.log("paso remover" + id);
     $(id).parent().remove();
-
 }
+

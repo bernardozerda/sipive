@@ -465,3 +465,20 @@ function validarCalificacion() {
         }
     });
 }
+
+function exportableExcel(array){
+
+    var url = "../../migracionesIndividual/generarLinks.php"; // El script a dónde se realizará la petición.
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            "array": array
+        }, // Adjuntar los campos del formulario enviado.
+        success: function (data)
+        {
+            $("#destino").html(data); // Mostrar la respuestas del script PHP.
+
+        }
+    });
+}

@@ -523,7 +523,7 @@ class Encuestas {
         $objRes = $aptBd->execute($sql);
         while ($objRes->fields) {
             //reinicio de liliana
-             $this->arrAplicacion = Array();
+             //
             foreach ($objRes->fields as $txtCampo => $txtValor) {
                 $$txtCampo = iconv("UTF-8", "Windows-1252", $txtValor);
             }
@@ -689,7 +689,7 @@ class Encuestas {
         if (!empty($arrAplicaciones)) {
 
             // obtiene las respuestas del hogar en la encuesta
-            
+            $this->arrAplicacion = Array();
             $this->obtenerEncuesta($arrAplicaciones[0]['seqAplicacion']);
 
             // cantidad de miembros del hogar

@@ -94,7 +94,7 @@ if(($_SESSION['seqUsuario'] == 5) || ($_SESSION['seqUsuario'] == 218) || ($_SESS
 				//echo "<b>Estado Proceso: </b>[" . $rowForm['seqEstadoProceso'] . "]<br>";
 				$idEstadoProceso = $rowForm['seqEstadoProceso'];
 				$idFormulario = $rowForm['seqFormulario'];
-				if ($idEstadoProceso == 15) { // inicio if 2
+				if ($idEstadoProceso == 15 || $idEstadoProceso == 62) { // inicio if 2
 				// MIEMBROS DEL HOGAR
 				$sqlMiembros = @mysql_query("SELECT T_FRM_HOGAR.seqCiudadano, seqParentesco, numDocumento, seqTipoDocumento, CONCAT(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2) AS nombre FROM T_FRM_HOGAR LEFT JOIN T_CIU_CIUDADANO ON (T_FRM_HOGAR.seqCiudadano = T_CIU_CIUDADANO.seqCiudadano) WHERE seqFormulario = '" . $rowForm['seqFormulario'] . "' AND seqParentesco = 1");
 				while ($rowMiembros = mysql_fetch_array($sqlMiembros)) {

@@ -71,8 +71,8 @@
 			$arrFases['escritura']['revisionTecnica']['imprimir']  = "desembolsoRevisionTecnica( $seqFormulario );";
 			
 			$arrFases['escritura']['escrituracion']['nombre'] = utf8_encode("Escrituracion");
-			$arrFases['escritura']['escrituracion']['permisos']  = array( 26 , 27 , 28 , 29 , 30 , 32 , 33 );
-			$arrFases['escritura']['escrituracion']['adelante']  = array( 26 , 27 , 28 );
+			$arrFases['escritura']['escrituracion']['permisos']  = array( 26 , 27 , 28 , 29 , 30 , 32 , 33 , 62 );
+			$arrFases['escritura']['escrituracion']['adelante']  = array( 26 , 27 , 62 , 28 );
 			$arrFases['escritura']['escrituracion']['atras']     = array( 15 , 19 , 24 );
 			$arrFases['escritura']['escrituracion']['plantilla'] = "desembolso/busquedaOferta.tpl";
 			$arrFases['escritura']['escrituracion']['codigo']    = "./contenidos/desembolso/busquedaOferta.php";

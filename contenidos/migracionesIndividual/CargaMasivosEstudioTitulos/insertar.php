@@ -40,6 +40,15 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $datos[$i] = mb_ereg_replace("[^a-zA-Z0-9\-\_\/\\\ \,\.\;\:áéíóúñüÁÉÍÓÚÜÑ\#]","",utf8_encode(trim($txtValor)));
             }
 
+//            echo "<pre>";
+//            print_r( $datos );
+//            echo "</pre>";
+//
+//            echo "****" . strtotime($datos[11]) . "<br>";
+//
+//
+//            die();
+
             $casilla = "";
 
             $seqFormulario = trim($datos [0]);
@@ -92,6 +101,11 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $band = 1;
             }
 
+
+            $CfchEscrituraTitulo = explode("/", $fchEscrituraTitulo);
+            if ($CfchEscrituraTitulo[1] != "") {
+                $fchEscrituraTitulo = $CfchEscrituraTitulo[2] . "-" . $CfchEscrituraTitulo[1] . "-" . $CfchEscrituraTitulo[0];
+            }
 
             $CfchEscrituraIdentificacion = explode("/", $fchEscrituraIdentificacion);
             if ($CfchEscrituraIdentificacion[1] != "") {

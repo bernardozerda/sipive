@@ -36,7 +36,7 @@ include '../../../recursos/archivos/verificarSesion.php';
 
                         if (!empty($linea)) {
                             $arrayLineas = explode("\t", $linea);
-                            if ($linea_num == 0 && $arrayLineas[0] != 'Documento' && $arrayLineas[1] != 'Comentario') {
+                            if ($linea_num == 0 && strtoupper($arrayLineas[0]) != 'DOCUMENTO' && strtoupper($arrayLineas[1]) != 'COMENTARIO') {
                                 exit("Verifique los titulos del Archivo de texto debe se documento y  comentario");
                             } else if ($linea_num != 0 && !empty($arrayLineas[0])) {
                                 $separado_por_comas .= trim($arrayLineas[0]) . ",";
@@ -85,7 +85,8 @@ include '../../../recursos/archivos/verificarSesion.php';
                         $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
                             INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
-                            WHERE seqEstadoProceso NOT IN(62,23,28,15)
+                            INNER JOIN t_frm_estado_proceso USING(seqEstadoProceso)
+                            WHERE seqEtapa NOT IN(5)
                             and numDocumento IN(" . $separado_por_comas . ")";
                         $resultados = $db->get_results($sql);
                         $rows = count($resultados);
@@ -101,36 +102,37 @@ include '../../../recursos/archivos/verificarSesion.php';
                                 echo $msg;
                                 die();
                             }
-                        } else if ($band) {
-                            //Está consulta válida que los documentos pertenezcan a un mismo proyecto
-                            $sql = "SELECT seqFormulario,
-                                    seqProyecto,
-                                    txtNombreProyecto,
-                                    GROUP_CONCAT(numDocumento,' del proyecto ', ucwords(txtNombreProyecto) SEPARATOR '<br> ') AS 'documentos'
-                                    FROM t_frm_formulario
-                                    INNER JOIN t_frm_hogar hog USING (seqFormulario)
-                                    INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
-                                    INNER JOIN t_pry_proyecto pro USING(seqProyecto)
-                                    WHERE ciu.numDocumento IN (" . $separado_por_comas . ")      
-                                    GROUP BY seqProyecto";
-                            $resultados = $db->get_results($sql);
-                            $rows = count($resultados);
-                            if ($rows > 1) {
-                                $val = "<b>Los siguientes documentos no pertenecen a un mismo proyecto</b><br>";
-                                foreach ($resultados as $value) {
-                                    $val .= "<br>" . $value->documentos . ".";
-                                }
-                                $val .= " <br><br> Por favor verifique que los documentos a radicar pertenezcan al mismo proyecto ";
-                                $msg = "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
-                                $band = false;
-                                if (!$band) {
-                                    echo $msg;
-                                    die();
-                                } else {
-                                    return $band;
-                                }
-                            }
-                        }
+                        } 
+//                        else if ($band) {
+//                            //Está consulta válida que los documentos pertenezcan a un mismo proyecto
+//                            $sql = "SELECT seqFormulario,
+//                                    seqProyecto,
+//                                    txtNombreProyecto,
+//                                    GROUP_CONCAT(numDocumento,' del proyecto ', ucwords(txtNombreProyecto) SEPARATOR '<br> ') AS 'documentos'
+//                                    FROM t_frm_formulario
+//                                    INNER JOIN t_frm_hogar hog USING (seqFormulario)
+//                                    INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
+//                                    INNER JOIN t_pry_proyecto pro USING(seqProyecto)
+//                                    WHERE ciu.numDocumento IN (" . $separado_por_comas . ")      
+//                                    GROUP BY seqProyecto";
+//                            $resultados = $db->get_results($sql);
+//                            $rows = count($resultados);
+//                            if ($rows > 1) {
+//                                $val = "<b>Los siguientes documentos no pertenecen a un mismo proyecto</b><br>";
+//                                foreach ($resultados as $value) {
+//                                    $val .= "<br>" . $value->documentos . ".";
+//                                }
+//                                $val .= " <br><br> Por favor verifique que los documentos a radicar pertenezcan al mismo proyecto ";
+//                                $msg = "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
+//                                $band = false;
+//                                if (!$band) {
+//                                    echo $msg;
+//                                    die();
+//                                } else {
+//                                    return $band;
+//                                }
+//                            }
+//                        }
                     }
                     return $band;
                 }
@@ -143,7 +145,8 @@ include '../../../recursos/archivos/verificarSesion.php';
                         INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
                         INNER JOIN t_pry_proyecto pro USING(seqProyecto)
                         INNER JOIN t_pry_unidad_proyecto und using(seqFormulario)
-                        WHERE seqEstadoProceso IN(62,23,28,15) AND seqParentesco = 1
+                        INNER JOIN t_frm_estado_proceso USING(seqEstadoProceso)
+                        WHERE seqEtapa IN(5) AND seqParentesco = 1
                         AND numDocumento IN(" . $separado_por_comas . ")";
                     $resultados = $db->get_results($sql);
                     $rows = count($resultados);
@@ -212,7 +215,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                         //echo "<br> seguimiento ->" . $seguimiento;
                         $db->query($seguimiento);
                     } else {
-                        echo $msg = "<p class='alert alert-danger'>No exixte unidades vinculadas</p>";
+                        echo $msg = "<p class='alert alert-danger'>No existe unidades vinculadas</p>";
                         die();
                     }
                 }

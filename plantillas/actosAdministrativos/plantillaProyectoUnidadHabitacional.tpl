@@ -50,7 +50,7 @@
                                     <tr bgcolor="{cycle values="#eeeeee,#d0d0d0"}">
                                         <td width="50%">{$arrUnidadProyecto.nombre}</td>
                                         {if doubleval( $arrUnidadProyecto.documento != 0 )}
-                                            <td class="msgError">Unidad tomada por {$arrUnidadProyecto.documento|number_format:0:',':'.'}</td>
+                                            <td class="msgError">Unidad tomada por {$arrUnidadProyecto.documento}</td>
                                         {else}
                                             <td class="msgVerde">Unidad disponible</td>
                                         {/if}
@@ -67,7 +67,7 @@
                                     <tr bgcolor="{cycle values="#eeeeee,#d0d0d0"}">
                                         <td width="50%">{$arrUnidadProyecto.nombre}</td>
                                         {if doubleval( $arrUnidadProyecto.documento != 0 )}
-                                            <td class="msgError">Unidad tomada por {$arrUnidadProyecto.documento|number_format:0:',':'.'}</td>
+                                            <td class="msgError">Unidad tomada por {$arrUnidadProyecto.documento}</td>
                                         {else}
                                             <td class="msgVerde">Unidad disponible</td>
                                         {/if}

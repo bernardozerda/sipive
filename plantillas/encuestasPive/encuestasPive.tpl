@@ -80,6 +80,36 @@
 	{/if}
 	<p>
 		<fieldset style="width: 90%; border: 1px dotted #999999; padding:10px; padding-bottom:30px;">
+			<legend> <strong>EXPORTAR RESULTADOS</strong></legend>
+			<form onsubmit="return false;">
+				<table cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td width="350px"><strong>Listado de documentos</strong></td>
+						<td rowspan="2">
+							<button onclick="someterFormulario('mensajes', this.form, './contenidos/encuestasPive/listarEncuestas.php', true, false);" style="width:70px;">
+								<img src="recursos/imagenes/inscrito.gif" width="25px" height="25px"><br>
+								<span style="font-size: 10px; font-weight: bold;">Exportar<br>Respuestas</span>
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: middle">
+							<span id="planoEncuesta"
+								  onMouseOver="mostrarTooltip('planoEncuesta','Cargue un archivo de texto plano separado por tabulaciones y sin titulos con los numeros de documento')"
+							>
+								<input type="file" name="documentos" >
+								&nbsp;
+								<img src="./recursos/imagenes/ayuda.png" width="20px" height="20px">
+							</span>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</fieldset>
+	</p>
+
+	<p>
+		<fieldset style="width: 90%; border: 1px dotted #999999; padding:10px; padding-bottom:30px;">
 			<legend> <strong>CONSULTA DE INFORMACIÓN DE ENCUESTAS </strong></legend>
 				<form onsubmit="return false;">
 					{assign var=txtFuncion value="someterFormulario('resultado',this.form,'./contenidos/encuestasPive/listarEncuestas.php',true,true);"}

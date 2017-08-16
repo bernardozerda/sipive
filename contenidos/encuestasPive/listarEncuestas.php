@@ -107,10 +107,8 @@
                                                 $arrHojaFormulario[0][$txtIdentificador] = $txtIdentificador;
                                                 if (isset($claEncuestas->arrAplicacion['formulario'][$seqRespuesta])) {
                                                     if ($arrHojaFormulario[$seqAplicacion][$txtIdentificador] == "") {
-                                                        $arrHojaFormulario[$seqAplicacion][$txtIdentificador] = $claEncuestas->arrAplicacion['formulario'][$seqRespuesta];
+                                                        $arrHojaFormulario[$seqAplicacion][$txtIdentificador] = utf8_encode($claEncuestas->arrAplicacion['formulario'][$seqRespuesta]);
                                                     }
-                                                } else {
-                                                    $arrHojaFormulario[$seqAplicacion][$txtIdentificador] = "";
                                                 }
                                             }
                                         } else {
@@ -125,10 +123,8 @@
                                                     $arrHojaCiudadano[$numPosicion]['FORMULARIO'] = $arrAplicacion['txtFormulario'];
                                                     if (isset($arrCiudadano[$seqRespuesta])) {
                                                         if ($arrHojaCiudadano[$numPosicion][$txtIdentificador] == "") {
-                                                            $arrHojaCiudadano[$numPosicion][$txtIdentificador] = $arrCiudadano[$seqRespuesta];
+                                                            $arrHojaCiudadano[$numPosicion][$txtIdentificador] = utf8_encode($arrCiudadano[$seqRespuesta]);
                                                         }
-                                                    } else {
-                                                        $arrHojaCiudadano[$numPosicion][$txtIdentificador] = "";
                                                     }
                                                 }
                                             }
@@ -145,7 +141,8 @@
 //            pr($arrHojaCiudadano);
 //            pr($arrErrores);
 
-            $xmlArchivo  = "<?xml version='1.0' ?>";
+
+            $xmlArchivo  = "<?xml version='1.0' encoding='UTF-8'?>";
             $xmlArchivo .= "<ss:Workbook xmlns:ss='urn:schemas-microsoft-com:office:spreadsheet'>";
 
             // hoja de errores
@@ -194,7 +191,7 @@
             foreach( $arrHojaCiudadano as $i => $arrLinea){
                 $xmlArchivo .= "<ss:Row>";
                 foreach($arrLinea as $txtValor) {
-                    $txtTipo = ( is_numeric( $txtValor ) )? "Number" : "String";
+                    $txtTipo = ( is_numeric( trim($txtValor) ) )? "Number" : "String";
                     $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='$txtTipo'>";
                     $xmlArchivo .= $txtValor;
                     $xmlArchivo .= "</ss:Data></ss:Cell>";
@@ -211,6 +208,7 @@
             header("Content-Disposition: inline; filename=\"" . $txtNombre . "\"");
 
             echo $xmlArchivo;
+
 
         }else{
             imprimirMensajes($arrErrores, array() );

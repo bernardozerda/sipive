@@ -100,9 +100,9 @@ Class TipoActoAdministrativo {
                             $objTipoActo->arrFormatoArchivo[2]['tipo'] = "texto";
                             $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Valor Correcto";
                             $objTipoActo->arrFormatoArchivo[3]['tipo'] = "texto";
-                            $objTipoActo->arrFormatoArchivo[4]['nombre'] = "Resolución Modificada";
+                            $objTipoActo->arrFormatoArchivo[4]['nombre'] = "Resolución que es modificada";
                             $objTipoActo->arrFormatoArchivo[4]['tipo'] = "texto";
-                            $objTipoActo->arrFormatoArchivo[5]['nombre'] = "Fecha Resolución Modificada";
+                            $objTipoActo->arrFormatoArchivo[5]['nombre'] = "Fecha Resolución que es modificada (yyyy-mm-dd)";
                             $objTipoActo->arrFormatoArchivo[5]['tipo'] = "fecha";
                             break;
                         case 3: // Resolucion de inhabilitados

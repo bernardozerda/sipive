@@ -2312,12 +2312,22 @@ Class ActoAdministrativo {
                                                 );
                                             }
 
+                                            $valAspiraSubsidio = array_shift(
+                                                obtenerDatosTabla(
+                                                    "T_PRY_UNIDAD_PROYECTO",
+                                                    array("seqUnidadProyecto","valSDVEActual"),
+                                                    "seqUnidadProyecto",
+                                                    "seqUnidadProyecto = '" . $seqUnidadProyecto
+                                                )
+                                            );
+
                                             // Actualiza la unidad en el formulario
                                             $sql = "
                                                 UPDATE T_FRM_FORMULARIO SET 
                                                   seqProyecto = " . $seqProyecto . ",
                                                   seqProyectoHijo = " . $seqProyectoHijo . ",
-                                                  seqUnidadProyecto = " . $seqUnidadProyecto . "
+                                                  seqUnidadProyecto = " . $seqUnidadProyecto . ",
+                                                  valAspiraSubsidio = " . $valAspiraSubsidio . "
                                                 WHERE seqFormulario = " . $objFormulario->seqFormulario;
                                             $aptBd->execute($sql);
 

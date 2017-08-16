@@ -36,6 +36,10 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
 
         if ($linea_num != 0) {
             $datos = explode("\t", $linea);
+            foreach($datos as $i => $txtValor){
+                $datos[$i] = mb_ereg_replace("[^a-zA-Z0-9\-\_\/\\\ \,\.\;\:áéíóúñüÁÉÍÓÚÜÑ\#]","",utf8_encode(trim($txtValor)));
+            }
+
             $casilla = "";
 
             $seqFormulario = trim($datos [0]);
@@ -291,29 +295,28 @@ function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
     if (count($dato) == 0) {
         foreach ($arreglo['seqFormulario'] as $key => $value) {
             if ($arreglo['seqDesembolso'][$int] != "") {
-                $valores .= "(
-                       " . $arreglo['seqDesembolso'][$int] . ",
-                       '" . $arreglo['numEscrituraIdentificacion'][$int] . "',
-                       '" . $arreglo['fchEscrituraIdentificacion'][$int] . "',
-                       '" . $arreglo['numNotariaIdentificacion'][$int] . "',
-                       '" . $arreglo['numEscrituraTitulo'][$int] . "',
-                       '" . $arreglo['fchEscrituraTitulo'][$int] . "',
-                       '" . $arreglo['numNotariaTitulo'][$int] . "',
-                       '" . $arreglo['numFolioMatricula'][$int] . "',
-                       '" . $arreglo['txtZonaMatricula'][$int] . "',
-                       '" . $arreglo['fchMatricula'][$int] . "',
-                       '" . $arreglo['bolSubsidioSDHT'][$int] . "',
-                       '" . $arreglo['bolSubsidioFonvivienda'][$int] . "',
-                       '" . $arreglo['numResolucionFonvivienda'][$int] . "',
-                       '" . $arreglo['numAnoResolucionFonvivienda'][$int] . "',
-                       '" . $arreglo['txtAprobo'][$int] . "',
-                       '" . $arreglo['fchCreacion'][$int] . "',
-                       '" . $arreglo['fchActualizacion'][$int] . "',
-                       '" . $arreglo['txtCiudadTitulo'][$int] . "',
-                       '" . $arreglo['txtCiudadIdentificacion'][$int] . "',
-                       '" . $arreglo['txtCiudadMatricula'][$int] . "',
-                       '" . $arreglo['txtElaboro'][$int] . "'";
-
+                $valores .= "(";
+                $valores .= ( is_null( $arreglo['seqDesembolso'][$int]               ) )? "null" : intval( $arreglo['seqDesembolso'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['numEscrituraIdentificacion'][$int]  ) )? "null" : intval( $arreglo['numEscrituraIdentificacion'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['fchEscrituraIdentificacion'][$int]  ) )? "null" : "'" . trim($arreglo['fchEscrituraIdentificacion'][$int] ) . "',";
+                $valores .= ( is_null( $arreglo['numNotariaIdentificacion'][$int]    ) )? "null" : intval( $arreglo['numNotariaIdentificacion'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['numEscrituraTitulo'][$int]          ) )? "null" : intval( $arreglo['numEscrituraTitulo'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['fchEscrituraTitulo'][$int]          ) )? "null" : "'" . trim( $arreglo['fchEscrituraTitulo'][$int] ) . "',";
+                $valores .= ( is_null( $arreglo['numNotariaTitulo'][$int]            ) )? "null" : intval( $arreglo['numNotariaTitulo'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['numFolioMatricula'][$int]           ) )? "null" : intval( $arreglo['numFolioMatricula'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['txtZonaMatricula'][$int]            ) )? "null" : "'" . trim( $arreglo['txtZonaMatricula'][$int] ) . "',";
+                $valores .= ( is_null( $arreglo['fchMatricula'][$int]                ) )? "null" : "'" . trim( $arreglo['fchMatricula'][$int] ) . "',";
+                $valores .= ( is_null( $arreglo['bolSubsidioSDHT'][$int]             ) )? "null" : intval( $arreglo['bolSubsidioSDHT'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['bolSubsidioFonvivienda'][$int]      ) )? "null" : intval( $arreglo['bolSubsidioFonvivienda'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['numResolucionFonvivienda'][$int]    ) )? "null" : intval( $arreglo['numResolucionFonvivienda'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['numAnoResolucionFonvivienda'][$int] ) )? "null" : intval( $arreglo['numAnoResolucionFonvivienda'][$int] ) . ",";
+                $valores .= ( is_null( $arreglo['txtAprobo'][$int]                   ) )? "null" : "'" . trim( $arreglo['txtAprobo'][$int] ) . "',";
+                $valores .= trim( $arreglo['fchCreacion'][$int] ) . ",";
+                $valores .= trim( $arreglo['fchActualizacion'][$int]) . ",";
+                $valores .= ( is_null( $arreglo['txtCiudadTitulo'][$int]             ) )? "null" : "'" . trim( $arreglo['txtCiudadTitulo'][$int] ) . "',";
+                $valores .= ( is_null( $arreglo['txtCiudadIdentificacion'][$int]     ) )? "null" : "'" . trim( $arreglo['txtCiudadIdentificacion'][$int] ) . "',";
+                $valores .= ( is_null( $arreglo['txtCiudadMatricula'][$int]          ) )? "null" : "'" . trim( $arreglo['txtCiudadMatricula'][$int] ) . "',";
+                $valores .= ( is_null( $arreglo['txtElaboro'][$int]                  ) )? "null" : "'" . trim( $arreglo['txtElaboro'][$int] ) . "'";
                 $valores .= "),";
                 $ArrImpresion['seqFormulario'][$int] = $value;
                 $ArrImpresion['seqDesembolso'][$int] = $arreglo['seqDesembolso'][$int];
@@ -331,28 +334,29 @@ function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
             $seqDesembolso = array_search(trim($arreglo['seqDesembolso'][$int]), $dato);
             if ($seqDesembolso == "") {
                 if ($arreglo['seqDesembolso'][$int] != "") {
-                    $valores .= "(
-                       " . $arreglo['seqDesembolso'][$int] . ",
-                       '" . $arreglo['numEscrituraIdentificacion'][$int] . "',
-                       '" . $arreglo['fchEscrituraIdentificacion'][$int] . "',
-                       '" . $arreglo['numNotariaIdentificacion'][$int] . "',
-                       '" . $arreglo['numEscrituraTitulo'][$int] . "',
-                       '" . $arreglo['fchEscrituraTitulo'][$int] . "',
-                       '" . $arreglo['numNotariaTitulo'][$int] . "',
-                       '" . $arreglo['numFolioMatricula'][$int] . "',
-                       '" . $arreglo['txtZonaMatricula'][$int] . "',
-                       '" . $arreglo['fchMatricula'][$int] . "',
-                       '" . $arreglo['bolSubsidioSDHT'][$int] . "',
-                       '" . $arreglo['bolSubsidioFonvivienda'][$int] . "',
-                       '" . $arreglo['numResolucionFonvivienda'][$int] . "',
-                       '" . $arreglo['numAnoResolucionFonvivienda'][$int] . "',
-                       '" . $arreglo['txtAprobo'][$int] . "',
-                       '" . $arreglo['fchCreacion'][$int] . "',
-                       '" . $arreglo['fchActualizacion'][$int] . "',
-                       '" . $arreglo['txtCiudadTitulo'][$int] . "',
-                       '" . $arreglo['txtCiudadIdentificacion'][$int] . "',
-                       '" . $arreglo['txtCiudadMatricula'][$int] . "',
-                       '" . $arreglo['txtElaboro'][$int] . "'";
+
+                    $valores .= "(";
+                    $valores .= ( is_null( $arreglo['seqDesembolso'][$int]               ) )? "null" : intval( $arreglo['seqDesembolso'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['numEscrituraIdentificacion'][$int]  ) )? "null" : intval( $arreglo['numEscrituraIdentificacion'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['fchEscrituraIdentificacion'][$int]  ) )? "null" : "'" . trim($arreglo['fchEscrituraIdentificacion'][$int] ) . "',";
+                    $valores .= ( is_null( $arreglo['numNotariaIdentificacion'][$int]    ) )? "null" : intval( $arreglo['numNotariaIdentificacion'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['numEscrituraTitulo'][$int]          ) )? "null" : intval( $arreglo['numEscrituraTitulo'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['fchEscrituraTitulo'][$int]          ) )? "null" : "'" . trim( $arreglo['fchEscrituraTitulo'][$int] ) . "',";
+                    $valores .= ( is_null( $arreglo['numNotariaTitulo'][$int]            ) )? "null" : intval( $arreglo['numNotariaTitulo'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['numFolioMatricula'][$int]           ) )? "null" : intval( $arreglo['numFolioMatricula'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['txtZonaMatricula'][$int]            ) )? "null" : "'" . trim( $arreglo['txtZonaMatricula'][$int] ) . "',";
+                    $valores .= ( is_null( $arreglo['fchMatricula'][$int]                ) )? "null" : "'" . trim( $arreglo['fchMatricula'][$int] ) . "',";
+                    $valores .= ( is_null( $arreglo['bolSubsidioSDHT'][$int]             ) )? "null" : intval( $arreglo['bolSubsidioSDHT'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['bolSubsidioFonvivienda'][$int]      ) )? "null" : intval( $arreglo['bolSubsidioFonvivienda'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['numResolucionFonvivienda'][$int]    ) )? "null" : intval( $arreglo['numResolucionFonvivienda'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['numAnoResolucionFonvivienda'][$int] ) )? "null" : intval( $arreglo['numAnoResolucionFonvivienda'][$int] ) . ",";
+                    $valores .= ( is_null( $arreglo['txtAprobo'][$int]                   ) )? "null" : "'" . trim( $arreglo['txtAprobo'][$int] ) . "',";
+                    $valores .= trim( $arreglo['fchCreacion'][$int] ) . ",";
+                    $valores .= trim( $arreglo['fchActualizacion'][$int]) . ",";
+                    $valores .= ( is_null( $arreglo['txtCiudadTitulo'][$int]             ) )? "null" : "'" . trim( $arreglo['txtCiudadTitulo'][$int] ) . "',";
+                    $valores .= ( is_null( $arreglo['txtCiudadIdentificacion'][$int]     ) )? "null" : "'" . trim( $arreglo['txtCiudadIdentificacion'][$int] ) . "',";
+                    $valores .= ( is_null( $arreglo['txtCiudadMatricula'][$int]          ) )? "null" : "'" . trim( $arreglo['txtCiudadMatricula'][$int] ) . "',";
+                    $valores .= ( is_null( $arreglo['txtElaboro'][$int]                  ) )? "null" : "'" . trim( $arreglo['txtElaboro'][$int] ) . "'";
                     $valores .= "),";
                     $ArrImpresion['seqFormulario'][$ex] = $value;
                     $ArrImpresion['seqDesembolso'][$ex] = $arreglo['seqDesembolso'][$int];
@@ -378,7 +382,7 @@ function insertarEstudiosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
         $result = $db->query($query);
     }
 
-    //  echo "<br>*".$query ."<br>";
+      //echo "<br>*".$query ."<br>";
     if ($existen != "") {
         $cantidaE = ($int) - $ex;
         // $existen = substr_replace(trim($existen), ';', -1, 1);

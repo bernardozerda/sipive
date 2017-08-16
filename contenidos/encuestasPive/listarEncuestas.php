@@ -109,8 +109,6 @@
                                                     if ($arrHojaFormulario[$seqAplicacion][$txtIdentificador] == "") {
                                                         $arrHojaFormulario[$seqAplicacion][$txtIdentificador] = utf8_encode($claEncuestas->arrAplicacion['formulario'][$seqRespuesta]);
                                                     }
-                                                } else {
-                                                    $arrHojaFormulario[$seqAplicacion][$txtIdentificador] = "";
                                                 }
                                             }
                                         } else {
@@ -127,8 +125,6 @@
                                                         if ($arrHojaCiudadano[$numPosicion][$txtIdentificador] == "") {
                                                             $arrHojaCiudadano[$numPosicion][$txtIdentificador] = utf8_encode($arrCiudadano[$seqRespuesta]);
                                                         }
-                                                    } else {
-                                                        $arrHojaCiudadano[$numPosicion][$txtIdentificador] = "";
                                                     }
                                                 }
                                             }

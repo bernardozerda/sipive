@@ -16,7 +16,7 @@ class Encuestas {
     private $arrSeqFormulario;
     private $arrPregunta;
 
-    function Encuestas() {
+    function __construct() {
         $this->seqDiseno = 0;
         $this->txtDiseno = 0;
         $this->bolFormulario = 0;
@@ -35,7 +35,7 @@ class Encuestas {
                         txtDiseno, 
                         bolFormulario, 
                         bolCiudadano 
-                from t_enc_diseno " .
+                from t_enc_diseno ";
                 $sql .= ($seqDiseno == 0) ? "" : "where seqDiseno = " . $seqDiseno;
         $objRes = $aptBd->execute($sql);
         while ($objRes->fields) {
@@ -109,7 +109,6 @@ class Encuestas {
      * @return string
      */
     public function validarRespuestas($arrArchivo, $txtDestino) {
-        global $aptBd;
 
         if ($txtDestino != "formulario" and $txtDestino != "ciudadano") {
             $arrErrores[] = "Valor del segundo parámetro no válido, use 'formulario' o 'ciudadano' como valores validos";
@@ -170,23 +169,28 @@ class Encuestas {
                                 break;
                         }
                     }
-// 						if(! empty($arrErrores)){
-// 							echo $txtIdentificador ." => #". $txtRespuesta ."#<br>";
-// 							pr($this->arrPregunta);
-// 							pr($arrErrores);
-// 						}
                 }
             }
         }
         return $arrErrores;
     }
 
-    private function obtenerPregunta($txtIdentificador = "") {
+    private function obtenerPregunta($txtIdentificador = "", $txtDestino = "") {
         global $aptBd;
         $arrErrores = array();
         try {
-            $txtCondicion = ($txtIdentificador != "") ? "and res.txtIdentificador = '" . $txtIdentificador . "'" : "";
+            $txtCondicion  = ( $txtIdentificador != ""                 ) ? "and res.txtIdentificador = '" . $txtIdentificador . "' " : "";
+
+            if( strtolower($txtDestino) != "" ){
+                if( strtolower($txtDestino) == "formulario" ){
+                    $txtCondicion .= "and pre.txtTablaDestino = 'T_ENC_APLICACION_FORMULARIO' ";
+                }else{
+                    $txtCondicion .= "and pre.txtTablaDestino = 'T_ENC_APLICACION_CIUDADANO' ";
+                }
+            }
+
             $this->arrPregunta = array();
+
             $sql = "
 					select
 					  pre.seqPregunta,
@@ -288,6 +292,8 @@ class Encuestas {
 
             if (empty($arrErrores)) {
 
+                // Obtiene las preguntas del formulario
+                $this->obtenerPregunta("","formulario");
 
                 // Inactiva las aplicaciones anteriores que haya tenido el mismo hogar
                 // Se pueden tener varias aplicaciones para el mismo hogar pero solo una activa
@@ -349,6 +355,10 @@ class Encuestas {
                 }
 
                 if ($this->bolCiudadano == 1) {
+
+                    // Obtiene las preguntas del formulario
+                    $this->obtenerPregunta("","ciudadano");
+
                     foreach ($arrCiudadano as $numLinea => $arrRegistro) {
                         $txtFormulario = $arrRegistro['FORMULARIO'];
                         unset($arrRegistro['FORMULARIO']); // formulario
@@ -421,6 +431,7 @@ class Encuestas {
                     SELECT 
                         apl.seqAplicacion,
                         dis.txtDiseno,
+                        apl.txtNombreCargue,
                         apl.txtFormulario,
                         apl.fchAplicacion,
                         apl.fchCarga,
@@ -498,8 +509,10 @@ class Encuestas {
             }
             $seqRespuesta = ($bolRespuesta == true) ? $seqRespuesta : 0;
         } else {
-            $arrPrimeraRespuesta = array_keys($this->arrPregunta[$txtIdentificador]['respuesta']);
-            $seqRespuesta = $arrPrimeraRespuesta[0];
+            if( ! is_null( $this->arrPregunta[$txtIdentificador]['respuesta'] ) ) {
+                $arrPrimeraRespuesta = array_keys($this->arrPregunta[$txtIdentificador]['respuesta']);
+                $seqRespuesta = $arrPrimeraRespuesta[0];
+            }
         }
         return $seqRespuesta;
     }

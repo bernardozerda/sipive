@@ -62,7 +62,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $fchEscrituraIdentificacion = trim($datos [11]);
             $numNotariaIdentificacion = trim($datos [12]);
             $numEscrituraTitulo = trim($datos [10]);
-            $fchEscrituraTitulo = trim($datos [11]);
+            $fchEscrituraTitulo = trim($datos [19]);
             $numNotariaTitulo = trim($datos [12]);
             $numFolioMatricula = trim($datos [34]);
             $txtZonaMatricula = trim($datos [23]);

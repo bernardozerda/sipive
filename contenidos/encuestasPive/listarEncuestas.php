@@ -106,9 +106,12 @@
                                                 $txtIdentificador = $arrRespuesta['identificador'];
                                                 $arrHojaFormulario[0][$txtIdentificador] = $txtIdentificador;
                                                 if (isset($claEncuestas->arrAplicacion['formulario'][$seqRespuesta])) {
-                                                    if ($arrHojaFormulario[$seqAplicacion][$txtIdentificador] == "") {
+                                                    if ( trim($arrHojaFormulario[$seqAplicacion][$txtIdentificador]) == "") {
                                                         $arrHojaFormulario[$seqAplicacion][$txtIdentificador] = utf8_encode($claEncuestas->arrAplicacion['formulario'][$seqRespuesta]);
                                                     }
+                                                }
+                                                if( ! ( isset( $arrHojaFormulario[$seqAplicacion][$txtIdentificador] ) and $arrHojaFormulario[$seqAplicacion][$txtIdentificador] != "" ) ){
+                                                    $arrHojaFormulario[$seqAplicacion][$txtIdentificador] = "";
                                                 }
                                             }
                                         } else {
@@ -122,9 +125,12 @@
                                                     $numPosicion = $arrLineas[$i];
                                                     $arrHojaCiudadano[$numPosicion]['FORMULARIO'] = $arrAplicacion['txtFormulario'];
                                                     if (isset($arrCiudadano[$seqRespuesta])) {
-                                                        if ($arrHojaCiudadano[$numPosicion][$txtIdentificador] == "") {
+                                                        if ( trim($arrHojaCiudadano[$numPosicion][$txtIdentificador]) == "") {
                                                             $arrHojaCiudadano[$numPosicion][$txtIdentificador] = utf8_encode($arrCiudadano[$seqRespuesta]);
                                                         }
+                                                    }
+                                                    if( ! ( isset( $arrHojaCiudadano[$numPosicion][$txtIdentificador] ) and $arrHojaCiudadano[$numPosicion][$txtIdentificador] != "" ) ){
+                                                        $arrHojaCiudadano[$numPosicion][$txtIdentificador] = "";
                                                     }
                                                 }
                                             }

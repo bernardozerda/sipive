@@ -45,6 +45,7 @@
 					<td></td>
 					<td>
 						<strong>Número del formulario de encuesta:</strong> {$arrAplicacion.txtFormulario}<br>
+						<strong>Nombre del cargue:</strong> {$arrAplicacion.txtNombreCargue}<br>
 						<strong>Fecha de aplicación:</strong> {$arrAplicacion.fchAplicacion}<br>
 						<strong>Fecha de carga:</strong> {$arrAplicacion.fchCarga}
 					</td>

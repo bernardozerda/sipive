@@ -496,7 +496,7 @@ Class TipoActoAdministrativo {
                                                 $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: No existe la unidad habitacional " . trim($arrRegistro['correcto'][1]);
                                             }else{
                                                 if( intval($seqFormularioUnidad) != 0 ){
-                                                    $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: La unidad habitacional " . trim($arrRegistro['correcto']) . " esta tomada por el hogar de " .  number_format(Ciudadano::documentoVinculado($seqFormularioUnidad),"0",".",",");
+                                                    $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: La unidad habitacional " . trim($arrRegistro['correcto'][1]) . " esta tomada por el hogar de " .  number_format(Ciudadano::documentoVinculado($seqFormularioUnidad),"0",".",",");
                                                 }
                                             }
                                         }
@@ -2317,7 +2317,7 @@ Class ActoAdministrativo {
                                                     "T_PRY_UNIDAD_PROYECTO",
                                                     array("seqUnidadProyecto","valSDVEActual"),
                                                     "seqUnidadProyecto",
-                                                    "seqUnidadProyecto = '" . $seqUnidadProyecto
+                                                    "seqUnidadProyecto = " . $seqUnidadProyecto
                                                 )
                                             );
 

@@ -2146,9 +2146,15 @@ class Desembolso {
             }
         }
 
+        $fchRegistroPresupuestal1   = ( esFechaValida( $arrPost['fecha1'] ) )? "'" . $arrPost['fecha1'] . "'" : "null";
+        $fchRegistroPresupuestal2   = ( esFechaValida( $arrPost['fecha2'] ) )? "'" . $arrPost['fecha2'] . "'" : "null";
+        $fchRadicacion              = ( esFechaValida( $arrPost['fechaRadicado'] ) )? "'" . $arrPost['fechaRadicado'] . "'" : "null";
+        $fchOrden                   = ( esFechaValida( $arrPost['fechaOrden'] ) )? "'" . $arrPost['fechaOrden'] . "'" : "null";
+
         if (empty($arrErrores)) {
             $seqDesembolso = $this->seqDesembolso;
             if (intval($arrPost['seqSolicitudEditar']) == 0) {
+
                 $sql = "
 						INSERT INTO T_DES_SOLICITUD (
 							numRegistroPresupuestal1,
@@ -2208,9 +2214,9 @@ class Desembolso {
 							txtCorreoGiro
 						) VALUES (
 							'" . doubleval($arrPost['registro1']) . "',
-							'" . $arrPost['fecha1'] . "',
+							" . $fchRegistroPresupuestal1 . ",
 							'" . doubleval($arrPost['registro2']) . "',
-							'" . $arrPost['fecha2'] . "',
+							" . $fchRegistroPresupuestal2 . ",
 							'" . doubleval($arrPost['valor']) . "',
 							'" . intval($arrPost['bolCedulaBeneficiario'] ). "',
 							'" . $arrPost['txtCedulaBeneficiario'] . "',
@@ -2229,9 +2235,9 @@ class Desembolso {
 							'" . $arrPost['txtRevisoSubsecretaria'] . "',
 							'" . $arrPost['usuario'] . "',
 							'" . doubleval($arrPost['numeroRadicado']) . "',
-							'" . $arrPost['fechaRadicado'] . "',
+							" . $fchRadicacion . ",
 							'" . doubleval($arrPost['numeroOrden']) . "',
-							'" . $arrPost['fechaOrden'] . "',
+							" . $fchOrden . ",
 							'" . doubleval($arrPost['monto']) . "',
 							'$seqDesembolso',
 							'SDHT-SGF-SDRPL-$txtFormulario-$numAno2Digitos',
@@ -2299,29 +2305,29 @@ class Desembolso {
 							) VALUES (
 								$seqSolicitud,
 								$seqFormularioActo,
-								'" . $arrPost['registro1'] . "',
-								'" . $arrPost['fecha1'] . "',
-								'" . $arrPost['registro2'] . "',
-								'" . $arrPost['fecha2'] . "',
-								'" . $arrPost['valor'] . "',
-								'" . $arrPost['numeroRadicado'] . "',
-								'" . $arrPost['fechaRadicado'] . "',
-								'" . $arrPost['numeroOrden'] . "',
-								'" . $arrPost['fechaOrden'] . "',
-								'" . $arrPost['monto'] . "',
-								'" . $arrPost['numProyectoInversion'] . "',
-								'" . $arrPost['txtNombreBeneficiarioGiro'] . "',
-								'" . $arrPost['numDocumentoBeneficiarioGiro'] . "',
-								'" . $arrPost['txtDireccionBeneficiarioGiro'] . "',
-								'" . $arrPost['numTelefonoGiro'] . "',
-								'" . $arrPost['numCuentaGiro'] . "',
-								'" . $arrPost['txtTipoCuentaGiro'] . "',
-								'" . $arrPost['seqBancoGiro'] . "',
+								'" . doubleval( $arrPost['registro1'] ). "',
+								" . $fchRegistroPresupuestal1 . ",
+								'" . doubleval( $arrPost['registro2']) . "',
+								" . $fchRegistroPresupuestal2 . ",
+								'" . doubleval($arrPost['valor']) . "',
+								'" . doubleval($arrPost['numeroRadicado']) . "',
+								" . $fchRadicacion . ",
+								'" . doubleval($arrPost['numeroOrden']) . "',
+								" . $fchOrden . ",
+								'" . doubleval($arrPost['monto']) . "',
+								'" . doubleval($arrPost['numProyectoInversion']) . "',
+								'" . trim( $arrPost['txtNombreBeneficiarioGiro']) . "',
+								'" . doubleval( $arrPost['numDocumentoBeneficiarioGiro']) . "',
+								'" . trim( $arrPost['txtDireccionBeneficiarioGiro'] ). "',
+								'" . doubleval( $arrPost['numTelefonoGiro']) . "',
+								'" . doubleval( $arrPost['numCuentaGiro']) . "',
+								'" . trim( $arrPost['txtTipoCuentaGiro']) . "',
+								'" . doubleval( $arrPost['seqBancoGiro']) . "',
 								'" . $fchCreacion . "',
 								'" . date("Y-m-d H:i:s") . "',
-								'" . intval($arrPost['bolGiroTercero'] ). "',
-								'" . $arrPost['txtGiroTercero'] . "',
-								'" . $arrPost['txtCorreoGiro'] . "'
+								'" . intval($arrPost['bolGiroTercero'] ) . "',
+								'" . trim($arrPost['txtGiroTercero'] ). "',
+								'" . trim( $arrPost['txtCorreoGiro'] ). "'
 							)
 						";
 
@@ -2330,6 +2336,7 @@ class Desembolso {
                         $aptBd->execute($sql);
                     } catch (Exception $objError) {
                         $arrErrores[] = "No se ha podido salvar el historico del giro";
+                        $arrErrores[] = $objError->getMessage();
                     }
                 } catch (Exception $objError) {
                     $arrErrores[] = "No se ha podido salvar el registro de solicitud de desembolso";
@@ -2339,60 +2346,60 @@ class Desembolso {
 
                 $sql = "
 						UPDATE T_DES_SOLICITUD SET
-							numRegistroPresupuestal1		=	'" . $arrPost['registro1'] . "',
-							fchRegistroPresupuestal1		=	'" . $arrPost['fecha1'] . "',
-							numRegistroPresupuestal2		=	'" . $arrPost['registro2'] . "',
-							fchRegistroPresupuestal2		=	'" . $arrPost['fecha2'] . "',
-							valSolicitado					=	'" . $arrPost['valor'] . "',
+							numRegistroPresupuestal1		=	'" . doubleval( $arrPost['registro1']) . "',
+							fchRegistroPresupuestal1		=	" . $fchRegistroPresupuestal1 . ",
+							numRegistroPresupuestal2		=	'" . doubleval( $arrPost['registro2']) . "',
+							fchRegistroPresupuestal2		=	" . $fchRegistroPresupuestal2 . ",
+							valSolicitado					=	'" .doubleval(  $arrPost['valor']) . "',
 							bolDocumentoBeneficiario		=	'" . intval($arrPost['bolCedulaBeneficiario']) . "',
-							txtDocumentoBeneficiario		=	'" . $arrPost['txtCedulaBeneficiario'] . "',
+							txtDocumentoBeneficiario		=	'" . trim( $arrPost['txtCedulaBeneficiario']) . "',
 							bolDocumentoVendedor			=	'" . intval($arrPost['bolCedulaVendedor']) . "',
-							txtDocumentoVendedor			=	'" . $arrPost['txtCedulaVendedor'] . "',
+							txtDocumentoVendedor			=	'" . trim( $arrPost['txtCedulaVendedor'] ). "',
 							bolCertificacionBancaria		=	'" . intval($arrPost['bolCertificacionBancaria']) . "',
-							txtCertificacionBancaria		=	'" . $arrPost['txtCertificacionBancaria'] . "',
+							txtCertificacionBancaria		=	'" . trim( $arrPost['txtCertificacionBancaria']) . "',
 							bolCartaAsignacion				=	'" . intval($arrPost['bolCartaAsignacion']) . "',
-							txtCartaAsignacion				=	'" . $arrPost['txtCartaAsignacion'] . "',
+							txtCartaAsignacion				=	'" . trim( $arrPost['txtCartaAsignacion']) . "',
 							bolAutorizacion					=	'" . intval($arrPost['bolAutorizacion']) . "',
-							txtAutorizacion					=	'" . $arrPost['txtAutorizacion'] . "',
-							txtSubsecretaria				=	'" . $arrPost['txtSubsecretaria'] . "',
+							txtAutorizacion					=	'" . trim( $arrPost['txtAutorizacion']) . "',
+							txtSubsecretaria				=	'" . trim( $arrPost['txtSubsecretaria'] ). "',
 							bolSubsecretariaEncargado		=	'" . intval($arrPost['bolSubsecretariaEncargado']) . "',
-							txtSubdireccion					=	'" . $arrPost['txtSubdireccion'] . "',
+							txtSubdireccion					=	'" . trim( $arrPost['txtSubdireccion']) . "',
 							bolSubdireccionEncargado		=	'" . intval($arrPost['bolSubdireccionEncargado']) . "',
-							txtRevisoSubsecretaria			=	'" . $arrPost['txtRevisoSubsecretaria'] . "',
-							txtElaboroSubsecretaria			=	'" . $arrPost['usuario'] . "',
-							numRadiacion					=	'" . $arrPost['numeroRadicado'] . "',
-							fchRadicacion					=	'" . $arrPost['fechaRadicado'] . "',
-							numOrden						=	'" . $arrPost['numeroOrden'] . "',
-							fchOrden						=	'" . $arrPost['fechaOrden'] . "',
-							valOrden						=	'" . $arrPost['monto'] . "',
+							txtRevisoSubsecretaria			=	'" . trim($arrPost['txtRevisoSubsecretaria']) . "',
+							txtElaboroSubsecretaria			=	'" . trim( $arrPost['usuario']) . "',
+							numRadiacion					=	'" . doubleval( $arrPost['numeroRadicado']) . "',
+							fchRadicacion					=	" . $fchRadicacion . ",
+							numOrden						=	'" . doubleval( $arrPost['numeroOrden']) . "',
+							fchOrden						=	" . $fchOrden . ",
+							valOrden						=	'" . doubleval( $arrPost['monto']) . "',
 							seqDesembolso					=	'$seqDesembolso',
-							numProyectoInversion			=	'" . $arrPost['numProyectoInversion'] . "',
-							txtNombreBeneficiarioGiro		=	'" . $arrPost['txtNombreBeneficiarioGiro'] . "',
-							numDocumentoBeneficiarioGiro	=	'" . $arrPost['numDocumentoBeneficiarioGiro'] . "',
-							txtDireccionBeneficiarioGiro	=	'" . $arrPost['txtDireccionBeneficiarioGiro'] . "',
-							numTelefonoGiro					=	'" . $arrPost['numTelefonoGiro'] . "',
-							numCuentaGiro					=	'" . $arrPost['numCuentaGiro'] . "',
-							txtTipoCuentaGiro				=	'" . $arrPost['txtTipoCuentaGiro'] . "',
-							seqBancoGiro					=	'" . $arrPost['seqBancoGiro'] . "',
+							numProyectoInversion			=	'" . doubleval( $arrPost['numProyectoInversion'] ). "',
+							txtNombreBeneficiarioGiro		=	'" . trim( $arrPost['txtNombreBeneficiarioGiro']) . "',
+							numDocumentoBeneficiarioGiro	=	'" . doubleval( $arrPost['numDocumentoBeneficiarioGiro']) . "',
+							txtDireccionBeneficiarioGiro	=	'" . trim( $arrPost['txtDireccionBeneficiarioGiro']) . "',
+							numTelefonoGiro					=	'" . doubleval( $arrPost['numTelefonoGiro']) . "',
+							numCuentaGiro					=	'" . doubleval( $arrPost['numCuentaGiro']) . "',
+							txtTipoCuentaGiro				=	'" . trim( $arrPost['txtTipoCuentaGiro']) . "',
+							seqBancoGiro					=	'" . doubleval( $arrPost['seqBancoGiro'] ). "',
 							fchActualizacion				=	'" . date("Y-m-d H:i:s") . "',
 							bolRut							=	'" . intval($arrPost['bolRut']) . "',
-							txtRut							=	'" . $arrPost['txtRut'] . "',
+							txtRut							=	'" . trim( $arrPost['txtRut']) . "',
 							bolNit							=	'" . intval($arrPost['bolNit']) . "',
-							txtNit							=	'" . $arrPost['txtNit'] . "',
+							txtNit							=	'" . trim( $arrPost['txtNit'] ). "',
 							bolCedulaRepresentante			=	'" . intval($arrPost['bolCedulaRepresentante']) . "',
-							txtCedulaRepresentante			=	'" . $arrPost['txtCedulaRepresentante'] . "',
+							txtCedulaRepresentante			=	'" . trim( $arrPost['txtCedulaRepresentante'] ). "',
 							bolCamaraComercio				=	'" . intval($arrPost['bolCamaraComercio']) . "',
-							txtCamaraComercio				=	'" . $arrPost['txtCamaraComercio'] . "',
+							txtCamaraComercio				=	'" . trim( $arrPost['txtCamaraComercio'] ). "',
 							bolGiroTercero					=	'" . intval($arrPost['bolGiroTercero']) . "',
-							txtGiroTercero					=	'" . $arrPost['txtGiroTercero'] . "',
+							txtGiroTercero					=	'" . trim( $arrPost['txtGiroTercero'] ). "',
 							bolBancoArrendador				=	'" . intval($arrPost['bolBancoArrendador']) . "',
-							txtBancoArrendador				=	'" . $arrPost['txtBancoArrendador'] . "',
+							txtBancoArrendador				=	'" . trim( $arrPost['txtBancoArrendador'] ). "',
 							bolActaEntregaFisica			=	'" . intval($arrPost['bolActaEntregaFisica']) . "',
-							txtActaEntregaFisica			=	'" . $arrPost['txtActaEntregaFisica'] . "',
+							txtActaEntregaFisica			=	'" . trim( $arrPost['txtActaEntregaFisica'] ). "',
 							bolActaLiquidacion				=	'" . intval($arrPost['bolActaLiquidacion']) . "',
-							txtActaLiquidacion				=	'" . $arrPost['txtActaLiquidacion'] . "',
+							txtActaLiquidacion				=	'" . trim( $arrPost['txtActaLiquidacion'] ). "',
 							txtConsecutivo					=	'SDHT-SGF-SDRPL-$txtFormulario-$numAno2Digitos',
-							txtCorreoGiro					=	'" . $arrPost['txtCorreoGiro'] . "'
+							txtCorreoGiro					=	'" . trim( $arrPost['txtCorreoGiro'] ). "'
 						WHERE seqSolicitud = " . $arrPost['seqSolicitudEditar'];
 
                 try {
@@ -2402,29 +2409,29 @@ class Desembolso {
                     $sql = "
 							UPDATE T_AAD_GIRO SET
 								seqFormularioActo = $seqFormularioActo,
-								numRegistroPresupuestal1 = '" . $arrPost['registro1'] . "',
-								fchRegistroPresupuestal1 = '" . $arrPost['fecha1'] . "',
-								numRegistroPresupuestal2 = '" . $arrPost['registro2'] . "',
-								fchRegistroPresupuestal2 = '" . $arrPost['fecha2'] . "',
-								valSolicitado = '" . $arrPost['valor'] . "',
-								numRadiacion = '" . $arrPost['numeroRadicado'] . "',
-								fchRadicacion = '" . $arrPost['fechaRadicado'] . "',
-								numOrden = '" . $arrPost['numeroOrden'] . "',
-								fchOrden = '" . $arrPost['fechaOrden'] . "',
-								valOrden = '" . $arrPost['monto'] . "',
-								numProyectoInversion = '" . $arrPost['numProyectoInversion'] . "',
-								txtNombreBeneficiarioGiro = '" . $arrPost['txtNombreBeneficiarioGiro'] . "',
-								numDocumentoBeneficiarioGiro = '" . $arrPost['numDocumentoBeneficiarioGiro'] . "',
-								txtDireccionBeneficiarioGiro = '" . $arrPost['txtDireccionBeneficiarioGiro'] . "',
-								numTelefonoGiro = '" . $arrPost['numTelefonoGiro'] . "',
-								numCuentaGiro = '" . $arrPost['numCuentaGiro'] . "',
-								txtTipoCuentaGiro = '" . $arrPost['txtTipoCuentaGiro'] . "',
-								seqBancoGiro = '" . $arrPost['seqBancoGiro'] . "',
+								numRegistroPresupuestal1 = '" . doubleval( $arrPost['registro1']) . "',
+								fchRegistroPresupuestal1 = " . $fchRegistroPresupuestal1 . ",
+								numRegistroPresupuestal2 = '" . doubleval( $arrPost['registro2']) . "',
+								fchRegistroPresupuestal2 = " . $fchRegistroPresupuestal2 . ",
+								valSolicitado = '" . doubleval( $arrPost['valor']) . "',
+								numRadiacion = '" . doubleval( $arrPost['numeroRadicado'] ). "',
+								fchRadicacion = " . $fchRadicacion . ",
+								numOrden = '" .doubleval(  $arrPost['numeroOrden']) . "',
+								fchOrden = " . $fchOrden . ",
+								valOrden = '" . doubleval( $arrPost['monto']) . "',
+								numProyectoInversion = '" . doubleval( $arrPost['numProyectoInversion']) . "',
+								txtNombreBeneficiarioGiro = '" . trim( $arrPost['txtNombreBeneficiarioGiro']) . "',
+								numDocumentoBeneficiarioGiro = '" . doubleval( $arrPost['numDocumentoBeneficiarioGiro']) . "',
+								txtDireccionBeneficiarioGiro = '" . trim( $arrPost['txtDireccionBeneficiarioGiro']) . "',
+								numTelefonoGiro = '" . doubleval( $arrPost['numTelefonoGiro'] ). "',
+								numCuentaGiro = '" . doubleval( $arrPost['numCuentaGiro']) . "',
+								txtTipoCuentaGiro = '" . trim( $arrPost['txtTipoCuentaGiro'] ). "',
+								seqBancoGiro = '" . doubleval( $arrPost['seqBancoGiro']) . "',
 								fchActualizacion = '" . date("Y-m-d H:i:s") . "',
 								bolGiroTercero = '" . intval($arrPost['bolGiroTercero']) . "',
-								txtGiroTercero = '" . $arrPost['txtGiroTercero'] . "',
-								txtCorreoGiro = '" . $arrPost['txtCorreoGiro'] . "'
-							WHERE seqSolicitud = " . $arrPost['seqSolicitudEditar'] . ";
+								txtGiroTercero = '" . trim( $arrPost['txtGiroTercero'] ). "',
+								txtCorreoGiro = '" . trim( $arrPost['txtCorreoGiro']) . "'
+							WHERE seqSolicitud = " . doubleval( $arrPost['seqSolicitudEditar']) . ";
 						";
                     try {
                         //echo $sql . "<hr>";

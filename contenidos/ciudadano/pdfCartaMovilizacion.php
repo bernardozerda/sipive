@@ -177,8 +177,8 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $path = K_PATH_IMAGES;
 $path = explode('librerias', $path);
 $image_file = $path[0] . 'recursos\imagenes\firma.JPG';
-$pdf->writeHTML("<b>Cordialmente,</b><p>&nbsp;</p>", true, false, true, false, '');
-$pdf->Image($image_file, 15, 208, 75, 30, 'JPG', '', '', false, 150, '', false, false, 0, false, false, false);
+///$pdf->writeHTML("<b>Cordialmente,</b><p>&nbsp;</p>", true, false, true, false, '');
+$pdf->Image($image_file, 15, 180, 75, 30, 'JPG', '', '', false, 150, '', false, false, 0, false, false, false);
 $pdf->writeHTML("<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><b>MAURICIO CORTÉS GARZÓN</b>", true, false, true, false, '');
 $pdf->writeHTML("Subsecretarío de la Gestión Financiera ", true, false, true, false, '');
 

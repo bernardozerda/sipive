@@ -14,7 +14,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Formulari
 
 setlocale(LC_TIME, 'spanish');
 date_default_timezone_set("America/Bogota");
-$hoy = iconv('ISO-8859-1', 'UTF-8', strftime('%A %d de %B de %Y', time()));
+$hoy = iconv('ISO-8859-1', 'UTF-8', strftime('%Y', time()));
 $claCiudadano = new Ciudadano();
 $claFormulario = new FormularioSubsidios();
 //var_dump($claFormulario); exit();
@@ -22,7 +22,7 @@ $seqFormulario = $claCiudadano->formularioVinculado($_GET['documento']);
 $claFormulario->cargarFormulario($seqFormulario);
 $contenido ="";
 if ($_GET['tipo'] == 2) {
-    $contenido .= '<p>&nbsp;</p><p>Bogota D.C. ' .$hoy. '</p>';
+    $contenido .= '<p>&nbsp;</p><p>Bogota D.C.  NO INSCRITO - APLICATIVO ' .$hoy. '</p>';
 }else{
     $contenido .= '<p>&nbsp;</p><p>Bogota D.C. ' . "<p><p>&nbsp;</p>";
 }
@@ -113,38 +113,39 @@ La Secretaria Distrital del Hábitat informa que ".$txtEncabezado." ".strtoupper
     NO se encuentra inscrito (a) en el Sistema
 de Información del Programa Integral de Vivienda Efectiva - SIPIVE de la Secretaría Distrital del
 Hábitat, por lo tanto no es beneficiario de recursos correspondientes al Aporte Distrital que otorga esta Entidad,
-en el marco del Decreto 623 de 2016, “Por el cual se establece el Programa Integral de Vivienda Efectiva y se
+en el marco del Decreto 623 de 2016, <i>\"Por el cual se establece el Programa Integral de Vivienda Efectiva y se
 dictan medidas para la generación de vivienda nueva y el mejoramiento de las condiciones de habitabilidad y
-estructurales de las viviendas y se dictan otras disposiciones”.</p>";
+estructurales de las viviendas y se dictan otras disposiciones\"</i>.</p>";
+    $txtParrafo .= "<p>En consideración a lo anterior, esta Secretaría autoriza a  " . $txtEncabezado . " " . strtoupper($txtNombre1) . ", a efectuar la movilización de los recursos "
+           . "que se encuentran depositados en la Cuenta de Ahorro Programado.</p>";
+
 } else {
     $txtParrafo .= "<p>En atención a su comunicación, la Secretaría Distrital del Hábitat informa que  " . $txtEncabezado . " " . strtoupper($txtNombre1) . ", no es beneficiaria (o) del Aporte Distrital que asigna la SDHT.</p>"
-    . "<p>En consideración a lo anterior, esta Secretaría autoriza a ".$txtEncabezado." ".strtoupper($txtNombre1) .", realizar la movilización de los recursos que se encuentran depositados en la Cuenta de Ahorro Programado.</p>";
+    . "<p>En consideración a lo anterior, esta Secretaría autoriza a ".$txtEncabezado." ".strtoupper($txtNombre1) .", a realizar la movilización de los recursos que se encuentran depositados en la Cuenta de Ahorro Programado.</p>";
       
 }
-  $txtParrafo .= "<p>Cabe aclarar que esta movilización se autoriza única y exclusivamente para los recursos allí
+  $txtParrafo .= "<p>Cabe aclarar que esta movilización se autoriza única y exclusivamente para los recursos 
 depositados por el hogar. Respecto a los recursos consignados por la Caja de Vivienda Popular - CVP -
 correspondiente al Valor Único de Reconocimiento - VUR, deberá acercarse a la Caja de Vivienda
 Popular ubicada en la Carrera 13 No. 54 - 13, para solicitar el trámite correspondiente.</p>";
-      $txtParrafo .= "<p>Finalmente, la Secretaría Distrital del Hábitat le informa que todos los trámites son gratuitos, por lo que
-no necesita de intermediarios o tramitadores. Cualquier información adicional acerca del presente
-documento, puede comunicarse con nuestra línea PBX 3581600 Extensión 3001.</p>";
-
-
-/* $claPdf->ezText(utf8_decode("<i>" . $txtParrafo . "</i><br>"), $txtTamanoFuente, array("justification" => "full")); */
-$contenido .= utf8_decode($txtParrafo);
-
-/* $claPdf->ezText(utf8_decode($txtParrafo . "<br>"), $txtTamanoFuente, array("justification" => "full")); */
-
-$txtParrafo = "<p><i>La Secretaría Distrital del Hábitat informa que todos los trámites para la obtención del Subsidio Distrital "
-        . "de Vivienda en Especie (SDVE), desde la etapa de la inscripción hasta la asignación, son gratuitos por lo que no "
-        . "necesita de intermediarios o tramitadores. </i></p>";
+      
 
 
 
 $contenido .= utf8_decode($txtParrafo);
-$txtParrafo = "<p>Cualquier información adicional, puede comunicarse con nuestra línea de atención al ciudadano PBX 3581600 opción 1.</p>";
+
+
+$txtParrafo = "<p>Finalmente, la Secretaría Distrital del Hábitat le informa que todos los trámites son gratuitos, "
+              . "por lo que no necesita de intermediarios o tramitadores. Cualquier información adicional acerca del presente documento, "
+              . "puede comunicarse con nuestra línea PBX 3581600 Extensión 3001</p>";
+
+
+//$contenido .= utf8_decode($txtParrafo);
+
 if($_GET['tipo'] == 2){
-    $txtParrafo .="<p>&nbsp;</p>";
+    $txtParrafo .="<p><b>Cordialmente,</b></p><p>&nbsp;</p><p>&nbsp;</p>";
+}else{
+    $txtParrafo .="<p><b>Cordialmente,</b><p><p>&nbsp;</p><p>&nbsp;</p>";
 }
 $contenido .= utf8_decode($txtParrafo);
 

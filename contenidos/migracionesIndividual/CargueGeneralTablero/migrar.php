@@ -59,36 +59,52 @@ if (isset($code)) {
                     $nombreArchivo = $_FILES['archivo']['tmp_name'];
                     $lineas = file($nombreArchivo);
                     foreach ($lineas as $linea_num => $linea) {
-                         $linea = str_replace("\n", "", trim($linea));
-                         $linea = str_replace("\r", "", trim($linea));
-                         //$linea = str_replace("\t", "", trim($linea));
-                         
-                         if($linea != ''){                             
-                             array_push($arrDocumentosArchivo, $linea);
-                             
-                         }                        
+                        $linea = str_replace("\n", "", trim($linea));
+                        $linea = str_replace("\r", "", trim($linea));
+                        //$linea = str_replace("\t", "", trim($linea));
+
+                        if ($linea != '') {
+                            array_push($arrDocumentosArchivo, $linea);
+                        }
                     }
                 } else {
                     exit('debe seleccionar un archivo. <img border="0" src="../lib/back.png" width="30" height="30" style="cursor: pointer" onClick="history.back()">Volver');
                 }
-               
-            
-             $separado_por_comas = implode(",", $arrDocumentosArchivo);
-                
-             //  echo $rest = substr($separado_por_comas, -1);
-               
+
+
+                $separado_por_comas = implode(",", $arrDocumentosArchivo);
+
+                //  echo $rest = substr($separado_por_comas, -1);
+
                 $validar = validarDocumentos($separado_por_comas, $db, $code, $estadoV, $estadoT);
                 if ($validar) {
                     migrarInformacion($separado_por_comas, $db, $code, $estadoV);
                 }
-
                 // Valida si el documento cumple con los requisitos para ejecutar el cambio de estado y actualizar la fecha de radicación 
                 function validarDocumentos($separado_por_comas, $db, $code, $estadoV, $estadoT) {
                     global $db;
                     $band = true;
                     $msg = "";
+                    $val = "Los siguientes Documentos no estan registrados en el sistema";
+                    $ced = explode(",", $separado_por_comas);
+                    foreach ($ced as $value) {
+                        $sqlValidarExistencia = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
+                            INNER JOIN t_frm_hogar hog USING (seqFormulario)
+                            INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
+                            WHERE  and numDocumento IN(" . $value . ")";
+                        $resultadosValidarExistencia = $db->get_results($sqlValidarExistencia);
+                        $rowsValidarExistencia = count($resultadosValidarExistencia);
+                        if ($rowsValidarExistencia < 1) {
+                            $band = false;
+                            $val .= "<br>" . $value;
+                        }
+                    }
+                    if (!$band) {
+                        echo "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
+                        die();
+                    }
                     // Está consulta válida que los números de los documentos pertenezcan al postulante principal
-                     $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
+                    $sql = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
                             INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
                             WHERE seqParentesco NOT IN(1) 
@@ -114,7 +130,7 @@ if (isset($code)) {
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
                             INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
                             WHERE seqEstadoProceso NOT IN(" . $estadoV . ")
-                            and numDocumento IN(" . $separado_por_comas . ")";
+                             numDocumento IN(" . $separado_por_comas . ")";
                         $resultados = $db->get_results($sql);
                         $rows = count($resultados);
                         if ($rows > 0) {

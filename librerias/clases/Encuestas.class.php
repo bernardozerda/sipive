@@ -698,12 +698,14 @@ class Encuestas {
         $numCabezaHogar = 0; // 1 = hombre 2 o 3 = mujer
 
         $arrAplicaciones = $this->listarAplicaciones($numDocumento);
-       // var_dump($arrAplicaciones);
+        //var_dump($arrAplicaciones);
         if (!empty($arrAplicaciones)) {
 
             // obtiene las respuestas del hogar en la encuesta
             $this->arrAplicacion = Array();
             $this->obtenerEncuesta($arrAplicaciones[0]['seqAplicacion']);
+
+
 
             // cantidad de miembros del hogar
             $arrVariables['variables']['cant'] = count($this->arrAplicacion['ciudadano']);
@@ -856,55 +858,6 @@ class Encuestas {
                     }
                 }
 
-
-                // afilacion salud o no afiliado
-                if (intval($arrCiudadano[155]) != 0 or intval($arrCiudadano[156]) != 0) {
-                    $arrVariables['variables']['afiliacion'] ++;
-                }
-
-                // sumando ingresos del hogar
-                $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[252]);
-                $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[253]);
-                $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[254]);
-                $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[255]);
-                $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[256]);
-                $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[257]);
-                $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[258]);
-                $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[259]);
-
-                // cantHijos
-                if (intval($arrCiudadano[64]) != 0) {
-                    $arrVariables['variables']['cantHijos'] ++;
-                }
-
-                // conyugueHogar
-                if (intval($arrCiudadano[63]) != 0) {
-                    $arrVariables['variables']['conyugueHogar'] ++;
-                }
-
-                // condiciones especiales
-                if (intval($arrCiudadano[161]) != 0) {
-                    $arrVariables['variables']['cantCondEspecial'] ++;
-                }
-
-                // condicion etnica
-                if (
-                        intval($arrCiudadano[82]) != 0 or
-                        intval($arrCiudadano[83]) != 0 or
-                        intval($arrCiudadano[84]) != 0 or
-                        intval($arrCiudadano[85]) != 0 or
-                        intval($arrCiudadano[86])
-                ) {
-                    $arrVariables['variables']['condicionEtnica'] ++;
-                }
-
-                // grupo lgtbi
-                if (
-                        intval($arrCiudadano[75]) != 0 or
-                        intval($arrCiudadano[76]) != 0
-                ) {
-                    $arrVariables['variables']['grupoLgtbi'] ++;
-                }
             }
 
             // cohabitacion

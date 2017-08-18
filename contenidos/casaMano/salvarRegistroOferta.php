@@ -82,8 +82,8 @@
      * VALIDACIONES DE LA PESTAÑA DE RECIBO DE DOCUMENTOS
      ***************************************************************************************************************/
 
-    // Retorno o reubicacion
-    if( $claFormulario->seqTipoEsquema == 11 ){
+    // Retorno o reubicacion o casa en mano
+    if( $claFormulario->seqTipoEsquema == 11 || $claFormulario->seqTipoEsquema == 5 ){
         if ($_POST['txtCompraVivienda'] == "nueva") {
             $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
             $arrObligatorios['numAltoRiesgo'] = "Certificado de riesgo";
@@ -92,6 +92,7 @@
             $arrObligatorios['numUltimoPredial'] = "Ultimo Recibo Predial";
             $arrObligatorios['numActaEntrega'] = "Certificado de Constructora de Entrega Inmueble";
         }else{
+            $arrObligatorios['numEscrituraPublica'] = "Promesa de Compraventa o Separación del Inmueble";
             $arrObligatorios['numCertificadoTradicion'] = "Certificado de Tradicion y Libertad";
             $arrObligatorios['numAltoRiesgo'] = "Certificado de riesgo";
             $arrObligatorios['numHabitabilidad'] = "Certificado de Habitabilidad";

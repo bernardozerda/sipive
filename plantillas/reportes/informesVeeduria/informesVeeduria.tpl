@@ -1,0 +1,46 @@
+<p>
+    <fieldset style="width: 90%; border: 1px dotted #999999; padding:10px; padding-bottom:30px;">
+        <legend><strong>LISTADO DE CORTES</strong></legend>
+        <table cellpadding="5" cellspacing="0" border="0" width="100%">
+            <thead align="left">
+                <th width="120px">Periodo</th>
+                <th width="120px">Fecha de Creación</th>
+                <th width="250px">Usuario</th>
+                <th width="100px">Informe Proyectos</th>
+                <th></th>
+            </thead>
+            <tfoot align="left">
+                <th>Periodo</th>
+                <th>Fecha de Creación</th>
+                <th>Usuario</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tfoot>
+            <tbody>
+                {foreach name=cortes from=$arrCortes item=arrDato}
+                    <tr bgcolor="{cycle name=cortes values="#E5E5E5,#F9F9F9"}">
+                        <td>{$arrDato.txtCorte}</td>
+                        <td>{$arrDato.fchCorte}</td>
+                        <td>{$arrDato.txtNombre}</td>
+                        <td align="center">
+                            <form onSubmit="return false;" id="Corte{$arrDato.seqCorte}">
+                                <button onClick="someterFormulario('mensajes', this.form, './contenidos/reportes/informesVeeduria/informeProyectos.php', true, false);"
+                                        style="width: 35px; height: 30px">
+                                    <img src="./recursos/imagenes/excel-48.png"
+                                         width="20px"
+                                         height="20px"
+                                         style="cursor: hand"
+
+                                    >
+                                </button>
+                                <input type="hidden" name="seqCorte" id="seqCorte" value="{$arrDato.seqCorte}">
+                            </form>
+                        </td>
+                        <td align="center">
+                        </td>
+                    </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </fieldset>
+</p>

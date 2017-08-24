@@ -23,18 +23,14 @@
                         <td>{$arrDato.fchCorte}</td>
                         <td>{$arrDato.txtNombre}</td>
                         <td align="center">
-                            <form onSubmit="return false;" id="Corte{$arrDato.seqCorte}">
-                                <button onClick="someterFormulario('mensajes', this.form, './contenidos/reportes/informesVeeduria/informeProyectos.php', true, false);"
-                                        style="width: 35px; height: 30px">
-                                    <img src="./recursos/imagenes/excel-48.png"
-                                         width="20px"
-                                         height="20px"
-                                         style="cursor: hand"
+                            <button onClick="location.href='./contenidos/reportes/informesVeeduria/informeProyectos.php?seqCorte={$arrDato.seqCorte}'" style="width: 35px; height: 30px">
+                                <img src="./recursos/imagenes/excel-48.png"
+                                     width="20px"
+                                     height="20px"
+                                     style="cursor: hand"
 
-                                    >
-                                </button>
-                                <input type="hidden" name="seqCorte" id="seqCorte" value="{$arrDato.seqCorte}">
-                            </form>
+                                >
+                            </button>
                         </td>
                         <td align="center">
                         </td>

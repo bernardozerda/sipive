@@ -8,10 +8,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "InformeVeedurias.class.php" );
 
 $claInforme = new InformeVeedurias();
-$arrReporte = $claInforme->reporteProyectos($_POST['seqCorte']);
-
-//pr($arrReporte);
-
+$arrReporte = $claInforme->reporteProyectos($_GET['seqCorte']);
 $claInforme->imprimirReporteProyectos($arrReporte);
 
 ?>

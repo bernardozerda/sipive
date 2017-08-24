@@ -51,7 +51,8 @@ class InformeVeedurias
 
         $sql = "
             select
-                pry.txtNombreProyecto, 
+                pry.txtNombreProyecto as txtNombreProyectoHijo,
+                pry1.txtNombreProyecto as txtNombreProyectoPadre,
                 upr.txtNombreUnidad,
                 upr.fchLegalizado,
                 uac.numActo as numActoProyecto, 
@@ -65,6 +66,7 @@ class InformeVeedurias
                 aad.numActo as numActoHogar, 
                 aad.fchActo as fchActoHogar
             from t_vee_proyecto pry
+            left join t_pry_proyecto pry1 on pry.seqProyectoPadre = pry1.seqProyecto and pry.seqCorte
             inner join t_vee_unidad_proyecto upr on pry.seqProyectoVeeduria = upr.seqProyectoVeeduria
             inner join t_vee_unidades_vinculadas uvi on upr.seqUnidadProyectoVeeduria = uvi.seqUnidadProyectoVeeduria
             inner join t_vee_unidad_acto uac on uvi.seqUnidadActoVeeduria = uac.seqUnidadActoVeeduria
@@ -88,8 +90,7 @@ class InformeVeedurias
             ) aad on frm.seqFormulario = aad.seqFormulario
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
-            and upr.bolActivo = 1   
-            and uac.seqTipoActoUnidad <> 2
+            and upr.bolActivo = 1
             order by pry.txtNombreProyecto
         ";
         $objRes = $aptBd->execute($sql);
@@ -100,9 +101,10 @@ class InformeVeedurias
         $numAnioMaximoVinculado = 0;
         $numAnioMinimoLegalizado = 0;
         $numAnioMaximoLegalizado = 0;
+        $arrFormularios = array();
         while ($objRes->fields) {
 
-            $txtProyecto = $objRes->fields['txtNombreProyecto'];
+            $txtProyecto = ( trim( $objRes->fields['txtNombreProyectoPadre'] ) != "" )? $objRes->fields['txtNombreProyectoPadre'] : $objRes->fields['txtNombreProyectoHijo'];
             $txtUnidad = $objRes->fields['txtNombreUnidad'];
             $numActoProyecto = $objRes->fields['numActoProyecto'];
             $fchActoProyecto = $objRes->fields['fchActoProyecto'];
@@ -113,6 +115,7 @@ class InformeVeedurias
             $fchLegalizado = $objRes->fields['fchLegalizado'];
             $bolCerrado = $objRes->fields['bolCerrado'];
             $seqEstadoProceso = $objRes->fields['seqEstadoProceso'];
+            $seqFormulario = $objRes->fields['seqFormulario'];
 
             $txtNombreResolucion = $numActoProyecto . " de " . date("Y", strtotime($fchActoProyecto));
 
@@ -162,12 +165,120 @@ class InformeVeedurias
 
             }
 
+            if( intval( $seqFormulario ) != 0 ) {
+                $arrFormularios[] = $seqFormulario;
+            }
 
             $objRes->MoveNext();
         }
 
+        $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
+
         return $arrReporte;
     }
+
+    private function obtenerHogares($arrFormularios , $seqCorte )
+    {
+        global $aptBd;
+        $sql = "
+            SELECT
+              frm.seqFormulario as Formulario,
+              eta.txtEtapa as Etapa,
+              epr.txtEstadoProceso as Estado,
+              pgo.txtPlanGobierno as 'Plan de Gobierno',
+              IF(frm.seqModalidad <> 0, moa.txtModalidad,'No Disponible') as Modalidad,
+              IF(frm.seqTipoEsquema is not null, tes.txtTipoEsquema,'No Disponible') as Esquema,
+              sol.txtSolucion as Solucion, 
+              sol.txtDescripcion as 'Descripcion de la Solucion',
+              frm.fchInscripcion as 'Fecha de Inscripcion',
+              frm.fchPostulacion as 'Fecha de Postulacion',
+              frm.fchUltimaActualizacion as 'Ultima Actualizacion',
+              frm.fchVencimiento as 'Fecha de Vencimiento',
+              IF(frm.bolCerrado = 1, 'SI', 'NO') as Cerrado,
+              frm.txtFormulario as 'Numero de Formulario',
+              IF(frm.bolSancion = 1, 'SI', 'NO') as Sancionado,
+              sis.txtSisben as Sisben,
+              IF(frm.seqProyecto is null or frm.seqProyecto = 0,'No Disponible',pry.txtNombreProyecto) as Proyecto,
+              IF(frm.seqProyectoHijo is null or frm.seqProyectoHijo = 0,'No Disponible',pry1.txtNombreProyecto) as Conjunto,
+              IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad) as Unidad,
+              loc.txtLocalidad as Localidad,
+              if(bar.txtBarrio is null,'No Disponible',bar.txtBarrio) as Barrio,
+              if(frm.numHabitaciones is null,0,frm.numHabitaciones) as Dormitorios,
+              if(frm.numHacinamiento is null,0,frm.numHacinamiento) as Hacinamiento,
+              pat.txtPuntoAtencion as 'Punto de Atencion',
+              ppal.txtNombre as 'Postulante Principal - Nombre',
+              ppal.txtTipoDocumento as 'Postulante Principal - Tipo de Documento',
+              ppal.numDocumento as 'Postulante Principal - Documento',
+              upper(concat( ciu.txtNombre1,' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2 )) as Nombre,
+              tdo.txtTipoDocumento as 'Tipo de Documento',
+              ciu.numDocumento as Documento,
+              par.txtParentesco as Parentesco,
+              FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365)) AS Edad,
+              rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365))) AS 'Rango Edad',
+              ned.txtNivelEducativo as 'Nivel Educativo', 
+              ciu.numAnosAprobados as 'Años Aprobados',
+              etn.txtEtnia as 'Condicion Etnica', 
+              eci.txtEstadoCivil as 'Estado Civil', 
+              ocu.txtOcupacion as 'Ocupacion',   
+              sal.txtSalud as 'Afiliacion a Salud',
+              ucwords( cabezaFamilia( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as 'Cabeza de Familia',
+              ucwords( mayor65anos( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as 'Mayor de 65',
+              ucwords( discapacitado( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as 'Discapacitado',
+              ucwords( ningunaCondicionEspecial( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as 'Ninguna Condicion',    
+              sex.txtSexo as Sexo, 
+              if(ciu.bolLgtb=1,'Si','No') as LGTBI, 
+              glg.txtGrupoLgtbi as 'Grupo LGTBI', 
+              if(frm.bolDesplazado = 1, 'Si','No') as Desplazado,
+              tvi.txtTipoVictima 'Hecho Victimizante'
+            FROM t_vee_formulario frm
+            INNER JOIN t_vee_hogar hog ON frm.seqFormularioVeeduria = hog.seqFormularioVeeduria
+            INNER JOIN t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria and ciu.seqCorte = $seqCorte
+            INNER JOIN t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
+            INNER JOIN t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+            INNER JOIN t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
+            LEFT  JOIN t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
+            LEFT  JOIN t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
+            INNER JOIN t_frm_solucion sol on frm.seqSolucion = sol.seqSolucion 
+            INNER JOIN t_frm_sisben sis on frm.seqSisben = sis.seqSisben
+            LEFT  JOIN t_pry_proyecto pry on frm.seqProyecto = pry.seqProyecto 
+            LEFT  JOIN t_pry_proyecto pry1 on frm.seqProyectoHijo = pry1.seqProyecto
+            LEFT  JOIN t_vee_unidad_proyecto upr on frm.seqUnidadProyecto = upr.seqUnidadProyecto
+            INNER JOIN t_frm_localidad loc on frm.seqLocalidad = loc.seqLocalidad
+            LEFT  JOIN t_frm_barrio bar on frm.seqBarrio = bar.seqBarrio
+            INNER JOIN t_frm_punto_atencion pat on frm.seqPuntoAtencion = pat.seqPuntoAtencion
+            INNER JOIN t_ciu_parentesco par on hog.seqParentesco = par.seqParentesco
+            INNER JOIN (
+              SELECT 
+                frm1.seqFormularioVeeduria,
+                upper(concat( ciu1.txtNombre1,' ', ciu1.txtNombre2,' ', ciu1.txtApellido1,' ', ciu1.txtApellido2 )) as txtNombre,
+                ciu1.numDocumento,
+                tdo1.txtTipoDocumento
+              FROM t_vee_formulario frm1
+              INNER JOIN t_vee_hogar hog1 ON frm1.seqFormularioVeeduria = hog1.seqFormularioVeeduria and hog1.seqParentesco = 1
+              INNER JOIN t_vee_ciudadano ciu1 ON hog1.seqCiudadanoVeeduria = ciu1.seqCiudadanoVeeduria
+              INNER JOIN t_ciu_tipo_documento tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
+            ) ppal on frm.seqFormularioVeeduria = ppal.seqFormularioVeeduria
+            INNER JOIN t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
+            LEFT  JOIN t_ciu_nivel_educativo ned on ciu.seqNivelEducativo = ned.seqNivelEducativo
+            INNER JOIN t_ciu_etnia etn on ciu.seqEtnia = etn.seqEtnia
+            INNER JOIN t_ciu_estado_civil eci on ciu.seqEstadoCivil = eci.seqEstadoCivil
+            INNER JOIN t_ciu_ocupacion ocu on ciu.seqOcupacion = ocu.seqOcupacion
+            INNER JOIN t_ciu_sexo sex on ciu.seqSexo = sex.seqSexo
+            LEFT  JOIN t_ciu_salud sal on ciu.seqSalud = sal.seqSalud
+            LEFT  JOIN t_frm_tipovictima tvi on ciu.seqTipoVictima = tvi.seqTipoVictima
+            LEFT  JOIN t_frm_grupo_lgtbi glg on ciu.seqGrupoLgtbi = glg.seqGrupoLgtbi
+            WHERE frm.seqCorte = $seqCorte
+            AND frm.seqFormulario IN ( " . implode("," , $arrFormularios ) . " )
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrHogares = array();
+        while( $objRes->fields ){
+            $arrHogares[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $arrHogares;
+    }
+
 
     private function fuentesXML(){
 
@@ -231,6 +342,8 @@ class InformeVeedurias
 
     public function imprimirReporteProyectos($arrReporte)
     {
+
+        ini_set("memory_limit","-1");
 
         $numAcrossGenerados   = ($arrReporte['reporte']['generados']['maximo']   - $arrReporte['reporte']['generados']['minimo']  ) + 1;
         $numAcrossVinculados  = ($arrReporte['reporte']['vinculados']['maximo']  - $arrReporte['reporte']['vinculados']['minimo'] ) + 1;
@@ -358,12 +471,47 @@ class InformeVeedurias
 
         $xmlArchivo .= "</ss:Table>";
         $xmlArchivo .= "</ss:Worksheet>";
+
+        /***********************************************
+         * HOJA REPORTE DE HOGARES
+         ***********************************************/
+
+        $xmlArchivo .= "<ss:Worksheet ss:Name='Información de Hogares'>";
+        $xmlArchivo .= "<ss:Table>";
+
+        /***********************************************
+         * TITULOS DE LA HOJA DE HOGARES
+         ***********************************************/
+
+        $arrTitulos = array_keys($arrReporte['hogares'][0]);
+
+        $xmlArchivo .= "<ss:Row>";
+        foreach ($arrTitulos as $txtTitulo){
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
+        }
+        $xmlArchivo .= "</ss:Row>";
+
+
+        /***********************************************
+         * CONTENIDO DE LA HOJA DE HOGARES
+         ***********************************************/
+
+        foreach ($arrReporte['hogares'] as $numLinea => $arrDatos){
+            $xmlArchivo .= "<ss:Row>";
+            foreach($arrDatos as $txtTitulo => $txtValor) {
+                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>$txtValor</ss:Data></ss:Cell>";
+            }
+            $xmlArchivo .= "</ss:Row>";
+        }
+
+        $xmlArchivo .= "</ss:Table>";
+        $xmlArchivo .= "</ss:Worksheet>";
+
         $xmlArchivo .= "</ss:Workbook>";
 
         $txtNombre = "InformeProyectos" . date("YmdHis") . ".xls";
         header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
         header("Content-Disposition: inline; filename=\"" . $txtNombre . "\"");
-
         echo $xmlArchivo;
 
     }

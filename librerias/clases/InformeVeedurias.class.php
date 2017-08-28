@@ -51,24 +51,6 @@ class InformeVeedurias
 
         $sql = "
             select
-                pry1.txtNombreProyecto as txtNombreProyectoPadre, 
-                pry1.numNitProyecto, 
-                pry1.seqLocalidad, 
-                pry1.seqBarrio, 
-                pry1.seqOferente, 
-                pry1.seqConstructor, 
-                pry1.seqConstructor2,
-                pry1.txtNombreVendedor, 
-                pry1.numNitVendedor,
-                pry.txtNombreProyecto as txtNombreProyectoHijo,
-                pry.numNitProyecto, 
-                pry.seqLocalidad, 
-                pry.seqBarrio, 
-                pry.seqOferente, 
-                pry.seqConstructor, 
-                pry.seqConstructor2,
-                pry.txtNombreVendedor, 
-                pry.numNitVendedor,
                 upr.seqUnidadProyecto,
                 upr.txtNombreUnidad, 
                 upr.txtMatriculaInmobiliaria, 
@@ -76,15 +58,35 @@ class InformeVeedurias
                 upr.valSDVEAprobado, 
                 upr.valSDVEActual, 
                 upr.valSDVEComplementario, 
-                upr.fchLegalizado, 
-                upr.seqPlanGobierno, 
+                upr.fchLegalizado,  
+                pgo.txtPlanGobierno,
                 upr.seqModalidad, 
+                moa.txtModalidad,
                 upr.seqTipoEsquema,
+                tes.txtTipoEsquema,
                 uac.numActo as numActoProyecto, 
                 uac.fchActo as fchActoProyecto, 
                 uac.seqTipoActoUnidad,
                 tac.txtTipoActoUnidad,
                 uvi.valIndexado,
+                pry1.txtNombreProyecto as txtNombreProyectoPadre, 
+                pry1.numNitProyecto as txtNitProyectoPadre, 
+                loc1.txtLocalidad as txtLocalidadPadre,
+                bar1.txtBarrio as txtBarrioPadre, 
+                eof1.txtNombreOferente as txtNombreOferentePadre,
+                eof1.numNitOferente as numNitOferentePadre, 
+                con11.txtNombreConstructor as txtNombreConstructorPadre,
+                con12.txtNombreConstructor as txtNombreConstructorPadre2,
+                pry1.txtNombreVendedor as txtNombreVendedorPadre, 
+                pry1.numNitVendedor as txtNitVendedorPadre,
+                pry.txtNombreProyecto as txtNombreProyectoHijo,
+                pry.numNitProyecto as numNitProyectoHijo, 
+                loc2.txtLocalidad as txtLocalidadHijo,
+                bar2.txtBarrio as txtBarrioHijo,
+                con21.txtNombreConstructor as txtNombreConstructorHijo,
+                con22.txtNombreConstructor as txtNombreConstructorHijo2,
+                pry.txtNombreVendedor as txtNombreVendedorHijo, 
+                pry.numNitVendedor as numNitVendedorHijo,
                 frm.seqFormulario,
                 frm.seqEstadoProceso,
                 frm.bolCerrado,
@@ -113,10 +115,22 @@ class InformeVeedurias
                 group by fac.seqFormulario
               ) frm on hvi.seqFormularioActo = frm.seqFormularioActo
             ) aad on frm.seqFormulario = aad.seqFormulario
+            inner join t_frm_plan_gobierno pgo on upr.seqPlanGobierno = pgo.seqPlanGobierno
+            inner join t_frm_modalidad moa on moa.seqModalidad = upr.seqModalidad
+            inner join t_pry_tipo_esquema tes on upr.seqTipoEsquema = tes.seqTipoEsquema
+            left  join t_frm_localidad loc1 on pry1.seqLocalidad = loc1.seqLocalidad
+            left  join t_frm_barrio bar1 on pry1.seqBarrio = bar1.seqBarrio
+            left  join t_pry_entidad_oferente eof1 on pry1.seqOferente = eof1.seqProyectoOferente
+            left  join t_pry_constructor con11 on pry1.seqConstructor = con11.seqConstructor
+            left  join t_pry_constructor con12 on pry1.seqConstructor2 = con12.seqConstructor
+            left  join t_frm_localidad loc2 on pry.seqLocalidad = loc2.seqLocalidad
+            left  join t_frm_barrio bar2 on pry.seqBarrio = bar2.seqBarrio 
+            left  join t_pry_constructor con21 on pry.seqConstructor = con21.seqConstructor
+            left  join t_pry_constructor con22 on pry.seqConstructor2 = con22.seqConstructor
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
             and upr.bolActivo = 1
-            order by pry.txtNombreProyecto
+            order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
         ";
         $objRes = $aptBd->execute($sql);
         $arrReporte = array();
@@ -133,12 +147,10 @@ class InformeVeedurias
             /***************************************************************************
              * PROCESAMIENTO DE LA HOJA DE REPORTE
              ***************************************************************************/
+            $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
 
             // debe acumular sobre proyecto padre cuando aplique
             $txtProyecto = ( trim( $objRes->fields['txtNombreProyectoPadre'] ) != "" )? $objRes->fields['txtNombreProyectoPadre'] : $objRes->fields['txtNombreProyectoHijo'];
-
-            // Nombre de la resolucion para poner en la hoja
-            $txtNombreResolucion = $objRes->fields['numActoProyecto'] . " de " . date("Y", strtotime($objRes->fields['fchActoProyecto']));
 
             // Determina el año menor y mayor para imprimir el numero de columnas correcto en el excel (XML)
             $numAnioResolucionProyecto = date("Y", strtotime($objRes->fields['fchActoProyecto']));
@@ -147,16 +159,22 @@ class InformeVeedurias
             $arrReporte['reporte']['generados']['minimo'] = $numAnioMinimoGenerado;
             $arrReporte['reporte']['generados']['maximo'] = $numAnioMaximoGenerado;
 
+            if( $objRes->fields['seqTipoActoUnidad'] == 1 ){
+                $txtNombreResolucion = $objRes->fields['numActoProyecto'] . " de " . date("Y", strtotime($objRes->fields['fchActoProyecto']));
+            }
+
             // de acuerdo al tipo de aad de proyecto suma o resta
             // para las indexaciones va calculando el valor de la unidad
             switch( $objRes->fields['seqTipoActoUnidad'] ){
                 case 1: // Asignacion de unidades
                     $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]++;
                     $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total']++;
+                    $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
                     break;
                 case 2: // Indexacion de unidades
 
                     // calcular el valor definitivo de la unidad
+                    $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
 
                     break;
                 case 3: // modificatoria (valor positivo incluye unidades // valor negativo excluye unidades)
@@ -199,21 +217,64 @@ class InformeVeedurias
                 $arrFormularios[$seqFormulario]['fchResolucion'] = $objRes->fields['fchActoHogar'];
             }
 
+            // Prepara los datos para la hoja de proyectos
+            if( ( trim( $objRes->fields['txtNombreProyectoPadre'] ) != "" ) ){
+                $txtNombreProyectoPadre = $objRes->fields['txtNombreProyectoPadre'];
+                $txtNombreProyectoHijo  = $objRes->fields['txtNombreProyectoHijo'];
+                $txtNitProyecto         = $objRes->fields['txtNitProyectoPadre'];
+                $txtLocalidad           = $objRes->fields['txtLocalidadPadre'];
+                $txtBarrio              = $objRes->fields['txtBarrioPadre'];
+                $txtNombreOferente      = $objRes->fields['txtNombreOferentePadre'];
+                $numNitOferente         = $objRes->fields['numNitOferentePadre'];
+                $txtNombreConstructor   = $objRes->fields['txtNombreConstructorPadre'];
+                $txtNombreConstructor2  = $objRes->fields['txtNombreConstructorPadre2'];
+                $txtNombreVendedor      = $objRes->fields['txtNombreVendedorPadre'];
+                $numNitVendedor         = $objRes->fields['txtNitVendedorPadre'];
+            }else{
+                $txtNombreProyectoPadre = $objRes->fields['txtNombreProyectoHijo'];
+                $txtNombreProyectoHijo  = "No aplica";
+                $txtNitProyecto         = $objRes->fields['txtNitProyectoHijo'];
+                $txtLocalidad           = $objRes->fields['txtLocalidadHijo'];
+                $txtBarrio              = $objRes->fields['txtBarrioHijo'];
+                $txtNombreOferente      = $objRes->fields['txtNombreOferenteHijo'];
+                $numNitOferente         = $objRes->fields['numNitOferenteHijo'];
+                $txtNombreConstructor   = $objRes->fields['txtNombreConstructorHijo'];
+                $txtNombreConstructor2  = $objRes->fields['txtNombreConstructorHijo2'];
+                $txtNombreVendedor      = $objRes->fields['txtNombreVendedorHijo'];
+                $numNitVendedor         = $objRes->fields['txtNitVendedorHijo'];
+            }
+
+
             /***************************************************************************
              * PROCESAMIENTO DE LA HOJA DE PROYECTOS
              ***************************************************************************/
 
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Proyecto Padre' ]     = $txtNombreProyectoPadre;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Proyecto Hijo' ]      = $txtNombreProyectoHijo;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Proyecto' ]       = $txtNitProyecto;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Localidad Proyecto' ] = $txtLocalidad;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Barrio Proyecto' ]    = $txtBarrio;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente' ]           = $txtNombreOferente;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente' ]       = $numNitOferente;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Constructor' ]        = $txtNombreConstructor;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Contructor 2' ]       = $txtNombreConstructor2;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Vendedor' ]           = $txtNombreVendedor;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Vendedor' ]       = $numNitVendedor;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Unidad' ]                 = $objRes->fields['txtNombreUnidad'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmobiliaria' ] = $objRes->fields['txtMatriculaInmobiliaria'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'CHIP' ]                   = $objRes->fields['txtChipLote'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Aprobado' ]          = $objRes->fields['valSDVEAprobado'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Actual' ]            = $objRes->fields['valSDVEActual'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Complementario' ]    = $objRes->fields['valSDVEComplementario'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Valor Indexado' ]         = $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Legalizacion' ]  = $objRes->fields['fchLegalizado'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Plan de Gobierno' ]       = $objRes->fields['txtPlanGobierno'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Modalidad' ]              = $objRes->fields['txtModalidad'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Esquema' ]                = $objRes->fields['txtTipoEsquema'];
+
             /***************************************************************************
              * PROCESAMIENTO DE LA HOJA DE RESOLUCIONES
              ***************************************************************************/
-
-            if( ( trim( $objRes->fields['txtNombreProyectoPadre'] ) != "" ) ){
-                $txtNombreProyectoPadre = $objRes->fields['txtNombreProyectoPadre'];
-                $txtNombreProyectoHijo  = $objRes->fields['txtNombreProyectoHijo'];
-            }else{
-                $txtNombreProyectoPadre = $objRes->fields['txtNombreProyectoHijo'];
-                $txtNombreProyectoHijo  = "No aplica";
-            }
 
             $numPosicion = count( $arrReporte['resoluciones'] );
             $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Padre'] = $txtNombreProyectoPadre;
@@ -241,6 +302,11 @@ class InformeVeedurias
                 $arrReporte['hogares'][$numLinea]['Resolucion'] = $arrFormularios[$seqFormulario]['numResolucion'];
                 $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['fchResolucion'];
             }
+        }
+
+        // quita la variable de paso de calculo del valor indexado de proyectos
+        foreach( $arrReporte['proyectos'] as $seqUnidadProyecto => $arrDatos ){
+            unset( $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] );
         }
 
         return $arrReporte;
@@ -534,7 +600,7 @@ class InformeVeedurias
          * HOJA REPORTE DE HOGARES
          ***********************************************/
 
-        $xmlArchivo .= "<ss:Worksheet ss:Name='Información de Hogares'>";
+        $xmlArchivo .= "<ss:Worksheet ss:Name='Hogares'>";
         $xmlArchivo .= "<ss:Table>";
 
         // titulos
@@ -547,6 +613,35 @@ class InformeVeedurias
 
         // datos
         foreach ($arrReporte['hogares'] as $numLinea => $arrDatos){
+            $xmlArchivo .= "<ss:Row>";
+            foreach($arrDatos as $txtTitulo => $txtValor) {
+                $txtTipo = ( is_numeric( $txtValor ) )? "Number" : "String";
+                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
+            }
+            $xmlArchivo .= "</ss:Row>";
+        }
+
+        $xmlArchivo .= "</ss:Table>";
+        $xmlArchivo .= "</ss:Worksheet>";
+
+
+        /***********************************************
+         * HOJA PROYECTOS
+         ***********************************************/
+
+        $xmlArchivo .= "<ss:Worksheet ss:Name='Proyectos'>";
+        $xmlArchivo .= "<ss:Table>";
+
+        // titulos
+        $arrTitulos = array_keys( array_shift( $arrReporte['proyectos'] ) );
+        $xmlArchivo .= "<ss:Row>";
+        foreach ($arrTitulos as $txtTitulo){
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
+        }
+        $xmlArchivo .= "</ss:Row>";
+
+        // datos
+        foreach ($arrReporte['proyectos'] as $seqUnidadProyecto => $arrDatos){
             $xmlArchivo .= "<ss:Row>";
             foreach($arrDatos as $txtTitulo => $txtValor) {
                 $txtTipo = ( is_numeric( $txtValor ) )? "Number" : "String";
@@ -585,9 +680,6 @@ class InformeVeedurias
 
         $xmlArchivo .= "</ss:Table>";
         $xmlArchivo .= "</ss:Worksheet>";
-
-
-
 
         $xmlArchivo .= "</ss:Workbook>";
 

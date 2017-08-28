@@ -129,8 +129,7 @@ class InformeVeedurias
             left  join t_pry_constructor con22 on pry.seqConstructor2 = con22.seqConstructor
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
-            and upr.bolActivo = 1
-            order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
+            and upr.bolActivo = 1            
         ";
         $objRes = $aptBd->execute($sql);
         $arrReporte = array();
@@ -291,6 +290,8 @@ class InformeVeedurias
 
             $objRes->MoveNext();
         }
+
+        ksort($arrReporte['reporte']['generados']['datos']);
 
         // obtiene los datos del hogar
         $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);

@@ -129,7 +129,7 @@ class InformeVeedurias
             left  join t_pry_constructor con22 on pry.seqConstructor2 = con22.seqConstructor
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
-            and upr.bolActivo = 1            
+            -- and upr.bolActivo = 1            
         ";
         $objRes = $aptBd->execute($sql);
         $arrReporte = array();

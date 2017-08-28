@@ -141,7 +141,6 @@ class InformeVeedurias
         $numAnioMinimoLegalizado = 0;
         $numAnioMaximoLegalizado = 0;
         $arrFormularios = array();
-
         while ($objRes->fields) {
 
             /***************************************************************************

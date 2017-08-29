@@ -130,7 +130,6 @@ class InformeVeedurias
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
             -- and upr.bolActivo = 1  
-             and pry.seqProyectoVeeduria = 19
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
         ";
         $objRes = $aptBd->execute($sql);

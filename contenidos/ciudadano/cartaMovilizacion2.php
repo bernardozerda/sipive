@@ -69,18 +69,21 @@ $txtSaludo = "Señores<br>";
 $txtNombre = $_GET['banco'];
 $txtEncabezado = "";
 $txtNombre1 = strtoupper($_GET['nombre']);
+$documento = "";
 
 foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
 
     if ($objCiudadano->seqParentesco == 1) {
         $txtEncabezado = ( $objCiudadano->seqSexo == 1 ) ? " el señor" : " la señora";
-        $txtNombre = $objCiudadano->txtNombre1 . " ";
-        $txtNombre .= ( $objCiudadano->txtNombre2 != "" ) ? $objCiudadano->txtNombre2 . " " : "";
-        $txtNombre .= $objCiudadano->txtApellido1 . " " . $objCiudadano->txtApellido2;
-        $txtTipoDocumento = obtenerNombres("T_CIU_TIPO_DOCUMENTO", "seqTipoDocumento", $objCiudadano->seqTipoDocumento);
+//        $txtNombre = $objCiudadano->txtNombre1 . " ";
+//        $txtNombre .= ( $objCiudadano->txtNombre2 != "" ) ? $objCiudadano->txtNombre2 . " " : "";
+//        $txtNombre .= $objCiudadano->txtApellido1 . " " . $objCiudadano->txtApellido2;
+
         $txtInscripcion = ( $objCiudadano->seqSexo == 1 ) ? "inscrito" : "inscrita";
         break;
     }
+    $txtTipoDocumento = obtenerNombres("T_CIU_TIPO_DOCUMENTO", "seqTipoDocumento", $objCiudadano->seqTipoDocumento);
+    $documento = $txtTipoDocumento . " " . $objCiudadano->numDocumento;
 }
 $contenido .= utf8_decode($txtSaludo);
 $contenido .= utf8_decode(strtoupper($txtNombre));
@@ -112,17 +115,17 @@ $contenido .= utf8_decode("Respetados Señores:") . "";
 
 if ($_GET['tipo'] == 2) {
     $txtParrafo = "<p stroke='0.2' fill='true'  style='text-align:justify;'>
-La Secretaria Distrital del Hábitat informa que " . $txtEncabezado . " " . strtoupper($txtNombre1) . ",
+La Secretaria Distrital del Hábitat informa que " . $txtEncabezado . " " . strtoupper($txtNombre1) . " con C.C. " . $_GET['documento'] . ",
     NO se encuentra inscrito (a) en el Sistema
 de Información del Programa Integral de Vivienda Efectiva - SIPIVE de la Secretaría Distrital del
 Hábitat, por lo tanto no es beneficiario de recursos correspondientes al Aporte Distrital que otorga esta Entidad,
 en el marco del Decreto 623 de 2016, <i>\"Por el cual se establece el Programa Integral de Vivienda Efectiva y se
 dictan medidas para la generación de vivienda nueva y el mejoramiento de las condiciones de habitabilidad y
 estructurales de las viviendas y se dictan otras disposiciones\"</i>.</p>";
-    $txtParrafo .= "<p>En consideración a lo anterior, esta Secretaría autoriza a  " . $txtEncabezado . " " . strtoupper($txtNombre1) . ", a efectuar la movilización de los recursos "
+    $txtParrafo .= "<p>En consideración a lo anterior, esta Secretaría autoriza a  " . $txtEncabezado . " " . strtoupper($txtNombre1) . " con C.C. " . $_GET['documento'] . ", a efectuar la movilización de los recursos "
             . "que se encuentran depositados en la Cuenta de Ahorro Programado.</p>";
 } else {
-    $txtParrafo .= "<p>En atención a su comunicación, la Secretaría Distrital del Hábitat informa que  " . $txtEncabezado . " " . strtoupper($txtNombre1) . ", no es beneficiaria (o) del Aporte Distrital que asigna la SDHT.</p>"
+    $txtParrafo .= "<p>En atención a su comunicación, la Secretaría Distrital del Hábitat informa que  " . $txtEncabezado . " " . strtoupper($txtNombre1). " con C.C. " . $_GET['documento']  . ", no es beneficiaria (o) del Aporte Distrital que asigna la SDHT.</p>"
             . "<p>En consideración a lo anterior, esta Secretaría autoriza a " . $txtEncabezado . " " . strtoupper($txtNombre1) . ", a realizar la movilización de los recursos que se encuentran depositados en la Cuenta de Ahorro Programado.</p>";
 }
 $txtParrafo .= "<p>Cabe aclarar que esta movilización se autoriza única y exclusivamente para los recursos 

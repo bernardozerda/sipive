@@ -191,8 +191,10 @@ class InformeVeedurias
                     break;
             }
 
+            $seqFormulario = $objRes->fields['seqFormulario'];
+
             // conteo para las columnas de vinculados segun el estado del proceso
-            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosVinculado ) ) {
+            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosVinculado ) and ! isset( $arrFormularios[$seqFormulario] ) ) {
                 $numAnioResolucionHogar = date("Y", strtotime($objRes->fields['fchActoHogar']));
                 $numAnioMinimoVinculado = (($numAnioMinimoVinculado == 0) or ($numAnioMinimoVinculado >= $numAnioResolucionHogar)) ? $numAnioResolucionHogar : $numAnioMinimoVinculado;
                 $numAnioMaximoVinculado = (($numAnioMaximoVinculado == 0) or ($numAnioMaximoVinculado <= $numAnioResolucionHogar)) ? $numAnioResolucionHogar : $numAnioMaximoVinculado;
@@ -203,7 +205,7 @@ class InformeVeedurias
             }
 
             // conteo para las columnas de legalizados segun el estado del proceso
-            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosLegalizado ) ){
+            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosLegalizado ) and ! isset( $arrFormularios[$seqFormulario] ) ){
                 $numAnioLegalizado = date("Y", strtotime($objRes->fields['fchLegalizado']));
                 $numAnioMinimoLegalizado = (($numAnioMinimoLegalizado == 0) or ($numAnioMinimoLegalizado >= $numAnioLegalizado)) ? $numAnioLegalizado : $numAnioMinimoLegalizado;
                 $numAnioMaximoLegalizado = (($numAnioMaximoLegalizado == 0) or ($numAnioMaximoLegalizado <= $numAnioLegalizado)) ? $numAnioLegalizado : $numAnioMaximoLegalizado;
@@ -214,7 +216,6 @@ class InformeVeedurias
             }
 
             // se usa mas adelante para completar la informacion de la hoja de hogares
-            $seqFormulario = $objRes->fields['seqFormulario'];
             if( intval( $seqFormulario ) != 0 ) {
                 $arrFormularios[$seqFormulario]['numResolucion'] = $objRes->fields['numActoHogar'];
                 $arrFormularios[$seqFormulario]['fchResolucion'] = $objRes->fields['fchActoHogar'];
@@ -291,7 +292,7 @@ class InformeVeedurias
             if( $objRes->fields['seqTipoActoUnidad'] <> 3 ) {
                 $arrReporte['resoluciones'][$numPosicion]['Valor Indexacion'] = $objRes->fields['valIndexado'];
             }else{
-                $arrReporte['resoluciones'][$numPosicion]['Valor Indexacion'] = 0;
+                $arrReporte['resoluciones'][$numPosicion]['Valor Indexacion'] = ($objRes->fields['valIndexado'] > 0)? "Adiciona":"Desvincula";
             }
 
             $objRes->MoveNext();

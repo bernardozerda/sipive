@@ -129,7 +129,8 @@ class InformeVeedurias
             left  join t_pry_constructor con22 on pry.seqConstructor2 = con22.seqConstructor
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
-            -- and upr.bolActivo = 1   
+            -- and upr.bolActivo = 1  
+             and pry.seqProyectoVeeduria = 19
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
         ";
         $objRes = $aptBd->execute($sql);
@@ -177,11 +178,13 @@ class InformeVeedurias
 
                     break;
                 case 3: // modificatoria (valor positivo incluye unidades // valor negativo excluye unidades)
+
                     if( $objRes->fields['valIndexado'] > 0 ){
                         $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]++;
                         $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total']++;
                     }else{
-                        $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]--;
+                        $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto] =
+                            intval($arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]) - 1;
                         $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total']--;
                     }
                     $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
@@ -293,6 +296,8 @@ class InformeVeedurias
         }
 
         ksort($arrReporte['reporte']['generados']['datos']);
+
+        pr( $arrReporte['reporte']['generados']['datos'] );
 
         // obtiene los datos del hogar
         $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
@@ -684,12 +689,12 @@ class InformeVeedurias
         $xmlArchivo .= "</ss:Worksheet>";
 
         $xmlArchivo .= "</ss:Workbook>";
-
+/*
         $txtNombre = "InformeProyectos" . date("YmdHis") . ".xls";
         header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
         header("Content-Disposition: inline; filename=\"" . $txtNombre . "\"");
         echo $xmlArchivo;
-
+*/
     }
 
 

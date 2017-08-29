@@ -129,7 +129,7 @@ class InformeVeedurias
             left  join t_pry_constructor con22 on pry.seqConstructor2 = con22.seqConstructor
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
-            and upr.bolActivo = 1
+            -- and upr.bolActivo = 1  
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
         ";
         $objRes = $aptBd->execute($sql);
@@ -153,6 +153,7 @@ class InformeVeedurias
 
             // Determina el año menor y mayor para imprimir el numero de columnas correcto en el excel (XML)
             $numAnioResolucionProyecto = date("Y", strtotime($objRes->fields['fchActoProyecto']));
+
             $numAnioMinimoGenerado = (($numAnioMinimoGenerado == 0) or ($numAnioMinimoGenerado >= $numAnioResolucionProyecto)) ? $numAnioResolucionProyecto : $numAnioMinimoGenerado;
             $numAnioMaximoGenerado = (($numAnioMaximoGenerado == 0) or ($numAnioMaximoGenerado <= $numAnioResolucionProyecto)) ? $numAnioResolucionProyecto : $numAnioMaximoGenerado;
             $arrReporte['reporte']['generados']['minimo'] = $numAnioMinimoGenerado;
@@ -177,11 +178,13 @@ class InformeVeedurias
 
                     break;
                 case 3: // modificatoria (valor positivo incluye unidades // valor negativo excluye unidades)
+
                     if( $objRes->fields['valIndexado'] > 0 ){
                         $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]++;
                         $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total']++;
                     }else{
-                        $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]--;
+                        $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto] =
+                            intval($arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]) - 1;
                         $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total']--;
                     }
                     $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
@@ -249,6 +252,7 @@ class InformeVeedurias
              * PROCESAMIENTO DE LA HOJA DE PROYECTOS
              ***************************************************************************/
 
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'seqUnidadProyecto' ]  = $seqUnidadProyecto;
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Proyecto Padre' ]     = $txtNombreProyectoPadre;
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Proyecto Hijo' ]      = $txtNombreProyectoHijo;
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Proyecto' ]       = $txtNitProyecto;
@@ -277,6 +281,7 @@ class InformeVeedurias
              ***************************************************************************/
 
             $numPosicion = count( $arrReporte['resoluciones'] );
+            $arrReporte['resoluciones'][ $numPosicion ]['seqUnidadProyecto'] = $seqUnidadProyecto;
             $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Padre'] = $txtNombreProyectoPadre;
             $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Hijo'] = $txtNombreProyectoHijo;
             $arrReporte['resoluciones'][ $numPosicion ]['Nombre Unidad'] = $objRes->fields['txtNombreUnidad'];
@@ -291,6 +296,8 @@ class InformeVeedurias
 
             $objRes->MoveNext();
         }
+
+        ksort($arrReporte['reporte']['generados']['datos']);
 
         // obtiene los datos del hogar
         $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);

@@ -153,13 +153,13 @@ class InformeVeedurias
 
             // Determina el año menor y mayor para imprimir el numero de columnas correcto en el excel (XML)
             $numAnioResolucionProyecto = date("Y", strtotime($objRes->fields['fchActoProyecto']));
-            $numAnioMinimoGenerado = (($numAnioMinimoGenerado == 0) or ($numAnioMinimoGenerado >= $numAnioResolucionProyecto)) ? $numAnioResolucionProyecto : $numAnioMinimoGenerado;
-            $numAnioMaximoGenerado = (($numAnioMaximoGenerado == 0) or ($numAnioMaximoGenerado <= $numAnioResolucionProyecto)) ? $numAnioResolucionProyecto : $numAnioMaximoGenerado;
-            $arrReporte['reporte']['generados']['minimo'] = $numAnioMinimoGenerado;
-            $arrReporte['reporte']['generados']['maximo'] = $numAnioMaximoGenerado;
 
             if( $objRes->fields['seqTipoActoUnidad'] == 1 ){
                 $txtNombreResolucion = $objRes->fields['numActoProyecto'] . " de " . date("Y", strtotime($objRes->fields['fchActoProyecto']));
+                $numAnioMinimoGenerado = (($numAnioMinimoGenerado == 0) or ($numAnioMinimoGenerado >= $numAnioResolucionProyecto)) ? $numAnioResolucionProyecto : $numAnioMinimoGenerado;
+                $numAnioMaximoGenerado = (($numAnioMaximoGenerado == 0) or ($numAnioMaximoGenerado <= $numAnioResolucionProyecto)) ? $numAnioResolucionProyecto : $numAnioMaximoGenerado;
+                $arrReporte['reporte']['generados']['minimo'] = $numAnioMinimoGenerado;
+                $arrReporte['reporte']['generados']['maximo'] = $numAnioMaximoGenerado;
             }
 
             // de acuerdo al tipo de aad de proyecto suma o resta

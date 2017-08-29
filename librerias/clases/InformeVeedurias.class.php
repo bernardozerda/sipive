@@ -296,8 +296,6 @@ class InformeVeedurias
 
         ksort($arrReporte['reporte']['generados']['datos']);
 
-        pr( $arrReporte['reporte']['generados']['datos'] );
-
         // obtiene los datos del hogar
         $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
 
@@ -688,12 +686,12 @@ class InformeVeedurias
         $xmlArchivo .= "</ss:Worksheet>";
 
         $xmlArchivo .= "</ss:Workbook>";
-/*
+
         $txtNombre = "InformeProyectos" . date("YmdHis") . ".xls";
         header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
         header("Content-Disposition: inline; filename=\"" . $txtNombre . "\"");
         echo $xmlArchivo;
-*/
+
     }
 
 

@@ -51,6 +51,34 @@ class InformeVeedurias
 
         $sql = "
             select
+                pry1.txtNombreProyecto as txtNombreProyectoPadre, 
+                pry1.numNitProyecto as txtNitProyectoPadre, 
+                loc1.txtLocalidad as txtLocalidadPadre,
+                bar1.txtBarrio as txtBarrioPadre, 
+                eof11.txtNombreOferente as txtNombreOferentePadre1,
+                eof11.numNitOferente as numNitOferentePadre1, 
+                eof12.txtNombreOferente2 as txtNombreOferentePadre2,
+                eof12.numNitOferente2 as numNitOferentePadre2, 
+                eof13.txtNombreOferente3 as txtNombreOferentePadre3,
+                eof13.numNitOferente3 as numNitOferentePadre3, 
+                con1.txtNombreConstructor as txtNombreConstructorPadre,
+                con1.numDocumentoConstructor as numDocumentoConstructorPadre,
+                pry1.txtNombreVendedor as txtNombreVendedorPadre, 
+                pry1.numNitVendedor as txtNitVendedorPadre,
+                pry.txtNombreProyecto as txtNombreProyectoHijo,
+                pry.numNitProyecto as numNitProyectoHijo, 
+                loc2.txtLocalidad as txtLocalidadHijo,
+                bar2.txtBarrio as txtBarrioHijo,
+                eof.txtNombreOferente as txtNombreOferenteHijo1,
+                eof.numNitOferente as numNitOferenteHijo1, 
+                eof2.txtNombreOferente2 as txtNombreOferenteHijo2,
+                eof2.numNitOferente2 as numNitOferenteHijo2, 
+                eof3.txtNombreOferente3 as txtNombreOferenteHijo3,
+                eof3.numNitOferente3 as numNitOferenteHijo3, 
+                con2.txtNombreConstructor as txtNombreConstructorHijo,
+                con2.numDocumentoConstructor as numDocumentoConstructorHijo,
+                pry.txtNombreVendedor as txtNombreVendedorHijo, 
+                pry.numNitVendedor as numNitVendedorHijo,
                 upr.seqUnidadProyecto,
                 upr.txtNombreUnidad, 
                 upr.txtMatriculaInmobiliaria, 
@@ -58,6 +86,8 @@ class InformeVeedurias
                 upr.valSDVEAprobado, 
                 upr.valSDVEActual, 
                 upr.valSDVEComplementario, 
+                upr.bolLegalizado,
+                if(upr.bolLegalizado = 1,'SI','NO') as bolLegalizado,
                 upr.fchLegalizado,  
                 pgo.txtPlanGobierno,
                 upr.seqModalidad, 
@@ -65,28 +95,11 @@ class InformeVeedurias
                 upr.seqTipoEsquema,
                 tes.txtTipoEsquema,
                 uac.numActo as numActoProyecto, 
-                uac.fchActo as fchActoProyecto, 
+                uac.fchActo as fchActoProyecto,
+                if(upr.bolActivo = 1,'SI','NO') as bolActivo,
                 uac.seqTipoActoUnidad,
                 tac.txtTipoActoUnidad,
                 uvi.valIndexado,
-                pry1.txtNombreProyecto as txtNombreProyectoPadre, 
-                pry1.numNitProyecto as txtNitProyectoPadre, 
-                loc1.txtLocalidad as txtLocalidadPadre,
-                bar1.txtBarrio as txtBarrioPadre, 
-                eof1.txtNombreOferente as txtNombreOferentePadre,
-                eof1.numNitOferente as numNitOferentePadre, 
-                con11.txtNombreConstructor as txtNombreConstructorPadre,
-                con12.txtNombreConstructor as txtNombreConstructorPadre2,
-                pry1.txtNombreVendedor as txtNombreVendedorPadre, 
-                pry1.numNitVendedor as txtNitVendedorPadre,
-                pry.txtNombreProyecto as txtNombreProyectoHijo,
-                pry.numNitProyecto as numNitProyectoHijo, 
-                loc2.txtLocalidad as txtLocalidadHijo,
-                bar2.txtBarrio as txtBarrioHijo,
-                con21.txtNombreConstructor as txtNombreConstructorHijo,
-                con22.txtNombreConstructor as txtNombreConstructorHijo2,
-                pry.txtNombreVendedor as txtNombreVendedorHijo, 
-                pry.numNitVendedor as numNitVendedorHijo,
                 frm.seqFormulario,
                 frm.seqEstadoProceso,
                 frm.bolCerrado,
@@ -120,16 +133,19 @@ class InformeVeedurias
             inner join t_pry_tipo_esquema tes on upr.seqTipoEsquema = tes.seqTipoEsquema
             left  join t_frm_localidad loc1 on pry1.seqLocalidad = loc1.seqLocalidad
             left  join t_frm_barrio bar1 on pry1.seqBarrio = bar1.seqBarrio
-            left  join t_pry_entidad_oferente eof1 on pry1.seqOferente = eof1.seqProyectoOferente
-            left  join t_pry_constructor con11 on pry1.seqConstructor = con11.seqConstructor
-            left  join t_pry_constructor con12 on pry1.seqConstructor2 = con12.seqConstructor
+            left  join t_pry_entidad_oferente eof11 on pry1.seqProyecto = eof11.seqProyecto
+            left  join t_pry_entidad_oferente eof12 on pry1.seqProyecto = eof12.seqProyecto
+            left  join t_pry_entidad_oferente eof13 on pry1.seqProyecto = eof13.seqProyecto
+            left  join t_pry_entidad_oferente eof on pry.seqProyecto = eof.seqProyecto
+            left  join t_pry_entidad_oferente eof2 on pry.seqProyecto = eof2.seqProyecto
+            left  join t_pry_entidad_oferente eof3 on pry.seqProyecto = eof3.seqProyecto
+            left  join t_pry_constructor con1 on pry1.seqConstructor = con1.seqConstructor
+            left  join t_pry_constructor con2 on pry.seqConstructor = con2.seqConstructor
             left  join t_frm_localidad loc2 on pry.seqLocalidad = loc2.seqLocalidad
-            left  join t_frm_barrio bar2 on pry.seqBarrio = bar2.seqBarrio 
-            left  join t_pry_constructor con21 on pry.seqConstructor = con21.seqConstructor
-            left  join t_pry_constructor con22 on pry.seqConstructor2 = con22.seqConstructor
+            left  join t_frm_barrio bar2 on pry.seqBarrio = bar2.seqBarrio
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
-            -- and upr.bolActivo = 1  
+            -- and upr.bolActivo = 1
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
         ";
         $objRes = $aptBd->execute($sql);
@@ -222,32 +238,20 @@ class InformeVeedurias
             }
 
             // Prepara los datos para la hoja de proyectos
-            if( ( trim( $objRes->fields['txtNombreProyectoPadre'] ) != "" ) ){
-                $txtNombreProyectoPadre = $objRes->fields['txtNombreProyectoPadre'];
-                $txtNombreProyectoHijo  = $objRes->fields['txtNombreProyectoHijo'];
-                $txtNitProyecto         = $objRes->fields['txtNitProyectoPadre'];
-                $txtLocalidad           = $objRes->fields['txtLocalidadPadre'];
-                $txtBarrio              = $objRes->fields['txtBarrioPadre'];
-                $txtNombreOferente      = $objRes->fields['txtNombreOferentePadre'];
-                $numNitOferente         = $objRes->fields['numNitOferentePadre'];
-                $txtNombreConstructor   = $objRes->fields['txtNombreConstructorPadre'];
-                $txtNombreConstructor2  = $objRes->fields['txtNombreConstructorPadre2'];
-                $txtNombreVendedor      = $objRes->fields['txtNombreVendedorPadre'];
-                $numNitVendedor         = $objRes->fields['txtNitVendedorPadre'];
-            }else{
-                $txtNombreProyectoPadre = $objRes->fields['txtNombreProyectoHijo'];
-                $txtNombreProyectoHijo  = "No aplica";
-                $txtNitProyecto         = $objRes->fields['txtNitProyectoHijo'];
-                $txtLocalidad           = $objRes->fields['txtLocalidadHijo'];
-                $txtBarrio              = $objRes->fields['txtBarrioHijo'];
-                $txtNombreOferente      = $objRes->fields['txtNombreOferenteHijo'];
-                $numNitOferente         = $objRes->fields['numNitOferenteHijo'];
-                $txtNombreConstructor   = $objRes->fields['txtNombreConstructorHijo'];
-                $txtNombreConstructor2  = $objRes->fields['txtNombreConstructorHijo2'];
-                $txtNombreVendedor      = $objRes->fields['txtNombreVendedorHijo'];
-                $numNitVendedor         = $objRes->fields['txtNitVendedorHijo'];
-            }
-
+            $txtNombreProyectoPadre = (trim($objRes->fields['txtNombreProyectoPadre']) != "")? trim($objRes->fields['txtNombreProyectoPadre']) : trim($objRes->fields['txtNombreProyectoHijo']);
+            $txtNombreProyectoHijo  = (trim($objRes->fields['txtNombreProyectoHijo']) != "")? trim($objRes->fields['txtNombreProyectoHijo']) : "No Aplica";
+            $txtNitProyecto         = (trim($objRes->fields['txtNitProyectoPadre']) != "")? trim( $objRes->fields['txtNitProyectoPadre'] ) : trim( $objRes->fields['txtNitProyectoHijo'] );
+            $txtLocalidad           = (trim($objRes->fields['txtLocalidadPadre']) != "")?  trim($objRes->fields['txtLocalidadPadre']) : trim($objRes->fields['txtLocalidadHijo']);
+            $txtBarrio              = (trim($objRes->fields['txtBarrioPadre']) != "")? trim($objRes->fields['txtBarrioPadre']) : trim($objRes->fields['txtBarrioHijo']);
+            $txtNombreOferente1     = (trim($objRes->fields['txtNombreOferentePadre1']) != "")? trim($objRes->fields['txtNombreOferentePadre1']) : trim($objRes->fields['txtNombreOferenteHijo1']);
+            $numNitOferente1        = (trim($objRes->fields['numNitOferentePadre1']) != "")? trim($objRes->fields['numNitOferentePadre1']) : trim($objRes->fields['numNitOferenteHijo1']);
+            $txtNombreOferente2     = (trim($objRes->fields['txtNombreOferentePadre2']) != "")? trim($objRes->fields['txtNombreOferentePadre2']) : trim($objRes->fields['txtNombreOferenteHijo2']);
+            $numNitOferente2        = (trim($objRes->fields['numNitOferentePadre2']) != "")? trim($objRes->fields['numNitOferentePadre2']) : trim($objRes->fields['numNitOferenteHijo2']);
+            $txtNombreOferente3     = (trim($objRes->fields['txtNombreOferentePadre3']) != "")? trim($objRes->fields['txtNombreOferentePadre3']) : trim($objRes->fields['txtNombreOferenteHijo3']);
+            $numNitOferente3        = (trim($objRes->fields['numNitOferentePadre3']) != "")? trim($objRes->fields['numNitOferentePadre3']) : trim($objRes->fields['numNitOferenteHijo3']);
+            $txtNombreConstructor   = (trim($objRes->fields['txtNombreConstructorPadre']) != "")? trim($objRes->fields['txtNombreConstructorPadre']) : trim($objRes->fields['txtNombreConstructorHijo']);
+            $txtNombreVendedor      = (trim($objRes->fields['txtNombreVendedorPadre']) != "")? trim($objRes->fields['txtNombreVendedorPadre']) : trim($objRes->fields['txtNombreVendedorHijo']);
+            $numNitVendedor         = (trim($objRes->fields['txtNitVendedorPadre']) != "")? trim($objRes->fields['txtNitVendedorPadre']) : trim($objRes->fields['txtNitVendedorHijo']);
 
             /***************************************************************************
              * PROCESAMIENTO DE LA HOJA DE PROYECTOS
@@ -259,10 +263,13 @@ class InformeVeedurias
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Proyecto' ]       = $txtNitProyecto;
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Localidad Proyecto' ] = $txtLocalidad;
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Barrio Proyecto' ]    = $txtBarrio;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente' ]           = $txtNombreOferente;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente' ]       = $numNitOferente;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente 1' ]         = $txtNombreOferente1;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 1' ]     = $numNitOferente1;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente 2' ]         = $txtNombreOferente2;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 2' ]     = $numNitOferente2;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente 3' ]         = $txtNombreOferente3;
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 3' ]     = $numNitOferente3;
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Constructor' ]        = $txtNombreConstructor;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Contructor 2' ]       = $txtNombreConstructor2;
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Vendedor' ]           = $txtNombreVendedor;
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Vendedor' ]       = $numNitVendedor;
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Unidad' ]                 = $objRes->fields['txtNombreUnidad'];
@@ -272,10 +279,12 @@ class InformeVeedurias
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Actual' ]            = $objRes->fields['valSDVEActual'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Complementario' ]    = $objRes->fields['valSDVEComplementario'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Valor Indexado' ]         = $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Legalizacion' ]  = $objRes->fields['fchLegalizado'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Legalizado' ]             = $objRes->fields['bolLegalizado'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Legalización' ]  = $objRes->fields['fchLegalizado'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Plan de Gobierno' ]       = $objRes->fields['txtPlanGobierno'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Modalidad' ]              = $objRes->fields['txtModalidad'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Esquema' ]                = $objRes->fields['txtTipoEsquema'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Unidad Activa' ]          = $objRes->fields['bolActivo'];
 
             /***************************************************************************
              * PROCESAMIENTO DE LA HOJA DE RESOLUCIONES
@@ -286,13 +295,23 @@ class InformeVeedurias
             $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Padre'] = $txtNombreProyectoPadre;
             $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Hijo'] = $txtNombreProyectoHijo;
             $arrReporte['resoluciones'][ $numPosicion ]['Nombre Unidad'] = $objRes->fields['txtNombreUnidad'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Tipo Resolucion'] = $objRes->fields['txtTipoActoUnidad'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Numero Resolucion'] = $objRes->fields['numActoProyecto'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Fecha Resolucion'] = $objRes->fields['fchActoProyecto'];
-            if( $objRes->fields['seqTipoActoUnidad'] <> 3 ) {
-                $arrReporte['resoluciones'][$numPosicion]['Valor Indexacion'] = $objRes->fields['valIndexado'];
-            }else{
-                $arrReporte['resoluciones'][$numPosicion]['Valor Indexacion'] = ($objRes->fields['valIndexado'] > 0)? "Adiciona":"Desvincula";
+            $arrReporte['resoluciones'][ $numPosicion ]['Tipo Resolución'] = $objRes->fields['txtTipoActoUnidad'];
+            $arrReporte['resoluciones'][ $numPosicion ]['Numero Resolución'] = $objRes->fields['numActoProyecto'];
+            $arrReporte['resoluciones'][ $numPosicion ]['Fecha Resolución'] = $objRes->fields['fchActoProyecto'];
+            $arrReporte['resoluciones'][ $numPosicion ]['Año Resolución'] = (esFechaValida($objRes->fields['fchActoProyecto']))?
+                                                                                date("Y" , strtotime($objRes->fields['fchActoProyecto'])) :
+                                                                                "";
+            $arrReporte['resoluciones'][$numPosicion]['Valor Indexación'] = $objRes->fields['valIndexado'];
+            switch($objRes->fields['seqTipoActoUnidad']){
+                case 1:
+                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = "Generacion";
+                    break;
+                case 2:
+                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Positiva" : "Negativa";
+                    break;
+                case 3:
+                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Adiciona" : "Desvincula";
+                    break;
             }
 
             $objRes->MoveNext();
@@ -307,8 +326,11 @@ class InformeVeedurias
         foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
             $seqFormulario = $arrDatos['Formulario'];
             if( isset( $arrFormularios[$seqFormulario] ) ){
-                $arrReporte['hogares'][$numLinea]['Resolucion'] = $arrFormularios[$seqFormulario]['numResolucion'];
+                $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['numResolucion'];
                 $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['fchResolucion'];
+                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['fchResolucion']))?
+                                                                date( "Y" , strtotime( $arrFormularios[$seqFormulario]['fchResolucion'] )) :
+                                                                "";
             }
         }
 
@@ -425,12 +447,6 @@ class InformeVeedurias
 
         $xmlEstilos = "<Styles>";
 
-        $xmlEstilos .= "<Style ss:ID='titulo'>";
-        $xmlEstilos .= "<Alignment ss:Horizontal='Center' ss:Vertical='Center'/>";
-        $xmlEstilos .= "<Interior ss:Color='#000000' ss:Pattern='Solid'/>";
-        $xmlEstilos .= "<Font x:Family='Swiss' ss:Bold='1'/>";
-        $xmlEstilos .= "</Style>";
-
         $xmlEstilos .= "
             <Style ss:ID='Default' ss:Name='Normal'>
                 <Alignment/>
@@ -471,6 +487,12 @@ class InformeVeedurias
                 <Alignment ss:Vertical='Center' ss:Horizontal='Right'/>
                 <Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>
                 <Interior ss:Color='#F2F2F2' ss:Pattern='Solid'/>
+            </Style>
+        ";
+
+        $xmlEstilos .= "
+            <Style ss:ID='s5'>
+                <NumberFormat ss:Format='yyyy-mm-dd'/>
             </Style>
         ";
 
@@ -623,8 +645,21 @@ class InformeVeedurias
         foreach ($arrReporte['hogares'] as $numLinea => $arrDatos){
             $xmlArchivo .= "<ss:Row>";
             foreach($arrDatos as $txtTitulo => $txtValor) {
-                $txtTipo = ( is_numeric( $txtValor ) )? "Number" : "String";
-                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
+                $txtTipo = $this->tipoDato( $txtValor );
+                $txtEstilo = "";
+                switch($txtTipo){
+                    case "DateTime":
+                        $txtValor = date( "Y-m-d" , strtotime( $txtValor ) );
+                        $txtEstilo = "ss:StyleID='s5'";
+                        break;
+                    case "Number":
+                        $txtValor = doubleval($txtValor);
+                        break;
+                    default:
+                        $txtValor = trim($txtValor);
+                        break;
+                }
+                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
             }
             $xmlArchivo .= "</ss:Row>";
         }
@@ -652,8 +687,21 @@ class InformeVeedurias
         foreach ($arrReporte['proyectos'] as $seqUnidadProyecto => $arrDatos){
             $xmlArchivo .= "<ss:Row>";
             foreach($arrDatos as $txtTitulo => $txtValor) {
-                $txtTipo = ( is_numeric( $txtValor ) )? "Number" : "String";
-                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
+                $txtTipo = $this->tipoDato( $txtValor );
+                $txtEstilo = "";
+                switch($txtTipo){
+                    case "DateTime":
+                        $txtValor = date( "Y-m-d" , strtotime( $txtValor ) );
+                        $txtEstilo = "ss:StyleID='s5'";
+                        break;
+                    case "Number":
+                        $txtValor = doubleval($txtValor);
+                        break;
+                    default:
+                        $txtValor = trim($txtValor);
+                        break;
+                }
+                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
             }
             $xmlArchivo .= "</ss:Row>";
         }
@@ -680,8 +728,21 @@ class InformeVeedurias
         foreach ($arrReporte['resoluciones'] as $numLinea => $arrDatos){
             $xmlArchivo .= "<ss:Row>";
             foreach($arrDatos as $txtTitulo => $txtValor) {
-                $txtTipo = ( is_numeric( $txtValor ) )? "Number" : "String";
-                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
+                $txtTipo = $this->tipoDato( $txtValor );
+                $txtEstilo = "";
+                switch($txtTipo){
+                    case "DateTime":
+                        $txtValor = date( "Y-m-d" , strtotime( $txtValor ) );
+                        $txtEstilo = "ss:StyleID='s5'";
+                        break;
+                    case "Number":
+                        $txtValor = doubleval($txtValor);
+                        break;
+                    default:
+                        $txtValor = trim($txtValor);
+                        break;
+                }
+                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
             }
             $xmlArchivo .= "</ss:Row>";
         }
@@ -696,6 +757,21 @@ class InformeVeedurias
         header("Content-Disposition: inline; filename=\"" . $txtNombre . "\"");
         echo $xmlArchivo;
 
+    }
+
+    private function tipoDato($txtValor){
+        switch(true){
+            case esFechaValida($txtValor):
+                $txtTipo = "DateTime";
+                break;
+            case is_numeric($txtValor):
+                $txtTipo = "Number";
+                break;
+            default:
+                $txtTipo = "String";
+                break;
+        }
+        return $txtTipo;
     }
 
 

@@ -20,10 +20,10 @@ $claFormulario = new FormularioSubsidios();
 //var_dump($claFormulario); exit();
 $seqFormulario = $claCiudadano->formularioVinculado($_GET['documento']);
 $claFormulario->cargarFormulario($seqFormulario);
-$contenido ="";
+$contenido = "";
 if ($_GET['tipo'] == 2) {
-    $contenido .= '<p>&nbsp;</p><p>Bogota D.C.  NO INSCRITO - APLICATIVO ' .$hoy. '</p>';
-}else{
+    $contenido .= '<p>&nbsp;</p><p>Bogota D.C. </p>';
+} else {
     $contenido .= '<p>&nbsp;</p><p>Bogota D.C. ' . "<p><p>&nbsp;</p>";
 }
 
@@ -74,6 +74,9 @@ foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
 
     if ($objCiudadano->seqParentesco == 1) {
         $txtEncabezado = ( $objCiudadano->seqSexo == 1 ) ? " el señor" : " la señora";
+        $txtNombre = $objCiudadano->txtNombre1 . " ";
+        $txtNombre .= ( $objCiudadano->txtNombre2 != "" ) ? $objCiudadano->txtNombre2 . " " : "";
+        $txtNombre .= $objCiudadano->txtApellido1 . " " . $objCiudadano->txtApellido2;
         $txtTipoDocumento = obtenerNombres("T_CIU_TIPO_DOCUMENTO", "seqTipoDocumento", $objCiudadano->seqTipoDocumento);
         $txtInscripcion = ( $objCiudadano->seqSexo == 1 ) ? "inscrito" : "inscrita";
         break;
@@ -109,7 +112,7 @@ $contenido .= utf8_decode("Respetados Señores:") . "";
 
 if ($_GET['tipo'] == 2) {
     $txtParrafo = "<p stroke='0.2' fill='true'  style='text-align:justify;'>
-La Secretaria Distrital del Hábitat informa que ".$txtEncabezado." ".strtoupper($txtNombre1) .",
+La Secretaria Distrital del Hábitat informa que " . $txtEncabezado . " " . strtoupper($txtNombre1) . ",
     NO se encuentra inscrito (a) en el Sistema
 de Información del Programa Integral de Vivienda Efectiva - SIPIVE de la Secretaría Distrital del
 Hábitat, por lo tanto no es beneficiario de recursos correspondientes al Aporte Distrital que otorga esta Entidad,
@@ -117,18 +120,16 @@ en el marco del Decreto 623 de 2016, <i>\"Por el cual se establece el Programa I
 dictan medidas para la generación de vivienda nueva y el mejoramiento de las condiciones de habitabilidad y
 estructurales de las viviendas y se dictan otras disposiciones\"</i>.</p>";
     $txtParrafo .= "<p>En consideración a lo anterior, esta Secretaría autoriza a  " . $txtEncabezado . " " . strtoupper($txtNombre1) . ", a efectuar la movilización de los recursos "
-           . "que se encuentran depositados en la Cuenta de Ahorro Programado.</p>";
-
+            . "que se encuentran depositados en la Cuenta de Ahorro Programado.</p>";
 } else {
     $txtParrafo .= "<p>En atención a su comunicación, la Secretaría Distrital del Hábitat informa que  " . $txtEncabezado . " " . strtoupper($txtNombre1) . ", no es beneficiaria (o) del Aporte Distrital que asigna la SDHT.</p>"
-    . "<p>En consideración a lo anterior, esta Secretaría autoriza a ".$txtEncabezado." ".strtoupper($txtNombre1) .", a realizar la movilización de los recursos que se encuentran depositados en la Cuenta de Ahorro Programado.</p>";
-      
+            . "<p>En consideración a lo anterior, esta Secretaría autoriza a " . $txtEncabezado . " " . strtoupper($txtNombre1) . ", a realizar la movilización de los recursos que se encuentran depositados en la Cuenta de Ahorro Programado.</p>";
 }
-  $txtParrafo .= "<p>Cabe aclarar que esta movilización se autoriza única y exclusivamente para los recursos 
+$txtParrafo .= "<p>Cabe aclarar que esta movilización se autoriza única y exclusivamente para los recursos 
 depositados por el hogar. Respecto a los recursos consignados por la Caja de Vivienda Popular - CVP -
 correspondiente al Valor Único de Reconocimiento - VUR, deberá acercarse a la Caja de Vivienda
 Popular ubicada en la Carrera 13 No. 54 - 13, para solicitar el trámite correspondiente.</p>";
-      
+
 
 
 
@@ -136,16 +137,16 @@ $contenido .= utf8_decode($txtParrafo);
 
 
 $txtParrafo = "<p>Finalmente, la Secretaría Distrital del Hábitat le informa que todos los trámites son gratuitos, "
-              . "por lo que no necesita de intermediarios o tramitadores. Cualquier información adicional acerca del presente documento, "
-              . "puede comunicarse con nuestra línea PBX 3581600 Extensión 3001</p>";
+        . "por lo que no necesita de intermediarios o tramitadores. Cualquier información adicional acerca del presente documento, "
+        . "puede comunicarse con nuestra línea PBX 3581600 Extensión 3001</p>";
 
 
 //$contenido .= utf8_decode($txtParrafo);
 
-if($_GET['tipo'] == 2){
-    $txtParrafo .="<p><b>Cordialmente,</b></p><p>&nbsp;</p><p>&nbsp;</p>";
-}else{
-    $txtParrafo .="<p><b>Cordialmente,</b><p><p>&nbsp;</p><p>&nbsp;</p>";
+if ($_GET['tipo'] == 2) {
+    $txtParrafo .= "<p><b>Cordialmente,</b></p><p>&nbsp;</p><p>&nbsp;</p>";
+} else {
+    $txtParrafo .= "<p><b>Cordialmente,</b><p><p>&nbsp;</p><p>&nbsp;</p>";
 }
 $contenido .= utf8_decode($txtParrafo);
 
@@ -192,7 +193,7 @@ if ($_GET['cuenta'] == 1) {
     $totalRecursos = 0;
     if ($claFormulario->valSaldoCuentaAhorro > 0) {
         $totalRecursos = $claFormulario->valTotalRecursos - $claFormulario->valSaldoCuentaAhorro;
-        $txtCambios .="<b> Cambios en el formulario: [ " . $seqFormulario . " ]</b>" . $txtSalto;
+        $txtCambios .= "<b> Cambios en el formulario: [ " . $seqFormulario . " ]</b>" . $txtSalto;
         $txtCambios .= " Valor Ahorro 1: , Valor Anterior: $claFormulario->valSaldoCuentaAhorro, Valor Nuevo: 0" . $txtSalto;
         $txtCambios .= "Entidad , Valor Anterior: " . $_GET['banco'] . ", Valor Nuevo: Ninguno" . $txtSalto;
         $txtCambios .= "Fecha Movilización , Valor Anterior: $claFormulario->fchAperturaCuentaAhorro, Valor Nuevo: 0000-00-00. $txtSalto";
@@ -216,7 +217,7 @@ if ($_GET['cuenta'] == 1) {
     $totalRecursos = 0;
     if ($claFormulario->valSaldoCuentaAhorro2 > 0) {
         $totalRecursos = $claFormulario->valTotalRecursos - $claFormulario->valSaldoCuentaAhorro2;
-        $txtCambios .="<b> Cambios en el formulario: [ " . $seqFormulario . " ]</b>" . $txtSalto;
+        $txtCambios .= "<b> Cambios en el formulario: [ " . $seqFormulario . " ]</b>" . $txtSalto;
         $txtCambios .= "Valor Ahorro 2 : , Valor Anterior: $claFormulario->valSaldoCuentaAhorro2, Valor Nuevo: 0" . $txtSalto;
         $txtCambios .= "Entidad , Valor Anterior: " . $_GET['banco'] . ", Valor Nuevo: Ninguno" . $txtSalto;
         $txtCambios .= "Fecha Movilización , Valor Anterior: $claFormulario->fchAperturaCuentaAhorro2, Valor Nuevo: 0000-00-00" . $txtSalto;
@@ -238,7 +239,7 @@ if ($_GET['cuenta'] == 1) {
 }
 
 if ($claFormulario->seqFormulario != 0) {
-     $sql = "
+    $sql = "
       INSERT INTO T_SEG_SEGUIMIENTO (
          seqFormulario, 
          fchMovimiento, 
@@ -253,10 +254,10 @@ if ($claFormulario->seqFormulario != 0) {
          $seqFormulario, 
          NOW(), 
          " . $_SESSION['seqUsuario'] . ", 
-         'El hogar ha generado la carta de movilizacion de recursos para el banco " . $_GET['banco'] . " registrado con el codigo: <b>" . $txtCodigo . "</b>. Registrado a nombre de:".$txtNombre1 ." Identificado con C.C:".$numDoc."' , 
+         'El hogar ha generado la carta de movilizacion de recursos para el banco " . $_GET['banco'] . " registrado con el codigo: <b>" . $txtCodigo . "</b>. Registrado a nombre de:" . $txtNombre1 . " Identificado con C.C:" . $numDoc . "' , 
          \"" . ereg_replace("\"", "", $txtCambios) . "\", 
          " . mb_ereg_replace("[^0-9]", "", $objCiudadano->numDocumento) . ", 
-         '".$txtNombre1."', 
+         '" . $txtNombre1 . "', 
          105, 
          1
       )

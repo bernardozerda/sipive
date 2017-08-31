@@ -366,14 +366,14 @@ class InformeVeedurias
               UPPER(des.txtBarrio) as 'Barrio1',
               UPPER(des.txtPropiedad) as 'Propiedad1',
               des.txtEscritura as 'Escritura1',
-              des.fchEscritura as 'Fecha de Escritura1',
+              IF(des.fchEscritura < '2000-01-01',NULL,des.fchEscritura) as 'Fecha de Escritura1',
               des.numNotaria as 'Notaria de Escritura1',
               UPPER(des.txtCiudad) as 'Ciudad de Escritura1',
-              des.fchSentencia as 'Fecha de Sentencia1',
+              IF(des.fchSentencia < '2000-01-01',NULL,des.fchSentencia) as 'Fecha de Sentencia1',
               des.numJuzgado as 'Juzgado de Sentencia1',
               UPPER(des.txtCiudadSentencia) as 'Ciudad de Sentencia1',
               des.numResolucion as 'Resolución de Propiedad1',
-              des.fchResolucion as 'Fecha de Propiedad1',
+              IF(des.fchResolucion < '2000-01-01',NULL,des.fchResolucion) as 'Fecha de Propiedad1',
               des.txtEntidad as 'Entidad de Propiedad1',
               UPPER(des.txtCiudadResolucion) as 'Ciudad de Propiedad1',
               */
@@ -391,14 +391,14 @@ class InformeVeedurias
               UPPER(esc.txtBarrio) as 'Barrio',
               UPPER(IF(esc.txtPropiedad is null,'Ninguno',esc.txtPropiedad)) as 'Propiedad',
               esc.txtEscritura as 'Escritura',
-              esc.fchEscritura as 'Fecha de Escritura',
+              IF(esc.fchEscritura < '2000-01-01',NULL,esc.fchEscritura) as 'Fecha de Escritura',
               esc.numNotaria as 'Notaria de Escritura',
               UPPER(esc.txtCiudad) as 'Ciudad de Escritura',
-              esc.fchSentencia as 'Fecha de Sentencia',
+              IF(esc.fchSentencia < '2000-01-01',NULL,esc.fchSentencia) as 'Fecha de Sentencia',
               esc.numJuzgado as 'Juzgado de Sentencia',
               UPPER(esc.txtCiudadSentencia) as 'Ciudad de Sentencia',
               esc.numResolucion as 'Numero de Resolución',
-              esc.fchResolucion as 'Fecha de Resolución',
+              IF(esc.fchResolucion < '2000-01-01',NULL,esc.fchResolucion) as 'Fecha de Resolución',
               UPPER(esc.txtEntidad) as 'Entidad Resolución',
               UPPER(esc.txtCiudadResolucion) as 'Ciudad Resolución',
               UPPER(esc.txtMatriculaInmobiliaria) as 'Matrícula Inmobiliaria',
@@ -678,7 +678,7 @@ class InformeVeedurias
 
     private function tipoDato($txtValor){
         switch(true){
-            case esFechaValida($txtValor):
+            case esFechaValida($txtValor) and strtotime( $txtValor ) !== false:
                 $txtTipo = "DateTime";
                 break;
             case is_numeric($txtValor):
@@ -729,13 +729,13 @@ class InformeVeedurias
 
         // datos
         foreach ($arrReporte as $numLinea => $arrDatos){
-            $xmlArchivo .= "<ss:Row>";
+            $xmlArchivo .= "<ss:Row>\r\n";
             foreach($arrDatos as $txtTitulo => $txtValor) {
                 $txtTipo = $this->tipoDato( $txtValor );
                 $txtEstilo = "";
                 switch($txtTipo){
                     case "DateTime":
-                        $txtValor = (esFechaValida($txtValor))? date( "Y-m-d" , strtotime( $txtValor ) ) : "";
+                        $txtValor = date( "Y-m-d" , strtotime( $txtValor ) );
                         $txtEstilo = "ss:StyleID='s5'";
                         break;
                     case "Number":
@@ -745,9 +745,9 @@ class InformeVeedurias
                         $txtValor = trim($txtValor);
                         break;
                 }
-                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
+                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>\r\n";
             }
-            $xmlArchivo .= "</ss:Row>";
+            $xmlArchivo .= "</ss:Row>\r\n";
         }
 
         $xmlArchivo .= "</ss:Table>";

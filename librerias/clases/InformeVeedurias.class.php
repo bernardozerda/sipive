@@ -447,8 +447,8 @@ class InformeVeedurias
         while ( $objRes->fields ){
             $seqFormulario = $objRes->fields['Formulario'];
             $arrReporte['reporte'][] = $objRes->fields;
-            $arrFormularios[$seqFormulario]['numResolucion'] = $objRes->fields['numActo'];
-            $arrFormularios[$seqFormulario]['fchResolucion'] = $objRes->fields['fchActo'];
+            $arrFormularios[$seqFormulario]['Resolución'] = $objRes->fields['numActo'];
+            $arrFormularios[$seqFormulario]['Fechal'] = $objRes->fields['fchActo'];
             $objRes->MoveNext();
         }
 
@@ -678,7 +678,7 @@ class InformeVeedurias
 
     private function tipoDato($txtValor){
         switch(true){
-            case esFechaValida($txtValor) and strtotime( $txtValor ) !== false:
+            case (esFechaValida($txtValor)) and (strlen($txtValor) <= 10) and (strtotime( $txtValor ) !== false):
                 $txtTipo = "DateTime";
                 break;
             case is_numeric($txtValor):

@@ -447,8 +447,8 @@ class InformeVeedurias
         while ( $objRes->fields ){
             $seqFormulario = $objRes->fields['Formulario'];
             $arrReporte['reporte'][] = $objRes->fields;
-            $arrFormularios[$seqFormulario]['Resolución'] = $objRes->fields['numActo'];
-            $arrFormularios[$seqFormulario]['Fechal'] = $objRes->fields['fchActo'];
+            $arrFormularios[$seqFormulario]['Resolución'] = $objRes->fields['Resolución'];
+            $arrFormularios[$seqFormulario]['Fecha'] = $objRes->fields['Fecha'];
             $objRes->MoveNext();
         }
 
@@ -458,10 +458,10 @@ class InformeVeedurias
         foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
             $seqFormulario = $arrDatos['Formulario'];
             if( isset( $arrFormularios[$seqFormulario] ) ){
-                $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['numResolucion'];
-                $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['fchResolucion'];
-                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['fchResolucion']))?
-                    date( "Y" , strtotime( $arrFormularios[$seqFormulario]['fchResolucion'] )) :
+                $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['Resolución'];
+                $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['Fecha'];
+                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['Fecha']))?
+                    date( "Y" , strtotime( $arrFormularios[$seqFormulario]['Fecha'] )) :
                     "";
             }
         }

@@ -24,7 +24,7 @@ class InformeVeedurias
         $this->txtCorte = "";
         $this->fchCorte = null;
         $this->txtNombre = "";
-        $this->arrEstadosVinculado = array( 15, 62, 17, 19, 22, 23, 24, 25, 26, 27, 28, 29, 31 , 40 );
+        $this->arrEstadosVinculado = array( 15, 62, 17, 19, 22, 23, 24, 25, 26, 27, 28, 29, 31, 40 );
         $this->arrEstadosLegalizado = array( 40 );
     }
 
@@ -342,6 +342,133 @@ class InformeVeedurias
         return $arrReporte;
     }
 
+    public function reporteNoProyectos($seqCorte)
+    {
+        global $aptBd;
+        $sql = "
+            SELECT 
+              frm.seqFormulario as 'Formulario',
+              pgo.txtPlanGobierno as 'Plan de Gobierno',
+              IF(moa.txtModalidad is null,'No Disponible',moa.txtModalidad) as 'Modalidad',
+              IF(tes.txtTipoEsquema is null,'No Disponible',tes.txtTipoEsquema) as 'Esquema', 
+              eta.txtEtapa as 'Etapa', 
+              epr.txtEstadoProceso as 'Estado', 
+              aad.numActo as 'Resolución',
+              aad.fchActo as 'Fecha',
+              /*
+              UPPER(des.txtNombreVendedor) as 'Vendedor1',
+              tdo.txtTipoDocumento as 'Tipo de Documento del Vendedor1', 
+              des.numDocumentoVendedor as 'Documento del Vendedor1',
+              UPPER(des.txtCompraVivienda) as 'Tipo de Vivienda1',
+              UPPER(des.txtDireccionInmueble) as 'Dirección1',
+              ciu.txtCiudad as 'Ciudad1',
+              UPPER(loc.txtLocalidad) as 'Localidad1',
+              UPPER(des.txtBarrio) as 'Barrio1',
+              UPPER(des.txtPropiedad) as 'Propiedad1',
+              des.txtEscritura as 'Escritura1',
+              des.fchEscritura as 'Fecha de Escritura1',
+              des.numNotaria as 'Notaria de Escritura1',
+              UPPER(des.txtCiudad) as 'Ciudad de Escritura1',
+              des.fchSentencia as 'Fecha de Sentencia1',
+              des.numJuzgado as 'Juzgado de Sentencia1',
+              UPPER(des.txtCiudadSentencia) as 'Ciudad de Sentencia1',
+              des.numResolucion as 'Resolución de Propiedad1',
+              des.fchResolucion as 'Fecha de Propiedad1',
+              des.txtEntidad as 'Entidad de Propiedad1',
+              UPPER(des.txtCiudadResolucion) as 'Ciudad de Propiedad1',
+              */
+              UPPER(des.txtMatriculaInmobiliaria) as 'Matrícula Inmoviliaria-ME',
+              UPPER(des.txtChip) as 'CHIP-ME',
+              UPPER(des.txtCedulaCatastral) as 'Cédula Catastral-ME',
+              UPPER(des.txtTipoPredio) as 'Tipo de Predio-ME',
+              UPPER(esc.txtNombreVendedor) as 'Vendedor',
+              tdo1.txtTipoDocumento as 'Tipo de Documento del Vendedor', 
+              esc.numDocumentoVendedor as 'Documento del Vendedor',
+              UPPER(esc.txtCompraVivienda) as 'Tipo de Vivienda',
+              UPPER(esc.txtDireccionInmueble) as 'Dirección',
+              ciu1.txtCiudad as 'Ciudad',
+              UPPER(loc1.txtLocalidad) as 'Localidad',
+              UPPER(esc.txtBarrio) as 'Barrio',
+              UPPER(IF(esc.txtPropiedad is null,'Ninguno',esc.txtPropiedad)) as 'Propiedad',
+              esc.txtEscritura as 'Escritura',
+              esc.fchEscritura as 'Fecha de Escritura',
+              esc.numNotaria as 'Notaria de Escritura',
+              UPPER(esc.txtCiudad) as 'Ciudad de Escritura',
+              esc.fchSentencia as 'Fecha de Sentencia',
+              esc.numJuzgado as 'Juzgado de Sentencia',
+              UPPER(esc.txtCiudadSentencia) as 'Ciudad de Sentencia',
+              esc.numResolucion as 'Numero de Resolución',
+              esc.fchResolucion as 'Fecha de Resolución',
+              UPPER(esc.txtEntidad) as 'Entidad Resolución',
+              UPPER(esc.txtCiudadResolucion) as 'Ciudad Resolución',
+              UPPER(esc.txtMatriculaInmobiliaria) as 'Matrícula Inmobiliaria',
+              UPPER(esc.txtChip) as 'CHIP',
+              UPPER(esc.txtTipoPredio) as 'Tipo de Predio'
+            FROM t_vee_formulario frm
+            LEFT JOIN t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
+            LEFT JOIN t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
+            LEFT JOIN t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
+            LEFT JOIN t_frm_estado_proceso epr ON frm.seqEstadoProceso = epr.seqEstadoProceso
+            LEFT JOIN t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+            LEFT JOIN t_vee_desembolso des ON frm.seqFormularioVeeduria = des.seqFormularioVeeduria
+            LEFT JOIN t_vee_escrituracion esc ON des.seqDesembolsoVeeduria = esc.seqDesembolsoVeeduria
+            LEFT JOIN t_ciu_tipo_documento tdo on des.seqTipoDocumento = tdo.seqTipoDocumento
+            LEFT JOIN t_ciu_tipo_documento tdo1 on des.seqTipoDocumento = tdo1.seqTipoDocumento
+            LEFT JOIN v_frm_ciudad ciu on des.seqCiudad = ciu.seqCiudad
+            LEFT JOIN v_frm_ciudad ciu1 on des.seqCiudad = ciu1.seqCiudad
+            LEFT JOIN t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
+            LEFT JOIN t_frm_localidad loc1 on des.seqLocalidad = loc1.seqLocalidad
+            INNER JOIN
+            (
+              SELECT 
+                frm.seqFormulario, 
+                hvi.numActo, 
+                hvi.fchActo
+              FROM t_aad_hogares_vinculados hvi
+              INNER JOIN (
+                SELECT 
+                  fac.seqFormulario, 
+                  max(fac.seqFormularioActo) AS seqFormularioActo
+                FROM t_aad_hogares_vinculados hvi
+                INNER JOIN t_aad_formulario_acto fac ON hvi.seqFormularioActo = fac.seqFormularioActo
+                WHERE hvi.seqTipoActo = 1
+                GROUP BY fac.seqFormulario
+              ) frm ON hvi.seqFormularioActo = frm.seqFormularioActo
+            ) aad ON frm.seqFormulario = aad.seqFormulario
+            WHERE ( 
+                 frm.seqUnidadProyecto = 0
+              OR frm.seqUnidadProyecto IS NULL
+              OR frm.seqUnidadProyecto = 1
+            )
+            -- AND frm.seqFormulario = 2529
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrFormularios = array();
+        while ( $objRes->fields ){
+            $seqFormulario = $objRes->fields['Formulario'];
+            $arrReporte['reporte'][] = $objRes->fields;
+            $arrFormularios[$seqFormulario]['numResolucion'] = $objRes->fields['numActo'];
+            $arrFormularios[$seqFormulario]['fchResolucion'] = $objRes->fields['fchActo'];
+            $objRes->MoveNext();
+        }
+
+        $arrReporte['hogares'] = $this->obtenerHogares(array_keys($arrFormularios),$seqCorte);
+
+        // adiciona el dato del aad del hogar
+        foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
+            $seqFormulario = $arrDatos['Formulario'];
+            if( isset( $arrFormularios[$seqFormulario] ) ){
+                $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['numResolucion'];
+                $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['fchResolucion'];
+                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['fchResolucion']))?
+                    date( "Y" , strtotime( $arrFormularios[$seqFormulario]['fchResolucion'] )) :
+                    "";
+            }
+        }
+
+        return $arrReporte;
+    }
+
     private function obtenerHogares($arrFormularios , $seqCorte )
     {
         global $aptBd;
@@ -442,7 +569,6 @@ class InformeVeedurias
         return $arrHogares;
     }
 
-
     private function fuentesXML(){
 
         $xmlEstilos = "<Styles>";
@@ -496,12 +622,147 @@ class InformeVeedurias
             </Style>
         ";
 
+        $xmlEstilos .= "
+            <Style ss:ID='s6'>
+                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
+                <Font ss:FontName='Calibri' ss:Size='8'/>
+                <Interior ss:Color='#C5D9F1' ss:Pattern='Solid'/>
+            </Style>
+        ";
+
+        $xmlEstilos .= "
+            <Style ss:ID='s7'>
+                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
+                <Font ss:FontName='Calibri' ss:Size='8'/>
+                <Interior ss:Color='#F2DDDC' ss:Pattern='Solid'/>
+            </Style>
+        ";
+
+        $xmlEstilos .= "
+            <Style ss:ID='s8'>
+                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
+                <Font ss:FontName='Calibri' ss:Size='8'/>
+                <Interior ss:Color='#EAF1DD' ss:Pattern='Solid'/>
+            </Style>
+        ";
+
+        $xmlEstilos .= "
+            <Style ss:ID='s9'>
+                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
+                <Font ss:FontName='Calibri' ss:Size='8'/>
+                <Interior ss:Color='#E5E0EC' ss:Pattern='Solid'/>
+            </Style>
+        ";
+
+        $xmlEstilos .= "
+            <Style ss:ID='s10'>
+                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
+                <Font ss:FontName='Calibri' ss:Size='8'/>
+                <Interior ss:Color='#F2F2F2' ss:Pattern='Solid'/>
+            </Style>
+        ";
+
+        $xmlEstilos .= "
+            <Style ss:ID='s11'>
+                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
+                <Font ss:FontName='Calibri' ss:Size='8'/>
+                <Interior ss:Color='#FDE9D9' ss:Pattern='Solid'/>
+            </Style>
+        ";
+
         $xmlEstilos .= "</Styles>";
 
         return $xmlEstilos;
 
     }
 
+    private function tipoDato($txtValor){
+        switch(true){
+            case esFechaValida($txtValor):
+                $txtTipo = "DateTime";
+                break;
+            case is_numeric($txtValor):
+                $txtTipo = "Number";
+                break;
+            default:
+                $txtTipo = "String";
+                break;
+        }
+        return $txtTipo;
+    }
+
+    private function obtenerXMLEncabezado(){
+        $xmlArchivo  = "<?xml version='1.0'?> ";
+        $xmlArchivo .= "<?mso-application progid='Excel.Sheet'?> ";
+        $xmlArchivo .= "<Workbook xmlns='urn:schemas-microsoft-com:office:spreadsheet' ";
+        $xmlArchivo .= "xmlns:o='urn:schemas-microsoft-com:office:office' ";
+        $xmlArchivo .= "xmlns:x='urn:schemas-microsoft-com:office:excel' ";
+        $xmlArchivo .= "xmlns:ss='urn:schemas-microsoft-com:office:spreadsheet' ";
+        $xmlArchivo .= "xmlns:html='http://www.w3.org/TR/REC-html40'>";
+        return $xmlArchivo;
+    }
+
+    private function obtenerXMLPie(){
+        $xmlArchivo = "</ss:Workbook>";
+        return $xmlArchivo;
+    }
+
+    private function obtenerXMLHojaPlana( $arrReporte , $txtNombreHoja, $arrColores = array() )
+    {
+        $xmlArchivo  = "<ss:Worksheet ss:Name='$txtNombreHoja'>";
+        $xmlArchivo .= "<ss:Table>";
+
+        // Para los colores de las columnas, de sobreescriben las celdas?
+        if( ! empty( $arrColores ) ){
+            foreach ( $arrColores as $txtTitulo => $txtEstilo ){
+                $xmlArchivo .= "<Column ss:AutoFitWidth='1' ss:StyleID='$txtEstilo'/>";
+            }
+        }
+
+        // titulos
+        $arrTitulos = array_keys($arrReporte[0]);
+        $xmlArchivo .= "<ss:Row>";
+        foreach ($arrTitulos as $txtTitulo){
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
+        }
+        $xmlArchivo .= "</ss:Row>";
+
+        // datos
+        foreach ($arrReporte as $numLinea => $arrDatos){
+            $xmlArchivo .= "<ss:Row>";
+            foreach($arrDatos as $txtTitulo => $txtValor) {
+                $txtTipo = $this->tipoDato( $txtValor );
+                $txtEstilo = "";
+                switch($txtTipo){
+                    case "DateTime":
+                        $txtValor = (esFechaValida($txtValor))? date( "Y-m-d" , strtotime( $txtValor ) ) : "";
+                        $txtEstilo = "ss:StyleID='s5'";
+                        break;
+                    case "Number":
+                        $txtValor = doubleval($txtValor);
+                        break;
+                    default:
+                        $txtValor = trim($txtValor);
+                        break;
+                }
+                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
+            }
+            $xmlArchivo .= "</ss:Row>";
+        }
+
+        $xmlArchivo .= "</ss:Table>";
+        $xmlArchivo .= "</ss:Worksheet>";
+
+        return $xmlArchivo;
+    }
+
+    private function exportarResultadosXML( $xmlArchivo , $txtNombreArchivo )
+    {
+        $txtNombre = mb_ereg_replace("[^0-9a-zA-Z]","", $txtNombreArchivo) . date("YmdHis") . ".xls";
+        header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
+        header("Content-Disposition: inline; filename=\"" . $txtNombre . "\"");
+        echo $xmlArchivo;
+    }
 
     public function imprimirReporteProyectos($arrReporte)
     {
@@ -514,13 +775,7 @@ class InformeVeedurias
          * ENCABEZADO
          ***********************************************/
 
-        $xmlArchivo  = "<?xml version='1.0'?> ";
-        $xmlArchivo .= "<?mso-application progid='Excel.Sheet'?> ";
-        $xmlArchivo .= "<Workbook xmlns='urn:schemas-microsoft-com:office:spreadsheet' ";
-        $xmlArchivo .= "xmlns:o='urn:schemas-microsoft-com:office:office' ";
-        $xmlArchivo .= "xmlns:x='urn:schemas-microsoft-com:office:excel' ";
-        $xmlArchivo .= "xmlns:ss='urn:schemas-microsoft-com:office:spreadsheet' ";
-        $xmlArchivo .= "xmlns:html='http://www.w3.org/TR/REC-html40'>";
+        $xmlArchivo = $this->obtenerXMLEncabezado();
 
         /***********************************************
          * ESTILOS DE FUENTES
@@ -630,150 +885,58 @@ class InformeVeedurias
          * HOJA REPORTE DE HOGARES
          ***********************************************/
 
-        $xmlArchivo .= "<ss:Worksheet ss:Name='Hogares'>";
-        $xmlArchivo .= "<ss:Table>";
-
-        // titulos
-        $arrTitulos = array_keys($arrReporte['hogares'][0]);
-        $xmlArchivo .= "<ss:Row>";
-        foreach ($arrTitulos as $txtTitulo){
-            $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
-        }
-        $xmlArchivo .= "</ss:Row>";
-
-        // datos
-        foreach ($arrReporte['hogares'] as $numLinea => $arrDatos){
-            $xmlArchivo .= "<ss:Row>";
-            foreach($arrDatos as $txtTitulo => $txtValor) {
-                $txtTipo = $this->tipoDato( $txtValor );
-                $txtEstilo = "";
-                switch($txtTipo){
-                    case "DateTime":
-                        $txtValor = date( "Y-m-d" , strtotime( $txtValor ) );
-                        $txtEstilo = "ss:StyleID='s5'";
-                        break;
-                    case "Number":
-                        $txtValor = doubleval($txtValor);
-                        break;
-                    default:
-                        $txtValor = trim($txtValor);
-                        break;
-                }
-                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
-            }
-            $xmlArchivo .= "</ss:Row>";
-        }
-
-        $xmlArchivo .= "</ss:Table>";
-        $xmlArchivo .= "</ss:Worksheet>";
-
+        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['hogares'] , "Hogares" );
 
         /***********************************************
          * HOJA PROYECTOS
          ***********************************************/
 
-        $xmlArchivo .= "<ss:Worksheet ss:Name='Proyectos'>";
-        $xmlArchivo .= "<ss:Table>";
-
-        // titulos
-        $arrTitulos = array_keys( array_shift( $arrReporte['proyectos'] ) );
-        $xmlArchivo .= "<ss:Row>";
-        foreach ($arrTitulos as $txtTitulo){
-            $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
-        }
-        $xmlArchivo .= "</ss:Row>";
-
-        // datos
-        foreach ($arrReporte['proyectos'] as $seqUnidadProyecto => $arrDatos){
-            $xmlArchivo .= "<ss:Row>";
-            foreach($arrDatos as $txtTitulo => $txtValor) {
-                $txtTipo = $this->tipoDato( $txtValor );
-                $txtEstilo = "";
-                switch($txtTipo){
-                    case "DateTime":
-                        $txtValor = date( "Y-m-d" , strtotime( $txtValor ) );
-                        $txtEstilo = "ss:StyleID='s5'";
-                        break;
-                    case "Number":
-                        $txtValor = doubleval($txtValor);
-                        break;
-                    default:
-                        $txtValor = trim($txtValor);
-                        break;
-                }
-                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
-            }
-            $xmlArchivo .= "</ss:Row>";
-        }
-
-        $xmlArchivo .= "</ss:Table>";
-        $xmlArchivo .= "</ss:Worksheet>";
+        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['proyectos'] , "Proyectos" );
 
         /***********************************************
          * HOJA RESOLUCIONES
          ***********************************************/
 
-        $xmlArchivo .= "<ss:Worksheet ss:Name='Resoluciones'>";
-        $xmlArchivo .= "<ss:Table>";
+        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['resoluciones'] , "Resoluciones" );
 
-        // titulos
-        $arrTitulos = array_keys($arrReporte['resoluciones'][0]);
-        $xmlArchivo .= "<ss:Row>";
-        foreach ($arrTitulos as $txtTitulo){
-            $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
-        }
-        $xmlArchivo .= "</ss:Row>";
+        $xmlArchivo .= $this->obtenerXMLPie();
 
-        // datos
-        foreach ($arrReporte['resoluciones'] as $numLinea => $arrDatos){
-            $xmlArchivo .= "<ss:Row>";
-            foreach($arrDatos as $txtTitulo => $txtValor) {
-                $txtTipo = $this->tipoDato( $txtValor );
-                $txtEstilo = "";
-                switch($txtTipo){
-                    case "DateTime":
-                        $txtValor = date( "Y-m-d" , strtotime( $txtValor ) );
-                        $txtEstilo = "ss:StyleID='s5'";
-                        break;
-                    case "Number":
-                        $txtValor = doubleval($txtValor);
-                        break;
-                    default:
-                        $txtValor = trim($txtValor);
-                        break;
-                }
-                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
-            }
-            $xmlArchivo .= "</ss:Row>";
-        }
-
-        $xmlArchivo .= "</ss:Table>";
-        $xmlArchivo .= "</ss:Worksheet>";
-
-        $xmlArchivo .= "</ss:Workbook>";
-
-        $txtNombre = "InformeProyectos" . date("YmdHis") . ".xls";
-        header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
-        header("Content-Disposition: inline; filename=\"" . $txtNombre . "\"");
-        echo $xmlArchivo;
+        $this->exportarResultadosXML( $xmlArchivo , "Informe Proyectos" );
 
     }
 
-    private function tipoDato($txtValor){
-        switch(true){
-            case esFechaValida($txtValor):
-                $txtTipo = "DateTime";
-                break;
-            case is_numeric($txtValor):
-                $txtTipo = "Number";
-                break;
-            default:
-                $txtTipo = "String";
-                break;
-        }
-        return $txtTipo;
-    }
+    public function imprimirReporteNoProyectos($arrReporte)
+    {
 
+        /***********************************************
+         * ENCABEZADO
+         ***********************************************/
+
+        $xmlArchivo = $this->obtenerXMLEncabezado();
+
+        /***********************************************
+         * ESTILOS DE FUENTES
+         ***********************************************/
+
+        $xmlArchivo .= $this->fuentesXML();
+
+        /***********************************************
+         * HOJA REPORTE
+         ***********************************************/
+
+        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['reporte'] , "Asignados");
+
+        /***********************************************
+         * HOJA REPORTE DE HOGARES
+         ***********************************************/
+
+        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['hogares'] , "Hogares" );
+
+        $xmlArchivo .= $this->obtenerXMLPie();
+
+        $this->exportarResultadosXML( $xmlArchivo , "Informe No Proyectos" );
+
+    }
 
 
 }

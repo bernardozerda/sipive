@@ -5,9 +5,9 @@
             <thead align="left">
                 <th width="120px">Periodo</th>
                 <th width="120px">Fecha de Creación</th>
-                <th width="250px">Usuario</th>
-                <th width="100px">Informe Proyectos</th>
-                <th></th>
+                <th>Usuario</th>
+                <th width="120px">Informe Vinculación a Proyectos</th>
+                <th width="120px">Informe de Hogares con Asignación</th>
             </thead>
             <tfoot align="left">
                 <th>Periodo</th>
@@ -28,11 +28,17 @@
                                      width="20px"
                                      height="20px"
                                      style="cursor: hand"
-
                                 >
                             </button>
                         </td>
                         <td align="center">
+                            <button onClick="location.href='./contenidos/reportes/informesVeeduria/informeNoProyectos.php?seqCorte={$arrDato.seqCorte}'" style="width: 35px; height: 30px">
+                                <img src="./recursos/imagenes/excel-48.png"
+                                     width="20px"
+                                     height="20px"
+                                     style="cursor: hand"
+                                >
+                            </button>
                         </td>
                     </tr>
                 {/foreach}

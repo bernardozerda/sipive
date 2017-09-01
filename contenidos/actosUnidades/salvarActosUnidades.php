@@ -176,7 +176,7 @@ if( $_FILES['fileUnidadesActo']['error'] != UPLOAD_ERR_NO_FILE ){
 			$sqlUpdValorActual = "UPDATE T_PRY_UNIDAD_PROYECTO 
 									SET valSDVEActual = " . $nuevoValorActual . "
 									WHERE seqUnidadProyecto = " . $arrUnidadAuxiliar['seqUnidadProyecto'] . "";
-//			$aptBd->execute($sqlUpdValorActual);
+			$aptBd->execute($sqlUpdValorActual);
 			// Inserta las unidades que van a ser indexadas
 			$sqlAddUndVinculadas = "INSERT T_PRY_AAD_UNIDADES_VINCULADAS (seqUnidadActo, seqUnidadProyecto, valIndexado)
 									VALUES ($ultimoActo, " . $arrUnidadAuxiliar['seqUnidadProyecto'] . ", " . $arrUnidadAuxiliar['valIndexacion'] . ") ";
@@ -187,7 +187,7 @@ if( $_FILES['fileUnidadesActo']['error'] != UPLOAD_ERR_NO_FILE ){
 				$sqlUpdateSubsidio = "UPDATE T_FRM_FORMULARIO 
 									SET valAspiraSubsidio = " . $nuevoValorActual . ", txtSoporteSubsidio = '" . $soporte . "'
 									WHERE seqUnidadProyecto = " . $arrUnidadAuxiliar['seqUnidadProyecto'] . "";
-//				$aptBd->execute($sqlUpdateSubsidio);
+				$aptBd->execute($sqlUpdateSubsidio);
 			}
 		} // Fin foreach
 	} // Fin If errores

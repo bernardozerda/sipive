@@ -307,10 +307,10 @@ class InformeVeedurias
                     $arrReporte['resoluciones'][$numPosicion]['Observación'] = "Generacion";
                     break;
                 case 2:
-                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Positiva" : "Negativa";
+                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Indexación Positiva" : "Indexación Negativa";
                     break;
                 case 3:
-                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Adiciona" : "Desvincula";
+                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Adiciona Unidad" : "Retira Unidades";
                     break;
             }
 
@@ -720,7 +720,7 @@ class InformeVeedurias
         }
 
         // titulos
-        $arrTitulos = array_keys($arrReporte[0]);
+        $arrTitulos = array_keys( array_shift( $arrReporte ) );
         $xmlArchivo .= "<ss:Row>";
         foreach ($arrTitulos as $txtTitulo){
             $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";

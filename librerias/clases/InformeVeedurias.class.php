@@ -86,16 +86,15 @@ class InformeVeedurias
                 upr.valSDVEAprobado, 
                 upr.valSDVEActual, 
                 upr.valSDVEComplementario, 
-                upr.bolLegalizado,
-                if(upr.bolLegalizado = 1,'SI','NO') as bolLegalizado,
                 upr.fchLegalizado,  
+                if(upr.bolLegalizado = 1,'SI','NO') as bolLegalizado,
                 pgo.txtPlanGobierno,
                 upr.seqModalidad, 
                 moa.txtModalidad,
                 upr.seqTipoEsquema,
                 tes.txtTipoEsquema,
                 uac.numActo as numActoProyecto, 
-                uac.fchActo as fchActoProyecto,
+                uac.fchActo as fchActoProyecto, 
                 if(upr.bolActivo = 1,'SI','NO') as bolActivo,
                 uac.seqTipoActoUnidad,
                 tac.txtTipoActoUnidad,
@@ -104,7 +103,28 @@ class InformeVeedurias
                 frm.seqEstadoProceso,
                 frm.bolCerrado,
                 aad.numActo as numActoHogar, 
-                aad.fchActo as fchActoHogar
+                aad.fchActo as fchActoHogar,
+                esc.numDocumentoVendedor,
+                UPPER(esc.txtCompraVivienda) as txtCompraVivienda,
+                UPPER(esc.txtDireccionInmueble) as txtDireccionInmueble,
+                ciu1.txtCiudad as txtCiudad,
+                UPPER(loc1.txtLocalidad) as txtLocalidad,
+                UPPER(esc.txtBarrio) as txtBarrio,
+                UPPER(IF(esc.txtPropiedad is null,'Ninguno',esc.txtPropiedad)) as txtPropiedad,
+                esc.txtEscritura as txtEscritura,
+                IF(esc.fchEscritura < '2000-01-01',NULL,esc.fchEscritura) as fchEscritura,
+                esc.numNotaria as numNotaria,
+                UPPER(esc.txtCiudad) as txtCiudadEscritura,
+                IF(esc.fchSentencia < '2000-01-01',NULL,esc.fchSentencia) as fchSentencia,
+                esc.numJuzgado as numJuzgado,
+                UPPER(esc.txtCiudadSentencia) as txtCiudadSentencia,
+                esc.numResolucion as numResolucion,
+                IF(esc.fchResolucion < '2000-01-01',NULL,esc.fchResolucion) as fchResolucion,
+                UPPER(esc.txtEntidad) as txtEntidad,
+                UPPER(esc.txtCiudadResolucion) as txtCiudadResolucion,
+                UPPER(esc.txtMatriculaInmobiliaria) as txtMatriculaInmobiliaria,
+                UPPER(esc.txtChip) as txtChip,
+                UPPER(esc.txtTipoPredio) as txtTipoPredio
             from t_vee_proyecto pry
             left join t_pry_proyecto pry1 on pry.seqProyectoPadre = pry1.seqProyecto and pry.seqCorte
             inner join t_vee_unidad_proyecto upr on pry.seqProyectoVeeduria = upr.seqProyectoVeeduria
@@ -142,7 +162,11 @@ class InformeVeedurias
             left  join t_pry_constructor con1 on pry1.seqConstructor = con1.seqConstructor
             left  join t_pry_constructor con2 on pry.seqConstructor = con2.seqConstructor
             left  join t_frm_localidad loc2 on pry.seqLocalidad = loc2.seqLocalidad
-            left  join t_frm_barrio bar2 on pry.seqBarrio = bar2.seqBarrio
+            left  join t_frm_barrio bar2 on pry.seqBarrio = bar2.seqBarrio 
+            left  join t_vee_desembolso des on frm.seqFormularioVeeduria = des.seqFormularioVeeduria
+            left  join t_vee_escrituracion esc on des.seqDesembolsoVeeduria = esc.seqDesembolsoVeeduria
+            left  join v_frm_ciudad ciu1 on des.seqCiudad = ciu1.seqCiudad
+            left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
             -- and upr.bolActivo = 1
@@ -311,6 +335,27 @@ class InformeVeedurias
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Modalidad' ]              = $objRes->fields['txtModalidad'];
             //$arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Esquema' ]                = $objRes->fields['txtTipoEsquema'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Unidad Activa' ]          = $objRes->fields['bolActivo'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Vendedor Escriturado' ]               = $objRes->fields['numDocumentoVendedor'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Tipo de Vivienda' ]                   = $objRes->fields['txtCompraVivienda'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Dirección Escriturada' ]              = $objRes->fields['txtDireccionInmueble'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Escriturada' ]                 = $objRes->fields['txtCiudad'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Localidad Escriturada' ]              = $objRes->fields['txtLocalidad'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Barrio Escriturado' ]                 = $objRes->fields['txtBarrio'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Propiedad' ]                          = $objRes->fields['txtPropiedad'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Escritura' ]                          = $objRes->fields['txtEscritura'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha Escritura' ]                    = $objRes->fields['fchEscritura'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Notaria Escritura' ]                  = $objRes->fields['numNotaria'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Escritura' ]                   = $objRes->fields['txtCiudadEscritura'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Sentencia' ]                 = $objRes->fields['fchSentencia'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Juzgado Sentencia' ]                  = $objRes->fields['numJuzgado'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Sentencia' ]                   = $objRes->fields['txtCiudadSentencia'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Resolución' ]                         = $objRes->fields['numResolucion'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Resolución' ]                = $objRes->fields['fchResolucion'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Entidad de Reslolución' ]             = $objRes->fields['txtEntidad'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Resolución' ]                  = $objRes->fields['txtCiudadResolucion'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmoviliaria Escriturada' ] = $objRes->fields['txtMatriculaInmobiliaria'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'CHIP Escriturado' ]                   = $objRes->fields['txtChip'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Tipo de Predio' ]                     = $objRes->fields['txtTipoPredio'];
 
             /***************************************************************************
              * PROCESAMIENTO DE LA HOJA DE RESOLUCIONES

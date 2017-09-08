@@ -2243,7 +2243,7 @@ class Desembolso {
 							'SDHT-SGF-SDRPL-$txtFormulario-$numAno2Digitos',
 							'" . doubleval($arrPost['numProyectoInversion']) . "',
 							'" . $arrPost['txtNombreBeneficiarioGiro'] . "',
-							'" . doubleval($arrPost['numDocumentoBeneficiarioGiro']) . "',
+							'" . $arrPost['numDocumentoBeneficiarioGiro'] . "',
 							'" . $arrPost['txtDireccionBeneficiarioGiro'] . "',
 							'" . doubleval($arrPost['numTelefonoGiro']) . "',
 							'" . trim($arrPost['numCuentaGiro']) . "',
@@ -2317,7 +2317,7 @@ class Desembolso {
 								'" . doubleval($arrPost['monto']) . "',
 								'" . doubleval($arrPost['numProyectoInversion']) . "',
 								'" . trim( $arrPost['txtNombreBeneficiarioGiro']) . "',
-								'" . doubleval( $arrPost['numDocumentoBeneficiarioGiro']) . "',
+								'" . $arrPost['numDocumentoBeneficiarioGiro'] . "',
 								'" . trim( $arrPost['txtDireccionBeneficiarioGiro'] ). "',
 								'" . doubleval( $arrPost['numTelefonoGiro']) . "',
 								'" . trim( $arrPost['numCuentaGiro']) . "',
@@ -2375,7 +2375,7 @@ class Desembolso {
 							seqDesembolso					=	'$seqDesembolso',
 							numProyectoInversion			=	'" . doubleval( $arrPost['numProyectoInversion'] ). "',
 							txtNombreBeneficiarioGiro		=	'" . trim( $arrPost['txtNombreBeneficiarioGiro']) . "',
-							numDocumentoBeneficiarioGiro	=	'" . doubleval( $arrPost['numDocumentoBeneficiarioGiro']) . "',
+							numDocumentoBeneficiarioGiro	=	'" . $arrPost['numDocumentoBeneficiarioGiro'] . "',
 							txtDireccionBeneficiarioGiro	=	'" . trim( $arrPost['txtDireccionBeneficiarioGiro']) . "',
 							numTelefonoGiro					=	'" . doubleval( $arrPost['numTelefonoGiro']) . "',
 							numCuentaGiro					=	'" . trim( $arrPost['numCuentaGiro']) . "',
@@ -2403,7 +2403,7 @@ class Desembolso {
 						WHERE seqSolicitud = " . $arrPost['seqSolicitudEditar'];
 
                 try {
-                    //echo $sql . "<hr>";
+                    echo $sql . "<hr>";
                     $aptBd->execute($sql);
 
                     $sql = "

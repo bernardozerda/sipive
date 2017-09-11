@@ -331,7 +331,7 @@
 	$arrGrupoLgtbi = obtenerDatosTabla("T_FRM_GRUPO_LGTBI", array("seqGrupoLgtbi", "txtGrupoLgtbi"), "seqGrupoLgtbi");
 	$arrCiudad = obtenerDatosTabla("V_FRM_CIUDAD", array("seqCiudad", "txtCiudad"), "seqCiudad");
 	$arrTipoEsquema = obtenerDatosTabla("T_PRY_TIPO_ESQUEMA", array("seqTipoEsquema", "txtTipoEsquema"), "seqTipoEsquema");
-	$arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtNombre"), "seqConvenio", "", "txtNombre");
+	$arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtBanco"), "seqConvenio", "", "txtBanco");
 
 	$claSmarty->assign( "arrConvenio" , $arrConvenio );
 	$claSmarty->assign( "arrTipoEsquema" , $arrTipoEsquema );

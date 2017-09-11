@@ -848,7 +848,15 @@ function valorSubsidio($claFormulario){
             $valSubsidio = ($valSubsidio > $valTope)? $valTope : $valSubsidio;
             $valSubsidio = ($valSubsidio * $arrConfiguracion['constantes']['salarioMinimo']);
         }elseif($claFormulario->seqModalidad == 13){
-            $valSubsidio = mb_ereg_replace("[^0-9]","" , $claFormulario->valCartaLeasing);
+
+            $arrValor = obtenerDatosTabla(
+                "T_PRY_UNIDAD_PROYECTO",
+                array("0", "valSDVEActual"),
+                "0",
+                "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
+            );
+            $valSubsidio = $arrValor[0];
+
         }
 
     }else{

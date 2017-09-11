@@ -1608,7 +1608,8 @@ function valorSubsidio() {
         seqUnidadProyecto: $("#seqUnidadProyecto").val(),
         valSubsidioNacional: $("#valSubsidioNacional").val(),
         valDonacion: $("#valDonacion").val(),
-        valCartaLeasing: $("#valCartaLeasing").val()
+        valCartaLeasing: $("#valCartaLeasing").val(),
+        valAspiraSubsidio: $("#valAspiraSubsidio").val()
     }
 
     $.ajax({
@@ -1616,6 +1617,7 @@ function valorSubsidio() {
         type: "POST",
         data: jQuery.param(jParametros),
         success: function(respuesta){
+            // document.getElementById("mensajes").innerHTML = respuesta;
             $("#valAspiraSubsidio").val(respuesta);
             sumarTotalRecursos();
         },

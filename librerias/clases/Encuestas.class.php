@@ -58,7 +58,7 @@ class Encuestas {
 
             // verifica que la primera columna sea el identificador de formulario
             if (trim(mb_strtoupper($arrLinea[0])) != "FORMULARIO") {
-                $arrErrores[] = "No se encuentra la columna FORMULARIO en el archivo de respuestas de formulario";
+                $arrErrores[] = "No se encuentra la columna FORMULARIO en el archivo de respuestas de " . strtoupper($txtDestino);
             }
             unset($arrLinea[0]); // formulario
             // Identifica la tabla destino de las preguntas donde se almacenará la respuesta

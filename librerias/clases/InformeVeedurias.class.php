@@ -81,7 +81,7 @@ class InformeVeedurias
                 pry.numNitVendedor as numNitVendedorHijo,
                 upr.seqUnidadProyecto,
                 upr.txtNombreUnidad, 
-                upr.txtMatriculaInmobiliaria, 
+                UPPER(upr.txtMatriculaInmobiliaria), 
                 upr.txtChipLote, 
                 upr.valSDVEAprobado, 
                 upr.valSDVEActual, 

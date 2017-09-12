@@ -122,7 +122,7 @@ class InformeVeedurias
                 IF(esc.fchResolucion < '2000-01-01',NULL,esc.fchResolucion) as fchResolucion,
                 UPPER(esc.txtEntidad) as txtEntidad,
                 UPPER(esc.txtCiudadResolucion) as txtCiudadResolucion,
-                UPPER(esc.txtMatriculaInmobiliaria) as txtMatriculaInmobiliaria,
+                UPPER(esc.txtMatriculaInmobiliaria) as txtMatriculaInmobiliariaEscriturada,
                 UPPER(esc.txtChip) as txtChip,
                 UPPER(esc.txtTipoPredio) as txtTipoPredio
             from t_vee_proyecto pry
@@ -353,7 +353,7 @@ class InformeVeedurias
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Resolución' ]                = $objRes->fields['fchResolucion'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Entidad de Reslolución' ]             = $objRes->fields['txtEntidad'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Resolución' ]                  = $objRes->fields['txtCiudadResolucion'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmoviliaria Escriturada' ] = $objRes->fields['txtMatriculaInmobiliaria'];
+            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmoviliaria Escriturada' ] = $objRes->fields['txtMatriculaInmobiliariaEscriturada'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'CHIP Escriturado' ]                   = $objRes->fields['txtChip'];
             $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Tipo de Predio' ]                     = $objRes->fields['txtTipoPredio'];
 

@@ -64,6 +64,35 @@
         $claSmarty->display( "desembolso/pedirConfirmacion.tpl" );
 
     } else {
+
+        $arrIgnorarCampos[] = "txtDireccion";
+        $arrIgnorarCampos[] = "txtDireccionSolucion";
+        $arrIgnorarCampos[] = "numTelefono1";
+        $arrIgnorarCampos[] = "numTelefono2";
+        $arrIgnorarCampos[] = "numCelular";
+        $arrIgnorarCampos[] = "seqCiudad";
+        $arrIgnorarCampos[] = "seqUpz";
+        $arrIgnorarCampos[] = "seqLocalidad";
+        $arrIgnorarCampos[] = "seqBarrio";
+        $arrIgnorarCampos[] = "txtCorreo";
+
+        unset($_POST['hogar']);
+        foreach ($claCasaMano->objPostulacion as $txtClave => $txtValor) {
+            if ($txtClave != "arrCiudadano") {
+                if (!in_array($txtClave, $arrIgnorarCampos)) {
+                    $_POST[$txtClave] = $txtValor;
+                }
+            } else {
+                foreach ($claCasaMano->objPostulacion->$txtClave as $seqCiudadano => $objCiudadano) {
+                    $numDocumento = $objCiudadano->numDocumento;
+                    foreach ($objCiudadano as $txtCampo => $txtValue) {
+                        $_POST['hogar'][$numDocumento][$txtCampo] = $txtValue;
+                    }
+                }
+            }
+        }
+
+
         $claCasaMano->salvar( $_POST );
         imprimirMensajes( $claCasaMano->arrErrores , $claCasaMano->arrMensajes );
     }

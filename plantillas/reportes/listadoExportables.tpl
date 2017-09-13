@@ -854,7 +854,7 @@
 
                 {if $reporteAsignadosAAD == 1}
                     <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                        <td class="tituloCampo" align="left" width="60%">reporteAsignadosAAD</td>
+                        <td class="tituloCampo" align="left" width="60%">Reporte Asignados Actos Administrativos</td>
                         <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
                             <a onclick="someterFormulario(
                                             'mensajes',
@@ -869,7 +869,7 @@
 
                 {if $reporteAsignacionUnidades == 1}
                     <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                        <td class="tituloCampo" align="left" width="60%">reporteAsignacionUnidades</td>
+                        <td class="tituloCampo" align="left" width="60%">Reporte Asignación Unidades</td>
                         <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
                             <a href="./contenidos/otros/analisisUnidadesAsignadas/analisisUnidadesAsignadas.php" target="_blank">Exportable</a>
                         </td>

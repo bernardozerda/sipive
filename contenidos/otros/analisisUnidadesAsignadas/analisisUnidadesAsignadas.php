@@ -18,18 +18,18 @@ $sql = "
         und.valSDVEComplementario,
         und.valSDVEActual,
         IF(LOWER(tec.txtExistencia) = 'si','SI','NO') as 'viabilidadTecnica',
+        und.seqFormulario,
+        ciu.numDocumento AS 'documentoPpal',
+        UPPER(CONCAT(ciu.txtNombre1,' ',ciu.txtNombre2,' ',ciu.txtApellido1,' ',ciu.txtApellido2)) AS 'nombrePpal',
+        frm.txtFormulario,
+        CONCAT(eta.txtEtapa,' - ',epr.txtEstadoProceso) AS 'estadoProceso',
         und.txtMatriculaInmobiliaria,
         und.bolLegalizado,
-        und.fchLegalizado,
-        und.bolActivo,
         pgo.txtPlanGobierno,
         moa.txtModalidad,
         tes.txtTipoEsquema,
-        und.seqFormulario,
-        frm.txtFormulario,
-        UPPER(CONCAT(ciu.txtNombre1,' ',ciu.txtNombre2,' ',ciu.txtApellido1,' ',ciu.txtApellido2)) AS 'nombrePpal',
-        ciu.numDocumento AS 'documentoPpal',
-        CONCAT(eta.txtEtapa,' - ',epr.txtEstadoProceso) AS 'estadoProceso'
+        und.fchLegalizado,
+        und.bolActivo
     FROM T_PRY_UNIDAD_PROYECTO und 
     INNER JOIN T_PRY_PROYECTO pry ON und.seqProyecto = pry.seqProyecto
     LEFT  JOIN T_PRY_PROYECTO pryP ON pry.seqProyectoPadre = pryP.seqProyecto
@@ -57,41 +57,43 @@ foreach($arrRegistros as $numLinea => $arrRegistro){
     $arrRegistros[$numLinea]['txtNombreProyecto'] = $txtConjunto;
 }
 
-header("Content-Type: application/vnd.ms-excel");
-header("content-disposition: attachment;filename=analisisUnidadesAsignadas.xls");
-
 $txtSeparador = "\t";
 $txtSalto     = "\r\n";
 
 //$txtSeparador = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 //$txtSalto     = "<br>";
 
-echo "Proyecto" . $txtSeparador;
-echo "Conjunto Residencial" . $txtSeparador;
-echo "seqUnidadProyecto" . $txtSeparador;
-echo "Unidad Proyecto" . $txtSeparador;
-echo "Nombre Unidad Referencia" . $txtSeparador;
-echo "Nombre Unidad Auxiliar" . $txtSeparador;
-echo "Valor Aprobado" . $txtSeparador;
-echo "Valor Complementario" . $txtSeparador;
-echo "Valor Actual" . $txtSeparador;
-echo "Viabilidad T&eacute;cnica" . $txtSeparador;
-echo "seqFormulario" . $txtSeparador;
-echo "Documento" . $txtSeparador;
-echo "Nombre" . $txtSeparador;
-echo "txtFormulario" . $txtSeparador;
-echo "Estado del Proceso" . $txtSeparador;
-echo "Matr&iacute;cula Inmobiliaria" . $txtSeparador;
-echo "Legalizado" . $txtSeparador;
-echo "Fecha Legalizado" . $txtSeparador;
-echo "Plan de Gobierno" . $txtSeparador;
-echo "Modalidad" . $txtSeparador;
-echo "Esquema" . $txtSeparador;
-echo "Activo". $txtSeparador;
-echo $txtSalto;
+$txtArchivo =  "Proyecto" . $txtSeparador;
+$txtArchivo .=  "Conjunto Residencial" . $txtSeparador;
+$txtArchivo .=  "seqUnidadProyecto" . $txtSeparador;
+$txtArchivo .=  "Unidad Proyecto" . $txtSeparador;
+$txtArchivo .=  "Nombre Unidad Referencia" . $txtSeparador;
+$txtArchivo .=  "Nombre Unidad Auxiliar" . $txtSeparador;
+$txtArchivo .=  "Valor Aprobado" . $txtSeparador;
+$txtArchivo .=  "Valor Complementario" . $txtSeparador;
+$txtArchivo .=  "Valor Actual" . $txtSeparador;
+$txtArchivo .=  "Viabilidad Técnica" . $txtSeparador;
+$txtArchivo .=  "seqFormulario" . $txtSeparador;
+$txtArchivo .=  "Documento" . $txtSeparador;
+$txtArchivo .=  "Nombre" . $txtSeparador;
+$txtArchivo .=  "txtFormulario" . $txtSeparador;
+$txtArchivo .=  "Estado del Proceso" . $txtSeparador;
+$txtArchivo .=  "Matrícula Inmobiliaria" . $txtSeparador;
+$txtArchivo .=  "Legalizado" . $txtSeparador;
+$txtArchivo .=  "Fecha Legalizado" . $txtSeparador;
+$txtArchivo .=  "Plan de Gobierno" . $txtSeparador;
+$txtArchivo .=  "Modalidad" . $txtSeparador;
+$txtArchivo .=  "Esquema" . $txtSeparador;
+$txtArchivo .=  "Activo". $txtSeparador;
+$txtArchivo .=  $txtSalto;
 foreach( $arrRegistros as $arrRegistro ){
-    echo implode($txtSeparador,$arrRegistro) . $txtSalto;
+    $txtArchivo .=  implode($txtSeparador,$arrRegistro) . $txtSalto;
 }
+
+header("Content-Type: application/vnd.ms-excel");
+header("content-disposition: attachment;filename=analisisUnidadesAsignadas.xls");
+
+echo utf8_decode($txtArchivo);
 
 //
 //die();

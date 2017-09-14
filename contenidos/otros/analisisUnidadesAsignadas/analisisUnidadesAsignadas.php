@@ -24,12 +24,12 @@ $sql = "
         frm.txtFormulario,
         CONCAT(eta.txtEtapa,' - ',epr.txtEstadoProceso) AS 'estadoProceso',
         und.txtMatriculaInmobiliaria,
-        und.bolLegalizado,
+        IF(und.bolLegalizado=0,'NO','SI') as bolLegalizado,
+        und.fchLegalizado,
         pgo.txtPlanGobierno,
         moa.txtModalidad,
         tes.txtTipoEsquema,
-        und.fchLegalizado,
-        und.bolActivo
+        IF(und.bolActivo=0,'NO','SI') as bolActivo
     FROM T_PRY_UNIDAD_PROYECTO und 
     INNER JOIN T_PRY_PROYECTO pry ON und.seqProyecto = pry.seqProyecto
     LEFT  JOIN T_PRY_PROYECTO pryP ON pry.seqProyectoPadre = pryP.seqProyecto

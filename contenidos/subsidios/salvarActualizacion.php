@@ -98,6 +98,13 @@ if ($claFormulario->bolCerrado == 1) {
     }
 }
 
+// Si es de plan de gobierno 2 (bogota humana) no puede salvar datos
+if( $claFormulario->seqPlanGobierno != 3 ){
+    $txtPlanGobierno = array_shift( obtenerDatosTabla("T_FRM_PLAN_GOBIERNO",array("seqPlanGobierno","txtPlanGobierno"),"seqPlanGobierno","seqPlanGobierno = " . $claFormulario->seqPlanGobierno) );
+    $arrErrores[] = "No puede actualizar los hogares del plan de gobierno " . $txtPlanGobierno;
+}
+
+
 // si el formulario tiene sancion no se puede modificar
 if ($claFormulario->bolSancion == 1) {
     $arrErrores[] = "No puede modificar formularios de hogares que se encuentran sancionados";

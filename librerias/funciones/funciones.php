@@ -899,6 +899,8 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
         $arrEsquema[3][12][] = 11; // retorno reubicacion
     }
 
+    $arrEsquema[3][12][] = 12; // mi casa ya
+
     // Leasing
     $arrEsquema[3][13][] = 9;  // proyectos sdht
 

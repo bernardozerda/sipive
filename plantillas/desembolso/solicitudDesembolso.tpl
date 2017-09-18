@@ -39,6 +39,17 @@
                             <tr><td style="padding-right:10px" align="right">
                                     $ {$claFormulario->valAspiraSubsidio|number_format:0:',':'.'}
                                 </td></tr>
+                            {if
+                            ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
+                            ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+                            ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
+                            ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+                            }
+                                <tr><td class="tituloTabla">Valor Complementario</td></tr>
+                                <tr><td style="padding-right:10px" align="right">
+                                    $ {$claFormulario->valComplementario|number_format:0:',':'.'}
+                                </td></tr>
+                            {/if}
                             <tr><td class="tituloTabla">Valor Solicitudes</td></tr>
                             <tr><td style="padding-right:10px" align="right">
                                     $ {$claDesembolso->arrSolicitud.resumen.valSolicitudes|number_format:0:',':'.'}
@@ -49,12 +60,28 @@
                                 </td></tr>
                             <tr><td class="tituloTabla">Saldo Subsidio</td></tr>
                             <tr><td style="padding-right:10px; padding-bottom:5px; border-bottom: 1px solid #999999;" align="right">
+
+                                    {if
+                                    ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
+                                    ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+                                    ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
+                                    ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+                                    }
+                                        {math equation="x + y" x=$claFormulario->valAspiraSubsidio y=$claFormulario->valComplementario assign=valDesembolsos}
+                                    {else}
+                                        {math equation="x + y" x=$claFormulario->valAspiraSubsidio y=0 assign=valDesembolsos}
+                                    {/if}
+
                                     {assign var=valOrdenesPago value=0}
                                     {if $claDesembolso->arrSolicitud.resumen.valSolicitudes != ""}
                                         {assign var=valOrdenesPago value=$claDesembolso->arrSolicitud.resumen.valSolicitudes}
                                     {/if}
-                                    {math equation="x - y" x=$claFormulario->valAspiraSubsidio y=$valOrdenesPago assign=valSaldo}
+
+                                    {math equation="x - y" x=$valDesembolsos y=$valOrdenesPago assign=valSaldo}
+
                                     $ {$valSaldo|number_format:0:',':'.'}
+
+
                                 </td></tr>
 
                             {foreach name="solicitud" from=$claDesembolso->arrSolicitud.resumen.fechas key=seqSolicitud item=fchSolicitud}

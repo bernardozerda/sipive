@@ -102,6 +102,7 @@ class FormularioSubsidios {
     public $valAspiraSubsidio;
     public $valAvaluo;
     public $valCartaLeasing;
+    public $valComplementario;
     public $valCredito;
     public $valDonacion;
     public $valIngresoHogar;
@@ -204,6 +205,7 @@ class FormularioSubsidios {
         $this->valAspiraSubsidio = 0;
         $this->valAvaluo = 0;
         $this->valCartaLeasing = 0;
+        $this->valComplementario = 0;
         $this->valCredito = 0;
         $this->valDonacion = 0;
         $this->valIngresoHogar = 0;
@@ -323,6 +325,7 @@ class FormularioSubsidios {
                 valAspiraSubsidio,
                 valAvaluo,
                 valCartaLeasing,
+                valComplementario,
                 valCredito,
                 valDonacion,
                 valIngresoHogar,
@@ -422,6 +425,7 @@ class FormularioSubsidios {
                 " . $this->valAspiraSubsidio . ",
                 " . $this->valAvaluo . ",
                 " . $this->valCartaLeasing . ",
+                " . $this->valComplementario . ",
                 " . $this->valCredito . ",
                 " . $this->valDonacion . ",
                 " . $this->valIngresoHogar . ",
@@ -571,6 +575,7 @@ class FormularioSubsidios {
                     valAspiraSubsidio,
                     valAvaluo,
                     valCartaLeasing,
+                    valComplementario,
                     valCredito,
                     valDonacion,
                     valIngresoHogar,
@@ -676,6 +681,7 @@ class FormularioSubsidios {
                 $this->valAspiraSubsidio = doubleval($objRes->fields['valAspiraSubsidio']);
                 $this->valAvaluo = doubleval($objRes->fields['valAvaluo']);
                 $this->valCartaLeasing = doubleval($objRes->fields['valCartaLeasing']);
+                $this->valComplementario = doubleval($objRes->fields['valComplementario']);
                 $this->valCredito = doubleval($objRes->fields['valCredito']);
                 $this->valDonacion = doubleval($objRes->fields['valDonacion']);
                 $this->valIngresoHogar = doubleval($objRes->fields['valIngresoHogar']);
@@ -797,6 +803,7 @@ class FormularioSubsidios {
                     valAspiraSubsidio = ". doubleval( $this->valAspiraSubsidio ) .",
                     valAvaluo = ". doubleval( $this->valAvaluo ) .",
                     valCartaLeasing = ". doubleval( $this->valCartaLeasing ) .",
+                    valComplementario = ". doubleval( $this->valComplementario ) .",
                     valCredito = ". doubleval( $this->valCredito ) .",
                     valDonacion = ". doubleval( $this->valDonacion ) .",
                     valIngresoHogar = ". doubleval( $this->valIngresoHogar ) .",

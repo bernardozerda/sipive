@@ -82,9 +82,19 @@
 		<fieldset style="width: 90%; border: 1px dotted #999999; padding:10px; padding-bottom:30px;">
 			<legend> <strong>EXPORTAR RESULTADOS</strong></legend>
 			<form onsubmit="return false;">
-				<table cellpadding="0" cellspacing="0" border="0">
+				<table cellpadding="3" cellspacing="0" border="0" width="95%">
 					<tr>
-						<td width="350px"><strong>Listado de documentos</strong></td>
+						<td width="150px">
+							<strong>Seleccione la encuesta</strong>
+						</td>
+						<td colspan="2">
+							<select name="diseno" style="width: 350px">
+								<option value="0">Seleccione una opción</option>
+                                {foreach from=$arrDisenos item=objEncuesta}
+									<option value="{$objEncuesta->seqDiseno}">{$objEncuesta->txtDiseno}</option>
+                                {/foreach}
+							</select>
+						</td>
 						<td rowspan="2">
 							<button onclick="someterFormulario('mensajes', this.form, './contenidos/encuestasPive/listarEncuestas.php', true, false);" style="width:70px;">
 								<img src="recursos/imagenes/inscrito.gif" width="25px" height="25px"><br>
@@ -93,14 +103,16 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="vertical-align: middle">
+						<td><strong>Listado de documentos</strong></td>
+						<td style="vertical-align: middle" width="260px">
 							<span id="planoEncuesta"
 								  onMouseOver="mostrarTooltip('planoEncuesta','Cargue un archivo de texto plano separado por tabulaciones y sin titulos con los numeros de documento')"
 							>
-								<input type="file" name="documentos" >
-								&nbsp;
-								<img src="./recursos/imagenes/ayuda.png" width="20px" height="20px">
+								<input type="file" name="documentos">
 							</span>
+						</td>
+						<td>
+							<img src="./recursos/imagenes/ayuda.png" width="20px" height="20px">
 						</td>
 					</tr>
 				</table>

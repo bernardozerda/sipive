@@ -146,7 +146,7 @@
         $claSmarty->assign( "seqFormulario" , $_POST['seqFormulario'] );
         $claSmarty->assign( "seqCasaMano" , intval( $_POST['seqCasaMano'] ) );
         $claSmarty->assign( "arrPost" , $_POST );
-        $claSmarty->assign( "arrEstadosCEM" , $arrEstadosCEM );
+        $claSmarty->assign( "arrEstadosFlujo" , $arrEstadosCEM );
         $claSmarty->assign( "txtArchivoCEM" , $claCasaMano->arrFases[ $arrFlujoHogar['flujo'] ][ $arrFlujoHogar['fase'] ]['salvar'] );
 		$claSmarty->assign("arrBarrio", $arrBarrio);
         $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);

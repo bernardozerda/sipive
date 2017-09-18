@@ -875,8 +875,10 @@ function valorSubsidio($claFormulario){
 function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     global $aptBd;
 
-    // Adquisicion
-    $arrEsquema[2][6][] = 1; // individual
+    // Adquisicion de vivienda nueva
+    $arrEsquema[2][6][] = 1;  // individual
+    $arrEsquema[2][6][] = 7;  // programas especiales con proyectos de la secretaria
+    $arrEsquema[2][6][] = 13; // programas especiales con solucion fuera de la secretaria
 
     // construccion en sitio propio
     $arrEsquema[2][7][] = 2; // colectivo opv
@@ -890,6 +892,9 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     // mejoramiento en redensificacion
     $arrEsquema[2][10][] = 4; // territorial dirigido
 
+    // Adquisicion de vivienda usada
+    $arrEsquema[2][11][] = 13; // programas especiales con solucion fuera de la secretaria
+
     // Adquisicion cierre financiero
     $arrEsquema[3][12][] = 9;  // proyectos sdht
     $arrEsquema[3][12][] = 10; // proyecto no sdht
@@ -898,6 +903,10 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     if( $bolDesplazado == 1 ) {
         $arrEsquema[3][12][] = 11; // retorno reubicacion
     }
+
+    $arrEsquema[3][12][] = 12; // mi casa ya
+    $arrEsquema[3][12][] = 14;  // programas especiales con proyectos de la secretaria
+    $arrEsquema[3][12][] = 15; // programas especiales con solucion fuera de la secretaria
 
     // Leasing
     $arrEsquema[3][13][] = 9;  // proyectos sdht

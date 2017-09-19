@@ -869,6 +869,7 @@ function valorSubsidio($claFormulario){
             )
         );
     }
+
     return $valSubsidio;
 }
 

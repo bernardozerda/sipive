@@ -139,11 +139,23 @@
                   <td>{$arrResolucionIndexacion.rp} del {$arrResolucionIndexacion.fechaRp|date_format:"%d de %B del %Y"}</td>
                </tr>
             {/if}
-            
+
 				<tr>
-               <td><b>Total Valor del Subsidio:</b></td>
-               <td>$ {$claFormulario->valAspiraSubsidio|number_format:0:',':'.'}</td>
-            </tr>
+					<td><b>Valor del Subsidio / Aporte:</b></td>
+					<td>$ {$claFormulario->valAspiraSubsidio|number_format:0:',':'.'}</td>
+				</tr>
+
+                {if
+                ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
+                ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+                ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
+                ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+                }
+					<tr>
+						<td><b>Valor Complementario:</b></td>
+						<td>$ {$claFormulario->valComplementario|number_format:0:',':'.'}</td>
+					</tr>
+                {/if}
 				
 				
 			</table>
@@ -214,7 +226,24 @@
 					<td><b>Saldo del Desembolso:</b></td>
 					<!--<td>$ 0</td>-->
 					<td>
-						{math equation="x - y" x=$claFormulario->valAspiraSubsidio y=$claDesembolso->arrSolicitud.resumen.valSolicitudes assign=valSaldo}
+                        {if
+                        ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
+                        ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+                        ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
+                        ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+                        }
+                            {math equation="x + y" x=$claFormulario->valAspiraSubsidio y=$claFormulario->valComplementario assign=valDesembolsos}
+                        {else}
+                            {math equation="x + y" x=$claFormulario->valAspiraSubsidio y=0 assign=valDesembolsos}
+                        {/if}
+
+                        {assign var=valOrdenesPago value=0}
+                        {if $claDesembolso->arrSolicitud.resumen.valSolicitudes != ""}
+                            {assign var=valOrdenesPago value=$claDesembolso->arrSolicitud.resumen.valSolicitudes}
+                        {/if}
+
+                        {math equation="x - y" x=$valDesembolsos y=$valOrdenesPago assign=valSaldo}
+
 						$ {$valSaldo|number_format:0:',':'.'}
 					</td>
 				</tr>

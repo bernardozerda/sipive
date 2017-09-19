@@ -1958,36 +1958,35 @@
                                 </tr>
 
                                 <!-- VALOR COMPLEMENTARIO -->
+                                {assign var=txtComplementario value='none'}
                                 {if
                                     ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
                                     ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
                                     ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
                                     ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
                                 }
-                                    <tr>
-                                        <!-- VALOR AL QUE ASPIRA DEL SUBSIDIO -->
-                                        <td class="tituloTabla" height="25px" align="top">
-                                            Valor Complementario
-                                        </td>
-                                        <td bgcolor="#E4E4E4" align="right" style="padding-right:5px" id="tdValComplementario" height="25px" align="top">
-                                            $ <input type="text"
-                                                     name="valComplementario"
-                                                     id="valComplementario"
-                                                     value="{$claFormulario->valComplementario|number_format:'0':'.':'.'}"
-                                                     onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                     style="padding-right: 5px; width:100px; text-align:right;"
-                                                     onkeyup="formatoSeparadores(this)"
-                                            />
-                                        </td>
-                                        <td bgcolor="#E4E4E4">&nbsp;</td>
-                                        <td bgcolor="#E4E4E4">&nbsp;</td>
-                                    </tr>
-                                {else}
-                                    <input type="hidden" name="valComplementario" value="{$claFormulario->valComplementario}">
+                                    {assign var=txtComplementario value=''}
                                 {/if}
 
-
+                                <tr id="trValComplementario" style="display: {$txtComplementario};">
+                                    <!-- VALOR AL QUE ASPIRA DEL SUBSIDIO -->
+                                    <td class="tituloTabla" height="25px" align="top">
+                                        Valor Complementario
+                                    </td>
+                                    <td bgcolor="#E4E4E4" align="right" style="padding-right:5px" height="25px" align="top">
+                                        $ <input type="text"
+                                                 name="valComplementario"
+                                                 id="valComplementario"
+                                                 value="{$claFormulario->valComplementario|number_format:'0':'.':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 style="padding-right: 5px; width:100px; text-align:right;"
+                                                 onkeyup="formatoSeparadores(this)"
+                                        />
+                                    </td>
+                                    <td bgcolor="#E4E4E4">&nbsp;</td>
+                                    <td bgcolor="#E4E4E4">&nbsp;</td>
+                                </tr>
 
                             </table>
                             </p>

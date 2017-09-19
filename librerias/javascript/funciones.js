@@ -1617,7 +1617,7 @@ function valorSubsidio() {
         type: "POST",
         data: jQuery.param(jParametros),
         success: function(respuesta){
-            // document.getElementById("mensajes").innerHTML = respuesta;
+            //document.getElementById("mensajes").innerHTML = respuesta;
             $("#valAspiraSubsidio").val(respuesta);
             sumarTotalRecursos();
         },
@@ -1979,6 +1979,7 @@ function datosPestanaPostulacion(txtModo) {
                 $("#trNoLeasing4").removeAttr("style").hide();
                 $("#trLeasing1").removeAttr("style").show();
                 $("#trLeasing2").removeAttr("style").show();
+
             }else {
 
                 $("#valSaldoCuentaAhorro").attr("readonly" , false);
@@ -2038,6 +2039,11 @@ function datosPestanaPostulacion(txtModo) {
             $('#txtDireccionSolucion').val(objRespuesta.direccion);
             $('#txtMatriculaInmobiliaria').val(objRespuesta.matricula);
             $('#txtChip').val(objRespuesta.chip);
+
+            $("#trValComplementario").removeAttr("style").hide();
+            if( $('#seqTipoEsquema').val() == 7 || $('#seqTipoEsquema').val() == 13 || $('#seqTipoEsquema').val() == 14 || $('#seqTipoEsquema').val() == 15 ){
+                $("#trValComplementario").removeAttr("style").show();
+            }
 
         }
 

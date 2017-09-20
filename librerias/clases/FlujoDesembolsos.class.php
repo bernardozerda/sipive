@@ -314,7 +314,7 @@
             
          $arrFases['postulacionIndividual']['legalizacion']['nombre'] = utf8_encode("Legalizacion Desembolso");
 			$arrFases['postulacionIndividual']['legalizacion']['permisos']  = array( 29,62,40 );
-			$arrFases['postulacionIndividual']['legalizacion']['adelante']  = array( 29,62,40 );
+			$arrFases['postulacionIndividual']['legalizacion']['adelante']  = array( 29,32,62,40 );
 			$arrFases['postulacionIndividual']['legalizacion']['atras']     = array( 15,28 );
 			$arrFases['postulacionIndividual']['legalizacion']['plantilla'] = "desembolso/solicitudDesembolso.tpl";
 			$arrFases['postulacionIndividual']['legalizacion']['codigo']    = "./contenidos/desembolso/solicitudDesembolso.php";

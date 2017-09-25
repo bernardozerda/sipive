@@ -342,9 +342,9 @@ class CasaMano
              ";
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
-                $this->objRegistroOferta = new stdClass();
+                $this->objRegistroOferta = array();
                 foreach ($objRes->fields as $txtCampo => $txtValor) {
-                    $this->objRegistroOferta->$txtCampo = regularizarCampo($txtCampo,$txtValor);
+                    $this->objRegistroOferta[$txtCampo] = regularizarCampo($txtCampo,$txtValor);
                 }
                 $objRes->MoveNext();
             }
@@ -973,7 +973,7 @@ class CasaMano
                 $sql = "UPDATE T_CEM_REGISTRO_VIVIENDA SET ";
                 foreach ($arrPost as $txtCampo => $txtValor) {
                     $sql .= $txtCampo . " = " . $txtValor . ",";
-                }
+                 }
                 $sql = trim($sql, ",");
                 $sql .= " WHERE seqCasaMano = " . $arrPost['seqCasaMano'];
 

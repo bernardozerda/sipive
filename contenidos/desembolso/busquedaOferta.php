@@ -68,6 +68,36 @@ if (in_array($claFormulario->seqEstadoProceso, $claFlujoDesembolsos->arrFases[$_
     $claActosAdministrativos = new ActoAdministrativo();
     $arrActos = $claActosAdministrativos->cronologia($numDocumento);
 
+   /*******************************************************************************************************
+    * INFORMACION ACTO INDEXACION -- ESTOS ACTOS SON DEL MODULO DE PROYECTOS
+    * **************************************************************************************************** */
+   $sqlActoUnidad =  "
+                SELECT 
+                    uac.seqUnidadActo, 
+                    uac.numActo, 
+                    uac.fchActo, 
+                    uac.txtDescripcion, 
+                    uvi.valIndexado
+                FROM T_PRY_AAD_UNIDAD_ACTO uac
+                INNER JOIN T_PRY_AAD_UNIDADES_VINCULADAS uvi ON uac.seqUnidadActo = uvi.seqUnidadActo
+                WHERE seqTipoActoUnidad = 2 
+                AND uvi.seqUnidadProyecto = (
+                      SELECT seqUnidadProyecto 
+                      FROM T_FRM_FORMULARIO 
+                      WHERE seqFormulario = $seqFormulario
+                )
+            ";
+   $objRes = $aptBd->execute( $sqlActoUnidad );
+   while( $objRes->fields ){
+      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['seqUnidadActo']		= $objRes->fields['seqUnidadActo'];
+      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['numActo']			= $objRes->fields['numActo'];
+      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['fchActo']			= formatoFechaTextoFecha($objRes->fields['fchActo']);
+      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['txtDescripcion']	= $objRes->fields['txtDescripcion'];
+      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['valIndexado']		= $objRes->fields['valIndexado'];
+      $objRes->MoveNext();
+   }
+   $claSmarty->assign("arrActosAsociados", $arrActosAsociados);
+
     $claSmarty->assign("arrActos", $arrActos); //  Pestania de actos administrativos
     $claSmarty->assign("arrRegistros", $arrRegistros); // Registros de seguimiento
     if ($_POST['fase'] == "escrituracion") {

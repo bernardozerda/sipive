@@ -22,9 +22,9 @@ $seqFormulario = $claCiudadano->formularioVinculado($_GET['documento']);
 $claFormulario->cargarFormulario($seqFormulario);
 $contenido = "";
 if ($_GET['tipo'] == 2) {
-    $contenido .= '<p>&nbsp;</p><p>Bogota D.C. </p>';
+    $contenido .= "<p>&nbsp;</p><p>Bogota D.C. " . strftime("%d de %B de %Y") . "</p>";
 } else {
-    $contenido .= '<p>&nbsp;</p><p>Bogota D.C. ' . "<p><p>&nbsp;</p>";
+    $contenido .= "<p>&nbsp;</p><p>Bogota D.C. " . strftime("%d de %B de %Y") . "<p><p>&nbsp;</p>";
 }
 
 $txtCodigo = obtenerCode();

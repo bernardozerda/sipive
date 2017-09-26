@@ -29,8 +29,13 @@
       $claCasaMano = new CasaMano();
       $arrCasaMano = $claCasaMano->cargar( $seqFormulario , $seqCasaMano );
       $objCasaMano = array_shift( $arrCasaMano );
-      $claDesembolso = $objCasaMano->objRegistroOferta;
+
+      $claDesembolso = new Desembolso();
       $claDesembolso->arrJuridico = $objCasaMano->objRevisionJuridica;
+      foreach( $objCasaMano->objRegistroOferta as $txtClave => $txtValor ) {
+         $claDesembolso->$txtClave = $txtValor;
+      }
+
    } else {
       $claDesembolso->cargarDesembolso( $seqFormulario );
    }

@@ -81,7 +81,15 @@
                         if( empty($arrAplicaciones[$numDocumento]) ) {
                             $numPosicion = count($arrErrores);
                             $arrErrores[$numPosicion]['documento'] = $numDocumento;
-                            $arrErrores[$numPosicion]['mensaje'] = "No se encontraron encuestas";
+                            $txtDiseno = array_shift(
+                               obtenerDatosTabla(
+                                  "T_ENC_DISENO",
+                                    array("seqDiseno","txtdiseno"),
+                                  "seqDiseno",
+                                  "seqDiseno = " . $_POST['diseno']
+                               )
+                            );
+                            $arrErrores[$numPosicion]['mensaje'] = "No se encontraron aplicaciones para " . $txtDiseno;
                         }
                     }
                 }
@@ -156,7 +164,7 @@
             $xmlArchivo .= "<ss:Workbook xmlns:ss='urn:schemas-microsoft-com:office:spreadsheet'>";
 
             // hoja de errores
-            $xmlArchivo .= "<ss:Worksheet ss:Name='Errores'>";
+            $xmlArchivo .= "<ss:Worksheet ss:Name='Mensajes'>";
             $xmlArchivo .= "<ss:Table>";
             $xmlArchivo .= "<ss:Row>";
             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>";

@@ -45,6 +45,10 @@
 
     }else {
 
+        if( $_POST['diseno'] == 0 ){
+            $arrErrores[] = "Seleccione un diseño para exportar los resultados";
+        }
+
         switch ($_FILES['documentos']['error']) {
             case UPLOAD_ERR_INI_SIZE:
                 $arrErrores[] = "El archivo Excede el tamaño permitido, contacte al administrador del sistema";
@@ -73,11 +77,19 @@
                 $claEncuestas = new Encuestas();
                 foreach ($arrDocumentos as $numDocumento){
                     if( doubleval($numDocumento) != 0) {
-                        $arrAplicaciones[$numDocumento] = array_shift($claEncuestas->listarAplicaciones($numDocumento));
+                        $arrAplicaciones[$numDocumento] = array_shift($claEncuestas->listarAplicaciones($numDocumento, $_POST['diseno']));
                         if( empty($arrAplicaciones[$numDocumento]) ) {
                             $numPosicion = count($arrErrores);
                             $arrErrores[$numPosicion]['documento'] = $numDocumento;
-                            $arrErrores[$numPosicion]['mensaje'] = "No se encontraron encuestas";
+                            $txtDiseno = array_shift(
+                               obtenerDatosTabla(
+                                  "T_ENC_DISENO",
+                                    array("seqDiseno","txtdiseno"),
+                                  "seqDiseno",
+                                  "seqDiseno = " . $_POST['diseno']
+                               )
+                            );
+                            $arrErrores[$numPosicion]['mensaje'] = "No se encontraron aplicaciones para " . $txtDiseno;
                         }
                     }
                 }
@@ -152,7 +164,7 @@
             $xmlArchivo .= "<ss:Workbook xmlns:ss='urn:schemas-microsoft-com:office:spreadsheet'>";
 
             // hoja de errores
-            $xmlArchivo .= "<ss:Worksheet ss:Name='Errores'>";
+            $xmlArchivo .= "<ss:Worksheet ss:Name='Mensajes'>";
             $xmlArchivo .= "<ss:Table>";
             $xmlArchivo .= "<ss:Row>";
             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>";
@@ -197,7 +209,21 @@
             foreach( $arrHojaCiudadano as $i => $arrLinea){
                 $xmlArchivo .= "<ss:Row>";
                 foreach($arrLinea as $txtValor) {
-                    $txtTipo = ( is_numeric( trim($txtValor) ) )? "Number" : "String";
+                    //$txtTipo = ( is_numeric( trim($txtValor) ) )? "Number" : "String";
+
+                    switch(true){
+                        case (esFechaValida($txtValor)) and (strlen($txtValor) <= 10) and (strtotime( $txtValor ) !== false):
+                            $txtTipo = "DateTime";
+                            break;
+                        case is_numeric($txtValor):
+                            $txtTipo = "Number";
+                            break;
+                        default:
+                            $txtTipo = "String";
+                            break;
+                    }
+
+
                     $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='$txtTipo'>";
                     $xmlArchivo .= $txtValor;
                     $xmlArchivo .= "</ss:Data></ss:Cell>";

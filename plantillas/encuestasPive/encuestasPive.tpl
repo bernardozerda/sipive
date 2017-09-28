@@ -5,7 +5,10 @@
 	{if isset( $smarty.session.arrGrupos.$seqProyectoAplicacion.20 ) or isset($smarty.session.arrGrupos.$seqProyectoAplicacion.37)}
 		<p>
 			<fieldset style="width: 90%; border: 1px dotted #999999; padding:10px;">
-				<legend><strong> CARGA DE INFORMACIÓN DE LAS ENCUESTAS</strong> </legend>
+				<legend>
+					<strong>CARGA DE INFORMACIÓN DE LAS ENCUESTAS</strong>
+				</legend>
+				<p style="width: 100%" class="msgVerde">Cargue las aplicaciones de las encuestas realizadas a los hogares</p>
 				<form id="frmEncuestas"
 					onSubmit="someterFormulario('mensajes',this,'./contenidos/encuestasPive/salvarEncuestas.php',true,true); return false;">
 					<table cellpadding="5">
@@ -80,11 +83,33 @@
 	{/if}
 	<p>
 		<fieldset style="width: 90%; border: 1px dotted #999999; padding:10px; padding-bottom:30px;">
-			<legend> <strong>EXPORTAR RESULTADOS</strong></legend>
+			<legend> <strong>EXPORTAR ARCHIVOS PLANOS DE LAS ENCUESTAS</strong></legend>
+			<p style="width: 100%" class="msgVerde">
+				Obtenga el archivo plano de las aplicaciones de las encuestas previamente cargadas,
+				es un archivo plano con las respuestas dadas por los hogares.<br>
+				<span class="msgError">Este archivo no es el archivo que se usa para los cruces, para obtenerlo vaya a Exportables -> Encuestas PIVE (para cruces)</span>
+			</p>
 			<form onsubmit="return false;">
-				<table cellpadding="0" cellspacing="0" border="0">
+				<table cellpadding="3" cellspacing="0" border="0" width="95%">
 					<tr>
-						<td width="350px"><strong>Listado de documentos</strong></td>
+						<td width="150px">
+							<strong>Seleccione la encuesta</strong>
+						</td>
+						<td>
+							<span id="planoDiseno"
+								  onMouseOver="mostrarTooltip('planoDiseno','Seleccione el diseño que fue aplicado al hogar')"
+							>
+								<img src="./recursos/imagenes/ayuda.png" width="20px" height="20px">
+							</span>
+						</td>
+						<td colspan="2">
+							<select name="diseno" style="width: 350px">
+								<option value="0">Seleccione una opción</option>
+                                {foreach from=$arrDisenos item=objEncuesta}
+									<option value="{$objEncuesta->seqDiseno}">{$objEncuesta->txtDiseno}</option>
+                                {/foreach}
+							</select>
+						</td>
 						<td rowspan="2">
 							<button onclick="someterFormulario('mensajes', this.form, './contenidos/encuestasPive/listarEncuestas.php', true, false);" style="width:70px;">
 								<img src="recursos/imagenes/inscrito.gif" width="25px" height="25px"><br>
@@ -93,15 +118,18 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="vertical-align: middle">
+						<td><strong>Listado de documentos</strong></td>
+						<td>
 							<span id="planoEncuesta"
 								  onMouseOver="mostrarTooltip('planoEncuesta','Cargue un archivo de texto plano separado por tabulaciones y sin titulos con los numeros de documento')"
 							>
-								<input type="file" name="documentos" >
-								&nbsp;
 								<img src="./recursos/imagenes/ayuda.png" width="20px" height="20px">
 							</span>
 						</td>
+						<td style="vertical-align: middle" width="260px">
+							<input type="file" name="documentos">
+						</td>
+
 					</tr>
 				</table>
 			</form>
@@ -110,7 +138,10 @@
 
 	<p>
 		<fieldset style="width: 90%; border: 1px dotted #999999; padding:10px; padding-bottom:30px;">
-			<legend> <strong>CONSULTA DE INFORMACIÓN DE ENCUESTAS </strong></legend>
+			<legend> <strong>EXPORTAR FORMATO WORD DE LAS ENCUESTAS</strong></legend>
+			<p style="width: 100%" class="msgVerde">
+				Consulte los resultados dados por un hogar (en word) para todas las aplicaciones que se hayan realizado para un hogar
+			</p>
 				<form onsubmit="return false;">
 					{assign var=txtFuncion value="someterFormulario('resultado',this.form,'./contenidos/encuestasPive/listarEncuestas.php',true,true);"}
 					{include file="subsidios/buscarCedula.tpl"}

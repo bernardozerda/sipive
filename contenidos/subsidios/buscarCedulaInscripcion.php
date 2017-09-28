@@ -32,6 +32,13 @@ if (!isset($_POST['cedula'])) {
     // Quita los puntos del documento
     $_POST['cedula'] = mb_ereg_replace("[^0-9]", "", $_POST['cedula']);
 
+    $claFormulario = new FormularioSubsidios();
+    $claCiudadano = new Ciudadano();
+    $seqFormulario = $claCiudadano->formularioVinculado($_POST['cedula']);
+    $claFormulario->cargarFormulario($seqFormulario);
+    $seqEtapa = obtenerCampo("T_FRM_ESTADO_PROCESO", $claFormulario->seqEstadoProceso, "seqEtapa", "seqEstadoProceso");
+    $seqPlanGobierno = ( $seqFormulario == 0 )? 3 : $claFormulario->seqPlanGobierno;
+
     // Informacion de los select que hay en el formulario
     $arrTipoDocumento = obtenerDatosTabla("T_CIU_TIPO_DOCUMENTO", array("seqTipoDocumento", "txtTipoDocumento"), "seqTipoDocumento", "", "txtTipoDocumento");
     $arrTipoVictima = obtenerDatosTabla("T_FRM_TIPOVICTIMA", array("seqTipoVictima", "txtTipoVictima"), "seqTipoVictima", "seqTipoVictima <> 0", "txtTipoVictima");
@@ -39,7 +46,7 @@ if (!isset($_POST['cedula'])) {
     $arrSexo = obtenerDatosTabla("T_CIU_SEXO", array("seqSexo", "txtSexo"), "seqSexo", "", "txtSexo");
     $arrEstadoCivil = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil", "bolActivo"), "seqEstadoCivil", "bolActivo = 1", "txtEstadoCivil");
     $arrVivienda = obtenerDatosTabla("T_FRM_VIVIENDA", array("seqVivienda", "txtVivienda"), "seqVivienda", "", "txtVivienda");
-    $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = 3", "seqPlanGobierno DESC, txtModalidad");
+    $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $seqPlanGobierno, "seqPlanGobierno DESC, txtModalidad");
     $arrSisben = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben", "bolActivo"), "seqSisben", "bolActivo = 1");
     $arrBanco = obtenerDatosTabla("T_FRM_BANCO", array("seqBanco", "txtBanco"), "seqBanco", "seqBanco > 1", "txtBanco");
     $arrEstados = estadosProceso();
@@ -63,20 +70,13 @@ if (!isset($_POST['cedula'])) {
      * VERIFICACION DE LA EXISTENCIA DEL CIUDADANO
      ******************************************************************************************************/
 
-    $claFormulario = new FormularioSubsidios();
-    $claCiudadano = new Ciudadano();
-    $seqFormulario = $claCiudadano->formularioVinculado($_POST['cedula']);
-
     if ($seqFormulario == 0) {
         $txtPlantilla = "subsidios/inscripcion.tpl";
     } else {
 
-        $claFormulario->cargarFormulario($seqFormulario);
-        $seqEtapa = obtenerCampo("T_FRM_ESTADO_PROCESO", $claFormulario->seqEstadoProceso, "seqEtapa", "seqEstadoProceso");
-
         if ($seqEtapa == 1) {
 
-            if( $claFormulario->seqPlanGobierno == 3 ) {
+//            if( $claFormulario->seqPlanGobierno == 3 ) {
 
                 // datos del formulario que dependen de los datos de la base de datos
                 $arrTipoEsquemas = obtenerTipoEsquema($claFormulario->seqModalidad, $claFormulario->seqPlanGobierno, $claFormulario->bolDesplazado);
@@ -122,9 +122,9 @@ if (!isset($_POST['cedula'])) {
                 }
 
                 $txtPlantilla = "subsidios/actualizacion.tpl";
-            } else {
-                $arrErrores[] = "No se pueden visualizar los datos de hogares del plan de gobierno " . $arrPlanGobierno[$claFormulario->seqPlanGobierno];
-            }
+//            } else {
+//                $arrErrores[] = "No se pueden visualizar los datos de hogares del plan de gobierno " . $arrPlanGobierno[$claFormulario->seqPlanGobierno];
+//            }
         } else {
             $arrErrores[] = "El hogar esta en el estado " . $arrEstados[$claFormulario->seqEstadoProceso] . " ingrese por el manú Proceso -> Postulación";
         }

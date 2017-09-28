@@ -1608,7 +1608,8 @@ function valorSubsidio() {
         seqUnidadProyecto: $("#seqUnidadProyecto").val(),
         valSubsidioNacional: $("#valSubsidioNacional").val(),
         valDonacion: $("#valDonacion").val(),
-        valCartaLeasing: $("#valCartaLeasing").val()
+        valCartaLeasing: $("#valCartaLeasing").val(),
+        valAspiraSubsidio: $("#valAspiraSubsidio").val()
     }
 
     $.ajax({
@@ -1616,6 +1617,7 @@ function valorSubsidio() {
         type: "POST",
         data: jQuery.param(jParametros),
         success: function(respuesta){
+            //document.getElementById("mensajes").innerHTML = respuesta;
             $("#valAspiraSubsidio").val(respuesta);
             sumarTotalRecursos();
         },
@@ -1977,6 +1979,7 @@ function datosPestanaPostulacion(txtModo) {
                 $("#trNoLeasing4").removeAttr("style").hide();
                 $("#trLeasing1").removeAttr("style").show();
                 $("#trLeasing2").removeAttr("style").show();
+
             }else {
 
                 $("#valSaldoCuentaAhorro").attr("readonly" , false);
@@ -2036,6 +2039,11 @@ function datosPestanaPostulacion(txtModo) {
             $('#txtDireccionSolucion').val(objRespuesta.direccion);
             $('#txtMatriculaInmobiliaria').val(objRespuesta.matricula);
             $('#txtChip').val(objRespuesta.chip);
+
+            $("#trValComplementario").removeAttr("style").hide();
+            if( $('#seqTipoEsquema').val() == 7 || $('#seqTipoEsquema').val() == 13 || $('#seqTipoEsquema').val() == 14 || $('#seqTipoEsquema').val() == 15 ){
+                $("#trValComplementario").removeAttr("style").show();
+            }
 
         }
 
@@ -10016,16 +10024,17 @@ function selectAnidados(documento, valor) {
 
     $(function () {
         var fillSecondary = function () {
-            $('#numAnosAprobados').empty();
-            var selected = $('#nivelEducativo').val();
-
-            options[selected].forEach(function (element, index) {
-                $('#numAnosAprobados').append('<option value="' + element + '">' + element + '</option>');
-            });
-            if (document.getElementById(documento + '-numAnosAprobados')) {
-                if (valor == 1 && document.getElementById(documento + '-numAnosAprobados').value != "") {
-                    var anos = document.getElementById(documento + '-numAnosAprobados').value;
-                    $('#numAnosAprobados').val(anos);
+            if( YAHOO.util.Dom.get("nivelEducativo") != null) {
+                $('#numAnosAprobados').empty();
+                var selected = $('#nivelEducativo').val();
+                options[selected].forEach(function (element, index) {
+                    $('#numAnosAprobados').append('<option value="' + element + '">' + element + '</option>');
+                });
+                if (document.getElementById(documento + '-numAnosAprobados')) {
+                    if (valor == 1 && document.getElementById(documento + '-numAnosAprobados').value != "") {
+                        var anos = document.getElementById(documento + '-numAnosAprobados').value;
+                        $('#numAnosAprobados').val(anos);
+                    }
                 }
             }
         }
@@ -10249,11 +10258,6 @@ function alertaDigitacionCampo(txtCampo,txtValor){
 
     }
 
-
-
-
-
-
     if( bolAlerta == true ){
 
         var handleOk = function () {
@@ -10328,3 +10332,64 @@ function tablaPlantillaProyectoUnidadHabitacional( idMostrar, idOcultar ){
 }
 
 
+function eliminarActoAdministrativo( numActo , fchActo ){
+
+    txtMensaje  = "<form method='POST' enctype='multipart/form-data' id='frmEliminarActos' onSubmit='return false;'>";
+    txtMensaje += "<table>";
+    txtMensaje += "<tr><td class='msgError'>Indique el motivo por el que realiza la eliminación del acto adminsitrativo " + numActo + " de " + fchActo + "</td></tr>";
+    txtMensaje += "<tr><td><textarea name='txtMotivo' id='txtMotivo' style='width: 100%; height: 100px;'></textarea></td></tr>";
+    txtMensaje += "</table>";
+    txtMensaje += "<input type='hidden' name='numActo' value='" + numActo + "'>";
+    txtMensaje += "<input type='hidden' name='fchActo' value='" + fchActo + "'>";
+    txtMensaje += "</form>";
+
+    var handleOk = function () {
+        if( YAHOO.util.Dom.get('txtMotivo').value == "" ){
+            alert("Indique el motivo para eliminar el acto administrativo");
+        }else{
+            someterFormulario("mensajes",this.form,"./contenidos/actosAdministrativos/eliminarActos.php",false,true);
+            this.cancel();
+        }
+
+    }
+
+    var handleErr = function () {
+        this.cancel();
+    }
+
+    var objAtributos = {
+        width: "350px",
+        height: "200px",
+        effect: {
+            effect: YAHOO.widget.ContainerEffect.FADE,
+            duration: 0
+        },
+        fixedcenter: true,
+        zIndex: 1,
+        visible: false,
+        modal: true,
+        draggable: false,
+        close: false,
+        text: txtMensaje,
+        buttons: [
+            {
+                text: "Aceptar",
+                handler: handleOk,
+                isDefault: true
+            },
+            {
+                text: "Cancelar",
+                handler: handleErr
+            }
+        ]
+    }
+
+    // INSTANCIA EL OBJETO DIALOGO
+    var objDialogo1 = new YAHOO.widget.SimpleDialog("aad", objAtributos);
+
+    // Muestra el cuadro de dialogo
+    objDialogo1.setHeader("Atención !!");
+    objDialogo1.render(document.body);
+    objDialogo1.show();
+
+}

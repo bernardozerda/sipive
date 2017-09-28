@@ -140,7 +140,7 @@
                                              onClick="eliminarObjeto('observacion{$numSecuencia}')"
                                              >X</div>
                                         <div style="cursor:pointer; float:right; width:97%; height:14px; border:1px solid #F9F9F9;"
-                                             onMouseOver="mostrarHint('{$txtDocumento}')" onMouseOut="ocultarHint();">
+                                             onMouseOver="mostrarHint('{$txtObservacion}')" onMouseOut="ocultarHint();">
                                             {if $txtObservacion|strlen > 80}
                                                 {$numSecuencia} - {$txtObservacion|substr:0:80}...
                                             {else}

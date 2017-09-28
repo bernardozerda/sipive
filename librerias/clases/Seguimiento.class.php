@@ -4732,6 +4732,7 @@ class Seguimiento {
         $claCasaMano = new CasaMano();
         $arrCasaMano = $claCasaMano->cargar($arrPost['seqFormulario'],$arrPost['seqCasaMano']);
         $claCasaMano = end($arrCasaMano);
+        $objAnterior = new stdClass();
         $objAnterior->arrJuridico = $claCasaMano->objRevisionJuridica;
 
         return $this->cambiosRevisionJuridica($objAnterior,$arrPost);
@@ -4743,6 +4744,7 @@ class Seguimiento {
         $claCasaMano = new CasaMano();
         $arrCasaMano = $claCasaMano->cargar($arrPost['seqFormulario'],$arrPost['seqCasaMano']);
         $claCasaMano = end($arrCasaMano);
+        $objAnterior = new stdClass();
         $objAnterior->arrTecnico = $claCasaMano->objRevisionTecnica;
 
         return $this->cambiosRevisionTecnica($objAnterior,$arrPost);

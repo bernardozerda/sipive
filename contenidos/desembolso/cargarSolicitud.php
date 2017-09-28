@@ -198,7 +198,7 @@
     	$txtRespuesta = "var objRespuesta = { " . $txtSeparador;
     	foreach( $arrRespuesta as  $txtCampo => $txtValor ){
     		$txtRespuesta .= $txtCampo . ":";
-    		if( $txtCampo == "numCuentaGiro" ){
+    		if( $txtCampo == "numCuentaGiro" or  $txtCampo == "numDocumentoBeneficiarioGiro"){
     			$txtRespuesta .= "'" . $txtValor ."',"  . $txtSeparador;
     		}else if( is_numeric( $txtValor ) == 1 ){
     			$txtRespuesta .=  $txtValor . ","  . $txtSeparador;

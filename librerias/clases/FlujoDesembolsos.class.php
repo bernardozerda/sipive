@@ -41,11 +41,11 @@
             
 			/*****************************************************************
 			 * Fases del desemboslo con escritura publica registrada
- 			******************************************************************/	 
-			
+ 			******************************************************************/
+
 			$arrFases['escritura']['busquedaOferta']['nombre']    = utf8_encode("Busqueda de la Oferta");
-			$arrFases['escritura']['busquedaOferta']['permisos']  = array( 15 , 19 , 22 , 24 , 26 , 27 , 28 , 29 , 30 , 32 , 33 );
-			$arrFases['escritura']['busquedaOferta']['adelante']  = array( 15 , 19 , 22 );
+			$arrFases['escritura']['busquedaOferta']['permisos']  = array( 15 , 17 , 19 , 22 , 24 , 26 , 27 , 28 , 29 , 30 , 32 , 33 );
+			$arrFases['escritura']['busquedaOferta']['adelante']  = array( 15 , 17 , 19 , 22 );
 			$arrFases['escritura']['busquedaOferta']['atras']     = array( ); // No hay regreso a otras fases
 			$arrFases['escritura']['busquedaOferta']['plantilla'] = "desembolso/busquedaOferta.tpl";
 			$arrFases['escritura']['busquedaOferta']['codigo']    = "./contenidos/desembolso/busquedaOferta.php";
@@ -314,7 +314,7 @@
             
          $arrFases['postulacionIndividual']['legalizacion']['nombre'] = utf8_encode("Legalizacion Desembolso");
 			$arrFases['postulacionIndividual']['legalizacion']['permisos']  = array( 29,62,40 );
-			$arrFases['postulacionIndividual']['legalizacion']['adelante']  = array( 29,62,40 );
+			$arrFases['postulacionIndividual']['legalizacion']['adelante']  = array( 29,32,62,40 );
 			$arrFases['postulacionIndividual']['legalizacion']['atras']     = array( 15,28 );
 			$arrFases['postulacionIndividual']['legalizacion']['plantilla'] = "desembolso/solicitudDesembolso.tpl";
 			$arrFases['postulacionIndividual']['legalizacion']['codigo']    = "./contenidos/desembolso/solicitudDesembolso.php";

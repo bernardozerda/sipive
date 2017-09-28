@@ -2098,11 +2098,22 @@ class Desembolso {
             $valAcumulado = $objRes->fields['acumulado'];
         }
         $valorTotal = $valAcumulado + $valorSolicitud; // Suma las solicitudes almacenadas con el valor solicitado
-        // Consulta el valor del subsidio para el hogar actual
-        $sqlSubsidio = "SELECT valAspiraSubsidio FROM T_FRM_FORMULARIO WHERE seqFormulario = $idFormulario";
-        $objRes = $aptBd->execute($sqlSubsidio);
-        if ($objRes->fields) {
-            $valSubsidio = $objRes->fields['valAspiraSubsidio'];
+
+//        // Consulta el valor del subsidio para el hogar actual
+//        $sqlSubsidio = "SELECT valAspiraSubsidio FROM T_FRM_FORMULARIO WHERE seqFormulario = $idFormulario";
+//        $objRes = $aptBd->execute($sqlSubsidio);
+//        if ($objRes->fields) {
+//            $valSubsidio = $objRes->fields['valAspiraSubsidio'];
+//        }
+
+        $valSubsidio =  $claFormulario->valAspiraSubsidio;
+        if(
+            ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
+            ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+            ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
+            ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+        ){
+            $valSubsidio += $claFormulario->valComplementario;
         }
 
         // Verifica que el acumulado de las solicitudes no supere el valor del subsidio asignado al hogar
@@ -2243,7 +2254,7 @@ class Desembolso {
 							'SDHT-SGF-SDRPL-$txtFormulario-$numAno2Digitos',
 							'" . doubleval($arrPost['numProyectoInversion']) . "',
 							'" . $arrPost['txtNombreBeneficiarioGiro'] . "',
-							'" . doubleval($arrPost['numDocumentoBeneficiarioGiro']) . "',
+							'" . $arrPost['numDocumentoBeneficiarioGiro'] . "',
 							'" . $arrPost['txtDireccionBeneficiarioGiro'] . "',
 							'" . doubleval($arrPost['numTelefonoGiro']) . "',
 							'" . trim($arrPost['numCuentaGiro']) . "',
@@ -2317,7 +2328,7 @@ class Desembolso {
 								'" . doubleval($arrPost['monto']) . "',
 								'" . doubleval($arrPost['numProyectoInversion']) . "',
 								'" . trim( $arrPost['txtNombreBeneficiarioGiro']) . "',
-								'" . doubleval( $arrPost['numDocumentoBeneficiarioGiro']) . "',
+								'" . $arrPost['numDocumentoBeneficiarioGiro'] . "',
 								'" . trim( $arrPost['txtDireccionBeneficiarioGiro'] ). "',
 								'" . doubleval( $arrPost['numTelefonoGiro']) . "',
 								'" . trim( $arrPost['numCuentaGiro']) . "',
@@ -2375,7 +2386,7 @@ class Desembolso {
 							seqDesembolso					=	'$seqDesembolso',
 							numProyectoInversion			=	'" . doubleval( $arrPost['numProyectoInversion'] ). "',
 							txtNombreBeneficiarioGiro		=	'" . trim( $arrPost['txtNombreBeneficiarioGiro']) . "',
-							numDocumentoBeneficiarioGiro	=	'" . doubleval( $arrPost['numDocumentoBeneficiarioGiro']) . "',
+							numDocumentoBeneficiarioGiro	=	'" . $arrPost['numDocumentoBeneficiarioGiro'] . "',
 							txtDireccionBeneficiarioGiro	=	'" . trim( $arrPost['txtDireccionBeneficiarioGiro']) . "',
 							numTelefonoGiro					=	'" . doubleval( $arrPost['numTelefonoGiro']) . "',
 							numCuentaGiro					=	'" . trim( $arrPost['numCuentaGiro']) . "',
@@ -2403,7 +2414,7 @@ class Desembolso {
 						WHERE seqSolicitud = " . $arrPost['seqSolicitudEditar'];
 
                 try {
-                    //echo $sql . "<hr>";
+                    echo $sql . "<hr>";
                     $aptBd->execute($sql);
 
                     $sql = "

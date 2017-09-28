@@ -74,13 +74,15 @@ $arrBeneficiario['telefono1'] = $claFormulario->numTelefono1;
 $arrBeneficiario['telefono2'] = $claFormulario->numTelefono2;
 $arrBeneficiario['celular'] = $claFormulario->numCelular;
 
+$claDesembolso = new Desembolso;
 if (intval($_GET['seqCasaMano'])) {
     $seqCasaMano = $_GET['seqCasaMano'];
     $claCasaMano = new CasaMano();
     $arrCasaMano = $claCasaMano->cargar($_GET['seqFormulario']);
-    $claDesembolso = $arrCasaMano[$seqCasaMano]->objRegistroOferta;
+    foreach ( $arrCasaMano[$seqCasaMano]->objRegistroOferta as $txtClave => $txtValor ){
+       $claDesembolso->$txtClave = $txtValor;
+    }
 } else {
-    $claDesembolso = new Desembolso;
     $claDesembolso->cargarDesembolso($_GET['seqFormulario']);
 }
 
@@ -161,8 +163,10 @@ if ($_GET['bolEscrituracion'] == 1) {
         $claDesembolso->$txtClave = $txtValor;
     }
 }
-$claSmarty->assign("claDesembolso", $claDesembolso);
 
+//pr($claDesembolso);
+
+$claSmarty->assign("claDesembolso", $claDesembolso);
 $claSmarty->assign("txtUsuarioSesion", $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']);
 $claSmarty->assign("numTotalFolios", $numTotalFolios);
 $claSmarty->assign("numRegistro", $numRegistros);

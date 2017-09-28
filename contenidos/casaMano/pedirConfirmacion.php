@@ -1,7 +1,7 @@
 <?php
 
     $txtPrefijoRuta = "../../";
-	include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
+	 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
     include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos']   . "archivos/inclusionSmarty.php" );
@@ -10,6 +10,8 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "FormularioSubsidios.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "Seguimiento.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "CasaMano.class.php" );
+
+    //pr($_POST);
 
     // declaracion de variables necesarias
     $bolCambios = false;
@@ -64,6 +66,37 @@
         $claSmarty->display( "desembolso/pedirConfirmacion.tpl" );
 
     } else {
+
+        $arrIgnorarCampos[] = "txtDireccion";
+        $arrIgnorarCampos[] = "txtDireccionSolucion";
+        $arrIgnorarCampos[] = "numTelefono1";
+        $arrIgnorarCampos[] = "numTelefono2";
+        $arrIgnorarCampos[] = "numCelular";
+        $arrIgnorarCampos[] = "seqCiudad";
+        $arrIgnorarCampos[] = "seqUpz";
+        $arrIgnorarCampos[] = "seqLocalidad";
+        $arrIgnorarCampos[] = "seqBarrio";
+        $arrIgnorarCampos[] = "txtCorreo";
+
+        unset($_POST['hogar']);
+        if($_POST['txtFase'] == "postulacion") {
+           foreach ($claCasaMano->objPostulacion as $txtClave => $txtValor) {
+              if ($txtClave != "arrCiudadano") {
+                 if (!in_array($txtClave, $arrIgnorarCampos)) {
+                    $_POST[$txtClave] = $txtValor;
+                 }
+              } else {
+                 foreach ($claCasaMano->objPostulacion->$txtClave as $seqCiudadano => $objCiudadano) {
+                    $numDocumento = $objCiudadano->numDocumento;
+                    foreach ($objCiudadano as $txtCampo => $txtValue) {
+                       $_POST['hogar'][$numDocumento][$txtCampo] = $txtValue;
+                    }
+                 }
+              }
+           }
+        }
+
+
         $claCasaMano->salvar( $_POST );
         imprimirMensajes( $claCasaMano->arrErrores , $claCasaMano->arrMensajes );
     }

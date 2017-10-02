@@ -635,7 +635,7 @@ class Desembolso {
                 $aptBd->execute($sql);
             } catch (Exception $objError) {
                 $arrErrores[] = $objError->getMessage();
-                echo $sql;
+                //echo $sql;
             }
         } else {
 
@@ -2414,7 +2414,7 @@ class Desembolso {
 						WHERE seqSolicitud = " . $arrPost['seqSolicitudEditar'];
 
                 try {
-                    echo $sql . "<hr>";
+                    //echo $sql . "<hr>";
                     $aptBd->execute($sql);
 
                     $sql = "

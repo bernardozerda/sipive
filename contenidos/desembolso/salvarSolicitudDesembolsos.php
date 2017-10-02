@@ -338,14 +338,26 @@
 
                 if( empty( $arrErrores ) ){
 
+                    $bolCambioEstado = true;
+                    if( $_POST['seqEstadoProceso'] == $arrCodigo['final'] ){
+                        $seqProyecto = $_SESSION['seqProyecto'];
+                        if( ! isset( $_SESSION['arrGrupos'][$seqProyecto][9] ) ){
+                            $bolCambioEstado = false;
+                        }
+                    }
+
                     // cambio estado
-                    $sql = "
-                        UPDATE T_FRM_FORMULARIO SET
-                            seqEstadoProceso = " . $_POST['seqEstadoProceso'] . "
-                        WHERE seqFormulario = " . $_POST['seqFormulario'] . "
-                    ";
-                    //echo $sql;
-                    $aptBd->execute( $sql );
+                    if( $bolCambioEstado ) {
+                        $sql = "
+                            UPDATE T_FRM_FORMULARIO SET
+                                seqEstadoProceso = " . $_POST['seqEstadoProceso'] . "
+                            WHERE seqFormulario = " . $_POST['seqFormulario'] . "
+                        ";
+                        //echo $sql;
+                        $aptBd->execute( $sql );
+                    }else{
+                        $arrErrores[] = "No tiene permisos para finalizar el proceso";
+                    }
                     
                 }	
 

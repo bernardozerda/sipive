@@ -353,7 +353,9 @@ class Desembolso {
 					esc.txtServiciosPublicos,
 					esc.txtCorreoVendedor,
 					flu.txtFlujo,
-					esc.seqCiudad
+					esc.seqCiudad,
+					esc.seqAplicacionSubsidio,
+                    esc.seqProyectosSoluciones
 				FROM T_DES_ESCRITURACION esc
 				LEFT JOIN T_DES_FLUJO flu ON esc.seqFormulario = flu.seqFormulario
 				WHERE
@@ -1142,6 +1144,8 @@ class Desembolso {
 						txtServiciosPublicos = '" . $arrPost['txtServiciosPublicos'] . "',
 						txtCorreoVendedor = '" . $arrPost['txtCorreoVendedor'] . "',
 						seqCiudad = '" . $arrPost['seqCiudad'] . "',
+						seqProyectosSoluciones = " . $arrPost['seqProyectosSoluciones'] . ",
+						seqAplicacionSubsidio = " . $arrPost['seqAplicacionSubsidio'] . ",
 						$txtCampos
 					WHERE
 						seqFormulario = " . $arrPost['seqFormulario'] . "

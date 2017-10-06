@@ -103,6 +103,7 @@ if (in_array($claFormulario->seqEstadoProceso, $claFlujoDesembolsos->arrFases[$_
     if ($_POST['fase'] == "escrituracion") {
 
         if (is_array($claDesembolso->arrEscrituracion)) {
+
             foreach ($claDesembolso->arrEscrituracion as $txtClave => $txtValor) {
                 $claDesembolso->$txtClave = $txtValor;
             }

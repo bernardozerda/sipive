@@ -26,6 +26,7 @@ $sql = "
         und.txtMatriculaInmobiliaria,
         IF(und.bolLegalizado=0,'NO','SI') as bolLegalizado,
         und.fchLegalizado,
+        und.fchDevolucionExpediente,
         pgo.txtPlanGobierno,
         moa.txtModalidad,
         tes.txtTipoEsquema,
@@ -80,6 +81,7 @@ $txtArchivo .=  "txtFormulario" . $txtSeparador;
 $txtArchivo .=  "Estado del Proceso" . $txtSeparador;
 $txtArchivo .=  "Matrícula Inmobiliaria" . $txtSeparador;
 $txtArchivo .=  "Legalizado" . $txtSeparador;
+$txtArchivo .=  "Devolución" . $txtSeparador;
 $txtArchivo .=  "Fecha Legalizado" . $txtSeparador;
 $txtArchivo .=  "Plan de Gobierno" . $txtSeparador;
 $txtArchivo .=  "Modalidad" . $txtSeparador;

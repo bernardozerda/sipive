@@ -25,8 +25,8 @@ $sql = "
         CONCAT(eta.txtEtapa,' - ',epr.txtEstadoProceso) AS 'estadoProceso',
         und.txtMatriculaInmobiliaria,
         IF(und.bolLegalizado=0,'NO','SI') as bolLegalizado,
-        und.fchLegalizado,
-        und.fchDevolucionExpediente,
+        IF(und.fchLegalizado='0000:00:00',NULL,und.fchLegalizado) as fchLegalizado,
+        IF(und.fchDevolucionExpediente='0000:00:00',NULL,und.fchDevolucionExpediente) as fchDevolucionExpediente,
         pgo.txtPlanGobierno,
         moa.txtModalidad,
         tes.txtTipoEsquema,
@@ -81,8 +81,8 @@ $txtArchivo .=  "txtFormulario" . $txtSeparador;
 $txtArchivo .=  "Estado del Proceso" . $txtSeparador;
 $txtArchivo .=  "Matrícula Inmobiliaria" . $txtSeparador;
 $txtArchivo .=  "Legalizado" . $txtSeparador;
-$txtArchivo .=  "Devolución" . $txtSeparador;
 $txtArchivo .=  "Fecha Legalizado" . $txtSeparador;
+$txtArchivo .=  "Devolución" . $txtSeparador;
 $txtArchivo .=  "Plan de Gobierno" . $txtSeparador;
 $txtArchivo .=  "Modalidad" . $txtSeparador;
 $txtArchivo .=  "Esquema" . $txtSeparador;

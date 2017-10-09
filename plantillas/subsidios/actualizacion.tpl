@@ -1618,6 +1618,11 @@
     <input type="hidden" name="numDocumento" value="{$arrPost.cedula}">
     <input type="hidden" id="valAspiraSubsidio" value="{$objFormulario->valAspiraSubsidio}">
 
+    <input type="hidden" id="valAporteAvanceObra"        name="valAporteAvanceObra"        value="0">
+    <input type="hidden" id="txtSoporteAvanceObra"       name="txtSoporteAvanceObra"       value="">
+    <input type="hidden" id="valAporteMateriales"        name="valAporteMateriales"        value="0">
+    <input type="hidden" id="txtSoporteAporteMateriales" name="txtSoporteAporteMateriales" value="">
+
     <!-- valor que se usa para la advertencia de ingresos del hogar -->
     <input type="hidden" id="valSMMLV" value="{$valSMMLV}">
     {if isset( $smarty.session.arrGrupos.3.6 ) }
@@ -1625,8 +1630,6 @@
     {else}
         <input type="hidden" id="bolActivarModalidad" value="0">
     {/if}
-
-
 
 </form>
 

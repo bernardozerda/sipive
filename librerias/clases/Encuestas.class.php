@@ -368,12 +368,13 @@ class Encuestas {
                     $numDocumento = doubleval($arrLinea['NUMERO_DOC']);
                     $seqFormulario = (isset($this->arrSeqFormulario[$numDocumento])) ? intval($this->arrSeqFormulario[$numDocumento]) : 0;
                     if (!isset($arrHogar[$txtFormulario])) {
-                        $arrHogar[$txtFormulario] = $seqFormulario;
+                        $arrHogar[$txtFormulario]['formulario'] = $seqFormulario;
+                        $arrHogar[$txtFormulario]['documento'] = $numDocumento;
                     }
                 }
-                foreach ($arrHogar as $txtFormulario => $seqFormulario) {
-                    if ($seqFormulario == 0) {
-                        $arrErrores[] = "Error formulario " . $txtFormulario . ": El ciudadano reportado (" . $arrLinea['NUMERO_DOC'] . ") por la encuesta no está registrado en el sistema";
+                foreach ($arrHogar as $txtFormulario => $arrFormulario) {
+                    if ($arrFormulario['formulario'] == 0) {
+                        $arrErrores[] = "Error formulario " . $txtFormulario . ": El ciudadano reportado (" . $arrFormulario['documento'] . ") por la encuesta no está registrado en el sistema";
                     }
                 }
             }
@@ -458,7 +459,7 @@ class Encuestas {
                                     seqRespuesta,
                                     valRespuesta,
                                     numOrden
-                                ) VALUES 
+                                ) VALUES
 							";
 
                         foreach ($arrRegistro as $txtIdentificador => $txtValor) {

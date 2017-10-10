@@ -195,9 +195,6 @@ if (empty($arrErrores)) {
                 }
             } elseif($arrCiudadano['seqParentesco'] == 2){
                 $numConyuge++;
-                if ($arrCiudadano['seqTipoDocumento'] != 1 and $arrCiudadano['seqTipoDocumento'] != 2) {
-                    $arrErrores[] = "El tipo de documento seleccionado para el conyuge no es válido";
-                }
             } else {
                 $seqParentesco = $arrCiudadano['seqParentesco'];
                 if (!isset($arrParentescos[$seqParentesco])) {

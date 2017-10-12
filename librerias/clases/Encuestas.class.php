@@ -338,6 +338,8 @@ class Encuestas {
         $arrAplicaciones = array();
         try {
 
+            $aptBd->BeginTrans();
+
             // obtiene los documentos de los ciudadanos vs formularios
             $this->obtenerFormulario();
 
@@ -362,18 +364,20 @@ class Encuestas {
                 }
             } else {
                 $arrHogar = array();
+                $arrHogarError = array();
                 foreach ($arrFormulario as $numLinea => $arrLinea) {
                     $txtFormulario = $arrLinea['FORMULARIO'];
                     $numDocumento = doubleval($arrLinea['NUMERO_DOC']);
                     $seqFormulario = (isset($this->arrSeqFormulario[$numDocumento])) ? intval($this->arrSeqFormulario[$numDocumento]) : 0;
                     if (!isset($arrHogar[$txtFormulario])) {
-                        $arrHogar[$txtFormulario]['formulario'] = $seqFormulario;
-                        $arrHogar[$txtFormulario]['documento'] = $numDocumento;
+                        $arrHogar[$txtFormulario] = $seqFormulario;
+                        $arrHogarError[$txtFormulario]['formulario'] = $seqFormulario;
+                        $arrHogarError[$txtFormulario]['documento'] = $numDocumento;
                     }
                 }
-                foreach ($arrHogar as $txtFormulario => $arrFormulario) {
-                    if ($arrFormulario['formulario'] == 0) {
-                        $arrErrores[] = "Error formulario " . $txtFormulario . ": El ciudadano reportado (" . $arrFormulario['documento'] . ") por la encuesta no está registrado en el sistema";
+                foreach ($arrHogarError as $txtFormulario => $arrDatos) {
+                    if ($arrDatos['formulario'] == 0) {
+                        $arrErrores[] = "Error formulario " . $txtFormulario . ": El ciudadano reportado (" . $arrDatos['documento'] . ") por la encuesta no está registrado en el sistema";
                     }
                 }
             }
@@ -386,10 +390,11 @@ class Encuestas {
                 // Inactiva las aplicaciones anteriores que haya tenido el mismo hogar
                 // Se pueden tener varias aplicaciones para el mismo hogar pero solo una activa
                 $sql = "
-							update t_enc_aplicacion set
-								bolActiva = 0
-							where seqDiseno = " . $this->seqDiseno . "
-							and seqFormulario in ( " . implode(",", $arrHogar) . " )";
+                    update t_enc_aplicacion set
+                        bolActiva = 0
+                    where seqDiseno = " . $this->seqDiseno . "
+                    and seqFormulario in ( " . implode(",", $arrHogar) . " )
+                ";
                 $aptBd->execute($sql);
 
                 foreach ($arrFormulario as $numLinea => $arrRegistro) {
@@ -398,26 +403,26 @@ class Encuestas {
                     $seqFormulario = $arrHogar[$txtFormulario];
 
                     $sql = "
-							INSERT INTO t_enc_aplicacion(
-							  seqDiseno,
-							  txtNombreCargue,
-							  seqFormulario,
-							  txtFormulario,
-							  fchAplicacion,
-							  fchCarga,
-							  bolActiva,
-							  seqUsuarioCarga
-							) VALUES (
-							  " . $this->seqDiseno . ",
-							  '" . trim($txtNombre) . "',
-							  " . $seqFormulario . ",
-							  '" . $arrRegistro['FORMULARIO'] . "',
-							  '" . $arrRegistro['FECHA'] . "',
-							  NOW(),
-							  1,
-							  " . $_SESSION['seqUsuario'] . "
-							 );
-						";
+                        INSERT INTO t_enc_aplicacion(
+                            seqDiseno,
+                            txtNombreCargue,
+                            seqFormulario,
+                            txtFormulario,
+                            fchAplicacion,
+                            fchCarga,
+                            bolActiva,
+                            seqUsuarioCarga
+                        ) VALUES (
+                            " . $this->seqDiseno . ",
+                            '" . trim($txtNombre) . "',
+                            " . $seqFormulario . ",
+                            '" . $arrRegistro['FORMULARIO'] . "',
+                            '" . $arrRegistro['FECHA'] . "',
+                            NOW(),
+                            1,
+                            " . $_SESSION['seqUsuario'] . "
+                         );
+                    ";
                     $aptBd->execute($sql);
                     $seqAplicacion = $aptBd->Insert_ID();
 
@@ -425,12 +430,12 @@ class Encuestas {
                     unset($arrRegistro['FORMULARIO']); // formulario
 
                     $sql = "
-                            INSERT INTO t_enc_aplicacion_formulario (
-                                seqAplicacion,
-                                seqRespuesta,
-                                valRespuesta
-                            ) VALUES
-                        ";
+                        INSERT INTO t_enc_aplicacion_formulario (
+                            seqAplicacion,
+                            seqRespuesta,
+                            valRespuesta
+                        ) VALUES
+                    ";
 
                     foreach ($arrRegistro as $txtIdentificador => $txtValor) {
                         $seqRespuesta = $this->obtenerSecuencialRespuesta($txtIdentificador, $txtValor);
@@ -453,13 +458,13 @@ class Encuestas {
                         $seqAplicacion = $arrAplicaciones[$txtFormulario];
 
                         $sql = "
-                                INSERT INTO t_enc_aplicacion_ciudadano (
-                                    seqAplicacion,
-                                    seqRespuesta,
-                                    valRespuesta,
-                                    numOrden
-                                ) VALUES
-							";
+                            INSERT INTO t_enc_aplicacion_ciudadano (
+                                seqAplicacion,
+                                seqRespuesta,
+                                valRespuesta,
+                                numOrden
+                            ) VALUES
+                        ";
 
                         foreach ($arrRegistro as $txtIdentificador => $txtValor) {
                             $seqRespuesta = $this->obtenerSecuencialRespuesta($txtIdentificador, $txtValor);
@@ -472,10 +477,12 @@ class Encuestas {
                     }
                 }
             }
+
+            $aptBd->CommitTrans();
+
         } catch (Exception $objError) {
-            echo $objError->getMessage() . "<hr>";
-            echo $objError->getTrace() . "<hr>";
-            die();
+            $arrErrores[] = $objError->getMessage();
+            $aptBd->RollbackTrans();
         }
         return $arrErrores;
     }
@@ -1039,7 +1046,7 @@ class Encuestas {
         $numPosicionSalud = $this->arrVariablesCalificacion[$seqDiseno]['salud'];
         $numPosicionIpes = $this->arrVariablesCalificacion[$seqDiseno]['ipes'];
 
-
+        // integracion social
         if ($numPosicionIntegracion == 0) {
             $arrVariables['variables']['bolIntegracionSocial'] = $claFormulario->bolIntegracionSocial;
         } else {
@@ -1051,7 +1058,7 @@ class Encuestas {
             }
         }
 
-// secretaria de educacion
+        // secretaria de educacion
         if ($numPosicionEducacion == 0) {
             $arrVariables['variables']['bolSecEducacion'] = $claFormulario->bolSecEducacion;
         } else {
@@ -1063,7 +1070,7 @@ class Encuestas {
             }
         }
 
-// secretaria de la mujer
+        // secretaria de la mujer
         if ($numPosicionMujer == 0) {
             $arrVariables['variables']['bolSecMujer'] = $claFormulario->bolSecMujer;
         } else {
@@ -1075,7 +1082,7 @@ class Encuestas {
             }
         }
 
-// alta consejeria
+        // alta consejeria
         if ($numPosicionAltaCon == 0) {
             $arrVariables['variables']['bolAltaCon'] = $claFormulario->bolAltaCon;
         } else {
@@ -1087,7 +1094,7 @@ class Encuestas {
             }
         }
 
-// salud
+        // salud
         if ($numPosicionSalud == 0) {
             $arrVariables['variables']['bolSecSalud'] = $claFormulario->bolSeqSalud;
         } else {
@@ -1099,7 +1106,7 @@ class Encuestas {
             }
         }
 
-// ipes
+        // ipes
         if ($numPosicionIpes == 0) {
             $arrVariables['variables']['bolIpes'] = $claFormulario->bolIpes;
         } else {

@@ -178,6 +178,19 @@
 
 	}
 
+	// verifica que los que contestan la encuesta este dentro de los ciudadanos
+    $arrDocumentos = array();
+	if( ! empty( $arrCiudadano ) ) {
+        foreach ($arrCiudadano as $arrDatos) {
+            $arrDocumentos[] = $arrDatos['NUM_DOCUM'];
+        }
+        foreach($arrFormulario as $arrAplicacion){
+            if( ! in_array( $arrAplicacion['NUMERO_DOC'] , $arrDocumentos ) ){
+                $arrErrores[] = "Error Formulario " . $arrAplicacion['FORMULARIO'] . " El documento " . $arrAplicacion['NUMERO_DOC'] . " no se encuentra dentro de los ciudadanos encuestados";
+            }
+        }
+    }
+
 	// Si no hay errores salva la informacion
 	if(empty($arrErrores)){
 		$numInicio = time();

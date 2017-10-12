@@ -27,91 +27,90 @@ class Encuestas {
         $this->arrAplicacion = Array();
 
         // Para el diseno de potenciales beneficiarios (seqDiseno 1)
-        $this->arrVariablesCalificacion[1]['orden']           = 52;
-        $this->arrVariablesCalificacion[1]['cedula']          = 61;
-        $this->arrVariablesCalificacion[1]['edad']            = 81;
-        $this->arrVariablesCalificacion[1]['primerNombre']    = 53;
-        $this->arrVariablesCalificacion[1]['segundoNombre']   = 54;
-        $this->arrVariablesCalificacion[1]['primerApellido']  = 55;
+        $this->arrVariablesCalificacion[1]['orden'] = 52;
+        $this->arrVariablesCalificacion[1]['cedula'] = 61;
+        $this->arrVariablesCalificacion[1]['edad'] = 81;
+        $this->arrVariablesCalificacion[1]['primerNombre'] = 53;
+        $this->arrVariablesCalificacion[1]['segundoNombre'] = 54;
+        $this->arrVariablesCalificacion[1]['primerApellido'] = 55;
         $this->arrVariablesCalificacion[1]['segundoApellido'] = 56;
-        $this->arrVariablesCalificacion[1]['aniosAprobados']  = 125;
-        $this->arrVariablesCalificacion[1]['secundaria']      = 120;
-        $this->arrVariablesCalificacion[1]['tecnico']         = 121;
-        $this->arrVariablesCalificacion[1]['tecnologo']       = 122;
-        $this->arrVariablesCalificacion[1]['universitario']   = 123;
-        $this->arrVariablesCalificacion[1]['posgrado']        = 124;
-        $this->arrVariablesCalificacion[1]['jefeHogar']       = 62;
-        $this->arrVariablesCalificacion[1]['afiliadoSalud']   = 155;
-        $this->arrVariablesCalificacion[1]['noAfiliado']      = 156;
-        $this->arrVariablesCalificacion[1]['asalariado']      = 252;
-        $this->arrVariablesCalificacion[1]['independiente']   = 253;
-        $this->arrVariablesCalificacion[1]['pensiones']       = 254;
-        $this->arrVariablesCalificacion[1]['hijo']            = 64;
-        $this->arrVariablesCalificacion[1]['conyuge']         = 63;
-        $this->arrVariablesCalificacion[1]['condiciones']     = 161;
-        $this->arrVariablesCalificacion[1]['indigena']        = 82;
-        $this->arrVariablesCalificacion[1]['gitano']          = 83;
-        $this->arrVariablesCalificacion[1]['raizal']          = 84;
-        $this->arrVariablesCalificacion[1]['palenquero']      = 85;
-        $this->arrVariablesCalificacion[1]['negro']           = 86;
-        $this->arrVariablesCalificacion[1]['intersexual']     = 74;
-        $this->arrVariablesCalificacion[1]['homosexual']      = 75;
-        $this->arrVariablesCalificacion[1]['bisexual']        = 76;
-        $this->arrVariablesCalificacion[1]['transgenero']     = 80;
-        $this->arrVariablesCalificacion[1]['hombre']          = 72;
-        $this->arrVariablesCalificacion[1]['mujer']           = 73;
-        $this->arrVariablesCalificacion[1]['cohabitacion']    = 35;
-        $this->arrVariablesCalificacion[1]['dormitorios']     = 38;
-        $this->arrVariablesCalificacion[1]['integracion']     = 0;
-        $this->arrVariablesCalificacion[1]['educacion']       = 0;
-        $this->arrVariablesCalificacion[1]['mujer']           = 0;
-        $this->arrVariablesCalificacion[1]['salud']           = 0;
-        $this->arrVariablesCalificacion[1]['altacon']         = 0;
-        $this->arrVariablesCalificacion[1]['ipes']            = 0;
+        $this->arrVariablesCalificacion[1]['aniosAprobados'] = 125;
+        $this->arrVariablesCalificacion[1]['secundaria'] = 120;
+        $this->arrVariablesCalificacion[1]['tecnico'] = 121;
+        $this->arrVariablesCalificacion[1]['tecnologo'] = 122;
+        $this->arrVariablesCalificacion[1]['universitario'] = 123;
+        $this->arrVariablesCalificacion[1]['posgrado'] = 124;
+        $this->arrVariablesCalificacion[1]['jefeHogar'] = 62;
+        $this->arrVariablesCalificacion[1]['afiliadoSalud'] = 155;
+        $this->arrVariablesCalificacion[1]['noAfiliado'] = 156;
+        $this->arrVariablesCalificacion[1]['asalariado'] = 252;
+        $this->arrVariablesCalificacion[1]['independiente'] = 253;
+        $this->arrVariablesCalificacion[1]['pensiones'] = 254;
+        $this->arrVariablesCalificacion[1]['hijo'] = 64;
+        $this->arrVariablesCalificacion[1]['conyuge'] = 63;
+        $this->arrVariablesCalificacion[1]['condiciones'] = 161;
+        $this->arrVariablesCalificacion[1]['indigena'] = 82;
+        $this->arrVariablesCalificacion[1]['gitano'] = 83;
+        $this->arrVariablesCalificacion[1]['raizal'] = 84;
+        $this->arrVariablesCalificacion[1]['palenquero'] = 85;
+        $this->arrVariablesCalificacion[1]['negro'] = 86;
+        $this->arrVariablesCalificacion[1]['intersexual'] = 74;
+        $this->arrVariablesCalificacion[1]['homosexual'] = 75;
+        $this->arrVariablesCalificacion[1]['bisexual'] = 76;
+        $this->arrVariablesCalificacion[1]['transgenero'] = 80;
+        $this->arrVariablesCalificacion[1]['hombre'] = 72;
+        $this->arrVariablesCalificacion[1]['mujer'] = 73;
+        $this->arrVariablesCalificacion[1]['cohabitacion'] = 35;
+        $this->arrVariablesCalificacion[1]['dormitorios'] = 38;
+        $this->arrVariablesCalificacion[1]['integracion'] = 0;
+        $this->arrVariablesCalificacion[1]['educacion'] = 0;
+        $this->arrVariablesCalificacion[1]['mujer'] = 0;
+        $this->arrVariablesCalificacion[1]['salud'] = 0;
+        $this->arrVariablesCalificacion[1]['altacon'] = 0;
+        $this->arrVariablesCalificacion[1]['ipes'] = 0;
 
         // Para el diseno de caracterizacion socioeconomica (seqDiseno 3)
-        $this->arrVariablesCalificacion[3]['orden']           = 524;
-        $this->arrVariablesCalificacion[3]['cedula']          = 533;
-        $this->arrVariablesCalificacion[3]['edad']            = 534;
-        $this->arrVariablesCalificacion[3]['primerNombre']    = 525;
-        $this->arrVariablesCalificacion[3]['segundoNombre']   = 526;
-        $this->arrVariablesCalificacion[3]['primerApellido']  = 527;
+        $this->arrVariablesCalificacion[3]['orden'] = 524;
+        $this->arrVariablesCalificacion[3]['cedula'] = 533;
+        $this->arrVariablesCalificacion[3]['edad'] = 534;
+        $this->arrVariablesCalificacion[3]['primerNombre'] = 525;
+        $this->arrVariablesCalificacion[3]['segundoNombre'] = 526;
+        $this->arrVariablesCalificacion[3]['primerApellido'] = 527;
         $this->arrVariablesCalificacion[3]['segundoApellido'] = 528;
-        $this->arrVariablesCalificacion[3]['aniosAprobados']  = 598;
-        $this->arrVariablesCalificacion[3]['secundaria']      = 593;
-        $this->arrVariablesCalificacion[3]['tecnico']         = 594;
-        $this->arrVariablesCalificacion[3]['tecnologo']       = 595;
-        $this->arrVariablesCalificacion[3]['universitario']   = 596;
-        $this->arrVariablesCalificacion[3]['posgrado']        = 597;
-        $this->arrVariablesCalificacion[3]['jefeHogar']       = 535;
-        $this->arrVariablesCalificacion[3]['afiliadoSalud']   = 626;
-        $this->arrVariablesCalificacion[3]['noAfiliado']      = 627;
-        $this->arrVariablesCalificacion[3]['asalariado']      = 723;
-        $this->arrVariablesCalificacion[3]['independiente']   = 724;
-        $this->arrVariablesCalificacion[3]['pensiones']       = 725;
-        $this->arrVariablesCalificacion[3]['hijo']            = 537;
-        $this->arrVariablesCalificacion[3]['conyuge']         = 536;
-        $this->arrVariablesCalificacion[3]['condiciones']     = 632;
-        $this->arrVariablesCalificacion[3]['indigena']        = 553;
-        $this->arrVariablesCalificacion[3]['gitano']          = 554;
-        $this->arrVariablesCalificacion[3]['raizal']          = 555;
-        $this->arrVariablesCalificacion[3]['palenquero']      = 556;
-        $this->arrVariablesCalificacion[3]['negro']           = 557;
-        $this->arrVariablesCalificacion[3]['intersexual']     = 546;
-        $this->arrVariablesCalificacion[3]['homosexual']      = 547;
-        $this->arrVariablesCalificacion[3]['bisexual']        = 548;
-        $this->arrVariablesCalificacion[3]['transgenero']     = 549;
-        $this->arrVariablesCalificacion[3]['hombre']          = 544;
-        $this->arrVariablesCalificacion[3]['mujer']           = 545;
-        $this->arrVariablesCalificacion[3]['cohabitacion']    = 507;
-        $this->arrVariablesCalificacion[3]['dormitorios']     = 510;
-        $this->arrVariablesCalificacion[3]['integracion']     = 734;
-        $this->arrVariablesCalificacion[3]['educacion']       = 0;
-        $this->arrVariablesCalificacion[3]['mujer']           = 735;
-        $this->arrVariablesCalificacion[3]['salud']           = 0;
-        $this->arrVariablesCalificacion[3]['altacon']         = 0;
-        $this->arrVariablesCalificacion[3]['ipes']            = 733;
-
+        $this->arrVariablesCalificacion[3]['aniosAprobados'] = 598;
+        $this->arrVariablesCalificacion[3]['secundaria'] = 593;
+        $this->arrVariablesCalificacion[3]['tecnico'] = 594;
+        $this->arrVariablesCalificacion[3]['tecnologo'] = 595;
+        $this->arrVariablesCalificacion[3]['universitario'] = 596;
+        $this->arrVariablesCalificacion[3]['posgrado'] = 597;
+        $this->arrVariablesCalificacion[3]['jefeHogar'] = 535;
+        $this->arrVariablesCalificacion[3]['afiliadoSalud'] = 626;
+        $this->arrVariablesCalificacion[3]['noAfiliado'] = 627;
+        $this->arrVariablesCalificacion[3]['asalariado'] = 723;
+        $this->arrVariablesCalificacion[3]['independiente'] = 724;
+        $this->arrVariablesCalificacion[3]['pensiones'] = 725;
+        $this->arrVariablesCalificacion[3]['hijo'] = 537;
+        $this->arrVariablesCalificacion[3]['conyuge'] = 536;
+        $this->arrVariablesCalificacion[3]['condiciones'] = 632;
+        $this->arrVariablesCalificacion[3]['indigena'] = 553;
+        $this->arrVariablesCalificacion[3]['gitano'] = 554;
+        $this->arrVariablesCalificacion[3]['raizal'] = 555;
+        $this->arrVariablesCalificacion[3]['palenquero'] = 556;
+        $this->arrVariablesCalificacion[3]['negro'] = 557;
+        $this->arrVariablesCalificacion[3]['intersexual'] = 546;
+        $this->arrVariablesCalificacion[3]['homosexual'] = 547;
+        $this->arrVariablesCalificacion[3]['bisexual'] = 548;
+        $this->arrVariablesCalificacion[3]['transgenero'] = 552;
+        $this->arrVariablesCalificacion[3]['hombre'] = 544;
+        $this->arrVariablesCalificacion[3]['mujer'] = 545;
+        $this->arrVariablesCalificacion[3]['cohabitacion'] = 507;
+        $this->arrVariablesCalificacion[3]['dormitorios'] = 510;
+        $this->arrVariablesCalificacion[3]['integracion'] = 734;
+        $this->arrVariablesCalificacion[3]['educacion'] = 0;
+        $this->arrVariablesCalificacion[3]['mujer'] = 735;
+        $this->arrVariablesCalificacion[3]['salud'] = 0;
+        $this->arrVariablesCalificacion[3]['altacon'] = 0;
+        $this->arrVariablesCalificacion[3]['ipes'] = 733;
     }
 
     public function obtenerDiseno($seqDiseno = 0) {
@@ -124,7 +123,7 @@ class Encuestas {
                         bolFormulario, 
                         bolCiudadano 
                 from t_enc_diseno ";
-                $sql .= ($seqDiseno == 0) ? "" : "where seqDiseno = " . $seqDiseno;
+        $sql .= ($seqDiseno == 0) ? "" : "where seqDiseno = " . $seqDiseno;
         $objRes = $aptBd->execute($sql);
         while ($objRes->fields) {
             $claEncuesta = null;
@@ -267,12 +266,12 @@ class Encuestas {
         global $aptBd;
         $arrErrores = array();
         try {
-            $txtCondicion  = ( $txtIdentificador != ""                 ) ? "and res.txtIdentificador = '" . $txtIdentificador . "' " : "";
+            $txtCondicion = ( $txtIdentificador != "" ) ? "and res.txtIdentificador = '" . $txtIdentificador . "' " : "";
 
-            if( strtolower($txtDestino) != "" ){
-                if( strtolower($txtDestino) == "formulario" ){
+            if (strtolower($txtDestino) != "") {
+                if (strtolower($txtDestino) == "formulario") {
                     $txtCondicion .= "and pre.txtTablaDestino = 'T_ENC_APLICACION_FORMULARIO' ";
-                }else{
+                } else {
                     $txtCondicion .= "and pre.txtTablaDestino = 'T_ENC_APLICACION_CIUDADANO' ";
                 }
             }
@@ -381,7 +380,7 @@ class Encuestas {
             if (empty($arrErrores)) {
 
                 // Obtiene las preguntas del formulario
-                $this->obtenerPregunta("","formulario");
+                $this->obtenerPregunta("", "formulario");
 
                 // Inactiva las aplicaciones anteriores que haya tenido el mismo hogar
                 // Se pueden tener varias aplicaciones para el mismo hogar pero solo una activa
@@ -445,7 +444,7 @@ class Encuestas {
                 if ($this->bolCiudadano == 1) {
 
                     // Obtiene las preguntas del formulario
-                    $this->obtenerPregunta("","ciudadano");
+                    $this->obtenerPregunta("", "ciudadano");
 
                     foreach ($arrCiudadano as $numLinea => $arrRegistro) {
                         $txtFormulario = $arrRegistro['FORMULARIO'];
@@ -510,11 +509,11 @@ class Encuestas {
         return $arrErrores;
     }
 
-    public function listarAplicaciones($numDocumento,$seqDiseno = 0) {
+    public function listarAplicaciones($numDocumento, $seqDiseno = 0) {
         global $aptBd;
         $arrAplicaciones = array();
         $this->obtenerFormulario($numDocumento);
-        $txtCondicion = ( $seqDiseno == 0 )? "" : "AND dis.seqDiseno = " . $seqDiseno;
+        $txtCondicion = ( $seqDiseno == 0 ) ? "" : "AND dis.seqDiseno = " . $seqDiseno;
         if (intval($this->arrSeqFormulario[$numDocumento]) != 0) {
             $sql = "
                 SELECT 
@@ -543,7 +542,7 @@ class Encuestas {
                 $objRes->MoveNext();
             }
         }
-        
+
         return $arrAplicaciones;
     }
 
@@ -601,7 +600,7 @@ class Encuestas {
             }
             $seqRespuesta = ($bolRespuesta == true) ? $seqRespuesta : 0;
         } else {
-            if( ! is_null( $this->arrPregunta[$txtIdentificador]['respuesta'] ) ) {
+            if (!is_null($this->arrPregunta[$txtIdentificador]['respuesta'])) {
                 $arrPrimeraRespuesta = array_keys($this->arrPregunta[$txtIdentificador]['respuesta']);
                 $seqRespuesta = $arrPrimeraRespuesta[0];
             }
@@ -758,27 +757,27 @@ class Encuestas {
 
         // inicializa el arreglo
         $arrVariables['errores'] = array();
-        $arrVariables  = array();
-        $arrVariables['variables']['cant'] = 0; 
-        $arrVariables['variables']['edades'] = array(); 
-        $arrVariables['variables']['cantMayor'] = 0; 
-        $arrVariables['variables']['adultos'] = 0; 
-        $arrVariables['variables']['aprobadosJefe'] = 0; 
-        $arrVariables['variables']['aprobados'] = 0; 
-        $arrVariables['variables']['afiliacion'] = 0; 
-        $arrVariables['variables']['cohabitacion'] = 0; 
-        $arrVariables['variables']['dormitorios'] = 0; 
-        $arrVariables['variables']['ingresos'] = 0; 
-        $arrVariables['variables']['cantMenores'] = 0; 
-        $arrVariables['variables']['cantHijos'] = 0; 
-        $arrVariables['variables']['mujerCabHogar'] = 0; 
-        $arrVariables['variables']['conyugueHogar'] = 0; 
-        $arrVariables['variables']['cantadultoMayor'] = 0; 
-        $arrVariables['variables']['cantCondEspecial'] = 0; 
-        $arrVariables['variables']['condicionEtnica'] = 0; 
-        $arrVariables['variables']['adolecentes'] = 0; 
-        $arrVariables['variables']['hombreCabHogar'] = 0; 
-        $arrVariables['variables']['grupoLgtbi'] = 0; 
+        $arrVariables = array();
+        $arrVariables['variables']['cant'] = 0;
+        $arrVariables['variables']['edades'] = array();
+        $arrVariables['variables']['cantMayor'] = 0;
+        $arrVariables['variables']['adultos'] = 0;
+        $arrVariables['variables']['aprobadosJefe'] = 0;
+        $arrVariables['variables']['aprobados'] = 0;
+        $arrVariables['variables']['afiliacion'] = 0;
+        $arrVariables['variables']['cohabitacion'] = 0;
+        $arrVariables['variables']['dormitorios'] = 0;
+        $arrVariables['variables']['ingresos'] = 0;
+        $arrVariables['variables']['cantMenores'] = 0;
+        $arrVariables['variables']['cantHijos'] = 0;
+        $arrVariables['variables']['mujerCabHogar'] = 0;
+        $arrVariables['variables']['conyugueHogar'] = 0;
+        $arrVariables['variables']['cantadultoMayor'] = 0;
+        $arrVariables['variables']['cantCondEspecial'] = 0;
+        $arrVariables['variables']['condicionEtnica'] = 0;
+        $arrVariables['variables']['adolecentes'] = 0;
+        $arrVariables['variables']['hombreCabHogar'] = 0;
+        $arrVariables['variables']['grupoLgtbi'] = 0;
         $arrVariables['variables']['bolIntegracionSocial'] = 0;
         $arrVariables['variables']['bolSecEducacion'] = 0;
         $arrVariables['variables']['bolSecMujer'] = 0;
@@ -795,10 +794,10 @@ class Encuestas {
         $fchAplicacion = null;
         $seqAplicacion = 0;
         $seqDiseno = 0;
-        foreach( $arrAplicaciones as $arrDatos ){
-            if( $arrDatos['bolActiva'] == 1
-            and $arrDatos['bolCruces'] == 1
-            and strtotime( $fchAplicacion ) <= strtotime($arrDatos['fchAplicacion']) ){
+        foreach ($arrAplicaciones as $arrDatos) {
+            if ($arrDatos['bolActiva'] == 1
+                    and $arrDatos['bolCruces'] == 1
+                    and strtotime($fchAplicacion) <= strtotime($arrDatos['fchAplicacion'])) {
                 $fchAplicacion = $arrDatos['fchAplicacion'];
                 $seqAplicacion = $arrDatos['seqAplicacion'];
                 $seqDiseno = $arrDatos['seqDiseno'];
@@ -828,7 +827,7 @@ class Encuestas {
                 $numOrden = intval($arrCiudadano[$numPosicionOrden]);  // Orden del ciudadano
                 $numCedula = intval($arrCiudadano[$numPosicionCedula]); // Numero del documento del ciudadano
                 $numEdad = intval($arrCiudadano[$numPosicionEdad]);   // Edad del ciudadano
-                $nombres = $arrCiudadano[$numPosicionPrimerNombre]." ".$arrCiudadano[$numPosicionSegundoNombre]." ".$arrCiudadano[$numPosicionPrimerApellido]." ".$arrCiudadano[$numPosicionSegundoApellido];
+                $nombres = $arrCiudadano[$numPosicionPrimerNombre] . " " . $arrCiudadano[$numPosicionSegundoNombre] . " " . $arrCiudadano[$numPosicionPrimerApellido] . " " . $arrCiudadano[$numPosicionSegundoApellido];
                 // si no se contesta la cedula entonces toma el orden del miembro de hogar
                 if (intval($numCedula) == 0) {
                     $numCedula = $numOrden;
@@ -910,69 +909,68 @@ class Encuestas {
                     }
 
                     // afilacion salud o no afiliado
-                    $numPosicionAfiliado   = $this->arrVariablesCalificacion[$seqDiseno]['afiliadoSalud'];
+                    $numPosicionAfiliado = $this->arrVariablesCalificacion[$seqDiseno]['afiliadoSalud'];
                     $numPosicionNoAfiliado = $this->arrVariablesCalificacion[$seqDiseno]['noAfiliado'];
-                    if( intval( $arrCiudadano[$numPosicionAfiliado] ) != 0 or intval( $arrCiudadano[$numPosicionNoAfiliado] ) != 0 ){
-                        $arrVariables['variables']['afiliacion']++;
+                    if (intval($arrCiudadano[$numPosicionAfiliado]) != 0 or intval($arrCiudadano[$numPosicionNoAfiliado]) != 0) {
+                        $arrVariables['variables']['afiliacion'] ++;
                     }
 
                     // sumando ingresos del hogar
                     $numPosicionEmpleado = $this->arrVariablesCalificacion[$seqDiseno]['asalariado'];
                     $numPosicionIndependiente = $this->arrVariablesCalificacion[$seqDiseno]['independiente'];
                     $numPosicionPensionado = $this->arrVariablesCalificacion[$seqDiseno]['pensiones'];
-                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[$numPosicionEmpleado] );
-                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[$numPosicionIndependiente] );
-                    $arrVariables['variables']['ingresos'] += doubleval( $arrCiudadano[$numPosicionPensionado] );
+                    $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[$numPosicionEmpleado]);
+                    $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[$numPosicionIndependiente]);
+                    $arrVariables['variables']['ingresos'] += doubleval($arrCiudadano[$numPosicionPensionado]);
 
                     // cantHijos
                     $numPosicionHijo = $this->arrVariablesCalificacion[$seqDiseno]['hijo'];
-                    if( intval( $arrCiudadano[$numPosicionHijo] ) != 0 ){
-                        $arrVariables['variables']['cantHijos']++;
+                    if (intval($arrCiudadano[$numPosicionHijo]) != 0) {
+                        $arrVariables['variables']['cantHijos'] ++;
                     }
 
                     // conyugueHogar
                     $numPosicionConyuge = $this->arrVariablesCalificacion[$seqDiseno]['conyuge'];
-                    if( intval( $arrCiudadano[$numPosicionConyuge] ) != 0 ){
-                        $arrVariables['variables']['conyugueHogar']++;
+                    if (intval($arrCiudadano[$numPosicionConyuge]) != 0) {
+                        $arrVariables['variables']['conyugueHogar'] ++;
                     }
 
                     // condiciones especiales
                     $numPosicionCondicion = $this->arrVariablesCalificacion[$seqDiseno]['condiciones'];
-                    if( intval( $arrCiudadano[$numPosicionCondicion] ) != 0 ) {
-                        $arrVariables['variables']['cantCondEspecial']++;
+                    if (intval($arrCiudadano[$numPosicionCondicion]) != 0) {
+                        $arrVariables['variables']['cantCondEspecial'] ++;
                     }
 
                     // condicion etnica
 
-                    $numPosicionIndigena   = $this->arrVariablesCalificacion[$seqDiseno]['indigena'];
-                    $numPosicionGitano     = $this->arrVariablesCalificacion[$seqDiseno]['gitano'];
-                    $numPosicionRaizal     = $this->arrVariablesCalificacion[$seqDiseno]['raizal'];
+                    $numPosicionIndigena = $this->arrVariablesCalificacion[$seqDiseno]['indigena'];
+                    $numPosicionGitano = $this->arrVariablesCalificacion[$seqDiseno]['gitano'];
+                    $numPosicionRaizal = $this->arrVariablesCalificacion[$seqDiseno]['raizal'];
                     $numPosicionPalenquero = $this->arrVariablesCalificacion[$seqDiseno]['palenquero'];
-                    $numPosicionNegro      = $this->arrVariablesCalificacion[$seqDiseno]['negro'];
-                    if(
-                        intval( $arrCiudadano[$numPosicionIndigena] ) != 0 or
-                        intval( $arrCiudadano[$numPosicionGitano] ) != 0 or
-                        intval( $arrCiudadano[$numPosicionRaizal] ) != 0 or
-                        intval( $arrCiudadano[$numPosicionPalenquero] ) != 0 or
-                        intval( $arrCiudadano[$numPosicionNegro] )
-                    ){
-                        $arrVariables['variables']['condicionEtnica']++;
+                    $numPosicionNegro = $this->arrVariablesCalificacion[$seqDiseno]['negro'];
+                    if (
+                            intval($arrCiudadano[$numPosicionIndigena]) != 0 or
+                            intval($arrCiudadano[$numPosicionGitano]) != 0 or
+                            intval($arrCiudadano[$numPosicionRaizal]) != 0 or
+                            intval($arrCiudadano[$numPosicionPalenquero]) != 0 or
+                            intval($arrCiudadano[$numPosicionNegro])
+                    ) {
+                        $arrVariables['variables']['condicionEtnica'] ++;
                     }
 
                     // grupo lgtbi
                     $numPosicionIntersexual = $this->arrVariablesCalificacion[$seqDiseno]['intersexual'];
-                    $numPosicionHomosexual  = $this->arrVariablesCalificacion[$seqDiseno]['homosexual'];
-                    $numPosicionBisexual    = $this->arrVariablesCalificacion[$seqDiseno]['bisexual'];
+                    $numPosicionHomosexual = $this->arrVariablesCalificacion[$seqDiseno]['homosexual'];
+                    $numPosicionBisexual = $this->arrVariablesCalificacion[$seqDiseno]['bisexual'];
                     $numPosicionTransgenero = $this->arrVariablesCalificacion[$seqDiseno]['transgenero'];
-                    if(
-                        intval( $arrCiudadano[$numPosicionIntersexual] ) != 0 or
-                        intval( $arrCiudadano[$numPosicionHomosexual] ) != 0 or
-                        intval( $arrCiudadano[$numPosicionBisexual] ) != 0 or
-                        intval( $arrCiudadano[$numPosicionTransgenero] ) != 0
-                    ){
-                        $arrVariables['variables']['grupoLgtbi']++;
+                    if (
+                            intval($arrCiudadano[$numPosicionIntersexual]) != 0 or
+                            intval($arrCiudadano[$numPosicionHomosexual]) != 0 or
+                            intval($arrCiudadano[$numPosicionBisexual]) != 0 or
+                            intval($arrCiudadano[$numPosicionTransgenero]) != 0
+                    ) {
+                        $arrVariables['variables']['grupoLgtbi'] ++;
                     }
-
                 } else {
                     $arrVariables['errores'][] = "No se ha encontrado respuesta para la pregunta de AÑOS APROBADOS para el ciudadano $numCedula";
                 }
@@ -994,7 +992,6 @@ class Encuestas {
                         $numCabezaHogar = 2; // mujer o intersexual
                     }
                 }
-
             }
 
             // cohabitacion
@@ -1035,19 +1032,83 @@ class Encuestas {
         $claFormulario->cargarFormulario($seqFormulario);
 
         $numPosicionIntegracion = $this->arrVariablesCalificacion[$seqDiseno]['integracion'];
-        $numPosicionEducacion   = $this->arrVariablesCalificacion[$seqDiseno]['educacion'];
-        $numPosicionMujer       = $this->arrVariablesCalificacion[$seqDiseno]['mujer'];
-        $numPosicionAltaCon     = $this->arrVariablesCalificacion[$seqDiseno]['altacon'];
-        $numPosicionSalud       = $this->arrVariablesCalificacion[$seqDiseno]['salud'];
-        $numPosicionIpes        = $this->arrVariablesCalificacion[$seqDiseno]['ipes'];
+        $numPosicionEducacion = $this->arrVariablesCalificacion[$seqDiseno]['educacion'];
+        $numPosicionMujer = $this->arrVariablesCalificacion[$seqDiseno]['mujer'];
+        $numPosicionAltaCon = $this->arrVariablesCalificacion[$seqDiseno]['altacon'];
+        $numPosicionSalud = $this->arrVariablesCalificacion[$seqDiseno]['salud'];
+        $numPosicionIpes = $this->arrVariablesCalificacion[$seqDiseno]['ipes'];
 
 
-        $arrVariables['variables']['bolIntegracionSocial'] = ( $numPosicionIntegracion == 0 )? $claFormulario->bolIntegracionSocial : intval($this->arrAplicacion['formulario'][$numPosicionDormitorios]);
-        $arrVariables['variables']['bolSecEducacion'] = ( $numPosicionEducacion == 0 )? $claFormulario->bolSecEducacion : intval($this->arrAplicacion['formulario'][$numPosicionEducacion]);;
-        $arrVariables['variables']['bolSecMujer'] = ( $numPosicionMujer == 0 )? $claFormulario->bolSecMujer : intval($this->arrAplicacion['formulario'][$numPosicionMujer]);
-        $arrVariables['variables']['bolAltaCon'] = ( $numPosicionAltaCon == 0 )? $claFormulario->bolAltaCon : intval($this->arrAplicacion['formulario'][$numPosicionAltaCon]);
-        $arrVariables['variables']['bolSecSalud'] = ( $numPosicionSalud == 0 )? $claFormulario->bolSeqSalud : intval($this->arrAplicacion['formulario'][$numPosicionSalud]);
-        $arrVariables['variables']['bolIpes'] = ( $numPosicionIpes == 0 )? $claFormulario->bolIpes : intval($this->arrAplicacion['formulario'][$numPosicionIpes]);
+        if ($numPosicionIntegracion == 0) {
+            $arrVariables['variables']['bolIntegracionSocial'] = $claFormulario->bolIntegracionSocial;
+        } else {
+            $arrVariables['variables']['bolIntegracionSocial'] = 0;
+            foreach ($this->arrAplicacion['ciudadano'] as $numLinea => $arrCiudadano) {
+                if (isset($arrCiudadano[$numPosicionIntegracion]) and $arrCiudadano[$numPosicionIntegracion] == 1) {
+                    $arrVariables['variables']['bolIntegracionSocial'] = 1;
+                }
+            }
+        }
+
+// secretaria de educacion
+        if ($numPosicionEducacion == 0) {
+            $arrVariables['variables']['bolSecEducacion'] = $claFormulario->bolSecEducacion;
+        } else {
+            $arrVariables['variables']['bolSecEducacion'] = 0;
+            foreach ($this->arrAplicacion['ciudadano'] as $numLinea => $arrCiudadano) {
+                if (isset($arrCiudadano[$numPosicionEducacion]) and $arrCiudadano[$numPosicionEducacion] == 1) {
+                    $arrVariables['variables']['bolSecEducacion'] = 1;
+                }
+            }
+        }
+
+// secretaria de la mujer
+        if ($numPosicionMujer == 0) {
+            $arrVariables['variables']['bolSecMujer'] = $claFormulario->bolSecMujer;
+        } else {
+            $arrVariables['variables']['bolSecMujer'] = 0;
+            foreach ($this->arrAplicacion['ciudadano'] as $numLinea => $arrCiudadano) {
+                if (isset($arrCiudadano[$numPosicionMujer]) and $arrCiudadano[$numPosicionMujer] == 1) {
+                    $arrVariables['variables']['bolSecMujer'] = 1;
+                }
+            }
+        }
+
+// alta consejeria
+        if ($numPosicionAltaCon == 0) {
+            $arrVariables['variables']['bolAltaCon'] = $claFormulario->bolAltaCon;
+        } else {
+            $arrVariables['variables']['bolAltaCon'] = 0;
+            foreach ($this->arrAplicacion['ciudadano'] as $numLinea => $arrCiudadano) {
+                if (isset($arrCiudadano[$numPosicionAltaCon]) and $arrCiudadano[$numPosicionAltaCon] == 1) {
+                    $arrVariables['variables']['bolAltaCon'] = 1;
+                }
+            }
+        }
+
+// salud
+        if ($numPosicionSalud == 0) {
+            $arrVariables['variables']['bolSecSalud'] = $claFormulario->bolSeqSalud;
+        } else {
+            $arrVariables['variables']['bolSecSalud'] = 0;
+            foreach ($this->arrAplicacion['ciudadano'] as $numLinea => $arrCiudadano) {
+                if (isset($arrCiudadano[$numPosicionSalud]) and $arrCiudadano[$numPosicionSalud] == 1) {
+                    $arrVariables['variables']['bolSecSalud'] = 1;
+                }
+            }
+        }
+
+// ipes
+        if ($numPosicionIpes == 0) {
+            $arrVariables['variables']['bolIpes'] = $claFormulario->bolIpes;
+        } else {
+            $arrVariables['variables']['bolIpes'] = 0;
+            foreach ($this->arrAplicacion['ciudadano'] as $numLinea => $arrCiudadano) {
+                if (isset($arrCiudadano[$numPosicionIpes]) and $arrCiudadano[$numPosicionIpes] == 1) {
+                    $arrVariables['variables']['bolIpes'] = 1;
+                }
+            }
+        }
 
         return $arrVariables;
     }

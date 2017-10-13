@@ -91,6 +91,7 @@ Class TipoActoAdministrativo {
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "tipo de solucion";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "valor del subsidio";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "matricula inmobiliaria";
+                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "chip";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "proyecto";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "unidad habitacional";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "valor donacion";
@@ -2184,6 +2185,15 @@ Class ActoAdministrativo {
                                                  ";
                                             $aptBd->execute($sql);
                                             $txtCambios .= "txtMatriculaInmobiliaria, Valor Anterior: " . $arrRegistro['incorrecto'] . ", Valor Nuevo: " . $arrRegistro['correcto'] . "\n";
+                                            break;
+                                        case "chip":
+                                            $sql = "
+                                                    UPDATE T_FRM_FORMULARIO SET
+                                                       txtChip = '" . $arrRegistro['correcto'] . "'
+                                                    WHERE seqFormulario = " . $objFormulario->seqFormulario . "
+                                                 ";
+                                            $aptBd->execute($sql);
+                                            $txtCambios .= "txtChip, Valor Anterior: " . $arrRegistro['incorrecto'] . ", Valor Nuevo: " . $arrRegistro['correcto'] . "\n";
                                             break;
                                         case "valor donacion":
                                             $sql = "

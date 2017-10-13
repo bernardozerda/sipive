@@ -73,6 +73,7 @@ $arrExportables["plantillaestudiotitulos"] = 0; // Plantilla Estudio de Titulos
 $arrExportables["plantillaEscrituracion"] = 0; // Plantilla Escrituración
 $arrExportables["informeProyectos"] = 0;
 $arrExportables["encuestasPive"] = 0; // Encuestas PIVE
+$arrExportables["inconsistenciasInscripcion"] = 0; // Reporte de inconsistencias de inscripcion
 
 foreach ($arrGruposPertenece as $seqGrupo) {
 
@@ -208,9 +209,13 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["informeProyectos"] = 1;
             $arrExportables["archivoDesembolso"] = 1;
             $arrExportables["encuestasPive"] = 1;
+            $arrExportables["inconsistenciasInscripcion"] = 1;
             break;
         case 34: // Cruce Información Cvp
             $arrExportables["reporteInformacionCvp"] = 1;
+            break;
+        case 34: // Reportes
+            $arrExportables["inconsistenciasInscripcion"] = 1;
             break;
         case 37: // Carga Encuestas
             $arrExportables["encuestasPive"] = 1;

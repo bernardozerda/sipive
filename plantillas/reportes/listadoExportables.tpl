@@ -63,6 +63,7 @@
 {assign var=informeProyectos 		        value=$arrExportables.informeProyectos}
 {assign var=reporteInformacionCvp 		    value=$arrExportables.reporteInformacionCvp}
 {assign var=encuestasPive        		    value=$arrExportables.encuestasPive}
+{assign var=inconsistenciasInscripcion	    value=$arrExportables.inconsistenciasInscripcion}
 
 <form id="listadoExportable" >
     <center>
@@ -1100,6 +1101,15 @@
                 </tr>
             {/if}
 
+            {if $inconsistenciasInscripcion == 1}
+                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                    <td class="tituloCampo" align="left" width="60%">Inconsistencias de inscripción</td>
+                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                        <a onclick="location.href = './contenidos/reportes/inconsistenciasInscripcion.php?inicio=' + document.getElementById('fchInicio').value + '&final=' + document.getElementById('fchFin').value"
+                           href="#">Exportable</a>
+                    </td>
+                </tr>
+            {/if}
 
         </center>
         <input type="hidden" id="txtComentario" name="txtComentario" />

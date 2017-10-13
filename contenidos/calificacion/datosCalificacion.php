@@ -21,7 +21,16 @@ $claEncuestas = new Encuestas();
 <style>
     th{
         text-align: left;
+        white-space: nowrap;
+        font-size: 9px;
+        height: 15px;  
     }
+    .container  td, th{
+        clear: both;
+        height: 15px;
+    }
+    table tr:nth-child(odd) {background-color:#b9c9fe;}
+    table tr:nth-child(even) {background-color: #e8edff;}
 </style>
 <?php
 $arrayIndicadores = $claCalificacion->listarIndicadores();
@@ -35,12 +44,13 @@ foreach ($formularios as $keyF => $valueF) {
     $doc .= $valueF['seqFormulario'];
 }
 
+
 if ($doc == "") {
     echo "Este documento no se encuentra afiliado a un formulario por favor rectificar el número";
     die();
 }
 $arrayCalificacion = $claCalificacion->datosUltimaCalificacion($doc);
-$sumTotalCalificacion = $claCalificacion->datosSumaTotalCalificacion($doc); 
+$sumTotalCalificacion = $claCalificacion->datosSumaTotalCalificacion($doc);
 //echo ($sumTotalCalificacion);
 $arraySalud = $claCalificacion->obtenerDatosSalud();
 
@@ -51,7 +61,7 @@ $array = calcularCalificacion($arraDatosActuales);
 
 
 $arrayDatosEncuentas = $claEncuestas->obtenerVariablesCalificacion($documento);
-if(count($arrayDatosEncuentas['errores']) > 0){
+if (count($arrayDatosEncuentas['errores']) > 0) {
     echo $arrayDatosEncuentas['errores'][0];
     Die();
 }
@@ -100,7 +110,7 @@ if ($arrayIndicadores) {
     <table>
         <tr>
             <td>
-                <table class="table table-striped table-bordered" style="width: 85%; text-align: center">
+                <table style="width: 80%; text-align: center">
                     <tr>
                         <th colspan="4" style="text-align: center">Datos Hogar En SIPIVE</th>
                     </tr>
@@ -226,7 +236,7 @@ if ($arrayIndicadores) {
                                 <td><?php echo $valueAct['ingresos'] ?></td>
                             </tr>
                             <tr>
-                                <th>Miembros Mayores de edad</th>
+                                <th>Miembros Mayores (Resago)</th>
                                 <td><?php echo $valueAct['cantMayor'] ?></td>            
                                 <th>Miembros Adultos entre 15 y 60 años </th>
                                 <td><?php echo $valueAct['adultos'] ?></td>
@@ -244,7 +254,7 @@ if ($arrayIndicadores) {
                                 <td><?php echo $valueAct['cohabitacion'] ?></td>
                             </tr>
                             <tr>
-                                <th>Camtidad Menores </th>
+                                <th>Cantidad Menores </th>
                                 <td><?php echo $valueAct['cantMenores'] ?></td>            
                                 <th>Hijos</th>
                                 <td><?php echo $valueAct['cantHijos'] ?></td>
@@ -291,18 +301,21 @@ if ($arrayIndicadores) {
                                 <th>bolAltaCon</th>
                                 <td><?php echo $valueAct['bolAltaCon'] ?></td>
                             </tr>
+                            <tr>
+                                <th>Dormitorios</th>
+                                <td><?php echo $valueAct['dormitorios'] ?></td>
+                            </tr>
                         <?php } ?>
                     <?php } ?>
                 </table>
             </td>
             <td>
-                <table class="table table-striped table-bordered" style="width: 85%; text-align: center">
+                <table  style="width: 80%; text-align: center">
                     <tr>
                         <th colspan="4" style="text-align: center">Datos Hogar Encuestas</th>
                     </tr>
 
-                    <?php 
-                                        
+                    <?php
                     if ($arrayDatosEncuentas) {
                         $calcEducacion = ($arrayDatosEncuentas['variables']['aprobados'] / ($arrayDatosEncuentas['variables']['cantMayor']));
                         $educacion = 0;
@@ -421,7 +434,7 @@ if ($arrayIndicadores) {
                             <td><?php echo $arrayDatosEncuentas['variables']['ingresos'] ?></td>
                         </tr>
                         <tr>
-                            <th>Miembros Mayores de edad</th>
+                            <th>Miembros Mayores (Resago)</th>
                             <td><?php echo $arrayDatosEncuentas['variables']['cantMayor'] ?></td>            
                             <th>Miembros Adultos entre 15 y 60 años </th>
                             <td><?php echo $arrayDatosEncuentas['variables']['adultos'] ?></td>
@@ -439,7 +452,7 @@ if ($arrayIndicadores) {
                             <td><?php echo $arrayDatosEncuentas['variables']['cohabitacion'] ?></td>
                         </tr>
                         <tr>
-                            <th>Camtidad Menores </th>
+                            <th>Cantidad Menores </th>
                             <td><?php echo $arrayDatosEncuentas['variables']['cantMenores'] ?></td>            
                             <th>Hijos</th>
                             <td><?php echo $arrayDatosEncuentas['variables']['cantHijos'] ?></td>
@@ -490,114 +503,132 @@ if ($arrayIndicadores) {
                     <?php } ?>
                 </table>
             </td>
+
         </tr>
     </table>
+    <p>&nbsp;</p>
+    <table>
+        <tr>
+            <td>
+                <table>
 
-    <table class="table table-striped table-bordered" style="width: 85%; text-align: left">
-        <tr>
-            <td></td>
-            <th>Valor Calificación</th>
-            <th>total sistema</th>
-        </tr>
-        <tr>
-            <th style="text-align: center">Indicador</th>
-            <th style="text-align: center">Cantidad</th>           
-            <th style="text-align: center">Total Calificación</th>
-            <th style="text-align: center">Total SIPIVE Hoy</th>
-            <th style="text-align: center">Total Encuesta</th>
-        </tr>
-        <?php foreach ($arrayIndicadores as $key => $value) {
-            ?>
-            <tr>
-                <td><?php echo $value['txtIndicador'] ?></td>
-                <?php if ($arrayCalificacion) { ?>
+                    <tr>
+                        <th style="text-align: center">Indicador</th>
+                    </tr>
+                    <?php foreach ($arrayIndicadores as $key => $value) { ?>
+                        <tr>
+                            <td><?php echo $value['txtIndicador'] ?></td>                 
+                        </tr>
+                    <?php } ?>
+                    <tr>
+                        <th>Tota General</th> 
+                    </tr>
+                </table>
+
+            </td>
+            <td>
+                <table class="table table-striped table-bordered" style="width: 100%; text-align: left">
+
+
+                    <tr>
+
+                        <th style="text-align: center">Total Calificación</th>
+                        <th style="text-align: center">Total SIPIVE Hoy</th>
+                        <th style="text-align: center">Total Encuesta</th>
+                    </tr>
+                    <?php foreach ($arrayIndicadores as $key => $value) { ?>
+                        <tr>
+                            <!--<td><?php echo $value['txtIndicador'] ?></td>-->
+                            <?php if ($arrayCalificacion) { ?>
+                                <?php foreach ($arrayCalificacion as $keyCal => $valueCal) { ?>
+                                    <?php if ($valueCal['seqIndicador'] == $value['seqIndicador']) { ?>
+                                                                                                                                                               <!--<td style="text-align: center"><?php echo $valueCal['cantidadMiembros'] ?></td>   -->                                       
+                                        <td style="text-align: center"><?php echo str_replace(".", ",", $valueCal['total']) ?></td>
+
+                                    <?php } ?>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 1) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalcalBle) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEnccalBle) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 2) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalRSA) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncRSA) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 3) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalCohabitacion) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncCohabitacion) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 4) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalHacinamiento) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncHacinamiento) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 5) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalIPC) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncIPC) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 6) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalTDE) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncTDE) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 7) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalHN12) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncHN12) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 8) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalMCF) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncMCF) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 9) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalHAMY) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncHAMY) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 10) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalCDISC) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncCDISC) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 11) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalHPGE) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncHPGE) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 12) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalHN18) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncHN18) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 13) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalHCF) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncHCF) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 14) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalPLGTBI) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncPLGTBI) ?></td>
+                                <?php } ?>
+                                <?php if ($value['seqIndicador'] == 15) { ?>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalPPGD) ?></td>
+                                    <td style="text-align: center"><?php echo str_replace(".", ",", $totalEncPPGD) ?></td>
+                                <?php } ?>
+                            <?php } ?>
+                        </tr>   
+                        <?php
+                        $cont++;
+                    }
+                    ?>
                     <?php
-                    foreach ($arrayCalificacion as $keyCal => $valueCal) {
-
-                        $ingresos = $valueCal['totalIngresos'];
-                        $miembros = $valueCal['cantMiembrosHogar'];
-                        ?>
-                        <?php if ($valueCal['seqIndicador'] == $value['seqIndicador']) { ?>
-                            <td style="text-align: center"><?php echo $valueCal['cantidadMiembros'] ?></td>                                            
-                            <td style="text-align: center"><?php echo $valueCal['total'] ?></td>
-
-                        <?php } ?>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 1) { ?>
-                        <td style="text-align: center"><?php echo $totalcalBle ?></td>
-                        <td style="text-align: center"><?php echo $totalEnccalBle ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 2) { ?>
-                        <td style="text-align: center"><?php echo $totalRSA ?></td>
-                        <td style="text-align: center"><?php echo $totalEncRSA ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 3) { ?>
-                        <td style="text-align: center"><?php echo $totalCohabitacion ?></td>
-                        <td style="text-align: center"><?php echo $totalEncCohabitacion ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 4) { ?>
-                        <td style="text-align: center"><?php echo $totalHacinamiento ?></td>
-                        <td style="text-align: center"><?php echo $totalEncHacinamiento ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 5) { ?>
-                        <td style="text-align: center"><?php echo $totalIPC ?></td>
-                        <td style="text-align: center"><?php echo $totalEncIPC ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 6) { ?>
-                        <td style="text-align: center"><?php echo $totalTDE ?></td>
-                        <td style="text-align: center"><?php echo $totalEncTDE ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 7) { ?>
-                        <td style="text-align: center"><?php echo $totalHN12 ?></td>
-                        <td style="text-align: center"><?php echo $totalEncHN12 ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 8) { ?>
-                        <td style="text-align: center"><?php echo $totalMCF ?></td>
-                        <td style="text-align: center"><?php echo $totalEncMCF ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 9) { ?>
-                        <td style="text-align: center"><?php echo $totalHAMY ?></td>
-                        <td style="text-align: center"><?php echo $totalEncHAMY ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 10) { ?>
-                        <td style="text-align: center"><?php echo $totalCDISC ?></td>
-                        <td style="text-align: center"><?php echo $totalEncCDISC ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 11) { ?>
-                        <td style="text-align: center"><?php echo $totalHPGE ?></td>
-                        <td style="text-align: center"><?php echo $totalEncHPGE ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 12) { ?>
-                        <td style="text-align: center"><?php echo $totalHN18 ?></td>
-                        <td style="text-align: center"><?php echo $totalEncHN18 ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 13) { ?>
-                        <td style="text-align: center"><?php echo $totalHCF ?></td>
-                        <td style="text-align: center"><?php echo $totalEncHCF ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 14) { ?>
-                        <td style="text-align: center"><?php echo $totalPLGTBI ?></td>
-                        <td style="text-align: center"><?php echo $totalEncPLGTBI ?></td>
-                    <?php } ?>
-                    <?php if ($value['seqIndicador'] == 15) { ?>
-                        <td style="text-align: center"><?php echo $totalPPGD ?></td>
-                        <td style="text-align: center"><?php echo $totalEncPPGD ?></td>
-                    <?php } ?>
-                <?php } ?>
-            </tr>   
-            <?php
-            $cont++;
-        }
-        ?>
-        <tr style="text-align: center">
-            <th>Tota General</th>
-            <th>&nbsp;</th>           
-            <th><?php echo $sumTotalCalificacion ?></th>
-             <th><?php echo $totalcalBle+$totalRSA+$totalCohabitacion+$totalHacinamiento+$totalIPC+$totalTDE+$totalHN12+$totalMCF+$totalHAMY+$totalCDISC+$totalHPGE+$totalHN18+	$totalHCF+$totalPLGTBI+$totalPPGD; ?></th>
-              <th><?php echo $totalEnccalBle+$totalEncRSA+$totalEncCohabitacion+$totalEncHacinamiento+$totalEncIPC+$totalEncTDE+$totalEncHN12+$totalEncMCF+$totalEncHAMY+$totalEncCDISC+$totalEncHPGE+$totalEncHN18 ?></th>
-        </tr>
-        <?php
-    }
-    ?>
+                    $total1 = $totalcalBle + $totalRSA + $totalCohabitacion + $totalHacinamiento + $totalIPC + $totalTDE + $totalHN12 + $totalMCF + $totalHAMY + $totalCDISC + $totalHPGE + $totalHN18 + $totalHCF + $totalPLGTBI + $totalPPGD;
+                    $total2 = $totalEnccalBle + $totalEncRSA + $totalEncCohabitacion + $totalEncHacinamiento + $totalEncIPC + $totalEncTDE + $totalEncHN12 + $totalEncMCF + $totalEncHAMY + $totalEncCDISC + $totalEncHPGE + $totalEncHN18 + $totalEncHCF + $totalEncPLGTBI + $totalEncPPGD;
+                    ?>
+                    <tr style="text-align: center">          
+                        <th><?php echo str_replace(".", ",", $sumTotalCalificacion) ?></th>
+                        <th><?php echo str_replace(".", ",", $total1) ?></th>
+                        <th><?php echo str_replace(".", ",", $total2) ?></th>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </table>
+        </td>
+    </tr>
 </table>
+
+
 

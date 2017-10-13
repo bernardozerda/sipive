@@ -4,6 +4,7 @@ function calcularCalificacion($arraDatosActuales) {
      $arrayIndicadores = $claCalificacion->listarIndicadores();
     $resIndicadores = Array();
     foreach ($arraDatosActuales as $keyAct => $valueAct) {
+       
 
         $calcEducacion = ($valueAct['aprobados'] / ($valueAct['cantMayor']));
         $educacion = 0;

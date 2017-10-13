@@ -589,6 +589,8 @@ class FormularioSubsidios {
                 FROM T_FRM_FORMULARIO
                 WHERE seqFormulario = $seqFormulario
             ";
+            
+           // echo $sql;
             $objRes = $aptBd->execute($sql);
             if ($objRes->fields) {
 

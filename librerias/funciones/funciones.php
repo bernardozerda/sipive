@@ -965,5 +965,30 @@ function regularizarCampo($txtClave, $txtValor){
     return $txtValor;
 }
 
+function rangoEdad( $numEdad ){
+    $txtRango = "";
+    switch(true){
+        case $numEdad >= 0 and $numEdad <= 5:
+            $txtRango = "0 a 5";
+            break;
+        case $numEdad >= 6 and $numEdad <= 13:
+            $txtRango = "6 a 13";
+            break;
+        case $numEdad >= 14 and $numEdad <= 17:
+            $txtRango = "14 a 17";
+            break;
+        case $numEdad >= 18 and $numEdad <= 26:
+            $txtRango = "18 a 16";
+            break;
+        case $numEdad >= 27 and $numEdad <= 59:
+            $txtRango = "27 a 59";
+            break;
+        case $numEdad >= 60:
+            $txtRango = "Mayor de 60";
+            break;
+    }
+    return $txtRango;
+}
+
 
 ?>

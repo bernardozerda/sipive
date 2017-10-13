@@ -51,9 +51,9 @@ function variables($valor) {
         $arrEstadoCon = array();
         //$arrEstadoCon[15] = "";
         $arrEstadoCon[62] = "SELECT count(*) as cant, 
-                            case WHEN (datediff(DATE(NOW()), fchRadicacion))between 0 and 4
+                            case WHEN (workdaydiff(DATE(NOW()), fchRadicacion))between 0 and 4
                               THEN 'verde'
-                              WHEN (datediff(DATE(NOW()), fchRadicacion)) between 5 and 6
+                              WHEN (workdaydiff(DATE(NOW()), fchRadicacion)) between 5 and 6
                               THEN 'amarillo'
                               ELSE 'rojo' 
                             END
@@ -64,9 +64,9 @@ function variables($valor) {
                                GROUP BY color";
 
         $arrEstadoCon[17] = "SELECT count(*) as cant, 
-                            case WHEN (datediff(DATE(NOW()), fchInformacionSolucion))between 0 and 2
+                            case WHEN (workdaydiff(DATE(NOW()), fchInformacionSolucion))between 0 and 2
                             THEN 'verde'
-                            WHEN (datediff(DATE(NOW()), fchInformacionSolucion)) between 3 and 3
+                            WHEN (workdaydiff(DATE(NOW()), fchInformacionSolucion)) between 3 and 3
                             THEN 'amarillo'
                             ELSE 'rojo' 
                             END
@@ -77,9 +77,9 @@ function variables($valor) {
                              GROUP BY color";
 
         $arrEstadoCon[27] = "SELECT count(*) as cant, 
-                                case WHEN (datediff(DATE(NOW()), fchCreacionBusquedaOferta))between 0 and 7
+                                case WHEN (workdaydiff(DATE(NOW()), fchCreacionBusquedaOferta))between 0 and 7
                                 THEN 'verde'
-                                WHEN (datediff(DATE(NOW()), fchCreacionBusquedaOferta)) between 8 and 9
+                                WHEN (workdaydiff(DATE(NOW()), fchCreacionBusquedaOferta)) between 8 and 9
                                 THEN 'amarillo'
                                 ELSE 'rojo' 
                                 END
@@ -90,9 +90,9 @@ function variables($valor) {
                              where  und.seqProyecto = ** AND und.seqProyecto>0 and seqEstadoProceso = ¬¬
                              GROUP BY color";
         $arrEstadoCon[22] = "SELECT count(*) as cant, 
-                                case WHEN (datediff(DATE(NOW()), fchCreacionEscrituracion)) between 0 and 1
+                                case WHEN (workdaydiff(DATE(NOW()), fchCreacionEscrituracion)) between 0 and 1
                                 THEN 'verde'
-                                WHEN (datediff(DATE(NOW()), fchCreacionEscrituracion)) between 2 and 2
+                                WHEN (workdaydiff(DATE(NOW()), fchCreacionEscrituracion)) between 2 and 2
                                 THEN 'amarillo'
                                 ELSE 'rojo' 
                                 END
@@ -104,9 +104,9 @@ function variables($valor) {
                              GROUP BY color";
 
         $arrEstadoCon[23] = "SELECT count(*) as cant, 
-                                case WHEN (datediff(DATE(NOW()), fchCreacionEscrituracion)) between 0 and 2
+                                case WHEN (workdaydiff(DATE(NOW()), fchCreacionEscrituracion)) between 0 and 2
                                 THEN 'verde'
-                                WHEN (datediff(DATE(NOW()), fchCreacionEscrituracion)) between 3 and 3
+                                WHEN (workdaydiff(DATE(NOW()), fchCreacionEscrituracion)) between 3 and 3
                                 THEN 'amarillo'
                                 ELSE 'rojo' 
                                 END
@@ -118,9 +118,9 @@ function variables($valor) {
                              GROUP BY color";
 
         $arrEstadoCon[25] = "SELECT count(*) as cant, 
-                        case WHEN (datediff(DATE(NOW()), tec.fchCreacion))between 0 and 2
+                        case WHEN (workdaydiff(DATE(NOW()), tec.fchCreacion))between 0 and 2
                         THEN 'verde'
-                        WHEN (datediff(DATE(NOW()), tec.fchCreacion)) between 3 and 3
+                        WHEN (workdaydiff(DATE(NOW()), tec.fchCreacion)) between 3 and 3
                         THEN 'amarillo'
                         ELSE 'rojo' 
                         END
@@ -133,9 +133,9 @@ function variables($valor) {
                          GROUP BY color";
 
         $arrEstadoCon[26] = "SELECT count(*) as cant, 
-                        case WHEN (datediff(DATE(NOW()), tec.fchActualizacion))between 0 and 7
+                        case WHEN (workdaydiff(DATE(NOW()), tec.fchActualizacion))between 0 and 7
                         THEN 'verde'
-                        WHEN (datediff(DATE(NOW()), tec.fchActualizacion)) between 8 and 9
+                        WHEN (workdaydiff(DATE(NOW()), tec.fchActualizacion)) between 8 and 9
                         THEN 'amarillo'
                         ELSE 'rojo' 
                         END
@@ -148,9 +148,9 @@ function variables($valor) {
                          GROUP BY color";
 
         $arrEstadoCon[24] = "SELECT count(*) as cant, 
-                            case WHEN (datediff(DATE(NOW()), fchInformacionTitulos))between 0 and 2
+                            case WHEN (workdaydiff(DATE(NOW()), fchInformacionTitulos))between 0 and 2
                               THEN 'verde'
-                              WHEN (datediff(DATE(NOW()), fchInformacionTitulos)) between 3 and 3
+                              WHEN (workdaydiff(DATE(NOW()), fchInformacionTitulos)) between 3 and 3
                               THEN 'amarillo'
                               ELSE 'rojo' 
                             END
@@ -160,9 +160,9 @@ function variables($valor) {
                                where und.seqProyecto = ** AND und.seqProyecto>0 and seqEstadoProceso = ¬¬ 
                                GROUP BY color";
         $arrEstadoCon[31] = "SELECT count(*) as cant, 
-                        case WHEN (datediff(DATE(NOW()), tit.fchCreacion))between 0 and 7
+                        case WHEN (workdaydiff(DATE(NOW()), tit.fchCreacion))between 0 and 7
                         THEN 'verde'
-                        WHEN (datediff(DATE(NOW()), tit.fchCreacion)) between 8 and 9
+                        WHEN (workdaydiff(DATE(NOW()), tit.fchCreacion)) between 8 and 9
                         THEN 'amarillo'
                         ELSE 'rojo' 
                         END
@@ -175,9 +175,9 @@ function variables($valor) {
                          GROUP BY color";
 
         $arrEstadoCon[29] = "SELECT count(*) as cant, 
-                        case WHEN (datediff(DATE(NOW()), tit.fchActualizacion))between 0 and 7
+                        case WHEN (workdaydiff(DATE(NOW()), tit.fchActualizacion))between 0 and 7
                         THEN 'verde'
-                        WHEN (datediff(DATE(NOW()), tit.fchActualizacion)) between 8 and 9
+                        WHEN (workdaydiff(DATE(NOW()), tit.fchActualizacion)) between 8 and 9
                         THEN 'amarillo'
                         ELSE 'rojo' 
                         END
@@ -265,7 +265,9 @@ function modificarDatosTablero() {
 
                     $value = str_replace("¬¬", $key, $value);
 
-                  //  echo "<p>" . $value . "</p>";
+                    
+                        echo "<p>" . $value . "</p>";
+                        
 
                     $rs = mysql_query($value, $conexion) or die(mysql_error());
                     if (mysql_num_rows($rs) > 0) {
@@ -291,7 +293,6 @@ function modificarDatosTablero() {
 //                       }
 
                         mysql_query($sql, $conexion) or die(mysql_error());
-
                     }
 
                     //echo "<br>" . $sql;

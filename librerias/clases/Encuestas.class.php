@@ -859,7 +859,7 @@ class Encuestas {
                     }
 
                     // adolecente
-                    if ($numEdad >= 12 and $numEdad <= 19) {
+                    if ($numEdad >= 13 and $numEdad <= 18) {
                         $arrVariables['variables']['adolecentes'] ++;
                     }
 

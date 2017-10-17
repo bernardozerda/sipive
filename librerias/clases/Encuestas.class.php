@@ -157,7 +157,7 @@ class Encuestas {
 
             $sql = "
 					select distinct
-                                        res.txtIdentificador
+                    res.txtIdentificador
 					from t_enc_diseno dis
 					inner join t_enc_seccion sec on dis.seqDiseno = sec.seqDiseno
 					inner join t_enc_subseccion sse on sec.seqSeccion = sse.seqSeccion
@@ -206,7 +206,7 @@ class Encuestas {
             foreach ($arrArchivo as $numLinea => $arrLinea) {
 
                 if (!esNumero($arrLinea['FORMULARIO'])) {
-                    $arrErrores[] = "Archivo " . ucwords($txtDestino) . " - Error linea " . ($numLinea + 1) . ": Columna Formulario debe ser numérico";
+                    $arrErrores[] = "Archivo " . $txtDestino . " - Error linea " . ($numLinea + 1) . ": Columna Formulario debe ser numérico";
                 } else {
                     $numFormulario = intval($arrLinea['FORMULARIO']);
                 }
@@ -214,7 +214,7 @@ class Encuestas {
 
                 if ($txtDestino == "formulario") {
                     if (in_array($numFormulario, $arrFormularios)) {
-                        $arrErrores[] = "Archivo Formulario - Error linea " . ($numLinea + 1) . ": No puede tener registrado el formulario [" . $numFormulario . "] en más de una ocasión";
+                        $arrErrores[] = "Archivo " . $txtDestino . " - Error linea " . ($numLinea + 1) . ": No puede tener registrado el formulario [" . $numFormulario . "] en más de una ocasión";
                     } else {
                         $arrFormularios[] = $numFormulario;
                     }
@@ -359,7 +359,7 @@ class Encuestas {
                 }
                 foreach ($arrHogar as $txtFormulario => $seqFormulario) {
                     if ($seqFormulario == 0) {
-                        $arrErrores[] = "Error formulario " . $txtFormulario . ": Ninguno de los ciudadanos reportados por la encuesta está registrado en el sistema";
+                        $arrErrores[] = "Error formulario " . $txtFormulario . ": Ninguno de los ciudadanos reportados por la encuesta está en SiPIVE";
                     }
                 }
             } else {
@@ -377,7 +377,7 @@ class Encuestas {
                 }
                 foreach ($arrHogarError as $txtFormulario => $arrDatos) {
                     if ($arrDatos['formulario'] == 0) {
-                        $arrErrores[] = "Error formulario " . $txtFormulario . ": El ciudadano reportado (" . $arrDatos['documento'] . ") por la encuesta no está registrado en el sistema";
+                        $arrErrores[] = "Error formulario " . $txtFormulario . ": El ciudadano reportado (" . $arrDatos['documento'] . ") por la encuesta no está en SiPIVE";
                     }
                 }
             }

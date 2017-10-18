@@ -20,7 +20,7 @@
 	 * @version 1,0 Mayo 2009
 	 */
 	YAHOO.util.Event.onDOMReady( cargarListener );
-	YAHOO.util.Event.POLL_INTERVAL = 10;
+	YAHOO.util.Event.POLL_INTERVAL = 1;
 
 	/**
 	 * CARGA LOS LISTENER DESDE QUE INICIA EL APLICATIVO

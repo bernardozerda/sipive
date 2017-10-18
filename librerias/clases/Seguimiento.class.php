@@ -348,8 +348,6 @@ class Seguimiento {
         $this->arrTipoDato['valTotalRecursos'] = 'numero';
     }
 
-// fin constructor
-
     function obtenerRegistros($numLimite = 0, $numInicia = 0) {
         global $aptBd;
 
@@ -451,8 +449,8 @@ class Seguimiento {
         return $arrRegistros;
     }
 
-    /*     * *****************************************************************************************************
-     * Funci[on Creada por Ing Liliana Basto pata obtener los registros de cada Acto Administrativo
+    /*******************************************************************************************************
+     * Función Creada por Ing Liliana Basto pata obtener los registros de cada Acto Administrativo
      * **************************************************************************************************** */
 
     function obtenerRegistrosActos($numLimite = 0, $numInicia = 0) {
@@ -760,7 +758,6 @@ class Seguimiento {
         return $txtCambios;
     }
 
-
     /**
      * MIRA LOS CAMBIOS EN EL FORMULARIO DE POSTULACION / ACTUALIZACION
      */
@@ -835,7 +832,7 @@ class Seguimiento {
         return $txtCambios;
     }
 
-        public function cambiosCambioEstados($seqFormulario, $objAnterior, $objNuevo) {
+    public function cambiosCambioEstados($seqFormulario, $objAnterior, $objNuevo) {
 
             $txtSeparador = $this->txtSeparador;
             $txtSalto = $this->txtSalto;
@@ -909,8 +906,6 @@ class Seguimiento {
 
             return $txtCambios;
         }
-
-
 
     /**
      * COMPARACION DE VALORES
@@ -1022,8 +1017,6 @@ class Seguimiento {
         return $txtCambios;
     }
 
-// fin comparar valores
-
     /**
      * CAMBIOS PARA TODAS LAS FASES DE DESEMBOLSOS
      */
@@ -1048,8 +1041,6 @@ class Seguimiento {
 
         return $txtCambios;
     }
-
-// fin cambios desembolso
 
     /**
      * DESEMBOLSO PARA LA BUSQUEDA DE LA OFERTA
@@ -1821,8 +1812,6 @@ class Seguimiento {
         return $txtCambios;
     }
 
-// fin cambiso desembolso busqueda de la oferta
-
     /**
      * DESEMBOLSO EN LA REVISION JURIDICA
      */
@@ -1974,8 +1963,6 @@ class Seguimiento {
 
         return $txtCambios;
     }
-
-// fin cambios revision juridica
 
     /**
      * DESEMBOLSO EN LA REVISION TECNICA
@@ -4750,6 +4737,65 @@ class Seguimiento {
         return $this->cambiosRevisionTecnica($objAnterior,$arrPost);
 
     }
+
+    /**
+     *
+     */
+    public function actosAdministrativos( $seqTipoActo, $numActo, $fchActo, $arrCambios ){
+        global $aptBd;
+
+        // obtiene el nombre del tipo de acto
+        $arrTipoActo = aadTipo::cargarTipoActo($seqTipoActo);
+
+        // Aplica los seguimientos para todos los hogares
+        foreach( $arrCambios as $seqFormulario => $arrDatos){
+
+            $txtCambios = "<strong>[" . $seqFormulario . "] Cambios al formulario:</strong><br>";
+            foreach( $arrDatos['cambios'] as $arrRegistro ){
+                $txtCambios .=
+                    str_repeat("&nbsp;" , 5) .
+                    $arrRegistro['campo'] .
+                    ", Valor Anterior: " . $arrRegistro['anterior'] .
+                    ", Valor Nuevo: " . $arrRegistro['nuevo'];
+            }
+
+            $txtNombre = array_shift(
+                obtenerDatosTabla(
+                    "T_CIU_CIUDADANO",
+                    array( "numDocumento" , "upper(concat(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) as txtNombre" ),
+                    "numDocumento",
+                    "numDocumento" . $arrDatos['documento'] . " and seqTipoDocumento in (1,2)"
+                )
+            );
+
+            $sql = "
+                insert into t_seg_seguimiento (
+                    seqFormulario, 
+                    fchMovimiento, 
+                    seqUsuario, 
+                    txtComentario, 
+                    txtCambios, 
+                    numDocumento, 
+                    txtNombre, 
+                    seqGestion
+                ) values (
+                    " . $seqFormulario . ",
+                    now(),
+                    " . $_SESSION['seqUsuario'] . ",
+                    'Vinculado a la " . $arrTipoActo[$seqTipoActo]->txtTipoActo . " " . $numActo . " del " . $fchActo . "',
+                    '" . $txtCambios . "',
+                    " . $arrDatos['documento'] . ",
+                    '" . $txtNombre . "',
+                    46
+                )
+            ";
+            $aptBd->execute($sql);
+
+        }
+
+    }
+
+
 
 
 }

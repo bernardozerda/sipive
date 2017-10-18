@@ -4741,6 +4741,49 @@ function plantillaProyectoUnidadHabitacional( ) {
 
 }
 
+// esta funcion reemplaza la funcion plantillaProyectoUnidadHabitacional();
+function plantillaProyectos( ) {
+
+    var objPopUp = new YAHOO.widget.Panel(
+        "pop",
+        {
+            height: "500px",
+            width: "900px",
+            fixedcenter: true,
+            close: true,
+            draggable: true,
+            modal: true,
+            visible: true
+        }
+    );
+
+    var fncExito = function (objRespuesta) {
+        objPopUp.setHeader("Consulta de proyecto y unidad habitacional");
+        objPopUp.setBody(objRespuesta.responseText);
+        objPopUp.render(document.body);
+        objPopUp.show();
+    }
+
+    var fncFalla = function (objRespuesta) {
+        objPopUp.setHeader("Error al abrir el documento");
+        objPopUp.setBody(objRespuesta.status + ": " + objRespuesta.statusText);
+        objPopUp.render(document.body);
+        objPopUp.show();
+    }
+
+    var objRetorno = {
+        success: fncExito,
+        failure: fncFalla
+    }
+
+    YAHOO.util.Connect.asyncRequest(
+        "POST",
+        "./contenidos/aad/guiaProyectos.php",
+        objRetorno
+    );
+
+}
+
 function plantillaActoAdministrativo(idTipoActo) {
 
     var objTipoActo = YAHOO.util.Dom.get(idTipoActo);
@@ -8267,12 +8310,10 @@ function exportarCartasAsignacion() {
 // FUNCIONES PARA EL NUEVO MODULO DE ACTOS ADMINISTRATIVOS
 
 fncTabActoAdministrativo = function () {
-
     eliminarObjeto("listenerTabActoAdministrativo");
     YAHOO.util.Event.onContentReady("listenerTabActoAdministrativo", fncTabActoAdministrativo);
-
     var objTabView = new YAHOO.widget.TabView('tabActoAdministrativo');
-
+    YAHOO.util.Dom.get("tabActoAdministrativo").style.visibility = "visible";
 }
 YAHOO.util.Event.onContentReady("listenerTabActoAdministrativo", fncTabActoAdministrativo);
 
@@ -10393,3 +10434,96 @@ function eliminarActoAdministrativo( numActo , fchActo ){
     objDialogo1.show();
 
 }
+
+// esta funcion reemplaza la funcion eliminarActoAdministrativo
+function eliminarAAD( numActo , fchActo ){
+
+    txtMensaje  = "<form method='POST' enctype='multipart/form-data' id='frmEliminarActos' onSubmit='return false;'>";
+    txtMensaje += "<table>";
+    txtMensaje += "<tr><td class='msgError'>Indique el motivo por el que realiza la eliminación del acto adminsitrativo " + numActo + " de " + fchActo + "</td></tr>";
+    txtMensaje += "<tr><td><textarea name='txtMotivo' id='txtMotivo' style='width: 100%; height: 100px;'></textarea></td></tr>";
+    txtMensaje += "</table>";
+    txtMensaje += "<input type='hidden' name='numActo' value='" + numActo + "'>";
+    txtMensaje += "<input type='hidden' name='fchActo' value='" + fchActo + "'>";
+    txtMensaje += "</form>";
+
+    var handleOk = function () {
+        if( YAHOO.util.Dom.get('txtMotivo').value == "" ){
+            alert("Indique el motivo para eliminar el acto administrativo");
+        }else{
+            someterFormulario("mensajes",this.form,"./contenidos/aad/eliminar.php",false,true);
+            this.cancel();
+        }
+
+    }
+
+    var handleErr = function () {
+        this.cancel();
+    }
+
+    var objAtributos = {
+        width: "350px",
+        height: "200px",
+        effect: {
+            effect: YAHOO.widget.ContainerEffect.FADE,
+            duration: 0
+        },
+        fixedcenter: true,
+        zIndex: 1,
+        visible: false,
+        modal: true,
+        draggable: false,
+        close: false,
+        text: txtMensaje,
+        buttons: [
+            {
+                text: "Aceptar",
+                handler: handleOk,
+                isDefault: true
+            },
+            {
+                text: "Cancelar",
+                handler: handleErr
+            }
+        ]
+    }
+
+    // INSTANCIA EL OBJETO DIALOGO
+    var objDialogo1 = new YAHOO.widget.SimpleDialog("aad", objAtributos);
+
+    // Muestra el cuadro de dialogo
+    objDialogo1.setHeader("Atención !!");
+    objDialogo1.render(document.body);
+    objDialogo1.show();
+
+}
+
+var detallesAAD = function(){
+    $('#detallesAAD').DataTable({
+        "lengthMenu": [[5,10], [5,10]],
+        "scrollX": true,
+        "dom": 'lftp'
+    });
+
+    objSelect = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "select",
+        "detallesAAD_wrapper"
+    );
+
+    objInput = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "input",
+        "detallesAAD_wrapper"
+    );
+
+    objSelect.className = "inputLogin";
+    objInput.className = "inputLogin";
+
+    objPaginador = YAHOO.util.Dom.get("detallesAAD_paginate");
+    objPaginador.style.textAlign = "center";
+
+    eliminarObjeto("listenerDetallesAAD");
+    YAHOO.util.Event.onContentReady("listenerDetallesAAD",detallesAAD);
+}
+YAHOO.util.Event.onContentReady("listenerDetallesAAD",detallesAAD);

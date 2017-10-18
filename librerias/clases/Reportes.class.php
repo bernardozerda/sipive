@@ -4161,8 +4161,38 @@ WHERE ( tdo.seqTipoDocumento =1 OR tdo.seqTipoDocumento =2 OR tdo.seqTipoDocumen
 
                     $bolSinErrores = true;
 
-                    // inhabilidad para cantidad de miembros de hogar
+                    // suma los documentos dela base de datos
+                    // y cuenta otras variables para cruces
                     $numMiembrosFormulario = count($claFormulario->arrCiudadano);
+                    $numDocumentosFormulario = 0;
+                    $numEtnias = 0;
+                    $numCondiciones = 0;
+                    $numSalud = 0;
+                    foreach( $claFormulario->arrCiudadano as $objCiudadano ){
+                        $numDocumentosFormulario += $objCiudadano->numDocumento;
+                        if( intval($objCiudadano->seqEtnia) > 1 ){
+                            $numEtnias++;
+                        }
+                        if( intval($objCiudadano->seqCondicionEspecial)  == 3 or
+                            intval($objCiudadano->seqCondicionEspecial2) == 3 or
+                            intval($objCiudadano->seqCondicionEspecial3) == 3
+                        ){
+                            $numCondiciones++;
+                        }
+                        if( intval($objCiudadano->seqSalud) == 1 or
+                            intval($objCiudadano->seqSalud) == 2
+                        ){
+                            $numSalud++;
+                        }
+                    }
+
+                    // suma los documentos de las encuestas
+                    $numDocumentosEncuesta = 0;
+                    foreach( $arrVariables['variables']['edades'] as $cedula => $edad ){
+                        $numDocumentosEncuesta += $cedula;
+                    }
+
+                    // inhabilidad para cantidad de miembros de hogar
                     if( $numMiembrosFormulario != $arrVariables['variables']['cant'] ){
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
@@ -4171,31 +4201,50 @@ WHERE ( tdo.seqTipoDocumento =1 OR tdo.seqTipoDocumento =2 OR tdo.seqTipoDocumen
                         $arrEncuestas[$numPosicion]['DETALLE'] = "Miembros Inscritos SiPIVE: " . $numMiembrosFormulario . "; Miembros Encuesta: " . $arrVariables['variables']['cant'];
                         $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
                         $bolSinErrores = false;
-                    }else{
+                    }
 
-                        // suma los documentos dela base de datos
-                        $numDocumentosFormulario = 0;
-                        foreach( $claFormulario->arrCiudadano as $objCiudadano ){
-                            $numDocumentosFormulario += $objCiudadano->numDocumento;
-                        }
+                    // inhabilidad de sumas de documentos
+                    if( $numDocumentosFormulario != $numDocumentosEncuesta ){
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Conformación del hogar";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Diferiere Número de Documento de al menos un miembro del hogar";
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
+                    }
 
-                        // suma los documentos de las encuestas
-                        $numDocumentosEncuesta = 0;
-                        foreach( $arrVariables['variables']['edades'] as $cedula => $edad ){
-                            $numDocumentosEncuesta += $cedula;
-                        }
+                    // inhabilidad por etnia
+                    if( $numEtnias != $arrVariables['variables']['condicionEtnica'] ){
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Condición étnica";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Condiciones étnicas en SiPIVE: " . $numEtnias . "; Condiciones étnicas en Encuesta: " . $arrVariables['variables']['condicionEtnica'];
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
+                    }
 
-                        // inhabilidad de sumas de documentos
-                        if( $numDocumentosFormulario != $numDocumentosEncuesta ){
-                            $numPosicion = count($arrEncuestas);
-                            $arrEncuestas[$numPosicion] = $arrDatos;
-                            $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
-                            $arrEncuestas[$numPosicion]['CAUSA'] = "Conformación del hogar";
-                            $arrEncuestas[$numPosicion]['DETALLE'] = "Diferiere Número de Documento de al menos un miembro del hogar";
-                            $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
-                            $bolSinErrores = false;
-                        }
+                    // inhabilidad por condiciones especiales
+                    if( $numCondiciones != $arrVariables['variables']['cantCondEspecial'] ){
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Discapacidad";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Discapacidades en SiPIVE: " . $numCondiciones . "; Discapacidades en Encuesta: " . $arrVariables['variables']['cantCondEspecial'];
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
+                    }
 
+                    // inhabilidad por afiliacion a salud
+                    if( $numSalud != $arrVariables['variables']['afiliacion'] ){
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Afiliación a salud";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Afiliación a salud en SiPIVE: " . $numSalud . "; Afiliación a salud en Encuesta: " . $arrVariables['variables']['afiliacion'];
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
                     }
 
                     // inhabilidad cohabitacion
@@ -4227,6 +4276,84 @@ WHERE ( tdo.seqTipoDocumento =1 OR tdo.seqTipoDocumento =2 OR tdo.seqTipoDocumen
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
                         $arrEncuestas[$numPosicion]['CAUSA'] = "Ingresos del Hogar";
                         $arrEncuestas[$numPosicion]['DETALLE'] = "Ingresos en SiPIVE: " . number_format($claFormulario->valIngresoHogar,"0",".",",") . ";  Ingresos en Encuesta: " . number_format($arrVariables['variables']['ingresos'],"0",".",",");
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
+                    }
+
+                    // inhabilidad integracion social
+                    if( $claFormulario->bolIntegracionSocial != $arrVariables['variables']['bolIntegracionSocial'] ){
+                        $txtIntegracionFormulario = ($claFormulario->bolIntegracionSocial == 1)? "SI" : "NO";
+                        $txtIntegracionEncuesta = ($arrVariables['variables']['bolIntegracionSocial'] == 1)? "SI" : "NO";
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Programas Distrito";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Integración social en SiPIVE: " . $txtIntegracionFormulario . ";  Integración social en Encuesta: " . $txtIntegracionEncuesta;
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
+                    }
+
+                    // inhabilidad educacion
+                    if( $claFormulario->bolSecEducacion != $arrVariables['variables']['bolSecEducacion'] ){
+                        $txtEducacionFormulario = ($claFormulario->bolSecEducacion == 1)? "SI" : "NO";
+                        $txtEducacionEncuesta = ($arrVariables['variables']['bolSecEducacion'] == 1)? "SI" : "NO";
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Programas Distrito";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Secretaría de educación en SiPIVE: " . $txtEducacionFormulario . ";  Secretaría de educación en Encuesta: " . $txtEducacionEncuesta;
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
+                    }
+
+                    // inhabilidad secretaria de la mujer
+                    if( $claFormulario->bolSecMujer != $arrVariables['variables']['bolSecMujer'] ){
+                        $txtMujerFormulario = ($claFormulario->bolSecMujer == 1)? "SI" : "NO";
+                        $txtMujerEncuesta = ($arrVariables['variables']['bolSecMujer'] == 1)? "SI" : "NO";
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Programas Distrito";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Secretaría de la mujer en SiPIVE: " . $txtMujerFormulario . ";  Secretaría de la mujer en Encuesta: " . $txtMujerEncuesta;
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
+                    }
+
+                    // inhabilidad secretaria de salud
+                    if( $claFormulario->bolSecSalud != $arrVariables['variables']['bolSecSalud'] ){
+                        $txtSaludFormulario = ($claFormulario->bolSecSalud == 1)? "SI" : "NO";
+                        $txtSaludEncuesta = ($arrVariables['variables']['bolSecSalud'] == 1)? "SI" : "NO";
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Programas Distrito";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Secretaría de salud en SiPIVE: " . $txtSaludFormulario . ";  Secretaría de salud en Encuesta: " . $txtSaludEncuesta;
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
+                    }
+
+                    // inhabilidad alta consejeria
+                    if( $claFormulario->bolAltaCon != $arrVariables['variables']['bolAltaCon'] ){
+                        $txtAltaFormulario = ($claFormulario->bolAltaCon == 1)? "SI" : "NO";
+                        $txtAltaEncuesta = ($arrVariables['variables']['bolAltaCon'] == 1)? "SI" : "NO";
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Programas Distrito";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Secretaría de salud en SiPIVE: " . $txtAltaFormulario . ";  Secretaría de salud en Encuesta: " . $txtAltaEncuesta;
+                        $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
+                        $bolSinErrores = false;
+                    }
+
+                    // inhabilidad IPES
+                    if( $claFormulario->bolIpes != $arrVariables['variables']['bolIpes'] ){
+                        $txtIpesFormulario = ($claFormulario->bolIpes == 1)? "SI" : "NO";
+                        $txtIpesEncuesta = ($arrVariables['variables']['bolIpes'] == 1)? "SI" : "NO";
+                        $numPosicion = count($arrEncuestas);
+                        $arrEncuestas[$numPosicion] = $arrDatos;
+                        $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
+                        $arrEncuestas[$numPosicion]['CAUSA'] = "Programas Distrito";
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Secretaría de salud en SiPIVE: " . $txtIpesFormulario . ";  Secretaría de salud en Encuesta: " . $txtIpesEncuesta;
                         $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
                         $bolSinErrores = false;
                     }

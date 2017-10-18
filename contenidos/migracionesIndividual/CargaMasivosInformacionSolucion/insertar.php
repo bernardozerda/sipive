@@ -124,7 +124,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                     } // FIN RECORRE LINEAS
                     // EJECUTA LOS INSERTS Y UPDATES
                     if ($error == "") { // Si no hay errores se ejecutan los queries
-                        // INSERTS      
+                        // INSERTS
                          global $db;
                         $separado_por_comas = implode(",", $arrFormularioArchivo);
                         $validar = validarDocumentos($separado_por_comas, $db, 27, 17, "Remisión Datos Solución");

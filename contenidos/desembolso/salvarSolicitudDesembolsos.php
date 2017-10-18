@@ -273,12 +273,25 @@
 
         if( empty( $arrErrores ) ){
 
+
+            $valDesembolsos =  $claFormulario->valAspiraSubsidio;
+            if(
+                ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
+                ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+                ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
+                ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+            ){
+                $valDesembolsos += $claFormulario->valComplementario;
+            }
+
             if( isset( $_POST['seqSolicitudEditar'] ) and intval( $_POST['seqSolicitudEditar'] ) != 0 ){
                 $seqSolicitudEditar = $_POST['seqSolicitudEditar']; 
                 if( intval( $claDesembolso->arrSolicitud[ $seqSolicitudEditar ]['valOrden'] ) == 0 ){
+
                     $valSolicitudes = $claDesembolso->arrSolicitud['valSolicitudes'] - $claDesembolso->arrSolicitud[ $seqSolicitudEditar ]['valSolicitado'];
                     $valSolicitudes += $_POST['valor'];
-                    if( $valSolicitudes > $claFormulario->valAspiraSubsidio ){
+
+                    if( $valSolicitudes > $valDesembolsos ){
                         $arrErrores[] = "No puede digitar un valor tan alto porque supera el valor del saldo (o el monto total) del subsidio";
                     }
                 }else{
@@ -286,7 +299,7 @@
                 }
             }else{
                 $valSolicitudes = $claDesembolso->arrSolicitud['valSolicitudes'] + $_POST['valor'];
-                if( $valSolicitudes > $claFormulario->valAspiraSubsidio ){
+                if( $valSolicitudes > $valDesembolsos ){
                     $arrErrores[] = "No puede digitar un valor tan alto porque supera el valor del saldo (o el monto total) del subsidio";
                 }
             }
@@ -325,14 +338,26 @@
 
                 if( empty( $arrErrores ) ){
 
+                    $bolCambioEstado = true;
+                    if( $_POST['seqEstadoProceso'] == $arrCodigo['final'] ){
+                        $seqProyecto = $_SESSION['seqProyecto'];
+                        if( ! isset( $_SESSION['arrGrupos'][$seqProyecto][9] ) ){
+                            $bolCambioEstado = false;
+                        }
+                    }
+
                     // cambio estado
-                    $sql = "
-                        UPDATE T_FRM_FORMULARIO SET
-                            seqEstadoProceso = " . $_POST['seqEstadoProceso'] . "
-                        WHERE seqFormulario = " . $_POST['seqFormulario'] . "
-                    ";
-                    //echo $sql;
-                    $aptBd->execute( $sql );
+                    if( $bolCambioEstado ) {
+                        $sql = "
+                            UPDATE T_FRM_FORMULARIO SET
+                                seqEstadoProceso = " . $_POST['seqEstadoProceso'] . "
+                            WHERE seqFormulario = " . $_POST['seqFormulario'] . "
+                        ";
+                        //echo $sql;
+                        $aptBd->execute( $sql );
+                    }else{
+                        $arrErrores[] = "No tiene permisos para finalizar el proceso";
+                    }
                     
                 }	
 

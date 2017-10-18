@@ -12,6 +12,7 @@
                 <td valign="top"><br>
                     <input type="file" name="fileDocumentos" /></td></tr>
             <tr>
+               
                 <td colspan="2" align="right">
                     <br><br><input  type="button" 
                                     value="Proceder a Calificar" 
@@ -28,6 +29,7 @@
                 </td></tr>
         </table></form>
     <br> 
+
 
     <br>
     <h3>Información de Calificación    <a href="#popup" class="popup-link"><img src="recursos/imagenes/simulador.png"  height="28px" /></a></h3>
@@ -55,14 +57,22 @@
                 <tr>
                     <td  align="center"><b>{$fechaCalificacion}</b>&nbsp;</td>
                     <td  align="center">{$cuantos}</td>
-                    <td align="center"><a href="#" onclick="cargarContenido('contenido','./contenidos/calificacion/listaCalificacion.php?fecha={$fechaCalificacion}','',true);"><img src="recursos/imagenes/list.png" width="24px"/></a></td>
+                    <td align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/calificacion/listaCalificacion.php?fecha={$fechaCalificacion}', '', true);"><img src="recursos/imagenes/list.png" width="24px"/></a></td>
                     <td align="center"><a href="contenidos/calificacion/expCalificacion.php?fchCal={$fechaCalificacion}" target='_blank'><img src="recursos/imagenes/excel-48.png" width="24px"/></a></td>
 
                 </tr>
             {/foreach}
         </table>
     </div>
+     <div style="text-align: left; left: 10%; position: relative;"><br>
+                        <button onclick="cargarContenido('contenido', './contenidos/calificacion/reporte/archivo.php', '', true);" style="width:70px;">
+                            <img src="recursos/imagenes/reportEncuesta.png" width="25px" height="25px"><br>
+                            <span style="font-size: 10px; font-weight: bold;">Exportar<br>Cal. Encuestas</span>
+                        </button>
+                    </div>
+
+
     {include file="calificacion/simulador.tpl"}
- <script src="../../librerias/javascript/dataTable.js"></script> 
+    <script src="../../librerias/javascript/dataTable.js"></script> 
 
 </center>

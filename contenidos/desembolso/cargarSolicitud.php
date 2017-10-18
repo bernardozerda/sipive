@@ -43,7 +43,9 @@
     if( isset( $claDesembolso->arrSolicitud['detalles'][ $seqSolicitud ] ) ){
     	
     	$arrRegistro = $claDesembolso->arrSolicitud['detalles'][ $seqSolicitud ];
-    	
+
+        //pr($arrRegistro);
+
     	if( intval( $arrRegistro['numRegistroPresupuestal1'] ) == 0 ){
     		$arrRegistro['numRegistroPresupuestal1'] = "Número Registro";
     	}
@@ -140,37 +142,39 @@
 			$arrRespuesta['bolBancoArrendador']       = $arrRegistro['bolBancoArrendador'];
 			$arrRespuesta['txtBancoArrendador']       = $arrRegistro['txtBancoArrendador'];
     	}
-    	
-    	/*if( $arrRegistro['numProyectoInversion'] == 488 ){
-    		$arrRespuesta['proyecto488'] = 1;
-    		$arrRespuesta['proyecto644'] = 0;
-    	}else{
-    		$arrRespuesta['proyecto488'] = 0;
-    		$arrRespuesta['proyecto644'] = 1;
-    	}*/
-		
+
 		if( $arrRegistro['numProyectoInversion'] == 488 ){
-    		$arrRespuesta['proyecto488'] = 1;
-    		$arrRespuesta['proyecto644'] = 0;
-			$arrRespuesta['proyecto435'] = 0;
-			$arrRespuesta['proyecto801'] = 0;
+    		$arrRespuesta['proyecto488']  = 1;
+    		$arrRespuesta['proyecto644']  = 0;
+			$arrRespuesta['proyecto435']  = 0;
+			$arrRespuesta['proyecto801']  = 0;
+			$arrRespuesta['proyecto1075'] = 0;
     	} else if ( $arrRegistro['numProyectoInversion'] == 644 ) {
-    		$arrRespuesta['proyecto488'] = 0;
-    		$arrRespuesta['proyecto644'] = 1;
-			$arrRespuesta['proyecto435'] = 0;
-			$arrRespuesta['proyecto801'] = 0;
+    		$arrRespuesta['proyecto488']  = 0;
+    		$arrRespuesta['proyecto644']  = 1;
+			$arrRespuesta['proyecto435']  = 0;
+			$arrRespuesta['proyecto801']  = 0;
+            $arrRespuesta['proyecto1075'] = 0;
     	} else if ( $arrRegistro['numProyectoInversion'] == 435 ) {
-    		$arrRespuesta['proyecto488'] = 0;
-    		$arrRespuesta['proyecto644'] = 0;
-			$arrRespuesta['proyecto435'] = 1;
-			$arrRespuesta['proyecto801'] = 0;
+    		$arrRespuesta['proyecto488']  = 0;
+    		$arrRespuesta['proyecto644']  = 0;
+			$arrRespuesta['proyecto435']  = 1;
+			$arrRespuesta['proyecto801']  = 0;
+            $arrRespuesta['proyecto1075'] = 0;
     	} else if ( $arrRegistro['numProyectoInversion'] == 801 ) {
-    		$arrRespuesta['proyecto488'] = 0;
-    		$arrRespuesta['proyecto644'] = 0;
-			$arrRespuesta['proyecto435'] = 0;
-			$arrRespuesta['proyecto801'] = 1;
-    	}
-    	
+    		$arrRespuesta['proyecto488']  = 0;
+    		$arrRespuesta['proyecto644']  = 0;
+			$arrRespuesta['proyecto435']  = 0;
+			$arrRespuesta['proyecto801']  = 1;
+            $arrRespuesta['proyecto1075'] = 0;
+    	}  else if ( $arrRegistro['numProyectoInversion'] == 1075 ) {
+            $arrRespuesta['proyecto488']  = 0;
+            $arrRespuesta['proyecto644']  = 0;
+            $arrRespuesta['proyecto435']  = 0;
+            $arrRespuesta['proyecto801']  = 0;
+            $arrRespuesta['proyecto1075'] = 1;
+        }
+
     	$arrRespuesta['numeroRadicado']				= $arrRegistro['numRadiacion'];
     	$arrRespuesta['fechaRadicado']				= $arrRegistro['fchRadicacionTexto'];
     	$arrRespuesta['numeroOrden']				= $arrRegistro['numOrden'];
@@ -186,15 +190,15 @@
     	$arrRespuesta['numCuentaGiro']				= $arrRegistro['numCuentaGiro'];
     	$arrRespuesta['txtTipoCuentaGiro']          = $arrRegistro['txtTipoCuentaGiro'];
     	$arrRespuesta['seqBancoGiro']               = $arrRegistro['seqBancoGiro'];
-		
+
 //    	pr( $arrRespuesta );
-    	
+
     	$txtSeparador = "";
     	
     	$txtRespuesta = "var objRespuesta = { " . $txtSeparador;
     	foreach( $arrRespuesta as  $txtCampo => $txtValor ){
     		$txtRespuesta .= $txtCampo . ":";
-    		if( $txtCampo == "numCuentaGiro" ){
+    		if( $txtCampo == "numCuentaGiro" or  $txtCampo == "numDocumentoBeneficiarioGiro"){
     			$txtRespuesta .= "'" . $txtValor ."',"  . $txtSeparador;
     		}else if( is_numeric( $txtValor ) == 1 ){
     			$txtRespuesta .=  $txtValor . ","  . $txtSeparador;

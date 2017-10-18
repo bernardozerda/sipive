@@ -31,7 +31,7 @@ class MYPDF extends TCPDF {
         $this->setPageMark();
         $path = K_PATH_IMAGES;
         $path = explode('librerias', $path);
-        $image_file = $path[0] . 'recursos\imagenes\escudo.jpg';
+        $image_file = $path[0] . 'recursos/imagenes/escudo.jpg';
 
         $this->Image($image_file, 90, 10, 25, 25); //, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
     }
@@ -49,10 +49,10 @@ class MYPDF extends TCPDF {
         $this->SetFont('times', null, 8);
         $path = K_PATH_IMAGES;
         $path = explode('librerias', $path);
-        $image_file = $path[0] . 'recursos\imagenes\certificados.png';
-        $image_file2 = $path[0] . 'recursos\imagenes\bta_positiva.jpg';
+        $image_file = $path[0] . 'recursos/imagenes/certificados.png';
+        $image_file2 = $path[0] . 'recursos/imagenes/bta_positiva.jpg';
 
-        //$this->Image($image_file, 60, 260, 80, 25); //, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($image_file, 60, 260, 80, 25); //, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
         $this->Image($image_file2, 150, 260, 40, 25);
         $txt = 'Calle 52 No. 13-64, Conmutador: 358 1600,          www.habitatbogota.gov.co,   @habitatComunica,        Código Postal: 11231';
@@ -176,9 +176,9 @@ $pdf->writeHTML($html, true, false, true, false, '');
 
 $path = K_PATH_IMAGES;
 $path = explode('librerias', $path);
-$image_file = $path[0] . 'recursos\imagenes\firma.JPG';
-$pdf->writeHTML("<b>Cordialmente,</b><p>&nbsp;</p>", true, false, true, false, '');
-$pdf->Image($image_file, 15, 208, 75, 30, 'JPG', '', '', false, 150, '', false, false, 0, false, false, false);
+$image_file = $path[0] . 'recursos/imagenes/firma.jpg';
+///$pdf->writeHTML("<b>Cordialmente,</b><p>&nbsp;</p>", true, false, true, false, '');
+$pdf->Image($image_file, 15, 180, 75, 30, 'jpg', '', '', false, 150, '', false, false, 0, false, false, false);
 $pdf->writeHTML("<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><b>MAURICIO CORTÉS GARZÓN</b>", true, false, true, false, '');
 $pdf->writeHTML("Subsecretarío de la Gestión Financiera ", true, false, true, false, '');
 

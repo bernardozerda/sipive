@@ -466,7 +466,7 @@ function validarCalificacion() {
     });
 }
 
-function exportableExcel(array){
+function exportableExcel(array) {
 
     var url = "../../migracionesIndividual/generarLinks.php"; // El script a dónde se realizará la petición.
     $.ajax({
@@ -482,3 +482,26 @@ function exportableExcel(array){
         }
     });
 }
+
+function mostrarPagina(value) {
+    var page = 'archivosAfiliados.php'
+//    if (value == 1) {
+//        page = 'archivosAfiliados.php'
+//    }
+
+    var url = "../../reportes/cargarFonvivienda/" + page; // El script a dónde se realizará la petición.
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            "value": value
+        }, // Adjuntar los campos del formulario enviado.
+        success: function (data)
+        {
+            $("#ContentPage").html(data); // Mostrar la respuestas del script PHP.
+
+        }
+    });
+    console.log(value);
+}
+

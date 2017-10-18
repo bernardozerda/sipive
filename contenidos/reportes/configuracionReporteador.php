@@ -104,6 +104,8 @@
 	$arrCampos["bolAltaCon"]["nombre"] 						= "Acta de Voluntariedad";
 	$arrCampos["numAnosAprobados"]["nombre"] 				= "Anios Aprobados";
 	$arrCampos["seqSalud"]["nombre"] 						= "Afiliacion a Salud";
+	$arrCampos["valCartaLeasing"]["nombre"] 				= "Valor Carta Leasing";
+	$arrCampos["valComplementario"]["nombre"] 				= "Valor Complementario";
 
 	$arrCampos["fchVigencia"]["tablaOrigen"] 					= "T_FRM_FORMULARIO";
 	$arrCampos["bolCerrado"]["tablaOrigen"] 					= "T_FRM_FORMULARIO";
@@ -206,6 +208,8 @@
 	$arrCampos["bolAltaCon"]["tablaOrigen"] 					= "T_FRM_FORMULARIO";
 	$arrCampos["numAnosAprobados"]["tablaOrigen"] 				= "T_CIU_CIUDADANO";
 	$arrCampos["seqSalud"]["tablaOrigen"] 						= "T_CIU_CIUDADANO";
+    $arrCampos["valCartaLeasing"]["tablaOrigen"] 				= "T_FRM_FORMULARIO";
+    $arrCampos["valComplementario"]["tablaOrigen"] 				= "T_FRM_FORMULARIO";
 
 	$arrCampos["fchVigencia"]["aliasOrigen"] 				= "frm";
 	$arrCampos["bolCerrado"]["aliasOrigen"] 				= "frm";
@@ -308,6 +312,8 @@
 	$arrCampos["bolAltaCon"]["aliasOrigen"] 				= "frm";
 	$arrCampos["numAnosAprobados"]["aliasOrigen"] 			= "ciu";
 	$arrCampos["seqSalud"]["aliasOrigen"] 					= "ciu";
+    $arrCampos["valCartaLeasing"]["aliasOrigen"] 			= "frm";
+    $arrCampos["valComplementario"]["aliasOrigen"] 			= "frm";
 
 	$arrCampos["fchVigencia"]["tipoDato"] 					= "fecha";
 	$arrCampos["bolCerrado"]["tipoDato"] 					= "booleano";
@@ -410,6 +416,8 @@
 	$arrCampos["bolAltaCon"]["tipoDato"] 					= "booleano";
 	$arrCampos["numAnosAprobados"]["tipoDato"] 				= "numero";
 	$arrCampos["seqSalud"]["tipoDato"] 						= "externo";
+    $arrCampos["valCartaLeasing"]["tipoDato"] 				= "numero";
+    $arrCampos["valComplementario"]["tipoDato"] 			= "numero";
 
 	$arrCampos["seqBancoCredito"]["tablaJoin"] 			= "T_FRM_BANCO";
 	$arrCampos["seqBancoCuentaAhorro"]["tablaJoin"] 	= "T_FRM_BANCO";
@@ -789,3 +797,5 @@
 	$arrTemporalGrupo["txtSoporteDonacion"] 			= $arrCampos["txtSoporteDonacion"]["nombre"];		
 	$arrTemporalGrupo["txtSoporteSubsidio"] 			= $arrCampos["txtSoporteSubsidio"]["nombre"];
 	$arrTemporalGrupo["valTotalRecursos"] 				= $arrCampos["valTotalRecursos"]["nombre"];
+	$arrTemporalGrupo["valCartaLeasing"] 				= $arrCampos["valCartaLeasing"]["nombre"];
+	$arrTemporalGrupo["valComplementario"] 				= $arrCampos["valComplementario"]["nombre"];

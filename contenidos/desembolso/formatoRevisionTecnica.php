@@ -34,8 +34,19 @@ if ($seqCasaMano != 0) {
     $claCasaMano = new CasaMano();
     $arrCasaMano = $claCasaMano->cargar($seqFormulario, $seqCasaMano);
     $objCasaMano = array_shift($arrCasaMano);
-    $claDesembolso = $objCasaMano->objRegistroOferta;
-    $claDesembolso->arrTecnico = $objCasaMano->objRevisionTecnica;
+
+
+//    $claDesembolso = $objCasaMano->objRegistroOferta;
+//    $claDesembolso->arrTecnico = $objCasaMano->objRevisionTecnica;
+
+   // simulacion de la clase de desembolso para la plantilla
+   $claDesembolso = new Desembolso();
+   $claDesembolso->arrTecnico = $objCasaMano->objRevisionTecnica;
+   foreach( $objCasaMano->objRegistroOferta as $txtClave => $txtValor ) {
+      $claDesembolso->$txtClave = $txtValor;
+   }
+
+
 } else {
     $claDesembolso->cargarDesembolso($seqFormulario);
 }

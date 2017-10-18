@@ -115,6 +115,7 @@ foreach ($_POST as $txtClave => $txtValor){
 if (!empty($_POST['hogar'])) {
 
     $numCabezaFamilia = 0;
+    $numConyuge = 0;
     $numCondicionJefeHogar = 0;
     $numCondicionJefeHogarSinIngreso = 0;
     $numCuentaUnionMarital = 0;
@@ -172,6 +173,8 @@ if (!empty($_POST['hogar'])) {
             if ($arrCiudadano['seqTipoDocumento'] != 1 and $arrCiudadano['seqTipoDocumento'] != 2) {
                 $arrErrores[] = "El tipo de documento seleccionado para el postulante principal no es válido";
             }
+        } elseif ($arrCiudadano['seqParentesco'] == 2){
+            $numConyuge++;
         } else {
             $seqParentesco = $arrCiudadano['seqParentesco'];
             if (!isset($arrParentescos[$seqParentesco])) {
@@ -211,6 +214,11 @@ if (!empty($_POST['hogar'])) {
 
             // fechas para comparar mayor de edad y tercera edad
             $numEdad = strtotime($arrCiudadano['fchNacimiento']);
+
+            // la fecha de nacimiento no puede ser mayor a hoy
+            if( $numEdad > time() ){
+                $arrErrores[] = "Fecha de nacimiento invalida para el documento " . number_format($numDocumento) . " no puede ser mayor a hoy";
+            }
 
             // se compara si es mayor de edad al momento de la postulacion
             if (($numEdad <= $numMayorEdad) and in_array($arrCiudadano['seqTipoDocumento'], $arrDocumentos)) {
@@ -266,6 +274,9 @@ if (!empty($_POST['hogar'])) {
     switch (true) {
         case $numCabezaFamilia == 0:
             $arrErrores[] = "Debe haber un postulante principal para el hogar";
+            break;
+        case $numConyuge > 1:
+            $arrErrores[] = "Debe haber solo un conyuge para el hogar";
             break;
         case $numCabezaFamilia > 1:
             $arrErrores[] = "Solo puede tener un postulante principal para este hogar";

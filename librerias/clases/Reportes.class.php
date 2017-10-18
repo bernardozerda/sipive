@@ -227,13 +227,9 @@ class Reportes {
     }
 
     public function exportableReporteAnalisisPoblacion() {
-
         global $aptBd;
-
         $arrErrores = &$this->arrErrores;
-
         if (empty($arrErrores)) {
-
             $sql = "SELECT 
 						frm.seqFormulario,
 						frm.txtFormulario,
@@ -293,8 +289,8 @@ class Reportes {
 						ucwords( ningunaCondicionEspecial( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtNingunaCondicionEspecial,
 						par.txtParentesco AS Parentesco,
 						ciu.fchNacimiento AS FechaNacimiento,
-						FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365)) AS Edad,
-						rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365))) AS RangoEdad,
+						FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365.2)) AS Edad,
+						rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365.2))) AS RangoEdad,
 						etn.txtEtnia AS Etnia,
 						(
 							SELECT
@@ -324,6 +320,19 @@ class Reportes {
             try {
                 //pr( $sql ); die( );
                 $objRes = $aptBd->execute($sql);
+                $arrReporte = array();
+
+                // el calculo de fechas de mysql es impreciso
+                // se ajusta el calculo con objetos php
+                $fchHoy = new DateTime();
+                while( $objRes->fields ){
+                    $fchNacimiento = new DateTime($objRes->fields['FechaNacimiento']);
+                    $fchDiferencia = date_diff($fchHoy,$fchNacimiento);
+                    $objRes->fields['Edad'] = $fchDiferencia->y;
+                    $objRes->fields['RangoEdad'] = rangoEdad($objRes->fields['Edad']);
+                    $arrReporte[] = $objRes->fields;
+                    $objRes->MoveNext();
+                }
 
                 $arrTitulosCampos[] = 'seqFormulario';
                 $arrTitulosCampos[] = 'txtFormulario';
@@ -357,8 +366,7 @@ class Reportes {
                 $arrTitulosCampos[] = 'RangoEdad';
                 $arrTitulosCampos[] = 'Etnia';
 
-
-                $this->obtenerReportesGeneral($objRes, "ReporteAnalisisPoblacion", $arrTitulosCampos);
+                $this->obtenerReportesGeneral($arrReporte, "ReporteAnalisisPoblacion", $arrTitulosCampos);
             } catch (Exception $objError) {
                 $arrErrores[] = "Se ha producido un error al consultar los datos";
             }

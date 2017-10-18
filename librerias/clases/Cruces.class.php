@@ -1,399 +1,415 @@
 <?php
 
-	/**
-	 * CLASE PARA LA MANIPULACION DE LOS CRUCES
-	 * @author Bernardo Zerda
-	 * @version 1.0 Marzo 2017
-	 */
-	
-	class Cruces {
-	
-		public $seqCruce; 
-		public $txtNombre; 
-		public $fchCruce; 
-		public $txtCuerpo; 
-		public $txtPie; 
-		public $txtFirma; 
-		public $txtElaboro; 
-		public $txtReviso; 
-		public $fchCreacionCruce; 
-		public $txtUsuario; 
-		public $txtNombreArchivo; 
-		public $seqUsuario; 
-		public $txtUsuarioActualiza; 
-		public $txtNombreArchivoActualiza; 
-		public $seqUsuarioActualiza;
-		public $arrHogares;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-		public $numPaginador; // Cuantos registros por pagina
-		public $numPaginas; // cuantas paginas por bloque
+/**
+ * Description of cruces
+ *
+ * @author lbastoz
+ */
+class Cruces {
 
-		private $arrEstados;
-		private $arrFormatoArchivo;
+    //put your code here
 
-		/**
-		 * CONSTRUCTOR DE LA CLASE, SE COLCOAN LOS PARAMETROS
-		 * GENERALES COMO REGLAS DE ENTRADA Y SALIDA PARA LOS CRUCES
-		 * Y FORMATO DEL ARCHIVO DE CARGA, APARTE DE INICIALIZAR LOS DATOS
-		 * DE LA CLASE
-		 * @author Bernardo Zerda
-		 * @param void
-		 * @return boolean
-		 * @version 1.0 Mar 2017
-		 */
-		
-		function Cruces(){
-		
-			// Inicializa las variables
-			$this->seqCruce = 0;
-			$this->txtNombre = "";
-			$this->fchCruce = NULL;
-			$this->txtCuerpo = "";
-			$this->txtPie = "";
-			$this->txtFirma = "";
-			$this->txtElaboro = "";
-			$this->txtReviso = "";
-			$this->fchCreacionCruce = NULL;
-			$this->txtUsuario = "";
-			$this->txtNombreArchivo = "";
-			$this->seqUsuario = 0;
-			$this->txtUsuarioActualiza = "";
-			$this->txtNombreArchivoActualiza = "";
-			$this->seqUsuarioActualiza = 0;
-			$this->arrHogares = array();
-			$this->numPaginas = 10;
-			$this->numPaginador = 20;
+    function Cruces() {
+        
+    }
 
-			// Formato de carga del archivo
-			$this->arrFormatoArchivo[] = "seqformulario";
-			$this->arrFormatoArchivo[] = "postulante principal";
-			$this->arrFormatoArchivo[] = "modalidad";
-			$this->arrFormatoArchivo[] = "estado";
-			$this->arrFormatoArchivo[] = "tipo documento";
-			$this->arrFormatoArchivo[] = "documento";
-			$this->arrFormatoArchivo[] = "nombre";
-			$this->arrFormatoArchivo[] = "parentesco";
-			$this->arrFormatoArchivo[] = "entidad";
-			$this->arrFormatoArchivo[] = "causa";
-			$this->arrFormatoArchivo[] = "detalle";
-			$this->arrFormatoArchivo[] = "inhabilitar";
-			$this->arrFormatoArchivo[] = "observaciones";
-			
-			// Carga los estados del proceso
-			$this->arrEstados = estadosProceso();
-			
-			return true;	
-		}
-		
-		/**
-		 * OBTIENE LOS DATOS BASICOS DEL CRUCE
-		 * @author Bernardo Zerda
-		 * @version 1.0 mar 2017
-		 * @param string txtCruce
-		 * @return array $arrCruces
-		 */
-		
-		public function listarCruces($txtCruce="",$txtColumnaOrden="",$txtDireccionOrden=""){
-			global $aptBd;
-			$arrCruces = array();
-			$txtCondicion = ($txtCruce == "")? "" : "WHERE cru.txtNombre like '%" . $txtCruce. "%'";
+    function validarDocumentos($separado_por_comas) {
+        global $aptBd;
 
-			switch($txtColumnaOrden){
-				case "nombre":
-					$txtColumnaOrden = "cru.txtNombre";
-					break;
-				case "fecha":
-                    $txtColumnaOrden = "cru.fchCreacionCruce";
-					break;
-				default:
-                    $txtColumnaOrden = "cru.fchCreacionCruce";
-					break;
-			}
+        $band = true;
+        $msg = "";
+        // Está consulta válida que no exista un cruce igual
+        $sql = "SELECT numdocumento FROM t_frm_formulario
+                            INNER JOIN t_frm_hogar hog USING (seqFormulario)
+                            INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
+                            WHERE seqParentesco NOT IN(1) 
+                            and numDocumento IN(" . $separado_por_comas . ")";
+        $objRes = $aptBd->execute($sql);
 
-            switch($txtDireccionOrden){
-                case "asc":
-                    $txtDireccionOrden = "ASC";
-                    break;
-                case "desc":
-                    $txtDireccionOrden = "DESC";
-                    break;
-                default:
-                    $txtDireccionOrden = "DESC";
-                    break;
-            }
 
-			$sql = "
-				SELECT 
-					cru.seqCruce,
-					cru.txtNombre,
-					cru.fchCruce,
-					cru.txtCuerpo,
-					cru.txtPie,
-					cru.txtFirma,
-					cru.txtElaboro,
-					cru.txtReviso,
-					cru.fchCreacionCruce,
-					cru.txtUsuario,
-					cru.txtNombreArchivo,
-					cru.seqUsuario,
-					cru.txtUsuarioActualiza,
-					cru.txtNombreArchivoActualiza,
-					cru.seqUsuarioActualiza
-				FROM T_CRU_CRUCES cru
-				" . $txtCondicion . "
-				ORDER BY " . $txtColumnaOrden . " " . $txtDireccionOrden . "
-			";
-			$objRes = $aptBd->execute($sql);
-			while( $objRes->fields ){
-				$seqCruce = $objRes->fields['seqCruce'];
-				$arrCruces[$seqCruce] = $objRes->fields;
-				$objRes->MoveNext();
-			}
-			return $arrCruces;	
-		}		
-		
-		/**
-		 * VALIDACION DE LA PLANTILLA DE CARGA DE CRUCES, SOLO VALIDA LA LINEA DE TITULOS
-		 * @author Bernardo Zerda
-		 * @version 1.0 mar 2017
-		 * @param array arrLineaTitulos
-		 * @return array $arrErrores
-		 */
-		public function validarPlantillaCarga( $arrLineaTitulos = array() ){
-			$arrErrores = array();
-			if( empty( $arrLineaTitulos )){
-				$arrErrores[] = "No hay datos para validar";
-			}else{				
-				for( $i = 0 ; $i < count( $arrLineaTitulos ) ; $i++ ){
-					if( trim( strtolower( $arrLineaTitulos[$i] ) ) != $this->arrFormatoArchivo[$i]  ){
-						$arrErrores[] = "Error Linea 1 Columna " . ($i + 1) . ": No existe la columna " . ucwords( $this->arrFormatoArchivo[$i]) . " o no está en la posición correcta";
-					}
-				}
-			}
-			return $arrErrores;
-		}
-		
-		/**
-		 * VALIDACION DE LAS LINEAS DEL ARCHIVO
-		 * @author Bernardo Zerda
-		 * @version 1.0 mar 2017
-		 * @param array arrLineaTitulos
-		 * @return array $arrErrores
-		 */
-		public function validarLineaArchivo( $arrLinea, $numLinea){
-			
-			// Limpia y codifica cada uno de los campos
-			foreach ($arrLinea as $txtClave => $txtValor) {
-				$arrLinea[$txtClave] = trim($txtValor);
-			}
-			
-			/**
-			 * VALIDACION DE COHERENCIA DE LOS DATOS
-			 */
-			
-			// Validacion del seqFormulario
-			$seqFormulario = 0;
-			if( is_numeric( $arrLinea[0] ) ){
-				$seqFormulario = intval($arrLinea[0]);
-			}else{
-				$arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[0] ) . ": Introduzca solo números";
-			}
-			
-			// Validacion del postulante principal
-			$numDocumentoPPal = 0;
-			if( is_numeric( $arrLinea[1] ) ){
-				$numDocumentoPPal = intval($arrLinea[1]);
-			}else{
-				$arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[1] ) . ": Introduzca solo números";
-			}
-			
-			// Validacion de la modalidad
-			$seqModalidad = obtenerSecuencial($arrLinea[2], "T_FRM_MODALIDAD", "txtModalidad", "seqModalidad");
-			if( $seqModalidad == 0 ){
-				$arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[2] ) . ": Valor no válido o no existe";
-			}
-			
-			// Valida estados del proceso
-			$seqEstadoProceso = 0;
-			if( in_array( $arrLinea[3] , $this->arrEstados) ){
-				$seqEstadoProceso = array_keys($this->arrEstados,$arrLinea[3]);
-			}else{
-				$arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[3] ) . ": Valor no válido o no existe";
-			}
-			
-			// Validacion del tipo de documento
-			$seqTipoDocumento = obtenerSecuencial($arrLinea[4], "T_CIU_TIPO_DOCUMENTO", "txtTipoDocumento", "seqTipoDocumento");
-			if( $seqTipoDocumento == 0 ){
-				$arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[4] ) . ": Valor no válido o no existe";
-			}
-						
-			// Validacion del documento
-			$numDocumento = 0;
-			if( is_numeric( $arrLinea[5] ) ){
-                $numDocumento = intval($arrLinea[5]);
-			}else{
-				$arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[5] ) . ": Introduzca solo números";
-			}
-			
-			// Validacion del nombre
-			$txtNombre = "";
-			if( trim( $arrLinea[6]) != ""){
-				$txtNombre = $arrLinea[6];
-			}else{
-				$arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[6] ) . ": No puede dejar vacía esta columna";
-			}
-			
-			// Validacion del parentesco
-			$seqParentesco = obtenerSecuencial($arrLinea[7], "T_CIU_PARENTESCO", "txtParentesco", "seqParentesco");
-			if( $seqParentesco == 0 ){
-				$arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[7] ) . ": Valor no válido o no existe";
-			}
-			
-			// son opcionales la entidad, causa y detalle
-			$txtEntidad = trim( $arrLinea[8] );
-			$txtCausa   = trim( $arrLinea[9] );
-			$txtDetalle = trim( $arrLinea[10] );
-			
-			// Validacion de inhabilitar
-			if( ! ( trim( strtolower( $arrLinea[11] ) ) == 'si' or trim( strtolower( $arrLinea[11] ) ) == 'no' ) ) {
-				$arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[11] ) . ": Valor no válido, solo puede indicar Si o No";
-			}
-			
-			// la observacion es opcional
-			$txtObservaciones = trim( $arrLinea[12]); 
-			
-			/**
-			 * VALIDACION DE REGLAS DE NEGOCIO
-			 */
-
-            $claFormulario = new FormularioSubsidios();
-
-			if( empty($arrErrores) ) {
-
-                // Valida la existencia del formulario
-                $txtError = $claFormulario->formularioExiste($seqFormulario);
-                if ($txtError !== true) {
-                    $arrErrores[] = "Error Linea " . $numLinea . " Columna " . ucwords($this->arrFormatoArchivo[0]) . " " . $txtError;
-                }
-            }
-
-            if( empty($arrErrores) ) {
-
-				// coincide el formulario con el postulante principal
-				$claFormulario->cargarFormulario($seqFormulario);
-				foreach( $claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano ){
-					if( $objCiudadano->seqParentesco == 1 ){
-						break;
-					}
-				}
-
-				// validacion del postulante principal
-				if( $numDocumentoPPal != $objCiudadano->numDocumento ){
-                    $arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[1] ) . " El documento de postulante principal no es el que figura en el formulario";
-				}
-
-				// validacion de la modalidad
-                if( $seqModalidad != $claFormulario->seqModalidad ){
-                    $arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[2] ) . " La modalidad no coindice con la del formulario";
-				}
-
-                // estado del proceso
-                if( $seqEstadoProceso != $claFormulario->seqEstadoProceso ){
-                    $arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[3] ) . " El estado del proceso no coincide con el del formulario";
-                }
-
-                // validacion del documento del ciudadano
-                $seqFormularioCiudadano = $claFormulario->formularioVinculado2($numDocumento, $seqTipoDocumento);
-                if( $seqFormulario !=  $seqFormularioCiudadano ){
-                    $arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[4] ) . " El ciudadano " . $numDocumento . " pertenece a un hogar diferente al del postulante principal referenciado o no existe";
-				}
-
-				// validando nombres y parentescos del ciudadano
-                foreach( $claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano ){
-                    if( $numDocumento == $objCiudadano->numDocumento ){
-                    	if( $seqParentesco != $objCiudadano->seqParentesco ){
-                            $arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[4] ) . " El ciudadano " . $numDocumento . " tiene un parentesco diferente en la base de datos";
-						}
-                        if( $txtNombre != trim($objCiudadano->obtenerNombre($numDocumento)) ){
-                            $arrErrores[] = "Error Linea " . $numLinea ." Columna " . ucwords( $this->arrFormatoArchivo[4] ) . " El ciudadano " . $numDocumento . " tiene otro nombre en la base de datos";
-                        }
-					}
-                }
-			}
-
-			return $arrErrores;	
-		}
-		
-		/**
-		 * CARGA UN CRUCE SELECCIONADO POR EL USUARIO
-         * @author Bernardo Zerda
-         * @version 1.1 Jul 2017
-		 */
-
-		public function leerCruce(){
-			global $aptBd;
-
-            $arrEstados = estadosProceso();
-
-            $sql = "
-				SELECT
-					cru.seqCruce,
-					cru.txtNombre,
-					cru.fchCruce,
-					cru.txtCuerpo,
-					cru.txtPie,
-					cru.txtFirma,
-					cru.txtElaboro,
-					cru.txtReviso,
-					cru.fchCreacionCruce,
-					cru.txtUsuario,
-					cru.txtNombreArchivo,
-					cru.seqUsuario,
-					cru.txtUsuarioActualiza,
-					cru.txtNombreArchivoActualiza,
-					cru.seqUsuarioActualiza
-				FROM T_CRU_CRUCES cru
-				WHERE cru.seqCruce = '" . $this->seqCruce . "'
-			";
-            $objRes = $aptBd->execute( $sql );
-            if( $objRes->fields ){
-            	foreach($objRes->fields as $txtCampo => $txtValor){
-            		$this->$txtCampo = regularizarCampo( $txtCampo , $txtValor );
-				}
-
-                $sql = "
-					SELECT DISTINCT
-					   cru.seqFormulario,
-					   cru.numDocumento,
-					   cru.txtNombre,
-					   ( 
-						  SELECT SUM(cru1.bolInhabilitar) 
-						  FROM T_CRU_RESULTADO cru1 
-						  WHERE cru1.seqCruce = cru.seqCruce
-						  AND cru1.seqFormulario = cru.seqFormulario
-					   ) AS bolInhabilitar,
-					   frm.seqEstadoProceso
-					FROM T_CRU_RESULTADO cru
-					INNER JOIN T_FRM_FORMULARIO frm ON cru.seqFormulario = frm.seqFormulario
-					WHERE cru.seqCruce = " . $this->seqCruce . "
-					  AND cru.seqParentesco = 1
-					ORDER BY cru.numDocumento
-				";
-				$objRes = $aptBd->execute( $sql );
-                while( $objRes->fields ){
-                    $seqEstadoProceso = $objRes->fields['seqEstadoProceso'];
-                    $seqFormulario = $objRes->fields['seqFormulario'];
-                    $this->arrHogares[ $seqFormulario ]['bolInhabilitar']     = ( $objRes->fields['bolInhabilitar'] > 0 )? 1 : 0;
-                    $this->arrHogares[ $seqFormulario ]['numDocumento'] = $objRes->fields['numDocumento'];
-                    $this->arrHogares[ $seqFormulario ]['txtNombre']    = $objRes->fields['txtNombre'];
-                    $this->arrHogares[ $seqFormulario ]['txtEstado']    = $arrEstados[ $seqEstadoProceso ];
+//
+        if ($objRes->_numOfRows > 0) {
+            $val = "<b>Los siguientes documentos no se encuentran registrados como postulante principal</b><br>";
+            if ($aptBd->ErrorMsg() == "") {
+                while ($objRes->fields) {
+                    $val .= "<br>" . $objRes->fields['numdocumento'];
                     $objRes->MoveNext();
                 }
             }
-			return true;
-		}
+            $val .= " <br><br> Por favor verifique los datos del hogar ";
+            $msg = "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
+            $band = false;
+            if (!$band) {
+                echo $msg;
+                die();
+            }
+        }
+        return $band;
+    }
 
-		
-	}
+    function validarCruceExiste($grupo, $fch) {
+        global $aptBd;
+        $grupo = strtoupper(trim($grupo));
+        $band = true;
+        $msg = "";
+        $val = "";
+        // Está consulta válida que los números de los documentos pertenezcan al postulante principal
+        $sql = "SELECT * FROM t_pre_grupo WHERE UPPER(txtPreCruGrupo) = '" . $grupo . "'";
+        $objRes = $aptBd->execute($sql);
+//
+        if ($objRes->_numOfRows > 0) {
+            $val = "<b>Este cruce ya existe por favor Verifique el Nombre</b><br>";
+            if ($aptBd->ErrorMsg() == "") {
+                while ($objRes->fields) {
+                    $val .= $objRes->fields['txtNombreGrupo'];
+                    $objRes->MoveNext();
+                }
+            }
+            $msg = "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
+            $band = false;
+            if (!$band) {
+                echo $msg;
+                die();
+            }
+        }
+        return $band;
+    }
 
-?>
+    function obtenerFormularios($separado_por_comas) {
+
+        global $aptBd;
+
+        $val = "";
+        $sql = "SELECT seqFormulario FROM t_frm_formulario
+                            INNER JOIN t_frm_hogar hog USING (seqFormulario)
+                            INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
+                            WHERE numDocumento IN(" . $separado_por_comas . ") group by seqFormulario";
+        $objRes = $aptBd->execute($sql);
+
+        if ($objRes->_numOfRows > 0) {
+
+            if ($aptBd->ErrorMsg() == "") {
+                while ($objRes->fields) {
+                    $val .= $objRes->fields['seqFormulario'] . ",";
+                    $objRes->MoveNext();
+                }
+            }
+        }
+
+        $val = substr($val, 0, -1);
+        return $val;
+    }
+
+    function insertarReporteGrupo($grupo) {
+
+        global $aptBd;
+        $sql = "INSERT INTO t_pre_grupo (txtPreCruGrupo,fchPreCruGrupo) VALUES ('" . $grupo . "',NOW());";
+        $objRes = $aptBd->execute($sql);
+        return $aptBd->Insert_ID();
+    }
+
+    function insertarReporteGeneral($formularios, $fch, $grupo, $user) {
+
+        global $aptBd;
+
+        $sql = "insert into t_pre_cruces_general SELECT 
+    frm.seqFormulario,
+    frm.txtFormulario,
+    frm.fchVigencia AS Vigencia_SDV,
+    CONCAT(eta.txtEtapa, ' ', epr.txtEstadoProceso) AS EstadoProceso,
+    IF(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
+    moa.txtModalidad,
+    sol.txtDescripcion AS DescripcionSolucion,
+    sol.txtSolucion,
+    IF(frm.bolCerrado = 1, 'Si', 'No') AS Cerrado,
+    (SELECT 
+            tdo.txtTipoDocumento
+        FROM
+            T_FRM_HOGAR hog1
+                INNER JOIN
+            T_CIU_CIUDADANO ciu1 ON hog1.seqCiudadano = ciu1.seqCiudadano
+                INNER JOIN
+            T_CIU_TIPO_DOCUMENTO tdo ON ciu1.seqTipoDocumento = tdo.seqTipoDocumento
+        WHERE
+            hog1.seqFormulario = hog.seqFormulario
+                AND hog1.seqParentesco = 1) AS TipoDocumentoPPAL,
+    (SELECT 
+            ciu1.numDocumento
+        FROM
+            T_FRM_HOGAR hog1
+                INNER JOIN
+            T_CIU_CIUDADANO ciu1 ON hog1.seqCiudadano = ciu1.seqCiudadano
+        WHERE
+            hog1.seqFormulario = hog.seqFormulario
+                AND hog1.seqParentesco = 1) AS DocumentoPPAL,
+    (SELECT 
+            UPPER(CONCAT(ciu1.txtNombre1,
+                                ' ',
+                                ciu1.txtNombre2,
+                                ' ',
+                                ciu1.txtApellido1,
+                                ' ',
+                                ciu1.txtApellido2))
+        FROM
+            T_FRM_HOGAR hog1
+                INNER JOIN
+            T_CIU_CIUDADANO ciu1 ON hog1.seqCiudadano = ciu1.seqCiudadano
+        WHERE
+            hog1.seqFormulario = hog.seqFormulario
+                AND hog1.seqParentesco = 1) AS NombrePPAL,
+    (SELECT 
+            tdo.txtTipoDocumento
+        FROM
+            T_CIU_TIPO_DOCUMENTO tdo
+        WHERE
+            tdo.seqTipoDocumento = ciu.seqTipoDocumento) AS TipoDocumento,
+    ciu.numDocumento,
+    UPPER(CONCAT(ciu.txtNombre1,
+                    ' ',
+                    ciu.txtNombre2,
+                    ' ',
+                    ciu.txtApellido1,
+                    ' ',
+                    ciu.txtApellido2)) AS Nombre,
+    par.txtParentesco,
+    sex.txtSexo,
+    etn.txtEtnia,
+    (SELECT 
+            ces.txtCondicionEspecial
+        FROM
+            T_CIU_CONDICION_ESPECIAL ces
+        WHERE
+            ciu.seqCondicionEspecial = ces.seqCondicionEspecial) AS CondicionEspecial1,
+    (SELECT 
+            ces.txtCondicionEspecial
+        FROM
+            T_CIU_CONDICION_ESPECIAL ces
+        WHERE
+            ciu.seqCondicionEspecial2 = ces.seqCondicionEspecial) AS CondicionEspecial2,
+    (SELECT 
+            ces.txtCondicionEspecial
+        FROM
+            T_CIU_CONDICION_ESPECIAL ces
+        WHERE
+            ciu.seqCondicionEspecial3 = ces.seqCondicionEspecial) AS CondicionEspecial3,
+    ned.txtNivelEducativo,
+    sis.txtSisben,
+    frm.numAdultosNucleo,
+    frm.numNinosNucleo,
+    (frm.numAdultosNucleo + frm.numNinosNucleo) AS numMiembrosHogar,
+    IF(ciu.bolLgtb = 1, 'Si', 'No') AS LGBT,
+    ocu.txtOcupacion,
+    eci.txtEstadoCivil,
+    frm.fchInscripcion,
+    frm.fchPostulacion,
+    frm.fchUltimaActualizacion,
+    frm.valAspiraSubsidio,
+    pat.txtPuntoAtencion,
+    viv.txtVivienda,
+    frm.valIngresoHogar,
+    frm.valSaldoCuentaAhorro,
+    (SELECT 
+            ban.txtBanco
+        FROM
+            T_FRM_BANCO ban
+        WHERE
+            ban.seqBanco = frm.seqBancoCuentaAhorro) AS EntidadAhorro1,
+    frm.valSaldoCuentaAhorro2,
+    (SELECT 
+            ban.txtBanco
+        FROM
+            T_FRM_BANCO ban
+        WHERE
+            ban.seqBanco = frm.seqBancoCuentaAhorro2) AS EntidadAhorro2,
+    frm.valCredito,
+    (SELECT 
+            ban.txtBanco
+        FROM
+            T_FRM_BANCO ban
+        WHERE
+            ban.seqBanco = frm.seqBancoCredito) AS EntidadCredito,
+    frm.valDonacion,
+    (SELECT 
+            edo.txtEmpresaDonante
+        FROM
+            T_FRM_EMPRESA_DONANTE edo
+        WHERE
+            edo.seqEmpresaDonante = frm.seqEmpresaDonante) AS entidadDonante,
+    (frm.valSaldoCuentaAhorro + frm.valSaldoCuentaAhorro2) AS SumaAhorro,
+    (frm.valSaldoCuentaAhorro + frm.valSaldoCuentaAhorro2 + frm.valSubsidioNacional + frm.valAporteLote + frm.valSaldoCesantias + frm.valAporteAvanceObra + frm.valAporteMateriales + frm.valCredito + frm.valDonacion) AS SumaCierreFinanciero,
+    frm.valArriendo,
+    (SELECT 
+            loc.txtLocalidad
+        FROM
+            T_FRM_LOCALIDAD loc
+        WHERE
+            loc.seqLocalidad = frm.seqLocalidad) AS localidad,
+    frm.txtBarrio,
+    IF(frm.bolIdentificada = 1, 'Si', 'No') AS IdetificadaSolSDHT,
+    IF(frm.bolViabilizada = 1, 'Si', 'No') AS PerteneceViaSDHT,
+    des.txtNombreVendedor,
+    (SELECT 
+            loc.txtLocalidad
+        FROM
+            T_FRM_LOCALIDAD loc
+        WHERE
+            loc.seqLocalidad = des.seqLocalidad) AS localidadSolucion,
+    des.txtBarrio,
+    IF((TRIM(des.txtCompraVivienda) = ''
+            OR des.txtCompraVivienda IS NULL),
+        'Ninguna',
+        des.txtCompraVivienda) AS TipoViviendaComprar,
+    (SELECT 
+            SUM(dsol.valSolicitado)
+        FROM
+            T_DES_SOLICITUD dsol
+        WHERE
+            frm.seqFormulario = des.seqFormulario
+                AND dsol.seqDesembolso = des.seqDesembolso) AS ValorSolicitado, '" . $fch . "', " . $grupo . ", " . $user . "
+FROM
+    T_FRM_FORMULARIO frm
+        INNER JOIN
+    T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
+        INNER JOIN
+    T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
+        LEFT JOIN
+    T_CIU_PARENTESCO par ON hog.seqParentesco = par.seqParentesco
+        LEFT JOIN
+    T_CIU_SEXO sex ON ciu.seqSexo = sex.seqSexo
+        LEFT JOIN
+    T_CIU_ETNIA etn ON ciu.seqEtnia = etn.seqEtnia
+        LEFT JOIN
+    T_CIU_NIVEL_EDUCATIVO ned ON ciu.seqNivelEducativo = ned.seqNivelEducativo
+        LEFT JOIN
+    T_FRM_SISBEN sis ON frm.seqSisben = sis.seqSisben
+        LEFT JOIN
+    T_CIU_OCUPACION ocu ON ciu.seqOcupacion = ocu.seqOcupacion
+        LEFT JOIN
+    T_CIU_ESTADO_CIVIL eci ON ciu.seqEstadoCivil = eci.seqEstadoCivil
+        LEFT JOIN
+    T_FRM_ESTADO_PROCESO epr ON frm.seqEstadoProceso = epr.seqEstadoProceso
+        INNER JOIN
+    T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
+        LEFT JOIN
+    T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
+        LEFT JOIN
+    T_FRM_SOLUCION sol ON frm.seqSolucion = sol.seqSolucion
+        LEFT JOIN
+    T_FRM_PUNTO_ATENCION pat ON frm.seqPuntoAtencion = pat.seqPuntoAtencion
+        LEFT JOIN
+    T_FRM_VIVIENDA viv ON frm.seqVivienda = viv.seqVivienda
+        LEFT JOIN
+    T_DES_DESEMBOLSO des ON des.seqFormulario = frm.seqFormulario
+WHERE
+    frm.seqFormulario IN (" . $formularios . ")";
+
+        $objRes = $aptBd->execute($sql);
+        if ($aptBd->ErrorMsg() == "") {
+            return $aptBd->Affected_Rows();
+        } else {
+            return $aptBd->Affected_Rows();
+        }
+    }
+
+    function obtenerDatosGrupo() {
+        global $aptBd;
+        $grupo = strtoupper(trim($grupo));
+        $band = true;
+        $arrayData = Array();
+        // Está consulta válida que los números de los documentos pertenezcan al postulante principal
+        $sql = "SELECT seqPreCruGrupo, txtPreCruGrupo FROM t_pre_grupo ORDER BY seqPreCruGrupo desc limit 10";
+        $objRes = $aptBd->execute($sql);
+//
+        if ($objRes->_numOfRows > 0) {
+            if ($aptBd->ErrorMsg() == "") {
+                while ($objRes->fields) {
+                    $arrayData[] = $objRes->fields;
+                    $objRes->MoveNext();
+                }
+            }
+        }
+        return $arrayData;
+    }
+
+    function validarDocumentosAfiliados($separado_por_comas, $grupo) {
+        global $aptBd;
+
+        $band = true;
+        $datos = array();
+        $val = "<b>Los siguientes documentos no se encuentran registrados el reporte generado</b><br>";
+        // Está consulta válida que no exista un cruce igual
+        $sql = "SELECT numdocumento FROM t_pre_cruces_general    
+                            where   seqPreCruGrupo = " . $grupo . " ORDER BY numdocumento";
+        $objRes = $aptBd->execute($sql);
+//
+        if ($objRes->_numOfRows > 0) {
+
+            if ($aptBd->ErrorMsg() == "") {
+                while ($objRes->fields) {
+                    $datos[] = $objRes->fields['numdocumento'];
+                    $objRes->MoveNext();
+                }
+            }
+        }
+        //$separado_por_comas = sort($separado_por_comas);
+
+        foreach ($separado_por_comas as $key => $value) {
+            if (!in_array($value, $datos)) {
+                $val .= "<br>" . $value;
+                $band = false;
+            }
+        }
+
+        $val .= " <br><br> Por favor verifique los datos del hogar ";
+        $msg = "<p class='alert alert-danger'>" . ucfirst($val) . "</p>";
+        if (!$band) {
+            echo $msg;
+            die();
+        }
+        return $band;
+    }
+
+    function InsertarCruces($array, $grupo) {
+
+        global $aptBd;
+        $band = true;
+        $separado_por_comas = implode(",", $array['Documento']);
+        $sql = "SELECT seqFormulario,  txtModalidad, Desplazado, DocumentoPPAL, txtFormulario, numDocumento, Nombre, txtParentesco,   seqPreCruGrupo, estadoProceso, TipoDocumento FROM t_pre_cruces_general    
+          where   seqPreCruGrupo = " . $grupo . " and numDocumento in ($separado_por_comas) ORDER BY numdocumento asc";
+        $objRes = $aptBd->execute($sql);
+        $insertCons = "INSERT INTO t_pre_cruces_consolidado
+                      (
+                        seqFormulario, txtInhabilitar, txtModalidad, txtDezplazado, numDocumentoPp, txtFormulario, numDocumento, txtNombreCompleto, txtParentesco,
+                        txtCausa, txtEntidad, txtConcatenacion, txtTipo, seqPreCruGrupo, txtEstado, txtTipoDoc)
+                        VALUES";
+        $valueInsert ="";
+        if ($objRes->_numOfRows > 0) {
+            if ($aptBd->ErrorMsg() == "") {
+                $cont = 1;
+                while ($objRes->fields) {
+                    foreach ($array['Documento'] as $key => $value) {
+                        if ($value == $objRes->fields['numDocumento']) {
+                              $valueInsert .= "(".$objRes->fields['seqFormulario'].", 'SI','".$objRes->fields['txtModalidad']."','".$objRes->fields['Desplazado']."',".$objRes->fields['DocumentoPPAL'].",'";
+                              $valueInsert .= $objRes->fields['txtFormulario']."',".$objRes->fields['numDocumento'].",'".$objRes->fields['Nombre']."','".$objRes->fields['txtParentesco']."','";
+                              $valueInsert .= "Afiliación CCF', 'FONVIVIENDA','Entidad:".$array['Entidad'][$key]."', '', 1,'".$objRes->fields['estadoProceso']."','".$objRes->fields['TipoDocumento']."'),";
+                           // echo "<br>" . $cont . " -> " . $value . " ==" . $objRes->fields['numDocumento'];
+                            $cont++;
+                        }
+                    }
+                    $objRes->MoveNext();
+                }
+                $valueInsert = substr_replace($valueInsert, ';', -1, 1);
+                echo $insertCons."".$valueInsert;
+                $aptBd->execute($insertCons."".$valueInsert);
+            }
+            
+        }
+    }
+
+}

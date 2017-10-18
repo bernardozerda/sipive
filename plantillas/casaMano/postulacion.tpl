@@ -1785,7 +1785,7 @@
                                     {assign var=bolCamposNoLeasing value=""}
                                 {/if}
 
-                                <tr id="trNoLeasing1" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                <tr id="trNoLeasing1" bgcolor="#E4E4E4" style="display:{$bolCamposNoLeasing}">
                                     <!-- SUMA DE RECURSOS PROPIOS -->
                                     <td class="tituloTabla" style="padding-top:5px;">Recursos propios</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">
@@ -1801,7 +1801,7 @@
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                 </tr>
-                                <tr id="trNoLeasing2" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                <tr id="trNoLeasing2" bgcolor="#E4E4E4" style="display:{$bolCamposNoLeasing}">
                                     <!-- SUMA DE SUBSIDIOS -->
                                     <td class="tituloTabla" style="padding-top:5px;">Valor Subsidios + (Donacion y/o VUR)</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">
@@ -1818,7 +1818,7 @@
                                     <td>&nbsp;</td>
 
                                 </tr>
-                                <tr id="trNoLeasing3" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                <tr id="trNoLeasing3" bgcolor="#E4E4E4" style="display:{$bolCamposNoLeasing}">
                                     <!-- TOTAL RECURSOS ECONOMICOS -->
                                     <td class="tituloTabla" style="padding-top:5px;">Total recursos del hogar</td>
                                     <td align="right" style="padding-top:5px; padding-right:5px">
@@ -1914,7 +1914,7 @@
                                             Estimado del Aporte
                                         {/if}
                                     </td>
-                                    <td bgcolor="#E0E0E0" align="right" style="padding-right:5px" id="tdValSubsidio" height="25px" align="top">
+                                    <td bgcolor="#E4E4E4" align="right" style="padding-right:5px" id="tdValSubsidio" height="25px" align="top">
                                         $ <input type="text"
                                                  name="valAspiraSubsidio"
                                                  id="valAspiraSubsidio"
@@ -1923,17 +1923,23 @@
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  style="padding-right: 5px; width:100px; text-align:right;"
                                                  onkeyup="formatoSeparadores(this)"
-                                                 {if $claFormulario->seqModalidad != 8 && $claFormulario->seqModalidad != 9 && $claFormulario->seqModalidad != 10}
-                                                    readonly
+                                                 {if not (
+                                                   $claFormulario->seqModalidad == 8  ||
+                                                   $claFormulario->seqModalidad == 9  ||
+                                                   $claFormulario->seqModalidad == 10 ||
+                                                   ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+                                                   ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+                                                 ) }
+                                                     readonly
                                                  {/if}
                                         />
                                     </td>
 
                                     {if $claFormulario->seqPlanGobierno == 2}
-                                        <td bgcolor="#E0E0E0" class="tituloTabla" height="25px" align="top">
+                                        <td bgcolor="#E4E4E4" class="tituloTabla" height="25px" align="top">
                                             Soporte Cambio
                                         </td>
-                                        <td bgcolor="#E0E0E0" style="padding-left: 10px;" height="25px" align="top">
+                                        <td bgcolor="#E4E4E4" style="padding-left: 10px;" height="25px" align="top">
                                             <input type="text"
                                                    name="txtSoporteSubsidio"
                                                    id="txtSoporteSubsidio"
@@ -1945,11 +1951,43 @@
                                             />
                                         </td>
                                     {else}
-                                        <td bgcolor="#E0E0E0">&nbsp;</td>
-                                        <td bgcolor="#E0E0E0">&nbsp;</td>
+                                        <td bgcolor="#E4E4E4">&nbsp;</td>
+                                        <td bgcolor="#E4E4E4">&nbsp;</td>
                                         <input type="hidden" name="txtSoporteSubsidio" value="{$claFormulario->txtSoporteSubsidio}">
                                     {/if}
                                 </tr>
+
+                                <!-- VALOR COMPLEMENTARIO -->
+                                {assign var=txtComplementario value='none'}
+                                {if
+                                    ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
+                                    ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+                                    ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
+                                    ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+                                }
+                                    {assign var=txtComplementario value=''}
+                                {/if}
+
+                                <tr id="trValComplementario" style="display: {$txtComplementario};">
+                                    <!-- VALOR AL QUE ASPIRA DEL SUBSIDIO -->
+                                    <td class="tituloTabla" height="25px" align="top">
+                                        Valor Complementario
+                                    </td>
+                                    <td bgcolor="#E4E4E4" align="right" style="padding-right:5px" height="25px" align="top">
+                                        $ <input type="text"
+                                                 name="valComplementario"
+                                                 id="valComplementario"
+                                                 value="{$claFormulario->valComplementario|number_format:'0':'.':'.'}"
+                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                 style="padding-right: 5px; width:100px; text-align:right;"
+                                                 onkeyup="formatoSeparadores(this)"
+                                        />
+                                    </td>
+                                    <td bgcolor="#E4E4E4">&nbsp;</td>
+                                    <td bgcolor="#E4E4E4">&nbsp;</td>
+                                </tr>
+
                             </table>
                             </p>
                         </div>

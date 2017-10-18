@@ -12,6 +12,7 @@ include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ActosAdmin
 include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php");
 include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CRM.class.php");
 include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php");
+include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Desembolso.class.php");
 
 //    pr( $_POST );
 
@@ -46,13 +47,14 @@ if (intval($_POST['seqFormulario']) != 0) {
 
 }
 
-$RegistroOferta = $objCasaMano->objRegistroOferta;
-$localidadcem = $RegistroOferta->seqLocalidad;
-
 // simulacion de la clase de desembolso para la plantilla
-$claDesembolso = $objCasaMano->objRegistroOferta;
-
+$claDesembolso = new Desembolso();
 $claDesembolso->arrTecnico = $objCasaMano->objRevisionTecnica;
+foreach( $objCasaMano->objRegistroOferta as $txtClave => $txtValor ) {
+   $claDesembolso->$txtClave = $txtValor;
+}
+
+$localidadcem = $claDesembolso->seqLocalidad;
 
 $bolPermiso = $objCasaMano->puedeIngresar($arrFlujoHogar);
 if ($bolPermiso == true) {

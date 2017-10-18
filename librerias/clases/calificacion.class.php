@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Ciudadano.class.php';
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -29,6 +30,7 @@ class calificacion {
     public $HCF;
     public $PLGTBI;
     public $PPGD;
+    public $smmlv;
 
 //put your code here
     public function calificacion() {
@@ -47,6 +49,7 @@ class calificacion {
         $this->HCF = 0;
         $this->PLGTBI = 0;
         $this->PPGD = 0;
+        $this->smmlv = $arrConfiguracion['constantes']['salarioMinimo'];
     }
 
     public function obtenerValorIndicadores() {
@@ -250,13 +253,7 @@ class calificacion {
                                    DATE_FORMAT(ciu1.fchNacimiento, '%m-%d'),
                                 0,
                                 -1) >= 15
-                       AND   YEAR(CURDATE())
-                           - YEAR(ciu1.fchNacimiento)
-                           + IF(
-                                DATE_FORMAT(CURDATE(), '%m-%d') >
-                                   DATE_FORMAT(ciu1.fchNacimiento, '%m-%d'),
-                                0,
-                                -1) < 60
+                       AND ciu1.valIngresos > 0
                        AND hog1.seqFormulario = hog.seqFormulario)
                    AS adultos,
                 (SELECT sum(numAnosAprobados)
@@ -392,7 +389,8 @@ class calificacion {
         }
         $sql .= " GROUP BY frm.seqFormulario
          ORDER BY frm.seqFormulario";
-//echo $sql; exit();
+        //echo $sql;
+//        exit();
         try {
             $objRes = $aptBd->execute($sql);
             $datos = array();
@@ -765,7 +763,8 @@ FROM t_frm_calificacion_plan3    cal
 where fchCalificacion like '" . $fecha . "'
 and seqParentesco = 1
 group by seqFormulario";
-        //echo $sql; die();
+//        echo $sql;
+//        die();
         return $sql;
     }
 
@@ -842,7 +841,7 @@ group by seqIndicador;";
         $sql = "SELECT max(fchCalificacion), sum(total) as total
            FROM t_frm_calificacion_plan3
             left join t_frm_calificacion_operaciones using(seqCalificacion)
-            where seqFormulario in (" . $formularios . ") And fchCalificacion like '".$fecha."'";
+            where seqFormulario in (" . $formularios . ") And fchCalificacion like '" . $fecha . "'";
 
         try {
             $objRes = $aptBd->execute($sql);
@@ -859,6 +858,125 @@ group by seqIndicador;";
             $suma = $value['total'];
         }
         return $suma;
+    }
+
+    function obtenerPromedioING($formularios, $smlv) {
+        global $aptBd;
+
+        $sql = "SELECT 
+                 sum(valIngresos) AS ingresos, COUNT(seqCiudadano) AS cant
+                FROM
+                    t_ciu_ciudadano ciu1
+                        LEFT JOIN
+                    t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                   seqFormulario in (" . $formularios . ") group by seqFormulario";
+
+        try {
+            $objRes = $aptBd->execute($sql);
+            $cont = $objRes->_numOfRows;
+
+            $datos = Array();
+            $calcING = 0;
+            $inversa = 0;
+            $sumador = 0;
+            $total = 0;
+            while ($objRes->fields) {
+
+                $calcING = $objRes->fields['ingresos'] / $objRes->fields['cant'];
+                if ($calcING < 121196) {
+                    $calcING = 121196;
+                }
+                $inversa = 1 / ($calcING / $smlv);
+                $sumador += $inversa;
+                $objRes->MoveNext();
+            }
+
+            $total = ($sumador / $cont);
+
+            return $total;
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
+    }
+
+    function obtenerPromedioEdu($formularios) {
+        global $aptBd;
+        $sql = "SELECT 
+                SUM(numAnosAprobados) as aprobados, count(numDocumento) as cant
+                FROM
+                    t_ciu_ciudadano ciu1
+                        LEFT JOIN
+                    t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                    YEAR(CURDATE()) - YEAR(ciu1.fchNacimiento) + IF(DATE_FORMAT(CURDATE(), '%m-%d') > DATE_FORMAT(ciu1.fchNacimiento, '%m-%d'),
+                        0,
+                        - 1) >= 15 and seqFormulario in (" . $formularios . ") group by seqFormulario";
+
+        try {
+            $objRes = $aptBd->execute($sql);
+            $cont = $objRes->_numOfRows;
+            $datos = Array();
+            $calcEd = 0;
+            $inversa = 0;
+            $sumador = 0;
+            $total = 0;
+            while ($objRes->fields) {
+                $calcEd = $objRes->fields['aprobados'] / $objRes->fields['cant'];
+                $inversa = 1 / ($calcEd + 0.5);
+                $sumador += $inversa;
+                $objRes->MoveNext();
+            }
+            $total = $sumador / $cont;
+            return $total;
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
+    }
+
+    function obtenerPromedioTDE($formularios) {
+        global $aptBd;
+        $sql = "select  COUNT(seqCiudadano) AS cant, 
+                (SELECT 
+                         COUNT(*)
+                FROM
+                    t_ciu_ciudadano ciu1
+                        LEFT JOIN
+                    t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                           YEAR(CURDATE()) - YEAR(ciu1.fchNacimiento) + IF(DATE_FORMAT(CURDATE(), '%m-%d') > DATE_FORMAT(ciu1.fchNacimiento, '%m-%d'),
+                               0,
+                - 1) >= 15 and ciu1.valIngresos > 0  AND hog1.seqFormulario = hog.seqFormulario) AS adultos
+                from t_ciu_ciudadano
+                left join t_frm_hogar hog using(seqCiudadano)
+                where seqFormulario in(" . $formularios . ")
+                group by seqFormulario";
+
+        try {
+            $objRes = $aptBd->execute($sql);
+            $cont = $objRes->_numOfRows;
+            $datos = Array();
+            $calcEd = 0;
+            $inversa = 0;
+            $sumador = 0;
+            $total = 0;
+            while ($objRes->fields) {
+
+                if ($objRes->fields['adultos'] < 1) {
+                    $calcTDE = 3.5;
+                } else {
+                    $calcTDE = $objRes->fields['cant'] / $objRes->fields['adultos'];
+                }
+
+                $sumador += $calcTDE;
+                $objRes->MoveNext();
+            }
+            $total = $sumador / $cont;
+
+            return $total;
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
     }
 
 }

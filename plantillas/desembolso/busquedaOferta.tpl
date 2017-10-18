@@ -604,6 +604,19 @@
 
                        />
 
+
+                <input type="hidden"
+                       name="bolViabilizoJuridico"
+                       id="bolViabilizoJuridico"
+                       value="{$claDesembolso->bolViabilizoJuridico}"
+                       />
+
+                <input type="hidden"
+                       name="bolViabilizoTecnico"
+                       id="bolViabilizoTecnico"
+                       value="{$claDesembolso->bolViabilizoTecnico}"
+                       />
+
                 <!-- Fin de la adicion 20JUN2016-->
 
                 </tr>

@@ -98,6 +98,13 @@ if ($claFormulario->bolCerrado == 1) {
     }
 }
 
+// Si es de plan de gobierno 2 (bogota humana) no puede salvar datos
+if( $claFormulario->seqPlanGobierno != 3 ){
+    $txtPlanGobierno = array_shift( obtenerDatosTabla("T_FRM_PLAN_GOBIERNO",array("seqPlanGobierno","txtPlanGobierno"),"seqPlanGobierno","seqPlanGobierno = " . $claFormulario->seqPlanGobierno) );
+    $arrErrores[] = "No puede actualizar los hogares del plan de gobierno " . $txtPlanGobierno;
+}
+
+
 // si el formulario tiene sancion no se puede modificar
 if ($claFormulario->bolSancion == 1) {
     $arrErrores[] = "No puede modificar formularios de hogares que se encuentran sancionados";
@@ -128,6 +135,7 @@ if (empty($arrErrores)) {
     if (!empty($_POST['hogar'])) {
 
         $numCabezaFamilia = 0;
+        $numConyuge = 0;
         $numCondicionJefeHogar = 0;
         $numCondicionJefeHogarSinIngreso = 0;
         $numCuentaUnionMarital = 0;
@@ -185,6 +193,8 @@ if (empty($arrErrores)) {
                 if ($arrCiudadano['seqTipoDocumento'] != 1 and $arrCiudadano['seqTipoDocumento'] != 2) {
                     $arrErrores[] = "El tipo de documento seleccionado para el postulante principal no es válido";
                 }
+            } elseif($arrCiudadano['seqParentesco'] == 2){
+                $numConyuge++;
             } else {
                 $seqParentesco = $arrCiudadano['seqParentesco'];
                 if (!isset($arrParentescos[$seqParentesco])) {
@@ -229,6 +239,11 @@ if (empty($arrErrores)) {
 
                     // fechas para comparar mayor de edad y tercera edad
                     $numEdad = strtotime($arrCiudadano['fchNacimiento']);
+
+                    // la fecha de nacimiento no puede ser mayor a hoy
+                    if( $numEdad > time() ){
+                        $arrErrores[] = "Fecha de nacimiento invalida para el documento " . number_format($numDocumento) . " no puede ser mayor a hoy";
+                    }
 
                     // se compara si es mayor de edad al momento de la postulacion
                     if (($numEdad <= $numMayorEdad) and in_array($arrCiudadano['seqTipoDocumento'], $arrDocumentos)) {
@@ -293,6 +308,9 @@ if (empty($arrErrores)) {
                 break;
             case $numCabezaFamilia > 1:
                 $arrErrores[] = "Solo puede tener un postulante principal para este hogar";
+                break;
+            case $numConyuge > 1:
+                $arrErrores[] = "Debe haber solo un conyuge para el hogar";
                 break;
             case $numCondicionJefeHogar > 1:
                 $arrErrores[] = "Solo puede haber un miembro de hogar con la condición especial de \"Madre / Padre cabeza de Familia\"";

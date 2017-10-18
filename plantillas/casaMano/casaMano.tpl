@@ -147,23 +147,23 @@
                                 </div>
                                 <div style="cursor: pointer;
                                         background-color:
-                                {if $objCasaMano->numDiasRevisionTecnica >= $objCasaMano->numDiasLimiteRevsionTecnica}
-                                        red
-                                    {else}
-                                        green
-                                {/if};
+                                            {if $objCasaMano->numDiasRevisionTecnica >= $objCasaMano->numDiasLimiteRevsionTecnica}
+                                                red
+                                            {else}
+                                                green
+                                            {/if};
                                         font-size: 7px;
                                         color: white;
                                         font-weight: bold;
                                         width:30px;
                                         height: 10px;"
                                      onClick="
-                                     {if $objCasaMano->bolRevisionTecnica == 1}
-
-                                     {else}
-                                             popUpPdfCasaMano( 'habitabilidadPdf.php' , 'exportar[]={$objCasaMano->objPostulacion->seqFormulario}' , '{$seqCasaMano}' )
-                                     {/if}
-                                             "
+                                         {if $objCasaMano->bolRevisionTecnica == 1}
+                                            return false;
+                                         {else}
+                                            popUpPdfCasaMano( 'habitabilidadPdf.php' , 'exportar[]={$objCasaMano->objPostulacion->seqFormulario}' , '{$seqCasaMano}' )
+                                         {/if}
+                                     "
                                 >
                                     {$objCasaMano->numDiasRevisionTecnica}
                                 </div>
@@ -185,10 +185,10 @@
                                             onClick="cambioCEM('./contenidos/casaMano/revisionTecnica.php','seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}&modificar={$smarty.foreach.fases.last}');">
                                         <img src="./recursos/imagenes/plus_icon.gif">
                                     </button>
-                                    <input type="checkbox" id="bolVisita" name="bolVisita">
-                                    Con visita
                                 {/if}
                             {/if}
+                            <input type="checkbox" id="bolVisita" name="bolVisita">
+                            Con visita
                         </td>
 
                         <!-- PRIMERA VERIFICACION -->

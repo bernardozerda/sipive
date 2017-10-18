@@ -39,17 +39,20 @@
         $objCasaMano = array_shift( $arrCasaMano );
     }
 
-    $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $objCasaMano->objRegistroOferta->seqLocalidad, "txtBarrio");
+    $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $objCasaMano->objRegistroOferta['seqLocalidad'], "txtBarrio");
 
     $arrTextoBarrio = obtenerDatosTabla(
         "T_FRM_BARRIO",
         array("seqLocalidad","seqBarrio"),
         "seqLocalidad",
-        "seqLocalidad = " . $objCasaMano->objRegistroOferta->seqLocalidad . " and txtBarrio = '" . $objCasaMano->objRegistroOferta->txtBarrio . "'"
+        "seqLocalidad = " . $objCasaMano->objRegistroOferta['seqLocalidad'] . " and txtBarrio = '" . $objCasaMano->objRegistroOferta['txtBarrio'] . "'"
     );
 
-    $objCasaMano->objRegistroOferta = ( is_object($objCasaMano->objRegistroOferta) )? $objCasaMano->objRegistroOferta : new stdClass();
-    $objCasaMano->objRegistroOferta->seqBarrio = $arrTextoBarrio[$objCasaMano->objRegistroOferta->seqLocalidad];
+
+
+    $objCasaMano->objRegistroOferta = ( is_array($objCasaMano->objRegistroOferta) )? $objCasaMano->objRegistroOferta : array();
+    $seqLocalidad = $objCasaMano->objRegistroOferta['seqLocalidad'];
+    $objCasaMano->objRegistroOferta['seqBarrio'] = $arrTextoBarrio[$seqLocalidad];
 
     $bolPermiso = $objCasaMano->puedeIngresar( $arrFlujoHogar );
     if( $bolPermiso == true ){
@@ -74,7 +77,9 @@
       // obtiene la informacion de la pestana de actos administrativos
       $claActosAdministrativos = new ActoAdministrativo();
       $arrActos = $claActosAdministrativos->cronologia( $numDocumento );
-      
+
+
+
       $claSmarty->assign( "arrActos" , $arrActos );
       $claSmarty->assign( "arrParentesco" , $arrParentesco );
       $claSmarty->assign( "arrBarrio" , $arrBarrio );

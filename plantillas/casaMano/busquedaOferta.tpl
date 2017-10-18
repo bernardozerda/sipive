@@ -59,7 +59,7 @@
                                         ponerPlaceholder(this.id, 'Nombre del vendedor');"
                                onBlur="this.style.backgroundColor = '#FFFFFF';
                                         sinCaracteresEspeciales(this);"
-                               value="{$claDesembolso->txtNombreVendedor}"
+                               value="{$claDesembolso.txtNombreVendedor}"
                                style="width:98%"
                                />
                     </td>
@@ -77,7 +77,7 @@
                                 >
                             {foreach from=$arrTipoDocumento key=seqTipoDocumento item=txtTipoDocumento}
                                 <option value="{$seqTipoDocumento}"
-                                        {if $claDesembolso->seqTipoDocumento == $seqTipoDocumento} selected {/if}
+                                        {if $claDesembolso.seqTipoDocumento == $seqTipoDocumento} selected {/if}
                                         >{$txtTipoDocumento}</option>
                             {/foreach}
                         </select>	        				
@@ -91,7 +91,7 @@
                                                    ponerPlaceholder(this.id, 'Documento');" 
                                onBlur="this.style.backgroundColor = '#FFFFFF';"
                                onkeyup="formatoSeparadores(this)"
-                               value="{$claDesembolso->numDocumentoVendedor|number_format:0:'.':'.'}"
+                               value="{$claDesembolso.numDocumentoVendedor|number_format:0:'.':'.'}"
                                style="width:200px"
                                />
                     </td>
@@ -108,7 +108,7 @@
                                            ponerPlaceholder(this.id, 'Telefono 1');" 
                                onBlur="javascript: soloNumeros(this);
                                            this.style.backgroundColor = '#FFFFFF';"
-                               value="{$claDesembolso->numTelefonoVendedor}"
+                               value="{$claDesembolso.numTelefonoVendedor}"
                                size="16"
                                />
 
@@ -119,7 +119,7 @@
                                            ponerPlaceholder(this.id, 'Telefono 2');" 
                                onBlur="javascript: soloNumeros(this);
                                            this.style.backgroundColor = '#FFFFFF';"
-                               value="{$claDesembolso->numTelefonoVendedor2}"
+                               value="{$claDesembolso.numTelefonoVendedor2}"
                                size="16"
                                />
                     </td>
@@ -131,7 +131,7 @@
                                onFocus="this.style.backgroundColor = '#ADD8E6';
                                            ponerPlaceholder(this.id, 'Correo electr&oacute;nico');" 
                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                               value="{$claDesembolso->txtCorreoVendedor}"
+                               value="{$claDesembolso.txtCorreoVendedor}"
                                style="width:200px"
                                />
                     </td>
@@ -143,7 +143,7 @@
                                      name="txtCompraVivienda"
                                      id="compraNueva"
                                      value="nueva"
-                                     {if $claDesembolso->txtCompraVivienda == "nueva"} checked {/if}
+                                     {if $claDesembolso.txtCompraVivienda == "nueva"} checked {/if}
                                      />
 
                         {if $claFormulario->seqTipoEsquema != 10}
@@ -151,7 +151,7 @@
                                      name="txtCompraVivienda"
                                      id="compraUsada"
                                      value="usada"
-                                     {if $claDesembolso->txtCompraVivienda == "usada"} checked {/if}
+                                     {if $claDesembolso.txtCompraVivienda == "usada"} checked {/if}
                                      />
                         {/if}
                     </td>
@@ -180,7 +180,7 @@
                                                        ponerPlaceholder(this.id, 'Direcci&oacute;n');" 
                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
                                    style="width:98%;"
-                                   value="{$claDesembolso->txtDireccionInmueble}"
+                                   value="{$claDesembolso.txtDireccionInmueble}"
                                    readonly
                                    />
                             <div id="objDireccionOcultoInmueble" style="display:none" />
@@ -192,7 +192,7 @@
                                     name="bolPoseedor"
                                     id="bolPoseedor"
                                     value="1"
-                                    {if $claDesembolso->bolPoseedor == 1} checked {/if}
+                                    {if $claDesembolso.bolPoseedor == 1} checked {/if}
                                     /> Es Poseedor
                         {else}
                             &nbsp;
@@ -215,7 +215,7 @@
                             ><option value="">Seleccione</option>
                             {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
                                 <option value="{$seqCiudad}" 
-                                        {if $claDesembolso->seqCiudad == $seqCiudad} selected {/if}
+                                        {if $claDesembolso.seqCiudad == $seqCiudad} selected {/if}
                                         > {$txtCiudad}</option>            
                             {/foreach}
                         </select>    
@@ -238,7 +238,7 @@
                             <option value="0">0 - DESCONOCIDO</option>
                             {foreach from=$arrLocalidad key=seqLocalidad item=txtLocalidad}
                                 <option value="{$seqLocalidad}"
-                                        {if $claDesembolso->seqLocalidad == $seqLocalidad} selected {/if}
+                                        {if $claDesembolso.seqLocalidad == $seqLocalidad} selected {/if}
                                         >{$txtLocalidad}</option>
                             {/foreach}
                         </select>
@@ -252,10 +252,10 @@
                                 style="width:260px;"
                         >
                             <option value="0">Seleccione</option>
-                            {if intval( $claDesembolso->seqLocalidad ) != 0}
+                            {if intval( $claDesembolso.seqLocalidad ) != 0}
                                 {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
                                     <option value="{$seqBarrio}"
-                                            {if $claDesembolso->seqBarrio == $seqBarrio}
+                                            {if $claDesembolso.seqBarrio == $seqBarrio}
                                                 selected
                                             {/if}
                                     >
@@ -277,10 +277,10 @@
                                 onChange="cambiarTipoPropiedad(this);"
                                 style="width:200px"
                         />
-                            <option value="escritura" {if $claDesembolso->txtPropiedad  == "escritura"} selected {/if}>Escritura Publica</option>
-                            <option value="sentencia" {if $claDesembolso->txtPropiedad  == "sentencia"} selected {/if}>Sentencia</option>
-                            <option value="resolucion" {if $claDesembolso->txtPropiedad == "resolucion"} selected {/if}>Resolucion</option>
-                            <option value="ninguno" {if $claDesembolso->txtPropiedad == "ninguno"} selected {/if}>Ninguno</option>
+                            <option value="escritura" {if $claDesembolso.txtPropiedad  == "escritura"} selected {/if}>Escritura Publica</option>
+                            <option value="sentencia" {if $claDesembolso.txtPropiedad  == "sentencia"} selected {/if}>Sentencia</option>
+                            <option value="resolucion" {if $claDesembolso.txtPropiedad == "resolucion"} selected {/if}>Resolucion</option>
+                            <option value="ninguno" {if $claDesembolso.txtPropiedad == "ninguno"} selected {/if}>Ninguno</option>
                         </select>
                     </td>
                 </tr>
@@ -291,7 +291,7 @@
                         <!-- OPCIONES PARA ESCRITURA PUBLICA -->
 
                         <div id="escritura"
-                             {if $claDesembolso->txtPropiedad == "Escritura" || $claDesembolso->txtPropiedad == "escritura"|| $claDesembolso->txtPropiedad == ""}
+                             {if $claDesembolso.txtPropiedad == "Escritura" || $claDesembolso.txtPropiedad == "escritura"|| $claDesembolso.txtPropiedad == ""}
                                  style="display:inline;"
                              {else}
                                  style="display:none;"
@@ -304,7 +304,7 @@
                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
                                    onBlur="javascript: soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
-                                   value="{$claDesembolso->txtEscritura}"
+                                   value="{$claDesembolso.txtEscritura}"
                                    /> del
                             <input	type="text"
                                    name="fchEscritura"
@@ -314,7 +314,7 @@
                                                            this.style.backgroundColor = '#FFFFFF';"
                                    maxlength="10"
                                    style="width:80px"
-                                   value="{if $claDesembolso->fchEscritura != '0000-00-00'}{$claDesembolso->fchEscritura}{/if}"
+                                   value="{if $claDesembolso.fchEscritura != '0000-00-00'}{$claDesembolso.fchEscritura}{/if}"
                                    readonly
                                    />  <a href="#" onClick="calendarioPopUp('fchEscritura');">Calendario</a> notaría
                             <input	type="text"
@@ -325,7 +325,7 @@
                                                            this.style.backgroundColor = '#FFFFFF';"
                                    maxlength="3"
                                    style="width:37px"
-                                   value="{$claDesembolso->numNotaria}"
+                                   value="{$claDesembolso.numNotaria}"
                                    /> ciudad
                             <input	type="text"
                                    name="txtCiudad"
@@ -334,13 +334,13 @@
                                    onBlur="javascript: soloLetras(this);
                                                            this.style.backgroundColor = '#FFFFFF';"
                                    style="width:100px"
-                                   value="{$claDesembolso->txtCiudad}"
+                                   value="{$claDesembolso.txtCiudad}"
                                    /></div> <!-- fin div Escritura_ga -->
                         </div>
 
                         <!-- OPCIONES PARA SENTENCIA -->
                         <div id="sentencia"
-                             {if $claDesembolso->txtPropiedad == "sentencia"}
+                             {if $claDesembolso.txtPropiedad == "sentencia"}
                                  style="display:inline;"
                              {else}
                                  style="display:none;"
@@ -354,7 +354,7 @@
                                                        this.style.backgroundColor = '#FFFFFF';"
                                maxlength="10"
                                style="width:80px"
-                               value="{if $claDesembolso->fchSentencia != '0000-00-00'}{$claDesembolso->fchSentencia}{/if}"
+                               value="{if $claDesembolso.fchSentencia != '0000-00-00'}{$claDesembolso.fchSentencia}{/if}"
                                readonly
                                />  <a href="#" onClick="calendarioPopUp('fchSentencia');">Calendario</a> juzgado
                         <input	type="text"
@@ -365,7 +365,7 @@
                                                        this.style.backgroundColor = '#FFFFFF';"
                                maxlength="3"
                                style="width:37px"
-                               value="{$claDesembolso->numJuzgado}"
+                               value="{$claDesembolso.numJuzgado}"
                                /> de la ciudad de
                         <input	type="text"
                                name="txtCiudadSentencia"
@@ -374,13 +374,13 @@
                                onBlur="javascript: soloLetras(this);
                                                        this.style.backgroundColor = '#FFFFFF';"
                                style="width:100px"
-                               value="{$claDesembolso->txtCiudadSentencia}"
+                               value="{$claDesembolso.txtCiudadSentencia}"
                                />
                         </div>
 
                         <!-- OPCIONES PARA RESOLUCION -->
                         <div id="resolucion"
-                             {if $claDesembolso->txtPropiedad == "resolucion"}
+                             {if $claDesembolso.txtPropiedad == "resolucion"}
                                  style="display:inline;"
                              {else}
                                  style="display:none;"
@@ -394,7 +394,7 @@
                                                        this.style.backgroundColor = '#FFFFFF';"
                                maxlength="5"
                                style="width:50px"
-                               value="{$claDesembolso->numResolucion}"
+                               value="{$claDesembolso.numResolucion}"
                                /> del
                         <input	type="text"
                                name="fchResolucion"
@@ -404,7 +404,7 @@
                                                        this.style.backgroundColor = '#FFFFFF';"
                                maxlength="10"
                                style="width:80px"
-                               value="{if $claDesembolso->fchResolucion != '0000-00-00'}{$claDesembolso->fchResolucion}{/if}"
+                               value="{if $claDesembolso.fchResolucion != '0000-00-00'}{$claDesembolso.fchResolucion}{/if}"
                                />  <a href="#" onClick="calendarioPopUp('fchResolucion');">Calendario</a> entidad
                         <input	type="text"
                                name="txtEntidad"
@@ -413,7 +413,7 @@
                                onBlur="javascript: soloLetras(this);
                                                        this.style.backgroundColor = '#FFFFFF';"
                                style="width:100px"
-                               value="{$claDesembolso->txtEntidad}"
+                               value="{$claDesembolso.txtEntidad}"
                                /> ciudad
                         <input	type="text"
                                name="txtCiudadResolucion"
@@ -422,7 +422,7 @@
                                onBlur="javascript: soloLetras(this);
                                                        this.style.backgroundColor = '#FFFFFF';"
                                style="width:100px"
-                               value="{$claDesembolso->txtCiudadResolucion}"
+                               value="{$claDesembolso.txtCiudadResolucion}"
                                />
                         </div>
 
@@ -441,7 +441,7 @@
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                        this.style.backgroundColor = '#FFFFFF';"
                                style="width:200px"
-                               value="{$claDesembolso->txtMatriculaInmobiliaria}"
+                               value="{$claDesembolso.txtMatriculaInmobiliaria}"
                                />
                     </td>
                     <td>Chip</td>
@@ -454,7 +454,7 @@
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                        this.style.backgroundColor = '#FFFFFF';"
                                style="width:200px"
-                               value="{$claDesembolso->txtChip}"
+                               value="{$claDesembolso.txtChip}"
                                />
                     </td>		        			
                 </tr>
@@ -469,7 +469,7 @@
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                        this.style.backgroundColor = '#FFFFFF';"
                                style="width:200px"
-                               value="{$claDesembolso->txtCedulaCatastral}"
+                               value="{$claDesembolso.txtCedulaCatastral}"
                                />
                     </td>
                     <td>Area (m<sup>2</sup>)</td>
@@ -483,7 +483,7 @@
                                                        this.style.backgroundColor = '#FFFFFF';"
                                style="width:50px"
                                maxlength="4"
-                               value="{$claDesembolso->numAreaLote}"
+                               value="{$claDesembolso.numAreaLote}"
                                /> Construida
                         <input	type="text"
                                name="numAreaConstruida"
@@ -493,7 +493,7 @@
                                                        this.style.backgroundColor = '#FFFFFF';"
                                style="width:50px"
                                maxlength="3"
-                               value="{$claDesembolso->numAreaConstruida}"
+                               value="{$claDesembolso.numAreaConstruida}"
                                />
                     </td>
                 </tr>
@@ -507,7 +507,7 @@
                                onBlur="this.style.backgroundColor = '#FFFFFF';"
                                onkeyup="formatoSeparadores(this)"
                                style="width:200px"
-                               value="{$claDesembolso->numAvaluo}"
+                               value="{$claDesembolso.numAvaluo}"
                                />
                     </td>
                     <td>Valor Inmueble</td>
@@ -520,7 +520,7 @@
                                onBlur="javascript: soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
                                onkeyup="formatoSeparadores(this)"
                                style="width:200px"
-                               value="{$claDesembolso->numValorInmueble}"
+                               value="{$claDesembolso.numValorInmueble}"
                                />
                     </td>
                 </tr>
@@ -532,13 +532,13 @@
                                       name="txtTipoPredio"
                                       id="tipoUrbano" 
                                       value="urbano" 
-                                      {if strtoupper ($claDesembolso->txtTipoPredio) == "URBANO"} checked {/if}
+                                      {if strtoupper ($claDesembolso.txtTipoPredio) == "URBANO"} checked {/if}
                                       />&nbsp;
                         Rural <input type="radio" 
                                      name="txtTipoPredio"
                                      id="tipoRural" 
                                      value="rural" 
-                                     {if strtoupper($claDesembolso->txtTipoPredio) == "RURAL"} checked {/if}
+                                     {if strtoupper($claDesembolso.txtTipoPredio) == "RURAL"} checked {/if}
                                      />
                     </td>
                     <td>
@@ -554,7 +554,7 @@
                             <option value="0">No Disponible</option>
                             {section loop=7 start=1 name=estrato}
                                 <option value="{$smarty.section.estrato.index}"
-                                        {if $claDesembolso->numEstrato == $smarty.section.estrato.index} selected {/if} 
+                                        {if $claDesembolso.numEstrato == $smarty.section.estrato.index} selected {/if}
                                         >Estrato {$smarty.section.estrato.index}</option>
                             {/section}
                         </select>
@@ -575,7 +575,7 @@
                                 id="persona" 
                                 name="documentos" 
                                 value="persona"
-                                {if $claDesembolso->txtTipoDocumentos != 'empresa'} checked {/if} 
+                                {if $claDesembolso.txtTipoDocumentos != 'empresa'} checked {/if}
                                 onClick="mostrarDocumentosEscrituracion(this.id, 'listadoDocumentos');"
                                 /> Persona Natural
                     </td>
@@ -584,7 +584,7 @@
                                 id="empresa"
                                 name="documentos" 
                                 value="empresa"
-                                {if $claDesembolso->txtTipoDocumentos == 'empresa'} checked {/if} 
+                                {if $claDesembolso.txtTipoDocumentos == 'empresa'} checked {/if}
                                 onClick="mostrarDocumentosEscrituracion(this.id, 'listadoDocumentos');"
                                 /> Persona Jur&iacute;dica
                     </td>
@@ -604,7 +604,7 @@
                         <input	type="text"
                                name="numEscrituraPublica"
                                id="numEscrituraPublica"
-                               value="{$claDesembolso->numEscrituraPublica}"
+                               value="{$claDesembolso.numEscrituraPublica}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -616,7 +616,7 @@
                         <input	type="text"
                                name="txtEscrituraPublica"
                                id="txtEscrituraPublica"
-                               value="{$claDesembolso->txtEscrituraPublica}"
+                               value="{$claDesembolso.txtEscrituraPublica}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -631,7 +631,7 @@
                         <input	type="text"
                                name="numCertificadoTradicion"
                                id="numCertificadoTradicion"
-                               value="{$claDesembolso->numCertificadoTradicion}"
+                               value="{$claDesembolso.numCertificadoTradicion}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -643,7 +643,7 @@
                         <input	type="text"
                                name="txtCertificadoTradicion"
                                id="txtCertificadoTradicion"
-                               value="{$claDesembolso->txtCertificadoTradicion}"
+                               value="{$claDesembolso.txtCertificadoTradicion}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -653,8 +653,8 @@
                     </td>
                 </tr>
 
-                <input type="hidden" name="numCartaAsignacion" value="{$claDesembolso->numCartaAsignacion}">
-                <input type="hidden" name="txtCartaAsignacion" value="{$claDesembolso->txtCartaAsignacion}">
+                <input type="hidden" name="numCartaAsignacion" value="{$claDesembolso.numCartaAsignacion}">
+                <input type="hidden" name="txtCartaAsignacion" value="{$claDesembolso.txtCartaAsignacion}">
 
                 <tr  id="3-ambos">
                     <td>Certificado de riesgo</td>
@@ -662,7 +662,7 @@
                         <input	type="text"
                                name="numAltoRiesgo"
                                id="numAltoRiesgo"
-                               value="{$claDesembolso->numAltoRiesgo}"
+                               value="{$claDesembolso.numAltoRiesgo}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -674,7 +674,7 @@
                         <input	type="text"
                                name="txtAltoRiesgo"
                                id="txtAltoRiesgo"
-                               value="{$claDesembolso->txtAltoRiesgo}"
+                               value="{$claDesembolso.txtAltoRiesgo}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
                                style="width:300px"
@@ -688,7 +688,7 @@
                         <input	type="text"
                                name="numHabitabilidad"
                                id="numHabitabilidad"
-                               value="{$claDesembolso->numHabitabilidad}"
+                               value="{$claDesembolso.numHabitabilidad}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -700,7 +700,7 @@
                         <input	type="text"
                                name="txtHabitabilidad"
                                id="txtHabitabilidad"
-                               value="{$claDesembolso->txtHabitabilidad}"
+                               value="{$claDesembolso.txtHabitabilidad}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -715,7 +715,7 @@
                         <input	type="text"
                                name="numBoletinCatastral"
                                id="numBoletinCatastral"
-                               value="{$claDesembolso->numBoletinCatastral}"
+                               value="{$claDesembolso.numBoletinCatastral}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -727,7 +727,7 @@
                         <input	type="text"
                                name="txtBoletinCatastral"
                                id="txtBoletinCatastral"
-                               value="{$claDesembolso->txtBoletinCatastral}"
+                               value="{$claDesembolso.txtBoletinCatastral}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -742,7 +742,7 @@
                         <input	type="text"
                                name="numLicenciaConstruccion"
                                id="numLicenciaConstruccion"
-                               value="{$claDesembolso->numLicenciaConstruccion}"
+                               value="{$claDesembolso.numLicenciaConstruccion}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -754,7 +754,7 @@
                         <input	type="text"
                                name="txtLicenciaConstruccion"
                                id="txtLicenciaConstruccion"
-                               value="{$claDesembolso->txtLicenciaConstruccion}"
+                               value="{$claDesembolso.txtLicenciaConstruccion}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -769,7 +769,7 @@
                         <input	type="text"
                                name="numUltimoPredial"
                                id="numUltimoPredial"
-                               value="{$claDesembolso->numUltimoPredial}"
+                               value="{$claDesembolso.numUltimoPredial}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -781,7 +781,7 @@
                         <input	type="text"
                                name="txtUltimoPredial"
                                id="txtUltimoPredial"
-                               value="{$claDesembolso->txtUltimoPredial}"
+                               value="{$claDesembolso.txtUltimoPredial}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -796,7 +796,7 @@
                         <input	type="text"
                                name="numUltimoReciboAgua"
                                id="numUltimoReciboAgua"
-                               value="{$claDesembolso->numUltimoReciboAgua}"
+                               value="{$claDesembolso.numUltimoReciboAgua}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -808,7 +808,7 @@
                         <input	type="text"
                                name="txtUltimoReciboAgua"
                                id="txtUltimoReciboAgua"
-                               value="{$claDesembolso->txtUltimoReciboAgua}"
+                               value="{$claDesembolso.txtUltimoReciboAgua}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -823,7 +823,7 @@
                         <input	type="text"
                                name="numUltimoReciboEnergia"
                                id="numUltimoReciboEnergia"
-                               value="{$claDesembolso->numUltimoReciboEnergia}"
+                               value="{$claDesembolso.numUltimoReciboEnergia}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -835,7 +835,7 @@
                         <input	type="text"
                                name="txtUltimoReciboEnergia"
                                id="txtUltimoReciboEnergia"
-                               value="{$claDesembolso->txtUltimoReciboEnergia}"
+                               value="{$claDesembolso.txtUltimoReciboEnergia}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -850,7 +850,7 @@
                         <input	type="text"
                                name="numActaEntrega"
                                id="numActaEntrega"
-                               value="{$claDesembolso->numActaEntrega}"
+                               value="{$claDesembolso.numActaEntrega}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -862,7 +862,7 @@
                         <input	type="text"
                                name="txtActaEntrega"
                                id="txtActaEntrega"
-                               value="{$claDesembolso->txtActaEntrega}"
+                               value="{$claDesembolso.txtActaEntrega}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -872,11 +872,11 @@
                     </td>
                 </tr>
 
-                <input type="hidden" name="numCertificacionVendedor" value="{$claDesembolso->numCertificacionVendedor}">
-                <input type="hidden" name="txtCertificacionVendedor" value="{$claDesembolso->txtCertificacionVendedor}">
+                <input type="hidden" name="numCertificacionVendedor" value="{$claDesembolso.numCertificacionVendedor}">
+                <input type="hidden" name="txtCertificacionVendedor" value="{$claDesembolso.txtCertificacionVendedor}">
 
-                <input type="hidden" name="numAutorizacionDesembolso" value="{$claDesembolso->numAutorizacionDesembolso}">
-                <input type="hidden" name="txtAutorizacionDesembolso" value="{$claDesembolso->txtAutorizacionDesembolso}">
+                <input type="hidden" name="numAutorizacionDesembolso" value="{$claDesembolso.numAutorizacionDesembolso}">
+                <input type="hidden" name="txtAutorizacionDesembolso" value="{$claDesembolso.txtAutorizacionDesembolso}">
 
                 <tr  id="11-ambos">
                     <td>Fotocopia de la cedula del vendedor</td>
@@ -884,7 +884,7 @@
                         <input	type="text"
                                name="numFotocopiaVendedor"
                                id="numFotocopiaVendedor"
-                               value="{$claDesembolso->numFotocopiaVendedor}"
+                               value="{$claDesembolso.numFotocopiaVendedor}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -896,7 +896,7 @@
                         <input	type="text"
                                name="txtFotocopiaVendedor"
                                id="txtFotocopiaVendedor"
-                               value="{$claDesembolso->txtFotocopiaVendedor}"
+                               value="{$claDesembolso.txtFotocopiaVendedor}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -905,13 +905,13 @@
                                />
                     </td>
                 </tr>
-                <tr {if $claDesembolso->txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="12-empresa">
+                <tr {if $claDesembolso.txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="12-empresa">
                     <td>Fotocopia RUT</td>
                     <td align="center">
                         <input	type="text"
                                name="numRut"
                                id="numRut"
-                               value="{$claDesembolso->numRut}"
+                               value="{$claDesembolso.numRut}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -923,7 +923,7 @@
                         <input	type="text"
                                name="txtRut"
                                id="txtRut"
-                               value="{$claDesembolso->txtRut}"
+                               value="{$claDesembolso.txtRut}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -932,13 +932,13 @@
                                />
                     </td>
                 </tr>
-                <tr {if $claDesembolso->txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="13-empresa">
+                <tr {if $claDesembolso.txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="13-empresa">
                     <td>Fotocopia RIT</td>
                     <td align="center">
                         <input	type="text"
                                name="numRit"
                                id="numRit"
-                               value="{$claDesembolso->numRit}"
+                               value="{$claDesembolso.numRit}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -950,7 +950,7 @@
                         <input	type="text"
                                name="txtRit"
                                id="txtRit"
-                               value="{$claDesembolso->txtRit}"
+                               value="{$claDesembolso.txtRit}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -959,13 +959,13 @@
                                />
                     </td>
                 </tr>
-                <tr {if $claDesembolso->txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="14-empresa">
+                <tr {if $claDesembolso.txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="14-empresa">
                     <td>Fotocopia NIT</td>
                     <td align="center">
                         <input	type="text"
                                name="numNit"
                                id="numNit"
-                               value="{$claDesembolso->numNit}"
+                               value="{$claDesembolso.numNit}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -977,7 +977,7 @@
                         <input	type="text"
                                name="txtNit"
                                id="txtNit"
-                               value="{$claDesembolso->txtNit}"
+                               value="{$claDesembolso.txtNit}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -992,7 +992,7 @@
                         <input	type="text"
                                name="numOtros"
                                id="numOtros"
-                               value="{$claDesembolso->numOtros}"
+                               value="{$claDesembolso.numOtros}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: soloNumeros(this);
                                                    this.style.backgroundColor = '#FFFFFF';"
@@ -1004,7 +1004,7 @@
                         <input	type="text"
                                name="txtOtro"
                                id="txtOtro"
-                               value="{$claDesembolso->txtOtro}"
+                               value="{$claDesembolso.txtOtro}"
                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                onBlur="javascript: sinCaracteresEspeciales(this);
                                                    this.style.backgroundColor = '#FFFFFF';"

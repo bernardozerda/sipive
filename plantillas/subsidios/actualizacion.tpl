@@ -690,7 +690,7 @@
                                 </tr>
                             </table>
 
-                            </p></div>
+                        </p></div>
 
                         <!-- DATOS DEL HOGAR -->
                         <div id="hogar" style="height:409px;"><p>
@@ -1013,8 +1013,7 @@
                                     </td>
                                 </tr>
                             </table></p>
-                            </p>
-                        </div>
+                        </p></div>
 
                         <!-- INFORMACION FINANCIERA -->
                         <div id="financiera" style="height:407px;"><p>
@@ -1456,141 +1455,142 @@
                                     </td>
                                 </tr>
                             </table>
-                            </p></div>
-                            {include file="subsidios/simulador.tpl"}
-                    </div>
+                        </p></div>
 
-                    <!-- MODALIDAD Y VIVIENDA -->
-                    <div id="modalidad" style="height:410px;"><p>
-                        <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666;">
 
-                            <!-- MODALIDAD DEL SUBSIDIO y TIPO DE SOLUCION -->
-                            <tr>
-                                <td width="150px">Modalidad Solución</td>
-                                <td>
-                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                            name="seqModalidad"
-                                            id="seqModalidad"
-                                            style="width:100%;"
-                                            onChange="datosPestanaPostulacion('actualizacion');"
-                                    >
-                                        <option value="0">Seleccione</option>
-                                        {foreach from=$arrModalidad key=seqModalidad item=txtModalidad}
-                                            <option value="{$seqModalidad}"
-                                                    {if $objFormulario->seqModalidad == $seqModalidad} selected {/if}
-                                            >
-                                                {$txtModalidad}
-                                            </option>
-                                        {/foreach}
-                                    </select>
-                                </td>
-                                <td width="100px">Tipo Solución</td>
-                                <td id="tdTipoSolucion" align="left">
-                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                            name="seqSolucion"
-                                            id="seqSolucion"
-                                            style="width:100%;"
-                                    >
-                                        <option value="1">NINGUNA</option>
-                                        {if intval( $objFormulario->seqModalidad ) != 0}
-                                            {foreach from=$arrSolucion key=seqSolucion item=arrDatos}
-                                                {if $objFormulario->seqModalidad == $arrDatos.seqModalidad}
-                                                    <option value="{$seqSolucion}"
-                                                            {if $objFormulario->seqSolucion == $seqSolucion}
-                                                                selected
-                                                            {/if}
-                                                    >
-                                                        {$arrDatos.txtSolucion}
-                                                    </option>
-                                                {/if}
+
+                        <!-- MODALIDAD Y VIVIENDA -->
+                        <div id="modalidad" style="height:410px;"><p>
+                            <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666;">
+
+                                <!-- MODALIDAD DEL SUBSIDIO y TIPO DE SOLUCION -->
+                                <tr>
+                                    <td width="150px">Modalidad Solución</td>
+                                    <td>
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="seqModalidad"
+                                                id="seqModalidad"
+                                                style="width:100%;"
+                                                onChange="datosPestanaPostulacion('actualizacion');"
+                                        >
+                                            <option value="0">Seleccione</option>
+                                            {foreach from=$arrModalidad key=seqModalidad item=txtModalidad}
+                                                <option value="{$seqModalidad}"
+                                                        {if $objFormulario->seqModalidad == $seqModalidad} selected {/if}
+                                                >
+                                                    {$txtModalidad}
+                                                </option>
                                             {/foreach}
-                                        {/if}
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <!-- TIPO ESQUEMA -->
-                            <tr>
-                                <td>Tipo Esquema</td>
-                                <td colspan="3" align="left">
-                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                            name="seqTipoEsquema"
-                                            id="seqTipoEsquema"
-                                            style="width:100%"
-                                    >
-                                        <option value="0" selected {if ! isset( $smarty.session.arrGrupos.3.6 ) } disabled {/if}>NINGUNO</option>
-                                        {foreach from=$arrTipoEsquemas key=seqTipoEsquema item=txtTipoEsquema}
-                                            <option value="{$seqTipoEsquema}"
-                                                    {if $objFormulario->seqTipoEsquema == $seqTipoEsquema} selected {/if}
-                                                    {if ! isset( $smarty.session.arrGrupos.3.6 ) }
-                                                        disabled
+                                        </select>
+                                    </td>
+                                    <td width="100px">Tipo Solución</td>
+                                    <td id="tdTipoSolucion" align="left">
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="seqSolucion"
+                                                id="seqSolucion"
+                                                style="width:100%;"
+                                        >
+                                            <option value="1">NINGUNA</option>
+                                            {if intval( $objFormulario->seqModalidad ) != 0}
+                                                {foreach from=$arrSolucion key=seqSolucion item=arrDatos}
+                                                    {if $objFormulario->seqModalidad == $arrDatos.seqModalidad}
+                                                        <option value="{$seqSolucion}"
+                                                                {if $objFormulario->seqSolucion == $seqSolucion}
+                                                                    selected
+                                                                {/if}
+                                                        >
+                                                            {$arrDatos.txtSolucion}
+                                                        </option>
                                                     {/if}
-                                            >
-                                                {$txtTipoEsquema}
-                                            </option>
-                                        {/foreach}
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                        <br>
-                        <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666">
+                                                {/foreach}
+                                            {/if}
+                                        </select>
+                                    </td>
+                                </tr>
 
-                            <!-- TIENE PROMESA DE COMPRA VENTA FIRMADA -->
-                            <tr>
-                                <td width="350px">¿ Tiene una promesa de compra - venta firmada ?</td>
-                                <td>
-                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                            name="bolPromesaFirmada"
-                                            id="bolPromesaFirmada"
-                                            style="width:100px;"
-                                    >
-                                        <option value="0" {if $objFormulario->bolPromesaFirmada != 1} selected {/if}>No</option>
-                                        <option value="1" {if $objFormulario->bolPromesaFirmada == 1} selected {/if}>Si</option>
-                                    </select>
-                                </td>
-                                <td>&nbsp;</td>
-                            </tr>
+                                <!-- TIPO ESQUEMA -->
+                                <tr>
+                                    <td>Tipo Esquema</td>
+                                    <td colspan="3" align="left">
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="seqTipoEsquema"
+                                                id="seqTipoEsquema"
+                                                style="width:100%"
+                                        >
+                                            <option value="0" selected {if ! isset( $smarty.session.arrGrupos.3.6 ) } disabled {/if}>NINGUNO</option>
+                                            {foreach from=$arrTipoEsquemas key=seqTipoEsquema item=txtTipoEsquema}
+                                                <option value="{$seqTipoEsquema}"
+                                                        {if $objFormulario->seqTipoEsquema == $seqTipoEsquema} selected {/if}
+                                                        {if ! isset( $smarty.session.arrGrupos.3.6 ) }
+                                                            disabled
+                                                        {/if}
+                                                >
+                                                    {$txtTipoEsquema}
+                                                </option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666">
 
-                            <!-- TIENE IDENTIFICADA UNA SOLUCION DE VIVIENDA VIABILIZADA POR LA SDHT -->
-                            <tr>
-                                <td>¿ Tiene Idetificada una solución Viabilizada por la SDHT ?</td>
-                                <td>
-                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                            name="bolIdentificada"
-                                            id="bolIdentificada"
-                                            style="width:100px;"
-                                    >
-                                        <option value="0" {if $objFormulario->bolIdentificada != 1} selected {/if}>No</option>
-                                        <option value="1" {if $objFormulario->bolIdentificada == 1} selected {/if}>Si</option>
-                                    </select>
-                                </td>
-                                <td>&nbsp;</td>
-                            </tr>
+                                <!-- TIENE PROMESA DE COMPRA VENTA FIRMADA -->
+                                <tr>
+                                    <td width="350px">¿ Tiene una promesa de compra - venta firmada ?</td>
+                                    <td>
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="bolPromesaFirmada"
+                                                id="bolPromesaFirmada"
+                                                style="width:100px;"
+                                        >
+                                            <option value="0" {if $objFormulario->bolPromesaFirmada != 1} selected {/if}>No</option>
+                                            <option value="1" {if $objFormulario->bolPromesaFirmada == 1} selected {/if}>Si</option>
+                                        </select>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
 
-                            <!-- PERTENECE A UN PLAN DE VIVIENDA VIABILIZADA POR LA SDHT -->
-                            <tr>
-                                <td>Pertenece a un Plan de Vivienda Viabilizada por la SDHT</td>
-                                <td>
-                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                            name="bolViabilizada"
-                                            id="bolViabilizada"
-                                            style="width:100px;"
-                                    >
-                                        <option value="0" {if $objFormulario->bolViabilizada != 1} selected {/if}>No</option>
-                                        <option value="1" {if $objFormulario->bolViabilizada == 1} selected {/if}>Si</option>
-                                    </select>
-                                </td>
-                                <td>&nbsp;</td>
-                            </tr>
-                        </table>
-                        </p>
+                                <!-- TIENE IDENTIFICADA UNA SOLUCION DE VIVIENDA VIABILIZADA POR LA SDHT -->
+                                <tr>
+                                    <td>¿ Tiene Idetificada una solución Viabilizada por la SDHT ?</td>
+                                    <td>
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="bolIdentificada"
+                                                id="bolIdentificada"
+                                                style="width:100px;"
+                                        >
+                                            <option value="0" {if $objFormulario->bolIdentificada != 1} selected {/if}>No</option>
+                                            <option value="1" {if $objFormulario->bolIdentificada == 1} selected {/if}>Si</option>
+                                        </select>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+
+                                <!-- PERTENECE A UN PLAN DE VIVIENDA VIABILIZADA POR LA SDHT -->
+                                <tr>
+                                    <td>Pertenece a un Plan de Vivienda Viabilizada por la SDHT</td>
+                                    <td>
+                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="bolViabilizada"
+                                                id="bolViabilizada"
+                                                style="width:100px;"
+                                        >
+                                            <option value="0" {if $objFormulario->bolViabilizada != 1} selected {/if}>No</option>
+                                            <option value="1" {if $objFormulario->bolViabilizada == 1} selected {/if}>Si</option>
+                                        </select>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1618,6 +1618,11 @@
     <input type="hidden" name="numDocumento" value="{$arrPost.cedula}">
     <input type="hidden" id="valAspiraSubsidio" value="{$objFormulario->valAspiraSubsidio}">
 
+    <input type="hidden" id="valAporteAvanceObra"        name="valAporteAvanceObra"        value="0">
+    <input type="hidden" id="txtSoporteAvanceObra"       name="txtSoporteAvanceObra"       value="">
+    <input type="hidden" id="valAporteMateriales"        name="valAporteMateriales"        value="0">
+    <input type="hidden" id="txtSoporteAporteMateriales" name="txtSoporteAporteMateriales" value="">
+
     <!-- valor que se usa para la advertencia de ingresos del hogar -->
     <input type="hidden" id="valSMMLV" value="{$valSMMLV}">
     {if isset( $smarty.session.arrGrupos.3.6 ) }
@@ -1626,10 +1631,10 @@
         <input type="hidden" id="bolActivarModalidad" value="0">
     {/if}
 
-
-
 </form>
 
 <div id="postulacionTabView"></div>
 <div id="objDireccionOculto" style="display:none"></div>
 <div id="objDireccionOcultoSolucion" style="display:none"></div>
+
+{include file="subsidios/simulador.tpl"}

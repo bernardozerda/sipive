@@ -848,7 +848,15 @@ function valorSubsidio($claFormulario){
             $valSubsidio = ($valSubsidio > $valTope)? $valTope : $valSubsidio;
             $valSubsidio = ($valSubsidio * $arrConfiguracion['constantes']['salarioMinimo']);
         }elseif($claFormulario->seqModalidad == 13){
-            $valSubsidio = mb_ereg_replace("[^0-9]","" , $claFormulario->valCartaLeasing);
+
+            $arrValor = obtenerDatosTabla(
+                "T_PRY_UNIDAD_PROYECTO",
+                array("0", "valSDVEActual"),
+                "0",
+                "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
+            );
+            $valSubsidio = $arrValor[0];
+
         }
 
     }else{
@@ -861,14 +869,17 @@ function valorSubsidio($claFormulario){
             )
         );
     }
+
     return $valSubsidio;
 }
 
 function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     global $aptBd;
 
-    // Adquisicion
-    $arrEsquema[2][6][] = 1; // individual
+    // Adquisicion de vivienda nueva
+    $arrEsquema[2][6][] = 1;  // individual
+    $arrEsquema[2][6][] = 7;  // programas especiales con proyectos de la secretaria
+    $arrEsquema[2][6][] = 13; // programas especiales con solucion fuera de la secretaria
 
     // construccion en sitio propio
     $arrEsquema[2][7][] = 2; // colectivo opv
@@ -882,6 +893,9 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     // mejoramiento en redensificacion
     $arrEsquema[2][10][] = 4; // territorial dirigido
 
+    // Adquisicion de vivienda usada
+    $arrEsquema[2][11][] = 13; // programas especiales con solucion fuera de la secretaria
+
     // Adquisicion cierre financiero
     $arrEsquema[3][12][] = 9;  // proyectos sdht
     $arrEsquema[3][12][] = 10; // proyecto no sdht
@@ -890,6 +904,10 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     if( $bolDesplazado == 1 ) {
         $arrEsquema[3][12][] = 11; // retorno reubicacion
     }
+
+    $arrEsquema[3][12][] = 12; // mi casa ya
+    $arrEsquema[3][12][] = 14;  // programas especiales con proyectos de la secretaria
+    $arrEsquema[3][12][] = 15; // programas especiales con solucion fuera de la secretaria
 
     // Leasing
     $arrEsquema[3][13][] = 9;  // proyectos sdht
@@ -945,6 +963,31 @@ function regularizarCampo($txtClave, $txtValor){
             break;
     }
     return $txtValor;
+}
+
+function rangoEdad( $numEdad ){
+    $txtRango = "";
+    switch(true){
+        case $numEdad >= 0 and $numEdad <= 5:
+            $txtRango = "0 a 5";
+            break;
+        case $numEdad >= 6 and $numEdad <= 13:
+            $txtRango = "6 a 13";
+            break;
+        case $numEdad >= 14 and $numEdad <= 17:
+            $txtRango = "14 a 17";
+            break;
+        case $numEdad >= 18 and $numEdad <= 26:
+            $txtRango = "18 a 16";
+            break;
+        case $numEdad >= 27 and $numEdad <= 59:
+            $txtRango = "27 a 59";
+            break;
+        case $numEdad >= 60:
+            $txtRango = "Mayor de 60";
+            break;
+    }
+    return $txtRango;
 }
 
 

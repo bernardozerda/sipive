@@ -91,6 +91,7 @@ Class TipoActoAdministrativo {
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "tipo de solucion";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "valor del subsidio";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "matricula inmobiliaria";
+                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "chip";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "proyecto";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "unidad habitacional";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "valor donacion";
@@ -158,6 +159,10 @@ Class TipoActoAdministrativo {
                         case 10: // Resolucion de Revocatoria
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento Postulante Principal";
                             $objTipoActo->arrFormatoArchivo[0]['tipo'] = "numero";
+                            $objTipoActo->arrFormatoArchivo[1]['nombre'] = "Resolución que es modificada";
+                            $objTipoActo->arrFormatoArchivo[1]['tipo'] = "texto";
+                            $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Fecha Resolución que es modificada (yyyy-mm-dd)";
+                            $objTipoActo->arrFormatoArchivo[2]['tipo'] = "fecha";
                             break;
                         case 11: // Resolucion de Exclusion
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento Postulante Principal";
@@ -295,7 +300,11 @@ Class TipoActoAdministrativo {
                         $arrFormularios['datos'][$numDocumento]['fecha'] = $arrLinea[2];
                         $arrFormularios['datos'][$numDocumento]['valor'] = $arrLinea[3];
                         break;
-                    case 11:
+                   case 10: // revocatoria
+                        $arrFormularios['datos'][$numDocumento]['numero'] = $arrLinea[1];
+                        $arrFormularios['datos'][$numDocumento]['fecha']  = $arrLinea[2];
+                        break;
+                   case 11:
                         $arrFormularios['datos'][$numDocumento]['estado'] = $arrLinea[1];
                         break;
                 }
@@ -636,6 +645,12 @@ Class TipoActoAdministrativo {
                         }
                         if ($objFormulario->bolCerrado == 0) {
                             $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no puede ser asignado, el Formulario se encuentra Abierto ";
+                        }
+                        $claActo = new ActoAdministrativo();
+                        $claActo = array_shift($claActo->cargarActoAdministrativo($arrFormularios['datos'][$numDocumento]['numero'],$arrFormularios['datos'][$numDocumento]['numero'],array($numDocumento)));
+                        if($claActo == null){
+                           $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no se encuentra vinculado a la resolución  " .
+                                                 $arrFormularios['datos'][$numDocumento]['numero'] . " del " . $arrFormularios['datos'][$numDocumento]['fecha'];
                         }
                         break;
                     case 11: // Exclusion
@@ -1244,7 +1259,9 @@ Class ActoAdministrativo {
                          ' ',
                          TRIM( cac.txtApellido2 )
                        ) 
-                     ) AS txtNombre
+                     ) AS txtNombre,
+                     hvi.numActoReferencia,
+                     hvi.fchActoReferencia
                    FROM T_AAD_HOGAR_ACTO hac
                    INNER JOIN T_AAD_CIUDADANO_ACTO cac ON hac.seqCiudadanoActo = cac.seqCiudadanoActo
                    INNER JOIN T_AAD_FORMULARIO_ACTO fac ON hac.seqFormularioActo = fac.seqFormularioActo
@@ -1262,6 +1279,8 @@ Class ActoAdministrativo {
                 $numDocumento = $objRes->fields['numDocumento'];
                 $this->arrMasInformacion[$numDocumento]['txtTipoDocumento'] = $objRes->fields['txtTipoDocumento'];
                 $this->arrMasInformacion[$numDocumento]['txtNombre'] = $objRes->fields['txtNombre'];
+                $this->arrMasInformacion[$numDocumento]['resolucion'] = $objRes->fields['numActoReferencia'];
+                $this->arrMasInformacion[$numDocumento]['fecha'] = $objRes->fields['fchActoReferencia'];
 
                 $objRes->MoveNext();
             }
@@ -1571,7 +1590,11 @@ Class ActoAdministrativo {
                         $arrFormularios['datos'][$numDocumento]['fecha'] = $arrLinea[2];
                         $arrFormularios['datos'][$numDocumento]['valor'] = $arrLinea[3];
                         break;
-                    case 11: // Exclusion
+                   case 10:
+                        $arrFormularios['datos'][$numDocumento]['numero'] = $arrLinea[1];
+                        $arrFormularios['datos'][$numDocumento]['fecha'] = $arrLinea[2];
+                        break;
+                   case 11: // Exclusion
                         $arrFormularios['datos'][$numDocumento]['estado'] = $arrLinea[1];
                         $arrFormularios['datos'][$numDocumento]['comentario'] = $arrLinea[2];
                         break;
@@ -1617,11 +1640,11 @@ Class ActoAdministrativo {
                     $numActoReferencia = 0;
                     $fchActoReferencia = "";
                     switch ($arrActo['seqTipoActo']) {
-                        case 2:
+                        case 2: // modificatoria
                             $numActoReferencia = $arrFormularios['datos'][$numDocumento][0]['resolucion'];
                             $fchActoReferencia = $arrFormularios['datos'][$numDocumento][0]['fecha'];
                             break;
-                        case 7:
+                        case 7: // notificaciones
                             $numActoReferencia = $arrFormularios['datos'][$numDocumento]['numero'];
                             $fchActoReferencia = $arrFormularios['datos'][$numDocumento]['fecha'];
                             break;
@@ -1629,6 +1652,10 @@ Class ActoAdministrativo {
                             $numActoReferencia = $arrFormularios['datos'][$numDocumento]['numero'];
                             $fchActoReferencia = $arrFormularios['datos'][$numDocumento]['fecha'];
                             break;
+                       case 10: // revocatoria
+                           $numActoReferencia = $arrFormularios['datos'][$numDocumento]['numero'];
+                           $fchActoReferencia = $arrFormularios['datos'][$numDocumento]['fecha'];
+                           break;
                     }
 
                     $fchActoReferencia = ( esFechaValida( $fchActoReferencia ) )? "'" . $fchActoReferencia . "'" : "NULL";
@@ -2159,6 +2186,15 @@ Class ActoAdministrativo {
                                             $aptBd->execute($sql);
                                             $txtCambios .= "txtMatriculaInmobiliaria, Valor Anterior: " . $arrRegistro['incorrecto'] . ", Valor Nuevo: " . $arrRegistro['correcto'] . "\n";
                                             break;
+                                        case "chip":
+                                            $sql = "
+                                                    UPDATE T_FRM_FORMULARIO SET
+                                                       txtChip = '" . $arrRegistro['correcto'] . "'
+                                                    WHERE seqFormulario = " . $objFormulario->seqFormulario . "
+                                                 ";
+                                            $aptBd->execute($sql);
+                                            $txtCambios .= "txtChip, Valor Anterior: " . $arrRegistro['incorrecto'] . ", Valor Nuevo: " . $arrRegistro['correcto'] . "\n";
+                                            break;
                                         case "valor donacion":
                                             $sql = "
                                                     UPDATE T_FRM_FORMULARIO SET
@@ -2600,7 +2636,7 @@ Class ActoAdministrativo {
     public function cronologia($numDocumento) {
         $arrInformacion = array();
         $arrActos = $this->cargarActoAdministrativo(0, null, array($numDocumento));
-        //var_dump($arrActos);
+        //pr($arrActos);
         $seqFormulario = $this->documento2formulario($numDocumento);
         $arrActosExistentes = array_keys($arrActos);
         foreach ($arrActos as $txtClave => $objActo) {
@@ -2656,7 +2692,7 @@ Class ActoAdministrativo {
                 case 4: // recursos de reposicion
                     $arrActos[$txtClave]->obtenerResultado($seqFormulario);
                     $txtActoRelacionado = $objActo->arrCaracteristicas[5] . strtotime($objActo->arrCaracteristicas[6]);
-                    if (in_array($txtActoRelacionado, $arrActosExistentes)) {
+                    if (in_array($txtActoRelacionado, $arrActosExistentes) and isset( $arrInformacion[$txtActoRelacionado] )) {
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['tipo'] = $objActo->seqTipoActo;
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['nombre'] = $txtNombreActo;
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['numero'] = $objActo->numActo;
@@ -2728,7 +2764,8 @@ Class ActoAdministrativo {
                     break;
                 case 10: // revocatorias
                     $arrActos[$txtClave]->obtenerRevocatorias($seqFormulario);
-                    $txtActoRelacionado = $objActo->arrCaracteristicas[91] . strtotime($objActo->arrCaracteristicas[92]);
+                    //$txtActoRelacionado = $objActo->arrCaracteristicas[91] . strtotime($objActo->arrCaracteristicas[92]);
+                   $txtActoRelacionado = $arrActos[$txtClave]->arrMasInformacion[$numDocumento]['resolucion'] . strtotime($arrActos[$txtClave]->arrMasInformacion[$numDocumento]['fecha']);
                     if (in_array($txtActoRelacionado, $arrActosExistentes)) {
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['tipo'] = $objActo->seqTipoActo;
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['nombre'] = $txtNombreActo;
@@ -2809,7 +2846,7 @@ Class ActoAdministrativo {
                         $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $arrActos[$txtClave]->arrMasInformacion[$numDocumento]['fecha'];
                     }
                     break;
-                case 8:
+                case 8: // indexacion
                     $arrActos[$txtClave]->obtenerIndexacion($seqFormulario);
                     $txtActoRelacionado = $arrActos[$txtClave]->arrMasInformacion[$numDocumento]['numActoReferencia'] . strtotime($arrActos[$txtClave]->arrMasInformacion[$numDocumento]['fchActoReferencia']);
                     if (in_array($txtActoRelacionado, $arrActosExistentes)) {
@@ -2881,7 +2918,7 @@ Class ActoAdministrativo {
         if ($objRes->fields) {
             while ($objRes->fields) {
 
-                $arrEstados[$objRes->fields['seqEstadoProceso']] = "<strong>" . $objRes->fields['txtEstadoProceso'] . "<strong>";
+                $arrEstados[$objRes->fields['seqEstadoProceso']] = $objRes->fields['txtEstadoProceso'];
 
                 $objRes->MoveNext();
             }
@@ -2890,6 +2927,113 @@ Class ActoAdministrativo {
         }
 
         return $arrEstados;
+    }
+
+
+    public function eliminarActoAdministrativo( $numActo , $fchActo , $txtMotivo ){
+        global $aptBd;
+
+        // determina si el acto administrativo tiene giros
+        $sql = "
+            select
+                hvi.numActo,
+                hvi.fchActo,
+                sum(gir.valSolicitado) as valGiros
+            from t_aad_hogares_vinculados hvi
+            left join t_aad_giro gir on hvi.seqFormularioActo = gir.seqFormularioActo
+            where hvi.numActo = " . $numActo . "
+            and hvi.fchActo = '" . $fchActo . "'
+            group by
+                hvi.numActo,
+                hvi.fchActo
+        ";
+        $arrGiros = $aptBd->GetAll($sql);
+        if( doubleval($arrGiros[0]['valGiros']) == 0 ) {
+
+           $aptBd->BeginTrans();
+
+           try {
+
+              // consulta la informacion relacionada con el acto
+              $sql = "
+                    select
+                    hac.seqFormularioActo,
+                    hac.seqCiudadanoActo
+                    from t_aad_hogares_vinculados hvi
+                    inner join t_aad_hogar_acto hac on hvi.seqFormularioActo = hac.seqFormularioActo
+                    where hvi.numActo = " . $numActo . "
+                    and hvi.fchActo = '" . $fchActo . "'
+                ";
+              $objRes = $aptBd->execute($sql);
+              while ($objRes->fields) {
+                 $arrFormularioActo[] = $objRes->fields['seqFormularioActo'];
+                 $arrCiudadanoActo[] = $objRes->fields['seqCiudadanoActo'];
+                 $objRes->MoveNext();
+              }
+
+              // elimina los hogares
+              if(! empty( $arrFormularioActo ) ) {
+                 $sql = "
+                    delete 
+                    from t_aad_hogar_acto 
+                    where seqFormularioActo in (" . implode(",", $arrFormularioActo) . ")
+                ";
+                 $aptBd->execute($sql);
+              }
+
+              // elimina los vinculados
+              if(! empty( $arrFormularioActo ) ) {
+                 $sql = "
+                    delete 
+                    from t_aad_hogares_vinculados 
+                    where seqFormularioActo in (" . implode(",", $arrFormularioActo) . ")
+                ";
+                 $aptBd->execute($sql);
+              }
+
+              // elimina los ciudadnos vinculados
+              if(! empty( $arrCiudadanoActo ) ) {
+                 $sql = "
+                    delete 
+                    from t_aad_ciudadano_acto 
+                    where seqCiudadanoActo in (" . implode(",", $arrCiudadanoActo) . ")
+                ";
+                 $aptBd->execute($sql);
+              }
+
+              // elimina los formularios
+              if(! empty( $arrFormularioActo ) ) {
+                 $sql = "
+                    delete 
+                    from t_aad_formulario_acto 
+                    where seqFormularioActo in (" . implode(",", $arrFormularioActo) . ")
+                ";
+                 $aptBd->execute($sql);
+              }
+
+              // elimina el acto administrativo
+              $sql = "
+                    delete 
+                    from t_aad_acto_administrativo
+                    where numActo = " . $numActo . "
+                    and fchActo = '" . $fchActo . "'
+                ";
+              $aptBd->execute($sql);
+
+              // Registro de las actividades
+              $claRegistroActividades = new RegistroActividades();
+              $claRegistroActividades->registrarActividad("Borrado", 145, $_SESSION['seqUsuario'], "AAD " . $numActo . " del " . $fchActo . ": " . $txtMotivo);
+
+              $aptBd->CommitTrans();
+
+           } catch (Exception $objError) {
+              $this->arrErrores[] = "Problemas al eliminar el acto adminsitrativo, no se borró ningpun registro";
+              //$this->arrErrores[] = $objError->getMessage();
+              $aptBd->RollbackTrans();
+           }
+        }else{
+            $this->arrErrores[] = "No puede eliminar el Acto Administrativo " . $numActo . " del " . $fchActo . " porque tiene giros asociados";
+        }
     }
 
 }

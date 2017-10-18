@@ -20,7 +20,7 @@
 							{/if}
 							
 							<button onclick="someterFormulario('mensajes', this.form, './contenidos/encuestasPive/exportarEncuesta.php', true, false);" style="width:70px;">
-								<img src="recursos/imagenes/word.png" width="25px" height="25px"><br>
+								<img src="../../recursos/imagenes/word.png" width="25px" height="25px"><br>
 								<span style="font-size: 10px; font-weight: bold;">Exportar<br>Respuestas</span>
 							</button>
 							<input type="hidden" name="seqAplicacion" value="{$arrAplicacion.seqAplicacion}">
@@ -33,7 +33,7 @@
 									&nbsp;
 								</div>
 								<button onclick="pedirConfirmacion('mensajes', this.form,'./contenidos/encuestasPive/eliminarEncuestas.php');" style="width:70px;">
-									<img src="recursos/imagenes/error.png" width="25px" height="25px"><br>
+									<img src="../../recursos/imagenes/error.png" width="25px" height="25px"><br>
 									<span style="font-size: 10px; font-weight: bold;">Eliminar<br>Aplicación</span>
 								</button>
 								<input type="hidden" name="seqAplicacion" value="{$arrAplicacion.seqAplicacion}">

@@ -20,7 +20,7 @@
 	 * 300 SEGUNDOS SON EL VALOR PORQUE ES EL TIEMPO
 	 */
 	 
-	YAHOO.util.Event.POLL_INTERVAL = 1200;
+	YAHOO.util.Event.POLL_INTERVAL = 1;
 
 
 	/** 

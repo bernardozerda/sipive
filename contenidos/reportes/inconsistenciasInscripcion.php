@@ -107,12 +107,17 @@ $arrParametros['seguimientos'][] = "quita";
 $arrParametros['seguimientos'][] = "saca";
 $arrParametros['seguimientos'][] = "exclu";
 $arrParametros['seguimientos'][] = "radicado";
+$arrParametros['seguimientos'][] = "defunc";
+$arrParametros['seguimientos'][] = "desvincul";
 
 // deduccion de entidades por el correo del usuario
 $arrParametros['entidad']["habitatbogota.gov.co"]       = "SDHT";
 $arrParametros['entidad']["sdis.gov.co"]                = "SDIS";
 $arrParametros['entidad']["alcaldiabogota.gov.co"]      = "ACAV";
 $arrParametros['entidad']["cajaviviendapopular.gov.co"] = "CVP";
+
+// estados del proceso
+$arrParametros['estados'] = estadosProceso();
 
 $seqProyecto = $_SESSION['seqProyecto'];
 
@@ -150,6 +155,7 @@ $sql = "
     WHERE seg.fchMovimiento >= '" . $fchInicial . " 00:00:00'
     AND seg.fchMovimiento <= '" . $fchFinal . " 23:59:59'
     AND seg.bolMostrar = 1
+    ORDER BY seg.fchMovimiento DESC
 ";
 $objRes = $aptBd->execute($sql);
 while($objRes->fields){
@@ -160,14 +166,14 @@ while($objRes->fields){
 
     $claUsuario = null;
     $claUsuario = array_shift(Usuario::cargarUsuario($objRes->fields['seqUsuario']));
+    $claUsuario->seqUsuario = $objRes->fields['seqUsuario'];
 
     // verifica que el registro sea valido
     if(
-            isset( $claFormulario->seqModalidad , $arrParametros['modalidades'] )
+            isset( $arrParametros['modalidades'][$claFormulario->seqModalidad] )
         and isset( $claUsuario->arrGrupos[$seqProyecto][5] )
         and empty( array_intersect( $claUsuario->arrGrupos[$seqProyecto] , $arrParametros['gruposExcluidos'] ) )
     ){
-
         $seqFormulario = $objRes->fields['seqFormulario'];
         $seqUsuario    = $objRes->fields['seqUsuario'];
 
@@ -341,48 +347,44 @@ if( ! empty( $arrFormularios ) ) {
         }
 
         // Suma de recursos propios
-        $valTotalRecursos =
+        $valRecursosPropios =
             $claFormulario->valSaldoCuentaAhorro +
             $claFormulario->valSaldoCuentaAhorro2 +
             $claFormulario->valSaldoCesantias +
             $claFormulario->valCredito +
-            $claFormulario->valAporteLote +
+            $claFormulario->valAporteLote;
+
+        // subsidios
+        $valSubsidios =
             $claFormulario->valSubsidioNacional +
             $claFormulario->valDonacion;
+
+        // total recursos
+        $valTotalRecursos = $valRecursosPropios + $valSubsidios;
+
+        // valor calculado del aporte, obliga la modalidad a 12 (CF), despues la pone como estaba
+        $seqModalidad = $claFormulario->seqModalidad;
+        $claFormulario->seqModalidad = 12;
+        $valAspiraSubsidio = valorSubsidio($claFormulario);
+        $claFormulario->seqModalidad = $seqModalidad;
+
+        $txtVictima = ( $claFormulario->bolDesplazado == 1 )? "Víctima" : "Vulnerable";
 
         // nombre de modalidad
         $txtModalidad = $arrParametros['modalidades'][ $claFormulario->seqModalidad ];
 
-        // modalidad de postulacion
-        switch(true){
-            case $claFormulario->seqModalidad == 13 and $claFormulario->bolDesplazado == 1:
-                if( $valTotalRecursos > ($arrConfiguracion['constantes']['salarioMinimo'] * 35) ){
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['causa'] = "Modalidad de postulación";
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['detalle'] = "Víctima Verificar Modalidad CF > 35 SMMLV";
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['valor'] = $valTotalRecursos;
-                }
-                break;
-            case $claFormulario->seqModalidad == 13 and $claFormulario->bolDesplazado == 0:
-                if( ( $valTotalRecursos + ($arrConfiguracion['constantes']['salarioMinimo'] * 35) ) > ($arrConfiguracion['constantes']['salarioMinimo'] * 70) ){
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['causa'] = "Modalidad de postulación";
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['detalle'] = "Vulnerable Verificar Modalidad CF > 70 SMMLV";
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['valor'] = $valTotalRecursos;
-                }
-                break;
-            case $claFormulario->seqModalidad == 12 and $claFormulario->bolDesplazado == 1:
-                if( $valTotalRecursos < ($arrConfiguracion['constantes']['salarioMinimo'] * 35) ){
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['causa'] = "Modalidad de postulación";
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['detalle'] = "Víctima Verificar Modalidad CF < 35 SMMLV";
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['valor'] = $valTotalRecursos;
-                }
-                break;
-            case $claFormulario->seqModalidad == 12 and $claFormulario->bolDesplazado == 0:
-                if( ( $valTotalRecursos + ($arrConfiguracion['constantes']['salarioMinimo'] * 35) ) < ($arrConfiguracion['constantes']['salarioMinimo'] * 70) ){
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['causa'] = "Modalidad de postulación";
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['detalle'] = "Vulnerable Verificar Modalidad CF < 70 SMMLV";
-                    $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['valor'] = $valTotalRecursos;
-                }
-                break;
+        if( $claFormulario->seqModalidad == 12 ){
+            if( ( $valTotalRecursos + $valAspiraSubsidio ) < ($arrConfiguracion['constantes']['salarioMinimo'] * 70) ){
+                $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['causa'] = "Modalidad de postulación";
+                $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['detalle'] = "$txtVictima Verificar Modalidad CF < 35 SMMLV";
+                $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['valor'] = "(Rec) " . $valTotalRecursos . " + (Apo) " . $valAspiraSubsidio . " = (Tot) " . ( $valTotalRecursos + $valAspiraSubsidio );
+            }
+        }elseif( $claFormulario->seqModalidad == 13 ){
+            if( ( $valTotalRecursos + $valAspiraSubsidio) > ($arrConfiguracion['constantes']['salarioMinimo'] * 70) ){
+                $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['causa'] = "Modalidad de postulación";
+                $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['detalle'] = "$txtVictima Verificar Modalidad CF > 70 SMMLV";
+                $arrReporte[$seqFormulario]['modalidad'][$txtModalidad]['valor'] = "(Rec) " . $valTotalRecursos . " + (Apo) " . $valAspiraSubsidio . " = (Tot) " . ( $valTotalRecursos + $valAspiraSubsidio );
+            }
         }
 
     }
@@ -458,15 +460,20 @@ $arrFuentes['titulo']['fill']['color'] = array('rgb' => 'E4E4E4');
 $arrFuentes['titulo']['font']['bold']  = true;
 $arrFuentes['titulo']['font']['color'] = array('rgb' => '000000');
 
-$arrTitulos[] = "Formulario";
-$arrTitulos[] = "Documento PPAL";
-$arrTitulos[] = "Nombre PPAL PPAL";
-$arrTitulos[] = "Documento";
-$arrTitulos[] = "Nombre";
-$arrTitulos[] = "Reporte";
-$arrTitulos[] = "Causa";
-$arrTitulos[] = "Detalle";
-$arrTitulos[] = "Valor";
+$arrTitulos[0] = "Formulario";
+$arrTitulos[1] = "Estado";
+$arrTitulos[2] = "Modalidad";
+$arrTitulos[3] = "Victima";
+$arrTitulos[4] = "Documento PPAL";
+$arrTitulos[5] = "Nombre PPAL PPAL";
+$arrTitulos[6] = "Documento";
+$arrTitulos[7] = "Nombre";
+$arrTitulos[8] = "Reporte";
+$arrTitulos[9] = "Causa";
+$arrTitulos[10] = "Detalle";
+$arrTitulos[11] = "Valor";
+$arrTitulos[12] = "Ultimo Usuario";
+$arrTitulos[13] = "Usuarios";
 
 // Creacion del libro de excel
 $objPHPExcel = new PHPExcel();
@@ -483,382 +490,411 @@ foreach($arrTitulos as $numColumna => $txtTiutlo){
 }
 
 // contenido
-$numFila = 2;
-foreach($arrReporte as $seqFormulario => $arrInconsistencias){
+if (!empty($arrReporte)) {
+    $numFila = 2;
+    foreach ($arrReporte as $seqFormulario => $arrInconsistencias) {
 
-    $objCiudadanoPrincipal = null;
-    foreach($arrFormularios[$seqFormulario]->arrCiudadano as $seqCiudadano => $claCiudadano){
-        if( $claCiudadano->seqParentesco == 1 ){
-            $objCiudadanoPrincipal = $claCiudadano;
+        $objCiudadanoPrincipal = null;
+        foreach ($arrFormularios[$seqFormulario]->arrCiudadano as $seqCiudadano => $claCiudadano) {
+            if ($claCiudadano->seqParentesco == 1) {
+                $objCiudadanoPrincipal = $claCiudadano;
+            }
         }
-    }
 
-    $txtNombrePrincipal = $objCiudadanoPrincipal->txtNombre1 . " " .
-        $objCiudadanoPrincipal->txtNombre2 . " " .
-        $objCiudadanoPrincipal->txtApellido1 . " " .
-        $objCiudadanoPrincipal->txtApellido2;
+        $txtNombrePrincipal = $objCiudadanoPrincipal->txtNombre1 . " " .
+            $objCiudadanoPrincipal->txtNombre2 . " " .
+            $objCiudadanoPrincipal->txtApellido1 . " " .
+            $objCiudadanoPrincipal->txtApellido2;
 
-    foreach($arrInconsistencias as $txtReporte => $arrDatos){
-        switch($txtReporte){
-            case "ingresosCiudadano":
-                foreach($arrDatos as $seqCiudadano => $arrCausas){
+        $seqEstadoProceso = $arrFormularios[$seqFormulario]->seqEstadoProceso;
+
+        $seqModalidad = $arrFormularios[$seqFormulario]->seqModalidad;
+        $txtModalidad = $arrParametros['modalidades'][$seqModalidad];
+
+        $txtDesplazado = ($arrFormularios[$seqFormulario]->bolDesplazado == 1)? "SI" : "NO";
+
+        foreach ($arrInconsistencias as $txtReporte => $arrDatos) {
+
+            switch ($txtReporte) {
+                case "ingresosCiudadano":
+                    foreach ($arrDatos as $seqCiudadano => $arrCausas) {
+
+                        $txtNombre = $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre1 . " " .
+                            $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre2 . " " .
+                            $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido1 . " " .
+                            $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido2;
+
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->numDocumento, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, strtoupper($txtNombre), flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Ingresos del Ciudadano", flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrCausas["causa"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrCausas["detalle"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrCausas["valor"], flase);
+
+                        $i = 0;
+                        $txtUltimoUsuario = "";
+                        $txtUsuarios      = "";
+                        foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                            if( $i == 0 ){
+                                $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                            }
+                            $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                            $i++;
+
+                        }
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
+
+                        $numFila++;
+
+                    }
+                    break;
+                case "salud":
+                    foreach ($arrDatos as $seqCiudadano => $arrCausas) {
+
+                        $txtNombre = $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre1 . " " .
+                            $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre2 . " " .
+                            $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido1 . " " .
+                            $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido2;
+
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->numDocumento, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, strtoupper($txtNombre), flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Afiliación a Salud", flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrCausas["causa"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrCausas["detalle"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrCausas["valor"], flase);
+
+                        $i = 0;
+                        $txtUltimoUsuario = "";
+                        $txtUsuarios      = "";
+                        foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                            if( $i == 0 ){
+                                $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                            }
+                            $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                            $i++;
+
+                        }
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
+
+                        $numFila++;
+
+                    }
+                    break;
+                case "cohabitacion":
 
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Cohabitación", flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrDatos["causa"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrDatos["detalle"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrDatos["valor"], flase);
 
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
+                    $i = 0;
+                    $txtUltimoUsuario = "";
+                    $txtUsuarios      = "";
+                    foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                        if( $i == 0 ){
+                            $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                        }
+                        $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                        $i++;
 
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->numDocumento, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                    $txtNombre = $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre1 . " " .
-                                 $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre2 . " " .
-                                 $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido1 . " " .
-                                 $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido2;
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, strtoupper($txtNombre), flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Ingresos del Ciudadano", flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrCausas["causa"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrCausas["detalle"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrCausas["valor"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
+                    }
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
 
                     $numFila++;
-
-                }
-                break;
-            case "salud":
-                foreach($arrDatos as $seqCiudadano => $arrCausas){
+                    break;
+                case "hacinamiento":
 
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Hacinamiento", flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrDatos["causa"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrDatos["detalle"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrDatos["valor"], flase);
 
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
+                    $i = 0;
+                    $txtUltimoUsuario = "";
+                    $txtUsuarios      = "";
+                    foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                        if( $i == 0 ){
+                            $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                        }
+                        $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                        $i++;
 
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->numDocumento, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                    $txtNombre = $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre1 . " " .
-                        $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre2 . " " .
-                        $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido1 . " " .
-                        $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido2;
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, strtoupper($txtNombre), flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Afiliación a Salud", flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrCausas["causa"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrCausas["detalle"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrCausas["valor"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
+                    }
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
 
                     $numFila++;
-
-                }
-                break;
-            case "cohabitacion":
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Cohabitación", flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrDatos["causa"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrDatos["detalle"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrDatos["valor"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
-
-                $numFila++;
-                break;
-            case "hacinamiento":
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Hacinamiento", flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrDatos["causa"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrDatos["detalle"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrDatos["valor"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
-
-                $numFila++;
-                break;
-            case "ingresosHogar":
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Ingresos del Hogar", flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrDatos["causa"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrDatos["detalle"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrDatos["valor"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
-
-                $numFila++;
-                break;
-            case "ahorro":
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Ahorro", flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrDatos["causa"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrDatos["detalle"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrDatos["valor"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
-
-                $numFila++;
-                break;
-            case "cesantias":
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Cesantias", flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrDatos["causa"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrDatos["detalle"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrDatos["valor"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
-
-                $numFila++;
-                break;
-            case "credito":
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Credito", flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrDatos["causa"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrDatos["detalle"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrDatos["valor"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
-
-                $numFila++;
-                break;
-            case "actualizacion":
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, null, flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Actualización de datos", flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrDatos["causa"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrDatos["detalle"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrDatos["valor"], flase);
-                $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
-
-                $numFila++;
-                break;
-            case "modalidad":
-                foreach($arrDatos as $seqSeguimiento => $arrCausas){
+                    break;
+                case "ingresosHogar":
 
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Ingresos del Hogar", flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrDatos["causa"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrDatos["detalle"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrDatos["valor"], flase);
 
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
+                    $i = 0;
+                    $txtUltimoUsuario = "";
+                    $txtUsuarios      = "";
+                    foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                        if( $i == 0 ){
+                            $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                        }
+                        $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                        $i++;
 
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, null , flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, null, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, $arrCausas["causa"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $txtModalidad, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrCausas["detalle"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrCausas["valor"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
+                    }
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
 
                     $numFila++;
-
-                }
-                break;
-            case "seguimiento":
-                foreach($arrDatos as $seqSeguimiento => $arrCausas){
+                    break;
+                case "ahorro":
 
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Ahorro", flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrDatos["causa"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrDatos["detalle"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrDatos["valor"], flase);
 
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
+                    $i = 0;
+                    $txtUltimoUsuario = "";
+                    $txtUsuarios      = "";
+                    foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                        if( $i == 0 ){
+                            $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                        }
+                        $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                        $i++;
 
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, strtoupper($txtNombrePrincipal), flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, null , flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $arrCausas["nombre"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, "Seguimientos", flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrCausas["causa"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrCausas["detalle"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
-
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrCausas["valor"], flase);
-                    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
+                    }
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
 
                     $numFila++;
+                    break;
+                case "cesantias":
 
-                }
-                break;
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Cesantias", flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrDatos["causa"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrDatos["detalle"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrDatos["valor"], flase);
+
+                    $i = 0;
+                    $txtUltimoUsuario = "";
+                    $txtUsuarios      = "";
+                    foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                        if( $i == 0 ){
+                            $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                        }
+                        $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                        $i++;
+
+                    }
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
+
+                    $numFila++;
+                    break;
+                case "credito":
+
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Credito", flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrDatos["causa"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrDatos["detalle"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrDatos["valor"], flase);
+
+                    $i = 0;
+                    $txtUltimoUsuario = "";
+                    $txtUsuarios      = "";
+                    foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                        if( $i == 0 ){
+                            $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                        }
+                        $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                        $i++;
+
+                    }
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
+
+                    $numFila++;
+                    break;
+                case "actualizacion":
+
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, null, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Actualización de datos", flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrDatos["causa"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrDatos["detalle"], flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrDatos["valor"], flase);
+
+                    $i = 0;
+                    $txtUltimoUsuario = "";
+                    $txtUsuarios      = "";
+                    foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                        if( $i == 0 ){
+                            $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                        }
+                        $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                        $i++;
+
+                    }
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
+
+                    $numFila++;
+                    break;
+                case "modalidad":
+                    foreach ($arrDatos as $seqSeguimiento => $arrCausas) {
+
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, null, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, null, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, $arrCausas["causa"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $txtModalidad, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrCausas["detalle"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrCausas["valor"], flase);
+
+                        $i = 0;
+                        $txtUltimoUsuario = "";
+                        $txtUsuarios      = "";
+                        foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                            if( $i == 0 ){
+                                $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                            }
+                            $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                            $i++;
+
+                        }
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
+
+                        $numFila++;
+
+                    }
+                    break;
+                case "seguimiento":
+                    foreach ($arrDatos as $seqSeguimiento => $arrCausas) {
+
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, null, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, $arrCausas["nombre"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Seguimientos", flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrCausas["causa"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrCausas["detalle"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrCausas["valor"], flase);
+
+                        $i = 0;
+                        $txtUltimoUsuario = "";
+                        $txtUsuarios      = "";
+                        foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                            if( $i == 0 ){
+                                $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                            }
+                            $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                            $i++;
+
+                        }
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
+
+                        $numFila++;
+
+                    }
+                    break;
+            }
         }
-    }
 
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(1)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(2)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(3)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(4)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(5)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(6)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(7)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(8)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(9)->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(10)->setAutoSize(true);
+
+    }
 }
 
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

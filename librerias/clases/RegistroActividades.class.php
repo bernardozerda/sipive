@@ -88,13 +88,13 @@
         		'". $_SERVER['REMOTE_ADDR'] ."',
         		'". gethostbyaddr($_SERVER['REMOTE_ADDR']) ."'
         	)
-        ";		
+        ";
 
 	    	try {
 	    		$aptBd->execute( $sql );
 	    	} catch ( Exception $objError ) {
 	    		$arrErrores[] = "No se pudo registrar la actividad del usuario";
-	    		pr($arrErrores); die();
+	    		//pr($arrErrores); die();
 	    	}
 	    	
 	    	return $arrErrores;

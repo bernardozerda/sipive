@@ -478,7 +478,7 @@ class Encuestas {
                 }
             }
 
-            throw new Exception("rollback");
+            //throw new Exception("rollback");
 
             $aptBd->CommitTrans();
 

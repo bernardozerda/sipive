@@ -359,7 +359,7 @@ class Encuestas {
                 }
                 foreach ($arrHogar as $txtFormulario => $seqFormulario) {
                     if ($seqFormulario == 0) {
-                        $arrErrores[] = "Error formulario " . $txtFormulario . ": Ninguno de los ciudadanos reportados por la encuesta está en SiPIVE";
+                        $arrErrores[] = "Error formulario " . $txtFormulario . ": Ninguno de los ciudadanos con cedula de ciudadania reportados por la encuesta está en SiPIVE";
                     }
                 }
             } else {
@@ -477,6 +477,8 @@ class Encuestas {
                     }
                 }
             }
+
+            throw new Exception("rollback");
 
             $aptBd->CommitTrans();
 

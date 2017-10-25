@@ -60,6 +60,24 @@ foreach ($array as $key => $value) {
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/DevolucionExpedientes/index.php');">Devolución Expedientes</a></li>
 
                 <?php } ?>
+
+                <!------------------------------------------------------------------------------------------------------
+                    CARGA MASIVA DE DESEMBOLSO ESQUEMA MI CASA YA
+                 ------------------------------------------------------------------------------------------------------>
+
+                <?php if (in_array("1", $grupos) || in_array("8", $grupos)) { ?>
+                    <li>
+                        <a href="javascript:void(0)"
+                           onClick="cambiarOpcionLegalizacion(
+                               'contenidoLegalizacion',
+                               'contenidos/migracionesIndividual/DesembolsoMiCasaYa/index.php'
+                           );"
+                        >
+                            Cargue masivo de desembolso para el esquema <strong>Mi casa ya</strong>
+                        </a>
+                    </li>
+                <?php } ?>
+
             </ul>
         </div>
         <div style="width: 73%; float: right;">

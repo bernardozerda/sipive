@@ -178,8 +178,8 @@ echo "&nbsp;";
 <html lang="es">
 <head>
     <!-- Estilos CSS -->
-    <link href="../../../librerias/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="../../../librerias/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="./librerias/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="./librerias/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 </head>
 <body>
 <div id="contenidos" class="container" style="width: 650px">

@@ -62,12 +62,8 @@
 		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border: 1px solid #999999;">
 			<tr>
 				<td width="150px" height="80px" align="center" valign="middle">
-               {if in_array( 31, $smarty.session.arrGrupos.3) || in_array( 32, $smarty.session.arrGrupos.3) || in_array( 33, $smarty.session.arrGrupos.3)}
-                  <img src="../../recursos/imagenes/cvp.png">
-               {else}
-                  <img src="../../recursos/imagenes/escudo.png">
-               {/if}
-            </td>
+					<img src="../../recursos/imagenes/escudo.png">
+            	</td>
 				<td align="center" valign="middle" style="padding:20px; {$txtFuente12}">
 					<b>Certificado de Existencia y Habitabilidad</b><br>
 					<span style="{$txtFuente10}">Fecha de Emisión: {$txtFecha}</span><br>

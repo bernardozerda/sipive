@@ -80,10 +80,12 @@
         // y que no deben ir a la base de datos
         foreach( $_POST as $txtClave => $txtValor ){
             if( ! is_array( $_POST[ $txtClave ] ) ){
-                $_POST[ $txtClave ] = preg_replace( "/[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@]/" , "" , $txtValor );
+                $_POST[ $txtClave ] = preg_replace( "/[^\)\(áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\,\-\/@]/" , "" , $txtValor );
             }
         }
-        
+
+//        pr($claDesembolso);
+
 		$bolCambios = $claDesembolso->hayCambios( $_POST , $arrCodigo['fase'] );
 
 		// si no tiene el numero del vendedor quiere decir que no hay registro

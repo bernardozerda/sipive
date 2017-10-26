@@ -214,8 +214,6 @@ echo "&nbsp;";
         <form method="post"
               onsubmit="return false;"
               enctype="multipart/form-data"
-              id="formcargar"
-              class="form-signin"
         >
             <div class="form-group">
                 <h4 class="form-signin-heading">Plantilla de datos</h4>

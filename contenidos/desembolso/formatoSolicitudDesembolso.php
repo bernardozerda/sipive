@@ -12,7 +12,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Desembolso.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ActosAdministrativos.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ActosAdministrativos2.class.php" );
 
 include( "./datosComunes.php" );
 
@@ -36,49 +36,45 @@ foreach ($claFormulario->arrCiudadano as $objCiudadano) {
 
 // Obtiene los actos administrativos a los que se realaciona el postulante principal
 $claActosAdministrativos = new ActoAdministrativo;
-$arrFormularioActo = $claActosAdministrativos->actoExisteCiudadano($objCiudadano->numDocumento);
 
 // obtiene el ultimo acto adminsitrativo de asignacion
+$arrActos = $claActosAdministrativos->cronologia($objCiudadano->numDocumento);
+
 $arrResolucionAsignacion = array();
 $arrResolucionIndexacion = array();
 $arrResolucionModificacion = array();
-
-foreach ($arrFormularioActo as $seqFormularioActo) {
-    $arrActoAdministrativo = $claActosAdministrativos->obtenerActoAdministrativo($seqFormularioActo);
-    $arrActo = $claActosAdministrativos->cargarActoAdministrativoNumero($arrActoAdministrativo['seqTipoActo'], $arrActoAdministrativo['numActo'], $arrActoAdministrativo['fchActo'], $seqFormularioActo);
-    $arrCaracteristicas = $claActosAdministrativos->caracteristicasActo($arrActoAdministrativo['numActo'], $arrActoAdministrativo['fchActo']);
-    if ($arrActoAdministrativo['seqTipoActo'] == 1) {
-        $arrResolucionAsignacion['numero'] = $arrActoAdministrativo['numActo'];
-        $arrResolucionAsignacion['fecha'] = $arrActoAdministrativo['fchActo'];
-        $arrResolucionAsignacion['valor'] = $arrActo[1][13]; // Aqui esta el valor de la resolucion
-    } elseif ($arrActoAdministrativo['seqTipoActo'] == 8) {
-        $arrResolucionIndexacion['numero'] = $arrActoAdministrativo['numActo'];
-        $arrResolucionIndexacion['fecha'] = $arrActoAdministrativo['fchActo'];
-        $arrResolucionIndexacion['proyecto'] = $arrCaracteristicas['Número del Proyecto'];
-        $arrResolucionIndexacion['rp'] = $arrCaracteristicas['RP'];
-        $arrResolucionIndexacion['fechaRp'] = $arrCaracteristicas['Fecha RP'];
-        $arrResolucionIndexacion['valor'] = $arrActo[1][21]; // Aqui esta el valor de la resolucion
-        //$arrResolucionIndexacion['valor']  = $arrActo[1][13]; // Aqui esta el valor de la resolucion
-    } elseif ($arrActoAdministrativo['seqTipoActo'] == 2) {
-        $arrResolucionModificacion['numero'] = $arrActoAdministrativo['numActo'];
-        $arrResolucionModificacion['fecha'] = $arrActoAdministrativo['fchActo'];
-        //pr($arrResolucionModificacion);die();
-        if ($arrCaracteristicas['Resolucion que Modifica'] == $arrResolucionAsignacion['numero'] and
-                strtotime($arrCaracteristicas['Fecha resolucion']) == strtotime($arrResolucionAsignacion['fecha'])
-        ) {
-            $arrResolucionAsignacion['valor'] = $arrActo[1][13];
+foreach ($arrActos as $txtClave => $arrInformacion) {
+    if ($arrInformacion["acto"]["tipo"] == 1) {
+        $arrResolucionAsignacion['numero'] = $arrInformacion['acto']['numero'];
+        $arrResolucionAsignacion['fecha'] = date("Y-m-d", $arrInformacion['acto']['marca']);
+        $arrResolucionAsignacion['valor'] = $arrInformacion['acto']['valor']; // Aqui esta el valor original de la resolucion de asignacion
+        $arrResolucionIndexacion = array();
+        if (isset($arrInformacion['relacionado'])) {
+            foreach ($arrInformacion['relacionado'] as $txtClave => $arrRelacionado) {
+                if ($arrRelacionado['tipo'] == 8) {
+                    $arrResolucionIndexacion['numero'] = $arrRelacionado['numero'];
+                    $arrResolucionIndexacion['fecha'] = date("Y-m-d", $arrRelacionado['marca']);
+                    $arrResolucionIndexacion['proyecto'] = $arrRelacionado['caracteristicas'][38];
+                    $arrResolucionIndexacion['rp'] = $arrRelacionado['caracteristicas'][35];
+                    $arrResolucionIndexacion['fechaRp'] = $arrRelacionado['caracteristicas'][37];
+                    $arrResolucionIndexacion['valor'] = $arrRelacionado['indexacion'];
+                }
+                //si hay una resolucion modificatoria al valor del subsidio se reemplaza el valor del subsidio por el de la modificacion
+                if ($arrRelacionado['tipo'] == 2) {
+                    $arrResolucionModificacion['numero'] = $arrActoAdministrativo['numActo'];
+                    $arrResolucionModificacion['fecha'] = $arrActoAdministrativo['fchActo'];
+                    if (is_array($arrRelacionado['modificaciones'])) {
+                        foreach ($arrRelacionado['modificaciones'] as $arrModificacion) {
+                            if ($arrModificacion['txtCampo'] == "VR SUBSIDIO" or $arrModificacion['txtCampo'] == "Valor Del Subsidio") {
+                                $arrResolucionAsignacion['valor'] = $arrModificacion['txtCorrecto'];
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-} //die();
-// adquiere la fecha del acto administrativo asi no este dentro del arreglo juridico
-//        if( is_numeric( $claDesembolso->arrJuridico['numResolucion'] ) ){
-//            $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode( ucwords( strftime("%d de %B del %Y" , strtotime( $claDesembolso->arrJuridico['fchResolucion'] ) ) ) );
-//        } else {
-//            $claDesembolso->arrJuridico['numResolucion'] = $arrResolucionAsignacion['numero'];
-//            $claDesembolso->arrJuridico['fchResolucion'] = $arrResolucionAsignacion['fecha'];
-//            $claDesembolso->arrJuridico['valResolucion'] = $arrResolucionAsignacion['valor'];
-//            $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode( ucwords( strftime("%d de %B del %Y" , strtotime( $arrResolucionAsignacion['fecha'] ) ) ) );					
-//        }
+}
 
 $arrNombreProyectos = array();
 $arrNombreProyectos[644] = "Soluciones De Vivienda Para Población En Situación De Desplazamiento";

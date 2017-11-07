@@ -916,32 +916,34 @@ Class ActoAdministrativo {
         try {
             $txtCondicion = ( intval($seqFormulario) != 0 ) ? "AND fac.seqFormulario = " . $seqFormulario : "";
             $sql = "
-                   SELECT
-                     tdo.txtTipoDocumento,
-                     cac.numDocumento,
-                     UPPER( 
-                       CONCAT(
-                         TRIM( cac.txtNombre1 ),
-                         ' ',
-                         IF( TRIM( cac.txtNombre2 ) = '' , '' , CONCAT( cac.txtNombre2 , ' ' ) ),
-                         TRIM( cac.txtApellido1 ),
-                         ' ',
-                         TRIM( cac.txtApellido2 )
-                       ) 
-                     ) AS txtNombre,
-                     hac.txtCampo,
-                     hac.txtIncorrecto,
-                     hac.txtCorrecto
-                   FROM T_AAD_HOGAR_ACTO hac
-                   INNER JOIN T_AAD_CIUDADANO_ACTO cac ON hac.seqCiudadanoActo = cac.seqCiudadanoActo
-                   INNER JOIN T_AAD_FORMULARIO_ACTO fac ON hac.seqFormularioActo = fac.seqFormularioActo
-                   INNER JOIN T_AAD_HOGARES_VINCULADOS hvi ON hvi.seqFormularioActo = fac.seqFormularioActo
-                   INNER JOIN T_CIU_TIPO_DOCUMENTO tdo ON cac.seqTipoDocumento = tdo.seqTipoDocumento
-                   WHERE hvi.numActo = " . $this->numActo . "
-                   AND hvi.fchActo = '" . $this->fchActo . "'
-                   $txtCondicion
-                   ORDER BY cac.numDocumento
-                ";
+                SELECT
+                    tdo.txtTipoDocumento,
+                    cac.numDocumento,
+                    UPPER( 
+                    CONCAT(
+                    TRIM( cac.txtNombre1 ),
+                    ' ',
+                    IF( TRIM( cac.txtNombre2 ) = '' , '' , CONCAT( cac.txtNombre2 , ' ' ) ),
+                    TRIM( cac.txtApellido1 ),
+                    ' ',
+                    TRIM( cac.txtApellido2 )
+                    ) 
+                    ) AS txtNombre,
+                    hac.txtCampo,
+                    hac.txtIncorrecto,
+                    hac.txtCorrecto,
+                    hvi.numActoReferencia, 
+                    hvi.fchActoReferencia
+                FROM T_AAD_HOGAR_ACTO hac
+                INNER JOIN T_AAD_CIUDADANO_ACTO cac ON hac.seqCiudadanoActo = cac.seqCiudadanoActo
+                INNER JOIN T_AAD_FORMULARIO_ACTO fac ON hac.seqFormularioActo = fac.seqFormularioActo
+                INNER JOIN T_AAD_HOGARES_VINCULADOS hvi ON hvi.seqFormularioActo = fac.seqFormularioActo
+                INNER JOIN T_CIU_TIPO_DOCUMENTO tdo ON cac.seqTipoDocumento = tdo.seqTipoDocumento
+                WHERE hvi.numActo = " . $this->numActo . "
+                AND hvi.fchActo = '" . $this->fchActo . "'
+                $txtCondicion
+                ORDER BY cac.numDocumento
+            ";
             //echo $sql;
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
@@ -953,6 +955,10 @@ Class ActoAdministrativo {
                     $this->arrMasInformacion[$numDocumento]['arrModificaciones'][$numCuenta]['txtCampo'] = $objRes->fields['txtCampo'];
                     $this->arrMasInformacion[$numDocumento]['arrModificaciones'][$numCuenta]['txtIncorrecto'] = $objRes->fields['txtIncorrecto'];
                     $this->arrMasInformacion[$numDocumento]['arrModificaciones'][$numCuenta]['txtCorrecto'] = $objRes->fields['txtCorrecto'];
+                    if(intval($this->arrCaracteristicas[4]) == 0) {
+                        $this->arrCaracteristicas[4] = $objRes->fields['numActoReferencia'];
+                        $this->arrCaracteristicas[7] = $objRes->fields['fchActoReferencia'];
+                    }
                 }
                 $objRes->MoveNext();
             }
@@ -2659,6 +2665,7 @@ Class ActoAdministrativo {
                 case 2: // Modificatoria
                     $arrActos[$txtClave]->obtenerModificaciones($seqFormulario);
                     $txtActoRelacionado = $objActo->arrCaracteristicas[4] . strtotime($objActo->arrCaracteristicas[7]);
+                    $txtActoRelacionado2 = "";
                     if (in_array($txtActoRelacionado, $arrActosExistentes)) {
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['tipo'] = $objActo->seqTipoActo;
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['nombre'] = $txtNombreActo;
@@ -2666,7 +2673,9 @@ Class ActoAdministrativo {
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['fecha'] = $txtFechaActo;
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['marca'] = strtotime($objActo->fchActo);
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['modificaciones'] = $objActo->arrMasInformacion[$numDocumento]['arrModificaciones'];
-                    } else {
+                    }elseif(in_array($txtActoRelacionado2, $arrActosExistentes)){
+
+                    }else {
                         $arrInformacion[$txtClave]['acto']['tipo'] = $objActo->seqTipoActo;
                         $arrInformacion[$txtClave]['acto']['nombre'] = $txtNombreActo;
                         $arrInformacion[$txtClave]['acto']['numero'] = $objActo->numActo;

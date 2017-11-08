@@ -16,7 +16,7 @@
                         id="seqTipoActo"
                         onFocus="this.style.backgroundColor = '#ADD8E6';"
                         onBlur="this.style.backgroundColor = '#FFFFFF';"
-                        onchange="cargarContenido('informacion','./contenidos/aad/informacion.php','seqTipoActo='+this.options[this.selectedIndex].value,true)"
+                        onchange="enrutarAAD(this)"
                         style="width: 300px;"
                 >
                     {foreach from=$arrTipoActo key=seqTipoActo item=claTipoActo}
@@ -35,13 +35,13 @@
                 <label for="numActo"><strong>Número</strong></label>
             </td>
             <td>
-                <input type="number"
+                <input type="text"
                        name="numActo"
                        id="numActo"
                        onFocus="this.style.backgroundColor = '#ADD8E6';"
                        onBlur="this.style.backgroundColor = '#FFFFFF';"
                        value="{$claActoAdministrativo->numActo}"
-                       style="width: 50px;"
+                       style="width: 120px;"
                 >
             </td>
             <td></td>

@@ -13,12 +13,7 @@
                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                  onChange="
-                     cargarContenido(
-                        'informacion',
-                        './contenidos/actosAdministrativos/informacionActo.php',
-                        'seqTipoActo=' + this.options[ this.selectedIndex ].value,
-                        true
-                     );
+                     enrutarAAD(this , seqTipoActo)
                  "
          >
             {foreach from=$arrTipoActo key=seqTipoActo item=objTipoActo}
@@ -175,6 +170,14 @@
             </div>
          </div>
          <div id="listenerTabActoAdministrativo"></div>
+      </td>
+   </tr>
+   <tr>
+      <td>&nbsp;</td>
+      <td align="center">
+         <button onClick="someterFormulario('mensajes','frmSavarAAD','./contenidos/actosAdministrativos/salvarActosAdministrativos.php',true,true);">
+            Guardar Cambios
+         </button>
       </td>
    </tr>
 </table>

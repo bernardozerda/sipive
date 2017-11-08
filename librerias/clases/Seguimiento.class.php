@@ -4753,10 +4753,10 @@ class Seguimiento {
             $txtCambios = "<strong>[" . $seqFormulario . "] Cambios al formulario:</strong><br>";
             foreach( $arrDatos['cambios'] as $arrRegistro ){
                 $txtCambios .=
-                    str_repeat("&nbsp;" , 5) .
+                    str_repeat($this->txtSeparador , 5) .
                     $arrRegistro['campo'] .
                     ", Valor Anterior: " . $arrRegistro['anterior'] .
-                    ", Valor Nuevo: " . $arrRegistro['nuevo'];
+                    ", Valor Nuevo: " . $arrRegistro['nuevo'] . $this->txtSalto;
             }
 
             $txtNombre = array_shift(

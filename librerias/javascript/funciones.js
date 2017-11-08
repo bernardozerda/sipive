@@ -8314,6 +8314,7 @@ fncTabActoAdministrativo = function () {
     YAHOO.util.Event.onContentReady("listenerTabActoAdministrativo", fncTabActoAdministrativo);
     var objTabView = new YAHOO.widget.TabView('tabActoAdministrativo');
     YAHOO.util.Dom.get("tabActoAdministrativo").style.visibility = "visible";
+    window.scrollTo(0,0);
 }
 YAHOO.util.Event.onContentReady("listenerTabActoAdministrativo", fncTabActoAdministrativo);
 
@@ -10527,3 +10528,35 @@ var detallesAAD = function(){
     YAHOO.util.Event.onContentReady("listenerDetallesAAD",detallesAAD);
 }
 YAHOO.util.Event.onContentReady("listenerDetallesAAD",detallesAAD);
+
+/**
+ * FUNCTION PROVICIONAL PARA ENRUTAR LA CREACION DE LOS ACTOS
+ * ADMINISTRATIVOS USANDO EL NUEVO MODULO AAD O EL ACTUAL
+ * ACTOS ADMINISTRATIVOS
+ */
+
+function enrutarAAD(objSelect){
+
+    if(
+        objSelect.options[objSelect.selectedIndex].value == 1 ||
+        objSelect.options[objSelect.selectedIndex].value == 6
+    ) {
+        // usa el modulo nuevo
+        cargarContenido(
+            'informacion',
+            './contenidos/aad/informacion.php',
+            'seqTipoActo=' + objSelect.options[objSelect.selectedIndex].value,
+            true
+        );
+    }else{
+        // usa el modulo actual
+        cargarContenido(
+            'informacion',
+            './contenidos/actosAdministrativos/informacionActo.php',
+            'seqTipoActo=' + objSelect.options[ objSelect.selectedIndex ].value,
+            true
+        );
+    }
+
+}
+

@@ -375,7 +375,9 @@ class aadTipo
 
         }
 
-
+        if(count($arrArchivo) == 1){
+            $this->arrErrores[] = "Un archivo que contiene solo los titulos se considera vacío";
+        }
 
         return $arrArchivo;
     }

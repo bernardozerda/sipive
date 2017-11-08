@@ -103,7 +103,7 @@
 		YAHOO.util.Event.onContentReady( "postulacionTabView" , postulacionTabView );
 		var objTabView = new YAHOO.widget.TabView('pestanasPostulacion');
 		var objTabView = new YAHOO.widget.TabView('postulacion');
-		// falta el elemento que bva a tener el foco por defecto
+        window.scrollTo(0,0);
 	}
 	
 	function actosTabView(){

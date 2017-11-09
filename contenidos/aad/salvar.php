@@ -35,13 +35,7 @@ if( empty($arrErrores) ) {
     $claTipoActo = new aadTipo();
     $claTipoActo = array_shift($claTipoActo->cargarTipoActo($_POST['seqTipoActo']));
 
-    if(intval($_POST['numActo']) == 0){
-        $arrErrores[] = "Debe dar un número para el acto administrativo";
-    }
 
-    if(!esFechaValida($_POST['fchActo'])){
-        $arrErrores[] = "Debe dar una fecha para el acto administrativo";
-    }
 
     if(empty($arrErrores)) {
 

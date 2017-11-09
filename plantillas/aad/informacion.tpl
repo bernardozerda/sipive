@@ -43,6 +43,11 @@
                        value="{$claActoAdministrativo->numActo}"
                        style="width: 120px;"
                 >
+                {if intval($arrPost.seqTipoActo) == 6}
+                    <input type="checkbox" name="bolRadicado" value="1"> Es Resolución
+                {elseif intval($arrPost.seqTipoActo) == 10}
+                    <input type="checkbox" name="bolRadicado" value="1"> Es FOREST
+                {/if}
             </td>
             <td></td>
         </tr>

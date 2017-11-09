@@ -419,9 +419,7 @@ class aad
                 $this->arrCaracteristicas['fchActoRelacionado'] = $arrCaracteristicas[50];
                 break;
             case 10: // revocatoria
-                $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[146];
-                $this->arrCaracteristicas['numActoRelacionado'] = intval($arrCaracteristicas[91]);
-                $this->arrCaracteristicas['fchActoRelacionado'] = $arrCaracteristicas[92];
+                $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[154];
                 break;
             case 11: // exclusion
                 $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[147];
@@ -1201,7 +1199,7 @@ class aad
             case 5: // no asignado
                 break;
             case 6: // renuncia
-                $this->validarReglasRenuncia($arrPost,$arrArchivo);
+                $this->validarReglasRenuncia($arrArchivo);
                 break;
             case 7: // notificaciones
                 break;
@@ -1210,6 +1208,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->validarReglasRenuncia($arrArchivo); // usa las mismas de renuncia
                 break;
             case 11: // exclusion
                 break;
@@ -1283,7 +1282,7 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function validarReglasRenuncia($arrPost,$arrArchivo)
+    private function validarReglasRenuncia($arrArchivo)
     {
 
         $arrEstados = estadosProceso();
@@ -1376,6 +1375,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->validarFormularioDesvinculacion($arrPost);
                 break;
             case 11: // exclusion
                 break;
@@ -1393,6 +1393,16 @@ class aad
      */
     private function validarFormularioAsignacion($arrPost)
     {
+
+        // numero de acto
+        if (intval($_POST['numActo']) == 0) {
+            $arrErrores[] = "Debe dar un número para el acto administrativo";
+        }
+
+        // fecha del acto
+        if(!esFechaValida($_POST['fchActo'])){
+            $arrErrores[] = "Debe dar una fecha para el acto administrativo";
+        }
 
         // texto de la resolucion
         if (trim($arrPost['txtResolucion']) == "") {
@@ -1471,17 +1481,27 @@ class aad
 
     /**
      * VALIDACIONES DEL FORMULARIO PARA
-     * LOS RADICADOS DE RENUNCIA
+     * LOS RADICADOS O RESOLUCIONES DE RENUNCIA
      * @param $arrPost
      */
     private function validarFormularioRenuncia($arrPost)
     {
-        // numero de formulario - expresion regular para el numero
-        // 1-2017-99999
-        // "/(\d{1})(\d{4})(\d{1,})/"
-        preg_match("/(\d{1})(\d{4})(\d{1,})/",$arrPost['numActo'],$arrMatch);
-        if(empty($arrMatch)){
-            $this->arrErrores[] = "Revise el formato del radicado, debe ser el radicado de Forest";
+        // numero - expresion regular para el forest
+        if(isset($arrPost['bolRadicado']) and intval($arrPost['bolRadicado']) == 1) {
+
+            if (intval($_POST['numActo']) == 0 or strlen($_POST['numActo']) > 4) {
+                $this->arrErrores[]  = "Debe dar un número para el acto administrativo";
+            }
+        }else{
+            preg_match("/(\d{1})(\d{4})(\d{1,})/", $arrPost['numActo'], $arrMatch);
+            if (empty($arrMatch)) {
+                $this->arrErrores[] = "Revise el formato del radicado, debe ser el radicado de Forest";
+            }
+        }
+
+        // fecha del acto
+        if(!esFechaValida($_POST['fchActo'])){
+            $arrErrores[] = "Debe dar una fecha para el acto administrativo";
         }
 
         // texto de la resolucion
@@ -1490,6 +1510,37 @@ class aad
         }
 
     }
+
+    /**
+     * VALIDACIONES DEL FORMULARIO PARA
+     * LOS RADICADOS O RESOLUCIONES DE DESVINCULACION
+     * @param $arrPost
+     */
+    private function validarFormularioDesvinculacion($arrPost)
+    {
+        // numero - expresion regular para el forest
+        if(isset($arrPost['bolRadicado']) and intval($arrPost['bolRadicado']) == 1) {
+            preg_match("/(\d{1})(\d{4})(\d{1,})/", $arrPost['numActo'], $arrMatch);
+            if (empty($arrMatch)) {
+                $this->arrErrores[] = "Revise el formato del radicado, debe ser el radicado de Forest";
+            }
+        }else{
+            if (intval($_POST['numActo']) == 0 or strlen($_POST['numActo']) > 4) {
+                $this->arrErrores[]  = "Debe dar un número para el acto administrativo";
+            }
+        }
+
+        // fecha del acto
+        if(!esFechaValida($_POST['fchActo'])){
+            $arrErrores[] = "Debe dar una fecha para el acto administrativo";
+        }
+
+        // texto de la resolucion
+        if (trim($arrPost['txtResolucion']) == "") {
+            $this->arrErrores[] = "El texto de la resolución no puede estar vacío";
+        }
+    }
+
 
     /**
      * DESDE LAS CARACTERISTICAS DEL AAD EN EL HTML
@@ -1637,6 +1688,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->arrCaracteristicas['txtResolucion'] = 154;
                 break;
             case 11: // exclusion
                 break;
@@ -1705,6 +1757,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->aplicarEfectosDesvinculacion($arrArchivo);
                 break;
             case 11: // exclusion
                 break;
@@ -1756,7 +1809,7 @@ class aad
     }
 
     /**
-     * APLICANDO LOS EFECTOS DE LAS RESOLUCIONES DE ASIGNACION
+     * APLICANDO LOS EFECTOS DE LAS RADICADOS / RESOLUCIONES DE RENUNCIA
      * @param $arrArchivo
      */
     private function aplicarEfectosRenuncia($arrArchivo){
@@ -1777,7 +1830,7 @@ class aad
             // realiza la modificacion del estado (nuevo) y libera la unidad
             $sql = "
                 update t_frm_formulario set
-                    seqEstadoProceso = 5
+                    seqEstadoProceso = 18
                     ,fchUltimaActualizacion = NOW()
                     ,bolSancion = 1
                     ,fchVigencia = DATE_ADD(now(), INTERVAL 1 YEAR)
@@ -1801,7 +1854,7 @@ class aad
             $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqEstadoProceso";
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['seqEstadoProceso'];
-            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 5;
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 18;
 
             // adiciona el cambio al arreglo para el seguimiento
             $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
@@ -1816,6 +1869,70 @@ class aad
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "fchVigencia";
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['fchVigencia'];
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = date("Y-m-d H:i:s" , strtotime("+ 1 year"));
+
+            // adiciona el cambio al arreglo para el seguimiento
+            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqUnidadProyecto";
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['seqUnidadProyecto'];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 1;
+
+        }
+    }
+
+    /**
+     * APLICANDO LOS EFECTOS DE LAS RADICADO / RESOLUCIONES DE ASIGNACION
+     * @param $arrArchivo
+     */
+    private function aplicarEfectosDesvinculacion($arrArchivo)
+    {
+        global $aptBd;
+        foreach ($arrArchivo as $arrRegistro) {
+
+            // obtiene el formulario que corresponde a la cedula
+            $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
+
+            // obtiene el estado del proceso que corresponde al hogar (actual)
+            $arrEstadoProceso = obtenerDatosTabla(
+                "T_FRM_FORMULARIO",
+                array("seqFormulario", "seqEstadoProceso", "bolSancion", "fchVigencia", "seqUnidadProyecto" ),
+                "seqFormulario",
+                "seqFormulario = " . $seqFormulario
+            );
+
+            // realiza la modificacion del estado (nuevo) y libera la unidad
+            $sql = "
+                update t_frm_formulario set
+                    seqEstadoProceso = 57
+                    ,fchUltimaActualizacion = NOW()
+                    ,seqUnidadProyecto = 1
+                where seqFormulario = " . $seqFormulario . "
+            ";
+            $aptBd->execute($sql);
+
+            // libera la unidad
+            if(intval($arrEstadoProceso['seqUnidadProyecto']) != 0) {
+                $sql = "
+                    update t_pry_unidad_proyecto set
+                    seqFormulario = null
+                    where seqUnidadProyecto = " . intval($arrEstadoProceso['seqUnidadProyecto']) . "
+                ";
+                $aptBd->execute($sql);
+            }
+
+            // adiciona el cambio al arreglo para el seguimiento
+            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqEstadoProceso";
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['seqEstadoProceso'];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 57;
+
+            // adiciona el cambio al arreglo para el seguimiento
+            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqUnidadProyecto";
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['seqUnidadProyecto'];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 1;
 
         }
     }
@@ -1849,6 +1966,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->vincularHogresAsignacion($arrPost,$arrArchivo); // usa la misma que asignacion
                 break;
             case 11: // exclusion
                 break;

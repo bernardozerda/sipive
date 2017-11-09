@@ -1769,21 +1769,32 @@ class aad
             // obtiene el estado del proceso que corresponde al hogar (actual)
             $arrEstadoProceso = obtenerDatosTabla(
                 "T_FRM_FORMULARIO",
-                array("seqFormulario", "seqEstadoProceso", "bolSancion", "fchVigencia" ),
+                array("seqFormulario", "seqEstadoProceso", "bolSancion", "fchVigencia", "seqUnidadProyecto" ),
                 "seqFormulario",
                 "seqFormulario = " . $seqFormulario
             );
 
-            // realiza la modificacion del estado (nuevo)
+            // realiza la modificacion del estado (nuevo) y libera la unidad
             $sql = "
                 update t_frm_formulario set
                     seqEstadoProceso = 5
                     ,fchUltimaActualizacion = NOW()
                     ,bolSancion = 1
                     ,fchVigencia = DATE_ADD(now(), INTERVAL 1 YEAR)
+                    ,seqUnidadProyecto = 1
                 where seqFormulario = " . $seqFormulario . "
             ";
             $aptBd->execute($sql);
+
+            // libera la unidad
+            if(intval($arrEstadoProceso['seqUnidadProyecto']) != 0) {
+                $sql = "
+                    update t_pry_unidad_proyecto set
+                    seqFormulario = null
+                    where seqUnidadProyecto = " . intval($arrEstadoProceso['seqUnidadProyecto']) . "
+                ";
+                $aptBd->execute($sql);
+            }
 
             // adiciona el cambio al arreglo para el seguimiento
             $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);

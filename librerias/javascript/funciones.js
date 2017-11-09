@@ -10539,7 +10539,8 @@ function enrutarAAD(objSelect){
 
     if(
         objSelect.options[objSelect.selectedIndex].value == 1 ||
-        objSelect.options[objSelect.selectedIndex].value == 6
+        objSelect.options[objSelect.selectedIndex].value == 6 ||
+        objSelect.options[objSelect.selectedIndex].value == 10
     ) {
         // usa el modulo nuevo
         cargarContenido(

@@ -1,25 +1,28 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of cruces
- *
+ * Clase para reportes de cruces
+ * y operaciones del modulo de
+ * cruces para Bogota mejor para todos
  * @author lbastoz
+ * @modified bzerdar (Nov 2017)
  */
-class Cruces {
 
-    //put your code here
+class Cruces
+{
 
-    function Cruces() {
-        
+
+    function __construct()
+    {
+
     }
 
-    function validarDocumentos($separado_por_comas) {
+    /***************************************************************************************************************
+     * METODOS PARA EL MODELO T_PRE_*
+     ***************************************************************************************************************/
+
+    function validarDocumentos($separado_por_comas)
+    {
         global $aptBd;
 
         $band = true;
@@ -53,7 +56,8 @@ class Cruces {
         return $band;
     }
 
-    function validarCruceExiste($grupo, $fch) {
+    function validarCruceExiste($grupo, $fch)
+    {
         global $aptBd;
         $grupo = strtoupper(trim($grupo));
         $band = true;
@@ -81,7 +85,8 @@ class Cruces {
         return $band;
     }
 
-    function obtenerFormularios($separado_por_comas) {
+    function obtenerFormularios($separado_por_comas)
+    {
 
         global $aptBd;
 
@@ -106,7 +111,8 @@ class Cruces {
         return $val;
     }
 
-    function insertarReporteGrupo($grupo) {
+    function insertarReporteGrupo($grupo)
+    {
 
         global $aptBd;
         $sql = "INSERT INTO t_pre_grupo (txtPreCruGrupo,fchPreCruGrupo) VALUES ('" . $grupo . "',NOW());";
@@ -114,7 +120,8 @@ class Cruces {
         return $aptBd->Insert_ID();
     }
 
-    function insertarReporteGeneral($formularios, $fch, $grupo, $user) {
+    function insertarReporteGeneral($formularios, $fch, $grupo, $user)
+    {
 
         global $aptBd;
 
@@ -317,7 +324,8 @@ WHERE
         }
     }
 
-    function obtenerDatosGrupo() {
+    function obtenerDatosGrupo()
+    {
         global $aptBd;
         $grupo = strtoupper(trim($grupo));
         $band = true;
@@ -337,7 +345,8 @@ WHERE
         return $arrayData;
     }
 
-    function validarDocumentosAfiliados($separado_por_comas, $grupo) {
+    function validarDocumentosAfiliados($separado_por_comas, $grupo)
+    {
         global $aptBd;
 
         $band = true;
@@ -375,7 +384,8 @@ WHERE
         return $band;
     }
 
-    function InsertarCruces($array, $grupo) {
+    function InsertarCruces($array, $grupo)
+    {
 
         global $aptBd;
         $band = true;
@@ -388,28 +398,78 @@ WHERE
                         seqFormulario, txtInhabilitar, txtModalidad, txtDezplazado, numDocumentoPp, txtFormulario, numDocumento, txtNombreCompleto, txtParentesco,
                         txtCausa, txtEntidad, txtConcatenacion, txtTipo, seqPreCruGrupo, txtEstado, txtTipoDoc)
                         VALUES";
-        $valueInsert ="";
+        $valueInsert = "";
         if ($objRes->_numOfRows > 0) {
             if ($aptBd->ErrorMsg() == "") {
                 $cont = 1;
                 while ($objRes->fields) {
                     foreach ($array['Documento'] as $key => $value) {
                         if ($value == $objRes->fields['numDocumento']) {
-                              $valueInsert .= "(".$objRes->fields['seqFormulario'].", 'SI','".$objRes->fields['txtModalidad']."','".$objRes->fields['Desplazado']."',".$objRes->fields['DocumentoPPAL'].",'";
-                              $valueInsert .= $objRes->fields['txtFormulario']."',".$objRes->fields['numDocumento'].",'".$objRes->fields['Nombre']."','".$objRes->fields['txtParentesco']."','";
-                              $valueInsert .= "Afiliación CCF', 'FONVIVIENDA','Entidad:".$array['Entidad'][$key]."', '', 1,'".$objRes->fields['estadoProceso']."','".$objRes->fields['TipoDocumento']."'),";
-                           // echo "<br>" . $cont . " -> " . $value . " ==" . $objRes->fields['numDocumento'];
+                            $valueInsert .= "(" . $objRes->fields['seqFormulario'] . ", 'SI','" . $objRes->fields['txtModalidad'] . "','" . $objRes->fields['Desplazado'] . "'," . $objRes->fields['DocumentoPPAL'] . ",'";
+                            $valueInsert .= $objRes->fields['txtFormulario'] . "'," . $objRes->fields['numDocumento'] . ",'" . $objRes->fields['Nombre'] . "','" . $objRes->fields['txtParentesco'] . "','";
+                            $valueInsert .= "Afiliación CCF', 'FONVIVIENDA','Entidad:" . $array['Entidad'][$key] . "', '', 1,'" . $objRes->fields['estadoProceso'] . "','" . $objRes->fields['TipoDocumento'] . "'),";
+                            // echo "<br>" . $cont . " -> " . $value . " ==" . $objRes->fields['numDocumento'];
                             $cont++;
                         }
                     }
                     $objRes->MoveNext();
                 }
                 $valueInsert = substr_replace($valueInsert, ';', -1, 1);
-                echo $insertCons."".$valueInsert;
-                $aptBd->execute($insertCons."".$valueInsert);
+                echo $insertCons . "" . $valueInsert;
+                $aptBd->execute($insertCons . "" . $valueInsert);
             }
-            
+
         }
     }
+
+    /***************************************************************************************************************
+     * METODOS PARA EL MODELO T_CRU_*
+     ***************************************************************************************************************/
+
+    public function listado($arrPost = array()){
+        global $aptBd;
+
+        $txtCondicionCreacion = ($arrPost['creacionInicio'] != null)? " AND fchCreacionCruce >= '" . $arrPost['creacionInicio']->format('Y-m-d') . "' AND fchCreacionCruce <= '" . $arrPost['creacionFinal']->format('Y-m-d') . "'" : "";
+        $txtCondicionActualizacion = ($arrPost['updateInicio'] != null)? " AND fchActualizacionCruce >= '" . $arrPost['updateInicio']->format('Y-m-d') . "' AND fchActualizacionCruce <= '" . $arrPost['updateFinal']->format('Y-m-d') . "'" : "";
+        $txtCondicionFecha = ($arrPost['cruceInicio'] != null)? " AND fchCruce >= '" . $arrPost['cruceInicio']->format('Y-m-d') . "' AND fchCruce <= '" . $arrPost['cruceFinal']->format('Y-m-d') . "'" : "";
+        $txtCondicionNombre = (trim($arrPost['nombre']) != "")? " AND cru.txtNombre LIKE '%" . $arrPost['nombre'] . "%'" : "";
+        $txtCondicionDocumento = (intval($arrPost['documento']) != 0)? " AND numDocumento = " . intval($arrPost['documento'])  : "";
+
+        $arrCruces = array();
+        $sql = "
+            SELECT DISTINCT 
+                cru.seqCruce,
+                cru.txtNombre,
+                cru.fchCruce,
+                cru.fchCreacionCruce,
+                if(isNull(usu1.seqUsuario) = 1,'',concat(usu1.txtNombre,' ',usu1.txtApellido)) as txtUsuarioCreacion,
+                cru.fchActualizacionCruce,
+                if(isNull(usu2.seqUsuario) = 1,'',concat(usu2.txtNombre,' ',usu2.txtApellido)) as txtUsuarioActualiza
+            FROM t_cru_cruces cru
+            LEFT JOIN t_cru_resultado res ON cru.seqCruce = res.seqCruce AND res.seqParentesco = 1
+            LEFT JOIN t_cor_usuario usu1 on cru.txtUsuario = usu1.txtUsuario
+            LEFT JOIN t_cor_usuario usu2 on cru.txtUsuarioActualiza = usu2.txtUsuario
+            WHERE 1 = 1
+            $txtCondicionCreacion
+            $txtCondicionActualizacion
+            $txtCondicionFecha
+            $txtCondicionNombre
+            $txtCondicionDocumento
+            ORDER BY cru.fchCreacionCruce DESC
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqCruce                                      = $objRes->fields['seqCruce'];
+            $arrCruces[$seqCruce]['txtNombre']             = $objRes->fields['txtNombre'];
+            $arrCruces[$seqCruce]['fchCruce']              = new DateTime($objRes->fields['fchCruce']);
+            $arrCruces[$seqCruce]['fchCreacionCruce']      = new DateTime($objRes->fields['fchCreacionCruce']);
+            $arrCruces[$seqCruce]['fchActualizacionCruce'] = new DateTime($objRes->fields['fchActualizacionCruce']);
+            $arrCruces[$seqCruce]['txtUsuarioCreacion']    = $objRes->fields['txtUsuarioCreacion'];
+            $arrCruces[$seqCruce]['txtUsuarioActualiza']   = $objRes->fields['txtUsuarioActualiza'];
+            $objRes->MoveNext();
+        }
+        return $arrCruces;
+    }
+
 
 }

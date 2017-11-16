@@ -10561,3 +10561,34 @@ function enrutarAAD(objSelect){
 
 }
 
+var listadoCruces = function(){
+    $('#listadoCruces').DataTable({
+        "lengthMenu": [[20,50,100,-1], [20,50,100,'Todos']],
+        "order": [[1, "desc"]],
+        "scrollX": true,
+        "dom": 'lpti'
+    });
+
+    objSelect = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "select",
+        "listadoCruces_wrapper"
+    );
+
+    objInput = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "input",
+        "listadoCruces_wrapper"
+    );
+
+    objSelect.className = "inputLogin";
+    objInput.className = "inputLogin";
+
+    objPaginador = YAHOO.util.Dom.get("listadoCruces_paginate");
+    objPaginador.style.textAlign = "center";
+
+    eliminarObjeto("listadoCrucesListener");
+    YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
+}
+YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
+

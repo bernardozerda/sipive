@@ -12,9 +12,6 @@ include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Cruces.class.php" );
 
 $_POST['creacionInicio'] = (esFechaValida($_POST['creacionInicio']))? new DateTime($_POST['creacionInicio']) : null;
@@ -61,7 +58,6 @@ if(! empty($arrErrores)){
     $arrCruces = $claCruces->listado($_POST);
 }
 
-$claSmarty->assign( "arrPost"  , $_POST );
 $claSmarty->assign( "arrPost"  , $_POST );
 $claSmarty->assign( "arrCruces", $arrCruces );
 $claSmarty->display( "cruces2/cruces.tpl" );

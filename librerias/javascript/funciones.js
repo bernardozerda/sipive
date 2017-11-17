@@ -10563,10 +10563,10 @@ function enrutarAAD(objSelect){
 
 var listadoCruces = function(){
     $('#listadoCruces').DataTable({
-        "lengthMenu": [[20,50,100,-1], [20,50,100,'Todos']],
-        "order": [[1, "desc"]],
+        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+        "order": [[0, "desc"]],
         "scrollX": true,
-        "dom": 'lpti'
+        "dom": 'litp'
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(

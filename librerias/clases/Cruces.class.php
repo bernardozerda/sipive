@@ -11,9 +11,49 @@
 class Cruces
 {
 
+    public $arrErrores;
+    private $arrFormatoArchivo;
 
     function __construct()
     {
+        $this->arrErrores = array();
+
+        $this->arrFormatoArchivo[0]['nombre'] = "seqFormulario";
+        $this->arrFormatoArchivo[0]['tipo'] = "numero";
+        $this->arrFormatoArchivo[1]['nombre'] = "Postulante Principal";
+        $this->arrFormatoArchivo[1]['tipo'] = "numero";
+        $this->arrFormatoArchivo[2]['nombre'] = "Modalidad";
+        $this->arrFormatoArchivo[2]['tipo'] = "texto";
+        $this->arrFormatoArchivo[2]['rango'] = obtenerDatosTabla("t_frm_modalidad",array("seqModalidad","txtModalidad"),"seqModalidad","seqPlanGobierno in (2,3)");
+        $this->arrFormatoArchivo[3]['nombre'] = "Estado";
+        $this->arrFormatoArchivo[3]['tipo'] = "texto";
+        $this->arrFormatoArchivo[3]['rango'] = estadosProceso();
+        $this->arrFormatoArchivo[4]['nombre'] = "Tipo_Documento";
+        $this->arrFormatoArchivo[4]['tipo'] = "texto";
+        $this->arrFormatoArchivo[4]['rango'] = obtenerDatosTabla("t_ciu_tipo_documento",array("seqTipoDocumento","txtTipoDocumento"),"seqTipoDocumento","seqTipoDocumento not in (6,8)");
+        $this->arrFormatoArchivo[5]['nombre'] = "Documento";
+        $this->arrFormatoArchivo[5]['tipo'] = "numero";
+        $this->arrFormatoArchivo[6]['nombre'] = "Nombre";
+        $this->arrFormatoArchivo[6]['tipo'] = "texto";
+        $this->arrFormatoArchivo[7]['nombre'] = "Parentesco";
+        $this->arrFormatoArchivo[7]['tipo'] = "texto";
+        $this->arrFormatoArchivo[7]['rango'] = obtenerDatosTabla("t_ciu_parentesco",array("seqParentesco","txtParentesco"),"seqParentesco","bolActivo = 1");
+        $this->arrFormatoArchivo[8]['nombre'] = "Entidad";
+        $this->arrFormatoArchivo[8]['tipo'] = "texto";
+        $this->arrFormatoArchivo[9]['nombre'] = "Causa";
+        $this->arrFormatoArchivo[9]['tipo'] = "texto";
+        $this->arrFormatoArchivo[10]['nombre'] = "Detalle";
+        $this->arrFormatoArchivo[10]['tipo'] = "texto";
+        $this->arrFormatoArchivo[11]['nombre'] = "Inhabilitar";
+        $this->arrFormatoArchivo[11]['tipo'] = "texto";
+        $this->arrFormatoArchivo[11]['rango'][] = "si";
+        $this->arrFormatoArchivo[11]['rango'][] = "no";
+        $this->arrFormatoArchivo[11]['rango'][] = "SI";
+        $this->arrFormatoArchivo[11]['rango'][] = "NO";
+        $this->arrFormatoArchivo[11]['rango'][] = "Si";
+        $this->arrFormatoArchivo[11]['rango'][] = "No";
+        $this->arrFormatoArchivo[12]['nombre'] = "Observaciones";
+        $this->arrFormatoArchivo[12]['tipo'] = "texto";
 
     }
 
@@ -442,13 +482,9 @@ WHERE
                 cru.txtNombre,
                 cru.fchCruce,
                 cru.fchCreacionCruce,
-                if(isNull(usu1.seqUsuario) = 1,'',concat(usu1.txtNombre,' ',usu1.txtApellido)) as txtUsuarioCreacion,
-                cru.fchActualizacionCruce,
-                if(isNull(usu2.seqUsuario) = 1,'',concat(usu2.txtNombre,' ',usu2.txtApellido)) as txtUsuarioActualiza
+                cru.fchActualizacionCruce
             FROM t_cru_cruces cru
-            LEFT JOIN t_cru_resultado res ON cru.seqCruce = res.seqCruce AND res.seqParentesco = 1
-            LEFT JOIN t_cor_usuario usu1 on cru.txtUsuario = usu1.txtUsuario
-            LEFT JOIN t_cor_usuario usu2 on cru.txtUsuarioActualiza = usu2.txtUsuario
+            INNER JOIN t_cru_resultado res ON cru.seqCruce = res.seqCruce AND res.seqParentesco = 1
             WHERE 1 = 1
             $txtCondicionCreacion
             $txtCondicionActualizacion
@@ -464,12 +500,242 @@ WHERE
             $arrCruces[$seqCruce]['fchCruce']              = new DateTime($objRes->fields['fchCruce']);
             $arrCruces[$seqCruce]['fchCreacionCruce']      = new DateTime($objRes->fields['fchCreacionCruce']);
             $arrCruces[$seqCruce]['fchActualizacionCruce'] = new DateTime($objRes->fields['fchActualizacionCruce']);
-            $arrCruces[$seqCruce]['txtUsuarioCreacion']    = $objRes->fields['txtUsuarioCreacion'];
-            $arrCruces[$seqCruce]['txtUsuarioActualiza']   = $objRes->fields['txtUsuarioActualiza'];
             $objRes->MoveNext();
         }
         return $arrCruces;
     }
 
+    public function validarFormulario($arrPost){
+
+        if($arrPost['txtNombre'] == ""){
+            $this->arrErrores[] = "Debe dar un nombre al cruce";
+        }else{
+            $seqCruce = array_shift(obtenerDatosTabla(
+                "t_cru_cruces",
+                array("txtNombre","seqCruce"),
+                "txtNombre",
+                "txtNombre = '" . $arrPost['txtNombre'] . "' and seqCruce <> " . intval($arrPost['seqCruce'])
+            ));
+
+            if($seqCruce != 0){
+                $this->arrErrores[] = "El nombre del cruce ya está en uso";
+            }
+
+        }
+
+        if(!esFechaValida($arrPost['fchCruce'])){
+            $this->arrErrores[] = "Debe dar una fecha para el cruce";
+        }
+
+        if($arrPost['txtCuerpo'] != ""){
+            if($arrPost['txtFirma'] == ""){
+                $this->arrErrores[] = "Debe indicar el nombre de quien firma la carta";
+            }
+            if($arrPost['txtElaboro'] == ""){
+                $this->arrErrores[] = "Debe indicar el nombre de quien elabora la carta";
+            }
+            if($arrPost['txtReviso'] == ""){
+                $this->arrErrores[] = "Debe indicar el nombre de quien revisa la carta";
+            }
+        }
+
+    }
+
+    public function cargarArchivo(){
+        $arrArchivo = array();
+
+        // valida si el archivo fue cargado y si corresponde a las extensiones válidas
+        switch ($_FILES['archivo']['error']) {
+            case UPLOAD_ERR_INI_SIZE:
+                $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" Excede el tamaño permitido";
+                break;
+            case UPLOAD_ERR_FORM_SIZE:
+                $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" Excede el tamaño permitido";
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" no fue completamente cargado, intente de nuevo, si el error persiste contacte al administrador";
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                $this->arrErrores[] = "Debe especificar un archivo para cargar";
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR:
+                $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" no se pudo cargar por falta de carpeta temporal, contacte al administrador";
+                break;
+            case UPLOAD_ERR_CANT_WRITE:
+                $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" no se pudo guardar en el servidor, contacte al administrador";
+                break;
+            case UPLOAD_ERR_EXTENSION:
+                $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" no se pudo guardar en el servidor por un problema de extensiones, contacte al administrador";
+                break;
+            default:
+                $numPunto = strpos($_FILES['archivo']['name'], ".") + 1;
+                $numRestar = ( strlen($_FILES['archivo']['name']) - $numPunto ) * -1;
+                $txtExtension = substr($_FILES['archivo']['name'], $numRestar);
+                if (!in_array(strtolower($txtExtension), array("xls","xlsx","txt"))) {
+                    $this->arrErrores[] = "Tipo de Archivo no permitido $txtExtension ";
+                }
+                break;
+        }
+
+        if( empty( $this->arrErrores ) ){
+
+            // si es un archivo de texto obtiene los datos
+            if( $_FILES['archivo']['type'] == "text/plain" ){
+                foreach( file( $_FILES['archivo']['tmp_name'] ) as $numLinea => $txtLinea ){
+                    if( trim( $txtLinea ) != "" ) {
+                        $arrArchivo[$numLinea] = explode("\t", utf8_encode(trim($txtLinea)));
+                        foreach( $arrArchivo[$numLinea] as $numColumna => $txtCelda ){
+                            if( $numColumna < count( $this->arrFormatoArchivo ) ) {
+                                $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
+                            }else{
+                                unset( $arrArchivo[$numLinea][$numColumna] );
+                            }
+                        }
+                    }
+                }
+            }else{
+                try{
+
+                    // crea las clases para la obtencion de los datos
+                    $txtTipoArchivo = PHPExcel_IOFactory::identify($_FILES['archivo']['tmp_name']);
+                    $objReader = PHPExcel_IOFactory::createReader($txtTipoArchivo);
+                    $objPHPExcel = $objReader->load($_FILES['archivo']['tmp_name']);
+                    $objHoja = $objPHPExcel->getSheet(0);
+
+                    // obtiene las dimensiones del archivo para la obtencion del contenido por rangos
+                    $numFilas = $objHoja->getHighestRow();
+                    $numColumnas = PHPExcel_Cell::columnIndexFromString( $objHoja->getHighestColumn() ) - 1;
+
+                    // obtiene los datos del rango obtenido
+                    for( $numFila = 1; $numFila <= $numFilas; $numFila++ ){
+                        for( $numColumna = 0; $numColumna <= $numColumnas; $numColumna++ ){
+                            $numFilaArreglo = $numFila - 1;
+                            $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna,$numFila)->getValue();
+                            if( $this->arrFormatoArchivo[$numColumna]['tipo'] == "fecha" and is_numeric( $arrArchivo[$numFilaArreglo][$numColumna] ) ) {
+                                $claFecha = PHPExcel_Shared_Date::ExcelToPHPObject($arrArchivo[$numFilaArreglo][$numColumna]);
+                                $arrArchivo[$numFilaArreglo][$numColumna] = $claFecha->format("Y-m-d");
+                            }
+                        }
+                    }
+
+                    // limpia las lineas vacias
+                    foreach ($arrArchivo as $numLinea => $arrLinea) {
+                        $bolLineaVacia = true;
+                        foreach ($arrLinea as $numColumna => $txtCelda) {
+                            if ($txtCelda != "") {
+                                $bolLineaVacia = false;
+                                $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
+                            }
+                        }
+                        if ($bolLineaVacia == true) {
+                            unset($arrArchivo[$numLinea]);
+                        }
+                    }
+
+                } catch ( Exception $objError ){
+                    $this->arrErrores[] = $objError->getMessage();
+                }
+            }
+        }
+
+        if(count($arrArchivo) == 1){
+            $this->arrErrores[] = "Un archivo que contiene solo los titulos se considera vacío";
+        }
+
+        return $arrArchivo;
+    }
+
+    public function validarArchivo($arrArchivo){
+        foreach( $this->arrFormatoArchivo as $numColumna => $arrCelda ){
+            for( $numFila = 1; $numFila < count($arrArchivo); $numFila++ ){
+                if( $arrArchivo[$numFila][$numColumna] != "" ) {
+                    $bolError = false;
+                    switch ($arrCelda['tipo']) {
+                        case "numero":
+                            $bolError = ( is_numeric( $arrArchivo[$numFila][$numColumna] ) )? false : true;
+                            break;
+                        case "fecha":
+                            $bolError = ( esFechaValida( $arrArchivo[$numFila][$numColumna] ) )? false : true;
+                            break;
+                    }
+                    if( $bolError ){
+                        $this->arrErrores[] = "Error Linea " . ($numFila + 1) . " columna " . $arrCelda['nombre'] . " el valor debe ser " . $arrCelda['tipo'];
+                    }
+                    if( isset( $arrCelda['rango'] ) ){
+                        if( ! in_array( $arrArchivo[$numFila][$numColumna] , $arrCelda['rango'] ) ){
+                            $this->arrErrores[] = "Error Linea " . ($numFila + 1) . " columna " . $arrCelda['nombre'] . " " . $arrArchivo[$numFila][$numColumna] . " no es un valor válido" ;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function salvar($arrPost,$arrArchivo){
+        global $aptBd;
+        try{
+            $aptBd->BeginTrans();
+
+            $this->validarReglasCrear($arrArchivo);
+
+
+
+
+//            $this->arrErrores[] = "prueba";
+            if (!empty($this->arrErrores)) {
+                throw new Exception(array_shift($this->arrErrores));
+            }
+
+            $aptBd->CommitTrans();
+
+        } catch (Exception $objError) {
+            $aptBd->RollbackTrans();
+            $this->arrErrores[] = $objError->getMessage();
+        }
+
+
+    }
+
+    private function validarReglasCrear($arrArchivo){
+
+        $arrFormularios = array();
+
+        unset($arrArchivo[0]);
+        foreach($arrArchivo as $numLinea => $arrLinea){
+
+            $seqFormulario = $arrLinea[0];
+            if(!isset($arrFormularios[$seqFormulario])){
+                $claFormulario = new FormularioSubsidios();
+                $claFormulario->cargarFormulario($arrLinea[0]);
+            }
+
+            $objCiudadano = $this->obtenerPrincipal($claFormulario);
+            if($objCiudadano->numDocumento != $arrLinea[1]){
+                $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El documento " . $arrLinea[1] . " no es el postulante principal";
+            }
+
+            if($claFormulario->seqModalidad != array_shift(array_keys($this->arrFormatoArchivo[2]['rango'],$arrLinea[2]))){
+                $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La modalidad " . $arrLinea[2] . " no corresponde con la registrada en el sistema";
+            }
+
+            if($claFormulario->seqEstadoProceso != array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3]))){
+                $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no corresponde el estado registrado en el sistema";
+            }
+
+            // correspondencia de ciudadanos
+
+
+        }
+    }
+
+    private function obtenerPrincipal($claFormulario){
+        $objCiudadano = null;
+        foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano){
+            if($objCiudadano->seqParentesco == 1){
+                break;
+            }
+        }
+        return $objCiudadano;
+    }
 
 }

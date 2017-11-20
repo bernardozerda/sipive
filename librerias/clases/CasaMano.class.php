@@ -778,27 +778,23 @@ class CasaMano
         switch ($arrPost['txtFase']) {
             case "registroOferta":
                 $this->salvarRegistroOferta($arrPost);
-                $this->modificarEstadoProceso($arrPost);
                 break;
             case "revisionJuridica":
                 $this->salvarRevisionJuridica($arrPost);
-                $this->modificarEstadoProceso($arrPost);
-                $this->verificacionConceptos($arrPost);
+                $this->primeraVerificacion($arrPost);
                 break;
             case "revisionTecnica":
                 $this->salvarRevisiontecnica($arrPost);
-                $this->modificarEstadoProceso($arrPost);
-                $this->verificacionConceptos($arrPost);
+                $this->primeraVerificacion($arrPost);
                 break;
             case "primeraVerificacion":
-                $this->verificacionConceptos($arrPost);
+                $this->primeraVerificacion($arrPost);
                 break;
             case "postulacion":
                 $this->salvarPostulacion($arrPost);
                 break;
             case "segundaVerificacion":
-                $arrPost['seqEstadoProceso'] = (intval($arrPost['bolResultado']) == 1) ? 16 : 48;
-                $this->modificarEstadoProceso($arrPost);
+                $this->segundaVerificacion($arrPost);
                 break;
         }
 
@@ -806,67 +802,101 @@ class CasaMano
 
     }
 
-    public function modificarEstadoProceso($arrPost)
+    private function primeraVerificacion($arrPost)
     {
         global $aptBd;
 
-        // La modadlidad del hogar se afecta cuando se selecciona vivienda nueva o usada
-        // Para Vivienda nueva la modalidad queda en 6  - Adquisición de Vivienda Nueva
-        // Para Vivienda usada la modalidad queda en 11 - Adquisición de Vivienda Usada
-//        $txtModalidad = "";
-//        if (isset($arrPost['txtCompraVivienda']) and trim($arrPost['txtCompraVivienda']) != "") {
-//            $txtModalidad = ",seqModalidad = ";
-//            $txtModalidad .= (trim($arrPost['txtCompraVivienda']) == "nueva") ? 6 : 11;
-//        }
+        if (intval($arrPost['seqCasaMano']) != 0) {
 
-        // Coloca el estado del proceso seleccionado por el usuario
-        /*echo "arrPost[seqFormulario]:".$arrPost['seqFormulario']."<br>";
-        echo "arrPost[estadoActual]:".$arrPost['estadoActual']."<br>";
-        echo "arrPost[seqEstadoProceso]:".$arrPost['seqEstadoProceso']."<br>";*/
+            // Verificacion sin cruce (registros sin cruces)
+            if ($this->bolPrimeraVerificacion == 1) {
 
-        /*modificacion para que actualice el estado del proceso unicamente cuando cumpla las condiciones:
-            Campo -> bolPrimeraVerificacion en nulo o vacio
-            Campo -> bolRevisionJuridica que este en 1
-            Campo -> bolRevisionTecnica que este en 1
-            Los valores de estos campos son obtenidos desde -> \sdv\contenidos\cruces\salvarCruces.php
-            */
-        if ($arrPost['bolPrimeraVerificacion'] == "" && $arrPost['bolRevisionJuridica'] == 1 && $arrPost['bolRevisionTecnica'] == 1) {
+                switch(true){
 
-            $sql = "
-				 UPDATE T_FRM_FORMULARIO SET
-					 seqEstadoProceso = 46,
-					 $txtModalidad
-				 WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
-			 ";
-            //echo "sql:".$sql;
+                    // Alguien falta en el proceso
+                    case $this->bolRevisionJuridica == 0 or $this->bolRevisionTecnica == 0:
+                        $seqEstadoProceso = 44; // Primera verificacion
+                        break;
 
-            try {
-                $aptBd->execute($sql);
-            } catch (Exception $objError) {
-                $this->arrErrores[] = "No se pudo modificar el estado del proceso";
+                    // juridica y tecnica viabilizan
+                    case $this->bolRevisionJuridica == 1 and $this->bolRevisionTecnica == 1:
+                        $seqEstadoProceso = 46; // Primera verificacion aprobada
+                        break;
+
+                    // juridica o tecnica no viabilizan
+                    case $this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2:
+                        $seqEstadoProceso = 45; // Primera verificacion pendiente
+                        break;
+
+                }
+
             }
 
+            // Verificacion con cruce (registros con algun cruce)
+            if ($this->bolPrimeraVerificacion == 2) {
+                $seqEstadoProceso = 45; // Primera verificacion pendiente
+            }
+
+            // No se ha realizado la verificacion
+            if ($this->bolPrimeraVerificacion == 0) {
+
+                switch(true){
+
+                    // juridica y tecnica viabilizan
+                    case $this->bolRevisionJuridica == 1 and $this->bolRevisionTecnica == 1:
+                        $seqEstadoProceso = 44; // Primera verificacion
+                        break;
+
+                    // juridica o tecnica no viabilizan
+                    case $this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2:
+                        $seqEstadoProceso = 45; // Primera verificacion pendiente
+                        break;
+
+                    // Alguien falta en el proceso
+                    default:
+                        $seqEstadoProceso = 0;
+                        break;
+
+                }
+
+            }
+
+            // alterar el estado del proceso segun el resultado
+            if ($seqEstadoProceso != 0) {
+                try {
+                    $sql = "
+                        UPDATE T_FRM_FORMULARIO SET
+                            seqEstadoProceso = " . $seqEstadoProceso . "
+                        WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
+                    ";
+                    $aptBd->execute($sql);
+                } catch (Exception $objError) {
+                    $this->arrErrores[] = "No se pudo modificar el estado del proceso";
+                }
+
+            }
+
+        } else {
+            $this->arrErrores[] = "No se encuentra el registro de casa en mano para hacer la verificacion de conceptos";
         }
+    }
 
-        /*--- Fin de la modificacion subida el Jueves 9 de Octubre de 2014 ---*/
+    private function segundaVerificacion($arrPost)
+    {
+        global $aptBd;
 
-        /*
-        if ($arrPost['estadoActual'] != 15 ){
+        try {
+            $arrPost['seqEstadoProceso'] = (intval($arrPost['bolResultado']) == 1) ? 16 : 48;
             $sql = "
                 UPDATE T_FRM_FORMULARIO SET
-                    seqEstadoProceso = " . $arrPost['seqEstadoProceso'] . ",
-                    seqTipoEsquema = 5
-                    $txtModalidad
+                    seqEstadoProceso = " . $arrPost['seqEstadoProceso'] . "
                 WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
             ";
-            //echo "sql:".$sql;
+            $aptBd->execute($sql);
+        } catch (Exception $objError) {
+            $this->arrErrores[] = "No se pudo modificar el estado del proceso";
+        }
 
-            try {
-                $aptBd->execute( $sql );
-            } catch ( Exception $objError ){
-                $this->arrErrores[] = "No se pudo modificar el estado del proceso";
-            }
-       }*/
     }
 
     public function salvarRegistroOferta($arrPost)
@@ -1011,9 +1041,6 @@ class CasaMano
         }
     }
 
-    /**
-     * @param $arrPost
-     */
     public function salvarRevisionJuridica($arrPost)
     {
         global $aptBd;
@@ -1685,50 +1712,7 @@ class CasaMano
         return $bolCambios;
     }
 
-    public function verificacionConceptos($arrPost)
-    {
-        global $aptBd;
 
-        if (intval($arrPost['seqCasaMano']) != 0) {
-
-            // Verificacion sin cruce
-            if ($this->bolPrimeraVerificacion == 1) {
-
-                // juridica o tecnica no viabilizan
-                if ($this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2) {
-                    $arrPost['txtCompraVivienda'] = "nueva";
-                    $seqEstadoProceso = 37; // Hogar actualizado
-
-                    // Juridica y tecnica viabilizan
-                } elseif ($this->bolRevisionJuridica == 1 and $this->bolRevisionTecnica == 1) {
-                    $seqEstadoProceso = 46; // Primera verificacion aprobada
-
-                    // Alguien falta en el proceso
-                } elseif ($this->bolRevisionJuridica == 0 or $this->bolRevisionTecnica == 0) {
-                    $seqEstadoProceso = 44; // Primera verificacion
-                } else {
-                    $seqEstadoProceso = 0;
-                }
-
-                // Verificacion con cruce
-            } elseif ($this->bolPrimeraVerificacion == 2) {
-                $seqEstadoProceso = 45; // Primera verificacion pendiente
-
-                // No hay primera verificacion
-            } else {
-                $seqEstadoProceso = 0;
-            }
-
-            // alterar el estado del proceso segun el resultado
-            if ($seqEstadoProceso != 0) {
-                $arrPost['seqEstadoProceso'] = $seqEstadoProceso;
-                $this->modificarEstadoProceso($arrPost);
-            }
-
-        } else {
-            $this->arrErrores[] = "No se encuentra el registro de casa en mano para hacer la verificacion de conceptos";
-        }
-    }
 
     /**
      * VERIFICA LOS PERMISOS DEL USUARIO PARA

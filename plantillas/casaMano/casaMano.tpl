@@ -299,9 +299,10 @@
             <!-- 
                 LINEA PARA ADICIONAR REGISTROS DE VIVIENDA
                 SOLO SI ESTA EN EL ESTADO DE HOGAR POSTULADO
+                o CALIFICADO
             -->
 
-            {if $claFormulario->seqEstadoProceso == 37}
+            {if $claFormulario->seqEstadoProceso == 37 || $claFormulario->seqEstadoProceso == 53}
                 <tr align="center" style="vertical-align: bottom;">
                     <td width="{$numAncho}">
                         <button onClick="cambioCEM(

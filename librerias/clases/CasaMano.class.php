@@ -78,11 +78,11 @@ class CasaMano
 
         $this->arrFases['cem']['registroOferta']['grupos'] = array(6, 7, 8, 14, 13);
         $this->arrFases['cem']['registroOferta']['permitido']['etapas'] = array();
-        $this->arrFases['cem']['registroOferta']['permitido']['estados'] = array(37, 43, 44, 45, 46, 47, 48, 15, 16);
+        $this->arrFases['cem']['registroOferta']['permitido']['estados'] = array(37, 53, 43, 44, 45, 46, 47, 48, 15, 16);
         $this->arrFases['cem']['registroOferta']['prohibido']['etapas'] = array();
         $this->arrFases['cem']['registroOferta']['prohibido']['estados'] = array();
         $this->arrFases['cem']['registroOferta']['atras'] = array();
-        $this->arrFases['cem']['registroOferta']['adelante'] = array(37, 43, 44);
+        $this->arrFases['cem']['registroOferta']['adelante'] = array(37, 53, 43, 44);
         $this->arrFases['cem']['registroOferta']['salvar'] = "./contenidos/casaMano/salvarRegistroOferta.php";
         $this->arrFases['cem']['registroOferta']['plantilla'] = "casaMano/busquedaOferta.tpl";
 
@@ -612,56 +612,6 @@ class CasaMano
         return true;
     }
 
-//    public function salvarSeguimiento($arrPost)
-//    {
-//        global $aptBd;
-//
-//        if (intval($arrPost['seqGrupoGestion']) == 0) {
-//            $this->arrErrores[] = "Seleccione el grupo de la gesti&oacute;n realizada";
-//        }
-//
-//        if (intval($arrPost['seqGestion']) == 0) {
-//            $this->arrErrores[] = "Seleccione la gesti&oacute;n realizada";
-//        }
-//
-//        if (trim($arrPost['txtComentario']) == "") {
-//            $this->arrErrores[] = "Por favor diligencie el campo de comentarios";
-//        }
-//
-//        if (empty($this->arrErrores)) {
-//            $sql = "
-//                 INSERT INTO T_SEG_SEGUIMIENTO (
-//                   seqFormulario,
-//                   fchMovimiento,
-//                   seqUsuario,
-//                   txtComentario,
-//                   txtCambios,
-//                   numDocumento,
-//                   txtNombre,
-//                   seqGestion
-//                 ) VALUES (
-//                   " . $arrPost['seqFormulario'] . ",
-//                   '" . date("Y-m-d H:i:s") . "',
-//                   " . $_SESSION['seqUsuario'] . ",
-//                   '" . $arrPost['txtComentario'] . "',
-//                   '" . $arrPost['txtCambios'] . "',
-//                   " . $arrPost['cedula'] . ",
-//                   '" . $arrPost['nombre'] . "',
-//                   " . $arrPost['seqGestion'] . "
-//                 )
-//             ";
-//            try {
-//                $aptBd->execute($sql);
-//                $this->arrMensajes[] = "Ha salvado un registro de actividad, el n&uacute;mero del registro es " .
-//                    number_format($aptBd->Insert_ID(), 0, ".", ",") . ". Conserve este " .
-//                    "n&uacute;mero para su referencia.";
-//            } catch (Exception $objError) {
-//                $this->arrErrores[] = "No se ha podido registrar el seguimiento, contacte al administrador del sistema";
-//                //$this->arrErrores[] = $objError->getMessage();
-//            }
-//        }
-//    }
-
     public function salvar($arrPost)
     {
         global $aptBd;
@@ -736,7 +686,7 @@ class CasaMano
                         $arrCampos['txtRevisionTecnica'] = "'" . $arrPost['txtDescripcionVivienda'] . "'";
                         break;
                     case "primeraVerificacion":
-                        $arrCampos['bolPrimeraVerificacion'] = "'" . $arrPost['bolResultado'] . "'";
+                        $arrCampos['bolPrimeraVerificacion'] = $arrPost['bolResultado'];
                         $arrCampos['fchPrimeraVerificacion'] = "'" . $arrPost['fchCruce'] . "'";
                         $arrCampos['seqPrimeraVerificacion'] = "'" . $arrPost['seqCruce'] . "'";
                         break;
@@ -748,7 +698,7 @@ class CasaMano
                         }
                         break;
                     case "segundaVerificacion":
-                        $arrCampos['bolSegundaVerificacion'] = "'" . $arrPost['bolResultado'] . "'";
+                        $arrCampos['bolSegundaVerificacion'] = $arrPost['bolResultado'];
                         $arrCampos['fchSegundaVerificacion'] = "'" . $arrPost['fchCruce'] . "'";
                         $arrCampos['seqSegundaVerificacion'] = "'" . $arrPost['seqCruce'] . "'";
                         break;
@@ -808,28 +758,34 @@ class CasaMano
 
         if (intval($arrPost['seqCasaMano']) != 0) {
 
-            // Verificacion sin cruce (registros sin cruces)
-            if ($this->bolPrimeraVerificacion == 1) {
-
+            // No se ha realizado la verificacion
+            if ($this->bolPrimeraVerificacion == 0) {
                 switch(true){
-
-                    // Alguien falta en el proceso
-                    case $this->bolRevisionJuridica == 0 or $this->bolRevisionTecnica == 0:
+                    case $this->bolRevisionJuridica == 1 or $this->bolRevisionTecnica == 1:
                         $seqEstadoProceso = 44; // Primera verificacion
                         break;
+                    case $this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2:
+                        $seqEstadoProceso = 37; // Hogar Actualizado
+                        break;
+                    default:
+                        $seqEstadoProceso = 0;
+                        break;
+                }
+            }
 
-                    // juridica y tecnica viabilizan
+            // Verificacion sin cruce (registros sin cruces)
+            if ($this->bolPrimeraVerificacion == 1) {
+                switch(true){
                     case $this->bolRevisionJuridica == 1 and $this->bolRevisionTecnica == 1:
                         $seqEstadoProceso = 46; // Primera verificacion aprobada
                         break;
-
-                    // juridica o tecnica no viabilizan
                     case $this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2:
-                        $seqEstadoProceso = 45; // Primera verificacion pendiente
+                        $seqEstadoProceso = 37; // Primera verificacion pendiente
                         break;
-
+                    default:
+                        $seqEstadoProceso = 44; // Primera verificacion
+                        break;
                 }
-
             }
 
             // Verificacion con cruce (registros con algun cruce)
@@ -837,36 +793,13 @@ class CasaMano
                 $seqEstadoProceso = 45; // Primera verificacion pendiente
             }
 
-            // No se ha realizado la verificacion
-            if ($this->bolPrimeraVerificacion == 0) {
-
-                switch(true){
-
-                    // juridica y tecnica viabilizan
-                    case $this->bolRevisionJuridica == 1 and $this->bolRevisionTecnica == 1:
-                        $seqEstadoProceso = 44; // Primera verificacion
-                        break;
-
-                    // juridica o tecnica no viabilizan
-                    case $this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2:
-                        $seqEstadoProceso = 45; // Primera verificacion pendiente
-                        break;
-
-                    // Alguien falta en el proceso
-                    default:
-                        $seqEstadoProceso = 0;
-                        break;
-
-                }
-
-            }
-
             // alterar el estado del proceso segun el resultado
             if ($seqEstadoProceso != 0) {
                 try {
                     $sql = "
                         UPDATE T_FRM_FORMULARIO SET
-                            seqEstadoProceso = " . $seqEstadoProceso . "
+                            seqEstadoProceso = " . $seqEstadoProceso . ",
+                            fchUltimaActualizacion = NOW()
                         WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
                     ";
                     $aptBd->execute($sql);
@@ -886,10 +819,11 @@ class CasaMano
         global $aptBd;
 
         try {
-            $arrPost['seqEstadoProceso'] = (intval($arrPost['bolResultado']) == 1) ? 16 : 48;
+            $arrPost['seqEstadoProceso'] = (intval($arrPost['bolResultado']) == 1) ? 16 : 56;
             $sql = "
                 UPDATE T_FRM_FORMULARIO SET
-                    seqEstadoProceso = " . $arrPost['seqEstadoProceso'] . "
+                    seqEstadoProceso = " . $arrPost['seqEstadoProceso'] . ",
+                    fchUltimaActializacion = now()
                 WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
             ";
             $aptBd->execute($sql);
@@ -1711,8 +1645,6 @@ class CasaMano
 
         return $bolCambios;
     }
-
-
 
     /**
      * VERIFICA LOS PERMISOS DEL USUARIO PARA

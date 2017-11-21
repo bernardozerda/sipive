@@ -4067,6 +4067,25 @@ class Seguimiento {
         }
     }
 
+    private function cambiosCruces($arrPost){
+
+        $claFormulario = new FormularioSubsidios();
+        $claFormulario->cargarFormulario($arrPost['seqFormulario']);
+
+        $txtCambios = "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Formulario:</b>" . $this->txtSalto;
+
+        // Estado del proceso
+        $txtValorAnterior = $claFormulario->seqEstadoProceso;
+        $txtValorNuevo = $arrPost['seqEstadoProceso'];
+        if ($txtValorAnterior != $txtValorNuevo) {
+            $arrEstados = estadosProceso();
+            $txtCambios .= $this->txtSeparador . "seqEstadoProceso, Valor Anterior: " . $arrEstados[$txtValorAnterior] . ", " .
+                "Valor Nuevo: " . $arrEstados[$txtValorNuevo] . $this->txtSalto;
+        }
+
+        return $txtCambios;
+    }
+
     private function cambiosRegistroOferta($arrPost){
 
         $claFormulario = new FormularioSubsidios;

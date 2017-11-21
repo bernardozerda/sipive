@@ -10,6 +10,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Cruces.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExcel.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/IOFactory.php" );
@@ -44,6 +45,8 @@ if(! empty($claCruces->arrErrores)) {
     $claSmarty->display("cruces2/formularioCruces.tpl");
 
 }else{
+
+    imprimirMensajes($claCruces->arrErrores, $claCruces->arrMensajes);
 
     $arrCruces = $claCruces->listado($_POST);
     $claSmarty->assign( "arrCruces", $arrCruces );

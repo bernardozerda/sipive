@@ -12,11 +12,14 @@ class Cruces
 {
 
     public $arrErrores;
+    public $arrMensajes;
     private $arrFormatoArchivo;
+    private $arrEstadosPermitidos;
 
     function __construct()
     {
         $this->arrErrores = array();
+        $this->arrMensajes = array();
 
         $this->arrFormatoArchivo[0]['nombre'] = "seqFormulario";
         $this->arrFormatoArchivo[0]['tipo'] = "numero";
@@ -54,6 +57,17 @@ class Cruces
         $this->arrFormatoArchivo[11]['rango'][] = "No";
         $this->arrFormatoArchivo[12]['nombre'] = "Observaciones";
         $this->arrFormatoArchivo[12]['tipo'] = "texto";
+
+        // Primera varificacion -> crear -> seqTipoEsquema = array( _ESTADOS_ )
+        $this->arrEstadosPermitidos['crear'][9]  = array(53,47); // CF - Proyectos gestionado por la SDHT
+        $this->arrEstadosPermitidos['crear'][5]  = array(44,47); // Casa en Mano
+        $this->arrEstadosPermitidos['crear'][10] = array(44,47); // CF - Proyectos fuera de la SDHT
+        $this->arrEstadosPermitidos['crear'][11] = array(44,47); // CF - Retorno / Reubicacion
+
+        $this->arrEstadosPermitidos['editar'][9]  = array(45,56); // CF - Proyectos gestionado por la SDHT
+        $this->arrEstadosPermitidos['editar'][5]  = array(44,45,56); // Casa en Mano
+        $this->arrEstadosPermitidos['editar'][10] = array(44,45,56); // CF - Proyectos fuera de la SDHT
+        $this->arrEstadosPermitidos['editar'][11] = array(44,45,56); // CF - Retorno / Reubicacion
 
     }
 
@@ -717,11 +731,14 @@ WHERE
                 $arrInhabilitar = array();
                 unset($arrArchivo[0]);
                 foreach($arrArchivo as $numLinea => $arrLinea){
+
                     $bolInhabilitar = (strtolower($arrLinea[11]) == "no")? 0 : 1;
                     $seqFormulario = $arrLinea[0];
-                    if((!isset($arrInhabilitar[$seqFormulario])) or $arrInhabilitar[$seqFormulario] == 0) {
-                        $arrInhabilitar[$seqFormulario] = $bolInhabilitar;
+                    if((!isset($arrInhabilitar[$seqFormulario])) or $arrInhabilitar[$seqFormulario]['inhabilitar'] == 0) {
+                        $arrInhabilitar[$seqFormulario]['inhabilitar'] = $bolInhabilitar;
+                        $arrInhabilitar[$seqFormulario]['estado'] = array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3]));
                     }
+
                     $sql = "
                         INSERT INTO t_cru_resultado(
                             seqCruce,
@@ -755,10 +772,13 @@ WHERE
                     ";
                     $aptBd->execute($sql);
                 }
-                $this->cambioEstados($seqCruce,$arrInhabilitar);
+                $this->cambioEstados($seqCruce,$arrPost['fchCruce'],$arrInhabilitar);
+
+                // bloquear el formulario mientras este en estado 45 o 56
+
             }
             if(!empty($this->arrErrores)){
-                throw new Exception('');
+                $aptBd->RollbackTrans();
             }else{
                 $aptBd->CommitTrans();
             }
@@ -769,16 +789,116 @@ WHERE
     }
 
     private function validarReglasCrear($arrArchivo){
+        global $arrConfiguracion;
         $arrFormularios = array();
         unset($arrArchivo[0]);
-        foreach($arrArchivo as $numLinea => $arrLinea){
+        foreach($arrArchivo as $numLinea => $arrLinea) {
 
             // obtiene los datos del formulario
             $seqFormulario = $arrLinea[0];
-            if(!isset($arrFormularios[$seqFormulario])){
+            if (!isset($arrFormularios[$seqFormulario])) {
                 $claFormulario = new FormularioSubsidios();
                 $claFormulario->cargarFormulario($arrLinea[0]);
+            } else {
+                $claFormulario = $arrFormularios[$seqFormulario];
             }
+
+            /**
+             * validaciones de integridad de datos
+             * aplica para la segunda validacion ( segundo cruce )
+             */
+            if($claFormulario->seqEstadoProceso == 47 || $claFormulario->seqEstadoProceso == 56 ) {
+
+                // verifica que tenga numero de formulario
+                if ($claFormulario->txtFormulario == "") {
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": No tiene numero de formulario";
+                    if (!in_array($txtMensaje, $this->arrErrores)) {
+                        $this->arrErrores[] = $txtMensaje;
+                    }
+                }
+
+                // verifica que tenga fecha de posutlaicon
+                if (!esFechaValida($claFormulario->fchPostulacion)) {
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": No tiene fecha de postulacion";
+                    if (!in_array($txtMensaje, $this->arrErrores)) {
+                        $this->arrErrores[] = $txtMensaje;
+                    }
+                }
+
+                // localidad fuera de bogota, debe tener seqEntidadDonante = CVP bolDesplazado = 0
+                if ($claFormulario->seqLocalidad == 22){
+                    if($claFormulario->bolDesplazado == 0 and $claFormulario->seqEmpresaDonante != 10){
+                        $txtMensaje = "Error Formulario " . $seqFormulario . ": Es hogar vulnerable sin VUR con localidad fuera de bogotá";
+                        if (!in_array($txtMensaje, $this->arrErrores)) {
+                            $this->arrErrores[] = $txtMensaje;
+                        }
+                    }
+                }else{
+                    if($claFormulario->bolDesplazado == 1){
+                        $txtMensaje = "Error Formulario " . $seqFormulario . ": Es hogar victima con localidad dentro de bogotá";
+                        if (!in_array($txtMensaje, $this->arrErrores)) {
+                            $this->arrErrores[] = $txtMensaje;
+                        }
+                    }
+                }
+
+                // verifica que no tenga fecha de vigencia
+                if (esFechaValida($claFormulario->fchVigencia)) {
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": El formulario no puede tener fecha de vigencia";
+                    if (!in_array($txtMensaje, $this->arrErrores)) {
+                        $this->arrErrores[] = $txtMensaje;
+                    }
+                }
+
+                // verifica que el formulario este cerrado
+                if ($claFormulario->bolCerrado == 0) {
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": El formulario debe estar cerrado";
+                    if (!in_array($txtMensaje, $this->arrErrores)) {
+                        $this->arrErrores[] = $txtMensaje;
+                    }
+                }
+
+                $arrModalidad = obtenerDatosTabla(
+                    "T_FRM_MODALIDAD",
+                    array("seqModalidad", "txtModalidad"),
+                    "seqModalidad",
+                    "seqPlanGobierno = " . $claFormulario->seqPlanGobierno
+                );
+                if(! isset($arrModalidad[$claFormulario->seqModalidad])){
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": La modalidad no concuerda con el plan de gobierno";
+                    if (!in_array($txtMensaje, $this->arrErrores)) {
+                        $this->arrErrores[] = $txtMensaje;
+                    }
+                }
+
+                $arrTipoEsquemas = obtenerTipoEsquema($claFormulario->seqModalidad, $claFormulario->seqPlanGobierno, $claFormulario->bolDesplazado);
+                if(! isset($arrTipoEsquemas[$claFormulario->seqTipoEsquema])){
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": El esquema no concuerda con la modalidad y plan de gobierno";
+                    if (!in_array($txtMensaje, $this->arrErrores)) {
+                        $this->arrErrores[] = $txtMensaje;
+                    }
+                }
+
+                $arrSolucion = obtenerSolucion($claFormulario->seqModalidad);
+                if(! isset($arrSolucion[$claFormulario->seqSolucion])){
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": La solucion no concuera con la modalidad y plan de gobierno";
+                    if (!in_array($txtMensaje, $this->arrErrores)) {
+                        $this->arrErrores[] = $txtMensaje;
+                    }
+                }
+
+                if($claFormulario->valIngresoHogar <= ($arrConfiguracion['constantes']['salarioMinimo'] * 2)){
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": Hoar con ingresos superiores a 2 SMMLV";
+                    if (!in_array($txtMensaje, $this->arrErrores)) {
+                        $this->arrErrores[] = $txtMensaje;
+                    }
+                }
+
+            }
+
+            /**
+             * validaciones generales
+             */
 
             // verifica que corresponda el postulante principal
             $objCiudadano = $this->obtenerPrincipal($claFormulario);
@@ -789,14 +909,19 @@ WHERE
             // verifica que la modalidad sea la misma de la base de datos
             if($claFormulario->seqModalidad != array_shift(array_keys($this->arrFormatoArchivo[2]['rango'],$arrLinea[2]))){
                 $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La modalidad " . $arrLinea[2] . " no corresponde con la registrada en el sistema";
+            }else{
+                $arrModalidad[$claFormulario->seqModalidad] = 1;
             }
 
             // verifica que el estado del proceso sea el mismo de la base de datos
             // y verifica que este en estado Inscrito - Calificado
             if($claFormulario->seqEstadoProceso != array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3]))){
                 $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no corresponde el estado registrado en el sistema";
-            }elseif($claFormulario->seqEstadoProceso != 53){
-                $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no es permitido para el cargue de cruces";
+            }else{
+                $seqTipoEsquema = $claFormulario->seqTipoEsquema;
+                if(!in_array(array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3])),$this->arrEstadosPermitidos['crear'][$seqTipoEsquema])){
+                    $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no es permitido para el cargue de cruces";
+                }
             }
 
             // verifica que los datos del ciudadano sean los mismos de la base de datos
@@ -829,6 +954,14 @@ WHERE
             if(in_array($arrLinea[5],$arrHogar)){
                 unset($arrHogar);
             }
+
+            // si esta en inhabilitar si (1) debe tener Entidad - Causa - Detalle
+            if(strtolower($arrLinea[11]) == "si"){
+                if(trim($arrLinea[8]) == "" or trim($arrLinea[9]) == "" or trim($arrLinea[10]) == ""){
+                    $this->arrErrores[] = "Error Linea " .  ($numLinea + 1) . ": Debe dar Entidad - Causa - Detalle para inhabilitar la linea";
+                }
+            }
+
         }
 
         // verifica los miembros de hogar que faltan dentro del archivo
@@ -838,6 +971,10 @@ WHERE
             }
         }
 
+        // verifica que el archivo tenga una sola modalidad
+        if(count($arrModalidad) > 1){
+            $this->arrErrores[] = "No puede tener mas de una modalidad dentro del archivo";
+        }
     }
 
     private function obtenerPrincipal($claFormulario){
@@ -858,25 +995,80 @@ WHERE
         return strtolower(trim($txtNombre));
     }
 
-    private function cambioEstados($seqCruce,$arrInhabilitar){
+    private function cambioEstados($seqCruce,$fchCruce,$arrInhabilitar){
+        global $aptBd;
 
-        foreach($arrInhabilitar as $seqFormulario => $bolInhabilitar){
+        foreach($arrInhabilitar as $seqFormulario => $arrDato){
+
+            $bolInhabilitar = $arrDato['inhabilitar'];
+            $seqEstadoProceso = $arrDato['estado'];
 
             $claCasaMano = new CasaMano();
-            $arrCasaMano = $claCasaMano->cargar($seqFormulario);
+            $claCasaMano = end($claCasaMano->cargar($seqFormulario));
 
-            pr($arrCasaMano);
+            if(intval($claCasaMano->seqCasaMano) == 0 ){
 
-//            if($bolInhabilitar == 1){
-//                $sql = "update t_frm_formulario set seqEstadoProceso "
-//            }
+                if($seqEstadoProceso == 53 || $seqEstadoProceso == 45) {
+                    $seqEstadoProceso = ($bolInhabilitar == 1) ? 45 : 46;
+                    $arrSeguimiento['txtComentario'] = "Primera verificación realizada";
+                }elseif($seqEstadoProceso == 47 || $seqEstadoProceso == 56){
+                    $seqEstadoProceso = ($bolInhabilitar == 1) ? 56 : 16;
+                    $arrSeguimiento['txtComentario'] = "Segunda verificación realizada";
+                }
 
+                $sql = "
+                    update t_frm_formulario set 
+                        seqEstadoProceso = " . $seqEstadoProceso . ",
+                        fchUltimaActualizacion = NOW()
+                    where seqFormulario = " . $seqFormulario;
+                $aptBd->execute($sql);
+
+            }else{
+
+                $arrCasaMano['txtFlujo']               = "cem";
+                $arrCasaMano['seqFormulario']          = $seqFormulario;
+                $arrCasaMano['seqCasaMano']            = $claCasaMano->seqCasaMano;
+
+                if($seqEstadoProceso == 44 || $seqEstadoProceso == 45) {
+                    $arrSeguimiento['txtComentario'] = "Primera verificación realizada";
+                    $arrCasaMano['txtFase'] = "primeraVerificacion";
+                }elseif($seqEstadoProceso == 47 || $seqEstadoProceso == 56 ){
+                    $arrSeguimiento['txtComentario'] = "Segunda verificación realizada";
+                    $arrCasaMano['txtFase'] = "segundaVerificacion";
+                }
+
+                $arrCasaMano['bolResultado'] = ($bolInhabilitar == 1)? 2 : 1;
+                $arrCasaMano['fchCruce'] = $fchCruce;
+                $arrCasaMano['seqCruce'] = $seqCruce;
+
+                $claCasaMano->salvar($arrCasaMano);
+                $this->arrErrores = $claCasaMano->arrErrores;
+            }
+
+            $arrSeguimiento['seqGrupoGestion'] = 11; // revision interna
+            $arrSeguimiento['seqGestion'] = 46;      // actualizacion de estado
+            $arrSeguimiento['seqFormulario'] = $seqFormulario;
+            $arrSeguimiento['seqEstadoProceso'] = $seqEstadoProceso;
+
+            $objCiudadano = $this->obtenerPrincipal($claCasaMano->objPostulacion);
+            $arrSeguimiento['cedula'] = $objCiudadano->numDocumento;
+            $arrSeguimiento['nombre'] = $this->obtenerNombre($objCiudadano);
+
+            $claSeguimiento = new Seguimiento();
+            $claSeguimiento->salvarSeguimiento($arrSeguimiento,"cambiosCruces");
+
+//            $claSeguimiento->arrErrores[] = "test";
+
+            if(!empty($claSeguimiento->arrErrores)) {
+                foreach ($claSeguimiento->arrErrores as $txtError) {
+                    $this->arrErrores[] = $txtError;
+                }
+            }else{
+                $this->arrMensajes = $claSeguimiento->arrMensajes;
+            }
 
         }
 
-        $this->arrErrores[] = "Error de prueba";
-
     }
-
 
 }

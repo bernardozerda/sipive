@@ -483,6 +483,7 @@ WHERE
     public function listado($arrPost = array()){
         global $aptBd;
 
+        $txtCondicionSecuencia = ($arrPost['seqCruce'] != null)? " AND cru.seqCruce = " . $arrPost['seqCruce'] : "";
         $txtCondicionCreacion = ($arrPost['creacionInicio'] != null)? " AND fchCreacionCruce >= '" . $arrPost['creacionInicio']->format('Y-m-d') . "' AND fchCreacionCruce <= '" . $arrPost['creacionFinal']->format('Y-m-d') . "'" : "";
         $txtCondicionActualizacion = ($arrPost['updateInicio'] != null)? " AND fchActualizacionCruce >= '" . $arrPost['updateInicio']->format('Y-m-d') . "' AND fchActualizacionCruce <= '" . $arrPost['updateFinal']->format('Y-m-d') . "'" : "";
         $txtCondicionFecha = ($arrPost['cruceInicio'] != null)? " AND fchCruce >= '" . $arrPost['cruceInicio']->format('Y-m-d') . "' AND fchCruce <= '" . $arrPost['cruceFinal']->format('Y-m-d') . "'" : "";
@@ -500,6 +501,7 @@ WHERE
             FROM t_cru_cruces cru
             INNER JOIN t_cru_resultado res ON cru.seqCruce = res.seqCruce AND res.seqParentesco = 1
             WHERE 1 = 1
+            $txtCondicionSecuencia
             $txtCondicionCreacion
             $txtCondicionActualizacion
             $txtCondicionFecha
@@ -1057,8 +1059,6 @@ WHERE
             $claSeguimiento = new Seguimiento();
             $claSeguimiento->salvarSeguimiento($arrSeguimiento,"cambiosCruces");
 
-//            $claSeguimiento->arrErrores[] = "test";
-
             if(!empty($claSeguimiento->arrErrores)) {
                 foreach ($claSeguimiento->arrErrores as $txtError) {
                     $this->arrErrores[] = $txtError;
@@ -1069,6 +1069,24 @@ WHERE
 
         }
 
+    }
+
+    public function eliminar($seqCruce)
+    {
+        global $aptBd;
+        try {
+            $aptBd->BeginTrans();
+            $arrCurce = $this->listado(array("seqCruce" => $seqCruce));
+            $sql = "delete from t_cru_resultado where seqCruce = " . $seqCruce;
+            $aptBd->execute($sql);
+            $sql = "delete from t_cru_cruces where seqCruce = " . $seqCruce;
+            $aptBd->execute($sql);
+            $this->arrMensajes[] = "Eliminado el cruce " . $arrCurce[$seqCruce]['txtNombre'];
+            $aptBd->CommitTrans();
+        }catch(Exception $objError){
+            $this->arrErrores[] = $objError->getMessage();
+            $aptBd->RollBackTrans();
+        }
     }
 
 }

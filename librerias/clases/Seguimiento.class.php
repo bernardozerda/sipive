@@ -4072,15 +4072,13 @@ class Seguimiento {
         $claFormulario = new FormularioSubsidios();
         $claFormulario->cargarFormulario($arrPost['seqFormulario']);
 
-        $txtCambios = "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Formulario:</b>" . $this->txtSalto;
-
         // Estado del proceso
+        $txtCambios = "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Formulario:</b>" . $this->txtSalto;
         $txtValorAnterior = $claFormulario->seqEstadoProceso;
         $txtValorNuevo = $arrPost['seqEstadoProceso'];
         if ($txtValorAnterior != $txtValorNuevo) {
-            $arrEstados = estadosProceso();
-            $txtCambios .= $this->txtSeparador . "seqEstadoProceso, Valor Anterior: " . $arrEstados[$txtValorAnterior] . ", " .
-                "Valor Nuevo: " . $arrEstados[$txtValorNuevo] . $this->txtSalto;
+            $txtCambios .= $this->txtSeparador . "seqEstadoProceso, Valor Anterior: " . $txtValorAnterior . ", " .
+                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         return $txtCambios;

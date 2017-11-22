@@ -97,7 +97,9 @@
                         <td align="center"><a href="#">Exportar</a></td>
                         <td align="center">
                             {if isset($smarty.session.arrGrupos.3.20)}
-                                <a href="#">Eliminar</a>
+                                <a href="#" onClick="cargarContenido('mensajes','./contenidos/cruces2/eliminar.php','seqCruce={$seqCruce}',true);">
+                                    Eliminar
+                                </a>
                             {/if}
                         </td>
                     </tr>

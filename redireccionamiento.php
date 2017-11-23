@@ -1,3 +1,12 @@
+<?php
+
+//    var_dump( mb_split("/",$_SERVER['REQUEST_URI'])[1] );
+//
+//    var_dump($_SERVER); die();
+
+
+?>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es-es" lang="es-es" >
 <head>
@@ -27,7 +36,7 @@
 
     <script type="text/javascript">
         function irA(){
-            setTimeout( "location.href = 'https://<?=$_SERVER['SERVER_NAME']; ?>/sipive'" , 3000 );
+            setTimeout( "location.href = 'https://<?=$_SERVER['SERVER_NAME'] . "/" . mb_split("/",$_SERVER['REQUEST_URI'])[1] ; ?>'" , 3000 );
         }
     </script>
 
@@ -65,7 +74,7 @@
                     <img src="./recursos/imagenes/cargando.gif">
                 </p>
                 <p>
-                    <a id="irA" class="btn btn-primary btn-large" href="https://<?=$_SERVER['SERVER_NAME']?>/sipive">
+                    <a id="irA" class="btn btn-primary btn-large" href="https://<?=$_SERVER['SERVER_NAME'] . "/" . mb_split("/",$_SERVER['REQUEST_URI'])[1] ?>">
                         Ir al sitio seguro
                     </a>
                 </p>

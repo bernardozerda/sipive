@@ -36,8 +36,10 @@ if (isset($_SESSION["sdhtsdv"]) or isset($_COOKIE['sdhtsdv'])) {
 }
 
 // verifica que este en https
-if (strtolower(trim($_SERVER['HTTPS'])) != "on") {
-    header("Location: ./redireccionamiento.php");
+if(HTTPS_ONLY == true) {
+    if (strtolower(trim($_SERVER['HTTPS'])) != "on") {
+        header("Location: ./redireccionamiento.php");
+    }
 }
 
 // Ruta relativa 

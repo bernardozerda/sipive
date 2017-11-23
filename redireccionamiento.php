@@ -1,12 +1,3 @@
-<?php
-
-//    var_dump( mb_split("/",$_SERVER['REQUEST_URI'])[1] );
-//
-//    var_dump($_SERVER); die();
-
-
-?>
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es-es" lang="es-es" >
 <head>

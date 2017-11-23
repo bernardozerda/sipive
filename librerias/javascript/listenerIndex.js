@@ -122,8 +122,7 @@
 	 * @author Bernardo Zerda
 	 */
 	
-	// setInterval( "alertaVencimientoSesion()" , 300000 );
-	setInterval( "alertaVencimientoSesion()" , 5000 );
+	setInterval( "alertaVencimientoSesion()" , 300000 );
 
 	function alertaVencimientoSesion(){
 

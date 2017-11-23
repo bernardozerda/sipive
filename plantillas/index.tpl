@@ -46,7 +46,7 @@
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/charts/charts-min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/yui/treeview/treeview-min.js"></script>
 
-            <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+            <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/javascript/funciones.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/javascript/funcionesSubsidios.js"></script>
             <script language="JavaScript" type="text/javascript" src="./librerias/javascript/funcionesProyectos.js"></script>

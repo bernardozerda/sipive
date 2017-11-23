@@ -6,24 +6,36 @@
  * ACTIVA, EL INDEX REDIRECCIONA AQUI.
  * AQUI SE REALIZAN LAS TAREAS DE AUTENTICACION
  * @author Bernardo Zerda
+ * @author Bernardo Zerda
  * @version 1.0 Abril 2009
+ * @version 1.1 Noviembre 2017
  */
+
 session_start();
 
+// solo funciona bajo https
+define("HTTPS_ONLY", true);
 
-define("TIMEOUT", 1800); // Tiempo de valides de la sesion en segundos ( 30 minutos )
+// Tiempo de validez de la sesion en segundos
+define("TIMEOUT", 1800);
+
 // Elimina la session y las cookies si estan activas
-
 if (isset($_SESSION["sdhtsdv"]) or isset($_COOKIE['sdhtsdv'])) {
     unset($_SESSION["sdhtsdv"]);
-    setcookie("sdhtsdv", 1, time() - TIMEOUT, "/", null, false, false);
+    setcookie(
+        "sdhtsdv",
+        time() - TIMEOUT,
+        time() - TIMEOUT,
+        "/",
+        null,
+        HTTPS_ONLY,
+        false
+    );
     session_destroy();
     unset($_POST);
 }
 
 // verifica que este en https
-$_SERVER['HTTPS'] = "on";
-
 if (strtolower(trim($_SERVER['HTTPS'])) != "on") {
     header("Location: ./redireccionamiento.php");
 }
@@ -65,7 +77,7 @@ if (isset($_POST['btnSalvar']) and intval($_POST['btnSalvar']) == 1) {
     if ($_POST['seqPuntoAtencion'] == 1) {
         $arrErrores['punto'] = "La ubicaci&oacute;n no es v&aacute;lida";
     }
-    // $_SESSION['codigo']." !=". $_POST['codigo'];
+
     // Valida el codigo Captcha
     if (( $_SESSION['codigo'] != $_POST['codigo'] ) or empty($_SESSION['codigo'])) {
         $arrErrores['codigo'] = "El codigo no coincide";
@@ -150,6 +162,7 @@ if (isset($_POST['btnSalvar']) and intval($_POST['btnSalvar']) == 1) {
                     } else {
 
                         // Registra algunos datos en la session
+                        $_SESSION["sdhtsdv"] = 1;
                         $_SESSION['seqUsuario'] = $seqUsuario;
                         $_SESSION['txtNombre'] = $objUsuario->txtNombre;
                         $_SESSION['txtApellido'] = $objUsuario->txtApellido;
@@ -179,37 +192,36 @@ if (isset($_POST['btnSalvar']) and intval($_POST['btnSalvar']) == 1) {
 
         // Registra la cookie
         $bolCookie = setcookie(
-                "sdhtsdv", 1, time() + TIMEOUT, "/", null, false, // true para produccion
-                false              // true para produccion
-        ); // Cookie Real
-
-        setcookie(
-                "validar", time() + TIMEOUT, time() + TIMEOUT, "/", null, false, // true para produccion
-                false              // true para produccion
-        ); // Cookie para validar el tiempo de vida de la sesion
+            "sdhtsdv",
+            time() + TIMEOUT,
+            time() + TIMEOUT,
+            "/",
+            null,
+            HTTPS_ONLY,
+            false
+        );
 
         if ($bolCookie) {
 
-
-            //session_register( "sdhtsdv" );
-            $session['sdhtsdv'] = 'sdhtsdv';
-
             // si no es el super administrador lo envia al index.php
             // de lo contrario le muestra el panel de control
-
             if ($_SESSION['seqUsuario'] != 1) {
-
                 header("Location:./index.php");
             } else {
                 header("Location:./panelControl.php");
             }
+
         } else { // Error registrando la cookie
+
             $arrErrores['otros'][] = "No se ha podido registrar la sesion";
-            //session_unregister( "sdhtsdv" );
-            $session['sdhtsdv'] = 'sdhtsdv';
             setcookie(
-                    "sdhtsdv", 1, time() - TIMEOUT, "/", null, false, // true para produccion
-                    false              // true para produccion
+                "sdhtsdv",
+                time() - TIMEOUT,
+                time() - TIMEOUT,
+                "/",
+                null,
+                HTTPS_ONLY,
+                false
             );
             session_destroy();
         }
@@ -217,29 +229,17 @@ if (isset($_POST['btnSalvar']) and intval($_POST['btnSalvar']) == 1) {
 }
 
 // Recogiendo los posibles sitios
-$sql = "
-		SELECT
-			seqPuntoAtencion,
-			txtPuntoAtencion
-		FROM 
-			T_FRM_PUNTO_ATENCION
-		WHERE
-			seqPuntoAtencion > 1 and bolMostrar = 1
-                        
-		ORDER BY
-			txtPuntoAtencion ASC		
-	";
-$arrPuntos = array();
 $arrPuntos[1] = "Ninguno";
-$objRes = $aptBd->execute($sql);
-while ($objRes->fields) {
+$arrPuntos = obtenerDatosTabla(
+    "T_FRM_PUNTO_ATENCION",
+    array("seqPuntoAtencion","txtPuntoAtencion"),
+    "seqPuntoAtencion",
+    "seqPuntoAtencion > 1 and bolMostrar = 1",
+    "txtPuntoAtencion ASC"
+);
+$arrPuntos = array(1 => "NINGUNO") + $arrPuntos;
 
-    $arrPuntos[$objRes->fields['seqPuntoAtencion']] = $objRes->fields['txtPuntoAtencion'];
-    $objRes->MoveNext();
-}
-
-
-// Datos para el tama�o de la imagen captcha
+// Datos para el tamaño de la imagen captcha
 $numAncho = 200;
 $numAlto = 50;
 $numLetras = 4;

@@ -122,32 +122,49 @@
 	 * @author Bernardo Zerda
 	 */
 	
-	setInterval( "alertaVencimientoSesion()" , ( ( YAHOO.util.Event.POLL_INTERVAL / 2 ) * 1000 ) );
-	
+	// setInterval( "alertaVencimientoSesion()" , 300000 );
+	setInterval( "alertaVencimientoSesion()" , 5000 );
+
 	function alertaVencimientoSesion(){
-		
+
 		// al parecer reinicia el tiempo del poll interval
 		YAHOO.util.Event.startInterval();
 		
 		// El tiempo de vida de la cookie esta en segundos
 		// este timestamp se entrega en milisegundos por eso
 		// se divide este valor en 1000
-		var numTimeStamp    = ( Number(new Date()) / 1000 );
-		
+		var numTimeStamp = Math.round( Number(new Date()) / 1000 );
+
 		// Obtiene el valor de la sesion de la cookie,
-		// Esta cookie validar NO ES la que se usa para renovar la sesion
-		// de manera que si se trata de modificar el valor la sesion seguira
-		// viva con el valor de la cookie real 
-		var numExpiraSesion = YAHOO.util.Cookie.get( "validar" );
+		var numExpiraSesion = YAHOO.util.Cookie.get( "sdhtsdv" );
 
 		// tiempo restante de vida en segundos
 		var numTiempoVida = Math.round( numExpiraSesion - numTimeStamp );
 
+		// elimina objetos basura dejados por el YUI
+        while(document.getElementById('aviso_mask')){
+            eliminarObjeto('aviso_mask');
+        }
+
+        while(document.getElementById('aviso_c')){
+            eliminarObjeto('aviso_c');
+        }
+
+        while(document.getElementById('wait_mask')){
+            eliminarObjeto('wait_mask');
+        }
+
+        while(document.getElementById('wait_c')){
+            eliminarObjeto('wait_c');
+        }
+
+        eliminarObjeto("_yuiResizeMonitor");
+
 		// Cuando quede menos de la cuarta parte de tiempo de vida de la
 		// sesion el sistema muestra un popup que avida que por el tiempo
 		// de inactividad se va a cerrar la sesion
-		if( numTiempoVida <= (YAHOO.util.Event.POLL_INTERVAL * 2)  && numTiempoVida > 0  ){
-			
+		if( numTiempoVida <= 450 && numTiempoVida > 0 ){
+
 			var txtMensaje  = "<div style='text-align:center' class='msgError'>";
 				txtMensaje += "Le quedan menos de " + (numTiempoVida +1) + " segundos de vida a su sesi&oacute;n ";
 				txtMensaje += "debe salvar los cambios que haya hecho para no perder la informaci&oacute;n";
@@ -173,8 +190,7 @@
 			objAviso.show();
 			 
 		}
-		
-		
+
 	}
 
 	YAHOO.util.Event.onContentReady("matarSesion",function(o){

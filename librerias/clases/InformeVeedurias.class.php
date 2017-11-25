@@ -418,7 +418,7 @@ class InformeVeedurias
     {
         global $aptBd;
         $sql = "
-            SELECT 
+            SELECT DISTINCT 
               frm.seqFormulario as 'Formulario',
               pgo.txtPlanGobierno as 'Plan de Gobierno',
               IF(moa.txtModalidad is null,'No Disponible',moa.txtModalidad) as 'Modalidad',
@@ -511,7 +511,7 @@ class InformeVeedurias
                  frm.seqUnidadProyecto = 0
               OR frm.seqUnidadProyecto IS NULL
               OR frm.seqUnidadProyecto = 1
-            )
+            ) AND frm.seqCorte = $seqCorte
             -- AND frm.seqFormulario = 2529
         ";
         $objRes = $aptBd->execute($sql);

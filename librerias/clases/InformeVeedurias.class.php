@@ -524,7 +524,7 @@ class InformeVeedurias
             $objRes->MoveNext();
         }
 
-        $arrReporte['hogares'] = $this->obtenerHogares(array_keys($arrFormularios),$seqCorte);
+        $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
 
         // adiciona el dato del aad del hogar
         foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){

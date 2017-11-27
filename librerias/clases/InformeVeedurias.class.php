@@ -512,8 +512,8 @@ class InformeVeedurias
               OR frm.seqUnidadProyecto IS NULL
               OR frm.seqUnidadProyecto = 1
             ) AND frm.seqCorte = $seqCorte
-            -- AND frm.seqFormulario = 2529
-        ";
+            -- AND frm.seqFormulario = 25760
+        "; //echo $sql . "<hr>"; die();
         $objRes = $aptBd->execute($sql);
         $arrFormularios = array();
         while ( $objRes->fields ){
@@ -792,9 +792,8 @@ class InformeVeedurias
         }
 
         // titulos
-        $arrTitulos = array_keys( array_shift( $arrReporte ) );
         $xmlArchivo .= "<ss:Row>";
-        foreach ($arrTitulos as $txtTitulo){
+        foreach ($arrReporte[0] as $txtTitulo => $txtValor){
             $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
         }
         $xmlArchivo .= "</ss:Row>";

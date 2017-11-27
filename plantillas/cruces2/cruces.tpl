@@ -93,8 +93,16 @@
                         <td align="center">{$arrCruce.fchActualizacionCruce->format('Y-m-d')}</td>
                         <td align="center">{$arrCruce.fchCruce->format('Y-m-d')}</td>
                         <td>{$arrCruce.txtNombre}</td>
-                        <td align="center"><a href="#">Ver</a></td>
-                        <td align="center"><a href="#">Exportar</a></td>
+                        <td align="center">
+                            <a href="#" onClick="cargarContenido('contenido','./contenidos/cruces2/ver.php','seqCruce={$seqCruce}',true)">
+                                Ver
+                            </a>
+                        </td>
+                        <td align="center">
+                            <a href="#" onclick="location.href='./contenidos/cruces2/exportar.php?seqCruce={$seqCruce}'">
+                                Exportar
+                            </a>
+                        </td>
                         <td align="center">
                             {if isset($smarty.session.arrGrupos.3.20)}
                                 <a href="#" onClick="cargarContenido('mensajes','./contenidos/cruces2/eliminar.php','seqCruce={$seqCruce}',true);">

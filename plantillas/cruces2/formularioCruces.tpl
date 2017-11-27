@@ -12,7 +12,7 @@
         </div>
         <div class="panel-body" style="padding-left: 30px; padding-right: 30px;">
 
-            <table cellpadding="0" cellspacing="0" class="table table-bordered">
+            <table cellpadding="0" cellspacing="0" class="table table-striped">
                 <tr>
                     <td width="120px">Nombre</td>
                     <td width="400px">
@@ -99,7 +99,7 @@
 
         </div>
         <div class="panel-footer" align="center">
-            <button type="submit" class="btn btn-success" style="width: 100px">
+            <button type="submit" class="btn btn-primary" style="width: 100px">
                 Salvar
             </button>&nbsp;
             <button type="button" class="btn btn-danger" onclick="cargarContenido('contenido','./contenidos/cruces2/formularioCruces.php','',true);" style="width: 100px">

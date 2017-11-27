@@ -13,13 +13,15 @@ class Cruces
 
     public $arrErrores;
     public $arrMensajes;
+    public $arrDatos;
     private $arrFormatoArchivo;
     private $arrEstadosPermitidos;
 
     function __construct()
     {
-        $this->arrErrores = array();
+        $this->arrErrores  = array();
         $this->arrMensajes = array();
+        $this->arrDatos    = array();
 
         $this->arrFormatoArchivo[0]['nombre'] = "seqFormulario";
         $this->arrFormatoArchivo[0]['tipo'] = "numero";
@@ -994,7 +996,7 @@ WHERE
         $txtNombre .= (trim($objCiudadano->txtNombre2) != "")? $objCiudadano->txtNombre2 . " " : "";
         $txtNombre .= $objCiudadano->txtApellido1 . " ";
         $txtNombre .= (trim($objCiudadano->txtApellido2) != "")? $objCiudadano->txtApellido2 . " " : "";
-        return strtolower(trim($txtNombre));
+        return mb_strtolower(trim($txtNombre));
     }
 
     private function cambioEstados($seqCruce,$fchCruce,$arrInhabilitar){
@@ -1087,6 +1089,97 @@ WHERE
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollBackTrans();
         }
+    }
+
+    public function cargar($seqCruce){
+        global $aptBd;
+
+        $arrEstados = estadosProceso();
+
+        $sql = "
+            SELECT 
+                cru.seqCruce,
+                cru.txtNombre,
+                cru.fchCruce,
+                cru.txtCuerpo,
+                cru.txtPie,
+                cru.txtFirma,
+                cru.txtElaboro,
+                cru.txtReviso,
+                cru.fchCreacionCruce,
+                concat(usu.txtNombre,' ',usu.txtApellido) as txtUsuario,
+                cru.txtNombreArchivo,
+                concat(usu.txtNombre,' ',usu.txtApellido) as txtUsuarioActualiza,
+                cru.txtNombreArchivoActualiza,
+                cru.seqUsuarioActualiza,
+                cru.fchActualizacionCruce
+            FROM t_cru_cruces cru
+            inner join t_cor_usuario usu on cru.txtUsuario = usu.txtUsuario 
+            inner join t_cor_usuario usu1 on cru.txtUsuarioActualiza = usu1.txtUsuario 
+            WHERE seqCruce = $seqCruce
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $this->arrDatos['seqCruce'] = $objRes->fields['seqCruce'];
+            $this->arrDatos['txtNombre'] = strtoupper($objRes->fields['txtNombre']);
+            $this->arrDatos['fchCruce'] = new DateTime($objRes->fields['fchCruce']) ;
+            $this->arrDatos['txtCuerpo'] = $objRes->fields['txtCuerpo'];
+            $this->arrDatos['txtPie'] = $objRes->fields['txtPie'];
+            $this->arrDatos['txtFirma'] = strtoupper($objRes->fields['txtFirma']);
+            $this->arrDatos['txtElaboro'] = strtoupper($objRes->fields['txtElaboro']);
+            $this->arrDatos['txtReviso'] = strtoupper($objRes->fields['txtReviso']);
+            $this->arrDatos['fchCreacionCruce'] = new DateTime($objRes->fields['fchCreacionCruce']);
+            $this->arrDatos['txtUsuario'] = strtoupper($objRes->fields['txtUsuario']);
+            $this->arrDatos['txtNombreArchivo'] = $objRes->fields['txtNombreArchivo'];
+            $this->arrDatos['seqUsuario'] = $objRes->fields['seqUsuario'];
+            $this->arrDatos['txtUsuarioActualiza'] = strtoupper($objRes->fields['txtUsuarioActualiza']);;
+            $this->arrDatos['txtNombreArchivoActualiza'] = $objRes->fields['txtNombreArchivoActualiza'];
+            $this->arrDatos['fchActualizacionCruce'] = new DateTime($objRes->fields['fchActualizacionCruce']);
+
+            $objRes->MoveNext();
+        }
+
+        $sql = "
+            select 
+                res.seqResultado,
+                res.seqCruce,
+                res.seqFormulario,
+                res.seqModalidad,
+                res.seqEstadoProceso,
+                res.seqTipoDocumento,
+                res.numDocumento,
+                res.txtNombre,
+                res.seqParentesco,
+                res.txtEntidad,
+                res.txtTitulo,
+                res.txtDetalle,
+                res.bolInhabilitar,
+                res.txtObservaciones
+            from t_cru_resultado res
+            where seqCruce = $seqCruce
+            order by res.seqFormulario, res.numDocumento
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqResultado = $objRes->fields['seqResultado'];
+            $seqFormulario = $objRes->fields['seqFormulario'];
+            $claFormulario = new FormularioSubsidios();
+            $claFormulario->cargarFormulario($seqFormulario);
+            $objCiudadano = $this->obtenerPrincipal($claFormulario);
+            foreach($objRes->fields as $txtCampo => $txtValor) {
+                $this->arrDatos['arrResultado'][$seqResultado][$txtCampo] = $txtValor;
+            }
+            $this->arrDatos['arrResultado'][$seqResultado]['numDocumentoPrincipal'] = $objCiudadano->numDocumento;
+            $this->arrDatos['arrResultado'][$seqResultado]['txtNombrePrincipal'] = mb_strtoupper($this->obtenerNombre($objCiudadano));
+            $this->arrDatos['arrResultado'][$seqResultado]['txtEstado'] = $arrEstados[$objRes->fields['seqEstadoProceso']];
+
+            $objRes->MoveNext();
+        }
+
+
+
+
     }
 
 }

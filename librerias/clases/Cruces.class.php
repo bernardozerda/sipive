@@ -13,13 +13,18 @@ class Cruces
 
     public $arrErrores;
     public $arrMensajes;
+    public $arrIgnorados;
+    public $arrDatos;
     private $arrFormatoArchivo;
     private $arrEstadosPermitidos;
+    private $arrHash;
 
     function __construct()
     {
-        $this->arrErrores = array();
+        $this->arrErrores  = array();
         $this->arrMensajes = array();
+        $this->arrIgnorados = array();
+        $this->arrDatos    = array();
 
         $this->arrFormatoArchivo[0]['nombre'] = "seqFormulario";
         $this->arrFormatoArchivo[0]['tipo'] = "numero";
@@ -58,16 +63,26 @@ class Cruces
         $this->arrFormatoArchivo[12]['nombre'] = "Observaciones";
         $this->arrFormatoArchivo[12]['tipo'] = "texto";
 
-        // Primera varificacion -> crear -> seqTipoEsquema = array( _ESTADOS_ )
-        $this->arrEstadosPermitidos['crear'][9]  = array(53,47); // CF - Proyectos gestionado por la SDHT
-        $this->arrEstadosPermitidos['crear'][5]  = array(44,47); // Casa en Mano
-        $this->arrEstadosPermitidos['crear'][10] = array(44,47); // CF - Proyectos fuera de la SDHT
-        $this->arrEstadosPermitidos['crear'][11] = array(44,47); // CF - Retorno / Reubicacion
+        /**
+         * Estados en los que se puede crear un cruce
+         * - Primera Verificacion
+         *      - [53] Calificado - EPI
+         *      - [44] Primera Verificacion - CEM
+         * - Segunda Verificacion
+         *      - [47] Postulado EPI / CEM
+         */
+        $this->arrEstadosPermitidos['crear'] = array(53,44,47);
 
-        $this->arrEstadosPermitidos['editar'][9]  = array(45,56); // CF - Proyectos gestionado por la SDHT
-        $this->arrEstadosPermitidos['editar'][5]  = array(44,45,56); // Casa en Mano
-        $this->arrEstadosPermitidos['editar'][10] = array(44,45,56); // CF - Proyectos fuera de la SDHT
-        $this->arrEstadosPermitidos['editar'][11] = array(44,45,56); // CF - Retorno / Reubicacion
+        /**
+         * Estados en los que se puede levantar cruces
+         * - Primera Verificacion
+         *      - [45] Calificado - EPI / CEM
+         * - Segunda Verificacion
+         *      - [56] Postulado EPI / CEM
+         */
+        $this->arrEstadosPermitidos['editar'] = array(44,45,56); // CF - Proyectos gestionado por la SDHT
+
+        $this->arrHash = array();
 
     }
 
@@ -691,7 +706,7 @@ WHERE
         global $aptBd;
         try{
             $aptBd->BeginTrans();
-            $this->validarReglasCrear($arrArchivo);
+            $this->validarReglasBasicas($arrArchivo,'crear');
             if(empty($this->arrErrores)){
                 $sql = "
                     INSERT INTO t_cru_cruces(
@@ -719,7 +734,7 @@ WHERE
                         '" . $arrPost['txtElaboro']  . "',
                         '" . $arrPost['txtReviso']  . "',
                         NOW(),
-                        '" . $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido'] . "',
+                        '" . $_SESSION['txtUsuario'] . "',
                         '" . $_FILES['archivo']['name'] . "',
                         " . $_SESSION['seqUsuario'] . ",
                         null,
@@ -733,14 +748,12 @@ WHERE
                 $arrInhabilitar = array();
                 unset($arrArchivo[0]);
                 foreach($arrArchivo as $numLinea => $arrLinea){
-
                     $bolInhabilitar = (strtolower($arrLinea[11]) == "no")? 0 : 1;
                     $seqFormulario = $arrLinea[0];
                     if((!isset($arrInhabilitar[$seqFormulario])) or $arrInhabilitar[$seqFormulario]['inhabilitar'] == 0) {
                         $arrInhabilitar[$seqFormulario]['inhabilitar'] = $bolInhabilitar;
                         $arrInhabilitar[$seqFormulario]['estado'] = array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3]));
                     }
-
                     $sql = "
                         INSERT INTO t_cru_resultado(
                             seqCruce,
@@ -775,9 +788,6 @@ WHERE
                     $aptBd->execute($sql);
                 }
                 $this->cambioEstados($seqCruce,$arrPost['fchCruce'],$arrInhabilitar);
-
-                // bloquear el formulario mientras este en estado 45 o 56
-
             }
             if(!empty($this->arrErrores)){
                 $aptBd->RollbackTrans();
@@ -790,7 +800,7 @@ WHERE
         }
     }
 
-    private function validarReglasCrear($arrArchivo){
+    private function validarReglasBasicas($arrArchivo,$txtModo){
         global $arrConfiguracion;
         $arrFormularios = array();
         unset($arrArchivo[0]);
@@ -804,6 +814,9 @@ WHERE
             } else {
                 $claFormulario = $arrFormularios[$seqFormulario];
             }
+
+            // validacion en otros cruces
+            $this->crucesPendientes($numLinea , $seqFormulario);
 
             /**
              * validaciones de integridad de datos
@@ -890,7 +903,7 @@ WHERE
                 }
 
                 if($claFormulario->valIngresoHogar <= ($arrConfiguracion['constantes']['salarioMinimo'] * 2)){
-                    $txtMensaje = "Error Formulario " . $seqFormulario . ": Hoar con ingresos superiores a 2 SMMLV";
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": Hogar con ingresos superiores a 2 SMMLV";
                     if (!in_array($txtMensaje, $this->arrErrores)) {
                         $this->arrErrores[] = $txtMensaje;
                     }
@@ -920,17 +933,24 @@ WHERE
             if($claFormulario->seqEstadoProceso != array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3]))){
                 $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no corresponde el estado registrado en el sistema";
             }else{
-                $seqTipoEsquema = $claFormulario->seqTipoEsquema;
-                if(!in_array(array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3])),$this->arrEstadosPermitidos['crear'][$seqTipoEsquema])){
-                    $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no es permitido para el cargue de cruces";
+                if($txtModo == 'crear') {
+                    if (!in_array(array_shift(array_keys($this->arrFormatoArchivo[3]['rango'], $arrLinea[3])), $this->arrEstadosPermitidos[$txtModo])) {
+                        $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no es permitido para el cargue de cruces";
+                    }
+                    if(in_array($claFormulario->seqTipoEsquema , array( 5 , 10 , 11 , 13 , 15 )) and $claFormulario->seqEstadoProceso == 53){
+                        $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no es permitido para el cargue de cruces";
+                    }
                 }
             }
+
+            $numDocumento = $arrLinea[5];
+            $arrHogarArchivo[$seqFormulario][$numDocumento] = 1;
 
             // verifica que los datos del ciudadano sean los mismos de la base de datos
             // y verifica que todos los miembros de hogar esten incluidos
             $bolCiudadanoEncontrado = false;
             foreach($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano){
-                $arrHogar[$seqFormulario] = $objCiudadano->numDocumento;
+                $arrHogar[$seqFormulario][$objCiudadano->numDocumento] = $seqCiudadano;
                 if($arrLinea[5] == $objCiudadano->numDocumento) {
                     $bolCiudadanoEncontrado = true;
                     $seqTipoDocumento = array_shift(array_keys($this->arrFormatoArchivo[4]['rango'], $arrLinea[4]));
@@ -952,11 +972,6 @@ WHERE
                 $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El documento " . $arrLinea[5] . " no pertenece al hogar";
             }
 
-            // los que queden dentro de arrHogar son los que faltan dentro del archivo
-            if(in_array($arrLinea[5],$arrHogar)){
-                unset($arrHogar);
-            }
-
             // si esta en inhabilitar si (1) debe tener Entidad - Causa - Detalle
             if(strtolower($arrLinea[11]) == "si"){
                 if(trim($arrLinea[8]) == "" or trim($arrLinea[9]) == "" or trim($arrLinea[10]) == ""){
@@ -966,10 +981,21 @@ WHERE
 
         }
 
+        // los que queden dentro de arrHogar son los que faltan dentro del archivo
+        foreach($arrHogar as $seqFormulario => $arrCiudadanos){
+            foreach ($arrCiudadanos as $numDocumento => $tmp){
+                if(isset($arrHogarArchivo[$seqFormulario][$numDocumento])){
+                    unset($arrHogar[$seqFormulario][$numDocumento]);
+                }
+            }
+        }
+
         // verifica los miembros de hogar que faltan dentro del archivo
         if(!empty($arrHogar)){
-            foreach($arrHogar as $seqFormulario => $numDocumento) {
-                $this->arrErrores[] = "Error Formulario " . $seqFormulario . ": El documento " . $numDocumento . " no se encuentra dentro del archivo";
+            foreach($arrHogar as $seqFormulario => $arrCiudadano) {
+                foreach($arrCiudadano as $numDocumento => $seqCiudadano) {
+                    $this->arrErrores[] = "Error Formulario " . $seqFormulario . ": El documento " . $numDocumento . " no se encuentra dentro del archivo";
+                }
             }
         }
 
@@ -994,7 +1020,7 @@ WHERE
         $txtNombre .= (trim($objCiudadano->txtNombre2) != "")? $objCiudadano->txtNombre2 . " " : "";
         $txtNombre .= $objCiudadano->txtApellido1 . " ";
         $txtNombre .= (trim($objCiudadano->txtApellido2) != "")? $objCiudadano->txtApellido2 . " " : "";
-        return strtolower(trim($txtNombre));
+        return mb_strtolower(trim($txtNombre));
     }
 
     private function cambioEstados($seqCruce,$fchCruce,$arrInhabilitar){
@@ -1022,6 +1048,12 @@ WHERE
                     update t_frm_formulario set 
                         seqEstadoProceso = " . $seqEstadoProceso . ",
                         fchUltimaActualizacion = NOW()
+                    where seqFormulario = " . $seqFormulario;
+                $aptBd->execute($sql);
+
+                $sql = "
+                    update t_cru_resultado set
+                        seqEstadoProceso = " . $seqEstadoProceso . "
                     where seqFormulario = " . $seqFormulario;
                 $aptBd->execute($sql);
 
@@ -1087,6 +1119,271 @@ WHERE
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollBackTrans();
         }
+    }
+
+    public function cargar($seqCruce){
+        global $aptBd;
+
+        $arrEstados = estadosProceso();
+
+        $sql = "
+            SELECT 
+                cru.seqCruce,
+                cru.txtNombre,
+                cru.fchCruce,
+                cru.txtCuerpo,
+                cru.txtPie,
+                cru.txtFirma,
+                cru.txtElaboro,
+                cru.txtReviso,
+                cru.fchCreacionCruce,
+                concat(usu.txtNombre,' ',usu.txtApellido) as txtUsuario,
+                cru.txtNombreArchivo,
+                concat(usu1.txtNombre,' ',usu1.txtApellido) as txtUsuarioActualiza,
+                cru.txtNombreArchivoActualiza,
+                cru.seqUsuarioActualiza,
+                cru.fchActualizacionCruce
+            FROM t_cru_cruces cru
+            inner join t_cor_usuario usu on cru.txtUsuario = usu.txtUsuario 
+            left join t_cor_usuario usu1 on cru.txtUsuarioActualiza = usu1.txtUsuario 
+            WHERE seqCruce = $seqCruce
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $this->arrDatos['seqCruce'] = $objRes->fields['seqCruce'];
+            $this->arrDatos['txtNombre'] = strtoupper($objRes->fields['txtNombre']);
+            $this->arrDatos['fchCruce'] = new DateTime($objRes->fields['fchCruce']) ;
+            $this->arrDatos['txtCuerpo'] = $objRes->fields['txtCuerpo'];
+            $this->arrDatos['txtPie'] = $objRes->fields['txtPie'];
+            $this->arrDatos['txtFirma'] = strtoupper($objRes->fields['txtFirma']);
+            $this->arrDatos['txtElaboro'] = strtoupper($objRes->fields['txtElaboro']);
+            $this->arrDatos['txtReviso'] = strtoupper($objRes->fields['txtReviso']);
+            $this->arrDatos['fchCreacionCruce'] = new DateTime($objRes->fields['fchCreacionCruce']);
+            $this->arrDatos['txtUsuario'] = strtoupper($objRes->fields['txtUsuario']);
+            $this->arrDatos['txtNombreArchivo'] = $objRes->fields['txtNombreArchivo'];
+            $this->arrDatos['seqUsuario'] = $objRes->fields['seqUsuario'];
+            $this->arrDatos['txtUsuarioActualiza'] = strtoupper($objRes->fields['txtUsuarioActualiza']);;
+            $this->arrDatos['txtNombreArchivoActualiza'] = $objRes->fields['txtNombreArchivoActualiza'];
+            $this->arrDatos['fchActualizacionCruce'] = (esFechaValida($objRes->fields['fchActualizacionCruce']))? new DateTime($objRes->fields['fchActualizacionCruce']) : null;
+
+            $objRes->MoveNext();
+        }
+
+        $sql = "
+            select 
+                res.seqResultado,
+                res.seqCruce,
+                res.seqFormulario,
+                res.seqModalidad,
+                res.seqEstadoProceso,
+                res.seqTipoDocumento,
+                res.numDocumento,
+                res.txtNombre,
+                res.seqParentesco,
+                res.txtEntidad,
+                res.txtTitulo,
+                res.txtDetalle,
+                res.bolInhabilitar,
+                res.txtObservaciones
+            from t_cru_resultado res
+            where seqCruce = $seqCruce
+            order by res.seqFormulario, res.numDocumento
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields) {
+            $seqResultado = $objRes->fields['seqResultado'];
+            $seqFormulario = $objRes->fields['seqFormulario'];
+            $claFormulario = new FormularioSubsidios();
+            $claFormulario->cargarFormulario($seqFormulario);
+            $objCiudadano = $this->obtenerPrincipal($claFormulario);
+            foreach ($objRes->fields as $txtCampo => $txtValor) {
+                $this->arrDatos['arrResultado'][$seqResultado][$txtCampo] = $txtValor;
+            }
+            $this->arrDatos['arrResultado'][$seqResultado]['numDocumentoPrincipal'] = $objCiudadano->numDocumento;
+            $this->arrDatos['arrResultado'][$seqResultado]['txtNombrePrincipal'] = mb_strtoupper($this->obtenerNombre($objCiudadano));
+            $this->arrDatos['arrResultado'][$seqResultado]['txtEstado'] = $arrEstados[$objRes->fields['seqEstadoProceso']];
+            $this->arrDatos['arrResultado'][$seqResultado]['txtEstadoFormulario'] = $arrEstados[$claFormulario->seqEstadoProceso];
+            $this->arrDatos['arrResultado'][$seqResultado]['seqEstadoProceso'] = $claFormulario->seqEstadoProceso;
+
+            $this->arrHash[
+                $objCiudadano->numDocumento .
+                $objRes->fields['numDocumento'] .
+                mb_strtolower($objRes->fields['txtEntidad']) .
+                mb_strtolower($objRes->fields['txtTitulo']) .
+                mb_strtolower($objRes->fields['txtDetalle'])
+            ] = $seqResultado;
+
+            $objRes->MoveNext();
+        }
+
+    }
+
+    public function editar($arrPost,$arrArchivo){
+        global $aptBd;
+        try{
+            $aptBd->BeginTrans();
+            $this->validarReglasBasicas($arrArchivo,'editar');
+            $this->validarReglasEditar($arrArchivo);
+
+            if(empty($this->arrErrores)){
+
+                $sql = "
+                    UPDATE t_cru_cruces SET
+                        fchCruce = '" . $arrPost['fchCruce'] . "',
+                        txtUsuarioActualiza = '" . $_SESSION['txtUsuario'] . "',
+                        txtNombreArchivoActualiza = '" . $_FILES['archivo']['name'] . "',
+                        seqUsuarioActualiza = " . $_SESSION['seqUsuario'] . ",
+                        fchActualizacionCruce = NOW()
+                    WHERE seqCruce = " . $arrPost['seqCruce'] . "
+                ";
+                $aptBd->execute($sql);
+
+                $arrInhabilitar = array();
+                unset($arrArchivo[0]);
+                foreach($arrArchivo as $numLinea => $arrLinea){
+
+                    if(! in_array(array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3])),$this->arrEstadosPermitidos['editar'])){
+                        $numDocumentoPrincipal = $arrLinea[1];
+                        $this->arrIgnorados[$numDocumentoPrincipal] = $numDocumentoPrincipal;
+                    }else{
+
+                        $bolInhabilitar = (strtolower($arrLinea[11]) == "no")? 0 : 1;
+                        $seqFormulario = $arrLinea[0];
+                        if((!isset($arrInhabilitar[$seqFormulario])) or $arrInhabilitar[$seqFormulario]['inhabilitar'] == 0) {
+                            $arrInhabilitar[$seqFormulario]['inhabilitar'] = $bolInhabilitar;
+                            $arrInhabilitar[$seqFormulario]['estado'] = array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3]));
+                        }
+
+                        $txtHash =
+                            $arrLinea[1] .
+                            $arrLinea[5] .
+                            mb_strtolower($arrLinea[8]) .
+                            mb_strtolower($arrLinea[9]) .
+                            mb_strtolower($arrLinea[10]);
+
+                        if(! isset( $this->arrHash[$txtHash] )) {
+                            $sql = "
+                                INSERT INTO t_cru_resultado(
+                                    seqCruce,
+                                    seqFormulario,
+                                    seqModalidad,
+                                    seqEstadoProceso,
+                                    seqTipoDocumento,
+                                    numDocumento,
+                                    txtNombre,
+                                    seqParentesco,
+                                    txtEntidad,
+                                    txtTitulo,
+                                    txtDetalle,
+                                    bolInhabilitar,
+                                    txtObservaciones
+                                ) VALUES (
+                                    " . $arrPost['seqCruce'] . ",
+                                    " . $arrLinea[0] . ",
+                                    " . array_shift(array_keys($this->arrFormatoArchivo[2]['rango'], $arrLinea[2])) . ",
+                                    " . array_shift(array_keys($this->arrFormatoArchivo[3]['rango'], $arrLinea[3])) . ",
+                                    " . array_shift(array_keys($this->arrFormatoArchivo[4]['rango'], $arrLinea[4])) . ",
+                                    " . $arrLinea[5] . ",
+                                    '" . strtoupper($arrLinea[6]) . "',
+                                    " . array_shift(array_keys($this->arrFormatoArchivo[7]['rango'], $arrLinea[7])) . ",
+                                    '" . strtoupper($arrLinea[8]) . "',
+                                    '" . strtoupper($arrLinea[9]) . "',
+                                    '" . strtoupper($arrLinea[10]) . "',
+                                    " . $bolInhabilitar . ",
+                                    '" . strtoupper($arrLinea[12]) . "'
+                                )
+                            ";
+                        }else{
+                            $sql = "
+                                UPDATE t_cru_resultado SET
+                                    bolInhabilitar = " . $bolInhabilitar . ",
+                                    txtObservaciones = '" . strtoupper($arrLinea[12]) . "'
+                                WHERE seqResultado = " . $this->arrHash[$txtHash] . "
+                            ";
+                        }
+                        $aptBd->execute($sql);
+                    }
+                }
+                $this->cambioEstados($arrPost['seqCruce'],$arrPost['fchCruce'],$arrInhabilitar);
+            }
+
+            if(!empty($this->arrErrores)){
+                $aptBd->RollbackTrans();
+            }else{
+                $aptBd->CommitTrans();
+            }
+        } catch (Exception $objError) {
+            $this->arrErrores[] = $objError->getMessage();
+            $aptBd->RollbackTrans();
+        }
+
+    }
+
+    private function validarReglasEditar($arrArchivo){
+        $arrHash = $this->arrHash;
+        $numLineas = count($arrArchivo);
+        $arrFormularios = array();
+        unset($arrArchivo[0]);
+
+        foreach($arrArchivo as $numLinea => $arrLinea){
+            $seqFormulario = $arrLinea[0];
+            $arrFormularios[$seqFormulario] = true;
+
+            $txtHash =
+                $arrLinea[1] .
+                $arrLinea[5] .
+                mb_strtolower($arrLinea[8]) .
+                mb_strtolower($arrLinea[9]) .
+                mb_strtolower($arrLinea[10]);
+
+            unset($arrHash[$txtHash]);
+
+        }
+
+        if(! empty($arrHash)){
+            $this->arrErrores[] = "No puede alterar las lineas originales del cruce";
+        }
+
+        $numFormularios = count($arrFormularios);
+
+        if($numLineas < count($this->arrDatos['arrResultado'])){
+            $this->arrErrores[] = "No puede incluir menos lineas de las que originalmente tiene el cruce";
+        }
+
+        $arrFormularios = array();
+        foreach($this->arrDatos['arrResultado'] as $seqResultado => $arrDato){
+            $seqFormulario = $arrDato['seqFormulario'];
+            $arrFormularios[$seqFormulario] = true;
+        }
+
+        if($numFormularios != count($arrFormularios)){
+            $this->arrErrores[] = "No puede alterar la cantidad de hogares del cruce";
+        }
+
+    }
+
+    private function crucesPendientes($numLinea , $seqFormulario){
+        global $aptBd;
+
+        $claFormulario = new FormularioSubsidios();
+        $claFormulario->cargarFormulario($seqFormulario);
+
+        $objCiudadano = $this->obtenerPrincipal($claFormulario);
+
+        $sql = "
+            select distinct
+              cru.txtNombre
+            from t_cru_cruces cru
+            inner join t_cru_resultado res on cru.seqCruce = res.seqCruce
+            where seqFormulario = $seqFormulario 
+            and res.bolInhabilitar = 1
+        ";
+        $arrPendientes = $aptBd->GetAll($sql);
+        foreach ($arrPendientes as $arrCruce){
+            $this->arrErrores[] = "Error Linea " . ( $numLinea + 1 ) . ": El Hogar de " . $objCiudadano->numDocumento . " tiene cruces pendientes en el cruce " . $arrCruce['txtNombre'];
+        }
+
     }
 
 }

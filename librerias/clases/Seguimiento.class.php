@@ -4077,8 +4077,8 @@ class Seguimiento {
         $txtValorAnterior = $claFormulario->seqEstadoProceso;
         $txtValorNuevo = $arrPost['seqEstadoProceso'];
         if ($txtValorAnterior != $txtValorNuevo) {
-            $txtCambios .= $this->txtSeparador . "seqEstadoProceso, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+            $txtCambios .= $this->txtSeparador . "seqEstadoProceso, Valor Anterior: " . $txtValorNuevo . ", " .
+                "Valor Nuevo: " . $txtValorAnterior . $this->txtSalto;
         }
 
         return $txtCambios;

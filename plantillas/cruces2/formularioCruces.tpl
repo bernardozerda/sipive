@@ -29,7 +29,7 @@
                                required
                         >
                     </td>
-                    <td width="120px">Fecha</td>
+                    <td width="120px">Publicación</td>
                     <td>
                         <input type="text"
                                id="fchCruce"

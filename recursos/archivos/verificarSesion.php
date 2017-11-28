@@ -8,7 +8,7 @@
 session_start();
 
 // solo funciona bajo https
-define("HTTPS_ONLY", false);
+define("HTTPS_ONLY", true);
 
 // Tiempo de valides de la sesion en segundos
 define("TIMEOUT", 1800);
@@ -33,14 +33,11 @@ if ($bolMatarSesion) {
     );
     session_destroy();
 
-    // redirecciona a la pantalla de autenticacion si la encuentra en esta posicion relativa
-    // si no coloca un link que obiga al usuario a ir a la autenticacion del aplicativo
-    if (file_exists($txtPrefijo . "autenticacion.php")) {
-        header("Location: " . $txtPrefijo . "autenticacion.php");
-    } else {
-        echo "<div id='matarSesion'></div>";
-        exit(0);
-    }
+    // redirecciona a la pantalla de autenticacion
+    $txtRuta  = (HTTPS_ONLY == true)? "https://" : "http://";
+    $txtRuta .=  $_SERVER['SERVER_NAME'] . "/" . mb_split("/",$_SERVER['REQUEST_URI'])[1] . "/autenticacion.php";
+
+    header("Location: " . $txtRuta);
 
 } else {
 

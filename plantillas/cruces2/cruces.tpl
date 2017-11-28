@@ -14,7 +14,7 @@
                 <thead>
                     <th align="center" width="90px">Creación</th>
                     <th align="center" width="90px">Actualización</th>
-                    <th align="center" width="90px">Fecha</th>
+                    <th align="center" width="90px">Publicación</th>
                     <th align="center">Nombre</th>
                     <th align="center" width="30px">&nbsp;</th>
                     <th align="center" width="40px">&nbsp;</th>

@@ -61,14 +61,12 @@ foreach($claCruces->arrDatos['arrResultado'] as $seqResultado => $arrLinea ){
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['numDocumentoPrincipal'], false);
     $objHoja->getRowDimension(($numFila + 2))->setRowHeight(12);
 
-    $txtModalidad = mb_strtoupper(
-        array_shift(
-            obtenerDatosTabla(
-                "t_frm_modalidad",
-                array("seqModalidad","txtModalidad"),
-                "seqModalidad",
-                "seqModalidad = " . $arrLinea['seqModalidad']
-            )
+    $txtModalidad = array_shift(
+        obtenerDatosTabla(
+            "t_frm_modalidad",
+            array("seqModalidad","txtModalidad"),
+            "seqModalidad",
+            "seqModalidad = " . $arrLinea['seqModalidad']
         )
     );
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtModalidad, false);
@@ -78,14 +76,12 @@ foreach($claCruces->arrDatos['arrResultado'] as $seqResultado => $arrLinea ){
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrEstados[$seqEstadoProceso], false);
     $objHoja->getRowDimension(($numFila + 2))->setRowHeight(12);
 
-    $txtTipoDocumento = mb_strtoupper(
-        array_shift(
-            obtenerDatosTabla(
-                "t_ciu_tipo_documento",
-                array("seqTipoDocumento","txtTipoDocumento"),
-                "seqTipoDocumento",
-                "seqTipoDocumento = " . $arrLinea['seqTipoDocumento']
-            )
+    $txtTipoDocumento = array_shift(
+        obtenerDatosTabla(
+            "t_ciu_tipo_documento",
+            array("seqTipoDocumento","txtTipoDocumento"),
+            "seqTipoDocumento",
+            "seqTipoDocumento = " . $arrLinea['seqTipoDocumento']
         )
     );
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtTipoDocumento, false);
@@ -97,14 +93,12 @@ foreach($claCruces->arrDatos['arrResultado'] as $seqResultado => $arrLinea ){
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtNombre'], false);
     $objHoja->getRowDimension(($numFila + 2))->setRowHeight(12);
 
-    $txtParentesco = mb_strtoupper(
-        array_shift(
-            obtenerDatosTabla(
-                "t_ciu_parentesco",
-                array("seqParentesco","txtParentesco"),
-                "seqParentesco",
-                "seqParentesco = " . $arrLinea['seqParentesco']
-            )
+    $txtParentesco = array_shift(
+        obtenerDatosTabla(
+            "t_ciu_parentesco",
+            array("seqParentesco","txtParentesco"),
+            "seqParentesco",
+            "seqParentesco = " . $arrLinea['seqParentesco']
         )
     );
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtParentesco, false);

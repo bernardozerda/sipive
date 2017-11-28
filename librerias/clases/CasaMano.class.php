@@ -676,12 +676,12 @@ class CasaMano
                         $arrCampos['fchRegistroVivienda'] = "'" . date("Y-m-d H:i:s") . "'";
                         break;
                     case "revisionJuridica":
-                        $arrCampos['bolRevisionJuridica'] = ($arrPost['txtConcepto'] == "") ? "''" : "'" . $arrPost['txtConcepto'] . "'";
+                        $arrCampos['bolRevisionJuridica'] = ($arrPost['txtConcepto'] == "") ? "0" : $arrPost['txtConcepto'];
                         $arrCampos['fchRevisionJuridica'] = "'" . date("Y-m-d H:i:s") . "'";
                         $arrCampos['txtRevisionJuridica'] = "'" . $arrPost['concepto'] . "'";
                         break;
                     case "revisionTecnica":
-                        $arrCampos['bolRevisionTecnica'] = ($arrPost['txtConcepto'] == "") ? "''" : "'" . $arrPost['txtConcepto'] . "'";
+                        $arrCampos['bolRevisionTecnica'] = ($arrPost['txtConcepto'] == "") ? "0" : $arrPost['txtConcepto'];
                         $arrCampos['fchRevisionTecnica'] = "'" . $arrPost['fchVisita'] . "'";
                         $arrCampos['txtRevisionTecnica'] = "'" . $arrPost['txtDescripcionVivienda'] . "'";
                         break;
@@ -761,11 +761,11 @@ class CasaMano
             // No se ha realizado la verificacion
             if ($this->bolPrimeraVerificacion == 0) {
                 switch(true){
-                    case $this->bolRevisionJuridica == 1 or $this->bolRevisionTecnica == 1:
-                        $seqEstadoProceso = 44; // Primera verificacion
-                        break;
                     case $this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2:
                         $seqEstadoProceso = 37; // Hogar Actualizado
+                        break;
+                    case $this->bolRevisionJuridica == 1 or $this->bolRevisionTecnica == 1:
+                        $seqEstadoProceso = 44; // Primera verificacion
                         break;
                     default:
                         $seqEstadoProceso = 0;
@@ -776,11 +776,11 @@ class CasaMano
             // Verificacion sin cruce (registros sin cruces)
             if ($this->bolPrimeraVerificacion == 1) {
                 switch(true){
-                    case $this->bolRevisionJuridica == 1 and $this->bolRevisionTecnica == 1:
-                        $seqEstadoProceso = 46; // Primera verificacion aprobada
-                        break;
                     case $this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2:
                         $seqEstadoProceso = 37; // Primera verificacion pendiente
+                        break;
+                    case $this->bolRevisionJuridica == 1 and $this->bolRevisionTecnica == 1:
+                        $seqEstadoProceso = 46; // Primera verificacion aprobada
                         break;
                     default:
                         $seqEstadoProceso = 44; // Primera verificacion
@@ -803,6 +803,13 @@ class CasaMano
                         WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
                     ";
                     $aptBd->execute($sql);
+
+                    $sql = "
+                        update t_cru_resultado set
+                            seqEstadoProceso = " . $seqEstadoProceso . "
+                        where seqFormulario = " . $arrPost['seqFormulario'];
+                    $aptBd->execute($sql);
+
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se pudo modificar el estado del proceso";
                 }

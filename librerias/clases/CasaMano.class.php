@@ -793,6 +793,10 @@ class CasaMano
                 $seqEstadoProceso = 45; // Primera verificacion pendiente
             }
 
+            if($seqEstadoProceso == 46 and ( time() > strtotime($this->fchPrimeraVerificacion) )){
+                $seqEstadoProceso = 37;
+            }
+
             // alterar el estado del proceso segun el resultado
             if ($seqEstadoProceso != 0) {
                 try {

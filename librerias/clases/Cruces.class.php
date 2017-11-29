@@ -1041,7 +1041,8 @@ WHERE
                     update t_frm_formulario set 
                         seqEstadoProceso = " . $seqEstadoProceso . ",
                         fchUltimaActualizacion = NOW()
-                    where seqFormulario = " . $seqFormulario;
+                    where seqFormulario = " . $seqFormulario . "
+                      and seqCruce = " . $seqCruce;
                 $aptBd->execute($sql);
 
                 $sql = "

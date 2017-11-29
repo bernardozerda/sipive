@@ -1037,17 +1037,22 @@ WHERE
                     $arrSeguimiento['txtComentario'] = "Segunda verificación realizada";
                 }
 
+                if($seqEstadoProceso == 46 and ( time() > strtotime($fchCruce) )){
+                    $seqEstadoProceso = 37;
+                }
+
                 $sql = "
-                    update t_frm_formulario set 
+                    update t_frm_formulario2 set 
                         seqEstadoProceso = " . $seqEstadoProceso . ",
                         fchUltimaActualizacion = NOW()
                     where seqFormulario = " . $seqFormulario;
                 $aptBd->execute($sql);
 
                 $sql = "
-                    update t_cru_resultado set
+                    update t_cru_resultado set 
                         seqEstadoProceso = " . $seqEstadoProceso . "
-                    where seqFormulario = " . $seqFormulario;
+                    where seqFormulario = " . $seqFormulario . " 
+                      and seqCruce = " . $seqCruce;
                 $aptBd->execute($sql);
 
             }else{

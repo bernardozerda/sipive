@@ -23,7 +23,18 @@
 
 var mychartMostrar;
 
+function verificarSesion(){
+    var numTimeStamp = Math.round( Number(new Date()) / 1000 );
+    var numExpiraSesion = YAHOO.util.Cookie.get( "sdhtsdv" );
+    var numTiempoVida = Math.round( numExpiraSesion - numTimeStamp );
+    if(numTiempoVida < 0){
+        parent.window.location.href='./autenticacion.php';
+    }
+}
+
 function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargando) {
+
+    verificarSesion();
 
     document.getElementById(txtDivDestino).innerHTML = '';
 
@@ -380,6 +391,8 @@ function sinCaracteresEspeciales(objLimpiar) {
  * @version 1.0 Marzo 29 2009
  */
 function someterFormulario(txtDivDestino, objFormulario, txtArchivo, cargaArchivos, objetoCargando) {
+
+    verificarSesion();
 
     // Limpia el area donde el usuario siempre encontrarï¿½ los errores
     if (document.getElementById("mensajes")) {

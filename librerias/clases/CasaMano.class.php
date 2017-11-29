@@ -793,6 +793,10 @@ class CasaMano
                 $seqEstadoProceso = 45; // Primera verificacion pendiente
             }
 
+            if($seqEstadoProceso == 46 and ( time() > strtotime($this->fchPrimeraVerificacion) )){
+                $seqEstadoProceso = 37;
+            }
+
             // alterar el estado del proceso segun el resultado
             if ($seqEstadoProceso != 0) {
                 try {
@@ -807,7 +811,8 @@ class CasaMano
                     $sql = "
                         update t_cru_resultado set
                             seqEstadoProceso = " . $seqEstadoProceso . "
-                        where seqFormulario = " . $arrPost['seqFormulario'];
+                        where seqFormulario = " . $arrPost['seqFormulario'] . "
+                          and seqCruce = " . $arrPost['seqCruce'];
                     $aptBd->execute($sql);
 
                 } catch (Exception $objError) {
@@ -834,6 +839,14 @@ class CasaMano
                 WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
             ";
             $aptBd->execute($sql);
+
+            $sql = "
+                update t_cru_resultado set
+                    seqEstadoProceso = " . $arrPost['seqEstadoProceso'] . "
+                where seqFormulario = " . $arrPost['seqFormulario'] . "
+                  and seqCruce = " . $arrPost['seqCruce'];
+            $aptBd->execute($sql);
+
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo modificar el estado del proceso";
             $this->arrErrores[] = $objError->getMessage();

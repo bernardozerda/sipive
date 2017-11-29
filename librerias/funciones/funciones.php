@@ -883,6 +883,7 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
 
     // construccion en sitio propio
     $arrEsquema[2][7][] = 2; // colectivo opv
+    $arrEsquema[2][7][] = 4; // Territorial dirigido
 
     // mejoramiento estructural
     $arrEsquema[2][8][] = 4; // territorial dirigido

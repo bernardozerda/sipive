@@ -13,7 +13,6 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "RegistroA
 
 $claCruces = new Cruces();
 $claCruces->cargar($_POST['seqCruce']);
-
 $claCruces->eliminar($_POST['seqCruce']);
 
 $claRegistroActividades = new RegistroActividades();
@@ -25,5 +24,8 @@ $claRegistroActividades->registrarActividad(
 );
 
 imprimirMensajes($claCruces->arrErrores,$claCruces->arrMensajes);
+
+$claSmarty->assign( "arrCruces", $claCruces->listado() );
+$claSmarty->display( "cruces2/cruces.tpl" );
 
 ?>

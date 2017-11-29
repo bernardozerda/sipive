@@ -830,12 +830,13 @@ class CasaMano
             $sql = "
                 UPDATE T_FRM_FORMULARIO SET
                     seqEstadoProceso = " . $arrPost['seqEstadoProceso'] . ",
-                    fchUltimaActializacion = now()
+                    fchUltimaActualizacion = now()
                 WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
             ";
             $aptBd->execute($sql);
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo modificar el estado del proceso";
+            $this->arrErrores[] = $objError->getMessage();
         }
 
     }

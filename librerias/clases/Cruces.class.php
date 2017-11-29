@@ -800,7 +800,7 @@ WHERE
         }
     }
 
-    private function validarReglasBasicas($arrArchivo,$txtModo){
+    private function validarReglasBasicas($arrArchivo,$txtModo,$seqCruce = null){
         global $arrConfiguracion;
         $arrFormularios = array();
         unset($arrArchivo[0]);
@@ -816,7 +816,7 @@ WHERE
             }
 
             // validacion en otros cruces
-            $this->crucesPendientes($numLinea , $seqFormulario);
+            $this->crucesPendientes($numLinea , $seqFormulario, $seqCruce);
 
             /**
              * validaciones de integridad de datos
@@ -844,13 +844,6 @@ WHERE
                 if ($claFormulario->seqLocalidad == 22){
                     if($claFormulario->bolDesplazado == 0 and $claFormulario->seqEmpresaDonante != 10){
                         $txtMensaje = "Error Formulario " . $seqFormulario . ": Es hogar vulnerable sin VUR con localidad fuera de bogotá";
-                        if (!in_array($txtMensaje, $this->arrErrores)) {
-                            $this->arrErrores[] = $txtMensaje;
-                        }
-                    }
-                }else{
-                    if($claFormulario->bolDesplazado == 1){
-                        $txtMensaje = "Error Formulario " . $seqFormulario . ": Es hogar victima con localidad dentro de bogotá";
                         if (!in_array($txtMensaje, $this->arrErrores)) {
                             $this->arrErrores[] = $txtMensaje;
                         }
@@ -902,7 +895,7 @@ WHERE
                     }
                 }
 
-                if($claFormulario->valIngresoHogar <= ($arrConfiguracion['constantes']['salarioMinimo'] * 2)){
+                if($claFormulario->valIngresoHogar > ($arrConfiguracion['constantes']['salarioMinimo'] * 2)){
                     $txtMensaje = "Error Formulario " . $seqFormulario . ": Hogar con ingresos superiores a 2 SMMLV";
                     if (!in_array($txtMensaje, $this->arrErrores)) {
                         $this->arrErrores[] = $txtMensaje;
@@ -925,7 +918,7 @@ WHERE
             if($claFormulario->seqModalidad != array_shift(array_keys($this->arrFormatoArchivo[2]['rango'],$arrLinea[2]))){
                 $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La modalidad " . $arrLinea[2] . " no corresponde con la registrada en el sistema";
             }else{
-                $arrModalidad[$claFormulario->seqModalidad] = 1;
+                $arrModalidadArchivo[$claFormulario->seqModalidad] = 1;
             }
 
             // verifica que el estado del proceso sea el mismo de la base de datos
@@ -1000,7 +993,7 @@ WHERE
         }
 
         // verifica que el archivo tenga una sola modalidad
-        if(count($arrModalidad) > 1){
+        if(count($arrModalidadArchivo) > 1){
             $this->arrErrores[] = "No puede tener mas de una modalidad dentro del archivo";
         }
     }
@@ -1223,7 +1216,7 @@ WHERE
         global $aptBd;
         try{
             $aptBd->BeginTrans();
-            $this->validarReglasBasicas($arrArchivo,'editar');
+            $this->validarReglasBasicas($arrArchivo,'editar', $arrPost['seqCruce']);
             $this->validarReglasEditar($arrArchivo);
 
             if(empty($this->arrErrores)){
@@ -1363,13 +1356,15 @@ WHERE
 
     }
 
-    private function crucesPendientes($numLinea , $seqFormulario){
+    private function crucesPendientes($numLinea , $seqFormulario, $seqCruce){
         global $aptBd;
 
         $claFormulario = new FormularioSubsidios();
         $claFormulario->cargarFormulario($seqFormulario);
 
         $objCiudadano = $this->obtenerPrincipal($claFormulario);
+
+        $seqCruce = ($seqCruce == null)? "null" : $seqCruce;
 
         $sql = "
             select distinct
@@ -1378,6 +1373,7 @@ WHERE
             inner join t_cru_resultado res on cru.seqCruce = res.seqCruce
             where seqFormulario = $seqFormulario 
             and res.bolInhabilitar = 1
+            and cru.seqCruce <> $seqCruce
         ";
         $arrPendientes = $aptBd->GetAll($sql);
         foreach ($arrPendientes as $arrCruce){

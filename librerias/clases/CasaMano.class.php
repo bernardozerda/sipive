@@ -51,7 +51,7 @@ class CasaMano
         // postulacion individual
         // proyectos de la SDHT
 
-        $this->arrFases['pin']['modalidad'] = array( 1 , 6 , 9 , 12 , 13 );
+        $this->arrFases['pin']['modalidad'] = array( 1 , 6 , 7 , 9 , 12 , 13 );
         $this->arrFases['pin']['esquema'] = array( 0 , 1 , 2 , 3 , 4 , 6 , 7 , 8 , 9 , 12 , 14 );
 
         $this->arrFases['pin']['postulacion']['grupos'] = array(6,7,8);
@@ -830,12 +830,13 @@ class CasaMano
             $sql = "
                 UPDATE T_FRM_FORMULARIO SET
                     seqEstadoProceso = " . $arrPost['seqEstadoProceso'] . ",
-                    fchUltimaActializacion = now()
+                    fchUltimaActualizacion = now()
                 WHERE seqFormulario = " . $arrPost['seqFormulario'] . "
             ";
             $aptBd->execute($sql);
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo modificar el estado del proceso";
+            $this->arrErrores[] = $objError->getMessage();
         }
 
     }

@@ -230,11 +230,11 @@
                             style="border-left: 1px dotted #666666;"
 
                         >
-                            {if $objCasaMano->bolPrimeraVerificacion == 1 && ($objCasaMano->bolRevisionTecnica == 1)}
-                                {if esFechaValida( $objCasaMano->fchPostulacion )}
+                            {if $objCasaMano->bolPrimeraVerificacion == 1 && $objCasaMano->bolRevisionTecnica == 1}
+                                {if esFechaValida( $objCasaMano->objPostulacion->fchPostulacion )}
                                     <div style="cursor: pointer;"
                                          onClick="cambioCEM('./contenidos/casaMano/postulacion.php','seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}');">
-                                        {$objCasaMano->fchPostulacion|date_format|upper}
+                                        {$objCasaMano->objPostulacion->fchPostulacion|date_format|upper}
                                     </div>
                                 {else}
 

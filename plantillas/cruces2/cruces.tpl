@@ -105,7 +105,7 @@
                         </td>
                         <td align="center">
                             {if isset($smarty.session.arrGrupos.3.20)}
-                                <a href="#" onClick="cargarContenido('mensajes','./contenidos/cruces2/eliminar.php','seqCruce={$seqCruce}',true);">
+                                <a href="#" onClick="cargarContenido('contenido','./contenidos/cruces2/eliminar.php','seqCruce={$seqCruce}',true);">
                                     Eliminar
                                 </a>
                             {/if}

@@ -86,7 +86,12 @@ while ($rowProyectos = mysql_fetch_array($resultProyectos)){
 				LEFT JOIN T_PRY_PROYECTO prh ON frm.seqProyectoHijo = prh.seqProyecto
 				LEFT JOIN T_PRY_UNIDAD_PROYECTO und ON frm.seqUnidadProyecto = und.seqUnidadProyecto
 				LEFT JOIN T_DES_ESCRITURACION esc ON frm.seqFormulario = esc.seqFormulario
-				WHERE $txtCondicion
+				INNER JOIN (
+                    select MAX(seqEscrituracion) as seqEscrituracion, seqFormulario
+                    from t_des_escrituracion
+                    group by seqFormulario
+                 ) escMax on escMax.seqEscrituracion = esc.seqEscrituracion
+				WHERE $txtCondicion				
 				AND pry.seqProyecto = $idProyecto ";
 				if ($idConjunto > 1){
 					$sqlHogares .= " AND prh.seqProyecto = $idConjunto ";

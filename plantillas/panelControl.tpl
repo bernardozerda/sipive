@@ -16,25 +16,35 @@
 		<link rel="stylesheet" type="text/css" href="./librerias/yui/container/assets/skins/sam/container.css" />
 		<link rel="stylesheet" type="text/css" href="./librerias/yui/calendar/assets/skins/sam/calendar.css" />
 		<link rel="stylesheet" type="text/css" href="./librerias/yui/treeview/assets/skins/sam/treeview.css" />
-  
-		<!-- INCLUSIONES JAVASCRIPT -->	
-		<script language="JavaScript" type="text/javascript" src="./librerias/yui/yahoo/yahoo-min.js"></script>
-		<script language="JavaScript" type="text/javascript" src="./librerias/yui/event/event-min.js"></script>
-		<script language="JavaScript" type="text/javascript" src="./librerias/yui/connection/connection-min.js"></script>
+
+		<!-- INCLUSIONES JAVASCRIPT -->
 		<script language="JavaScript" type="text/javascript" src="./librerias/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-		<script language="JavaScript" type="text/javascript" src="./librerias/yui/animation/animation-min.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/yui/element/element-min.js"></script>
-		<script language="JavaScript" type="text/javascript" src="./librerias/yui/button/button-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/connection/connection-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/dom/dom-min.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/yui/dragdrop/dragdrop-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/event/event-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/animation/animation-min.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/yui/container/container-min.js"></script>
-		<script language="JavaScript" type="text/javascript" src="./librerias/yui/calendar/calendar-min.js"></script>
-		<script language="JavaScript" type="text/javascript" src="./librerias/yui/treeview/treeview-min.js" ></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/button/button-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/menu/menu-min.js" ></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/calendar/calendar-min.js" ></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/tabview/tabview-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/cookie/cookie-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/paginator/paginator-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/datasource/datasource-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/datatable/datatable-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/autocomplete/autocomplete-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/json/json-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/swf/swf-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/charts/charts-min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="./librerias/yui/treeview/treeview-min.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/encripcion.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/funciones.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/funcionesProyectos.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/listeners.js"></script>
 
-		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
 	</head>
 

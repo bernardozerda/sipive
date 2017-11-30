@@ -29,7 +29,7 @@
                        id="numActo"
                        onFocus="this.style.backgroundColor = '#ADD8E6'"
                        onBlur="this.style.backgroundColor = '#FFFFFF';"
-                       style="width: 50px;"
+                       style="width: 100px;"
                 >
             </td>
         </tr>

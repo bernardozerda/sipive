@@ -95,6 +95,8 @@
 			txtTipoDocumento
 		FROM 
 			T_CIU_TIPO_DOCUMENTO
+		WHERE
+			seqTipoDocumento NOT IN (8)
 		ORDER BY
 			txtTipoDocumento
 	";

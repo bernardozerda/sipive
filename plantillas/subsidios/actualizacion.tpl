@@ -434,8 +434,8 @@
                                                            value=""
                                                            onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                            onBlur="soloNumeros(this);
-                                                                   this.style.backgroundColor = '#FFFFFF';"
-                                                           onkeyup="alertaDigitacionCampo('ingresos',0);"
+                                                                   this.style.backgroundColor = '#FFFFFF';
+                                                                    alertaDigitacionCampo('ingresos',0);"
                                                            style="width:90%; text-align: right;"
                                                            />
                                                 </td>

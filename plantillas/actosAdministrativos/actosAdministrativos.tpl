@@ -66,14 +66,6 @@
          </div>
       </td>
    </tr>
-   <tr>
-      <td>&nbsp;</td>
-      <td align="center">
-         <button onClick="someterFormulario('mensajes','frmSavarAAD','./contenidos/actosAdministrativos/salvarActosAdministrativos.php',true,true);">
-            Guardar Cambios
-         </button>
-      </td>
-   </tr>
 </table>
 
          

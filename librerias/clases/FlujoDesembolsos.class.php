@@ -18,7 +18,7 @@
 			$this->arrFlujos["escritura"]        = utf8_encode("Escritura Publica Registrada");
 			$this->arrFlujos["giroAnticipado"]   = utf8_encode("Giro Anticpado");
             
-            $this->arrFlujos["postulacionIndividual"]   = utf8_encode("Postulacion Individual");
+            $this->arrFlujos["postulacionIndividual"]   = utf8_encode("Masivo (P.Individual, Mi casa ya, vivienda gratuita");
             
             $this->arrFlujos["retornoEscritura"]        = utf8_encode("Retorno con Escritura Publica Registrada");
 			$this->arrFlujos["retornoGiroAnticipado"]   = utf8_encode("Retorno con Giro Anticpado");

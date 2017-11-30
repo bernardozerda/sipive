@@ -265,7 +265,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][2] = doubleval($arrCaracteristicas[28]);
                 $this->arrCaracteristicas['fchRp'][2] = $arrCaracteristicas[29];
                 $this->arrCaracteristicas['numVigRp'][2] = $arrCaracteristicas[30];
-                $this->arrCaracteristicas['numPry'][2] = intval($arrCaracteristicas[160]);
+                $this->arrCaracteristicas['numPry'][2] = intval($arrCaracteristicas[142]);
                 $this->arrCaracteristicas['numCdp'][3] = intval($arrCaracteristicas[40]);
                 $this->arrCaracteristicas['valCdp'][3] = doubleval($arrCaracteristicas[41]);
                 $this->arrCaracteristicas['fchCdp'][3] = $arrCaracteristicas[42];
@@ -283,7 +283,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][4] = doubleval($arrCaracteristicas[56]);
                 $this->arrCaracteristicas['fchRp'][4] = $arrCaracteristicas[57];
                 $this->arrCaracteristicas['numVigRp'][4] = $arrCaracteristicas[58];
-                $this->arrCaracteristicas['numPry'][4] = intval($arrCaracteristicas[150]);
+                $this->arrCaracteristicas['numPry'][4] = intval($arrCaracteristicas[143]);
                 $this->arrCaracteristicas['numCdp'][5] = intval($arrCaracteristicas[59]);
                 $this->arrCaracteristicas['valCdp'][5] = doubleval($arrCaracteristicas[60]);
                 $this->arrCaracteristicas['fchCdp'][5] = $arrCaracteristicas[61];
@@ -292,7 +292,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][5] = doubleval($arrCaracteristicas[64]);
                 $this->arrCaracteristicas['fchRp'][5] = $arrCaracteristicas[65];
                 $this->arrCaracteristicas['numVigRp'][5] = $arrCaracteristicas[66];
-                $this->arrCaracteristicas['numPry'][5] = intval($arrCaracteristicas[151]);
+                $this->arrCaracteristicas['numPry'][5] = intval($arrCaracteristicas[144]);
                 $this->arrCaracteristicas['numCdp'][6] = intval($arrCaracteristicas[67]);
                 $this->arrCaracteristicas['valCdp'][6] = doubleval($arrCaracteristicas[68]);
                 $this->arrCaracteristicas['fchCdp'][6] = $arrCaracteristicas[69];
@@ -301,7 +301,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][6] = doubleval($arrCaracteristicas[72]);
                 $this->arrCaracteristicas['fchRp'][6] = $arrCaracteristicas[73];
                 $this->arrCaracteristicas['numVigRp'][6] = $arrCaracteristicas[74];
-                $this->arrCaracteristicas['numPry'][6] = intval($arrCaracteristicas[152]);
+                $this->arrCaracteristicas['numPry'][6] = intval($arrCaracteristicas[145]);
                 $this->arrCaracteristicas['numCdp'][7] = intval($arrCaracteristicas[75]);
                 $this->arrCaracteristicas['valCdp'][7] = doubleval($arrCaracteristicas[76]);
                 $this->arrCaracteristicas['fchCdp'][7] = $arrCaracteristicas[77];
@@ -310,7 +310,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][7] = doubleval($arrCaracteristicas[80]);
                 $this->arrCaracteristicas['fchRp'][7] = $arrCaracteristicas[81];
                 $this->arrCaracteristicas['numVigRp'][7] = $arrCaracteristicas[82];
-                $this->arrCaracteristicas['numPry'][7] = intval($arrCaracteristicas[153]);
+                $this->arrCaracteristicas['numPry'][7] = intval($arrCaracteristicas[146]);
                 $this->arrCaracteristicas['numCdp'][8] = intval($arrCaracteristicas[83]);
                 $this->arrCaracteristicas['valCdp'][8] = doubleval($arrCaracteristicas[84]);
                 $this->arrCaracteristicas['fchCdp'][8] = $arrCaracteristicas[85];
@@ -319,7 +319,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][8] = doubleval($arrCaracteristicas[88]);
                 $this->arrCaracteristicas['fchRp'][8] = $arrCaracteristicas[89];
                 $this->arrCaracteristicas['numVigRp'][8] = $arrCaracteristicas[90];
-                $this->arrCaracteristicas['numPry'][8] = intval($arrCaracteristicas[154]);
+                $this->arrCaracteristicas['numPry'][8] = intval($arrCaracteristicas[147]);
                 $this->arrCaracteristicas['numCdp'][9] = intval($arrCaracteristicas[100]);
                 $this->arrCaracteristicas['valCdp'][9] = doubleval($arrCaracteristicas[101]);
                 $this->arrCaracteristicas['fchCdp'][9] = $arrCaracteristicas[102];
@@ -328,7 +328,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][9] = doubleval($arrCaracteristicas[105]);
                 $this->arrCaracteristicas['fchRp'][9] = $arrCaracteristicas[106];
                 $this->arrCaracteristicas['numVigRp'][9] = $arrCaracteristicas[107];
-                $this->arrCaracteristicas['numPry'][9] = intval($arrCaracteristicas[155]);
+                $this->arrCaracteristicas['numPry'][9] = intval($arrCaracteristicas[148]);
                 $this->arrCaracteristicas['numCdp'][10] = intval($arrCaracteristicas[108]);
                 $this->arrCaracteristicas['valCdp'][10] = doubleval($arrCaracteristicas[109]);
                 $this->arrCaracteristicas['fchCdp'][10] = $arrCaracteristicas[110];
@@ -337,7 +337,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][10] = doubleval($arrCaracteristicas[113]);
                 $this->arrCaracteristicas['fchRp'][10] = $arrCaracteristicas[114];
                 $this->arrCaracteristicas['numVigRp'][10] = $arrCaracteristicas[115];
-                $this->arrCaracteristicas['numPry'][10] = intval($arrCaracteristicas[156]);
+                $this->arrCaracteristicas['numPry'][10] = intval($arrCaracteristicas[149]);
                 $this->arrCaracteristicas['numCdp'][11] = intval($arrCaracteristicas[116]);
                 $this->arrCaracteristicas['valCdp'][11] = doubleval($arrCaracteristicas[117]);
                 $this->arrCaracteristicas['fchCdp'][11] = $arrCaracteristicas[118];
@@ -346,7 +346,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][11] = doubleval($arrCaracteristicas[121]);
                 $this->arrCaracteristicas['fchRp'][11] = $arrCaracteristicas[122];
                 $this->arrCaracteristicas['numVigRp'][11] = $arrCaracteristicas[123];
-                $this->arrCaracteristicas['numPry'][11] = intval($arrCaracteristicas[157]);
+                $this->arrCaracteristicas['numPry'][11] = intval($arrCaracteristicas[150]);
                 $this->arrCaracteristicas['numCdp'][12] = intval($arrCaracteristicas[124]);
                 $this->arrCaracteristicas['valCdp'][12] = doubleval($arrCaracteristicas[125]);
                 $this->arrCaracteristicas['fchCdp'][12] = $arrCaracteristicas[126];
@@ -355,7 +355,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][12] = doubleval($arrCaracteristicas[129]);
                 $this->arrCaracteristicas['fchRp'][12] = $arrCaracteristicas[130];
                 $this->arrCaracteristicas['numVigRp'][12] = $arrCaracteristicas[131];
-                $this->arrCaracteristicas['numPry'][12] = intval($arrCaracteristicas[158]);
+                $this->arrCaracteristicas['numPry'][12] = intval($arrCaracteristicas[151]);
                 $this->arrCaracteristicas['numCdp'][13] = intval($arrCaracteristicas[132]);
                 $this->arrCaracteristicas['valCdp'][13] = doubleval($arrCaracteristicas[133]);
                 $this->arrCaracteristicas['fchCdp'][13] = $arrCaracteristicas[134];
@@ -364,7 +364,7 @@ class aad
                 $this->arrCaracteristicas['valRp'][13] = doubleval($arrCaracteristicas[137]);
                 $this->arrCaracteristicas['fchRp'][13] = $arrCaracteristicas[138];
                 $this->arrCaracteristicas['numVigRp'][13] = $arrCaracteristicas[139];
-                $this->arrCaracteristicas['numPry'][13] = intval($arrCaracteristicas[159]);
+                $this->arrCaracteristicas['numPry'][13] = intval($arrCaracteristicas[152]);
                 break;
             case 2: // modificatorias
                 $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[2];
@@ -383,9 +383,7 @@ class aad
                 $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[8];
                 break;
             case 6: // renuncia
-                $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[162];
-                $this->arrCaracteristicas['numActoRelacionado'] = intval($arrCaracteristicas[18]);
-                $this->arrCaracteristicas['fchActoRelacionado'] = $arrCaracteristicas[19];
+                $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[153];
                 break;
             case 7: // notificaciones
                 $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[39];
@@ -421,9 +419,7 @@ class aad
                 $this->arrCaracteristicas['fchActoRelacionado'] = $arrCaracteristicas[50];
                 break;
             case 10: // revocatoria
-                $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[146];
-                $this->arrCaracteristicas['numActoRelacionado'] = intval($arrCaracteristicas[91]);
-                $this->arrCaracteristicas['fchActoRelacionado'] = $arrCaracteristicas[92];
+                $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[154];
                 break;
             case 11: // exclusion
                 $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[147];
@@ -623,30 +619,32 @@ class aad
                 break;
             case 6: // renuncia
                 $sql = "
-               SELECT
-                  hac.seqFormularioActo as 'Formulario Acto',
-                  tdo.txtTipoDocumento as 'Tipo Documento',
-                  cac.numDocumento as 'Documento',
-                  UPPER( 
-                    CONCAT(
-                      TRIM( cac.txtNombre1 ),
-                      ' ',
-                      IF( TRIM( cac.txtNombre2 ) = '' , '' , CONCAT( cac.txtNombre2 , ' ' ) ),
-                      TRIM( cac.txtApellido1 ),
-                      ' ',
-                      TRIM( cac.txtApellido2 )
-                    ) 
-                  ) AS 'Nombre'
-               FROM T_AAD_HOGAR_ACTO hac
-               INNER JOIN T_AAD_CIUDADANO_ACTO cac ON hac.seqCiudadanoActo = cac.seqCiudadanoActo
-               INNER JOIN T_AAD_FORMULARIO_ACTO fac ON hac.seqFormularioActo = fac.seqFormularioActo
-               INNER JOIN T_AAD_HOGARES_VINCULADOS hvi ON hvi.seqFormularioActo = fac.seqFormularioActo
-               INNER JOIN T_CIU_TIPO_DOCUMENTO tdo ON cac.seqTipoDocumento = tdo.seqTipoDocumento
-               WHERE hac.seqParentesco = 1
-               AND hvi.numActo = " . $this->numActo . "
-               AND hvi.fchActo = '" . $this->fchActo . "'
-               ORDER BY cac.numDocumento
-            ";
+                    SELECT
+                        hac.seqFormularioActo as 'Formulario Acto',
+                        tdo.txtTipoDocumento as 'Tipo Documento',
+                        cac.numDocumento as 'Documento',
+                        UPPER( 
+                        CONCAT(
+                        TRIM( cac.txtNombre1 ),
+                        ' ',
+                        IF( TRIM( cac.txtNombre2 ) = '' , '' , CONCAT( cac.txtNombre2 , ' ' ) ),
+                        TRIM( cac.txtApellido1 ),
+                        ' ',
+                        TRIM( cac.txtApellido2 )
+                        ) 
+                        ) AS 'Nombre',
+                        hvi.numActoReferencia as 'Resolución',
+                        hvi.fchActoReferencia as 'Fecha'
+                    FROM T_AAD_HOGAR_ACTO hac
+                    INNER JOIN T_AAD_CIUDADANO_ACTO cac ON hac.seqCiudadanoActo = cac.seqCiudadanoActo
+                    INNER JOIN T_AAD_FORMULARIO_ACTO fac ON hac.seqFormularioActo = fac.seqFormularioActo
+                    INNER JOIN T_AAD_HOGARES_VINCULADOS hvi ON hvi.seqFormularioActo = fac.seqFormularioActo
+                    INNER JOIN T_CIU_TIPO_DOCUMENTO tdo ON cac.seqTipoDocumento = tdo.seqTipoDocumento
+                    WHERE hac.seqParentesco = 1
+                    AND hvi.numActo = " . $this->numActo . "
+                    AND hvi.fchActo = '" . $this->fchActo . "'
+                    ORDER BY cac.numDocumento
+                ";
                 break;
             case 7: // notificaciones
                 $sql = "
@@ -915,11 +913,15 @@ class aad
                     $this->arrDetalles['titulos'][] = "Tipo de Documento";
                     $this->arrDetalles['titulos'][] = "Documento";
                     $this->arrDetalles['titulos'][] = "Nombre";
+                    $this->arrDetalles['titulos'][] = "Resolución";
+                    $this->arrDetalles['titulos'][] = "Fecha";
                     foreach ($this->arrExportable as $numLinea => $arrLinea) {
                         $seqFormularioActo = $arrLinea['Formulario Acto'];
                         $this->arrDetalles['detalle'][$seqFormularioActo]['txtTipoDocumento'] = $arrLinea['Tipo Documento'];
                         $this->arrDetalles['detalle'][$seqFormularioActo]['numDocumento'] = $arrLinea['Documento'];
                         $this->arrDetalles['detalle'][$seqFormularioActo]['txtNombre'] = $arrLinea['Nombre'];
+                        $this->arrDetalles['detalle'][$seqFormularioActo]['numResolucion'] = $arrLinea['Resolución'];
+                        $this->arrDetalles['detalle'][$seqFormularioActo]['fchResolucion'] = $arrLinea['Fecha'];
                         $this->arrDetalles['resumen']['Total Hogares'] = count($this->arrDetalles['detalle']);
                     }
                     break;
@@ -1197,6 +1199,7 @@ class aad
             case 5: // no asignado
                 break;
             case 6: // renuncia
+                $this->validarReglasRenuncia($arrArchivo);
                 break;
             case 7: // notificaciones
                 break;
@@ -1205,6 +1208,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->validarReglasRenuncia($arrArchivo); // usa las mismas de renuncia
                 break;
             case 11: // exclusion
                 break;
@@ -1257,14 +1261,83 @@ class aad
                 case $arrRegistro[1] != "" and $arrRegistro[2] != "":
                     $arrListado = $this->listarActos(1, $arrRegistro[1], $arrRegistro[2], array($arrRegistro[0]));
                     if (empty($arrListado)) {
-                        $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El documento " . $arrRegistro[0] . " no pertenece a la resolución " . $arrRegistro[1] . " del " . $arrRegistro[2] . " o dicha resolución no es de asignación";
+                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El documento " . $arrRegistro[0] . " no pertenece a la resolución " . $arrRegistro[1] . " del " . $arrRegistro[2] . " o dicha resolución no es de asignación";
                     }
                     break;
                 case $arrRegistro[1] == "" and $arrRegistro[2] != "":
-                    $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El registro tiene fecha pero no numero de resolución";
+                    $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El registro tiene fecha pero no numero de resolución";
                     break;
                 case $arrRegistro[1] != "" and $arrRegistro[2] == "":
-                    $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El registro tiene número pero no fecha de resolución";
+                    $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El registro tiene número pero no fecha de resolución";
+                    break;
+            }
+
+        }
+
+    }
+
+    /**
+     * APLICA TODAS LAS VALIDACIONES DE REGLAS
+     * DE NEGOCIO PARA LOS RADICADOS DE RENUNCIA
+     * @param $arrPost
+     * @param $arrArchivo
+     */
+    private function validarReglasRenuncia($arrArchivo)
+    {
+
+        $arrEstados = estadosProceso();
+        $claCiudadano = new Ciudadano();
+
+        foreach ($arrArchivo as $numLinea => $arrLinea){
+
+            $seqFormulario = $claCiudadano->formularioVinculado($arrLinea[0]);
+            if ($seqFormulario == 0) {
+                $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $claCiudadano->arrErrores[0];
+            }
+
+            $seqEstadoProceso = array_shift(
+                obtenerDatosTabla(
+                    "T_FRM_FORMULARIO",
+                    array("seqFormulario", "seqEstadoProceso"),
+                    "seqFormulario",
+                    "seqFormulario = " . $seqFormulario
+                )
+            );
+
+            $seqEtapa = array_shift(
+                obtenerDatosTabla(
+                    "T_FRM_ESTADO_PROCESO",
+                    array("seqEstadoProceso", "seqEtapa"),
+                    "seqEstadoProceso",
+                    "seqEstadoProceso = " . $seqEstadoProceso
+                )
+            );
+
+            if($seqEtapa != 4 and $seqEtapa != 5){
+                $this->arrErrores[] =
+                    "Error linea " . ($numLinea + 1) . ": El hogar del ciudadano " . $arrLinea[0] . " esta en estado \"" .
+                    $arrEstados[$seqEstadoProceso] . "\" y no es permitido para asociar a una resolución de asignación";
+
+            }
+
+            // Si tiene fecha de resolucion y numero mira si existe
+            // y si el hogar esta vinculado a esa resoliución
+            switch (true) {
+                case $arrLinea[1] != "" and $arrLinea[2] != "":
+                    $arrListado = $this->listarActos(1, $arrLinea[1], $arrLinea[2], array($arrLinea[0]));
+                    if (empty($arrListado)) {
+                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El documento " . $arrLinea[0] . " no pertenece a la resolución " . $arrLinea[1] . " del " . $arrLinea[2] . " o dicha resolución no es de asignación";
+                    }
+                    break;
+                case $arrLinea[1] == "" and $arrLinea[2] != "":
+                    $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El registro tiene fecha pero no numero de resolución";
+                    break;
+                case $arrLinea[1] != "" and $arrLinea[2] == "":
+                    $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El registro tiene número pero no fecha de resolución";
+                    break;
+                case $arrLinea[1] == "" and $arrLinea[2] == "":
+                    $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El registro debe tener número de resolución";
+                    $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El registro debe tener fecha de resolución";
                     break;
             }
 
@@ -1293,6 +1366,7 @@ class aad
             case 5: // no asignado
                 break;
             case 6: // renuncia
+                $this->validarFormularioRenuncia($arrPost);
                 break;
             case 7: // notificaciones
                 break;
@@ -1301,6 +1375,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->validarFormularioDesvinculacion($arrPost);
                 break;
             case 11: // exclusion
                 break;
@@ -1319,16 +1394,14 @@ class aad
     private function validarFormularioAsignacion($arrPost)
     {
 
-        //pr( $arrPost );
-
-        // numero de formulario
-        if (intval($arrPost['numActo']) == 0) {
-            $this->arrErrores[] = "La resolución debe tener un número";
+        // numero de acto
+        if (intval($_POST['numActo']) == 0) {
+            $arrErrores[] = "Debe dar un número para el acto administrativo";
         }
 
-        // fecha de formulario
-        if (!esFechaValida($arrPost['fchActo'])) {
-            $this->arrErrores[] = "La resolución debe tener una fecha";
+        // fecha del acto
+        if(!esFechaValida($_POST['fchActo'])){
+            $arrErrores[] = "Debe dar una fecha para el acto administrativo";
         }
 
         // texto de la resolucion
@@ -1407,6 +1480,69 @@ class aad
     }
 
     /**
+     * VALIDACIONES DEL FORMULARIO PARA
+     * LOS RADICADOS O RESOLUCIONES DE RENUNCIA
+     * @param $arrPost
+     */
+    private function validarFormularioRenuncia($arrPost)
+    {
+        // numero - expresion regular para el forest
+        if(isset($arrPost['bolRadicado']) and intval($arrPost['bolRadicado']) == 1) {
+
+            if (intval($_POST['numActo']) == 0 or strlen($_POST['numActo']) > 4) {
+                $this->arrErrores[]  = "Debe dar un número para el acto administrativo";
+            }
+        }else{
+            preg_match("/(\d{1})(\d{4})(\d{1,})/", $arrPost['numActo'], $arrMatch);
+            if (empty($arrMatch)) {
+                $this->arrErrores[] = "Revise el formato del radicado, debe ser el radicado de Forest";
+            }
+        }
+
+        // fecha del acto
+        if(!esFechaValida($_POST['fchActo'])){
+            $arrErrores[] = "Debe dar una fecha para el acto administrativo";
+        }
+
+        // texto de la resolucion
+        if (trim($arrPost['txtResolucion']) == "") {
+            $this->arrErrores[] = "El texto de la resolución no puede estar vacío";
+        }
+
+    }
+
+    /**
+     * VALIDACIONES DEL FORMULARIO PARA
+     * LOS RADICADOS O RESOLUCIONES DE DESVINCULACION
+     * @param $arrPost
+     */
+    private function validarFormularioDesvinculacion($arrPost)
+    {
+        // numero - expresion regular para el forest
+        if(isset($arrPost['bolRadicado']) and intval($arrPost['bolRadicado']) == 1) {
+            preg_match("/(\d{1})(\d{4})(\d{1,})/", $arrPost['numActo'], $arrMatch);
+            if (empty($arrMatch)) {
+                $this->arrErrores[] = "Revise el formato del radicado, debe ser el radicado de Forest";
+            }
+        }else{
+            if (intval($_POST['numActo']) == 0 or strlen($_POST['numActo']) > 4) {
+                $this->arrErrores[]  = "Debe dar un número para el acto administrativo";
+            }
+        }
+
+        // fecha del acto
+        if(!esFechaValida($_POST['fchActo'])){
+            $arrErrores[] = "Debe dar una fecha para el acto administrativo";
+        }
+
+        // texto de la resolucion
+        if (trim($arrPost['txtResolucion']) == "") {
+            $this->arrErrores[] = "El texto de la resolución no puede estar vacío";
+        }
+    }
+
+
+    /**
      * DESDE LAS CARACTERISTICAS DEL AAD EN EL HTML
      * SE MAPEAN CON LOS IDENTIFICADORES DE BASE DE DATOS
      * @param $arrCaracteristicas
@@ -1433,7 +1569,7 @@ class aad
                 $this->arrCaracteristicas['valRp2'] = 28;
                 $this->arrCaracteristicas['fchRp2'] = 29;
                 $this->arrCaracteristicas['numVigRp2'] = 30;
-                $this->arrCaracteristicas['numPry2'] = 160;
+                $this->arrCaracteristicas['numPry2'] = 142;
                 $this->arrCaracteristicas['numCdp3'] = 40;
                 $this->arrCaracteristicas['valCdp3'] = 41;
                 $this->arrCaracteristicas['fchCdp3'] = 42;
@@ -1451,7 +1587,7 @@ class aad
                 $this->arrCaracteristicas['valRp4'] = 56;
                 $this->arrCaracteristicas['fchRp4'] = 57;
                 $this->arrCaracteristicas['numVigRp4'] = 58;
-                $this->arrCaracteristicas['numPry4'] = 150;
+                $this->arrCaracteristicas['numPry4'] = 143;
                 $this->arrCaracteristicas['numCdp5'] = 59;
                 $this->arrCaracteristicas['valCdp5'] = 60;
                 $this->arrCaracteristicas['fchCdp5'] = 61;
@@ -1460,7 +1596,7 @@ class aad
                 $this->arrCaracteristicas['valRp5'] = 64;
                 $this->arrCaracteristicas['fchRp5'] = 65;
                 $this->arrCaracteristicas['numVigRp5'] = 66;
-                $this->arrCaracteristicas['numPry5'] = 151;
+                $this->arrCaracteristicas['numPry5'] = 144;
                 $this->arrCaracteristicas['numCdp6'] = 67;
                 $this->arrCaracteristicas['valCdp6'] = 68;
                 $this->arrCaracteristicas['fchCdp6'] = 69;
@@ -1469,7 +1605,7 @@ class aad
                 $this->arrCaracteristicas['valRp6'] = 72;
                 $this->arrCaracteristicas['fchRp6'] = 73;
                 $this->arrCaracteristicas['numVigRp6'] = 74;
-                $this->arrCaracteristicas['numPry6'] = 152;
+                $this->arrCaracteristicas['numPry6'] = 145;
                 $this->arrCaracteristicas['numCdp7'] = 75;
                 $this->arrCaracteristicas['valCdp7'] = 76;
                 $this->arrCaracteristicas['fchCdp7'] = 77;
@@ -1478,7 +1614,7 @@ class aad
                 $this->arrCaracteristicas['valRp7'] = 80;
                 $this->arrCaracteristicas['fchRp7'] = 81;
                 $this->arrCaracteristicas['numVigRp7'] = 82;
-                $this->arrCaracteristicas['numPry7'] = 153;
+                $this->arrCaracteristicas['numPry7'] = 146;
                 $this->arrCaracteristicas['numCdp8'] = 83;
                 $this->arrCaracteristicas['valCdp8'] = 84;
                 $this->arrCaracteristicas['fchCdp8'] = 85;
@@ -1487,7 +1623,7 @@ class aad
                 $this->arrCaracteristicas['valRp8'] = 88;
                 $this->arrCaracteristicas['fchRp8'] = 89;
                 $this->arrCaracteristicas['numVigRp8'] = 90;
-                $this->arrCaracteristicas['numPry8'] = 154;
+                $this->arrCaracteristicas['numPry8'] = 147;
                 $this->arrCaracteristicas['numCdp9'] = 100;
                 $this->arrCaracteristicas['valCdp9'] = 101;
                 $this->arrCaracteristicas['fchCdp9'] = 102;
@@ -1496,7 +1632,7 @@ class aad
                 $this->arrCaracteristicas['valRp9'] = 105;
                 $this->arrCaracteristicas['fchRp9'] = 106;
                 $this->arrCaracteristicas['numVigRp9'] = 107;
-                $this->arrCaracteristicas['numPry9'] = 155;
+                $this->arrCaracteristicas['numPry9'] = 148;
                 $this->arrCaracteristicas['numCdp10'] = 108;
                 $this->arrCaracteristicas['valCdp10'] = 109;
                 $this->arrCaracteristicas['fchCdp10'] = 110;
@@ -1505,7 +1641,7 @@ class aad
                 $this->arrCaracteristicas['valRp10'] = 113;
                 $this->arrCaracteristicas['fchRp10'] = 114;
                 $this->arrCaracteristicas['numVigRp10'] = 115;
-                $this->arrCaracteristicas['numPry10'] = 156;
+                $this->arrCaracteristicas['numPry10'] = 149;
                 $this->arrCaracteristicas['numCdp11'] = 116;
                 $this->arrCaracteristicas['valCdp11'] = 117;
                 $this->arrCaracteristicas['fchCdp11'] = 118;
@@ -1514,7 +1650,7 @@ class aad
                 $this->arrCaracteristicas['valRp11'] = 121;
                 $this->arrCaracteristicas['fchRp11'] = 122;
                 $this->arrCaracteristicas['numVigRp11'] = 123;
-                $this->arrCaracteristicas['numPry11'] = 157;
+                $this->arrCaracteristicas['numPry11'] = 150;
                 $this->arrCaracteristicas['numCdp12'] = 124;
                 $this->arrCaracteristicas['valCdp12'] = 125;
                 $this->arrCaracteristicas['fchCdp12'] = 126;
@@ -1523,7 +1659,7 @@ class aad
                 $this->arrCaracteristicas['valRp12'] = 129;
                 $this->arrCaracteristicas['fchRp12'] = 130;
                 $this->arrCaracteristicas['numVigRp12'] = 131;
-                $this->arrCaracteristicas['numPry12'] = 158;
+                $this->arrCaracteristicas['numPry12'] = 151;
                 $this->arrCaracteristicas['numCdp13'] = 132;
                 $this->arrCaracteristicas['valCdp13'] = 133;
                 $this->arrCaracteristicas['fchCdp13'] = 134;
@@ -1532,7 +1668,7 @@ class aad
                 $this->arrCaracteristicas['valRp13'] = 137;
                 $this->arrCaracteristicas['fchRp13'] = 138;
                 $this->arrCaracteristicas['numVigRp13'] = 139;
-                $this->arrCaracteristicas['numPry13'] = 159;
+                $this->arrCaracteristicas['numPry13'] = 152;
                 break;
             case 2: // modificatorias
                 break;
@@ -1543,6 +1679,7 @@ class aad
             case 5: // no asignado
                 break;
             case 6: // renuncia
+                $this->arrCaracteristicas['txtResolucion'] = 153;
                 break;
             case 7: // notificaciones
                 break;
@@ -1551,6 +1688,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->arrCaracteristicas['txtResolucion'] = 154;
                 break;
             case 11: // exclusion
                 break;
@@ -1610,6 +1748,7 @@ class aad
             case 5: // no asignado
                 break;
             case 6: // renuncia
+                $this->aplicarEfectosRenuncia($arrArchivo);
                 break;
             case 7: // notificaciones
                 break;
@@ -1618,6 +1757,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->aplicarEfectosDesvinculacion($arrArchivo);
                 break;
             case 11: // exclusion
                 break;
@@ -1629,7 +1769,6 @@ class aad
 
     /**
      * APLICANDO LOS EFECTOS DE LAS RESOLUCIONES DE ASIGNACION
-     * @param $seqTipoActo
      * @param $arrArchivo
      */
     private function aplicarEfectosAsignacion($arrArchivo)
@@ -1670,6 +1809,135 @@ class aad
     }
 
     /**
+     * APLICANDO LOS EFECTOS DE LAS RADICADOS / RESOLUCIONES DE RENUNCIA
+     * @param $arrArchivo
+     */
+    private function aplicarEfectosRenuncia($arrArchivo){
+        global $aptBd;
+        foreach ($arrArchivo as $arrRegistro) {
+
+            // obtiene el formulario que corresponde a la cedula
+            $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
+
+            // obtiene el estado del proceso que corresponde al hogar (actual)
+            $arrEstadoProceso = obtenerDatosTabla(
+                "T_FRM_FORMULARIO",
+                array("seqFormulario", "seqEstadoProceso", "bolSancion", "fchVigencia", "seqUnidadProyecto" ),
+                "seqFormulario",
+                "seqFormulario = " . $seqFormulario
+            );
+
+            // realiza la modificacion del estado (nuevo) y libera la unidad
+            $sql = "
+                update t_frm_formulario set
+                    seqEstadoProceso = 18
+                    ,fchUltimaActualizacion = NOW()
+                    ,bolSancion = 1
+                    ,fchVigencia = DATE_ADD(now(), INTERVAL 1 YEAR)
+                    ,seqUnidadProyecto = 1
+                where seqFormulario = " . $seqFormulario . "
+            ";
+            $aptBd->execute($sql);
+
+            // libera la unidad
+            if(intval($arrEstadoProceso['seqUnidadProyecto']) != 0) {
+                $sql = "
+                    update t_pry_unidad_proyecto set
+                    seqFormulario = null
+                    where seqUnidadProyecto = " . intval($arrEstadoProceso['seqUnidadProyecto']) . "
+                ";
+                $aptBd->execute($sql);
+            }
+
+            // adiciona el cambio al arreglo para el seguimiento
+            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqEstadoProceso";
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['seqEstadoProceso'];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 18;
+
+            // adiciona el cambio al arreglo para el seguimiento
+            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "bolSancion";
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['bolSancion'];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 1;
+
+            // adiciona el cambio al arreglo para el seguimiento
+            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "fchVigencia";
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['fchVigencia'];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = date("Y-m-d H:i:s" , strtotime("+ 1 year"));
+
+            // adiciona el cambio al arreglo para el seguimiento
+            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqUnidadProyecto";
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['seqUnidadProyecto'];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 1;
+
+        }
+    }
+
+    /**
+     * APLICANDO LOS EFECTOS DE LAS RADICADO / RESOLUCIONES DE ASIGNACION
+     * @param $arrArchivo
+     */
+    private function aplicarEfectosDesvinculacion($arrArchivo)
+    {
+        global $aptBd;
+        foreach ($arrArchivo as $arrRegistro) {
+
+            // obtiene el formulario que corresponde a la cedula
+            $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
+
+            // obtiene el estado del proceso que corresponde al hogar (actual)
+            $arrEstadoProceso = obtenerDatosTabla(
+                "T_FRM_FORMULARIO",
+                array("seqFormulario", "seqEstadoProceso", "bolSancion", "fchVigencia", "seqUnidadProyecto" ),
+                "seqFormulario",
+                "seqFormulario = " . $seqFormulario
+            );
+
+            // realiza la modificacion del estado (nuevo) y libera la unidad
+            $sql = "
+                update t_frm_formulario set
+                    seqEstadoProceso = 57
+                    ,fchUltimaActualizacion = NOW()
+                    ,seqUnidadProyecto = 1
+                where seqFormulario = " . $seqFormulario . "
+            ";
+            $aptBd->execute($sql);
+
+            // libera la unidad
+            if(intval($arrEstadoProceso['seqUnidadProyecto']) != 0) {
+                $sql = "
+                    update t_pry_unidad_proyecto set
+                    seqFormulario = null
+                    where seqUnidadProyecto = " . intval($arrEstadoProceso['seqUnidadProyecto']) . "
+                ";
+                $aptBd->execute($sql);
+            }
+
+            // adiciona el cambio al arreglo para el seguimiento
+            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqEstadoProceso";
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['seqEstadoProceso'];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 57;
+
+            // adiciona el cambio al arreglo para el seguimiento
+            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqUnidadProyecto";
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso[$seqFormulario]['seqUnidadProyecto'];
+            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 1;
+
+        }
+    }
+
+    /**
      * ENRUTADOR PARA LA VINVULACION DE HOGARES SEGUN EL ACTO ADMINISTRATIVO
      * @param $seqTipoActo
      * @param $arrArchivo
@@ -1689,6 +1957,7 @@ class aad
             case 5: // no asignado
                 break;
             case 6: // renuncia
+                $this->vincularHogresAsignacion($arrPost,$arrArchivo); // usa la misma que asignacion
                 break;
             case 7: // notificaciones
                 break;
@@ -1697,6 +1966,7 @@ class aad
             case 9: // perdida
                 break;
             case 10: // revocatoria
+                $this->vincularHogresAsignacion($arrPost,$arrArchivo); // usa la misma que asignacion
                 break;
             case 11: // exclusion
                 break;

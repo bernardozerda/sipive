@@ -828,7 +828,7 @@ function valorSubsidio($claFormulario){
 
         if($claFormulario->seqModalidad == 12){
             $valDiferenciaSubsidios = ($valTope - $valSubsidioNAL < 0)? 0 : $valTope - $valSubsidioNAL;
-            if($claFormulario->bolDesplazado == 0){
+            if($claFormulario->bolDesplazado == 0 or $claFormulario->seqTipoEsquema == 12){
                 if( ($valSubsidioNAL + $valVUR + $valDiferenciaSubsidios) > $valVivienda ){
                     if( $valVivienda - ($valSubsidioNAL + $valVUR) < 0 ){
                         $valSubsidio = 0;
@@ -883,6 +883,7 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
 
     // construccion en sitio propio
     $arrEsquema[2][7][] = 2; // colectivo opv
+    $arrEsquema[2][7][] = 4; // Territorial dirigido
 
     // mejoramiento estructural
     $arrEsquema[2][8][] = 4; // territorial dirigido

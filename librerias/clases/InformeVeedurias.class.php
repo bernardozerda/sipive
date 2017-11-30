@@ -418,7 +418,7 @@ class InformeVeedurias
     {
         global $aptBd;
         $sql = "
-            SELECT 
+            SELECT DISTINCT 
               frm.seqFormulario as 'Formulario',
               pgo.txtPlanGobierno as 'Plan de Gobierno',
               IF(moa.txtModalidad is null,'No Disponible',moa.txtModalidad) as 'Modalidad',
@@ -511,9 +511,9 @@ class InformeVeedurias
                  frm.seqUnidadProyecto = 0
               OR frm.seqUnidadProyecto IS NULL
               OR frm.seqUnidadProyecto = 1
-            )
-            -- AND frm.seqFormulario = 2529
-        ";
+            ) AND frm.seqCorte = $seqCorte
+            -- AND frm.seqFormulario = 25760
+        "; //echo $sql . "<hr>"; die();
         $objRes = $aptBd->execute($sql);
         $arrFormularios = array();
         while ( $objRes->fields ){
@@ -524,7 +524,7 @@ class InformeVeedurias
             $objRes->MoveNext();
         }
 
-        $arrReporte['hogares'] = $this->obtenerHogares(array_keys($arrFormularios),$seqCorte);
+        $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
 
         // adiciona el dato del aad del hogar
         foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
@@ -792,9 +792,8 @@ class InformeVeedurias
         }
 
         // titulos
-        $arrTitulos = array_keys( array_shift( $arrReporte ) );
         $xmlArchivo .= "<ss:Row>";
-        foreach ($arrTitulos as $txtTitulo){
+        foreach ($arrReporte[0] as $txtTitulo => $txtValor){
             $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
         }
         $xmlArchivo .= "</ss:Row>";

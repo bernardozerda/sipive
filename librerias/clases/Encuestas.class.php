@@ -359,7 +359,7 @@ class Encuestas {
                 }
                 foreach ($arrHogar as $txtFormulario => $seqFormulario) {
                     if ($seqFormulario == 0) {
-                        $arrErrores[] = "Error formulario " . $txtFormulario . ": Ninguno de los ciudadanos reportados por la encuesta está en SiPIVE";
+                        $arrErrores[] = "Error formulario " . $txtFormulario . ": Ninguno de los ciudadanos con cedula de ciudadania reportados por la encuesta está en SiPIVE";
                     }
                 }
             } else {
@@ -478,6 +478,8 @@ class Encuestas {
                 }
             }
 
+            //throw new Exception("rollback");
+
             $aptBd->CommitTrans();
 
         } catch (Exception $objError) {
@@ -491,7 +493,7 @@ class Encuestas {
         global $aptBd;
         $arrErrores = array();
         $this->arrSeqFormulario = array();
-        $txtCondicion = ( doubleval($numDocumento) != 0 ) ? "where ciu.numDocumento = '" . $numDocumento . "'" : "";
+        $txtCondicion = ( doubleval($numDocumento) != 0 ) ? "and ciu.numDocumento = '" . $numDocumento . "'" : "";
         $sql = "
 				select 
 				  frm.seqFormulario,
@@ -499,6 +501,7 @@ class Encuestas {
 				from t_frm_formulario frm
 				inner join t_frm_hogar hog on frm.seqFormulario = hog.seqFormulario
 				inner join t_ciu_ciudadano ciu on ciu.seqCiudadano = hog.seqCiudadano
+				where ciu.seqTipoDocumento in (1,2)
 				$txtCondicion
 			";
         $objRes = $aptBd->execute($sql);

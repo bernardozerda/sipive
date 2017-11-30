@@ -35,39 +35,43 @@ if( empty($arrErrores) ) {
     $claTipoActo = new aadTipo();
     $claTipoActo = array_shift($claTipoActo->cargarTipoActo($_POST['seqTipoActo']));
 
-    // carga el acto administrativo para
-    // saber si existe y proceder si no
-    $claActoAdministrativo = new aad();
-    $arrActos = $claActoAdministrativo->listarActos($_POST['seqTipoActo'],$_POST['numActo'],$_POST['fchActo']);
 
-    if( empty( $arrActos ) ) {
 
-        // abre el archivo y lo carga en un arreglo
-        $arrArchivo = $claTipoActo->cargarArchivo();
+    if(empty($arrErrores)) {
 
-        // si hay errores
-        if (empty($claTipoActo->arrErrores)) {
+        // carga el acto administrativo para
+        // saber si existe y proceder si no
+        $claActoAdministrativo = new aad();
+        $arrActos = $claActoAdministrativo->listarActos($_POST['seqTipoActo'], $_POST['numActo'], $_POST['fchActo']);
 
-            $claTipoActo->validarTitulos($arrArchivo[0]);
+        if (empty($arrActos)) {
 
+            // abre el archivo y lo carga en un arreglo
+            $arrArchivo = $claTipoActo->cargarArchivo();
+
+            // si hay errores
             if (empty($claTipoActo->arrErrores)) {
 
-                $claTipoActo->validarDatos($arrArchivo);
+                $claTipoActo->validarTitulos($arrArchivo[0]);
 
                 if (empty($claTipoActo->arrErrores)) {
 
-                    $claActoAdministrativo = null;
-                    $claActoAdministrativo = new aad();
-                    $claActoAdministrativo->salvar($_POST, $arrArchivo);
+                    $claTipoActo->validarDatos($arrArchivo);
 
-                    if (empty($claActoAdministrativo->arrErrores)) {
+                    if (empty($claTipoActo->arrErrores)) {
 
-                        $arrMensajes = $claActoAdministrativo->arrMensajes;
+                        $claActoAdministrativo = null;
+                        $claActoAdministrativo = new aad();
+                        $claActoAdministrativo->salvar($_POST, $arrArchivo);
 
+                        if (empty($claActoAdministrativo->arrErrores)) {
+                            $arrMensajes = $claActoAdministrativo->arrMensajes;
+                        } else {
+                            $arrErrores = $claActoAdministrativo->arrErrores;
+                        }
                     } else {
-                        $arrErrores = $claActoAdministrativo->arrErrores;
+                        $arrErrores = $claTipoActo->arrErrores;
                     }
-
                 } else {
                     $arrErrores = $claTipoActo->arrErrores;
                 }
@@ -75,10 +79,8 @@ if( empty($arrErrores) ) {
                 $arrErrores = $claTipoActo->arrErrores;
             }
         } else {
-            $arrErrores = $claTipoActo->arrErrores;
+            $arrErrores[] = "Ya existe un acto administrativo con ese numero y fecha";
         }
-    }else{
-        $arrErrores[] = "Ya existe un acto administrativo con ese numero y fecha";
     }
 }
 

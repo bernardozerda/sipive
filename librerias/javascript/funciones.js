@@ -23,7 +23,18 @@
 
 var mychartMostrar;
 
+function verificarSesion(){
+    var numTimeStamp = Math.round( Number(new Date()) / 1000 );
+    var numExpiraSesion = YAHOO.util.Cookie.get( "sdhtsdv" );
+    var numTiempoVida = Math.round( numExpiraSesion - numTimeStamp );
+    if(numTiempoVida < 0){
+        parent.window.location.href='./autenticacion.php';
+    }
+}
+
 function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargando) {
+
+    verificarSesion();
 
     document.getElementById(txtDivDestino).innerHTML = '';
 
@@ -380,6 +391,8 @@ function sinCaracteresEspeciales(objLimpiar) {
  * @version 1.0 Marzo 29 2009
  */
 function someterFormulario(txtDivDestino, objFormulario, txtArchivo, cargaArchivos, objetoCargando) {
+
+    verificarSesion();
 
     // Limpia el area donde el usuario siempre encontrarï¿½ los errores
     if (document.getElementById("mensajes")) {
@@ -7169,52 +7182,52 @@ function seleccionarCheckUnidades(idUnidadProyecto, idCheck) {
     }
 }
 
-function exportarInhabilidadesExcel(idFormulario) {
-
-    var objFormulario = YAHOO.util.Dom.get(idFormulario);
-    var arrCheck = YAHOO.util.Dom.getElementsBy(function () {
-        return true;
-    }, 'input', objFormulario);
-
-    var numSeleccionados = 0;
-    if (arrCheck.length > 1) {
-        for (numIndice in arrCheck) {
-            if (arrCheck[ numIndice ].id != "0" && arrCheck[ numIndice ].checked == true) {
-                numSeleccionados++;
-            }
-
-        }
-    }
-
-    if (numSeleccionados > 0) {
-        someterFormulario('mensajes', objFormulario, './contenidos/cruces/exportarInhabilidades.php', true, false);
-    } else {
-
-        // Objeto que contiene los atributos del cuadro de dialogo
-        var objAtributos = {
-            width: "300px",
-            effect: {
-                effect: YAHOO.widget.ContainerEffect.FADE,
-                duration: 0.25
-            },
-            fixedcenter: true,
-            modal: true,
-            draggable: true,
-            close: true
-        }
-
-        // INSTANCIA EL OBJETO DIALOGO
-        var objDialogo = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
-
-        objDialogo.setHeader("Atencion Requerida !!"); // encabezado del objeto
-        objDialogo.setBody("Debe seleccionar al menos un registro, no hay nada que exportar"); // texto que se muestra en el cuerpo (formato html)
-        objDialogo.cfg.setProperty("icon", YAHOO.widget.SimpleDialog.ICON_WARN); // Icono de advertencia que se ve en el cuadro
-        objDialogo.render(document.body);
-        objDialogo.show();
-    }
-
-
-}
+// function exportarInhabilidadesExcel(idFormulario) {
+//
+//     var objFormulario = YAHOO.util.Dom.get(idFormulario);
+//     var arrCheck = YAHOO.util.Dom.getElementsBy(function () {
+//         return true;
+//     }, 'input', objFormulario);
+//
+//     var numSeleccionados = 0;
+//     if (arrCheck.length > 1) {
+//         for (numIndice in arrCheck) {
+//             if (arrCheck[ numIndice ].id != "0" && arrCheck[ numIndice ].checked == true) {
+//                 numSeleccionados++;
+//             }
+//
+//         }
+//     }
+//
+//     if (numSeleccionados > 0) {
+//         someterFormulario('mensajes', objFormulario, './contenidos/cruces/exportarInhabilidades.php', true, false);
+//     } else {
+//
+//         // Objeto que contiene los atributos del cuadro de dialogo
+//         var objAtributos = {
+//             width: "300px",
+//             effect: {
+//                 effect: YAHOO.widget.ContainerEffect.FADE,
+//                 duration: 0.25
+//             },
+//             fixedcenter: true,
+//             modal: true,
+//             draggable: true,
+//             close: true
+//         }
+//
+//         // INSTANCIA EL OBJETO DIALOGO
+//         var objDialogo = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
+//
+//         objDialogo.setHeader("Atencion Requerida !!"); // encabezado del objeto
+//         objDialogo.setBody("Debe seleccionar al menos un registro, no hay nada que exportar"); // texto que se muestra en el cuerpo (formato html)
+//         objDialogo.cfg.setProperty("icon", YAHOO.widget.SimpleDialog.ICON_WARN); // Icono de advertencia que se ve en el cuadro
+//         objDialogo.render(document.body);
+//         objDialogo.show();
+//     }
+//
+//
+// }
 
 function exportarUnidadesProyectoExcel(idUnidadProyecto) {
     var objFormulario = YAHOO.util.Dom.get(idUnidadProyecto);
@@ -7342,63 +7355,63 @@ function cargarUnidadesProyecto() {
     objDialogo.show();
 }
 
-function exportarInhabilidadesPdf(idFormulario) {
-
-    // OBTIENE EL FORMULARIO QUE VA A SER SOMETIDO
-    var objFormulario = YAHOO.util.Dom.get(idFormulario);
-    var objHidden = YAHOO.util.Dom.get('seqCruce');
-
-    var txtFormularios = "";
-
-    // OBTIENE LOS CHECKBOX DEL FORMULARIO
-    var arrCheck = YAHOO.util.Dom.getElementsBy(function () {
-        return true;
-    }, 'input', objFormulario);
-
-    // VERIFICA QUE HAYA ALGUN CHECK SELECCIONADO
-    var numSeleccionados = 0;
-    if (arrCheck.length > 1) {
-        for (numIndice in arrCheck) {
-            if (arrCheck[ numIndice ].id != "0" && arrCheck[ numIndice ].checked == true) {
-                numSeleccionados++;
-                txtFormularios += "exportar[]=" + arrCheck[ numIndice ].value + "&";
-
-            }
-        }
-    }
-
-    // VERIFICA QUE HAYAN CHECK SELECCIONADOS
-    if (numSeleccionados > 0) {
-
-        // llamar funcion
-        popUpPdfCasaMano('exportarPdf.php', txtFormularios, objHidden.value);
-
-    } else { // SE MUESTRA CUANDO NO HAY CHECK SELECCIONADOS
-
-        // Objeto que contiene los atributos del cuadro de dialogo
-        var objAtributos = {
-            width: "300px",
-            effect: {
-                effect: YAHOO.widget.ContainerEffect.FADE,
-                duration: 0.25
-            },
-            fixedcenter: true,
-            modal: true,
-            draggable: true,
-            close: true
-        }
-
-        // INSTANCIA EL OBJETO DIALOGO
-        var objDialogo = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
-
-        objDialogo.setHeader("Atencion Requerida !!"); // encabezado del objeto
-        objDialogo.setBody("Debe seleccionar al menos un registro, no hay nada que exportar"); // texto que se muestra en el cuerpo (formato html)
-        objDialogo.cfg.setProperty("icon", YAHOO.widget.SimpleDialog.ICON_WARN); // Icono de advertencia que se ve en el cuadro
-        objDialogo.render(document.body);
-        objDialogo.show();
-    }
-
-}
+// function exportarInhabilidadesPdf(idFormulario) {
+//
+//     // OBTIENE EL FORMULARIO QUE VA A SER SOMETIDO
+//     var objFormulario = YAHOO.util.Dom.get(idFormulario);
+//     var objHidden = YAHOO.util.Dom.get('seqCruce');
+//
+//     var txtFormularios = "";
+//
+//     // OBTIENE LOS CHECKBOX DEL FORMULARIO
+//     var arrCheck = YAHOO.util.Dom.getElementsBy(function () {
+//         return true;
+//     }, 'input', objFormulario);
+//
+//     // VERIFICA QUE HAYA ALGUN CHECK SELECCIONADO
+//     var numSeleccionados = 0;
+//     if (arrCheck.length > 1) {
+//         for (numIndice in arrCheck) {
+//             if (arrCheck[ numIndice ].id != "0" && arrCheck[ numIndice ].checked == true) {
+//                 numSeleccionados++;
+//                 txtFormularios += "exportar[]=" + arrCheck[ numIndice ].value + "&";
+//
+//             }
+//         }
+//     }
+//
+//     // VERIFICA QUE HAYAN CHECK SELECCIONADOS
+//     if (numSeleccionados > 0) {
+//
+//         // llamar funcion
+//         popUpPdfCasaMano('exportarPdf.php', txtFormularios, objHidden.value);
+//
+//     } else { // SE MUESTRA CUANDO NO HAY CHECK SELECCIONADOS
+//
+//         // Objeto que contiene los atributos del cuadro de dialogo
+//         var objAtributos = {
+//             width: "300px",
+//             effect: {
+//                 effect: YAHOO.widget.ContainerEffect.FADE,
+//                 duration: 0.25
+//             },
+//             fixedcenter: true,
+//             modal: true,
+//             draggable: true,
+//             close: true
+//         }
+//
+//         // INSTANCIA EL OBJETO DIALOGO
+//         var objDialogo = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
+//
+//         objDialogo.setHeader("Atencion Requerida !!"); // encabezado del objeto
+//         objDialogo.setBody("Debe seleccionar al menos un registro, no hay nada que exportar"); // texto que se muestra en el cuerpo (formato html)
+//         objDialogo.cfg.setProperty("icon", YAHOO.widget.SimpleDialog.ICON_WARN); // Icono de advertencia que se ve en el cuadro
+//         objDialogo.render(document.body);
+//         objDialogo.show();
+//     }
+//
+// }
 
 /**
  * UNA FUNCION PARA HACER EL AUTOCOMPLETAR EN CUALQUIER CAMPO
@@ -7435,7 +7448,7 @@ function popUpPdfCasaMano(txtArchivo, txtFormularios, seqCruce) {
     var wndFormato = null;
     try {
         var numAlto = YAHOO.util.Dom.getDocumentHeight() - 200;
-        var txtUrl = "./contenidos/cruces/" + txtArchivo;
+        var txtUrl = "./contenidos/cruces2/" + txtArchivo;
         txtUrl += "?seqCruce=" + seqCruce + "&" + txtFormularios;
         var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=" + numAlto + ",left=100,top=10,titlebar=0";
         if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
@@ -8314,6 +8327,7 @@ fncTabActoAdministrativo = function () {
     YAHOO.util.Event.onContentReady("listenerTabActoAdministrativo", fncTabActoAdministrativo);
     var objTabView = new YAHOO.widget.TabView('tabActoAdministrativo');
     YAHOO.util.Dom.get("tabActoAdministrativo").style.visibility = "visible";
+    window.scrollTo(0,0);
 }
 YAHOO.util.Event.onContentReady("listenerTabActoAdministrativo", fncTabActoAdministrativo);
 
@@ -10527,3 +10541,67 @@ var detallesAAD = function(){
     YAHOO.util.Event.onContentReady("listenerDetallesAAD",detallesAAD);
 }
 YAHOO.util.Event.onContentReady("listenerDetallesAAD",detallesAAD);
+
+/**
+ * FUNCTION PROVICIONAL PARA ENRUTAR LA CREACION DE LOS ACTOS
+ * ADMINISTRATIVOS USANDO EL NUEVO MODULO AAD O EL ACTUAL
+ * ACTOS ADMINISTRATIVOS
+ */
+
+function enrutarAAD(objSelect){
+
+    if(
+        objSelect.options[objSelect.selectedIndex].value == 1 ||
+        objSelect.options[objSelect.selectedIndex].value == 6 ||
+        objSelect.options[objSelect.selectedIndex].value == 10
+    ) {
+        // usa el modulo nuevo
+        cargarContenido(
+            'informacion',
+            './contenidos/aad/informacion.php',
+            'seqTipoActo=' + objSelect.options[objSelect.selectedIndex].value,
+            true
+        );
+    }else{
+        // usa el modulo actual
+        cargarContenido(
+            'informacion',
+            './contenidos/actosAdministrativos/informacionActo.php',
+            'seqTipoActo=' + objSelect.options[ objSelect.selectedIndex ].value,
+            true
+        );
+    }
+
+}
+
+var listadoCruces = function(){
+    $('#listadoCruces').DataTable({
+        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+        "order": [[0, "desc"]],
+        "scrollX": true,
+        "dom": 'lftipr'
+    });
+
+    objSelect = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "select",
+        "listadoCruces_wrapper"
+    );
+
+    objInput = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "input",
+        "listadoCruces_wrapper"
+    );
+
+    objSelect.className = "inputLogin";
+    objInput.className = "inputLogin";
+
+    objPaginador = YAHOO.util.Dom.get("listadoCruces_paginate");
+    objPaginador.style.textAlign = "center";
+
+    eliminarObjeto("listadoCrucesListener");
+    YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
+}
+YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
+

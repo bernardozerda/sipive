@@ -34,10 +34,10 @@ if ($bolMatarSesion) {
     session_destroy();
 
     // redirecciona a la pantalla de autenticacion
-//    $txtRuta  = (HTTPS_ONLY == true)? "https://" : "http://";
-//    $txtRuta .=  $_SERVER['SERVER_NAME'] . "/" . mb_split("/",$_SERVER['REQUEST_URI'])[1] . "/autenticacion.php";
+    $txtRuta  = (HTTPS_ONLY == true)? "https://" : "http://";
+    $txtRuta .=  $_SERVER['SERVER_NAME'] . "/" . mb_split("/",$_SERVER['REQUEST_URI'])[1] . "/autenticacion.php";
 
-    //header("Location: " . $txtRuta);
+    header("Location: " . $txtRuta);
 
 } else {
 

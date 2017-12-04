@@ -102,6 +102,7 @@ class InformeVeedurias
                 frm.seqFormulario,
                 frm.seqEstadoProceso,
                 frm.bolCerrado,
+                IF(frm.bolDesplazado = 1,'Desplazado','Vulnerable') as bolDesplazado,
                 aad.numActo as numActoHogar, 
                 aad.fchActo as fchActoHogar,
                 esc.numDocumentoVendedor,
@@ -168,25 +169,22 @@ class InformeVeedurias
             left  join v_frm_ciudad ciu1 on des.seqCiudad = ciu1.seqCiudad
             left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
             where pry.seqCorte = $seqCorte
-            and pry.bolActivo = 1
-            -- and upr.bolActivo = 1
+            and pry.bolActivo = 1            
+            -- and pry.seqProyecto in (149,30)
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
-        ";
+        "; // and pry.seqProyecto = 30
         $objRes = $aptBd->execute($sql);
         $arrReporte = array();
-        $numAnioMinimoGenerado = 0;
-        $numAnioMaximoGenerado = 0;
-        $numAnioMinimoVinculado = 0;
-        $numAnioMaximoVinculado = 0;
-        $numAnioMinimoLegalizado = 0;
-        $numAnioMaximoLegalizado = 0;
         $arrFormularios = array();
         while ($objRes->fields) {
 
             /***************************************************************************
              * PROCESAMIENTO DE LA HOJA DE REPORTE
              ***************************************************************************/
+
             $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
+            $bolDesplazado = $objRes->fields['bolDesplazado'];
+            $seqFormulario = $objRes->fields['seqFormulario'];
 
             // debe acumular sobre proyecto padre cuando aplique
             $txtProyecto = ( trim( $objRes->fields['txtNombreProyectoPadre'] ) != "" )? $objRes->fields['txtNombreProyectoPadre'] : $objRes->fields['txtNombreProyectoHijo'];
@@ -194,13 +192,33 @@ class InformeVeedurias
             // Determina el año menor y mayor para imprimir el numero de columnas correcto en el excel (XML)
             $numAnioResolucionProyecto = date("Y", strtotime($objRes->fields['fchActoProyecto']));
 
-            $numAnioMinimoGenerado = (($numAnioMinimoGenerado == 0) or ($numAnioMinimoGenerado >= $numAnioResolucionProyecto)) ? $numAnioResolucionProyecto : $numAnioMinimoGenerado;
-            $numAnioMaximoGenerado = (($numAnioMaximoGenerado == 0) or ($numAnioMaximoGenerado <= $numAnioResolucionProyecto)) ? $numAnioResolucionProyecto : $numAnioMaximoGenerado;
-            $arrReporte['reporte']['generados']['minimo'] = $numAnioMinimoGenerado;
-            $arrReporte['reporte']['generados']['maximo'] = $numAnioMaximoGenerado;
-            $arrReporte['plata']['generados']['minimo'] = $numAnioMinimoGenerado;
-            $arrReporte['plata']['generados']['maximo'] = $numAnioMaximoGenerado;
+            $arrReporte['Conteo Consolidado']['limites']['generados']['minimo'] = (
+                ($arrReporte['Conteo Consolidado']['limites']['generados']['minimo'] == 0) or
+                ($arrReporte['Conteo Consolidado']['limites']['generados']['minimo'] >= $numAnioResolucionProyecto)
+            ) ?
+                $numAnioResolucionProyecto :
+                $arrReporte['Conteo Consolidado']['limites']['generados']['minimo'];
 
+            $arrReporte['Conteo Consolidado']['limites']['generados']['maximo'] = (
+                ($arrReporte['Conteo Consolidado']['limites']['generados']['maximo'] == 0) or
+                ($arrReporte['Conteo Consolidado']['limites']['generados']['maximo'] <= $numAnioResolucionProyecto)
+            ) ?
+                $numAnioResolucionProyecto :
+                $arrReporte['Conteo Consolidado']['limites']['generados']['maximo'];
+
+            $arrReporte['Dinero Consolidado']['limites']['generados']['minimo'] = (
+                ($arrReporte['Dinero Consolidado']['limites']['generados']['minimo'] == 0) or
+                ($arrReporte['Dinero Consolidado']['limites']['generados']['minimo'] >= $numAnioResolucionProyecto)
+            ) ?
+                $numAnioResolucionProyecto :
+                $arrReporte['Dinero Consolidado']['limites']['generados']['minimo'];
+
+            $arrReporte['Dinero Consolidado']['limites']['generados']['maximo'] = (
+                ($arrReporte['Dinero Consolidado']['limites']['generados']['maximo'] == 0) or
+                ($arrReporte['Dinero Consolidado']['limites']['generados']['maximo'] <= $numAnioResolucionProyecto)
+            ) ?
+                $numAnioResolucionProyecto :
+                $arrReporte['Dinero Consolidado']['limites']['generados']['maximo'];
 
             if( $objRes->fields['seqTipoActoUnidad'] == 1 ){
                 $txtNombreResolucion = $objRes->fields['numActoProyecto'] . " de " . date("Y", strtotime($objRes->fields['fchActoProyecto']));
@@ -210,74 +228,203 @@ class InformeVeedurias
             // para las indexaciones va calculando el valor de la unidad
             switch( $objRes->fields['seqTipoActoUnidad'] ){
                 case 1: // Asignacion de unidades
-                    $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]++;
-                    $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total']++;
-                    $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
 
-                    $arrReporte['plata']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto] += $objRes->fields['valIndexado'];
-                    $arrReporte['plata']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total'] += $objRes->fields['valIndexado'];
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto]++;
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total']++;
+
+                    $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] += $objRes->fields['valIndexado'];
+                    $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total'] += $objRes->fields['valIndexado'];
+
+//                    $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
 
                     break;
                 case 2: // Indexacion de unidades
 
-                    // calcular el valor definitivo de la unidad
-                    $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
+                    $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] += $objRes->fields['valIndexado'];
+                    $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total'] += $objRes->fields['valIndexado'];
 
-                    $arrReporte['plata']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto] += $objRes->fields['valIndexado'];
-                    $arrReporte['plata']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total'] += $objRes->fields['valIndexado'];
+                    // calcular el valor definitivo de la unidad
+//                    $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
 
                     break;
                 case 3: // modificatoria (valor positivo incluye unidades // valor negativo excluye unidades)
 
                     if( $objRes->fields['valIndexado'] > 0 ){
-                        $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]++;
-                        $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total']++;
+                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto]++;
+                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total']++;
                     }else{
-                        $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto] =
-                            intval($arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto]) - 1;
-                        $arrReporte['reporte']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total']--;
-                    }
-                    $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
+                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] =
+                            intval($arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto]) -
+                            1;
 
-                    $arrReporte['plata']['generados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionProyecto] += $objRes->fields['valIndexado'];
-                    $arrReporte['plata']['generados']['datos'][$txtProyecto][$txtNombreResolucion]['total'] += $objRes->fields['valIndexado'];
+                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total']--;
+                    }
+
+                    $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] += $objRes->fields['valIndexado'];
+                    $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total'] += $objRes->fields['valIndexado'];
+
+//                    $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
 
                     break;
             }
 
-            $seqFormulario = $objRes->fields['seqFormulario'];
-
             // conteo para las columnas de vinculados segun el estado del proceso
             if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosVinculado ) and ! isset( $arrFormularios[$seqFormulario] ) ) {
-                $numAnioResolucionHogar = date("Y", strtotime($objRes->fields['fchActoHogar']));
-                $numAnioMinimoVinculado = (($numAnioMinimoVinculado == 0) or ($numAnioMinimoVinculado >= $numAnioResolucionHogar)) ? $numAnioResolucionHogar : $numAnioMinimoVinculado;
-                $numAnioMaximoVinculado = (($numAnioMaximoVinculado == 0) or ($numAnioMaximoVinculado <= $numAnioResolucionHogar)) ? $numAnioResolucionHogar : $numAnioMaximoVinculado;
-                $arrReporte['reporte']['vinculados']['minimo'] = $numAnioMinimoVinculado;
-                $arrReporte['reporte']['vinculados']['maximo'] = $numAnioMaximoVinculado;
-                $arrReporte['reporte']['vinculados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionHogar]++;
-                $arrReporte['reporte']['vinculados']['datos'][$txtProyecto][$txtNombreResolucion]['total']++;
 
-                $arrReporte['plata']['vinculados']['minimo'] = $numAnioMinimoVinculado;
-                $arrReporte['plata']['vinculados']['maximo'] = $numAnioMaximoVinculado;
-                $arrReporte['plata']['vinculados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioResolucionHogar] += $objRes->fields['valIndexado'];
-                $arrReporte['plata']['vinculados']['datos'][$txtProyecto][$txtNombreResolucion]['total'] += $objRes->fields['valIndexado'];
+                $numAnioResolucionHogar = date("Y", strtotime($objRes->fields['fchActoHogar']));
+
+                // limites para vinculados
+                $arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'] = (
+                    ($arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'] == 0) or
+                    ($arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
+                )?
+                    $numAnioResolucionHogar :
+                    $arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'];
+
+                $arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'] = (
+                    ($arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'] == 0) or
+                    ($arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
+                )?
+                    $numAnioResolucionHogar :
+                    $arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'];
+
+                // limites para vidulados desplazados y vulnerables
+                $arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'] = (
+                    ($arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'] == 0) or
+                    ($arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
+                )?
+                    $numAnioResolucionHogar :
+                    $arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'];
+
+                $arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'] = (
+                    ($arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'] == 0) or
+                    ($arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
+                )?
+                    $numAnioResolucionHogar :
+                    $arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'];
+
+                // limites para los vinculados en dinero
+                $arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'] = (
+                    ($arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'] == 0) or
+                    ($arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
+                )?
+                    $numAnioResolucionHogar :
+                    $arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'];
+
+                $arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'] = (
+                    ($arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'] == 0) or
+                    ($arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
+                )?
+                    $numAnioResolucionHogar :
+                    $arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'];
+
+                // limites para desplazados o vulnerables dinero
+                $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'] = (
+                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'] == 0) or
+                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
+                )?
+                    $numAnioResolucionHogar :
+                    $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'];
+
+                $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'] = (
+                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'] == 0) or
+                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
+                )?
+                    $numAnioResolucionHogar :
+                    $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'];
+
+                // conteos
+                $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar]++;
+                $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total']++;
+
+                $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar]++;
+                $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total']++;
+
+                $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar] += $objRes->fields['valIndexado'];
+                $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total'] += $objRes->fields['valIndexado'];
+
+                $arrReporte['Dinero ' . $bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar] += $objRes->fields['valIndexado'];
+                $arrReporte['Dinero ' . $bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total'] += $objRes->fields['valIndexado'];
 
             }
 
             // conteo para las columnas de legalizados segun el estado del proceso
             if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosLegalizado ) and ! isset( $arrFormularios[$seqFormulario] ) ){
-                $numAnioLegalizado = date("Y", strtotime($objRes->fields['fchLegalizado']));
-                $numAnioMinimoLegalizado = (($numAnioMinimoLegalizado == 0) or ($numAnioMinimoLegalizado >= $numAnioLegalizado)) ? $numAnioLegalizado : $numAnioMinimoLegalizado;
-                $numAnioMaximoLegalizado = (($numAnioMaximoLegalizado == 0) or ($numAnioMaximoLegalizado <= $numAnioLegalizado)) ? $numAnioLegalizado : $numAnioMaximoLegalizado;
-                $arrReporte['reporte']['legalizados']['minimo'] = $numAnioMinimoLegalizado;
-                $arrReporte['reporte']['legalizados']['maximo'] = $numAnioMaximoLegalizado;
-                $arrReporte['reporte']['legalizados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioLegalizado]++;
-                $arrReporte['reporte']['legalizados']['datos'][$txtProyecto][$txtNombreResolucion]['total']++;
 
-                $arrReporte['plata']['legalizados']['minimo'] = $numAnioMinimoLegalizado;
-                $arrReporte['plata']['legalizados']['maximo'] = $numAnioMaximoLegalizado;
-                $arrReporte['plata']['legalizados']['datos'][$txtProyecto][$txtNombreResolucion][$numAnioLegalizado] += $objRes->fields['valIndexado'];
-                $arrReporte['plata']['legalizados']['datos'][$txtProyecto][$txtNombreResolucion]['total'] += $objRes->fields['valIndexado'];
+                $numAnioLegalizado = date("Y", strtotime($objRes->fields['fchLegalizado']));
+
+                // limites para legalizados
+                $arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'] = (
+                    ($arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'] == 0) or
+                    ($arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
+                )?
+                    $numAnioLegalizado :
+                    $arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'];
+
+                $arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'] = (
+                    ($arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'] == 0) or
+                    ($arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
+                )?
+                    $numAnioLegalizado :
+                    $arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'];
+
+                // limites para desplazados y vulnerables legalizados
+                $arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'] = (
+                    ($arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'] == 0) or
+                    ($arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
+                )?
+                    $numAnioLegalizado :
+                    $arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'];
+
+                $arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'] = (
+                    ($arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'] == 0) or
+                    ($arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
+                )?
+                    $numAnioLegalizado :
+                    $arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'];
+
+                // limites para dinero legalizados
+                $arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'] = (
+                    ($arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'] == 0) or
+                    ($arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
+                )?
+                    $numAnioLegalizado :
+                    $arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'];
+
+                $arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'] = (
+                    ($arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'] == 0) or
+                    ($arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
+                )?
+                    $numAnioLegalizado :
+                    $arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'];
+
+                // limites para dinero legalizados
+                $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'] = (
+                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'] == 0) or
+                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
+                )?
+                    $numAnioLegalizado :
+                    $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'];
+
+                $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'] = (
+                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'] == 0) or
+                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
+                )?
+                    $numAnioLegalizado :
+                    $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'];
+
+                // conteos
+                $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado]++;
+                $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total']++;
+
+                $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado]++;
+                $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total']++;
+
+                $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado] += $objRes->fields['valIndexado'];
+                $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total'] += $objRes->fields['valIndexado'];
+
+                $arrReporte['Dinero ' . $bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado] += $objRes->fields['valIndexado'];
+                $arrReporte['Dinero ' . $bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total'] += $objRes->fields['valIndexado'];
 
             }
 
@@ -307,112 +454,117 @@ class InformeVeedurias
              * PROCESAMIENTO DE LA HOJA DE PROYECTOS
              ***************************************************************************/
 
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'seqUnidadProyecto' ]  = $seqUnidadProyecto;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Proyecto Padre' ]     = $txtNombreProyectoPadre;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Proyecto Hijo' ]      = $txtNombreProyectoHijo;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Proyecto' ]       = $txtNitProyecto;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Localidad Proyecto' ] = $txtLocalidad;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Barrio Proyecto' ]    = $txtBarrio;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente 1' ]         = $txtNombreOferente1;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 1' ]     = $numNitOferente1;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente 2' ]         = $txtNombreOferente2;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 2' ]     = $numNitOferente2;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente 3' ]         = $txtNombreOferente3;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 3' ]     = $numNitOferente3;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Constructor' ]        = $txtNombreConstructor;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Vendedor' ]           = $txtNombreVendedor;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Vendedor' ]       = $numNitVendedor;
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Unidad' ]                 = $objRes->fields['txtNombreUnidad'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmobiliaria' ] = $objRes->fields['txtMatriculaInmobiliaria'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'CHIP' ]                   = $objRes->fields['txtChipLote'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Aprobado' ]          = $objRes->fields['valSDVEAprobado'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Actual' ]            = $objRes->fields['valSDVEActual'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Complementario' ]    = $objRes->fields['valSDVEComplementario'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Valor Indexado' ]         = $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Legalizado' ]             = $objRes->fields['bolLegalizado'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Legalización' ]  = $objRes->fields['fchLegalizado'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Plan de Gobierno' ]       = $objRes->fields['txtPlanGobierno'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Modalidad' ]              = $objRes->fields['txtModalidad'];
-            //$arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Esquema' ]                = $objRes->fields['txtTipoEsquema'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Unidad Activa' ]          = $objRes->fields['bolActivo'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Vendedor Escriturado' ]               = $objRes->fields['numDocumentoVendedor'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Tipo de Vivienda' ]                   = $objRes->fields['txtCompraVivienda'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Dirección Escriturada' ]              = $objRes->fields['txtDireccionInmueble'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Escriturada' ]                 = $objRes->fields['txtCiudad'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Localidad Escriturada' ]              = $objRes->fields['txtLocalidad'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Barrio Escriturado' ]                 = $objRes->fields['txtBarrio'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Propiedad' ]                          = $objRes->fields['txtPropiedad'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Escritura' ]                          = $objRes->fields['txtEscritura'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha Escritura' ]                    = $objRes->fields['fchEscritura'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Notaria Escritura' ]                  = $objRes->fields['numNotaria'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Escritura' ]                   = $objRes->fields['txtCiudadEscritura'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Sentencia' ]                 = $objRes->fields['fchSentencia'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Juzgado Sentencia' ]                  = $objRes->fields['numJuzgado'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Sentencia' ]                   = $objRes->fields['txtCiudadSentencia'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Resolución' ]                         = $objRes->fields['numResolucion'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Resolución' ]                = $objRes->fields['fchResolucion'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Entidad de Reslolución' ]             = $objRes->fields['txtEntidad'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Resolución' ]                  = $objRes->fields['txtCiudadResolucion'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmoviliaria Escriturada' ] = $objRes->fields['txtMatriculaInmobiliariaEscriturada'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'CHIP Escriturado' ]                   = $objRes->fields['txtChip'];
-            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Tipo de Predio' ]                     = $objRes->fields['txtTipoPredio'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'seqUnidadProyecto' ]  = $seqUnidadProyecto;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Proyecto Padre' ]     = $txtNombreProyectoPadre;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Proyecto Hijo' ]      = $txtNombreProyectoHijo;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Proyecto' ]       = $txtNitProyecto;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Localidad Proyecto' ] = $txtLocalidad;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Barrio Proyecto' ]    = $txtBarrio;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente 1' ]         = $txtNombreOferente1;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 1' ]     = $numNitOferente1;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente 2' ]         = $txtNombreOferente2;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 2' ]     = $numNitOferente2;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Oferente 3' ]         = $txtNombreOferente3;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 3' ]     = $numNitOferente3;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Constructor' ]        = $txtNombreConstructor;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Vendedor' ]           = $txtNombreVendedor;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Nit Vendedor' ]       = $numNitVendedor;
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Unidad' ]                 = $objRes->fields['txtNombreUnidad'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmobiliaria' ] = $objRes->fields['txtMatriculaInmobiliaria'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'CHIP' ]                   = $objRes->fields['txtChipLote'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Aprobado' ]          = $objRes->fields['valSDVEAprobado'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Actual' ]            = $objRes->fields['valSDVEActual'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'SDVE Complementario' ]    = $objRes->fields['valSDVEComplementario'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Valor Indexado' ]         = $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Legalizado' ]             = $objRes->fields['bolLegalizado'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Legalización' ]  = $objRes->fields['fchLegalizado'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Plan de Gobierno' ]       = $objRes->fields['txtPlanGobierno'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Modalidad' ]              = $objRes->fields['txtModalidad'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Unidad Activa' ]          = $objRes->fields['bolActivo'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Vendedor Escriturado' ]               = $objRes->fields['numDocumentoVendedor'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Tipo de Vivienda' ]                   = $objRes->fields['txtCompraVivienda'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Dirección Escriturada' ]              = $objRes->fields['txtDireccionInmueble'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Escriturada' ]                 = $objRes->fields['txtCiudad'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Localidad Escriturada' ]              = $objRes->fields['txtLocalidad'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Barrio Escriturado' ]                 = $objRes->fields['txtBarrio'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Propiedad' ]                          = $objRes->fields['txtPropiedad'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Escritura' ]                          = $objRes->fields['txtEscritura'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha Escritura' ]                    = $objRes->fields['fchEscritura'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Notaria Escritura' ]                  = $objRes->fields['numNotaria'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Escritura' ]                   = $objRes->fields['txtCiudadEscritura'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Sentencia' ]                 = $objRes->fields['fchSentencia'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Juzgado Sentencia' ]                  = $objRes->fields['numJuzgado'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Sentencia' ]                   = $objRes->fields['txtCiudadSentencia'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Resolución' ]                         = $objRes->fields['numResolucion'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Fecha de Resolución' ]                = $objRes->fields['fchResolucion'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Entidad de Reslolución' ]             = $objRes->fields['txtEntidad'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Ciudad Resolución' ]                  = $objRes->fields['txtCiudadResolucion'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmoviliaria Escriturada' ] = $objRes->fields['txtMatriculaInmobiliariaEscriturada'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'CHIP Escriturado' ]                   = $objRes->fields['txtChip'];
+//            $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'Tipo de Predio' ]                     = $objRes->fields['txtTipoPredio'];
 
             /***************************************************************************
              * PROCESAMIENTO DE LA HOJA DE RESOLUCIONES
              ***************************************************************************/
 
-            $numPosicion = count( $arrReporte['resoluciones'] );
-            $arrReporte['resoluciones'][ $numPosicion ]['seqUnidadProyecto'] = $seqUnidadProyecto;
-            $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Padre'] = $txtNombreProyectoPadre;
-            $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Hijo'] = $txtNombreProyectoHijo;
-            $arrReporte['resoluciones'][ $numPosicion ]['Nombre Unidad'] = $objRes->fields['txtNombreUnidad'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Tipo Resolución'] = $objRes->fields['txtTipoActoUnidad'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Numero Resolución'] = $objRes->fields['numActoProyecto'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Fecha Resolución'] = $objRes->fields['fchActoProyecto'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Año Resolución'] = (esFechaValida($objRes->fields['fchActoProyecto']))?
-                                                                                date("Y" , strtotime($objRes->fields['fchActoProyecto'])) :
-                                                                                "";
-            $arrReporte['resoluciones'][$numPosicion]['Valor Indexación'] = $objRes->fields['valIndexado'];
-            switch($objRes->fields['seqTipoActoUnidad']){
-                case 1:
-                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = "Generacion";
-                    break;
-                case 2:
-                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Indexación Positiva" : "Indexación Negativa";
-                    break;
-                case 3:
-                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Adiciona Unidad" : "Retira Unidades";
-                    break;
-            }
+//            $numPosicion = count( $arrReporte['resoluciones'] );
+//            $arrReporte['resoluciones'][ $numPosicion ]['seqUnidadProyecto'] = $seqUnidadProyecto;
+//            $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Padre'] = $txtNombreProyectoPadre;
+//            $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Hijo'] = $txtNombreProyectoHijo;
+//            $arrReporte['resoluciones'][ $numPosicion ]['Nombre Unidad'] = $objRes->fields['txtNombreUnidad'];
+//            $arrReporte['resoluciones'][ $numPosicion ]['Tipo Resolución'] = $objRes->fields['txtTipoActoUnidad'];
+//            $arrReporte['resoluciones'][ $numPosicion ]['Numero Resolución'] = $objRes->fields['numActoProyecto'];
+//            $arrReporte['resoluciones'][ $numPosicion ]['Fecha Resolución'] = $objRes->fields['fchActoProyecto'];
+//            $arrReporte['resoluciones'][ $numPosicion ]['Año Resolución'] = (esFechaValida($objRes->fields['fchActoProyecto']))?
+//                                                                                date("Y" , strtotime($objRes->fields['fchActoProyecto'])) :
+//                                                                                "";
+//            $arrReporte['resoluciones'][$numPosicion]['Valor Indexación'] = $objRes->fields['valIndexado'];
+//            switch($objRes->fields['seqTipoActoUnidad']){
+//                case 1:
+//                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = "Generacion";
+//                    break;
+//                case 2:
+//                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Indexación Positiva" : "Indexación Negativa";
+//                    break;
+//                case 3:
+//                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Adiciona Unidad" : "Retira Unidades";
+//                    break;
+//            }
 
             $objRes->MoveNext();
         }
 
-        ksort($arrReporte['reporte']['generados']['datos']);
-        ksort($arrReporte['plata']['generados']['datos']);
+        ksort($arrReporte['Conteo Consolidado']['datos']);
+        ksort($arrReporte['Desplazado']['datos']);
+        ksort($arrReporte['Vulnerable']['datos']);
+        ksort($arrReporte['Dinero Consolidado']['datos']);
+        ksort($arrReporte['Dinero Desplazado']['datos']);
+        ksort($arrReporte['Dinero Vulnerable']['datos']);
 
         // obtiene los datos del hogar
-        $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
-
-        // adiciona el dato del aad del hogar
-        foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
-            $seqFormulario = $arrDatos['Formulario'];
-            if( isset( $arrFormularios[$seqFormulario] ) ){
-                $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['numResolucion'];
-                $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['fchResolucion'];
-                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['fchResolucion']))?
-                                                                date( "Y" , strtotime( $arrFormularios[$seqFormulario]['fchResolucion'] )) :
-                                                                "";
-            }
-        }
+//        $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
+//
+//         adiciona el dato del aad del hogar
+//        foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
+//            $seqFormulario = $arrDatos['Formulario'];
+//            if( isset( $arrFormularios[$seqFormulario] ) ){
+//                $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['numResolucion'];
+//                $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['fchResolucion'];
+//                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['fchResolucion']))?
+//                                                                date( "Y" , strtotime( $arrFormularios[$seqFormulario]['fchResolucion'] )) :
+//                                                                "";
+//            }
+//        }
 
         // quita la variable de paso de calculo del valor indexado de proyectos
-        foreach( $arrReporte['proyectos'] as $seqUnidadProyecto => $arrDatos ){
-            unset( $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] );
-        }
+//        foreach( $arrReporte['proyectos'] as $seqUnidadProyecto => $arrDatos ){
+//            unset( $arrReporte['proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] );
+//        }
 
         return $arrReporte;
     }
+
+
 
     public function reporteNoProyectos($seqCorte)
     {
@@ -426,29 +578,7 @@ class InformeVeedurias
               eta.txtEtapa as 'Etapa', 
               epr.txtEstadoProceso as 'Estado', 
               aad.numActo as 'Resolución',
-              aad.fchActo as 'Fecha',
-              /*
-              UPPER(des.txtNombreVendedor) as 'Vendedor1',
-              tdo.txtTipoDocumento as 'Tipo de Documento del Vendedor1', 
-              des.numDocumentoVendedor as 'Documento del Vendedor1',
-              UPPER(des.txtCompraVivienda) as 'Tipo de Vivienda1',
-              UPPER(des.txtDireccionInmueble) as 'Dirección1',
-              ciu.txtCiudad as 'Ciudad1',
-              UPPER(loc.txtLocalidad) as 'Localidad1',
-              UPPER(des.txtBarrio) as 'Barrio1',
-              UPPER(des.txtPropiedad) as 'Propiedad1',
-              des.txtEscritura as 'Escritura1',
-              IF(des.fchEscritura < '2000-01-01',NULL,des.fchEscritura) as 'Fecha de Escritura1',
-              des.numNotaria as 'Notaria de Escritura1',
-              UPPER(des.txtCiudad) as 'Ciudad de Escritura1',
-              IF(des.fchSentencia < '2000-01-01',NULL,des.fchSentencia) as 'Fecha de Sentencia1',
-              des.numJuzgado as 'Juzgado de Sentencia1',
-              UPPER(des.txtCiudadSentencia) as 'Ciudad de Sentencia1',
-              des.numResolucion as 'Resolución de Propiedad1',
-              IF(des.fchResolucion < '2000-01-01',NULL,des.fchResolucion) as 'Fecha de Propiedad1',
-              des.txtEntidad as 'Entidad de Propiedad1',
-              UPPER(des.txtCiudadResolucion) as 'Ciudad de Propiedad1',
-              */
+              aad.fchActo as 'Fecha',              
               UPPER(des.txtMatriculaInmobiliaria) as 'Matrícula Inmoviliaria-ME',
               UPPER(des.txtChip) as 'CHIP-ME',
               UPPER(des.txtCedulaCatastral) as 'Cédula Catastral-ME',
@@ -565,6 +695,7 @@ class InformeVeedurias
               IF(frm.seqProyecto is null or frm.seqProyecto = 0,'No Disponible',pry.txtNombreProyecto) as Proyecto,
               IF(frm.seqProyectoHijo is null or frm.seqProyectoHijo = 0,'No Disponible',pry1.txtNombreProyecto) as Conjunto,
               IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad) as Unidad,
+              upr.fchLegalizado as 'Fecha Legalización',
               loc.seqLocalidad as Localidad,
               if(bar.txtBarrio is null,'No Disponible',bar.txtBarrio) as Barrio,
               if(frm.numHabitaciones is null,0,frm.numHabitaciones) as Dormitorios,
@@ -603,9 +734,9 @@ class InformeVeedurias
             LEFT  JOIN t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
             INNER JOIN t_frm_solucion sol on frm.seqSolucion = sol.seqSolucion 
             INNER JOIN t_frm_sisben sis on frm.seqSisben = sis.seqSisben
-            LEFT  JOIN t_pry_proyecto pry on frm.seqProyecto = pry.seqProyecto 
-            LEFT  JOIN t_pry_proyecto pry1 on frm.seqProyectoHijo = pry1.seqProyecto
-            LEFT  JOIN t_vee_unidad_proyecto upr on frm.seqUnidadProyecto = upr.seqUnidadProyecto
+            LEFT JOIN t_vee_proyecto pry ON frm.seqProyecto = pry.seqProyecto and pry.seqCorte = $seqCorte
+            LEFT JOIN t_vee_proyecto pry1 ON frm.seqProyectoHijo = pry1.seqProyecto and pry1.seqCorte = $seqCorte
+            LEFT JOIN t_vee_unidad_proyecto upr ON frm.seqUnidadProyecto = upr.seqUnidadProyecto and upr.seqProyectoVeeduria = pry.seqProyectoVeeduria
             INNER JOIN t_frm_localidad loc on frm.seqLocalidad = loc.seqLocalidad
             LEFT  JOIN t_frm_barrio bar on frm.seqBarrio = bar.seqBarrio
             INNER JOIN t_ciu_parentesco par on hog.seqParentesco = par.seqParentesco
@@ -632,12 +763,7 @@ class InformeVeedurias
             WHERE frm.seqCorte = $seqCorte
             AND frm.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )
         ";
-        $objRes = $aptBd->execute($sql);
-        $arrHogares = array();
-        while( $objRes->fields ){
-            $arrHogares[] = $objRes->fields;
-            $objRes->MoveNext();
-        }
+        $arrHogares = $aptBd->GetAll($sql);
         return $arrHogares;
     }
 
@@ -793,7 +919,9 @@ class InformeVeedurias
 
         // titulos
         $xmlArchivo .= "<ss:Row>";
-        foreach ($arrReporte[0] as $txtTitulo => $txtValor){
+        $arrTitulos = reset($arrReporte);
+
+        foreach ($arrTitulos as $txtTitulo => $txtValor){
             $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
         }
         $xmlArchivo .= "</ss:Row>";
@@ -838,10 +966,6 @@ class InformeVeedurias
     public function imprimirReporteProyectos($arrReporte)
     {
 
-        $numAcrossGenerados   = ($arrReporte['reporte']['generados']['maximo']   - $arrReporte['reporte']['generados']['minimo']  ) + 1;
-        $numAcrossVinculados  = ($arrReporte['reporte']['vinculados']['maximo']  - $arrReporte['reporte']['vinculados']['minimo'] ) + 1;
-        $numAcrossLegalizados = ($arrReporte['reporte']['legalizados']['maximo'] - $arrReporte['reporte']['legalizados']['minimo']) + 1;
-
         /***********************************************
          * ENCABEZADO
          ***********************************************/
@@ -855,222 +979,41 @@ class InformeVeedurias
         $xmlArchivo .= $this->fuentesXML();
 
         /***********************************************
-         * HOJA REPORTE CONTEO
+         * HOJA REPORTE CONTEOS Y DINERO
          ***********************************************/
 
-        $xmlArchivo .= "<ss:Worksheet ss:Name='Reporte Proyectos Conteo'>";
-        $xmlArchivo .= "<ss:Table>";
-        $xmlArchivo .= "<Column ss:AutoFitWidth='0' ss:Width='180'/>";
+        // conteos
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Conteo Consolidado'],'Conteo Consolidado');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Desplazado'],'Desplazado');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Vulnerable'],'Vulnerable');
 
-        // titulos
-        $xmlArchivo .= "<ss:Row>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeDown='1'><ss:Data ss:Type='String'>Proyecto</ss:Data></ss:Cell>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeDown='1'><ss:Data ss:Type='String'>Resoluciones</ss:Data></ss:Cell>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='$numAcrossGenerados'><ss:Data ss:Type='String'>Subsidios Generados</ss:Data></ss:Cell>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='$numAcrossVinculados'><ss:Data ss:Type='String'>Vinculados</ss:Data></ss:Cell>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='$numAcrossLegalizados'><ss:Data ss:Type='String'>Legalizados</ss:Data></ss:Cell>";
-        $xmlArchivo .= "</ss:Row>";
-
-        // titulos - anios para generados
-        $xmlArchivo .= "<ss:Row>";
-        for( $numAnio = $arrReporte['reporte']['generados']['minimo'] ; $numAnio <= $arrReporte['reporte']['generados']['maximo']; $numAnio++ ){
-            if( $numAnio == $arrReporte['reporte']['generados']['minimo'] ){
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s2' ss:Index='3'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-            }else{
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-            }
-        }
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
-
-        // titulos - anios para vinculados
-        for( $numAnio = $arrReporte['reporte']['vinculados']['minimo'] ; $numAnio <= $arrReporte['reporte']['vinculados']['maximo']; $numAnio++ ){
-            $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-        }
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
-
-        // titulos - anios para legalizados
-        for( $numAnio = $arrReporte['reporte']['legalizados']['minimo'] ; $numAnio <= $arrReporte['reporte']['legalizados']['maximo']; $numAnio++ ){
-            $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-        }
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
-
-        $xmlArchivo .= "</ss:Row>";
-
-        // datos del reporte
-        foreach( $arrReporte['reporte']['generados']['datos'] as $txtProyecto => $arrResoluciones ){
-            foreach( $arrResoluciones as $txtNombreResolucion => $arrAnios ){
-                $xmlArchivo .= "<ss:Row>";
-
-                // GENERADOS
-                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>$txtProyecto</ss:Data></ss:Cell>";
-                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>$txtNombreResolucion</ss:Data></ss:Cell>";
-                for ($numAnio = $arrReporte['reporte']['generados']['minimo']; $numAnio <= $arrReporte['reporte']['generados']['maximo']; $numAnio++) {
-                    if ( isset( $arrAnios[ $numAnio ] ) ) {
-                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrAnios[ $numAnio ] . "</ss:Data></ss:Cell>";
-                    } else {
-                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                    }
-                }
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrAnios['total'] . "</ss:Data></ss:Cell>";
-
-                // VINCULADOS
-                if( isset( $arrReporte['reporte']['vinculados']['datos'][ $txtProyecto ][ $txtNombreResolucion ] ) ){
-                    for ($numAnio = $arrReporte['reporte']['vinculados']['minimo']; $numAnio <= $arrReporte['reporte']['vinculados']['maximo']; $numAnio++) {
-                        if ( isset( $arrReporte['reporte']['vinculados']['datos'][ $txtProyecto ][ $txtNombreResolucion ][ $numAnio ] ) ) {
-                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrReporte['reporte']['vinculados']['datos'][ $txtProyecto ][ $txtNombreResolucion ][ $numAnio ] . "</ss:Data></ss:Cell>";
-                        } else {
-                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                        }
-                    }
-                }else{
-                    for ($numAnio = $arrReporte['reporte']['vinculados']['minimo']; $numAnio <= $arrReporte['reporte']['vinculados']['maximo']; $numAnio++) {
-                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                    }
-                }
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrReporte['reporte']['vinculados']['datos'][ $txtProyecto ][ $txtNombreResolucion ]['total'] . "</ss:Data></ss:Cell>";
-
-                // LEGALIZADOS
-                if( isset( $arrReporte['reporte']['legalizados']['datos'][ $txtProyecto ][ $txtNombreResolucion ] ) ){
-                    for ($numAnio = $arrReporte['reporte']['legalizados']['minimo']; $numAnio <= $arrReporte['reporte']['legalizados']['maximo']; $numAnio++) {
-                        if ( isset( $arrReporte['reporte']['legalizados']['datos'][ $txtProyecto ][ $txtNombreResolucion ][ $numAnio ] ) ) {
-                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrReporte['reporte']['legalizados']['datos'][ $txtProyecto ][ $txtNombreResolucion ][ $numAnio ] . "</ss:Data></ss:Cell>";
-                        } else {
-                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                        }
-                    }
-                }else{
-                    for ($numAnio = $arrReporte['reporte']['legalizados']['minimo']; $numAnio <= $arrReporte['reporte']['legalizados']['maximo']; $numAnio++) {
-                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                    }
-                }
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrReporte['reporte']['legalizados']['datos'][ $txtProyecto ][ $txtNombreResolucion ]['total'] . "</ss:Data></ss:Cell>";
-
-                $xmlArchivo .= "</ss:Row>";
-            }
-        }
-
-        $xmlArchivo .= "</ss:Table>";
-        $xmlArchivo .= "</ss:Worksheet>";
-
-        /***********************************************
-         * HOJA REPORTE PLATA
-         ***********************************************/
-
-        $xmlArchivo .= "<ss:Worksheet ss:Name='Reporte Proyectos Dinero'>";
-        $xmlArchivo .= "<ss:Table>";
-        $xmlArchivo .= "<Column ss:AutoFitWidth='0' ss:Width='180'/>";
-
-        // titulos
-        $xmlArchivo .= "<ss:Row>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeDown='1'><ss:Data ss:Type='String'>Proyecto</ss:Data></ss:Cell>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeDown='1'><ss:Data ss:Type='String'>Resoluciones</ss:Data></ss:Cell>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='$numAcrossGenerados'><ss:Data ss:Type='String'>Subsidios Generados</ss:Data></ss:Cell>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='$numAcrossVinculados'><ss:Data ss:Type='String'>Vinculados</ss:Data></ss:Cell>";
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='$numAcrossLegalizados'><ss:Data ss:Type='String'>Legalizados</ss:Data></ss:Cell>";
-        $xmlArchivo .= "</ss:Row>";
-
-        // titulos - anios para generados
-        $xmlArchivo .= "<ss:Row>";
-        for( $numAnio = $arrReporte['plata']['generados']['minimo'] ; $numAnio <= $arrReporte['plata']['generados']['maximo']; $numAnio++ ){
-            if( $numAnio == $arrReporte['plata']['generados']['minimo'] ){
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s2' ss:Index='3'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-            }else{
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-            }
-        }
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
-
-        // titulos - anios para vinculados
-        for( $numAnio = $arrReporte['plata']['vinculados']['minimo'] ; $numAnio <= $arrReporte['plata']['vinculados']['maximo']; $numAnio++ ){
-            $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-        }
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
-
-        // titulos - anios para legalizados
-        for( $numAnio = $arrReporte['plata']['legalizados']['minimo'] ; $numAnio <= $arrReporte['plata']['legalizados']['maximo']; $numAnio++ ){
-            $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-        }
-        $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
-
-        $xmlArchivo .= "</ss:Row>";
-
-        // datos del reporte
-        foreach( $arrReporte['plata']['generados']['datos'] as $txtProyecto => $arrResoluciones ){
-            foreach( $arrResoluciones as $txtNombreResolucion => $arrAnios ){
-                $xmlArchivo .= "<ss:Row>";
-
-                // GENERADOS
-                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>$txtProyecto</ss:Data></ss:Cell>";
-                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>$txtNombreResolucion</ss:Data></ss:Cell>";
-                for ($numAnio = $arrReporte['plata']['generados']['minimo']; $numAnio <= $arrReporte['plata']['generados']['maximo']; $numAnio++) {
-                    if ( isset( $arrAnios[ $numAnio ] ) ) {
-                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrAnios[ $numAnio ] . "</ss:Data></ss:Cell>";
-                    } else {
-                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                    }
-                }
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrAnios['total'] . "</ss:Data></ss:Cell>";
-
-                // VINCULADOS
-                if( isset( $arrReporte['plata']['vinculados']['datos'][ $txtProyecto ][ $txtNombreResolucion ] ) ){
-                    for ($numAnio = $arrReporte['plata']['vinculados']['minimo']; $numAnio <= $arrReporte['plata']['vinculados']['maximo']; $numAnio++) {
-                        if ( isset( $arrReporte['plata']['vinculados']['datos'][ $txtProyecto ][ $txtNombreResolucion ][ $numAnio ] ) ) {
-                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrReporte['plata']['vinculados']['datos'][ $txtProyecto ][ $txtNombreResolucion ][ $numAnio ] . "</ss:Data></ss:Cell>";
-                        } else {
-                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                        }
-                    }
-                }else{
-                    for ($numAnio = $arrReporte['plata']['vinculados']['minimo']; $numAnio <= $arrReporte['plata']['vinculados']['maximo']; $numAnio++) {
-                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                    }
-                }
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrReporte['plata']['vinculados']['datos'][ $txtProyecto ][ $txtNombreResolucion ]['total'] . "</ss:Data></ss:Cell>";
-
-                // LEGALIZADOS
-                if( isset( $arrReporte['plata']['legalizados']['datos'][ $txtProyecto ][ $txtNombreResolucion ] ) ){
-                    for ($numAnio = $arrReporte['plata']['legalizados']['minimo']; $numAnio <= $arrReporte['plata']['legalizados']['maximo']; $numAnio++) {
-                        if ( isset( $arrReporte['plata']['legalizados']['datos'][ $txtProyecto ][ $txtNombreResolucion ][ $numAnio ] ) ) {
-                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrReporte['plata']['legalizados']['datos'][ $txtProyecto ][ $txtNombreResolucion ][ $numAnio ] . "</ss:Data></ss:Cell>";
-                        } else {
-                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                        }
-                    }
-                }else{
-                    for ($numAnio = $arrReporte['plata']['legalizados']['minimo']; $numAnio <= $arrReporte['plata']['legalizados']['maximo']; $numAnio++) {
-                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
-                    }
-                }
-                $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrReporte['plata']['legalizados']['datos'][ $txtProyecto ][ $txtNombreResolucion ]['total'] . "</ss:Data></ss:Cell>";
-
-                $xmlArchivo .= "</ss:Row>";
-            }
-        }
-
-        $xmlArchivo .= "</ss:Table>";
-        $xmlArchivo .= "</ss:Worksheet>";
+        // dinero
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Dinero Consolidado'],'Dinero Consolidado');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Dinero Desplazado'],'Dinero Desplazado');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Dinero Vulnerable'],'Dinero Vulnerable');
 
         /***********************************************
          * HOJA REPORTE DE HOGARES
          ***********************************************/
 
-        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['hogares'] , "Hogares" );
+//        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['hogares'] , "Hogares" );
 
         /***********************************************
          * HOJA PROYECTOS
          ***********************************************/
 
-        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['proyectos'] , "Proyectos" );
+//        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['proyectos'] , "Proyectos" );
 
         /***********************************************
          * HOJA RESOLUCIONES
          ***********************************************/
 
-        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['resoluciones'] , "Resoluciones" );
+//        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['resoluciones'] , "Resoluciones" );
 
         $xmlArchivo .= $this->obtenerXMLPie();
 
         $this->exportarResultadosXML( $xmlArchivo , "Informe Proyectos" );
+
 
     }
 
@@ -1107,5 +1050,150 @@ class InformeVeedurias
 
     }
 
+    private function obtenerXMLHojaConteo($arrReporte,$txtNombre)
+    {
+        $numAcrossGenerados   = intval($arrReporte['limites']['generados']['maximo'])   - intval($arrReporte['limites']['generados']['minimo']);
+        $numAcrossVinculados  = intval($arrReporte['limites']['vinculados']['maximo'])  - intval($arrReporte['limites']['vinculados']['minimo']);
+        $numAcrossLegalizados = intval($arrReporte['limites']['legalizados']['maximo']) - intval($arrReporte['limites']['legalizados']['minimo']);
+
+        $xmlArchivo  = "<ss:Worksheet ss:Name='$txtNombre'>";
+        $xmlArchivo .= "<ss:Table>";
+        $xmlArchivo .= "<Column ss:AutoFitWidth='0' ss:Width='180'/>";
+
+        /***********************************************
+         * TITULOS 1 (CABECERA)
+         ***********************************************/
+
+        $xmlArchivo .= "<ss:Row>";
+        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeDown='1'><ss:Data ss:Type='String'>Proyecto</ss:Data></ss:Cell>";
+        $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeDown='1'><ss:Data ss:Type='String'>Resoluciones</ss:Data></ss:Cell>";
+        if($numAcrossGenerados > 0) {
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='" . ($numAcrossGenerados + 1) . "'><ss:Data ss:Type='String'>Subsidios Generados</ss:Data></ss:Cell>";
+        }
+        if($numAcrossVinculados > 0) {
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='" . ($numAcrossVinculados + 1) . "'><ss:Data ss:Type='String'>Vinculados</ss:Data></ss:Cell>";
+        }
+        if($numAcrossLegalizados > 0) {
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='" . ($numAcrossLegalizados + 1). "'><ss:Data ss:Type='String'>Legalizados</ss:Data></ss:Cell>";
+        }
+        $xmlArchivo .= "</ss:Row>";
+
+        /***********************************************
+         * TITULOS 2 (AÑOS)
+         ***********************************************/
+
+        $xmlArchivo .= "<ss:Row>";
+
+        // titulos de anios para generados
+        $bolIndex = false;
+        if(intval($arrReporte['limites']['generados']['minimo']) > 0) {
+            for ($numAnio = $arrReporte['limites']['generados']['minimo']; $numAnio <= $arrReporte['limites']['generados']['maximo']; $numAnio++) {
+                if ($bolIndex == false and $numAnio == $arrReporte['limites']['generados']['minimo']) {
+                    $bolIndex = true;
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s2' ss:Index='3'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
+                }else{
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
+                }
+            }
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
+        }
+
+        // titulos - anios para vinculados
+        if(intval($arrReporte['limites']['vinculados']['minimo']) > 0) {
+            for ($numAnio = $arrReporte['limites']['vinculados']['minimo']; $numAnio <= $arrReporte['limites']['vinculados']['maximo']; $numAnio++) {
+                if ($bolIndex == false and $numAnio == $arrReporte['limites']['vinculados']['minimo']) {
+                    $bolIndex = true;
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s2' ss:Index='3'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
+                }else{
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
+                }
+
+            }
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
+        }
+
+        // titulos - anios para legalizados
+        if(intval($arrReporte['limites']['legalizados']['minimo'])) {
+            for ($numAnio = $arrReporte['limites']['legalizados']['minimo']; $numAnio <= $arrReporte['limites']['legalizados']['maximo']; $numAnio++) {
+                if ($bolIndex == false and $numAnio == $arrReporte['limites']['legalizados']['minimo']) {
+                    $bolIndex = true;
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s2' ss:Index='3'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
+                }else{
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
+                }
+
+            }
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
+        }
+
+        $xmlArchivo .= "</ss:Row>";
+
+        /***********************************************
+         * LINEAS
+         ***********************************************/
+
+        // datos del reporte
+        foreach ($arrReporte['datos'] as $txtProyecto => $arrResoluciones) {
+            foreach ($arrResoluciones as $txtNombreResolucion => $arrDatos) {
+                $xmlArchivo .= "<ss:Row>";
+
+                // GENERADOS
+                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>$txtProyecto</ss:Data></ss:Cell>";
+                $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>$txtNombreResolucion</ss:Data></ss:Cell>";
+
+                if(isset($arrDatos['generados'])) {
+                    for ($numAnio = $arrReporte['limites']['generados']['minimo']; $numAnio <= $arrReporte['limites']['generados']['maximo']; $numAnio++) {
+                        if (isset($arrDatos['generados'][$numAnio])) {
+                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['generados'][$numAnio] . "</ss:Data></ss:Cell>";
+                        }else{
+                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
+                        }
+                    }
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrDatos['generados']['total'] . "</ss:Data></ss:Cell>";
+                }
+
+                // VINCULADOS
+                if(isset($arrDatos['vinculados'])) {
+                    for ($numAnio = $arrReporte['limites']['vinculados']['minimo']; $numAnio <= $arrReporte['limites']['vinculados']['maximo']; $numAnio++) {
+                        if (isset($arrDatos['vinculados'][$numAnio])) {
+                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['vinculados'][$numAnio] . "</ss:Data></ss:Cell>";
+                        }else{
+                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
+                        }
+                    }
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrDatos['vinculados']['total'] . "</ss:Data></ss:Cell>";
+                }else{
+                    for ($numAnio = $arrReporte['limites']['vinculados']['minimo']; $numAnio <= $arrReporte['limites']['vinculados']['maximo']; $numAnio++) {
+                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
+                    }
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
+                }
+
+                // LEGALIZADOS
+                if(isset($arrDatos['legalizados'])) {
+                    for ($numAnio = $arrReporte['limites']['legalizados']['minimo']; $numAnio <= $arrReporte['limites']['legalizados']['maximo']; $numAnio++) {
+                        if (isset($arrDatos['legalizados'][$numAnio])) {
+                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['legalizados'][$numAnio] . "</ss:Data></ss:Cell>";
+                        }else{
+                            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
+                        }
+                    }
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrDatos['legalizados']['total'] . "</ss:Data></ss:Cell>";
+                }else{
+                    for ($numAnio = $arrReporte['limites']['legalizados']['minimo']; $numAnio <= $arrReporte['limites']['legalizados']['maximo']; $numAnio++) {
+                        $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
+                    }
+                    $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
+                }
+
+                $xmlArchivo .= "</ss:Row>";
+            }
+        }
+
+        $xmlArchivo .= "</ss:Table>";
+        $xmlArchivo .= "</ss:Worksheet>";
+        
+        return $xmlArchivo;
+    }
 
 }

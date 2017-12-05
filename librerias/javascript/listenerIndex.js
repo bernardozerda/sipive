@@ -166,7 +166,7 @@
 		if( numTiempoVida <= 450 && numTiempoVida > 0 ){
 
 			var txtMensaje  = "<div style='text-align:center' class='msgError'>";
-				txtMensaje += "Le quedan menos de " + (numTiempoVida +1) + " segundos de vida a su sesi&oacute;n ";
+				txtMensaje += "Le quedan menos de " + Math.round((numTiempoVida + 1) / 60) + " segundos de vida a su sesi&oacute;n ";
 				txtMensaje += "debe salvar los cambios que haya hecho para no perder la informaci&oacute;n";
 			 	txtMensaje += "</div>";
 

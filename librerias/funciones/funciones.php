@@ -876,42 +876,37 @@ function valorSubsidio($claFormulario){
 function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     global $aptBd;
 
-    // Adquisicion de vivienda nueva
-    $arrEsquema[2][6][] = 1;  // individual
-    $arrEsquema[2][6][] = 7;  // programas especiales con proyectos de la secretaria
-    $arrEsquema[2][6][] = 13; // programas especiales con solucion fuera de la secretaria
+    // plan de gobierno 1 [PG][MOD] = ESQUEMA
+    $arrEsquema[1][1][]  = 6;
+    $arrEsquema[1][2][]  = 6;
+    $arrEsquema[1][3][]  = 6;
+    $arrEsquema[1][5][]  = 6;
+    $arrEsquema[1][6][]  = 6;
+    $arrEsquema[1][11][] = 6;
 
-    // construccion en sitio propio
-    $arrEsquema[2][7][] = 2; // colectivo opv
-    $arrEsquema[2][7][] = 4; // Territorial dirigido
+    // plan de gobierno 2
+    $arrEsquema[2][6][]  = 1;
+    $arrEsquema[2][6][]  = 7;
+    $arrEsquema[2][6][]  = 13;
+    $arrEsquema[2][7][]  = 2;
+    $arrEsquema[2][7][]  = 4;
+    $arrEsquema[2][3][]  = 4;
+    $arrEsquema[2][8][]  = 4;
+    $arrEsquema[2][9][]  = 4;
+    $arrEsquema[2][10][] = 4;
+    $arrEsquema[2][11][] = 13;
 
-    // mejoramiento estructural
-    $arrEsquema[2][8][] = 4; // territorial dirigido
+    // plan de gobierno 3
+    $arrEsquema[3][12][] = 9;
+    $arrEsquema[3][12][] = 10;
+    $arrEsquema[3][12][] = 12;
+    $arrEsquema[3][12][] = 14;
+    $arrEsquema[3][12][] = 15;
+    $arrEsquema[3][13][] = 9;
 
-    // mejoramiento habitacional
-    $arrEsquema[2][9][] = 4; // territorial dirigido
-
-    // mejoramiento en redensificacion
-    $arrEsquema[2][10][] = 4; // territorial dirigido
-
-    // Adquisicion de vivienda usada
-    $arrEsquema[2][11][] = 13; // programas especiales con solucion fuera de la secretaria
-
-    // Adquisicion cierre financiero
-    $arrEsquema[3][12][] = 9;  // proyectos sdht
-    $arrEsquema[3][12][] = 10; // proyecto no sdht
-
-    // solo si es victima puede optar por el esquema de retorno / reubicacion
     if( $bolDesplazado == 1 ) {
-        $arrEsquema[3][12][] = 11; // retorno reubicacion
+        $arrEsquema[3][12][] = 11;
     }
-
-    $arrEsquema[3][12][] = 12; // mi casa ya
-    $arrEsquema[3][12][] = 14;  // programas especiales con proyectos de la secretaria
-    $arrEsquema[3][12][] = 15; // programas especiales con solucion fuera de la secretaria
-
-    // Leasing
-    $arrEsquema[3][13][] = 9;  // proyectos sdht
 
     // obtiene los esquemas segun modalidad y plan de gobierno
     $arrTipoEsquemas = array();

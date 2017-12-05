@@ -286,8 +286,8 @@
  			******************************************************************/	 
             
          $arrFases['postulacionIndividual']['escrituracion']['nombre'] = utf8_encode("Escrituracion");
-			$arrFases['postulacionIndividual']['escrituracion']['permisos']  = array( 15,17,19,23,26,27,28,29,40 );
-			$arrFases['postulacionIndividual']['escrituracion']['adelante']  = array( 15,17,19,23,27 );
+			$arrFases['postulacionIndividual']['escrituracion']['permisos']  = array( 15,17,19,23,26,27,28,29,40,60,61 );
+			$arrFases['postulacionIndividual']['escrituracion']['adelante']  = array( 15,17,60,61,19,23,27 );
 			$arrFases['postulacionIndividual']['escrituracion']['atras']     = array( );
 			$arrFases['postulacionIndividual']['escrituracion']['plantilla'] = "desembolso/busquedaOferta.tpl";
 			$arrFases['postulacionIndividual']['escrituracion']['codigo']    = "./contenidos/desembolso/busquedaOferta.php";

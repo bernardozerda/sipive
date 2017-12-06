@@ -808,15 +808,18 @@ class CasaMano
                     ";
                     $aptBd->execute($sql);
 
-                    $sql = "
-                        update t_cru_resultado set
-                            seqEstadoProceso = " . $seqEstadoProceso . "
-                        where seqFormulario = " . $arrPost['seqFormulario'] . "
-                          and seqCruce = " . $arrPost['seqCruce'];
-                    $aptBd->execute($sql);
+                    if($arrPost['seqCruce'] != 0) {
+                        $sql = "
+                            update t_cru_resultado set
+                                seqEstadoProceso = " . $seqEstadoProceso . "
+                            where seqFormulario = " . $arrPost['seqFormulario'] . "
+                              and seqCruce = " . $arrPost['seqCruce'];
+                        $aptBd->execute($sql);
+                    }
 
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se pudo modificar el estado del proceso";
+                    $this->arrErrores[] = $objError->getMessage();
                 }
 
             }

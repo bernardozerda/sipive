@@ -52,7 +52,7 @@ class CasaMano
         // proyectos de la SDHT
 
         $this->arrFases['pin']['modalidad'] = array( 1 , 3 , 5 , 6 , 7 , 9 , 12 , 13 );
-        $this->arrFases['pin']['esquema'] = array( 0 , 1 , 2 , 3 , 4 , 6 , 7 , 8 , 9 , 12 , 14 );
+        $this->arrFases['pin']['esquema'] = array( 0 , 1 , 2 , 3 , 4 , 7 , 8 , 9 , 12 , 14 );
 
         $this->arrFases['pin']['postulacion']['grupos'] = array(6,7,8);
         $this->arrFases['pin']['postulacion']['permitido']['etapas'] = array(2,3,4,5);
@@ -67,7 +67,7 @@ class CasaMano
         // proyectos fuera de la SDHT
         // retorno o reubicación
         $this->arrFases['cem']['modalidad'] = array( 6 , 11 , 12 );
-        $this->arrFases['cem']['esquema'] = array( 5 , 10 , 11 , 13 , 15 );
+        $this->arrFases['cem']['esquema'] = array( 5 , 6 , 10 , 11 , 13 , 15 );
 
         $this->arrFases['cem']['panelHogar']['grupos'] = array(6, 7, 8, 14, 13);
         $this->arrFases['cem']['panelHogar']['permitido']['etapas'] = array(1,2,3,4,5);

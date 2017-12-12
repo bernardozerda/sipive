@@ -372,6 +372,9 @@ if (empty($arrErrores)) {
         	//$claFormulario->seqProyecto     = 32; // INDIVIDUAL PROYECTO SDVE
         }
 
+        $claFormulario->seqCesantias = ($claFormulario->seqCesantias == 0)? 1: $claFormulario->seqCesantias;
+        $claFormulario->seqPeriodo   = ($claFormulario->seqPeriodo == 0)? 1: $claFormulario->seqPeriodo;
+
         $claFormulario->editarFormulario($seqFormulario);
         if (empty($claFormulario->arrErrores)) {
 
@@ -410,6 +413,7 @@ if (empty($arrErrores)) {
         } else {
             $numErrores++;
             $arrErrores[] = "No se pudo actualizar la informacion del formulario $seqFormulario ( " . $claFormulario->numDocumento . " )";
+            $arrErrores[] = $claFormulario->arrErrores[1];
         }
     }
 }

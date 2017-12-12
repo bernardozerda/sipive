@@ -471,7 +471,7 @@ function sqlEscrituracion($seqDesembolso , $arrLinea){
     $arrCampos['numActaEntrega'] = 1;
     $arrCampos['numAltoRiesgo'] = 1;
     $arrCampos['numAperturaCAP'] = null;
-    $arrCampos['numAutorizacionDesembolso'] = 1;
+    $arrCampos['numAutorizacionDesembolso'] = null;
     $arrCampos['numBoletinCatastral'] = null;
     $arrCampos['numCedulaArrendador'] = null;
     $arrCampos['numCertificacionVendedor'] = null;

@@ -45,8 +45,8 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
 //            echo "</pre>";
 //
 //            echo "****" . strtotime($datos[11]) . "<br>";
-//
-//
+
+
 //            die();
 
             $casilla = "";
@@ -115,10 +115,10 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             if ($CfchMatricula[1] != "") {
                 $fchMatricula = $CfchMatricula[2] . "-" . $CfchMatricula[1] . "-" . $CfchMatricula[0];
             }
-            if ($datos [27] == "" || $datos [32] == "" || $datos [29] == "" || $datos [31] == "" || $datos [36] == "" || $datos [28] == "") {
+            if ($datos[27] == "" || $datos[32] == "" || $datos[29] == "" || $datos[31] == "" || $datos[36] == "" || $datos[28] == "") {
                 $band = 1;
             }
-            if ($datos [18] == "" || $datos [14] == "" || $datos [42] == "") {
+            if ($datos[18] == "" || $datos[14] == "" || $datos[42] == "") {
                 $band = 1;
             }
 //        echo "<br>***" . $registros . " fchEscrituraIdentificacion -> " . $fchEscrituraIdentificacion . " fchMatricula-> " . $fchMatricula;

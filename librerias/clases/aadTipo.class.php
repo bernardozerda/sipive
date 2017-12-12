@@ -392,7 +392,7 @@ class aadTipo
      */
     public function validarTitulos( $arrTitulos ){
         foreach( $this->arrFormatoArchivo as $numColumna => $arrCelda ){
-            if( mb_ereg_replace( "[^0-9A-Za-záéíóúüñÑ\ \-\/]","", $arrTitulos[$numColumna]) != $arrCelda['nombre'] ){
+            if( mb_strtolower(mb_ereg_replace( "[^0-9A-Za-záéíóúüñÑ\ \-\/]","", $arrTitulos[$numColumna])) != mb_strtolower($arrCelda['nombre']) ){
                 $this->arrErrores[] = "La columna " . $arrCelda['nombre'] . " no se encuentra o no esta en el lugar correcto";
             }
         }

@@ -125,7 +125,8 @@ class InformeVeedurias
                 UPPER(esc.txtCiudadResolucion) as txtCiudadResolucion,
                 UPPER(esc.txtMatriculaInmobiliaria) as txtMatriculaInmobiliariaEscriturada,
                 UPPER(esc.txtChip) as txtChip,
-                UPPER(esc.txtTipoPredio) as txtTipoPredio
+                UPPER(esc.txtTipoPredio) as txtTipoPredio,
+                upr.seqFormulario as seqFormularioUnidad
             from t_vee_proyecto pry
             left join t_pry_proyecto pry1 on pry.seqProyectoPadre = pry1.seqProyecto and pry.seqCorte
             inner join t_vee_unidad_proyecto upr on pry.seqProyectoVeeduria = upr.seqProyectoVeeduria
@@ -455,6 +456,7 @@ class InformeVeedurias
              ***************************************************************************/
 
             $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'seqUnidadProyecto' ]  = $seqUnidadProyecto;
+            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'seqFormulario' ]      = $objRes->fields['seqFormularioUnidad'];
             $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Proyecto Padre' ]     = $txtNombreProyectoPadre;
             $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Proyecto Hijo' ]      = $txtNombreProyectoHijo;
             $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Nit Proyecto' ]       = $txtNitProyecto;
@@ -692,7 +694,7 @@ class InformeVeedurias
               frm.txtFormulario as 'Numero de Formulario',
               IF(frm.bolSancion = 1, 'SI', 'NO') as Sancionado,
               sis.txtSisben as Sisben,
-              IF(frm.seqProyecto is null or frm.seqProyecto = 0,'No Disponible',pry.txtNombreProyecto) as Proyecto,
+              IF(frm.seqProyecto is null or frm.seqProyecto = 0,'No Disponible',pry2.txtNombreProyecto) as Proyecto,
               IF(frm.seqProyectoHijo is null or frm.seqProyectoHijo = 0,'No Disponible',pry1.txtNombreProyecto) as Conjunto,
               IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad) as Unidad,
               upr.fchLegalizado as 'Fecha Legalización',
@@ -736,6 +738,7 @@ class InformeVeedurias
             INNER JOIN t_frm_sisben sis on frm.seqSisben = sis.seqSisben
             LEFT JOIN t_vee_proyecto pry ON frm.seqProyecto = pry.seqProyecto and pry.seqCorte = $seqCorte
             LEFT JOIN t_vee_proyecto pry1 ON frm.seqProyectoHijo = pry1.seqProyecto and pry1.seqCorte = $seqCorte
+            LEFT JOIN t_pry_proyecto pry2 ON frm.seqProyecto = pry2.seqProyecto
             LEFT JOIN t_vee_unidad_proyecto upr ON frm.seqUnidadProyecto = upr.seqUnidadProyecto and upr.seqProyectoVeeduria = pry.seqProyectoVeeduria
             INNER JOIN t_frm_localidad loc on frm.seqLocalidad = loc.seqLocalidad
             LEFT  JOIN t_frm_barrio bar on frm.seqBarrio = bar.seqBarrio

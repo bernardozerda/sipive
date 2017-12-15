@@ -36,11 +36,11 @@ FROM T_AAD_HOGARES_VINCULADOS ah
 LEFT JOIN t_aad_formulario_acto tafa ON(tafa.seqFormularioActo = ah.seqFormularioActo)
 GROUP BY numActo
 ORDER BY ah.fchActo DESC) AS T_AAD_HOGARES_VINCULADOS1 USING (numActo)
-WHERE T_FRM_HOGAR.seqParentesco = 1 AND T_DES_ESCRITURACION.seqFormulario IN (" . $seqFormularios . ") AND seqTipoActo = 1 "
+WHERE T_FRM_HOGAR.seqParentesco = 1 AND T_FRM_FORMULARIO.seqEstadoProceso = 24 AND seqTipoActo = 1 "
             . " GROUP BY T_DES_ESCRITURACION.seqFormulario order by  T_DES_ESCRITURACION.seqEscrituracion, T_AAD_FORMULARIO_ACTO.seqFormularioActo desc";
 
-//   echo $sql;
-//    die();
+   // echo $sql;
+    // die();
     $resultdl = mysql_query($sql, $conexion) or die(mysql_error());
     //echo $resultdl; die();
     $registros = mysql_num_rows($resultdl);

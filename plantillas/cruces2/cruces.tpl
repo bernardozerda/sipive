@@ -10,7 +10,7 @@
     </div>
     <div class="panel-body">
         <form method="post" onsubmit="someterFormulario('contenido',this,'./contenidos/cruces2/cruces.php',false,true); return false;">
-            <table id="listadoCruces" class="table table-condensed table-hover" width="100%">
+            <table id="listadoCruces" class="table table-striped table-condensed table-hover" width="100%">
                 <thead>
                     <th align="center" width="90px">Creación</th>
                     <th align="center" width="90px">Actualización</th>

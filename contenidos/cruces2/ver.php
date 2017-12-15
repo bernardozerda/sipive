@@ -15,7 +15,19 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Usuario.c
 $claCruces = new Cruces();
 $claCruces->cargar($_POST['seqCruce']);
 
+$arrVer = array();
+foreach($claCruces->arrDatos['arrResultado'] as $seqResultado => $arrDato) {
+    $seqFormulario = $arrDato['seqFormulario'];
+    $arrVer[$seqFormulario]['documento'] = $arrDato['numDocumentoPrincipal'];
+    $arrVer[$seqFormulario]['nombre'] = $arrDato['txtNombrePrincipal'];
+    $arrVer[$seqFormulario]['estado'] = $arrDato['txtEstadoFormulario'];
+    if($arrVer[$seqFormulario]['inhabilitar'] != 1) {
+        $arrVer[$seqFormulario]['inhabilitar'] = $arrDato['bolInhabilitar'];
+    }
+}
+
 $claSmarty->assign( "claCruces", $claCruces );
+$claSmarty->assign( "arrVer", $arrVer );
 $claSmarty->display( "cruces2/ver.tpl" );
 
 ?>

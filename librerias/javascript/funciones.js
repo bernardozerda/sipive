@@ -7182,52 +7182,52 @@ function seleccionarCheckUnidades(idUnidadProyecto, idCheck) {
     }
 }
 
-// function exportarInhabilidadesExcel(idFormulario) {
-//
-//     var objFormulario = YAHOO.util.Dom.get(idFormulario);
-//     var arrCheck = YAHOO.util.Dom.getElementsBy(function () {
-//         return true;
-//     }, 'input', objFormulario);
-//
-//     var numSeleccionados = 0;
-//     if (arrCheck.length > 1) {
-//         for (numIndice in arrCheck) {
-//             if (arrCheck[ numIndice ].id != "0" && arrCheck[ numIndice ].checked == true) {
-//                 numSeleccionados++;
-//             }
-//
-//         }
-//     }
-//
-//     if (numSeleccionados > 0) {
-//         someterFormulario('mensajes', objFormulario, './contenidos/cruces/exportarInhabilidades.php', true, false);
-//     } else {
-//
-//         // Objeto que contiene los atributos del cuadro de dialogo
-//         var objAtributos = {
-//             width: "300px",
-//             effect: {
-//                 effect: YAHOO.widget.ContainerEffect.FADE,
-//                 duration: 0.25
-//             },
-//             fixedcenter: true,
-//             modal: true,
-//             draggable: true,
-//             close: true
-//         }
-//
-//         // INSTANCIA EL OBJETO DIALOGO
-//         var objDialogo = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
-//
-//         objDialogo.setHeader("Atencion Requerida !!"); // encabezado del objeto
-//         objDialogo.setBody("Debe seleccionar al menos un registro, no hay nada que exportar"); // texto que se muestra en el cuerpo (formato html)
-//         objDialogo.cfg.setProperty("icon", YAHOO.widget.SimpleDialog.ICON_WARN); // Icono de advertencia que se ve en el cuadro
-//         objDialogo.render(document.body);
-//         objDialogo.show();
-//     }
-//
-//
-// }
+function exportarInhabilidadesExcel(idFormulario) {
+
+    var objFormulario = YAHOO.util.Dom.get(idFormulario);
+    var arrCheck = YAHOO.util.Dom.getElementsBy(function () {
+        return true;
+    }, 'input', objFormulario);
+
+    var numSeleccionados = 0;
+    if (arrCheck.length > 1) {
+        for (numIndice in arrCheck) {
+            if (arrCheck[ numIndice ].id != "0" && arrCheck[ numIndice ].checked == true) {
+                numSeleccionados++;
+            }
+
+        }
+    }
+
+    if (numSeleccionados > 0) {
+        someterFormulario('mensajes', objFormulario, './contenidos/cruces/exportarInhabilidades.php', true, false);
+    } else {
+
+        // Objeto que contiene los atributos del cuadro de dialogo
+        var objAtributos = {
+            width: "300px",
+            effect: {
+                effect: YAHOO.widget.ContainerEffect.FADE,
+                duration: 0.25
+            },
+            fixedcenter: true,
+            modal: true,
+            draggable: true,
+            close: true
+        }
+
+        // INSTANCIA EL OBJETO DIALOGO
+        var objDialogo = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
+
+        objDialogo.setHeader("Atencion Requerida !!"); // encabezado del objeto
+        objDialogo.setBody("Debe seleccionar al menos un registro, no hay nada que exportar"); // texto que se muestra en el cuerpo (formato html)
+        objDialogo.cfg.setProperty("icon", YAHOO.widget.SimpleDialog.ICON_WARN); // Icono de advertencia que se ve en el cuadro
+        objDialogo.render(document.body);
+        objDialogo.show();
+    }
+
+
+}
 
 function exportarUnidadesProyectoExcel(idUnidadProyecto) {
     var objFormulario = YAHOO.util.Dom.get(idUnidadProyecto);
@@ -10605,3 +10605,33 @@ var listadoCruces = function(){
 }
 YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
 
+var auditoriaCruces = function(){
+    $('#auditoriaCruces').DataTable({
+        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+        "order": [[0, "desc"]],
+        "scrollX": true,
+        "dom": 'lftipr'
+    });
+
+    objSelect = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "select",
+        "auditoriaCruces_wrapper"
+    );
+
+    objInput = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "input",
+        "auditoriaCruces_wrapper"
+    );
+
+    objSelect.className = "inputLogin";
+    objInput.className = "inputLogin";
+
+    objPaginador = YAHOO.util.Dom.get("auditoriaCruces_paginate");
+    objPaginador.style.textAlign = "center";
+
+    eliminarObjeto("auditoriaCrucesListener");
+    YAHOO.util.Event.onContentReady("auditoriaCrucesListener",auditoriaCruces);
+}
+YAHOO.util.Event.onContentReady("auditoriaCrucesListener",auditoriaCruces);

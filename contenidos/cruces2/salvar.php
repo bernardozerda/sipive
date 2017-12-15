@@ -20,21 +20,7 @@ foreach($_POST as $txtClave => $txtValor){
 }
 
 $claCruces = new Cruces();
-
-// valida los campos del formulario en pantalla
-$claCruces->validarFormulario($_POST);
-
-// carga el archivo txt, xls o xlsx
-$arrArchivo = $claCruces->cargarArchivo();
-
-// valida que los datos sean coherentes con el formato del archivo
-// ver la clase $claCruces->arrFormatoArchivo
-$claCruces->validarArchivo($arrArchivo);
-
-// si no hay errores procede a validar reglas de negocio y salvar
-if(empty($claCruces->arrErrores)){
-    $claCruces->salvar($_POST,$arrArchivo);
-}
+$claCruces->salvar();
 
 // si no hay errores imprime los mensajes
 if(! empty($claCruces->arrErrores)) {

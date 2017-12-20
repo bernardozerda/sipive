@@ -76,6 +76,27 @@ while ($objRes->fields) {
 
 $numRegistros = array_shift(array_keys($claSeguimiento->obtenerRegistros(1, 0)));
 
+// si es modalidad de leasing carga los datos del contrato
+$arrContratoLeasing = array();
+if($claFormulario->seqModalidad == 13){
+
+    $seqEscrituracion = $claDesembolso->arrEscrituracion['seqEscrituracion'];
+    $arrContratoLeasing = obtenerDatosTabla(
+        "t_des_escrituracion",
+        array("seqEscrituracion","numContratoLeasing","fchContratoLeasing"),
+        "seqEscrituracion",
+        "seqEscrituracion = " . $seqEscrituracion
+    )[$seqEscrituracion];
+    $arrContratoLeasing['txtFechaLeasing'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrContratoLeasing['fchContratoLeasing']))));
+
+    $arrConvenio = obtenerDatosTabla(
+        "v_frm_convenio",
+        array("seqConvenio","txtConvenio","txtBanco"),
+        "seqConvenio",
+        "seqConvenio = " . $claFormulario->seqConvenio
+    )[$claFormulario->seqConvenio];
+
+}
 
 $claSmarty->assign("txtFuente12", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 11px;");
 $claSmarty->assign("txtFuente10", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 9px;");
@@ -86,6 +107,8 @@ $claSmarty->assign("claFormulario", $claFormulario);
 $claSmarty->assign("nombreComercial", $nombreComercial);
 $claSmarty->assign("txtUsuarioSesion", utf8_encode($_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']));
 $claSmarty->assign("numRegistro", $numRegistros);
+$claSmarty->assign("arrContratoLeasing", $arrContratoLeasing);
+$claSmarty->assign("arrConvenio", $arrConvenio);
 
 $claSmarty->display("desembolso/formatoEstudioTitulos.tpl");
 ?>

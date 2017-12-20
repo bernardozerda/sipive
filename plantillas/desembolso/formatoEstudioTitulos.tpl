@@ -17,7 +17,8 @@
             <title>SDV - SDHT</title>
 
     </head>
-    <body onLoad="window.print();">
+    {*<body onLoad="window.print();">*}
+    <body>
 
         <center>
 
@@ -161,7 +162,17 @@
                             {if $claDesembolso->arrTitulos.bolSubsidioFonvivienda == 1} y Fonvivienda {/if}
                         </td>
                     </tr>
-                {/if}			
+                {/if}
+
+                {if not empty($arrContratoLeasing)}
+                    <tr>
+                        <td valign="top" bgcolor="#E4E4E4"><b>Contrato de Leasing</b></td>
+                        <td align="justify">
+                            Número {$arrContratoLeasing.numContratoLeasing} del {$arrContratoLeasing.fchContratoLeasing}
+                        </td>
+                    </tr>
+                {/if}
+
 
                 <!-- SUBSIDIOS ASIGNADOS -->
                 <tr>
@@ -178,6 +189,15 @@
                         {/if} 
                     </td>
                 </tr>
+
+                {if not empty($arrConvenio)}
+                    <tr>
+                        <td valign="top" bgcolor="#E4E4E4"><b>Convenio de Leasing</b></td>
+                        <td align="justify">
+                            {$arrConvenio.txtConvenio} con la entidad {$arrConvenio.txtBanco}
+                        </td>
+                    </tr>
+                {/if}
 
                 {if $seqModalidad neq "5"}
                     <!-- AVALUO -->

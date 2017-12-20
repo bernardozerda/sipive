@@ -3797,63 +3797,66 @@ ORDER BY aad.fchActo DESC;
     }
 
     public function InformacionSolucion() {
-
         global $aptBd;
 
-
         $arrErrores = &$this->arrErrores;
-
         if (empty($arrErrores)) {
-            
-            $sql = "select frm.seqFormulario AS 'id Hogar',
-ciu.numDocumento 'CC Postulante Principal',
-tdo.txtTipoDocumento AS 'Tipo Documento',
-UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS 'Nombre',
-frm.txtFormulario AS 'Formulario', 
-frm.seqProyecto AS 'Proyecto Padre', 
-frm.seqProyectoHijo AS 'Proyecto Hijo',
-pry.txtNombreProyecto AS 'Proyecto',
-frm.seqUnidadproyecto, und.txtNombreunidad AS 'Unidad Proyecto',
-und.valSDVEAprobado AS 'Valor Aprobado', 
-und.valSDVEActual AS 'Valor Actual',
-tec.txtexistencia AS 'Viabilidad Tecnica', 
-CONCAT('Res. ', aad.numActo) AS 'Resolucion Vinculacion',
-YEAR(aad.fchActo) AS 'Año', 
-aad.fchActo AS 'Fecha Resolucion', 
-CONCAT(eta.txtEtapa, ' - ', epr.txtEstadoProceso) AS 'Estado del Proceso', 
-frm.valAspiraSubsidio AS 'Valor Subsidio',
-IF(frm.SeqProyectoHijo = '', UPPER(pry.txtNombreComercial), UPPER(prh.txtNombreComercial)) AS 'Nombre Comercial', 
-und.txtNombreunidad AS 'Descripcion de la Unidad',
-(SELECT 
-GROUP_CONCAT(DISTINCT (UPPER(CONCAT(CONVERT(ciu1.txtNombre1 USING utf8), ' ', 
-CONVERT(ciu1.txtNombre2 USING utf8), ' ', CONVERT(ciu1.txtApellido1 USING utf8), ' ', 
-CONVERT(ciu1.txtApellido2 USING utf8)))), ' ', CONVERT(tdo.txtTipoDocumento USING utf8),' ', ciu1.numDocumento, ' ',  civ.txtEstadocivil, ' ' SEPARATOR' -- ')
-FROM T_FRM_HOGAR hog1
-INNER JOIN T_CIU_CIUDADANO ciu1 ON hog1.seqCiudadano = ciu1.seqCiudadano
-WHERE hog1.seqFormulario =  hog.seqFormulario and ( ciu1.seqTipoDocumento =1 OR ciu1.seqTipoDocumento =2 OR ciu1.seqTipoDocumento =5 )) AS 'Miembros Mayores de Edad'
-FROM T_FRM_FORMULARIO frm 
-INNER JOIN T_FRM_VALOR_SUBSIDIO vsu ON (frm.seqModalidad = vsu.seqModalidad) AND (vsu.seqSolucion = frm.seqSolucion)
-LEFT JOIN T_FRM_HOGAR hog ON (frm.seqFormulario = hog.seqFormulario)
-LEFT JOIN T_PRY_PROYECTO pry ON (frm.seqProyecto = pry.seqProyecto) 
-LEFT JOIN T_PRY_PROYECTO prh ON (frm.seqProyectoHijo = prh.seqProyecto) 
-LEFT JOIN T_PRY_UNIDAD_PROYECTO und ON (frm.seqFormulario = und.seqFormulario) 
-LEFT JOIN T_PRY_TECNICO tec ON (und.seqUnidadProyecto = tec.seqUnidadProyecto)
-LEFT JOIN T_FRM_ESTADO_PROCESO epr ON (frm.seqEstadoProceso = epr.seqEstadoProceso) 
-LEFT JOIN T_FRM_ETAPA eta ON (epr.seqEtapa = eta.seqEtapa)
-LEFT JOIN T_CIU_CIUDADANO ciu ON (hog.seqCiudadano = ciu.seqCiudadano)
-INNER JOIN T_CIU_TIPO_DOCUMENTO tdo ON (tdo.seqTipoDocumento  = ciu.seqTipoDocumento )
-INNER JOIN T_CIU_PARENTESCO par ON (par.seqParentesco = hog.seqParentesco) 
-INNER JOIN T_CIU_ESTADO_CIVIL civ ON (civ.seqEstadoCivil = ciu.seqEstadoCivil)  
-LEFT JOIN T_AAD_FORMULARIO_ACTO fac ON (frm.seqFormulario = fac.seqFormulario) 
-LEFT JOIN T_AAD_HOGARES_VINCULADOS hvi ON (fac.seqFormularioActo = hvi.seqFormularioActo) 
-INNER JOIN (SELECT * FROM T_AAD_ACTO_ADMINISTRATIVO ORDER BY T_AAD_ACTO_ADMINISTRATIVO.fchActo desc) AS aad ON ( hvi.numActo = aad.numActo AND hvi.fchActo = aad.fchActo)
-WHERE ( tdo.seqTipoDocumento =1 OR tdo.seqTipoDocumento =2 OR tdo.seqTipoDocumento =5 ) AND hog.seqParentesco = 1  AND frm.seqFormulario IN (" . $this->seqFormularios . " )"
-                    . "GROUP BY frm.seqFormulario order by frm.seqFormulario";
-
+            $sql = "
+                SELECT 
+                    frm.seqFormulario AS 'id Hogar',
+                    ciu.numDocumento 'CC Postulante Principal',
+                    tdo.txtTipoDocumento AS 'Tipo Documento',
+                    UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS 'Nombre',
+                    frm.txtFormulario AS 'Formulario', 
+                    frm.seqProyecto AS 'Proyecto Padre', 
+                    frm.seqProyectoHijo AS 'Proyecto Hijo',
+                    pry.txtNombreProyecto AS 'Proyecto',
+                    frm.seqUnidadproyecto, und.txtNombreunidad AS 'Unidad Proyecto',
+                    und.valSDVEAprobado AS 'Valor Aprobado', 
+                    und.valSDVEActual AS 'Valor Actual',
+                    tec.txtexistencia AS 'Viabilidad Tecnica', 
+                    CONCAT('Res. ', aad.numActo) AS 'Resolucion Vinculacion',
+                    YEAR(aad.fchActo) AS 'Año', 
+                    aad.fchActo AS 'Fecha Resolucion', 
+                    CONCAT(eta.txtEtapa, ' - ', epr.txtEstadoProceso) AS 'Estado del Proceso', 
+                    frm.valAspiraSubsidio AS 'Valor Subsidio',
+                    frm.valCartaLeasing AS 'Valor Carta Leasing',
+                    con.txtBanco as 'Banco Convenio Leasing',
+                    IF(frm.SeqProyectoHijo = '', UPPER(pry.txtNombreComercial), UPPER(prh.txtNombreComercial)) AS 'Nombre Comercial', 
+                    und.txtNombreunidad AS 'Descripcion de la Unidad',
+                    (
+                      SELECT GROUP_CONCAT(DISTINCT (UPPER(CONCAT(CONVERT(ciu1.txtNombre1 USING utf8), ' ', CONVERT(ciu1.txtNombre2 USING utf8), ' ', CONVERT(ciu1.txtApellido1 USING utf8), ' ', 
+                              CONVERT(ciu1.txtApellido2 USING utf8)))), ' ', CONVERT(tdo.txtTipoDocumento USING utf8),' ', ciu1.numDocumento, ' ',  civ.txtEstadocivil, ' ' SEPARATOR' -- ')
+                      FROM T_FRM_HOGAR hog1
+                      INNER JOIN T_CIU_CIUDADANO ciu1 ON hog1.seqCiudadano = ciu1.seqCiudadano
+                      WHERE hog1.seqFormulario =  hog.seqFormulario 
+                        and ( ciu1.seqTipoDocumento =1 OR ciu1.seqTipoDocumento =2 OR ciu1.seqTipoDocumento =5 )
+                    ) AS 'Miembros Mayores de Edad'
+                FROM T_FRM_FORMULARIO frm 
+                INNER JOIN T_FRM_HOGAR hog ON frm.seqFormulario = hog.seqFormulario
+                INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
+                INNER JOIN T_CIU_TIPO_DOCUMENTO tdo ON tdo.seqTipoDocumento  = ciu.seqTipoDocumento
+                INNER JOIN T_CIU_PARENTESCO par ON par.seqParentesco = hog.seqParentesco 
+                INNER JOIN T_CIU_ESTADO_CIVIL civ ON civ.seqEstadoCivil = ciu.seqEstadoCivil 
+                LEFT JOIN V_FRM_CONVENIO con ON frm.seqConvenio = con.seqConvenio
+                LEFT JOIN T_PRY_PROYECTO pry ON frm.seqProyecto = pry.seqProyecto
+                LEFT JOIN T_PRY_PROYECTO prh ON frm.seqProyectoHijo = prh.seqProyecto 
+                LEFT JOIN T_PRY_UNIDAD_PROYECTO und ON frm.seqFormulario = und.seqFormulario 
+                LEFT JOIN T_PRY_TECNICO tec ON und.seqUnidadProyecto = tec.seqUnidadProyecto
+                LEFT JOIN T_FRM_ESTADO_PROCESO epr ON frm.seqEstadoProceso = epr.seqEstadoProceso 
+                LEFT JOIN T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
+                LEFT JOIN T_AAD_FORMULARIO_ACTO fac ON frm.seqFormulario = fac.seqFormulario 
+                LEFT JOIN T_AAD_HOGARES_VINCULADOS hvi ON fac.seqFormularioActo = hvi.seqFormularioActo 
+                INNER JOIN (SELECT * FROM T_AAD_ACTO_ADMINISTRATIVO ORDER BY T_AAD_ACTO_ADMINISTRATIVO.fchActo DESC) AS aad ON ( hvi.numActo = aad.numActo AND hvi.fchActo = aad.fchActo)
+                WHERE ( tdo.seqTipoDocumento = 1 OR tdo.seqTipoDocumento = 2 OR tdo.seqTipoDocumento = 5 ) 
+                  AND hog.seqParentesco = 1  
+                  AND frm.seqFormulario IN (" . $this->seqFormularios . ")
+                GROUP BY frm.seqFormulario 
+                ORDER BY frm.seqFormulario
+            ";
             try {
-
+//                echo $sql; die();
                 $objRes = $aptBd->execute($sql);
-
                 $this->obtenerReportesGeneral($objRes, "InformacionSolucion");
             } catch (Exception $objError) {
                 $arrErrores[] = "Se ha producido un error al consultar los datos";
@@ -4391,6 +4394,235 @@ WHERE ( tdo.seqTipoDocumento =1 OR tdo.seqTipoDocumento =2 OR tdo.seqTipoDocumen
         }
 
     }
+
+    public function estudioTitulosLeasing(){
+        global $txtPrefijoRuta , $arrConfiguracion , $aptBd;
+
+        // consulta de los datos
+        $sql = "
+            select
+                frm.seqFormulario as 'ID HOGAR',
+                ciu.numDocumento as 'CC POSTULANTE PRINCIPAL',
+                tdo.txtTipoDocumento as 'TIPO DE DOCUMENTO',
+                upper(concat(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) as 'NOMBRE POSTULANTE PRINCIPAL',
+                pry1.txtNombreProyecto as 'PROYECTO',
+                pry2.txtNombreProyecto as 'CONJUNTO',  
+                upr.txtNombreUnidad as 'DESCRIPCION DE LA UNIDAD',
+                esc.txtNombreVendedor 'PROPIETARIO',
+                esc.txtDireccionInmueble as 'DIRECCION INMUEBLE', 
+                esc.numContratoLeasing as 'NUMERO CONTRATO LEASING',
+                esc.fchContratoLeasing as 'FECHA CONTRATO LEASING',
+                pte.txtExistencia as 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD',
+                esc.numValorInmueble  as 'VALOR INMUEBLE',
+                aad.numActo as 'NUMERO DEL ACTO',
+                date_format(aad.fchActo,'%Y-%m-%d') as 'FECHA DEL ACTO',
+                '' as 'No. ESCRITURA', 
+                '' as 'FECHA ESCRITURA', 
+                '' as 'NOTARIA', 
+                '' as 'CIUDAD NOTARIA', 
+                '' as 'FOLIO DE MATRICULA', 
+                '' as 'ZONA OFICINA REGISTRO', 
+                '' as 'CIUDAD OFICINA REGISTRO', 
+                '' as 'FECHA FOLIO', 
+                '' as 'RESOLUCION DE VINCULACION COINCIDENTE', 
+                '' as 'CARTA DE VINCULACION Y/O RESOLUCION PROTOCOLIZADA', 
+                '' as 'No. DE ANOTACION CTL COMPRAVENTA', 
+                '' as 'SE CANCELA HIPOTECA MAYOR EXTENSION (SI LA HUBIERE)', 
+                '' as 'NUMERO Y FECHA DE CONTRATO LEASING',
+                '' as 'DETERMINACIÓN DEL APORTE DEL DISTRITO CAPITAL EN LA ESCRITURA',
+                '' as 'CLAUSULAS DONDE SE ESPECIFIQUEN RESTRICCIONES Y PROHIBICIONES EN EL CONTRATO',
+                '' as 'RELACIÓN DE LOS INTEGRANTES DEL HOGAR EN EL CONTRATO',
+                '' as 'CLÁUSULA ESPECIALES A IMPUESTOS Y CONTRIBUCIONES CON CARGO AL APORTE DEL DISTRITO CAPITAL',
+                '' as 'NUMERO Y FECHA DEL CONTRATO DE LEASING HABITACIONAL',
+                '' as 'BENEFICIO DEL APORTE SEA EL LOCATARIO DEL CONTRATO DE LEASING',
+                '' as 'DESCRIPCIÓN DEL APORTE DENTRO DEL CONTRATO',
+                '' as 'PROPIEDAD DE LA ENTIDAD FINANCIERA OTORGANTE DEL LEASING EN CTL',
+                '' as 'SE VIABILIZA JURIDICAMENTE',
+                '' as 'ELABORO', 
+                '' as 'APROBO',
+                '' as 'OBSERVACION'  
+            from t_frm_formulario frm
+            inner join t_frm_hogar hog on frm.seqFormulario = hog.seqFormulario and hog.seqParentesco = 1
+            inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+            inner join t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
+            inner join t_des_escrituracion esc on frm.seqFormulario = esc.seqFormulario
+            inner join t_pry_proyecto pry1 on pry1.seqProyecto = frm.seqProyecto
+            left  join t_pry_proyecto pry2 on pry2.seqProyecto = frm.seqProyectoHijo
+            inner join t_pry_unidad_proyecto upr on frm.seqUnidadProyecto = upr.seqUnidadProyecto
+            inner join t_pry_tecnico pte on upr.seqUnidadProyecto = pte.seqUnidadProyecto
+            inner join (
+              select
+                fac.seqFormulario, 
+                hvi.numActo, 
+                MAX(hvi.fchActo) as fchActo
+              from t_aad_hogares_vinculados hvi
+              inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
+              where hvi.seqTipoActo = 1
+              group by 
+                hvi.seqFormularioActo, 
+                hvi.numActo
+            ) aad on frm.seqFormulario = aad.seqFormulario
+            where frm.seqFormulario in (" . $this->seqFormularios . ")
+              and frm.seqModalidad = 13        
+        ";
+        $arrReporte = $aptBd->GetAll($sql);
+
+        if(! empty($arrReporte)) {
+
+            // exporta los resultados
+            include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "PHPExcel.php");
+            include("../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php");
+
+            $objPHPExcel = new PHPExcel();
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            $objHoja = $objPHPExcel->getActiveSheet();
+            $objHoja->setTitle('Estudio Titulos Leasing');
+            $objHoja->getDefaultColumnDimension()->setWidth(15);
+
+            // titulos
+            $arrTitulos = array_keys($arrReporte[0]);
+            for ($i = 0; $i < count($arrTitulos); $i++) {
+                $objHoja->setCellValueByColumnAndRow($i, 1, $arrTitulos[$i], false);
+                $objHoja->getRowDimension(1)->setRowHeight(80);
+                $objHoja->getStyleByColumnAndRow($i,1)->getAlignment()->setWrapText(true);
+                $objHoja->getStyleByColumnAndRow($i,1)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objHoja->getStyleByColumnAndRow($i,1)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            }
+
+            // contenido
+            foreach ($arrReporte as $numLinea => $arrDatos) {
+                $numColumna = 0;
+                foreach ($arrDatos as $txtCelda) {
+                    $objHoja->setCellValueByColumnAndRow($numColumna, ($numLinea + 2), $txtCelda, false);
+                    if($numColumna < 9){
+                        $objHoja->getColumnDimensionByColumn($numColumna)->setAutoSize(true);
+                    }
+                    $numColumna++;
+                }
+            }
+
+            // estilo por defecto
+            $arrEstilos = array(
+                'font' => array(
+                    'bold' => false,
+                    'size' => 8,
+                    'name' => 'Calibri'
+                ),
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                ),
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+
+            // dimnsiones de la hoja
+            $numColumnas = count($arrTitulos);
+            $numFilas = count($arrReporte);
+
+            // formato por defecto dela hoja
+            $objHoja->getStyle(
+                PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . ($numFilas + 1))
+                ->applyFromArray($arrEstilos);
+
+            // colores en los titulos
+            $objHoja->getStyle(
+                PHPExcel_Cell::stringFromColumnIndex(0)  . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) .  "1")
+                ->getFont()
+                ->setBold(true);
+
+            $objHoja->getStyle(
+                PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) .  "1")
+                ->getFill()
+                ->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+
+            $objHoja->getStyle(
+                PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) .  "1")
+                ->getFill()
+                ->getStartColor()
+                ->setARGB('A9A9A9');
+
+            $objHoja->getStyle(
+                PHPExcel_Cell::stringFromColumnIndex(23) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex(35) .  "1")
+                ->getFill()
+                ->getStartColor()
+                ->setARGB('FF0000');
+
+            // formatos de fecha
+            $objPHPExcel->getActiveSheet()->getStyle(
+                PHPExcel_Cell::stringFromColumnIndex(16) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex(16) .  ($numFilas + 1))
+                ->getNumberFormat()
+                ->setFormatCode("yyyy-mm-dd");
+
+            $objPHPExcel->getActiveSheet()->getStyle(
+                PHPExcel_Cell::stringFromColumnIndex(22) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex(22) .  ($numFilas + 1))
+                ->getNumberFormat()
+                ->setFormatCode("yyyy-mm-dd");
+
+            $objHoja->getStyle(
+                PHPExcel_Cell::stringFromColumnIndex(12) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex(12) .  ($numFilas + 1))
+                ->getNumberFormat()
+                ->setFormatCode('#,##');
+
+
+            // listas
+            for($numColumna = 23; $numColumna < 37; $numColumna++){
+                for($numFila = 2; $numFila < $numFilas; $numFila++){
+                    $objValidacion = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($numColumna, $numFila)->getDataValidation();
+                    $objValidacion->setType(PHPExcel_Cell_DataValidation::TYPE_LIST);
+                    $objValidacion->setErrorStyle(PHPExcel_Cell_DataValidation::STYLE_STOP);
+                    $objValidacion->setAllowBlank(false);
+                    $objValidacion->setShowInputMessage(true);
+                    $objValidacion->setShowErrorMessage(true);
+                    $objValidacion->setShowDropDown(true);
+                    $objValidacion->setErrorTitle("Error de datos");
+                    $objValidacion->setError("El valor digitado no es válido");
+                    $objValidacion->setPromptTitle("Los valores válidos son:");
+                    $objValidacion->setFormula1('"' . implode(",", ["SI","NO","NO APLICA"]) . '"');
+                }
+            }
+
+            // proteccion
+            $objPHPExcel->getSecurity()->setLockWindows(false);
+            $objPHPExcel->getSecurity()->setLockStructure(false);
+            $objPHPExcel->getSheet(0)->getProtection()->setSheet(true);
+            $objPHPExcel->getActiveSheet()->getProtection()->setSort(true);
+            $objPHPExcel->getActiveSheet()->getProtection()->setInsertRows(true);
+            $objPHPExcel->getActiveSheet()->getProtection()->setFormatCells(true);
+            $objPHPExcel->getActiveSheet()->getProtection()->setPassword('SDHT');
+
+            //desprotege las celdas editables
+            $objPHPExcel->getActiveSheet()->getStyle(
+                PHPExcel_Cell::stringFromColumnIndex(15) . "2:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas) .  ($numFilas+1))
+                ->getProtection()
+                ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header("Content-Disposition: attachment;filename='Platilla_Estudio_Titulos_Leasing.xlsx");
+            header('Cache-Control: max-age=0');
+            ob_end_clean();
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            $objWriter->save('php://output');
+
+        }else{
+            imprimirErrores(array("No hay datos para mostrar, verifique que haya cargado el arhivo de documentos y que todos sean postulantes principales en la modalidad de leasing habitacional"));
+        }
+
+    }
+
 
 }
 

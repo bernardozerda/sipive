@@ -205,5 +205,9 @@ switch ($reporte) {
 //        $claReporte->encuestasPive();
         $claReporte->encuestasPiveCruces();
         break;
+
+    case "estudioTitulosLeasing":
+        $claReporte->estudioTitulosLeasing();
+        break;
 }
 ?>

@@ -64,6 +64,7 @@
 {assign var=reporteInformacionCvp 		    value=$arrExportables.reporteInformacionCvp}
 {assign var=encuestasPive        		    value=$arrExportables.encuestasPive}
 {assign var=inconsistenciasInscripcion	    value=$arrExportables.inconsistenciasInscripcion}
+{assign var=estudioTitulosLeasing   	    value=$arrExportables.estudioTitulosLeasing}
 
 <form id="listadoExportable" >
     <center>
@@ -1041,6 +1042,23 @@
                         </td>
                     </tr>
                 {/if}
+
+
+                {if $estudioTitulosLeasing == 1}
+                    <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                        <td class="tituloCampo" align="left">Plantilla Estudio Titulos Leasing</td>
+                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                            <a onclick="someterFormulario(
+                                                'mensajes',
+                                                'listadoExportable',
+                                                './contenidos/reportes/ReportesExportables.php?reporte=estudioTitulosLeasing',
+                                                true,
+                                                false)"
+                               href="#">Exportable</a>
+                        </td>
+                    </tr>
+                {/if}
+
                 
                 {if $plantillaEscrituracion == 1}
                     <tr {if $x is not even} style="background:#{$backColor};" {/if}>

@@ -178,6 +178,11 @@ function obtenerReporteEscrituracion($arrDocumentos) {
         $tituloReporte[47] = "Obs Nit";
         $tituloReporte[48] = "Folio Otros";
         $tituloReporte[49] = "Obs Otros";
+        $tituloReporte[50] = "Número Contrato Leasing";
+        $tituloReporte[51] = "Fecha Contrato Leasing";
+        $tituloReporte[52] = "Folios Contrato Leasing";
+        $tituloReporte[53] = "Obs Contrato Leasing";
+
 
         //Cabecera del Archivo   
         $field = 0;
@@ -190,13 +195,13 @@ function obtenerReporteEscrituracion($arrDocumentos) {
             $field++;
         }
         $field = 25;
-        $columnas30 = 74;
+        $columnas30 = 78;
         $tiltle = 1;
         while ($field !== $columnas30) {
             $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[$field] . "1", $tituloReporte[$tiltle])->getRowDimension('1')->setRowHeight(40);
             $objPHPExcel->getActiveSheet()->getColumnDimension($arrNomCol[$field])->setAutoSize(true);
             $objPHPExcel->getProperties()->setCreator("HOO")->setLastModifiedBy("HOO");
-            $objPHPExcel->getActiveSheet()->getStyle('Z1:BV1')->applyFromArray($style_Mod);
+            $objPHPExcel->getActiveSheet()->getStyle('Z1:BZ1')->applyFromArray($style_Mod);
             $field++;
             $tiltle++;
         }
@@ -207,13 +212,19 @@ function obtenerReporteEscrituracion($arrDocumentos) {
             $field = 0;
             while ($field !== $columnas) {
                 $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[$field] . $rowcount, $row[$field]);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . $rowcount . ':BV' . $rowcount)->applyFromArray($styleArrayBody);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $rowcount . ':BZ' . $rowcount)->applyFromArray($styleArrayBody);
                 $field++;
             }
             $rowcount++;
         }
 
-        //Protección de hoja 
+        // formato de fechas
+        $objPHPExcel->getActiveSheet()->getStyle("Q1:Q"   . $rowcount)->getNumberFormat()->setFormatCode("yyyy-mm-dd");
+        $objPHPExcel->getActiveSheet()->getStyle("R1:R"   . $rowcount)->getNumberFormat()->setFormatCode("yyyy-mm-dd");
+        $objPHPExcel->getActiveSheet()->getStyle("AB1:AB" . $rowcount)->getNumberFormat()->setFormatCode("yyyy-mm-dd");
+        $objPHPExcel->getActiveSheet()->getStyle("BX1:BX" . $rowcount)->getNumberFormat()->setFormatCode("yyyy-mm-dd");
+
+        //Protección de hoja
         $objPHPExcel->getSecurity()->setLockWindows(false);
         $objPHPExcel->getSecurity()->setLockStructure(false);
         $objPHPExcel->getSheet(0)->getProtection()->setSheet(true);
@@ -223,7 +234,7 @@ function obtenerReporteEscrituracion($arrDocumentos) {
 
 
         //desprotege las celdas editables
-        $objPHPExcel->getActiveSheet()->getStyle('AA2:BV' . ($registros + 1))->getProtection()
+        $objPHPExcel->getActiveSheet()->getStyle('AA2:BZ' . ($registros + 1))->getProtection()
                 ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
         $objPHPExcel->getActiveSheet()->getStyle('AE2:AE' . ($registros + 1))->getProtection()
                 ->setLocked(PHPExcel_Style_Protection::PROTECTION_PROTECTED);

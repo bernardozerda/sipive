@@ -127,7 +127,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                         // INSERTS
                          global $db;
                         $separado_por_comas = implode(",", $arrFormularioArchivo);
-                        $validar = validarDocumentos($separado_por_comas, $db, 27, 17, "Remisión Datos Solución");
+                        $validar = validarDocumentos($separado_por_comas, $db, 27, 17, "Registro Información Solución");
                         if ($queryInsert != '' && $validar) {
                             $segmentoInsert = "INSERT INTO T_DES_DESEMBOLSO (seqFormulario, txtNombreVendedor, numDocumentoVendedor, txtBarrio, seqLocalidad, txtEscritura, numNotaria, fchEscritura, txtMatriculaInmobiliaria, bolViabilizoJuridico, bolviabilizoTecnico, txtChip, seqTipoDocumento, txtCompraVivienda, txtTipoPredio, numTelefonoVendedor, txtCedulaCatastral, txtTipoDocumentos, numEstrato, txtCiudad, fchCreacionBusquedaOferta, fchActualizacionBusquedaOferta, txtPropiedad, txtCorreoVendedor, seqCiudad, seqAplicacionSubsidio, seqProyectosSoluciones, txtDireccionInmueble) VALUES ";
                           $queryInsert = $segmentoInsert . substr($queryInsert, 0, -2) . ";";

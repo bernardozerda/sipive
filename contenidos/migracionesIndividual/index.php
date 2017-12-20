@@ -39,17 +39,122 @@ foreach ($array as $key => $value) {
                 <?php } ?>
                 <?php if (in_array("1", $grupos) || in_array("8", $grupos)) { ?>
 
-                    <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/masivoPlantillaEscrituracion/index.php');">Cargue Datos Escrituraci&oacute;n</a></li>                
+                    <!------------------------------------------------------------------------------------------------------
+                        CARGUE DATOS ESCRITURACION
+                     ------------------------------------------------------------------------------------------------------>
 
-                    <li><a href="javascript:void(0)" onClick=" cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/migracionEstudiosTecnicosPryDes/index.php');">Migraci&oacute;n Estudios T&eacute;cnicos Proyectos a Desembolsos</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Escrituración<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/masivoPlantillaEscrituracion/index.php'
+                                   );"
+                                >
+                                    Cargue Datos Escrituraci&oacute;n
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/DesembolsoMiCasaYa/index.php'
+                                   );"
+                                >
+                                    Mi Casa Ya
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/leasing/escrituracion.php'
+                                   );"
+                                >
+                                    Leasing Habitacional
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!------------------------------------------------------------------------------------------------------
+                        CARGUE DATOS ESTUDIOS TÉCNICOS
+                     ------------------------------------------------------------------------------------------------------>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Estudios Técnicos<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick=" cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/migracionEstudiosTecnicosPryDes/index.php'
+                                   );"
+                                >
+                                    Migraci&oacute;n Proyectos a Desembolsos
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/EstudiosTecnicosMiCasaYa/index.php'
+                                   );"
+                                >
+                                    Mi Casa Ya
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
                 <?php } ?>
                 <?php if (in_array("8", $grupos)) { ?>
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=26');">Generaci&oacute;n Certificado Habitabilidad</a></li>
-                    <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=24');">Remisi&oacute;n Estudio de Titulos</a></li>
+
                 <?php } ?>
                 <?php if (in_array("1", $grupos) || in_array("8", $grupos)) { ?>
-                    <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargaMasivosEstudioTitulos/index.php');">Migraci&oacute;n Masiva de Estudio de Titulos</a></li>
+
+                    <!------------------------------------------------------------------------------------------------------
+                        CARGUE DATOS ESTUDIO DE TITULOS
+                     ------------------------------------------------------------------------------------------------------>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Estudio de Títulos<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=24');"
+                                >
+                                    Remisi&oacute;n Estudio de Titulos
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/CargaMasivosEstudioTitulos/index.php'
+                                   );"
+                                >
+                                    Migraci&oacute;n Masiva de Estudio de Titulos
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/leasing/estudioTitulos.php'
+                                   );"
+                                >
+                                    Leasing Habitacional
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=29');">Conformaci&oacute;n Definitiva Documentaci&oacute;n</a></li>
                 <?php } ?>
                 <?php if (in_array("10", $grupos)) { ?>
@@ -60,50 +165,6 @@ foreach ($array as $key => $value) {
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/DevolucionExpedientes/index.php');">Devolución Expedientes</a></li>
 
                 <?php } ?>
-
-                <!------------------------------------------------------------------------------------------------------
-                    ESQUEMA MI CASA YA
-                 ------------------------------------------------------------------------------------------------------>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mi Casa Ya<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-
-                        <!------------------------------------------------------------------------------------------------------
-                            CARGA MASIVA DE DESEMBOLSO Y ESCRITURACION
-                         ------------------------------------------------------------------------------------------------------>
-
-                        <?php if (in_array("1", $grupos) || in_array("8", $grupos)) { ?>
-                            <li>
-                                <a href="javascript:void(0)"
-                                   onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/DesembolsoMiCasaYa/index.php'
-                                   );"
-                                >
-                                    Masivo de escrituración
-                                </a>
-                            </li>
-                        <?php } ?>
-
-                        <!------------------------------------------------------------------------------------------------------
-                            CARGA MASIVA DE ESTUDIOS TÉCNICOS
-                         ------------------------------------------------------------------------------------------------------>
-
-                        <?php if (in_array("1", $grupos) || in_array("8", $grupos)) { ?>
-                            <li>
-                                <a href="javascript:void(0)"
-                                   onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/EstudiosTecnicosMiCasaYa/index.php'
-                                   );"
-                                >
-                                    Masivo estudios técnicos
-                                </a>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                </li>
 
             </ul>
         </div>

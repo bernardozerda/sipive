@@ -74,6 +74,7 @@ $arrExportables["plantillaEscrituracion"] = 0; // Plantilla Escrituración
 $arrExportables["informeProyectos"] = 0;
 $arrExportables["encuestasPive"] = 0; // Encuestas PIVE
 $arrExportables["inconsistenciasInscripcion"] = 0; // Reporte de inconsistencias de inscripcion
+$arrExportables["estudioTitulosLeasing"] = 0; // Plantilla Estudio de Titulos Leasing
 
 foreach ($arrGruposPertenece as $seqGrupo) {
 
@@ -172,6 +173,7 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["plantillaestudiotitulos"] = 1;
             $arrExportables["reporteEstudioTitulos"] = 1;
             $arrExportables["archivoDesembolso"] = 1;
+            $arrExportables["estudioTitulosLeasing"] = 1;
             break;
 
         case 14: // tecnico
@@ -210,6 +212,7 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["archivoDesembolso"] = 1;
             $arrExportables["encuestasPive"] = 1;
             $arrExportables["inconsistenciasInscripcion"] = 1;
+            $arrExportables["estudioTitulosLeasing"] = 1;
             break;
         case 34: // Cruce Información Cvp
             $arrExportables["reporteInformacionCvp"] = 1;

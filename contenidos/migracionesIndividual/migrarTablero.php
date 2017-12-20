@@ -150,7 +150,6 @@ function migrarInformacion($separado_por_comas, $db, $code, $estadoV) {
         if ($db->query($update)) {
             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de estado de los siguientes documentos"
             . $documentos . "</p>";
-            echo "<br>prueba";
         }
         if ($db->query($updateProy)) {
             echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de la fecha  de radicaci&oacute;n de los siguientes documentos"

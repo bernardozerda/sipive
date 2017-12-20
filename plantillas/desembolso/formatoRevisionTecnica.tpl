@@ -65,6 +65,9 @@
 					<img src="../../recursos/imagenes/escudo.png">
             	</td>
 				<td align="center" valign="middle" style="padding:20px; {$txtFuente12}">
+					<b>ALCALDIA MAYOR DE BOGOTA</b><br>
+					SECRETARIA DEL HABITAT<br>
+					PROGRAMA INTEGRAL DE VIVIENDA EFECTIVA (PIVE)<br>
 					<b>Certificado de Existencia y Habitabilidad</b><br>
 					<span style="{$txtFuente10}">Fecha de Emisión: {$txtFecha}</span><br>
 					<span style="{$txtFuente10}">Fecha de visita: {$txtFechaVisita}</span><br>

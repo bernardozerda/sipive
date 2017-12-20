@@ -183,7 +183,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                             $fecha = "NULL";
                         }
 
-                        echo $updateRad = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = " . $fecha . ", txtRadicadoForest = '" . $numRadicado . "' WHERE seqFormulario IN (" . $seqFormularios . ")";
+                        $updateRad = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = " . $fecha . ", txtRadicadoForest = '" . $numRadicado . "' WHERE seqFormulario IN (" . $seqFormularios . ")";
 
                         if ($db->query($update)) {
                             $documentos = str_replace(",", "<br>", $documentos);
@@ -193,12 +193,15 @@ include '../../../recursos/archivos/verificarSesion.php';
                             echo "<p class='alert alert-danger'>Hubo un error al modificar los estados de los documentos. Por favor consulte al administrador</p>";
                         }
                         if (!empty($updateRad)) {
-                            if ($db->query($updateRad)) {
+                            if ($db->query($updateRad) !== null) {
                                 $documentos = str_replace(",", "<br>", $documentos);
                                 echo "<p class='alert alert-success'>En total se modifico " . $cont . " registros <br><br>Se realiz&oacute; la modificaci&oacute;n de la fecha  de radicaci&oacute;n de los siguientes documentos: "
                                 . $documentos . "</p>";
                             } else {
                                 echo "<p class='alert alert-danger'>Hubo un error al modificar la fecha de la Radicaci&oacute;n. Por favor consulte al administrador</p>";
+                                echo $updateRad;
+                                var_dump($db->error);
+
                             }
                         }
                         // echo "<br> seguimiento ->" . $seguimiento;

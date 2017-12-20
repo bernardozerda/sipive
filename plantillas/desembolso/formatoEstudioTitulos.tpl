@@ -26,8 +26,10 @@
                 <tr>
                     <td width="150px" height="80px" align="center" valign="middle"><img src="../../recursos/imagenes/escudo.png"></td>
                     <td align="center" valign="middle" style="{$txtFuente12} padding:10px;">
-                        <b>Subsidio Distrital de Vivienda</b><br/>
-                        <b>Proceso de Desembolso.</b><br/>
+                        <b>ALCALDIA MAYOR DE BOGOTA</b><br>
+                        SECRETARIA DEL HABITAT<br>
+                        PROGRAMA INTEGRAL DE VIVIENDA EFECTIVA (PIVE)<br><br>
+
                         <span style="{$txtFuente10}">
                             Fecha de Radicaci&oacute;n: {$txtFecha}<br/>
                             No. Registro: {$numRegistro|number_format:0:'.':','}
@@ -40,14 +42,13 @@
 
             <table cellpadding="2" cellspacing="0" border="0" width="90%" style="{$txtFuente12}">
                 <tr><td align="center" style="padding-left:30px; padding-right:30px; font-weight:bold;">
-                        <b>Secretaría Distrital de Hábitat<br/>
-                            {if $seqModalidad eq "5"}
-                                Concepto Jurídico Contrato<br /> 
-                                Subsidio Condicionado de Arrendamiento
-                            {else}
-                                Estudio de Títulos<br />
-                                Vivienda {$claDesembolso->txtCompraVivienda|ucwords}</b>
-                            {/if}
+                    {if $seqModalidad eq "5"}
+                        <b>Proceso de Desembolso. Concepto Jurídico Contrato</b><br/>
+                        Subsidio Condicionado de Arrendamiento
+                    {else}
+                        <b>Proceso de Desembolso. Estudio de Títulos</b><br/>
+                        Vivienda {$claDesembolso->txtCompraVivienda|ucwords}</b>
+                    {/if}
                     </td></tr>
             </table>
 
@@ -113,7 +114,7 @@
                             predio cuya descripcion, cabida y linderos se encuentran
                             estipulados en la escritura pública {$claDesembolso->arrTitulos.numEscrituraIdentificacion|number_format:0:',':'.'}
                             del {$claDesembolso->arrTitulos.fchEscrituraIdentificacionTexto} elevada ante la notaría 
-                            {$claDesembolso->arrTitulos.numNotariaIdentificacion|number_format:0:',':'.'} de {$claDesembolso->arrTitulos.txtCiudadIdentificacion}
+                            {$claDesembolso->arrTitulos.numNotariaIdentificacion|number_format:0:',':'.'} de {$claDesembolso->arrTitulos.txtCiudadIdentificacion|mb_strtoupper}
                         {/if}
                     </td>
                 </tr>
@@ -125,7 +126,7 @@
                         <td align="justify">
                             Escritura pública {$claDesembolso->arrTitulos.numEscrituraTitulo|number_format:0:',':'.'} del 
                             {$claDesembolso->arrTitulos.fchEscrituraTituloTexto} elevada ante la notaría 
-                            {$claDesembolso->arrTitulos.numNotariaTitulo|number_format:0:',':'.'} de {$claDesembolso->arrTitulos.txtCiudadTitulo}, registrada en la anotación 
+                            {$claDesembolso->arrTitulos.numNotariaTitulo|number_format:0:',':'.'} de {$claDesembolso->arrTitulos.txtCiudadTitulo|mb_strtoupper}, registrada en la anotación
                             {$claDesembolso->arrTitulos.numFolioMatricula|number_format:0:',':'.'} del Folio de Matricula Inmobilaria.
                         </td>
                     </tr>
@@ -143,9 +144,9 @@
                         {if ( $claDesembolso->arrTitulos.txtZonaMatricula neq "" ) and ( $claDesembolso->arrTitulos.fchMatriculaTexto neq "" or $claDesembolso->arrTitulos.fchMatriculaTexto neq "0000-00-00" )}
                             de la oficina de registro de instrumentos públicos
                             {if $claDesembolso->arrTitulos.txtZonaMatricula  ne "Otra"}
-                                zona {$claDesembolso->arrTitulos.txtZonaMatricula|ucwords}
+                                zona {$claDesembolso->arrTitulos.txtZonaMatricula|mb_strtoupper}
                             {/if}
-                            de {$claDesembolso->arrTitulos.txtCiudadMatricula|ucwords}, cuya fecha de expedicion data del 
+                            de {$claDesembolso->arrTitulos.txtCiudadMatricula|mb_strtoupper}, cuya fecha de expedicion data del
                             {$claDesembolso->arrTitulos.fchMatriculaTexto}
                         {/if} 
                     </td>
@@ -156,7 +157,7 @@
                     <tr>
                         <td valign="top" bgcolor="#E4E4E4"><b>Modo de Adquisición</b></td>
                         <td align="justify">
-                            Compraventa {$arrSolucionDescripcion.$seqModalidad.$seqSolucion}, adquirida con el producto otorgado por la SDHT&nbsp;
+                            Compraventa {$arrSolucionDescripcion.$seqModalidad.$seqSolucion|mb_strtoupper}, adquirida con el producto otorgado por la SDHT&nbsp;
                             {if $claDesembolso->arrTitulos.bolSubsidioFonvivienda == 1} y Fonvivienda {/if}
                         </td>
                     </tr>

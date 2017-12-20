@@ -36,7 +36,9 @@
                                             </td>
                                             {if $seqCasaMano == 0}
                                                 <td align="center" valign="middle" style="{$txtFuente12} padding:10px;">
-                                                    <b>Secretaría Distrital de Hábitat</b><br>
+                                                    <b>ALCALDIA MAYOR DE BOGOTA</b><br>
+                                                    SECRETARIA DEL HABITAT<br>
+                                                    PROGRAMA INTEGRAL DE VIVIENDA EFECTIVA (PIVE)<br>
                                                         <b>Proceso de Desembolso. Recibo de Documentación</b><br>
                                                             <span style="{$txtFuente10}">
                                                                 Fecha de Radicaci&oacute;n: {$txtFecha}<br>

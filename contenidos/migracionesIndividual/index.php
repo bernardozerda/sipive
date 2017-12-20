@@ -112,7 +112,15 @@ foreach ($array as $key => $value) {
                 <?php } ?>
                 <?php if (in_array("8", $grupos)) { ?>
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=26');">Generaci&oacute;n Certificado Habitabilidad</a></li>
-
+                    <li>
+                        <a href="javascript:void(0)"
+                           onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=24');"
+                        >
+                            Remisi&oacute;n Estudio de Titulos
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php if (in_array("1", $grupos) || in_array("8", $grupos)) { ?>
 
@@ -123,15 +131,6 @@ foreach ($array as $key => $value) {
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Estudio de Títulos<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a href="javascript:void(0)"
-                                   onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=24');"
-                                >
-                                    Remisi&oacute;n Estudio de Titulos
-                                </a>
-                            </li>
                             <li>
                                 <a href="javascript:void(0)"
                                    onClick="cambiarOpcionLegalizacion(

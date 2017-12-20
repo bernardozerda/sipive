@@ -143,7 +143,7 @@ function validarArchivo(){
                         "seqFormulario = " . $seqFormulario
                     )
                 );
-                if($seqEstadoProceso != 25){
+                if($seqEstadoProceso != 24){
                     $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado para el documento " . $arrArchivo[$numLinea][0] . " no es correcto";
                 }
 

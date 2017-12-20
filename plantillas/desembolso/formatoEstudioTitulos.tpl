@@ -17,8 +17,7 @@
             <title>SDV - SDHT</title>
 
     </head>
-    {*<body onLoad="window.print();">*}
-    <body>
+    <body onLoad="window.print();">
 
         <center>
 

@@ -218,6 +218,7 @@ function sqlEstudioTitulos($arrArchivo){
     $arrObservaciones[] = "BENEFICIO DEL APORTE SEA EL LOCATARIO DEL CONTRATO DE LEASING";
     $arrObservaciones[] = "DESCRIPCIÓN DEL APORTE DENTRO DEL CONTRATO";
     $arrObservaciones[] = "PROTOCOLIZACIÓN  DE LA RESOLUCIÓN O CARTA DE ASIGNACIÓN";
+    $arrObservaciones[] = "PROPIEDAD DE LA ENTIDAD FINANCIERA OTORGANTE DEL LEASING EN CTL";
 
     // documentos analizados
     $arrDocumentos[] = "ESCRITURA PÚBLICA";

@@ -221,15 +221,6 @@ function validarArchivo(){
                     $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El formato de feha de la columna 'Fecha Contrato Leasing' no es correcto";
                 }
 
-                // validaciones de fechas
-                if(! esFechaValida($arrArchivo[$numLinea][10])){
-                    $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La columna '" . $arrPlantilla[10] . "' no tiene el formato correcto";
-                }
-
-                if(! esFechaValida($arrArchivo[$numLinea][14])){
-                    $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La columna '" . $arrPlantilla[10] . "' no tiene el formato correcto";
-                }
-
             }
         }else{
             unset($arrArchivo[$numLinea]);

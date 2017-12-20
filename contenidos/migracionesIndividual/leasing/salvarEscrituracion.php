@@ -222,7 +222,7 @@ function validarArchivo(){
                 }
 
                 // validaciones de campos vacios
-                for($numColumna = 15; $numColumna < count($arrArchivo[$numLinea]); $numColumna){
+                for($numColumna = 15; $numColumna < count($arrArchivo[$numLinea]); $numColumna++){
                     if(trim($arrArchivo[$numLinea][$numColumna]) == ""){
                         $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La columna '" . $arrPlantilla[$numColumna] . "' no puede estar vacia";
                     }

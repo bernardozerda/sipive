@@ -6,7 +6,7 @@
       integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
 
-<form onsubmit="someterFormulario('contenido',this,'./contenidos/cruces2/salvarEscrituracion.php',true,true); return false;">
+<form onsubmit="someterFormulario('contenido',this,'./contenidos/cruces2/salvar.php',true,true); return false;">
 
     <div class="panel panel-default">
         <div class="panel-heading">

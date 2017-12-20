@@ -82,7 +82,7 @@
                 >{$claActoAdministrativo->arrCaracteristicas.txtResolucion}</textarea>
             </td>
             <td>
-                <button style="width:60px; height:40px;" type="button" onclick="someterFormulario('mensajes',this.form,'contenidos/aad/salvarEscrituracion.php',true,true);">
+                <button style="width:60px; height:40px;" type="button" onclick="someterFormulario('mensajes',this.form,'contenidos/aad/salvar.php',true,true);">
                     <img src="recursos/imagenes/salvar.png" width="20px;" height="20px;"><br>
                     <span style="font-size: 10px; font-weight: bold;">Guardar</span>
                 </button>

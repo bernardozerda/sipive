@@ -1419,6 +1419,9 @@ function sumarTotalRecursos() {
     if( document.getElementById('valCartaLeasing') != null ) {
         formatoSeparadores(YAHOO.util.Dom.get("valCartaLeasing"));
     }
+
+    valorSubsidio();
+
 }
 
 
@@ -1630,9 +1633,9 @@ function valorSubsidio() {
         type: "POST",
         data: jQuery.param(jParametros),
         success: function(respuesta){
-            //document.getElementById("mensajes").innerHTML = respuesta;
+            // document.getElementById("mensajes").innerHTML = respuesta;
             $("#valAspiraSubsidio").val(respuesta);
-            sumarTotalRecursos();
+            //sumarTotalRecursos();
         },
         error: function(error){
             alert("Falló el calculo de valor del aporte / subsidio");

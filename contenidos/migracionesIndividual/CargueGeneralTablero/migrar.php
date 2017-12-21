@@ -91,7 +91,7 @@ if (isset($code)) {
                         $sqlValidarExistencia = "SELECT numdocumento, seqProyecto FROM t_frm_formulario
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
                             INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
-                            WHERE numDocumento IN(" . $value . ")";
+                            WHERE numDocumento IN(" . $value . ") AND seqTipoDocumento IN (1,2)";
                         $resultadosValidarExistencia = $db->get_results($sqlValidarExistencia);
                         $rowsValidarExistencia = count($resultadosValidarExistencia);
                         if ($rowsValidarExistencia < 1) {
@@ -108,7 +108,7 @@ if (isset($code)) {
                             INNER JOIN t_frm_hogar hog USING (seqFormulario)
                             INNER JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
                             WHERE seqParentesco NOT IN(1) 
-                            and numDocumento IN(" . $separado_por_comas . ")";
+                            and numDocumento IN(" . $separado_por_comas . ") AND seqTipoDocumento IN (1,2)";
                     $resultados = $db->get_results($sql);
                     $rows = count($resultados);
                     if ($rows > 0) {

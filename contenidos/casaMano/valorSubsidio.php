@@ -9,7 +9,7 @@
 
 	$claFormulario = new stdClass();
 	foreach($_POST as $txtClave => $txtValor){
-		$claFormulario->$txtClave = $txtValor;
+		$claFormulario->$txtClave = doubleval(mb_ereg_replace("[^0-9]","",$txtValor));
 	}
 
 	$valSubsidio = valorSubsidio($claFormulario);

@@ -88,6 +88,30 @@ if (intval($_GET['seqCasaMano'])) {
 
 $claDesembolso->numNotaria = ( $claDesembolso->numNotaria == 0 ) ? "" : $claDesembolso->numNotaria;
 
+
+// si es modalidad de leasing carga los datos del contrato
+$arrContratoLeasing = array();
+if($claFormulario->seqModalidad == 13){
+
+    $seqEscrituracion = $claDesembolso->arrEscrituracion['seqEscrituracion'];
+    $arrContratoLeasing = obtenerDatosTabla(
+        "t_des_escrituracion",
+        array("seqEscrituracion","numContratoLeasing","fchContratoLeasing","numFoliosContratoLeasing","txtFoliosContratoLeasing"),
+        "seqEscrituracion",
+        "seqEscrituracion = " . $seqEscrituracion
+    )[$seqEscrituracion];
+    $arrContratoLeasing['txtFechaLeasing'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrContratoLeasing['fchContratoLeasing']))));
+
+    $arrConvenio = obtenerDatosTabla(
+        "v_frm_convenio",
+        array("seqConvenio","txtConvenio","txtBanco"),
+        "seqConvenio",
+        "seqConvenio = " . $claFormulario->seqConvenio
+    )[$claFormulario->seqConvenio];
+
+}
+
+
 if ($_GET['bolEscrituracion'] == 1) {
     foreach ($claDesembolso->arrEscrituracion as $txtClave => $txtValor) {
         $claDesembolso->$txtClave = $txtValor;
@@ -116,8 +140,8 @@ if ($_GET['bolEscrituracion'] == 1) {
             $claDesembolso->numRetiroRecursos +
             $claDesembolso->numNit +
             $claDesembolso->numRit +
-            $claDesembolso->numRut
-
+            $claDesembolso->numRut +
+            $arrContratoLeasing['numFoliosContratoLeasing']
 
             );
 } else {
@@ -152,8 +176,8 @@ $claSeguimiento->seqFormulario = $_GET['seqFormulario'];
 
 $numRegistros = array_shift(array_keys($claSeguimiento->obtenerRegistros(1, 0)));
 
-$claSmarty->assign("txtFuente12", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 12px;");
-$claSmarty->assign("txtFuente10", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;");
+$claSmarty->assign("txtFuente12", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;");
+$claSmarty->assign("txtFuente10", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 8px;");
 $claSmarty->assign("txtFecha", $txtFecha);
 $claSmarty->assign("arrBeneficiario", $arrBeneficiario);
 $claSmarty->assign("claFormulario", $claFormulario);
@@ -173,6 +197,8 @@ $claSmarty->assign("numRegistro", $numRegistros);
 $claSmarty->assign("nombreComercial", $nombreComercial);
 $claSmarty->assign("arrResolucionAsignacion", $arrResolucionAsignacion);
 $claSmarty->assign("seqCasaMano", $_GET['seqCasaMano']);
+$claSmarty->assign("arrContratoLeasing", $arrContratoLeasing);
+$claSmarty->assign("arrConvenio", $arrConvenio);
 
 $claSmarty->display("desembolso/formatoBusquedaOferta.tpl");
 ?>

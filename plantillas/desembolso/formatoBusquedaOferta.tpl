@@ -18,13 +18,80 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="title" content="SIPIVE">
-            <meta name="keywords" content="pive,subsidio,vivienda,social,prioritaria,bogota,habitat,asignacion,credito" />
-            <meta name="description" content="SIPIVE">
-                <meta http-equiv="Content-Language" content="es">
-                    <meta name="robots" content="index,  nofollow" />
-                    <title>SDV - SDHT</title>
-                    </head>
-                    <body onLoad="window.print();"> 
+        <meta name="keywords" content="pive,subsidio,vivienda,social,prioritaria,bogota,habitat,asignacion,credito" />
+        <meta name="description" content="SIPIVE">
+        <meta http-equiv="Content-Language" content="es">
+        <meta name="robots" content="index,  nofollow" />
+        <title>SDV - SDHT</title>
+    </head>
+    <body>
+    {*<body onLoad="window.print();">*}
+
+    {*<table cellspacing="0" cellpadding="0" border="0" width="750px" style="border: 1px solid #999999;">*}
+        {*<tr>*}
+            {*<td width="150px" height="80px" align="center" valign="middle">*}
+                {*<img src="../../recursos/imagenes/escudo.png">*}
+            {*</td>*}
+            {*<td align="center" valign="middle" style="{$txtFuente12} padding:10px;">*}
+                {*<strong>ALCALDIA MAYOR DE BOGOTA - SECRETARIA DEL HABITAT</strong><br>*}
+                {*PROGRAMA INTEGRAL DE VIVIENDA EFECTIVA (PIVE)<br>*}
+                {*Proceso de Desembolso. Recibo de Documentación<br>*}
+                {*<span style="{$txtFuente10}">*}
+                    {*Fecha de Radicaci&oacute;n: {$txtFecha}<br>*}
+                    {*No. Registro: {$numRegistro|number_format:0:'.':','}*}
+                {*</span>*}
+            {*</td>*}
+            {*<td width="150px" align="center" valign="middle">*}
+                {*<img src="../../recursos/imagenes/bta_positiva_carta.jpg">*}
+            {*</td>*}
+        {*</tr>*}
+    {*</table>*}
+
+    {*<table cellspacing="0" cellpadding="2" border="0" width="750px" style="{$txtFuente10}">*}
+        {*<tr>*}
+            {*<td style="border-bottom: 1px dotted #999999;"><strong>Beneficiario</strong></td>*}
+            {*<td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.nombre}&nbsp;</td>*}
+            {*<td style="border-bottom: 1px dotted #999999;"><strong>Documento</strong></td>*}
+            {*<td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.tipoDocumento} {$arrBeneficiario.documento}&nbsp;</td>*}
+        {*</tr>*}
+        {*<tr>*}
+            {*<td style="border-bottom: 1px dotted #999999;"><strong>Modalidad</strong></td>*}
+            {*<td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.modalidad}&nbsp;</td>*}
+            {*<td style="border-bottom: 1px dotted #999999;"><strong>Valor estimado del aporte</strong></td>*}
+            {*<td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.valor}&nbsp;</td>*}
+        {*</tr>*}
+        {*{if $seqCasaMano == 0}*}
+            {*<tr>*}
+                {*<td style="border-bottom: 1px dotted #999999;"><strong>Resoluci&oacute;n de Asignaci&oacute;n</strong></td>*}
+                {*<td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.resolucion}&nbsp;</td>*}
+                {*<td style="border-bottom: 1px dotted #999999;">&nbsp;</td>*}
+                {*<td style="border-bottom: 1px dotted #999999;">&nbsp;</td>*}
+            {*</tr>*}
+        {*{/if}*}
+        {*<tr>*}
+            {*<td style="border-bottom: 1px dotted #999999;"><strong>Direcci&oacute;n</strong></td>*}
+            {*<td style="border-bottom: 1px dotted #999999;" colspan="3">{$arrBeneficiario.direccion}&nbsp;</td>*}
+        {*</tr>*}
+        {*<tr>*}
+            {*<td style="border-bottom: 1px dotted #999999;"><strong>Localidad</strong></td>*}
+            {*<td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.localidad}&nbsp;</td>*}
+            {*<td style="border-bottom: 1px dotted #999999;"><strong>Barrio</strong></td>*}
+            {*<td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.barrio}&nbsp;</td>*}
+        {*</tr>*}
+        {*<tr>*}
+            {*<td style="border-bottom: 1px dotted #999999;"><strong>Tel&eacute;fonos</strong></td>*}
+            {*<td style="border-bottom: 1px dotted #999999;" colspan="3">*}
+                {*{$arrBeneficiario.telefono1}&nbsp;&nbsp;&nbsp;*}
+                {*{$arrBeneficiario.telefono2}&nbsp;&nbsp;&nbsp;*}
+                {*{$arrBeneficiario.celular}&nbsp;*}
+            {*</td>*}
+        {*</tr>*}
+    {*</table>*}
+
+    {*<br>*}
+    {*<hr>*}
+
+
                         <table cellspacing="0" cellpadding="0" border="0" width="750px" style="border: 1px solid #999999;">
                             <tr>
                                 <td width="150px" height="80px" align="center" valign="middle">
@@ -36,10 +103,10 @@
                                             </td>
                                             {if $seqCasaMano == 0}
                                                 <td align="center" valign="middle" style="{$txtFuente12} padding:10px;">
-                                                    <b>ALCALDIA MAYOR DE BOGOTA</b><br>
+                                                    <strong>ALCALDIA MAYOR DE BOGOTA</strong><br>
                                                     SECRETARIA DEL HABITAT<br>
                                                     PROGRAMA INTEGRAL DE VIVIENDA EFECTIVA (PIVE)<br>
-                                                        <b>Proceso de Desembolso. Recibo de Documentación</b><br>
+                                                        <strong>Proceso de Desembolso. Recibo de Documentación</strong><br>
                                                             <span style="{$txtFuente10}">
                                                                 Fecha de Radicaci&oacute;n: {$txtFecha}<br>
                                                                     No. Registro: {$numRegistro|number_format:0:'.':','}
@@ -47,8 +114,8 @@
                                                             </td>
                                                         {else}
                                                             <td align="center" valign="middle" style="{$txtFuente12} padding:10px;">
-                                                                <b>Secretaría Distrital de Hábitat</b><br>
-                                                                    <b>Programa PIVE.<br>Recibo de Documentación</b><br>
+                                                                <strong>Secretaría Distrital de Hábitat</strong><br>
+                                                                    <strong>Programa PIVE.<br>Recibo de Documentación</strong><br>
                                                                         <span style="{$txtFuente10}">
                                                                             Fecha de Radicaci&oacute;n: {$txtFecha}<br>
                                                                                 No. Registro: {$numRegistro|number_format:0:'.':','}
@@ -60,37 +127,37 @@
                                                                     </table>
                                                                     <table cellspacing="0" cellpadding="2" border="0" width="750px" style="{$txtFuente10}">
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Nombre del Beneficiario</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Nombre del Beneficiario</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.nombre}&nbsp;</td>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Documento</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Documento</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.tipoDocumento} {$arrBeneficiario.documento}&nbsp;</td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Modalidad</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Modalidad</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.modalidad}&nbsp;</td>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Valor estimado del aporte</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Valor estimado del aporte</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.valor}&nbsp;</td>
                                                                         </tr>
                                                                         {if $seqCasaMano == 0}
                                                                             <tr>
-                                                                                <td style="border-bottom: 1px dotted #999999;"><b>Resoluci&oacute;n de Asignaci&oacute;n</b></td>
+                                                                                <td style="border-bottom: 1px dotted #999999;"><strong>Resoluci&oacute;n de Asignaci&oacute;n</strong></td>
                                                                                 <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.resolucion}&nbsp;</td>
                                                                                 <td style="border-bottom: 1px dotted #999999;">&nbsp;</td>
                                                                                 <td style="border-bottom: 1px dotted #999999;">&nbsp;</td>
                                                                             </tr>
-                                                                        {/if}   
+                                                                        {/if}
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Direcci&oacute;n</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Direcci&oacute;n</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;" colspan="3">{$arrBeneficiario.direccion}&nbsp;</td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Localidad</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Localidad</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.localidad}&nbsp;</td>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Barrio</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Barrio</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.barrio}&nbsp;</td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Tel&eacute;fonos</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Tel&eacute;fonos</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;" colspan="3">
                                                                                 {$arrBeneficiario.telefono1}&nbsp;&nbsp;&nbsp;
                                                                                 {$arrBeneficiario.telefono2}&nbsp;&nbsp;&nbsp;
@@ -101,31 +168,31 @@
 
                                                                     <table cellspacing="0" cellpadding="2" border="0" width="750px" style="{$txtFuente10}">
                                                                         <tr>
-                                                                            <td bgcolor="#CECECE" align="center" colspan="4"><b>DATOS DEL INMUEBLE</b></td>
+                                                                            <td bgcolor="#CECECE" align="center" colspan="4"><strong>DATOS DEL INMUEBLE</strong></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;" width="140px"><b>Nombre del Vendedor</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;" width="140px"><strong>Nombre del Vendedor</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$claDesembolso->txtNombreVendedor|ucwords}&nbsp;</td>
-                                                                            <td style="border-bottom: 1px dotted #999999;" width="120px"><b>Documento</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;" width="120px"><strong>Documento</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;" width="200px">{$arrTipoDocumento.$tipoDocVendedor} {$claDesembolso->numDocumentoVendedor|number_format:0:'.':','}&nbsp;</td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Direcci&oacute;n del inmueble</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Direcci&oacute;n del inmueble</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;" >{$claDesembolso->txtDireccionInmueble|strtoupper}&nbsp;</td>
                                                                             {if $nombreComercial != ''}
-                                                                                <td style="border-bottom: 1px dotted #999999;"><b>Proyecto</b></td>
+                                                                                <td style="border-bottom: 1px dotted #999999;"><strong>Proyecto</strong></td>
                                                                                 <td style="border-bottom: 1px dotted #999999;">{$nombreComercial}</td>
 
                                                                             {/if}
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Localidad</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Localidad</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrLocalidad.$seqLocalidadDesembolso}&nbsp;</td>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Barrio</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Barrio</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$claDesembolso->txtBarrio}&nbsp;</td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;" width="130px"><b>Título de Propiedad</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;" width="130px"><strong>Título de Propiedad</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;" colspan="3">
                                                                                 {if $claDesembolso->txtPropiedad == "escritura"}
                                                                                     Escritura Pública Número {$claDesembolso->txtEscritura} del {$claDesembolso->fchEscritura} registrada en la notaria {$claDesembolso->numNotaria}&nbsp; de {$claDesembolso->txtCiudad} 
@@ -138,116 +205,143 @@
                                                                                 {/if}
                                                                             </td>
                                                                         </tr>
+
+                                                                        {if $claFormulario->seqModalidad == 13}
+                                                                            <tr>
+                                                                                <td style="border-bottom: 1px dotted #999999;" width="130px"><strong>Contrato Leasing</strong></td>
+                                                                                <td style="border-bottom: 1px dotted #999999;" colspan="3">
+                                                                                    {$arrContratoLeasing.numContratoLeasing} de {$arrContratoLeasing.txtFechaLeasing}
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td style="border-bottom: 1px dotted #999999;" width="130px"><strong>Convenio</strong></td>
+                                                                                <td style="border-bottom: 1px dotted #999999;" colspan="3">
+                                                                                    {$arrConvenio.txtConvenio} de {$arrConvenio.txtBanco}
+                                                                                </td>
+                                                                            </tr>
+                                                                        {/if}
+
+
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;" width="130px"><b>Matr&iacute;cula Inmobili&aacute;ria</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;" width="130px"><strong>Matr&iacute;cula Inmobili&aacute;ria</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">{$claDesembolso->txtMatriculaInmobiliaria|upper}&nbsp;</td>	
-                                                                            <td style="border-bottom: 1px dotted #999999;" width="130px"><b>Chip</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;" width="130px"><strong>Chip</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;" colspan="3">{$claDesembolso->txtChip|upper}&nbsp;</td>			
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Aval&uacute;o</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Aval&uacute;o</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">$ {$claDesembolso->numAvaluo|number_format:0:'.':','}&nbsp;</td>
-                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Valor de la venta</b></td>
+                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Valor de la venta</strong></td>
                                                                             <td style="border-bottom: 1px dotted #999999;">$ {$claDesembolso->numValorInmueble|number_format:0:'.':','}&nbsp;</td>
                                                                         </tr>
                                                                     </table>
 
                                                                     <table cellspacing="0" cellpadding="2" border="0" width="750px" style="{$txtFuente10}">
                                                                         <tr>
-                                                                            <td bgcolor="#CECECE" align="center" colspan="3"><b>DOCUMENTOS RADICADOS</b></td>
+                                                                            <td bgcolor="#CECECE" align="center" colspan="3"><strong>DOCUMENTOS RADICADOS</strong></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="border-bottom: 1px solid #999999;" align="center"><b>DOCUMENTO</b></td>
-                                                                            <td style="border-bottom: 1px solid #999999;" align="center"><b>FOLIOS</b></td>
-                                                                            <td style="border-bottom: 1px solid #999999;" align="center"><b>OBSERVACIONES</b></td>
+                                                                            <td style="border-bottom: 1px solid #999999;" align="center"><strong>DOCUMENTO</strong></td>
+                                                                            <td style="border-bottom: 1px solid #999999;" align="center"><strong>FOLIOS</strong></td>
+                                                                            <td style="border-bottom: 1px solid #999999;" align="center"><strong>OBSERVACIONES</strong></td>
                                                                         </tr>
 
                                                                         {if $claFormulario->seqModalidad != 5}
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Escritura p&uacute;blica de adquisici&oacute;n de la vivienda o Promesa de Compraventa</b></td>
+                                                                                <td width="260px"><strong>Escritura p&uacute;blica de adquisici&oacute;n de la vivienda o Promesa de Compraventa</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numEscrituraPublica}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtEscrituraPublica}&nbsp;</td>
                                                                             </tr>
+
+                                                                            {if $claFormulario->seqModalidad == 13}
+                                                                                <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
+                                                                                    <td width="260px"><strong>Cotnrato de Leasing Habitacional</strong></td>
+                                                                                    <td width="60px" align="center">{$arrContratoLeasing.numFoliosContratoLeasing}&nbsp;</td>
+                                                                                    <td>{$arrContratoLeasing.txtFoliosContratoLeasing}&nbsp;</td>
+                                                                                </tr>
+                                                                            {/if}
+
+
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Certificado de tradici&oacute;n y libertad vigente</b></td>
+                                                                                <td width="260px"><strong>Certificado de tradici&oacute;n y libertad vigente</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numCertificadoTradicion}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtCertificadoTradicion}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Fotocopia de la carta de asignacion del SDV</b></td>
+                                                                                <td width="260px"><strong>Fotocopia de la carta de asignacion del SDV</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numCartaAsignacion}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtCartaAsignacion}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Certificado de alto riesgo</b></td>
+                                                                                <td width="260px"><strong>Certificado de alto riesgo</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numAltoRiesgo}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtAltoRiesgo}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Certificado de habitabilidad</b></td>
+                                                                                <td width="260px"><strong>Certificado de habitabilidad</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numHabitabilidad}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtHabitabilidad}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Bolet&iacute;n catastral</b></td>
+                                                                                <td width="260px"><strong>Bolet&iacute;n catastral</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numBoletinCatastral}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtBoletinCatastral}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Licencia de contrucci&oacute;n del inmueble</b></td>
+                                                                                <td width="260px"><strong>Licencia de contrucci&oacute;n del inmueble</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numLicenciaConstruccion}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtLicenciaConstruccion}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Recibo de pago del &uacute;ltimo impuesto predial</b></td>
+                                                                                <td width="260px"><strong>Recibo de pago del &uacute;ltimo impuesto predial</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numUltimoPredial}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtUltimoPredial}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>&Uacute;ltimo recibo de acueducto y alcantarillado</b></td>
+                                                                                <td width="260px"><strong>&Uacute;ltimo recibo de acueducto y alcantarillado</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numUltimoReciboAgua}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtUltimoReciboAgua}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>&Uacute;ltimo recibo de energ&iacute;a</b></td>
+                                                                                <td width="260px"><strong>&Uacute;ltimo recibo de energ&iacute;a</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numUltimoReciboEnergia}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtUltimoReciboEnergia}&nbsp;</td>
                                                                             </tr>
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Acta de Entrega del Inmueble</b></td>
+                                                                                <td width="260px"><strong>Acta de Entrega del Inmueble</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numActaEntrega}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtActaEntrega}&nbsp;</td>
                                                                             </tr>
 
                                                                             <tr  bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Certificación bancaria del vendedor</b></td>
+                                                                                <td width="260px"><strong>Certificación bancaria del vendedor</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numCertificacionVendedor}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtCertificacionVendedor}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Autorización de desembolso</b></td>
+                                                                                <td width="260px"><strong>Autorización de desembolso</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numAutorizacionDesembolso}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtAutorizacionDesembolso}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Fotocopia Cedula Vendedor</b></td>
+                                                                                <td width="260px"><strong>Fotocopia Cedula Vendedor</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numFotocopiaVendedor}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtFotocopiaVendedor}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>RUT (Persona Jurídica)</b></td>
+                                                                                <td width="260px"><strong>RUT (Persona Jurídica)</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numRut}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtRut}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>RIT (Persona Jurídica)</b></td>
+                                                                                <td width="260px"><strong>RIT (Persona Jurídica)</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numRit}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtRit}&nbsp;</td>
                                                                             </tr>
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>NIT (Persona Jurídica)</b></td>
+                                                                                <td width="260px"><strong>NIT (Persona Jurídica)</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numNit}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtNit}&nbsp;</td>
                                                                             </tr>
@@ -255,49 +349,49 @@
                                                                         {else}
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Contrato de Arrendamiento</b></td>
+                                                                                <td width="260px"><strong>Contrato de Arrendamiento</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numContratoArrendamiento}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtContratoArrendamiento}&nbsp;</td>
                                                                             </tr>
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Certificado de apertura CAP</b></td>
+                                                                                <td width="260px"><strong>Certificado de apertura CAP</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numAperturaCAP}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtAperturaCAP}&nbsp;</td>
                                                                             </tr>
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Cédula del Arrendador</b></td>
+                                                                                <td width="260px"><strong>Cédula del Arrendador</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numCedulaArrendador}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtCedulaArrendador}&nbsp;</td>
                                                                             </tr>
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Certificación Cuenta Arrendador</b></td>
+                                                                                <td width="260px"><strong>Certificación Cuenta Arrendador</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numCuentaArrendador}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtCuentaArrendador}&nbsp;</td>
                                                                             </tr>
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Tres Recibos de Servicios Públicos</b></td>
+                                                                                <td width="260px"><strong>Tres Recibos de Servicios Públicos</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numServiciosPublicos}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtServiciosPublicos}&nbsp;</td>
                                                                             </tr>
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Autorización de Retiro de Recursos</b></td>
+                                                                                <td width="260px"><strong>Autorización de Retiro de Recursos</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numRetiroRecursos}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtRetiroRecursos}&nbsp;</td>
                                                                             </tr>
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Certificado de tradici&oacute;n y libertad vigente</b></td>
+                                                                                <td width="260px"><strong>Certificado de tradici&oacute;n y libertad vigente</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numCertificadoTradicion}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtCertificadoTradicion}&nbsp;</td>
                                                                             </tr>
 
                                                                             <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                                <td width="260px"><b>Bolet&iacute;n nomenclatura</b></td>
+                                                                                <td width="260px"><strong>Bolet&iacute;n nomenclatura</strong></td>
                                                                                 <td width="60px" align="center">{$claDesembolso->numBoletinCatastral}&nbsp;</td>
                                                                                 <td>{$claDesembolso->txtBoletinCatastral}&nbsp;</td>
                                                                             </tr>
@@ -305,7 +399,7 @@
                                                                         {/if}
 
                                                                         <tr bgcolor="{cycle name=c1 values="#EAEAEA,#FFFFFF"}">
-                                                                            <td width="260px"><b>Otros Documentos</b></td>
+                                                                            <td width="260px"><strong>Otros Documentos</strong></td>
                                                                             <td width="60px" align="center">{$claDesembolso->numOtros}&nbsp;</td>
                                                                             <td>{$claDesembolso->txtOtro}&nbsp;</td>
                                                                         </tr>
@@ -319,8 +413,8 @@
                                                                     </table>
                                                                     <table cellspacing="0" cellpadding="0" border="0" width="750px" style="{$txtFuente10}">
                                                                         <tr>
-                                                                            <td bgcolor="#CECECE" align="center" width="25%"><b>RADICADO POR</b></td>
-                                                                            <td bgcolor="#CECECE" align="center" width="25%"><b>RECIBIDO POR</b></td>
+                                                                            <td bgcolor="#CECECE" align="center" width="25%"><strong>RADICADO POR</strong></td>
+                                                                            <td bgcolor="#CECECE" align="center" width="25%"><strong>RECIBIDO POR</strong></td>
                                                                         </tr>
                                                                         <tr><td colspan="4">
                                                                                 <table cellspacing="3" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">
@@ -350,8 +444,8 @@
 
                                                                                         </td>
                                                                                         <td align="center" valign="middle" style="padding:10px; {$txtFuente12}">
-                                                                                            <b>Secretaría Distrital de Hábitat</b><br>
-                                                                                                <b>Proceso de Desembolso. Recibo de Documentación</b><br>
+                                                                                            <strong>Secretaría Distrital de Hábitat</strong><br>
+                                                                                                <strong>Proceso de Desembolso. Recibo de Documentación</strong><br>
                                                                                                     <span style="{$txtFuente10}">Fecha de Radicaci&oacute;n: {$txtFecha}</span>
                                                                                                     </td>
                                                                                                     <td width="150px" align="center" valign="middle"><img src="../../recursos/imagenes/bta_positiva_carta.jpg"></td>
@@ -359,32 +453,32 @@
                                                                                                     </table>
                                                                                                     <table cellspacing="0" cellpadding="2" border="0" width="750px" style="{$txtFuente10}">
                                                                                                         <tr>
-                                                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Nombre del Beneficiario</b></td>
+                                                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Nombre del Beneficiario</strong></td>
                                                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.nombre}&nbsp;</td>
-                                                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Documento</b></td>
+                                                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Documento</strong></td>
                                                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrBeneficiario.tipoDocumento} {$arrBeneficiario.documento}&nbsp;</td>
                                                                                                         </tr>
                                                                                                         <tr>
-                                                                                                            <td style="border-bottom: 1px dotted #999999;" width="140px"><b>Nombre del Vendedor</b></td>
+                                                                                                            <td style="border-bottom: 1px dotted #999999;" width="140px"><strong>Nombre del Vendedor</strong></td>
                                                                                                             <td style="border-bottom: 1px dotted #999999;">{$claDesembolso->txtNombreVendedor}&nbsp;</td>
-                                                                                                            <td style="border-bottom: 1px dotted #999999;" width="90px"><b>Documento</b></td>
+                                                                                                            <td style="border-bottom: 1px dotted #999999;" width="90px"><strong>Documento</strong></td>
                                                                                                             <td style="border-bottom: 1px dotted #999999;" width="200px">{$arrTipoDocumento.$tipoDocVendedor} {$claDesembolso->numDocumentoVendedor|number_format:0:'.':','}&nbsp;</td>
                                                                                                         </tr>
                                                                                                         <tr>
-                                                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Direcci&oacute;n del inmueble</b></td>
+                                                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Direcci&oacute;n del inmueble</strong></td>
                                                                                                             <td style="border-bottom: 1px dotted #999999;" colspan="3">{$claDesembolso->txtDireccionInmueble}&nbsp;</td>
                                                                                                         </tr>
                                                                                                         <tr>
-                                                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Localidad</b></td>
+                                                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Localidad</strong></td>
                                                                                                             <td style="border-bottom: 1px dotted #999999;">{$arrLocalidad.$seqLocalidadDesembolso}&nbsp;</td>
-                                                                                                            <td style="border-bottom: 1px dotted #999999;"><b>Barrio</b></td>
+                                                                                                            <td style="border-bottom: 1px dotted #999999;"><strong>Barrio</strong></td>
                                                                                                             <td style="border-bottom: 1px dotted #999999;">{$claDesembolso->txtBarrio}&nbsp;</td>
                                                                                                         </tr>
                                                                                                     </table>
                                                                                                     <table cellspacing="0" cellpadding="0" border="0" width="750px" style="{$txtFuente10}">
                                                                                                         <tr>
-                                                                                                            <td bgcolor="#CECECE" align="center" width="25%"><b>RADICADO POR</b></td>
-                                                                                                            <td bgcolor="#CECECE" align="center" width="25%"><b>RECIBIDO POR</b></td>
+                                                                                                            <td bgcolor="#CECECE" align="center" width="25%"><strong>RADICADO POR</strong></td>
+                                                                                                            <td bgcolor="#CECECE" align="center" width="25%"><strong>RECIBIDO POR</strong></td>
                                                                                                         </tr>
                                                                                                         <tr><td colspan="4">
                                                                                                                 <table cellspacing="3" cellpadding="0" border="0" width="100%" style="{$txtFuente10}">

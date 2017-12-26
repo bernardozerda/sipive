@@ -138,6 +138,17 @@
 							</a></i></u>
 						</td>
 					</tr>
+
+					{if $seqModalidad == 13}
+						<tr>
+							<td><strong>Contrato de Leasing</strong></td>
+							<td>Número {$claDesembolso->arrEscrituracion.numContratoLeasing} del {$claDesembolso->arrEscrituracion.fchContratoLeasing}</td>
+						</tr>
+						<tr>
+							<td><strong>Convenio de Leasing</strong></td>
+							<td>{$arrConvenio.txtConvenio} con el bacno {$arrConvenio.txtBanco}</td>
+						</tr>
+					{/if}
 					
 					{if $seqModalidad neq "5"}
 					<!-- TITULO DE ADQUISICION -->

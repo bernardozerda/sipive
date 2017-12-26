@@ -37,6 +37,13 @@ $arrRegistros = $claSeguimiento->obtenerRegistros(100);
 $claDesembolso = new Desembolso();
 $claDesembolso->cargarDesembolso($seqFormulario);
 
+$arrConvenio = obtenerDatosTabla(
+    "v_frm_convenio",
+    array("seqConvenio","txtConvenio","txtBanco"),
+    "seqConvenio",
+    "seqConvenio = " . $claFormulario->seqConvenio
+)[$claFormulario->seqConvenio];
+
 $claDesembolso->arrTitulos['fchEscrituraIdentificacionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($claDesembolso->arrTitulos['fchEscrituraIdentificacion']))));
 $claDesembolso->arrTitulos['fchEscrituraTituloTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($claDesembolso->arrTitulos['fchEscrituraTitulo']))));
 $claDesembolso->arrTitulos['fchMatriculaTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($claDesembolso->arrTitulos['fchMatricula']))));
@@ -106,6 +113,7 @@ $claSmarty->assign("arrRegistros", $arrRegistros); // Registros de seguimiento
 $claSmarty->assign("claFormulario", $claFormulario);
 $claSmarty->assign("txtUsuarioSesion", $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']);
 $claSmarty->assign("arrFlujoHogar", $arrFlujoHogar); // Flujo de datos aplicado al hogar        
+$claSmarty->assign("arrConvenio", $arrConvenio);
 
 $claSmarty->display($claFlujoDesembolsos->arrFases[$_POST['flujo']][$_POST['fase']]['plantilla']);
 

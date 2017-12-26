@@ -154,6 +154,13 @@ if (is_numeric($valCedulaFormat) and $valCedulaFormat > 0) {
             $claDesembolso->arrJuridico['valResolucion'] = $arrResolucionAsignacion['valor'];
             $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrResolucionAsignacion['fecha']))));
 
+            $arrConvenio = obtenerDatosTabla(
+                "v_frm_convenio",
+                array("seqConvenio","txtConvenio","txtBanco"),
+                "seqConvenio",
+                "seqConvenio = " . $claFormulario->seqConvenio
+            )[$claFormulario->seqConvenio];
+
             // Plantilla comun para todas las fases de desembolso
             $claSmarty->assign("arrActos", $arrActos);
             $claSmarty->assign("arrNombreProyectos", $arrNombreProyectos);
@@ -163,6 +170,7 @@ if (is_numeric($valCedulaFormat) and $valCedulaFormat > 0) {
             $claSmarty->assign("seqFormulario", $seqFormulario);
             $claSmarty->assign("cedula", $valCedulaFormat); // PARA SABER AL FINAL DEL PROCESO A QUE CIUDADANO SE ATENDIO
             $claSmarty->assign("claFormulario", $claFormulario);
+            $claSmarty->assign("arrConvenio", $arrConvenio);
 
             if ($arrFlujoHogar['fase'] == "escrituracion") {
                 if (is_array($claDesembolso->arrEscrituracion)) {

@@ -181,23 +181,47 @@
       }
 
       // Guarda los cambios
-      $claDesembolso = new Desembolso;		 		
+      $claDesembolso = new Desembolso;
 
-      if( $txtFase == "busquedaOferta" ){
-         $arrErrores = $claDesembolso->salvarBusquedaOferta( $_POST , $txtFase );
-      } else {
-          
-          /* // ESTA SECCION GUARDA EN ESCRITURACION Y EN BUSQUEDA DE LA SOLUCION (NO DEBE IR) JUNIO 09/2016
-		  if( $claFormulario->seqTipoEsquema == 1 ){
-              $arrErrores = $claDesembolso->salvarBusquedaOferta( $_POST , $txtFase );
-          }*/
+       $arrErrores = $claDesembolso->salvarBusquedaOferta( $_POST , $txtFase );
 
-         $arrErrores = $claDesembolso->salvarEscrituracion( $_POST , $txtFase );
+      if( $txtFase == "escrituracion" ){
+
+          if($claFormulario->seqModalidad == 13){
+              if(intval($_POST['numContratoLeasing']) == 0){
+                  $arrErrores[] = "Indique el contrato de leasing";
+              }
+              if(!esFechaValida($_POST['fchContratoLeasing'])){
+                  $arrErrores[] = "Indique la fecha del contrato de leasing";
+              }
+              if(intval($_POST['numFoliosContratoLeasing']) == 0){
+                  $arrErrores[] = "Indique la cantidad de folios que tiene el contrato de leasing";
+              }
+              if(trim($_POST['txtFoliosContratoLeasing']) == ""){
+                  $arrErrores[] = "Indique la cantidad de folios que tiene el contrato de leasing";
+              }
+          }
+
+          $arrErrores = $claDesembolso->salvarEscrituracion( $_POST , $txtFase );
       }
 
       // Asignacion del tutor al proceso
       $claCrm = new CRM;
       $claCrm->asignarFormularioTutor( $_POST[ "seqFormulario" ] );
+
+       // Coloca el flujo
+       $sql = "delete from t_des_flujo where seqFormulario = " . $_POST['seqFormulario'];
+       $aptBd->execute( $sql );
+
+        $sql = "
+          insert into t_des_flujo (seqFormulario, txtFlujo) 
+          values (" . $_POST['seqFormulario'] . ",'" . $_POST['txtFlujo'] . "')
+      ";
+       try {
+           $aptBd->execute( $sql );
+       } catch ( Exception $objError ){
+           $arrErrores[] = $objError->getMessage();
+       }
 
       // Coloca el estado del proceso seleccionado por el usuario
       $sql = "

@@ -451,7 +451,35 @@
 
                         </td>
                     </tr>
-                {/if} <!-- fin de la condicion para modalidad de arriendo -->                                       
+                {/if} <!-- fin de la condicion para modalidad de arriendo -->
+
+                {if $claFormulario->seqModalidad == 13}
+                    <tr>
+                        <td>Contrato de Leasing #</td>
+                        <td>
+                            <input type="text"
+                                   name="numContratoLeasing"
+                                   id="numContratoLeasing"
+                                   onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                   onBlur="javascript: soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
+                                   style="width:100px"
+                                   value="{$claDesembolso->numContratoLeasing}"
+                            >
+                        </td>
+                        <td>Fecha del contrato</td>
+                        <td>
+                             <input	type="text"
+                                    name="fchContratoLeasing"
+                                    id="fchContratoLeasing"
+                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                    onBlur="javascript: sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                    maxlength="10"
+                                    style="width:80px"
+                                    value="{if esFechaValida($claDesembolso->fchContratoLeasing)}{$claDesembolso->fchContratoLeasing}{/if}"
+                                    />  <a href="#" onClick="calendarioPopUp('fchContratoLeasing');">Calendario</a>
+                        </td>
+                    </tr>
+                {/if}
 
                 <!-- MATRICULA INMOBILIARIA	 -->
                 <tr>
@@ -686,7 +714,38 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="2-ambos">
+
+                    {if $claFormulario->seqModalidad == 13}
+                        <tr id="2-ambos">
+                            <td>Folios Contrato Leasing</td>
+                            <td align="center">
+                                <input	type="text"
+                                       name="numFoliosContratoLeasing"
+                                       id="numFoliosContratoLeasing"
+                                       value="{$claDesembolso->numFoliosContratoLeasing}"
+                                       onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                       onBlur="javascript: soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
+                                       style="width:40px"
+                                       maxlength="3"
+                                       />
+                            </td>
+                            <td>
+                                <input	type="text"
+                                       name="txtFoliosContratoLeasing"
+                                       id="txtFoliosContratoLeasing"
+                                       value="{$claDesembolso->txtFoliosContratoLeasing}"
+                                       onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                       onBlur="javascript: sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                       style="width:300px"
+                                       class="inputLogin"
+                                       />
+                            </td>
+                        </tr>
+                    {/if}
+
+
+
+                    <tr  id="3-ambos">
                         <td>Certificado de tradici&oacute;n y libertad</td>
                         <td align="center">
                             <input	type="text" 
@@ -713,7 +772,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="3-ambos">
+                    <tr  id="4-ambos">
                         <td>Fotocopia Carta de Asignaci&oacute;n</td>
                         <td align="center">
                             <input	type="text" 
@@ -740,7 +799,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="4-ambos">
+                    <tr  id="5-ambos">
                         <td>Certificado de riesgo</td>
                         <td align="center">
                             <input	type="text" 
@@ -766,7 +825,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="5-ambos">
+                    <tr  id="6-ambos">
                         <td>Certificado de habitabilidad</td>
                         <td align="center">
                             <input	type="text" 
@@ -793,7 +852,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="6-ambos">
+                    <tr  id="7-ambos">
                         <td>Bolet&iacute;n catastral</td>
                         <td align="center">
                             <input	type="text" 
@@ -820,7 +879,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="7-ambos">
+                    <tr  id="8-ambos">
                         <td>Licencia construcci&oacute;n inmueble</td>
                         <td align="center">
                             <input	type="text" 
@@ -847,7 +906,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="8-ambos">
+                    <tr  id="9-ambos">
                         <td>Recibo de &uacute;ltimo pago de impuesto predial</td>
                         <td align="center">
                             <input	type="text" 
@@ -874,7 +933,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="9-ambos">
+                    <tr  id="10-ambos">
                         <td>&Uacute;ltimo recibo de acueducto y alcantarillado</td>
                         <td align="center">
                             <input	type="text" 
@@ -901,7 +960,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="10-ambos">
+                    <tr  id="11-ambos">
                         <td>&Uacute;ltimo recibo de Energ&iacute;a</td>
                         <td align="center">
                             <input	type="text" 
@@ -928,7 +987,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="11-ambos">
+                    <tr  id="12-ambos">
                         <td>Acta de entrega del inmueble</td>
                         <td align="center">
                             <input	type="text" 
@@ -955,7 +1014,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="12-ambos">
+                    <tr  id="13-ambos">
                         <td>Certificación Bancaria del Vendedor</td>
                         <td align="center">
                             <input	type="text" 
@@ -982,7 +1041,7 @@
                         </td>
                     </tr>
 
-                    <tr  id="13-ambos">
+                    <tr  id="14-ambos">
                         <td>Autorización de desembolso</td>
                         <td align="center">
                             <input	type="text" 
@@ -1009,7 +1068,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr  id="14-ambos">
+                    <tr  id="15-ambos">
                         <td>Fotocopia de la cedula del vendedor</td>
                         <td align="center">
                             <input	type="text" 
@@ -1036,7 +1095,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr {if $claDesembolso->txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="15-empresa">
+                    <tr {if $claDesembolso->txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="16-empresa">
                         <td>Fotocopia RUT</td>
                         <td align="center">
                             <input	type="text" 
@@ -1063,7 +1122,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr {if $claDesembolso->txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="16-empresa">
+                    <tr {if $claDesembolso->txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="17-empresa">
                         <td>Fotocopia RIT</td>
                         <td align="center">
                             <input	type="text" 
@@ -1090,7 +1149,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr {if $claDesembolso->txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="17-empresa">
+                    <tr {if $claDesembolso->txtTipoDocumentos != 'empresa'} style="display:none" {/if} id="18-empresa">
                         <td>Fotocopia NIT</td>
                         <td align="center">
                             <input	type="text" 
@@ -1117,7 +1176,7 @@
                                    />
                         </td>
                     </tr>
-                    <tr id="18-ambos">
+                    <tr id="19-ambos">
                         <td>Otros documentos</td>
                         <td align="center">
                             <input	type="text" 

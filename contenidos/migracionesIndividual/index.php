@@ -53,7 +53,7 @@ foreach ($array as $key => $value) {
                                        'contenidos/migracionesIndividual/masivoPlantillaEscrituracion/index.php'
                                    );"
                                 >
-                                    Cargue Datos Escrituraci&oacute;n
+                                    Postulación Individual
                                 </a>
                             </li>
                             <li>
@@ -93,7 +93,7 @@ foreach ($array as $key => $value) {
                                        'contenidos/migracionesIndividual/migracionEstudiosTecnicosPryDes/index.php'
                                    );"
                                 >
-                                    Migraci&oacute;n Proyectos a Desembolsos
+                                    Postulación Individual / Proyectos gestionados por SDHT
                                 </a>
                             </li>
                             <li>
@@ -138,7 +138,7 @@ foreach ($array as $key => $value) {
                                        'contenidos/migracionesIndividual/CargaMasivosEstudioTitulos/index.php'
                                    );"
                                 >
-                                    Migraci&oacute;n Masiva de Estudio de Titulos
+                                    Postulación Individual / Mi Casa Ya
                                 </a>
                             </li>
                             <li>

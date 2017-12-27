@@ -4432,8 +4432,7 @@ ORDER BY aad.fchActo DESC;
                 '' as 'DETERMINACIÓN DEL APORTE DEL DISTRITO CAPITAL EN LA ESCRITURA',
                 '' as 'CLAUSULAS DONDE SE ESPECIFIQUEN RESTRICCIONES Y PROHIBICIONES EN EL CONTRATO',
                 '' as 'RELACIÓN DE LOS INTEGRANTES DEL HOGAR EN EL CONTRATO',
-                '' as 'CLÁUSULA ESPECIALES A IMPUESTOS Y CONTRIBUCIONES CON CARGO AL APORTE DEL DISTRITO CAPITAL',
-                '' as 'NUMERO Y FECHA DEL CONTRATO DE LEASING HABITACIONAL',
+                '' as 'CLÁUSULA ESPECIALES A IMPUESTOS Y CONTRIBUCIONES CON CARGO AL APORTE DEL DISTRITO CAPITAL',                
                 '' as 'BENEFICIO DEL APORTE SEA EL LOCATARIO DEL CONTRATO DE LEASING',
                 '' as 'DESCRIPCIÓN DEL APORTE DENTRO DEL CONTRATO',
                 '' as 'PROPIEDAD DE LA ENTIDAD FINANCIERA OTORGANTE DEL LEASING EN CTL',
@@ -4577,7 +4576,7 @@ ORDER BY aad.fchActo DESC;
 
 
             // listas
-            for($numColumna = 23; $numColumna < 37; $numColumna++){
+            for($numColumna = 23; $numColumna < 36; $numColumna++){
                 for($numFila = 2; $numFila < $numFilas; $numFila++){
                     $objValidacion = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($numColumna, $numFila)->getDataValidation();
                     $objValidacion->setType(PHPExcel_Cell_DataValidation::TYPE_LIST);

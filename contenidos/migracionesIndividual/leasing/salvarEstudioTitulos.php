@@ -101,20 +101,19 @@ function validarArchivo(){
     $arrPlantilla[22] = 'FECHA FOLIO';
     $arrPlantilla[23] = 'RESOLUCION DE VINCULACION COINCIDENTE';
     $arrPlantilla[24] = 'CARTA DE VINCULACION Y/O RESOLUCION PROTOCOLIZADA';
-    $arrPlantilla[25] = 'No. DE ANOTACION CTL COMPRAVENTA';
+    $arrPlantilla[25] = 'ANOTACION CTL COMPRAVENTA';
     $arrPlantilla[26] = 'SE CANCELA HIPOTECA MAYOR EXTENSION (SI LA HUBIERE)';
     $arrPlantilla[27] = 'NUMERO Y FECHA DE CONTRATO LEASING';
     $arrPlantilla[28] = 'DETERMINACIÓN DEL APORTE DEL DISTRITO CAPITAL EN LA ESCRITURA';
     $arrPlantilla[29] = 'CLAUSULAS DONDE SE ESPECIFIQUEN RESTRICCIONES Y PROHIBICIONES EN EL CONTRATO';
-    $arrPlantilla[30] = 'RELACIÓN DE LOS INTEGRANTES DEL HOGAR EN EL CONTRATO';
-    $arrPlantilla[31] = 'CLÁUSULA ESPECIALES A IMPUESTOS Y CONTRIBUCIONES CON CARGO AL APORTE DEL DISTRITO CAPITAL';
+    $arrPlantilla[30] = 'RELACIÓN DE LOS INTEGRANTES DEL HOGAR EN LA ESCRITURA';
+    $arrPlantilla[31] = 'IMPUESTOS CON CARGO AL APORTE DEL DISTRITO CAPITAL';
     $arrPlantilla[32] = 'BENEFICIO DEL APORTE SEA EL LOCATARIO DEL CONTRATO DE LEASING';
-    $arrPlantilla[33] = 'DESCRIPCIÓN DEL APORTE DENTRO DEL CONTRATO';
-    $arrPlantilla[34] = 'PROPIEDAD DE LA ENTIDAD FINANCIERA OTORGANTE DEL LEASING EN CTL';
-    $arrPlantilla[35] = 'SE VIABILIZA JURIDICAMENTE';
-    $arrPlantilla[36] = 'ELABORO';
-    $arrPlantilla[37] = 'APROBO';
-    $arrPlantilla[38] = 'OBSERVACION';
+    $arrPlantilla[33] = 'PROPIEDAD DE LA ENTIDAD FINANCIERA OTORGANTE DEL LEASING EN CTL';
+    $arrPlantilla[34] = 'SE VIABILIZA JURIDICAMENTE';
+    $arrPlantilla[35] = 'ELABORO';
+    $arrPlantilla[36] = 'APROBO';
+    $arrPlantilla[37] = 'OBSERVACION';
 
     $txtArchivo = utf8_encode(file_get_contents($_FILES['documentos']['tmp_name']));
     $arrArchivo = mb_split("\r\n",$txtArchivo);
@@ -147,7 +146,7 @@ function validarArchivo(){
                 }
 
                 // campos no vacios
-                for($numColumna = 15 ; $numColumna < 38; $numColumna++){
+                for($numColumna = 15 ; $numColumna < 37; $numColumna++){
                     if(trim($arrArchivo[$numLinea][$numColumna]) == ""){
                         $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La columna '" . $arrPlantilla[$numColumna] . "' no puede estar vacia";
                     }
@@ -174,7 +173,7 @@ function validarArchivo(){
                 }
 
                 // valida todas las solumnas si / no / no aplica
-                for($numColumna = 23 ; $numColumna < 36; $numColumna++){
+                for($numColumna = 23 ; $numColumna < 35; $numColumna++){
                     if(! in_array(mb_strtolower($arrArchivo[$numLinea][$numColumna]),["si","no","no aplica"])){
                         $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La columna '" . $arrPlantilla[$numColumna] . "' no tiene un valor valido";
                     }
@@ -211,11 +210,10 @@ function sqlEstudioTitulos($arrArchivo){
     // observaciones para los titulos
     $arrObservaciones[] = "DETERMINACIÓN DEL APORTE DEL DISTRITO CAPITAL EN LA ESCRITURA";
     $arrObservaciones[] = "CLAUSULAS DONDE SE ESPECIFIQUEN RESTRICCIONES Y PROHIBICIONES EN LA ESCRITURA";
-    $arrObservaciones[] = "RELACIÓN DE LOS INTEGRANTES DEL HOGAR EN EL CONTRATO";
-    $arrObservaciones[] = "CLÁUSULA ESPECIALES A IMPUESTOS Y CONTRIBUCIONES CON CARGO AL APORTE DEL DISTRITO CAPITAL";
+    $arrObservaciones[] = "RELACIÓN DE LOS INTEGRANTES DEL HOGAR EN LA ESCRITURA";
+    $arrObservaciones[] = "IMPUESTOS CON CARGO AL APORTE DEL DISTRITO CAPITAL";
     $arrObservaciones[] = "NUMERO Y FECHA DEL CONTRATO DE LEASING HABITACIONAL";
     $arrObservaciones[] = "BENEFICIO DEL APORTE SEA EL LOCATARIO DEL CONTRATO DE LEASING";
-    $arrObservaciones[] = "DESCRIPCIÓN DEL APORTE DENTRO DEL CONTRATO";
     $arrObservaciones[] = "PROTOCOLIZACIÓN  DE LA RESOLUCIÓN O CARTA DE ASIGNACIÓN";
     $arrObservaciones[] = "PROPIEDAD DE LA ENTIDAD FINANCIERA OTORGANTE DEL LEASING EN CTL";
 
@@ -285,8 +283,8 @@ function sqlEstudioTitulos($arrArchivo){
                     null,
                     now(),
                     null,
-                    '" . $arrDatos[36] . "',
-                    '" . $arrDatos[37] . "'
+                    '" . $arrDatos[35] . "',
+                    '" . $arrDatos[36] . "'
                 )
             ";
             $aptBd->execute($sql);
@@ -325,7 +323,8 @@ function sqlEstudioTitulos($arrArchivo){
             }
 
             // cambio de estado 31 == si || 28 == no
-            $seqEstadoProceso = (mb_strtolower($arrDatos[27]) == "no")? 28 : 31;
+            // columna "se viabiliza juridicamente"
+            $seqEstadoProceso = (mb_strtolower($arrDatos[34]) == "no")? 28 : 31;
             $sql = "update t_frm_formulario set seqEstadoProceso = " . $seqEstadoProceso . ", fchUltimaActualizacion = now() where seqFormulario = " . $arrDatos[0];
             $aptBd->execute($sql);
 

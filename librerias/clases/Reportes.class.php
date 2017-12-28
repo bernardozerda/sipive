@@ -4549,7 +4549,7 @@ ORDER BY aad.fchActo DESC;
 
             $objHoja->getStyle(
                 PHPExcel_Cell::stringFromColumnIndex(23) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex(35) .  "1")
+                PHPExcel_Cell::stringFromColumnIndex(34) .  "1")
                 ->getFill()
                 ->getStartColor()
                 ->setARGB('FF0000');
@@ -4575,7 +4575,7 @@ ORDER BY aad.fchActo DESC;
 
 
             // listas
-            for($numColumna = 23; $numColumna < 36; $numColumna++){
+            for($numColumna = 23; $numColumna < 35; $numColumna++){
                 for($numFila = 2; $numFila < $numFilas; $numFila++){
                     $objValidacion = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($numColumna, $numFila)->getDataValidation();
                     $objValidacion->setType(PHPExcel_Cell_DataValidation::TYPE_LIST);

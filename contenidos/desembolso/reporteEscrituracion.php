@@ -3,7 +3,9 @@
 /**
  * REPORTE DE ESCRITURACION Y ESTUDIO DE TITULOS
  * @author Jaison Ospina
+ * @author Bernardo Zerda
  * @version 1.0 Febrero 2016
+ * @version 1.1 Diciembre 2017
  */
 $txtPrefijoRuta = "../../";
 
@@ -107,6 +109,8 @@ if( empty($arrErrores) ){
             T_DES_ESCRITURACION.txtEscritura AS 'Escritura',
             T_DES_ESCRITURACION.numNotaria AS 'Notaría',
             T_DES_ESCRITURACION.fchEscritura AS 'Fecha Escritura',
+            T_DES_ESCRITURACION.numContratoLeasing AS 'Número Contrato Leasing',
+            T_DES_ESCRITURACION.fchContratoLeasing AS 'Fecha Contrato Leasing',
             T_DES_ESCRITURACION.numAvaluo AS 'No. Avalúo',
             T_DES_ESCRITURACION.valInmueble AS 'Valor Inmueble',
             T_DES_ESCRITURACION.txtChip AS 'Chip',
@@ -114,20 +118,12 @@ if( empty($arrErrores) ){
             T_DES_ESCRITURACION.numValorInmueble AS 'Valor Inmueble',
             T_DES_ESCRITURACION.bolViabilizoJuridico AS 'Viabilizó Jurídico',
             T_DES_ESCRITURACION.bolviabilizoTecnico AS 'Viabilizó Técnico',
-            #T_DES_ESCRITURACION.txtCompraVivienda AS 'Compra Vivienda',
-            #T_DES_ESCRITURACION.txtTipoPredio AS 'Tipo Predio',
             T_DES_ESCRITURACION.txtCedulaCatastral AS 'Cédula Catastral',
             T_DES_ESCRITURACION.numAreaConstruida AS 'Area Construída',
             T_DES_ESCRITURACION.numAreaLote AS 'Area Lote',
-            #T_DES_ESCRITURACION.txtTipoDocumentos AS 'Tipo Documentos',
-            #T_DES_ESCRITURACION.numEstrato AS 'Estrato',
-            #T_DES_ESCRITURACION.txtCiudad AS 'Ciudad',
             T_FRM_CIUDAD.txtCiudad AS 'Ciudad',
             T_DES_ESCRITURACION.txtNombreVendedor AS 'Nombre Vendedor',
             T_DES_ESCRITURACION.numDocumentoVendedor AS 'Documento Vendedor',
-            #T_DES_ESCRITURACION.numTelefonoVendedor AS 'Telefono Vendedor',
-            #T_DES_ESCRITURACION.numTelefonoVendedor2 AS 'Teléfono 2 Vendedor',
-            #T_DES_ESCRITURACION.txtCorreoVendedor AS 'Correo Vendedor',
             T_DES_ESTUDIO_TITULOS.seqEstudioTitulos,
             T_DES_ESTUDIO_TITULOS.numEscrituraIdentificacion AS 'No. Escritura Identificación',
             T_DES_ESTUDIO_TITULOS.fchEscrituraIdentificacion AS 'Fecha Escritura Identificación',
@@ -202,7 +198,7 @@ if( empty($arrErrores) ){
             T_DES_ESCRITURACION.seqFormulario
     ";
 
-    //echo $sql; die();
+//    echo $sql; die();
 
     $objRes = $aptBd->execute($sql);
     $txtNombreArchivo = "ReporteEscrituracion" . date("Ymd_His") . ".xls";

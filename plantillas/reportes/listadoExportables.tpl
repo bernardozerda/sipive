@@ -619,20 +619,7 @@
                     </tr>
                 {/if}
 
-                {if $reporteEstudioTitulos == 1}
-                   <!-- <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                        <td class="tituloCampo" align="left">Reporte de Estudio de T&iacute;tulos</td>
-                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
-                            <a onclick="someterFormulario(
-                                            'mensajes',
-                                            'listadoExportable',
-                                            './contenidos/desembolso/reporteEstudioTitulos.php',
-                                            true,
-                                            false)"
-                               href="#">Exportable</a>
-                        </td>
-                    </tr>-->
-                {/if}
+
 
                 {if $reporteCierre == 1}
                     <tr {if $x is not even} style="background:#{$backColor};" {/if}>

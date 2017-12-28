@@ -111,6 +111,7 @@ if( empty($arrErrores) ){
             T_DES_ESCRITURACION.fchEscritura AS 'Fecha Escritura',
             T_DES_ESCRITURACION.numContratoLeasing AS 'Número Contrato Leasing',
             T_DES_ESCRITURACION.fchContratoLeasing AS 'Fecha Contrato Leasing',
+            T_FRM_FORMULARIO.valCartaLeasing AS 'Valor Aporte Leasing',
             T_DES_ESCRITURACION.numAvaluo AS 'No. Avalúo',
             T_DES_ESCRITURACION.valInmueble AS 'Valor Inmueble',
             T_DES_ESCRITURACION.txtChip AS 'Chip',

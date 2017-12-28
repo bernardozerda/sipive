@@ -98,6 +98,28 @@ if($claFormulario->seqModalidad == 13){
 
 }
 
+
+// Obtiene el postulante principal
+foreach ($claFormulario->arrCiudadano as $objCiudadano) {
+    if ($objCiudadano->seqParentesco == 1) {
+        $numDocumento = mb_ereg_replace("[^0-9]", "", $objCiudadano->numDocumento);
+        break;
+    }
+}
+
+// obtiene la informacion de la pestana de actos administrativos
+$claActosAdministrativos = new ActoAdministrativo();
+$arrActos = $claActosAdministrativos->cronologia($numDocumento);
+
+foreach ($arrActos as $txtClave => $arrInformacion) {
+    if ($arrInformacion['acto']['tipo'] == 1) {
+        $claDesembolso->arrJuridico['numResolucion'] = $arrInformacion['acto']['numero'];
+        $claDesembolso->arrJuridico['fchResolucion'] = $arrInformacion['acto']['fecha'];
+        $claDesembolso->arrJuridico['valResolucion'] = $arrInformacion['acto']['valor'];
+        $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrInformacion['acto']['fecha']))));
+    }
+}
+
 $claSmarty->assign("txtFuente12", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 11px;");
 $claSmarty->assign("txtFuente10", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 9px;");
 $claSmarty->assign("txtFecha", $txtFecha);

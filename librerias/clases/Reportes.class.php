@@ -3299,7 +3299,7 @@ public function exportableReporteTodosConEstado() {
 			LEFT JOIN T_PRY_PROYECTO pry ON fac.seqProyecto = pry.seqProyecto
 			LEFT JOIN T_PRY_PROYECTO prh ON fac.seqProyectoHijo = prh.seqProyecto
 			LEFT JOIN T_FRM_FORMULARIO frm ON fac.seqFormulario = frm.seqFormulario
-			LEFT JOIN T_PRY_UNIDAD_PROYECTO und ON frm.seqUnidadProyecto = und.seqUnidadProyecto
+			LEFT JOIN T_PRY_UNIDAD_PROYECTO und ON fac.seqUnidadProyecto = und.seqUnidadProyecto
 			LEFT JOIN T_PRY_TIPO_ESQUEMA AS esq ON fac.seqTipoEsquema = esq.seqTipoEsquema
  WHERE     (hac.seqParentesco = 1 OR hac.seqParentesco IS NULL)
        AND aad.seqCaracteristica = 1

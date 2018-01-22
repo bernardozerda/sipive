@@ -171,9 +171,11 @@ class InformeVeedurias
             left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1            
-            -- and pry.seqProyecto in (149,30)
+            -- and pry.seqProyecto in (104)
+            -- and uac.numActo = 267
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
         "; // and pry.seqProyecto = 30
+//        echo $sql;
         $objRes = $aptBd->execute($sql);
         $arrReporte = array();
         $arrFormularios = array();
@@ -270,7 +272,7 @@ class InformeVeedurias
             }
 
             // conteo para las columnas de vinculados segun el estado del proceso
-            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosVinculado ) and ! isset( $arrFormularios[$seqFormulario] ) ) {
+            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosVinculado ) ) {
 
                 $numAnioResolucionHogar = date("Y", strtotime($objRes->fields['fchActoHogar']));
 
@@ -335,11 +337,15 @@ class InformeVeedurias
                     $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'];
 
                 // conteos
-                $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar]++;
-                $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total']++;
+                if( ! isset( $arrFormularios[$seqFormulario] ) ) {
 
-                $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar]++;
-                $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total']++;
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar]++;
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total']++;
+
+                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar]++;
+                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total']++;
+
+                }
 
                 $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar] += $objRes->fields['valIndexado'];
                 $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total'] += $objRes->fields['valIndexado'];
@@ -350,7 +356,7 @@ class InformeVeedurias
             }
 
             // conteo para las columnas de legalizados segun el estado del proceso
-            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosLegalizado ) and ! isset( $arrFormularios[$seqFormulario] ) ){
+            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosLegalizado ) ){
 
                 $numAnioLegalizado = date("Y", strtotime($objRes->fields['fchLegalizado']));
 
@@ -415,11 +421,13 @@ class InformeVeedurias
                     $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'];
 
                 // conteos
-                $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado]++;
-                $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total']++;
+                if( ! isset( $arrFormularios[$seqFormulario] ) ) {
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado]++;
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total']++;
 
-                $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado]++;
-                $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total']++;
+                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado]++;
+                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total']++;
+                }
 
                 $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado] += $objRes->fields['valIndexado'];
                 $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total'] += $objRes->fields['valIndexado'];

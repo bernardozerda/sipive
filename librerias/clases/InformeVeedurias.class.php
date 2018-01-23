@@ -175,7 +175,7 @@ class InformeVeedurias
             -- and uac.numActo = 267
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
         "; // and pry.seqProyecto = 30
-//        echo $sql;
+
         $objRes = $aptBd->execute($sql);
         $arrReporte = array();
         $arrFormularios = array();
@@ -704,8 +704,18 @@ class InformeVeedurias
               sis.txtSisben as Sisben,
               IF(frm.seqProyecto is null or frm.seqProyecto = 0,'No Disponible',pry2.txtNombreProyecto) as Proyecto,
               IF(frm.seqProyectoHijo is null or frm.seqProyectoHijo = 0,'No Disponible',pry1.txtNombreProyecto) as Conjunto,
-              IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad) as Unidad,
-              upr.fchLegalizado as 'Fecha Legalización',
+              IF(upr.seqUnidadProyectoVeeduria IS NOT NULL,
+                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.seqUnidadProyecto),
+                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.seqUnidadProyecto) 
+              )as Unidad,
+              IF(upr.seqUnidadProyectoVeeduria IS NOT NULL,
+                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad),
+                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.txtNombreUnidad) 
+              )as 'Descripcion de la Unidad',
+              IF(upr.seqUnidadProyectoVeeduria IS NOT NULL,
+                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.fchLegalizado),
+                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.fchLegalizado) 
+              )as 'Fecha Legalización',
               loc.seqLocalidad as Localidad,
               if(bar.txtBarrio is null,'No Disponible',bar.txtBarrio) as Barrio,
               if(frm.numHabitaciones is null,0,frm.numHabitaciones) as Dormitorios,
@@ -748,6 +758,7 @@ class InformeVeedurias
             LEFT JOIN t_vee_proyecto pry1 ON frm.seqProyectoHijo = pry1.seqProyecto and pry1.seqCorte = $seqCorte
             LEFT JOIN t_pry_proyecto pry2 ON frm.seqProyecto = pry2.seqProyecto
             LEFT JOIN t_vee_unidad_proyecto upr ON frm.seqUnidadProyecto = upr.seqUnidadProyecto and upr.seqProyectoVeeduria = pry.seqProyectoVeeduria
+            LEFT JOIN t_vee_unidad_proyecto upr1 ON frm.seqUnidadProyecto = upr1.seqUnidadProyecto and upr1.seqProyectoVeeduria = pry1.seqProyectoVeeduria
             INNER JOIN t_frm_localidad loc on frm.seqLocalidad = loc.seqLocalidad
             LEFT  JOIN t_frm_barrio bar on frm.seqBarrio = bar.seqBarrio
             INNER JOIN t_ciu_parentesco par on hog.seqParentesco = par.seqParentesco
@@ -772,7 +783,8 @@ class InformeVeedurias
             LEFT  JOIN t_frm_tipovictima tvi on ciu.seqTipoVictima = tvi.seqTipoVictima
             LEFT  JOIN t_frm_grupo_lgtbi glg on ciu.seqGrupoLgtbi = glg.seqGrupoLgtbi
             WHERE frm.seqCorte = $seqCorte
-            AND frm.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )
+            AND frm.seqFormulario IN (6)
+            -- AND frm.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )
         ";
         $arrHogares = $aptBd->GetAll($sql);
         return $arrHogares;
@@ -974,7 +986,7 @@ class InformeVeedurias
         echo $xmlArchivo;
     }
 
-    public function imprimirReporteProyectos($arrReporte)
+    public function imprimirReporteProyectos($arrReporte, $seqCorte)
     {
 
         /***********************************************
@@ -1023,12 +1035,14 @@ class InformeVeedurias
 
         $xmlArchivo .= $this->obtenerXMLPie();
 
-        $this->exportarResultadosXML( $xmlArchivo , "Informe Proyectos" );
+        $arrCorte = $this->obtenerCortes($seqCorte);
+
+        $this->exportarResultadosXML( $xmlArchivo , "InfPry_" . $arrCorte['txtCorte'] );
 
 
     }
 
-    public function imprimirReporteNoProyectos($arrReporte)
+    public function imprimirReporteNoProyectos($arrReporte,$seqCorte)
     {
 
         /***********************************************
@@ -1057,7 +1071,9 @@ class InformeVeedurias
 
         $xmlArchivo .= $this->obtenerXMLPie();
 
-        $this->exportarResultadosXML( $xmlArchivo , "Informe No Proyectos" );
+        $arrCorte = $this->obtenerCortes($seqCorte);
+
+        $this->exportarResultadosXML( $xmlArchivo , "InfNoPry_" . $arrCorte['txtCorte']  );
 
     }
 

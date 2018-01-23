@@ -11,6 +11,6 @@ ini_set("memory_limit","-1");
 
 $claInforme = new InformeVeedurias();
 $arrReporte = $claInforme->reporteNoProyectos($_GET['seqCorte']);
-$claInforme->imprimirReporteNoProyectos($arrReporte);
+$claInforme->imprimirReporteNoProyectos($arrReporte,$_GET['seqCorte']);
 
 ?>

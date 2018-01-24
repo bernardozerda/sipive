@@ -202,32 +202,6 @@ if (empty($arrErrores)) {
                 $arrErrores[] = $mail->ErrorInfo;
             }
 
-//
-//            $mail = new PHPMailer();
-//            $mail->IsSMTP();
-//            $mail->SMTPAuth = true;
-//            $mail->SMTPSecure = $seguridad;
-//            $mail->SMTPDebug = 0;
-//            $mail->Host = $servidor;
-//            $mail->Port = $puerto;
-//            $mail->Username = $usuario;
-//            $mail->Password = $clave;
-//            $mail->From = $usuario;
-//            $mail->FromName = $nombre;
-//            $mail->Subject = $txtSubject;
-//            $mail->Body = utf8_decode($txtMensajeHtml);
-//            $mail->AddAddress($txtCorreo, $nombrecompleto);
-//            $mail->addReplyTo($usuario, $nombre);
-//            $mail->IsHTML(true);
-//            if ($mail->Send()) {
-//                $claAutenticacion = new Usuario();
-//                $arrErrores = $claAutenticacion->editarUsuario(
-//                        $seqUsuario, $arrUsuario[$seqUsuario]->txtNombre, $arrUsuario[$seqUsuario]->txtApellido, $arrUsuario[$seqUsuario]->txtUsuario, $txtClaveEncriptada, $txtCorreo, 1, $arrUsuario[$seqUsuario]->numVencimiento, $arrPermisos, $arrPrivilegios
-//                );
-//            } else {
-//                $arrErrores[] = "No se ha podido enviar el correo al usuario seleccionado";
-//            }
-
             /**
              * FIN ENVIO MAIL
              */

@@ -246,8 +246,6 @@ if (empty($arrErrores)) {
     echo "</div>";
 } else {
 
-    var_dump($arrErrores);
-
     //imprimirMensajes($arrErrores, array());
     echo "<div class='alert alert-danger' role='alert'>";
     foreach($arrErrores as $txtMensajes){

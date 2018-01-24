@@ -16,8 +16,15 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Usuario.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Autenticacion.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['phpmailer'] . "class.phpmailer.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['nusoap'] . "nusoap.php" );
+
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['phpmailer'] . "/src/PHPMailer.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['phpmailer'] . "/src/Exception.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['phpmailer'] . "/src/SMTP.php" );
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 $arrErrores = array(); // donde se almacenan los errores
 // Esta expresion regular valida que el correo electronico escrito por el usuario
@@ -85,47 +92,6 @@ if (empty($arrErrores)) {
              */
             $txtSubject = "Solicitud de Cambio de Clave";
 
-//            $txtMensajeHtml = "
-//                    <center>
-//                    <table cellspacing='5'
-//                           cellpadding='5'
-//                           width='500px'
-//                           bgcolor='#ECECEC'
-//                           style='
-//                             padding:5px;
-//                             font-family: Verdana, Geneva, Arial, Helvetica,
-//                             sans-serif; color:black:
-//                             font-size:11px;
-//                             font-weight: bold;
-//                           '
-//                    >
-//                        <tr><td align='justify' colspan='2' style='padding:10px; color:#4682b4; font-size:14px; border: 1px dotted #999999; ' bgcolor='#FFFFFF'>
-//                            <b>Hola " . $arrUsuario[$seqUsuario]->txtNombre . " " . $arrUsuario[$seqUsuario]->txtApellido . "</b>
-//						</td></tr>
-//						<tr><td colspan='2' bgcolor='#F9F9F9' style='padding:10px;'>
-//                            Has usado el procedimiento para recuperar tu contrase&ntilde;a para ingresar al SDHT - Subsidios de vivienda, te informamos que
-//                            tu clave ha sido restaurada, tu clave actual es: <i>(recuerda respetar mayusculas y minusculas)</i>
-//						</td></tr>
-//						<tr><td colspan='2' height='40px' bgcolor='#FDF5E6' style='color:#C8211B; font-size:14px;' align='center'>
-//							$txtNuevaClave
-//						</td></tr>
-//						<tr><td colspan='2' bgcolor='#F9F9F9' style='padding:10px;'>
-//							Por tu seguridad, la pr&oacute;xima vez que ingreses
-//                            el sistema te solicitar&aacute; que cambies tu contrase&ntilde;a.
-//                        </td></tr>
-//                        <tr>
-//							<td style='padding:5px' width='30px' align='center'>
-//								<img src='http://sdv.habitatbogota.gov.co/sipive/recursos/imagenes/escudo_bogota.png'>
-//							</td>
-//							<td style='padding:10px'>
-//	                            Secretar&iacute;a Distrital del H&aacute;bitat<br>
-//	                            Bogot&aacute; D.C. - Colombia<br>
-//	                        </td>
-//						</tr>
-//                    </table>
-//                    </center>
-//                ";
-
             $txtMensajeHtml = "
                 <center>
                     <table cellspacing='0'
@@ -189,38 +155,78 @@ if (empty($arrErrores)) {
                     </table>
                 </center>     
             ";
-            
-            $servidor = $arrConfiguracion['correo']['servidor'];
-            $puerto = $arrConfiguracion['correo']['puerto'];
-            $seguridad = $arrConfiguracion['correo']['seguridad'];
-            $nombre = $arrConfiguracion['correo']['nombre'];
-            $usuario = $arrConfiguracion['correo']['usuario'];
-            $clave = $arrConfiguracion['correo']['clave'];
-            $nombrecompleto = $arrUsuario[$seqUsuario]->txtNombre . " " . $arrUsuario[$seqUsuario]->txtApellido;
 
-            $mail = new PHPMailer();
-            $mail->IsSMTP();
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = $seguridad;
-            $mail->SMTPDebug = 0;
-            $mail->Host = $servidor;
-            $mail->Port = $puerto;
-            $mail->Username = $usuario;
-            $mail->Password = $clave;
-            $mail->From = $usuario;
-            $mail->FromName = $nombre;
-            $mail->Subject = $txtSubject;
-            $mail->Body = utf8_decode($txtMensajeHtml);
-            $mail->AddAddress($txtCorreo, $nombrecompleto);
-            $mail->IsHTML(true);
-            if ($mail->Send()) {
+            $mail = new PHPMailer(true);
+            try {
+
+                $nombrecompleto = $arrUsuario[$seqUsuario]->txtNombre . " " . $arrUsuario[$seqUsuario]->txtApellido;
+
+                //Server settings
+                $mail->SMTPDebug = 0;
+                $mail->isSMTP();
+                $mail->Host = $arrConfiguracion['correo']['servidor'];
+                $mail->SMTPAuth = true;
+                $mail->Username = $arrConfiguracion['correo']['usuario'];
+                $mail->Password = $arrConfiguracion['correo']['clave'];
+                $mail->SMTPSecure = $arrConfiguracion['correo']['seguridad'];
+                $mail->Port = $arrConfiguracion['correo']['puerto'];
+
+                //Recipients
+                $mail->setFrom($mail->Username, $arrConfiguracion['correo']['nombre']);
+                $mail->addAddress($txtCorreo, $nombrecompleto);     // Add a recipient
+                $mail->addReplyTo($mail->Username, $arrConfiguracion['correo']['nombre']);
+
+                //Content
+                $mail->isHTML(true);
+                $mail->Subject = $txtSubject;
+                $mail->Body    = utf8_decode($txtMensajeHtml);
+
+                $mail->send();
+
                 $claAutenticacion = new Usuario();
                 $arrErrores = $claAutenticacion->editarUsuario(
-                        $seqUsuario, $arrUsuario[$seqUsuario]->txtNombre, $arrUsuario[$seqUsuario]->txtApellido, $arrUsuario[$seqUsuario]->txtUsuario, $txtClaveEncriptada, $txtCorreo, 1, $arrUsuario[$seqUsuario]->numVencimiento, $arrPermisos, $arrPrivilegios
+                    $seqUsuario,
+                    $arrUsuario[$seqUsuario]->txtNombre,
+                    $arrUsuario[$seqUsuario]->txtApellido,
+                    $arrUsuario[$seqUsuario]->txtUsuario,
+                    $txtClaveEncriptada,
+                    $txtCorreo,
+                    1,
+                    $arrUsuario[$seqUsuario]->numVencimiento,
+                    $arrPermisos,
+                    $arrPrivilegios
                 );
-            } else {
+
+            } catch (Exception $e) {
                 $arrErrores[] = "No se ha podido enviar el correo al usuario seleccionado";
+                $arrErrores[] = $mail->ErrorInfo;
             }
+
+//
+//            $mail = new PHPMailer();
+//            $mail->IsSMTP();
+//            $mail->SMTPAuth = true;
+//            $mail->SMTPSecure = $seguridad;
+//            $mail->SMTPDebug = 0;
+//            $mail->Host = $servidor;
+//            $mail->Port = $puerto;
+//            $mail->Username = $usuario;
+//            $mail->Password = $clave;
+//            $mail->From = $usuario;
+//            $mail->FromName = $nombre;
+//            $mail->Subject = $txtSubject;
+//            $mail->Body = utf8_decode($txtMensajeHtml);
+//            $mail->AddAddress($txtCorreo, $nombrecompleto);
+//            $mail->addReplyTo($usuario, $nombre);
+//            $mail->IsHTML(true);
+//            if ($mail->Send()) {
+//                $claAutenticacion = new Usuario();
+//                $arrErrores = $claAutenticacion->editarUsuario(
+//                        $seqUsuario, $arrUsuario[$seqUsuario]->txtNombre, $arrUsuario[$seqUsuario]->txtApellido, $arrUsuario[$seqUsuario]->txtUsuario, $txtClaveEncriptada, $txtCorreo, 1, $arrUsuario[$seqUsuario]->numVencimiento, $arrPermisos, $arrPrivilegios
+//                );
+//            } else {
+//                $arrErrores[] = "No se ha podido enviar el correo al usuario seleccionado";
+//            }
 
             /**
              * FIN ENVIO MAIL
@@ -239,6 +245,9 @@ if (empty($arrErrores)) {
     }
     echo "</div>";
 } else {
+
+    var_dump($arrErrores);
+
     //imprimirMensajes($arrErrores, array());
     echo "<div class='alert alert-danger' role='alert'>";
     foreach($arrErrores as $txtMensajes){

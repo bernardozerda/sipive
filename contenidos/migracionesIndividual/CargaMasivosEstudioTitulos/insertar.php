@@ -164,8 +164,8 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrViabilizados['folio'][$intV] = $documentos2;
                     $arrViabilizados['certificado'][$intV] = $documentos3;
                     $arrViabilizados['observacion'][$intV] = utf8_decode($txtConcepto);
-
                     $intV++;
+                    //echo "jkchsadk";
                 }
             } else if ($viabilizado == false) {
                 if ($seqFormulario != "") {

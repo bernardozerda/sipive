@@ -4029,6 +4029,10 @@ class Seguimiento {
                 $txtCambios = "";
             }
 
+            if( intval( $_POST['bolSoloSeguimiento'] ) == 1){
+                $txtCambios = "";
+            }
+
             $sql = "
                  INSERT INTO T_SEG_SEGUIMIENTO (
                    seqFormulario,

@@ -1191,6 +1191,31 @@ function quitarMiembroHogar(numDocumento) {
 
 }
 
+function quitarMiembroYSalvar(numDocumento){
+    var seqFormulario = YAHOO.util.Dom.get("seqFormulario").value;
+    var objGrupoGestion = YAHOO.util.Dom.get("seqGrupoGestion");
+    var objGestion = YAHOO.util.Dom.get("seqGestion");
+    var txtComentario = YAHOO.util.Dom.get("txtComentario").value;
+    var objParentesco    = YAHOO.util.Dom.get("parentesco-" + numDocumento);
+    if (objParentesco.value == 1) {
+        alert("No puede eliminar a la cabeza de familia como miembro del hogar");
+    }else{
+        cargarContenido(
+            "mensajes",
+            "./contenidos/subsidios/quitarMiembroHogar.php",
+            "seqFormulario=" + seqFormulario +
+            "&numDocumento=" + numDocumento +
+            "&seqGrupoGestion=" + objGrupoGestion.options[ objGrupoGestion.selectedIndex ].value +
+            "&seqGestion=" + objGestion.options[ objGestion.selectedIndex ].value +
+            "&txtComentario=" + txtComentario
+        );
+        eliminarObjeto(numDocumento);
+        eliminarObjeto("detalles" + numDocumento);
+    }
+}
+
+
+
 
 function comprobacionCedula(objNumeroDocumento, idBuscarDocumento) {
 

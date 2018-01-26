@@ -1650,7 +1650,8 @@ function valorSubsidio() {
         valSubsidioNacional: $("#valSubsidioNacional").val(),
         valDonacion: $("#valDonacion").val(),
         valCartaLeasing: $("#valCartaLeasing").val(),
-        valAspiraSubsidio: $("#valAspiraSubsidio").val()
+        valAspiraSubsidio: $("#valAspiraSubsidio").val(),
+        bolCerrado: $("#bolCerrado").val()
     }
 
     $.ajax({

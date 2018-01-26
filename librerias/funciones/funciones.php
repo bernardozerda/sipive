@@ -794,82 +794,91 @@ function valorSubsidio($claFormulario){
     $valVivienda = 70; // SMMLV
     $valTope     = ($claFormulario->seqTipoEsquema == 11)? 26 : 35; // SMMLV 26 para retorno reubicacion y 35 para el resto
     $valSubsidio = 0;
-
-    if($claFormulario->seqPlanGobierno == 2) {
-        if ($claFormulario->seqModalidad == 6) {
-            $arrValor = obtenerDatosTabla(
-                "T_PRY_UNIDAD_PROYECTO",
-                array("0", "valSDVEActual"),
-                "0",
-                "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
-            );
-            $valSubsidio = $arrValor[0];
-        }else{
-            $arrValor = obtenerDatosTabla("T_PRY_PROYECTO",array("0","valMaximoSubsidio","valNumeroSoluciones"),"0","seqProyecto = " . $claFormulario->seqProyecto);
-            if(intval($arrValor[0]['valNumeroSoluciones']) != 0){
-                $valSubsidio = intval(($arrValor[0]['valMaximoSubsidio'] / $arrValor[0]['valNumeroSoluciones']));
+    if($claFormulario->bolCerrado == 0) {
+        if ($claFormulario->seqPlanGobierno == 2) {
+            if ($claFormulario->seqModalidad == 6) {
+                $arrValor = obtenerDatosTabla(
+                    "T_PRY_UNIDAD_PROYECTO",
+                    array("0", "valSDVEActual"),
+                    "0",
+                    "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
+                );
+                $valSubsidio = $arrValor[0];
+            } else {
+                $arrValor = obtenerDatosTabla("T_PRY_PROYECTO", array("0", "valMaximoSubsidio", "valNumeroSoluciones"), "0", "seqProyecto = " . $claFormulario->seqProyecto);
+                if (intval($arrValor[0]['valNumeroSoluciones']) != 0) {
+                    $valSubsidio = intval(($arrValor[0]['valMaximoSubsidio'] / $arrValor[0]['valNumeroSoluciones']));
+                }
             }
-        }
 
-        if( doubleval( $valSubsidio ) == 0 ){
+            if (doubleval($valSubsidio) == 0) {
+                $valSubsidio = array_shift(
+                    obtenerDatosTabla(
+                        "T_FRM_FORMULARIO",
+                        array("seqFormulario", "valAspiraSubsidio"),
+                        "seqFormulario",
+                        "seqFormulario = " . $claFormulario->seqFormulario
+                    )
+                );
+            }
+
+        } elseif ($claFormulario->seqPlanGobierno == 3) {
+            $valSubsidioNAL = intval($claFormulario->valSubsidioNacional) / $arrConfiguracion['constantes']['salarioMinimo'];
+            $valVUR = intval($claFormulario->valDonacion) / $arrConfiguracion['constantes']['salarioMinimo'];
+
+            if ($claFormulario->seqModalidad == 12) {
+                $valDiferenciaSubsidios = ($valTope - $valSubsidioNAL < 0) ? 0 : $valTope - $valSubsidioNAL;
+                if ($claFormulario->bolDesplazado == 0 or $claFormulario->seqTipoEsquema == 12) {
+                    if (($valSubsidioNAL + $valVUR + $valDiferenciaSubsidios) > $valVivienda) {
+                        if ($valVivienda - ($valSubsidioNAL + $valVUR) < 0) {
+                            $valSubsidio = 0;
+                        } else {
+                            $valSubsidio = $valVivienda - ($valSubsidioNAL + $valVUR);
+                        }
+                    } else {
+                        $valSubsidio = $valDiferenciaSubsidios;
+                    }
+                } else {
+                    if ($valVivienda - ($valSubsidioNAL + $valVUR) < 0) {
+                        $valSubsidio = 0;
+                    } else {
+                        $valSubsidio = $valVivienda - ($valSubsidioNAL + $valVUR);
+                    }
+                }
+                $valSubsidio = ($valSubsidio > $valTope) ? $valTope : $valSubsidio;
+                $valSubsidio = ($valSubsidio * $arrConfiguracion['constantes']['salarioMinimo']);
+            } elseif ($claFormulario->seqModalidad == 13) {
+
+                $arrValor = obtenerDatosTabla(
+                    "T_PRY_UNIDAD_PROYECTO",
+                    array("0", "valSDVEActual"),
+                    "0",
+                    "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
+                );
+                $valSubsidio = $arrValor[0];
+
+            }
+
+        } else {
             $valSubsidio = array_shift(
                 obtenerDatosTabla(
                     "T_FRM_FORMULARIO",
-                    array("seqFormulario","valAspiraSubsidio"),
+                    array("seqFormulario", "valAspiraSubsidio"),
                     "seqFormulario",
                     "seqFormulario = " . $claFormulario->seqFormulario
                 )
             );
         }
-
-    }elseif( $claFormulario->seqPlanGobierno == 3 ){
-        $valSubsidioNAL = intval($claFormulario->valSubsidioNacional) / $arrConfiguracion['constantes']['salarioMinimo'];
-        $valVUR         = intval($claFormulario->valDonacion)         / $arrConfiguracion['constantes']['salarioMinimo'];
-
-        if($claFormulario->seqModalidad == 12){
-            $valDiferenciaSubsidios = ($valTope - $valSubsidioNAL < 0)? 0 : $valTope - $valSubsidioNAL;
-            if($claFormulario->bolDesplazado == 0 or $claFormulario->seqTipoEsquema == 12){
-                if( ($valSubsidioNAL + $valVUR + $valDiferenciaSubsidios) > $valVivienda ){
-                    if( $valVivienda - ($valSubsidioNAL + $valVUR) < 0 ){
-                        $valSubsidio = 0;
-                    }else{
-                        $valSubsidio = $valVivienda - ($valSubsidioNAL + $valVUR);
-                    }
-                }else{
-                    $valSubsidio = $valDiferenciaSubsidios;
-                }
-            } else {
-                if( $valVivienda - ($valSubsidioNAL + $valVUR) < 0 ){
-                    $valSubsidio = 0;
-                }else{
-                    $valSubsidio = $valVivienda - ($valSubsidioNAL + $valVUR);
-                }
-            }
-            $valSubsidio = ($valSubsidio > $valTope)? $valTope : $valSubsidio;
-            $valSubsidio = ($valSubsidio * $arrConfiguracion['constantes']['salarioMinimo']);
-        }elseif($claFormulario->seqModalidad == 13){
-
-            $arrValor = obtenerDatosTabla(
-                "T_PRY_UNIDAD_PROYECTO",
-                array("0", "valSDVEActual"),
-                "0",
-                "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
-            );
-            $valSubsidio = $arrValor[0];
-
-        }
-
     }else{
         $valSubsidio = array_shift(
             obtenerDatosTabla(
                 "T_FRM_FORMULARIO",
-                array("seqFormulario","valAspiraSubsidio"),
+                array("seqFormulario", "valAspiraSubsidio"),
                 "seqFormulario",
                 "seqFormulario = " . $claFormulario->seqFormulario
             )
         );
     }
-
     return $valSubsidio;
 }
 

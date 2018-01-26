@@ -3270,6 +3270,7 @@ public function exportableReporteTodosConEstado() {
                 sol.txtDescripcion AS Tipo,
                 sol.txtSolucion AS Rango,
                 fac.valAspiraSubsidio AS Vr_SDV,
+                fac.valCartaLeasing AS Vr_CartaLeasing,
 				CONCAT(txtEtapa ,' - ', txtEstadoProceso ) AS Estado_Proceso,
                 esq.txtTipoEsquema AS Esquema,
                 pry.txtNombreProyecto AS Proyecto,

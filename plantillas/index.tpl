@@ -109,17 +109,19 @@
         <footer>           
             <div >
                 <center>
-                    <div id="oScroll" style="width: 50%; margin-top: 5px; margin-bottom: 10px; height: 35px; right: 3%; font-weight: bold" class="alert alert-danger">
+                    <div id="oScroll" style="width: 900px; margin-top: 0px; margin-bottom: 5px; height: 35px" >
                         <div id="scroll" ><MARQUEE DIRECTION=LEFT class="alert alert-danger" style="padding:5px;">
-                            La información que se registra debe ser soportada documentalmente.
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            La sdht podrá verificar en cualquier momento la veracidad de la información.<br><br/><br/>
-                        </MARQUEE> </div><br/>
+                                *** SE HA PUBLICADO UNA NUEVA VERSIÓN DEL APLICATIVO
+                                *** POR FAVOR DIGITAR SIMULTÁNEAMENTE LAS TECLAS CONTROL Y F5
+                                *** REPETIR ESTA ACCIÓN EN MÁS DE UNA OCASION.
+                            </MARQUEE> </div><br/>
                     </div>
+
                     <div style=" position: relative; float: left; width:100%">
-                        <img src="./recursos/imagenes/pie_ws.png" /><br> 
+                        <img src="./recursos/imagenes/pie_ws.png" /><br>
                     </div>
+
+
                     <!--<img src="./recursos/imagenes/background_menupie.png" width="450px" height="20px"/>-->
                 </center>
             </div>

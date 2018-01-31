@@ -118,13 +118,17 @@ if (empty($arrErrores)) {
                     $arrErrores = $claActo->arrErrores;
                 }
 
-                $aptBd->RollbackTrans();
+                if(empty($arrErrores)) {
+                    $aptBd->CommitTrans();
+                }else{
+                    throw new Exception("No se pudo procesar la transaccion");
+                }
 
             } catch (Exception $objError) {
 
                 $aptBd->RollbackTrans();
 
-                $arrErrores = $objError->getMessage();
+                $arrErrores[] = $objError->getMessage();
             }
 
         }

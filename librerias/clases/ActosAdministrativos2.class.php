@@ -2106,11 +2106,6 @@ Class ActoAdministrativo {
 
                             if (isset($arrFormularios['datos'][$numDocumento]) and ! empty($arrFormularios['datos'][$numDocumento])) {
                                 $txtCambios = "";
-
-                                echo $numDocumento . "<br>";
-                                pr($arrFormularios['datos'][$numDocumento]);
-
-
                                 foreach ($arrFormularios['datos'][$numDocumento] as $arrRegistro) {
                                     switch (strtolower($arrRegistro['campo'])) {
                                         case "primer nombre":

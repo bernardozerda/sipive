@@ -783,7 +783,7 @@ class InformeVeedurias
             LEFT  JOIN t_frm_tipovictima tvi on ciu.seqTipoVictima = tvi.seqTipoVictima
             LEFT  JOIN t_frm_grupo_lgtbi glg on ciu.seqGrupoLgtbi = glg.seqGrupoLgtbi
             WHERE frm.seqCorte = $seqCorte
-            AND frm.seqFormulario IN (6)
+            -- AND frm.seqFormulario IN (6)
             -- AND frm.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )
         ";
         $arrHogares = $aptBd->GetAll($sql);

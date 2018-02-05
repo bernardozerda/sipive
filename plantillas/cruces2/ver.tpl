@@ -18,6 +18,20 @@
             <div class="tab-pane active" id="datos" style="padding: 10px;">
                 <form method="post" onSubmit="return false;" id="frmModificaCruce">
                     <table cellpadding="0" cellspacing="0" class="table table-striped">
+
+                        <tr>
+                            <td width="150px"><strong>Tipo de Verificación</strong></td>
+                            <td colspan="3">
+                                {if $claCruces->arrDatos.numVerificacion == 1}
+                                    Primera Verificación
+                                {elseif $claCruces->arrDatos.numVerificacion == 2}
+                                    Segunda Verificación
+                                {else}
+                                    Desconocido
+                                {/if}
+                            </td>
+                        </tr>
+
                         <tr>
                             <td width="150px"><strong>Fecha de Creación</strong></td>
                             <td colspan="3">
@@ -102,6 +116,7 @@
                             <th align="center">Estado</th>
                             <th align="center">&nbsp;</th>
                             <th align="center">&nbsp;</th>
+                            <th align="center">&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,13 +140,20 @@
                                         <span class="label label-success">Sin Cruces</span>
                                     {/if}
                                 </td>
+                                <td>
+                                    {if isset($smarty.session.arrGrupos.3.20) or isset($smarty.session.arrGrupos.3.13)}
+                                        <a href="#" onClick="cargarContenido('contenido','./contenidos/cruces2/adicionar.php','seqCruce={$claCruces->arrDatos.seqCruce}&seqFormulario={$seqFormulario}',true)">
+                                            Adicionar
+                                        </a>
+                                    {/if}
+                                </td>
                             </tr>
                         {/foreach}
                     </tbody>
                 </table>
             </div>
             <div class="tab-pane" id="auditoria" style="padding: 10px; height: 400px; overflow: auto;">
-                <table data-order='[[ 0, "asc" ]]' id="auditoriaCruces" class="table table-condensed table-hover" width="840px">
+                <table data-order='[[ 0, "asc" ]]' id="auditoriaCruces" class="table table-condensed" width="840px">
                     <thead>
                         <th>Fecha</th>
                         <th>Usuario</th>
@@ -160,7 +182,7 @@
                                         <span class="label label-success">Sin Cruces</span>
                                     {/if}
                                 </td>
-                                <td>{$arrAuditoria.txtObservacion}</td>
+                                <td>{$arrAuditoria.txtObservaciones}</td>
                             </tr>
                         {/foreach}
                     </tbody>

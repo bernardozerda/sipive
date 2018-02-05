@@ -16,6 +16,19 @@
 
             <table cellpadding="0" cellspacing="0" class="table table-striped">
                 <tr>
+                    <td>Tipo de cruce</td>
+                    <td colspan="3">
+                        <table cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="25px"><input type="radio" name="numValidacion" value="1" {if $arrPost.numValidacion == 1} checked {/if}></td>
+                                <td width="150px">Primera Verificación</td>
+                                <td width="25px"><input type="radio" name="numValidacion" value="2" {if $arrPost.numValidacion == 2} checked {/if}></td>
+                                <td width="150px">Segunda Verificación</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
                     <td width="120px">Nombre</td>
                     <td width="400px">
                         <input type="text"

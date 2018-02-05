@@ -8,7 +8,7 @@
 session_start();
 
 // solo funciona bajo https
-define("HTTPS_ONLY", true);
+define("HTTPS_ONLY", false);
 
 // Tiempo de valides de la sesion en segundos
 define("TIMEOUT", 1800);

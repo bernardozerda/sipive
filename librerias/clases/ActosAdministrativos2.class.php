@@ -2077,6 +2077,7 @@ Class ActoAdministrativo {
                     $adicionSeguimiento = "";
                     $txtCambios = "";
                     $adicionComentario = "";
+
                     switch ($arrActo['seqTipoActo']) {
                         case 1:
                             $seqEstadoProceso = 0;
@@ -2102,6 +2103,7 @@ Class ActoAdministrativo {
                             $aptBd->execute($sqlActo);
                             break;
                         case 2:
+
                             if (isset($arrFormularios['datos'][$numDocumento]) and ! empty($arrFormularios['datos'][$numDocumento])) {
                                 $txtCambios = "";
                                 foreach ($arrFormularios['datos'][$numDocumento] as $arrRegistro) {
@@ -2267,6 +2269,7 @@ Class ActoAdministrativo {
                                             }
 
                                             // CONSULTA EL PROYECTO ACTUAL DEL HOGAR
+                                            $seqFormulario = $claCiudadano->formularioVinculado($numDocumento);
                                             $sqlConsulta = "SELECT seqProyecto, seqUnidadProyecto, seqTipoEsquema
 																FROM T_FRM_FORMULARIO WHERE seqFormulario = $seqFormulario";
                                             $objRes = $aptBd->execute($sqlConsulta);

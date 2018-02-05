@@ -11,6 +11,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Formulari
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Cruces.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "RegistroActividades.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExcel.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/IOFactory.php" );
@@ -21,31 +22,29 @@ foreach($_POST as $txtClave => $txtValor){
 
 $claCruces = new Cruces();
 $claCruces->cargar($_POST['seqCruce']);
+$arrListadoVer = $claCruces->arrDatos['arrResultado'];
+
 $claCruces->editar();
 
+imprimirMensajes($claCruces->arrErrores, $claCruces->arrMensajes);
 if(! empty($claCruces->arrErrores)) {
-    imprimirMensajes($claCruces->arrErrores);
+
+    $arrVer = array();
+    foreach($arrListadoVer  as $seqResultado => $arrDato) {
+        $seqFormulario = $arrDato['seqFormulario'];
+        $arrVer[$seqFormulario]['documento'] = $arrDato['numDocumentoPrincipal'];
+        $arrVer[$seqFormulario]['nombre'] = $arrDato['txtNombrePrincipal'];
+        $arrVer[$seqFormulario]['estado'] = $arrDato['txtEstadoFormulario'];
+        if( (!isset($arrVer[$seqFormulario]['inhabilitar'])) or intval($arrVer[$seqFormulario]['inhabilitar']) != 1) {
+            $arrVer[$seqFormulario]['inhabilitar'] = intval($arrDato['bolInhabilitar']);
+        }
+    }
+
     $claSmarty->assign( "claCruces", $claCruces );
+    $claSmarty->assign( "arrVer", $arrVer );
     $claSmarty->display("cruces2/ver.tpl");
+}else{
+    $arrCruces = $claCruces->listado();
+    $claSmarty->assign( "arrCruces", $arrCruces );
+    $claSmarty->display( "cruces2/cruces.tpl" );
 }
-
-
-// si no hay errores imprime los mensajes
-//if(! empty($claCruces->arrErrores)) {
-//    imprimirMensajes($claCruces->arrErrores);
-//    $claSmarty->assign( "claCruces", $claCruces );
-//    $claSmarty->display("cruces2/ver.tpl");
-//}else{
-//    if(! empty($claCruces->arrIgnorados)){
-//        $numPosicion = count($claCruces->arrMensajes) + 1;
-//        $claCruces->arrMensajes[$numPosicion] = "<span class='msgAlerta'>Los siguientes hogares fueron ignorados debido al estado del proceso en el que se encuentran en este momento: <ul>";
-//        foreach($claCruces->arrIgnorados as $numDocumento){
-//            $claCruces->arrMensajes[$numPosicion] .= "<li>" . number_format($numDocumento ). "</li>";
-//        }
-//        $claCruces->arrMensajes[$numPosicion] .= "</ul></span>";
-//    }
-//    imprimirMensajes($claCruces->arrErrores, $claCruces->arrMensajes);
-//    $arrCruces = $claCruces->listado();
-//    $claSmarty->assign( "arrCruces", $arrCruces );
-//    $claSmarty->display( "cruces2/cruces.tpl" );
-//}

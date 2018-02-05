@@ -1191,6 +1191,31 @@ function quitarMiembroHogar(numDocumento) {
 
 }
 
+function quitarMiembroYSalvar(numDocumento){
+    var seqFormulario = YAHOO.util.Dom.get("seqFormulario").value;
+    var objGrupoGestion = YAHOO.util.Dom.get("seqGrupoGestion");
+    var objGestion = YAHOO.util.Dom.get("seqGestion");
+    var txtComentario = YAHOO.util.Dom.get("txtComentario").value;
+    var objParentesco    = YAHOO.util.Dom.get("parentesco-" + numDocumento);
+    if (objParentesco.value == 1) {
+        alert("No puede eliminar a la cabeza de familia como miembro del hogar");
+    }else{
+        cargarContenido(
+            "mensajes",
+            "./contenidos/subsidios/quitarMiembroHogar.php",
+            "seqFormulario=" + seqFormulario +
+            "&numDocumento=" + numDocumento +
+            "&seqGrupoGestion=" + objGrupoGestion.options[ objGrupoGestion.selectedIndex ].value +
+            "&seqGestion=" + objGestion.options[ objGestion.selectedIndex ].value +
+            "&txtComentario=" + txtComentario
+        );
+        eliminarObjeto(numDocumento);
+        eliminarObjeto("detalles" + numDocumento);
+    }
+}
+
+
+
 
 function comprobacionCedula(objNumeroDocumento, idBuscarDocumento) {
 
@@ -1625,7 +1650,8 @@ function valorSubsidio() {
         valSubsidioNacional: $("#valSubsidioNacional").val(),
         valDonacion: $("#valDonacion").val(),
         valCartaLeasing: $("#valCartaLeasing").val(),
-        valAspiraSubsidio: $("#valAspiraSubsidio").val()
+        valAspiraSubsidio: $("#valAspiraSubsidio").val(),
+        bolCerrado: $("#bolCerrado").val()
     }
 
     $.ajax({
@@ -10638,3 +10664,70 @@ var auditoriaCruces = function(){
     YAHOO.util.Event.onContentReady("auditoriaCrucesListener",auditoriaCruces);
 }
 YAHOO.util.Event.onContentReady("auditoriaCrucesListener",auditoriaCruces);
+
+function cambiarFuenteInhabilidad(objSelectFuente){
+
+    // Objeto de respuesta si es satisfactoria la carga
+    var handleSuccess =
+        function (o) {
+            if (o.responseText !== undefined) {
+                var objCausas = JSON.parse(o.responseText);
+                var objSelectCausas = YAHOO.util.Dom.get('seqCausa');
+                var i = 0;
+                for(i =  (objSelectCausas.length - 1); i > 0; i--){
+                    objSelectCausas.remove(i);
+                }
+                for(seqCausa in objCausas) {
+                    i = objSelectCausas.length;
+                    var objOption = document.createElement('option');
+                    objOption.value = seqCausa;
+                    objOption.text = objCausas[seqCausa];
+                    objSelectCausas.add(objOption);
+                }
+                if( objSelectFuente.options[objSelectFuente.selectedIndex].value == 8 ){
+                    var objInhabilitar = YAHOO.util.Dom.get('bolInhabilitar');
+                    objInhabilitar.selectedIndex = 2;
+                }
+
+
+            }
+        };
+
+    // Objeto de respuesta si la carga falla
+    var handleFailure =
+        function (o) {
+            if (o.responseText !== undefined) {
+                // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
+                if (o.status == "401") {
+                    document.location = 'index.php';
+                } else {
+
+                    // Mensaje cuando la pagina no es encontrada
+                    var htmlCode = "";
+                    htmlCode = +o.status + " " + o.statusText;
+
+                    // Otros mensajes de error son mostrados directamente en el div
+                    document.getElementById(txtDivDestino).innerHTML = htmlCode;
+                }
+                if (bolCargando == 1) {
+                    objCargando.hide();
+                }
+                return false;
+            }
+        };
+
+    // Objeto de respuestas
+    var callback =
+        {
+            success: handleSuccess,
+            failure: handleFailure
+        };
+
+    // peticion asincrona al servidor
+    var callObj = YAHOO.util.Connect.asyncRequest("POST", "./contenidos/cruces2/cambiarFuenteInhabilidad.php", callback, 'seqFuente=' + objSelectFuente.options[objSelectFuente.selectedIndex].value);
+
+
+    return callObj;
+
+
+}

@@ -209,5 +209,23 @@ switch ($reporte) {
     case "estudioTitulosLeasing":
         $claReporte->estudioTitulosLeasing();
         break;
+    
+     case "soporteResolucionVinculacion":
+	
+       if ($_FILES['fileSecuenciales']['error'] == 0) {
+            $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileSecuenciales']['tmp_name']));            
+            foreach ($arrDocumentos as $numLinea => $numDocumento) {
+                if (intval($numDocumento) != 0) {
+                    $arrDocumentos[$numLinea] = intval($numDocumento);                    
+                } else {
+                    unset($arrDocumentos[$numLinea]);
+                }
+            }
+			
+            $claReporte->soporteResVinculacion($arrDocumentos);
+        }else{
+            echo '<span style="color:#c10;text-align:center;"><b>Selecione un archivo en filtros->Datos!</b></span>';
+        }
+        break;
 }
 ?>

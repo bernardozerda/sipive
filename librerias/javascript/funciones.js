@@ -10664,3 +10664,70 @@ var auditoriaCruces = function(){
     YAHOO.util.Event.onContentReady("auditoriaCrucesListener",auditoriaCruces);
 }
 YAHOO.util.Event.onContentReady("auditoriaCrucesListener",auditoriaCruces);
+
+function cambiarFuenteInhabilidad(objSelectFuente){
+
+    // Objeto de respuesta si es satisfactoria la carga
+    var handleSuccess =
+        function (o) {
+            if (o.responseText !== undefined) {
+                var objCausas = JSON.parse(o.responseText);
+                var objSelectCausas = YAHOO.util.Dom.get('seqCausa');
+                var i = 0;
+                for(i =  (objSelectCausas.length - 1); i > 0; i--){
+                    objSelectCausas.remove(i);
+                }
+                for(seqCausa in objCausas) {
+                    i = objSelectCausas.length;
+                    var objOption = document.createElement('option');
+                    objOption.value = seqCausa;
+                    objOption.text = objCausas[seqCausa];
+                    objSelectCausas.add(objOption);
+                }
+                if( objSelectFuente.options[objSelectFuente.selectedIndex].value == 8 ){
+                    var objInhabilitar = YAHOO.util.Dom.get('bolInhabilitar');
+                    objInhabilitar.selectedIndex = 2;
+                }
+
+
+            }
+        };
+
+    // Objeto de respuesta si la carga falla
+    var handleFailure =
+        function (o) {
+            if (o.responseText !== undefined) {
+                // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
+                if (o.status == "401") {
+                    document.location = 'index.php';
+                } else {
+
+                    // Mensaje cuando la pagina no es encontrada
+                    var htmlCode = "";
+                    htmlCode = +o.status + " " + o.statusText;
+
+                    // Otros mensajes de error son mostrados directamente en el div
+                    document.getElementById(txtDivDestino).innerHTML = htmlCode;
+                }
+                if (bolCargando == 1) {
+                    objCargando.hide();
+                }
+                return false;
+            }
+        };
+
+    // Objeto de respuestas
+    var callback =
+        {
+            success: handleSuccess,
+            failure: handleFailure
+        };
+
+    // peticion asincrona al servidor
+    var callObj = YAHOO.util.Connect.asyncRequest("POST", "./contenidos/cruces2/cambiarFuenteInhabilidad.php", callback, 'seqFuente=' + objSelectFuente.options[objSelectFuente.selectedIndex].value);
+
+
+    return callObj;
+
+
+}

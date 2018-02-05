@@ -11,6 +11,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Formulari
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Cruces.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "RegistroActividades.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExcel.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/IOFactory.php" );

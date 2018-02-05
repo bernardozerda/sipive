@@ -117,9 +117,11 @@
         </form>
     </div>
     <div class="panel-footer" align="center">
-        <button class="btn btn-primary" onclick="cargarContenido('contenido','./contenidos/cruces2/formularioCruces.php','',true);">
-            Crear Cruce
-        </button>
+        {if isset($smarty.session.arrGrupos.3.20)}
+            <button class="btn btn-primary" onclick="cargarContenido('contenido','./contenidos/cruces2/formularioCruces.php','',true);">
+                Crear Cruce
+            </button>
+        {/if}
     </div>
 </div>
 

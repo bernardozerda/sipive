@@ -325,9 +325,9 @@ class Reportes {
                 // el calculo de fechas de mysql es impreciso
                 // se ajusta el calculo con objetos php
                 $fchHoy = new DateTime();
-                while( $objRes->fields ){
+                while ($objRes->fields) {
                     $fchNacimiento = new DateTime($objRes->fields['FechaNacimiento']);
-                    $fchDiferencia = date_diff($fchHoy,$fchNacimiento);
+                    $fchDiferencia = date_diff($fchHoy, $fchNacimiento);
                     $objRes->fields['Edad'] = $fchDiferencia->y;
                     $objRes->fields['RangoEdad'] = rangoEdad($objRes->fields['Edad']);
                     $arrReporte[] = $objRes->fields;
@@ -875,42 +875,42 @@ class Reportes {
                  ";
 
 
-        try {
-            $objRes = $aptBd->execute($sql);
+            try {
+                $objRes = $aptBd->execute($sql);
 
-            $arrTitulosCampos[] = 'seqFormulario';
-            $arrTitulosCampos[] = 'txtFormulario';
-            $arrTitulosCampos[] = 'NombrePPAL';
-            $arrTitulosCampos[] = 'Documento';
-            $arrTitulosCampos[] = 'EstadoProceso';
-            $arrTitulosCampos[] = 'Desplazado';
-            $arrTitulosCampos[] = 'Modalidad';
-            $arrTitulosCampos[] = 'Solucion';
-            $arrTitulosCampos[] = 'valAspiraSubsidio';
-            $arrTitulosCampos[] = 'valSubsidio';
-            $arrTitulosCampos[] = 'txtSoporteSubsidio';
+                $arrTitulosCampos[] = 'seqFormulario';
+                $arrTitulosCampos[] = 'txtFormulario';
+                $arrTitulosCampos[] = 'NombrePPAL';
+                $arrTitulosCampos[] = 'Documento';
+                $arrTitulosCampos[] = 'EstadoProceso';
+                $arrTitulosCampos[] = 'Desplazado';
+                $arrTitulosCampos[] = 'Modalidad';
+                $arrTitulosCampos[] = 'Solucion';
+                $arrTitulosCampos[] = 'valAspiraSubsidio';
+                $arrTitulosCampos[] = 'valSubsidio';
+                $arrTitulosCampos[] = 'txtSoporteSubsidio';
 
-            $this->obtenerReportesGeneral($objRes, "ReporteVerificaModalidadSolucion", $arrTitulosCampos);
-        } catch (Exception $objError) {
-            $arrErrores[] = "Se ha producido un error al consultar los datos";
-        }
-        if (!empty($arrErrores)) {
+                $this->obtenerReportesGeneral($objRes, "ReporteVerificaModalidadSolucion", $arrTitulosCampos);
+            } catch (Exception $objError) {
+                $arrErrores[] = "Se ha producido un error al consultar los datos";
+            }
+            if (!empty($arrErrores)) {
+                imprimirMensajes($arrErrores, array());
+            }
+        } else {
             imprimirMensajes($arrErrores, array());
         }
-    } else {
-        imprimirMensajes($arrErrores, array());
     }
-}
 
-public function exportableReporteTodosConEstado() {
+    public function exportableReporteTodosConEstado() {
 
-    global $aptBd;
+        global $aptBd;
 
-    $arrErrores = &$this->arrErrores;
+        $arrErrores = &$this->arrErrores;
 
-    if (empty($arrErrores)) {
+        if (empty($arrErrores)) {
 
-        $sql = "SELECT 
+            $sql = "SELECT 
                                             frm.seqFormulario,
                                             frm.txtFormulario,
                                             ciu.numDocumento,
@@ -3878,8 +3878,9 @@ ORDER BY aad.fchActo DESC;
     public function informeProyectos() {
         informeProyectosActo();
     }
-    public function registrosCiudadano($arrDocumentos) { 
-   
+
+    public function registrosCiudadano($arrDocumentos) {
+
         obtenerRegistroCiudadano($arrDocumentos);
     }
 
@@ -4114,19 +4115,19 @@ ORDER BY aad.fchActo DESC;
 //
 //    }
 
-    public function encuestasPiveCruces(){
+    public function encuestasPiveCruces() {
         global $aptBd;
 
         $arrCalificados = array();
         $arrEncuestas = array();
-        
+
         switch ($_FILES['fileSecuenciales']['error']) {
             case UPLOAD_ERR_NO_FILE:
                 $this->arrErrores[] = "Para este reporte debe proporcionar un archivo de documentos de postulante principal";
                 break;
         }
 
-        if( empty( $this->arrErrores )) {
+        if (empty($this->arrErrores)) {
             $sql = "
                 select 
                   frm.seqFormulario as 'FORMULARIO',
@@ -4149,18 +4150,18 @@ ORDER BY aad.fchActo DESC;
                 inner join t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
                 inner join t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
                 inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
-                where frm.seqFormulario in (" . implode( $this->arrSeqFormularios , "," ) . ")
+                where frm.seqFormulario in (" . implode($this->arrSeqFormularios, ",") . ")
             ";
             $arrCalificados = $aptBd->GetAll($sql);
-            foreach($arrCalificados as $numLinea => $arrDatos){
+            foreach ($arrCalificados as $numLinea => $arrDatos) {
 
                 $claFormulario = new FormularioSubsidios();
-                $claFormulario->cargarFormulario( $arrDatos["FORMULARIO"] );
+                $claFormulario->cargarFormulario($arrDatos["FORMULARIO"]);
 
                 $claEncuesta = new Encuestas();
                 $arrVariables = $claEncuesta->obtenerVariablesCalificacion($arrDatos['DOCUMENTO']);
 
-                if(empty($arrVariables['errores'])) {
+                if (empty($arrVariables['errores'])) {
 
                     $bolSinErrores = true;
 
@@ -4171,32 +4172,32 @@ ORDER BY aad.fchActo DESC;
                     $numEtnias = 0;
                     $numCondiciones = 0;
                     $numSalud = 0;
-                    foreach( $claFormulario->arrCiudadano as $objCiudadano ){
+                    foreach ($claFormulario->arrCiudadano as $objCiudadano) {
                         $numDocumentosFormulario += $objCiudadano->numDocumento;
-                        if( intval($objCiudadano->seqEtnia) > 1 ){
+                        if (intval($objCiudadano->seqEtnia) > 1) {
                             $numEtnias++;
                         }
-                        if( intval($objCiudadano->seqCondicionEspecial)  == 3 or
-                            intval($objCiudadano->seqCondicionEspecial2) == 3 or
-                            intval($objCiudadano->seqCondicionEspecial3) == 3
-                        ){
+                        if (intval($objCiudadano->seqCondicionEspecial) == 3 or
+                                intval($objCiudadano->seqCondicionEspecial2) == 3 or
+                                intval($objCiudadano->seqCondicionEspecial3) == 3
+                        ) {
                             $numCondiciones++;
                         }
-                        if( intval($objCiudadano->seqSalud) == 1 or
-                            intval($objCiudadano->seqSalud) == 2
-                        ){
+                        if (intval($objCiudadano->seqSalud) == 1 or
+                                intval($objCiudadano->seqSalud) == 2
+                        ) {
                             $numSalud++;
                         }
                     }
 
                     // suma los documentos de las encuestas
                     $numDocumentosEncuesta = 0;
-                    foreach( $arrVariables['variables']['edades'] as $cedula => $edad ){
+                    foreach ($arrVariables['variables']['edades'] as $cedula => $edad) {
                         $numDocumentosEncuesta += $cedula;
                     }
 
                     // inhabilidad para cantidad de miembros de hogar
-                    if( $numMiembrosFormulario != $arrVariables['variables']['cant'] ){
+                    if ($numMiembrosFormulario != $arrVariables['variables']['cant']) {
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4207,7 +4208,7 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad de sumas de documentos
-                    if( $numDocumentosFormulario != $numDocumentosEncuesta ){
+                    if ($numDocumentosFormulario != $numDocumentosEncuesta) {
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4218,7 +4219,7 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad por etnia
-                    if( $numEtnias != $arrVariables['variables']['condicionEtnica'] ){
+                    if ($numEtnias != $arrVariables['variables']['condicionEtnica']) {
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4229,7 +4230,7 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad por condiciones especiales
-                    if( $numCondiciones != $arrVariables['variables']['cantCondEspecial'] ){
+                    if ($numCondiciones != $arrVariables['variables']['cantCondEspecial']) {
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4240,7 +4241,7 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad por afiliacion a salud
-                    if( $numSalud != $arrVariables['variables']['afiliacion'] ){
+                    if ($numSalud != $arrVariables['variables']['afiliacion']) {
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4251,7 +4252,7 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad cohabitacion
-                    if( $arrVariables['variables']['cohabitacion'] != $claFormulario->numHabitaciones ){
+                    if ($arrVariables['variables']['cohabitacion'] != $claFormulario->numHabitaciones) {
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4262,7 +4263,7 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad dormitorios
-                    if( $arrVariables['variables']['dormitorios'] != $claFormulario->numHacinamiento ){
+                    if ($arrVariables['variables']['dormitorios'] != $claFormulario->numHacinamiento) {
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4273,20 +4274,20 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad ingresos
-                    if( $arrVariables['variables']['ingresos'] != $claFormulario->valIngresoHogar ){
+                    if ($arrVariables['variables']['ingresos'] != $claFormulario->valIngresoHogar) {
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
                         $arrEncuestas[$numPosicion]['CAUSA'] = "Ingresos del Hogar";
-                        $arrEncuestas[$numPosicion]['DETALLE'] = "Ingresos en SiPIVE: " . number_format($claFormulario->valIngresoHogar,"0",".",",") . ";  Ingresos en Encuesta: " . number_format($arrVariables['variables']['ingresos'],"0",".",",");
+                        $arrEncuestas[$numPosicion]['DETALLE'] = "Ingresos en SiPIVE: " . number_format($claFormulario->valIngresoHogar, "0", ".", ",") . ";  Ingresos en Encuesta: " . number_format($arrVariables['variables']['ingresos'], "0", ".", ",");
                         $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
                         $bolSinErrores = false;
                     }
 
                     // inhabilidad integracion social
-                    if( $claFormulario->bolIntegracionSocial != $arrVariables['variables']['bolIntegracionSocial'] ){
-                        $txtIntegracionFormulario = ($claFormulario->bolIntegracionSocial == 1)? "SI" : "NO";
-                        $txtIntegracionEncuesta = ($arrVariables['variables']['bolIntegracionSocial'] == 1)? "SI" : "NO";
+                    if ($claFormulario->bolIntegracionSocial != $arrVariables['variables']['bolIntegracionSocial']) {
+                        $txtIntegracionFormulario = ($claFormulario->bolIntegracionSocial == 1) ? "SI" : "NO";
+                        $txtIntegracionEncuesta = ($arrVariables['variables']['bolIntegracionSocial'] == 1) ? "SI" : "NO";
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4297,9 +4298,9 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad educacion
-                    if( $claFormulario->bolSecEducacion != $arrVariables['variables']['bolSecEducacion'] ){
-                        $txtEducacionFormulario = ($claFormulario->bolSecEducacion == 1)? "SI" : "NO";
-                        $txtEducacionEncuesta = ($arrVariables['variables']['bolSecEducacion'] == 1)? "SI" : "NO";
+                    if ($claFormulario->bolSecEducacion != $arrVariables['variables']['bolSecEducacion']) {
+                        $txtEducacionFormulario = ($claFormulario->bolSecEducacion == 1) ? "SI" : "NO";
+                        $txtEducacionEncuesta = ($arrVariables['variables']['bolSecEducacion'] == 1) ? "SI" : "NO";
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4310,9 +4311,9 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad secretaria de la mujer
-                    if( $claFormulario->bolSecMujer != $arrVariables['variables']['bolSecMujer'] ){
-                        $txtMujerFormulario = ($claFormulario->bolSecMujer == 1)? "SI" : "NO";
-                        $txtMujerEncuesta = ($arrVariables['variables']['bolSecMujer'] == 1)? "SI" : "NO";
+                    if ($claFormulario->bolSecMujer != $arrVariables['variables']['bolSecMujer']) {
+                        $txtMujerFormulario = ($claFormulario->bolSecMujer == 1) ? "SI" : "NO";
+                        $txtMujerEncuesta = ($arrVariables['variables']['bolSecMujer'] == 1) ? "SI" : "NO";
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4323,9 +4324,9 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad secretaria de salud
-                    if( $claFormulario->bolSecSalud != $arrVariables['variables']['bolSecSalud'] ){
-                        $txtSaludFormulario = ($claFormulario->bolSecSalud == 1)? "SI" : "NO";
-                        $txtSaludEncuesta = ($arrVariables['variables']['bolSecSalud'] == 1)? "SI" : "NO";
+                    if ($claFormulario->bolSecSalud != $arrVariables['variables']['bolSecSalud']) {
+                        $txtSaludFormulario = ($claFormulario->bolSecSalud == 1) ? "SI" : "NO";
+                        $txtSaludEncuesta = ($arrVariables['variables']['bolSecSalud'] == 1) ? "SI" : "NO";
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4336,9 +4337,9 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad alta consejeria
-                    if( $claFormulario->bolAltaCon != $arrVariables['variables']['bolAltaCon'] ){
-                        $txtAltaFormulario = ($claFormulario->bolAltaCon == 1)? "SI" : "NO";
-                        $txtAltaEncuesta = ($arrVariables['variables']['bolAltaCon'] == 1)? "SI" : "NO";
+                    if ($claFormulario->bolAltaCon != $arrVariables['variables']['bolAltaCon']) {
+                        $txtAltaFormulario = ($claFormulario->bolAltaCon == 1) ? "SI" : "NO";
+                        $txtAltaEncuesta = ($arrVariables['variables']['bolAltaCon'] == 1) ? "SI" : "NO";
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4349,9 +4350,9 @@ ORDER BY aad.fchActo DESC;
                     }
 
                     // inhabilidad IPES
-                    if( $claFormulario->bolIpes != $arrVariables['variables']['bolIpes'] ){
-                        $txtIpesFormulario = ($claFormulario->bolIpes == 1)? "SI" : "NO";
-                        $txtIpesEncuesta = ($arrVariables['variables']['bolIpes'] == 1)? "SI" : "NO";
+                    if ($claFormulario->bolIpes != $arrVariables['variables']['bolIpes']) {
+                        $txtIpesFormulario = ($claFormulario->bolIpes == 1) ? "SI" : "NO";
+                        $txtIpesEncuesta = ($arrVariables['variables']['bolIpes'] == 1) ? "SI" : "NO";
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4360,9 +4361,8 @@ ORDER BY aad.fchActo DESC;
                         $arrEncuestas[$numPosicion]['INHABILITAR'] = "SI";
                         $bolSinErrores = false;
                     }
-
-                }else{
-                    foreach( $arrVariables['errores'] as $txtError ){
+                } else {
+                    foreach ($arrVariables['errores'] as $txtError) {
                         $numPosicion = count($arrEncuestas);
                         $arrEncuestas[$numPosicion] = $arrDatos;
                         $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4373,7 +4373,7 @@ ORDER BY aad.fchActo DESC;
                     }
                 }
 
-                if($bolSinErrores == true){
+                if ($bolSinErrores == true) {
                     $numPosicion = count($arrEncuestas);
                     $arrEncuestas[$numPosicion] = $arrDatos;
                     $arrEncuestas[$numPosicion]['ENTIDAD'] = "Encuesta";
@@ -4384,19 +4384,16 @@ ORDER BY aad.fchActo DESC;
 
                 $claEncuesta = null;
                 $claFormulario = null;
-
             }
 
-            $this->obtenerReportesGeneral($arrEncuestas,"encuestasCrucesPive");
-
-        }else{
-            imprimirMensajes($this->arrErrores,array());
+            $this->obtenerReportesGeneral($arrEncuestas, "encuestasCrucesPive");
+        } else {
+            imprimirMensajes($this->arrErrores, array());
         }
-
     }
 
-    public function estudioTitulosLeasing(){
-        global $txtPrefijoRuta , $arrConfiguracion , $aptBd;
+    public function estudioTitulosLeasing() {
+        global $txtPrefijoRuta, $arrConfiguracion, $aptBd;
 
         // consulta de los datos
         $sql = "
@@ -4465,7 +4462,7 @@ ORDER BY aad.fchActo DESC;
         ";
         $arrReporte = $aptBd->GetAll($sql);
 
-        if(! empty($arrReporte)) {
+        if (!empty($arrReporte)) {
 
             // exporta los resultados
             include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "PHPExcel.php");
@@ -4483,9 +4480,9 @@ ORDER BY aad.fchActo DESC;
             for ($i = 0; $i < count($arrTitulos); $i++) {
                 $objHoja->setCellValueByColumnAndRow($i, 1, $arrTitulos[$i], false);
                 $objHoja->getRowDimension(1)->setRowHeight(80);
-                $objHoja->getStyleByColumnAndRow($i,1)->getAlignment()->setWrapText(true);
-                $objHoja->getStyleByColumnAndRow($i,1)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                $objHoja->getStyleByColumnAndRow($i,1)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                $objHoja->getStyleByColumnAndRow($i, 1)->getAlignment()->setWrapText(true);
+                $objHoja->getStyleByColumnAndRow($i, 1)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objHoja->getStyleByColumnAndRow($i, 1)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             }
 
             // contenido
@@ -4493,7 +4490,7 @@ ORDER BY aad.fchActo DESC;
                 $numColumna = 0;
                 foreach ($arrDatos as $txtCelda) {
                     $objHoja->setCellValueByColumnAndRow($numColumna, ($numLinea + 2), $txtCelda, false);
-                    if($numColumna < 9){
+                    if ($numColumna < 9) {
                         $objHoja->getColumnDimensionByColumn($numColumna)->setAutoSize(true);
                     }
                     $numColumna++;
@@ -4523,60 +4520,60 @@ ORDER BY aad.fchActo DESC;
 
             // formato por defecto dela hoja
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . ($numFilas + 1))
-                ->applyFromArray($arrEstilos);
+                            PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . ($numFilas + 1))
+                    ->applyFromArray($arrEstilos);
 
             // colores en los titulos
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(0)  . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) .  "1")
-                ->getFont()
-                ->setBold(true);
+                            PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
+                    ->getFont()
+                    ->setBold(true);
 
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) .  "1")
-                ->getFill()
-                ->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                            PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
+                    ->getFill()
+                    ->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) .  "1")
-                ->getFill()
-                ->getStartColor()
-                ->setARGB('A9A9A9');
+                            PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
+                    ->getFill()
+                    ->getStartColor()
+                    ->setARGB('A9A9A9');
 
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(23) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex(34) .  "1")
-                ->getFill()
-                ->getStartColor()
-                ->setARGB('FF0000');
+                            PHPExcel_Cell::stringFromColumnIndex(23) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex(34) . "1")
+                    ->getFill()
+                    ->getStartColor()
+                    ->setARGB('FF0000');
 
             // formatos de fecha
             $objPHPExcel->getActiveSheet()->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(16) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex(16) .  ($numFilas + 1))
-                ->getNumberFormat()
-                ->setFormatCode("yyyy-mm-dd");
+                            PHPExcel_Cell::stringFromColumnIndex(16) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex(16) . ($numFilas + 1))
+                    ->getNumberFormat()
+                    ->setFormatCode("yyyy-mm-dd");
 
             $objPHPExcel->getActiveSheet()->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(22) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex(22) .  ($numFilas + 1))
-                ->getNumberFormat()
-                ->setFormatCode("yyyy-mm-dd");
+                            PHPExcel_Cell::stringFromColumnIndex(22) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex(22) . ($numFilas + 1))
+                    ->getNumberFormat()
+                    ->setFormatCode("yyyy-mm-dd");
 
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(12) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex(12) .  ($numFilas + 1))
-                ->getNumberFormat()
-                ->setFormatCode('#,##');
+                            PHPExcel_Cell::stringFromColumnIndex(12) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex(12) . ($numFilas + 1))
+                    ->getNumberFormat()
+                    ->setFormatCode('#,##');
 
 
             // listas
-            for($numColumna = 23; $numColumna < 35; $numColumna++){
-                for($numFila = 2; $numFila < $numFilas; $numFila++){
+            for ($numColumna = 23; $numColumna < 35; $numColumna++) {
+                for ($numFila = 2; $numFila < $numFilas; $numFila++) {
                     $objValidacion = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($numColumna, $numFila)->getDataValidation();
                     $objValidacion->setType(PHPExcel_Cell_DataValidation::TYPE_LIST);
                     $objValidacion->setErrorStyle(PHPExcel_Cell_DataValidation::STYLE_STOP);
@@ -4587,7 +4584,7 @@ ORDER BY aad.fchActo DESC;
                     $objValidacion->setErrorTitle("Error de datos");
                     $objValidacion->setError("El valor digitado no es válido");
                     $objValidacion->setPromptTitle("Los valores válidos son:");
-                    $objValidacion->setFormula1('"' . implode(",", ["SI","NO","NO APLICA"]) . '"');
+                    $objValidacion->setFormula1('"' . implode(",", ["SI", "NO", "NO APLICA"]) . '"');
                 }
             }
 
@@ -4602,10 +4599,10 @@ ORDER BY aad.fchActo DESC;
 
             //desprotege las celdas editables
             $objPHPExcel->getActiveSheet()->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(15) . "2:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas) .  ($numFilas+1))
-                ->getProtection()
-                ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+                            PHPExcel_Cell::stringFromColumnIndex(15) . "2:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas) . ($numFilas + 1))
+                    ->getProtection()
+                    ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
             header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             header("Content-Disposition: attachment;filename='Platilla_Estudio_Titulos_Leasing.xlsx");
@@ -4614,13 +4611,82 @@ ORDER BY aad.fchActo DESC;
 
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
             $objWriter->save('php://output');
-
-        }else{
+        } else {
             imprimirErrores(array("No hay datos para mostrar, verifique que haya cargado el arhivo de documentos y que todos sean postulantes principales en la modalidad de leasing habitacional"));
         }
-
     }
 
+    public function soporteResVinculacion($arrDocumentos) {
+        global $aptBd;
+
+        if (!empty($arrDocumentos)) {
+
+            $sql = "
+           SELECT 
+    seqFormulario,
+    numDocumento,
+    CONCAT(txtEtapa, '-', txtEstadoProceso) AS estado,
+    txtNombreProyecto,
+    txtDesplazado,
+    t_frm_formulario.fchInscripcion,
+    (SELECT 
+            SUM(total)
+        FROM
+            t_frm_calificacion_plan3
+                LEFT JOIN
+            t_frm_calificacion_operaciones USING (seqCalificacion)
+        WHERE
+            t_frm_calificacion_plan3.seqFormulario = t_frm_formulario.seqFormulario
+        ORDER BY fchCalificacion DESC
+        LIMIT 1) AS calificacion,
+    (SELECT 
+            fchCalificacion
+        FROM
+            t_frm_calificacion_plan3
+                LEFT JOIN
+            t_frm_calificacion_operaciones USING (seqCalificacion)
+        WHERE
+            t_frm_calificacion_plan3.seqFormulario = t_frm_formulario.seqFormulario
+        ORDER BY fchCalificacion DESC
+        LIMIT 1) AS fchCalificacion,
+    txtSoporteDonacion,
+    fchPostulacion,
+    (SELECT 
+            t_cru_cruces.txtNombre
+        FROM
+            t_cru_cruces
+                LEFT JOIN
+            t_cru_resultado USING (seqCruce)
+        WHERE
+            t_cru_resultado.seqFormulario = t_frm_formulario.seqFormulario
+        ORDER BY seqCruce DESC
+        LIMIT 1) AS 'Verificación - Cruce'
+FROM
+    t_frm_formulario
+        LEFT JOIN
+    t_frm_hogar USING (seqFormulario)
+        LEFT JOIN
+    t_ciu_ciudadano USING (seqCiudadano)
+        LEFT JOIN
+    t_frm_estado_proceso USING (seqEstadoProceso)
+        LEFT JOIN
+    t_frm_etapa USING (seqEtapa)
+        LEFT JOIN
+    t_pry_unidad_proyecto USING (seqFormulario)
+        LEFT JOIN
+    t_pry_proyecto ON (t_pry_proyecto.seqProyecto = t_pry_unidad_proyecto.seqProyecto)
+        LEFT JOIN
+    t_frm_tipo_victima_hogar USING (bolDesplazado)
+WHERE
+    numDocumento IN ( " . implode(",", $arrDocumentos) . " )
+         ";
+            $objRes = $aptBd->execute($sql);
+            $this->obtenerReportesGeneral($objRes, "soporteResVinculacion");
+        } else {
+            $this->arrErrores[] = "No hay documentos en el archivo";
+            imprimirMensajes($this->arrErrores, array());
+        }
+    }
 
 }
 

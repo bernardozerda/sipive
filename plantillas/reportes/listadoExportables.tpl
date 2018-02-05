@@ -65,6 +65,7 @@
 {assign var=encuestasPive        		    value=$arrExportables.encuestasPive}
 {assign var=inconsistenciasInscripcion	    value=$arrExportables.inconsistenciasInscripcion}
 {assign var=estudioTitulosLeasing   	    value=$arrExportables.estudioTitulosLeasing}
+{assign var=soporteResolucionVinculacion   value=$arrExportables.soporteResolucionVinculacion}
 
 <form id="listadoExportable" >
     <center>
@@ -1111,6 +1112,21 @@
                     <td class="tituloCampo" align="left" width="60%">Inconsistencias de inscripción</td>
                     <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
                         <a onclick="location.href = './contenidos/reportes/inconsistenciasInscripcion.php?inicio=' + document.getElementById('fchInicio').value + '&final=' + document.getElementById('fchFin').value"
+                           href="#">Exportable</a>
+                    </td>
+                </tr>
+            {/if}
+            
+            {if $soporteResolucionVinculacion == 1}
+                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                    <td class="tituloCampo" align="left" width="60%">Soporte Resoluci&oacute;n Vinculaci&oacute;n</td>
+                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                        <a onclick="someterFormulario(
+                                        'mensajes',
+                                        'listadoExportable',
+                                        './contenidos/reportes/ReportesExportables.php?reporte=soporteResolucionVinculacion',
+                                        true,
+                                        false)"
                            href="#">Exportable</a>
                     </td>
                 </tr>

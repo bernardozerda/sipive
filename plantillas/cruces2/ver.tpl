@@ -12,7 +12,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#datos" data-toggle="tab">Datos del Cruce</a></li>
             <li><a href="#hogares" data-toggle="tab">Hogares Vinculados</a></li>
-            <li><a href="#auditoria" data-toggle="tab">Auditoria</a></li>
+            <li><a href="#auditoria" data-toggle="tab">Seguimiento</a></li>
         </ul>
         <div class="tab-content" style="border-left: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">
             <div class="tab-pane active" id="datos" style="padding: 10px;">
@@ -82,19 +82,37 @@
                         <tr>
                             <td>Firma</td>
                             <td colspan="3">
-                                {$claCruces->arrDatos.txtFirma}
+                                <input type="text"
+                                       id="txtFirma"
+                                       name="txtFirma"
+                                       value="{$claCruces->arrDatos.txtFirma}"
+                                       style="width:300px"
+                                >
+                                <div id="txtFirmaContenedor" style="width:300px;"></div>
                             </td>
                         </tr>
                         <tr>
                             <td>Elaboró</td>
                             <td colspan="3">
-                                {$claCruces->arrDatos.txtElaboro}
+                                <input type="text"
+                                       id="txtElaboro"
+                                       name="txtElaboro"
+                                       value="{$claCruces->arrDatos.txtElaboro}"
+                                       style="width:300px;"
+                                >
+                                <div id="txtElaboroContenedor" style="width:300px"></div>
                             </td>
                         </tr>
                         <tr>
                             <td>Revisó</td>
                             <td colspan="3">
-                                {$claCruces->arrDatos.txtReviso}
+                                <input type="text"
+                                       id="txtReviso"
+                                       name="txtReviso"
+                                       value="{$claCruces->arrDatos.txtReviso}"
+                                       style="width:300px;"
+                                >
+                                <div id="txtRevisoContenedor" style="width:300px"></div>
                             </td>
                         </tr>
                         <tr>
@@ -202,7 +220,12 @@
         <button type="button" class="btn btn-success" style="width: 100px"
                 onClick="location.href='./contenidos/cruces2/exportar.php?seqCruce={$claCruces->arrDatos.seqCruce}'"
         >
-            Excel
+            Datos Cruce
+        </button>&nbsp;
+        <button type="button" class="btn btn-success" style="width: 100px"
+                onClick="location.href='./contenidos/cruces2/exportarAuditoria.php?seqCruce={$claCruces->arrDatos.seqCruce}'"
+        >
+            Auditoría
         </button>&nbsp;
         <button type="button" class="btn btn-default" onclick="cargarContenido('contenido','./contenidos/cruces2/cruces.php','',true);" style="width: 100px">
             Volver

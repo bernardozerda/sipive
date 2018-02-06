@@ -10629,6 +10629,10 @@ var listadoCruces = function(){
     objPaginador = YAHOO.util.Dom.get("listadoCruces_paginate");
     objPaginador.style.textAlign = "center";
 
+    autocompletar( 'txtFirma'   , 'txtFirmaContenedor'   , './contenidos/cruces2/nombres.php' , '' );
+    autocompletar( 'txtElaboro' , 'txtElaboroContenedor' , './contenidos/cruces2/nombres.php' , '' );
+    autocompletar( 'txtReviso'  , 'txtRevisoContenedor'  , './contenidos/cruces2/nombres.php' , '' );
+
     eliminarObjeto("listadoCrucesListener");
     YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
 }

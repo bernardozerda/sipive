@@ -919,6 +919,11 @@ WHERE
             if (!isset($arrFormularios[$seqFormulario])) {
                 $claFormulario = new FormularioSubsidios();
                 $claFormulario->cargarFormulario($arrLinea[0]);
+                foreach($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano){
+                    if($claFormulario->seqPlanGobierno == 2 and (!in_array($objCiudadano->seqTipoDocumento,array(1,2)))){
+                        unset($claFormulario->arrCiudadano[$seqCiudadano]);
+                    }
+                }
             } else {
                 $claFormulario = $arrFormularios[$seqFormulario];
             }
@@ -1699,6 +1704,11 @@ WHERE
             if(! isset($arrFormulariosArchivo[$seqFormulario])) {
                 $arrFormulariosArchivo[$seqFormulario] = new FormularioSubsidios();
                 $arrFormulariosArchivo[$seqFormulario]->cargarFormulario($seqFormulario);
+                foreach($arrFormulariosArchivo[$seqFormulario]->arrCiudadano as $seqCiudadano => $objCiudadano){
+                    if($arrFormulariosArchivo[$seqFormulario]->seqPlanGobierno == 2 and (!in_array($objCiudadano->seqTipoDocumento,array(1,2)))){
+                        unset($arrFormulariosArchivo[$seqFormulario]->arrCiudadano[$seqCiudadano]);
+                    }
+                }
             }
         }
 

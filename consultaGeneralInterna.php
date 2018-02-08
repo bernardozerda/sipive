@@ -235,11 +235,11 @@
                 select
                     tit.seqEstudioTitulos as 'Titulos',
                     ati.seqAdjuntoTitulos as 'Adjunto',
-                    ati.txtAdjunto as 'Observación'
+                    ati.txtAdjunto as 'Recomendación'
                 from t_des_estudio_titulos tit
                 inner join t_des_adjuntos_titulos ati on tit.seqEstudioTitulos = ati.seqEstudioTitulos
                 where seqDesembolso = $seqDesembolso
-                  and seqTipoAdjunto = 4
+                  and seqTipoAdjunto = 2
             ";
             $arrTitulos = $aptBd->GetAll($sql);
 

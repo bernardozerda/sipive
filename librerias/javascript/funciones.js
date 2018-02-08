@@ -1638,6 +1638,12 @@ function modificarMiembroHogar(numDocumento) {
 
 function valorSubsidio() {
 
+    if( $("#bolCerrado").is(":checked") == true ) {
+        var bolCerrado = 1;
+    }else{
+        var bolCerrado = 0;
+    }
+
     var jParametros = {
         seqFormulario: $("#seqFormulario").val(),
         bolDesplazado: $("#bolDesplazado").val(),
@@ -1651,7 +1657,7 @@ function valorSubsidio() {
         valDonacion: $("#valDonacion").val(),
         valCartaLeasing: $("#valCartaLeasing").val(),
         valAspiraSubsidio: $("#valAspiraSubsidio").val(),
-        bolCerrado: $("#bolCerrado").val()
+        bolCerrado: bolCerrado
     }
 
     $.ajax({
@@ -1661,7 +1667,6 @@ function valorSubsidio() {
         success: function(respuesta){
             // document.getElementById("mensajes").innerHTML = respuesta;
             $("#valAspiraSubsidio").val(respuesta);
-            //sumarTotalRecursos();
         },
         error: function(error){
             alert("Falló el calculo de valor del aporte / subsidio");

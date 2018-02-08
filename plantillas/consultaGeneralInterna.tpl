@@ -10,8 +10,8 @@
     <title>Consulta General Interna</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
-          integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
     <link href="./recursos/estilos/consultaGeneral.css" rel="stylesheet">
@@ -37,19 +37,6 @@
     <div class="jumbotron">
         <form method="post" action="./consultaGeneralInterna.php" class="form-horizontal">
             <div class="form-group row">
-                <label for="seqFormulario" class="col-5 col-form-label">
-                    <strong>Número de Formulario</strong>
-                </label>
-                <div class="col-7">
-                    <input class="form-control"
-                           type="number"
-                           value="{if $seqFormulario != 0} {$seqFormulario} {/if} "
-                           id="seqFormulario"
-                           name="seqFormulario"
-                    >
-                </div>
-            </div>
-            <div class="form-group row">
                 <label for="numDocumento" class="col-5 col-form-label">
                     <strong>Documento de Identificación</strong>
                 </label>
@@ -68,13 +55,25 @@
                 <div class="col-5">
                     <input class="form-control"
                            type="number"
-                           value="{if $numDocumento != 0} {$numDocumento} {/if}"
+                           value="{if $numDocumento != 0}{$numDocumento}{/if}"
                            id="numDocumento"
                            name="numDocumento"
                     >
                 </div>
             </div>
-
+            <div class="form-group row">
+                <label for="seqFormulario" class="col-5 col-form-label">
+                    <strong>Número de Formulario</strong>
+                </label>
+                <div class="col-7">
+                    <input class="form-control"
+                           type="number"
+                           value="{if $seqFormulario != 0}{$seqFormulario}{/if}"
+                           id="seqFormulario"
+                           name="seqFormulario"
+                    >
+                </div>
+            </div>
             <div class="form-group row">
                 <div class="col-12">
                     <input type="submit"
@@ -85,19 +84,21 @@
                     >
                 </div>
             </div>
-
         </form>
     </div>
 
-    <div class="row mb-3">
-        <div class="col-4">
+    <div class="row mb-3 ">
+        <div class="col-3 justified-content-md-center">
             <a href="#datosBasicos" class="btn btn-secondary">Datos Básicos</a>
         </div>
-        <div class="col-4">
+        <div class="col-3">
             <a href="#miembrosHogar" class="btn btn-secondary">Miembros de Hogar</a>
         </div>
-        <div class="col-4">
+        <div class="col-3">
             <a href="#actosAdminsitrativos" class="btn btn-secondary">Actos Administrativos</a>
+        </div>
+        <div class="col-3">
+            <a href="#desembolso" class="btn btn-secondary">Desembolso</a>
         </div>
     </div>
 
@@ -107,7 +108,7 @@
 
     <div class="card mb-3" id="datosBasicos">
         <div class="card-body">
-            <h5 class="card-title">Datos Básicos</h5>
+            <h5 class="card-title">Datos Básicos <a href="#" class="btn btn-secondary">Volver</a></h5>
             <table class="table table-striped">
                 {foreach from=$arrDatosBasicos item=arrDatos}
                     {foreach from=$arrDatos key=txtTitulo item=txtValor}
@@ -123,7 +124,7 @@
 
     <div class="card mb-3" id="miembrosHogar">
         <div class="card-body">
-            <h5 class="card-title">Miembros de Hogar</h5>
+            <h5 class="card-title">Miembros de Hogar <a href="#" class="btn btn-secondary">Volver</a></h5>
             <table class="table table-striped">
                 <tr>
                     {foreach from=$arrDatosMiembros.0 key=txtTitulo item=txtValor}
@@ -143,7 +144,7 @@
 
     <div class="card mb-3" id="actosAdminsitrativos">
         <div class="card-body">
-            <h5 class="card-title">Actos Administrativos</h5>
+            <h5 class="card-title">Actos Administrativos <a href="#" class="btn btn-secondary">Volver</a></h5>
             <table class="table table-striped">
                 <tr>
                     {foreach from=$arrDatosAAD.0 key=txtTitulo item=txtValor}
@@ -156,6 +157,46 @@
                             <td>{$txtValor}</td>
                         {/foreach}
                     </tr>
+                {/foreach}
+            </table>
+        </div>
+    </div>
+
+    <div class="card mb-3" id="desembolso">
+        <div class="card-body">
+            <h5 class="card-title">Desembolso <a href="#" class="btn btn-secondary">Volver</a></h5>
+            <table class="table table-striped">
+                {foreach from=$arrDatosDesembolso key=seqDesembolso item=arrEtapas}
+                    {foreach from=$arrEtapas key=txtEtapa item=arrDatos}
+                        <tr>
+                            <th colspan="2">
+                                <h6 class="text-muted">
+                                    <strong>
+                                        {$txtEtapa|ucwords}
+                                    </strong>
+                                </h6>
+                            </th>
+                        </tr>
+                        {foreach from=$arrDatos key=txtTitulo item=txtValor}
+                            {if not is_array($txtValor)}
+                                <tr>
+                                    <td width="300px" style="padding-left: 50px;">{$txtTitulo}</td>
+                                    <td>{$txtValor}</td>
+                                </tr>
+                            {else}
+                                <tr>
+                                    <td width="300px" style="padding-left: 50px;">Adjuntos</td>
+                                    <td>{$txtTitulo}</td>
+                                </tr>
+                                {foreach from=$txtValor key=txtTituloCelda item=txtvalorCelda}
+                                    <tr>
+                                        <td width="500px" style="padding-left: 150px;">{$txtTituloCelda}</td>
+                                        <td>{$txtvalorCelda}</td>
+                                    </tr>
+                                {/foreach}
+                            {/if}
+                        {/foreach}
+                    {/foreach}
                 {/foreach}
             </table>
         </div>

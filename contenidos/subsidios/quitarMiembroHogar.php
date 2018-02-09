@@ -23,6 +23,9 @@ try {
         if($objCiudadano->seqParentesco == 1){
             $numDocumento = $objCiudadano->numDocumento;
             $txtNombre = $objCiudadano->txtNombre1 . " " . $objCiudadano->txtNombre2 . " " . $objCiudadano->txtApellido1 . " " . $objCiudadano->txtApellido2;
+            if($numDocumento == $_POST['numDocumento']){
+                throw new Exception("No puede eliminar el postulante principal del formulario");
+            }
         }
         if ($objCiudadano->numDocumento == $_POST['numDocumento']) {
             $seqCiudadanoEliminar = $seqCiudadano;

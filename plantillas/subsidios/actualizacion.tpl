@@ -1641,4 +1641,60 @@
 <div id="objDireccionOculto" style="display:none"></div>
 <div id="objDireccionOcultoSolucion" style="display:none"></div>
 
+
+<div id="qmys" class="yui-pe-content" style="visibility: hidden">
+    <div class="hd">Ingrese los datos datos requeridos</div>
+    <div class="bd" style="padding: 10px">
+        <form method="POST" action="./contenidos/subsidios/quitarMiembroHogar.php">
+            <input type="hidden" name="numDocumento" id="documentoMiembro" value="">
+            <input type="hidden" name="seqFormulario" id="formularioMiembro" value="">
+            <table cellspacing="0" cellpadding="5" border="0" width="100%">
+                <tr>
+                    <td width="120px">Grupo de Gestión</td>
+                    <td width="300px">
+                        <select name="seqGrupoGestion1"
+                                id="seqGrupoGestion1"
+                                style="width:98%"
+                                onFocus="this.style.backgroundColor = '#ADD8E6'; document.getElementById('seqGrupoGestionError').innerHTML='';"
+                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                onChange="obtenerGestion( this , 'tdGestion1' , 'seqGestion1' );">
+                            >
+                            <option value="0">Seleccione Grupo</option>
+                            {foreach from=$arrGrupoGestion key=seqGrupoGestion item=txtGrupoGestion}
+                                <option value="{$seqGrupoGestion}">{$txtGrupoGestion}</option>
+                            {/foreach}
+                        </select>
+                        <div id="seqGrupoGestionError" class="msgError"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gestión</td>
+                    <td id="tdGestion1">
+                        <select name="seqGestion1"
+                                id="seqGestion1"
+                                style="width:98%"
+                                onFocus="this.style.backgroundColor = '#ADD8E6'; document.getElementById('seqGestionError').innerHTML='';"
+                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                        >
+                            <option value="0">Seleccione Gesti&oacute;n</select>
+                        </select>
+                        <div id="seqGestionError" class="msgError"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        <textarea id="txtComentario1"
+                                  name="txtComentario1"
+                                  style="width:100%; height: 70px"
+                                  onFocus="this.style.backgroundColor = '#ADD8E6'; document.getElementById('txtComentarioError').innerHTML='';"
+                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
+                        ></textarea>
+                        <div id="txtComentarioError" class="msgError"></div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
 {include file="subsidios/simulador.tpl"}

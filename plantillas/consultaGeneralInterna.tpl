@@ -55,7 +55,7 @@
                 <div class="col-5">
                     <input class="form-control"
                            type="number"
-                           value="{if $numDocumento != 0}{$numDocumento}{/if}"
+                           value=""
                            id="numDocumento"
                            name="numDocumento"
                     >
@@ -68,7 +68,7 @@
                 <div class="col-7">
                     <input class="form-control"
                            type="number"
-                           value="{if $seqFormulario != 0}{$seqFormulario}{/if}"
+                           value=""
                            id="seqFormulario"
                            name="seqFormulario"
                     >

@@ -312,6 +312,7 @@ function consultaDesembolsos($seqFormulario){
 
         foreach($arrSolicitudes as $arrRegistroSolicitud){
             $seqAdjuntoSolicitud = $arrRegistroSolicitud['Solicitud'];
+            unset($arrRegistroSolicitud['Solicitud']);
             $arrDesembolso[$seqDesembolso]['Solicitudes'][$seqAdjuntoSolicitud] = $arrRegistroSolicitud;
         }
 

@@ -229,7 +229,13 @@
                                 </tr>
                             {else}
                                 <tr>
-                                    <td width="300px" style="padding-left: 50px;">Adjuntos</td>
+                                    <td width="300px" style="padding-left: 50px;">
+                                        {if mb_strtoupper($txtEtapa) == "SOLICITUDES"}
+                                            Solicitud de desembolso
+                                        {else}
+                                            Observación
+                                        {/if}
+                                    </td>
                                     <td>{$txtTitulo}</td>
                                 </tr>
                                 {foreach from=$txtValor key=txtTituloCelda item=txtvalorCelda}

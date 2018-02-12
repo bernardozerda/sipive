@@ -1,97 +1,145 @@
 <?php
 
-    $txtPrefijoRuta = "./";
+$txtPrefijoRuta = "./";
 
-    include( "./recursos/archivos/verificarSesion.php" ); // Verifica si hay sesion
-    include( "./recursos/archivos/lecturaConfiguracion.php" );
-    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
-    include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
-    include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
+include( "./recursos/archivos/verificarSesion.php" ); // Verifica si hay sesion
+include( "./recursos/archivos/lecturaConfiguracion.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 
-    $seqFormulario = intval($_POST['seqFormulario']);
-    $seqTipoDocumento = intval($_POST['seqTipoDocumento']);
-    $numDocumento = intval($_POST['numDocumento']);
+if($_POST['txtSistema'] == "sdht_subsidios") {
+    $arrConfiguracion['baseDatos']['nombre'] = $_POST['txtSistema'];
+}
 
-    if($seqFormulario == 0){
-        $seqFormulario = consultarFormulario($seqTipoDocumento,$numDocumento);
-    }
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 
-    $arrDatosBasicos = array();
-    $arrDatosMiembros = array();
-    $arrDatosAAD = array();
-    $arrDatosDesembolso = array();
+$seqFormulario = intval($_POST['seqFormulario']);
+$seqTipoDocumento = intval($_POST['seqTipoDocumento']);
+$numDocumento = intval($_POST['numDocumento']);
+$txtSistema = trim($_POST['txtSistema']);
 
-    if($seqFormulario != 0){
-        $arrDatosBasicos    = consultaBasicaHogar($seqFormulario);
-        $arrDatosMiembros   = consultaMiembros($seqFormulario);
-        $arrDatosAAD        = consultaAAD($seqFormulario);
-        $arrDatosDesembolso = consultaDesembolsos($seqFormulario);
-    }
+if($seqFormulario == 0){
+    $seqFormulario = consultarFormulario($seqTipoDocumento,$numDocumento);
+}
 
-    $claSmarty->assign("seqFormulario", $seqFormulario);
-    $claSmarty->assign("seqTipoDocumento", $seqTipoDocumento);
-    $claSmarty->assign("numDocumento", $numDocumento);
-    $claSmarty->assign("arrDatosBasicos",$arrDatosBasicos);
-    $claSmarty->assign("arrDatosMiembros",$arrDatosMiembros);
-    $claSmarty->assign("arrDatosAAD",$arrDatosAAD);
-    $claSmarty->assign("arrDatosDesembolso",$arrDatosDesembolso);
+$arrDatosBasicos = array();
+$arrDatosMiembros = array();
+$arrDatosAAD = array();
+$arrDatosDesembolso = array();
 
-    $claSmarty->display("consultaGeneralInterna.tpl");
+if($seqFormulario != 0){
+    $arrDatosBasicos    = consultaBasicaHogar($seqFormulario);
+    $arrDatosMiembros   = consultaMiembros($seqFormulario);
+    $arrDatosAAD        = consultaAAD($seqFormulario);
+    $arrDatosDesembolso = consultaDesembolsos($seqFormulario);
+}
 
-    function consultaBasicaHogar($seqFormulario){
-        global $aptBd;
+$claSmarty->assign("seqFormulario", $seqFormulario);
+$claSmarty->assign("seqTipoDocumento", $seqTipoDocumento);
+$claSmarty->assign("numDocumento", $numDocumento);
+$claSmarty->assign("txtSistema", $txtSistema);
+$claSmarty->assign("arrDatosBasicos",$arrDatosBasicos);
+$claSmarty->assign("arrDatosMiembros",$arrDatosMiembros);
+$claSmarty->assign("arrDatosAAD",$arrDatosAAD);
+$claSmarty->assign("arrDatosDesembolso",$arrDatosDesembolso);
 
+$claSmarty->display("consultaGeneralInterna.tpl");
+
+function consultaBasicaHogar($seqFormulario){
+    global $aptBd, $txtSistema;
+
+    if($_POST['txtSistema'] == "sdht_subsidios") {
         $sql = "
-            select 
-              hog.seqFormulario as 'Formulario', 
-              concat('[',pgo.seqPlanGobierno,'] ',pgo.txtPlanGobierno) as 'Plan de Gobierno',
-              concat('[',moa.seqModalidad,'] ',moa.txtModalidad) as 'Modalidad',
-              concat('[',tes.seqTipoEsquema,'] ',tes.txtTipoEsquema) as 'Esquema',
-              concat('[',sol.seqSolucion,'] ',sol.txtSolucion) as 'Solución',
-              concat('[',frm.seqEstadoProceso,'] ',eta.txtEtapa, ' - ',epr.txtEstadoProceso) as 'Estado del Proceso', 
-              frm.txtFormulario as 'No. Formulario',
-              frm.fchInscripcion as 'Fecha de Inscripción', 
-              frm.fchPostulacion as 'Fecha de Postulación',
-              frm.fchUltimaActualizacion as 'Fecha de Última Actualización', 
-              IF(frm.bolCerrado = 1,'SI','NO') as 'Cerrado', 
-              IF(frm.bolDesplazado = 1,'SI (Desplazado)','NO (Vulnerable)') as 'Victima',
-              concat('[',pry1.seqProyecto,'] ',pry1.txtNombreProyecto) as 'Proyecto',
-              concat('[',pry2.seqProyecto,'] ',pry2.txtNombreProyecto) as 'Conjunto',
-              concat('[',upr.seqUnidadProyecto,'] ',upr.txtNombreUnidad) as 'Unidad Habitacional',
-              frm.txtDireccionSolucion as 'Direccion Solución', 
-              frm.txtMatriculaInmobiliaria as 'Matricula Inmobiliaria', 
-              frm.txtChip as 'CHIP', 
-              frm.valTotalRecursos as 'Total Recursos', 
-              frm.valIngresoHogar as 'Ingresos del Hogar', 
-              frm.valAspiraSubsidio as 'Valor del Subsidio / Aporte',
-              frm.valComplementario as 'Valor Complementario',
-              con.txtConvenio as 'Convenio Leasing',
-              con.txtBanco as 'Banco Convenio',
-              frm.valCartaLeasing as 'Valor Carta Leasing'
-            from t_frm_hogar hog
-            inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
-            inner join t_frm_formulario frm on hog.seqFormulario = frm.seqFormulario
-            inner join t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
-            inner join t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
-            left join t_frm_solucion sol on frm.seqFormulario = sol.seqSolucion
-            inner join t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
-            inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
-            left join t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
-            left join t_pry_proyecto pry1 on frm.seqProyecto = pry1.seqProyecto
-            left join t_pry_proyecto pry2 on frm.seqProyectoHijo = pry2.seqProyecto
-            left join t_pry_unidad_proyecto upr on frm.seqFormulario = upr.seqUnidadProyecto
-            left join v_frm_convenio con on frm.seqConvenio = con.seqConvenio
-            WHERE hog.seqParentesco = 1
-              AND frm.seqFormulario = $seqFormulario
-        ";
-
-        return $aptBd->GetAll($sql);
+                select 
+                  hog.seqFormulario as 'Formulario', 
+                  concat('[',pgo.seqPlanGobierno,'] ',pgo.txtPlanGobierno) as 'Plan de Gobierno',
+                  concat('[',moa.seqModalidad,'] ',moa.txtModalidad) as 'Modalidad',
+                  concat('[',tes.seqTipoEsquema,'] ',tes.txtTipoEsquema) as 'Esquema',
+                  concat('[',sol.seqSolucion,'] ',sol.txtSolucion) as 'Solución',
+                  concat('[',frm.seqEstadoProceso,'] ',eta.txtEtapa, ' - ',epr.txtEstadoProceso) as 'Estado del Proceso', 
+                  frm.txtFormulario as 'No. Formulario',
+                  frm.fchInscripcion as 'Fecha de Inscripción', 
+                  frm.fchPostulacion as 'Fecha de Postulación',
+                  frm.fchUltimaActualizacion as 'Fecha de Última Actualización', 
+                  IF(frm.bolCerrado = 1,'SI','NO') as 'Cerrado', 
+                  IF(frm.bolDesplazado = 1,'SI (Desplazado)','NO (Vulnerable)') as 'Victima',
+                  concat('[',pry1.seqProyecto,'] ',pry1.txtNombreProyecto) as 'Proyecto',
+                  concat('[',pry2.seqProyecto,'] ',pry2.txtNombreProyecto) as 'Conjunto',
+                  concat('[',upr.seqUnidadProyecto,'] ',upr.txtNombreUnidad) as 'Unidad Habitacional',
+                  frm.txtDireccionSolucion as 'Direccion Solución', 
+                  frm.txtMatriculaInmobiliaria as 'Matricula Inmobiliaria', 
+                  frm.txtChip as 'CHIP', 
+                  frm.valTotalRecursos as 'Total Recursos', 
+                  frm.valIngresoHogar as 'Ingresos del Hogar', 
+                  frm.valAspiraSubsidio as 'Valor del Subsidio / Aporte'
+                from t_frm_hogar hog
+                inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+                inner join t_frm_formulario frm on hog.seqFormulario = frm.seqFormulario
+                inner join t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
+                inner join t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
+                left join t_frm_solucion sol on frm.seqFormulario = sol.seqSolucion
+                inner join t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
+                inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+                left join t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
+                left join t_pry_proyecto pry1 on frm.seqProyecto = pry1.seqProyecto
+                left join t_pry_proyecto pry2 on frm.seqProyectoHijo = pry2.seqProyecto
+                left join t_pry_unidad_proyecto upr on frm.seqFormulario = upr.seqUnidadProyecto
+                WHERE hog.seqParentesco = 1
+                  AND frm.seqFormulario = $seqFormulario
+            ";
+    }else{
+        $sql = "
+                select 
+                  hog.seqFormulario as 'Formulario', 
+                  concat('[',pgo.seqPlanGobierno,'] ',pgo.txtPlanGobierno) as 'Plan de Gobierno',
+                  concat('[',moa.seqModalidad,'] ',moa.txtModalidad) as 'Modalidad',
+                  concat('[',tes.seqTipoEsquema,'] ',tes.txtTipoEsquema) as 'Esquema',
+                  concat('[',sol.seqSolucion,'] ',sol.txtSolucion) as 'Solución',
+                  concat('[',frm.seqEstadoProceso,'] ',eta.txtEtapa, ' - ',epr.txtEstadoProceso) as 'Estado del Proceso', 
+                  frm.txtFormulario as 'No. Formulario',
+                  frm.fchInscripcion as 'Fecha de Inscripción', 
+                  frm.fchPostulacion as 'Fecha de Postulación',
+                  frm.fchUltimaActualizacion as 'Fecha de Última Actualización', 
+                  IF(frm.bolCerrado = 1,'SI','NO') as 'Cerrado', 
+                  IF(frm.bolDesplazado = 1,'SI (Desplazado)','NO (Vulnerable)') as 'Victima',
+                  concat('[',pry1.seqProyecto,'] ',pry1.txtNombreProyecto) as 'Proyecto',
+                  concat('[',pry2.seqProyecto,'] ',pry2.txtNombreProyecto) as 'Conjunto',
+                  concat('[',upr.seqUnidadProyecto,'] ',upr.txtNombreUnidad) as 'Unidad Habitacional',
+                  frm.txtDireccionSolucion as 'Direccion Solución', 
+                  frm.txtMatriculaInmobiliaria as 'Matricula Inmobiliaria', 
+                  frm.txtChip as 'CHIP', 
+                  frm.valTotalRecursos as 'Total Recursos', 
+                  frm.valIngresoHogar as 'Ingresos del Hogar', 
+                  frm.valAspiraSubsidio as 'Valor del Subsidio / Aporte',
+                  frm.valComplementario as 'Valor Complementario',
+                  con.txtConvenio as 'Convenio Leasing',
+                  con.txtBanco as 'Banco Convenio',
+                  frm.valCartaLeasing as 'Valor Carta Leasing'
+                from t_frm_hogar hog
+                inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+                inner join t_frm_formulario frm on hog.seqFormulario = frm.seqFormulario
+                inner join t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
+                inner join t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
+                left join t_frm_solucion sol on frm.seqFormulario = sol.seqSolucion
+                inner join t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
+                inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+                left join t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
+                left join t_pry_proyecto pry1 on frm.seqProyecto = pry1.seqProyecto
+                left join t_pry_proyecto pry2 on frm.seqProyectoHijo = pry2.seqProyecto
+                left join t_pry_unidad_proyecto upr on frm.seqFormulario = upr.seqUnidadProyecto
+                left join v_frm_convenio con on frm.seqConvenio = con.seqConvenio
+                WHERE hog.seqParentesco = 1
+                  AND frm.seqFormulario = $seqFormulario
+            ";
     }
 
-    function consultaMiembros($seqFormulario){
-        global $aptBd;
+    return $aptBd->GetAll($sql);
+}
 
-        $sql = "
+function consultaMiembros($seqFormulario){
+    global $aptBd;
+
+    $sql = "
             select 
                 ciu.seqCiudadano as 'Ciudadano', 
                 par.txtParentesco as 'Parentesco', 
@@ -113,13 +161,13 @@
             WHERE frm.seqFormulario = $seqFormulario
         ";
 
-        return $aptBd->GetAll($sql);
-    }
+    return $aptBd->GetAll($sql);
+}
 
-    function consultaAAD($seqFormulario){
-        global $aptBd;
+function consultaAAD($seqFormulario){
+    global $aptBd;
 
-        $sql = "
+    $sql = "
             SELECT DISTINCT
               hvi.numActo AS 'Número del Acto',
               hvi.fchActo AS 'Fecha del Acto',
@@ -134,31 +182,31 @@
             WHERE fac.seqFormulario = $seqFormulario
          ";
 
-        return $aptBd->GetAll($sql);
-    }
+    return $aptBd->GetAll($sql);
+}
 
-    function consultarFormulario($seqTipoDocumento, $numDocumento){
-        global $aptBd;
-        $seqFormulario = 0;
-        $sql = "
+function consultarFormulario($seqTipoDocumento, $numDocumento){
+    global $aptBd;
+    $seqFormulario = 0;
+    $sql = "
             select seqFormulario
             from t_frm_hogar hog
             inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
             where ciu.numDocumento = $numDocumento
             and ciu.seqTipoDocumento = $seqTipoDocumento
         ";
-        $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
-            $seqFormulario = $objRes->fields['seqFormulario'];
-            $objRes->MoveNext();
-        }
-        return $seqFormulario;
+    $objRes = $aptBd->execute($sql);
+    while($objRes->fields){
+        $seqFormulario = $objRes->fields['seqFormulario'];
+        $objRes->MoveNext();
     }
+    return $seqFormulario;
+}
 
-    function consultaDesembolsos($seqFormulario){
-        global $aptBd;
+function consultaDesembolsos($seqFormulario){
+    global $aptBd;
 
-        $sql = "
+    $sql = "
             select 
                 des.seqDesembolso as 'Desembolso',
                 des.txtNombreVendedor as 'Vendedor',
@@ -175,40 +223,40 @@
             inner join t_ciu_tipo_documento tdo on des.seqTipoDocumento = tdo.seqTipoDocumento
             where seqFormulario = $seqFormulario
         ";
-        $arrDatos = $aptBd->GetAll($sql);
-        $arrDesembolso = array();
-        foreach($arrDatos as $arrRegistro){
+    $arrDatos = $aptBd->GetAll($sql);
+    $arrDesembolso = array();
+    foreach($arrDatos as $arrRegistro){
 
-            $seqDesembolso = $arrRegistro['Desembolso'];
-            $arrDesembolso[$seqDesembolso]['Antecedente'] = $arrRegistro;
+        $seqDesembolso = $arrRegistro['Desembolso'];
+        $arrDesembolso[$seqDesembolso]['Antecedente'] = $arrRegistro;
 
-            $sql = "
+        $sql = "
                 select 
                     seqJuridico as 'Juridico',                    
                     txtConcepto as 'Concepto'
                 from t_des_juridico 
                 where seqDesembolso = $seqDesembolso
             ";
-            $arrJuridico = $aptBd->GetAll($sql);
+        $arrJuridico = $aptBd->GetAll($sql);
 
-            foreach($arrJuridico as $arrRegistroJuridico){
-                $arrDesembolso[$seqDesembolso]['Juridico'] = $arrRegistroJuridico;
-            }
+        foreach($arrJuridico as $arrRegistroJuridico){
+            $arrDesembolso[$seqDesembolso]['Juridico'] = $arrRegistroJuridico;
+        }
 
-            $sql = "
+        $sql = "
                 select 
                     seqTecnico as 'Técnico',
                     txtExistencia as 'Certificado de existencia'
                 from t_des_tecnico
                 where seqDesembolso = $seqDesembolso
             ";
-            $arrTecnico = $aptBd->GetAll($sql);
+        $arrTecnico = $aptBd->GetAll($sql);
 
-            foreach($arrTecnico as $arrRegistroTecnico){
-                $arrDesembolso[$seqDesembolso]['Técnico'] = $arrRegistroTecnico;
-            }
+        foreach($arrTecnico as $arrRegistroTecnico){
+            $arrDesembolso[$seqDesembolso]['Técnico'] = $arrRegistroTecnico;
+        }
 
-            $sql = "
+        $sql = "
                 select 
                     esc.seqEscrituracion as 'Escrituracion',
                     esc.txtNombreVendedor as 'Vendedor',
@@ -225,13 +273,13 @@
                 inner join t_ciu_tipo_documento tdo on esc.seqTipoDocumento = tdo.seqTipoDocumento
                 where seqDesembolso = $seqDesembolso
             ";
-            $arrEscrituracion = $aptBd->GetAll($sql);
+        $arrEscrituracion = $aptBd->GetAll($sql);
 
-            foreach($arrEscrituracion as $arrRegistroEscrituracion){
-                $arrDesembolso[$seqDesembolso]['Escrituración'] = $arrRegistroEscrituracion;
-            }
+        foreach($arrEscrituracion as $arrRegistroEscrituracion){
+            $arrDesembolso[$seqDesembolso]['Escrituración'] = $arrRegistroEscrituracion;
+        }
 
-            $sql = "
+        $sql = "
                 select
                     tit.seqEstudioTitulos as 'Titulos',
                     ati.seqAdjuntoTitulos as 'Adjunto',
@@ -241,14 +289,14 @@
                 where seqDesembolso = $seqDesembolso
                   and seqTipoAdjunto = 2
             ";
-            $arrTitulos = $aptBd->GetAll($sql);
+        $arrTitulos = $aptBd->GetAll($sql);
 
-            foreach($arrTitulos as $arrRegistroTitulos){
-                $seqAdjuntoTitulos = $arrRegistroTitulos['Adjunto'];
-                $arrDesembolso[$seqDesembolso]['Títulos'][$seqAdjuntoTitulos] = $arrRegistroTitulos;
-            }
+        foreach($arrTitulos as $arrRegistroTitulos){
+            $seqAdjuntoTitulos = $arrRegistroTitulos['Adjunto'];
+            $arrDesembolso[$seqDesembolso]['Títulos'][$seqAdjuntoTitulos] = $arrRegistroTitulos;
+        }
 
-            $sql = "
+        $sql = "
                 select 
                     seqSolicitud as 'Solicitud',
                     numRadiacion as 'Numero de radicación',
@@ -260,17 +308,17 @@
                 from t_des_solicitud
                 where seqDesembolso = $seqDesembolso
             ";
-            $arrSolicitudes = $aptBd->GetAll($sql);
+        $arrSolicitudes = $aptBd->GetAll($sql);
 
-            foreach($arrSolicitudes as $arrRegistroSolicitud){
-                $seqAdjuntoSolicitud = $arrRegistroSolicitud['Solicitud'];
-                $arrDesembolso[$seqDesembolso]['Solicitudes'][$seqAdjuntoSolicitud] = $arrRegistroSolicitud;
-            }
-
+        foreach($arrSolicitudes as $arrRegistroSolicitud){
+            $seqAdjuntoSolicitud = $arrRegistroSolicitud['Solicitud'];
+            $arrDesembolso[$seqDesembolso]['Solicitudes'][$seqAdjuntoSolicitud] = $arrRegistroSolicitud;
         }
 
-        return $arrDesembolso;
-
     }
+
+    return $arrDesembolso;
+
+}
 
 ?>

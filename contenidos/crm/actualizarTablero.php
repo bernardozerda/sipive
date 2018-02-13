@@ -15,7 +15,7 @@ function conecta() {
 
 actualizarTablero();
 
-echo "Se ejecuto con Exito!!!";
+echo date('Y-m-d H:i:s')." Se ejecuto con Exito!!!";
 
 //modificarDatosTablero();
 
@@ -239,7 +239,6 @@ function actualizarTablero() {
     mysql_query($sqlUpdate, $conexion) or die(mysql_error());
     modificarDatosTablero();
 }
-
 function modificarDatosTablero() {
     $conexion = conecta();
     $arrEstadoCon = variables(0);

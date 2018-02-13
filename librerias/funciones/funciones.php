@@ -898,6 +898,7 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     $arrEsquema[2][6][]  = 7;
     $arrEsquema[2][6][]  = 13;
     $arrEsquema[2][6][]  = 2;
+    $arrEsquema[2][6][]  = 5;
     $arrEsquema[2][7][]  = 2;
     $arrEsquema[2][7][]  = 4;
     $arrEsquema[2][3][]  = 4;

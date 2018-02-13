@@ -4,13 +4,6 @@ include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 ?>
-<!--
-<!--
-PLANTILLA INICIAL DE LOGIN DE SDV
-Y CONSULTAS DE CIUDADANO
-@author Bernardo Zerda 
-@version 1.0 Octubre de 2013
--->
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es-es" lang="es-es" >
@@ -151,7 +144,7 @@ Y CONSULTAS DE CIUDADANO
                                                         if (isset($_POST['documento']) AND ( $_POST['documento'] != '')) {
                                                             $cedula = str_replace(",", "", str_replace(".", "", $_POST['documento']));
                                                             $tipoDocumento = $_POST['tipodoc'];
-                                                            $sqlForm = mysql_query("SELECT DISTINCT(T_CRU_CRUCES.seqCruce),T_CRU_CRUCES.txtNombre,
+                                                            $sqlForm = $aptBd->execute("SELECT DISTINCT(T_CRU_CRUCES.seqCruce),T_CRU_CRUCES.txtNombre,
                                                                                         fchCruce,
                                                                                         fchCreacionCruce,
                                                                                         numDocumento,
@@ -166,9 +159,11 @@ Y CONSULTAS DE CIUDADANO
                                                                                     WHERE numDocumento = '" . $cedula . "' AND seqTipoDocumento = $tipoDocumento");
                                                         } elseif (isset($_POST['formulario']) AND ( $_POST['formulario'] != '')) {
                                                             $formulario = $_POST['formulario'];
-                                                            $sqlForm = mysql_query("SELECT DISTINCT(seqCruce), seqFormulario FROM T_CRU_RESULTADO WHERE seqFormulario = '" . $formulario . "'");
+                                                            $sqlForm = $aptBd->execute("SELECT DISTINCT(seqCruce), seqFormulario FROM T_CRU_RESULTADO WHERE seqFormulario = '" . $formulario . "'");
                                                         }
-                                                        while (@$rowCruces = mysql_fetch_array($sqlForm)) {
+
+                                                        while ($sqlForm->fields) {
+                                                            $rowCruces = $sqlForm->fields;
                                                             // MUESTRA DATOS BASICOS DEL CRUCE
                                                             if (isset($_POST['documento']) AND ( $_POST['documento'] != '')) {
                                                                 echo "<div class='well'><table width='100%' align='center'>";
@@ -181,14 +176,14 @@ Y CONSULTAS DE CIUDADANO
                                                                 echo "<td><b>Archivo Actualiza:</b></td><td class='textoCeldas'>" . $rowCruces['txtNombreArchivoActualiza'] . "</td></tr>";
                                                                 echo "<tr><td><b>Formulario:</b></td><td class='textoCeldas' colspan = '5'>" . $rowCruces['seqFormulario'] . "</td></tr>";
                                                             } elseif (isset($_POST['formulario']) AND ( $_POST['formulario'] != '')) {
-                                                                $sqlFormulario = mysql_query("SELECT T_CRU_CRUCES.txtNombre, fchCruce, fchCreacionCruce, 
+                                                                $sqlFormulario = $aptBd->execute("SELECT T_CRU_CRUCES.txtNombre, fchCruce, fchCreacionCruce, 
                                                                                         t_cru_cruces.txtUsuario,
                                                                                         t_cru_cruces.txtNombreArchivo,
                                                                                         t_cru_cruces.seqUsuario,
                                                                                         t_cru_cruces.txtUsuarioActualiza,
                                                                                         t_cru_cruces.txtNombreArchivoActualiza,
                                                                                         t_cru_cruces.seqUsuarioActualiza FROM T_CRU_CRUCES WHERE seqCruce = " . $rowCruces['seqCruce']);
-                                                                $rowFormulario = mysql_fetch_array($sqlFormulario);
+                                                                $rowFormulario = $sqlFormulario->fields;
 
                                                                 echo "<div class='well'><table width='100%' align='center'>";
                                                                 echo "<tr><td width='20%'><b>Nombre Cruce:</b></td><td class='textoCeldas' colspan = '5'><b>" . $rowFormulario['txtNombre'] . "</b></td></tr>";
@@ -201,14 +196,15 @@ Y CONSULTAS DE CIUDADANO
                                                                 echo "<tr><td><b>Formulario:</b></td><td class='textoCeldas' colspan = '5'>" . $rowCruces['seqFormulario'] . "</td></tr>";
                                                             }
                                                             // POSTULANTE PRINCIPAL
-                                                            $sqlPpal = mysql_query("SELECT seqFormulario, numDocumento, CONCAT(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2) AS nombrePpal FROM T_FRM_HOGAR INNER JOIN T_CIU_CIUDADANO ON (T_FRM_HOGAR.seqCiudadano = T_CIU_CIUDADANO.seqCiudadano) WHERE seqParentesco = 1 AND seqFormulario = " . $rowCruces['seqFormulario']);
-                                                            $rowPpal = mysql_fetch_array($sqlPpal);
+                                                            $sqlPpal = $aptBd->execute("SELECT seqFormulario, numDocumento, CONCAT(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2) AS nombrePpal FROM T_FRM_HOGAR INNER JOIN T_CIU_CIUDADANO ON (T_FRM_HOGAR.seqCiudadano = T_CIU_CIUDADANO.seqCiudadano) WHERE seqParentesco = 1 AND seqFormulario = " . $rowCruces['seqFormulario']);
+                                                            $rowPpal = $sqlPpal->fields;
                                                             echo "<tr><td><b>Postulante Principal:</b></td><td class='textoCeldas' colspan = '5'>[" . $rowPpal['numDocumento'] . "] " . $rowPpal['nombrePpal'] . "</td></tr></table>";
                                                             // APARICIONES DEL DOCUMENTO EN T_CRU_RESULTADOS SEGUN EL SEQCRUCE
-                                                            $sqlResultadosCruce = mysql_query("SELECT * FROM T_CRU_RESULTADO WHERE seqCruce = " . $rowCruces['seqCruce'] . " AND seqFormulario = " . $rowCruces['seqFormulario']);
+                                                            $sqlResultadosCruce = $aptBd->execute("SELECT * FROM T_CRU_RESULTADO WHERE seqCruce = " . $rowCruces['seqCruce'] . " AND seqFormulario = " . $rowCruces['seqFormulario']);
                                                             echo "<br><table border='1' cellspacing='1' cellpadding='1' width='100%' align='center'>";
                                                             echo "<tr><th width='9%'>Documento</th><th width='20%'>Nombre</th><th width='10%'>Entidad</th><th width='10%'>T&iacute;tulo</th><th width='30%'>Detalle</th><th width='9%'>Inhabilitar</th><th width='12%'>Observaciones</th></tr>";
-                                                            while ($rowResultado = mysql_fetch_array($sqlResultadosCruce)) {
+                                                            while ($sqlResultadosCruce->fields) {
+                                                                $rowResultado = $sqlResultadosCruce->fields;
                                                                 echo "<tr><td class='textoCeldas'>" . $rowResultado['numDocumento'] . "</td>";
                                                                 echo "<td class='textoCeldas'>" . $rowResultado['txtNombre'] . "</td>";
                                                                 echo "<td class='textoCeldas' align='center'>" . $rowResultado['txtEntidad'] . "</td>";
@@ -216,8 +212,11 @@ Y CONSULTAS DE CIUDADANO
                                                                 echo "<td class='textoCeldas'>" . $rowResultado['txtDetalle'] . "</td>";
                                                                 echo "<td class='textoCeldas' align='center'>" . $rowResultado['bolInhabilitar'] . "</td>";
                                                                 echo "<td class='textoCeldas'>" . $rowResultado['txtObservaciones'] . "</td></tr>";
+                                                                $sqlResultadosCruce->MoveNext();
                                                             }
                                                             echo "</table></div>";
+
+                                                            $sqlForm->MoveNext();
                                                         }
                                                         ?>
                                                         <footer>

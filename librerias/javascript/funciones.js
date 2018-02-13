@@ -1192,26 +1192,125 @@ function quitarMiembroHogar(numDocumento) {
 }
 
 function quitarMiembroYSalvar(numDocumento){
-    var seqFormulario = YAHOO.util.Dom.get("seqFormulario").value;
-    var objGrupoGestion = YAHOO.util.Dom.get("seqGrupoGestion");
-    var objGestion = YAHOO.util.Dom.get("seqGestion");
-    var txtComentario = YAHOO.util.Dom.get("txtComentario").value;
-    var objParentesco    = YAHOO.util.Dom.get("parentesco-" + numDocumento);
-    if (objParentesco.value == 1) {
-        alert("No puede eliminar a la cabeza de familia como miembro del hogar");
-    }else{
-        cargarContenido(
-            "mensajes",
-            "./contenidos/subsidios/quitarMiembroHogar.php",
-            "seqFormulario=" + seqFormulario +
-            "&numDocumento=" + numDocumento +
-            "&seqGrupoGestion=" + objGrupoGestion.options[ objGrupoGestion.selectedIndex ].value +
-            "&seqGestion=" + objGestion.options[ objGestion.selectedIndex ].value +
-            "&txtComentario=" + txtComentario
-        );
+
+    var tmpObj = null;
+    tmpObj = document.getElementById('qmys_mask');
+    while (tmpObj != null) {
+        //alert( tmpObj );
+        eliminarObjeto("qmys_mask");
+        tmpObj = document.getElementById('qmys_mask');
+    }
+
+    var objDocumento = YAHOO.util.Dom.get("documentoMiembro");
+    objDocumento.value = numDocumento;
+
+    var objFormularioMiembro = YAHOO.util.Dom.get("formularioMiembro");
+    var objFormulario = YAHOO.util.Dom.get("seqFormulario");
+    objFormularioMiembro.value = objFormulario.value;
+
+    var fncSubmit = function (){
+        this.submit();
         eliminarObjeto(numDocumento);
         eliminarObjeto("detalles" + numDocumento);
     }
+
+    var fncCancel = function (){
+        this.cancel();
+    }
+
+    var onSuccess = function(o) {
+        var objMensajes = YAHOO.util.Dom.get('mensajes');
+        objMensajes.innerHTML = o.responseText;
+    };
+    var onFailure = function(o) {
+        alert("Your submission failed. Status: " + o.status);
+    };
+
+    var objConfiguracion = {
+        width : "500px",
+        height: "230px",
+        fixedcenter : true,
+        constraintoviewport : true,
+        modal: true,
+        constraintoviewport : true,
+        buttons: [
+            { text: "Aceptar", handler: fncSubmit },
+            { text: "Cancelar", handler: fncCancel, isDefault: true }
+        ]
+    };
+
+    var objDialogo = new YAHOO.widget.Dialog("qmys",objConfiguracion);
+
+    objDialogo.validate = function (){
+        objDatos = this.getData();
+
+        var bolError = false;
+
+        if(objDatos.txtComentario1 == ""){
+            var objError = YAHOO.util.Dom.get('txtComentarioError');
+            var objComentario = YAHOO.util.Dom.get('txtComentario1');
+            objError.innerHTML = 'Debe digitar un comentario';
+            objComentario.style.backgroundColor = "#ffe3e2";
+            bolError = true;
+        }
+
+        if(objDatos.seqGrupoGestion1 == 0){
+            var objError = YAHOO.util.Dom.get('seqGrupoGestionError');
+            var objComentario = YAHOO.util.Dom.get('seqGrupoGestion1');
+            objError.innerHTML = 'Debe digitar un comentario';
+            objComentario.style.backgroundColor = "#ffe3e2";
+            bolError = true;
+        }
+
+        if(objDatos.seqGestion1 == 0){
+            var objError = YAHOO.util.Dom.get('seqGestionError');
+            var objComentario = YAHOO.util.Dom.get('seqGestion1');
+            objError.innerHTML = 'Debe digitar un comentario';
+            objComentario.style.backgroundColor = "#ffe3e2";
+            bolError = true;
+        }
+
+        if(bolError == true){
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+
+    objDialogo.callback = {
+        success: onSuccess,
+        failure: onFailure
+    }
+
+    objDialogo.render();
+    objDialogo.show();
+
+    window.scrollTo(0,0);
+
+    // var seqFormulario = YAHOO.util.Dom.get("seqFormulario").value;
+    // var objGrupoGestion = YAHOO.util.Dom.get("seqGrupoGestion");
+    // var objGestion = YAHOO.util.Dom.get("seqGestion");
+    // var txtComentario = YAHOO.util.Dom.get("txtComentario").value;
+    // var objParentesco    = YAHOO.util.Dom.get("parentesco-" + numDocumento);
+    // if (objParentesco.value == 1) {
+    //     alert("No puede eliminar a la cabeza de familia como miembro del hogar");
+    // }else{
+    //     cargarContenido(
+    //         "mensajes",
+    //         "./contenidos/subsidios/quitarMiembroHogar.php",
+    //         "seqFormulario=" + seqFormulario +
+    //         "&numDocumento=" + numDocumento +
+    //         "&seqGrupoGestion=" + objGrupoGestion.options[ objGrupoGestion.selectedIndex ].value +
+    //         "&seqGestion=" + objGestion.options[ objGestion.selectedIndex ].value +
+    //         "&txtComentario=" + txtComentario
+    //     );
+
+    // }
+
+
 }
 
 
@@ -1638,6 +1737,12 @@ function modificarMiembroHogar(numDocumento) {
 
 function valorSubsidio() {
 
+    if( $("#bolCerrado").is(":checked") == true ) {
+        var bolCerrado = 1;
+    }else{
+        var bolCerrado = 0;
+    }
+
     var jParametros = {
         seqFormulario: $("#seqFormulario").val(),
         bolDesplazado: $("#bolDesplazado").val(),
@@ -1651,7 +1756,7 @@ function valorSubsidio() {
         valDonacion: $("#valDonacion").val(),
         valCartaLeasing: $("#valCartaLeasing").val(),
         valAspiraSubsidio: $("#valAspiraSubsidio").val(),
-        bolCerrado: $("#bolCerrado").val()
+        bolCerrado: bolCerrado
     }
 
     $.ajax({
@@ -1661,7 +1766,6 @@ function valorSubsidio() {
         success: function(respuesta){
             // document.getElementById("mensajes").innerHTML = respuesta;
             $("#valAspiraSubsidio").val(respuesta);
-            //sumarTotalRecursos();
         },
         error: function(error){
             alert("Falló el calculo de valor del aporte / subsidio");
@@ -10628,6 +10732,10 @@ var listadoCruces = function(){
 
     objPaginador = YAHOO.util.Dom.get("listadoCruces_paginate");
     objPaginador.style.textAlign = "center";
+
+    autocompletar( 'txtFirma'   , 'txtFirmaContenedor'   , './contenidos/cruces2/nombres.php' , '' );
+    autocompletar( 'txtElaboro' , 'txtElaboroContenedor' , './contenidos/cruces2/nombres.php' , '' );
+    autocompletar( 'txtReviso'  , 'txtRevisoContenedor'  , './contenidos/cruces2/nombres.php' , '' );
 
     eliminarObjeto("listadoCrucesListener");
     YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);

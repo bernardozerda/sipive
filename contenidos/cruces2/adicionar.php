@@ -40,11 +40,17 @@ foreach($claCruces->arrDatos['arrResultado'] as $seqResultado => $arrDatos){
 
 ksort($arrMiembros);
 
+$txtCondicion = "";
+if(isset($_SESSION['arrGrupos'][3][13]) and (! isset($_SESSION['arrGrupos'][3][20]))){
+    $arrFuentesJuridicas = array(9);
+    $txtCondicion = "seqFuente in (" . implode("," , $arrFuentesJuridicas) . ")";
+}
+
 $arrFuentes = obtenerDatosTabla(
     "t_cru_fuente",
     array("seqFuente","txtFuente"),
     "seqFuente",
-    "",
+    $txtCondicion,
     "txtFuente"
 );
 

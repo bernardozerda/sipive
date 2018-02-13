@@ -4073,19 +4073,19 @@ class Seguimiento {
 
     private function cambiosCruces($arrPost){
 
-        $claFormulario = new FormularioSubsidios();
-        $claFormulario->cargarFormulario($arrPost['seqFormulario']);
+//        $claFormulario = new FormularioSubsidios();
+//        $claFormulario->cargarFormulario($arrPost['seqFormulario']);
 
         // Estado del proceso
-        $txtCambios = "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Formulario:</b>" . $this->txtSalto;
-        $txtValorAnterior = $claFormulario->seqEstadoProceso;
-        $txtValorNuevo = $arrPost['seqEstadoProceso'];
-        if ($txtValorAnterior != $txtValorNuevo) {
-            $txtCambios .= $this->txtSeparador . "seqEstadoProceso, Valor Anterior: " . $txtValorNuevo . ", " .
-                "Valor Nuevo: " . $txtValorAnterior . $this->txtSalto;
-        }
+//        $txtCambios = "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Formulario:</b>" . $this->txtSalto;
+//        $txtValorAnterior = $claFormulario->seqEstadoProceso;
+//        $txtValorNuevo = $arrPost['seqEstadoProceso'];
+//        if ($txtValorAnterior != $txtValorNuevo) {
+//            $txtCambios .= $this->txtSeparador . "seqEstadoProceso, Valor Anterior: " . $txtValorNuevo . ", " .
+//                "Valor Nuevo: " . $txtValorAnterior . $this->txtSalto;
+//        }
 
-        return $txtCambios;
+        return "";
     }
 
     private function cambiosRegistroOferta($arrPost){

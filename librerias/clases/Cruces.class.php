@@ -919,6 +919,11 @@ WHERE
             if (!isset($arrFormularios[$seqFormulario])) {
                 $claFormulario = new FormularioSubsidios();
                 $claFormulario->cargarFormulario($arrLinea[0]);
+                foreach($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano){
+                    if($claFormulario->seqPlanGobierno == 2 and (!in_array($objCiudadano->seqTipoDocumento,array(1,2)))){
+                        unset($claFormulario->arrCiudadano[$seqCiudadano]);
+                    }
+                }
             } else {
                 $claFormulario = $arrFormularios[$seqFormulario];
             }
@@ -1380,7 +1385,7 @@ WHERE
             inner join t_cor_usuario usu on aud.seqUsuario = usu.seqUsuario 
             inner join t_ciu_parentesco par on par.seqParentesco = aud.seqParentesco
             where seqCruce = $seqCruce
-            order by aud.seqFormulario, aud.numDocumento
+            order by aud.fchMovimiento, aud.seqFormulario, aud.numDocumento, aud.txtTitulo, aud.txtEntidad, aud.txtDetalle
         ";
         $objRes = $aptBd->execute($sql);
         while($objRes->fields) {
@@ -1458,6 +1463,9 @@ WHERE
                                 seqUsuarioActualiza = " . $_SESSION['seqUsuario'] . ",
                                 txtUsuarioActualiza = '" . $txtUsuario . "',
                                 txtNombreArchivoActualiza = '" . $_FILES['archivo']['name'] . "',
+                                txtFirma = '" . $_POST['txtFirma'] . "',
+                                txtElaboro = '" . $_POST['txtElaboro'] . "',
+                                txtReviso = '" . $_POST['txtReviso'] . "',
                                 fchActualizacionCruce = now()
                              where seqCruce = " . $_POST['seqCruce'] . "
                         ";
@@ -1585,7 +1593,6 @@ WHERE
                 }
             } else {
 
-
                 $fchPublicacion = new DateTime(
                     array_shift(
                         obtenerDatosTabla(
@@ -1602,6 +1609,9 @@ WHERE
                         fchCruce = '" . $_POST['fchCruce'] . "',
                         txtUsuarioActualiza = '" . $_SESSION['txtUsuario'] . "',
                         seqUsuarioActualiza = " . $_SESSION['seqUsuario'] . ",
+                        txtFirma = '" . $_POST['txtFirma'] . "',
+                        txtElaboro = '" . $_POST['txtElaboro'] . "',
+                        txtReviso = '" . $_POST['txtReviso'] . "',
                         fchActualizacionCruce = NOW()
                     WHERE seqCruce = " . $_POST['seqCruce'] . "
                 ";
@@ -1624,7 +1634,7 @@ WHERE
                             "seqCruce = " . $_POST['seqCruce']
                         )
                     );
-                    $this->arrMensajes[] = "Se ha modificado la fecha de publicación del cruce " . $txtNombre . " del " . $fchPublicacion->format("Y-m-d") . " al " . $_POST['fchCruce'];
+                    $this->arrMensajes[] = "Se ha modificado la fecha de publicación y datos de firmas del cruce " . mb_strtoupper($txtNombre);
                 }
 
             }
@@ -1636,107 +1646,6 @@ WHERE
             }
 
         }catch (Exception $objError){
-            $this->arrErrores[] = $objError->getMessage();
-            $aptBd->RollbackTrans();
-        }
-
-    }
-
-    public function editar_old($arrPost,$arrArchivo){
-        global $aptBd;
-        try{
-            $aptBd->BeginTrans();
-            $this->validarReglasBasicas($arrArchivo,'editar', $arrPost['seqCruce']);
-            $this->validarReglasEditar($arrArchivo);
-
-            if(empty($this->arrErrores)){
-
-                $sql = "
-                    UPDATE t_cru_cruces SET
-                        fchCruce = '" . $arrPost['fchCruce'] . "',
-                        txtUsuarioActualiza = '" . $_SESSION['txtUsuario'] . "',
-                        txtNombreArchivoActualiza = '" . $_FILES['archivo']['name'] . "',
-                        seqUsuarioActualiza = " . $_SESSION['seqUsuario'] . ",
-                        fchActualizacionCruce = NOW()
-                    WHERE seqCruce = " . $arrPost['seqCruce'] . "
-                ";
-                $aptBd->execute($sql);
-
-                $arrInhabilitar = array();
-                unset($arrArchivo[0]);
-                foreach($arrArchivo as $numLinea => $arrLinea){
-
-                    if(! in_array(array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3])),$this->arrEstadosPermitidos['editar'])){
-                        $numDocumentoPrincipal = $arrLinea[1];
-                        $this->arrIgnorados[$numDocumentoPrincipal] = $numDocumentoPrincipal;
-                    }else{
-
-                        $bolInhabilitar = (strtolower($arrLinea[11]) == "no")? 0 : 1;
-                        $seqFormulario = $arrLinea[0];
-                        if((!isset($arrInhabilitar[$seqFormulario])) or $arrInhabilitar[$seqFormulario]['inhabilitar'] == 0) {
-                            $arrInhabilitar[$seqFormulario]['inhabilitar'] = $bolInhabilitar;
-                            $arrInhabilitar[$seqFormulario]['estado'] = array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],$arrLinea[3]));
-                        }
-
-                        $txtHash =
-                            $arrLinea[1] .
-                            $arrLinea[5] .
-                            mb_strtolower($arrLinea[8]) .
-                            mb_strtolower($arrLinea[9]) .
-                            mb_strtolower($arrLinea[10]);
-
-                        if(! isset( $this->arrHash[$txtHash] )) {
-                            $sql = "
-                                INSERT INTO t_cru_resultado(
-                                    seqCruce,
-                                    seqFormulario,
-                                    seqModalidad,
-                                    seqEstadoProceso,
-                                    seqTipoDocumento,
-                                    numDocumento,
-                                    txtNombre,
-                                    seqParentesco,
-                                    txtEntidad,
-                                    txtTitulo,
-                                    txtDetalle,
-                                    bolInhabilitar,
-                                    txtObservaciones
-                                ) VALUES (
-                                    " . $arrPost['seqCruce'] . ",
-                                    " . $arrLinea[0] . ",
-                                    " . array_shift(array_keys($this->arrFormatoArchivo[2]['rango'], $arrLinea[2])) . ",
-                                    " . array_shift(array_keys($this->arrFormatoArchivo[3]['rango'], $arrLinea[3])) . ",
-                                    " . array_shift(array_keys($this->arrFormatoArchivo[4]['rango'], $arrLinea[4])) . ",
-                                    " . $arrLinea[5] . ",
-                                    '" . strtoupper($arrLinea[6]) . "',
-                                    " . array_shift(array_keys($this->arrFormatoArchivo[7]['rango'], $arrLinea[7])) . ",
-                                    '" . strtoupper($arrLinea[8]) . "',
-                                    '" . strtoupper($arrLinea[9]) . "',
-                                    '" . strtoupper($arrLinea[10]) . "',
-                                    " . $bolInhabilitar . ",
-                                    '" . strtoupper($arrLinea[12]) . "'
-                                )
-                            ";
-                        }else{
-                            $sql = "
-                                UPDATE t_cru_resultado SET
-                                    bolInhabilitar = " . $bolInhabilitar . ",
-                                    txtObservaciones = '" . strtoupper($arrLinea[12]) . "'
-                                WHERE seqResultado = " . $this->arrHash[$txtHash] . "
-                            ";
-                        }
-                        $aptBd->execute($sql);
-                    }
-                }
-                $this->cambioEstados($arrPost['seqCruce'],$arrPost['fchCruce'],$arrInhabilitar);
-            }
-
-            if(!empty($this->arrErrores)){
-                $aptBd->RollbackTrans();
-            }else{
-                $aptBd->CommitTrans();
-            }
-        } catch (Exception $objError) {
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollbackTrans();
         }
@@ -1795,6 +1704,11 @@ WHERE
             if(! isset($arrFormulariosArchivo[$seqFormulario])) {
                 $arrFormulariosArchivo[$seqFormulario] = new FormularioSubsidios();
                 $arrFormulariosArchivo[$seqFormulario]->cargarFormulario($seqFormulario);
+                foreach($arrFormulariosArchivo[$seqFormulario]->arrCiudadano as $seqCiudadano => $objCiudadano){
+                    if($arrFormulariosArchivo[$seqFormulario]->seqPlanGobierno == 2 and (!in_array($objCiudadano->seqTipoDocumento,array(1,2)))){
+                        unset($arrFormulariosArchivo[$seqFormulario]->arrCiudadano[$seqCiudadano]);
+                    }
+                }
             }
         }
 
@@ -2181,6 +2095,5 @@ WHERE
         }
 
     }
-
 
 }

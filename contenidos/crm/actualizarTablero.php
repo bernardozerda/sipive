@@ -266,7 +266,7 @@ function modificarDatosTablero() {
                     $value = str_replace("¬¬", $key, $value);
 
                     
-                        echo "<p>" . $value . "</p>";
+                    //    echo "<p>" . $value . "</p>";
                         
 
                     $rs = mysql_query($value, $conexion) or die(mysql_error());

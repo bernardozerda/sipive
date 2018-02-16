@@ -579,43 +579,54 @@ class InformeVeedurias
     public function reporteNoProyectos($seqCorte)
     {
         global $aptBd;
+
         $sql = "
-            SELECT DISTINCT 
-              frm.seqFormulario as 'Formulario',
-              pgo.txtPlanGobierno as 'Plan de Gobierno',
-              IF(moa.txtModalidad is null,'No Disponible',moa.txtModalidad) as 'Modalidad',
-              IF(tes.txtTipoEsquema is null,'No Disponible',tes.txtTipoEsquema) as 'Esquema', 
-              eta.txtEtapa as 'Etapa', 
-              epr.txtEstadoProceso as 'Estado', 
-              aad.numActo as 'Resolución',
-              aad.fchActo as 'Fecha',              
-              UPPER(des.txtMatriculaInmobiliaria) as 'Matrícula Inmoviliaria-ME',
-              UPPER(des.txtChip) as 'CHIP-ME',
-              UPPER(des.txtCedulaCatastral) as 'Cédula Catastral-ME',
-              UPPER(des.txtTipoPredio) as 'Tipo de Predio-ME',
-              UPPER(esc.txtNombreVendedor) as 'Vendedor',
-              tdo1.txtTipoDocumento as 'Tipo de Documento del Vendedor', 
-              esc.numDocumentoVendedor as 'Documento del Vendedor',
-              UPPER(esc.txtCompraVivienda) as 'Tipo de Vivienda',
-              UPPER(esc.txtDireccionInmueble) as 'Dirección',
-              ciu1.txtCiudad as 'Ciudad',
-              UPPER(loc1.txtLocalidad) as 'Localidad',
-              UPPER(esc.txtBarrio) as 'Barrio',
-              UPPER(IF(esc.txtPropiedad is null,'Ninguno',esc.txtPropiedad)) as 'Propiedad',
-              esc.txtEscritura as 'Escritura',
-              IF(esc.fchEscritura < '2000-01-01',NULL,esc.fchEscritura) as 'Fecha de Escritura',
-              esc.numNotaria as 'Notaria de Escritura',
-              UPPER(esc.txtCiudad) as 'Ciudad de Escritura',
-              IF(esc.fchSentencia < '2000-01-01',NULL,esc.fchSentencia) as 'Fecha de Sentencia',
-              esc.numJuzgado as 'Juzgado de Sentencia',
-              UPPER(esc.txtCiudadSentencia) as 'Ciudad de Sentencia',
-              esc.numResolucion as 'Numero de Resolución',
-              IF(esc.fchResolucion < '2000-01-01',NULL,esc.fchResolucion) as 'Fecha de Resolución',
-              UPPER(esc.txtEntidad) as 'Entidad Resolución',
-              UPPER(esc.txtCiudadResolucion) as 'Ciudad Resolución',
-              UPPER(esc.txtMatriculaInmobiliaria) as 'Matrícula Inmobiliaria',
-              UPPER(esc.txtChip) as 'CHIP',
-              UPPER(esc.txtTipoPredio) as 'Tipo de Predio'
+            SELECT
+                frm.seqFormulario as 'Formulario',
+                pgo.txtPlanGobierno as 'Plan de Gobierno',
+                IF(moa.txtModalidad is null,'No Disponible',moa.txtModalidad) as 'Modalidad',
+                IF(tes.txtTipoEsquema is null,'No Disponible',tes.txtTipoEsquema) as 'Esquema', 
+                eta.txtEtapa as 'Etapa', 
+                frm.fchVigencia as 'Vigencia',
+                frm.valAspiraSubsidio as 'Valor Aporte / Subsidio',
+                frm.valComplementario as 'Valor Complementario Hogar',
+                epr.txtEstadoProceso as 'Estado', 
+                aad.numActo as 'Resolución',
+                aad.fchActo as 'Fecha',              
+                UPPER(des.txtMatriculaInmobiliaria) as 'Matrícula Inmoviliaria-ME',
+                UPPER(des.txtChip) as 'CHIP-ME',
+                UPPER(des.txtCedulaCatastral) as 'Cédula Catastral-ME',
+                UPPER(des.txtTipoPredio) as 'Tipo de Predio-ME',
+                UPPER(esc.txtNombreVendedor) as 'Vendedor',
+                tdo1.txtTipoDocumento as 'Tipo de Documento del Vendedor', 
+                esc.numDocumentoVendedor as 'Documento del Vendedor',
+                UPPER(esc.txtCompraVivienda) as 'Tipo de Vivienda',
+                UPPER(esc.txtDireccionInmueble) as 'Dirección',
+                ciu1.txtCiudad as 'Ciudad',
+                UPPER(loc1.txtLocalidad) as 'Localidad',
+                UPPER(esc.txtBarrio) as 'Barrio',
+                UPPER(IF(esc.txtPropiedad is null,'Ninguno',esc.txtPropiedad)) as 'Propiedad',
+                esc.txtEscritura as 'Escritura',
+                IF(esc.fchEscritura < '2000-01-01',NULL,esc.fchEscritura) as 'Fecha de Escritura',
+                esc.numNotaria as 'Notaria de Escritura',
+                UPPER(esc.txtCiudad) as 'Ciudad de Escritura',
+                IF(esc.fchSentencia < '2000-01-01',NULL,esc.fchSentencia) as 'Fecha de Sentencia',
+                esc.numJuzgado as 'Juzgado de Sentencia',
+                UPPER(esc.txtCiudadSentencia) as 'Ciudad de Sentencia',
+                esc.numResolucion as 'Numero de Resolución',
+                IF(esc.fchResolucion < '2000-01-01',NULL,esc.fchResolucion) as 'Fecha de Resolución',
+                UPPER(esc.txtEntidad) as 'Entidad Resolución',
+                UPPER(esc.txtCiudadResolucion) as 'Ciudad Resolución',
+                UPPER(esc.txtMatriculaInmobiliaria) as 'Matrícula Inmobiliaria',
+                UPPER(esc.txtChip) as 'CHIP',
+                UPPER(esc.txtTipoPredio) as 'Tipo de Predio',
+                tit.numEscrituraTitulo as 'Número Escritura Titulo',
+                tit.fchEscrituraTitulo as 'Fecha Escritura Titulo',
+                tit.numNotariaTitulo as 'Notaría Titulo',
+                tit.numFolioMatricula as 'Folio Matrícula',
+                tit.txtZonaMatricula as 'Zona Matricula',
+                tit.txtCiudadMatricula as 'Ciudad Matricula',
+                tit.fchMatricula as 'Fecha Matricula'
             FROM t_vee_formulario frm
             LEFT JOIN t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
             LEFT JOIN t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
@@ -624,6 +635,7 @@ class InformeVeedurias
             LEFT JOIN t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
             LEFT JOIN t_vee_desembolso des ON frm.seqFormularioVeeduria = des.seqFormularioVeeduria
             LEFT JOIN t_vee_escrituracion esc ON des.seqDesembolsoVeeduria = esc.seqDesembolsoVeeduria
+            LEFT JOIN t_vee_estudio_titulos tit ON des.seqDesembolsoVeeduria = tit.seqDesembolsoVeeduria
             LEFT JOIN t_ciu_tipo_documento tdo on des.seqTipoDocumento = tdo.seqTipoDocumento
             LEFT JOIN t_ciu_tipo_documento tdo1 on des.seqTipoDocumento = tdo1.seqTipoDocumento
             LEFT JOIN v_frm_ciudad ciu on des.seqCiudad = ciu.seqCiudad
@@ -632,28 +644,27 @@ class InformeVeedurias
             LEFT JOIN t_frm_localidad loc1 on des.seqLocalidad = loc1.seqLocalidad
             INNER JOIN
             (
-              SELECT 
-                frm.seqFormulario, 
-                hvi.numActo, 
-                hvi.fchActo
-              FROM t_aad_hogares_vinculados hvi
-              INNER JOIN (
                 SELECT 
-                  fac.seqFormulario, 
-                  max(fac.seqFormularioActo) AS seqFormularioActo
+                    frm.seqFormulario, 
+                    hvi.numActo, 
+                    hvi.fchActo
                 FROM t_aad_hogares_vinculados hvi
-                INNER JOIN t_aad_formulario_acto fac ON hvi.seqFormularioActo = fac.seqFormularioActo
-                WHERE hvi.seqTipoActo = 1
-                GROUP BY fac.seqFormulario
-              ) frm ON hvi.seqFormularioActo = frm.seqFormularioActo
+                INNER JOIN (
+                    SELECT 
+                        fac.seqFormulario, 
+                        max(fac.seqFormularioActo) AS seqFormularioActo
+                    FROM t_aad_hogares_vinculados hvi
+                    INNER JOIN t_aad_formulario_acto fac ON hvi.seqFormularioActo = fac.seqFormularioActo
+                    WHERE hvi.seqTipoActo = 1
+                    GROUP BY fac.seqFormulario
+                ) frm ON hvi.seqFormularioActo = frm.seqFormularioActo
             ) aad ON frm.seqFormulario = aad.seqFormulario
             WHERE ( 
                  frm.seqUnidadProyecto = 0
               OR frm.seqUnidadProyecto IS NULL
               OR frm.seqUnidadProyecto = 1
-            ) AND frm.seqCorte = $seqCorte
-            -- AND frm.seqFormulario = 25760
-        "; //echo $sql . "<hr>"; die();
+            ) AND frm.seqCorte = $seqCorte    
+        ";
         $objRes = $aptBd->execute($sql);
         $arrFormularios = array();
         while ( $objRes->fields ){
@@ -681,112 +692,199 @@ class InformeVeedurias
         return $arrReporte;
     }
 
-    private function obtenerHogares($arrFormularios , $seqCorte )
+    private function obtenerHogares($arrFormularios , $seqCorte)
     {
         global $aptBd;
+
+        $arrOcupacion = obtenerDatosTabla(
+            "t_ciu_ocupacion",
+            array("seqOcupacion","txtOcupacion"),
+            "seqOcupacion"
+        );
+
+        $arrEstadoCivil = obtenerDatosTabla(
+            "t_ciu_estado_civil",
+            array("seqEstadoCivil","txtEstadoCivil"),
+            "seqEstadoCivil"
+        );
+
+        $arrSexo = obtenerDatosTabla(
+            "t_ciu_sexo",
+            array("seqSexo","txtSexo"),
+            "seqSexo"
+        );
+
+        // POSTULANTES PRINCIPALES
         $sql = "
             SELECT
-              frm.seqFormulario as Formulario,
-              eta.txtEtapa as Etapa,
-              epr.txtEstadoProceso as Estado,
-              pgo.txtPlanGobierno as 'Plan de Gobierno',
-              IF(frm.seqModalidad <> 0, moa.txtModalidad,'No Disponible') as Modalidad,
-              IF(frm.seqTipoEsquema is not null, tes.txtTipoEsquema,'No Disponible') as Esquema,
-              sol.txtSolucion as Solucion, 
-              sol.txtDescripcion as 'Descripcion de la Solucion',
-              frm.fchInscripcion as 'Fecha de Inscripcion',
-              frm.fchPostulacion as 'Fecha de Postulacion',
-              frm.fchUltimaActualizacion as 'Ultima Actualizacion',
-              frm.fchVencimiento as 'Fecha de Vencimiento',
-              IF(frm.bolCerrado = 1, 'SI', 'NO') as Cerrado,
-              frm.txtFormulario as 'Numero de Formulario',
-              IF(frm.bolSancion = 1, 'SI', 'NO') as Sancionado,
-              sis.txtSisben as Sisben,
-              IF(frm.seqProyecto is null or frm.seqProyecto = 0,'No Disponible',pry2.txtNombreProyecto) as Proyecto,
-              IF(frm.seqProyectoHijo is null or frm.seqProyectoHijo = 0,'No Disponible',pry1.txtNombreProyecto) as Conjunto,
-              IF(upr.seqUnidadProyectoVeeduria IS NOT NULL,
-                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.seqUnidadProyecto),
-                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.seqUnidadProyecto) 
-              )as Unidad,
-              IF(upr.seqUnidadProyectoVeeduria IS NOT NULL,
-                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad),
-                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.txtNombreUnidad) 
-              )as 'Descripcion de la Unidad',
-              IF(upr.seqUnidadProyectoVeeduria IS NOT NULL,
-                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.fchLegalizado),
-                IF(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.fchLegalizado) 
-              )as 'Fecha Legalización',
-              loc.seqLocalidad as Localidad,
-              if(bar.txtBarrio is null,'No Disponible',bar.txtBarrio) as Barrio,
-              if(frm.numHabitaciones is null,0,frm.numHabitaciones) as Dormitorios,
-              if(frm.numHacinamiento is null,0,frm.numHacinamiento) as Hacinamiento,
-              ppal.txtNombre as 'Postulante Principal - Nombre',
-              ppal.txtTipoDocumento as 'Postulante Principal - Tipo de Documento',
-              ppal.numDocumento as 'Postulante Principal - Documento',
-              upper(concat( ciu.txtNombre1,' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2 )) as Nombre,
-              tdo.txtTipoDocumento as 'Tipo de Documento',
-              ciu.numDocumento as Documento,
-              par.txtParentesco as Parentesco,
-              FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365)) AS Edad,
-              rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365))) AS 'Rango Edad',
-              ned.txtNivelEducativo as 'Nivel Educativo', 
-              ciu.numAnosAprobados as 'Años Aprobados',
-              etn.txtEtnia as 'Condicion Etnica', 
-              eci.txtEstadoCivil as 'Estado Civil', 
-              ocu.txtOcupacion as 'Ocupacion',   
-              sal.txtSalud as 'Afiliacion a Salud',
-              ucwords( cabezaFamilia( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as 'Cabeza de Familia',
-              ucwords( mayor65anos( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as 'Mayor de 65',
-              ucwords( discapacitado( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as 'Discapacitado',
-              ucwords( ningunaCondicionEspecial( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as 'Ninguna Condicion',    
-              sex.txtSexo as Sexo, 
-              if(ciu.bolLgtb=1,'Si','No') as LGTBI, 
-              glg.txtGrupoLgtbi as 'Grupo LGTBI', 
-              if(frm.bolDesplazado = 1, 'Si','No') as Desplazado,
-              tvi.txtTipoVictima 'Hecho Victimizante'
-            FROM t_vee_formulario frm
-            INNER JOIN t_vee_hogar hog ON frm.seqFormularioVeeduria = hog.seqFormularioVeeduria
-            INNER JOIN t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria and ciu.seqCorte = $seqCorte
-            INNER JOIN t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
-            INNER JOIN t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
-            INNER JOIN t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
-            LEFT  JOIN t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
-            LEFT  JOIN t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
-            INNER JOIN t_frm_solucion sol on frm.seqSolucion = sol.seqSolucion 
-            INNER JOIN t_frm_sisben sis on frm.seqSisben = sis.seqSisben
-            LEFT JOIN t_vee_proyecto pry ON frm.seqProyecto = pry.seqProyecto and pry.seqCorte = $seqCorte
-            LEFT JOIN t_vee_proyecto pry1 ON frm.seqProyectoHijo = pry1.seqProyecto and pry1.seqCorte = $seqCorte
-            LEFT JOIN t_pry_proyecto pry2 ON frm.seqProyecto = pry2.seqProyecto
-            LEFT JOIN t_vee_unidad_proyecto upr ON frm.seqUnidadProyecto = upr.seqUnidadProyecto and upr.seqProyectoVeeduria = pry.seqProyectoVeeduria
-            LEFT JOIN t_vee_unidad_proyecto upr1 ON frm.seqUnidadProyecto = upr1.seqUnidadProyecto and upr1.seqProyectoVeeduria = pry1.seqProyectoVeeduria
-            INNER JOIN t_frm_localidad loc on frm.seqLocalidad = loc.seqLocalidad
-            LEFT  JOIN t_frm_barrio bar on frm.seqBarrio = bar.seqBarrio
-            INNER JOIN t_ciu_parentesco par on hog.seqParentesco = par.seqParentesco
-            INNER JOIN (
-              SELECT 
                 frm1.seqFormularioVeeduria,
                 upper(concat( ciu1.txtNombre1,' ', ciu1.txtNombre2,' ', ciu1.txtApellido1,' ', ciu1.txtApellido2 )) as txtNombre,
                 ciu1.numDocumento,
                 tdo1.txtTipoDocumento
-              FROM t_vee_formulario frm1
-              INNER JOIN t_vee_hogar hog1 ON frm1.seqFormularioVeeduria = hog1.seqFormularioVeeduria and hog1.seqParentesco = 1
-              INNER JOIN t_vee_ciudadano ciu1 ON hog1.seqCiudadanoVeeduria = ciu1.seqCiudadanoVeeduria
-              INNER JOIN t_ciu_tipo_documento tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
-            ) ppal on frm.seqFormularioVeeduria = ppal.seqFormularioVeeduria
-            INNER JOIN t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
-            LEFT  JOIN t_ciu_nivel_educativo ned on ciu.seqNivelEducativo = ned.seqNivelEducativo
-            INNER JOIN t_ciu_etnia etn on ciu.seqEtnia = etn.seqEtnia
-            INNER JOIN t_ciu_estado_civil eci on ciu.seqEstadoCivil = eci.seqEstadoCivil
-            INNER JOIN t_ciu_ocupacion ocu on ciu.seqOcupacion = ocu.seqOcupacion
-            INNER JOIN t_ciu_sexo sex on ciu.seqSexo = sex.seqSexo
-            LEFT  JOIN t_ciu_salud sal on ciu.seqSalud = sal.seqSalud
-            LEFT  JOIN t_frm_tipovictima tvi on ciu.seqTipoVictima = tvi.seqTipoVictima
-            LEFT  JOIN t_frm_grupo_lgtbi glg on ciu.seqGrupoLgtbi = glg.seqGrupoLgtbi
-            WHERE frm.seqCorte = $seqCorte
-            -- AND frm.seqFormulario IN (6)
-            -- AND frm.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )
+            FROM t_vee_formulario frm1
+            INNER JOIN t_vee_hogar hog1 ON frm1.seqFormularioVeeduria = hog1.seqFormularioVeeduria and hog1.seqParentesco = 1
+            INNER JOIN t_vee_ciudadano ciu1 ON hog1.seqCiudadanoVeeduria = ciu1.seqCiudadanoVeeduria
+            INNER JOIN t_ciu_tipo_documento tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
+            WHERE frm1.seqCorte = $seqCorte     
+              AND frm1.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )  
         ";
-        $arrHogares = $aptBd->GetAll($sql);
+        $objRes = $aptBd->execute($sql);
+        $arrPostulantePrincipal = array();
+        while($objRes->fields){
+            $seqFormularioVeeduria = $objRes->fields['seqFormularioVeeduria'];
+            $arrPostulantePrincipal[$seqFormularioVeeduria]['txtNombre'] = $objRes->fields['txtNombre'];
+            $arrPostulantePrincipal[$seqFormularioVeeduria]['txtTipoDocumento'] = $objRes->fields['txtTipoDocumento'];
+            $arrPostulantePrincipal[$seqFormularioVeeduria]['numDocumento'] = $objRes->fields['numDocumento'];
+            $objRes->MoveNext();
+        }
+
+        $sql = "
+            select
+                frm.seqFormulario as Formulario,
+                eta.txtEtapa as Etapa,
+                epr.txtEstadoProceso as Estado,
+                pgo.txtPlanGobierno as 'Plan de Gobierno',
+                if(moa.seqModalidad = 0 or moa.seqModalidad is null, 'No Disponible', moa.txtModalidad) as Modalidad,
+                if(tes.seqTipoEsquema = 0 or tes.seqTipoEsquema is null, 'No Disponible', tes.txtTipoEsquema) as Esquema,
+                if(sol.seqSolucion = 0 or sol.seqSolucion is null, 'No Disponible', sol.txtSolucion) as Solucion,
+                if(sol.seqSolucion = 0 or sol.seqSolucion is null, 'No Disponible', sol.txtDescripcion) as 'Descripción Solucion',
+                frm.fchInscripcion as 'Fecha de Inscripción',
+                frm.fchPostulacion as 'Fecha de Postulación',
+                frm.fchUltimaActualizacion as 'Ultima Actualización',
+                frm.fchVencimiento as 'Fecha de Vencimiento',
+                frm.fchVigencia as 'Fecha de Vigencia',
+                if(frm.bolCerrado = 1, 'SI','NO') as Cerrado,
+                if(frm.txtFormulario <> '',frm.txtFormulario,'No Disponible') as 'Número de Formulario',
+                IF(frm.bolSancion = 1, 'SI', 'NO') as Sancionado,
+                sis.txtSisben as Sisben,
+                if(pryvee.txtNombreProyecto is null,
+                if(pry.txtNombreProyecto is null,
+                'Ninguno',
+                pry.txtNombreProyecto),
+                pry.txtNombreProyecto
+                ) as Proyecto,
+                if(frm.seqProyectoHijo is null or frm.seqProyectoHijo = 0,'No Disponible',convee.txtNombreProyecto) as Conjunto,
+                if(upr.seqUnidadProyectoVeeduria IS NOT NULL,
+                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.seqUnidadProyecto),
+                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.seqUnidadProyecto)
+                ) as Unidad,
+                if(upr.seqUnidadProyectoVeeduria IS NOT NULL,
+                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad),
+                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.txtNombreUnidad)
+                )as 'Descripcion de la Unidad',
+                if(upr.seqUnidadProyectoVeeduria IS NOT NULL,
+                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.fchLegalizado),
+                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.fchLegalizado)
+                )as 'Fecha Legalización',
+                if(loc.seqLocalidad = 0 or loc.seqLocalidad is null,'No Disponible',loc.txtLocalidad) as Localidad,
+                if(bar.seqBarrio = 0 or bar.seqBarrio is null,'No Disponible',bar.txtBarrio) as Barrio,
+                if(frm.numHabitaciones is null,0,frm.numHabitaciones) as Dormitorios,
+                if(frm.numHacinamiento is null,0,frm.numHacinamiento) as Hacinamiento,
+                upper(concat( ciu.txtNombre1,' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2 )) as Nombre,
+                tdo.txtTipoDocumento as 'Tipo de Documento',
+                ciu.numDocumento as Documento,
+                par.txtParentesco as Parentesco,
+                ocu.txtOcupacion as Ocupacion,
+                eci.txtEstadoCivil as 'Estado Civil',
+                sex.txtSexo as 'Sexo',
+                FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365)) AS Edad,
+                rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365))) AS 'Rango Edad',
+                ciu.seqNivelEducativo as 'Nivel Educativo',
+                ciu.numAnosAprobados as 'Años Aprobados',
+                etn.txtEtnia as 'Condición Etnica',
+                sal.txtSalud as 'Afiliación a Salud',
+                ciu.seqCondicionEspecial ,
+                ciu.seqCondicionEspecial2 ,
+                ciu.seqCondicionEspecial3,
+                '' as 'Cabeza de Familia',
+                '' as 'Mayor de 65',
+                '' as 'Discapacitado',
+                '' as 'Ninguna Condicion',
+                if(ciu.bolLgtb=1,'Si','No') as LGTBI,
+                glg.txtGrupoLgtbi as 'Grupo LGTBI',
+                if(frm.bolDesplazado = 1, 'Si','No') as Desplazado,
+                tvi.txtTipoVictima 'Hecho Victimizante'
+            from t_vee_formulario frm
+            inner join t_vee_hogar hog ON frm.seqFormularioVeeduria = hog.seqFormularioVeeduria
+            inner join t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria and ciu.seqCorte = $seqCorte
+            inner join t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
+            inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+            inner join t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
+            left  join t_frm_modalidad moa on moa.seqModalidad = frm.seqModalidad
+            left  join t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
+            left  join t_frm_solucion sol ON frm.seqSolucion = sol.seqSolucion
+            left  join t_frm_sisben sis on frm.seqSisben = sis.seqSisben
+            left  join t_pry_proyecto pry on frm.seqProyecto = pry.seqProyecto
+            left  join t_vee_proyecto pryvee on frm.seqProyecto = pryvee.seqProyecto and pryvee.seqCorte = $seqCorte
+            left  join t_vee_proyecto convee on frm.seqUnidadProyecto = convee.seqProyecto and convee.seqCorte = $seqCorte
+            left  join t_vee_unidad_proyecto upr ON frm.seqUnidadProyecto = upr.seqUnidadProyecto and upr.seqProyectoVeeduria = pryvee.seqProyectoVeeduria
+            left  join t_vee_unidad_proyecto upr1 ON frm.seqUnidadProyecto = upr1.seqUnidadProyecto and upr1.seqProyectoVeeduria = convee.seqProyectoVeeduria
+            left  join t_frm_localidad loc on frm.seqLocalidad = loc.seqLocalidad
+            left  join t_frm_barrio bar on frm.seqBarrio = bar.seqBarrio
+            left  join t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
+            left  join t_ciu_parentesco par on hog.seqParentesco = par.seqParentesco
+            left  join t_ciu_ocupacion ocu on ciu.seqOcupacion = ocu.seqOcupacion
+            left  join t_ciu_estado_civil eci ON ciu.seqEstadoCivil = eci.seqEstadoCivil
+            left  join t_ciu_sexo sex on ciu.seqSexo = sex.seqSexo
+            left  join t_ciu_etnia etn on ciu.seqEtnia = etn.seqEtnia
+            left  join t_ciu_salud sal on ciu.seqSalud = sal.seqSalud
+            left  join t_frm_tipovictima tvi on ciu.seqTipoVictima = tvi.seqTipoVictima
+            left  join t_frm_grupo_lgtbi glg on ciu.seqGrupoLgtbi = glg.seqGrupoLgtbi
+            where frm.seqCorte = $seqCorte
+              and frm.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )
+        ";
+
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $seqOcupacion = $objRes->fields['Ocupacion'];
+            $objRes->fields['Ocupacion'] = $arrOcupacion[$seqOcupacion];
+
+            $seqEstadoCivil = $objRes->fields['Estado Civil'];
+            $objRes->fields['Estado Civil'] = $arrEstadoCivil[$seqEstadoCivil];
+
+            $seqSexo = $objRes->fields['Sexo'];
+            $objRes->fields['Sexo'] = $arrSexo[$seqSexo];
+
+            $seqCondicionEspecial1 = $objRes->fields['seqCondicionEspecial'];
+            $seqCondicionEspecial2 = $objRes->fields['seqCondicionEspecial2'];
+            $seqCondicionEspecial3 = $objRes->fields['seqCondicionEspecial3'];
+
+            unset($objRes->fields['seqCondicionEspecial']);
+            unset($objRes->fields['seqCondicionEspecial2']);
+            unset($objRes->fields['seqCondicionEspecial3']);
+
+            $txtCabezaFamilia    = "No";
+            $txtMayor65          = "No";
+            $txtDiscapacitado    = "No";
+            $txtNingunaCondicion = "No";
+
+            if($seqCondicionEspecial1 == 1 or $seqCondicionEspecial2 == 1 or $seqCondicionEspecial3 == 1) {
+                $txtCabezaFamilia = "Si";
+            }
+
+            if($seqCondicionEspecial1 == 2 or $seqCondicionEspecial2 == 2 or $seqCondicionEspecial3 == 2){
+                $txtMayor65 = "Si";
+            }
+
+            if($seqCondicionEspecial1 == 3 or $seqCondicionEspecial2 == 3 or $seqCondicionEspecial3 == 3){
+                $txtDiscapacitado = "Si";
+            }
+
+            if($seqCondicionEspecial1 == 6 and $seqCondicionEspecial2 == 6 and $seqCondicionEspecial3 == 6){
+                $txtNingunaCondicion = "Si";
+            }
+
+            $objRes->fields['Cabeza de Familia'] = $txtCabezaFamilia;
+            $objRes->fields['Mayor de 65'] = $txtMayor65;
+            $objRes->fields['Discapacitado'] = $txtDiscapacitado;
+            $objRes->fields['Ninguna Condicion'] = $txtNingunaCondicion;
+
+            $arrHogares[] = $objRes->fields;
+
+            $objRes->MoveNext();
+        }
+
         return $arrHogares;
     }
 

@@ -270,7 +270,7 @@ function consultaDesembolsos($seqFormulario){
                     esc.numNotaria as 'Notaría',
                     esc.txtCiudad as 'Ciudad'
                 from t_des_escrituracion esc
-                inner join t_ciu_tipo_documento tdo on esc.seqTipoDocumento = tdo.seqTipoDocumento
+                left join t_ciu_tipo_documento tdo on esc.seqTipoDocumento = tdo.seqTipoDocumento
                 where seqDesembolso = $seqDesembolso
             ";
         $arrEscrituracion = $aptBd->GetAll($sql);

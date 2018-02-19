@@ -99,10 +99,10 @@ class InformeVeedurias
                 uac.seqTipoActoUnidad,
                 tac.txtTipoActoUnidad,
                 uvi.valIndexado,
-                frm.seqFormulario,
-                frm.seqEstadoProceso,
-                frm.bolCerrado,
-                IF(frm.bolDesplazado = 1,'Desplazado','Vulnerable') as bolDesplazado,
+                seqFormulario,
+                seqEstadoProceso,
+                bolCerrado,
+                IF(bolDesplazado = 1,'Desplazado','Vulnerable') as bolDesplazado,
                 aad.numActo as numActoHogar, 
                 aad.fchActo as fchActoHogar,
                 esc.numDocumentoVendedor,
@@ -133,10 +133,10 @@ class InformeVeedurias
             inner join t_vee_unidades_vinculadas uvi on upr.seqUnidadProyectoVeeduria = uvi.seqUnidadProyectoVeeduria
             inner join t_vee_unidad_acto uac on uvi.seqUnidadActoVeeduria = uac.seqUnidadActoVeeduria
             inner join t_pry_aad_unidad_tipo_acto tac on uac.seqTipoActoUnidad = tac.seqTipoActoUnidad
-            left join t_vee_formulario frm on upr.seqFormulario = frm.seqFormulario and frm.seqCorte = $seqCorte
+            left join t_vee_formulario frm on upr.seqFormulario = seqFormulario and seqCorte = $seqCorte
             left join (
               select
-              frm.seqFormulario, 
+              seqFormulario, 
               hvi.numActo, 
               hvi.fchActo
               from t_aad_hogares_vinculados hvi
@@ -148,8 +148,8 @@ class InformeVeedurias
                 inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
                 where hvi.seqTipoActo = 1
                 group by fac.seqFormulario
-              ) frm on hvi.seqFormularioActo = frm.seqFormularioActo
-            ) aad on frm.seqFormulario = aad.seqFormulario
+              ) frm on hvi.seqFormularioActo = seqFormularioActo
+            ) aad on seqFormulario = aad.seqFormulario
             inner join t_frm_plan_gobierno pgo on upr.seqPlanGobierno = pgo.seqPlanGobierno
             inner join t_frm_modalidad moa on moa.seqModalidad = upr.seqModalidad
             inner join t_pry_tipo_esquema tes on upr.seqTipoEsquema = tes.seqTipoEsquema
@@ -165,7 +165,7 @@ class InformeVeedurias
             left  join t_pry_constructor con2 on pry.seqConstructor = con2.seqConstructor
             left  join t_frm_localidad loc2 on pry.seqLocalidad = loc2.seqLocalidad
             left  join t_frm_barrio bar2 on pry.seqBarrio = bar2.seqBarrio 
-            left  join t_vee_desembolso des on frm.seqFormularioVeeduria = des.seqFormularioVeeduria
+            left  join t_vee_desembolso des on seqFormularioVeeduria = des.seqFormularioVeeduria
             left  join t_vee_escrituracion esc on des.seqDesembolsoVeeduria = esc.seqDesembolsoVeeduria
             left  join v_frm_ciudad ciu1 on des.seqCiudad = ciu1.seqCiudad
             left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
@@ -587,9 +587,9 @@ class InformeVeedurias
                 IF(moa.txtModalidad is null,'No Disponible',moa.txtModalidad) as 'Modalidad',
                 IF(tes.txtTipoEsquema is null,'No Disponible',tes.txtTipoEsquema) as 'Esquema', 
                 eta.txtEtapa as 'Etapa', 
-                frm.fchVigencia as 'Vigencia',
-                frm.valAspiraSubsidio as 'Valor Aporte / Subsidio',
-                frm.valComplementario as 'Valor Complementario Hogar',
+                fchVigencia as 'Vigencia',
+                valAspiraSubsidio as 'Valor Aporte / Subsidio',
+                valComplementario as 'Valor Complementario Hogar',
                 epr.txtEstadoProceso as 'Estado', 
                 aad.numActo as 'Resolución',
                 aad.fchActo as 'Fecha',              
@@ -645,7 +645,7 @@ class InformeVeedurias
             INNER JOIN
             (
                 SELECT 
-                    frm.seqFormulario, 
+                    seqFormulario, 
                     hvi.numActo, 
                     hvi.fchActo
                 FROM t_aad_hogares_vinculados hvi
@@ -667,12 +667,60 @@ class InformeVeedurias
         ";
         $objRes = $aptBd->execute($sql);
         $arrFormularios = array();
-        while ( $objRes->fields ){
+        while ($objRes->fields){
             $seqFormulario = $objRes->fields['Formulario'];
             $arrReporte['reporte'][] = $objRes->fields;
             $arrFormularios[$seqFormulario]['Resolución'] = $objRes->fields['Resolución'];
             $arrFormularios[$seqFormulario]['Fecha'] = $objRes->fields['Fecha'];
             $objRes->MoveNext();
+        }
+
+        // obtiene las solicitudes de desembolso
+        $sql = "
+            select
+                frm.seqFormulario,
+                sol.seqSolicitud,
+                sol.numOrden,
+                sol.fchOrden,
+                sol.valOrden
+            from t_vee_formulario frm  
+            inner join t_vee_desembolso des on frm.seqFormularioVeeduria = des.seqFormularioVeeduria
+            inner join t_vee_solicitud sol on des.seqDesembolsoVeeduria = sol.seqDesembolsoVeeduria
+            where frm.seqFormulario in ( " . implode("," , array_keys( $arrFormularios ) ) . " )
+              and frm.seqCorte = $seqCorte 
+              and (sol.numOrden <> 0) 
+        ";
+        $objRes = $aptBd->execute($sql);
+        $numMaximo = 1;
+        $arrSolicitudes = array();
+        while($objRes->fields){
+            $seqFormulario = $objRes->fields['seqFormulario'];
+            $seqSolicitud = $objRes->fields['seqSolicitud'];
+            $arrSolicitudes[$seqFormulario][$seqSolicitud]['numOrden'] = $objRes->fields['numOrden'];
+            $arrSolicitudes[$seqFormulario][$seqSolicitud]['fchOrden'] = $objRes->fields['fchOrden'];
+            $arrSolicitudes[$seqFormulario][$seqSolicitud]['valOrden'] = $objRes->fields['valOrden'];
+            if(count($arrSolicitudes[$seqFormulario]) > $numMaximo){
+                $numMaximo = count($arrSolicitudes[$seqFormulario]);
+            }
+            $objRes->MoveNext();
+        }
+
+        // ordena las solicitudes dentro del arreglo
+        foreach($arrReporte['reporte'] as $numLinea => $arrRegistro ){
+            $seqFormulario = $arrRegistro['Formulario'];
+            $i = 1;
+            foreach($arrSolicitudes[$seqFormulario] as $seqSolicitud => $arrDatos){
+                $arrRegistro['# Orden ' . $i] = $arrDatos['numOrden'];
+                $arrRegistro['# Fecha ' . $i] = $arrDatos['fchOrden'];
+                $arrRegistro['# Valor ' . $i] = $arrDatos['valOrden'];
+                $i++;
+            }
+            for($i = $i; $i <= $numMaximo; $i++){
+                $arrRegistro['# Orden ' . $i] = "";
+                $arrRegistro['# Fecha ' . $i] = "";
+                $arrRegistro['# Valor ' . $i] = "";
+            }
+            $arrReporte['reporte'][$numLinea] = $arrRegistro;
         }
 
         $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
@@ -693,6 +741,201 @@ class InformeVeedurias
     }
 
     private function obtenerHogares($arrFormularios , $seqCorte)
+    {
+        global $aptBd;
+        
+        $arrHogares = array();
+        $arrEstado = estadosProceso();
+        $arrPlanGobierno = obtenerDatosTabla( "T_FRM_PLAN_GOBIERNO" , array( "seqPlanGobierno" , "txtPlanGobierno" ) , "seqPlanGobierno" , "" , "txtPlanGobierno" );
+        $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad");
+        $arrTipoEsquema = obtenerDatosTabla("T_PRY_TIPO_ESQUEMA", array("seqTipoEsquema", "txtTipoEsquema"), "seqTipoEsquema");
+        $arrSolucion = obtenerDatosTabla("T_FRM_SOLUCION", array("seqSolucion", "txtSolucion", "txtDescripcion"), "seqSolucion");
+        $arrSisben = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben"), "seqSisben");
+        $arrProyecto = obtenerDatosTabla("T_PRY_PROYECTO", array("seqProyecto", "txtProyecto"), "seqProyecto");
+        $arrUnidad = obtenerDatosTabla("t_pry_unidad_proyecto", array("seqUnidadProyecto", "txtNombreUnidad"), "seqUnidadProyecto");
+        $arrLocalidad = obtenerDatosTabla("T_FRM_LOCALIDAD", array("seqLocalidad", "txtLocalidad"), "seqLocalidad");
+        $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio");
+        $arrTipoDocumento = obtenerDatosTabla("T_CIU_TIPO_DOCUMENTO", array("seqTipoDocumento", "txtTipoDocumento"), "seqTipoDocumento");
+        $arrParentesco = obtenerDatosTabla("T_CIU_PARENTESCO", array("seqParentesco", "txtParentesco"), "seqParentesco");
+        $arrOcupacion = obtenerDatosTabla("T_CIU_OCUPACION", array("seqOcupacion", "txtOcupacion"), "seqOcupacion");
+        $arrEstadoCivil = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil"), "seqEstadoCivil");
+        $arrSexo = obtenerDatosTabla("T_CIU_SEXO", array("seqSexo", "txtSexo"), "seqSexo", "", "txtSexo");
+        $arrNivelEducativo = obtenerDatosTabla("T_CIU_NIVEL_EDUCATIVO", array("seqNivelEducativo", "txtNivelEducativo"), "seqNivelEducativo");
+        $arrCondicionEtnica = obtenerDatosTabla("T_CIU_ETNIA", array("seqEtnia", "txtEtnia"), "seqEtnia");
+        $arrSalud = obtenerDatosTabla("T_CIU_SALUD", array("seqSalud", "txtSalud"), "seqSalud");
+        $arrGrupoLgtbi = obtenerDatosTabla("T_FRM_GRUPO_LGTBI", array("seqGrupoLgtbi", "txtGrupoLgtbi"), "seqGrupoLgtbi");
+        $arrTipoVictima = obtenerDatosTabla("T_FRM_TIPOVICTIMA", array("seqTipoVictima", "txtTipoVictima"), "seqTipoVictima");
+
+        $sql = "
+            SELECT
+                frm1.seqFormularioVeeduria,
+                upper(concat( ciu1.txtNombre1,' ', ciu1.txtNombre2,' ', ciu1.txtApellido1,' ', ciu1.txtApellido2 )) as txtNombre,
+                ciu1.numDocumento,
+                tdo1.txtTipoDocumento
+            FROM t_vee_formulario frm1
+            INNER JOIN t_vee_hogar hog1 ON frm1.seqFormularioVeeduria = hog1.seqFormularioVeeduria and hog1.seqParentesco = 1
+            INNER JOIN t_vee_ciudadano ciu1 ON hog1.seqCiudadanoVeeduria = ciu1.seqCiudadanoVeeduria
+            INNER JOIN t_ciu_tipo_documento tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
+            WHERE frm1.seqCorte = $seqCorte     
+              AND frm1.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )  
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrPostulantePrincipal = array();
+        while($objRes->fields){
+            $seqFormularioVeeduria = $objRes->fields['seqFormularioVeeduria'];
+            $arrPostulantePrincipal[$seqFormularioVeeduria]['txtNombre'] = $objRes->fields['txtNombre'];
+            $arrPostulantePrincipal[$seqFormularioVeeduria]['txtTipoDocumento'] = $objRes->fields['txtTipoDocumento'];
+            $arrPostulantePrincipal[$seqFormularioVeeduria]['numDocumento'] = $objRes->fields['numDocumento'];
+            $objRes->MoveNext();
+        }
+
+        $sql = "
+            select
+                frm.seqFormularioVeeduria,
+                frm.seqFormulario,
+                frm.seqEstadoProceso,
+                frm.seqPlanGobierno,
+                frm.seqModalidad,
+                frm.seqTipoEsquema,
+                frm.seqSolucion,
+                frm.fchInscripcion,
+                frm.fchPostulacion,
+                frm.fchUltimaActualizacion,
+                frm.fchVencimiento,
+                frm.fchVigencia,
+                frm.bolCerrado,
+                frm.bolSancion,
+                frm.seqSisben,
+                frm.seqProyecto,
+                frm.seqProyectoHijo,
+                frm.seqUnidadProyecto,
+                frm.seqLocalidad,
+                frm.seqBarrio,
+                frm.numHabitaciones,
+                frm.numHacinamiento,
+                upper(concat( ciu.txtNombre1,' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2 )) as txtNombre,
+                ciu.seqTipoDocumento,
+                ciu.numDocumento,
+                hog.seqParentesco,
+                ciu.seqOcupacion,
+                ciu.seqEstadoCivil,
+                ciu.seqSexo,
+                FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365)) AS Edad,
+                rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365))) AS 'Rango Edad',
+                ciu.seqNivelEducativo,
+                ciu.numAnosAprobados,
+                ciu.seqEtnia,
+                ciu.seqSalud,
+                ciu.seqCondicionEspecial ,
+                ciu.seqCondicionEspecial2 ,
+                ciu.seqCondicionEspecial3,
+                ciu.bolLgtb,
+                ciu.seqGrupoLgtbi,
+                frm.bolDesplazado,
+                ciu.seqTipoVictima
+            from t_vee_formulario frm
+            inner join t_vee_hogar hog ON frm.seqFormularioVeeduria = hog.seqFormularioVeeduria
+            inner join t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria 
+              and ciu.seqCorte = $seqCorte
+              and frm.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )     
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            foreach($objRes->fields as $txtCampo => $txtValor){
+                $$txtCampo = $txtValor;
+            }
+
+            $numPosicion = count($arrHogares);
+
+            $arrHogares[$numPosicion]['Formulario'] = $objRes->fields['seqFormulario'];
+            $arrHogares[$numPosicion]['Estado'] = ($seqEstadoProceso != null)? $arrEstado[$seqEstadoProceso] : "No Disponible";
+            $arrHogares[$numPosicion]['Plan de Gobierno'] = ($seqPlanGobierno != null)? $arrPlanGobierno[$seqPlanGobierno] : "No Disponible";
+            $arrHogares[$numPosicion]['Modalidad'] = $arrModalidad[$seqModalidad];
+            $arrHogares[$numPosicion]['Esquema'] = ($seqTipoEsquema != null)? $arrTipoEsquema[$seqTipoEsquema] : "No Disponible";
+            $arrHogares[$numPosicion]['Solución'] = ($seqSolucion != null)? $arrSolucion[$seqSolucion]['txtSolucion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Descripción'] = ($seqSolucion != null)? $arrSolucion[$seqSolucion]['txtDescripcion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Inscripción'] = (esFechaValida($objRes->fields['fchInscripcion']))? $objRes->fields['fchInscripcion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Postulación'] = (esFechaValida($objRes->fields['fchPostulacion']))? $objRes->fields['fchPostulacion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Actualización'] = (esFechaValida($objRes->fields['fchUltimaActualizacion']))? $objRes->fields['fchUltimaActualizacion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Vencimiento'] = (esFechaValida($objRes->fields['fchVencimiento']))? $objRes->fields['fchVencimiento'] : "No Disponible";
+            $arrHogares[$numPosicion]['Vigencia'] = (esFechaValida($objRes->fields['fchVigencia']))? $objRes->fields['fchVigencia'] : "No Disponible";
+            $arrHogares[$numPosicion]['Cerrado'] = ($objRes->fields['bolCerrado'] == 1)? "Si" : "No";
+            $arrHogares[$numPosicion]['# Formulario'] = ($objRes->fields['txtFormulario'] != "")? $objRes->fields['txtFormulario'] : "No Disponible";
+            $arrHogares[$numPosicion]['Sanción'] = ($objRes->fields['bolSancion'] == 1)? "Si" : "No";
+            $arrHogares[$numPosicion]['Sisben'] = ($seqSisben != null)? $arrSisben[$seqSisben] : "No Disponible";
+            $arrHogares[$numPosicion]['Proyecto'] = ($seqProyecto != null and $seqProyecto != 0)? $arrProyecto[$seqProyecto] : "No Disponible";
+            $arrHogares[$numPosicion]['Conjunto'] = ($seqProyectoHijo != null and $seqProyectoHijo != 0)? $arrProyecto[$seqProyectoHijo] : "No Disponible";
+            $arrHogares[$numPosicion]['# Unidad'] = ($seqUnidadProyecto != null)? $seqUnidadProyecto : "No Disponible";
+            $arrHogares[$numPosicion]['Unidad'] = ($seqUnidadProyecto != null)? $arrUnidad[$seqUnidadProyecto] : "No Disponible";
+            $arrHogares[$numPosicion]['Localidad'] = ($seqLocalidad != null)? $arrLocalidad[$seqLocalidad] : "No Disponible";
+            $arrHogares[$numPosicion]['Barrio'] = ($seqBarrio != null)? $arrBarrio[$seqBarrio] : "No Disponible";
+            $arrHogares[$numPosicion]['Dormitorios'] = intval($objRes->fields['numHabitaciones']);
+            $arrHogares[$numPosicion]['Hacinamiento'] = intval($objRes->fields['numHacinamiento']);
+            $arrHogares[$numPosicion]['Postulante Principal'] = $arrPostulantePrincipal[$seqFormularioVeeduria]['txtNombre'];
+            $arrHogares[$numPosicion]['Tipo de Documento Principal'] = $arrPostulantePrincipal[$seqFormularioVeeduria]['txtTipoDocumento'];
+            $arrHogares[$numPosicion]['Documento Principal'] = $arrPostulantePrincipal[$seqFormularioVeeduria]['numDocumento'];
+            $arrHogares[$numPosicion]['Nombre'] = $objRes->fields['txtNombre'];
+            $arrHogares[$numPosicion]['Tipo de Documento'] = ($seqTipoDocumento != null)? $arrTipoDocumento[$seqTipoDocumento] : "No Disponible";
+            $arrHogares[$numPosicion]['Documento'] = $objRes->fields['numDocumento'];
+            $arrHogares[$numPosicion]['Parentesco'] = ($seqParentesco != null)? $arrParentesco[$seqParentesco] : "No Disponible";
+            $arrHogares[$numPosicion]['Ocupación'] = ($seqOcupacion != null)? $arrOcupacion[$seqOcupacion] : "No Disponible";
+            $arrHogares[$numPosicion]['Estado Civil'] = ($seqEstadoCivil != null)? $arrEstadoCivil[$seqEstadoCivil] : "No Disponible";
+            $arrHogares[$numPosicion]['Sexo'] = ($seqSexo != null)? $arrSexo[$seqSexo] : "No Disponible";
+            $arrHogares[$numPosicion]['Edad'] = $objRes->fields['Edad'];
+            $arrHogares[$numPosicion]['Rango Edad'] = $objRes->fields['Rango Edad'];
+            $arrHogares[$numPosicion]['Nivel Educativo'] = ($seqNivelEducativo != null)? $arrNivelEducativo[$seqNivelEducativo] : "No Disponible";
+            $arrHogares[$numPosicion]['Años Aprobados'] = $objRes->fields['numAnosAprobados'];
+            $arrHogares[$numPosicion]['Etnia'] = ($seqEtnia != null)? $arrCondicionEtnica[$seqEtnia] : "No Disponible";
+            $arrHogares[$numPosicion]['Salud'] = ($seqSalud != null)? $arrSalud[$seqSalud] : "No Disponible";
+
+            $seqCondicionEspecial1 = $objRes->fields['seqCondicionEspecial'];
+            $seqCondicionEspecial2 = $objRes->fields['seqCondicionEspecial2'];
+            $seqCondicionEspecial3 = $objRes->fields['seqCondicionEspecial3'];
+
+            unset($objRes->fields['seqCondicionEspecial']);
+            unset($objRes->fields['seqCondicionEspecial2']);
+            unset($objRes->fields['seqCondicionEspecial3']);
+
+            $txtCabezaFamilia    = "No";
+            $txtMayor65          = "No";
+            $txtDiscapacitado    = "No";
+            $txtNingunaCondicion = "No";
+
+            if($seqCondicionEspecial1 == 1 or $seqCondicionEspecial2 == 1 or $seqCondicionEspecial3 == 1) {
+                $txtCabezaFamilia = "Si";
+            }
+
+            if($seqCondicionEspecial1 == 2 or $seqCondicionEspecial2 == 2 or $seqCondicionEspecial3 == 2){
+                $txtMayor65 = "Si";
+            }
+
+            if($seqCondicionEspecial1 == 3 or $seqCondicionEspecial2 == 3 or $seqCondicionEspecial3 == 3){
+                $txtDiscapacitado = "Si";
+            }
+
+            if($seqCondicionEspecial1 == 6 and $seqCondicionEspecial2 == 6 and $seqCondicionEspecial3 == 6){
+                $txtNingunaCondicion = "Si";
+            }
+
+            $arrHogares[$numPosicion]['Cabeza de Familia'] = $txtCabezaFamilia;
+            $arrHogares[$numPosicion]['Mayor de 65'] = $txtMayor65;
+            $arrHogares[$numPosicion]['Discapacitado'] = $txtDiscapacitado;
+            $arrHogares[$numPosicion]['Ninguna Condición'] = $txtNingunaCondicion;
+
+            $arrHogares[$numPosicion]['LGTBI'] = ($objRes->fields['bolLgtb'] = 1)? "SI" : "NO";
+            $arrHogares[$numPosicion]['Grupo LGTBI'] = ($seqGrupoLgtbi != null)? $arrGrupoLgtbi[$seqGrupoLgtbi] : "No Disponible";
+
+            $arrHogares[$numPosicion]['Desplazado'] = ($objRes->fields['bolDesplazado'] = 1)? "SI" : "NO";
+            $arrHogares[$numPosicion]['Victima'] = ($seqTipoEsquema != null)? $arrTipoVictima[$seqTipoEsquema] : "No Disponible";
+
+            $objRes->MoveNext();
+        }
+        
+        return $arrHogares;
+    }
+
+    private function obtenerHogares_old($arrFormularios , $seqCorte)
     {
         global $aptBd;
 
@@ -740,7 +983,7 @@ class InformeVeedurias
 
         $sql = "
             select
-                frm.seqFormulario as Formulario,
+                seqFormulario as Formulario,
                 eta.txtEtapa as Etapa,
                 epr.txtEstadoProceso as Estado,
                 pgo.txtPlanGobierno as 'Plan de Gobierno',
@@ -748,14 +991,14 @@ class InformeVeedurias
                 if(tes.seqTipoEsquema = 0 or tes.seqTipoEsquema is null, 'No Disponible', tes.txtTipoEsquema) as Esquema,
                 if(sol.seqSolucion = 0 or sol.seqSolucion is null, 'No Disponible', sol.txtSolucion) as Solucion,
                 if(sol.seqSolucion = 0 or sol.seqSolucion is null, 'No Disponible', sol.txtDescripcion) as 'Descripción Solucion',
-                frm.fchInscripcion as 'Fecha de Inscripción',
-                frm.fchPostulacion as 'Fecha de Postulación',
-                frm.fchUltimaActualizacion as 'Ultima Actualización',
-                frm.fchVencimiento as 'Fecha de Vencimiento',
-                frm.fchVigencia as 'Fecha de Vigencia',
-                if(frm.bolCerrado = 1, 'SI','NO') as Cerrado,
-                if(frm.txtFormulario <> '',frm.txtFormulario,'No Disponible') as 'Número de Formulario',
-                IF(frm.bolSancion = 1, 'SI', 'NO') as Sancionado,
+                fchInscripcion as 'Fecha de Inscripción',
+                fchPostulacion as 'Fecha de Postulación',
+                fchUltimaActualizacion as 'Ultima Actualización',
+                fchVencimiento as 'Fecha de Vencimiento',
+                fchVigencia as 'Fecha de Vigencia',
+                if(bolCerrado = 1, 'SI','NO') as Cerrado,
+                if(txtFormulario <> '',txtFormulario,'No Disponible') as 'Número de Formulario',
+                IF(bolSancion = 1, 'SI', 'NO') as Sancionado,
                 sis.txtSisben as Sisben,
                 if(pryvee.txtNombreProyecto is null,
                 if(pry.txtNombreProyecto is null,
@@ -763,23 +1006,23 @@ class InformeVeedurias
                 pry.txtNombreProyecto),
                 pry.txtNombreProyecto
                 ) as Proyecto,
-                if(frm.seqProyectoHijo is null or frm.seqProyectoHijo = 0,'No Disponible',convee.txtNombreProyecto) as Conjunto,
+                if(seqProyectoHijo is null or seqProyectoHijo = 0,'No Disponible',convee.txtNombreProyecto) as Conjunto,
                 if(upr.seqUnidadProyectoVeeduria IS NOT NULL,
-                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.seqUnidadProyecto),
-                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.seqUnidadProyecto)
+                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr.seqUnidadProyecto),
+                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr1.seqUnidadProyecto)
                 ) as Unidad,
                 if(upr.seqUnidadProyectoVeeduria IS NOT NULL,
-                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad),
-                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.txtNombreUnidad)
+                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad),
+                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr1.txtNombreUnidad)
                 )as 'Descripcion de la Unidad',
                 if(upr.seqUnidadProyectoVeeduria IS NOT NULL,
-                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr.fchLegalizado),
-                if(frm.seqUnidadProyecto is null or frm.seqUnidadProyecto = 1,'No Disponible',upr1.fchLegalizado)
+                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr.fchLegalizado),
+                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr1.fchLegalizado)
                 )as 'Fecha Legalización',
                 if(loc.seqLocalidad = 0 or loc.seqLocalidad is null,'No Disponible',loc.txtLocalidad) as Localidad,
                 if(bar.seqBarrio = 0 or bar.seqBarrio is null,'No Disponible',bar.txtBarrio) as Barrio,
-                if(frm.numHabitaciones is null,0,frm.numHabitaciones) as Dormitorios,
-                if(frm.numHacinamiento is null,0,frm.numHacinamiento) as Hacinamiento,
+                if(numHabitaciones is null,0,numHabitaciones) as Dormitorios,
+                if(numHacinamiento is null,0,numHacinamiento) as Hacinamiento,
                 upper(concat( ciu.txtNombre1,' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2 )) as Nombre,
                 tdo.txtTipoDocumento as 'Tipo de Documento',
                 ciu.numDocumento as Documento,
@@ -802,25 +1045,25 @@ class InformeVeedurias
                 '' as 'Ninguna Condicion',
                 if(ciu.bolLgtb=1,'Si','No') as LGTBI,
                 glg.txtGrupoLgtbi as 'Grupo LGTBI',
-                if(frm.bolDesplazado = 1, 'Si','No') as Desplazado,
+                if(bolDesplazado = 1, 'Si','No') as Desplazado,
                 tvi.txtTipoVictima 'Hecho Victimizante'
             from t_vee_formulario frm
-            inner join t_vee_hogar hog ON frm.seqFormularioVeeduria = hog.seqFormularioVeeduria
+            inner join t_vee_hogar hog ON seqFormularioVeeduria = hog.seqFormularioVeeduria
             inner join t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria and ciu.seqCorte = $seqCorte
-            inner join t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
+            inner join t_frm_estado_proceso epr on seqEstadoProceso = epr.seqEstadoProceso
             inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
-            inner join t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
-            left  join t_frm_modalidad moa on moa.seqModalidad = frm.seqModalidad
-            left  join t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
-            left  join t_frm_solucion sol ON frm.seqSolucion = sol.seqSolucion
-            left  join t_frm_sisben sis on frm.seqSisben = sis.seqSisben
-            left  join t_pry_proyecto pry on frm.seqProyecto = pry.seqProyecto
-            left  join t_vee_proyecto pryvee on frm.seqProyecto = pryvee.seqProyecto and pryvee.seqCorte = $seqCorte
-            left  join t_vee_proyecto convee on frm.seqUnidadProyecto = convee.seqProyecto and convee.seqCorte = $seqCorte
-            left  join t_vee_unidad_proyecto upr ON frm.seqUnidadProyecto = upr.seqUnidadProyecto and upr.seqProyectoVeeduria = pryvee.seqProyectoVeeduria
-            left  join t_vee_unidad_proyecto upr1 ON frm.seqUnidadProyecto = upr1.seqUnidadProyecto and upr1.seqProyectoVeeduria = convee.seqProyectoVeeduria
-            left  join t_frm_localidad loc on frm.seqLocalidad = loc.seqLocalidad
-            left  join t_frm_barrio bar on frm.seqBarrio = bar.seqBarrio
+            inner join t_frm_plan_gobierno pgo on seqPlanGobierno = pgo.seqPlanGobierno
+            left  join t_frm_modalidad moa on moa.seqModalidad = seqModalidad
+            left  join t_pry_tipo_esquema tes on seqTipoEsquema = tes.seqTipoEsquema
+            left  join t_frm_solucion sol ON seqSolucion = sol.seqSolucion
+            left  join t_frm_sisben sis on seqSisben = sis.seqSisben
+            left  join t_pry_proyecto pry on seqProyecto = pry.seqProyecto
+            left  join t_vee_proyecto pryvee on seqProyecto = pryvee.seqProyecto and pryvee.seqCorte = $seqCorte
+            left  join t_vee_proyecto convee on seqUnidadProyecto = convee.seqProyecto and convee.seqCorte = $seqCorte
+            left  join t_vee_unidad_proyecto upr ON seqUnidadProyecto = upr.seqUnidadProyecto and upr.seqProyectoVeeduria = pryvee.seqProyectoVeeduria
+            left  join t_vee_unidad_proyecto upr1 ON seqUnidadProyecto = upr1.seqUnidadProyecto and upr1.seqProyectoVeeduria = convee.seqProyectoVeeduria
+            left  join t_frm_localidad loc on seqLocalidad = loc.seqLocalidad
+            left  join t_frm_barrio bar on seqBarrio = bar.seqBarrio
             left  join t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
             left  join t_ciu_parentesco par on hog.seqParentesco = par.seqParentesco
             left  join t_ciu_ocupacion ocu on ciu.seqOcupacion = ocu.seqOcupacion
@@ -830,8 +1073,8 @@ class InformeVeedurias
             left  join t_ciu_salud sal on ciu.seqSalud = sal.seqSalud
             left  join t_frm_tipovictima tvi on ciu.seqTipoVictima = tvi.seqTipoVictima
             left  join t_frm_grupo_lgtbi glg on ciu.seqGrupoLgtbi = glg.seqGrupoLgtbi
-            where frm.seqCorte = $seqCorte
-              and frm.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )
+            where seqCorte = $seqCorte
+              and seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )
         ";
 
         $objRes = $aptBd->execute($sql);

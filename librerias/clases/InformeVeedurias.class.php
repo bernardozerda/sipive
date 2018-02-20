@@ -663,7 +663,8 @@ class InformeVeedurias
                  frm.seqUnidadProyecto = 0
               OR frm.seqUnidadProyecto IS NULL
               OR frm.seqUnidadProyecto = 1
-            ) AND frm.seqCorte = $seqCorte    
+            ) AND frm.seqCorte = $seqCorte   
+            -- and frm.seqFormulario = 2529 
         ";
         $objRes = $aptBd->execute($sql);
         $arrFormularios = array();
@@ -736,6 +737,8 @@ class InformeVeedurias
                     "";
             }
         }
+
+//        pr($arrReporte);
 
         return $arrReporte;
     }

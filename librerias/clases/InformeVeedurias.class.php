@@ -99,10 +99,10 @@ class InformeVeedurias
                 uac.seqTipoActoUnidad,
                 tac.txtTipoActoUnidad,
                 uvi.valIndexado,
-                seqFormulario,
-                seqEstadoProceso,
-                bolCerrado,
-                IF(bolDesplazado = 1,'Desplazado','Vulnerable') as bolDesplazado,
+                frm.seqFormulario,
+                frm.seqEstadoProceso,
+                frm.bolCerrado,
+                IF(frm.bolDesplazado = 1,'Desplazado','Vulnerable') as bolDesplazado,
                 aad.numActo as numActoHogar, 
                 aad.fchActo as fchActoHogar,
                 esc.numDocumentoVendedor,
@@ -133,10 +133,10 @@ class InformeVeedurias
             inner join t_vee_unidades_vinculadas uvi on upr.seqUnidadProyectoVeeduria = uvi.seqUnidadProyectoVeeduria
             inner join t_vee_unidad_acto uac on uvi.seqUnidadActoVeeduria = uac.seqUnidadActoVeeduria
             inner join t_pry_aad_unidad_tipo_acto tac on uac.seqTipoActoUnidad = tac.seqTipoActoUnidad
-            left join t_vee_formulario frm on upr.seqFormulario = seqFormulario and seqCorte = $seqCorte
+            left join t_vee_formulario frm on upr.seqFormulario = frm.seqFormulario and frm.seqCorte = $seqCorte
             left join (
               select
-              seqFormulario, 
+              frm.seqFormulario, 
               hvi.numActo, 
               hvi.fchActo
               from t_aad_hogares_vinculados hvi
@@ -148,8 +148,8 @@ class InformeVeedurias
                 inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
                 where hvi.seqTipoActo = 1
                 group by fac.seqFormulario
-              ) frm on hvi.seqFormularioActo = seqFormularioActo
-            ) aad on seqFormulario = aad.seqFormulario
+              ) frm on hvi.seqFormularioActo = frm.seqFormularioActo
+            ) aad on frm.seqFormulario = aad.seqFormulario
             inner join t_frm_plan_gobierno pgo on upr.seqPlanGobierno = pgo.seqPlanGobierno
             inner join t_frm_modalidad moa on moa.seqModalidad = upr.seqModalidad
             inner join t_pry_tipo_esquema tes on upr.seqTipoEsquema = tes.seqTipoEsquema
@@ -165,7 +165,7 @@ class InformeVeedurias
             left  join t_pry_constructor con2 on pry.seqConstructor = con2.seqConstructor
             left  join t_frm_localidad loc2 on pry.seqLocalidad = loc2.seqLocalidad
             left  join t_frm_barrio bar2 on pry.seqBarrio = bar2.seqBarrio 
-            left  join t_vee_desembolso des on seqFormularioVeeduria = des.seqFormularioVeeduria
+            left  join t_vee_desembolso des on frm.seqFormularioVeeduria = des.seqFormularioVeeduria
             left  join t_vee_escrituracion esc on des.seqDesembolsoVeeduria = esc.seqDesembolsoVeeduria
             left  join v_frm_ciudad ciu1 on des.seqCiudad = ciu1.seqCiudad
             left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
@@ -578,7 +578,7 @@ class InformeVeedurias
 
     public function reporteNoProyectos($seqCorte)
     {
-        global $aptBd;
+        global $aptBd, $arrConfiguracion;
 
         $sql = "
             SELECT
@@ -587,10 +587,10 @@ class InformeVeedurias
                 IF(moa.txtModalidad is null,'No Disponible',moa.txtModalidad) as 'Modalidad',
                 IF(tes.txtTipoEsquema is null,'No Disponible',tes.txtTipoEsquema) as 'Esquema', 
                 eta.txtEtapa as 'Etapa', 
-                fchVigencia as 'Vigencia',
-                valAspiraSubsidio as 'Valor Aporte / Subsidio',
-                valComplementario as 'Valor Complementario Hogar',
                 epr.txtEstadoProceso as 'Estado', 
+                IF(frm.fchVigencia < '2000-01-01',NULL,frm.fchVigencia) as 'Vigencia',
+                valAspiraSubsidio as 'Valor Aporte / Subsidio',
+                IF(frm.valComplementario is null,0,frm.valComplementario) as 'Valor Complementario Hogar',
                 aad.numActo as 'Resolución',
                 aad.fchActo as 'Fecha',              
                 UPPER(des.txtMatriculaInmobiliaria) as 'Matrícula Inmoviliaria-ME',
@@ -663,8 +663,7 @@ class InformeVeedurias
                  frm.seqUnidadProyecto = 0
               OR frm.seqUnidadProyecto IS NULL
               OR frm.seqUnidadProyecto = 1
-            ) AND frm.seqCorte = $seqCorte   
-            -- and frm.seqFormulario = 2529 
+            ) AND frm.seqCorte = $seqCorte
         ";
         $objRes = $aptBd->execute($sql);
         $arrFormularios = array();
@@ -684,12 +683,12 @@ class InformeVeedurias
                 sol.numOrden,
                 sol.fchOrden,
                 sol.valOrden
-            from t_vee_formulario frm  
+            from t_vee_formulario frm
             inner join t_vee_desembolso des on frm.seqFormularioVeeduria = des.seqFormularioVeeduria
             inner join t_vee_solicitud sol on des.seqDesembolsoVeeduria = sol.seqDesembolsoVeeduria
             where frm.seqFormulario in ( " . implode("," , array_keys( $arrFormularios ) ) . " )
-              and frm.seqCorte = $seqCorte 
-              and (sol.numOrden <> 0) 
+              and frm.seqCorte = $seqCorte
+              and (sol.numOrden <> 0)
         ";
         $objRes = $aptBd->execute($sql);
         $numMaximo = 1;
@@ -1295,7 +1294,7 @@ class InformeVeedurias
 
         // datos
         foreach ($arrReporte as $numLinea => $arrDatos){
-            $xmlArchivo .= "<ss:Row>\r\n";
+            $xmlArchivo .= "<ss:Row>";
             foreach($arrDatos as $txtTitulo => $txtValor) {
                 $txtTipo = $this->tipoDato( $txtValor );
                 $txtEstilo = "";
@@ -1311,9 +1310,9 @@ class InformeVeedurias
                         $txtValor = trim($txtValor);
                         break;
                 }
-                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>\r\n";
+                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
             }
-            $xmlArchivo .= "</ss:Row>\r\n";
+            $xmlArchivo .= "</ss:Row>";
         }
 
         $xmlArchivo .= "</ss:Table>";

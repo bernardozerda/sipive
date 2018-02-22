@@ -5071,7 +5071,8 @@ function popUpAyuda(txtTitulo, txtContenido) {
                 close: true,
                 draggable: false,
                 modal: true,
-                visible: true
+                visible: true,
+                xy:[100,100],
             }
     );
 

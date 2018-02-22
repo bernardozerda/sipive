@@ -16,6 +16,7 @@ class InformeVeedurias
     public $txtNombre;
     private $arrEstadosVinculado;
     private $arrEstadosLegalizado;
+    private $arrFuentesExcel;
 
     function __construct()
     {
@@ -26,6 +27,7 @@ class InformeVeedurias
         $this->txtNombre = "";
         $this->arrEstadosVinculado = array( 15, 62, 17, 19, 22, 23, 24, 25, 26, 27, 28, 29, 31, 40 );
         $this->arrEstadosLegalizado = array( 40 );
+        $this->arrFuentesExcel = array();
     }
 
     public function obtenerCortes($seqCorte = 0)
@@ -526,8 +528,8 @@ class InformeVeedurias
             $arrReporte['resoluciones'][ $numPosicion ]['Numero Resolución'] = $objRes->fields['numActoProyecto'];
             $arrReporte['resoluciones'][ $numPosicion ]['Fecha Resolución'] = $objRes->fields['fchActoProyecto'];
             $arrReporte['resoluciones'][ $numPosicion ]['Año Resolución'] = (esFechaValida($objRes->fields['fchActoProyecto']))?
-                                                                                date("Y" , strtotime($objRes->fields['fchActoProyecto'])) :
-                                                                                "";
+                date("Y" , strtotime($objRes->fields['fchActoProyecto'])) :
+                "";
             $arrReporte['resoluciones'][$numPosicion]['Valor Indexación'] = $objRes->fields['valIndexado'];
             switch($objRes->fields['seqTipoActoUnidad']){
                 case 1:
@@ -561,8 +563,8 @@ class InformeVeedurias
                 $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['numResolucion'];
                 $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['fchResolucion'];
                 $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['fchResolucion']))?
-                                                                date( "Y" , strtotime( $arrFormularios[$seqFormulario]['fchResolucion'] )) :
-                                                                "";
+                    date( "Y" , strtotime( $arrFormularios[$seqFormulario]['fchResolucion'] )) :
+                    "";
             }
         }
 
@@ -574,14 +576,13 @@ class InformeVeedurias
         return $arrReporte;
     }
 
-
-
     public function reporteNoProyectos($seqCorte)
     {
         global $aptBd, $arrConfiguracion;
 
         $sql = "
             SELECT
+                frm.seqFormularioVeeduria,
                 frm.seqFormulario as 'Formulario',
                 pgo.txtPlanGobierno as 'Plan de Gobierno',
                 IF(moa.txtModalidad is null,'No Disponible',moa.txtModalidad) as 'Modalidad',
@@ -626,7 +627,7 @@ class InformeVeedurias
                 tit.numFolioMatricula as 'Folio Matrícula',
                 tit.txtZonaMatricula as 'Zona Matricula',
                 tit.txtCiudadMatricula as 'Ciudad Matricula',
-                tit.fchMatricula as 'Fecha Matricula'
+                IF(tit.fchMatricula < '2000-01-01',NULL,tit.fchMatricula) as 'Fecha Matricula'
             FROM t_vee_formulario frm
             LEFT JOIN t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
             LEFT JOIN t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
@@ -664,14 +665,17 @@ class InformeVeedurias
               OR frm.seqUnidadProyecto IS NULL
               OR frm.seqUnidadProyecto = 1
             ) AND frm.seqCorte = $seqCorte
+            -- limit 5 offset 13355
         ";
         $objRes = $aptBd->execute($sql);
         $arrFormularios = array();
+
         while ($objRes->fields){
-            $seqFormulario = $objRes->fields['Formulario'];
-            $arrReporte['reporte'][] = $objRes->fields;
-            $arrFormularios[$seqFormulario]['Resolución'] = $objRes->fields['Resolución'];
-            $arrFormularios[$seqFormulario]['Fecha'] = $objRes->fields['Fecha'];
+            $seqFormularioVeeduria = $objRes->fields['seqFormularioVeeduria'];
+            unset($objRes->fields['seqFormularioVeeduria']);
+            $arrReporte['asignados'][] = $objRes->fields;
+            $arrFormularios[$seqFormularioVeeduria]['Resolución'] = $objRes->fields['Resolución'];
+            $arrFormularios[$seqFormularioVeeduria]['Fecha'] = $objRes->fields['Fecha'];
             $objRes->MoveNext();
         }
 
@@ -706,21 +710,21 @@ class InformeVeedurias
         }
 
         // ordena las solicitudes dentro del arreglo
-        foreach($arrReporte['reporte'] as $numLinea => $arrRegistro ){
+        foreach($arrReporte['asignados'] as $numLinea => $arrRegistro ){
             $seqFormulario = $arrRegistro['Formulario'];
             $i = 1;
             foreach($arrSolicitudes[$seqFormulario] as $seqSolicitud => $arrDatos){
-                $arrRegistro['# Orden ' . $i] = $arrDatos['numOrden'];
-                $arrRegistro['# Fecha ' . $i] = $arrDatos['fchOrden'];
-                $arrRegistro['# Valor ' . $i] = $arrDatos['valOrden'];
+                $arrRegistro['Orden ' . $i] = $arrDatos['numOrden'];
+                $arrRegistro['Fecha ' . $i] = $arrDatos['fchOrden'];
+                $arrRegistro['Valor ' . $i] = $arrDatos['valOrden'];
                 $i++;
             }
             for($i = $i; $i <= $numMaximo; $i++){
-                $arrRegistro['# Orden ' . $i] = "";
-                $arrRegistro['# Fecha ' . $i] = "";
-                $arrRegistro['# Valor ' . $i] = "";
+                $arrRegistro['Orden ' . $i] = "";
+                $arrRegistro['Fecha ' . $i] = "";
+                $arrRegistro['Valor ' . $i] = "";
             }
-            $arrReporte['reporte'][$numLinea] = $arrRegistro;
+            $arrReporte['asignados'][$numLinea] = $arrRegistro;
         }
 
         $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
@@ -737,15 +741,13 @@ class InformeVeedurias
             }
         }
 
-//        pr($arrReporte);
-
         return $arrReporte;
     }
 
     private function obtenerHogares($arrFormularios , $seqCorte)
     {
         global $aptBd;
-        
+
         $arrHogares = array();
         $arrEstado = estadosProceso();
         $arrPlanGobierno = obtenerDatosTabla( "T_FRM_PLAN_GOBIERNO" , array( "seqPlanGobierno" , "txtPlanGobierno" ) , "seqPlanGobierno" , "" , "txtPlanGobierno" );
@@ -776,10 +778,10 @@ class InformeVeedurias
                 tdo1.txtTipoDocumento
             FROM t_vee_formulario frm1
             INNER JOIN t_vee_hogar hog1 ON frm1.seqFormularioVeeduria = hog1.seqFormularioVeeduria and hog1.seqParentesco = 1
-            INNER JOIN t_vee_ciudadano ciu1 ON hog1.seqCiudadanoVeeduria = ciu1.seqCiudadanoVeeduria
+            INNER JOIN t_vee_ciudadano ciu1 ON hog1.seqCiudadanoVeeduria = ciu1.seqCiudadanoVeeduria and ciu1.seqCorte = $seqCorte
             INNER JOIN t_ciu_tipo_documento tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
             WHERE frm1.seqCorte = $seqCorte     
-              AND frm1.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )  
+              AND frm1.seqFormularioVeeduria IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )  
         ";
         $objRes = $aptBd->execute($sql);
         $arrPostulantePrincipal = array();
@@ -837,9 +839,9 @@ class InformeVeedurias
                 ciu.seqTipoVictima
             from t_vee_formulario frm
             inner join t_vee_hogar hog ON frm.seqFormularioVeeduria = hog.seqFormularioVeeduria
-            inner join t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria 
-              and ciu.seqCorte = $seqCorte
-              and frm.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )     
+            inner join t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria and ciu.seqCorte = $seqCorte
+              and frm.seqCorte = $seqCorte
+              and frm.seqFormularioVeeduria IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )     
         ";
         $objRes = $aptBd->execute($sql);
         while($objRes->fields){
@@ -933,202 +935,6 @@ class InformeVeedurias
 
             $objRes->MoveNext();
         }
-        
-        return $arrHogares;
-    }
-
-    private function obtenerHogares_old($arrFormularios , $seqCorte)
-    {
-        global $aptBd;
-
-        $arrOcupacion = obtenerDatosTabla(
-            "t_ciu_ocupacion",
-            array("seqOcupacion","txtOcupacion"),
-            "seqOcupacion"
-        );
-
-        $arrEstadoCivil = obtenerDatosTabla(
-            "t_ciu_estado_civil",
-            array("seqEstadoCivil","txtEstadoCivil"),
-            "seqEstadoCivil"
-        );
-
-        $arrSexo = obtenerDatosTabla(
-            "t_ciu_sexo",
-            array("seqSexo","txtSexo"),
-            "seqSexo"
-        );
-
-        // POSTULANTES PRINCIPALES
-        $sql = "
-            SELECT
-                frm1.seqFormularioVeeduria,
-                upper(concat( ciu1.txtNombre1,' ', ciu1.txtNombre2,' ', ciu1.txtApellido1,' ', ciu1.txtApellido2 )) as txtNombre,
-                ciu1.numDocumento,
-                tdo1.txtTipoDocumento
-            FROM t_vee_formulario frm1
-            INNER JOIN t_vee_hogar hog1 ON frm1.seqFormularioVeeduria = hog1.seqFormularioVeeduria and hog1.seqParentesco = 1
-            INNER JOIN t_vee_ciudadano ciu1 ON hog1.seqCiudadanoVeeduria = ciu1.seqCiudadanoVeeduria
-            INNER JOIN t_ciu_tipo_documento tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
-            WHERE frm1.seqCorte = $seqCorte     
-              AND frm1.seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )  
-        ";
-        $objRes = $aptBd->execute($sql);
-        $arrPostulantePrincipal = array();
-        while($objRes->fields){
-            $seqFormularioVeeduria = $objRes->fields['seqFormularioVeeduria'];
-            $arrPostulantePrincipal[$seqFormularioVeeduria]['txtNombre'] = $objRes->fields['txtNombre'];
-            $arrPostulantePrincipal[$seqFormularioVeeduria]['txtTipoDocumento'] = $objRes->fields['txtTipoDocumento'];
-            $arrPostulantePrincipal[$seqFormularioVeeduria]['numDocumento'] = $objRes->fields['numDocumento'];
-            $objRes->MoveNext();
-        }
-
-        $sql = "
-            select
-                seqFormulario as Formulario,
-                eta.txtEtapa as Etapa,
-                epr.txtEstadoProceso as Estado,
-                pgo.txtPlanGobierno as 'Plan de Gobierno',
-                if(moa.seqModalidad = 0 or moa.seqModalidad is null, 'No Disponible', moa.txtModalidad) as Modalidad,
-                if(tes.seqTipoEsquema = 0 or tes.seqTipoEsquema is null, 'No Disponible', tes.txtTipoEsquema) as Esquema,
-                if(sol.seqSolucion = 0 or sol.seqSolucion is null, 'No Disponible', sol.txtSolucion) as Solucion,
-                if(sol.seqSolucion = 0 or sol.seqSolucion is null, 'No Disponible', sol.txtDescripcion) as 'Descripción Solucion',
-                fchInscripcion as 'Fecha de Inscripción',
-                fchPostulacion as 'Fecha de Postulación',
-                fchUltimaActualizacion as 'Ultima Actualización',
-                fchVencimiento as 'Fecha de Vencimiento',
-                fchVigencia as 'Fecha de Vigencia',
-                if(bolCerrado = 1, 'SI','NO') as Cerrado,
-                if(txtFormulario <> '',txtFormulario,'No Disponible') as 'Número de Formulario',
-                IF(bolSancion = 1, 'SI', 'NO') as Sancionado,
-                sis.txtSisben as Sisben,
-                if(pryvee.txtNombreProyecto is null,
-                if(pry.txtNombreProyecto is null,
-                'Ninguno',
-                pry.txtNombreProyecto),
-                pry.txtNombreProyecto
-                ) as Proyecto,
-                if(seqProyectoHijo is null or seqProyectoHijo = 0,'No Disponible',convee.txtNombreProyecto) as Conjunto,
-                if(upr.seqUnidadProyectoVeeduria IS NOT NULL,
-                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr.seqUnidadProyecto),
-                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr1.seqUnidadProyecto)
-                ) as Unidad,
-                if(upr.seqUnidadProyectoVeeduria IS NOT NULL,
-                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr.txtNombreUnidad),
-                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr1.txtNombreUnidad)
-                )as 'Descripcion de la Unidad',
-                if(upr.seqUnidadProyectoVeeduria IS NOT NULL,
-                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr.fchLegalizado),
-                if(seqUnidadProyecto is null or seqUnidadProyecto = 1,'No Disponible',upr1.fchLegalizado)
-                )as 'Fecha Legalización',
-                if(loc.seqLocalidad = 0 or loc.seqLocalidad is null,'No Disponible',loc.txtLocalidad) as Localidad,
-                if(bar.seqBarrio = 0 or bar.seqBarrio is null,'No Disponible',bar.txtBarrio) as Barrio,
-                if(numHabitaciones is null,0,numHabitaciones) as Dormitorios,
-                if(numHacinamiento is null,0,numHacinamiento) as Hacinamiento,
-                upper(concat( ciu.txtNombre1,' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2 )) as Nombre,
-                tdo.txtTipoDocumento as 'Tipo de Documento',
-                ciu.numDocumento as Documento,
-                par.txtParentesco as Parentesco,
-                ocu.txtOcupacion as Ocupacion,
-                eci.txtEstadoCivil as 'Estado Civil',
-                sex.txtSexo as 'Sexo',
-                FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365)) AS Edad,
-                rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365))) AS 'Rango Edad',
-                ciu.seqNivelEducativo as 'Nivel Educativo',
-                ciu.numAnosAprobados as 'Años Aprobados',
-                etn.txtEtnia as 'Condición Etnica',
-                sal.txtSalud as 'Afiliación a Salud',
-                ciu.seqCondicionEspecial ,
-                ciu.seqCondicionEspecial2 ,
-                ciu.seqCondicionEspecial3,
-                '' as 'Cabeza de Familia',
-                '' as 'Mayor de 65',
-                '' as 'Discapacitado',
-                '' as 'Ninguna Condicion',
-                if(ciu.bolLgtb=1,'Si','No') as LGTBI,
-                glg.txtGrupoLgtbi as 'Grupo LGTBI',
-                if(bolDesplazado = 1, 'Si','No') as Desplazado,
-                tvi.txtTipoVictima 'Hecho Victimizante'
-            from t_vee_formulario frm
-            inner join t_vee_hogar hog ON seqFormularioVeeduria = hog.seqFormularioVeeduria
-            inner join t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria and ciu.seqCorte = $seqCorte
-            inner join t_frm_estado_proceso epr on seqEstadoProceso = epr.seqEstadoProceso
-            inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
-            inner join t_frm_plan_gobierno pgo on seqPlanGobierno = pgo.seqPlanGobierno
-            left  join t_frm_modalidad moa on moa.seqModalidad = seqModalidad
-            left  join t_pry_tipo_esquema tes on seqTipoEsquema = tes.seqTipoEsquema
-            left  join t_frm_solucion sol ON seqSolucion = sol.seqSolucion
-            left  join t_frm_sisben sis on seqSisben = sis.seqSisben
-            left  join t_pry_proyecto pry on seqProyecto = pry.seqProyecto
-            left  join t_vee_proyecto pryvee on seqProyecto = pryvee.seqProyecto and pryvee.seqCorte = $seqCorte
-            left  join t_vee_proyecto convee on seqUnidadProyecto = convee.seqProyecto and convee.seqCorte = $seqCorte
-            left  join t_vee_unidad_proyecto upr ON seqUnidadProyecto = upr.seqUnidadProyecto and upr.seqProyectoVeeduria = pryvee.seqProyectoVeeduria
-            left  join t_vee_unidad_proyecto upr1 ON seqUnidadProyecto = upr1.seqUnidadProyecto and upr1.seqProyectoVeeduria = convee.seqProyectoVeeduria
-            left  join t_frm_localidad loc on seqLocalidad = loc.seqLocalidad
-            left  join t_frm_barrio bar on seqBarrio = bar.seqBarrio
-            left  join t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
-            left  join t_ciu_parentesco par on hog.seqParentesco = par.seqParentesco
-            left  join t_ciu_ocupacion ocu on ciu.seqOcupacion = ocu.seqOcupacion
-            left  join t_ciu_estado_civil eci ON ciu.seqEstadoCivil = eci.seqEstadoCivil
-            left  join t_ciu_sexo sex on ciu.seqSexo = sex.seqSexo
-            left  join t_ciu_etnia etn on ciu.seqEtnia = etn.seqEtnia
-            left  join t_ciu_salud sal on ciu.seqSalud = sal.seqSalud
-            left  join t_frm_tipovictima tvi on ciu.seqTipoVictima = tvi.seqTipoVictima
-            left  join t_frm_grupo_lgtbi glg on ciu.seqGrupoLgtbi = glg.seqGrupoLgtbi
-            where seqCorte = $seqCorte
-              and seqFormulario IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )
-        ";
-
-        $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
-
-            $seqOcupacion = $objRes->fields['Ocupacion'];
-            $objRes->fields['Ocupacion'] = $arrOcupacion[$seqOcupacion];
-
-            $seqEstadoCivil = $objRes->fields['Estado Civil'];
-            $objRes->fields['Estado Civil'] = $arrEstadoCivil[$seqEstadoCivil];
-
-            $seqSexo = $objRes->fields['Sexo'];
-            $objRes->fields['Sexo'] = $arrSexo[$seqSexo];
-
-            $seqCondicionEspecial1 = $objRes->fields['seqCondicionEspecial'];
-            $seqCondicionEspecial2 = $objRes->fields['seqCondicionEspecial2'];
-            $seqCondicionEspecial3 = $objRes->fields['seqCondicionEspecial3'];
-
-            unset($objRes->fields['seqCondicionEspecial']);
-            unset($objRes->fields['seqCondicionEspecial2']);
-            unset($objRes->fields['seqCondicionEspecial3']);
-
-            $txtCabezaFamilia    = "No";
-            $txtMayor65          = "No";
-            $txtDiscapacitado    = "No";
-            $txtNingunaCondicion = "No";
-
-            if($seqCondicionEspecial1 == 1 or $seqCondicionEspecial2 == 1 or $seqCondicionEspecial3 == 1) {
-                $txtCabezaFamilia = "Si";
-            }
-
-            if($seqCondicionEspecial1 == 2 or $seqCondicionEspecial2 == 2 or $seqCondicionEspecial3 == 2){
-                $txtMayor65 = "Si";
-            }
-
-            if($seqCondicionEspecial1 == 3 or $seqCondicionEspecial2 == 3 or $seqCondicionEspecial3 == 3){
-                $txtDiscapacitado = "Si";
-            }
-
-            if($seqCondicionEspecial1 == 6 and $seqCondicionEspecial2 == 6 and $seqCondicionEspecial3 == 6){
-                $txtNingunaCondicion = "Si";
-            }
-
-            $objRes->fields['Cabeza de Familia'] = $txtCabezaFamilia;
-            $objRes->fields['Mayor de 65'] = $txtMayor65;
-            $objRes->fields['Discapacitado'] = $txtDiscapacitado;
-            $objRes->fields['Ninguna Condicion'] = $txtNingunaCondicion;
-
-            $arrHogares[] = $objRes->fields;
-
-            $objRes->MoveNext();
-        }
 
         return $arrHogares;
     }
@@ -1137,102 +943,81 @@ class InformeVeedurias
 
         $xmlEstilos = "<Styles>";
 
-        $xmlEstilos .= "
-            <Style ss:ID='Default' ss:Name='Normal'>
-                <Alignment/>
-                <Borders/>
-                <Font ss:FontName='Calibri' ss:Size='8'/>
-                <Interior/>
-                <NumberFormat/>
-                <Protection/>
-            </Style>
-        ";
-        $xmlEstilos .= "
-            <Style ss:ID='s1'>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Center'/>
-                <Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>
-                <Interior ss:Color='#D8D8D8' ss:Pattern='Solid'/>
-            </Style>
-        ";
-        $xmlEstilos .= "
-            <Style ss:ID='s2'>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Right'/>
-                <Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>
-                <Interior ss:Color='#D8D8D8' ss:Pattern='Solid'/>
-            </Style>
-        ";
-        $xmlEstilos .= "
-            <Style ss:ID='s3'>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Right'/>
-                <Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>
-                <Interior ss:Color='#D8D8D8' ss:Pattern='Solid'/>
-            </Style>
-        ";
+        $xmlEstilos .= "<Style ss:ID='Default' ss:Name='Normal'>";
+        $xmlEstilos .= "<Alignment/>";
+        $xmlEstilos .= "<Borders/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+        $xmlEstilos .= "<Interior/>";
+        $xmlEstilos .= "<NumberFormat/>";
+        $xmlEstilos .= "<Protection/>";
+        $xmlEstilos .= "</Style>";
 
-        $xmlEstilos .= "
-            <Style ss:ID='s4'>
-                <Borders>
-                    <Border ss:Position='Right' ss:LineStyle='Continuous' ss:Weight='1'/>
-                </Borders>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Right'/>
-                <Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>
-                <Interior ss:Color='#F2F2F2' ss:Pattern='Solid'/>
-            </Style>
-        ";
+        $xmlEstilos .= "<Style ss:ID='s1'>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Center'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>";
+        $xmlEstilos .= "<Interior ss:Color='#D8D8D8' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
 
-        $xmlEstilos .= "
-            <Style ss:ID='s5'>
-                <NumberFormat ss:Format='yyyy-mm-dd'/>
-            </Style>
-        ";
+        $xmlEstilos .= "<Style ss:ID='s2'>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Right'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>";
+        $xmlEstilos .= "<Interior ss:Color='#D8D8D8' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
 
-        $xmlEstilos .= "
-            <Style ss:ID='s6'>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
-                <Font ss:FontName='Calibri' ss:Size='8'/>
-                <Interior ss:Color='#C5D9F1' ss:Pattern='Solid'/>
-            </Style>
-        ";
+        $xmlEstilos .= "<Style ss:ID='s3'>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Right'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>";
+        $xmlEstilos .= "<Interior ss:Color='#D8D8D8' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
 
-        $xmlEstilos .= "
-            <Style ss:ID='s7'>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
-                <Font ss:FontName='Calibri' ss:Size='8'/>
-                <Interior ss:Color='#F2DDDC' ss:Pattern='Solid'/>
-            </Style>
-        ";
+        $xmlEstilos .= "<Style ss:ID='s4'>";
+        $xmlEstilos .= "<Borders>";
+        $xmlEstilos .= "<Border ss:Position='Right' ss:LineStyle='Continuous' ss:Weight='1'/>";
+        $xmlEstilos .= "</Borders>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Right'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>";
+        $xmlEstilos .= "<Interior ss:Color='#F2F2F2' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
 
-        $xmlEstilos .= "
-            <Style ss:ID='s8'>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
-                <Font ss:FontName='Calibri' ss:Size='8'/>
-                <Interior ss:Color='#EAF1DD' ss:Pattern='Solid'/>
-            </Style>
-        ";
+        $xmlEstilos .= "<Style ss:ID='s5'>";
+        $xmlEstilos .= "<NumberFormat ss:Format='yyyy-mm-dd'/>";
+        $xmlEstilos .= "</Style>";
 
-        $xmlEstilos .= "
-            <Style ss:ID='s9'>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
-                <Font ss:FontName='Calibri' ss:Size='8'/>
-                <Interior ss:Color='#E5E0EC' ss:Pattern='Solid'/>
-            </Style>
-        ";
+        $xmlEstilos .= "<Style ss:ID='s6'>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+        $xmlEstilos .= "<Interior ss:Color='#C5D9F1' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
 
-        $xmlEstilos .= "
-            <Style ss:ID='s10'>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
-                <Font ss:FontName='Calibri' ss:Size='8'/>
-                <Interior ss:Color='#F2F2F2' ss:Pattern='Solid'/>
-            </Style>
-        ";
+        $xmlEstilos .= "<Style ss:ID='s7'>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+        $xmlEstilos .= "<Interior ss:Color='#F2DDDC' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
 
-        $xmlEstilos .= "
-            <Style ss:ID='s11'>
-                <Alignment ss:Vertical='Center' ss:Horizontal='Left'/>
-                <Font ss:FontName='Calibri' ss:Size='8'/>
-                <Interior ss:Color='#FDE9D9' ss:Pattern='Solid'/>
-            </Style>
-        ";
+        $xmlEstilos .= "<Style ss:ID='s8'>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+        $xmlEstilos .= "<Interior ss:Color='#EAF1DD' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
+
+        $xmlEstilos .= "<Style ss:ID='s9'>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+        $xmlEstilos .= "<Interior ss:Color='#E5E0EC' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
+
+        $xmlEstilos .= "<Style ss:ID='s10'>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+        $xmlEstilos .= "<Interior ss:Color='#F2F2F2' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
+
+        $xmlEstilos .= "<Style ss:ID='s11'>";
+        $xmlEstilos .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+        $xmlEstilos .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+        $xmlEstilos .= "<Interior ss:Color='#FDE9D9' ss:Pattern='Solid'/>";
+        $xmlEstilos .= "</Style>";
 
         $xmlEstilos .= "</Styles>";
 
@@ -1276,7 +1061,7 @@ class InformeVeedurias
         $xmlArchivo  = "<ss:Worksheet ss:Name='$txtNombreHoja'>";
         $xmlArchivo .= "<ss:Table>";
 
-        // Para los colores de las columnas, de sobreescriben las celdas?
+        // Para los colores de las columnas, de sobreescriben las celdas
         if( ! empty( $arrColores ) ){
             foreach ( $arrColores as $txtTitulo => $txtEstilo ){
                 $xmlArchivo .= "<Column ss:AutoFitWidth='1' ss:StyleID='$txtEstilo'/>";
@@ -1310,11 +1095,10 @@ class InformeVeedurias
                         $txtValor = trim($txtValor);
                         break;
                 }
-                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>$txtValor</ss:Data></ss:Cell>";
+                $xmlArchivo .= "<ss:Cell $txtEstilo><ss:Data ss:Type='$txtTipo'>" . $txtValor . "</ss:Data></ss:Cell>";
             }
             $xmlArchivo .= "</ss:Row>";
         }
-
         $xmlArchivo .= "</ss:Table>";
         $xmlArchivo .= "</ss:Worksheet>";
 
@@ -1404,7 +1188,7 @@ class InformeVeedurias
          * HOJA REPORTE
          ***********************************************/
 
-        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['reporte'] , "Asignados");
+        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['asignados'] , "Asignados");
 
         /***********************************************
          * HOJA REPORTE DE HOGARES
@@ -1562,7 +1346,7 @@ class InformeVeedurias
 
         $xmlArchivo .= "</ss:Table>";
         $xmlArchivo .= "</ss:Worksheet>";
-        
+
         return $xmlArchivo;
     }
 

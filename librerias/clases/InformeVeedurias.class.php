@@ -690,7 +690,7 @@ class InformeVeedurias
             from t_vee_formulario frm
             inner join t_vee_desembolso des on frm.seqFormularioVeeduria = des.seqFormularioVeeduria
             inner join t_vee_solicitud sol on des.seqDesembolsoVeeduria = sol.seqDesembolsoVeeduria
-            where frm.seqFormulario in ( " . implode("," , array_keys( $arrFormularios ) ) . " )
+            where frm.seqFormularioVeeduria in ( " . implode("," , array_keys( $arrFormularios ) ) . " )
               and frm.seqCorte = $seqCorte
               and (sol.numOrden <> 0)
         ";

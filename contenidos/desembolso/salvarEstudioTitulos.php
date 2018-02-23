@@ -128,7 +128,33 @@
 	if( trim( $_POST['aprobo'] ) == "" ){
 		$arrErrores[] = "Indique quien aprueba este documento";
 	}
-	
+
+    /**
+     * VALIDACION CRUZADA ENTRE TITULOS Y ESCRITURACION
+     */
+
+    if(! empty($claDesembolso->arrEscrituracion)){
+        if(mb_strtolower($claDesembolso->arrEscrituracion['txtPropiedad']) == "escritura"){
+
+            if(intval($_POST['escritura1']) != intval($claDesembolso->arrEscrituracion['txtEscritura'])){
+                $arrErrores[] = "El numero de la escritura de la identificación actual del inmueble no corresponde con lo registrado en el módulo de escrituración";
+            }
+
+            if(strtotime(trim($_POST['fecha1'])) != strtotime(trim($claDesembolso->arrEscrituracion['fchEscritura'])) ){
+                $arrErrores[] = "La fecha de la escritura de la identificación actual del inmueble no corresponde con lo registrado en el módulo de escrituración";
+            }
+
+            if(intval($_POST['notaria1']) != trim($claDesembolso->arrEscrituracion['numNotaria'])){
+                $arrErrores[] = "La notaría de la escritura de la identificación actual del inmueble no corresponde con lo registrado en el módulo de escrituración";
+            }
+
+            if(mb_strtolower(trim($_POST['ciudadAdquisicion'])) != mb_strtolower(trim($claDesembolso->arrEscrituracion['txtCiudad']))){
+                $arrErrores[] = "La ciudad de la escritura de la identificación actual del inmueble no corresponde con lo registrado en el módulo de escrituración";
+            }
+
+        }
+    }
+
     /**
      * PROCEDE A SALVAR EL REGISTRO
      */

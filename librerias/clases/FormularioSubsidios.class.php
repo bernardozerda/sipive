@@ -830,7 +830,7 @@ class FormularioSubsidios {
                 $sql = "
                     update t_pry_unidad_proyecto set
                       seqFormulario = null,
-                      valComplementario = null
+                      valSDVEComplementario = null
                     where seqFormulario = " . $this->seqFormulario . "
                 ";
                 $aptBd->execute($sql);
@@ -838,7 +838,7 @@ class FormularioSubsidios {
                     $sql = "
                         update t_pry_unidad_proyecto set
                           seqFormulario = " . $this->seqFormulario . ",
-                          valComplementario = " . doubleval( $this->valComplementario ) . " 
+                          valSDVEComplementario = " . doubleval( $this->valComplementario ) . " 
                         where seqUnidadProyecto = " . $this->seqUnidadProyecto . "
                     ";
                     $aptBd->execute($sql);

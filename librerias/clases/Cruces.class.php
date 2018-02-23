@@ -1233,8 +1233,12 @@ WHERE
             $arrSeguimiento['cedula'] = $objCiudadano->numDocumento;
             $arrSeguimiento['nombre'] = $this->obtenerNombre($objCiudadano);
 
-            $claSeguimiento = new Seguimiento();
-            $claSeguimiento->salvarSeguimiento($arrSeguimiento,"cambiosCruces");
+            if($arrSeguimiento['txtComentario'] != "") {
+                $claSeguimiento = new Seguimiento();
+                $claSeguimiento->salvarSeguimiento($arrSeguimiento, "cambiosCruces");
+            }else{
+                $this->arrErrores[] = "Verifique que el hogar " . $seqFormulario . " tenga un estado de proceso válido para las operaiones de cruces";
+            }
 
             if(!empty($claSeguimiento->arrErrores)) {
                 foreach ($claSeguimiento->arrErrores as $i => $txtError) {

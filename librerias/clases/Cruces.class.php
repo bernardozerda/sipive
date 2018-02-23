@@ -2096,4 +2096,118 @@ WHERE
 
     }
 
+    public function levantar($arrPost){
+        global $aptBd;
+
+        try{
+
+            $aptBd->BeginTrans();
+
+            $claFormulario = new FormularioSubsidios();
+            $claFormulario->cargarFormulario($arrPost['seqFormulario']);
+
+            $txtUsuario = array_shift(
+                obtenerDatosTabla(
+                    "t_cor_usuario",
+                    array("seqUsuario","txtNombre"),
+                    "seqUsuario",
+                    "seqUsuario = " . $_SESSION['seqUsuario']
+                )
+            );
+
+            $sql = "
+                update t_cru_cruces set
+                    seqUsuarioActualiza = " . $_SESSION['seqUsuario'] . ",
+                    txtUsuarioActualiza = '" . $txtUsuario . "',
+                    fchActualizacionCruce = now()
+                 where seqCruce = " . $arrPost['seqCruce'] . "
+            ";
+            $aptBd->execute($sql);
+
+            foreach($arrPost['resultado'] as $seqResultado => $arrDatos){
+
+                $sql = "
+                    update t_cru_resultado set 
+                      bolInhabilitar = " . $arrDatos['bolInhabilitar'] . ",
+                      txtObservaciones = '" . $arrDatos['txtObservaciones'] . "'
+                    where seqResultado = $seqResultado
+                ";
+                $aptBd->execute($sql);
+
+                $sql = "
+                    INSERT INTO t_cru_auditoria(
+                        fchMovimiento,
+                        seqUsuario,
+                        seqCruce,
+                        seqFormulario,
+                        seqModalidad,
+                        seqEstadoProceso,
+                        seqTipoDocumento,
+                        numDocumento,
+                        txtNombre,
+                        seqParentesco,
+                        txtEntidad,
+                        txtTitulo,
+                        txtDetalle,
+                        bolInhabilitar,
+                        txtObservaciones
+                    ) VALUES (
+                        now(),
+                        " . $_SESSION['seqUsuario'] . ",
+                        " . $arrPost['seqCruce'] . ",
+                        " . $arrPost['seqFormulario'] . ",
+                        " . $this->arrDatos['arrResultado'][$seqResultado]['seqModalidad'] . ",
+                        " . $this->arrDatos['arrResultado'][$seqResultado]['seqEstadoProceso'] . ",
+                        " . $this->arrDatos['arrResultado'][$seqResultado]['seqTipoDocumento'] . ",
+                        " . $this->arrDatos['arrResultado'][$seqResultado]['numDocumento'] . ",
+                        '" . mb_strtoupper($this->arrDatos['arrResultado'][$seqResultado]['txtNombre']) . "',
+                        " . $this->arrDatos['arrResultado'][$seqResultado]['seqParentesco'] . ",
+                        '" . $this->arrDatos['arrResultado'][$seqResultado]['txtEntidad'] . "',
+                        '" . $this->arrDatos['arrResultado'][$seqResultado]['txtTitulo'] . "',
+                        '" . mb_strtoupper($this->arrDatos['arrResultado'][$seqResultado]['txtDetalles']) . "',
+                        " . $arrDatos['bolInhabilitar'] . ",
+                        '" . mb_strtoupper($arrDatos['txtObservaciones']) . "'
+                    )
+                ";
+
+                $aptBd->execute($sql);
+
+            }
+
+            $arrInhabilitar = array();
+            $seqFormulario = $arrPost['seqFormulario'];
+            foreach($this->arrDatos['arrResultado'] as $seqResultado => $arrDato){
+                if($arrDato['seqFormulario'] == $seqFormulario){
+                    if( (!isset($arrInhabilitar[$seqFormulario])) or $arrInhabilitar[$seqFormulario]['inhabilitar'] == 0){
+                        $arrInhabilitar[$seqFormulario]['inhabilitar'] = $arrDato['bolInhabilitar'];
+                    }
+                }
+            }
+
+            $arrInhabilitar[$seqFormulario]['estado'] = $claFormulario->seqEstadoProceso;
+
+            $this->cambioEstados($arrPost['seqCruce'],$this->arrDatos['fchCruce']->format("Y-m-d"),$arrInhabilitar);
+
+            $claRegistroActividades = new RegistroActividades();
+            $arrErrores = $claRegistroActividades->registrarActividad( 'Edicion' , 227 , $_SESSION['seqUsuario'] , 'seqCruce = ' . $arrPost['seqCruce'] . " levantamiento de cruces" );
+
+            foreach($arrErrores as $i => $txtError) {
+                $this->arrErrores[] = $txtError;
+            }
+
+            if(empty($this->arrErrores)){
+                $aptBd->CommitTrans();
+            }else{
+                $aptBd->RollbackTrans();
+            }
+
+
+        }catch(Exception $objError){
+            $this->arrErrores[] = "Hubo un problema al realizar los cambios en los resultados del cruce";
+            $this->arrErrores[] = $objError->getMessage();
+            $aptBd->RollbackTrans();
+        }
+
+    }
+
 }

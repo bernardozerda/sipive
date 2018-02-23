@@ -126,12 +126,13 @@
                 </form>
             </div>
             <div class="tab-pane" id="hogares" style="padding: 10px;">
-                <table data-order='[[ 0, "asc" ]]' id="listadoCruces" class="table table-condensed table-hover" width="840px">
+                <table data-order='[[ 0, "asc" ]]' id="listadoCrucesVer" class="table table-condensed table-hover" width="840px">
                     <thead>
                         <tr>
                             <th align="center">Documento</th>
                             <th align="center">Nombre</th>
                             <th align="center">Estado</th>
+                            <th align="center">&nbsp;</th>
                             <th align="center">&nbsp;</th>
                             <th align="center">&nbsp;</th>
                             <th align="center">&nbsp;</th>
@@ -143,11 +144,6 @@
                                 <td>{$arrResultado.documento}</td>
                                 <td>{$arrResultado.nombre}</td>
                                 <td>{$arrResultado.estado}</td>
-                                <td>
-                                    <a href="#" onClick="location.href='./contenidos/cruces2/exportar.php?seqCruce={$claCruces->arrDatos.seqCruce}&seqFormulario={$seqFormulario}'">
-                                        Exportar
-                                    </a>
-                                </td>
                                 <td align="center">
                                     {if $arrResultado.inhabilitar == 1}
                                         <a class="label label-danger"
@@ -159,9 +155,21 @@
                                     {/if}
                                 </td>
                                 <td>
+                                    <a href="#" onClick="location.href='./contenidos/cruces2/exportar.php?seqCruce={$claCruces->arrDatos.seqCruce}&seqFormulario={$seqFormulario}'">
+                                        Exportar
+                                    </a>
+                                </td>
+                                <td>
                                     {if isset($smarty.session.arrGrupos.3.20) or isset($smarty.session.arrGrupos.3.13)}
                                         <a href="#" onClick="cargarContenido('contenido','./contenidos/cruces2/adicionar.php','seqCruce={$claCruces->arrDatos.seqCruce}&seqFormulario={$seqFormulario}',true)">
                                             Adicionar
+                                        </a>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {if isset($smarty.session.arrGrupos.3.20) or isset($smarty.session.arrGrupos.3.13)}
+                                        <a href="#" onClick="cargarContenido('contenido','./contenidos/cruces2/levantar.php','seqCruce={$claCruces->arrDatos.seqCruce}&seqFormulario={$seqFormulario}',true)">
+                                            Editar
                                         </a>
                                     {/if}
                                 </td>
@@ -233,5 +241,5 @@
     </div>
 </div>
 
-<div id="listadoCrucesListener"></div>
+<div id="listadoCrucesVerListener"></div>
 <div id="auditoriaCrucesListener"></div>

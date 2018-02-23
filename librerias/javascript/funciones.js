@@ -10713,7 +10713,7 @@ var listadoCruces = function(){
         "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
         "order": [[0, "desc"]],
         "scrollX": true,
-        "dom": 'lftipr'
+        "dom": 'ltipr'
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
@@ -10742,6 +10742,43 @@ var listadoCruces = function(){
     YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
 }
 YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
+
+var listadoCrucesVer = function(){
+    $('#listadoCrucesVer').DataTable({
+        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+        "order": [[0, "desc"]],
+        "scrollX": true,
+        "dom": 'lftipr'
+    });
+
+    objSelect = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "select",
+        "listadoCrucesVer_wrapper"
+    );
+
+    objInput = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "input",
+        "listadoCrucesVer_wrapper"
+    );
+
+    objSelect.className = "inputLogin";
+    objInput.className = "inputLogin";
+
+    objPaginador = YAHOO.util.Dom.get("listadoCrucesVer_paginate");
+    objPaginador.style.textAlign = "center";
+
+    autocompletar( 'txtFirma'   , 'txtFirmaContenedor'   , './contenidos/cruces2/nombres.php' , '' );
+    autocompletar( 'txtElaboro' , 'txtElaboroContenedor' , './contenidos/cruces2/nombres.php' , '' );
+    autocompletar( 'txtReviso'  , 'txtRevisoContenedor'  , './contenidos/cruces2/nombres.php' , '' );
+
+    eliminarObjeto("listadoCrucesVerListener");
+    YAHOO.util.Event.onContentReady("listadoCrucesVerListener",listadoCrucesVer);
+}
+YAHOO.util.Event.onContentReady("listadoCrucesVerListener",listadoCrucesVer);
+
+
 
 var auditoriaCruces = function(){
     $('#auditoriaCruces').DataTable({

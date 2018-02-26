@@ -4,6 +4,9 @@ include_once '../conecta.php';
 //include_once "../generarExcel.php";
 include '../migrarTablero.php';
 
+$sql = "SET CHARSET utf8";
+$db->get_results($sql);
+
 $observacion1 = 'PROPIETARIOS SON BENEFICIARIOS DEL SDV';
 $observacion2 = 'ESTADO CIVIL COINCIDENTE';
 $observacion3 = 'CONSTITUCIÓN PATRIMONIO DE FAMILIA';
@@ -61,9 +64,9 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $numEscrituraIdentificacion = trim($datos [10]);
             $fchEscrituraIdentificacion = trim($datos [11]);
             $numNotariaIdentificacion = trim($datos [12]);
-            $numEscrituraTitulo = trim($datos [10]);
+            $numEscrituraTitulo = trim($datos [18]);
             $fchEscrituraTitulo = trim($datos [19]);
-            $numNotariaTitulo = trim($datos [12]);
+            $numNotariaTitulo = trim($datos [20]);
             $numFolioMatricula = trim($datos [34]);
             $txtZonaMatricula = trim($datos [23]);
             $fchMatricula = trim($datos [25]);
@@ -101,7 +104,6 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $band = 1;
             }
 
-
             $CfchEscrituraTitulo = explode("/", $fchEscrituraTitulo);
             if ($CfchEscrituraTitulo[1] != "") {
                 $fchEscrituraTitulo = $CfchEscrituraTitulo[2] . "-" . $CfchEscrituraTitulo[1] . "-" . $CfchEscrituraTitulo[0];
@@ -116,9 +118,18 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $fchMatricula = $CfchMatricula[2] . "-" . $CfchMatricula[1] . "-" . $CfchMatricula[0];
             }
             if ($datos[27] == "" || $datos[32] == "" || $datos[29] == "" || $datos[31] == "" || $datos[36] == "" || $datos[28] == "") {
+                $casilla .= (trim($datos[27]) == '') ? "27," : '';
+                $casilla .= (trim($datos[32]) == '') ? "32," : '';
+                $casilla .= (trim($datos[29]) == '') ? "29," : '';
+                $casilla .= (trim($datos[31]) == '') ? "31," : '';
+                $casilla .= (trim($datos[36]) == '') ? "36," : '';
+                $casilla .= (trim($datos[28]) == '') ? "28," : '';
                 $band = 1;
             }
             if ($datos[18] == "" || $datos[14] == "" || $datos[42] == "") {
+                $casilla .= (trim($datos[18]) == '') ? "18," : '';
+                $casilla .= (trim($datos[14]) == '') ? "14," : '';
+                $casilla .= (trim($datos[42]) == '') ? "42," : '';
                 $band = 1;
             }
 //        echo "<br>***" . $registros . " fchEscrituraIdentificacion -> " . $fchEscrituraIdentificacion . " fchMatricula-> " . $fchMatricula;
@@ -127,6 +138,21 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $casilla .= (strtotime($fchEscrituraIdentificacion) == '') ? "12" : '';
                 $casilla .= (strtotime($fchMatricula) == '') ? "26" : '';
                 $band = 1;
+            }
+
+            $arrTitulos['numEscritura'] = $numEscrituraTitulo;
+            $arrTitulos['fchEscritura'] = $fchEscrituraTitulo;
+            $arrTitulos['numNotaria']   = $numNotariaTitulo;
+            $arrTitulos['txtCiudad']    = $txtCiudadTitulo;
+            $arrEscrituracion = obtenerEscrituracion($seqFormulario);
+            if(
+                $arrTitulos['numEscritura'] != $arrEscrituracion['numEscritura'] or
+                strtotime($arrTitulos['fchEscritura']) != strtotime($arrEscrituracion['fchEscritura']) or
+                $arrTitulos['numNotaria']   != $arrEscrituracion['numNotaria']   or
+                mb_strtolower(trim($arrTitulos['txtCiudad'])) != mb_strtolower(trim($arrEscrituracion['txtCiudad']))
+            ){
+                $casilla .= "18,19,20,21";
+                $band = 2;
             }
 
             if ($viabilizado && $band == 0) {
@@ -205,7 +231,10 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $intNV++;
                 }
             } else if ($band == 1) {
-                echo "Por favor verifique el registro # " . ($registros + 1) . " todos los campos en el hogar " . $seqFormulario . " en la casilla(s) # " . $casilla . " con valor vacio o el formato de fecha no es el indicado";
+                echo "Por favor verifique el registro # " . ($registros + 1) . " todos los campos en el hogar " . $seqFormulario . " en la(s) casilla(s) # " . $casilla . " con valor vacio o el formato de fecha no es el indicado";
+                exit();
+            } else if ($band == 2){
+                echo "Por favor verifique los datos de titulos del registro # " . ($registros + 1) . " en el hogar " . $seqFormulario . " en la(s) casilla(s) # " . $casilla . " no corresponden con los datos de escrituración en la base de datos";
                 exit();
             }
             $registros++;
@@ -215,6 +244,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     if ($validar) {
         $arrSeqDesembolso = obtenerDesembolso($idHogar);
         //var_dump($arrSeqDesembolso);    exit();
+
         asignarDesembolso($arrViabilizados, $arrSeqDesembolso, $intV, 1);
         asignarDesembolso($arrNoViabilizados, $arrSeqDesembolso, $intNV, 2);
     }
@@ -243,23 +273,24 @@ function obtenerDesembolso($numFormulario) {
 }
 
 function asignarDesembolso($arreglo, $desembolso, $cantidad, $tipo) {
-
-    $int = 1;
-    $cantF = count($arreglo['seqFormulario']);
-    $idSeqDesembolso = "";
-    foreach ($arreglo['seqFormulario'] as $key => $value) {
-        $seqFormulario = $arreglo['seqFormulario'][$int];
-        $seqDesembolso = array_search($seqFormulario, $desembolso);
-        if ($seqDesembolso != "") {
-            $arreglo['seqDesembolso'][$int] = $seqDesembolso;
-            $idSeqDesembolso .= $seqDesembolso . ",";
+    if(! empty($arreglo)) {
+        $int = 1;
+        $cantF = count($arreglo['seqFormulario']);
+        $idSeqDesembolso = "";
+        foreach ($arreglo['seqFormulario'] as $key => $value) {
+            $seqFormulario = $arreglo['seqFormulario'][$int];
+            $seqDesembolso = array_search($seqFormulario, $desembolso);
+            if ($seqDesembolso != "") {
+                $arreglo['seqDesembolso'][$int] = $seqDesembolso;
+                $idSeqDesembolso .= $seqDesembolso . ",";
+            }
+            // echo "<br>**".$arreglo['seqFormulario'][$int]."- ".$seqDesembolso;
+            $int++;
         }
-        // echo "<br>**".$arreglo['seqFormulario'][$int]."- ".$seqDesembolso;   
-        $int++;
+        $idSeqDesembolso = substr_replace($idSeqDesembolso, '', -1, 1);
+        // print_r($arreglo);
+        verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $cantF, $tipo);
     }
-    $idSeqDesembolso = substr_replace($idSeqDesembolso, '', -1, 1);
-    // print_r($arreglo);
-    verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $cantF, $tipo);
 }
 
 function verificarRegistrosExistentes($arreglo, $idSeqDesembolso, $cantF, $tipo) {
@@ -505,6 +536,7 @@ function insertarAdjuntosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
         $insert3 = substr_replace($valueObs3, ';', -1, 1);
         $result3 = $db->query($txtqueryAdjuntos . "" . $insert3);
     }
+
     $totalReg = $result1 + $result1 + $result1;
     if ($existen != "") {
         echo " Los formularios que se muestran a continuación se encontraban previamente almacenados en los adjuntos titulos" . $existen;
@@ -587,6 +619,40 @@ function generarLinks($arreglo, $tipo) {
 
 //    $separado_por_comas = implode(",", $arrFormularioArchivo);
 //    migrarInformacion($separado_por_comas, $db, 28, 27);
+}
+
+function obtenerEscrituracion($seqFormulario){
+    global $db;
+
+    $sql = "
+        select 
+          txtPropiedad, 
+          txtEscritura, 
+          fchEscritura, 
+          numNotaria, 
+          txtCiudad
+        from t_des_escrituracion
+        where seqFormulario = $seqFormulario
+    ";
+
+    $resultado = $db->get_results($sql);
+
+    $dato = Array();
+    foreach ($resultado as $res) {
+        if(mb_strtolower($res->txtPropiedad) == "escritura") {
+            $dato['numEscritura'] = $res->txtEscritura;
+            $dato['fchEscritura'] = $res->fchEscritura;
+            $dato['numNotaria']   = $res->numNotaria;
+            $dato['txtCiudad']    = $res->txtCiudad;
+        }else{
+            $dato['numEscritura'] = "";
+            $dato['fchEscritura'] = "";
+            $dato['numNotaria']   = "";
+            $dato['txtCiudad']    = "";
+        }
+    }
+
+    return $dato;
 }
 
 ?>

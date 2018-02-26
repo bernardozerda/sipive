@@ -304,8 +304,8 @@
 			$arrFases['postulacionIndividual']['revisionTecnica']['imprimir']  = "desembolsoRevisionTecnica( $seqFormulario );";
             
          $arrFases['postulacionIndividual']['estudioTitulos']['nombre'] = utf8_encode("Estudio de Titulos");
-			$arrFases['postulacionIndividual']['estudioTitulos']['permisos']  = array( 26,28,29,31,40 );
-			$arrFases['postulacionIndividual']['estudioTitulos']['adelante']  = array( 26,28,31,29 );
+			$arrFases['postulacionIndividual']['estudioTitulos']['permisos']  = array( 24,26,28,29,31,40 );
+			$arrFases['postulacionIndividual']['estudioTitulos']['adelante']  = array( 24,26,28,31,29 );
 			$arrFases['postulacionIndividual']['estudioTitulos']['atras']     = array( 15,27 );
 			$arrFases['postulacionIndividual']['estudioTitulos']['plantilla'] = "desembolso/estudioTitulos.tpl";
 			$arrFases['postulacionIndividual']['estudioTitulos']['codigo']    = "./contenidos/desembolso/estudioTitulos.php";

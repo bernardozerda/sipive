@@ -5060,35 +5060,35 @@ function mostrarAyudaGeneralReporteadorProyectos( ) {
  * @param String txtContenido  ==> Contenido en HTML de la ventana
  * @param String txtParametros ==> Ej: { width:"250px",fixedcenter:true,close:false,draggable:false,modal:true,visible:false }
  */
-function popUpAyuda(txtTitulo, txtContenido) {
-
-    // Instancia un objeto panel
-    var objAyuda = new YAHOO.widget.Panel(
-            "dlg",
-            {
-                width: '500px',
-                fixedcenter: true,
-                close: true,
-                draggable: false,
-                modal: true,
-                visible: true,
-                xy:[100,100],
-            }
-    );
-
-    // Encabezado
-    objAyuda.setHeader(txtTitulo);
-
-    // cuerpo del panel
-    objAyuda.setBody("<div style='text-align:justify'>" + txtContenido + "</div>");
-
-    // El objeto se despliega sobre el cuerpo del documento html
-    objAyuda.render(document.body);
-
-    // Muestra el objeto
-    objAyuda.show();
-
-}
+// function popUpAyuda(txtTitulo, txtContenido) {
+//
+//     // Instancia un objeto panel
+//     var objAyuda = new YAHOO.widget.Panel(
+//             "dlg",
+//             {
+//                 width: '500px',
+//                 fixedcenter: true,
+//                 close: true,
+//                 draggable: false,
+//                 modal: true,
+//                 visible: true,
+//                 xy:[100,100],
+//             }
+//     );
+//
+//     // Encabezado
+//     objAyuda.setHeader(txtTitulo);
+//
+//     // cuerpo del panel
+//     objAyuda.setBody("<div style='text-align:justify'>" + txtContenido + "</div>");
+//
+//     // El objeto se despliega sobre el cuerpo del documento html
+//     objAyuda.render(document.body);
+//
+//     // Muestra el objeto
+//     objAyuda.show();
+//
+// }
 
 /**
  * Filtro dependiendo el tipo de Acto Administrativo que se elija
@@ -8058,14 +8058,8 @@ function escondeDatosSegunTipoDesembolso() {
 
 function popUpAyuda( ) {
 
-//      var numAlto  = YAHOO.util.Dom.getDocumentHeight() - 200;
-//      var numAncho = YAHOO.util.Dom.getDocumentWidth() - 100;
-
     var numAlto = YAHOO.util.Dom.getDocumentHeight() - 200;
-    var numAncho = 400;
-
-    var x = YAHOO.util.Dom.getX("ayuda") - (numAncho - 25);
-    var y = YAHOO.util.Dom.getY("ayuda") + 10;
+    var numAncho = 500;
 
     var fncExito = function (o) {
 
@@ -8075,13 +8069,11 @@ function popUpAyuda( ) {
                 {
                     width: numAncho,
                     height: numAlto,
-                    fixedcenter: false,
+                    fixedcenter: true,
                     close: true,
                     draggable: false,
-                    modal: false,
-                    visible: false,
-                    x: x,
-                    y: y
+                    modal: true,
+                    visible: false
                 }
         );
 

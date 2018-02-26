@@ -19,12 +19,18 @@ $claFormulario = new FormularioSubsidios();
 $claFormulario->cargarFormulario($_POST['seqFormulario']);
 
 foreach($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano){
-    $arrMiembros[$objCiudadano->numDocumento] = mb_strtoupper(
-        $objCiudadano->txtNombre1 . " " .
-        $objCiudadano->txtNombre2 . " " .
-        $objCiudadano->txtApellido1 . " " .
-        $objCiudadano->txtApellido2
-    );
+    $bolIncluir = true;
+    if($claFormulario->seqPlanGobierno == 2 and (! in_array($objCiudadano->seqTipoDocumento,array(1,2)))){
+        $bolIncluir = false;
+    }
+    if($bolIncluir == true) {
+        $arrMiembros[$objCiudadano->numDocumento] = mb_strtoupper(
+            $objCiudadano->txtNombre1 . " " .
+            $objCiudadano->txtNombre2 . " " .
+            $objCiudadano->txtApellido1 . " " .
+            $objCiudadano->txtApellido2
+        );
+    }
 }
 
 $claCruces = new Cruces();

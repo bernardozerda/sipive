@@ -53,6 +53,7 @@ class InformeVeedurias
 
         $sql = "
             select
+                frm.seqFormularioVeeduria,
                 pry1.txtNombreProyecto as txtNombreProyectoPadre, 
                 pry1.numNitProyecto as txtNitProyectoPadre, 
                 loc1.txtLocalidad as txtLocalidadPadre,
@@ -172,11 +173,9 @@ class InformeVeedurias
             left  join v_frm_ciudad ciu1 on des.seqCiudad = ciu1.seqCiudad
             left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
             where pry.seqCorte = $seqCorte
-            and pry.bolActivo = 1            
-            -- and pry.seqProyecto in (104)
-            -- and uac.numActo = 267
+            and pry.bolActivo = 1
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
-        "; // and pry.seqProyecto = 30
+        ";
 
         $objRes = $aptBd->execute($sql);
         $arrReporte = array();
@@ -189,7 +188,9 @@ class InformeVeedurias
 
             $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
             $bolDesplazado = $objRes->fields['bolDesplazado'];
-            $seqFormulario = $objRes->fields['seqFormulario'];
+            $seqFormulario = $objRes->fields['seqFormularioVeeduria'];
+
+            unset($objRes->fields['seqFormularioVeeduria']);
 
             // debe acumular sobre proyecto padre cuando aplique
             $txtProyecto = ( trim( $objRes->fields['txtNombreProyectoPadre'] ) != "" )? $objRes->fields['txtNombreProyectoPadre'] : $objRes->fields['txtNombreProyectoHijo'];
@@ -755,7 +756,7 @@ class InformeVeedurias
         $arrTipoEsquema = obtenerDatosTabla("T_PRY_TIPO_ESQUEMA", array("seqTipoEsquema", "txtTipoEsquema"), "seqTipoEsquema");
         $arrSolucion = obtenerDatosTabla("T_FRM_SOLUCION", array("seqSolucion", "txtSolucion", "txtDescripcion"), "seqSolucion");
         $arrSisben = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben"), "seqSisben");
-        $arrProyecto = obtenerDatosTabla("T_PRY_PROYECTO", array("seqProyecto", "txtProyecto"), "seqProyecto");
+        $arrProyecto = obtenerDatosTabla("T_PRY_PROYECTO", array("seqProyecto", "txtNombreProyecto"), "seqProyecto");
         $arrUnidad = obtenerDatosTabla("t_pry_unidad_proyecto", array("seqUnidadProyecto", "txtNombreUnidad"), "seqUnidadProyecto");
         $arrLocalidad = obtenerDatosTabla("T_FRM_LOCALIDAD", array("seqLocalidad", "txtLocalidad"), "seqLocalidad");
         $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio");
@@ -844,6 +845,7 @@ class InformeVeedurias
               and frm.seqFormularioVeeduria IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )     
         ";
         $objRes = $aptBd->execute($sql);
+
         while($objRes->fields){
 
             foreach($objRes->fields as $txtCampo => $txtValor){

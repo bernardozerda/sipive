@@ -3,7 +3,7 @@
     <link href="../../../librerias/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="../../../librerias/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <script language="JavaScript" type="text/javascript" src="../../../librerias/javascript/funcionesSubsidios.js"></script>
-   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <!--        <link href="../../../librerias/bootstrap/css/bootstrap-theme.css" rel="stylesheet">-->
 </head>
 <?php

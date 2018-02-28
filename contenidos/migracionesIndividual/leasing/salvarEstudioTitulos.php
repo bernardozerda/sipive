@@ -359,7 +359,7 @@ function sqlEstudioTitulos($arrArchivo){
             $aptBd->execute($sql);
 
             $numDocumento = $arrDatos[1];
-            $arrImpresion[$numDocumento] = $_SERVER['HTTP_ORIGIN'] . "/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arrDatos[0];
+            $arrImpresion[$numDocumento] = "https://" . $_SERVER['HTTP_ORIGIN'] . "/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arrDatos[0];
 
         }
 

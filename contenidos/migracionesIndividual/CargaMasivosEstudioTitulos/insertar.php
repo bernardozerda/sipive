@@ -240,6 +240,10 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $registros++;
         }
     }
+
+    echo "termina";
+    die();
+
     $validar = validarDocumentos($idHogar, $db, 31, 24, "Escrituración");
     if ($validar) {
         $arrSeqDesembolso = obtenerDesembolso($idHogar);
@@ -639,17 +643,10 @@ function obtenerEscrituracion($seqFormulario){
 
     $dato = Array();
     foreach ($resultado as $res) {
-        if(mb_strtolower($res->txtPropiedad) == "escritura") {
-            $dato['numEscritura'] = $res->txtEscritura;
-            $dato['fchEscritura'] = $res->fchEscritura;
-            $dato['numNotaria']   = $res->numNotaria;
-            $dato['txtCiudad']    = $res->txtCiudad;
-        }else{
-            $dato['numEscritura'] = "";
-            $dato['fchEscritura'] = "";
-            $dato['numNotaria']   = "";
-            $dato['txtCiudad']    = "";
-        }
+        $dato['numEscritura'] = $res->txtEscritura;
+        $dato['fchEscritura'] = $res->fchEscritura;
+        $dato['numNotaria']   = $res->numNotaria;
+        $dato['txtCiudad']    = $res->txtCiudad;
     }
 
     return $dato;

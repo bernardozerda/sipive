@@ -1275,7 +1275,9 @@ WHERE
     public function cargar($seqCruce,$seqFormulario = null){
         global $aptBd;
 
-        $arrEstados = estadosProceso();
+        $txtCondicionFrm = ($seqFormulario != null)? " AND frm.seqFormulario = $seqFormulario" : "";
+        $txtCondicionRes = ($seqFormulario != null)? " AND res.seqFormulario = $seqFormulario" : "";
+        $txtCondicionAud = ($seqFormulario != null)? " AND aud.seqFormulario = $seqFormulario" : "";
 
         $sql = "
             SELECT 
@@ -1321,106 +1323,126 @@ WHERE
             $objRes->MoveNext();
         }
 
-        $txtCondicion = ($seqFormulario != null)? " AND seqFormulario = $seqFormulario" : "";
-
         $sql = "
-            select 
-                res.seqResultado,
-                res.seqCruce,
-                res.seqFormulario,
-                res.seqModalidad,
+            SELECT
+                res.seqResultado, 
+                res.seqCruce, 
+                res.seqFormulario, 
+                res.seqModalidad, 
                 res.seqEstadoProceso,
+                concat(eta.txtEtapa, ' - ', epr.txtEstadoProceso) as txtEstado,
                 res.seqTipoDocumento,
-                res.numDocumento,
-                res.txtNombre,
-                res.seqParentesco,
-                res.txtEntidad,
-                res.txtTitulo,
+                res.numDocumento, 
+                res.txtNombre, 
+                res.seqParentesco, 
+                res.txtEntidad, 
+                res.txtTitulo, 
                 res.txtDetalle,
-                res.bolInhabilitar,
-                res.txtObservaciones
-            from t_cru_resultado res
-            where seqCruce = $seqCruce
-            $txtCondicion            
-            order by res.seqFormulario, res.numDocumento
+                res.bolInhabilitar, 
+                res.txtObservaciones,
+                ppal.numDocumento as numDocumentoPrincipal,
+                ppal.txtNombre as txtNombrePrincipal,
+                ppal.seqEstadoProceso,
+                ppal.txtEstadoFormulario
+            FROM t_cru_resultado res
+            INNER JOIN t_frm_estado_proceso epr on res.seqEstadoProceso = epr.seqEstadoProceso
+            inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+            INNER JOIN (
+                select 
+                    res.seqResultado,
+                    frm.seqFormulario,
+                    ciu.numDocumento,
+                    concat(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2) as txtNombre,
+                    frm.seqEstadoProceso,
+                    concat(eta.txtEtapa, ' - ', epr.txtEstadoProceso) as txtEstadoFormulario
+                from t_frm_formulario frm
+                inner join t_frm_hogar hog on frm.seqFormulario = hog.seqFormulario and hog.seqParentesco = 1
+                inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+                inner join t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
+                inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+                inner join t_cru_resultado res on res.seqFormulario = frm.seqFormulario
+                where res.seqCruce = $seqCruce
+                $txtCondicionFrm
+            ) ppal on res.seqResultado = ppal.seqResultado
+            WHERE seqCruce = $seqCruce
+            $txtCondicionRes
+            ORDER BY res.seqFormulario, res.numDocumento        
         ";
         $objRes = $aptBd->execute($sql);
-        $arrFormularios = array();
         while($objRes->fields) {
             $seqResultado = $objRes->fields['seqResultado'];
-            $seqFormulario = $objRes->fields['seqFormulario'];
-            if(! isset($arrFormularios[$seqFormulario])) {
-                $claFormulario = new FormularioSubsidios();
-                $claFormulario->cargarFormulario($seqFormulario);
-                $arrFormularios[$seqFormulario] = $claFormulario;
-            }else{
-                $claFormulario = $arrFormularios[$seqFormulario];
-            }
-            $objCiudadano = $this->obtenerPrincipal($claFormulario);
-            foreach ($objRes->fields as $txtCampo => $txtValor) {
-                $this->arrDatos['arrResultado'][$seqResultado][$txtCampo] = $txtValor;
-            }
-            $this->arrDatos['arrResultado'][$seqResultado]['numDocumentoPrincipal'] = $objCiudadano->numDocumento;
-            $this->arrDatos['arrResultado'][$seqResultado]['txtNombrePrincipal'] = mb_strtoupper($this->obtenerNombre($objCiudadano));
-            $this->arrDatos['arrResultado'][$seqResultado]['txtEstado'] = $arrEstados[$objRes->fields['seqEstadoProceso']];
-            $this->arrDatos['arrResultado'][$seqResultado]['txtEstadoFormulario'] = $arrEstados[$claFormulario->seqEstadoProceso];
-            $this->arrDatos['arrResultado'][$seqResultado]['seqEstadoProceso'] = $claFormulario->seqEstadoProceso;
+            $this->arrDatos['arrResultado'][$seqResultado] = $objRes->fields;
             $objRes->MoveNext();
         }
 
         $sql = "
-            select 
+            select
                 aud.seqAuditoria,
                 aud.fchMovimiento,
-                aud.seqUsuario,
                 usu.txtUsuario,
                 aud.seqCruce,
                 aud.seqFormulario,
-                aud.seqModalidad,
-                aud.seqEstadoProceso,
-                aud.seqTipoDocumento,
+                ppal.txtModalidad,
+                concat(eta.txtEtapa, ' - ', epr.txtEstadoProceso) as txtEstado,
+                ppal.numDocumento as numDocumentoPrincipal,
+                tdo.txtTipoDocumento,
                 aud.numDocumento,
                 aud.txtNombre,
-                aud.seqParentesco,
                 par.txtParentesco,
                 aud.txtEntidad,
                 aud.txtTitulo,
                 aud.txtDetalle,
-                aud.bolInhabilitar,
+                IF(aud.bolInhabilitar = 1,'SI','NO') as bolInhabilitar,
                 aud.txtObservaciones
             from t_cru_auditoria aud
-            inner join t_cor_usuario usu on aud.seqUsuario = usu.seqUsuario 
+            inner join t_cor_usuario usu on aud.seqUsuario = usu.seqUsuario
+            inner join t_ciu_tipo_documento tdo on aud.seqTipoDocumento = tdo.seqTipoDocumento
             inner join t_ciu_parentesco par on par.seqParentesco = aud.seqParentesco
-            where seqCruce = $seqCruce
-            $txtCondicion
-            order by aud.fchMovimiento, aud.seqFormulario, aud.numDocumento, aud.txtTitulo, aud.txtEntidad, aud.txtDetalle
+            inner join t_frm_estado_proceso epr on aud.seqEstadoProceso = epr.seqEstadoProceso
+            inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+            inner join (
+                select distinct
+                    res.seqCruce,
+                    frm.seqFormulario,
+                    ciu.numDocumento,
+                    concat(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2) as txtNombre,
+                    frm.seqEstadoProceso,
+                    concat(eta.txtEtapa, ' - ', epr.txtEstadoProceso) as txtEstadoFormulario,
+                    moa.txtModalidad
+                from t_frm_formulario frm
+                inner join t_frm_hogar hog on frm.seqFormulario = hog.seqFormulario and hog.seqParentesco = 1
+                inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+                inner join t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
+                inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+                inner join t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
+                inner join t_cru_resultado res on res.seqFormulario = frm.seqFormulario
+                where res.seqCruce = $seqCruce
+                $txtCondicionFrm
+            ) ppal on ppal.seqCruce = aud.seqCruce and ppal.seqFormulario = aud.seqFormulario
+            where aud.seqCruce = $seqCruce
+            $txtCondicionAud
+            order by
+              aud.fchMovimiento,
+              aud.seqFormulario,
+              aud.numDocumento,
+              aud.txtTitulo,
+              aud.txtEntidad,
+              aud.txtDetalle
         ";
         $objRes = $aptBd->execute($sql);
         while($objRes->fields) {
-            $seqFormulario = $objRes->fields['seqFormulario'];
             $seqAuditoria = $objRes->fields['seqAuditoria'];
-
-            if(! isset($arrFormularios[$seqFormulario])) {
-                $claFormulario = new FormularioSubsidios();
-                $claFormulario->cargarFormulario($seqFormulario);
-                $arrFormularios[$seqFormulario] = $claFormulario;
-            }else{
-                $claFormulario = $arrFormularios[$seqFormulario];
-            }
-            $objCiudadano = $this->obtenerPrincipal($claFormulario);
-
+            unset($objRes->fields['seqAuditoria']);
             $this->arrAuditoria[$seqAuditoria] = $objRes->fields;
-            $this->arrAuditoria[$seqAuditoria]['numDocumentoPrincipal'] = $objCiudadano->numDocumento;
-            $this->arrAuditoria[$seqAuditoria]['txtNombrePrincipal'] = $this->obtenerNombre($objCiudadano);
-            $this->arrAuditoria[$seqAuditoria]['txtEstado'] = $arrEstados[$claFormulario->seqEstadoProceso];
-            $this->arrAuditoria[$seqAuditoria]['txtModalidad'] = array_shift(obtenerDatosTabla(
-                "T_FRM_MODALIDAD",
-                array("seqModalidad", "txtModalidad"),
-                "seqModalidad",
-                "seqModalidad = " . $claFormulario->seqModalidad
-            ));
             $objRes->MoveNext();
         }
+
+        $t4 = time();
+
+//        echo "t2 - t1 = " . ($t2 - $t1) . "<br>";
+//        echo "t3 - t2 = " . ($t3 - $t2) . "<br>";
+//        echo "t4 - t3 = " . ($t4 - $t3) . "<br>";
+//        echo "t4 - t1 = " . ($t4 - $t1) . "<br>";
 
     }
 

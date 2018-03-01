@@ -83,7 +83,7 @@ function consultaBasicaHogar($seqFormulario){
                 left join t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
                 left join t_pry_proyecto pry1 on frm.seqProyecto = pry1.seqProyecto
                 left join t_pry_proyecto pry2 on frm.seqProyectoHijo = pry2.seqProyecto
-                left join t_pry_unidad_proyecto upr on frm.seqFormulario = upr.seqUnidadProyecto
+                left join t_pry_unidad_proyecto upr on frm.seqUnidadProyecto = upr.seqUnidadProyecto
                 WHERE hog.seqParentesco = 1
                   AND frm.seqFormulario = $seqFormulario
             ";
@@ -126,7 +126,7 @@ function consultaBasicaHogar($seqFormulario){
                 left join t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
                 left join t_pry_proyecto pry1 on frm.seqProyecto = pry1.seqProyecto
                 left join t_pry_proyecto pry2 on frm.seqProyectoHijo = pry2.seqProyecto
-                left join t_pry_unidad_proyecto upr on frm.seqFormulario = upr.seqUnidadProyecto
+                left join t_pry_unidad_proyecto upr on frm.seqUnidadProyecto = upr.seqUnidadProyecto
                 left join v_frm_convenio con on frm.seqConvenio = con.seqConvenio
                 WHERE hog.seqParentesco = 1
                   AND frm.seqFormulario = $seqFormulario

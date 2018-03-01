@@ -50,8 +50,8 @@ $objHoja->setTitle('Cruce');
 // titulos
 for( $i = 0 ; $i < count($arrTitulos) ; $i++ ) {
     $objHoja->setCellValueByColumnAndRow( $i , 1 , $arrTitulos[$i] , false );
-    $objHoja->getRowDimension(1)->setRowHeight(12);
 }
+$objHoja->getRowDimension(1)->setRowHeight(12);
 
 // contenido
 $numFila = 0;
@@ -69,16 +69,16 @@ foreach($claCruces->arrAuditoria as $seqAuditoria => $arrLinea ) {
     }
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['fchMovimiento'], false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtUsuario'], false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['seqCruce'], false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['seqFormulario'], false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $txtModalidad = array_shift(
         obtenerDatosTabla(
@@ -90,14 +90,14 @@ foreach($claCruces->arrAuditoria as $seqAuditoria => $arrLinea ) {
     );
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtModalidad, false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $seqEstadoProceso = $arrLinea['seqEstadoProceso'];
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrEstados[$seqEstadoProceso], false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['numDocumentoPrincipal'], false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $txtTipoDocumento = array_shift(
         obtenerDatosTabla(
@@ -109,13 +109,13 @@ foreach($claCruces->arrAuditoria as $seqAuditoria => $arrLinea ) {
     );
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtTipoDocumento , false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['numDocumento'] , false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtNombre'] , false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $txtParentesco = array_shift(
         obtenerDatosTabla(
@@ -127,26 +127,30 @@ foreach($claCruces->arrAuditoria as $seqAuditoria => $arrLinea ) {
     );
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtParentesco , false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtEntidad'] , false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtTitulo'] , false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtDetalle'] , false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $txtInhabilitar = ($arrLinea['bolInhabilitar'] == 1)? "SI" : "NO";
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtInhabilitar , false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtObservaciones'] , false);
-    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $numFila++;
 
+}
+
+for($i = 0; $i < $numColumna; $i++) {
+    $objHoja->getColumnDimensionByColumn($i)->setAutoSize(true);
 }
 
 // *************************** ESTILOS POR DEFECTO DEL ARCHIVO DE EXCEL ********************************************* //

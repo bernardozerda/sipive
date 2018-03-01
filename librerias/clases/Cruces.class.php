@@ -1302,7 +1302,6 @@ WHERE
         ";
         $objRes = $aptBd->execute($sql);
         while($objRes->fields){
-
             $this->arrDatos['seqCruce'] = $objRes->fields['seqCruce'];
             $this->arrDatos['txtNombre'] = mb_strtoupper($objRes->fields['txtNombre']);
             $this->arrDatos['fchCruce'] = new DateTime($objRes->fields['fchCruce']) ;
@@ -1346,11 +1345,17 @@ WHERE
             order by res.seqFormulario, res.numDocumento
         ";
         $objRes = $aptBd->execute($sql);
+        $arrFormularios = array();
         while($objRes->fields) {
             $seqResultado = $objRes->fields['seqResultado'];
             $seqFormulario = $objRes->fields['seqFormulario'];
-            $claFormulario = new FormularioSubsidios();
-            $claFormulario->cargarFormulario($seqFormulario);
+            if(! isset($arrFormularios[$seqFormulario])) {
+                $claFormulario = new FormularioSubsidios();
+                $claFormulario->cargarFormulario($seqFormulario);
+                $arrFormularios[$seqFormulario] = $claFormulario;
+            }else{
+                $claFormulario = $arrFormularios[$seqFormulario];
+            }
             $objCiudadano = $this->obtenerPrincipal($claFormulario);
             foreach ($objRes->fields as $txtCampo => $txtValor) {
                 $this->arrDatos['arrResultado'][$seqResultado][$txtCampo] = $txtValor;
@@ -1360,7 +1365,6 @@ WHERE
             $this->arrDatos['arrResultado'][$seqResultado]['txtEstado'] = $arrEstados[$objRes->fields['seqEstadoProceso']];
             $this->arrDatos['arrResultado'][$seqResultado]['txtEstadoFormulario'] = $arrEstados[$claFormulario->seqEstadoProceso];
             $this->arrDatos['arrResultado'][$seqResultado]['seqEstadoProceso'] = $claFormulario->seqEstadoProceso;
-
             $objRes->MoveNext();
         }
 
@@ -1369,7 +1373,6 @@ WHERE
                 aud.seqAuditoria,
                 aud.fchMovimiento,
                 aud.seqUsuario,
-                -- concat(usu.txtNombre,' ',usu.txtApellido) as txtUsuario,
                 usu.txtUsuario,
                 aud.seqCruce,
                 aud.seqFormulario,
@@ -1389,6 +1392,7 @@ WHERE
             inner join t_cor_usuario usu on aud.seqUsuario = usu.seqUsuario 
             inner join t_ciu_parentesco par on par.seqParentesco = aud.seqParentesco
             where seqCruce = $seqCruce
+            $txtCondicion
             order by aud.fchMovimiento, aud.seqFormulario, aud.numDocumento, aud.txtTitulo, aud.txtEntidad, aud.txtDetalle
         ";
         $objRes = $aptBd->execute($sql);
@@ -1396,8 +1400,13 @@ WHERE
             $seqFormulario = $objRes->fields['seqFormulario'];
             $seqAuditoria = $objRes->fields['seqAuditoria'];
 
-            $claFormulario = new FormularioSubsidios();
-            $claFormulario->cargarFormulario($seqFormulario);
+            if(! isset($arrFormularios[$seqFormulario])) {
+                $claFormulario = new FormularioSubsidios();
+                $claFormulario->cargarFormulario($seqFormulario);
+                $arrFormularios[$seqFormulario] = $claFormulario;
+            }else{
+                $claFormulario = $arrFormularios[$seqFormulario];
+            }
             $objCiudadano = $this->obtenerPrincipal($claFormulario);
 
             $this->arrAuditoria[$seqAuditoria] = $objRes->fields;

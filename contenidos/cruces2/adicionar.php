@@ -34,7 +34,7 @@ foreach($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano){
 }
 
 $claCruces = new Cruces();
-$claCruces->cargar($_POST['seqCruce']);
+$claCruces->cargar($_POST['seqCruce'], $_POST['seqFormulario']);
 
 foreach($claCruces->arrDatos['arrResultado'] as $seqResultado => $arrDatos){
     $seqFormulario = $arrDatos['seqFormulario'];

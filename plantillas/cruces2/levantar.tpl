@@ -21,6 +21,7 @@
                     <tr>
                         <td>{$arrDatos.numDocumento}</td>
                         <td>
+                            <strong>Nombre:</strong> {$arrDatos.txtNombre}<br>
                             <strong>Entidad:</strong> {$arrDatos.txtEntidad}<br>
                             <strong>Causa:</strong> {$arrDatos.txtTitulo}<br>
                             <strong>Detalle:</strong> {$arrDatos.txtDetalle}

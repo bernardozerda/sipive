@@ -9,8 +9,6 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Cruces.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExcel.php" );
-include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 
 $arrEstados = estadosProceso();
 
@@ -20,7 +18,95 @@ $seqFormulario = (intval($_GET['seqFormulario']) != 0)? $_GET['seqFormulario'] :
 $claCruces = new Cruces();
 $claCruces->cargar($seqCruce,$seqFormulario);
 
-// *************************** CREA ARCHIVO DE EXCEL CON LOS DATOS ************************************************** //
+$xmlArchivo  = "<?xml version='1.0'?> ";
+$xmlArchivo .= "<?mso-application progid='Excel.Sheet'?> ";
+$xmlArchivo .= "<Workbook xmlns='urn:schemas-microsoft-com:office:spreadsheet' ";
+$xmlArchivo .= "xmlns:o='urn:schemas-microsoft-com:office:office' ";
+$xmlArchivo .= "xmlns:x='urn:schemas-microsoft-com:office:excel' ";
+$xmlArchivo .= "xmlns:ss='urn:schemas-microsoft-com:office:spreadsheet' ";
+$xmlArchivo .= "xmlns:html='http://www.w3.org/TR/REC-html40'>";
+
+$xmlArchivo .= "<Styles>";
+$xmlArchivo .= "<Style ss:ID='Default' ss:Name='Normal'>";
+$xmlArchivo .= "<Alignment/>";
+$xmlArchivo .= "<Borders/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+$xmlArchivo .= "<Interior/>";
+$xmlArchivo .= "<NumberFormat/>";
+$xmlArchivo .= "<Protection/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s1'>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Center'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>";
+$xmlArchivo .= "<Interior ss:Color='#D8D8D8' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s2'>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Right'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>";
+$xmlArchivo .= "<Interior ss:Color='#D8D8D8' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s3'>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Right'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>";
+$xmlArchivo .= "<Interior ss:Color='#D8D8D8' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s4'>";
+$xmlArchivo .= "<Borders>";
+$xmlArchivo .= "<Border ss:Position='Right' ss:LineStyle='Continuous' ss:Weight='1'/>";
+$xmlArchivo .= "</Borders>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Right'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8' ss:Bold='1'/>";
+$xmlArchivo .= "<Interior ss:Color='#F2F2F2' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s5'>";
+$xmlArchivo .= "<NumberFormat ss:Format='yyyy-mm-dd'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s6'>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+$xmlArchivo .= "<Interior ss:Color='#C5D9F1' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s7'>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+$xmlArchivo .= "<Interior ss:Color='#F2DDDC' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s8'>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+$xmlArchivo .= "<Interior ss:Color='#EAF1DD' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s9'>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+$xmlArchivo .= "<Interior ss:Color='#E5E0EC' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s10'>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+$xmlArchivo .= "<Interior ss:Color='#F2F2F2' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "<Style ss:ID='s11'>";
+$xmlArchivo .= "<Alignment ss:Vertical='Center' ss:Horizontal='Left'/>";
+$xmlArchivo .= "<Font ss:FontName='Calibri' ss:Size='8'/>";
+$xmlArchivo .= "<Interior ss:Color='#FDE9D9' ss:Pattern='Solid'/>";
+$xmlArchivo .= "</Style>";
+
+$xmlArchivo .= "</Styles>";
+
+$xmlArchivo .= "<ss:Worksheet ss:Name='Datos'>";
+$xmlArchivo .= "<ss:Table>";
 
 // titulos del archivo
 $arrTitulos[] = "RESULTADO";
@@ -38,149 +124,100 @@ $arrTitulos[] = "DETALLE";
 $arrTitulos[] = "INHABILITAR";
 $arrTitulos[] = "OBSERVACIONES";
 
-$numColumnas = count($arrTitulos);
-$numFilas = count($claCruces->arrDatos['arrResultado']);
-
-$objPHPExcel = new PHPExcel();
-$objPHPExcel->setActiveSheetIndex(0);
-$objHoja = $objPHPExcel->getActiveSheet();
-$objHoja->setTitle('Cruce');
-
 // titulos
-for( $i = 0 ; $i < count($arrTitulos) ; $i++ ) {
-    $objHoja->setCellValueByColumnAndRow( $i , 1 , $arrTitulos[$i] , false );
+$xmlArchivo .= "<ss:Row>";
+foreach ($arrTitulos as $txtTitulo => $txtValor){
+    $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtValor</ss:Data></ss:Cell>";
 }
-$objHoja->getRowDimension(1)->setRowHeight(12);
+$xmlArchivo .= "</ss:Row>";
 
-// contenido
-$numFila = 0;
-$arrFormularios = array();
-foreach($claCruces->arrDatos['arrResultado'] as $seqResultado => $arrLinea ){
+// datos
+foreach ($claCruces->arrDatos['arrResultado'] as $seqResultado => $arrDatos){
 
-    $numColumna = 0;
-
-    $objHoja->getRowDimension(($numFila + 2))->setRowHeight(12);
-
-    $seqFormulario = $arrLinea['seqFormulario'];
+    $seqFormulario = $arrDatos['seqFormulario'];
     if( ! isset( $arrFormularios[$seqFormulario] ) ){
         $arrFormularios[$seqFormulario] = new FormularioSubsidios();
         $arrFormularios[$seqFormulario]->cargarFormulario($seqFormulario);
     }
 
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $seqResultado, false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['seqFormulario'], false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['numDocumentoPrincipal'], false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+    // va quitando los ciudadanos que esten en el archivo, los que queden se adicionaran
+    foreach ($arrFormularios[$seqFormulario]->arrCiudadano as $seqCiudadano => $objCiudadano){
+        if(
+            $objCiudadano->seqTipoDocumento == $arrDatos['seqTipoDocumento'] and
+            $objCiudadano->numDocumento == $arrDatos['numDocumento']
+        ){
+            unset($arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]);
+        }
+    }
 
     $txtModalidad = array_shift(
         obtenerDatosTabla(
             "t_frm_modalidad",
-            array("seqModalidad","txtModalidad"),
+            array("seqModalidad", "txtModalidad"),
             "seqModalidad",
-            "seqModalidad = " . $arrLinea['seqModalidad']
+            "seqModalidad = " . $arrDatos['seqModalidad']
         )
     );
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtModalidad, false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
-    $seqEstadoProceso = $arrLinea['seqEstadoProceso'];
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrEstados[$seqEstadoProceso], false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+    $seqEstadoProceso = $arrDatos['seqEstadoProceso'];
 
     $txtTipoDocumento = array_shift(
         obtenerDatosTabla(
             "t_ciu_tipo_documento",
             array("seqTipoDocumento","txtTipoDocumento"),
             "seqTipoDocumento",
-            "seqTipoDocumento = " . $arrLinea['seqTipoDocumento']
+            "seqTipoDocumento = " . $arrDatos['seqTipoDocumento']
         )
     );
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtTipoDocumento, false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['numDocumento'], false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-    // va quitando los ciudadanos que esten en el archivo, los que queden se adicionaran
-    foreach ($arrFormularios[$seqFormulario]->arrCiudadano as $seqCiudadano => $objCiudadano){
-        if(
-            $objCiudadano->seqTipoDocumento == $arrLinea['seqTipoDocumento'] and
-            $objCiudadano->numDocumento == $arrLinea['numDocumento']
-        ){
-            unset($arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]);
-        }
-    }
-
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtNombre'], false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
     $txtParentesco = array_shift(
         obtenerDatosTabla(
             "t_ciu_parentesco",
             array("seqParentesco","txtParentesco"),
             "seqParentesco",
-            "seqParentesco = " . $arrLinea['seqParentesco']
+            "seqParentesco = " . $arrDatos['seqParentesco']
         )
     );
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtParentesco, false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtEntidad'], false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+    $txtInhabilitar = ($arrDatos['bolInhabilitar'] == 1)? "SI" : "NO";
 
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtTitulo'], false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+    $xmlArchivo .= "<ss:Row>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['seqResultado'] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['seqFormulario'] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['numDocumentoPrincipal'] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $txtModalidad . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $arrEstados[$seqEstadoProceso] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $txtTipoDocumento . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['numDocumento'] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $arrDatos['txtNombre'] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $txtParentesco . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $arrDatos['txtEntidad'] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $arrDatos['txtTitulo'] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $arrDatos['txtDetalle'] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $txtInhabilitar . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $arrDatos['txtObservaciones'] . "</ss:Data></ss:Cell>";
+    $xmlArchivo .= "</ss:Row>";
 
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtDetalle'], false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-    $txtInhabilitar = ($arrLinea['bolInhabilitar'] == 1)? "SI" : "NO";
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtInhabilitar, false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-    $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrLinea['txtObservaciones'], false);
-//    $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-    $numFila++;
 }
 
-for($i = 0; $i < $numColumna; $i++) {
-    $objHoja->getColumnDimensionByColumn($i)->setAutoSize(true);
-}
-
-// *************************** ADICIONA LOS MIEMBROS DE T_FRM_FORMULARIO ********************************************* //
-
+// datos
 $arrTipoDocumentoMayores = array(1,2);
+foreach($arrFormularios as $seqFormulario => $claFormulario) {
 
-foreach($arrFormularios as $seqFormulario => $claFormulario){
-    foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano){
+    foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
 
         $bolAdicionar = true;
-        if($claFormulario->seqPlanGobierno == 2 and (!in_array($objCiudadano->seqTipoDocumento,$arrTipoDocumentoMayores)) ){
+
+        if ($claFormulario->seqPlanGobierno == 2 and (!in_array($objCiudadano->seqTipoDocumento, $arrTipoDocumentoMayores))) {
             $bolAdicionar = false;
         }
 
-        if($bolAdicionar == true) {
+        if ($bolAdicionar == true) {
             $numColumna = 0;
-
-            $objHoja->getRowDimension(($numFila + 2))->setRowHeight(12);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), "", false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $seqFormulario, false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
             $claFormularioPrincipal = new FormularioSubsidios();
             $claFormularioPrincipal->cargarFormulario($seqFormulario);
             $objPrincipal = Cruces::obtenerPrincipal($claFormularioPrincipal);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $objPrincipal->numDocumento, false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
             $txtModalidad = array_shift(
                 obtenerDatosTabla(
@@ -190,12 +227,8 @@ foreach($arrFormularios as $seqFormulario => $claFormulario){
                     "seqModalidad = " . $claFormulario->seqModalidad
                 )
             );
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtModalidad, false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
             $seqEstadoProceso = $claFormulario->seqEstadoProceso;
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $arrEstados[$seqEstadoProceso], false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
             $txtTipoDocumento = array_shift(
                 obtenerDatosTabla(
@@ -205,14 +238,6 @@ foreach($arrFormularios as $seqFormulario => $claFormulario){
                     "seqTipoDocumento = " . $objCiudadano->seqTipoDocumento
                 )
             );
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtTipoDocumento, false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $objCiudadano->numDocumento, false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), Cruces::obtenerNombre($objCiudadano), false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
             $txtParentesco = array_shift(
                 obtenerDatosTabla(
@@ -222,67 +247,37 @@ foreach($arrFormularios as $seqFormulario => $claFormulario){
                     "seqParentesco = " . $objCiudadano->seqParentesco
                 )
             );
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), $txtParentesco, false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
 
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), '', false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
+            $xmlArchivo .= "<ss:Row>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'></ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>$seqFormulario</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $objPrincipal->numDocumento . "</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $txtModalidad . "</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $arrEstados[$seqEstadoProceso] . "</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $txtTipoDocumento . "</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $objCiudadano->numDocumento . "</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . Cruces::obtenerNombre($objCiudadano) . "</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $txtParentesco . "</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'></ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'></ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'></ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>SI</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'></ss:Data></ss:Cell>";
+            $xmlArchivo .= "</ss:Row>";
 
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), '', false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), '', false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), 'SI', false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, ($numFila + 2), '', false);
-//            $objHoja->getColumnDimensionByColumn($numColumna - 1)->setAutoSize(true);
-
-            $numFila++;
-            $numFilas++;
         }
     }
+
 }
 
-for($i = 0; $i < $numColumna; $i++) {
-    $objHoja->getColumnDimensionByColumn($i)->setAutoSize(true);
-}
+$xmlArchivo .= "</ss:Table>";
+$xmlArchivo .= "</ss:Worksheet>";
 
-// *************************** ESTILOS POR DEFECTO DEL ARCHIVO DE EXCEL ********************************************* //
+$xmlArchivo .= "</ss:Workbook>";
 
-// estilo por defecto
-$arrEstilos = array(
-    'font' => array(
-        'bold' => false,
-        'size' => 8,
-        'name' => 'Calibri'
-    ),
-    'alignment' => array(
-        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-    ),
-    'borders' => array(
-        'allborders' => array(
-            'style' => PHPExcel_Style_Border::BORDER_NONE,
-        ),
-    ),
-);
+header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
+header("Content-Disposition: inline; filename=\"Datos_" . $claCruces->arrDatos['txtNombre'] . "_" . date("YmdHis") . "\".xls");
 
-// da formato a todas las columnas del libro
-$objHoja->getStyle(  PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas) . ($numFilas + 1) )->applyFromArray($arrEstilos);
-
-// *************************** EXPORTA LOS RESULTADOS *************************************************************** //
-ob_end_clean();
-header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment;filename='Detalles_" . $claCruces->arrDatos['txtNombre'] . "_" . date("YmdHis") . ".xlsx");
-header('Cache-Control: max-age=0');
-ob_end_clean();
-
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-$objWriter->save('php://output');
-
-
-
+echo $xmlArchivo;
 
 ?>

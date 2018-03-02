@@ -31,13 +31,10 @@ $arrTitulos[] = "INHABILITAR";
 $arrTitulos[] = "OBSERVACIONES";
 
 $seqCruce = (intval($_GET['seqCruce']) != 0)? $_GET['seqCruce'] : null;
-
-$t1 = time();
+$seqFormulario = (intval($_GET['seqFormulario']) != 0)? $_GET['seqFormulario'] : null;
 
 $claCruces = new Cruces();
-$claCruces->cargar($seqCruce);
-
-$t2 = time();
+$claCruces->cargar($seqCruce, $seqFormulario);
 
 $xmlArchivo  = "<?xml version='1.0'?> ";
 $xmlArchivo .= "<?mso-application progid='Excel.Sheet'?> ";

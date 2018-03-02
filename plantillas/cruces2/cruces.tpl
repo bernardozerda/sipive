@@ -12,13 +12,14 @@
         <form method="post" onsubmit="someterFormulario('contenido',this,'./contenidos/cruces2/cruces.php',false,true); return false;">
             <table id="listadoCruces" class="table table-striped table-condensed table-hover" width="100%">
                 <thead>
-                    <th align="center" width="90px">Creación</th>
-                    <th align="center" width="90px">Actualización</th>
-                    <th align="center" width="90px">Publicación</th>
+                    <th align="center" width="70px">Creación</th>
+                    <th align="center" width="70px">Actualización</th>
+                    <th align="center" width="70px">Publicación</th>
                     <th align="center">Nombre</th>
-                    <th align="center" width="30px">&nbsp;</th>
+                    <th align="center" width="20px">&nbsp;</th>
                     <th align="center" width="40px">&nbsp;</th>
                     <th align="center" width="40px">&nbsp;</th>
+                    <th align="center" width="10px">&nbsp;</th>
                 </thead>
                 <thead>
                 <th>
@@ -78,7 +79,7 @@
                 <th valign="top">
                     <input type="text" name="nombre" value="{$arrPost.nombre}" placeholder="Nombre del cruce" style="width:100%;">
                 </th>
-                <th colspan="2" valign="top">
+                <th colspan="3" valign="top">
                     <input type="number" name="documento" value="{$arrPost.documento}" placeholder="Post.Principal" style="width:120px;">
 
                 </th>
@@ -94,12 +95,18 @@
                         <td align="center">{$arrCruce.fchCruce->format('Y-m-d')}</td>
                         <td>{$arrCruce.txtNombre}</td>
                         <td align="center">
-                            <a href="#" onClick="cargarContenido('contenido','./contenidos/cruces2/ver.php','seqCruce={$seqCruce}',true)">
-                                Ver
-                            </a>
+                            {if intval($arrPost.documento) != 0}
+                                <a href="#" onClick="cargarContenido('contenido','./contenidos/cruces2/levantar.php','seqCruce={$seqCruce}&seqFormulario={$seqFormulario}',true)">
+                                    Editar
+                                </a>
+                            {else}
+                                <a href="#" onClick="cargarContenido('contenido','./contenidos/cruces2/ver.php','seqCruce={$seqCruce}',true)">
+                                    Ver
+                                </a>
+                            {/if}
                         </td>
                         <td align="center">
-                            <a href="#" onclick="location.href='./contenidos/cruces2/exportar.php?seqCruce={$seqCruce}'">
+                            <a href="#" onclick="location.href='./contenidos/cruces2/exportar.php?seqCruce={$seqCruce}&seqFormulario={$seqFormulario}'">
                                 Exportar
                             </a>
                         </td>
@@ -109,6 +116,16 @@
                                     Eliminar
                                 </a>
                             {/if}
+                        </td>
+                        <td>
+                            {if intval($arrPost.documento) != 0}
+                                {if $arrCruce.bolInhabilitar == 0}
+                                    <span class="badge btn-success">&nbsp;</span>
+                                {else}
+                                    <span class="badge btn-danger">&nbsp;</span>
+                                {/if}
+                            {/if}
+
                         </td>
                     </tr>
                 {/foreach}

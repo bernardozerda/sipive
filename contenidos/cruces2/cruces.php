@@ -13,6 +13,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Cruces.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php" );
 
 $_POST['creacionInicio'] = (esFechaValida($_POST['creacionInicio']))? new DateTime($_POST['creacionInicio']) : null;
 $_POST['creacionFinal']  = (esFechaValida($_POST['creacionFinal']))?  new DateTime($_POST['creacionFinal']) : null;
@@ -50,6 +51,15 @@ if($_POST['cruceFinal'] != null or $_POST['cruceInicio'] != null) {
     }
 }
 
+$seqFormulario = 0;
+if(intval($_POST['documento']) != 0){
+    try {
+        $seqFormulario = Ciudadano::formularioVinculado($_POST['documento']);
+    }catch(Exception $objError){
+        $seqFormulario = 0;
+    }
+}
+
 $claCruces = new Cruces();
 if(! empty($arrErrores)){
     imprimirMensajes($arrErrores);
@@ -60,6 +70,7 @@ if(! empty($arrErrores)){
 
 $claSmarty->assign( "arrPost"  , $_POST );
 $claSmarty->assign( "arrCruces", $arrCruces );
+$claSmarty->assign( "seqFormulario", $seqFormulario );
 $claSmarty->display( "cruces2/cruces.tpl" );
 
 ?>

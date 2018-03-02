@@ -535,7 +535,8 @@ WHERE
                 cru.txtNombre,
                 cru.fchCruce,
                 cru.fchCreacionCruce,
-                cru.fchActualizacionCruce
+                cru.fchActualizacionCruce,
+                SUM(res.bolInhabilitar) as bolInhabilitar
             FROM t_cru_cruces cru
             INNER JOIN t_cru_resultado res ON cru.seqCruce = res.seqCruce AND res.seqParentesco = 1
             WHERE 1 = 1
@@ -545,6 +546,12 @@ WHERE
             $txtCondicionFecha
             $txtCondicionNombre
             $txtCondicionDocumento
+            GROUP BY
+                cru.seqCruce,
+                cru.txtNombre,
+                cru.fchCruce,
+                cru.fchCreacionCruce,
+                cru.fchActualizacionCruce
             ORDER BY cru.fchCreacionCruce DESC
         ";
         $objRes = $aptBd->execute($sql);
@@ -554,6 +561,7 @@ WHERE
             $arrCruces[$seqCruce]['fchCruce']              = new DateTime($objRes->fields['fchCruce']);
             $arrCruces[$seqCruce]['fchCreacionCruce']      = new DateTime($objRes->fields['fchCreacionCruce']);
             $arrCruces[$seqCruce]['fchActualizacionCruce'] = new DateTime($objRes->fields['fchActualizacionCruce']);
+            $arrCruces[$seqCruce]['bolInhabilitar']        = $objRes->fields['bolInhabilitar'];
             $objRes->MoveNext();
         }
         return $arrCruces;
@@ -1437,13 +1445,6 @@ WHERE
             $objRes->MoveNext();
         }
 
-        $t4 = time();
-
-//        echo "t2 - t1 = " . ($t2 - $t1) . "<br>";
-//        echo "t3 - t2 = " . ($t3 - $t2) . "<br>";
-//        echo "t4 - t3 = " . ($t4 - $t3) . "<br>";
-//        echo "t4 - t1 = " . ($t4 - $t1) . "<br>";
-
     }
 
     public function editar(){
@@ -2137,6 +2138,8 @@ WHERE
         try{
 
             $aptBd->BeginTrans();
+
+            $this->crucesPendientes(0,$arrPost['seqFormulario'],$arrPost['seqCruce']);
 
             $claFormulario = new FormularioSubsidios();
             $claFormulario->cargarFormulario($arrPost['seqFormulario']);

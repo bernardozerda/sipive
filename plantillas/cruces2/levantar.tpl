@@ -48,6 +48,16 @@
         <button type="button" class="btn btn-primary" style="width: 100px" onClick="someterFormulario('contenido',document.getElementById('frmLevantarCruce'),'./contenidos/cruces2/levantar.php',true,true);">
             Salvar
         </button>&nbsp;
+        <button type="button" class="btn btn-success" style="width: 100px"
+                onClick="location.href='./contenidos/cruces2/exportar.php?seqCruce={$claCruces->arrDatos.seqCruce}&seqFormulario={$seqFormulario}'"
+        >
+            Datos Cruce
+        </button>&nbsp;
+        <button type="button" class="btn btn-success" style="width: 100px"
+                onClick="location.href='./contenidos/cruces2/exportarAuditoria.php?seqCruce={$claCruces->arrDatos.seqCruce}&seqFormulario={$seqFormulario}'"
+        >
+            Auditoría
+        </button>&nbsp;
         <button type="button" class="btn btn-default" onclick="cargarContenido('contenido','./contenidos/cruces2/ver.php','seqCruce={$claCruces->arrDatos.seqCruce}',true);" style="width: 100px">
             Volver
         </button>

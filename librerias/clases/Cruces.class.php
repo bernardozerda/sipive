@@ -528,6 +528,12 @@ WHERE
         $txtCondicionNombre = (trim($arrPost['nombre']) != "")? " AND cru.txtNombre LIKE '%" . $arrPost['nombre'] . "%'" : "";
         $txtCondicionDocumento = (intval($arrPost['documento']) != 0)? " AND numDocumento = " . intval($arrPost['documento'])  : "";
 
+        $claCiudadano = new Ciudadano();
+        $seqFormulario = $claCiudadano->formularioVinculado($arrPost['documento']);
+        if(! empty($claCiudadano->arrErrores)){
+            $seqFormulario = 0;
+        }
+
         $arrCruces = array();
         $sql = "
             SELECT DISTINCT 
@@ -535,8 +541,7 @@ WHERE
                 cru.txtNombre,
                 cru.fchCruce,
                 cru.fchCreacionCruce,
-                cru.fchActualizacionCruce,
-                SUM(res.bolInhabilitar) as bolInhabilitar
+                cru.fchActualizacionCruce
             FROM t_cru_cruces cru
             INNER JOIN t_cru_resultado res ON cru.seqCruce = res.seqCruce AND res.seqParentesco = 1
             WHERE 1 = 1
@@ -545,13 +550,7 @@ WHERE
             $txtCondicionActualizacion
             $txtCondicionFecha
             $txtCondicionNombre
-            $txtCondicionDocumento
-            GROUP BY
-                cru.seqCruce,
-                cru.txtNombre,
-                cru.fchCruce,
-                cru.fchCreacionCruce,
-                cru.fchActualizacionCruce
+            $txtCondicionDocumento            
             ORDER BY cru.fchCreacionCruce DESC
         ";
         $objRes = $aptBd->execute($sql);
@@ -561,7 +560,16 @@ WHERE
             $arrCruces[$seqCruce]['fchCruce']              = new DateTime($objRes->fields['fchCruce']);
             $arrCruces[$seqCruce]['fchCreacionCruce']      = new DateTime($objRes->fields['fchCreacionCruce']);
             $arrCruces[$seqCruce]['fchActualizacionCruce'] = new DateTime($objRes->fields['fchActualizacionCruce']);
-            $arrCruces[$seqCruce]['bolInhabilitar']        = $objRes->fields['bolInhabilitar'];
+
+            $sql = "
+                select sum(bolInhabilitar) as bolInhabilitar
+                from t_cru_resultado
+                where seqCruce = $seqCruce
+                  and seqFormulario = $seqFormulario
+            ";
+            $objResCruce = $aptBd->execute($sql);
+            $arrCruces[$seqCruce]['bolInhabilitar'] = (intval($objResCruce->fields['bolInhabilitar']) > 0 )? 1: 0;
+
             $objRes->MoveNext();
         }
         return $arrCruces;

@@ -32,7 +32,7 @@
 			FROM 
 				T_FRM_ESTADO_PROCESO 
 			INNER JOIN T_FRM_ETAPA ON (T_FRM_ESTADO_PROCESO.seqEtapa = T_FRM_ETAPA.seqEtapa)
-			WHERE T_FRM_ESTADO_PROCESO.seqEstadoProceso IN (7, 41, 46, 54, 8, 52, 21) 
+			WHERE T_FRM_ESTADO_PROCESO.seqEstadoProceso IN (7, 41, 46, 54, 57, 8, 52, 21) 
 			ORDER BY T_FRM_ESTADO_PROCESO.seqEtapa
 		";
 	$objRes = $aptBd->execute( $sql );

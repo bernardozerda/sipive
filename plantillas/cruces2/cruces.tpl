@@ -122,7 +122,10 @@
                                 {if $arrCruce.bolInhabilitar == 0}
                                     <span class="badge btn-success">&nbsp;</span>
                                 {else}
-                                    <span class="badge btn-danger">&nbsp;</span>
+                                    <span class="badge btn-danger"
+                                          onClick="popUpPdfCasaMano('exportarPdf.php', 'exportar[]={$seqFormulario}', {$seqCruce});"
+                                          style="cursor: pointer"
+                                    >&nbsp;</span>
                                 {/if}
                             {/if}
 

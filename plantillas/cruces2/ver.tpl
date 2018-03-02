@@ -146,10 +146,11 @@
                                 <td>{$arrResultado.estado}</td>
                                 <td align="center">
                                     {if $arrResultado.inhabilitar == 1}
-                                        <a class="label label-danger"
-                                           onClick="popUpPdfCasaMano('exportarPdf.php', 'exportar[]={$seqFormulario}', {$claCruces->arrDatos.seqCruce});"
+                                        <span class="label label-danger"
+                                              onClick="popUpPdfCasaMano('exportarPdf.php', 'exportar[]={$seqFormulario}', {$claCruces->arrDatos.seqCruce});"
+                                              style="cursor: pointer"
                                         >Pendiente
-                                        </a>
+                                        </span>
                                     {else}
                                         <span class="label label-success">Sin Cruces</span>
                                     {/if}

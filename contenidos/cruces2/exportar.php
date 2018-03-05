@@ -258,8 +258,8 @@ foreach($arrFormularios as $seqFormulario => $claFormulario) {
             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $objCiudadano->numDocumento . "</ss:Data></ss:Cell>";
             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . Cruces::obtenerNombre($objCiudadano) . "</ss:Data></ss:Cell>";
             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>" . $txtParentesco . "</ss:Data></ss:Cell>";
-            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'></ss:Data></ss:Cell>";
-            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'></ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>SDHT</ss:Data></ss:Cell>";
+            $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>PENDIENTE CRUCES</ss:Data></ss:Cell>";
             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'></ss:Data></ss:Cell>";
             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>SI</ss:Data></ss:Cell>";
             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'></ss:Data></ss:Cell>";

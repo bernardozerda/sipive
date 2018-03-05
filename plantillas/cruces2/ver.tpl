@@ -12,7 +12,6 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#datos" data-toggle="tab">Datos del Cruce</a></li>
             <li><a href="#hogares" data-toggle="tab">Hogares Vinculados</a></li>
-            <li><a href="#auditoria" data-toggle="tab">Seguimiento</a></li>
         </ul>
         <div class="tab-content" style="border-left: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">
             <div class="tab-pane active" id="datos" style="padding: 10px;">
@@ -179,42 +178,6 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane" id="auditoria" style="padding: 10px; height: 400px; overflow: auto;">
-                <table data-order='[[ 0, "asc" ]]' id="auditoriaCruces" class="table table-condensed" width="840px">
-                    <thead>
-                        <th>Fecha</th>
-                        <th>Usuario</th>
-                        <th>Principal</th>
-                        <th>Docuemnto</th>
-                        <th>Entidad</th>
-                        <th>Causa</th>
-                        <th>Detalle</th>
-                        <th>Inhabilitar</th>
-                        <th>Observaciones</th>
-                    </thead>
-                    <tbody>
-                        {foreach from=$claCruces->arrAuditoria item=arrAuditoria}
-                            <tr>
-                                <td>{$arrAuditoria.fchMovimiento}</td>
-                                <td>{$arrAuditoria.txtUsuario}</td>
-                                <td>{$arrAuditoria.numDocumentoPrincipal}</td>
-                                <td>{$arrAuditoria.numDocumento}</td>
-                                <td>{$arrAuditoria.txtEntidad}</td>
-                                <td>{$arrAuditoria.txtCausa}</td>
-                                <td>{$arrAuditoria.txtDetalle}</td>
-                                <td>
-                                    {if $arrAuditoria.bolInhabilitar == 1}
-                                        <span class="label label-danger">Pendiente</span>
-                                    {else}
-                                        <span class="label label-success">Sin Cruces</span>
-                                    {/if}
-                                </td>
-                                <td>{$arrAuditoria.txtObservaciones}</td>
-                            </tr>
-                        {/foreach}
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
     <div class="panel-footer" align="center">
@@ -243,4 +206,3 @@
 </div>
 
 <div id="listadoCrucesVerListener"></div>
-<div id="auditoriaCrucesListener"></div>

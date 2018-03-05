@@ -10770,39 +10770,6 @@ var listadoCrucesVer = function(){
 }
 YAHOO.util.Event.onContentReady("listadoCrucesVerListener",listadoCrucesVer);
 
-
-
-var auditoriaCruces = function(){
-    $('#auditoriaCruces').DataTable({
-        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
-        "order": [[0, "desc"]],
-        "scrollX": true,
-        "dom": 'lftipr'
-    });
-
-    objSelect = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "select",
-        "auditoriaCruces_wrapper"
-    );
-
-    objInput = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "input",
-        "auditoriaCruces_wrapper"
-    );
-
-    objSelect.className = "inputLogin";
-    objInput.className = "inputLogin";
-
-    objPaginador = YAHOO.util.Dom.get("auditoriaCruces_paginate");
-    objPaginador.style.textAlign = "center";
-
-    eliminarObjeto("auditoriaCrucesListener");
-    YAHOO.util.Event.onContentReady("auditoriaCrucesListener",auditoriaCruces);
-}
-YAHOO.util.Event.onContentReady("auditoriaCrucesListener",auditoriaCruces);
-
 function cambiarFuenteInhabilidad(objSelectFuente){
 
     // Objeto de respuesta si es satisfactoria la carga

@@ -526,10 +526,10 @@ WHERE
         $txtCondicionActualizacion = ($arrPost['updateInicio'] != null)? " AND fchActualizacionCruce >= '" . $arrPost['updateInicio']->format('Y-m-d') . "' AND fchActualizacionCruce <= '" . $arrPost['updateFinal']->format('Y-m-d') . "'" : "";
         $txtCondicionFecha = ($arrPost['cruceInicio'] != null)? " AND fchCruce >= '" . $arrPost['cruceInicio']->format('Y-m-d') . "' AND fchCruce <= '" . $arrPost['cruceFinal']->format('Y-m-d') . "'" : "";
         $txtCondicionNombre = (trim($arrPost['nombre']) != "")? " AND cru.txtNombre LIKE '%" . $arrPost['nombre'] . "%'" : "";
-        $txtCondicionDocumento = (intval($arrPost['documento']) != 0)? " AND numDocumento = " . intval($arrPost['documento'])  : "";
+        $txtCondicionDocumento = (intval($arrPost['documento']) != 0)? " AND res.numDocumento = " . intval($arrPost['documento'])  : "";
 
         $claCiudadano = new Ciudadano();
-        $seqFormulario = $claCiudadano->formularioVinculado($arrPost['documento']);
+        $seqFormulario = $claCiudadano->formularioVinculado($arrPost['documento'], false, false);
         if(! empty($claCiudadano->arrErrores)){
             $seqFormulario = 0;
         }
@@ -543,7 +543,7 @@ WHERE
                 cru.fchCreacionCruce,
                 cru.fchActualizacionCruce
             FROM t_cru_cruces cru
-            INNER JOIN t_cru_resultado res ON cru.seqCruce = res.seqCruce AND res.seqParentesco = 1
+            INNER JOIN t_cru_resultado res ON cru.seqCruce = res.seqCruce
             WHERE 1 = 1
             $txtCondicionSecuencia
             $txtCondicionCreacion

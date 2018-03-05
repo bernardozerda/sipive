@@ -54,7 +54,8 @@ if($_POST['cruceFinal'] != null or $_POST['cruceInicio'] != null) {
 $seqFormulario = 0;
 if(intval($_POST['documento']) != 0){
     try {
-        $seqFormulario = Ciudadano::formularioVinculado($_POST['documento']);
+        $claCiudadano =  new Ciudadano();
+        $seqFormulario = $claCiudadano->formularioVinculado($_POST['documento'], false, false);
     }catch(Exception $objError){
         $seqFormulario = 0;
     }
@@ -62,7 +63,7 @@ if(intval($_POST['documento']) != 0){
 
 $claCruces = new Cruces();
 if(! empty($arrErrores)){
-    imprimirMensajes($arrErrores);
+    imprimirMensajes($arrErrores, $arrMensajes);
     $arrCruces = $claCruces->listado();
 }else{
     $arrCruces = $claCruces->listado($_POST);

@@ -174,7 +174,8 @@ class InformeVeedurias
             left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
-            order by pry.txtNombreProyecto, uac.seqTipoActoUnidad
+            order by pry.txtNombreProyecto, uac.seqTipoActoUnidad       
+              
         ";
 
         $objRes = $aptBd->execute($sql);
@@ -559,7 +560,8 @@ class InformeVeedurias
 
         // adiciona el dato del aad del hogar
         foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
-            $seqFormulario = $arrDatos['Formulario'];
+            $seqFormulario = $arrDatos['seqFormularioVeeduria'];
+            unset($arrReporte['hogares'][$numLinea]['seqFormularioVeeduria']);
             if( isset( $arrFormularios[$seqFormulario] ) ){
                 $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['numResolucion'];
                 $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['fchResolucion'];
@@ -732,7 +734,8 @@ class InformeVeedurias
 
         // adiciona el dato del aad del hogar
         foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
-            $seqFormulario = $arrDatos['Formulario'];
+            $seqFormulario = $arrDatos['seqFormularioVeeduria'];
+            unset($arrReporte['hogares'][$numLinea]['seqFormularioVeeduria']);
             if( isset( $arrFormularios[$seqFormulario] ) ){
                 $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['Resolución'];
                 $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['Fecha'];
@@ -854,6 +857,7 @@ class InformeVeedurias
 
             $numPosicion = count($arrHogares);
 
+            $arrHogares[$numPosicion]['seqFormularioVeeduria'] = $objRes->fields['seqFormularioVeeduria'];
             $arrHogares[$numPosicion]['Formulario'] = $objRes->fields['seqFormulario'];
             $arrHogares[$numPosicion]['Estado'] = ($seqEstadoProceso != null)? $arrEstado[$seqEstadoProceso] : "No Disponible";
             $arrHogares[$numPosicion]['Plan de Gobierno'] = ($seqPlanGobierno != null)? $arrPlanGobierno[$seqPlanGobierno] : "No Disponible";
@@ -1109,7 +1113,7 @@ class InformeVeedurias
 
     private function exportarResultadosXML( $xmlArchivo , $txtNombreArchivo )
     {
-        $txtNombre = mb_ereg_replace("[^0-9a-zA-Z]","", $txtNombreArchivo) . date("YmdHis") . ".xls";
+        $txtNombre = mb_ereg_replace("[^0-9a-zA-Z_]","", $txtNombreArchivo) . "_" . date("YmdHis") . ".xls";
         header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
         header("Content-Disposition: inline; filename=\"" . $txtNombre . "\"");
         echo $xmlArchivo;
@@ -1164,9 +1168,9 @@ class InformeVeedurias
 
         $xmlArchivo .= $this->obtenerXMLPie();
 
-        $arrCorte = $this->obtenerCortes($seqCorte);
+        $arrCorte = array_shift($this->obtenerCortes($seqCorte));
 
-        $this->exportarResultadosXML( $xmlArchivo , "InfPry_" . $arrCorte['txtCorte'] );
+        $this->exportarResultadosXML( $xmlArchivo , "IP_" . $arrCorte['txtCorte'] );
 
 
     }
@@ -1200,9 +1204,9 @@ class InformeVeedurias
 
         $xmlArchivo .= $this->obtenerXMLPie();
 
-        $arrCorte = $this->obtenerCortes($seqCorte);
+        $arrCorte = array_shift($this->obtenerCortes($seqCorte));
 
-        $this->exportarResultadosXML( $xmlArchivo , "InfNoPry_" . $arrCorte['txtCorte']  );
+        $this->exportarResultadosXML( $xmlArchivo , "INP_" . $arrCorte['txtCorte']  );
 
     }
 

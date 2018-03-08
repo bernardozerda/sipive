@@ -5,7 +5,7 @@
             <tr>
 
                 <!-- BOTON -->
-                {if $esCoordinador == 1}
+                {if $esCoordinador == 1 or $smarty.session.seqUsuario == 5}
                     <td width="60px" align="center" valign="top">
                         <button type="button" value="Actualizar Acto" style="width:50px; position: relative; margin-right: 3%" onclick="modificarActo('actosAdministrativos/modificarActo','{$seqFormulario}','{$arrActo.acto.seqformActo}');">
                             <img src="./recursos/imagenes/modify.png" width="16px" height="16px">
@@ -23,7 +23,7 @@
                             <strong>{$arrActo.acto.nombre}:</strong>
                             {$arrActo.acto.numero} del {$arrActo.acto.fecha}
                         </li>
-                        {if $esCoordinador == 1 and isset($arrActo.acto.seqEstadoProceso) }
+                        {if ($esCoordinador == 1 or $smarty.session.seqUsuario == 5) and isset($arrActo.acto.seqEstadoProceso) }
                             <li><strong>Estado:</strong> {$arrActo.acto.seqEstadoProceso}</li>
                         {/if}
                         {if $arrActo.acto.tipo == 1}

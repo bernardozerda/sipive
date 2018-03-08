@@ -2503,12 +2503,22 @@ Class ActoAdministrativo {
                             break;
                         case 6: // Renuncias
                             $txtCambios .= "seqEstadoProceso, Valor Anterior: " . $objFormulario->seqEstadoProceso . ", Valor Nuevo: 18\n";
+
                             $sql = "
                                     UPDATE T_FRM_FORMULARIO SET
-                                       seqEstadoProceso = 18
+                                       seqEstadoProceso = 18,
+                                       seqUnidadProyecto = null
                                     WHERE seqFormulario = " . $objFormulario->seqFormulario . "
                                  ";
                             $aptBd->execute($sql);
+
+                            $sql = "
+                                    UPDATE t_pry_unidad_proyecto SET
+                                       seqFormulario = NULL
+                                    WHERE seqFormulario = " . $objFormulario->seqFormulario . "
+                                 ";
+                            $aptBd->execute($sql);
+
                             break;
                         case 9: // Perdida
                             $txtCambios .= "seqEstadoProceso, Valor Anterior: " . $objFormulario->seqEstadoProceso . ", Valor Nuevo: 21\n";

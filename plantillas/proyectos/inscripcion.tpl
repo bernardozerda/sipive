@@ -30,7 +30,7 @@
     <div id="postulacion" class="yui-navset" style="width:100%; text-align:left;">
         <ul class="yui-nav" style="background:#E4E4E4;">
             <li class="selected"><a href="#frm"><em>Proyecto</em></a></li>
-           <!-- <li><a href="#ofe"><em>Oferente</em></a></li>-->
+            <li><a href="#ofe"><em>Oferente</em></a></li>
         </ul>
         <div class="yui-content">
             <div id="frm" style="height:380px;">
@@ -52,6 +52,9 @@
                     <tr><td height="5px"></td></tr>
                 </table>
                 {include file="proyectos/secDatosProyectoInscripcion.tpl"}
+            </div>
+            <div id="ofe" style="height:380px;">
+                {include file="proyectos/secDatosOferente.tpl"}
             </div>
          
         </div>

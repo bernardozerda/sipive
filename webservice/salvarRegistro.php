@@ -145,7 +145,7 @@
             <table width='600px'>
                <tr>
                   <td style='padding:10px;'>
-                     <img src='http://" . $_SERVER['HTTP_HOST'] . "/sipive/recursos/imagenes/escudo.png'>
+                     <img src='https://" . $_SERVER['HTTP_HOST'] . "/sipive/recursos/imagenes/escudo.png'>
                   </td>
                   <td style='padding:10px;'>
                      <strong>
@@ -166,7 +166,7 @@
                      de nuestro sistema. En éste momento la cuenta ya ha sido creada y requiere de activación.
                      Para realizar la activacion de la cuenta haga click en el enlace que aparece a continuación:<br><br>
                      <center style='font-size:16px; font-weight:bold;'>
-                        <a href='http://" . $_SERVER['HTTP_HOST'] . "/sipive/webservice/activacion.php?cuenta=" . $seqCuenta . "'>
+                        <a href='https://" . $_SERVER['HTTP_HOST'] . "/sipive/webservice/activacion.php?cuenta=" . $seqCuenta . "'>
                            ACTIVAR CUENTA
                         </a>
                      </center><br>

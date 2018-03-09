@@ -119,7 +119,7 @@ function consultaBasicaHogar($seqFormulario){
                 inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
                 inner join t_frm_formulario frm on hog.seqFormulario = frm.seqFormulario
                 inner join t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
-                inner join t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
+                left join t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
                 left join t_frm_solucion sol on frm.seqFormulario = sol.seqSolucion
                 inner join t_frm_estado_proceso epr on frm.seqEstadoProceso = epr.seqEstadoProceso
                 inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa

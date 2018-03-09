@@ -291,7 +291,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                                 <td>' . $resultado->numDocumento . '</td>
                                 <td>' . $resultado->txtNombreProyecto . '</td>
                                 <td>' . $resultado->txtNombreUnidad . '</td>
-                                <td> <a href="http://' . $_SERVER['HTTP_HOST'] . '/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '">http://' . $_SERVER['HTTP_HOST'] . '/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '</a> </td>
+                                <td> <a href="https://' . $_SERVER['HTTP_HOST'] . '/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '">http://' . $_SERVER['HTTP_HOST'] . '/sipive/contenidos/desembolso/formatoRevisionTecnica.php?seqFormulario=' . $resultado->seqFormulario . '</a> </td>
                             <tr>';
                         }
                         migrarInformacion($arraydocs, $db, 25, 23);

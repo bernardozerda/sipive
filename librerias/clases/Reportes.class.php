@@ -4676,7 +4676,7 @@ FROM
         LEFT JOIN
     t_pry_unidad_proyecto USING (seqFormulario)
         LEFT JOIN
-    t_pry_proyecto ON (t_pry_proyecto.seqProyecto = t_pry_unidad_proyecto.seqProyecto)
+    t_pry_proyecto ON (t_pry_proyecto.seqProyecto = t_frm_formulario.seqProyecto)
         LEFT JOIN
     t_frm_tipo_victima_hogar USING (bolDesplazado)
 WHERE

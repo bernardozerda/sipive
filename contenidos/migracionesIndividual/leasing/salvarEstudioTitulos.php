@@ -329,7 +329,7 @@ function sqlEstudioTitulos($arrArchivo){
                     seqEstudioTitulos,
                     txtAdjunto
                 ) VALUES (
-                    4,
+                    2,
                     $seqEstudioTitulos,
                     '" . $arrDatos[37] . "'
                 )

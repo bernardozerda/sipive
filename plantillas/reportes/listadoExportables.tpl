@@ -38,7 +38,7 @@
 {assign var=pasivosExigibles				value=$arrExportables.pasivosExigibles}
 {assign var=casaMano                        value=$arrExportables.casaMano}
 {assign var=x 								value=1}
-{assign var=backColor 						value=E4E4E4}
+{assign var=backColor 						value=D4D4D4}
 {assign var=actaVisita						value=$arrExportables.actaVisita}
 {assign var=permisos                        value=$arrExportables.permisos}
 {assign var=seguimientoDesembolsos 			value=$arrExportables.seguimientoDesembolsos}

@@ -668,7 +668,6 @@ class InformeVeedurias
               OR frm.seqUnidadProyecto IS NULL
               OR frm.seqUnidadProyecto = 1
             ) AND frm.seqCorte = $seqCorte
-            -- limit 5 offset 13355
         ";
         $objRes = $aptBd->execute($sql);
         $arrFormularios = array();
@@ -806,6 +805,7 @@ class InformeVeedurias
                 frm.seqModalidad,
                 frm.seqTipoEsquema,
                 frm.seqSolucion,
+                frm.txtFormulario,
                 frm.fchInscripcion,
                 frm.fchPostulacion,
                 frm.fchUltimaActualizacion,
@@ -933,11 +933,11 @@ class InformeVeedurias
             $arrHogares[$numPosicion]['Discapacitado'] = $txtDiscapacitado;
             $arrHogares[$numPosicion]['Ninguna Condición'] = $txtNingunaCondicion;
 
-            $arrHogares[$numPosicion]['LGTBI'] = ($objRes->fields['bolLgtb'] = 1)? "SI" : "NO";
+            $arrHogares[$numPosicion]['LGTBI'] = ($objRes->fields['bolLgtb'] == 1)? "SI" : "NO";
             $arrHogares[$numPosicion]['Grupo LGTBI'] = ($seqGrupoLgtbi != null)? $arrGrupoLgtbi[$seqGrupoLgtbi] : "No Disponible";
 
-            $arrHogares[$numPosicion]['Desplazado'] = ($objRes->fields['bolDesplazado'] = 1)? "SI" : "NO";
-            $arrHogares[$numPosicion]['Victima'] = ($seqTipoEsquema != null)? $arrTipoVictima[$seqTipoEsquema] : "No Disponible";
+            $arrHogares[$numPosicion]['Desplazado'] = ($objRes->fields['bolDesplazado'] == 1)? "SI" : "NO";
+            $arrHogares[$numPosicion]['Victima'] = ($seqTipoVictima != null)? $arrTipoVictima[$seqTipoVictima] : "No Disponible";
 
             $objRes->MoveNext();
         }

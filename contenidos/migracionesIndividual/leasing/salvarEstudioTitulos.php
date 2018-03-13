@@ -322,6 +322,19 @@ function sqlEstudioTitulos($arrArchivo){
                 $aptBd->execute($sql);
             }
 
+            // inserta la observacion del archivo
+            $sql = "
+                INSERT INTO t_des_adjuntos_titulos(
+                    seqTipoAdjunto,
+                    seqEstudioTitulos,
+                    txtAdjunto
+                ) VALUES (
+                    2,
+                    $seqEstudioTitulos,
+                    '" . $arrDatos[37] . "'
+                )
+            ";
+
             // cambio de estado 31 == si || 28 == no
             // columna "se viabiliza juridicamente"
             $seqEstadoProceso = (mb_strtolower($arrDatos[34]) == "no")? 28 : 31;

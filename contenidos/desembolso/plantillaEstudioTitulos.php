@@ -20,7 +20,19 @@ function plantillaestudiotitulos($seqFormularios) {
     mysql_set_charset('utf8', $conexion);
     mysql_select_db($arrConfiguracion['baseDatos']['nombre'], $conexion);
 
-    //sql
+    $sqlObtenerFormActo = "SELECT  GROUP_CONCAT(seqFormularioActo SEPARATOR ', ')  as seqFormularioActo
+    FROM  t_aad_formulario_acto tafa     where seqFormulario in(" . $seqFormularios . ") and tafa.seqFormularioActo in 
+(select max(seqFormularioActo) from  t_aad_formulario_acto left join T_AAD_HOGARES_VINCULADOS using(seqFormularioActo) where seqFormulario in (" . $seqFormularios . ") and seqTipoActo = 1  group by seqFormulario)";
+    $resultdObtenerFormActo = mysql_query($sqlObtenerFormActo, $conexion) or die(mysql_error());
+    $reqSeqFormularioActo = mysql_fetch_array($resultdObtenerFormActo);
+    $seqFormularioActo = $reqSeqFormularioActo['seqFormularioActo'];
+
+    $sqlSeqEscrituracion = "select  GROUP_CONCAT(seqEscrituracion SEPARATOR ', ') as seqEscrituracion from t_des_escrituracion where seqFormulario in (" . $seqFormularios . ") and seqEscrituracion in 
+(select max(seqEscrituracion) from  t_des_escrituracion where seqFormulario in (" . $seqFormularios . ") group by seqFormulario); ";
+    $resultdSeqEscrituracion = mysql_query($sqlSeqEscrituracion, $conexion) or die(mysql_error());
+    $reqSeqEscrituracion = mysql_fetch_array($resultdSeqEscrituracion);
+    $seqEscrituracion = $reqSeqEscrituracion['seqEscrituracion'];
+
     $sql = "SELECT T_DES_ESCRITURACION.seqFormulario AS 'ID HOGAR', T_CIU_CIUDADANO.numDocumento AS 'CC POSTULANTE PRINCIPAL', T_CIU_TIPO_DOCUMENTO.txtTipoDocumento AS 'TIPO DE DOCUMENTO', UPPER(CONCAT(T_CIU_CIUDADANO.txtNombre1, ' ', T_CIU_CIUDADANO.txtNombre2, ' ', T_CIU_CIUDADANO.txtApellido1, ' ', T_CIU_CIUDADANO.txtApellido2)) AS 'NOMBRE POSTULANTE PRINCIPAL', T_PRY_PROYECTO.txtNombreProyecto AS 'PROYECTO', T_DES_ESCRITURACION.txtNombreVendedor AS 'PROPIETARIO', T_FRM_FORMULARIO.seqUnidadProyecto AS 'seqUnidadProyecto', T_PRY_UNIDAD_PROYECTO.txtNombreUnidad AS 'txtnombreunidad', T_DES_ESCRITURACION.txtDireccionInmueble AS 'DIRECCION INMUEBLE', T_PRY_TECNICO.txtexistencia AS 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD', T_DES_ESCRITURACION.txtEscritura AS 'ESCRITURA REGISTRADA', T_DES_ESCRITURACION.fchEscritura AS 'FECHA ESCRITURA', T_DES_ESCRITURACION.numNotaria AS 'NOTARIA', T_DES_ESCRITURACION.txtCiudad AS 'CIUDAD NOTARIA', T_DES_ESCRITURACION.txtMatriculaInmobiliaria AS 'FOLIO DE MATRICULA', T_DES_ESCRITURACION.numValorInmueble AS 'VALOR INMUEBLE', T_AAD_HOGARES_VINCULADOS.numActo AS 'NUMERO DEL ACTO', DATE_FORMAT(T_AAD_HOGARES_VINCULADOS.fchacto,'%d-%m-%Y') AS 'FECHA DEL ACTO', '' AS 'No. ESCRITURA', '' AS 'FECHA ESCRITURA (D/M/A)', '' AS 'NOTARIA', '' AS 'CIUDAD NOTARIA', '' AS 'FOLIO DE MATRICULA', '' AS 'ZONA OFICINA REGISTRO', '' AS 'CIUDAD OFICINA REGISTRO', '' AS 'FECHA FOLIO (D/M/A)', '' AS 'RESOLUCION DE VINCULACION COINCIDENTE', '' AS 'BENEFICIARIOS DEL SDV COINCIDENTES', '' AS 'NOMBRE Y CEDULA DE LOS PROPIETARIOS EN EL CTL INCIDENTES', '' AS 'CONSTITUCION PATRIMONIO FAMILIA', '' AS 'INDAGACION AFECTACION A VIVIENDA FAMILIAR', '' AS 'RESTRICCIONES', '' AS 'ESTADO CIVIL COINCIDENTE', '' AS 'CARTA DE VINCULACION Y/O RESOLUCION PROTOCOLIZADA', '' AS 'No. DE ANOTACION CTL COMPRAVENTA', '' AS 'SE CANCELA HIPOTECA MAYOR EXTENSION (SI LA HUBIERE)', '' AS 'PATRIMONIO DE FAMILIA REGISTRADO', '' AS 'PROHIBICION DE TRANSFERENCIA Y DERECHO DE PREFERENCIA REGISTRADOS', '' AS 'IMPRESION DE CONSULTA FONVIVIENDA (HOGARES VICTIMAS)', '' AS 'ELABORO', '' AS 'APROBO', '' AS 'SE VIABILIZA JURIDICAMENTE', '' AS 'OBSERVACION'
 FROM T_DES_ESCRITURACION
 INNER JOIN T_FRM_FORMULARIO ON (T_DES_ESCRITURACION.seqFormulario = T_FRM_FORMULARIO.seqFormulario)
@@ -32,17 +44,12 @@ LEFT JOIN T_PRY_PROYECTO ON (T_PRY_PROYECTO.seqProyecto = T_PRY_UNIDAD_PROYECTO.
 LEFT JOIN T_PRY_TECNICO ON (T_FRM_FORMULARIO.seqUnidadProyecto = T_PRY_TECNICO.seqUnidadProyecto)
 INNER JOIN T_AAD_FORMULARIO_ACTO ON (T_FRM_FORMULARIO.seqFormulario = T_AAD_FORMULARIO_ACTO.seqFormulario)
 INNER JOIN T_AAD_HOGARES_VINCULADOS ON (T_AAD_FORMULARIO_ACTO.seqFormularioActo = T_AAD_HOGARES_VINCULADOS.seqFormularioActo)
-INNER JOIN (
-SELECT MAX(ah.fchActo), ah.numActo
-FROM T_AAD_HOGARES_VINCULADOS ah
-LEFT JOIN t_aad_formulario_acto tafa ON(tafa.seqFormularioActo = ah.seqFormularioActo)
-GROUP BY numActo
-ORDER BY ah.fchActo DESC) AS T_AAD_HOGARES_VINCULADOS1 USING (numActo)
-WHERE T_FRM_HOGAR.seqParentesco = 1 AND T_DES_ESCRITURACION.seqFormulario IN (" . $seqFormularios . ") AND seqTipoActo = 1 "
-            . " GROUP BY T_DES_ESCRITURACION.seqFormulario order by  T_DES_ESCRITURACION.seqEscrituracion, T_AAD_FORMULARIO_ACTO.seqFormularioActo desc";
+WHERE T_FRM_HOGAR.seqParentesco = 1 AND T_DES_ESCRITURACION.seqFormulario IN (" . $seqFormularios . ")"
+            . " AND seqTipoActo = 1 and T_AAD_FORMULARIO_ACTO.seqFormularioActo in(" . $seqFormularioActo . ") and  T_DES_ESCRITURACION.seqEscrituracion in (" . $seqEscrituracion . ")"
+            . " order by  T_DES_ESCRITURACION.seqEscrituracion, T_AAD_FORMULARIO_ACTO.seqFormularioActo desc";
 
-//    echo $sql;
-//     die();
+//echo $sql;
+    //   die();
     $resultdl = mysql_query($sql, $conexion) or die(mysql_error());
     //echo $resultdl; die();
     $registros = mysql_num_rows($resultdl);

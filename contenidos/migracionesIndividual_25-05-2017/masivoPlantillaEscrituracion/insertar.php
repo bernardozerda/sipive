@@ -610,7 +610,7 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
                         <td><?= $arreglo['numDocumento'][$int] ?></td>
                         <td><?= $arreglo['seqDesembolso'][$int] ?></td>
                         <td><?= $arreglo['seqFormulario'][$int] ?></td>
-                        <td><a href="http://<?php echo $_SERVER['HTTP_HOST']?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?>">http://<?php echo $_SERVER['HTTP_HOST']?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?></a></td>
+                        <td><a href="https://<?php echo $_SERVER['HTTP_HOST']?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?>">https://<?php echo $_SERVER['HTTP_HOST']?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?= $arreglo['seqFormulario'][$int] ?></a></td>
                     </tr>
 
 

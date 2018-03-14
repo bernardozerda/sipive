@@ -25,7 +25,7 @@ header("Expires: 1");
                 <td><?php echo $_POST['array']['numDocumento'][$int] ?></td>
                 <td><?php echo  $_POST['array']['seqDesembolso'][$int] ?></td>
                 <td><?php echo  $_POST['array']['seqFormulario'][$int] ?></td>
-                <td><a href="https://<?= $_SERVER['HTTP_HOST'] ?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?php echo $_POST['array']['seqFormulario'][$int] ?>">http://<?php echo $_SERVER['HTTP_HOST'] ?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?php echo  $_POST['array']['seqFormulario'][$int] ?></a></td>
+                <td><a href="https://<?= $_SERVER['HTTP_HOST'] ?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?php echo $_POST['array']['seqFormulario'][$int] ?>">https://<?php echo $_SERVER['HTTP_HOST'] ?>/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=<?php echo  $_POST['array']['seqFormulario'][$int] ?></a></td>
             </tr>
 
             <?php

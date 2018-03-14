@@ -108,7 +108,7 @@ if (empty($arrErrores)) {
                                 align='center'
                                 style='border-bottom: 1px solid #c4c4c4;'
                             >
-                                <img src='http://sdv.habitatbogota.gov.co/sipive/recursos/imagenes/bogota.jpg'>
+                                <img src='https://sdv.habitatbogota.gov.co/sipive/recursos/imagenes/bogota.jpg'>
                             </td>
                             <td align='center'
                                 style='

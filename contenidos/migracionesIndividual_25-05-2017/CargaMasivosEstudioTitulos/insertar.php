@@ -524,7 +524,7 @@ function generarLinks($arreglo, $tipo) {
         $tabla .= "<td>" . $arreglo['seqDesembolso'][$int] . "</td>";
         $tabla .= "<td>" . $arreglo['txtElaboro'][$int] . "</td>";
         $tabla .= "<td>" . $arreglo['txtAprobo'][$int] . "</td>";
-        $tabla .= "<td><a href='http://".$_SERVER['HTTP_HOST']."/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "' target='_blank'>http://".$_SERVER['HTTP_HOST']."/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "</a></td>";
+        $tabla .= "<td><a href='https://".$_SERVER['HTTP_HOST']."/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "' target='_blank'>https://".$_SERVER['HTTP_HOST']."/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arreglo['seqFormulario'][$int] . "</a></td>";
         $tabla .= "</tr>";
         $int++;
     }

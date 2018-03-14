@@ -29,24 +29,24 @@
       <ul>
          <li style="cursor:hand;">
             
-            <div onClick="mostrarOcultar('{$objMenu->txtEspanol}')">
-               <strong>{$objMenu->txtEspanol}</strong>
+            <div onClick="mostrarOcultar('{$objMenu->txtEspanol|trim}')">
+               <strong>{$objMenu->txtEspanol|trim}</strong>
             </div>
             
             {if not empty( $objMenu->arrHijos )}
-               <div id="{$objMenu->txtEspanol}" style="display:none">
-                  {if $objMenu->txtAyuda != ""}
-                     {include file=$objMenu->txtAyuda}
+               <div id="{$objMenu->txtEspanol|trim}" style="display:none">
+                  {if trim($objMenu->txtAyuda) != ""}
+                     {include file=$objMenu->txtAyuda|trim}
                   {/if}
                   <ul>
                      {foreach from=$objMenu->arrHijos item=objHijo}
                         <li>
-                           <div onClick="mostrarOcultar('{$objHijo->txtEspanol}')">
-                              <strong>{$objHijo->txtEspanol}</strong><br>
+                           <div onClick="mostrarOcultar('{$objHijo->txtEspanol|trim}')">
+                              <strong>{$objHijo->txtEspanol|trim}</strong><br>
                            </div>
-                           {if $objHijo->txtAyuda != ""}
-                              <div id="{$objHijo->txtEspanol}" style="display:none">
-                                 {include file=$objHijo->txtAyuda}
+                           {if trim($objHijo->txtAyuda) != ""}
+                              <div id="{$objHijo->txtEspanol|trim}" style="display:none">
+                                 {include file=$objHijo->txtAyuda|trim}
                               </div>
                            {/if}
                         </li>

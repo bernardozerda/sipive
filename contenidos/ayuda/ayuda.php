@@ -56,7 +56,7 @@
        }
        $arrMenu[ $seqMenu ] = $objMenu;
     }
-    
+
     $claSmarty->assign( "numAlto" , ( $_POST['alto'] - 50 ) );
     $claSmarty->assign( "arrMenu" , $arrMenu );
     $claSmarty->display( "ayuda/ayuda.tpl" );

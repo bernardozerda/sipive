@@ -285,9 +285,8 @@ function consultaDesembolsos($seqFormulario){
                     ati.seqAdjuntoTitulos as 'Adjunto',
                     ati.txtAdjunto as 'Recomendación'
                 from t_des_estudio_titulos tit
-                inner join t_des_adjuntos_titulos ati on tit.seqEstudioTitulos = ati.seqEstudioTitulos
-                where seqDesembolso = $seqDesembolso
-                  and seqTipoAdjunto = 2
+                left join t_des_adjuntos_titulos ati on tit.seqEstudioTitulos = ati.seqEstudioTitulos and seqTipoAdjunto = 2
+                where seqDesembolso = $seqDesembolso  
             ";
         $arrTitulos = $aptBd->GetAll($sql);
 

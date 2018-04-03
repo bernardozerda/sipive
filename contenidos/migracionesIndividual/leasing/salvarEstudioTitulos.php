@@ -334,6 +334,7 @@ function sqlEstudioTitulos($arrArchivo){
                     '" . $arrDatos[37] . "'
                 )
             ";
+            $aptBd->execute($sql);
 
             // cambio de estado 31 == si || 28 == no
             // columna "se viabiliza juridicamente"

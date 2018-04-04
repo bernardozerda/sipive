@@ -128,8 +128,8 @@ class CRMProyecto {
             $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
                     WHERE frm.bolCerrado =1  and und.seqFormulario is not null
-                    and (seqEstadoProceso = 15 OR seqEstadoProceso = 62 OR seqEstadoProceso = 17
-                    OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
+                    and (seqEstadoProceso = 15 OR seqEstadoProceso = 62 OR seqEstadoProceso = 17 OR seqEstadoProceso = 19
+                    OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 24 OR seqEstadoProceso = 25
                     OR seqEstadoProceso = 26 OR seqEstadoProceso = 27 OR seqEstadoProceso = 28 OR seqEstadoProceso = 31
                     OR seqEstadoProceso = 29 OR seqEstadoProceso = 40) and bolActivo =1 and und.seqProyecto >0";
         }
@@ -164,8 +164,8 @@ class CRMProyecto {
             $sql = "SELECT count(*) as cant, und.seqProyecto FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
                     WHERE frm.bolCerrado =1  and und.seqFormulario is not null
-                    and (seqEstadoProceso = 15 OR seqEstadoProceso = 62 OR seqEstadoProceso = 17
-                    OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
+                    and (seqEstadoProceso = 15 OR seqEstadoProceso = 62 OR seqEstadoProceso = 17 OR seqEstadoProceso = 19 
+                    OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 24  OR seqEstadoProceso = 25
                     OR seqEstadoProceso = 26 OR seqEstadoProceso = 27 OR seqEstadoProceso = 28 OR seqEstadoProceso = 31
                     OR seqEstadoProceso = 29 OR seqEstadoProceso = 40) and bolActivo =1";
         } else if ($valor == 5) {
@@ -175,8 +175,8 @@ class CRMProyecto {
         } else if ($valor == 6) {
             $sql = "SELECT count(*) as cant  FROM t_pry_unidad_proyecto    und
                     INNER JOIN t_frm_formulario frm USING (seqFormulario)
-                     WHERE bolCerrado = 1 AND (seqEstadoProceso = 62 OR seqEstadoProceso = 17
-                    OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
+                     WHERE bolCerrado = 1 AND (seqEstadoProceso = 62 OR seqEstadoProceso = 17 OR seqEstadoProceso = 19 
+                    OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 24 OR seqEstadoProceso = 25
                     OR seqEstadoProceso = 26 OR seqEstadoProceso = 27 OR seqEstadoProceso = 28 OR seqEstadoProceso = 31
                     OR seqEstadoProceso = 29 OR seqEstadoProceso = 24)";
         } else if ($valor == 7) {

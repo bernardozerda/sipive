@@ -25,7 +25,7 @@ class InformeVeedurias
         $this->txtCorte = "";
         $this->fchCorte = null;
         $this->txtNombre = "";
-        $this->arrEstadosVinculado = array( 15, 62, 17, 19, 22, 23, 24, 25, 26, 27, 28, 29, 31, 40 );
+        $this->arrEstadosVinculado = array( 15, 62, 17, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 40 );
         $this->arrEstadosLegalizado = array( 40 );
         $this->arrFuentesExcel = array();
     }
@@ -174,8 +174,8 @@ class InformeVeedurias
             left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
-            order by pry.txtNombreProyecto, uac.seqTipoActoUnidad       
-              
+            and upr.bolActivo = 1
+            order by pry.txtNombreProyecto, uac.seqTipoActoUnidad   
         ";
 
         $objRes = $aptBd->execute($sql);
@@ -625,7 +625,7 @@ class InformeVeedurias
                 UPPER(esc.txtChip) as 'CHIP',
                 UPPER(esc.txtTipoPredio) as 'Tipo de Predio',
                 tit.numEscrituraTitulo as 'Número Escritura Titulo',
-                tit.fchEscrituraTitulo as 'Fecha Escritura Titulo',
+                IF(tit.fchEscrituraTitulo < '2000-01-01',NULL,tit.fchEscrituraTitulo) as 'Fecha Escritura Titulo',
                 tit.numNotariaTitulo as 'Notaría Titulo',
                 tit.numFolioMatricula as 'Folio Matrícula',
                 tit.txtZonaMatricula as 'Zona Matricula',

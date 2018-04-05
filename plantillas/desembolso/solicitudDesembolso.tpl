@@ -836,7 +836,7 @@
 
                                         </tr>
                                         <tr>
-                                            <td style="padding-left:10px;">Elaboró:</td>
+                                            <td style="padding-left:10px;">Revisó:</td>
                                             <td style="padding-left:5px;">
                                                 <input type="text"
                                                        name="txtRevisoSubsecretaria"

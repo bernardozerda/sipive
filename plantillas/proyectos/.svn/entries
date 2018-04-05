@@ -26,16 +26,16 @@ sdht_usuario
 
 3dc0574e-9e49-4342-8304-e9a224232ceb
 
-cambioEstadosProyecto.tpl
+actualizacion.tpl
 file
+160
 
 
 
-
-2014-01-23T12:47:41.680253Z
-d24007513b30b4110b92d01033f83b40
-2014-01-23T12:48:15.328478Z
-103
+2014-01-29T20:14:21.956761Z
+5923e800731a5f944b99fcdaf5466889
+2014-01-29T20:23:32.805332Z
+160
 sdht_usuario
 
 
@@ -58,7 +58,7 @@ sdht_usuario
 
 
 
-3173
+26977
 
 buscarProyecto.tpl
 file
@@ -128,16 +128,16 @@ sdht_usuario
 
 1038
 
-actualizacion.tpl
+cambioEstadosProyecto.tpl
 file
-160
 
 
 
-2014-01-29T20:14:21.956761Z
-5923e800731a5f944b99fcdaf5466889
-2014-01-29T20:23:32.805332Z
-160
+
+2014-01-23T12:47:41.680253Z
+d24007513b30b4110b92d01033f83b40
+2014-01-23T12:48:15.328478Z
+103
 sdht_usuario
 
 
@@ -160,7 +160,7 @@ sdht_usuario
 
 
 
-26977
+3173
 
 datosDesembolso.tpl
 file
@@ -195,108 +195,6 @@ sdht_usuario
 
 
 8365
-
-inscripcionProyectos.tpl
-file
-
-
-
-
-2013-09-17T14:12:39.772914Z
-8198183e5459e6a250f92d667e59e72e
-2013-12-05T22:46:16.503378Z
-1
-sdht_usuario
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-27051
-
-pedirConfirmacion.tpl
-file
-
-
-
-
-2013-09-27T20:41:00.820752Z
-ebd6e3c2b08d7137565c7cd8c31f75d4
-2013-12-05T22:46:16.503378Z
-1
-sdht_usuario
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1065
-
-pedirSeguimiento.tpl
-file
-
-
-
-
-2014-01-21T13:26:30.825947Z
-637b19e8d4296831cdb8226e3406ef26
-2014-01-21T21:28:54.659785Z
-87
-sdht_usuario
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1489
 
 desembolso.tpl
 file
@@ -400,47 +298,13 @@ sdht_usuario
 
 29808
 
-postulacionOLD.tpl
-file
-
-
-
-
-2014-01-13T16:18:10.648761Z
-a566b6cba4a4e2e13d66c8893a1ce0db
-2014-01-21T21:28:54.659785Z
-87
-sdht_usuario
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-30953
-
 inscripcion.tpl
 file
 160
 
 
 
-2014-01-29T15:31:43.808585Z
+2018-03-08T23:18:34.213000Z
 0c921090d745de922363ff7b554eac7b
 2014-01-29T20:23:32.805332Z
 160
@@ -467,6 +331,131 @@ sdht_usuario
 
 
 19289
+
+inscripcionProyectos.tpl
+file
+
+
+
+
+2013-09-17T14:12:39.772914Z
+8198183e5459e6a250f92d667e59e72e
+2013-12-05T22:46:16.503378Z
+1
+sdht_usuario
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+27051
+
+inscripcion_.tpl
+file
+
+
+
+add
+
+0c921090d745de922363ff7b554eac7b
+
+
+
+
+
+
+
+
+
+
+
+copied
+http://192.168.4.104/svn/sdv/plantillas/proyectos/inscripcion.tpl
+160
+
+pedirConfirmacion.tpl
+file
+
+
+
+
+2013-09-27T20:41:00.820752Z
+ebd6e3c2b08d7137565c7cd8c31f75d4
+2013-12-05T22:46:16.503378Z
+1
+sdht_usuario
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1065
+
+pedirSeguimiento.tpl
+file
+
+
+
+
+2014-01-21T13:26:30.825947Z
+637b19e8d4296831cdb8226e3406ef26
+2014-01-21T21:28:54.659785Z
+87
+sdht_usuario
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1489
 
 postulacion.tpl
 file
@@ -501,4 +490,45 @@ sdht_usuario
 
 
 41658
+
+postulacionOLD.tpl
+file
+
+
+
+
+2014-01-13T16:18:10.648761Z
+a566b6cba4a4e2e13d66c8893a1ce0db
+2014-01-21T21:28:54.659785Z
+87
+sdht_usuario
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+30953
+
+vistas
+dir
+
+
+
+add
 

@@ -174,7 +174,6 @@ class InformeVeedurias
             left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
-            and upr.bolActivo = 1
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad   
         ";
 

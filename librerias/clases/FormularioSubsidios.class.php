@@ -590,7 +590,7 @@ class FormularioSubsidios {
                 WHERE seqFormulario = $seqFormulario
             ";
             
-           // echo $sql;
+      //      echo $sql;
             $objRes = $aptBd->execute($sql);
             if ($objRes->fields) {
 
@@ -829,16 +829,14 @@ class FormularioSubsidios {
             try {
                 $sql = "
                     update t_pry_unidad_proyecto set
-                      seqFormulario = null,
-                      valSDVEComplementario = null
+                      seqFormulario = 0
                     where seqFormulario = " . $this->seqFormulario . "
                 ";
                 $aptBd->execute($sql);
                 if( $this->seqUnidadProyecto > 1 ) {
                     $sql = "
                         update t_pry_unidad_proyecto set
-                          seqFormulario = " . $this->seqFormulario . ",
-                          valSDVEComplementario = " . doubleval( $this->valComplementario ) . " 
+                          seqFormulario = " . $this->seqFormulario . "
                         where seqUnidadProyecto = " . $this->seqUnidadProyecto . "
                     ";
                     $aptBd->execute($sql);
@@ -1179,25 +1177,6 @@ class FormularioSubsidios {
             $this->arrErrores[] = $objError->getMessage();
         }
         return true;
-    }
-
-    public function obtenerPostulantePrincipal(){
-        foreach($this->arrCiudadano as $seqCiudadadno => $objCiudadano){
-            if($objCiudadano->seqParentesco == 1){
-                break;
-            }
-        }
-        return $objCiudadano;
-    }
-
-    public function nombrePostulantePrincipal($txtFuncion){
-        $objCiudadano = $this->obtenerPostulantePrincipal();
-        return $txtFuncion(trim($objCiudadano->txtNombre1 ). " " . trim($objCiudadano->txtNombre2 ). " " . trim($objCiudadano->txtApellido1 ). " " . trim($objCiudadano->txtApellido2));
-    }
-
-    public function documentoPostulantePrincipal(){
-        $objCiudadano = $this->obtenerPostulantePrincipal();
-        return $objCiudadano->numDocumento;
     }
 
 

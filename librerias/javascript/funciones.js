@@ -23,12 +23,12 @@
 
 var mychartMostrar;
 
-function verificarSesion(){
-    var numTimeStamp = Math.round( Number(new Date()) / 1000 );
-    var numExpiraSesion = YAHOO.util.Cookie.get( "sdhtsdv" );
-    var numTiempoVida = Math.round( numExpiraSesion - numTimeStamp );
-    if(numTiempoVida < 0){
-        parent.window.location.href='./autenticacion.php';
+function verificarSesion() {
+    var numTimeStamp = Math.round(Number(new Date()) / 1000);
+    var numExpiraSesion = YAHOO.util.Cookie.get("sdhtsdv");
+    var numTiempoVida = Math.round(numExpiraSesion - numTimeStamp);
+    if (numTiempoVida < 0) {
+        parent.window.location.href = './autenticacion.php';
     }
 }
 
@@ -554,12 +554,12 @@ function eliminarRegistro(seqRegistro, txtPregunta, txtArchivo) {
             txtParametros += "&txtComentario=" + objComentario.value;
         }
 
-        if (typeof (YAHOO.util.Dom.get("seqGestion")) != "undefined" && YAHOO.util.Dom.get("seqGestion") != null ) {
+        if (typeof (YAHOO.util.Dom.get("seqGestion")) != "undefined" && YAHOO.util.Dom.get("seqGestion") != null) {
             var objGestion = YAHOO.util.Dom.get("seqGestion");
             txtParametros += "&seqGestion=" + objGestion.options[ objGestion.selectedIndex ].value;
         }
 
-        if (typeof (YAHOO.util.Dom.get("borrarAAD")) != "undefined" && YAHOO.util.Dom.get("borrarAAD") != null ) {
+        if (typeof (YAHOO.util.Dom.get("borrarAAD")) != "undefined" && YAHOO.util.Dom.get("borrarAAD") != null) {
             var objBorrarAAD = YAHOO.util.Dom.get("borrarAAD");
             txtParametros += "&bolBorrar=" + objBorrarAAD.checked;
         }
@@ -834,13 +834,13 @@ function buscarCedula(txtNombreArchivo) {
 function agregarMiembroHogar() {
 
     var arrAbreviacionesTipoDocumento = new Array();
-        arrAbreviacionesTipoDocumento[ 1 ] = "C.C.";
-        arrAbreviacionesTipoDocumento[ 2 ] = "C.E.";
-        arrAbreviacionesTipoDocumento[ 3 ] = "T.I.";
-        arrAbreviacionesTipoDocumento[ 4 ] = "R.C.";
-        arrAbreviacionesTipoDocumento[ 5 ] = "PAS.";
-        arrAbreviacionesTipoDocumento[ 6 ] = "NIT.";
-        arrAbreviacionesTipoDocumento[ 7 ] = "N.U.I.";
+    arrAbreviacionesTipoDocumento[ 1 ] = "C.C.";
+    arrAbreviacionesTipoDocumento[ 2 ] = "C.E.";
+    arrAbreviacionesTipoDocumento[ 3 ] = "T.I.";
+    arrAbreviacionesTipoDocumento[ 4 ] = "R.C.";
+    arrAbreviacionesTipoDocumento[ 5 ] = "PAS.";
+    arrAbreviacionesTipoDocumento[ 6 ] = "NIT.";
+    arrAbreviacionesTipoDocumento[ 7 ] = "N.U.I.";
 
     // Variable a recoger del nuevo miembro del hogar
     var objNombre1 = document.getElementById("nombre1");
@@ -867,15 +867,15 @@ function agregarMiembroHogar() {
     var objSeqGrupoLgtbi = document.getElementById("seqGrupoLgtbi");
     var objSeqCajaCompensacion = document.getElementById("cajaCompensacion");
 
-    var numDocumento = objNumDocumento.value.replace(/[^0-9]/g,"");
-    var valIngresos = objIngresos.value.replace(/[^0-9]/g,"");
+    var numDocumento = objNumDocumento.value.replace(/[^0-9]/g, "");
+    var valIngresos = objIngresos.value.replace(/[^0-9]/g, "");
 
     // Si el nivel educativo es ninguno no valida los anios aprobados
-    if( $("#nivelEducativo").val() == 0 ){
+    if ($("#nivelEducativo").val() == 0) {
         alert("Seleccione el nivel educativo");
         objNvlEducativo.focus();
         return false;
-    }else {
+    } else {
         if ($("#nivelEducativo").val() != 1) {
             if (objAnosAprobados != null) {
                 if ($("#numAnosAprobados").val() == "" || $("#numAnosAprobados").val() == 0) {
@@ -1000,7 +1000,7 @@ function agregarMiembroHogar() {
     txtInsertar += "<input type='hidden' id='parentesco-" + numDocumento + "' value='" + objParentesco.options[ objParentesco.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='ingreso-" + numDocumento + "' value='" + valIngresos + "'>";
 
-    if(objAnosAprobados.selectedIndex == -1){
+    if (objAnosAprobados.selectedIndex == -1) {
         objAnosAprobados.selectedIndex = 0;
     }
 
@@ -1123,9 +1123,9 @@ function agregarMiembroHogar() {
     // 0 = NO de lo contrario
     var arrTablas = $("#datosHogar").find("table");
     var numDesplazado = 0;
-    for(i=0; i < arrTablas.length; i++) {
-        if(parseInt(arrTablas[i].id)){
-            if( $("#" + arrTablas[i].id + "-seqTipoVictima").val() == 2 ){
+    for (i = 0; i < arrTablas.length; i++) {
+        if (parseInt(arrTablas[i].id)) {
+            if ($("#" + arrTablas[i].id + "-seqTipoVictima").val() == 2) {
                 numDesplazado = 1;
             }
         }
@@ -1134,27 +1134,27 @@ function agregarMiembroHogar() {
 
     // numDesplazado (Vulnerable) = 0
     // numDesplazado (Desplazado) = 1
-    if(numDesplazado == 0){
-        if( $("#seqTipoEsquema").val() == 11 ){
+    if (numDesplazado == 0) {
+        if ($("#seqTipoEsquema").val() == 11) {
             $("#seqTipoEsquema").val(0);
         }
-        $("#seqTipoEsquema > option").each(function() {
-            if( this.value == 11 ){
+        $("#seqTipoEsquema > option").each(function () {
+            if (this.value == 11) {
                 $(this).remove();
             }
         });
-    }else{
+    } else {
         var bolDesactivarModalidad = true;
-        if( $("#bolActivarModalidad").val() == 1 ){
+        if ($("#bolActivarModalidad").val() == 1) {
             bolDesactivarModalidad = false;
         }
         $("#seqTipoEsquema").append(
-            $('<option>', {
-                value: 11,
-                text: "Opción Retorno / Reubicación",
-                disabled: bolDesactivarModalidad
-            })
-        );
+                $('<option>', {
+                    value: 11,
+                    text: "Opción Retorno / Reubicación",
+                    disabled: bolDesactivarModalidad
+                })
+                );
     }
 
 
@@ -1177,7 +1177,7 @@ function quitarMiembroHogar(numDocumento) {
     } else {
 
         // Resta el valor al total
-        objTotalValor.value = parseInt(objTotalValor.value.replace(/[^0-9]/g,"")) - parseInt(objIngreso.value.replace(/[^0-9]/g,""));
+        objTotalValor.value = parseInt(objTotalValor.value.replace(/[^0-9]/g, "")) - parseInt(objIngreso.value.replace(/[^0-9]/g, ""));
 
         // Muestra el valor en pantalla
         formatoSeparadores(objTotalValor);
@@ -1191,7 +1191,7 @@ function quitarMiembroHogar(numDocumento) {
 
 }
 
-function quitarMiembroYSalvar(numDocumento){
+function quitarMiembroYSalvar(numDocumento) {
 
     var tmpObj = null;
     tmpObj = document.getElementById('qmys_mask');
@@ -1208,45 +1208,45 @@ function quitarMiembroYSalvar(numDocumento){
     var objFormulario = YAHOO.util.Dom.get("seqFormulario");
     objFormularioMiembro.value = objFormulario.value;
 
-    var fncSubmit = function (){
+    var fncSubmit = function () {
         this.submit();
         eliminarObjeto(numDocumento);
         eliminarObjeto("detalles" + numDocumento);
     }
 
-    var fncCancel = function (){
+    var fncCancel = function () {
         this.cancel();
     }
 
-    var onSuccess = function(o) {
+    var onSuccess = function (o) {
         var objMensajes = YAHOO.util.Dom.get('mensajes');
         objMensajes.innerHTML = o.responseText;
     };
-    var onFailure = function(o) {
+    var onFailure = function (o) {
         alert("Your submission failed. Status: " + o.status);
     };
 
     var objConfiguracion = {
-        width : "500px",
+        width: "500px",
         height: "230px",
-        fixedcenter : true,
-        constraintoviewport : true,
+        fixedcenter: true,
+        constraintoviewport: true,
         modal: true,
         constraintoviewport : true,
-        buttons: [
-            { text: "Aceptar", handler: fncSubmit },
-            { text: "Cancelar", handler: fncCancel, isDefault: true }
-        ]
+                buttons: [
+                    {text: "Aceptar", handler: fncSubmit},
+                    {text: "Cancelar", handler: fncCancel, isDefault: true}
+                ]
     };
 
-    var objDialogo = new YAHOO.widget.Dialog("qmys",objConfiguracion);
+    var objDialogo = new YAHOO.widget.Dialog("qmys", objConfiguracion);
 
-    objDialogo.validate = function (){
+    objDialogo.validate = function () {
         objDatos = this.getData();
 
         var bolError = false;
 
-        if(objDatos.txtComentario1 == ""){
+        if (objDatos.txtComentario1 == "") {
             var objError = YAHOO.util.Dom.get('txtComentarioError');
             var objComentario = YAHOO.util.Dom.get('txtComentario1');
             objError.innerHTML = 'Debe digitar un comentario';
@@ -1254,7 +1254,7 @@ function quitarMiembroYSalvar(numDocumento){
             bolError = true;
         }
 
-        if(objDatos.seqGrupoGestion1 == 0){
+        if (objDatos.seqGrupoGestion1 == 0) {
             var objError = YAHOO.util.Dom.get('seqGrupoGestionError');
             var objComentario = YAHOO.util.Dom.get('seqGrupoGestion1');
             objError.innerHTML = 'Debe digitar un comentario';
@@ -1262,7 +1262,7 @@ function quitarMiembroYSalvar(numDocumento){
             bolError = true;
         }
 
-        if(objDatos.seqGestion1 == 0){
+        if (objDatos.seqGestion1 == 0) {
             var objError = YAHOO.util.Dom.get('seqGestionError');
             var objComentario = YAHOO.util.Dom.get('seqGestion1');
             objError.innerHTML = 'Debe digitar un comentario';
@@ -1270,7 +1270,7 @@ function quitarMiembroYSalvar(numDocumento){
             bolError = true;
         }
 
-        if(bolError == true){
+        if (bolError == true) {
             return false;
         }
 
@@ -1288,7 +1288,7 @@ function quitarMiembroYSalvar(numDocumento){
     objDialogo.render();
     objDialogo.show();
 
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
 
     // var seqFormulario = YAHOO.util.Dom.get("seqFormulario").value;
     // var objGrupoGestion = YAHOO.util.Dom.get("seqGrupoGestion");
@@ -1472,45 +1472,67 @@ function dar_formato(num) {
 function sumarTotalRecursos() {
 
     // Recursos propios
-    if( $("#valSaldoCuentaAhorro").val()  == ""){ $("#valSaldoCuentaAhorro").val(0);  }
-    if( $("#valSaldoCuentaAhorro2").val() == ""){ $("#valSaldoCuentaAhorro2").val(0); }
-    if( $("#valSaldoCesantias").val()     == ""){ $("#valSaldoCesantias").val(0);     }
-    if( $("#valCredito").val()            == ""){ $("#valCredito").val(0);            }
-    if( $("#valAporteLote").val()         == ""){ $("#valAporteLote").val(0);         }
+    if ($("#valSaldoCuentaAhorro").val() == "") {
+        $("#valSaldoCuentaAhorro").val(0);
+    }
+    if ($("#valSaldoCuentaAhorro2").val() == "") {
+        $("#valSaldoCuentaAhorro2").val(0);
+    }
+    if ($("#valSaldoCesantias").val() == "") {
+        $("#valSaldoCesantias").val(0);
+    }
+    if ($("#valCredito").val() == "") {
+        $("#valCredito").val(0);
+    }
+    if ($("#valAporteLote").val() == "") {
+        $("#valAporteLote").val(0);
+    }
 
     // Subsidio + (Donaciones y/o VUR)
-    if( $("#valSubsidioNacional").val()   == ""){ $("#valSubsidioNacional").val(0);   }
-    if( $("#valDonacion").val()           == ""){ $("#valDonacion").val(0);           }
+    if ($("#valSubsidioNacional").val() == "") {
+        $("#valSubsidioNacional").val(0);
+    }
+    if ($("#valDonacion").val() == "") {
+        $("#valDonacion").val(0);
+    }
 
     // Suma de recursos propios
-    if( $("#valSumaRecursosPropios").val() == ""){ $("#valSumaRecursosPropios").val(0); }
+    if ($("#valSumaRecursosPropios").val() == "") {
+        $("#valSumaRecursosPropios").val(0);
+    }
 
     // Suma Subsidio + (Donaciones y/o VUR)
-    if( $("#valSumaSubsidios").val()     == ""){ $("#valSumaSubsidios").val(0); }
+    if ($("#valSumaSubsidios").val() == "") {
+        $("#valSumaSubsidios").val(0);
+    }
 
     // Valor del aporte
-    if( $("#valAspiraSubsidio").val() == ""){ $("#valAspiraSubsidio").val(0); }
+    if ($("#valAspiraSubsidio").val() == "") {
+        $("#valAspiraSubsidio").val(0);
+    }
 
-    if( document.getElementById('valCartaLeasing') != null ){
-        if( $("#valCartaLeasing").val()   == ""){ $("#valCartaLeasing").val(0);   }
+    if (document.getElementById('valCartaLeasing') != null) {
+        if ($("#valCartaLeasing").val() == "") {
+            $("#valCartaLeasing").val(0);
+        }
     }
 
     // limpiando caracteres en los valores utiles para sumas
-    var numSaldoCuenta    = parseInt($("#valSaldoCuentaAhorro").val().replace(/[^0-9]/g,''));
-    var numSaldoCuenta2   = parseInt($("#valSaldoCuentaAhorro2").val().replace(/[^0-9]/g,''));
-    var numCesantias      = parseInt($("#valSaldoCesantias").val().replace(/[^0-9]/g,''));
-    var numCredito        = parseInt($("#valCredito").val().replace(/[^0-9]/g,''));
-    var numAporteLote     = parseInt($("#valAporteLote").val().replace(/[^0-9]/g,''));
-    var numSubsidioNal    = parseInt($("#valSubsidioNacional").val().replace(/[^0-9]/g,''));
-    var numVUR            = parseInt($("#valDonacion").val().replace(/[^0-9]/g,''));
-    var numAspiraSubsidio = parseInt($("#valAspiraSubsidio").val().replace(/[^0-9]/g,''));
-    if( document.getElementById('valCartaLeasing') != null ) {
+    var numSaldoCuenta = parseInt($("#valSaldoCuentaAhorro").val().replace(/[^0-9]/g, ''));
+    var numSaldoCuenta2 = parseInt($("#valSaldoCuentaAhorro2").val().replace(/[^0-9]/g, ''));
+    var numCesantias = parseInt($("#valSaldoCesantias").val().replace(/[^0-9]/g, ''));
+    var numCredito = parseInt($("#valCredito").val().replace(/[^0-9]/g, ''));
+    var numAporteLote = parseInt($("#valAporteLote").val().replace(/[^0-9]/g, ''));
+    var numSubsidioNal = parseInt($("#valSubsidioNacional").val().replace(/[^0-9]/g, ''));
+    var numVUR = parseInt($("#valDonacion").val().replace(/[^0-9]/g, ''));
+    var numAspiraSubsidio = parseInt($("#valAspiraSubsidio").val().replace(/[^0-9]/g, ''));
+    if (document.getElementById('valCartaLeasing') != null) {
         var numCartaLeasing = parseInt($("#valCartaLeasing").val().replace(/[^0-9]/g, ''));
     }
     // Realizando las sumas
     var numSumaRecursosPropios = numSaldoCuenta + numSaldoCuenta2 + numCesantias + numCredito + numAporteLote;
-    var numSumaSubsidios       = numSubsidioNal + numVUR;
-    var numTotalRecursos       = numSumaRecursosPropios + numSumaSubsidios;
+    var numSumaSubsidios = numSubsidioNal + numVUR;
+    var numTotalRecursos = numSumaRecursosPropios + numSumaSubsidios;
 
     // Asignando valores a los input del formulario
     $("#valSaldoCuentaAhorro").val(numSaldoCuenta);
@@ -1521,10 +1543,10 @@ function sumarTotalRecursos() {
     $("#valSubsidioNacional").val(numSubsidioNal);
     $("#valDonacion").val(numVUR);
     $("#valSumaRecursosPropios").val(numSumaRecursosPropios);
-    $("#valSumaSubsidios").val( numSumaSubsidios );
+    $("#valSumaSubsidios").val(numSumaSubsidios);
     $("#valAspiraSubsidio").val(numAspiraSubsidio);
     $("#valTotalRecursos").val(numTotalRecursos);
-    if( document.getElementById('valCartaLeasing') != null ) {
+    if (document.getElementById('valCartaLeasing') != null) {
         $("#valCartaLeasing").val(numCartaLeasing);
     }
 
@@ -1540,7 +1562,7 @@ function sumarTotalRecursos() {
     formatoSeparadores(YAHOO.util.Dom.get("valSumaSubsidios"));
     formatoSeparadores(YAHOO.util.Dom.get("valAspiraSubsidio"));
     formatoSeparadores(YAHOO.util.Dom.get("valTotalRecursos"));
-    if( document.getElementById('valCartaLeasing') != null ) {
+    if (document.getElementById('valCartaLeasing') != null) {
         formatoSeparadores(YAHOO.util.Dom.get("valCartaLeasing"));
     }
 
@@ -1551,7 +1573,7 @@ function sumarTotalRecursos() {
 
 function modificarMiembroHogar(numDocumento) {
 
-    numDocumentoSinPuntos = numDocumento.replace(/[^0-9]/g,"");
+    numDocumentoSinPuntos = numDocumento.replace(/[^0-9]/g, "");
 
     // Muestra la tabla
     document.getElementById("agregarMiembro").style.display = "";
@@ -1575,7 +1597,7 @@ function modificarMiembroHogar(numDocumento) {
             }
 
             document.getElementById("numeroDoc").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-numDocumento") ? arrVariables[ i ].value : document.getElementById("numeroDoc").value;
-            if(! isNaN(document.getElementById("numeroDoc").value) ) {
+            if (!isNaN(document.getElementById("numeroDoc").value)) {
                 formatoSeparadores(document.getElementById("numeroDoc"));
             }
 
@@ -1653,8 +1675,8 @@ function modificarMiembroHogar(numDocumento) {
                 }
             }
 
-            document.getElementById("ingresos").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-valIngresos") ? arrVariables[ i ].value : parseInt(document.getElementById("ingresos").value.replace(/[^0-9]/g,""));
-            if(! isNaN(document.getElementById("ingresos").value) ) {
+            document.getElementById("ingresos").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-valIngresos") ? arrVariables[ i ].value : parseInt(document.getElementById("ingresos").value.replace(/[^0-9]/g, ""));
+            if (!isNaN(document.getElementById("ingresos").value)) {
                 formatoSeparadores(document.getElementById("ingresos"));
             }
 
@@ -1671,7 +1693,7 @@ function modificarMiembroHogar(numDocumento) {
             }
 
             if (arrVariables[ i ].id == numDocumentoSinPuntos + "-numAnosAprobados") {
-                selectAnidados(document.getElementById("numeroDoc").value.replace(/[^0-9]/g,""), document.getElementById("nivelEducativo").selectedIndex);
+                selectAnidados(document.getElementById("numeroDoc").value.replace(/[^0-9]/g, ""), document.getElementById("nivelEducativo").selectedIndex);
                 for (j = 0; j < document.getElementById("numAnosAprobados").length; j++) {
                     document.getElementById("numAnosAprobados").selectedIndex = (document.getElementById("numAnosAprobados").options[ j ].value == document.getElementById(numDocumentoSinPuntos + "-numAnosAprobados").value) ? j : document.getElementById("numAnosAprobados").selectedIndex;
                 }
@@ -1704,7 +1726,7 @@ function modificarMiembroHogar(numDocumento) {
     // Muestra el valor en pantalla
     formatoSeparadores(objTotalValor);
     objTotalMostrar.innerHTML = "$ " + objTotalValor.value;
-    objTotalValor.value.replace(/[^0-9]/g,"");
+    objTotalValor.value.replace(/[^0-9]/g, "");
 
     // Elimina el registro
     eliminarObjeto("detalles" + numDocumento);
@@ -1737,9 +1759,9 @@ function modificarMiembroHogar(numDocumento) {
 
 function valorSubsidio() {
 
-    if( $("#bolCerrado").is(":checked") == true ) {
+    if ($("#bolCerrado").is(":checked") == true) {
         var bolCerrado = 1;
-    }else{
+    } else {
         var bolCerrado = 0;
     }
 
@@ -1763,11 +1785,11 @@ function valorSubsidio() {
         url: "./contenidos/casaMano/valorSubsidio.php",
         type: "POST",
         data: jQuery.param(jParametros),
-        success: function(respuesta){
+        success: function (respuesta) {
             // document.getElementById("mensajes").innerHTML = respuesta;
             $("#valAspiraSubsidio").val(respuesta);
         },
-        error: function(error){
+        error: function (error) {
             alert("Falló el calculo de valor del aporte / subsidio");
         }
     });
@@ -1812,13 +1834,19 @@ function mostrarMensaje(seqModalidad) {
 
 function sumarTotal() {
 
-    if( $("#valPresupuesto").val() == ""){ $("#valPresupuesto").val(0); }
-    if( $("#valAvaluo").val()      == ""){ $("#valAvaluo").val(0);      }
-    if( $("#valTotal").val()       == ""){ $("#valTotal").val(0);       }
+    if ($("#valPresupuesto").val() == "") {
+        $("#valPresupuesto").val(0);
+    }
+    if ($("#valAvaluo").val() == "") {
+        $("#valAvaluo").val(0);
+    }
+    if ($("#valTotal").val() == "") {
+        $("#valTotal").val(0);
+    }
 
-    var valPresupuesto = parseInt($("#valPresupuesto").val().replace(/[^0-9]/g,''));
-    var valAvaluo      = parseInt($("#valAvaluo").val().replace(/[^0-9]/g,''));
-    var valTotal       = parseInt($("#valTotal").val().replace(/[^0-9]/g,''));
+    var valPresupuesto = parseInt($("#valPresupuesto").val().replace(/[^0-9]/g, ''));
+    var valAvaluo = parseInt($("#valAvaluo").val().replace(/[^0-9]/g, ''));
+    var valTotal = parseInt($("#valTotal").val().replace(/[^0-9]/g, ''));
 
     var valTotal = valPresupuesto + valAvaluo;
 
@@ -1840,100 +1868,100 @@ function pedirConfirmacion(txtDestino, objFormulario, txtArchivo) {
     var txtMensaje = "";
 
     // verifica que el navegador este en linea
-    if ( ! navigator.onLine ) {
+    if (!navigator.onLine) {
         txtMensaje = "<li>Por favor verifique la conexión a internet y de nuevo haga clic en Salvar Acualización</li>li>";
     }
 
     // verifica que no haya un ciudadano en modo de edicion en el formulario
-    if( objAgregarMiembro != null && objAgregarMiembro.style.display != "none" ){
+    if (objAgregarMiembro != null && objAgregarMiembro.style.display != "none") {
         txtMensaje = "<li>Por favor verifique que los miembros de hogar se encuentren agregados correctamente.</li>";
     }
 
     // si pasa las validaciones
-    if(txtMensaje == ""){
+    if (txtMensaje == "") {
         eliminarObjeto("dlgPedirConfirmacionListener");
         someterFormulario(txtDestino, objFormulario, txtArchivo, false, true);
 
         YAHOO.util.Event.onContentReady(
-            "dlgPedirConfirmacionListener",
-            function () {
-                var handleSubmit = function () {
-                    eliminarObjeto("tablaMensajes");
-                    this.submit();
-                    YAHOO.util.Event.onContentReady(
-                        "tablaMensajes",
-                        function () {
-                            var objMensajes = YAHOO.util.Dom.get('mensajes');
-                            var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
-                            if (objTablaMensajes.className == "msgOk") {
-                                var txtMensajes = objMensajes.innerHTML;
-                                $('#buscarCedula').trigger('click');
-                                objMensajes.innerHTML = txtMensajes;
-                            }
-                        }
-                    );
-                };
+                "dlgPedirConfirmacionListener",
+                function () {
+                    var handleSubmit = function () {
+                        eliminarObjeto("tablaMensajes");
+                        this.submit();
+                        YAHOO.util.Event.onContentReady(
+                                "tablaMensajes",
+                                function () {
+                                    var objMensajes = YAHOO.util.Dom.get('mensajes');
+                                    var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
+                                    if (objTablaMensajes.className == "msgOk") {
+                                        var txtMensajes = objMensajes.innerHTML;
+                                        $('#buscarCedula').trigger('click');
+                                        objMensajes.innerHTML = txtMensajes;
+                                    }
+                                }
+                        );
+                    };
 
-                // Cancela la accion de someter el formulario y cierra el cuadro de dialogo
-                var handleCancel = function () {
-                    this.cancel();
-                };
+                    // Cancela la accion de someter el formulario y cierra el cuadro de dialogo
+                    var handleCancel = function () {
+                        this.cancel();
+                    };
 
-                // Cuando da Submit al formulario del dialogo este es la funcion que contesta
-                var handleSuccess = function (o) {
-                    var response = o.responseText;
-                    response = response.split("<!")[0];
-                    document.getElementById("mensajes").innerHTML = response;
-                    var tmpObj = null;
-                    tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
-                    while (tmpObj != null) {
-                        //alert( tmpObj );
-                        eliminarObjeto("dlgPedirConfirmacion_mask");
+                    // Cuando da Submit al formulario del dialogo este es la funcion que contesta
+                    var handleSuccess = function (o) {
+                        var response = o.responseText;
+                        response = response.split("<!")[0];
+                        document.getElementById("mensajes").innerHTML = response;
+                        var tmpObj = null;
                         tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
-                    }
-                };
+                        while (tmpObj != null) {
+                            //alert( tmpObj );
+                            eliminarObjeto("dlgPedirConfirmacion_mask");
+                            tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
+                        }
+                    };
 
-                // Cuando se da submit y la accion falla este es el mensaje
-                var handleFailure = function (o) {
-                    alert("Submission failed: " + o.status);
-                };
+                    // Cuando se da submit y la accion falla este es el mensaje
+                    var handleFailure = function (o) {
+                        alert("Submission failed: " + o.status);
+                    };
 
-                // Objeto de configuracion
-                var objConfiguracion = {
-                    width: "350px",
-                    fixedcenter: true,
-                    close: false,
-                    draggable: false,
-                    modal: true,
-                    buttons: [{
-                        text: "Salvar Información",
-                        handler: handleSubmit,
-                        isDefault: true
-                    },
-                    {
-                        text: "Cancelar",
-                        handler: handleCancel
-                    }
-                    ],
-                    constraintoviewport: true
-                };
+                    // Objeto de configuracion
+                    var objConfiguracion = {
+                        width: "350px",
+                        fixedcenter: true,
+                        close: false,
+                        draggable: false,
+                        modal: true,
+                        buttons: [{
+                                text: "Salvar Información",
+                                handler: handleSubmit,
+                                isDefault: true
+                            },
+                            {
+                                text: "Cancelar",
+                                handler: handleCancel
+                            }
+                        ],
+                        constraintoviewport: true
+                    };
 
-                // Instancia el cuadro de dialogo
-                var dialog1 = new YAHOO.widget.Dialog("dlgPedirConfirmacion", objConfiguracion);
+                    // Instancia el cuadro de dialogo
+                    var dialog1 = new YAHOO.widget.Dialog("dlgPedirConfirmacion", objConfiguracion);
 
-                // Objeto callback del formulario para manejar la respuesta de este
-                dialog1.callback = {
-                    success: handleSuccess,
-                    failure: handleFailure
-                };
+                    // Objeto callback del formulario para manejar la respuesta de este
+                    dialog1.callback = {
+                        success: handleSuccess,
+                        failure: handleFailure
+                    };
 
-                // Muestra el cuadro de dialogo
-                dialog1.render();
-                dialog1.show();
+                    // Muestra el cuadro de dialogo
+                    dialog1.render();
+                    dialog1.show();
 
-            }
+                }
         );
-    }else{
+    } else {
         objMensajes.className = "msgError";
         objMensajes.innerHTML = txtMensaje;
     }
@@ -2018,88 +2046,88 @@ function datosPestanaPostulacion(txtModo) {
     var objDesplazado = YAHOO.util.Dom.get("bolDesplazado");
 
     var txtParametros =
-        "modo="            + txtModo                     + "&" +
-        "seqFormulario="   + $("#seqFormulario").val()   + "&" +
-        "seqModalidad="    + $("#seqModalidad").val()    + "&" +
-        "seqTipoEsquema="  + $("#seqTipoEsquema").val()  + "&" +
-        "seqPlanGobierno=" + $("#seqPlanGobierno").val() + "&" +
-        "seqProyecto="     + $("#seqProyecto").val()     + "&" +
-        "seqProyectoHijo=" + $("#seqProyectoHijo").val() + "&" +
-        "bolDesplazado="   + objDesplazado.options[ objDesplazado.selectedIndex ].value; // jQuery retorna NULL porque los option son disabled
+            "modo=" + txtModo + "&" +
+            "seqFormulario=" + $("#seqFormulario").val() + "&" +
+            "seqModalidad=" + $("#seqModalidad").val() + "&" +
+            "seqTipoEsquema=" + $("#seqTipoEsquema").val() + "&" +
+            "seqPlanGobierno=" + $("#seqPlanGobierno").val() + "&" +
+            "seqProyecto=" + $("#seqProyecto").val() + "&" +
+            "seqProyectoHijo=" + $("#seqProyectoHijo").val() + "&" +
+            "bolDesplazado=" + objDesplazado.options[ objDesplazado.selectedIndex ].value; // jQuery retorna NULL porque los option son disabled
 
     var objCargando = obtenerObjetoCargando();
-        objCargando.show();
+    objCargando.show();
 
-    var fncSuccess = function(o){
+    var fncSuccess = function (o) {
 
         var bolCalcularAporte = true;
 
         try {
             var objRespuesta = jQuery.parseJSON(o.responseText);
-        }catch(ex){
+        } catch (ex) {
             YAHOO.util.Dom.get('mensajes').innerHTML = o.responseText;
             txtModo = false;
         }
 
-        if(txtModo == "modalidad"){
+        if (txtModo == "modalidad") {
 
             // solucion
             $("#seqSolucion").empty();
-            for( i=0; i < objRespuesta.solucion.length; i++ ){
+            for (i = 0; i < objRespuesta.solucion.length; i++) {
                 $("#seqSolucion").append(
-                    $('<option>', {
-                        value: objRespuesta.solucion[i].valor,
-                        text: objRespuesta.solucion[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.solucion[i].valor,
+                            text: objRespuesta.solucion[i].texto
+                        })
+                        );
             }
-            if( $('#seqSolucion').children('option').length == 2){
+            if ($('#seqSolucion').children('option').length == 2) {
                 $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
             }
 
             // esquema
             $("#seqTipoEsquema").empty();
-            for( i=0; i < objRespuesta.esquema.length; i++ ){
+            for (i = 0; i < objRespuesta.esquema.length; i++) {
                 $("#seqTipoEsquema").append(
-                    $('<option>', {
-                        value: objRespuesta.esquema[i].valor,
-                        text: objRespuesta.esquema[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.esquema[i].valor,
+                            text: objRespuesta.esquema[i].texto
+                        })
+                        );
             }
             $('#seqTipoEsquema').val(objRespuesta.esquema[0].valor).prop('selected', true);
 
             // proyecto
             $("#seqProyecto").empty();
-            for( i=0; i < objRespuesta.proyecto.length; i++ ){
+            for (i = 0; i < objRespuesta.proyecto.length; i++) {
                 $("#seqProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.proyecto[i].valor,
-                        text: objRespuesta.proyecto[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.proyecto[i].valor,
+                            text: objRespuesta.proyecto[i].texto
+                        })
+                        );
             }
 
             // conjuntos
             $("#seqProyectoHijo").empty();
-            for( i=0; i < objRespuesta.conjuntos.length; i++ ){
+            for (i = 0; i < objRespuesta.conjuntos.length; i++) {
                 $("#seqProyectoHijo").append(
-                    $('<option>', {
-                        value: objRespuesta.conjuntos[i].valor,
-                        text: objRespuesta.conjuntos[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.conjuntos[i].valor,
+                            text: objRespuesta.conjuntos[i].texto
+                        })
+                        );
             }
 
             // unidades
             $("#seqUnidadProyecto").empty();
-            for( i=0; i < objRespuesta.unidades.length; i++ ){
+            for (i = 0; i < objRespuesta.unidades.length; i++) {
                 $("#seqUnidadProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.unidades[i].valor,
-                        text: objRespuesta.unidades[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.unidades[i].valor,
+                            text: objRespuesta.unidades[i].texto
+                        })
+                        );
             }
 
             // direccion + matricula + chip
@@ -2109,15 +2137,15 @@ function datosPestanaPostulacion(txtModo) {
 
             // cuando es leasing entonces muestra los campos de informacion financiera correspondientes
             // e inhabilita los campos de la pestaña financiera
-            if( $("#seqModalidad").val() == 13 ){
+            if ($("#seqModalidad").val() == 13) {
 
-                $("#valSaldoCuentaAhorro").attr("readonly" , true);
-                $("#valSaldoCuentaAhorro2").attr("readonly" , true);
-                $("#valSaldoCesantias").attr("readonly" , true);
-                $("#valCredito").attr("readonly" , true);
-                $("#valAporteLote").attr("readonly" , true);
-                $("#valSubsidioNacional").attr("readonly" , true);
-                $("#valDonacion").attr("readonly" , true);
+                $("#valSaldoCuentaAhorro").attr("readonly", true);
+                $("#valSaldoCuentaAhorro2").attr("readonly", true);
+                $("#valSaldoCesantias").attr("readonly", true);
+                $("#valCredito").attr("readonly", true);
+                $("#valAporteLote").attr("readonly", true);
+                $("#valSubsidioNacional").attr("readonly", true);
+                $("#valDonacion").attr("readonly", true);
 
                 $("#trNoLeasing1").removeAttr("style").hide();
                 $("#trNoLeasing2").removeAttr("style").hide();
@@ -2126,15 +2154,15 @@ function datosPestanaPostulacion(txtModo) {
                 $("#trLeasing1").removeAttr("style").show();
                 $("#trLeasing2").removeAttr("style").show();
 
-            }else {
+            } else {
 
-                $("#valSaldoCuentaAhorro").attr("readonly" , false);
-                $("#valSaldoCuentaAhorro2").attr("readonly" , false);
-                $("#valSaldoCesantias").attr("readonly" , false);
-                $("#valCredito").attr("readonly" , false);
-                $("#valAporteLote").attr("readonly" , false);
-                $("#valSubsidioNacional").attr("readonly" , false);
-                $("#valDonacion").attr("readonly" , false);
+                $("#valSaldoCuentaAhorro").attr("readonly", false);
+                $("#valSaldoCuentaAhorro2").attr("readonly", false);
+                $("#valSaldoCesantias").attr("readonly", false);
+                $("#valCredito").attr("readonly", false);
+                $("#valAporteLote").attr("readonly", false);
+                $("#valSubsidioNacional").attr("readonly", false);
+                $("#valDonacion").attr("readonly", false);
 
                 $("#trNoLeasing1").removeAttr("style").show();
                 $("#trNoLeasing2").removeAttr("style").show();
@@ -2146,39 +2174,39 @@ function datosPestanaPostulacion(txtModo) {
 
         }
 
-        if(txtModo == "esquema"){
+        if (txtModo == "esquema") {
 
             // proyecto
             $("#seqProyecto").empty();
-            for( i=0; i < objRespuesta.proyecto.length; i++ ){
+            for (i = 0; i < objRespuesta.proyecto.length; i++) {
                 $("#seqProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.proyecto[i].valor,
-                        text: objRespuesta.proyecto[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.proyecto[i].valor,
+                            text: objRespuesta.proyecto[i].texto
+                        })
+                        );
             }
 
             // conjuntos
             $("#seqProyectoHijo").empty();
-            for( i=0; i < objRespuesta.conjuntos.length; i++ ){
+            for (i = 0; i < objRespuesta.conjuntos.length; i++) {
                 $("#seqProyectoHijo").append(
-                    $('<option>', {
-                        value: objRespuesta.conjuntos[i].valor,
-                        text: objRespuesta.conjuntos[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.conjuntos[i].valor,
+                            text: objRespuesta.conjuntos[i].texto
+                        })
+                        );
             }
 
             // unidades
             $("#seqUnidadProyecto").empty();
-            for( i=0; i < objRespuesta.unidades.length; i++ ){
+            for (i = 0; i < objRespuesta.unidades.length; i++) {
                 $("#seqUnidadProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.unidades[i].valor,
-                        text: objRespuesta.unidades[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.unidades[i].valor,
+                            text: objRespuesta.unidades[i].texto
+                        })
+                        );
             }
 
             // direccion + matricula + chip
@@ -2187,34 +2215,34 @@ function datosPestanaPostulacion(txtModo) {
             $('#txtChip').val(objRespuesta.chip);
 
             $("#trValComplementario").removeAttr("style").hide();
-            if( $('#seqTipoEsquema').val() == 7 || $('#seqTipoEsquema').val() == 13 || $('#seqTipoEsquema').val() == 14 || $('#seqTipoEsquema').val() == 15 ){
+            if ($('#seqTipoEsquema').val() == 7 || $('#seqTipoEsquema').val() == 13 || $('#seqTipoEsquema').val() == 14 || $('#seqTipoEsquema').val() == 15) {
                 $("#trValComplementario").removeAttr("style").show();
             }
 
         }
 
-        if(txtModo == "proyecto"){
+        if (txtModo == "proyecto") {
 
             // conjuntos
             $("#seqProyectoHijo").empty();
-            for( i=0; i < objRespuesta.conjuntos.length; i++ ){
+            for (i = 0; i < objRespuesta.conjuntos.length; i++) {
                 $("#seqProyectoHijo").append(
-                    $('<option>', {
-                        value: objRespuesta.conjuntos[i].valor,
-                        text: objRespuesta.conjuntos[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.conjuntos[i].valor,
+                            text: objRespuesta.conjuntos[i].texto
+                        })
+                        );
             }
 
             // unidades
             $("#seqUnidadProyecto").empty();
-            for( i=0; i < objRespuesta.unidades.length; i++ ){
+            for (i = 0; i < objRespuesta.unidades.length; i++) {
                 $("#seqUnidadProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.unidades[i].valor,
-                        text: objRespuesta.unidades[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.unidades[i].valor,
+                            text: objRespuesta.unidades[i].texto
+                        })
+                        );
             }
 
             // direccion + matricula + chip
@@ -2224,82 +2252,82 @@ function datosPestanaPostulacion(txtModo) {
 
         }
 
-        if(txtModo == "conjuntos"){
+        if (txtModo == "conjuntos") {
             // unidades
             $("#seqUnidadProyecto").empty();
-            for( i=0; i < objRespuesta.unidades.length; i++ ){
+            for (i = 0; i < objRespuesta.unidades.length; i++) {
                 $("#seqUnidadProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.unidades[i].valor,
-                        text: objRespuesta.unidades[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.unidades[i].valor,
+                            text: objRespuesta.unidades[i].texto
+                        })
+                        );
             }
 
         }
 
-        if( txtModo == "inscripcion" ){
+        if (txtModo == "inscripcion") {
 
             bolCalcularAporte = false;
 
             // solucion
             $("#seqSolucion").empty();
-            for( i=0; i < objRespuesta.solucion.length; i++ ){
+            for (i = 0; i < objRespuesta.solucion.length; i++) {
                 $("#seqSolucion").append(
-                    $('<option>', {
-                        value: objRespuesta.solucion[i].valor,
-                        text: objRespuesta.solucion[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.solucion[i].valor,
+                            text: objRespuesta.solucion[i].texto
+                        })
+                        );
             }
-            if( $('#seqSolucion').children('option').length == 2){
+            if ($('#seqSolucion').children('option').length == 2) {
                 $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
             }
 
         }
 
-        if( txtModo == "actualizacion" ){
+        if (txtModo == "actualizacion") {
 
             // solucion
             $("#seqSolucion").empty();
-            for( i=0; i < objRespuesta.solucion.length; i++ ){
+            for (i = 0; i < objRespuesta.solucion.length; i++) {
                 $("#seqSolucion").append(
-                    $('<option>', {
-                        value: objRespuesta.solucion[i].valor,
-                        text: objRespuesta.solucion[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.solucion[i].valor,
+                            text: objRespuesta.solucion[i].texto
+                        })
+                        );
             }
-            if( $('#seqSolucion').children('option').length == 2){
+            if ($('#seqSolucion').children('option').length == 2) {
                 $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
             }
 
             var bolDesactivarModalidad = true;
-            if( $("#bolActivarModalidad").val() == 1 ){
+            if ($("#bolActivarModalidad").val() == 1) {
                 bolDesactivarModalidad = false;
             }
 
             // esquema
             $("#seqTipoEsquema").empty();
-            for( i=0; i < objRespuesta.esquema.length; i++ ){
+            for (i = 0; i < objRespuesta.esquema.length; i++) {
                 $("#seqTipoEsquema").append(
-                    $('<option>', {
-                        value: objRespuesta.esquema[i].valor,
-                        text: objRespuesta.esquema[i].texto,
-                        disabled: bolDesactivarModalidad
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.esquema[i].valor,
+                            text: objRespuesta.esquema[i].texto,
+                            disabled: bolDesactivarModalidad
+                        })
+                        );
 
             }
-            if( $("#seqModalidad").val() == 12 || $("#seqModalidad").val() == 13 ) {
+            if ($("#seqModalidad").val() == 12 || $("#seqModalidad").val() == 13) {
                 $('#seqTipoEsquema').val(9).prop('selected', true);
-            }else{
+            } else {
                 $('#seqTipoEsquema').val(objRespuesta.esquema[0].valor).prop('selected', true);
             }
 
         }
 
-        if( bolCalcularAporte == true ) {
+        if (bolCalcularAporte == true) {
             valorSubsidio();
         }
 
@@ -2317,11 +2345,11 @@ function datosPestanaPostulacion(txtModo) {
     };
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/casaMano/datosPestanaPostulacion.php",
-        callback,
-        txtParametros
-    );
+            "POST",
+            "./contenidos/casaMano/datosPestanaPostulacion.php",
+            callback,
+            txtParametros
+            );
 }
 
 /**
@@ -3214,7 +3242,7 @@ function limpiarBusqueda() {
     objCriterioTextoTermina.checked = false;
     objCriterioTextoContiene.checked = false;
 
-    buscarSeguimiento( 'contenidoBusqueda', './contenidos/seguimiento/buscarSeguimiento.php' );
+    buscarSeguimiento('contenidoBusqueda', './contenidos/seguimiento/buscarSeguimiento.php');
 
 }
 
@@ -4212,7 +4240,7 @@ function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
 
 function recogerDireccion(txtInputDireccion, txtDivDireccionOculto) {
     cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto);
-    setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 400);
+    setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 100);
 }
 
 function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
@@ -4230,24 +4258,24 @@ function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
     var aceptar = function () {
 
         var bolAlerta = false;
-        if( YAHOO.util.Dom.get('radTipoDireccion').checked ){
-            if( YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0,1) == "-" ){
-                alert( "Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'" );
+        if (YAHOO.util.Dom.get('radTipoDireccion').checked) {
+            if (YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0, 1) == "-") {
+                alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
                 bolAlerta = true;
-            }else{
-                if(
-                    YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
-                    YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
-                    YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
-                    YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
-                ){
-                    alert( "Complete la dirección" );
+            } else {
+                if (
+                        YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
+                        YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
+                        YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
+                        YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
+                        ) {
+                    alert("Complete la dirección");
                     bolAlerta = true;
                 }
             }
         }
 
-        if( bolAlerta == false ) {
+        if (bolAlerta == false) {
             direccionGenerada = document.getElementById(txtDivDireccionGenerada);
             txtDireccionForm.value.replace(/s{2,}/g, ' ');
             txtDireccionForm.value = direccionGenerada.innerHTML;
@@ -4891,16 +4919,16 @@ function plantillaProyectoUnidadHabitacional( ) {
 function plantillaProyectos( ) {
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            height: "500px",
-            width: "900px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                height: "500px",
+                width: "900px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     var fncExito = function (objRespuesta) {
@@ -4923,10 +4951,10 @@ function plantillaProyectos( ) {
     }
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/aad/guiaProyectos.php",
-        objRetorno
-    );
+            "POST",
+            "./contenidos/aad/guiaProyectos.php",
+            objRetorno
+            );
 
 }
 
@@ -5060,35 +5088,34 @@ function mostrarAyudaGeneralReporteadorProyectos( ) {
  * @param String txtContenido  ==> Contenido en HTML de la ventana
  * @param String txtParametros ==> Ej: { width:"250px",fixedcenter:true,close:false,draggable:false,modal:true,visible:false }
  */
-// function popUpAyuda(txtTitulo, txtContenido) {
-//
-//     // Instancia un objeto panel
-//     var objAyuda = new YAHOO.widget.Panel(
-//             "dlg",
-//             {
-//                 width: '500px',
-//                 fixedcenter: true,
-//                 close: true,
-//                 draggable: false,
-//                 modal: true,
-//                 visible: true,
-//                 xy:[100,100],
-//             }
-//     );
-//
-//     // Encabezado
-//     objAyuda.setHeader(txtTitulo);
-//
-//     // cuerpo del panel
-//     objAyuda.setBody("<div style='text-align:justify'>" + txtContenido + "</div>");
-//
-//     // El objeto se despliega sobre el cuerpo del documento html
-//     objAyuda.render(document.body);
-//
-//     // Muestra el objeto
-//     objAyuda.show();
-//
-// }
+function popUpAyuda(txtTitulo, txtContenido) {
+
+    // Instancia un objeto panel
+    var objAyuda = new YAHOO.widget.Panel(
+            "dlg",
+            {
+                width: '500px',
+                fixedcenter: true,
+                close: true,
+                draggable: false,
+                modal: true,
+                visible: true
+            }
+    );
+
+    // Encabezado
+    objAyuda.setHeader(txtTitulo);
+
+    // cuerpo del panel
+    objAyuda.setBody("<div style='text-align:justify'>" + txtContenido + "</div>");
+
+    // El objeto se despliega sobre el cuerpo del documento html
+    objAyuda.render(document.body);
+
+    // Muestra el objeto
+    objAyuda.show();
+
+}
 
 /**
  * Filtro dependiendo el tipo de Acto Administrativo que se elija
@@ -6980,7 +7007,8 @@ function formatoSeparadores(input) {
             input.value = input.value.replace(/[^\d\.]*/g, '');
             input.focus();
         }
-    }catch(o){}
+    } catch (o) {
+    }
 }
 
 function espia() {
@@ -7125,19 +7153,19 @@ function obtenerBarrioProyecto(objLocalidad) {
 }
 
 function obtenerUpz(objBarrio) {
-    if( document.getElementById("tdupz") != null ) {
+    if (document.getElementById("tdupz") != null) {
         document.getElementById("tdupz").innerHTML = "";
         cargarContenido(
-            'tdupz',
-            './contenidos/subsidios/barrioUpz.php',
-            'seqBarrio=' + objBarrio.options[objBarrio.selectedIndex].value,
-            true
-        );
+                'tdupz',
+                './contenidos/subsidios/barrioUpz.php',
+                'seqBarrio=' + objBarrio.options[objBarrio.selectedIndex].value,
+                true
+                );
         YAHOO.util.Event.onContentReady(
-            "seqUpz",
-            function () {
-                document.getElementById("seqBarrio").focus();
-            }
+                "seqUpz",
+                function () {
+                    document.getElementById("seqBarrio").focus();
+                }
         );
     }
 }
@@ -7678,160 +7706,195 @@ function buscarProyecto(txtNombreArchivo) {
 
 // Muestra los campos "Nombre" y "NIT de OPV" si selecciona el tipo de Organización "OPV"
 function escondeLineaOpv() {
-    if (document.getElementById("seqTipoEsquema").value == 2) {
-        document.getElementById("lineaOpv").style.display = "table-row";
-    } else {
-        document.getElementById("lineaOpv").style.display = "none";
-        document.getElementById("seqOpv").value = "0";
+    if (document.getElementById("seqTipoEsquema") != null) {
+        if (document.getElementById("seqTipoEsquema").value == 2) {
+            document.getElementById("lineaOpv").style.display = "inline";
+        } else {
+            document.getElementById("lineaOpv").style.display = "none";
+            document.getElementById("seqOpv").value = "0";
+        }
     }
+
 }
 
 // Muestra el campo "Operador" si el esquema seleccionado es "Territorial dirigido"
 function escondeTerritorialDirigido() {
-    if (document.getElementById("seqTipoEsquema").value == 4) { // Esquema Territorial Dirigido
-        // Operador y Objeto
-        document.getElementById("lineaTDirigida").style.display = "table-row";
-        // Plan Parcial
-        document.getElementById("idTituloPlanParcial").style.display = "none";
-        document.getElementById("idCampoPlanParcial").style.display = "none";
-        document.getElementById("txtNombrePlanParcial").value = "";
-        // Tipo Proyecto y Tipo Urbanizacion
-        document.getElementById("idLineaProyectoUrbanizacion").style.display = "none";
-        document.getElementById("seqTipoProyecto").value = "0";
-        document.getElementById("seqTipoUrbanizacion").value = "0";
-        // Tipo Solucion y Descripcion
-        document.getElementById("idLineaTipoSolucionDescripcion").style.display = "none";
-        document.getElementById("seqTipoSolucion").value = "0";
-        document.getElementById("txtDescripcionProyecto").value = "";
-        // Direccion
-        document.getElementById("idLineaDireccion").style.display = "none";
-        document.getElementById("bolDireccion").value = "0";
-        document.getElementById("txtDireccion").value = "";
-        // Torres
-        document.getElementById("idLineaTorres").style.display = "none";
-        document.getElementById("valTorres").value = "";
-        // Area Lote y Area Construida
-        document.getElementById("idLineaAreaLoteConstruida").style.display = "none";
-        document.getElementById("valAreaLote").value = "";
-        document.getElementById("valAreaConstruida").value = "";
-        // Chip Lote y Matricula Inmobiliaria
-        document.getElementById("idLineaChipLoteMatricula").style.display = "none";
-        document.getElementById("txtChipLote").value = "";
-        document.getElementById("txtMatriculaInmobiliariaLote").value = "";
-        // Registro y Fecha de Enajenacion
-        document.getElementById("idLineaRegistroFechaEnajenacion").style.display = "none";
-        document.getElementById("txtRegistroEnajenacion").value = "";
-        document.getElementById("fchRegistroEnajenacion").value = "";
-        // Equipamiento Comunal
-        document.getElementById("idLineaEquipamientoComunal").style.display = "none";
-        document.getElementById("bolEquipamientoComunal").value = "0";
-        document.getElementById("txtDescEquipamientoComunal").value = "";
-        // Licencia Urbanismo
-        document.getElementById("idLineaLicenciaUrbanismo1").style.display = "none";
-        document.getElementById("idLineaLicenciaUrbanismo2").style.display = "none";
-        document.getElementById("idLineaLicenciaUrbanismo3").style.display = "none";
-        document.getElementById("lineaProrrogaUrbanismo").style.display = "none";
-        document.getElementById("idLineaLicenciaUrbanismo4").style.display = "none";
-        // Licencia Construccion
-        document.getElementById("idLineaLicenciaConstruccion1").style.display = "none";
-        document.getElementById("idLineaLicenciaConstruccion2").style.display = "none";
-        document.getElementById("idLineaLicenciaConstruccion3").style.display = "none";
-        document.getElementById("lineaProrrogaConstruccion").style.display = "none";
-    } else { // Otros Esquemas
-        document.getElementById("lineaTDirigida").style.display = "none";
-        document.getElementById("txtNombreOperador").value = "";
-        document.getElementById("txtObjetoProyecto").value = "";
-        // Plan Parcial
-        document.getElementById("idTituloPlanParcial").style.display = "table-row";
-        document.getElementById("idCampoPlanParcial").style.display = "table-row";
-        // Tipo Proyecto y Tipo Urbanizacion
-        document.getElementById("idLineaProyectoUrbanizacion").style.display = "table-row";
-        // Tipo Solucion y Descripcion
-        document.getElementById("idLineaTipoSolucionDescripcion").style.display = "table-row";
-        // Direccion
-        document.getElementById("idLineaDireccion").style.display = "table-row";
-        // Torres
-        document.getElementById("idLineaTorres").style.display = "table-row";
-        // Area Lote y Area Construida
-        document.getElementById("idLineaAreaLoteConstruida").style.display = "table-row";
-        // Chip Lote y Matricula Inmobiliaria
-        document.getElementById("idLineaChipLoteMatricula").style.display = "table-row";
-        // Registro y Fecha de Enajenacion
-        document.getElementById("idLineaRegistroFechaEnajenacion").style.display = "table-row";
-        // Equipamiento Comunal
-        document.getElementById("idLineaEquipamientoComunal").style.display = "table-row";
-        // Licencia Urbanismo
-        document.getElementById("idLineaLicenciaUrbanismo1").style.display = "table-row";
-        document.getElementById("idLineaLicenciaUrbanismo2").style.display = "table-row";
-        document.getElementById("idLineaLicenciaUrbanismo3").style.display = "table-row";
-        document.getElementById("lineaProrrogaUrbanismo").style.display = "table-row";
-        document.getElementById("idLineaLicenciaUrbanismo4").style.display = "table-row";
-        // Licencia Construccion
-        document.getElementById("idLineaLicenciaConstruccion1").style.display = "table-row";
-        document.getElementById("idLineaLicenciaConstruccion2").style.display = "table-row";
-        document.getElementById("idLineaLicenciaConstruccion3").style.display = "table-row";
-        document.getElementById("lineaProrrogaConstruccion").style.display = "table-row";
+    if (document.getElementById("seqTipoEsquema") != null) {
+        if (document.getElementById("seqTipoEsquema").value == 4) { // Esquema Territorial Dirigido
+            // Operador y Objeto
+            document.getElementById("lineaTDirigida").style.display = "inline";
+            // Plan Parcial
+            document.getElementById("idTituloPlanParcial").style.display = "none";
+            document.getElementById("idCampoPlanParcial").style.display = "none";
+            document.getElementById("txtNombrePlanParcial").value = "";
+            // Tipo Proyecto y Tipo Urbanizacion
+            document.getElementById("idLineaProyectoUrbanizacion").style.display = "none";
+            document.getElementById("seqTipoProyecto").value = "0";
+            document.getElementById("seqTipoUrbanizacion").value = "0";
+            // Tipo Solucion y Descripcion
+            document.getElementById("idLineaTipoSolucionDescripcion").style.display = "none";
+            document.getElementById("seqTipoSolucion").value = "0";
+            document.getElementById("txtDescripcionProyecto").value = "";
+            // Direccion
+            document.getElementById("idLineaDireccion").style.display = "none";
+            document.getElementById("bolDireccion").value = "0";
+            document.getElementById("txtDireccion").value = "";
+            // Torres
+            //document.getElementById("idLineaTorres").style.display = "none";
+            document.getElementById("valTorres").value = "";
+            // Area Lote y Area Construida
+            document.getElementById("idLineaAreaLoteConstruida").style.display = "none";
+            document.getElementById("valAreaLote").value = "";
+            document.getElementById("valAreaConstruida").value = "";
+            // Chip Lote y Matricula Inmobiliaria
+            document.getElementById("idLineaChipLoteMatricula").style.display = "none";
+            document.getElementById("txtChipLote").value = "";
+            document.getElementById("txtMatriculaInmobiliariaLote").value = "";
+            // Registro y Fecha de Enajenacion
+            document.getElementById("idLineaRegistroFechaEnajenacion").style.display = "none";
+            document.getElementById("txtRegistroEnajenacion").value = "";
+            document.getElementById("fchRegistroEnajenacion").value = "";
+            // Equipamiento Comunal
+            document.getElementById("idLineaEquipamientoComunal").style.display = "none";
+            document.getElementById("bolEquipamientoComunal").value = "0";
+            document.getElementById("txtDescEquipamientoComunal").value = "";
+            // Licencia Urbanismo
+            document.getElementById("idLineaLicenciaUrbanismo1").style.display = "none";
+            document.getElementById("idLineaLicenciaUrbanismo2").style.display = "none";
+            document.getElementById("idLineaLicenciaUrbanismo3").style.display = "none";
+            document.getElementById("lineaProrrogaUrbanismo").style.display = "none";
+            document.getElementById("idLineaLicenciaUrbanismo4").style.display = "none";
+            // Licencia Construccion
+            document.getElementById("idLineaLicenciaConstruccion1").style.display = "none";
+            document.getElementById("idLineaLicenciaConstruccion2").style.display = "none";
+            document.getElementById("idLineaLicenciaConstruccion3").style.display = "none";
+            document.getElementById("lineaProrrogaConstruccion").style.display = "none";
+        } else { // Otros Esquemas
+            document.getElementById("lineaTDirigida").style.display = "none";
+            document.getElementById("txtNombreOperador").value = "";
+            document.getElementById("txtObjetoProyecto").value = "";
+            // Plan Parcial
+            document.getElementById("idTituloPlanParcial").style.display = "inline";
+            document.getElementById("idCampoPlanParcial").style.display = "inline";
+            // Tipo Proyecto y Tipo Urbanizacion
+            document.getElementById("idLineaProyectoUrbanizacion").style.display = "inline";
+            // Tipo Solucion y Descripcion
+            document.getElementById("idLineaTipoSolucionDescripcion").style.display = "inline";
+            // Direccion
+            document.getElementById("idLineaDireccion").style.display = "inline";
+            // Torres
+            //document.getElementById("idLineaTorres").style.display = "inline";
+            // Area Lote y Area Construida
+            document.getElementById("idLineaAreaLoteConstruida").style.display = "inline";
+            // Chip Lote y Matricula Inmobiliaria
+            document.getElementById("idLineaChipLoteMatricula").style.display = "inline";
+            // Registro y Fecha de Enajenacion
+            document.getElementById("idLineaRegistroFechaEnajenacion").style.display = "inline";
+            // Equipamiento Comunal
+            document.getElementById("idLineaEquipamientoComunal").style.display = "inline";
+            // Licencia Urbanismo
+            document.getElementById("idLineaLicenciaUrbanismo1").style.display = "inline";
+            document.getElementById("idLineaLicenciaUrbanismo2").style.display = "inline";
+            document.getElementById("idLineaLicenciaUrbanismo3").style.display = "inline";
+            document.getElementById("lineaProrrogaUrbanismo").style.display = "inline";
+            document.getElementById("idLineaLicenciaUrbanismo4").style.display = "inline";
+            // Licencia Construccion
+            document.getElementById("idLineaLicenciaConstruccion1").style.display = "inline";
+            document.getElementById("idLineaLicenciaConstruccion2").style.display = "inline";
+            document.getElementById("idLineaLicenciaConstruccion3").style.display = "inline";
+            document.getElementById("lineaProrrogaConstruccion").style.display = "inline";
+        }
     }
+
 }
 
 // Muestra el campo 'Dirección' si el campo booleano 'Se conoce la dirección?' es 'Si'
 function escondetxtDireccion() {
-    if (document.getElementById("bolDireccion").checked == 1) {
-        document.getElementById("lineaTituloDireccion").style.display = "table-row";
-        document.getElementById("lineaCampoDireccion").style.display = "table-row";
-    } else {
-        document.getElementById("lineaTituloDireccion").style.display = "none";
-        document.getElementById("lineaCampoDireccion").style.display = "none";
-        document.getElementById("txtDireccion").value = '';
+    if (document.getElementById("bolDireccion") != null) {
+        if (document.getElementById("bolDireccion").checked == 1) {
+            document.getElementById("lineaTituloDireccion").style.display = "inline";
+            //var element = document.getElementById("lineaTituloDireccion");
+            //element.classList.add("form-group");
+
+            // document.getElementById("lineaCampoDireccion").style.display = "inline";
+        } else {
+            document.getElementById("lineaTituloDireccion").style.display = "none";
+            // document.getElementById("lineaCampoDireccion").style.display = "none";
+            document.getElementById("txtDireccion").value = '';
+        }
     }
+
 }
 
 // Muestra el campo 'Descripción Equipamiento Comunal' si el campo booleano 'Equipamiento Comunal' es 'Si'
 function escondetxtDescEquipamientoComunal() {
-    if (document.getElementById("bolEquipamientoComunal").checked == 1) {
-        document.getElementById("idTituloDescEquipamientoComunal").style.display = "table-row";
-        document.getElementById("lineaDescEquipamientoComunal").style.display = "table-row";
-    } else {
-        document.getElementById("idTituloDescEquipamientoComunal").style.display = "none";
-        document.getElementById("lineaDescEquipamientoComunal").style.display = "none";
-        document.getElementById("txtDescEquipamientoComunal").value = '';
+    if (document.getElementById("bolEquipamientoComunal") != null) {
+        if (document.getElementById("bolEquipamientoComunal").checked == 1) {
+            document.getElementById("idTituloDescEquipamientoComunal").style.display = "inline";
+            //document.getElementById("lineaDescEquipamientoComunal").style.display = "inline";
+        } else {
+            document.getElementById("idTituloDescEquipamientoComunal").style.display = "none";
+            // document.getElementById("lineaDescEquipamientoComunal").style.display = "none";
+            document.getElementById("txtDescEquipamientoComunal").value = '';
+        }
     }
+
 }
 
 // Muestra 'Cedula' y 'Tarjeta Profesional' si el Tipo de Persona es 'Natural' o muestra el 'NIT' si es 'Juridica'
-function escondeCamposTipoPersona() {
-    if (document.getElementById("bolTipoPersonaInterventor").checked == 1) {
-        document.getElementById("lineaPersonaNatural").style.display = "table-row";
-        document.getElementById("lineaPersonaJuridica").style.display = "none";
-        document.getElementById("lineaPersonaJuridica2").style.display = "none";
-        document.getElementById("lineaPersonaJuridica3").style.display = "none";
-        document.getElementById("lineaTituloInterventor").style.display = "none";
-        document.getElementById("numNitInterventor").value = '';
-        document.getElementById("txtNombreRepLegalInterventor").value = '';
-        document.getElementById("txtDireccionRepLegalInterventor").value = '';
-        document.getElementById("numTelefonoRepLegalInterventor").value = '';
-        document.getElementById("txtCorreoRepLegalInterventor").value = '';
+function escondeCamposTipoPersona(valor) {
+    if (valor == 1) {
+        $(".lineaPersonaJuridica").hide();
+        $(".lineaPersonaNatural").show();
     } else {
-        document.getElementById("lineaPersonaNatural").style.display = "none";
-        document.getElementById("lineaPersonaJuridica").style.display = "table-row";
-        document.getElementById("lineaPersonaJuridica2").style.display = "table-row";
-        document.getElementById("lineaPersonaJuridica3").style.display = "table-row";
-        document.getElementById("lineaTituloInterventor").style.display = "table-row";
-        document.getElementById("numCedulaInterventor").value = '';
-        document.getElementById("numTProfesionalInterventor").value = '';
+        $(".lineaPersonaJuridica").show();
+        $(".lineaPersonaNatural").hide();
     }
+
+//    if (document.getElementById("bolTipoPersonaInterventor") != null) {
+//        
+//        if (document.getElementById("bolTipoPersonaInterventor").checked == 1) {
+////            document.getElementById("lineaPersonaNatural").style.display = "inline";
+////            document.getElementById("lineaPersonaJuridica").style.display = "none";
+////            document.getElementById("lineaPersonaJuridica2").style.display = "none";
+////            document.getElementById("lineaPersonaJuridica3").style.display = "none";
+////            document.getElementById("lineaTituloInterventor").style.display = "none";
+////            document.getElementById("numNitInterventor").value = '';
+////            document.getElementById("txtNombreRepLegalInterventor").value = '';
+////            document.getElementById("txtDireccionRepLegalInterventor").value = '';
+////            document.getElementById("numTelefonoRepLegalInterventor").value = '';
+////            document.getElementById("txtCorreoRepLegalInterventor").value = '';
+//            $(".col-md-4 lineaPersonaNatural").hide();
+//            $("#lineaPersonaJuridica").hide();
+//        } else {
+//            alert($(".lineaPersonaNatural"));
+////            document.getElementById("lineaPersonaNatural").style.display = "none";
+////            document.getElementById("lineaPersonaJuridica").style.display = "table-row";
+////            document.getElementById("lineaPersonaJuridica2").style.display = "table-row";
+////            document.getElementById("lineaPersonaJuridica3").style.display = "table-row";
+////            document.getElementById("lineaTituloInterventor").style.display = "table-row";
+////            document.getElementById("numCedulaInterventor").value = '';
+////            document.getElementById("numTProfesionalInterventor").value = '';
+//            $(".lineaPersonaNatural").hide();
+//            //$("#lineaPersonaNatural").hide();
+//        }
+//    }
+
 }
 
 // Muestra el tr "LineaConstructor" si "bolConstructor" es "SI"
 function escondeLineaConstructor() {
-    if (document.getElementById("bolConstructor").checked == 0) {
-        document.getElementById("idTituloConstructor").style.display = "table-row";
-        document.getElementById("idComboConstructor").style.display = "table-row";
-    } else {
-        document.getElementById("idTituloConstructor").style.display = "none";
-        document.getElementById("idComboConstructor").style.display = "none";
-        document.getElementById("seqConstructor").value = '0';
+    if (document.getElementById("bolConstructor") != null) {
+        if (document.getElementById("bolConstructor").checked == 0) {
+            document.getElementById("idTituloConstructor").style.display = "table-row";
+            document.getElementById("idComboConstructor").style.display = "table-row";
+        } else {
+            document.getElementById("idTituloConstructor").style.display = "none";
+            document.getElementById("idComboConstructor").style.display = "none";
+            document.getElementById("seqConstructor").value = '0';
+        }
     }
+
 }
 
 // Calcula el valor del subsidio dependiendo del numero de soluciones
@@ -7909,6 +7972,7 @@ function preguntarGuardarProyecto() {
 function obtenerModalidad(objEsquema) {
 
     document.getElementById("tdModalidad").innerHTML = "";
+
     cargarContenido(
             'tdModalidad',
             './contenidos/proyectos/modalidadEsquema.php',
@@ -7916,38 +7980,43 @@ function obtenerModalidad(objEsquema) {
             true
             );
 
-    YAHOO.util.Event.onContentReady(
-            "seqTipoEsquema",
-            function () {
-                document.getElementById("seqTipoEsquema").focus();
-            }
-    );
+//    YAHOO.util.Event.onContentReady(
+//            "seqTipoEsquema",
+//            function () {
+//                document.getElementById("seqTipoEsquema").focus();
+//            }
+//    );
 }
 
 // COMITE DE ELEGIBILIDAD - Muestra los datos de aprobación si el campo 'bolAprobacion' está checkeado
 function escondeSeccionAprobacion() {
-    if (document.getElementById("bolAprobacion").checked) {
-        document.getElementById("tblSeccionAprobacion").style.display = "table-row";
-    } else {
-        document.getElementById("tblSeccionAprobacion").style.display = "none";
-        document.getElementById("numActaAprobacion").value = '';
-        document.getElementById("fchActaAprobacion").value = '';
-        document.getElementById("numResolucionAprobacion").value = '';
-        document.getElementById("fchResolucionAprobacion").value = '';
-        document.getElementById("txtActaResuelve").value = '';
-        //document.getElementById("txtObservacionAprobacion").value = '';
-        document.getElementById("txtCondicionAprobacion").value = '';
+    if (document.getElementById("bolAprobacion") != null) {
+        if (document.getElementById("bolAprobacion").checked) {
+            document.getElementById("tblSeccionAprobacion").style.display = "table-row";
+        } else {
+            document.getElementById("tblSeccionAprobacion").style.display = "none";
+            document.getElementById("numActaAprobacion").value = '';
+            document.getElementById("fchActaAprobacion").value = '';
+            document.getElementById("numResolucionAprobacion").value = '';
+            document.getElementById("fchResolucionAprobacion").value = '';
+            document.getElementById("txtActaResuelve").value = '';
+            //document.getElementById("txtObservacionAprobacion").value = '';
+            document.getElementById("txtCondicionAprobacion").value = '';
+        }
     }
 }
 
 // Si bolCondiciones
 function muestraCondicionAprobacion() {
-    if (document.getElementById("bolCondicionAprobacion").checked) {
-        document.getElementById("tblSeccionCondicionado").style.display = "table-row";
-    } else {
-        document.getElementById("tblSeccionCondicionado").style.display = "none";
-        document.getElementById("txtCondicionAprobacion").value = '';
+    if (document.getElementById("bolCondicionAprobacion") != null) {
+        if (document.getElementById("bolCondicionAprobacion").checked) {
+            document.getElementById("tblSeccionCondicionado").style.display = "table-row";
+        } else {
+            document.getElementById("tblSeccionCondicionado").style.display = "none";
+            document.getElementById("txtCondicionAprobacion").value = '';
+        }
     }
+
     //alert(document.getElementById("bolCondicionAprobaciondisabled").disable);
 }
 
@@ -8058,8 +8127,14 @@ function escondeDatosSegunTipoDesembolso() {
 
 function popUpAyuda( ) {
 
+//      var numAlto  = YAHOO.util.Dom.getDocumentHeight() - 200;
+//      var numAncho = YAHOO.util.Dom.getDocumentWidth() - 100;
+
     var numAlto = YAHOO.util.Dom.getDocumentHeight() - 200;
-    var numAncho = 500;
+    var numAncho = 400;
+
+    var x = YAHOO.util.Dom.getX("ayuda") - (numAncho - 25);
+    var y = YAHOO.util.Dom.getY("ayuda") + 10;
 
     var fncExito = function (o) {
 
@@ -8069,11 +8144,13 @@ function popUpAyuda( ) {
                 {
                     width: numAncho,
                     height: numAlto,
-                    fixedcenter: true,
+                    fixedcenter: false,
                     close: true,
                     draggable: false,
-                    modal: true,
-                    visible: false
+                    modal: false,
+                    visible: false,
+                    x: x,
+                    y: y
                 }
         );
 
@@ -8453,7 +8530,7 @@ fncTabActoAdministrativo = function () {
     YAHOO.util.Event.onContentReady("listenerTabActoAdministrativo", fncTabActoAdministrativo);
     var objTabView = new YAHOO.widget.TabView('tabActoAdministrativo');
     YAHOO.util.Dom.get("tabActoAdministrativo").style.visibility = "visible";
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
 }
 YAHOO.util.Event.onContentReady("listenerTabActoAdministrativo", fncTabActoAdministrativo);
 
@@ -8646,201 +8723,51 @@ var indiceFilaFormulario = 1;
 function addTipoVivienda() {
     myNewRow = document.getElementById("tablaTipoVivienda").insertRow(-1);
     myNewRow.id = indiceFilaFormulario;
+    indiceFilaFormulario = ($("#tablaTipoVivienda tr").length) - 1;
+    var addDiv = "";
+    addDiv += "<td><div class='form-group'><div class='col-md-3'><label class='control-label' >Nombre</label><br /><input type='text' name='txtNombreTipoVivienda[]' id='txtNombreTipoVivienda' onBlur='sinCaracteresEspeciales( this );' style='width:150px' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Cantidad</label><br /><input type='text' name='numCantidad[]' id='numCantidad_" + indiceFilaFormulario + "' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this ); sumaVentas();' style='width:50px; text-align:right' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>&Aacute;rea</label><br /><input type='text' name='numArea[]' id='numArea' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' style='width:50px; text-align:right' >&nbsp;m²</div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>A&ntilde;o Venta</label><br /><input type='text' name='numAnoVenta[]' id='numAnoVenta' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' style='width:50px; text-align:right' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>Precio Venta</label><br />$ <input type='text' name='valPrecioVenta[]' id='valPrecioVenta_" + indiceFilaFormulario + "' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this ); sumaVentas();' style='width:80px; text-align:right' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>Cierre</label><br />$ <input type='text' name='valCierre[]' id='valCierre' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' style='width:80px; text-align:right' ></div>";
+    addDiv += "<div class='col-md-4'><label class='control-label'>Descripci&oacute;n</label><br /><textarea name='txtDescripcion[]' id='txtDescripcion' style='width:260px'></textarea></div>";
+    addDiv += "<div class='col-md-2'><label class='control-label'>Eliminar</label><br /><img src='recursos/imagenes/remove.png' width='22px' onclick='return confirmaRemoverLineaFormulario(this);' style='position: relative; float: left;'></div><p>&nbsp;</p></div></td>";
     myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtNombreTipoVivienda[" + indiceFilaFormulario + "]' id='txtNombreTipoVivienda' onBlur='sinCaracteresEspeciales( this );' style='width:150px' ></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='numCantidad[" + indiceFilaFormulario + "]' id='numCantidad_" + indiceFilaFormulario + "' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this ); sumaVentas();' style='width:50px; text-align:right' ></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='numArea[" + indiceFilaFormulario + "]' id='numArea' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' style='width:50px; text-align:right' >&nbsp;m²</td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='numAnoVenta[" + indiceFilaFormulario + "]' id='numAnoVenta' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' style='width:50px; text-align:right' ></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td>$ <input type='text' name='valPrecioVenta[" + indiceFilaFormulario + "]' id='valPrecioVenta_" + indiceFilaFormulario + "' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this ); sumaVentas();' style='width:80px; text-align:right' ></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><textarea name='txtDescripcion[" + indiceFilaFormulario + "]' id='txtDescripcion' style='width:260px'></textarea></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td>$ <input type='text' name='valCierre[" + indiceFilaFormulario + "]' id='valCierre' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' style='width:80px; text-align:right' ></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='button' value='Eliminar' onClick='return confirmaRemoverLineaFormulario(this);'></td>";
+    myNewCell.innerHTML = addDiv;
     indiceFilaFormulario++;
 }
 
 // ADICIONAR LINEAS AL CONJUNTO RESIDENCIAL (SUBPROYECTOS)
 var indiceFilaFormulario = 1;
 function addConjuntoResidencial() {
+
     myNewRow = document.getElementById("tablaConjuntoResidencial").insertRow(-1);
     myNewRow.id = indiceFilaFormulario;
+    indiceFilaFormulario = ($("#tablaConjuntoResidencial tr").length) - 1;
+    var addDiv = "";
+    addDiv += "<td><div class='form-group'><div class='col-md-3'><label class='control-label' >Nombre </label><br /><input type='text' name='txtNombreProyectoHijo[]' id='txtNombreProyectoHijo' onBlur='sinCaracteresEspeciales( this );' size='28' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Nombre Comercial </label><br /><input type='text' name='txtNombreComercialHijo[]' id='txtNombreComercialHijo' onBlur='sinCaracteresEspeciales( this );' size='28' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Direcci&oacute;n&nbsp;del&nbsp;Conjunto </label><br /><a href='#' onClick='recogerDireccion( \"txtDireccionHijo[r_" + indiceFilaFormulario + "]\", \"objDireccionOculto\" )'><img src='recursos/imagenes/icono_lupa.gif'></a>&nbsp;<input type='text' name='txtDireccionHijo[]' id='txtDireccionHijo[r_" + indiceFilaFormulario + "]' size='20' style='background-color:#E4E4E4;' readonly /></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Unidades </label><br /><input type='text' name='valNumeroSolucionesHijo[]' id='valNumeroSolucionesHijo' onBlur='sinCaracteresEspeciales( this );' size='6' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Chip </label><br /><input type='text' name='txtChipLoteHijo[]' id='txtChipLoteHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Matr&iacute;cula Inmobiliaria </label><br /><input type='text' name='txtMatriculaInmobiliariaLoteHijo[]' id='txtMatriculaInmobiliariaLoteHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Lic. Urbanismo </label><br /><input type='text' name='txtLicenciaUrbanismoHijo[]' id='txtLicenciaUrbanismoHijo' onBlur='sinCaracteresEspeciales( this );' size='18' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Fecha&nbsp;Licencia </label><br /><input name='fchLicenciaUrbanismo1Hijo[]' type='text' id='fchLicenciaUrbanismo1Hijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchLicenciaUrbanismo1Hijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Vigencia&nbsp;Licencia </label><br /><input name='fchVigenciaLicenciaUrbanismoHijo[]' type='text' id='fchVigenciaLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchVigenciaLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Curadur&iacute;a </label><br /><input type='text' name='txtExpideLicenciaUrbanismoHijo[]' id='txtExpideLicenciaUrbanismoHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Lic. Construcci&oacute;n </label><br /><input type='text' name='txtLicenciaConstruccionHijo[]' id='txtLicenciaConstruccionHijo' onBlur='sinCaracteresEspeciales( this );' size='18' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Fecha&nbsp;Licencia </label><br /><input name='fchLicenciaConstruccion1Hijo[]' type='text' id='fchLicenciaConstruccion1Hijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchLicenciaConstruccion1Hijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Vigencia&nbsp;Licencia </label><br /><input name='fchVigenciaLicenciaConstruccionHijo[]' type='text' id='fchVigenciaLicenciaConstruccionHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchVigenciaLicenciaConstruccionHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Vendedor </label><br /><input type='text' name='txtNombreVendedorHijo[]' id='txtNombreVendedorHijo' onBlur='sinCaracteresEspeciales( this );' size='20' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >NIT Vendedor </label><br /><input type='text' name='numNitVendedorHijo[]' id='numNitVendedorHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >C&eacute;dula Catastral </label><br /><input type='text' name='txtCedulaCatastralHijo[]' id='txtCedulaCatastralHijo' onBlur='sinCaracteresEspeciales( this );' size='22' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >No. Escritura </label><br /><input type='text' name='txtEscrituraHijo[]' id='txtEscrituraHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Fecha&nbsp;Escritura </label><br /><input name='fchEscrituraHijo[]' type='text' id='fchEscrituraHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchEscrituraHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >No. Notar&iacute;a </label><br /><input type='text' name='numNotariaHijo[]' id='numNotariaHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Eliminar </label><br /><img src='recursos/imagenes/remove.png' width='22px' onclick='return confirmaRemoverLineaFormulario(this);' style='position: relative; float: left; width:15%'></div> <p>&nbsp;</p></div></td>";
     myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtNombreProyectoHijo[" + indiceFilaFormulario + "]' id='txtNombreProyectoHijo' onBlur='sinCaracteresEspeciales( this );' size='28' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtNombreComercialHijo[" + indiceFilaFormulario + "]' id='txtNombreComercialHijo' onBlur='sinCaracteresEspeciales( this );' size='28' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><a href='#' onClick='recogerDireccion( \"txtDireccionHijo[" + indiceFilaFormulario + "]\", \"objDireccionOculto\" )'><img src='recursos/imagenes/icono_lupa.gif'></a>&nbsp;<input type='text' name='txtDireccionHijo[" + indiceFilaFormulario + "]' id='txtDireccionHijo[" + indiceFilaFormulario + "]' size='20' style='background-color:#E4E4E4;' readonly /></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='valNumeroSolucionesHijo[" + indiceFilaFormulario + "]' id='valNumeroSolucionesHijo' onBlur='sinCaracteresEspeciales( this );' size='6' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtChipLoteHijo[" + indiceFilaFormulario + "]' id='txtChipLoteHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtMatriculaInmobiliariaLoteHijo[" + indiceFilaFormulario + "]' id='txtMatriculaInmobiliariaLoteHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]' id='txtLicenciaUrbanismoHijo' onBlur='sinCaracteresEspeciales( this );' size='18' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input name='fchLicenciaUrbanismo1Hijo[" + indiceFilaFormulario + "]' type='text' id='fchLicenciaUrbanismo1Hijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchLicenciaUrbanismo1Hijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input name='fchVigenciaLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]' type='text' id='fchVigenciaLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchVigenciaLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtExpideLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]' id='txtExpideLicenciaUrbanismoHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtLicenciaConstruccionHijo[" + indiceFilaFormulario + "]' id='txtLicenciaConstruccionHijo' onBlur='sinCaracteresEspeciales( this );' size='18' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input name='fchLicenciaConstruccion1Hijo[" + indiceFilaFormulario + "]' type='text' id='fchLicenciaConstruccion1Hijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchLicenciaConstruccion1Hijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input name='fchVigenciaLicenciaConstruccionHijo[" + indiceFilaFormulario + "]' type='text' id='fchVigenciaLicenciaConstruccionHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchVigenciaLicenciaConstruccionHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtNombreVendedorHijo[" + indiceFilaFormulario + "]' id='txtNombreVendedorHijo' onBlur='sinCaracteresEspeciales( this );' size='20' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='numNitVendedorHijo[" + indiceFilaFormulario + "]' id='numNitVendedorHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtCedulaCatastralHijo[" + indiceFilaFormulario + "]' id='txtCedulaCatastralHijo' onBlur='sinCaracteresEspeciales( this );' size='22' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='txtEscrituraHijo[" + indiceFilaFormulario + "]' id='txtEscrituraHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input name='fchEscrituraHijo[" + indiceFilaFormulario + "]' type='text' id='fchEscrituraHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchEscrituraHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "left");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='text' name='numNotariaHijo[" + indiceFilaFormulario + "]' id='numNotariaHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></td>";
-    //
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='button' value='Eliminar' onClick='return confirmaRemoverLineaFormulario(this);'></td>";
+    myNewCell.innerHTML = addDiv;
     indiceFilaFormulario++;
 }
 
@@ -9638,21 +9565,23 @@ function sumaTotalCostos() {
 
 function calculaUtilidad() {
     var valCalculaUtilidad = 0;
-    if ((document.getElementById("valTotalVentas").value) == '' || (document.getElementById("valTotalVentas").value) == 0) {
-        var valTotalVentas = 0;
-    } else {
-        var valTotalVentas = document.getElementById("valTotalVentas").value;
-    }
-    if ((document.getElementById("valTotalCostos").value) == '' || (document.getElementById("valTotalCostos").value) == 0) {
-        var valTotalCostos = 0;
-    } else {
-        var valTotalCostos = document.getElementById("valTotalCostos").value;
-    }
+    if (document.getElementById("valTotalVentas") != null) {
+        if ((document.getElementById("valTotalVentas").value) == '' || (document.getElementById("valTotalVentas").value) == 0) {
+            var valTotalVentas = 0;
+        } else {
+            var valTotalVentas = document.getElementById("valTotalVentas").value;
+        }
+        if ((document.getElementById("valTotalCostos").value) == '' || (document.getElementById("valTotalCostos").value) == 0) {
+            var valTotalCostos = 0;
+        } else {
+            var valTotalCostos = document.getElementById("valTotalCostos").value;
+        }
 
-    var objvalUtilidadProyecto = document.getElementById("valUtilidadProyecto");
+        var objvalUtilidadProyecto = document.getElementById("valUtilidadProyecto");
 
-    valCalculaUtilidad = valTotalVentas - valTotalCostos;
-    objvalUtilidadProyecto.value = valCalculaUtilidad;
+        valCalculaUtilidad = valTotalVentas - valTotalCostos;
+        objvalUtilidadProyecto.value = valCalculaUtilidad;
+    }
 }
 
 function sumaTotalRecursos() {
@@ -10190,22 +10119,22 @@ function selectAnidados(documento, valor) {
 
     var apr = "numAnosAprobados";
     var options = {
-        0:  ["0"],
-        1:  ["0"],
-        2:  ["1", "2", "3", "4"],
-        3:  ["5"],
-        4:  ["6", "7", "8", "9", "10"],
-        5:  ["11"],
-        6:  ["6", "7", "8", "9", "10", "11"],
-        7:  ["11"],
-        8:  ["11"],
-        9:  ["11"],
+        0: ["0"],
+        1: ["0"],
+        2: ["1", "2", "3", "4"],
+        3: ["5"],
+        4: ["6", "7", "8", "9", "10"],
+        5: ["11"],
+        6: ["6", "7", "8", "9", "10", "11"],
+        7: ["11"],
+        8: ["11"],
+        9: ["11"],
         12: ["11"]
     }
 
     $(function () {
         var fillSecondary = function () {
-            if( YAHOO.util.Dom.get("nivelEducativo") != null) {
+            if (YAHOO.util.Dom.get("nivelEducativo") != null) {
                 $('#numAnosAprobados').empty();
                 var selected = $('#nivelEducativo').val();
                 options[selected].forEach(function (element, index) {
@@ -10225,24 +10154,24 @@ function selectAnidados(documento, valor) {
 
 }
 
-function mostrarToolTip(){
+function mostrarToolTip() {
 
     var objCartaLeasing = YAHOO.util.Dom.get("valCartaLeasing");
     var objSelect = YAHOO.util.Dom.get("seqConvenio");
     var selectedIndex = objSelect.selectedIndex;
 
-    var fncSuccess = function(o){
+    var fncSuccess = function (o) {
         try {
             var objRespuesta = jQuery.parseJSON(o.responseText);
             objCartaLeasing.value = objRespuesta.valor;
             formatoSeparadores(objCartaLeasing);
             var objToolTip = new YAHOO.widget.Tooltip(
-                "myToolTip",
-                {
-                    context: "seqConvenioToolTip",
-                    width: "300px",
-                    text: objRespuesta.convenio
-                }
+                    "myToolTip",
+                    {
+                        context: "seqConvenioToolTip",
+                        width: "300px",
+                        text: objRespuesta.convenio
+                    }
             );
             valorSubsidio();
         } catch (e) {
@@ -10251,49 +10180,51 @@ function mostrarToolTip(){
         }
     }
 
-    var fncError = function(o){
+    var fncError = function (o) {
         console.log("Error obteniendo el texto del convenio");
     }
 
     var callback =
-        {
-            success: fncSuccess,
-            failure: fncError
-        };
+            {
+                success: fncSuccess,
+                failure: fncError
+            };
 
     var callObj = YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/casaMano/textoConvenio.php",
-        callback,
-        "seqConvenio=" + objSelect.options[selectedIndex].value
-    );
+            "POST",
+            "./contenidos/casaMano/textoConvenio.php",
+            callback,
+            "seqConvenio=" + objSelect.options[selectedIndex].value
+            );
 
 }
 
 YAHOO.util.Event.onContentReady(
-    "seqConvenioToolTip",
-    function(){ mostrarToolTip(); }
+        "seqConvenioToolTip",
+        function () {
+            mostrarToolTip();
+        }
 );
 
 
-function alertaFormularioCerrado( objBolCerrado , bolCerradoBaseDatos, bolPermisoAbrirFormularios ){
+function alertaFormularioCerrado(objBolCerrado, bolCerradoBaseDatos, bolPermisoAbrirFormularios) {
     var txtMensaje = "";
-    if( bolCerradoBaseDatos == 1 ){
-        if(objBolCerrado.checked == false){
-            if(bolPermisoAbrirFormularios == 1){
-                txtMensaje  = "<div class='msgError' style='font-size:12px; text-align:center;'>Va a intentar abrir un formulario cerrado, ésta acción implica los siguientes cambios:</div>";
+    if (bolCerradoBaseDatos == 1) {
+        if (objBolCerrado.checked == false) {
+            if (bolPermisoAbrirFormularios == 1) {
+                txtMensaje = "<div class='msgError' style='font-size:12px; text-align:center;'>Va a intentar abrir un formulario cerrado, ésta acción implica los siguientes cambios:</div>";
                 txtMensaje += "<p><li>Se perderá el numero de formulario</li>";
                 txtMensaje += "<li>La fecha de postulación será eliminada</li>";
                 txtMensaje += "<li>El hogar será devuelto a la etapa de inscripción</li>";
                 txtMensaje += "</p>";
-            }else{
-                txtMensaje  = "<div class='msgError' style='font-size:12px; text-align:center;'>No tiene permisos para abrir formularios</div>";
+            } else {
+                txtMensaje = "<div class='msgError' style='font-size:12px; text-align:center;'>No tiene permisos para abrir formularios</div>";
                 objBolCerrado.checked = true;
             }
         }
     }
 
-    if(txtMensaje != ""){
+    if (txtMensaje != "") {
 
         var handleOk = function () {
             this.cancel();
@@ -10340,7 +10271,7 @@ function alertaFormularioCerrado( objBolCerrado , bolCerradoBaseDatos, bolPermis
  * @param txtCampo
  * @param txtValor
  */
-function alertaDigitacionCampo(txtCampo,txtValor){
+function alertaDigitacionCampo(txtCampo, txtValor) {
 
     var objAlerta = YAHOO.util.Dom.get(txtCampo);
     var txtMensaje = "";
@@ -10350,7 +10281,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
     // verifica con los datos vivos (no los de la BD
     // si lo que se esta digitando supera los 2 salarios minimos
     // tomados de la lecturaConfiguracion a travez de un input hidden
-    if( txtCampo == 'ingresos' ){
+    if (txtCampo == 'ingresos') {
 
         var valDigitado = 0;
         var valSalarioHogarRestante = 0;
@@ -10364,8 +10295,8 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         var objIngresoCiudadano = null;
 
         // obtiene el valor digitado
-        objAlerta.value = ( objAlerta.value == "" )? 0 : objAlerta.value;
-        valDigitado = parseInt( objAlerta.value.replace(/[^0-9]/g,'') );
+        objAlerta.value = (objAlerta.value == "") ? 0 : objAlerta.value;
+        valDigitado = parseInt(objAlerta.value.replace(/[^0-9]/g, ''));
 
         // obtiene la suma de ingresos del resto del hogar
         // dado que cuando se presiona el boton de edicion
@@ -10374,22 +10305,22 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         objSMMLV = YAHOO.util.Dom.get('valSMMLV');
         objDatosHogar = YAHOO.util.Dom.get('datosHogar');
         arrTablasCiudadanos = objDatosHogar.getElementsByTagName('table');
-        for( i = 0 ; i < arrTablasCiudadanos.length ; i++ ){
-            if( arrTablasCiudadanos[i].id != "" && ( ! isNaN( arrTablasCiudadanos[i].id ) ) ){
+        for (i = 0; i < arrTablasCiudadanos.length; i++) {
+            if (arrTablasCiudadanos[i].id != "" && (!isNaN(arrTablasCiudadanos[i].id))) {
                 numDocumento = arrTablasCiudadanos[i].id;
-                objIngresoCiudadano = YAHOO.util.Dom.get( numDocumento + '-valIngresos' );
+                objIngresoCiudadano = YAHOO.util.Dom.get(numDocumento + '-valIngresos');
                 valSalarioHogarRestante = parseInt(valSalarioHogarRestante) + parseInt(objIngresoCiudadano.value);
             }
         }
 
         // En caso de cancelar este es el valor original que tenia el ciudadano
-        valRetorno =  parseInt(objValIngresoHogar.value.replace(/[^0-9]/g,'')) - parseInt(valSalarioHogarRestante);
+        valRetorno = parseInt(objValIngresoHogar.value.replace(/[^0-9]/g, '')) - parseInt(valSalarioHogarRestante);
 
         // Ingreso de los miembros de hogar
-        valNuevaSuma = parseInt( valDigitado + valSalarioHogarRestante );
+        valNuevaSuma = parseInt(valDigitado + valSalarioHogarRestante);
 
         // Si la suma supera los dos salarios minimos
-        if( valNuevaSuma > parseInt( objSMMLV.value * 2 ) ){
+        if (valNuevaSuma > parseInt(objSMMLV.value * 2)) {
             bolAlerta = true;
             txtMensaje = "<li class='msgError'>Con el valor ingreso digitado el Total de Ingresos Hogar supera los Dos (2) SMMLV. Sugerir al hogar tomar información de los beneficios del Gobierno Nacional - Min-Vivienda. ¿Es un dato válido?</li>";
         }
@@ -10399,8 +10330,8 @@ function alertaDigitacionCampo(txtCampo,txtValor){
 
     // no se permite el valor de cero hogares que habitan la vivienda
     // por encima de 10 se muestra una advertencia
-    if( txtCampo == 'numHabitaciones' ){
-        if( parseInt( objAlerta.value.replace(/[^0-9]/g,'') ) > 10 ){
+    if (txtCampo == 'numHabitaciones') {
+        if (parseInt(objAlerta.value.replace(/[^0-9]/g, '')) > 10) {
             bolAlerta = true;
             txtMensaje = "<li class='msgError'>El valor digitado en número de hogares es mayor de 10 hogares en la misma vivienda. , ¿Es un dato válido?</li>";
         }
@@ -10408,7 +10339,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
 
     // si el numero de dormitorios supera los miembros de hogar se
     // muestra una advertencia
-    if( txtCampo == 'numHacinamiento' ){
+    if (txtCampo == 'numHacinamiento') {
 
         var objDatosHogar = null;
         var arrTablasCiudadanos = null;
@@ -10416,7 +10347,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         var objAgregarMiembro = YAHOO.util.Dom.get("agregarMiembro");
 
         // verifica que no haya un ciudadano en modo de edicion en el formulario
-        if( objAgregarMiembro != null && objAgregarMiembro.style.display != "none" ){
+        if (objAgregarMiembro != null && objAgregarMiembro.style.display != "none") {
             bolAlerta = true;
             txtMensaje = "<li class='msgError'>Por favor verifique que los miembros de hogar se encuentren agregados correctamente.</li>";
         }
@@ -10424,14 +10355,14 @@ function alertaDigitacionCampo(txtCampo,txtValor){
         // cuenta los miembros de hogar
         objDatosHogar = YAHOO.util.Dom.get('datosHogar');
         arrTablasCiudadanos = objDatosHogar.getElementsByTagName('table');
-        for( i = 0 ; i < arrTablasCiudadanos.length ; i++ ){
-            if( arrTablasCiudadanos[i].id != "" && ( ! isNaN( arrTablasCiudadanos[i].id ) ) ){
+        for (i = 0; i < arrTablasCiudadanos.length; i++) {
+            if (arrTablasCiudadanos[i].id != "" && (!isNaN(arrTablasCiudadanos[i].id))) {
                 numMiembros = numMiembros + 1;
             }
         }
 
         // si el numero de habitaciones supera el numero de miembros del hogar
-        if( ( parseInt( objAlerta.value.replace(/[^0-9]/g,'') ) > numMiembros ) && txtMensaje == "" ){
+        if ((parseInt(objAlerta.value.replace(/[^0-9]/g, '')) > numMiembros) && txtMensaje == "") {
             bolAlerta = true;
             txtMensaje = "<li class='msgError'>El número de dormitorios es mayor al total de miembros del hogar, ¿Es un dato válido?</li>";
         }
@@ -10439,7 +10370,7 @@ function alertaDigitacionCampo(txtCampo,txtValor){
 
     }
 
-    if( bolAlerta == true ){
+    if (bolAlerta == true) {
 
         var handleOk = function () {
             this.cancel();
@@ -10488,8 +10419,8 @@ function alertaDigitacionCampo(txtCampo,txtValor){
     }
 
 }
-function exportableExcel(array){
-    
+function exportableExcel(array) {
+
     var url = "../../migracionesIndividual/generarLinks.php"; // El script a dónde se realizará la petición.
     $.ajax({
         type: "POST",
@@ -10501,21 +10432,21 @@ function exportableExcel(array){
         {
             console.log("prueba");
             return data;
-             //$("#destino").html(data);// Mostrar la respuestas del script PHP.
+            //$("#destino").html(data);// Mostrar la respuestas del script PHP.
 
         }
     });
 }
 
-function tablaPlantillaProyectoUnidadHabitacional( idMostrar, idOcultar ){
-        mostrarOcultar(idMostrar);
-        document.getElementById(idOcultar).style.display = 'none';
+function tablaPlantillaProyectoUnidadHabitacional(idMostrar, idOcultar) {
+    mostrarOcultar(idMostrar);
+    document.getElementById(idOcultar).style.display = 'none';
 }
 
 
-function eliminarActoAdministrativo( numActo , fchActo ){
+function eliminarActoAdministrativo(numActo, fchActo) {
 
-    txtMensaje  = "<form method='POST' enctype='multipart/form-data' id='frmEliminarActos' onSubmit='return false;'>";
+    txtMensaje = "<form method='POST' enctype='multipart/form-data' id='frmEliminarActos' onSubmit='return false;'>";
     txtMensaje += "<table>";
     txtMensaje += "<tr><td class='msgError'>Indique el motivo por el que realiza la eliminación del acto adminsitrativo " + numActo + " de " + fchActo + "</td></tr>";
     txtMensaje += "<tr><td><textarea name='txtMotivo' id='txtMotivo' style='width: 100%; height: 100px;'></textarea></td></tr>";
@@ -10525,10 +10456,10 @@ function eliminarActoAdministrativo( numActo , fchActo ){
     txtMensaje += "</form>";
 
     var handleOk = function () {
-        if( YAHOO.util.Dom.get('txtMotivo').value == "" ){
+        if (YAHOO.util.Dom.get('txtMotivo').value == "") {
             alert("Indique el motivo para eliminar el acto administrativo");
-        }else{
-            someterFormulario("mensajes",this.form,"./contenidos/actosAdministrativos/eliminarActos.php",false,true);
+        } else {
+            someterFormulario("mensajes", this.form, "./contenidos/actosAdministrativos/eliminarActos.php", false, true);
             this.cancel();
         }
 
@@ -10576,9 +10507,9 @@ function eliminarActoAdministrativo( numActo , fchActo ){
 }
 
 // esta funcion reemplaza la funcion eliminarActoAdministrativo
-function eliminarAAD( numActo , fchActo ){
+function eliminarAAD(numActo, fchActo) {
 
-    txtMensaje  = "<form method='POST' enctype='multipart/form-data' id='frmEliminarActos' onSubmit='return false;'>";
+    txtMensaje = "<form method='POST' enctype='multipart/form-data' id='frmEliminarActos' onSubmit='return false;'>";
     txtMensaje += "<table>";
     txtMensaje += "<tr><td class='msgError'>Indique el motivo por el que realiza la eliminación del acto adminsitrativo " + numActo + " de " + fchActo + "</td></tr>";
     txtMensaje += "<tr><td><textarea name='txtMotivo' id='txtMotivo' style='width: 100%; height: 100px;'></textarea></td></tr>";
@@ -10588,10 +10519,10 @@ function eliminarAAD( numActo , fchActo ){
     txtMensaje += "</form>";
 
     var handleOk = function () {
-        if( YAHOO.util.Dom.get('txtMotivo').value == "" ){
+        if (YAHOO.util.Dom.get('txtMotivo').value == "") {
             alert("Indique el motivo para eliminar el acto administrativo");
-        }else{
-            someterFormulario("mensajes",this.form,"./contenidos/aad/eliminar.php",false,true);
+        } else {
+            someterFormulario("mensajes", this.form, "./contenidos/aad/eliminar.php", false, true);
             this.cancel();
         }
 
@@ -10638,24 +10569,28 @@ function eliminarAAD( numActo , fchActo ){
 
 }
 
-var detallesAAD = function(){
+var detallesAAD = function () {
     $('#detallesAAD').DataTable({
-        "lengthMenu": [[5,10], [5,10]],
+        "lengthMenu": [[5, 10], [5, 10]],
         "scrollX": true,
         "dom": 'lftp'
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "select",
-        "detallesAAD_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "detallesAAD_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "input",
-        "detallesAAD_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "detallesAAD_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
@@ -10664,9 +10599,9 @@ var detallesAAD = function(){
     objPaginador.style.textAlign = "center";
 
     eliminarObjeto("listenerDetallesAAD");
-    YAHOO.util.Event.onContentReady("listenerDetallesAAD",detallesAAD);
+    YAHOO.util.Event.onContentReady("listenerDetallesAAD", detallesAAD);
 }
-YAHOO.util.Event.onContentReady("listenerDetallesAAD",detallesAAD);
+YAHOO.util.Event.onContentReady("listenerDetallesAAD", detallesAAD);
 
 /**
  * FUNCTION PROVICIONAL PARA ENRUTAR LA CREACION DE LOS ACTOS
@@ -10674,51 +10609,55 @@ YAHOO.util.Event.onContentReady("listenerDetallesAAD",detallesAAD);
  * ACTOS ADMINISTRATIVOS
  */
 
-function enrutarAAD(objSelect){
+function enrutarAAD(objSelect) {
 
-    if(
-        objSelect.options[objSelect.selectedIndex].value == 1 ||
-        objSelect.options[objSelect.selectedIndex].value == 6 ||
-        objSelect.options[objSelect.selectedIndex].value == 10
-    ) {
+    if (
+            objSelect.options[objSelect.selectedIndex].value == 1 ||
+            objSelect.options[objSelect.selectedIndex].value == 6 ||
+            objSelect.options[objSelect.selectedIndex].value == 10
+            ) {
         // usa el modulo nuevo
         cargarContenido(
-            'informacion',
-            './contenidos/aad/informacion.php',
-            'seqTipoActo=' + objSelect.options[objSelect.selectedIndex].value,
-            true
-        );
-    }else{
+                'informacion',
+                './contenidos/aad/informacion.php',
+                'seqTipoActo=' + objSelect.options[objSelect.selectedIndex].value,
+                true
+                );
+    } else {
         // usa el modulo actual
         cargarContenido(
-            'informacion',
-            './contenidos/actosAdministrativos/informacionActo.php',
-            'seqTipoActo=' + objSelect.options[ objSelect.selectedIndex ].value,
-            true
-        );
+                'informacion',
+                './contenidos/actosAdministrativos/informacionActo.php',
+                'seqTipoActo=' + objSelect.options[ objSelect.selectedIndex ].value,
+                true
+                );
     }
 
 }
 
-var listadoCruces = function(){
+var listadoCruces = function () {
     $('#listadoCruces').DataTable({
-        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+        "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, 'Todos']],
         "order": [[0, "desc"]],
         "scrollX": true,
-        "dom": 'ltipr'
+        "dom": 'lftipr'
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "select",
-        "listadoCruces_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "listadoCruces_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "input",
-        "listadoCruces_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "listadoCruces_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
@@ -10726,107 +10665,107 @@ var listadoCruces = function(){
     objPaginador = YAHOO.util.Dom.get("listadoCruces_paginate");
     objPaginador.style.textAlign = "center";
 
-    autocompletar( 'txtFirma'   , 'txtFirmaContenedor'   , './contenidos/cruces2/nombres.php' , '' );
-    autocompletar( 'txtElaboro' , 'txtElaboroContenedor' , './contenidos/cruces2/nombres.php' , '' );
-    autocompletar( 'txtReviso'  , 'txtRevisoContenedor'  , './contenidos/cruces2/nombres.php' , '' );
+    autocompletar('txtFirma', 'txtFirmaContenedor', './contenidos/cruces2/nombres.php', '');
+    autocompletar('txtElaboro', 'txtElaboroContenedor', './contenidos/cruces2/nombres.php', '');
+    autocompletar('txtReviso', 'txtRevisoContenedor', './contenidos/cruces2/nombres.php', '');
 
     eliminarObjeto("listadoCrucesListener");
-    YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
+    YAHOO.util.Event.onContentReady("listadoCrucesListener", listadoCruces);
 }
-YAHOO.util.Event.onContentReady("listadoCrucesListener",listadoCruces);
+YAHOO.util.Event.onContentReady("listadoCrucesListener", listadoCruces);
 
-var listadoCrucesVer = function(){
-    $('#listadoCrucesVer').DataTable({
-        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+var auditoriaCruces = function () {
+    $('#auditoriaCruces').DataTable({
+        "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, 'Todos']],
         "order": [[0, "desc"]],
         "scrollX": true,
         "dom": 'lftipr'
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "select",
-        "listadoCrucesVer_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "auditoriaCruces_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "input",
-        "listadoCrucesVer_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "auditoriaCruces_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
 
-    objPaginador = YAHOO.util.Dom.get("listadoCrucesVer_paginate");
+    objPaginador = YAHOO.util.Dom.get("auditoriaCruces_paginate");
     objPaginador.style.textAlign = "center";
 
-    autocompletar( 'txtFirma'   , 'txtFirmaContenedor'   , './contenidos/cruces2/nombres.php' , '' );
-    autocompletar( 'txtElaboro' , 'txtElaboroContenedor' , './contenidos/cruces2/nombres.php' , '' );
-    autocompletar( 'txtReviso'  , 'txtRevisoContenedor'  , './contenidos/cruces2/nombres.php' , '' );
-
-    eliminarObjeto("listadoCrucesVerListener");
-    YAHOO.util.Event.onContentReady("listadoCrucesVerListener",listadoCrucesVer);
+    eliminarObjeto("auditoriaCrucesListener");
+    YAHOO.util.Event.onContentReady("auditoriaCrucesListener", auditoriaCruces);
 }
-YAHOO.util.Event.onContentReady("listadoCrucesVerListener",listadoCrucesVer);
+YAHOO.util.Event.onContentReady("auditoriaCrucesListener", auditoriaCruces);
 
-function cambiarFuenteInhabilidad(objSelectFuente){
+function cambiarFuenteInhabilidad(objSelectFuente) {
 
     // Objeto de respuesta si es satisfactoria la carga
     var handleSuccess =
-        function (o) {
-            if (o.responseText !== undefined) {
-                var objCausas = JSON.parse(o.responseText);
-                var objSelectCausas = YAHOO.util.Dom.get('seqCausa');
-                var i = 0;
-                for(i =  (objSelectCausas.length - 1); i > 0; i--){
-                    objSelectCausas.remove(i);
-                }
-                for(seqCausa in objCausas) {
-                    i = objSelectCausas.length;
-                    var objOption = document.createElement('option');
-                    objOption.value = seqCausa;
-                    objOption.text = objCausas[seqCausa];
-                    objSelectCausas.add(objOption);
-                }
-                if( objSelectFuente.options[objSelectFuente.selectedIndex].value == 8 ){
-                    var objInhabilitar = YAHOO.util.Dom.get('bolInhabilitar');
-                    objInhabilitar.selectedIndex = 2;
-                }
+            function (o) {
+                if (o.responseText !== undefined) {
+                    var objCausas = JSON.parse(o.responseText);
+                    var objSelectCausas = YAHOO.util.Dom.get('seqCausa');
+                    var i = 0;
+                    for (i = (objSelectCausas.length - 1); i > 0; i--) {
+                        objSelectCausas.remove(i);
+                    }
+                    for (seqCausa in objCausas) {
+                        i = objSelectCausas.length;
+                        var objOption = document.createElement('option');
+                        objOption.value = seqCausa;
+                        objOption.text = objCausas[seqCausa];
+                        objSelectCausas.add(objOption);
+                    }
+                    if (objSelectFuente.options[objSelectFuente.selectedIndex].value == 8) {
+                        var objInhabilitar = YAHOO.util.Dom.get('bolInhabilitar');
+                        objInhabilitar.selectedIndex = 2;
+                    }
 
 
-            }
-        };
+                }
+            };
 
     // Objeto de respuesta si la carga falla
     var handleFailure =
-        function (o) {
-            if (o.responseText !== undefined) {
-                // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
-                if (o.status == "401") {
-                    document.location = 'index.php';
-                } else {
+            function (o) {
+                if (o.responseText !== undefined) {
+                    // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
+                    if (o.status == "401") {
+                        document.location = 'index.php';
+                    } else {
 
-                    // Mensaje cuando la pagina no es encontrada
-                    var htmlCode = "";
-                    htmlCode = +o.status + " " + o.statusText;
+                        // Mensaje cuando la pagina no es encontrada
+                        var htmlCode = "";
+                        htmlCode = +o.status + " " + o.statusText;
 
-                    // Otros mensajes de error son mostrados directamente en el div
-                    document.getElementById(txtDivDestino).innerHTML = htmlCode;
+                        // Otros mensajes de error son mostrados directamente en el div
+                        document.getElementById(txtDivDestino).innerHTML = htmlCode;
+                    }
+                    if (bolCargando == 1) {
+                        objCargando.hide();
+                    }
+                    return false;
                 }
-                if (bolCargando == 1) {
-                    objCargando.hide();
-                }
-                return false;
-            }
-        };
+            };
 
     // Objeto de respuestas
     var callback =
-        {
-            success: handleSuccess,
-            failure: handleFailure
-        };
+            {
+                success: handleSuccess,
+                failure: handleFailure
+            };
 
     // peticion asincrona al servidor
     var callObj = YAHOO.util.Connect.asyncRequest("POST", "./contenidos/cruces2/cambiarFuenteInhabilidad.php", callback, 'seqFuente=' + objSelectFuente.options[objSelectFuente.selectedIndex].value);
@@ -10834,5 +10773,9 @@ function cambiarFuenteInhabilidad(objSelectFuente){
 
     return callObj;
 
+
+}
+
+function ocultarDivs() {
 
 }

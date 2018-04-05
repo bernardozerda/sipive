@@ -1,10 +1,10 @@
 <?php
-/**
-* SALVA O EDITA LOS OFERENTES DE LA BASE DE DATOS
-* @author Jaison Ospina
-* @version 0.1 Noviembre 2013
-*/
 
+/**
+ * SALVA O EDITA LOS OFERENTES DE LA BASE DE DATOS
+ * @author Jaison Ospina
+ * @version 0.1 Noviembre 2013
+ */
 // Posicion relativa de los archivos a incluir
 $txtPrefijoRuta = "../../";
 
@@ -13,87 +13,82 @@ include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
 
 // Inclusiones necesarias
 include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos']   . "archivos/inclusionSmarty.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos']   . "archivos/coneccionBaseDatos.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "Oferente.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Oferente.class.php" );
 //include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "Proyecto.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "RegistroActividades.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "RegistroActividades.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "DatosGeneralesProyectos.class.php" );
 
 /**
-* Validacion del formulario de oferentes
-*/ 
-
+ * Validacion del formulario de oferentes
+ */
 $arrErrores = array();
-    
+
 // Validacion del nombre del Oferente
-if( ( ! isset( $_POST['nombre'] ) ) or trim( $_POST['nombre'] ) == "" ){
-	$arrErrores[] = "Debe diligenciar el nombre del Oferente";
+if ((!isset($_POST['txtNombreOferente']) ) or trim($_POST['txtNombreOferente']) == "") {
+    $arrErrores[] = "Debe diligenciar el nombre del Oferente";
 }
 
-// Validacion del Tipo de Documento del Oferente
-if( ( ! isset( $_POST['seqTipoDocumentoOferente'] ) ) or trim( $_POST['seqTipoDocumentoOferente'] ) == 0 ){
-	$arrErrores[] = "Debe seleccionar el Tipo de Documento del Oferente";
-}
 
 // Validacion del Numero de Documento del Oferente
-if( ( ! isset( $_POST['numDocumentoOferente'] ) ) or trim( $_POST['numDocumentoOferente'] ) == "" ){
-	$arrErrores[] = "Debe diligenciar el N&uacute;mero de Documento del Oferente";
+if ((!isset($_POST['numNitOferente']) ) or trim($_POST['numNitOferente']) == "") {
+    $arrErrores[] = "Debe diligenciar el N&uacute;mero de Documento del Oferente";
 } else {
-	if( $_POST['numDocumentoOferente'] <= 0 ){
-		$arrErrores[] = "El campo N&uacute;mero de Documento del Oferente debe ser mayor que cero";
-	}
+    if ($_POST['numNitOferente'] <= 0) {
+        $arrErrores[] = "El campo N&uacute;mero de Documento del Oferente debe ser mayor que cero";
+    }
 }
 
 // Validacion del nombre del Representante Legal del Oferente
-if( ( ! isset( $_POST['nombre'] ) ) or trim( $_POST['nombre'] ) == "" ){
-	$arrErrores[] = "Debe diligenciar el nombre del Oferente";
+if ((!isset($_POST['txtRepresentanteLegalOferente']) ) or trim($_POST['txtRepresentanteLegalOferente']) == "") {
+    $arrErrores[] = "Debe diligenciar el nombre del  Representante Legal";
 }
 
 // Validacion del Numero de Documento del Representante Legal del Oferente
-if( ( ! isset( $_POST['numDocumentoRepresentanteLegal'] ) ) or trim( $_POST['numDocumentoRepresentanteLegal'] ) == "" ){
-	$arrErrores[] = "Debe diligenciar el N&uacute;mero de Documento del Representante Legal del Oferente";
+if ((!isset($_POST['numNitRepresentanteLegalOferente']) ) or trim($_POST['numNitRepresentanteLegalOferente']) == "") {
+    $arrErrores[] = "Debe diligenciar el N&uacute;mero de Documento del Representante Legal del Oferente";
 } else {
-	if( $_POST['numDocumentoRepresentanteLegal'] <= 0 ){
-		$arrErrores[] = "El campo N&uacute;mero de Documento del Representante Legal del Oferente debe ser mayor que cero";
-	}
+    if ($_POST['numNitRepresentanteLegalOferente'] <= 0) {
+        $arrErrores[] = "El campo N&uacute;mero de Documento del Representante Legal del Oferente debe ser mayor que cero";
+    }
 }
-
-// Validacion de la fecha
-/*list( $numAno , $numMes , $numDia ) = split( "-" , $_POST['vencimiento'] );
-if( ! @checkdate( $numMes , $numDia , $numAno ) ){
-	$arrErrores[] = "Debe colocar una fecha de vencimiento de la licencia de uso del aplicativo";
-}*/
-
 /**
-* Salvar o editar Oferentes si no hay errores
-*/
+ * Salvar o editar Oferentes si no hay errores
+ */
+if (empty($arrErrores)) {
+    $claOferente = new Oferente;
+    $claRegistro = new RegistroActividades;
+    $claDatosProy = new DatosGeneralesProyectos();
 
-if( empty( $arrErrores ) ){
-	$claOferente = new Oferente;
-	$claRegistro = new RegistroActividades;
-
-	// Verifica si es para crear o editar la Oferente
-	if( isset( $_POST['seqEditar'] ) and is_numeric( $_POST['seqEditar'] ) and $_POST['seqEditar'] > 0 ){
-		$arrErrores = $claOferente->editarOferente( $_POST['seqEditar'] , trim( $_POST['nombre'] ) , $_POST['seqTipoDocumentoOferente'] , trim( $_POST['numDocumentoOferente'] ) , $_POST['txtNombreRepresentanteLegal'] , $_POST['numDocumentoRepresentanteLegal'] , $_POST['bolActivo'] , $_POST['seqMenu'] );
-		$claRegistro->registrarActividad( "Edicion" , 0 , $_SESSION['seqUsuario'] , "Edicion de Oferente: [" . $_POST['seqEditar'] . "] " . trim( $_POST['nombre'] ) . " Mensaje: " . implode( "," , $arrErrores ) );
-	} else {
-		$arrErrores = $claOferente->guardarOferente( $_POST['seqOferente'], trim( $_POST['nombre'] ) , $_POST['seqTipoDocumentoOferente'] , trim( $_POST['numDocumentoOferente'] ) , $_POST['txtNombreRepresentanteLegal'] , $_POST['numDocumentoRepresentanteLegal'] , $_POST['bolActivo'], $_POST['seqMenu'] );
-		$claRegistro->registrarActividad( "Creacion" , 0 , $_SESSION['seqUsuario'] , "Creacion de Oferente: " . trim( $_POST['nombre'] ) . " Mensaje: " . implode( "," , $arrErrores ) );	
-	}
+    // Verifica si es para crear o editar la Oferente
+    if (isset($_POST['seqOferente']) and is_numeric($_POST['seqOferente']) and $_POST['seqOferente'] > 0) {
+        $arrErrores = $claOferente->editarOferente($_POST);
+        $arrOferente = $claDatosProy->obtenerDatosOferente($_POST['seqOferente']);
+        $txtPlantilla = "proyectos/vistas/inscripcionOferente.tpl";
+        //$claRegistro->registrarActividad("Edicion", 0, $_SESSION['seqUsuario'], "Edicion de Oferente: [" . $_POST['seqEditar'] . "] " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));
+    } else {
+        $arrErrores = $claOferente->guardarOferente($_POST);
+        $arrOferente = $claDatosProy->obtenerDatosOferente(0);
+        $txtPlantilla = "proyectos/vistas/inscripcionOferente.tpl";
+        //$claRegistro->registrarActividad("Creacion", 0, $_SESSION['seqUsuario'], "Creacion de Oferente: " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));
+    }
 }
-
 /**
-* Impresion de resultados
-*/
-
-if( empty( $arrErrores ) ){
-	//pr ($arrErrores);
-	$arrMensajes[] = "El Oferente <b>" . $_POST['nombre'] . "</b> se ha guardado";
-	imprimirMensajes( array() , $arrMensajes , "salvarOferente" );
+ * Impresion de resultados
+ */
+if (empty($arrErrores)) {
+    //pr ($arrErrores);
+    $arrMensajes[] = "El Oferente <b>" . $_POST['txtNombreOferente'] . "</b> se ha guardado";
+    imprimirMensajes(array(), $arrMensajes, "salvarOferente");
+    $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
+    $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
+    $claSmarty->assign("arrayOferentes", $arrOferente);
+    $claSmarty->display($txtPlantilla);
 } else {
-	imprimirMensajes( $arrErrores , array() );
-	}
+    imprimirMensajes($arrErrores, array());
+}
 
 // Desconecta la base de datos
 $aptBd->close();

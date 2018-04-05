@@ -3,7 +3,7 @@
 	<tr bgcolor="#E4E4E4">
 		<td width="140px"><b>Estado del proceso</b></td>
 		<td width="280px">{foreach from=$arrEstadosProceso key=seqPryEstadoProceso item=txtPryEstadoProceso}{if $objFormularioProyecto->seqPryEstadoProceso == $seqPryEstadoProceso} {$txtPryEstadoProceso} {/if}{/foreach}</td>
-		<td width="140px"><b>Fecha de Inscripción</b></td>
+		<td width="140px"><b>Fecha de Inscripciï¿½n</b></td>
 		<td>{$objFormularioProyecto->fchInscripcion}&nbsp;</td>
 	</tr>
 	<tr><td height="5px"></td></tr>
@@ -12,7 +12,7 @@
 <table cellspacing="0" cellpadding="2" border="0" width="100%">
 
 	<tr><td class="tituloTabla" colspan="4">DATOS DEL PROYECTO
-	<img src="recursos/imagenes/blank.gif" onload="escondetxtDescEquipamientoComunal(); escondeLineaConstructor(); escondeCamposTipoPersona(); escondeLineaOpv(); escondeOperador();">
+	<img src="recursos/imagenes/blank.gif" onload="escondetxtDescEquipamientoComunal(); escondeLineaConstructor(); escondeCamposTipoPersona(); escondeLineaOpv();">
 	<img src="recursos/imagenes/blank.gif" onload="escondeSeccionAprobacion(); muestraCondicionAprobacion();">
 	</td></tr>
 	<tr><!-- NOMBRE DEL PROYECTO -->
@@ -90,11 +90,11 @@
 		<td>{$objFormularioProyecto->valNumeroSoluciones}</td>
 		<!-- AREA CONSTRUIDA -->
 		<td><b>Area a construir</b></td>
-		<td>{$objFormularioProyecto->valAreaConstruida}&nbsp;m²</td>
+		<td>{$objFormularioProyecto->valAreaConstruida}&nbsp;mï¿½</td>
 	</tr>
 	<tr><!-- AREA LOTE -->
 		<td><b>Area Lote</b></td>
-		<td>{$objFormularioProyecto->valAreaLote}&nbsp;m²</td>
+		<td>{$objFormularioProyecto->valAreaLote}&nbsp;mï¿½</td>
 		<td colspan="2"></td>
 	</tr>
 
@@ -113,10 +113,10 @@
 		<td>{$objFormularioProyecto->txtMatriculaInmobiliariaLote}</td>
 	</tr>
 	<tr><!-- REGISTRO DE ENAJENACION -->
-		<td><b>Registro de Enajenación</b></td>
+		<td><b>Registro de Enajenaciï¿½n</b></td>
 		<td align="left">{$objFormularioProyecto->txtRegistroEnajenacion}</td>
 		<!-- FECHA REGISTRO DE ENAJENACION -->
-		<td><b>Fecha Registro de Enajenación</b></td>
+		<td><b>Fecha Registro de Enajenaciï¿½n</b></td>
 		<td>{$objFormularioProyecto->fchRegistroEnajenacion}</td>
 	<tr><!-- EQUIPAMIENTO COMUNAL -->
 		<td valign="top"><b>Tiene Equipamiento Comunal?</b></td>

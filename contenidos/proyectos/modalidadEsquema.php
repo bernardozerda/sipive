@@ -21,14 +21,15 @@
 		$arrPryTipoModalidad[ $objRes->fields['seqPryTipoModalidad'] ] = $objRes->fields['txtPryTipoModalidad'];
 		$objRes->MoveNext();
 	}	
+        //echo $sql;        die();
 
 	echo "
-        <select onFocus=\"this.style.backgroundColor = '#ADD8E6';\" 
+        <select 
                 onBlur=\"this.style.backgroundColor = '#FFFFFF';\" 
                 name=\"seqPryTipoModalidad\" 
                 id=\"seqPryTipoModalidad\" 
-                style=\"width:200px;\"        
-        >
+                style=\"width:200px;\"
+                class=\"form-control required\">
     ";
 	foreach( $arrPryTipoModalidad as $seqPryTipoModalidad => $txtPryTipoModalidad ){
 		echo "<option value='$seqPryTipoModalidad'>$txtPryTipoModalidad</option>";

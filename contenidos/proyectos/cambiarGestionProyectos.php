@@ -35,7 +35,7 @@
 	}
 	
 	echo "<select name='" . $_POST['idSelect'] . "' id='" . $_POST['idSelect'] . "' style='width:250px' onFocus='this.style.backgroundColor = \"#ADD8E6\";' 
-						  onBlur='this.style.backgroundColor = \"#FFFFFF\";'><option value='0'>Seleccione Gesti&oacute;n</option>";
+						  onBlur='this.style.backgroundColor = \"#FFFFFF\";' class=\"form-control required\"><option value='0'>Seleccione Gesti&oacute;n</option>";
 	foreach( $arrGrupoGestion[ $_POST['grupo'] ]['gestion'] as $seqGestion => $arrGestion ){
 		echo "<option value='$seqGestion'>".$arrGestion['nombre']."</option>";
 	}

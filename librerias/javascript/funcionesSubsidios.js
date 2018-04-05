@@ -505,3 +505,18 @@ function mostrarPagina(value) {
     console.log(value);
 }
 
+function cartaMov2() {
+
+    $.ajax({    
+        url: './pdfCartaMovilizacion.php?documento=111&cuenta=&tipo=1&banco=prueba&nombre=prueba2',
+        type: 'post',
+        success: function (response) {
+            console.log(response);
+            return response;
+        }
+    });
+
+
+
+}
+

@@ -1,7 +1,7 @@
 <table cellspacing="0" cellpadding="2" border="0" width="100%">
 
 		<tr><td class="tituloTabla" colspan="4">DATOS DEL OFERENTE<img src="recursos/imagenes/blank.gif" onload="escondetxtDireccion(); escondetxtDescEquipamientoComunal(); escondeLineaConstructor(); escondeCamposTipoPersona();">
-		<img src="recursos/imagenes/blank.gif" onload="escondeOperador();escondeLineaOpv();"></td></tr>
+		<img src="recursos/imagenes/blank.gif" onload="escondeLineaOpv();"></td></tr>
 
 		<tr><td><b>Nombre</b></td>
 			<td>{$objFormularioProyecto->txtNombreOferente}<input name="txtNombreOferente" type="hidden" id="txtNombreOferente" value="{$objFormularioProyecto->txtNombreOferente}" /></td>

@@ -1,55 +1,72 @@
-<p>
-		<table border="0" cellspacing="2" cellpadding="0" width="860">
-			<tr><td class="tituloTabla" colspan="7">TIPO VIVIENDA</td></tr>
-			<tr><td colspan="7" align="right"><div onClick="addTipoVivienda()" style="cursor: hand">Adicionar Tipo de Vivienda&nbsp;<img src="recursos/imagenes/plus_icon.gif"></div></td></tr>
-		</table>
-		<div style="width:860px; overflow: scroll;">
-			<table border="0" cellspacing="2" cellpadding="0" width="1200" id="tablaTipoVivienda">
-				<tr class="tituloTabla">
-					<th align="center" width="18%" style="padding:6px;">Nombre</th>
-					<th align="center" width="8%" style="padding:6px;">Cantidad</th>
-					<th align="center" width="10%" style="padding:6px;">&Aacute;rea</th>
-					<th align="center" width="10%" style="padding:6px;">A&ntilde;o Venta</th>
-					<th align="center" width="10%" style="padding:6px;">Precio Venta</th>
-					<th align="center" width="26%" style="padding:6px;">Descripci&oacute;n</th>
-					<th align="center" width="10%" style="padding:6px;">Cierre</th>
-					<th align="center" width="8%" style="padding:6px;"></th>
-				</tr>
-				{assign var="num" value="0"}
-				{counter start=0 print=false assign=num}
-				{foreach from=$arrTipoVivienda key=seqTipoVivienda item=arrTipoV}
-					{if $num++%2 == 0} <tr class="fila_0">
-					{else} <tr class="fila_1">
-					{/if}
-						<td align="center" valign="top" style="padding:6px;" width="18%">
-							{counter print=false}
-							{assign var="actual" value="r_$num"}
-							<input type="hidden" name="seqTipoVivienda[{$actual}]" id="seqTipoVivienda" value="{$arrTipoV.seqTipoVivienda}" >
-							<input type="text" name="txtNombreTipoVivienda[{$actual}]" id="txtNombreTipoVivienda" value="{$arrTipoV.txtNombreTipoVivienda}" style="width:150px;" onblur="sinCaracteresEspeciales( this );">
-						</td>
-						<td align="center" valign="top" style="padding:6px;" width="8%">
-							<input type="text" name="numCantidad[{$actual}]" id="numCantidad{$actual}" value="{$arrTipoV.numCantidad}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales( this ); soloNumeros( this ); sumaVentas();">
-						</td>
-						<td align="center" valign="top" style="padding:6px;" width="10%">
-							<input type="text" name="numArea[{$actual}]" id="numArea" value="{$arrTipoV.numArea}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales( this ); soloNumeros( this );">&nbsp;m²
-						</td>
-						<td align="center" valign="top" style="padding:6px;" width="10%">
-							<input type="text" name="numAnoVenta[{$actual}]" id="numAnoVenta" value="{$arrTipoV.numAnoVenta}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales( this ); soloNumeros( this );">
-						</td>
-						<td align="center" valign="top" style="padding:6px;" width="10%">
-							$ <input type="text" name="valPrecioVenta[{$actual}]" id="valPrecioVenta{$actual}" value="{$arrTipoV.valPrecioVenta}" style="width:80px; text-align:right" onblur="sinCaracteresEspeciales( this ); soloNumeros( this ); sumaVentas();">
-						</td>
-						<td align="center" valign="top" style="padding:6px;" width="26%">
-							<textarea name="txtDescripcion[{$actual}]" id="txtDescripcion" style="width:260px" >{$arrTipoV.txtDescripcion}</textarea>
-						</td>
-						<td align="center" valign="top" style="padding:6px;" width="10%">
-							$ <input type="text" name="valCierre[{$actual}]" id="valCierre" value="{$arrTipoV.valCierre}" style="width:80px; text-align:right" onblur="sinCaracteresEspeciales( this ); soloNumeros( this );">
-						</td>
-						<td align="center" valign="top" style="padding:6px;" width="8%">
-							<input type='button' value='Eliminar' onclick='return confirmaRemoverLineaFormulario(this);'>
-						</td>
-					</tr>
-				{/foreach}
-			</table>
-		</div>
-	</p>
+<p style="width:100%; padding-left: 3%">
+<table border="0" cellspacing="2" cellpadding="0">
+
+    <tr><th class="tituloTabla" colspan="4">TIPO VIVIENDA</th>
+        <td colspan="3" style="text-align: right"><div onClick="addTipoVivienda()" style="cursor: hand">Adicionar Tipo de Vivienda&nbsp;
+                <img src="recursos/imagenes/add.png">
+            </div> 
+        </td>
+
+    </tr>
+</table>
+<div style="width:100%; padding-left: 3%">
+    <table border="0" cellspacing="2" cellpadding="0"  id="tablaTipoVivienda" style="padding-left: 3px; width: 98%">
+        {assign var="num" value="0"}
+        {counter start=0 print=false assign=num}
+        {foreach from=$arrTipoVivienda key=seqTipoVivienda item=arrTipoV}
+            {if $num++%2 == 0} <tr class="fila_0">
+            {else} <tr class="fila_1">
+                {/if}
+                <td>
+                    <div class="form-group" >
+                        <div class="col-md-3"> 
+                            <label class="control-label" >Nombre</label><br />
+                                {counter print=false}
+                                {assign var="actual" value="r_$num"}
+                                <input type="hidden" name="seqTipoVivienda[]" id="seqTipoVivienda" value="{$arrTipoV.seqTipoVivienda}" >
+                                <input type="text" name="txtNombreTipoVivienda[]" id="txtNombreTipoVivienda" value="{$arrTipoV.txtNombreTipoVivienda}" style="width:150px;" onblur="sinCaracteresEspeciales(this);">
+                                </div> 
+                                <div class="col-md-3"> 
+                                    <label class="control-label" >Cantidad</label><br />
+                                    <input type="text" name="numCantidad[]" id="numCantidad" value="{$arrTipoV.numCantidad}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales(this);
+                                            soloNumeros(this);
+                                            sumaVentas();">
+                                </div> 
+                                <div class="col-md-3"> 
+                                    <label class="control-label">&Aacute;rea</label><br />
+                                    <input type="text" name="numArea[]" id="numArea" value="{$arrTipoV.numArea}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales(this);
+                                            soloNumeros(this);">&nbsp;m²
+                                </div> 
+                                <div class="col-md-3"> 
+                                    <label class="control-label">A&ntilde;o Venta</label><br />
+                                    <input type="text" name="numAnoVenta[]" id="numAnoVenta" value="{$arrTipoV.numAnoVenta}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales(this);
+                                            soloNumeros(this);">
+                                </div> 
+                                <div class="col-md-3"> 
+                                    <label class="control-label">Precio Venta</label><br />
+                                    $ <input type="text" name="valPrecioVenta[]" id="valPrecioVenta" value="{$arrTipoV.valPrecioVenta}" style="width:80px; text-align:right" onblur="sinCaracteresEspeciales(this);
+                                            soloNumeros(this);
+                                            sumaVentas();">
+                                </div> 
+                                <div class="col-md-3"> 
+                                    <label class="control-label">Cierre</label><br />
+                                    $ <input type="text" name="valCierre[]" id="valCierre" value="{$arrTipoV.valCierre}" style="width:80px; text-align:right" onblur="sinCaracteresEspeciales(this);
+                                            soloNumeros(this);">
+                                </div> 
+                                <div class="col-md-4"> 
+                                    <label class="control-label">Descripci&oacute;n</label><br />
+                                    <textarea name="txtDescripcion[]" id="txtDescripcion" style="width:260px" >{$arrTipoV.txtDescripcion}</textarea>
+                                </div> 
+                                <div class="col-md-2"> 
+                                    <label class="control-label">Eliminar</label><br />
+                                    <!--<input type='button' value='Eliminar' onclick='return confirmaRemoverLineaFormulario(this);'>-->
+                                    <img src="recursos/imagenes/remove.png" width="22px" onclick="return confirmaRemoverLineaFormulario(this);" style="position: relative; float: left; ">
+                                </div> 
+                                <p>&nbsp;</p>
+                        </div>
+                </td>
+            </tr>
+        {/foreach}
+    </table>
+</div>
+</p>

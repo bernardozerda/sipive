@@ -41,7 +41,6 @@ class Ciudadano {
     public $txtNombre2;
     public $valIngresos;
 
-
     /**
      * CONSTRUCTOR
      */
@@ -76,7 +75,6 @@ class Ciudadano {
         $this->txtNombre1 = "";
         $this->txtNombre2 = "";
         $this->valIngresos = 0;
-
     }
 
     public function cargarCiudadano($seqCiudadano) {
@@ -119,7 +117,7 @@ class Ciudadano {
             $this->bolCertificadoElectoral = intval($objRes->fields['bolCertificadoElectoral']);
             $this->bolLgtb = intval($objRes->fields['bolLgtb']);
             $this->bolSoporteDocumento = intval($objRes->fields['bolSoporteDocumento']);
-            $this->fchNacimiento = (esFechaValida($objRes->fields['fchNacimiento']))? $objRes->fields['fchNacimiento'] : null;
+            $this->fchNacimiento = (esFechaValida($objRes->fields['fchNacimiento'])) ? $objRes->fields['fchNacimiento'] : null;
             $this->numAfiliacionSalud = intval($objRes->fields['numAfiliacionSalud']);
             $this->numAnosAprobados = intval($objRes->fields['numAnosAprobados']);
             $this->numDocumento = intval($objRes->fields['numDocumento']);
@@ -142,8 +140,8 @@ class Ciudadano {
             $this->txtApellido2 = trim($objRes->fields['txtApellido2']);
             $this->txtNombre1 = trim($objRes->fields['txtNombre1']);
             $this->txtNombre2 = trim($objRes->fields['txtNombre2']);
-            $this->valIngresos = doubleval($objRes->fields['valIngresos']);;
-
+            $this->valIngresos = doubleval($objRes->fields['valIngresos']);
+            ;
         } else {
             $this->arrErrores[] = "Ciudadano [$seqCiudadano] no encontrado";
         }
@@ -152,7 +150,7 @@ class Ciudadano {
     public function guardarCiudadano() {
         global $aptBd;
         try {
-            $fchNacimiento = (esFechaValida($this->fchNacimiento))? "'" . $this->fchNacimiento . "'" : "NULL";
+            $fchNacimiento = (esFechaValida($this->fchNacimiento)) ? "'" . $this->fchNacimiento . "'" : "NULL";
             $sql = "	    	
                 INSERT INTO T_CIU_CIUDADANO (
                     bolBeneficiario,
@@ -181,31 +179,31 @@ class Ciudadano {
                     txtNombre2,
                     valIngresos
                 ) VALUES (
-                    " . intval( $this->bolBeneficiario ) . ",
-                    " . intval( $this->bolCertificadoElectoral ) . ",
-                    " . intval( $this->bolLgtb ) . ",
+                    " . intval($this->bolBeneficiario) . ",
+                    " . intval($this->bolCertificadoElectoral) . ",
+                    " . intval($this->bolLgtb) . ",
                     " . $fchNacimiento . ",
-                    " . intval( $this->numAfiliacionSalud ) . ",
-                    " . intval( $this->numAnosAprobados ) . ",
-                    " . doubleval( $this->numDocumento ) . ",
-                    " . intval( $this->seqCajaCompensacion ) . ",                    
-                    " . intval( $this->seqCondicionEspecial ) . ",
-                    " . intval( $this->seqCondicionEspecial2 ) . ",
-                    " . intval( $this->seqCondicionEspecial3 ) . ",
-                    " . intval( $this->seqEstadoCivil ) . ",
-                    " . intval( $this->seqEtnia ) . ",
-                    " . intval( $this->seqGrupoLgtbi ) . ",
-                    " . intval( $this->seqNivelEducativo ) . ",
-                    " . intval( $this->seqOcupacion ) . ",
-                    " . intval( $this->seqSalud ) . ",
-                    " . intval( $this->seqSexo ) . ",
-                    " . intval( $this->seqTipoDocumento ) . ",
-                    " . intval( $this->seqTipoVictima ) . ",
-                    '" . trim( $this->txtApellido1 ) . "',
-                    '" . trim( $this->txtApellido2 ) . "',
-                    '" . trim( $this->txtNombre1 ) . "',
-                    '" . trim( $this->txtNombre2 ) . "',
-                    " . doubleval( $this->valIngresos ) . "
+                    " . intval($this->numAfiliacionSalud) . ",
+                    " . intval($this->numAnosAprobados) . ",
+                    " . doubleval($this->numDocumento) . ",
+                    " . intval($this->seqCajaCompensacion) . ",                    
+                    " . intval($this->seqCondicionEspecial) . ",
+                    " . intval($this->seqCondicionEspecial2) . ",
+                    " . intval($this->seqCondicionEspecial3) . ",
+                    " . intval($this->seqEstadoCivil) . ",
+                    " . intval($this->seqEtnia) . ",
+                    " . intval($this->seqGrupoLgtbi) . ",
+                    " . intval($this->seqNivelEducativo) . ",
+                    " . intval($this->seqOcupacion) . ",
+                    " . intval($this->seqSalud) . ",
+                    " . intval($this->seqSexo) . ",
+                    " . intval($this->seqTipoDocumento) . ",
+                    " . intval($this->seqTipoVictima) . ",
+                    '" . trim($this->txtApellido1) . "',
+                    '" . trim($this->txtApellido2) . "',
+                    '" . trim($this->txtNombre1) . "',
+                    '" . trim($this->txtNombre2) . "',
+                    " . doubleval($this->valIngresos) . "
                 )
              ";
             $aptBd->execute($sql);
@@ -222,34 +220,34 @@ class Ciudadano {
     public function editarCiudadano($seqCiudadano) {
         global $aptBd;
         try {
-            $fchNacimiento = (esFechaValida($this->fchNacimiento))? "'" . $this->fchNacimiento . "'" : "NULL";
+            $fchNacimiento = (esFechaValida($this->fchNacimiento)) ? "'" . $this->fchNacimiento . "'" : "NULL";
             $sql = "
                 update t_ciu_ciudadano set
-                    bolBeneficiario = " . intval( $this->bolBeneficiario ) . ",
-                    bolCertificadoElectoral = " . intval( $this->bolCertificadoElectoral ) . ",
-                    bolLgtb = " . intval( $this->bolLgtb ) . ",
+                    bolBeneficiario = " . intval($this->bolBeneficiario) . ",
+                    bolCertificadoElectoral = " . intval($this->bolCertificadoElectoral) . ",
+                    bolLgtb = " . intval($this->bolLgtb) . ",
                     fchNacimiento = " . $fchNacimiento . ",
-                    numAfiliacionSalud = " . intval( $this->numAfiliacionSalud ) . ",
-                    numAnosAprobados = " . intval( $this->numAnosAprobados ) . ",
-                    numDocumento = " . doubleval( $this->numDocumento ) . ",
-                    seqCajaCompensacion = " . intval( $this->seqCajaCompensacion ) . ",                    
-                    seqCondicionEspecial = " . intval( $this->seqCondicionEspecial ) . ",
-                    seqCondicionEspecial2 = " . intval( $this->seqCondicionEspecial2 ) . ",
-                    seqCondicionEspecial3 = " . intval( $this->seqCondicionEspecial3 ) . ",
-                    seqEstadoCivil = " . intval( $this->seqEstadoCivil ) . ",
-                    seqEtnia = " . intval( $this->seqEtnia ) . ",
-                    seqGrupoLgtbi = " . intval( $this->seqGrupoLgtbi ) . ",
-                    seqNivelEducativo = " . intval( $this->seqNivelEducativo ) . ",
-                    seqOcupacion = " . intval( $this->seqOcupacion ) . ",
-                    seqSalud = " . intval( $this->seqSalud ) . ",
-                    seqSexo = " . intval( $this->seqSexo ) . ",
-                    seqTipoDocumento = " . intval( $this->seqTipoDocumento ) . ",
-                    seqTipoVictima = " . intval( $this->seqTipoVictima ) . ",
-                    txtApellido1 = '" . trim( $this->txtApellido1 ) . "',
-                    txtApellido2 = '" . trim( $this->txtApellido2 ) . "',
-                    txtNombre1 = '" . trim( $this->txtNombre1 ) . "',
-                    txtNombre2 = '" . trim( $this->txtNombre2 ) . "',
-                    valIngresos = " . doubleval( $this->valIngresos ) . "
+                    numAfiliacionSalud = " . intval($this->numAfiliacionSalud) . ",
+                    numAnosAprobados = " . intval($this->numAnosAprobados) . ",
+                    numDocumento = " . doubleval($this->numDocumento) . ",
+                    seqCajaCompensacion = " . intval($this->seqCajaCompensacion) . ",                    
+                    seqCondicionEspecial = " . intval($this->seqCondicionEspecial) . ",
+                    seqCondicionEspecial2 = " . intval($this->seqCondicionEspecial2) . ",
+                    seqCondicionEspecial3 = " . intval($this->seqCondicionEspecial3) . ",
+                    seqEstadoCivil = " . intval($this->seqEstadoCivil) . ",
+                    seqEtnia = " . intval($this->seqEtnia) . ",
+                    seqGrupoLgtbi = " . intval($this->seqGrupoLgtbi) . ",
+                    seqNivelEducativo = " . intval($this->seqNivelEducativo) . ",
+                    seqOcupacion = " . intval($this->seqOcupacion) . ",
+                    seqSalud = " . intval($this->seqSalud) . ",
+                    seqSexo = " . intval($this->seqSexo) . ",
+                    seqTipoDocumento = " . intval($this->seqTipoDocumento) . ",
+                    seqTipoVictima = " . intval($this->seqTipoVictima) . ",
+                    txtApellido1 = '" . trim($this->txtApellido1) . "',
+                    txtApellido2 = '" . trim($this->txtApellido2) . "',
+                    txtNombre1 = '" . trim($this->txtNombre1) . "',
+                    txtNombre2 = '" . trim($this->txtNombre2) . "',
+                    valIngresos = " . doubleval($this->valIngresos) . "
                 where seqCiudadano = $seqCiudadano		
             ";
             $aptBd->execute($sql);
@@ -270,25 +268,25 @@ class Ciudadano {
                 where seqCiudadano = " . $this->seqCiudadano . "
             ";
             $aptBd->execute($sql);
-        } catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo eliminar la relacion entre el ciudadano " . $this->numDocumento . " y los formularios asociados";
         }
 
         // Si esta bien procede a borrar el ciudadano
-        if( empty( $this->arrErrores ) ){
-            try{
+        if (empty($this->arrErrores)) {
+            try {
                 $sql = "
                     delete
                     from t_ciu_ciudadano
                     where seqCiudadano = " . $this->seqCiudadano . "
                 ";
                 $aptBd->execute($sql);
-            } catch ( Exception $objError ){
+            } catch (Exception $objError) {
                 $this->arrErrores[] = "No se pudo eliminar el ciudadano " . $this->numDocumento;
             }
         }
 
-        return (empty($this->arrErrores))? true : false;
+        return (empty($this->arrErrores)) ? true : false;
     }
 
     public function ciudadanoExiste($seqTipoDocumento, $numDocumento) {
@@ -297,7 +295,7 @@ class Ciudadano {
         $sql = "
 				SELECT seqCiudadano
 				FROM T_CIU_CIUDADANO
-				WHERE numDocumento = " . mb_ereg_replace("[^0-9]","",$numDocumento) . "
+				WHERE numDocumento = " . mb_ereg_replace("[^0-9]", "", $numDocumento) . "
 				AND seqTipoDocumento = $seqTipoDocumento
 			";
         $objRes = $aptBd->execute($sql);
@@ -389,7 +387,7 @@ class Ciudadano {
             $objRes = $aptBd->execute($sql);
             if ($objRes->fields) {
                 $seqFormulario = $objRes->fields['seqFormulario'];
-            }else{
+            } else {
                 $this->arrErrores[] = "El numero de cedula $numCedula no se encuentra relacionado con ningún formulario";
             }
         } catch (Exception $objError) {
@@ -430,7 +428,7 @@ class Ciudadano {
         return $seqFormulario;
     }
 
-	public function obtenerCodigo($codigo) {
+    public function obtenerCodigo($codigo) {
 
         global $aptBd;
 
@@ -447,12 +445,12 @@ class Ciudadano {
 
         return $arrResultados;
     }
-    
-     public function ValidarMovilizacion($seqFormulario) {
+
+    public function ValidarMovilizacion($seqFormulario) {
 
         global $aptBd;
 
-         $sql = "
+        $sql = "
             SELECT 
                     count(*) as cantidad
             FROM 
@@ -469,8 +467,8 @@ class Ciudadano {
         }
         return $validar;
     }
-    
-     public function obtenerUsuarioCarta($usuario) {
+
+    public function obtenerUsuarioCarta($usuario) {
 
         global $aptBd;
 
@@ -488,7 +486,7 @@ class Ciudadano {
         return $arrResultados;
     }
 
-    public function obtenerNombre($numDocumento){
+    public function obtenerNombre($numDocumento) {
         global $aptBd;
         $txtNombre = "";
         $sql = " 
@@ -498,10 +496,10 @@ class Ciudadano {
               txtApellido1,
               txtApellido2
             FROM T_CIU_CIUDADANO
-            WHERE numDocumento = ".$numDocumento."
+            WHERE numDocumento = " . $numDocumento . "
         ";
         $objRes = $aptBd->execute($sql);
-        if($objRes->fields) {
+        if ($objRes->fields) {
             $txtNombre = trim($objRes->fields['txtNombre1']) . " ";
             $txtNombre .= ( trim($objRes->fields['txtNombre2']) != "" ) ? trim($objRes->fields['txtNombre2']) . " " : "";
             $txtNombre .= trim($objRes->fields['txtApellido1']) . " ";

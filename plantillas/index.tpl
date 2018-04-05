@@ -2,6 +2,7 @@
     <head>
 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="title" content="Subsidios de Vivienda">
             <meta name="keywords" content="subsidio,vivienda,social,prioritaria,bogota,habitat,asignacion,credito" />
             <meta name="description" content="Sistema de informacion de subsidios de vivienda"/>
@@ -67,7 +68,7 @@
 
         <center>
 
-            <table cellpadding="0" cellspacing="0" border="0" width="900px" bgcolor="#F9F9F9">
+            <table cellpadding="0" cellspacing="0" border="0" bgcolor="#F9F9F9" id="tablePrincipal" class="tablePrincipal">
 
                 <tr>
                     <td>

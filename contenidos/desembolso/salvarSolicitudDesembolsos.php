@@ -148,9 +148,9 @@
 
         }
 
-        if( trim( $_POST['txtSubsecretaria'] ) == "" ){
-            $arrErrores[] = "Debe indicar el nombre de quien forma por parte de la Subsecretaria de Gestión Financiera";
-        }
+//        if( trim( $_POST['txtSubsecretaria'] ) == "" ){
+//            $arrErrores[] = "Debe indicar el nombre de quien forma por parte de la Subsecretaria de Gestión Financiera";
+//        }
 
         if( isset( $_POST[ 'bolSubsecretariaEncargado' ] ) and trim( $_POST['txtSubsecretaria'] ) == "" ){
             $arrErrores[] = "Debe indicar el nombre de quien esta encargado en la Subsecretaria de Gestión Financiera";

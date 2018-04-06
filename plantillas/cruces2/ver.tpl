@@ -128,13 +128,13 @@
                 <table data-order='[[ 0, "asc" ]]' id="listadoCrucesVer" class="table table-condensed table-hover" width="840px">
                     <thead>
                         <tr>
-                            <th align="center">Documento</th>
-                            <th align="center">Nombre</th>
-                            <th align="center">Estado</th>
-                            <th align="center">&nbsp;</th>
-                            <th align="center">&nbsp;</th>
-                            <th align="center">&nbsp;</th>
-                            <th align="center">&nbsp;</th>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>

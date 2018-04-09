@@ -494,7 +494,9 @@ function completarMesesArreglo(&$arrCompletar) {
  * @param String txtOrden     // ORDER BY del select
  * @version 1.0 Agosto de 2013
  */
+
 function obtenerDatosTabla($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion = "", $txtOrden = "") {
+    
     global $aptBd;
     $arrDatos = array();
     $txtCondicion = ( trim($txtCondicion) != "" ) ? "WHERE $txtCondicion" : "";
@@ -507,6 +509,7 @@ function obtenerDatosTabla($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion 
                 $txtOrden
             ";
         try {
+           // echo $sql;
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
                 if (trim($txtLLave) != "") {

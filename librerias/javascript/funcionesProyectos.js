@@ -38,14 +38,12 @@ function  tablas() {
 // Funcion que almacena todos los formularios 
 function almacenarIncripcion() {
     var valid = true;
-    console.log("paso");
-    //console.log($("#seqGrupoGestion").select());
     $.each($("#frmProyectos input.required"), function (index, value) {
         if (!$(value).val()) {
-            console.log($(this).attr("id") + " ");
+            // console.log($(this).attr("id") + " ");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-            console.log($(this).attr("id") + "input");
+            // console.log($(this).attr("id") + "input");
             valid = false;
         }
 
@@ -74,7 +72,7 @@ function almacenarIncripcion() {
         if ($(value).val() == 0) {
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-           // console.log($(this).attr("id"));
+            // console.log($(this).attr("id"));
             valid = false;
         }
     });
@@ -126,3 +124,22 @@ function removerOferente(id) {
     $(id).parent().remove();
 }
 
+function obtenerModalidadProyecto(value) {
+    var parametros = {
+        "valor": value
+    };
+    $.ajax({
+        data: parametros,
+        url: 'contenidos/proyectos/contenidos/datosSelect.php',
+        type: 'post',
+        dataType: "json",
+        success: function (response) {
+            var select = $('#seqPryTipoModalidad');
+            var options = select.attr('options');
+            var selectedOption = '';
+            $.each(response, function (val, text) {
+                $("#seqPryTipoModalidad").append('<option value=' + val + '>' + text + '</option>');
+            });
+        }
+    });
+}

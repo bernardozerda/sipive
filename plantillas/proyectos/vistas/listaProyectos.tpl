@@ -41,11 +41,11 @@
             <td >{$value.padre}</td>            
             <td >{$value.txtPlanGobierno}</td>
             {if $id != 1}
-                <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=2&seqProyecto={$value.seqProyecto}', '', true);">
+                <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=2&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}', '', true);">
                         <img src="recursos/imagenes/list.png" width="24px"></a>
                 </td>
             {else}
-                <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=3&seqProyecto={$value.seqProyecto}', '', true);">
+                <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=3&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}', '', true);">
                         <img src="recursos/imagenes/Show.png" width="24px"></a>
                 </td>
             {/if}

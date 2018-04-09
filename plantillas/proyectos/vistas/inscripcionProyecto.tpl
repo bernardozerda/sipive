@@ -21,25 +21,30 @@
          </div>-->
         <div id="wrapper" class="container tab-content">
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
-                <li class="nav-item" >
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#datos" role="tab" aria-controls="home" aria-selected="true" >Datos Básicos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Licencias <br></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos <br>Financieros</a>
-                </li>
-                <li  class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Tipos<br> Vivienda</em></a>
-                </li>
-                <li  class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Conjuntos Residenciales</em></a>
-                </li>
-                <li  class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Cronograma <br></em></a>
-                </li>
-                <li class="nav-item">
+                {if $seqPryEstadoProceso == "" or $seqPryEstadoProceso >= 1}
+                    <li class="nav-item" >
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#datos" role="tab" aria-controls="home" aria-selected="true" >Datos Básicos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Licencias <br></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos <br>Financieros</a>
+                    </li>
+                {/if}
+                {if $seqPryEstadoProceso > 1}
+                    <li  class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Tipos<br> Vivienda</em></a>
+                    </li>
+                    <li  class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Conjuntos Residenciales</em></a>
+                    </li>
+                    <li  class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Cronograma <br></em></a>
+                    </li>
+                {/if}
+                <li class="nav-item">   
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 15px 0 0;">Seguimientos <br></a>
                 </li>
             </ul>
@@ -331,8 +336,9 @@
                         <div class="form-group" id="idLineaRegistroFechaEnajenacion">
                             <div class="col-md-4"> 
                                 <label class="control-label" >Fecha Registro de Enajenaci&oacute;n  </label>  
-                                <input name="fchRegistroEnajenacion" type="text" id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}" size="12" readonly class="form-control required" style="width: 70%; position: relative; float: left"/>
-                                <img src="recursos/imagenes/calendar.png" onClick="javascript: calendarioPopUp('fchRegistroEnajenacion');" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"/>
+                               <!-- <input name="fchRegistroEnajenacion" type="text" id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}" size="12" readonly class="form-control required" style="width: 70%; position: relative; float: left"/>-->
+                                <input type=date name="fchRegistroEnajenacion"  id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}"  class="form-control required" style="width: 70%; position: relative; float: left">
+                                <!--<img src="recursos/imagenes/calendar.png" onClick="javascript: calendarioPopUp('fchRegistroEnajenacion');" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"/>-->
                             </div>
                         </div>
                         <div class="form-group" >

@@ -31,7 +31,7 @@
                         <div class="col-md-3">
                             <label class="control-label" >Direcci&oacute;n&nbsp;del&nbsp;Conjunto</label><br />                            
                             <input type="text" name='txtDireccionHijo[]' id="txtDireccionHijo[]" value="{$arrConjunto.txtDireccion}" size="20" style="background-color:#E4E4E4;" readonly />
-                            <a href="#" onClick="recogerDireccion('txtDireccionHijo[]', 'objDireccionOculto')"><img src="recursos/imagenes/icono_lupa.gif"></a>
+                            <a href="#" onClick="recogerDireccion('txtDireccionHijo[]', 'objDireccionOculto')"><img src="recursos/imagenes/gps.png"></a>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >Unidades</label><br />

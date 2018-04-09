@@ -1,5 +1,5 @@
 <?php
-echo "paso";die();
+//echo "paso";die();
 $txtPrefijoRuta = "../../";
 
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );

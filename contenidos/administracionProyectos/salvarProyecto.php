@@ -1,5 +1,4 @@
 <?php
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -100,6 +99,7 @@ if (empty($arrErrores)) {
     $arrProyecto = $claProyecto->obtenerDatosProyectos($seqProyecto);
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($seqProyecto);
     $cantConjuntos = $claDatosProy->obtenerCantConjuntos($seqProyecto);
+    //echo "<br>conjuntos ->".$cantConjuntos;
     $cantTipoVivienda = $claDatosProy->obtenerCantTipoVivienda($seqProyecto);
 
     $arrayconjuntos[$seqProyecto]['seqProyectoHijo'] = $_POST["seqProyectoHijo"];
@@ -137,10 +137,10 @@ if (empty($arrErrores)) {
         $arrayLicencias[0] = 0;
     }
 
-    if ($cantConjuntos == 0) {
+    if ($cantConjuntos == 0 && isset($_POST["txtNombreProyectoHijo"])) {
         // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
         $claProyecto->almacenarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
-    } else {
+    } else if(isset($_POST["txtNombreProyectoHijo"])){
         $claProyecto->modificarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
     }
     if ($cantLicencias == 0) {
@@ -148,11 +148,12 @@ if (empty($arrErrores)) {
     } else {
         $claProyecto->modificarLicencias($seqProyecto, $_POST["seqProyectoLicencia"], $_POST["txtLicencia"], $_POST["txtExpideLicencia"], $_POST["seqTipoLicencia"], $_POST["fchLicencia"], $_POST["fchVigenciaLicencia"], $_POST["fchEjecutoriaLicencia"], $_POST["txtResEjecutoria"], $_POST["fchLicenciaProrroga"], $_POST["fchLicenciaProrroga1"], $_POST["fchLicenciaProrroga2"]);
     }
-
-    if ($cantTipoVivienda == 0) {
-        // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
+ECHO "<BR>cantTipoVivienda ->".$cantTipoVivienda;
+    if ($cantTipoVivienda == 0 && isset($_POST["txtNombreTipoVivienda"])) {
+         echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
         $claProyecto->almacenarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
-    } else {
+    } else if(isset($_POST["txtNombreTipoVivienda"])){
+        
         $claProyecto->modificarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
     }
 }/**

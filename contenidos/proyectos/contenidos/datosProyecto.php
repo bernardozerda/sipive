@@ -10,6 +10,8 @@ $txtPrefijoRuta = "../../../";
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
 include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
+
+
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "DatosGeneralesProyectos.class.php" );
@@ -29,8 +31,11 @@ $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
 $arrRegistros = array();
 $arrayDocumentos = array();
 $id = $_REQUEST['id'];
-$seqPlanGobierno = 3;
+$seqPlanGobierno = $_REQUEST['seqPlanGobierno'];
 $arrPryTipoModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $seqPlanGobierno, "seqPlanGobierno DESC, txtModalidad");
+$arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno DESC, txtPlanGobierno");
+//var_dump($arrPryTipoModalidad);
+
 if (isset($_REQUEST['seqProyecto'])) {
     $idProyecto = $_REQUEST['seqProyecto'];
     $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
@@ -53,9 +58,9 @@ if (isset($_REQUEST['seqProyecto'])) {
         $arrProyectos[0] = 0;
         $arrOferentesProy[0] = 0;
         $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
-    } 
+    }
 }
-//var_dump($arrOferentesProy);
+//var_dump($arrPlanGobierno);
 //$arrTipoEsquema = $claDatosProy->obtenerlistaEsquema();
 //$arrPryTipoModalidad = $claDatosProy->obtenerlistamodalidad();
 
@@ -87,6 +92,7 @@ $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioM
 $claSmarty->assign("numSubsidios", 26);
 $claSmarty->assign("arrTipoEsquema", $arrTipoEsquema);
 $claSmarty->assign("arrPryTipoModalidad", $arrPryTipoModalidad);
+$claSmarty->assign("arrPlanGobierno", $arrPlanGobierno);
 $claSmarty->assign("arrOpv", $arrOpv);
 $claSmarty->assign("arrTipoProyecto", $arrTipoProyecto);
 $claSmarty->assign("arrTipoUrbanizacion", $arrTipoUrbanizacion);

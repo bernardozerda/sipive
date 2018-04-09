@@ -974,7 +974,7 @@ class Proyecto {
             // }
         }
         $query = substr_replace($query, ';', -1, 1);
-        //echo "<br>" . $query . "<br>";
+       // echo "<br>" . $query . "<br>";
         try {
             $aptBd->execute($query);
         } catch (Exception $objError) {
@@ -1152,7 +1152,7 @@ class Proyecto {
             // }
         }
         $query = substr_replace($query, ';', -1, 1);
-        //echo "<br>" . $query . "<br>";
+       // echo "<br>" . $query . "<br>";
         try {
             $aptBd->execute($query);
         } catch (Exception $objError) {

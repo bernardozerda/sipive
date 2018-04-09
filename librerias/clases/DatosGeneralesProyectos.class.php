@@ -608,7 +608,7 @@ class DatosGeneralesProyectos {
     
      public function obtenerCantTipoVivienda($seqProyecto) {
         global $aptBd;
-        $sqlIn = "select count(*) AS cant from t_pry_proyecto where seqProyectoPadre = " . $seqProyecto;
+        $sqlIn = "select count(*) AS cant from t_pry_tipo_vivienda where seqProyecto = " . $seqProyecto;
         $objResIn = $aptBd->execute($sqlIn);
         $cant = 0;
         while ($objResIn->fields) {

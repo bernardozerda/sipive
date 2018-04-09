@@ -72,7 +72,7 @@ input.buscarCedula{
 
 table, td, tr, div, th, label {
     font-size: 11px;	
-    color: #505050;
+    /*color: #505050;*/
 }
 
 option{
@@ -243,6 +243,9 @@ a:hover {
     white-space:nowrap; 
 
 }
+.tablePrincipal{
+    max-width: 900px;
+}
 
 .tituloVerde{
     background: #008FA6; 
@@ -393,7 +396,7 @@ a:hover {
     position : absolute;
     white-space : nowrap;
     top : 0px;
-   /* left : 200px;*/
+    /* left : 200px;*/
     font-size : 14pt;
 }
 
@@ -542,6 +545,9 @@ a.popup-cerrar {
     }
     .responstable th:nth-child(2):after {
         display: none;
+    }
+    .tablePrincipal{
+        max-width: 400px;
     }
 }
 .responstable td {

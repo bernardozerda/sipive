@@ -382,7 +382,7 @@ function sqlEscrituracion($arrArchivo){
             $aptBd->BeginTrans();
             foreach($arrSql as $seqFormulrio => $sql) {
                 $aptBd->execute($sql['sql']);
-                $txtImpresion = "https://" . $_SERVER['HTTP_ORIGIN'] . "/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqFormulario=" . $seqFormulrio . "&seqCasaMano=0&bolEscrituracion=1'";
+                $txtImpresion = "https://" . $_SERVER['HTTP_ORIGIN'] . "/sipive/contenidos/desembolso/formatoBusquedaOferta.php?seqCasaMano=0&bolEscrituracion=1&seqFormulario=" . $seqFormulrio;
                 $numDocumento = $sql['doc'];
                 $arrImpresion[$numDocumento] = $txtImpresion;
             }

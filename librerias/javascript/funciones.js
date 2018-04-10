@@ -10667,7 +10667,7 @@ var listadoCruces = function () {
             );
 
     objSelect.className = "inputLogin";
-    objInput.className = "inputLogin";
+    objInput.className = "in1putLogin";
 
     objPaginador = YAHOO.util.Dom.get("listadoCruces_paginate");
     objPaginador.style.textAlign = "center";
@@ -10786,3 +10786,77 @@ function cambiarFuenteInhabilidad(objSelectFuente) {
 function ocultarDivs() {
 
 }
+
+var listadoAadProyectos = function(){
+
+    $('#listadoAadPry').DataTable({
+        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+        "order": [[0, "desc"]],
+        "scrollX": true,
+        "dom": 'lftipr'
+    });
+
+    objSelect = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "select",
+        "listadoAadPry_wrapper"
+    );
+
+    objInput = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "input",
+        "listadoAadPry_wrapper"
+    );
+
+    objSelect.className = "inputLogin";
+    objInput.className = "inputLogin";
+
+    objPaginador = YAHOO.util.Dom.get("listadoAadPry_paginate");
+    objPaginador.style.textAlign = "center";
+
+    eliminarObjeto("listadoAadProyectos");
+    YAHOO.util.Event.onContentReady("listadoAadProyectos",listadoAadProyectos);
+}
+YAHOO.util.Event.onContentReady("listadoAadProyectos",listadoAadProyectos);
+
+function plantillaAADProyectos(){
+    var objTipoActo = YAHOO.util.Dom.get("seqTipoActoUnidad");
+    var numIndex = objTipoActo.selectedIndex;
+    if( objTipoActo.options[numIndex].value == 0 ){
+        alert("Seleccione el tipo de acto para obtener la plantilla");
+    }else{
+        location.href='./contenidos/aadProyectos/plantilla.php?seqTipoActoUnidad=' + objTipoActo.options[numIndex].value;
+    }
+}
+
+var listadoCdpProyectos = function(){
+
+    $('#listadoCdp').DataTable({
+        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+        "order": [[0, "desc"]],
+        "scrollX": true,
+        "dom": 'ltipr'
+    });
+
+    objSelect = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "select",
+        "listadoCdp_wrapper"
+    );
+
+    objInput = YAHOO.util.Dom.getElementBy(
+        function(){ return true; },
+        "input",
+        "listadoCdp_wrapper"
+    );
+
+    objSelect.className = "inputLogin";
+    objInput.className = "inputLogin";
+
+    objPaginador = YAHOO.util.Dom.get("listadoCdp_paginate");
+    objPaginador.style.textAlign = "center";
+
+    eliminarObjeto("listadoCdpListener");
+    YAHOO.util.Event.onContentReady("listadoCdpListener",listadoCdpProyectos);
+}
+YAHOO.util.Event.onContentReady("listadoCdpListener",listadoCdpProyectos);

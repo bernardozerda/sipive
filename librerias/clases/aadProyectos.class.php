@@ -53,7 +53,7 @@ class aadProyectos
                     uac.fchActo, 
                     uac.fchCreacion, 
                     concat(usu.txtNombre,' ', usu.txtApellido) as txtUsuario,
-                    count(uvi.seqUnidadVinculado) as numVinculados
+                    count(distinct uvi.seqUnidadProyecto) as numVinculados
                 from t_pry_aad_unidad_acto uac
                 inner join t_pry_aad_unidad_tipo_acto tac on uac.seqTipoActoUnidad = tac.seqTipoActoUnidad
                 inner join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
@@ -111,7 +111,8 @@ class aadProyectos
 
             // unidades vinculadas y sus cdp y rp
             $sql = "
-                select 
+                select
+                    uvi.seqUnidadVinculado, 
                     upr.seqUnidadProyecto, 
                     if(pry1.seqProyecto is not null,pry1.seqProyecto,pry.seqProyecto) as seqProyecto,
                     if(pry1.seqProyecto is not null,pry1.txtNombreProyecto,pry.txtNombreProyecto) as txtNombreProyecto,
@@ -142,29 +143,31 @@ class aadProyectos
             ";
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
-                $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
-                $seqProyecto = $objRes->fields['seqProyecto'];
-                $numClave = (intval($seqUnidadProyecto) == 0)? $seqProyecto : $seqUnidadProyecto;
-                $this->arrUnidades[$numClave]['seqProyecto'] = $objRes->fields['seqProyecto'];
-                $this->arrUnidades[$numClave]['txtNombreProyecto'] = $objRes->fields['txtNombreProyecto'];
-                $this->arrUnidades[$numClave]['seqConjunto'] = $objRes->fields['seqConjunto'];
-                $this->arrUnidades[$numClave]['txtNombreConjunto'] = $objRes->fields['txtNombreConjunto'];
-                $this->arrUnidades[$numClave]['txtNombreUnidad'] = $objRes->fields['txtNombreUnidad'];
-                $this->arrUnidades[$numClave]['valIndexado'] = $objRes->fields['valIndexado'];
-                $this->arrUnidades[$numClave]['seqRegistroPresupuestal'] = $objRes->fields['seqRegistroPresupuestal'];
-                $this->arrUnidades[$numClave]['numNumeroCDP'] = $objRes->fields['numNumeroCDP'];
-                $this->arrUnidades[$numClave]['fchFechaCDP'] = new DateTime($objRes->fields['fchFechaCDP']);
-                $this->arrUnidades[$numClave]['valValorCDP'] = $objRes->fields['valValorCDP'];
-                $this->arrUnidades[$numClave]['numVigenciaCDP'] = $objRes->fields['numVigenciaCDP'];
-                $this->arrUnidades[$numClave]['numProyectoInversionCDP'] = $objRes->fields['numProyectoInversionCDP'];
-                $this->arrUnidades[$numClave]['numNumeroRP'] = $objRes->fields['numNumeroRP'];
-                $this->arrUnidades[$numClave]['fchFechaRP'] = new DateTime($objRes->fields['fchFechaRP']);
-                $this->arrUnidades[$numClave]['valValorRP'] = $objRes->fields['valValorRP'];
-                $this->arrUnidades[$numClave]['numVigenciaRP'] = $objRes->fields['numVigenciaRP'];
-                $this->arrUnidades[$numClave]['numActoReferencia'] = $objRes->fields['numActoReferencia'];
-                $this->arrUnidades[$numClave]['fchActoReferencia'] = new DateTime($objRes->fields['fchActoReferencia']);
-                $this->arrUnidades[$numClave]['bolActivoProyecto'] = $objRes->fields['bolActivoProyecto'];
-                $this->arrUnidades[$numClave]['bolActivoUnidad'] = $objRes->fields['bolActivoUnidad'];
+
+                $seqUnidadVinculado = $objRes->fields['seqUnidadVinculado'];
+
+                $this->arrUnidades[$seqUnidadVinculado]['seqProyecto'] = $objRes->fields['seqProyecto'];
+                $this->arrUnidades[$seqUnidadVinculado]['seqUnidadProyecto'] = $objRes->fields['seqUnidadProyecto'];
+                $this->arrUnidades[$seqUnidadVinculado]['txtNombreProyecto'] = $objRes->fields['txtNombreProyecto'];
+                $this->arrUnidades[$seqUnidadVinculado]['seqConjunto'] = $objRes->fields['seqConjunto'];
+                $this->arrUnidades[$seqUnidadVinculado]['txtNombreConjunto'] = $objRes->fields['txtNombreConjunto'];
+                $this->arrUnidades[$seqUnidadVinculado]['txtNombreUnidad'] = $objRes->fields['txtNombreUnidad'];
+                $this->arrUnidades[$seqUnidadVinculado]['valIndexado'] = $objRes->fields['valIndexado'];
+                $this->arrUnidades[$seqUnidadVinculado]['seqRegistroPresupuestal'] = $objRes->fields['seqRegistroPresupuestal'];
+                $this->arrUnidades[$seqUnidadVinculado]['numNumeroCDP'] = $objRes->fields['numNumeroCDP'];
+                $this->arrUnidades[$seqUnidadVinculado]['fchFechaCDP'] = new DateTime($objRes->fields['fchFechaCDP']);
+                $this->arrUnidades[$seqUnidadVinculado]['valValorCDP'] = $objRes->fields['valValorCDP'];
+                $this->arrUnidades[$seqUnidadVinculado]['numVigenciaCDP'] = $objRes->fields['numVigenciaCDP'];
+                $this->arrUnidades[$seqUnidadVinculado]['numProyectoInversionCDP'] = $objRes->fields['numProyectoInversionCDP'];
+                $this->arrUnidades[$seqUnidadVinculado]['numNumeroRP'] = $objRes->fields['numNumeroRP'];
+                $this->arrUnidades[$seqUnidadVinculado]['fchFechaRP'] = new DateTime($objRes->fields['fchFechaRP']);
+                $this->arrUnidades[$seqUnidadVinculado]['valValorRP'] = $objRes->fields['valValorRP'];
+                $this->arrUnidades[$seqUnidadVinculado]['numVigenciaRP'] = $objRes->fields['numVigenciaRP'];
+                $this->arrUnidades[$seqUnidadVinculado]['numActoReferencia'] = $objRes->fields['numActoReferencia'];
+                $this->arrUnidades[$seqUnidadVinculado]['fchActoReferencia'] = new DateTime($objRes->fields['fchActoReferencia']);
+                $this->arrUnidades[$seqUnidadVinculado]['bolActivoProyecto'] = $objRes->fields['bolActivoProyecto'];
+                $this->arrUnidades[$seqUnidadVinculado]['bolActivoUnidad'] = $objRes->fields['bolActivoUnidad'];
+
                 $objRes->MoveNext();
             }
 
@@ -706,7 +709,7 @@ class aadProyectos
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " es desconocido";
                 }else{
 
-                    // verificar proyecto duplicado cuando es de mejoramiento (o no tiene unidades)
+                    // coloca las unidades relacionadas con el proyecto
                     if(! isset($arrProyectos[$seqProyecto])){
                         $sql = "
                          select count(seqUnidadProyecto) as cuenta
@@ -715,8 +718,6 @@ class aadProyectos
                        ";
                         $objRes = $aptBd->execute($sql);
                         $arrProyectos[$seqProyecto] = intval($objRes->fields['cuenta']);
-                    }elseif ($arrProyectos[$seqProyecto] == 0){
-                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " esta duplicado dentro del archivo";
                     }
 
                     // si el proyecto esta inactivo no puede cargar resoluciones
@@ -762,12 +763,6 @@ class aadProyectos
                         if($bolActivo == 0){
                             $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La unidad " . $arrLinea[1] . " no está activa";
                         }
-                    }
-
-                    if (!in_array($seqUnidadProyecto, $arrUnidades)) {
-                        $arrUnidades[] = $seqUnidadProyecto;
-                    } else {
-                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La unidad " . $arrLinea[1] . " está duplicada dentro del archivo";
                     }
 
                 }
@@ -922,7 +917,7 @@ class aadProyectos
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " es desconocido";
                 }else{
 
-                    // verificar proyecto duplicado cuando es de mejoramiento (o no tiene unidades)
+                    // poner la cantidad de unidades asociadas al proyecto
                     if(! isset($arrProyectos[$seqProyecto])){
                         $sql = "
                          select count(seqUnidadProyecto) as cuenta
@@ -931,8 +926,6 @@ class aadProyectos
                        ";
                         $objRes = $aptBd->execute($sql);
                         $arrProyectos[$seqProyecto] = intval($objRes->fields['cuenta']);
-                    }elseif ($arrProyectos[$seqProyecto] == 0){
-                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " esta duplicado dentro del archivo";
                     }
 
                 }
@@ -954,12 +947,6 @@ class aadProyectos
 
                     if ($seqUnidadProyecto == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La descripcion de la unidad " . $arrLinea[1] . " es desconocida o no corresponde al proyecto " . $arrLinea[0];
-                    }
-
-                    if (!in_array($seqUnidadProyecto, $arrUnidades)) {
-                        $arrUnidades[] = $seqUnidadProyecto;
-                    } else {
-                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La unidad " . $arrLinea[1] . " está duplicada dentro del archivo";
                     }
 
                 }
@@ -1142,6 +1129,9 @@ class aadProyectos
 
         $arrFormato = $this->plantilla($arrPost['seqTipoActoUnidad']);
 
+        $arrUnidades = array();
+        $arrProyecto = array();
+
         unset($arrArchivo[0]);
         foreach($arrArchivo as $numLinea => $arrLinea){
 
@@ -1209,10 +1199,12 @@ class aadProyectos
                 $txtModalidad    = ($seqModalidadUnidad != 0)? "seqModalidad = $seqModalidadUnidad," : "seqModalidad = seqModalidad,";
                 $txtTipoEsquema  = ($seqEsquemaUnidad   != 0)? "seqTipoEsquema = $seqEsquemaUnidad"  : "seqTipoEsquema = seqTipoEsquema";
 
+                $arrUnidades[$seqUnidadProyecto] += doubleval($arrLinea[2]);
+
                 $sql = "
                     update t_pry_unidad_proyecto set
-                        valSDVEActual = " . intval($arrLinea[2]) . ",
-                        valSDVEComplementario = " . intval($arrLinea[3]) . ",
+                        valSDVEActual = " . $arrUnidades[$seqUnidadProyecto] . ",
+                        valSDVEComplementario = " . doubleval($arrLinea[3]) . ",
                         bolActivo = 1,
                         $txtPlanGobierno
                         $txtModalidad
@@ -1225,9 +1217,11 @@ class aadProyectos
 
                 $txtPlanGobierno = ($seqPlanGobierno    != 0)? "seqPlanGobierno = $seqPlanGobierno" : "seqPlanGobierno = seqPlanGobierno";
 
+                $arrProyecto[$seqProyecto] += doubleval($arrLinea[2]);
+
                 $sql = "
                     update t_pry_proyecto set
-                        valMaximoSubsidio = " . intval($arrLinea[2]) . ",
+                        valMaximoSubsidio = " . $arrProyecto[$seqProyecto] . ",
                         bolActivo = 1,
                         $txtPlanGobierno
                     where seqProyecto = $seqProyecto

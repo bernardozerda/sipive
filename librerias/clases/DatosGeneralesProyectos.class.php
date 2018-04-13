@@ -41,10 +41,10 @@ class DatosGeneralesProyectos {
 
         global $aptBd;
 
-        $sql = "SELECT * FROM  t_pry_entidad_oferente"
-                . " LEFT JOIN t_pry_proyecto_oferente USING(seqOferente)  ";
+        $sql = "SELECT * FROM  t_pry_entidad_oferente  entO"
+               . " LEFT JOIN t_pry_proyecto_oferente proyOf USING(seqOferente)  ";
         if ($seqProyecto > 0) {
-            $sql .= " where seqProyecto = " . $seqProyecto;
+            $sql .= " where proyOf.seqProyecto = " . $seqProyecto;
         }
         $sql . " ORDER BY seqOferente";
 
@@ -556,7 +556,19 @@ class DatosGeneralesProyectos {
 
     public function obtenerCantLicencias($seqProyecto) {
         global $aptBd;
-        $sqlIn = "select count(*) AS cant from t_pry_proyecto_licencias where seqProyecto = " . $seqProyecto;
+       echo $sqlIn = "select count(*) AS cant from t_pry_proyecto_licencias where seqProyecto = " . $seqProyecto;
+        $objResIn = $aptBd->execute($sqlIn);
+        $cant = 0;
+        while ($objResIn->fields) {
+            $cant = $objResIn->fields['cant'];
+            $objResIn->MoveNext();
+        }
+        return $cant;
+    }
+    
+    public function obtenerCantCronogramas($seqProyecto) {
+        global $aptBd;
+       echo  $sqlIn = "select count(*) AS cant from t_pry_cronograma_fechas where seqProyecto = " . $seqProyecto;
         $objResIn = $aptBd->execute($sqlIn);
         $cant = 0;
         while ($objResIn->fields) {

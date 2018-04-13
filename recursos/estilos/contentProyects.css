@@ -33,7 +33,7 @@ strong {
     /* padding: 5px 0;*/
     background: #e9ecef;
     border-radius: 20px;
-    max-height: 600px;
+    /*max-height: 600px;*/
     /* overflow-y: scroll;*/
 
 }
@@ -2760,7 +2760,7 @@ select[multiple].input-group-sm>.form-control,select[multiple].input-group-sm>.i
     border-bottom:0
 }
 .nav-tabs.nav-justified>li{
-    float:none
+    float:left
 }
 .nav-tabs.nav-justified>li>a{
     margin-bottom:5px;
@@ -2773,7 +2773,7 @@ select[multiple].input-group-sm>.form-control,select[multiple].input-group-sm>.i
 @media (min-width:768px){
     .nav-tabs.nav-justified>li{
         display:table-cell;
-        width:1%
+        width:25%
     }
     .nav-tabs.nav-justified>li>a{
         margin-bottom:0
@@ -2871,8 +2871,8 @@ select[multiple].input-group-sm>.form-control,select[multiple].input-group-sm>.i
 }
 .navbar{
     position:relative;
-    min-height:50px;
-    margin-bottom:20px;
+   /* min-height:50px;
+    margin-bottom:20px;*/
     border:1px solid transparent
 }
 @media (min-width:768px){

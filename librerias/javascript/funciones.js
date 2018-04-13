@@ -10790,4 +10790,3 @@ var listadoCdpProyectos = function(){
     YAHOO.util.Event.onContentReady("listadoCdpListener",listadoCdpProyectos);
 }
 YAHOO.util.Event.onContentReady("listadoCdpListener",listadoCdpProyectos);
-console.log("prueba git");

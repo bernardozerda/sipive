@@ -28,7 +28,7 @@
             <td  align="center"><b>{$value.seqTutorProyecto}</b>&nbsp;</td>
             <td >{$value.txtNombreTutor|upper}</td>
 
-            <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosTutor.php?tipo=2&seqTutor={$value.seqTutorProyecto}', '', true);">
+            <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosTutor.php?tipo=2&seqTutor={$value.seqTutorProyecto}&page=datosTutor.php', '', true);">
                     <img src="recursos/imagenes/list.png" width="24px"></a>
             </td>
 

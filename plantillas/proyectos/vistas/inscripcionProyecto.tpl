@@ -360,11 +360,10 @@
                             <div class="col-md-4"> 
                                 <label class="control-label" >Fecha Registro de Enajenaci&oacute;n  </label>  
                                <!-- <input name="fchRegistroEnajenacion" type="text" id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}" size="12" readonly class="form-control required" style="width: 70%; position: relative; float: left"/>-->
-                                <input type=date name="fchRegistroEnajenacion"  id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}"  class="form-control required" style="width: 70%; position: relative; float: left">
-                                <!--<img src="recursos/imagenes/calendar.png" onClick="javascript: calendarioPopUp('fchRegistroEnajenacion');" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"/>-->
-
+                                <input type=date name="fchRegistroEnajenacion"  id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}"  class="form-control required" style="width:150px;" />  
+                               <div id="val_fchRegistroEnajenacion" class="divError">Debe diligenciar la fecha de Registro de Enajenación</div>
                             </div>
-                            <div id="val_fchRegistroEnajenacion" class="divError">Debe diligenciar la fecha de Registro de Enajenación</div>
+                            
                         </div>
                         <div class="form-group" >
                             <div class="col-md-4"> 

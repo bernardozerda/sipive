@@ -85,6 +85,7 @@ if (empty($arrErrores)) {
     $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
     $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
     $claSmarty->assign("arrayOferentes", $arrOferente);
+    $claSmarty->assign("page", "datosOferente.php");
     $claSmarty->display($txtPlantilla);
 } else {
     imprimirMensajes($arrErrores, array());

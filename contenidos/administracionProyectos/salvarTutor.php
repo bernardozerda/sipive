@@ -43,6 +43,7 @@ if (empty($arrErrores)) {
     $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
     $claSmarty->assign("arrTutor", $arrTutor);
     $claSmarty->assign("seqUsuario", $seqUsuario);
+    $claSmarty->assign("page", "datosTutor.php");
 
     if ($txtPlantilla != "") {
         $claSmarty->display($txtPlantilla);

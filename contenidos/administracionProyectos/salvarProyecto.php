@@ -223,6 +223,7 @@ if (empty($arrErrores)) {
     $claSmarty->assign("arrTipoVivienda", $arrTipoVivienda);
     $claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
     $claSmarty->assign("arrCronogramaFecha", $arrCronogramaFecha);
+    $claSmarty->assign("page", "datosProyectos.php");
     $claSmarty->display($txtPlantilla);
 } else {
     imprimirMensajes($arrErrores, array());

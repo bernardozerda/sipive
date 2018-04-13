@@ -31,7 +31,7 @@
             <td  align="center"><b>{$value.seqConstructor}</b>&nbsp;</td>
             <td >{$value.txtNombreConstructor|upper}</td>
             <td >{$value.numDocumentoConstructor}</td>  
-            <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosConstructor.php?tipo=2&seqConstructor={$value.seqConstructor}', '', true);">
+            <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosConstructor.php?tipo=2&seqConstructor={$value.seqConstructor}&page=datosConstructor.php', '', true);">
                     <img src="recursos/imagenes/list.png" width="24px"></a>
             </td>
 

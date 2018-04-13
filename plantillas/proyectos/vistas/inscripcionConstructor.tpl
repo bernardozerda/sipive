@@ -4,15 +4,12 @@
 
     <div id="wrapper" class="container">
         <fieldset>
-            <legend>
-                <h4 style="position: relative; float: left; width: 30%; margin: 0; padding: 4px;">
+            <legend style="text-align: left" class="legend">
+                <h4 style="position: relative; float: left; width: 100%; margin: 0; padding: 5px;">
                     Datos del Constructor 
                 </h4>
                 <h6 style="position: relative; float: right; width: 40%; margin: 0; padding: 0;">
-                    <input type="button" name="btn_enviar" id="btn_enviar" value="Salvar Inscripci&oacute;n" onclick="almacenarIncripcion()" class="btn_volver"/>
-                    <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
-                           onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosConstructor.php', '', true);
-                                   cargarContenido('rutaMenu', './rutaMenu.php', 'menu=66', false);" class="btn_volver"/>   
+                   
                     <input type="hidden" id="seqUsuario" name="seqUsuario" value="{$seqUsuario}" >               
                     <input type="hidden" id="txtArchivo" name="txtArchivo" value="./contenidos/administracionProyectos/salvarConstructor.php">
                 </h6>

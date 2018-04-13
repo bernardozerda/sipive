@@ -12,40 +12,47 @@
             {assign var=seqPryEstadoProceso value = 1}
         {/if}
 
+        {if $seqPryEstadoProceso == 1}
+            {assign var=style value = "border-radius: 0 15px 0 0;"}
+            {assign var=styleLic value = "border-radius: 0 0 0 0;"}
+            {assign var=nav value = "width: 20%"}
+        {else}
+            {assign var=style value = "border-radius: 0 0 0 0;"}
+            {assign var=styleLic value = "border-radius: 0 15px 0 0;"}
+            {assign var=nav value = "width: 25%"}
+        {/if}
 
-        <!-- <div class="tab-content">
-             <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">uuu</div>
-             <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">ppp.</div>
-             <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">ññññ</div>
-             <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">.yyyy</div>
-         </div>-->
         <div id="wrapper" class="container tab-content">
-            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%">
                 {if $seqPryEstadoProceso == "" or $seqPryEstadoProceso >= 1}
-                    <li class="nav-item" >
+
+                    <li class="nav-item"  style="{$nav}">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#datos" role="tab" aria-controls="home" aria-selected="true" >Datos Básicos</a>
                     </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Licencias <br></a>
+                    <li  class="nav-item"  style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Tipos Vivienda</em></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos <br>Financieros</a>
+                    <li  class="nav-item"  style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Conjuntos Residenciales</em></a>
+                    </li>
+                    <li class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}">Licencias <br></a>
                     </li>
                 {/if}
                 {if $seqPryEstadoProceso > 1}
-                    <li  class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Tipos<br> Vivienda</em></a>
+
+                    <li class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos Financieros</a>
                     </li>
-                    <li  class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Conjuntos Residenciales</em></a>
+                    <li  class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Cronograma </em></a>
                     </li>
-                    <li  class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Cronograma <br></em></a>
+                    <li  class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosPolizas" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Polizas </em></a>
                     </li>
                 {/if}
-                <li class="nav-item">   
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 15px 0 0;">Seguimientos <br></a>
+                <li class="nav-item"  style="{$nav}">   
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="{$style}">Seguimientos <br></a>
                 </li>
             </ul>
             <div class="tab-pane active" id="datos" role="tabpanel" aria-labelledby="home-tab">
@@ -112,13 +119,29 @@
                             </div>
                         </div>
                         <div class="form-group"  id="idLineaTipoSolucionDescripcion">
-                            <div class="col-md-4"> 
+                            <div class="col-md-11"> 
                                 <label class="control-label" >Descripci&oacute;n del Proyecto</label>
-                                <textarea name="txtDescripcionProyecto" type="text"  id="txtDescripcionProyecto" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="width:250px; height: 26px" >{$value.txtDescripcionProyecto}</textarea>
+                                <textarea name="txtDescripcionProyecto" type="text"  id="txtDescripcionProyecto" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style=" height: 40px" >{$value.txtDescripcionProyecto}</textarea>
                             </div>
                         </div> 
                         <!-- TIPO DE MODALIDAD -->
                         <div class="form-group" >
+                            <div class="col-md-4" > 
+                                <label class="control-label" >Plan de gobierno(*)</label>
+                                <div  >
+                                    <select name="seqPlanGobierno"
+                                            id="seqPlanGobierno"
+                                            style="width:250px;"
+                                            onchange="obtenerModalidadProyecto(this.value)"
+                                            class="form-control required">
+                                        <option value="0">Seleccione una opci&oacute;n</option>
+                                        {foreach from=$arrPlanGobierno key=seqPlanGobierno item=txtPlanGobierno}
+                                            <option value="{$seqPlanGobierno}" {if $value.seqPlanGobierno == $seqPlanGobierno} selected {/if}>{$txtPlanGobierno}</option>
+                                        {/foreach}
+                                    </select>
+                                    <div id="val_seqPlanGobierno" class="divError">Debe seleccionar el Plan de gobierno</div>
+                                </div>
+                            </div>
                             <div class="col-md-4" > 
                                 <label class="control-label" >Tipo de Modalidad (*)</label>
                                 <div id="tdModalidad"  >
@@ -339,7 +362,9 @@
                                <!-- <input name="fchRegistroEnajenacion" type="text" id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}" size="12" readonly class="form-control required" style="width: 70%; position: relative; float: left"/>-->
                                 <input type=date name="fchRegistroEnajenacion"  id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}"  class="form-control required" style="width: 70%; position: relative; float: left">
                                 <!--<img src="recursos/imagenes/calendar.png" onClick="javascript: calendarioPopUp('fchRegistroEnajenacion');" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"/>-->
+
                             </div>
+                            <div id="val_fchRegistroEnajenacion" class="divError">Debe diligenciar la fecha de Registro de Enajenación</div>
                         </div>
                         <div class="form-group" >
                             <div class="col-md-4"> 
@@ -378,9 +403,9 @@
                             </div>
                         </div>  
                         <div class="form-group"  id="idTituloDescEquipamientoComunal" {if $value.bolEquipamientoComunal == 0} style="display: none" {/if}>
-                            <div class="col-md-4"> 
+                            <div class="col-md-10"> 
                                 <label class="control-label" >Descripci&oacute;n Equipamiento Comunal</label> 
-                                <textarea id="txtDescEquipamientoComunal" name="txtDescEquipamientoComunal"  class="form-control" style="height: 26px"/>{$value.txtDescEquipamientoComunal}</textarea>
+                                <textarea id="txtDescEquipamientoComunal" name="txtDescEquipamientoComunal"  class="form-control" style="height: 40px"/>{$value.txtDescEquipamientoComunal}</textarea>
                             </div>
                         </div>
                         <!--  <div class="form-group" id="idTituloDescEquipamientoComunal" >
@@ -433,19 +458,19 @@
                                       <!--<div id="table{$seqOferentesProy+1}"> -->
                                             <input type="hidden" name="seqProyectoOferente[]" value="{$valueOferentesProy.seqProyectoOferente}" />
                                             <select name="seqOferente[]"
-                                                    id="seqOferente" 
+                                                    id="seqOferente[]" 
                                                     class="form-control required" 
                                                     style="position: relative;float: left; width: 85%">
                                                 <option value="0">Seleccione una opci&oacute;n</option>
                                                 {foreach from=$arrOferente key=seqOferente item=valueOferente}
                                                     <option value="{$valueOferente.seqOferente}" {if $valueOferentesProy.seqOferente == $valueOferente.seqOferente} selected {/if}>{$valueOferente.txtNombreOferente}</option>
                                                 {/foreach}
-                                            </select>    
+                                            </select>   
+                                            <div id="val_seqOferente[]" class="divError">Debe seleccionar el oferente</div>
                                         </div>
 
-<!--  <img src="recursos/imagenes/remove.png" width="20px" onclick="removerOferente(table{$seqOferentesProy+1});" />
-</div> -->
-                                        <div id="val_seqOferente" class="divError">Debe seleccionar el oferente</div>
+<!--  <img src="recursos/imagenes/remove.png" width="20px" onclick="removerOferente(table{$seqOferentesProy+1});" /></div> -->
+
                                     </div>
 
                                     <div class="col-md-3">
@@ -474,31 +499,31 @@
                                             style="
                                             position: relative;
                                             float: left;
-                                            width: 100%;">
+                                            width: 85%;">
                                         <option value="0">Seleccione una opci&oacute;n</option>
                                         {foreach from=$arrOferente key=seqOferente item=valueOferente}
                                             <option value="{$valueOferente.seqOferente}" {if $value.seqOferente == $valueOferente.seqOferente} selected {/if}>{$valueOferente.txtNombreOferente}</option>
                                         {/foreach}
-                                    </select><img src="recursos/imagenes/add.png" width="24px" onclick="adicionarOferente();" style="position: relative;float: right; width: 8%;"/>
+                                    </select>
                                     <input type="hidden" name="seqProyectoOferente[]" value="0" />
                                 </div>
-                                <div id="val_seqOferente" class="divError">Debe seleccionar el oferente</div>
+                                <div id="val_seqOferente1" class="divError">Debe seleccionar el oferente</div>
                                 <div class="col-md-3">
                                     <label class="control-label" >Nombre Contacto Oferente</label>   
-                                    <input name="txtNombreContactoOferente[]" type="text" id="txtNombreContactoOferente" value="{$valueOferentesProy.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="width:180px;"/>
+                                    <input name="txtNombreContactoOferente[]" type="text" id="txtNombreContactoOferente_1" value="{$valueOferentesProy.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control " style="width:180px;"/>
                                     <div id="val_txtNombreContactoOferente" class="divError">Debe diligenciar el nombre de contacto del Oferente</div>
                                 </div>                                
                                 <div class="col-md-3">
                                     <label class="control-label" >Correo Contacto</label>   
-                                    <input name="txtCorreoOferente[]" type="text" id="txtCorreoOferente" value="{$valueOferentesProy.txtCorreoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:150px;"/>
+                                    <input name="txtCorreoOferente[]" type="text" id="txtCorreoOferente_1" value="{$valueOferentesProy.txtCorreoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:150px;"/>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="control-label" >Telefono Contacto</label>   
-                                    <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="width:100px;"/>
-                                    <div id="val_numTelContactoOferente" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
+                                    <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control " style="position: relative; float: left;width:70%;"/>
+                                    <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
+                                    <div id="val_numTelContactoOferente_" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
                                 </div>
                             {/if}
-
                         </div>
                     </fieldset>
                 </div>
@@ -532,6 +557,9 @@
             <!-- CRRONOGRAMA DE OBRAS -->
             <div id="datosCronograma" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
                 {include file="proyectos/secCronogramaFechas.tpl"}
+            </div>
+             <div id="datosPolizas" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
+                prueba
             </div>
         {/foreach}
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

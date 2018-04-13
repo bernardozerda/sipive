@@ -448,7 +448,8 @@ class Proyecto {
                     txtNombreProyecto,
                     numNitProyecto,
                     txtNombrePlanParcial,
-                    txtNombreComercial,                    
+                    txtNombreComercial,
+                    seqPlanGobierno,
                     seqPryTipoModalidad,
                     seqOpv,
                     txtNombreOperador,
@@ -512,7 +513,8 @@ class Proyecto {
                     '$txtNombreProyecto',
                     $numNitProyecto,
                     '$txtNombrePlanParcial',
-                    '$txtNombreComercial',                   
+                    '$txtNombreComercial',
+                    $seqPlanGobierno,
                     $seqPryTipoModalidad,
                     $seqOpv,
                     '$txtNombreOperador',
@@ -657,7 +659,8 @@ class Proyecto {
                         txtNombreProyecto = \"" . ereg_replace('\"', "", $txtNombreProyecto) . "\", 
                         numNitProyecto = " . $numNitProyecto . ",
                         txtNombrePlanParcial = '" . $txtNombrePlanParcial . "',
-                        txtNombreComercial = '" . $txtNombreComercial . "',                       
+                        txtNombreComercial = '" . $txtNombreComercial . "',  
+                        seqPlanGobierno = " . $seqPlanGobierno . ",
                         seqPryTipoModalidad = " . $seqPryTipoModalidad . ",
                         seqOpv = " . $seqOpv . ",
                         txtNombreOperador = '" . $txtNombreOperador . "',
@@ -859,7 +862,7 @@ class Proyecto {
         }
         $sqlLicencia = substr_replace($sqlLicencia, ';', -1, 1);
         $sql .= $sqlLicencia;
-        echo $sql;
+        //echo $sql;
         try {
             $aptBd->execute($sql);
         } catch (Exception $objError) {
@@ -885,7 +888,7 @@ class Proyecto {
     public function modificarLicencias($seqProyecto, $seqProyectoLicencia, $txtLicencia, $txtExpideLicencia, $seqTipoLicencia, $fchLicencia, $fchVigenciaLicencia, $fchEjecutoriaLicencia, $txtResEjecutoria, $fchLicenciaProrroga, $fchLicenciaProrroga1, $fchLicenciaProrroga2) {
         global $aptBd;
         $arrErrores = array();
-        foreach ($seqTipoLicencia as $key => $value) {
+        foreach ($seqProyectoLicencia as $key => $value) {
             $sql = 'UPDATE t_pry_proyecto_licencias
             SET            
             txtLicencia = "' . $txtLicencia[$key] . '",
@@ -974,7 +977,7 @@ class Proyecto {
             // }
         }
         $query = substr_replace($query, ';', -1, 1);
-       // echo "<br>" . $query . "<br>";
+        // echo "<br>" . $query . "<br>";
         try {
             $aptBd->execute($query);
         } catch (Exception $objError) {
@@ -1152,7 +1155,7 @@ class Proyecto {
             // }
         }
         $query = substr_replace($query, ';', -1, 1);
-       // echo "<br>" . $query . "<br>";
+        // echo "<br>" . $query . "<br>";
         try {
             $aptBd->execute($query);
         } catch (Exception $objError) {
@@ -1227,6 +1230,139 @@ class Proyecto {
                 $aptBd->execute($sql);
             } catch (Exception $objError) {
                 $arrErrores[] = "No se ha podido eliminar conjunto<b></b>";
+                pr($objError->getMessage());
+            }
+        }
+    }
+
+    function almacenarCronograma($seqProyecto, $arrayCronograma, $cant) {
+        // var_dump($arrayCronograma);
+        global $aptBd;
+        $arrErrores = array();
+        $query = "INSERT INTO t_pry_cronograma_fechas
+                (
+                    numActaDescriptiva,
+                    numAnoActaDescriptiva,
+                    fchInicialProyecto,
+                    fchFinalProyecto,
+                    valPlazoEjecucion,
+                    fchInicialEntrega,
+                    fchFinalEntrega,
+                    fchInicialEscrituracion,
+                    fchFinalEscrituracion,
+                    seqProyecto,
+                    fchGestion)
+                    VALUES";
+        for ($index = 0; $index < $cant; $index++) {
+
+            foreach ($arrayCronograma[$seqProyecto] as $key => $value) {
+                //echo "<p>".count($value)."</p>";
+                if (count($value) > 1) {
+                    $$key = $value[($index)];
+                } else {
+                    $$key = $value;
+                }
+
+                //echo "<br>***".$value[($index)]."***<br>";
+            }
+
+            $query .= "(
+                            $numActaDescriptiva,
+                            $numAnoActaDescriptiva,
+                            '$fchInicialProyecto',
+                            '$fchFinalProyecto',
+                            $valPlazoEjecucion,
+                            '$fchInicialEntrega',
+                            '$fchFinalEntrega',
+                            '$fchInicialEscrituracion',
+                            '$fchFinalEscrituracion',
+                            $seqProyecto,
+                            '$fchGestion'),";
+            // }
+        }
+        $query = substr_replace($query, ';', -1, 1);
+        // echo "<br>" . $query . "<br>";
+        try {
+            $aptBd->execute($query);
+        } catch (Exception $objError) {
+            $arrErrores[] = "No se ha podido cargar el cronograma<b></b>";
+            pr($objError->getMessage());
+        }
+    }
+
+    function modificarCronograma($seqProyecto, $array, $cant) {
+
+        global $aptBd;
+        $arrErrores = array();
+        $sqlExistentes = "SELECT seqCronogramaFecha FROM t_pry_cronograma_fechas WHERE seqProyecto = $seqProyecto";
+        $exeExistentes = $aptBd->execute($sqlExistentes);
+        //$cant = $exeExistentes->numRows();
+        //echo "<p>".$exeExistentes->numRows()."</p>";
+        $datos = Array();
+        $datosDiff = Array();
+        while ($exeExistentes->fields) {
+            $datos[] = $exeExistentes->fields['seqCronogramaFecha'];
+            $exeExistentes->MoveNext();
+        }
+        for ($index = 0; $index < $cant; $index++) {
+
+            foreach ($array[$seqProyecto] as $key => $value) {
+               $$key = $value[($index)];
+                //echo "<br>".$key;
+            }
+          //  echo "<br> seqCronogramaFecha -> ".$seqCronogramaFecha;
+            $datosDiff[] = $seqCronogramaFecha;
+
+            if (in_array($seqCronogramaFecha, $datos)) {
+                $query = "UPDATE t_pry_cronograma_fechas
+                        SET
+                        numActaDescriptiva = $numActaDescriptiva,
+                        numAnoActaDescriptiva = $numAnoActaDescriptiva,
+                        fchInicialProyecto = '$fchInicialProyecto',
+                        fchFinalProyecto = '$fchFinalProyecto',
+                        valPlazoEjecucion = $valPlazoEjecucion,
+                        fchInicialEntrega = '$fchInicialEntrega',
+                        fchFinalEntrega = '$fchFinalEntrega',
+                        fchInicialEscrituracion = '$fchInicialEscrituracion',
+                        fchFinalEscrituracion = '$fchFinalEscrituracion',                        
+                        fchGestion = '$fchGestion'
+                        WHERE seqCronogramaFecha = $seqCronogramaFecha "
+                        . "AND seqProyecto = $seqProyecto;";
+            } else if ($cant >=  $exeExistentes->numRows()) {
+                $arraycronograma = Array();
+                $arraycronograma[$seqProyecto]['seqCronogramaFecha'] = $seqCronogramaFecha;
+                $arraycronograma[$seqProyecto]['numActaDescriptiva'] = $numActaDescriptiva;
+                $arraycronograma[$seqProyecto]['numAnoActaDescriptiva'] = $numAnoActaDescriptiva;
+                $arraycronograma[$seqProyecto]['fchInicialProyecto'] = $fchInicialProyecto;
+                $arraycronograma[$seqProyecto]['fchFinalProyecto'] = $fchFinalProyecto;
+                $arraycronograma[$seqProyecto]['valPlazoEjecucion'] = $valPlazoEjecucion;
+                $arraycronograma[$seqProyecto]['fchInicialEntrega'] = $fchInicialEntrega;
+                $arraycronograma[$seqProyecto]['fchFinalEntrega'] = $fchFinalEntrega;
+                $arraycronograma[$seqProyecto]['fchInicialEscrituracion'] = $fchInicialEscrituracion;
+                $arraycronograma[$seqProyecto]['fchFinalEscrituracion'] = $fchFinalEscrituracion;
+                $this->almacenarCronograma($seqProyecto, $arraycronograma, count($arraycronograma));
+            }
+            //echo "<br><br>" . $query;
+            try {
+                $aptBd->execute($query);
+            } catch (Exception $objError) {
+                $arrErrores[] = "No se ha podido cargar las licencias<b></b>";
+                pr($objError->getMessage());
+            }
+        }
+        if ($cant < $exeExistentes->numRows()) {
+            $resultado = array_diff($datos, $datosDiff);
+            $delete = "";
+            foreach ($resultado as $value) {
+                $delete .= $value . ",";
+            }
+            //  print_r($resultado);
+            $delete = substr_replace($delete, '', -1, 1);
+            $sql = "DELETE FROM t_pry_cronograma_fechas WHERE seqCronogramaFecha in (" . $delete . ")";
+            try {
+                $aptBd->execute($sql);
+            } catch (Exception $objError) {
+                $arrErrores[] = "No se ha podido eliminar Cronograma<b></b>";
                 pr($objError->getMessage());
             }
         }

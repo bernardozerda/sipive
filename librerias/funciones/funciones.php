@@ -509,7 +509,7 @@ function obtenerDatosTabla($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion 
                 $txtOrden
             ";
         try {
-           // echo $sql;
+          // echo $sql;
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
                 if (trim($txtLLave) != "") {

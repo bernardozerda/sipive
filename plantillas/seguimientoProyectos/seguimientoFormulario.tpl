@@ -47,18 +47,18 @@
     </div>
 
     <div class="form-group">
-        <div class="col-md-6" >
+        <div class="col-md-5" >
             <label class="control-label" for="nome">&nbsp; <br></label>
             <input type="button" src="recursos/imagenes/search.png" name="masbusquedaAvanzada" id="masbusquedaAvanzada" value="B&uacute;squeda Avanzada" onclick="cuadroBusquedaAvanzada('busquedaAvanzada');" 
                    class="btn_volver" 
-                   style="cursor: hand;margin-top: 10px; background-image: url('recursos/imagenes/searchMore.png'); background-repeat: no-repeat; text-align: center; width: 200px; background-position-x: 1%;background-position-y: 37%;padding: 7px;  margin-top: 26px"/>
+                   style="cursor: hand;margin-top: 10px; background-image: url('recursos/imagenes/openMenu.png'); background-repeat: no-repeat; text-align: center; width: 200px; background-position-x: 1%;background-position-y: 37%;padding: 7px;  margin-top: 26px"/>
 
         </div>
         <div class="col-md-6" style="text-align: right" >
             <label class="control-label" for="nome">&nbsp; <br></label>
-            <input type="button" src="recursos/imagenes/search.png" name="btn_volver" id="btn_volver" value="Limpiar B&uacute;squeda" onclick="limpiarBusqueda();" 
+            <input type="button" name="btn_volver" id="btn_volver" value="Limpiar B&uacute;squeda" onclick="limpiarBusqueda();" 
                    class="btn_volver" 
-                   style="cursor: hand;margin-top: 10px; background-image: url('recursos/imagenes/search.png'); background-repeat: no-repeat; text-align: center; width: 200px; background-position-x: 1%;background-position-y: 32%;padding: 7px;  margin-top: 26px"/>
+                   style="cursor: hand;margin-top: 10px; background-image: url('recursos/imagenes/clear.png'); background-repeat: no-repeat; text-align: center; width: 180px; background-position-x: 1%;background-position-y: 80%;padding: 7px;  margin-top: 26px"/>
 
         </div>
 

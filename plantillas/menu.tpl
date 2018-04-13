@@ -50,7 +50,7 @@
                                {else}
                                    {assign var=varArchivo value="?"|explode:$objPadre->txtCodigo} 
                                    {if $varArchivo|@count gt 0}  
-                                       {assign var=ruta value=$objPadre->txtCodigo}.php                              
+                                       {assign var=ruta value=$objPadre->txtCodigo}                           
                                     {else}   
                                         {assign var=ruta value=$varArchivo[0]".php?"$varArchivo[1]} 
                                    {/if}

@@ -27,27 +27,37 @@
                             <ul class="dropdown-menu">
                                 {if $objPadre->txtCodigo != 'subsidios/vacio'}
                                     <li><a href="#menu-{$objPadre->txtEspanol}"
-                                           onClick="cargarContenido('contenido', './contenidos/{$objPadre->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqPadre}', false);">
+                                           onClick="cargarContenido('contenido', './contenidos/{$objPadre->txtCodigo}.php', '', true);
+                                                   cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqPadre}', false);">
                                             {$objPadre->txtEspanol} </a>
                                     </li>
                                 {/if}
                                 {foreach from=$objPadre->hijos key=seqHijo item=objHijo}
                                     <li><a href="#menu-{$objHijo->txtEspanol}"
-                                           onClick="cargarContenido('contenido', './contenidos/{$objHijo->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqHijo}', false);">
+                                           onClick="cargarContenido('contenido', './contenidos/{$objHijo->txtCodigo}.php', '', true);
+                                                   cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqHijo}', false);">
                                             {$objHijo->txtEspanol} </a>
                                     </li>
                                 {/foreach}
                             </ul>
                         </li>
                     {else}
+                        {assign var=ruta value=""}
                         <li>
                             <a href="#menu-{$objPadre->txtEspanol}"
-                                    {if $objPadre->txtEspanol|lower == 'inicio' }
-                                        onClick="location.reload(true);"
-                                    {else}
-                                        onClick="cargarContenido('contenido', './contenidos/{$objPadre->txtCodigo}.php', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqPadre}', false);"
-                                    {/if}
-                            >{$objPadre->txtEspanol}</a>
+                               {if $objPadre->txtEspanol|lower == 'inicio' }
+                                   onClick="location.reload(true);"
+                               {else}
+                                   {assign var=varArchivo value="?"|explode:$objPadre->txtCodigo} 
+                                   {if $varArchivo|@count gt 0}  
+                                       {assign var=ruta value=$objPadre->txtCodigo}                              
+                                    {else}   
+                                        {assign var=ruta value=$varArchivo[0]".php?"$varArchivo[1]} 
+                                   {/if}
+                                   onClick="cargarContenido('contenido', './contenidos/{$ruta}', '', true);
+                                           cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqPadre}', false);"
+                               {/if}
+                               >{$objPadre->txtEspanol}</a>
                         </li>
                     {/if}
                 {/foreach}

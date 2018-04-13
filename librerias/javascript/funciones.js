@@ -2649,7 +2649,7 @@ function cuadroBusquedaAvanzada(idDestino) {
         if (numAlto == 1) {
             objCuadro.style.display = "none";
             objIcono.style.background = '#299BAE';
-            objIcono.style.backgroundImage = "url('recursos/imagenes/searchMore.png')";
+             objIcono.style.backgroundImage = "url('recursos/imagenes/openMenu.png')";
             objIcono.style.backgroundRepeat = 'no-repeat'; 
             objIcono.style.backgroundPositionY  = '32%';
         }
@@ -5095,34 +5095,7 @@ function mostrarAyudaGeneralReporteadorProyectos( ) {
  * @param String txtContenido  ==> Contenido en HTML de la ventana
  * @param String txtParametros ==> Ej: { width:"250px",fixedcenter:true,close:false,draggable:false,modal:true,visible:false }
  */
-// function popUpAyuda(txtTitulo, txtContenido) {
-//
-//     // Instancia un objeto panel
-//     var objAyuda = new YAHOO.widget.Panel(
-//             "dlg",
-//             {
-//                 width: '500px',
-//                 fixedcenter: true,
-//                 close: true,
-//                 draggable: false,
-//                 modal: true,
-//                 visible: true
-//             }
-//     );
-//
-//     // Encabezado
-//     objAyuda.setHeader(txtTitulo);
-//
-//     // cuerpo del panel
-//     objAyuda.setBody("<div style='text-align:justify'>" + txtContenido + "</div>");
-//
-//     // El objeto se despliega sobre el cuerpo del documento html
-//     objAyuda.render(document.body);
-//
-//     // Muestra el objeto
-//     objAyuda.show();
-//
-// }
+
 
 /**
  * Filtro dependiendo el tipo de Acto Administrativo que se elija
@@ -8668,60 +8641,21 @@ var indiceFilaFormulario = 1;
 function addCronogramaFechas() {
     myNewRow = document.getElementById("tablaFormularioFechas").insertRow(-1);
     myNewRow.id = indiceFilaFormulario;
+    indiceFilaFormulario = ($("#tablaFormularioFechas tr").length) - 1;
+    var addDiv = "";
+    addDiv += "<td><div class='form-group'><div class='col-md-3'><label class='control-label' >Acta Descriptiva</label><br />Num. <input name='numActaDescriptiva[]' type='text' id='numActaDescriptiva[" + indiceFilaFormulario + "]' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' size='5' style='text-align:center'/> A&ntilde;o <input name='numAnoActaDescriptiva[" + indiceFilaFormulario + "]' type='text' id='numAnoActaDescriptiva[" + indiceFilaFormulario + "]' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' size='5' style='text-align:center'/></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Inicio</label><br /><input name='fchInicialProyecto[]' type='text' id='fchInicialProyecto[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchInicialProyecto[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>Terminación</label><br /><input name='fchFinalProyecto[]' type='text' id='fchFinalProyecto[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchFinalProyecto[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>Plazo Ejecución (Meses)</label><br /><input name='valPlazoEjecucion[]' type='text' id='valPlazoEjecucion[" + indiceFilaFormulario + "]' size='12' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' style='text-align:center'/></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>Inicio</label><br /><input name='fchInicialEntrega[]' type='text' id='fchInicialEntrega[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchInicialEntrega[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>Terminación Venta</label><br /><input name='fchFinalEntrega[]' type='text' id='fchFinalEntrega[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchFinalEntrega[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>Inicio</label><br /><input name='fchInicialEscrituracion[]' type='text' id='fchInicialEscrituracion[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchInicialEscrituracion[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label'>Terminación</label><br /><input name='fchFinalEscrituracion[]' type='text' id='fchFinalEscrituracion[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchFinalEscrituracion[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a>";
+    addDiv += "<img src='recursos/imagenes/remove.png' width='22px' onclick='return confirmaRemoverLineaFormulario(this);' style='position: relative; float: right; right: 15%'></div><p>&nbsp;</p></div></td>";
     myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td>Num. <input name='numActaDescriptiva[" + indiceFilaFormulario + "]' type='text' id='numActaDescriptiva[" + indiceFilaFormulario + "]' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' size='5' style='text-align:center'/> A&ntilde;o <input name='numAnoActaDescriptiva[" + indiceFilaFormulario + "]' type='text' id='numAnoActaDescriptiva[" + indiceFilaFormulario + "]' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' size='5' style='text-align:center'/></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:3px");
-    myNewCell.innerHTML = "<td><input name='fchInicialProyecto[" + indiceFilaFormulario + "]' type='text' id='fchInicialProyecto[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchInicialProyecto[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:3px");
-    myNewCell.innerHTML = "<td><input name='fchFinalProyecto[" + indiceFilaFormulario + "]' type='text' id='fchFinalProyecto[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchFinalProyecto[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input name='valPlazoEjecucion[" + indiceFilaFormulario + "]' type='text' id='valPlazoEjecucion[" + indiceFilaFormulario + "]' size='12' onBlur='sinCaracteresEspeciales( this ); soloNumeros( this );' style='text-align:center'/></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:3px");
-    myNewCell.innerHTML = "<td><input name='fchInicialEntrega[" + indiceFilaFormulario + "]' type='text' id='fchInicialEntrega[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchInicialEntrega[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:3px");
-    myNewCell.innerHTML = "<td><input name='fchFinalEntrega[" + indiceFilaFormulario + "]' type='text' id='fchFinalEntrega[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchFinalEntrega[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:3px");
-    myNewCell.innerHTML = "<td><input name='fchInicialEscrituracion[" + indiceFilaFormulario + "]' type='text' id='fchInicialEscrituracion[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchInicialEscrituracion[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:3px");
-    myNewCell.innerHTML = "<td><input name='fchFinalEscrituracion[" + indiceFilaFormulario + "]' type='text' id='fchFinalEscrituracion[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchFinalEscrituracion[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar_icon_tr.gif'></a></td>";
-    myNewCell = myNewRow.insertCell(-1);
-    myNewCell.align = "center";
-    myNewCell.setAttribute("align", "center");
-    myNewCell.setAttribute("valign", "top");
-    myNewCell.setAttribute("style", "padding:6px");
-    myNewCell.innerHTML = "<td><input type='button' value='Eliminar' onClick='return confirmaRemoverLineaFormulario(this);'></td>";
+ 
+    myNewCell.innerHTML = addDiv;
+	
     indiceFilaFormulario++;
 }
 
@@ -10780,10 +10714,6 @@ function cambiarFuenteInhabilidad(objSelectFuente) {
 
     return callObj;
 
-
-}
-
-function ocultarDivs() {
 
 }
 

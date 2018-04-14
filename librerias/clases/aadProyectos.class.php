@@ -718,6 +718,8 @@ class aadProyectos
                        ";
                         $objRes = $aptBd->execute($sql);
                         $arrProyectos[$seqProyecto] = intval($objRes->fields['cuenta']);
+                    }elseif ( isset($arrProyectos[$seqProyecto]) and $arrProyectos[$seqProyecto] == 0 and doubleval($arrLinea[2]) < 0 ){
+                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": Para indexaciones negativas el proyecto " . $arrLinea[0] . " no puede estar duplicado";
                     }
 
                     // si el proyecto esta inactivo no puede cargar resoluciones
@@ -804,6 +806,13 @@ class aadProyectos
                     if($seqRegistro != 0){
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": Para indexaciones negativas el identificador del recurso SiPIVE debe estar vacío";
                     }
+
+                    if(! isset($arrUnidades[$seqUnidadProyecto])){
+                        $arrUnidades[$seqUnidadProyecto] = 1;
+                    }elseif( isset($arrUnidades[$seqUnidadProyecto]) and $arrProyectos[$seqProyecto] != 0 ){
+                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": Para indexaciones negativas no puede tener la unidad " . $arrLinea[1] . " duplicada";
+                    }
+
 
                 }
 

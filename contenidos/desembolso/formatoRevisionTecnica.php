@@ -94,6 +94,9 @@ switch ($_SESSION['seqUsuario']) {
     case 551:
         $txtMatriculaProfesional = "25202-340510 CND";
         break;
+    case 283:
+        $txtMatriculaProfesional = "25202-384331 CND";
+        break;
     default :
         $txtMatriculaProfesional = "________________________________________";
         break;

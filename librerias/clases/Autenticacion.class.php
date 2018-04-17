@@ -149,7 +149,6 @@
                 FROM T_COR_USUARIO
                 WHERE txtUsuario = \"" . ereg_replace( '\"' , '' , $txtUsuario ) . "\"
                 AND txtClave = \"" . $txtClave . "\" 
-                AND bolActivo = 1
             ";
             $objRes = $aptBd->execute( $sql );
             

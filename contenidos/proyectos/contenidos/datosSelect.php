@@ -14,9 +14,10 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 
 //var_dump($_REQUEST);
 if (isset($_POST['valor'])) {
-  //  echo "paso " .$_POST['valor'];
+ //echo "paso " .$_POST['valor'];
 //    echo "paso2";
  $seqPlanGobierno = $_POST['valor'];
+ $arrPryTipoModalidad = Array();
     $arrPryTipoModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $seqPlanGobierno, "seqPlanGobierno DESC, txtModalidad");
    echo json_encode($arrPryTipoModalidad);   
 // print_r($arrPryTipoModalidad);

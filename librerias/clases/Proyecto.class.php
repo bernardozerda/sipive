@@ -507,6 +507,7 @@ class Proyecto {
                     txtEscritura,
                     fchEscritura,
                     numNotaria,
+                    seqProyectoGrupo,
                     seqUsuario)
                     VALUES (
                     $seqPryEstadoProceso,
@@ -572,6 +573,7 @@ class Proyecto {
                     '$txtEscritura',
                     '$fchEscritura',
                     $numNotaria,
+                    $seqProyectoGrupo,
                     $seqUsuario
                     ) ";
         try {
@@ -717,7 +719,8 @@ class Proyecto {
                         txtCedulaCatastral = '$txtCedulaCatastral',
                         txtEscritura = '$txtEscritura',
                         fchEscritura = '$fchEscritura',
-                        numNotaria = $numNotaria
+                        numNotaria = $numNotaria,
+                        seqProyectoGrupo = $seqProyectoGrupo
                         WHERE seqProyecto = $seqProyecto
             ";
         //echo  $sql; //die();
@@ -1122,6 +1125,9 @@ class Proyecto {
                   (
                     txtNombreTipoVivienda,
                     numCantidad,
+                    numCantUdsDisc,
+                    numTotalParq,
+                    numCantParqDisc,
                     numArea,
                     numAnoVenta,
                     valPrecioVenta,
@@ -1133,7 +1139,7 @@ class Proyecto {
         for ($index = 0; $index < $cant; $index++) {
             $txtNombreProyectoHijo = '';
             foreach ($arrayConjuntos[$seqProyecto] as $key => $value) {
-                if (count($value) > 1) {
+                if (count($value) < 1) {
                     $$key = $value[($index)];
                 } else {
                     $$key = $value;
@@ -1145,6 +1151,9 @@ class Proyecto {
             $query .= "(
                         '$txtNombreTipoVivienda',
                         $numCantidad,
+                        $numCantUdsDisc,
+                        $numTotalParq,
+                        $numCantParqDisc,
                         $numArea,
                         $numAnoVenta,
                         $valPrecioVenta,
@@ -1189,6 +1198,9 @@ class Proyecto {
                     SET 
                     txtNombreTipoVivienda = '$txtNombreTipoVivienda',
                        numCantidad = '$numCantidad', "
+                        . "numCantUdsDisc = '$numCantUdsDisc', "
+                        . "numTotalParq = '$numTotalParq', "
+                        . "numCantParqDisc = '$numCantParqDisc', "
                         . "numArea = '$numArea', "
                         . "numAnoVenta = '$numAnoVenta', "
                         . "valPrecioVenta = '$valPrecioVenta', "
@@ -1196,13 +1208,17 @@ class Proyecto {
                         . "valCierre = '$valCierre', "
                         . "fchGestion = '$fchGestion' "
                         . "WHERE seqTipoVivienda = $seqTipoVivienda "
-                        . "AND seqProyecto = $seqProyecto; ";
+                        . "AND seqProyecto = $seqProyecto;
+                        ";
             } else if ($cant >= $exeExistentes->numRows()) {
                 $arrayTipoVivienda = Array();
                 $arrayTipoVivienda[$seqProyecto]['seqTipoVivienda'] = $seqTipoVivienda;
                 $arrayTipoVivienda[$seqProyecto]['txtNombreTipoVivienda'] = $txtNombreTipoVivienda;
                 $arrayTipoVivienda[$seqProyecto]['numCantidad'] = $numCantidad;
                 $arrayTipoVivienda[$seqProyecto]['numArea'] = $numArea;
+                $arrayTipoVivienda[$seqProyecto]['numCantUdsDisc'] = $numCantUdsDisc;
+                $arrayTipoVivienda[$seqProyecto]['numTotalParq'] = $numTotalParq;
+                $arrayTipoVivienda[$seqProyecto]['numCantParqDisc'] = $numCantParqDisc;
                 $arrayTipoVivienda[$seqProyecto]['numAnoVenta'] = $numAnoVenta;
                 $arrayTipoVivienda[$seqProyecto]['valPrecioVenta'] = $valPrecioVenta;
                 $arrayTipoVivienda[$seqProyecto]['valCierre'] = $valCierre;
@@ -1221,7 +1237,7 @@ class Proyecto {
             $resultado = array_diff($datos, $datosDiff);
             $delete = "";
             foreach ($resultado as $value) {
-                $delete .= $value . ",";
+                $delete .= $value . ", ";
             }
             //  print_r($resultado);
             $delete = substr_replace($delete, '', -1, 1);
@@ -1230,7 +1246,8 @@ class Proyecto {
                 $aptBd->execute($sql);
             } catch (Exception $objError) {
                 $arrErrores[] = "No se ha podido eliminar conjunto<b></b>";
-                pr($objError->getMessage());
+                pr($objError->getMessage
+                        ());
             }
         }
     }
@@ -1239,20 +1256,20 @@ class Proyecto {
         // var_dump($arrayCronograma);
         global $aptBd;
         $arrErrores = array();
-        $query = "INSERT INTO t_pry_cronograma_fechas
-                (
-                    numActaDescriptiva,
-                    numAnoActaDescriptiva,
-                    fchInicialProyecto,
-                    fchFinalProyecto,
-                    valPlazoEjecucion,
-                    fchInicialEntrega,
-                    fchFinalEntrega,
-                    fchInicialEscrituracion,
-                    fchFinalEscrituracion,
-                    seqProyecto,
-                    fchGestion)
-                    VALUES";
+        $query = "  INSERT INTO t_pry_cronograma_fechas
+                        (
+                        numActaDescriptiva,
+                        numAnoActaDescriptiva,
+                        fchInicialProyecto,
+                        fchFinalProyecto,
+                        valPlazoEjecucion,
+                        fchInicialEntrega,
+                        fchFinalEntrega,
+                        fchInicialEscrituracion,
+                        fchFinalEscrituracion,
+                        seqProyecto,
+                        fchGestion)
+                        VALUES";
         for ($index = 0; $index < $cant; $index++) {
 
             foreach ($arrayCronograma[$seqProyecto] as $key => $value) {
@@ -1267,17 +1284,17 @@ class Proyecto {
             }
 
             $query .= "(
-                            $numActaDescriptiva,
-                            $numAnoActaDescriptiva,
-                            '$fchInicialProyecto',
-                            '$fchFinalProyecto',
-                            $valPlazoEjecucion,
-                            '$fchInicialEntrega',
-                            '$fchFinalEntrega',
-                            '$fchInicialEscrituracion',
-                            '$fchFinalEscrituracion',
-                            $seqProyecto,
-                            '$fchGestion'),";
+                        $numActaDescriptiva,
+                        $numAnoActaDescriptiva,
+                        '$fchInicialProyecto',
+                        '$fchFinalProyecto',
+                        $valPlazoEjecucion,
+                        '$fchInicialEntrega',
+                        '$fchFinalEntrega',
+                        '$fchInicialEscrituracion',
+                        '$fchFinalEscrituracion',
+                        $seqProyecto,
+                        '$fchGestion'), ";
             // }
         }
         $query = substr_replace($query, ';', -1, 1);
@@ -1286,7 +1303,8 @@ class Proyecto {
             $aptBd->execute($query);
         } catch (Exception $objError) {
             $arrErrores[] = "No se ha podido cargar el cronograma<b></b>";
-            pr($objError->getMessage());
+            pr($objError->getMessage
+                    ());
         }
     }
 
@@ -1294,7 +1312,7 @@ class Proyecto {
 
         global $aptBd;
         $arrErrores = array();
-        $sqlExistentes = "SELECT seqCronogramaFecha FROM t_pry_cronograma_fechas WHERE seqProyecto = $seqProyecto";
+        $sqlExistentes = "  SELECT seqCronogramaFecha FROM t_pry_cronograma_fechas WHERE seqProyecto = $seqProyecto";
         $exeExistentes = $aptBd->execute($sqlExistentes);
         //$cant = $exeExistentes->numRows();
         //echo "<p>".$exeExistentes->numRows()."</p>";
@@ -1307,10 +1325,10 @@ class Proyecto {
         for ($index = 0; $index < $cant; $index++) {
 
             foreach ($array[$seqProyecto] as $key => $value) {
-               $$key = $value[($index)];
+                $$key = $value[($index)];
                 //echo "<br>".$key;
             }
-          //  echo "<br> seqCronogramaFecha -> ".$seqCronogramaFecha;
+            //  echo "<br> seqCronogramaFecha->".$seqCronogramaFecha;
             $datosDiff[] = $seqCronogramaFecha;
 
             if (in_array($seqCronogramaFecha, $datos)) {
@@ -1324,11 +1342,12 @@ class Proyecto {
                         fchInicialEntrega = '$fchInicialEntrega',
                         fchFinalEntrega = '$fchFinalEntrega',
                         fchInicialEscrituracion = '$fchInicialEscrituracion',
-                        fchFinalEscrituracion = '$fchFinalEscrituracion',                        
+                        fchFinalEscrituracion = '$fchFinalEscrituracion',
                         fchGestion = '$fchGestion'
                         WHERE seqCronogramaFecha = $seqCronogramaFecha "
-                        . "AND seqProyecto = $seqProyecto;";
-            } else if ($cant >=  $exeExistentes->numRows()) {
+                        . "AND seqProyecto = $seqProyecto;
+                        ";
+            } else if ($cant >= $exeExistentes->numRows()) {
                 $arraycronograma = Array();
                 $arraycronograma[$seqProyecto]['seqCronogramaFecha'] = $seqCronogramaFecha;
                 $arraycronograma[$seqProyecto]['numActaDescriptiva'] = $numActaDescriptiva;
@@ -1354,7 +1373,7 @@ class Proyecto {
             $resultado = array_diff($datos, $datosDiff);
             $delete = "";
             foreach ($resultado as $value) {
-                $delete .= $value . ",";
+                $delete .= $value . ", ";
             }
             //  print_r($resultado);
             $delete = substr_replace($delete, '', -1, 1);

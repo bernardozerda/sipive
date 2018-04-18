@@ -628,7 +628,7 @@ class ProyectoVivienda {
         }
 
         // Consulta de Proyectos de Vivienda
-         $sql = "
+        $sql = "
                     SELECT
                             T_PRY_PROYECTO.seqProyecto,
                             numNitProyecto,
@@ -2233,14 +2233,26 @@ class ProyectoVivienda {
         $arrResultados = array();
         $txtParametro = strtolower($txtParametro);
 
-         $sql = "SELECT CONCAT(txtNombreProyecto,' [', group_concat(txtNombreOferente),']') AS nombre, T_PRY_PROYECTO.seqProyecto
-                    FROM T_PRY_PROYECTO 
-                    INNER JOIN t_pry_proyecto_oferente ON (T_PRY_PROYECTO.seqProyecto = t_pry_proyecto_oferente.seqProyecto)
-                    INNER JOIN T_PRY_ENTIDAD_OFERENTE ON (T_PRY_ENTIDAD_OFERENTE.seqOferente = T_PRY_ENTIDAD_OFERENTE.seqOferente)                    
-                    WHERE CONCAT(txtNombreProyecto,' [',txtNombreOferente,']') LIKE'%$txtParametro%' 
-                    GROUP BY seqProyecto LIMIT $numLimiteRegistros ";
-         //echo $sql; exit();
-
+        $sql = "SELECT CONCAT((SELECT  GROUP_CONCAT(seqOferente separator ',')
+                FROM
+                    t_pry_proyecto_oferente fr
+                WHERE
+                      fr.seqProyecto = T_PRY_PROYECTO.seqProyecto)) as seqOF,
+                    CONCAT(txtNombreProyecto,
+                    ' - ',           
+                    (SELECT 
+                            GROUP_CONCAT(txtNombreOferente SEPARATOR ';')
+                        FROM
+                            T_PRY_ENTIDAD_OFERENTE eof
+                        WHERE
+                            eof.seqOferente in (seqOF))) AS nombre,
+                            T_PRY_PROYECTO.seqProyecto
+                        FROM T_PRY_PROYECTO 
+                        INNER JOIN t_pry_proyecto_oferente ON (T_PRY_PROYECTO.seqProyecto = t_pry_proyecto_oferente.seqProyecto)
+                        INNER JOIN T_PRY_ENTIDAD_OFERENTE ON (T_PRY_ENTIDAD_OFERENTE.seqOferente = T_PRY_ENTIDAD_OFERENTE.seqOferente)                    
+                        WHERE CONCAT(txtNombreProyecto,' [',txtNombreOferente,']') LIKE'%$txtParametro%' 
+                        GROUP BY seqProyecto LIMIT $numLimiteRegistros ";
+        //echo $sql;
         try {
             $objRes = $aptBd->execute($sql);
 

@@ -40,7 +40,7 @@ function almacenarIncripcion() {
     var valid = true;
     $.each($("#frmProyectos input.required"), function (index, value) {
         if (!$(value).val()) {
-            // console.log($(this).attr("id") + " ");
+           //  console.log("paso1");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
             // console.log($(this).attr("id") + "input");
@@ -48,35 +48,38 @@ function almacenarIncripcion() {
         }
 
     });
+   // console.log($("#frmProyectos select.required"));
     $.each($("#frmProyectos select.required"), function (index, value) {
-
         if ($(value).val() == 0) {
+           // console.log($(value).val()+ " ****** "+index+"  ----- "+value);
+            // console.log($(this).attr("id") + "select");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-            console.log($(this).attr("id") + "select");
+          //  console.log($(this).attr("id") + "select");
             valid = false;
         }
     });
     $.each($("#frmProyectos input[type=email].required"), function (index, value) {
         var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
         console.log(caract.test($(value).val()));
+        console.log("paso2");
         if (caract.test($(value).val()) == false) {
             $("#val_" + $(this).attr("id")).css("display", "inline");
             $("#val_" + $(this).attr("id")).html("Correo erroneo! ");
-            console.log($(this).attr("id") + " input email");
+            //console.log($(this).attr("id") + " input email");
             valid = false;
         }
     });
     $.each($("#frmProyectos textArea.required"), function (index, value) {
-
         if ($(value).val() == 0) {
+           // console.log("paso3");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
             // console.log($(this).attr("id"));
             valid = false;
         }
     });
-    //console.log("paso " + valid);
+   
     if (valid) {
         var url = $("#txtArchivo").val();
         // var url = "./contenidos/proyectos/contenidos/datosOferente.php"; // El script a dónde se realizará la petición.
@@ -95,11 +98,12 @@ function almacenarIncripcion() {
 
 function adicionarOferente() {
 
-    var intId = $("#buildyourform select").length + 1;
+    var intId = $("#buildyourform select").length + 1; 
+    alert(intId);
     var fieldWrapper = $("<div class=\"form-group\" id=\"field" + intId + "\" />");
     var fName = "<div id=\"table" + intId + "\"><div class=\"col-md-3\"><label>Oferente(*)</label>";
     var fType = "<select name=\"seqOferente[]\" id=\"seqOferente_" + intId + "\" class=\"form-control required\"   style=\"position: relative;float: left; width: 85%\">";
-    $("#seqOferente option").each(function () {
+    $("#seqOferente_"+(intId-1)+" option").each(function () {
         fType += "<option value=" + $(this).attr('value') + ">" + $(this).text() + "</option>";
     });
     fType += "</select></div>";
@@ -125,6 +129,7 @@ function removerOferente(id) {
 }
 
 function obtenerModalidadProyecto(value) {
+    
     var parametros = {
         "valor": value
     };
@@ -134,10 +139,14 @@ function obtenerModalidadProyecto(value) {
         type: 'post',
         dataType: "json",
         success: function (response) {
+           
             var select = $('#seqPryTipoModalidad');
+            $('#seqPryTipoModalidad').empty();
             var options = select.attr('options');
             var selectedOption = '';
+            $("#seqPryTipoModalidad").append('<option value="0">Seleccione</option>');
             $.each(response, function (val, text) {
+                 
                 $("#seqPryTipoModalidad").append('<option value=' + val + '>' + text + '</option>');
             });
         }

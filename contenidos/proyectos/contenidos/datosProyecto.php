@@ -78,6 +78,7 @@ $arrTipoCuenta = $claDatosProy->obtenerlistaTipoCuenta();
 $arrTutorProyecto = $claDatosProy->obtenerlistaTutor();
 $arrOferente = $claDatosProy->obtenerDatosOferente(0);
 $arrConstructor = $claDatosProy->obtenerDatosConstructor(0);
+ $arrProyectoGrupo = $claDatosProy->obtenerDatosProyectosGrupo(0);
 $arrBarrio = $claDatosProy->obtenerListaBarrios();
 $cantDoc = $claDatosProy->obtenerDocumentoProyecto($idProyecto);
 $arrayDocumentos = $claProyecto->obtenerListaDocumentos($idProyecto, $cantDoc);
@@ -119,7 +120,9 @@ $claSmarty->assign("arrRegistros", $arrRegistros); // Registros de seguimiento
 $claSmarty->assign("arrTipoVivienda", $arrTipoVivienda);
 $claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
 $claSmarty->assign("arrCronogramaFecha", $arrCronogramaFecha);
+$claSmarty->assign("arrProyectoGrupo", $arrProyectoGrupo);
 $claSmarty->assign("id", $id);
+$claSmarty->assign("page", "datosProyecto.php?tipo=2");
 //$claSmarty->assign("arrCronogramaProyecto", $arrCronogramaProyecto);
 //$claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
 

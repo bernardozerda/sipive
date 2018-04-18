@@ -38,6 +38,7 @@ $seqUsuario = $_SESSION['seqUsuario'];
 $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
 $claSmarty->assign("arrayOferentes", $arrOferente);
 $claSmarty->assign("seqUsuario", $seqUsuario);
+$claSmarty->assign("page", "datosOferente.php");
 
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);

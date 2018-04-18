@@ -26,7 +26,7 @@
         <div class="col-md-4 lineaPersonaNatural" id="lineaPersonaNatural" {if $value.bolTipoPersonaInterventor != 1} style="display: none"{/if}> 
             <label class="control-label" >Numero Identificaci&oacute;n</label> 
             <input name="numCedulaInterventor" type="text" id="numCedulaInterventor" value="{$value.numCedulaInterventor}" onblur="sinCaracteresEspeciales(this);
-                                        soloNumeros(this);" class="form-control">
+                    soloNumeros(this);" class="form-control">
         </div>
         <div class="col-md-4 lineaPersonaNatural" id="lineaPersonaNatural" {if $value.bolTipoPersonaInterventor != 1} style="display: none"{/if}> 
             <label class="control-label" >Tarjeta Profesional</label> 
@@ -35,7 +35,7 @@
         <div class="col-md-4 lineaPersonaJuridica"  {if $value.bolTipoPersonaInterventor != 0}style="display: none" {/if}>
             <label class="control-label" >NIT</label>
             <input name="numNitInterventor" type="text" id="numNitInterventor" value="{$value.numNitInterventor}" onblur="sinCaracteresEspeciales(this);
-                                        soloNit(this);" style="width:200px;" class="form-control">
+                    soloNit(this);" style="width:200px;" class="form-control">
         </div>       
         <div class="col-md-4 lineaPersonaJuridica"  {if $value.bolTipoPersonaInterventor != 0} style="display: none" {/if}> 
             <label class="control-label" >Nombre Representante Legal</label>
@@ -69,8 +69,7 @@
                     <input name="txtLicencia[]" type="text" id="txtLicenciaUrbanismo" value="{$valueLic.txtLicencia}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control">
                     <input type="hidden" name="seqProyectoLicencia[]" id="seqProyectoLicencia[]" value="{$valueLic.seqProyectoLicencia}" >
                     <input type="hidden" name="seqTipoLicencia[]" id="seqTipoLicencia[]" value="1" >
-                </div>        
-
+                </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Entidad Expedici&oacute;n</label>                         
                     <input name="txtExpideLicencia[]" type="text" id="txtExpideLicenciaUrbanismo" value="{$valueLic.txtExpideLicencia}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control">

@@ -57,6 +57,7 @@ if (empty($arrErrores)) {
     $arrBarrio = $claDatosProy->obtenerListaBarrios();
     $arrOferente = $claDatosProy->obtenerDatosOferente(0);
     $arrConstructor = $claDatosProy->obtenerDatosConstructor(0);
+    $arrProyectoGrupo = $claDatosProy->obtenerDatosProyectosGrupo(0);
     // Verifica si es para crear o editar la Oferente
     $seqProyecto = 0;
     $seqProyecto = $_POST['seqProyecto'];
@@ -129,6 +130,9 @@ if (empty($arrErrores)) {
     $arrayTipoViviendas[$seqProyecto]['seqTipoVivienda'] = $_POST["seqTipoVivienda"];
     $arrayTipoViviendas[$seqProyecto]['txtNombreTipoVivienda'] = $_POST["txtNombreTipoVivienda"];
     $arrayTipoViviendas[$seqProyecto]['numCantidad'] = $_POST["numCantidad"];
+    $arrayTipoViviendas[$seqProyecto]['numCantUdsDisc'] = $_POST["numCantUdsDisc"];
+    $arrayTipoViviendas[$seqProyecto]['numTotalParq'] = $_POST["numTotalParq"];
+    $arrayTipoViviendas[$seqProyecto]['numCantParqDisc'] = $_POST["numCantParqDisc"];
     $arrayTipoViviendas[$seqProyecto]['numArea'] = $_POST["numArea"];
     $arrayTipoViviendas[$seqProyecto]['numAnoVenta'] = $_POST["numAnoVenta"];
     $arrayTipoViviendas[$seqProyecto]['valPrecioVenta'] = $_POST["valPrecioVenta"];
@@ -170,12 +174,12 @@ if (empty($arrErrores)) {
 
         $claProyecto->modificarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
     }
-   
+
     if ($cantCronograma == 0 && isset($_POST["numActaDescriptiva"])) {
-          
+
         $claProyecto->almacenarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
     } else if (isset($_POST["numActaDescriptiva"])) {
-        echo "paso";
+
         $claProyecto->modificarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
     }
 }/**
@@ -223,7 +227,8 @@ if (empty($arrErrores)) {
     $claSmarty->assign("arrTipoVivienda", $arrTipoVivienda);
     $claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
     $claSmarty->assign("arrCronogramaFecha", $arrCronogramaFecha);
-    $claSmarty->assign("page", "datosProyectos.php");
+    $claSmarty->assign("arrProyectoGrupo", $arrProyectoGrupo);
+    $claSmarty->assign("page", "datosProyectos.php?tipo=2");
     $claSmarty->display($txtPlantilla);
 } else {
     imprimirMensajes($arrErrores, array());

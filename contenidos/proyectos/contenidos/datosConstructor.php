@@ -40,6 +40,7 @@ $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
 $claSmarty->assign("arrConstructor", $arrConstructor);
 $claSmarty->assign("arrTipoDoc", $arrTipoDoc);
 $claSmarty->assign("seqUsuario", $seqUsuario);
+$claSmarty->assign("page", "datosConstructor.php");
 
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);

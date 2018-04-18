@@ -42,7 +42,7 @@ class DatosGeneralesProyectos {
         global $aptBd;
 
         $sql = "SELECT * FROM  t_pry_entidad_oferente  entO"
-               . " LEFT JOIN t_pry_proyecto_oferente proyOf USING(seqOferente)  ";
+                . " LEFT JOIN t_pry_proyecto_oferente proyOf USING(seqOferente)  ";
         if ($seqProyecto > 0) {
             $sql .= " where proyOf.seqProyecto = " . $seqProyecto;
         }
@@ -99,10 +99,10 @@ class DatosGeneralesProyectos {
                ";
         if ($seqProyecto > 0) {
             $sql .= " where seqProyecto = " . $seqProyecto;
-        }else{
+        } else {
             $sql .= " where seqProyectoPadre is null";
         }
-        
+
         $sql . " ORDER BY seqProyecto asc";
 
         $objRes = $aptBd->execute($sql);
@@ -556,7 +556,7 @@ class DatosGeneralesProyectos {
 
     public function obtenerCantLicencias($seqProyecto) {
         global $aptBd;
-       echo $sqlIn = "select count(*) AS cant from t_pry_proyecto_licencias where seqProyecto = " . $seqProyecto;
+        $sqlIn = "select count(*) AS cant from t_pry_proyecto_licencias where seqProyecto = " . $seqProyecto;
         $objResIn = $aptBd->execute($sqlIn);
         $cant = 0;
         while ($objResIn->fields) {
@@ -565,10 +565,10 @@ class DatosGeneralesProyectos {
         }
         return $cant;
     }
-    
+
     public function obtenerCantCronogramas($seqProyecto) {
         global $aptBd;
-       echo  $sqlIn = "select count(*) AS cant from t_pry_cronograma_fechas where seqProyecto = " . $seqProyecto;
+        $sqlIn = "select count(*) AS cant from t_pry_cronograma_fechas where seqProyecto = " . $seqProyecto;
         $objResIn = $aptBd->execute($sqlIn);
         $cant = 0;
         while ($objResIn->fields) {
@@ -595,7 +595,10 @@ class DatosGeneralesProyectos {
         while ($objRes->fields) {
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['seqTipoVivienda'] = $objRes->fields['seqTipoVivienda'];
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['txtNombreTipoVivienda'] = $objRes->fields['txtNombreTipoVivienda'];
-            $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numCantidad'] = $objRes->fields['numCantidad'];
+            $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numCantidad'] = $objRes->fields['numCantidad'];            
+            $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numCantUdsDisc'] = $objRes->fields['numCantUdsDisc'];
+            $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numTotalParq'] = $objRes->fields['numTotalParq'];
+            $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numCantParqDisc'] = $objRes->fields['numCantParqDisc'];            
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numArea'] = $objRes->fields['numArea'];
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numAnoVenta'] = $objRes->fields['numAnoVenta'];
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['valPrecioVenta'] = $objRes->fields['valPrecioVenta'];
@@ -617,8 +620,8 @@ class DatosGeneralesProyectos {
         }
         return $cant;
     }
-    
-     public function obtenerCantTipoVivienda($seqProyecto) {
+
+    public function obtenerCantTipoVivienda($seqProyecto) {
         global $aptBd;
         $sqlIn = "select count(*) AS cant from t_pry_tipo_vivienda where seqProyecto = " . $seqProyecto;
         $objResIn = $aptBd->execute($sqlIn);
@@ -723,6 +726,25 @@ class DatosGeneralesProyectos {
             $objRes->MoveNext();
         }
         return $arrCronogramaFecha;
+    }
+
+    public function obtenerDatosProyectosGrupo($seqProyectoGrupo) {
+
+        global $aptBd;
+
+        $sql = "SELECT * FROM  t_pry_proyecto_grupo where bolActivo = 1 ";
+        if ($seqProyectoGrupo > 0) {
+            $sql .= " and  seqProyectoGrupo = " . $seqProyectoGrupo;
+        }
+        $sql . " ORDER BY seqProyectoGrupo";
+
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
     }
 
 }

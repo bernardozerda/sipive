@@ -2649,18 +2649,18 @@ function cuadroBusquedaAvanzada(idDestino) {
         if (numAlto == 1) {
             objCuadro.style.display = "none";
             objIcono.style.background = '#299BAE';
-             objIcono.style.backgroundImage = "url('recursos/imagenes/openMenu.png')";
-            objIcono.style.backgroundRepeat = 'no-repeat'; 
-            objIcono.style.backgroundPositionY  = '32%';
+            objIcono.style.backgroundImage = "url('recursos/imagenes/openMenu.png')";
+            objIcono.style.backgroundRepeat = 'no-repeat';
+            objIcono.style.backgroundPositionY = '32%';
         }
     }
-    var animacionCompleta = function () {        
+    var animacionCompleta = function () {
         if (numAlto == 100) {
             objCuadro.style.display = "block";
             objIcono.style.background = '#204d74';
             objIcono.style.backgroundImage = "url('recursos/imagenes/searchMore.png')";
             objIcono.style.backgroundRepeat = 'no-repeat';
-            objIcono.style.backgroundPositionY  = '32%';
+            objIcono.style.backgroundPositionY = '32%';
         }
     }
 
@@ -8653,10 +8653,8 @@ function addCronogramaFechas() {
     addDiv += "<div class='col-md-3'><label class='control-label'>Terminación</label><br /><input name='fchFinalEscrituracion[]' type='text' id='fchFinalEscrituracion[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchFinalEscrituracion[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a>";
     addDiv += "<img src='recursos/imagenes/remove.png' width='22px' onclick='return confirmaRemoverLineaFormulario(this);' style='position: relative; float: right; right: 15%'></div><p>&nbsp;</p></div></td>";
     myNewCell = myNewRow.insertCell(-1);
- 
-    myNewCell.innerHTML = addDiv;
-	
-    indiceFilaFormulario++;
+     myNewCell.innerHTML = addDiv;
+     indiceFilaFormulario++;
 }
 
 // ADICIONAR LINEAS AL TIPO DE VIVIENDA (ESTRUCTURA DEL PROYECTO)

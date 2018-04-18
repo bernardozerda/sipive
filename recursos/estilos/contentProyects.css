@@ -58,7 +58,7 @@ strong {
 
 label {
     font-weight: normal;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 input {
@@ -1547,7 +1547,8 @@ label{
     display:inline-block;
     max-width:100%;
     margin-bottom:2px;
-    font-weight:700
+    font-weight: bold;
+    font-size: 12px;
 }
 input[type=search]{
     -webkit-box-sizing:border-box;
@@ -1647,7 +1648,7 @@ input[type=search]{
     margin-bottom:10px
 }
 .checkbox label,.radio label{
-    min-height:20px;
+    min-height:15px;
     padding-left:20px;
     margin-bottom:0;
     font-weight:400;
@@ -2788,7 +2789,7 @@ select[multiple].input-group-sm>.form-control,select[multiple].input-group-sm>.i
 }
 @media (min-width:768px){
     .nav-tabs.nav-justified>li>a{
-        height: 45px;
+        /* height: 45px;*/
         border-bottom:1px solid #ddd;
         border-radius:20px 0px 0 0
     }
@@ -2871,8 +2872,8 @@ select[multiple].input-group-sm>.form-control,select[multiple].input-group-sm>.i
 }
 .navbar{
     position:relative;
-   /* min-height:50px;
-    margin-bottom:20px;*/
+    /* min-height:50px;
+     margin-bottom:20px;*/
     border:1px solid transparent
 }
 @media (min-width:768px){

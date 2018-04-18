@@ -11,7 +11,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "Gestion
 
 $claGestion = new GestionFinancieraProyectos();
 $claGestion->proyectos();
-$claGestion->salvarLiberacion($_POST);
+$claGestion->eliminarLiberacion($_POST);
 
 $claSmarty->assign("claGestion", $claGestion);
 $claSmarty->assign("arrPost", $_POST);

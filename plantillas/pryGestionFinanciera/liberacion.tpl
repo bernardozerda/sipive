@@ -4,6 +4,20 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
       integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+{if not empty($claGestion->arrErrores)}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Hay Errores!</strong> {$claGestion->arrErrores.0}
+    </div>
+{/if}
+
+{if not empty($claGestion->arrMensajes)}
+    <div class="alert alert-success alert-dismissible" role="alert" style="font-size: 12px">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Hecho!</strong> {$claGestion->arrMensajes.0}
+    </div>
+{/if}
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h6 class="panel-title">
@@ -45,13 +59,14 @@
                             <td class="h5 text-right">$ {$arrResolucion.liberaciones|abs|number_format:0:',':'.'}</td>
                             <td class="h5 text-right">$ {$arrResolucion.saldo|abs|number_format:0:',':'.'}</td>
                             <td align="center">
-                                <button type="button" class="btn btn-default btn-xs" onclick="mostrarOcultar('cdpDisponibles')">
+                                <button type="button" class="btn btn-default btn-xs" onclick="mostrarOcultar('cdpDisponibles{$seqUnidadActoPrimario}')">
                                     <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Detalle
                                 </button>
                             </td>
                         </tr>
                         <tr>
-                            <td id="cdpDisponibles" colspan="5" style="display: none">
+                            <td id="cdpDisponibles{$seqUnidadActoPrimario}" colspan="5"
+                                style="display: {if not (isset($arrPost.seqUnidadActoPrimario) and $seqUnidadActoPrimario == $arrPost.seqUnidadActoPrimario)} none {/if}">
                                 <table class="table table-striped" cellspacing="0" cellpadding="0" width="100%">
                                     <thead>
                                         <tr>
@@ -91,15 +106,16 @@
                                                             $ {$arrCDP.saldo|number_format:0:',':'.'}
                                                         </td>
                                                         <td>
-                                                            <form id="frm{$seqUnidadActoPrimario}-{$seqRegistroPresupuestal}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/salvarLiberacion.php',false, true); return false">
+                                                            <form id="Slv{$seqUnidadActoPrimario}-{$seqRegistroPresupuestal}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/salvarLiberacion.php',false, true); return false">
                                                                 <input type="text" name="valor" onkeyup="formatoSeparadores(this)" style="width: 100px;">
                                                                 <input type="hidden" name="seqUnidadActoPrimario" value="{$seqUnidadActoPrimario}">
                                                                 <input type="hidden" name="seqUnidadActo" value="{$seqUnidadActo}">
                                                                 <input type="hidden" name="seqRegistroPresupuestal" value="{$seqRegistroPresupuestal}">
+                                                                <input type="hidden" name="seqProyecto" value="{$arrPost.seqProyecto}">
                                                             </form>
                                                         </td>
                                                         <td class="text-center">
-                                                            <button type="button" class="btn btn-primary btn-xs text-center" onClick="$('#frm{$seqUnidadActoPrimario}-{$seqRegistroPresupuestal}').submit();">
+                                                            <button type="button" class="btn btn-primary btn-xs text-center" onClick="$('#Slv{$seqUnidadActoPrimario}-{$seqRegistroPresupuestal}').submit();">
                                                                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Salvar
                                                             </button>&nbsp;
                                                             <button type="button" class="btn btn-default btn-xs text-center" onclick="mostrarOcultar('cdpLiberaciones{$seqRegistroPresupuestal}')">
@@ -108,7 +124,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="7" id="cdpLiberaciones{$seqRegistroPresupuestal}" style="display: none">
+                                                        <td colspan="7" id="cdpLiberaciones{$seqRegistroPresupuestal}"
+                                                            style="display: {if not (isset($arrPost.seqRegistroPresupuestal) and $seqRegistroPresupuestal == $arrPost.seqRegistroPresupuestal)} none {/if}">
                                                             <table class="table table-striped" cellspacing="0" cellpadding="0" width="100%">
                                                                 <thead>
                                                                     <tr>
@@ -125,9 +142,15 @@
                                                                             <td class="text-center" width="150px">{$arrRegistro.fecha->format('Y-m-d H:i:s')}</td>
                                                                             <td>{$arrRegistro.usuario}</td>
                                                                             <td width="100px" class="text-right">
-                                                                                <button type="button" class="btn btn-danger btn-xs">
-                                                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
-                                                                                </button>
+                                                                                <form id="Del{$seqLiberacion}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/eliminarLiberacion.php',false, true); return false">
+                                                                                    <button type="submit" class="btn btn-danger btn-xs">
+                                                                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
+                                                                                    </button>
+                                                                                    <input type="hidden" name="seqUnidadActoPrimario" value="{$seqUnidadActoPrimario}">
+                                                                                    <input type="hidden" name="seqRegistroPresupuestal" value="{$seqRegistroPresupuestal}">
+                                                                                    <input type="hidden" name="seqProyecto" value="{$arrPost.seqProyecto}">
+                                                                                    <input type="hidden" name="seqLiberacion" value="{$seqLiberacion}">
+                                                                                </form>
                                                                             </td>
                                                                         </tr>
                                                                     {/foreach}

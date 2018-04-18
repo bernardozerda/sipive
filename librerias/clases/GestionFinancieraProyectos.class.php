@@ -5,11 +5,15 @@ class GestionFinancieraProyectos
 
     public $arrProyectos;
     public $arrResoluciones;
+    public $arrErrores;
+    public $arrMensajes;
 
     public function __construct()
     {
         $this->arrProyectos = array();
         $this->arrResoluciones = array();
+        $this->arrErrores = array();
+        $this->arrMensajes = array();
     }
 
     /**
@@ -38,6 +42,8 @@ class GestionFinancieraProyectos
     }
 
     public function informacionProyecto($seqProyecto){
+
+        $this->arrResoluciones = array();
 
         $this->datosBasicos($seqProyecto);
 
@@ -178,6 +184,119 @@ class GestionFinancieraProyectos
     }
 
     private function giros($seqProyecto){
+
+    }
+
+    public function salvarLiberacion($arrPost){
+        global $aptBd;
+
+        // carga la infomacion previa para hacer las validaciones
+        $this->informacionProyecto($arrPost['seqProyecto']);
+
+        // datos necesarios
+        $valLiberado = doubleval(mb_ereg_replace("[^0-9]","", $arrPost['valor']));
+        $seqUnidadActoPrimario = $arrPost['seqUnidadActoPrimario'];
+        $seqUnidadActo = $arrPost['seqUnidadActo'];
+        $seqRegistroPresupuestal = $arrPost['seqRegistroPresupuestal'];
+
+        // validacion del valor
+        if($valLiberado == 0){
+            $this->arrErrores[] = "No debe dejar vacío el valor a liberar";
+        }
+
+        // validacion para liberacion del CDP
+        if(isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'])){
+            if($valLiberado > $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']){
+                $this->arrErrores[] = "No hay suficientes recursos para liberar del RP " .
+                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['numeroRP'] . " del " .
+                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['fechaRP']->format("Y");
+            }
+        }else{
+            if($valLiberado > $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP']){
+                $this->arrErrores[] = "No hay suficientes recursos para liberar del RP " .
+                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['numeroRP'] . " del " .
+                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['fechaRP']->format("Y");
+            }
+        }
+
+        // validacion contra la resolucion de liberacion
+        if(isset($this->arrResoluciones[$seqUnidadActoPrimario]['saldo'])){
+            if($valLiberado > abs($this->arrResoluciones[$seqUnidadActoPrimario]['saldo'])){
+                $this->arrErrores[] = "No hay suficientes recursos para liberar de la resolución " .
+                    $this->arrResoluciones[$seqUnidadActoPrimario]['numero'] . " del " .
+                    $this->arrResoluciones[$seqUnidadActoPrimario]['fecha']->format("Y");
+            }
+        }else{
+            if($valLiberado > abs($this->arrResoluciones[$seqUnidadActoPrimario]['total'])){
+                $this->arrErrores[] = "No hay suficientes recursos para liberar de la resolución " .
+                    $this->arrResoluciones[$seqUnidadActoPrimario]['numero'] . " del " .
+                    $this->arrResoluciones[$seqUnidadActoPrimario]['fecha']->format("Y");
+            }
+        }
+
+        // salva registro
+        if(empty($this->arrErrores)){
+
+            try{
+                $aptBd->BeginTrans();
+
+                $sql = "
+                    insert into t_pry_aad_liberacion(
+                        seqUnidadActo,
+                        seqRegistroPresupuestal,
+                        valLiberado,
+                        fchLiberacion,
+                        seqUsuario
+                    ) values (
+                        $seqUnidadActoPrimario,
+                        $seqRegistroPresupuestal,
+                        " . ($valLiberado * -1) . ",
+                        now(),
+                        " . $_SESSION['seqUsuario'] . "  
+                    )
+                ";
+                $aptBd->execute($sql);
+
+                $this->arrMensajes[] = "Registro de liberación de recursos ha sido salvado";
+
+                // carga la informacion posterior a la salvada del registro
+                $this->informacionProyecto($arrPost['seqProyecto']);
+
+                $aptBd->CommitTrans();
+            } catch ( Exception $objError ){
+                $aptBd->RollbackTrans();
+                $this->arrErrores[] = $objError->getMessage();
+                $this->Mensajes[] = array();
+            }
+
+        }
+
+    }
+
+    public function eliminarLiberacion($arrPost){
+        global $aptBd;
+
+        try{
+            $aptBd->BeginTrans();
+
+            $sql = "
+                delete 
+                from t_pry_aad_liberacion
+                where seqLiberacion = " . $arrPost['seqLiberacion'] . "
+            ";
+            $aptBd->execute($sql);
+
+            $this->arrMensajes[] = "Registro de liberación de recursos eliminado";
+
+            // carga la informacion posterior a la salvada del registro
+            $this->informacionProyecto($arrPost['seqProyecto']);
+
+            $aptBd->CommitTrans();
+        } catch ( Exception $objError ){
+            $aptBd->RollbackTrans();
+            $this->arrErrores[] = $objError->getMessage();
+            $this->Mensajes[] = array();
+        }
 
     }
 

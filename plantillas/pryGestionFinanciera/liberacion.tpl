@@ -84,81 +84,86 @@
                                         {foreach name=secondary from=$claGestion->arrResoluciones key=seqUnidadActo item=arrResolucion}
                                             {if $arrResolucion.total > 0}
                                                 {math equation="x * y" x=$arrResolucion.cdp|@count y=2 assign=rowSpan}
-                                                <tr><td rowspan="{$rowSpan}">
+                                                <tr>
+                                                <td {if $rowSpan != 0} rowspan="{$rowSpan}" {/if}>
                                                     {$arrResolucion.tipo}<br>{$arrResolucion.numero} de {$arrResolucion.fecha->format(Y)}
                                                 </td>
-                                                {foreach name=cdp from=$arrResolucion.cdp key=seqRegistroPresupuestal item=arrCDP}
-                                                    {if not $smarty.foreach.cdp.first}<tr>{/if}
-                                                        <td class="text-left">
-                                                            <strong><u>C:</u></strong> {$arrCDP.numeroCDP} de {$arrCDP.fechaCDP->format(Y)}<br>
-                                                            <strong><u>R:</u></strong> {$arrCDP.numeroRP} de {$arrCDP.fechaRP->format(Y)}
-                                                        </td>
-                                                        <td class="text-right">
-                                                            $ {$arrCDP.valorRP|number_format:0:',':'.'}
-                                                        </td>
-                                                        <td class="text-right">
-                                                            $ {$arrCDP.giros|number_format:0:',':'.'}
-                                                        </td>
-                                                        <td class="text-right">
-                                                            $ {$arrCDP.liberaciones|abs|number_format:0:',':'.'}
-                                                        </td>
-                                                        <td class="text-right">
-                                                            $ {$arrCDP.saldo|number_format:0:',':'.'}
-                                                        </td>
-                                                        <td>
-                                                            <form id="Slv{$seqUnidadActoPrimario}-{$seqRegistroPresupuestal}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/salvarLiberacion.php',false, true); return false">
-                                                                <input type="text" name="valor" onkeyup="formatoSeparadores(this)" style="width: 100px;">
-                                                                <input type="hidden" name="seqUnidadActoPrimario" value="{$seqUnidadActoPrimario}">
-                                                                <input type="hidden" name="seqUnidadActo" value="{$seqUnidadActo}">
-                                                                <input type="hidden" name="seqRegistroPresupuestal" value="{$seqRegistroPresupuestal}">
-                                                                <input type="hidden" name="seqProyecto" value="{$arrPost.seqProyecto}">
-                                                            </form>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <button type="button" class="btn btn-primary btn-xs text-center" onClick="$('#Slv{$seqUnidadActoPrimario}-{$seqRegistroPresupuestal}').submit();">
-                                                                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Salvar
-                                                            </button>&nbsp;
-                                                            <button type="button" class="btn btn-default btn-xs text-center" onclick="mostrarOcultar('cdpLiberaciones{$seqRegistroPresupuestal}')">
-                                                                <span class="h4">+</span>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="7" id="cdpLiberaciones{$seqRegistroPresupuestal}"
-                                                            style="display: {if not (isset($arrPost.seqRegistroPresupuestal) and $seqRegistroPresupuestal == $arrPost.seqRegistroPresupuestal)} none {/if}">
-                                                            <table class="table table-striped" cellspacing="0" cellpadding="0" width="100%">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th class="text-right">Valor</th>
-                                                                        <th class="text-center">Fecha</th>
-                                                                        <th>Usuario</th>
-                                                                        <th></th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    {foreach from=$claGestion->arrResoluciones.$seqUnidadActoPrimario.cdp.$seqRegistroPresupuestal.detalle key=seqLiberacion item=arrRegistro}
+                                                {if not empty($arrResolucion.cdp)}
+                                                    {foreach name=cdp from=$arrResolucion.cdp key=seqRegistroPresupuestal item=arrCDP}
+                                                        {if not $smarty.foreach.cdp.first}<tr>{/if}
+                                                            <td class="text-left">
+                                                                <strong><u>C:</u></strong> {$arrCDP.numeroCDP} de {$arrCDP.fechaCDP->format(Y)}<br>
+                                                                <strong><u>R:</u></strong> {$arrCDP.numeroRP} de {$arrCDP.fechaRP->format(Y)}
+                                                            </td>
+                                                            <td class="text-right">
+                                                                $ {$arrCDP.valorRP|number_format:0:',':'.'}
+                                                            </td>
+                                                            <td class="text-right">
+                                                                $ {$arrCDP.giros|number_format:0:',':'.'}
+                                                            </td>
+                                                            <td class="text-right">
+                                                                $ {$arrCDP.liberaciones|abs|number_format:0:',':'.'}
+                                                            </td>
+                                                            <td class="text-right">
+                                                                $ {$arrCDP.saldo|number_format:0:',':'.'}
+                                                            </td>
+                                                            <td>
+                                                                <form id="Slv{$seqUnidadActoPrimario}-{$seqRegistroPresupuestal}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/salvarLiberacion.php',false, true); return false">
+                                                                    <input type="text" name="valor" onkeyup="formatoSeparadores(this)" style="width: 100px;">
+                                                                    <input type="hidden" name="seqUnidadActoPrimario" value="{$seqUnidadActoPrimario}">
+                                                                    <input type="hidden" name="seqUnidadActo" value="{$seqUnidadActo}">
+                                                                    <input type="hidden" name="seqRegistroPresupuestal" value="{$seqRegistroPresupuestal}">
+                                                                    <input type="hidden" name="seqProyecto" value="{$arrPost.seqProyecto}">
+                                                                </form>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-primary btn-xs text-center" onClick="$('#Slv{$seqUnidadActoPrimario}-{$seqRegistroPresupuestal}').submit();">
+                                                                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Salvar
+                                                                </button>&nbsp;
+                                                                <button type="button" class="btn btn-default btn-xs text-center" onclick="mostrarOcultar('cdpLiberaciones{$seqRegistroPresupuestal}')">
+                                                                    <span class="h4">+</span>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="7" id="cdpLiberaciones{$seqRegistroPresupuestal}"
+                                                                style="display: {if not (isset($arrPost.seqRegistroPresupuestal) and $seqRegistroPresupuestal == $arrPost.seqRegistroPresupuestal)} none {/if}">
+                                                                <table class="table table-striped" cellspacing="0" cellpadding="0" width="100%">
+                                                                    <thead>
                                                                         <tr>
-                                                                            <td class="text-right" width="120px">$ {$arrRegistro.valor|abs|number_format:0:',':'.'}</td>
-                                                                            <td class="text-center" width="150px">{$arrRegistro.fecha->format('Y-m-d H:i:s')}</td>
-                                                                            <td>{$arrRegistro.usuario}</td>
-                                                                            <td width="100px" class="text-right">
-                                                                                <form id="Del{$seqLiberacion}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/eliminarLiberacion.php',false, true); return false">
-                                                                                    <button type="submit" class="btn btn-danger btn-xs">
-                                                                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
-                                                                                    </button>
-                                                                                    <input type="hidden" name="seqUnidadActoPrimario" value="{$seqUnidadActoPrimario}">
-                                                                                    <input type="hidden" name="seqRegistroPresupuestal" value="{$seqRegistroPresupuestal}">
-                                                                                    <input type="hidden" name="seqProyecto" value="{$arrPost.seqProyecto}">
-                                                                                    <input type="hidden" name="seqLiberacion" value="{$seqLiberacion}">
-                                                                                </form>
-                                                                            </td>
+                                                                            <th class="text-right">Valor</th>
+                                                                            <th class="text-center">Fecha</th>
+                                                                            <th>Usuario</th>
+                                                                            <th></th>
                                                                         </tr>
-                                                                    {/foreach}
-                                                                </tbody>
-                                                            </table>
-                                                        </td>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {foreach from=$claGestion->arrResoluciones.$seqUnidadActoPrimario.cdp.$seqRegistroPresupuestal.detalle key=seqLiberacion item=arrRegistro}
+                                                                            <tr>
+                                                                                <td class="text-right" width="120px">$ {$arrRegistro.valor|abs|number_format:0:',':'.'}</td>
+                                                                                <td class="text-center" width="150px">{$arrRegistro.fecha->format('Y-m-d H:i:s')}</td>
+                                                                                <td>{$arrRegistro.usuario}</td>
+                                                                                <td width="100px" class="text-right">
+                                                                                    <form id="Del{$seqLiberacion}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/eliminarLiberacion.php',false, true); return false">
+                                                                                        <button type="submit" class="btn btn-danger btn-xs">
+                                                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
+                                                                                        </button>
+                                                                                        <input type="hidden" name="seqUnidadActoPrimario" value="{$seqUnidadActoPrimario}">
+                                                                                        <input type="hidden" name="seqRegistroPresupuestal" value="{$seqRegistroPresupuestal}">
+                                                                                        <input type="hidden" name="seqProyecto" value="{$arrPost.seqProyecto}">
+                                                                                        <input type="hidden" name="seqLiberacion" value="{$seqLiberacion}">
+                                                                                    </form>
+                                                                                </td>
+                                                                            </tr>
+                                                                        {/foreach}
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    {/foreach}
+                                                {else}
                                                     </tr>
-                                                {/foreach}
+                                                {/if}
                                             {/if}
                                         {/foreach}
                                     </tbody>

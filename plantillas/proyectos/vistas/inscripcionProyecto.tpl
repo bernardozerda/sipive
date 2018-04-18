@@ -587,7 +587,7 @@
                 {include file="proyectos/secCronogramaFechas.tpl"}
             </div>
             <div id="datosPolizas" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
-               {include file="proyectos/vistas/inscripcionPoliza.tpl"}
+               prueba
             </div>
         {/foreach}
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -17,20 +17,22 @@
                 <th align="center">Vinculados</th>
                 <th align="center">Creación</th>
                 <th align="center">Usuario</th>
+                <th align="center" style="display:none">Proyectos</th>
                 <th align="center"></th>
                 <th align="center"></th>
             </thead>
             <tbody>
-                {foreach from=$arrActos item=arrActo}
+                {foreach from=$arrActos key=seqUnidadActo item=arrActo}
                     <tr>
-                        <td>{$arrActo.txtTipoActoUnidad}</td>
-                        <td>{$arrActo.numActo}</td>
-                        <td>{$arrActo.fchActo}</td>
-                        <td>{$arrActo.numVinculados}</td>
-                        <td>{$arrActo.fchCreacion}</td>
-                        <td>{$arrActo.txtUsuario}</td>
+                        <td>{$arrActo.tipo}</td>
+                        <td>{$arrActo.numero}</td>
+                        <td>{$arrActo.fecha}</td>
+                        <td>{$arrActo.unidades|@count}</td>
+                        <td>{$arrActo.creacion}</td>
+                        <td>{$arrActo.usuario}</td>
+                        <td style="display:none">{$arrActo.proyectos|@implode:','}</td>
                         <td>
-                            <a href="#" onClick="cargarContenido('contenido','./contenidos/aadProyectos/ver.php','seqUnidadActo={$arrActo.seqUnidadActo}',true);">
+                            <a href="#" onClick="cargarContenido('contenido','./contenidos/aadProyectos/ver.php','seqUnidadActo={$seqUnidadActo}',true);">
                                 <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" style="cursor: pointer"></span>
                             </a>
                         </td>

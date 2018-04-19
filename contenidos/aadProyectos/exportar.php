@@ -1,5 +1,7 @@
 <?php
 
+ini_set("memory_limit","-1");
+
 $txtPrefijoRuta = "../../";
 
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );

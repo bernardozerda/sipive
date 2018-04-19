@@ -45,6 +45,28 @@ class aadProyectos
             $txtCondicion .= (intval($numActo) != 0) ? "and uac.numActo = " . $numActo : "";
             $txtCondicion .= (esFechaValida($fchActo) != 0) ? "and uac.fchActo = " . $fchActo : "";
 
+//select
+//uac.seqUnidadActo,
+//tac.txtTipoActoUnidad,
+//uac.numActo,
+//uac.fchActo,
+//uac.fchCreacion,
+//concat(usu.txtNombre,' ', usu.txtApellido) as txtUsuario,
+//count(distinct uvi.seqUnidadProyecto) as numVinculados
+//from t_pry_aad_unidad_acto uac
+//inner join t_pry_aad_unidad_tipo_acto tac on uac.seqTipoActoUnidad = tac.seqTipoActoUnidad
+//inner join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
+//inner join t_cor_usuario usu on uac.seqUsuario = usu.seqUsuario
+//where 1 = 1 $txtCondicion
+//group by
+//tac.txtTipoActoUnidad,
+//uac.numActo,
+//uac.fchActo,
+//uac.fchCreacion,
+//concat(usu.txtNombre,' ', usu.txtApellido)
+//order by
+//uac.fchCreacion desc
+
             $sql = "
                 select 
                     uac.seqUnidadActo,
@@ -53,23 +75,38 @@ class aadProyectos
                     uac.fchActo, 
                     uac.fchCreacion, 
                     concat(usu.txtNombre,' ', usu.txtApellido) as txtUsuario,
-                    count(distinct uvi.seqUnidadProyecto) as numVinculados
+                    uvi.seqUnidadProyecto,
+                    uvi.seqProyecto,
+                    pry.txtNombreProyecto
                 from t_pry_aad_unidad_acto uac
                 inner join t_pry_aad_unidad_tipo_acto tac on uac.seqTipoActoUnidad = tac.seqTipoActoUnidad
                 inner join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
                 inner join t_cor_usuario usu on uac.seqUsuario = usu.seqUsuario
-                where 1 = 1 $txtCondicion
-                group by 
-                    tac.txtTipoActoUnidad,
-                    uac.numActo, 
-                    uac.fchActo, 
-                    uac.fchCreacion, 
-                    concat(usu.txtNombre,' ', usu.txtApellido)
+                left join t_pry_proyecto pry on uvi.seqProyecto = pry.seqProyecto
+                where 1 = 1
+                  $txtCondicion
                 order by                
                     uac.fchCreacion desc
             ";
+            $objRes = $aptBd->execute($sql);
+            $arrListado = array();
+            while($objRes->fields){
 
-            return $aptBd->GetAll($sql);
+                $seqUnidadActo = $objRes->fields['seqUnidadActo'];
+                $seqProyecto = $objRes->fields['seqProyecto'];
+
+                $arrListado[$seqUnidadActo]['tipo'] = $objRes->fields['txtTipoActoUnidad'];
+                $arrListado[$seqUnidadActo]['numero'] = $objRes->fields['numActo'];
+                $arrListado[$seqUnidadActo]['fecha'] = $objRes->fields['fchActo'];
+                $arrListado[$seqUnidadActo]['creacion'] = $objRes->fields['fchCreacion'];
+                $arrListado[$seqUnidadActo]['usuario'] = $objRes->fields['txtUsuario'];
+                $arrListado[$seqUnidadActo]['unidades'][] = $objRes->fields['seqUnidadProyecto'];
+                $arrListado[$seqUnidadActo]['proyectos'][$seqProyecto] = $objRes->fields['txtNombreProyecto'];
+
+                $objRes->MoveNext();
+            }
+
+            return $arrListado;
 
         } catch( Exception $objError ){
 

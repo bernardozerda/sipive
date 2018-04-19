@@ -320,7 +320,7 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
 
         // para paso a hogar calificado (53) o postulado (54)
         if ($arrDatos['estado'] == 53 || $arrDatos['estado'] == 54) {
-            $claFormulario->seqTipoEsquema = "1";
+//            $claFormulario->seqTipoEsquema = "1";
         }
 
         $claFormulario->txtComentario = $arrDatos['comentario'];

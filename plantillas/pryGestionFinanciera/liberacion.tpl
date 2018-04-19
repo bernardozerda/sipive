@@ -18,27 +18,27 @@
     </div>
 {/if}
 
+<form class="form-inline">
+    <div class="form-group">
+        <label for="seqProyecto"><h5>Proyecto</h5></label>&nbsp;&nbsp;&nbsp;
+        <select id="seqProyecto" class="form-control input-sm" name="seqProyecto" onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/liberacion.php',false,true);">
+            <option value="0">Seleccione Proyecto</option>
+            {foreach from=$claGestion->arrProyectos key=seqProyecto item=txtNombreProyecto}
+                <option value="{$seqProyecto}" {if $arrPost.seqProyecto == $seqProyecto} selected {/if}>
+                    {$txtNombreProyecto}
+                </option>
+            {/foreach}
+        </select>
+    </div>
+</form>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h6 class="panel-title">
-            Liberación de Recursos
+            Actos Administrativos de Liberación de Recursos
         </h6>
     </div>
     <div class="panel-body">
-
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="seqProyecto"><h5>Proyecto</h5></label>&nbsp;&nbsp;&nbsp;
-                <select id="seqProyecto" class="form-control input-sm" name="seqProyecto" onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/liberacion.php',false,true);">
-                    <option value="0">Seleccione Proyecto</option>
-                    {foreach from=$claGestion->arrProyectos key=seqProyecto item=txtNombreProyecto}
-                        <option value="{$seqProyecto}" {if $arrPost.seqProyecto == $seqProyecto} selected {/if}>
-                            {$txtNombreProyecto}
-                        </option>
-                    {/foreach}
-                </select>
-            </div>
-        </form>
 
         <table class="table table-striped" cellpadding="0" cellspacing="0">
             <thead>
@@ -51,8 +51,10 @@
             </tr>
             </thead>
             <tbody>
+                {assign var=bolResoluciones value=false}
                 {foreach name=main from=$claGestion->arrResoluciones key=seqUnidadActoPrimario item=arrResolucion}
                     {if $arrResolucion.total < 0}
+                        {assign var=bolResoluciones value=true}
                         <tr>
                             <td class="h5 text-left">{$arrResolucion.tipo} {$arrResolucion.numero} de {$arrResolucion.fecha->format(Y)}</td>
                             <td class="h5 text-right">$ {$arrResolucion.total|abs|number_format:0:',':'.'}</td>
@@ -69,6 +71,11 @@
                                 style="display: {if not (isset($arrPost.seqUnidadActoPrimario) and $seqUnidadActoPrimario == $arrPost.seqUnidadActoPrimario)} none {/if}">
                                 <table class="table table-striped" cellspacing="0" cellpadding="0" width="100%">
                                     <thead>
+                                        <tr>
+                                            <td style="background-color: #D9EDF7; color: #31708F;" colspan="8" class="text-center h5">
+                                                Actos administrativos disponibles para liberar recursos
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <th width="100px"></th>
                                             <th width="100px"></th>
@@ -174,6 +181,12 @@
                 {/foreach}
             </tbody>
         </table>
+
+        {if $bolResoluciones == false and $arrPost.seqProyecto != 0}
+            <div class="alert alert-warning alert-dismissible" role="alert" style="font-size: 12px">
+                <strong>Atención!</strong> No hay información de resoluciones disponibles para liberación de recursos para este proyecto
+            </div>
+        {/if}
 
     </div>
     <div class="panel-footer" align="center">

@@ -1036,58 +1036,29 @@ class Proyecto {
                         seqUsuario = " . $_SESSION['seqUsuario'] . " 
                     WHERE seqProyecto = $seqProyectoHijo;";
             } else if ($cant >= $exeExistentes->numRows()) {
-                $query = "INSERT INTO T_PRY_PROYECTO (
-                            txtNombreProyecto,
-                            txtNombreComercial,
-                            seqProyectoPadre,
-                            txtDireccion,
-                            valNumeroSoluciones,
-                            txtMatriculaInmobiliariaLote,
-                            txtChipLote,
-                            txtLicenciaUrbanismo,
-                            fchLicenciaUrbanismo1,
-                            fchVigenciaLicenciaUrbanismo,
-                            txtExpideLicenciaUrbanismo,
-                            txtLicenciaConstruccion,
-                            fchLicenciaConstruccion1,
-                            fchVigenciaLicenciaConstruccion,
-                            txtNombreVendedor,
-                            numNitVendedor,
-                            txtCedulaCatastral,
-                            txtEscritura,
-                            fchEscritura,
-                            numNotaria,
-                            seqTutorProyecto,
-                            seqPryEstadoProceso,
-                            fchInscripcion,
-                            fchUltimaActualizacion,
-                            seqUsuario) 
-            VALUES (
-                        '$txtNombreProyectoHijo', 
-                        '$txtNombreComercialHijo',
-                        '$seqProyecto',
-                        '$txtDireccionHijo',
-                        $valNumeroSolucionesHijo,
-                        '$txtMatriculaInmobiliariaLoteHijo',
-                        '$txtChipLoteHijo',
-                        '$txtLicenciaUrbanismoHijo',
-                        '$fchLicenciaUrbanismo1Hijo',
-                        '$fchVigenciaLicenciaUrbanismoHijo',
-                        '$txtExpideLicenciaUrbanismoHijo',
-                        '$txtLicenciaConstruccionHijo',
-                        '$fchLicenciaConstruccion1Hijo',
-                        '$fchVigenciaLicenciaConstruccionHijo',
-                        '$txtNombreVendedorHijo',
-                        '$numNitVendedorHijo',
-                        '$txtCedulaCatastralHijo',
-                        '$txtEscrituraHijo',
-                        '$fchEscrituraHijo',
-                        $numNotariaHijo,
-                        '$seqTutorProyecto',
-                        '2',
-                        '$fchGestion',
-                        '$fchGestion',
-                        " . $_SESSION['seqUsuario'] . ")";
+                
+                $arrayconjuntos = Array();
+                $arrayconjuntos[$seqProyecto]['seqProyectoHijo'][] = $seqProyectoHijo;
+                $arrayconjuntos[$seqProyecto]['txtNombreProyectoHijo'][] = $txtNombreProyectoHijo;
+                $arrayconjuntos[$seqProyecto]['txtNombreComercialHijo'][] = $txtNombreComercialHijo;
+                $arrayconjuntos[$seqProyecto]['txtDireccionHijo'][] = $txtDireccionHijo;
+                $arrayconjuntos[$seqProyecto]['valNumeroSolucionesHijo'][] = $valNumeroSolucionesHijo;
+                $arrayconjuntos[$seqProyecto]['txtChipLoteHijo'][] = $txtChipLoteHijo;
+                $arrayconjuntos[$seqProyecto]['txtMatriculaInmobiliariaLoteHijo'][] = $txtMatriculaInmobiliariaLoteHijo;
+                $arrayconjuntos[$seqProyecto]['txtLicenciaUrbanismoHijo'][] = $txtLicenciaUrbanismoHijo;
+                $arrayconjuntos[$seqProyecto]['fchLicenciaUrbanismo1Hijo'][] = $fchLicenciaUrbanismo1Hijo;
+                $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaUrbanismoHijo'][] = $fchVigenciaLicenciaUrbanismoHijo;
+                $arrayconjuntos[$seqProyecto]['txtExpideLicenciaUrbanismoHijo'][] = $txtExpideLicenciaUrbanismoHijo;
+                $arrayconjuntos[$seqProyecto]['txtLicenciaConstruccionHijo'][] = $txtLicenciaConstruccionHijo;
+                $arrayconjuntos[$seqProyecto]['fchLicenciaConstruccion1Hijo'][] = $fchLicenciaConstruccion1Hijo;
+                $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaConstruccionHijo'][] = $fchVigenciaLicenciaConstruccionHijo;
+                $arrayconjuntos[$seqProyecto]['txtNombreVendedorHijo'][] = $txtNombreVendedorHijo;
+                $arrayconjuntos[$seqProyecto]['numNitVendedorHijo'][] = $numNitVendedorHijo;
+                $arrayconjuntos[$seqProyecto]['txtCedulaCatastralHijo'][] = $txtCedulaCatastralHijo;
+                $arrayconjuntos[$seqProyecto]['txtEscrituraHijo'][] = $txtEscrituraHijo;
+                $arrayconjuntos[$seqProyecto]['fchEscrituraHijo'][] = $fchEscrituraHijo;
+                $arrayconjuntos[$seqProyecto]['numNotariaHijo'][] = $numNotariaHijo;
+                $this->almacenarConjuntos($seqProyecto, $arrayconjuntos, count($arrayconjuntos));
             }
             // echo "<br><br>" . $query;
             try {
@@ -1117,7 +1088,7 @@ class Proyecto {
 
 // fin validacion de borrar Proyecto
 
-    function almacenarTipoVivienda($seqProyecto, $array, $cant) {     
+    function almacenarTipoVivienda($seqProyecto, $array, $cant) {
 
         global $aptBd;
         $arrErrores = array();
@@ -1142,7 +1113,7 @@ class Proyecto {
                 $$key = $value[($index)];
             }
             if ($txtNombreTipoVivienda != "") {
-            $query .= "(
+                $query .= "(
                         '$txtNombreTipoVivienda',
                         $numCantidad,
                         $numCantUdsDisc,
@@ -1155,10 +1126,10 @@ class Proyecto {
                         $valCierre,
                         $seqProyecto,
                         '$fchGestion'),";
-             }
+            }
         }
         $query = substr_replace($query, ';', -1, 1);
-         //echo "<br>" . $query . "<br>";
+        //echo "<br>" . $query . "<br>";
         try {
             $aptBd->execute($query);
         } catch (Exception $objError) {
@@ -1168,7 +1139,7 @@ class Proyecto {
     }
 
     function modificarTipoVivienda($seqProyecto, $array, $cant) {
-      //  echo "****" . count($array[$seqProyecto]);
+        //  echo "****" . count($array[$seqProyecto]);
         global $aptBd;
         $arrErrores = array();
         $sqlExistentes = "SELECT seqTipoVivienda FROM T_PRY_TIPO_VIVIENDA WHERE seqProyecto = $seqProyecto";

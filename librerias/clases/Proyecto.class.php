@@ -1117,7 +1117,7 @@ class Proyecto {
 
 // fin validacion de borrar Proyecto
 
-    function almacenarTipoVivienda($seqProyecto, $arrayConjuntos, $cant) {
+    function almacenarTipoVivienda($seqProyecto, $array, $cant) {     
 
         global $aptBd;
         $arrErrores = array();
@@ -1136,18 +1136,12 @@ class Proyecto {
                     seqProyecto,
                     fchGestion)
                     VALUES";
-        for ($index = 0; $index < $cant; $index++) {
-            $txtNombreProyectoHijo = '';
-            foreach ($arrayConjuntos[$seqProyecto] as $key => $value) {
-                if (count($value) < 1) {
-                    $$key = $value[($index)];
-                } else {
-                    $$key = $value;
-                }
+        for ($index = 0; $index <= $cant; $index++) {
 
-                // echo "<br>***".$value[($index)]."***<br>";
+            foreach ($array[$seqProyecto] as $key => $value) {
+                $$key = $value[($index)];
             }
-            //if ($txtNombreProyectoHijo != "") {
+            if ($txtNombreTipoVivienda != "") {
             $query .= "(
                         '$txtNombreTipoVivienda',
                         $numCantidad,
@@ -1161,10 +1155,10 @@ class Proyecto {
                         $valCierre,
                         $seqProyecto,
                         '$fchGestion'),";
-            // }
+             }
         }
         $query = substr_replace($query, ';', -1, 1);
-        // echo "<br>" . $query . "<br>";
+         //echo "<br>" . $query . "<br>";
         try {
             $aptBd->execute($query);
         } catch (Exception $objError) {
@@ -1174,7 +1168,7 @@ class Proyecto {
     }
 
     function modificarTipoVivienda($seqProyecto, $array, $cant) {
-
+      //  echo "****" . count($array[$seqProyecto]);
         global $aptBd;
         $arrErrores = array();
         $sqlExistentes = "SELECT seqTipoVivienda FROM T_PRY_TIPO_VIVIENDA WHERE seqProyecto = $seqProyecto";
@@ -1212,17 +1206,17 @@ class Proyecto {
                         ";
             } else if ($cant >= $exeExistentes->numRows()) {
                 $arrayTipoVivienda = Array();
-                $arrayTipoVivienda[$seqProyecto]['seqTipoVivienda'] = $seqTipoVivienda;
-                $arrayTipoVivienda[$seqProyecto]['txtNombreTipoVivienda'] = $txtNombreTipoVivienda;
-                $arrayTipoVivienda[$seqProyecto]['numCantidad'] = $numCantidad;
-                $arrayTipoVivienda[$seqProyecto]['numArea'] = $numArea;
-                $arrayTipoVivienda[$seqProyecto]['numCantUdsDisc'] = $numCantUdsDisc;
-                $arrayTipoVivienda[$seqProyecto]['numTotalParq'] = $numTotalParq;
-                $arrayTipoVivienda[$seqProyecto]['numCantParqDisc'] = $numCantParqDisc;
-                $arrayTipoVivienda[$seqProyecto]['numAnoVenta'] = $numAnoVenta;
-                $arrayTipoVivienda[$seqProyecto]['valPrecioVenta'] = $valPrecioVenta;
-                $arrayTipoVivienda[$seqProyecto]['valCierre'] = $valCierre;
-                $arrayTipoVivienda[$seqProyecto]['txtDescripcion'] = $txtDescripcion;
+                $arrayTipoVivienda[$seqProyecto]['seqTipoVivienda'][] = $seqTipoVivienda;
+                $arrayTipoVivienda[$seqProyecto]['txtNombreTipoVivienda'][] = $txtNombreTipoVivienda;
+                $arrayTipoVivienda[$seqProyecto]['numCantidad'][] = $numCantidad;
+                $arrayTipoVivienda[$seqProyecto]['numArea'][] = $numArea;
+                $arrayTipoVivienda[$seqProyecto]['numCantUdsDisc'][] = $numCantUdsDisc;
+                $arrayTipoVivienda[$seqProyecto]['numTotalParq'][] = $numTotalParq;
+                $arrayTipoVivienda[$seqProyecto]['numCantParqDisc'][] = $numCantParqDisc;
+                $arrayTipoVivienda[$seqProyecto]['numAnoVenta'][] = $numAnoVenta;
+                $arrayTipoVivienda[$seqProyecto]['valPrecioVenta'][] = $valPrecioVenta;
+                $arrayTipoVivienda[$seqProyecto]['valCierre'][] = $valCierre;
+                $arrayTipoVivienda[$seqProyecto]['txtDescripcion'][] = $txtDescripcion;
                 $this->almacenarTipoVivienda($seqProyecto, $arrayTipoVivienda, count($arrayTipoVivienda));
             }
             // echo "<br><br>" . $query;
@@ -1237,7 +1231,7 @@ class Proyecto {
             $resultado = array_diff($datos, $datosDiff);
             $delete = "";
             foreach ($resultado as $value) {
-                $delete .= $value . ", ";
+                $delete .= $value . ",";
             }
             //  print_r($resultado);
             $delete = substr_replace($delete, '', -1, 1);

@@ -168,9 +168,9 @@ if (empty($arrErrores)) {
     }
 
     if ($cantTipoVivienda == 0 && isset($_POST["txtNombreTipoVivienda"])) {
-
+//echo "paso" .$cantTipoVivienda;
         $claProyecto->almacenarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
-    } else if (isset($_POST["txtNombreTipoVivienda"])) {
+    } else{
 
         $claProyecto->modificarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
     }

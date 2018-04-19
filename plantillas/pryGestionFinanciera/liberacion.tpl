@@ -59,7 +59,13 @@
                             <td class="h5 text-left">{$arrResolucion.tipo} {$arrResolucion.numero} de {$arrResolucion.fecha->format(Y)}</td>
                             <td class="h5 text-right">$ {$arrResolucion.total|abs|number_format:0:',':'.'}</td>
                             <td class="h5 text-right">$ {$arrResolucion.liberaciones|abs|number_format:0:',':'.'}</td>
-                            <td class="h5 text-right">$ {$arrResolucion.saldo|abs|number_format:0:',':'.'}</td>
+                            <td class="h5 text-right">
+                                {if $arrResolucion.saldo != 0}
+                                    $ {$arrResolucion.saldo|abs|number_format:0:',':'.'}
+                                {else}
+                                    $ {$arrResolucion.total|abs|number_format:0:',':'.'}
+                                {/if}
+                            </td>
                             <td align="center">
                                 <button type="button" class="btn btn-default btn-xs" onclick="mostrarOcultar('cdpDisponibles{$seqUnidadActoPrimario}')">
                                     <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Detalle
@@ -112,7 +118,11 @@
                                                                 $ {$arrCDP.liberaciones|abs|number_format:0:',':'.'}
                                                             </td>
                                                             <td class="text-right">
-                                                                $ {$arrCDP.saldo|number_format:0:',':'.'}
+                                                                {if $arrCDP.saldo != 0}
+                                                                    $ {$arrCDP.saldo|number_format:0:',':'.'}
+                                                                {else}
+                                                                    $ {$arrCDP.valorRP|number_format:0:',':'.'}
+                                                                {/if}
                                                             </td>
                                                             <td>
                                                                 <form id="Slv{$seqUnidadActoPrimario}-{$seqRegistroPresupuestal}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/salvarLiberacion.php',false, true); return false">

@@ -948,7 +948,11 @@ class Proyecto {
         for ($index = 0; $index < $cant; $index++) {
             $txtNombreProyectoHijo = '';
             foreach ($arrayConjuntos[$seqProyecto] as $key => $value) {
-                $$key = $value[($index)];
+                if ($value[($index)] == NULL && $value[($index)] == "") {
+                    $$key = 0;
+                } else {
+                    $$key = $value[($index)];
+                }
             }
             //if ($txtNombreProyectoHijo != "") {
             $query .= "(
@@ -1005,7 +1009,11 @@ class Proyecto {
         for ($index = 0; $index < $cant; $index++) {
             $txtNombreProyectoHijo = '';
             foreach ($arrayConjuntos[$seqProyecto] as $key => $value) {
-                $$key = $value[($index)];
+                if ($value[($index)] == NULL && $value[($index)] == "") {
+                    $$key = 0;
+                } else {
+                    $$key = $value[($index)];
+                }
             }
             $datosDiff[] = $seqProyectoHijo;
 
@@ -1036,7 +1044,7 @@ class Proyecto {
                         seqUsuario = " . $_SESSION['seqUsuario'] . " 
                     WHERE seqProyecto = $seqProyectoHijo;";
             } else if ($cant >= $exeExistentes->numRows()) {
-                
+
                 $arrayconjuntos = Array();
                 $arrayconjuntos[$seqProyecto]['seqProyectoHijo'][] = $seqProyectoHijo;
                 $arrayconjuntos[$seqProyecto]['txtNombreProyectoHijo'][] = $txtNombreProyectoHijo;
@@ -1110,7 +1118,12 @@ class Proyecto {
         for ($index = 0; $index <= $cant; $index++) {
 
             foreach ($array[$seqProyecto] as $key => $value) {
-                $$key = $value[($index)];
+
+                if ($value[($index)] == NULL && $value[($index)] == "") {
+                    $$key = 0;
+                } else {
+                    $$key = $value[($index)];
+                }
             }
             if ($txtNombreTipoVivienda != "") {
                 $query .= "(
@@ -1154,7 +1167,11 @@ class Proyecto {
         for ($index = 0; $index < $cant; $index++) {
             $txtNombreProyectoHijo = '';
             foreach ($array[$seqProyecto] as $key => $value) {
-                $$key = $value[($index)];
+                if ($value[($index)] == NULL && $value[($index)] == "") {
+                    $$key = 0;
+                } else {
+                    $$key = $value[($index)];
+                }
             }
             $datosDiff[] = $seqTipoVivienda;
 

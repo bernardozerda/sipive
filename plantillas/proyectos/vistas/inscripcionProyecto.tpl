@@ -63,19 +63,14 @@
                         <h4 style="position: relative; float: left; width: 50%; margin: 0; padding: 5px;">
                             Datos del Proyecto 
                         </h4>
-                        <!--<div class="dropdown" style="position: relative; float: left; width: 30%; margin: 0; ">
-                             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="margin: 0; ">INFORMACIÓN
-                                 <span class="caret"></span></button>
-                             <ul class="dropdown-menu">
-                                 <li><a href="#"  onclick=" var div = document.getElementById('seg').style.display = 'none';
-                                         document.getElementById('divContent').style.display = 'inline   ';">Datos Basicos</a></li>
-                                 <li><a href="#"  onclick=" var div = document.getElementById('divContent').style.display = 'none';
-                                         document.getElementById('seg').style.display = 'inline';">Seguimientos</a></li>
-                                 <li><a href="#"  data-toggle="modal" data-target="#myModal">Documentos</a></li>
-                        <!-- <li><a href="#">CSS</a></li>
-                         <li><a href="#">JavaScript</a></li>
-                    </ul>
-                </div>-->
+                        <div class="dropdown" style="position: relative; float: left; width: 30%; margin: 0; ">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="margin: 0; ">INFORMACIÓN
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#"  data-toggle="modal" data-target="#myModal">Documentos</a></li>
+
+                            </ul>
+                        </div>
 
                         <h6 style="position: relative; float: right; width: 50%; margin: 0; padding: 0;">
                             <input type="hidden" id="seqProyecto" name="seqProyecto" value="{if $value.seqProyecto != ""}{$value.seqProyecto}{else}0{/if}" > 
@@ -547,7 +542,8 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="control-label" >Telefono Contacto</label>   
-                                    <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control " style="position: relative; float: left;width:70%;"/>
+                                    <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);
+                                            soloNumeros(this);" class="form-control " style="position: relative; float: left;width:70%;"/>
                                     <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
                                     <div id="val_numTelContactoOferente_" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
                                 </div>
@@ -587,7 +583,7 @@
                 {include file="proyectos/secCronogramaFechas.tpl"}
             </div>
             <div id="datosPolizas" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
-               prueba
+                {include file="proyectos/vistas/inscripcionPoliza.tpl"}
             </div>
         {/foreach}
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

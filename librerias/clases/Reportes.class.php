@@ -329,7 +329,7 @@ class Reportes {
                     $fchNacimiento = new DateTime($objRes->fields['FechaNacimiento']);
                     $fchDiferencia = date_diff($fchHoy, $fchNacimiento);
                     $objRes->fields['Edad'] = $fchDiferencia->y;
-                    $objRes->fields['RangoEdad'] = rangoEdad($objRes->fields['Edad']);
+//                    $objRes->fields['RangoEdad'] = rangoEdad($objRes->fields['Edad']);
                     $arrReporte[] = $objRes->fields;
                     $objRes->MoveNext();
                 }

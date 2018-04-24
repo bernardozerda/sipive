@@ -296,25 +296,69 @@
                                 <div id="val_seqProyectoGrupo" class="divError">Este campo es requerido</div> 
                             </div>
                         </div>
-                        <div class="form-group" id="idLineaDireccion">
-                            <div class="col-md-4"> 
-                                <label class="control-label" >Se conoce la direcci&oacute;n?</label><br> 
-                                Si <input name="bolDireccion" type="radio" onClick="escondetxtDireccion()" id="bolDireccion" value="1" {if $value.bolDireccion == 1} checked {/if}   class="form-control" style="width: 12px; display: unset"/> 
-                                No <input name="bolDireccion" type="radio" onClick="escondetxtDireccion()" id="bolDireccion" value="0" {if $value.bolDireccion == 0} checked {/if}   class="form-control" style="width: 12px; display: unset"/> 
-                            </div>
-                        </div>
-                        <div class="form-group"  id="lineaTituloDireccion" {if $value.bolDireccion == 0} style="display: none"{/if}>
+                        <!-- <div class="form-group" id="idLineaDireccion">
+                             <div class="col-md-4"> 
+                                 <label class="control-label" >Se conoce la direcci&oacute;n?</label><br> 
+                                 Si <input name="bolDireccion" type="radio" onClick="escondetxtDireccion()" id="bolDireccion" value="1" {if $value.bolDireccion == 1} checked {/if}   class="form-control" style="width: 12px; display: unset"/> 
+                                 No <input name="bolDireccion" type="radio" onClick="escondetxtDireccion()" id="bolDireccion" value="0" {if $value.bolDireccion == 0} checked {/if}   class="form-control" style="width: 12px; display: unset"/> 
+                             </div>
+                         </div><br>
+                        <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label"  onclick="recogerDireccion('txtDireccion', 'objDireccionOcultoSolucion');" style="cursor: hand; text-decoration-line: underline">Direcci&oacute;n</label>                         
                                 <input type="text" 
-                                       name="txtDireccion" 
-                                       readonly="true"
+                                       name="txtDireccion"                                      
                                        id="txtDireccion" 
+                                       class="form-control required"
                                        value="{$value.txtDireccion}"                                
-                                       style="width:150px;"                               
-                                       class="form-control" />
+                                       />
+                            </div>
+                            <div id="val_txtDireccion" class="divError">Digite la dirección</div> 
+                        </div>-->
+                        <div class="form-group" >
+                            <div class="col-md-4"> 
+                                <label class="control-label"  onclick="recogerDireccion('txtDireccion', 'objDireccionOcultoSolucion');" style="cursor: hand; text-decoration-line: underline">Direcci&oacute;n</label>
+                                <input name="txtDireccion" type="text" id="txtDireccion" class="form-control required" value="{$value.valTorres}" txtDireccion style="width:150px;" readonly="true"/>
+                                <div id="val_txtDireccion" class="divError">Este campo es requerido</div>
                             </div>
                         </div>
+
+                        <div class="form-group" >
+                            <div class="col-md-4"> 
+                                <label class="control-label" >Nombre del Tutor (*)</label>
+                                <select name="seqTutorProyecto"
+                                        id="seqTutorProyecto"
+                                        class="form-control required">
+                                    <option value="0">Seleccione una opci&oacute;n</option>
+                                    {foreach from=$arrTutorProyecto key=seqTutorProyecto item=txtTutorProyecto}
+                                        <option value="{$seqTutorProyecto}" {if $value.seqTutorProyecto == $seqTutorProyecto} selected {/if}>{$txtTutorProyecto}</option>
+                                    {/foreach}
+                                </select>
+                                <div id="val_seqTutorProyecto" class="divError">Debe seleccionar un tutor para el Proyecto</div> 
+                            </div>
+                        </div>
+                        <div class="form-group" >
+                            <div class="col-md-4"> 
+                                <label class="control-label" >Constructor (*)</label> 
+                                <select name="seqConstructor"
+                                        id="seqConstructor" 
+                                        class="form-control required">
+                                    <option value="0">Seleccione una opci&oacute;n</option>
+                                    {foreach from=$arrConstructor key=seqConstructor item=txtNombreConstructor}
+                                        <option value="{$txtNombreConstructor.seqConstructor}" {if $value.seqConstructor == $txtNombreConstructor.seqConstructor} selected {/if}>{$txtNombreConstructor.txtNombreConstructor}</option>
+                                    {/foreach}
+                                </select>
+                                <div id="val_seqConstructor" class="divError">Seleccione constructor</div> 
+                            </div>
+                        </div>
+                        <div class="form-group" id="idLineaAreaLoteConstruida">
+                            <div class="col-md-4"> 
+                                <label class="control-label" >Area a Construir en <b>m²</b> (*)</label> 
+                                <input name="valAreaConstruida" type="text" id="valAreaConstruida" class="form-control required" value="{$value.valAreaConstruida}" onBlur="sinCaracteresEspeciales(this);
+                                        soloNumeros(this);" style="width:65px;"/>
+                                <div id="val_valAreaConstruida" class="divError">Este campo es requerido</div>    
+                            </div>
+                        </div> 
                         <div class="form-group">
                             <div class="col-md-4"> 
                                 <label class="control-label" >N&uacute;mero Soluciones (*)</label>    
@@ -344,14 +388,7 @@
                                 <div id="val_valAreaLote" class="divError">Debe diligenciar el Area del Lote</div>
                             </div>
                         </div>
-                        <div class="form-group" id="idLineaAreaLoteConstruida">
-                            <div class="col-md-4"> 
-                                <label class="control-label" >Area a Construir en <b>m²</b> (*)</label> 
-                                <input name="valAreaConstruida" type="text" id="valAreaConstruida" class="form-control required" value="{$value.valAreaConstruida}" onBlur="sinCaracteresEspeciales(this);
-                                        soloNumeros(this);" style="width:65px;"/>
-                                <div id="val_valAreaConstruida" class="divError">Este campo es requerido</div>    
-                            </div>
-                        </div> 
+
                         <div class="form-group" id="idLineaChipLoteMatricula" >
                             <div class="col-md-4"> 
                                 <label class="control-label" >Chip Lote</label>
@@ -369,60 +406,33 @@
                         <div class="form-group" id="idLineaRegistroFechaEnajenacion">
                             <div class="col-md-4"> 
                                 <label class="control-label" >Registro de Enajenaci&oacute;n (*)</label> 
-                                <input name="txtRegistroEnajenacion" type="text" id="txtRegistroEnajenacion" value="{$value.txtRegistroEnajenacion}" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="width:150px;" />
+                                <input name="txtRegistroEnajenacion" type="text" id="txtRegistroEnajenacion" value="{$value.txtRegistroEnajenacion}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:150px;" />
                                 <div id="val_txtRegistroEnajenacion" class="divError">Debe diligenciar el Registro de Enajenación</div> 
                             </div>
                         </div>  
                         <div class="form-group" id="idLineaRegistroFechaEnajenacion">
                             <div class="col-md-4"> 
-                                <label class="control-label" >Fecha Registro de Enajenaci&oacute;n  </label>  
-                                <input name="fchRegistroEnajenacion" type="text" id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}" size="12" readonly class="form-control required" style="width: 70%; position: relative; float: left"/>
-                                <a href="#" onclick="javascript: calendarioPopUp('fchRegistroEnajenacion');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
-                                  <!--<input type=date name="fchRegistroEnajenacion"  id="fchRegistroEnajenacion" value="{$value.fchRegistroEnajenacion}"  class="form-control required" style="width:150px;" />  -->
-                                <div id="val_fchRegistroEnajenacion" class="divError">Debe diligenciar la fecha de Registro de Enajenación</div>
-                            </div>
-
-                        </div>
-                        <div class="form-group" >
-                            <div class="col-md-4"> 
-                                <label class="control-label" >Nombre del Tutor (*)</label>
-                                <select name="seqTutorProyecto"
-                                        id="seqTutorProyecto"
-                                        class="form-control required">
-                                    <option value="0">Seleccione una opci&oacute;n</option>
-                                    {foreach from=$arrTutorProyecto key=seqTutorProyecto item=txtTutorProyecto}
-                                        <option value="{$seqTutorProyecto}" {if $value.seqTutorProyecto == $seqTutorProyecto} selected {/if}>{$txtTutorProyecto}</option>
-                                    {/foreach}
-                                </select>
-                                <div id="val_seqTutorProyecto" class="divError">Debe seleccionar un tutor para el Proyecto</div> 
-                            </div>
-                        </div>
-                        <div class="form-group" >
-                            <div class="col-md-4"> 
-                                <label class="control-label" >Constructor (*)</label> 
-                                <select name="seqConstructor"
-                                        id="seqConstructor" 
-                                        class="form-control required">
-                                    <option value="0">Seleccione una opci&oacute;n</option>
-                                    {foreach from=$arrConstructor key=seqConstructor item=txtNombreConstructor}
-                                        <option value="{$txtNombreConstructor.seqConstructor}" {if $value.seqConstructor == $txtNombreConstructor.seqConstructor} selected {/if}>{$txtNombreConstructor.txtNombreConstructor}</option>
-                                    {/foreach}
-                                </select>
-                                <div id="val_seqTutorProyecto" class="divError">Este campo es requerido</div> 
+                                <label class="control-label" >Fecha Registro de Enajenaci&oacute;n  </label><br>
+                                <input name="fchRegistroEnajenacion" type="text" id="fchRegistroEnajenacion" class="form-control"  value="{$value.fchRegistroEnajenacion}" readonly  style="width:50%; position: relative; float: left "/>
+                                <a href="#" onclick="javascript: calendarioPopUp('fchRegistroEnajenacion');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:35%"></a>
+                                <div id="val_fchRegistroEnajenacion" class="divError" style="position: relative; float: left; width: 100%">Este campo es requerido</div>    
                             </div>
                         </div>
 
-                        <div class="form-group"  id="idLineaEquipamientoComunal">
-                            <div class="col-md-4" > 
-                                <label class="control-label" >Tiene Equipamiento Comunal?</label><br> 
-                                Si <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="1" {if $value.bolEquipamientoComunal == 1} checked {/if} class="form-control" style="width: 12px; display: unset"/> 
-                                No <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="0" {if $value.bolEquipamientoComunal == 0} checked {/if} class="form-control" style="width: 12px; display: unset"/> 
-                            </div>
-                        </div>  
-                        <div class="form-group"  id="idTituloDescEquipamientoComunal" {if $value.bolEquipamientoComunal == 0} style="display: none" {/if}>
-                            <div class="col-md-10"> 
+
+
+                        <!-- <div class="form-group"  id="idLineaEquipamientoComunal">
+                             <div class="col-md-4" > 
+                                 <label class="control-label" >Tiene Equipamiento Comunal?</label><br> 
+                                 Si <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="1" {if $value.bolEquipamientoComunal == 1} checked {/if} class="form-control" style="width: 12px; display: unset"/> 
+                                 No <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="0" {if $value.bolEquipamientoComunal == 0} checked {/if} class="form-control" style="width: 12px; display: unset"/> 
+                             </div>
+                         </div>  -->
+                        <div class="form-group"  id="idTituloDescEquipamientoComunal" >
+                            <div class="col-md-8"> 
                                 <label class="control-label">Descripci&oacute;n Equipamiento Comunal</label> 
-                                <textarea id="txtDescEquipamientoComunal" name="txtDescEquipamientoComunal"  class="form-control" style="height: 40px">{$value.txtDescEquipamientoComunal}</textarea>
+                                <textarea id="txtDescEquipamientoComunal" name="txtDescEquipamientoComunal"  class="form-control required" style="height: 30px">{$value.txtDescEquipamientoComunal}</textarea>
+                                <div id="val_txtDescEquipamientoComunal" class="divError" style="position: relative; float: left; width: 100%">Este campo es requerido</div>  
                             </div>
                         </div>
                         <!--  <div class="form-group" id="idTituloDescEquipamientoComunal" >
@@ -458,6 +468,44 @@
 
 
                 </fieldset>
+                <p style="width: 100%;">&nbsp;</p>
+                <fieldset>
+                    <legend class="legend">
+                        <h4 style="position: relative; float: left; width: 50%; margin: 0; padding: 5px;">
+                            Datos Lote Mayor Extensi&oacute;n</h4>
+                    </legend>
+                    <div class="form-group">
+                        <div class="col-md-4"> 
+                            <label class="control-label">Nombre del vendedor</label> 
+                            <input name="txtNombreVendedor" type="text" id="txtNombreVendedor" value="{$value.txtNombreVendedor}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
+                            <div id="val_txtNombreVendedor" class="divError">Este campo es requerido</div>
+                        </div>
+                        <div class="col-md-4"> 
+                            <label class="control-label">Nit</label>                         
+                            <input name="numNitVendedor" type="text" id="numNitVendedor" value="{$value.numNitVendedor}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
+                            <div id="val_numNitVendedor" class="divError">Este campo es requerido</div>
+                        </div>
+                        <div class="col-md-4"> 
+                            <label class="control-label">Cédula Catastral</label> <br>
+                            <input name="txtCedulaCatastral" type="text" id="txtCedulaCatastral" value="{$value.txtCedulaCatastral}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
+                            <div id="val_txtCedulaCatastral" class="divError">Este campo es requerido</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label">No. Escritura</label><br> 
+                            <input name="txtEscritura" type="text" id="txtEscritura" value="{$value.txtEscritura}" onblur="sinCaracteresEspeciales(this);" class="form-control required"  style="width: 30%; position: relative; float: left"> <b style="width: 5%; position: relative; float: left; left: 2%;top: 5px">Del</b>
+
+                            <input name="fchEscritura" type="text" id="fchEscritura" value="{$value.fchEscritura}" size="10" readonly="" class="form-control required"  style="width: 35%; position: relative; float: left;left: 5%;">
+                            <a href="#" onclick="javascript: calendarioPopUp('fchEscritura');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:10%; "></a><br />
+                            <div id="val_fchEscritura" class="divError" style="width: 50%; position: relative;float: left;">Este campo es requerido</div>
+                            <div id="val_txtEscritura" class="divError" style="width: 50%; position: relative;float: right;">Este campo es requerido</div>
+                        </div>  
+                        <div class="col-md-4"> 
+                            <label class="control-label">No. Notaría</label> 
+                            <input name="numNotaria" type="text" id="numNotaria" value="{$value.numNotaria}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
+                            <div id="val_numNotaria" class="divError">Este campo es requerido</div>
+                        </div>
+                    </div>
+                </fieldset>
                 <p>&nbsp;</p>
                 <div>
                     <fieldset>
@@ -485,10 +533,10 @@
                                                     <option value="{$valueOferente.seqOferente}" {if $valueOferentesProy.seqOferente == $valueOferente.seqOferente} selected {/if}>{$valueOferente.txtNombreOferente}</option>
                                                 {/foreach}
                                             </select>   
-                                            <div id="val_seqOferente{$cont}" class="divError">Debe seleccionar el oferente</div>
+                                            <div id="val_seqOferente_{$cont}" class="divError" style="width: 100%; position: relative;float: left;">Debe seleccionar el oferente</div>
                                         </div>
 
-<!--  <img src="recursos/imagenes/remove.png" width="20px" onclick="removerOferente(table{$seqOferentesProy+1});" /></div> -->
+ <!--  <img src="recursos/imagenes/remove.png" width="20px" onclick="removerOferente(table{$seqOferentesProy+1});" /></div> -->
 
                                     </div>
 
@@ -583,7 +631,8 @@
                 {include file="proyectos/secCronogramaFechas.tpl"}
             </div>
             <div id="datosPolizas" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
-                {include file="proyectos/vistas/inscripcionPoliza.tpl"}
+                {*{include file="proyectos/vistas/inscripcionPoliza.tpl"}*}
+                prueba
             </div>
         {/foreach}
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -158,7 +158,7 @@ if (empty($arrErrores)) {
     if ($cantConjuntos == 0 && isset($_POST["txtNombreProyectoHijo"])) {
         // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
         $claProyecto->almacenarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
-    } else if (isset($_POST["txtNombreProyectoHijo"])) {
+    } else {
         $claProyecto->modificarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
     }
     if ($cantLicencias == 0 && isset($_POST["txtLicencia"])) {

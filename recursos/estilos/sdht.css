@@ -111,6 +111,9 @@ a:hover {
     padding-left: 16px;
     color: red;
     font-weight: bold;
+    position: relative;
+    float: left;
+    width: 100%;
 }
 
 .msgOk{

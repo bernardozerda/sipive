@@ -506,7 +506,6 @@ function mostrarPagina(value) {
 }
 
 function cartaMov2() {
-
     $.ajax({
         url: './pdfCartaMovilizacion.php?documento=111&cuenta=&tipo=1&banco=prueba&nombre=prueba2',
         type: 'post',

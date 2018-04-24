@@ -461,7 +461,6 @@ class Proyecto {
                     seqLocalidad,
                     seqBarrio,
                     txtOtrosBarrios,
-                    bolDireccion,
                     txtDireccion,
                     valNumeroSoluciones, 
                     valTorres,
@@ -471,7 +470,6 @@ class Proyecto {
                     txtMatriculaInmobiliariaLote,
                     txtRegistroEnajenacion,
                     fchRegistroEnajenacion,
-                    bolEquipamientoComunal,
                     txtDescEquipamientoComunal,
                     seqTutorProyecto,
                     seqConstructor,
@@ -526,8 +524,7 @@ class Proyecto {
                     '$txtDescripcionProyecto',
                     $seqLocalidad,
                     $seqBarrio,
-                    '$txtOtrosBarrios',
-                    $bolDireccion,
+                    '$txtOtrosBarrios',                   
                     '$txtDireccion',
                     $valNumeroSoluciones,                   
                     $valTorres,
@@ -536,8 +533,7 @@ class Proyecto {
                     '$txtChipLote',
                     '$txtMatriculaInmobiliariaLote',
                     '$txtRegistroEnajenacion',
-                    '$fchRegistroEnajenacion',
-                    $bolEquipamientoComunal,
+                    '$fchRegistroEnajenacion',                    
                     '$txtDescEquipamientoComunal',
                     $seqTutorProyecto,
                     $seqConstructor,
@@ -673,8 +669,7 @@ class Proyecto {
                         txtDescripcionProyecto = '" . $txtDescripcionProyecto . "',
                         seqLocalidad = " . $seqLocalidad . ",
                         seqBarrio = " . $seqBarrio . ",
-                        txtOtrosBarrios  = '" . $txtOtrosBarrios . "',
-                        bolDireccion = " . $bolDireccion . ",
+                        txtOtrosBarrios  = '" . $txtOtrosBarrios . "',                       
                         txtDireccion  = '" . $txtDireccion . "',
                         valNumeroSoluciones = " . $valNumeroSoluciones . ", 
                         valTorres = " . $valTorres . ",
@@ -684,7 +679,6 @@ class Proyecto {
                         txtMatriculaInmobiliariaLote  = '" . $txtMatriculaInmobiliariaLote . "',
                         txtRegistroEnajenacion  = '" . $txtRegistroEnajenacion . "',
                         fchRegistroEnajenacion  = '" . $fchRegistroEnajenacion . "',
-                        bolEquipamientoComunal = " . $bolEquipamientoComunal . ",
                         txtDescEquipamientoComunal  = '" . $txtDescEquipamientoComunal . "',
                         seqTutorProyecto = " . $seqTutorProyecto . " ,
                         seqConstructor = " . $seqConstructor . ",
@@ -987,6 +981,7 @@ class Proyecto {
         // echo "<br>" . $query . "<br>";
         try {
             $aptBd->execute($query);
+           // almacenarLicencias($seqProyecto, $txtLicencia, $txtExpideLicencia, $seqTipoLicencia, $fchLicencia, $fchVigenciaLicencia, $fchEjecutoriaLicencia, $txtResEjecutoria, $fchLicenciaProrroga, $fchLicenciaProrroga1, $fchLicenciaProrroga2)
         } catch (Exception $objError) {
             $arrErrores[] = "No se ha podido cargar las licencias<b></b>";
             pr($objError->getMessage());

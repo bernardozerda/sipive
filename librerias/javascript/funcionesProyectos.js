@@ -1,5 +1,5 @@
 $(function () {
-    $('#myTab li:last-child a').tab('show')
+    $('#myTab li:last-child a').tab('show');
 })
 function marcarTodos() {
     $("#marcarTodos").click(
@@ -40,29 +40,28 @@ function almacenarIncripcion() {
     var valid = true;
     $.each($("#frmProyectos input.required"), function (index, value) {
         if (!$(value).val()) {
-           //  console.log("paso1");
+            // console.log("paso1");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-            // console.log($(this).attr("id") + "input");
+             console.log($(this).attr("id") + "input");
             valid = false;
         }
 
     });
-   // console.log($("#frmProyectos select.required"));
+    // console.log($("#frmProyectos select.required"));
     $.each($("#frmProyectos select.required"), function (index, value) {
         if ($(value).val() == 0) {
-           // console.log($(value).val()+ " ****** "+index+"  ----- "+value);
+            // console.log($(value).val()+ " ****** "+index+"  ----- "+value);
             // console.log($(this).attr("id") + "select");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-          //  console.log($(this).attr("id") + "select");
+            //  console.log($(this).attr("id") + "select");
             valid = false;
         }
     });
     $.each($("#frmProyectos input[type=email].required"), function (index, value) {
         var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
         console.log(caract.test($(value).val()));
-        console.log("paso2");
         if (caract.test($(value).val()) == false) {
             $("#val_" + $(this).attr("id")).css("display", "inline");
             $("#val_" + $(this).attr("id")).html("Correo erroneo! ");
@@ -72,14 +71,14 @@ function almacenarIncripcion() {
     });
     $.each($("#frmProyectos textArea.required"), function (index, value) {
         if ($(value).val() == 0) {
-           // console.log("paso3");
+            // console.log("paso3");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
             // console.log($(this).attr("id"));
             valid = false;
         }
     });
-   
+
     if (valid) {
         var url = $("#txtArchivo").val();
         // var url = "./contenidos/proyectos/contenidos/datosOferente.php"; // El script a dónde se realizará la petición.
@@ -98,12 +97,11 @@ function almacenarIncripcion() {
 
 function adicionarOferente() {
 
-    var intId = $("#buildyourform select").length + 1; 
-    alert(intId);
+    var intId = $("#buildyourform select").length + 1;
     var fieldWrapper = $("<div class=\"form-group\" id=\"field" + intId + "\" />");
     var fName = "<div id=\"table" + intId + "\"><div class=\"col-md-3\"><label>Oferente(*)</label>";
     var fType = "<select name=\"seqOferente[]\" id=\"seqOferente_" + intId + "\" class=\"form-control required\"   style=\"position: relative;float: left; width: 85%\">";
-    $("#seqOferente_"+(intId-1)+" option").each(function () {
+    $("#seqOferente_" + (intId - 1) + " option").each(function () {
         fType += "<option value=" + $(this).attr('value') + ">" + $(this).text() + "</option>";
     });
     fType += "</select></div>";
@@ -114,11 +112,10 @@ function adicionarOferente() {
     fType += "<label class=\"control-label\" >Correo Contacto</label> ";
     fType += "<input name=\"txtCorreoOferente[]\" type=\"text\" id=\"txtCorreoOferente\" value=\"\" onBlur=\"sinCaracteresEspeciales(this);\" class=\"form-control\" style=\"width:140px;\"/></div>";
     fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Telefono Oferente</label>";
-    fType += "<input name=\"numTelContactoOferente[]\" type=\"text\" id=\"numTelContactoOferente\" value=\"\" onBlur=\"sinCaracteresEspeciales(this);\" class=\"form-control\" style=\"position: relative; float: left;width:70%;\"/>";
+    fType += "<input name=\"numTelContactoOferente[]\" type=\"text\" id=\"numTelContactoOferente\" value=\"\" onBlur=\"sinCaracteresEspeciales(this); soloNumeros(this);\" class=\"form-control\" style=\"position: relative; float: left;width:70%;\"/>";
     fType += "<img src=\"recursos/imagenes/remove.png\" width=\"22px\" onclick=\"removerOferente(table" + intId + ")\" style=\"position: relative; float: left; width:20% \"/>";
     fType += "</div></div>";
     fName += fType;
-    // fName += "<img src=\"recursos/imagenes/remove.png\" width=\"22px\" onclick=\"removerOferente(table" + intId + ")\"/>";
     fName += "</div></div>";
     fieldWrapper.append(fName);
     $("#buildyourform").append(fieldWrapper);
@@ -129,7 +126,7 @@ function removerOferente(id) {
 }
 
 function obtenerModalidadProyecto(value) {
-    
+
     var parametros = {
         "valor": value
     };
@@ -139,16 +136,28 @@ function obtenerModalidadProyecto(value) {
         type: 'post',
         dataType: "json",
         success: function (response) {
-           
+
             var select = $('#seqPryTipoModalidad');
             $('#seqPryTipoModalidad').empty();
             var options = select.attr('options');
             var selectedOption = '';
             $("#seqPryTipoModalidad").append('<option value="0">Seleccione</option>');
             $.each(response, function (val, text) {
-                 
+
                 $("#seqPryTipoModalidad").append('<option value=' + val + '>' + text + '</option>');
             });
         }
+    });
+}
+
+function showMenu() {
+    $(document).ready(function () {
+        $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
+            console.log("paso2" + event.preventDefault());
+            event.preventDefault();
+            event.stopPropagation();
+            $(this).parent().siblings().removeClass('open');
+            $(this).parent().toggleClass('open');
+        });
     });
 }

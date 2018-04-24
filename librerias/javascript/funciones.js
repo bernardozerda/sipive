@@ -8653,8 +8653,8 @@ function addCronogramaFechas() {
     addDiv += "<div class='col-md-3'><label class='control-label'>Terminación</label><br /><input name='fchFinalEscrituracion[]' type='text' id='fchFinalEscrituracion[" + indiceFilaFormulario + "]' size='12' style='text-align:center' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchFinalEscrituracion[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a>";
     addDiv += "<img src='recursos/imagenes/remove.png' width='22px' onclick='return confirmaRemoverLineaFormulario(this);' style='position: relative; float: right; right: 15%'></div><p>&nbsp;</p></div></td>";
     myNewCell = myNewRow.insertCell(-1);
-     myNewCell.innerHTML = addDiv;
-     indiceFilaFormulario++;
+    myNewCell.innerHTML = addDiv;
+    indiceFilaFormulario++;
 }
 
 // ADICIONAR LINEAS AL TIPO DE VIVIENDA (ESTRUCTURA DEL PROYECTO)
@@ -8683,31 +8683,36 @@ function addTipoVivienda() {
 // ADICIONAR LINEAS AL CONJUNTO RESIDENCIAL (SUBPROYECTOS)
 var indiceFilaFormulario = 1;
 function addConjuntoResidencial() {
-
+    console.log("conjunto");
     myNewRow = document.getElementById("tablaConjuntoResidencial").insertRow(-1);
     myNewRow.id = indiceFilaFormulario;
     indiceFilaFormulario = ($("#tablaConjuntoResidencial tr").length) - 1;
     var addDiv = "";
-    addDiv += "<td><div class='form-group'><div class='col-md-3'><label class='control-label' >Nombre </label><br /><input type='text' name='txtNombreProyectoHijo[]' id='txtNombreProyectoHijo' onBlur='sinCaracteresEspeciales( this );' size='28' ></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Nombre Comercial </label><br /><input type='text' name='txtNombreComercialHijo[]' id='txtNombreComercialHijo' onBlur='sinCaracteresEspeciales( this );' size='28' ></div>";
+    addDiv += "<td><div class='form-group'><div class='col-md-6'><label class='control-label' >Nombre </label><br /><input type='text' name='txtNombreProyectoHijo[]' id='txtNombreProyectoHijo' onBlur='sinCaracteresEspeciales( this );' size='80' ></div>";
+    addDiv += "<div class='col-md-6'><label class='control-label' >Nombre Comercial </label><br /><input type='text' name='txtNombreComercialHijo[]' id='txtNombreComercialHijo' onBlur='sinCaracteresEspeciales( this );' size='80' ></div>";
     addDiv += "<div class='col-md-3'><label class='control-label' >Direcci&oacute;n&nbsp;del&nbsp;Conjunto </label><br /><input type='text' name='txtDireccionHijo[]' id='txtDireccionHijo[r_" + indiceFilaFormulario + "]' size='20' style='background-color:#E4E4E4;' readonly />&nbsp;<a href='#' onClick='recogerDireccion( \"txtDireccionHijo[r_" + indiceFilaFormulario + "]\", \"objDireccionOculto\" )'><img src='recursos/imagenes/gps.png'></a></div>";
     addDiv += "<div class='col-md-3'><label class='control-label' >Unidades </label><br /><input type='text' name='valNumeroSolucionesHijo[]' id='valNumeroSolucionesHijo' onBlur='sinCaracteresEspeciales( this );' size='6' ></div>";
     addDiv += "<div class='col-md-3'><label class='control-label' >Chip </label><br /><input type='text' name='txtChipLoteHijo[]' id='txtChipLoteHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></div>";
     addDiv += "<div class='col-md-3'><label class='control-label' >Matr&iacute;cula Inmobiliaria </label><br /><input type='text' name='txtMatriculaInmobiliariaLoteHijo[]' id='txtMatriculaInmobiliariaLoteHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Lic. Urbanismo </label><br /><input type='text' name='txtLicenciaUrbanismoHijo[]' id='txtLicenciaUrbanismoHijo' onBlur='sinCaracteresEspeciales( this );' size='18' ></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Fecha&nbsp;Licencia </label><br /><input name='fchLicenciaUrbanismo1Hijo[]' type='text' id='fchLicenciaUrbanismo1Hijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchLicenciaUrbanismo1Hijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Vigencia&nbsp;Licencia </label><br /><input name='fchVigenciaLicenciaUrbanismoHijo[]' type='text' id='fchVigenciaLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchVigenciaLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Curadur&iacute;a </label><br /><input type='text' name='txtExpideLicenciaUrbanismoHijo[]' id='txtExpideLicenciaUrbanismoHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Lic. Construcci&oacute;n </label><br /><input type='text' name='txtLicenciaConstruccionHijo[]' id='txtLicenciaConstruccionHijo' onBlur='sinCaracteresEspeciales( this );' size='18' ></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Fecha&nbsp;Licencia </label><br /><input name='fchLicenciaConstruccion1Hijo[]' type='text' id='fchLicenciaConstruccion1Hijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchLicenciaConstruccion1Hijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Vigencia&nbsp;Licencia </label><br /><input name='fchVigenciaLicenciaConstruccionHijo[]' type='text' id='fchVigenciaLicenciaConstruccionHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchVigenciaLicenciaConstruccionHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Vendedor </label><br /><input type='text' name='txtNombreVendedorHijo[]' id='txtNombreVendedorHijo' onBlur='sinCaracteresEspeciales( this );' size='20' ></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >NIT Vendedor </label><br /><input type='text' name='numNitVendedorHijo[]' id='numNitVendedorHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></div>";
     addDiv += "<div class='col-md-3'><label class='control-label' >C&eacute;dula Catastral </label><br /><input type='text' name='txtCedulaCatastralHijo[]' id='txtCedulaCatastralHijo' onBlur='sinCaracteresEspeciales( this );' size='22' ></div>";
     addDiv += "<div class='col-md-3'><label class='control-label' >No. Escritura </label><br /><input type='text' name='txtEscrituraHijo[]' id='txtEscrituraHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></div>";
     addDiv += "<div class='col-md-3'><label class='control-label' >Fecha&nbsp;Escritura </label><br /><input name='fchEscrituraHijo[]' type='text' id='fchEscrituraHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchEscrituraHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >No. Notar&iacute;a </label><br /><input type='text' name='numNotariaHijo[]' id='numNotariaHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></div>";
-    addDiv += "<div class='col-md-3'><label class='control-label' >Eliminar </label><br /><img src='recursos/imagenes/remove.png' width='22px' onclick='return confirmaRemoverLineaFormulario(this);' style='position: relative; float: left; width:15%'></div> <p>&nbsp;</p></div></td>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >No. Notar&iacute;a </label><br /><input type='text' name='numNotariaHijo[]' id='numNotariaHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></div><div class='col-md-6'> <p>&nbsp;</p></div></div>";
+    addDiv += "<div class='col-md-12'> <fieldset><legend class='legend'> <h4 style='position: relative; float: left; width: 50%;  margin: 0px; padding: 5px'>  Licencia de urbanismo</h4> </legend>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Lic. Urbanismo </label><br /><input type='text' name='txtLicenciaUrbanismoHijo[]' id='txtLicenciaUrbanismoHijo' onBlur='sinCaracteresEspeciales( this );' size='18' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Entidad Expedici&oacute;n </label><br /><input type='text' name='txtExpideLicenciaUrbanismoHijo[]' id='txtExpideLicenciaUrbanismoHijo' onBlur='sinCaracteresEspeciales( this );' size='13' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Fecha&nbsp;Licencia </label><br /><input name='fchLicenciaUrbanismo1Hijo[]' type='text' id='fchLicenciaUrbanismo1Hijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchLicenciaUrbanismo1Hijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Vigencia&nbsp;Licencia </label><br /><input name='fchVigenciaLicenciaUrbanismoHijo[]' type='text' id='fchVigenciaLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchVigenciaLicenciaUrbanismoHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "</fieldset></div></div>";
+    addDiv += "<div class='col-md-12'> <fieldset><legend class='legend'> <h4 style='position: relative; float: left; width: 50%;  margin: 0px; padding: 5px'>  Licencia de urbanismo</h4> </legend>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Lic. Construcci&oacute;n </label><br /><input type='text' name='txtLicenciaConstruccionHijo[]' id='txtLicenciaConstruccionHijo' onBlur='sinCaracteresEspeciales( this );' size='18' ></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Fecha&nbsp;Licencia </label><br /><input name='fchLicenciaConstruccion1Hijo[]' type='text' id='fchLicenciaConstruccion1Hijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchLicenciaConstruccion1Hijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Vigencia&nbsp;Licencia </label><br /><input name='fchVigenciaLicenciaConstruccionHijo[]' type='text' id='fchVigenciaLicenciaConstruccionHijo[" + indiceFilaFormulario + "]' size='8' style='text-align:center; background-color:#E4E4E4' readonly /><a href='#' onClick='javascript: calendarioPopUp( \"fchVigenciaLicenciaConstruccionHijo[" + indiceFilaFormulario + "]\" ); '><img src='recursos/imagenes/calendar.png'></a></div>";
+    addDiv += "<div class='col-md-3'><label class='control-label' >Eliminar </label><br /><img src='recursos/imagenes/remove.png' width='22px' onclick='return confirmaRemoverLineaFormulario(this);' style='position: relative; float: left; width:15%'></div>";
+    addDiv += "</div></fieldset></div></div>";
+    /* addDiv += "<div class='col-md-3'><label class='control-label' >Vendedor </label><br /><input type='text' name='txtNombreVendedorHijo[]' id='txtNombreVendedorHijo' onBlur='sinCaracteresEspeciales( this );' size='20' ></div>";
+     addDiv += "<div class='col-md-3'><label class='control-label' >NIT Vendedor </label><br /><input type='text' name='numNitVendedorHijo[]' id='numNitVendedorHijo' onBlur='sinCaracteresEspeciales( this );' size='12' ></div>";*/
+    addDiv += " <p>&nbsp;</p></div></td>";
     myNewCell = myNewRow.insertCell(-1);
     myNewCell.innerHTML = addDiv;
     indiceFilaFormulario++;
@@ -10718,26 +10723,30 @@ function cambiarFuenteInhabilidad(objSelectFuente) {
 
 }
 
-var listadoAadProyectos = function(){
+var listadoAadProyectos = function () {
 
     $('#listadoAadPry').DataTable({
-        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+        "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, 'Todos']],
         "order": [[0, "desc"]],
         "scrollX": true,
         "dom": 'lftipr'
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "select",
-        "listadoAadPry_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "listadoAadPry_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "input",
-        "listadoAadPry_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "listadoAadPry_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
@@ -10746,40 +10755,44 @@ var listadoAadProyectos = function(){
     objPaginador.style.textAlign = "center";
 
     eliminarObjeto("listadoAadProyectos");
-    YAHOO.util.Event.onContentReady("listadoAadProyectos",listadoAadProyectos);
+    YAHOO.util.Event.onContentReady("listadoAadProyectos", listadoAadProyectos);
 }
-YAHOO.util.Event.onContentReady("listadoAadProyectos",listadoAadProyectos);
+YAHOO.util.Event.onContentReady("listadoAadProyectos", listadoAadProyectos);
 
-function plantillaAADProyectos(){
+function plantillaAADProyectos() {
     var objTipoActo = YAHOO.util.Dom.get("seqTipoActoUnidad");
     var numIndex = objTipoActo.selectedIndex;
-    if( objTipoActo.options[numIndex].value == 0 ){
+    if (objTipoActo.options[numIndex].value == 0) {
         alert("Seleccione el tipo de acto para obtener la plantilla");
-    }else{
-        location.href='./contenidos/aadProyectos/plantilla.php?seqTipoActoUnidad=' + objTipoActo.options[numIndex].value;
+    } else {
+        location.href = './contenidos/aadProyectos/plantilla.php?seqTipoActoUnidad=' + objTipoActo.options[numIndex].value;
     }
 }
 
-var listadoCdpProyectos = function(){
+var listadoCdpProyectos = function () {
 
     $('#listadoCdp').DataTable({
-        "lengthMenu": [[10,20,50,100,-1], [10,20,50,100,'Todos']],
+        "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, 'Todos']],
         "order": [[0, "desc"]],
         "scrollX": true,
         "dom": 'ltipr'
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "select",
-        "listadoCdp_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "listadoCdp_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function(){ return true; },
-        "input",
-        "listadoCdp_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "listadoCdp_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
@@ -10788,6 +10801,6 @@ var listadoCdpProyectos = function(){
     objPaginador.style.textAlign = "center";
 
     eliminarObjeto("listadoCdpListener");
-    YAHOO.util.Event.onContentReady("listadoCdpListener",listadoCdpProyectos);
+    YAHOO.util.Event.onContentReady("listadoCdpListener", listadoCdpProyectos);
 }
-YAHOO.util.Event.onContentReady("listadoCdpListener",listadoCdpProyectos);
+YAHOO.util.Event.onContentReady("listadoCdpListener", listadoCdpProyectos);

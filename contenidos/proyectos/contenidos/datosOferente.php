@@ -16,8 +16,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "DatosGeneralesProyectos.class.php" );
 
 $arrOferente[0] = array();
-$claDatosProy = new DatosGeneralesProyectos();
 $txtPlantilla = "proyectos/vistas/listaOferente.tpl";
+$claDatosProy = new DatosGeneralesProyectos();
 $idOferente = 0;
 $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
 
@@ -31,7 +31,7 @@ if (isset($_REQUEST['seqOferente'])) {
     if ($_REQUEST['tipo'] == '1') {
         $arrOferente = array();
         $arrOferente[0] = array();
-        $txtPlantilla = "proyectos/vistas/InscripcionOferente.tpl";
+        $txtPlantilla = "proyectos/vistas/inscripcionOferente.tpl";
     }
 }
 $seqUsuario = $_SESSION['seqUsuario'];

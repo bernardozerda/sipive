@@ -161,3 +161,23 @@ function showMenu() {
         });
     });
 }
+
+
+function pdfGiroFiducia() {
+
+    var wndFormato = null;
+    try {
+        var numAlto = YAHOO.util.Dom.getDocumentHeight() - 400;
+        var txtUrl  = "./contenidos/pryGestionFinanciera/pdfGiroFiducia.php";
+            //txtUrl += "?seqCruce=" + seqCruce + "&" + txtFormularios;
+        var txtParametros = "resizable=0,location=0,scrollbars=1,width=900,height=" + numAlto + ",left=100,top=10,titlebar=0";
+        if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
+            throw "ErrorPopUp";
+        }
+    } catch (objError) {
+        if (objError == "ErrorPopUp") {
+            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+        }
+    }
+
+}

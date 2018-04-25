@@ -174,16 +174,16 @@
                                                     CDP: {$arrTablaCDP.numeroCDP} de {$arrTablaCDP.fechaCDP->format(Y)}<br>
                                                     RP: {$arrTablaCDP.numeroRP} de {$arrTablaCDP.fechaRP->format(Y)}
                                                 </td>
-                                                <td style="vertical-align: middle">$ {$arrTablaCDP.valorRP|number_format:0:',':'.'}</td>
-                                                <td style="vertical-align: middle">$ {$arrTablaCDP.giros|number_format:0:',':'.'}</td>
-                                                <td style="vertical-align: middle">$ {$arrTablaCDP.liberaciones|abs|number_format:0:',':'.'}</td>
-                                                <td>
+                                                <td style="vertical-align: middle" class="text-right">$ {$arrTablaCDP.valorRP|number_format:0:',':'.'}</td>
+                                                <td style="vertical-align: middle" class="text-right">$ {$arrTablaCDP.giros|number_format:0:',':'.'}</td>
+                                                <td style="vertical-align: middle" class="text-right">$ {$arrTablaCDP.liberaciones|abs|number_format:0:',':'.'}</td>
+                                                <td class="text-center">
                                                     <input type="text" class="form-control input-sm"
                                                            id="valGiro" value="{$numTotalGiro|@doubleval|number_format:0:',':'.'}"
                                                            style="width: 110px"
                                                            readonly>
                                                 </td>
-                                                <td  style="vertical-align: middle" {if $arrTablaCDP.saldo < 0} class="text-danger" {/if}>
+                                                <td style="vertical-align: middle" class="text-right {if $arrTablaCDP.saldo < 0}text-danger{/if}">
                                                     $ {$arrTablaCDP.saldo|number_format:0:',':'.'}
                                                 </td>
                                             </tr>
@@ -438,10 +438,16 @@
         </div>
         <div class="panel-footer" align="center">&nbsp;
 
-            {*<button type="button" name="volver" class="btn btn-danger" style="width: 100px;">PDF</button>*}
-            {**}
-            &nbsp;
+            {if not empty($claGestion->arrMensajes)}
+                <button type="button" name="volver" class="btn btn-danger" style="width: 100px;"
+                        onclick="pdfGiroFiducia();"
+                >PDF</button>
+            {/if}
+
             <button type="button" name="salvar" value="1" class="btn btn-primary" style="width: 100px;"
+                    {if not empty($claGestion->arrMensajes)}
+                        disabled="disabled"
+                    {/if}
                     {if $bolPendientes == false}
                         onclick="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/salvarGiroFiducia.php',false,true);"
                     {else}

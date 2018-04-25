@@ -26,7 +26,7 @@ class GestionFinancieraProyectos
         $this->arrTitulos[] = "Nombre del Proyecto";
         $this->arrTitulos[] = "Identificador de la Unidad";
         $this->arrTitulos[] = "Descripcion de la Unidad";
-        $this->arrTitulos[] = "Valor por resolución";
+        $this->arrTitulos[] = "Valor disponible";
         $this->arrTitulos[] = "Valor a Girar";
 
     }
@@ -156,7 +156,6 @@ class GestionFinancieraProyectos
         $sql = "
             select distinct
                 lib.seqLiberacion, 
-                uvi.seqProyecto,
                 lib.seqUnidadActo,
                 lib.seqRegistroPresupuestal,
                 lib.valLiberado,
@@ -165,7 +164,12 @@ class GestionFinancieraProyectos
             from t_pry_aad_liberacion lib
             inner join t_cor_usuario usu on lib.seqUsuario = usu.seqUsuario
             inner join t_pry_aad_unidades_vinculadas uvi on lib.seqRegistroPresupuestal = uvi.seqRegistroPresupuestal
-            where uvi.seqProyecto = $seqProyecto
+            where uvi.seqProyecto  in (
+                select seqProyecto
+                from t_pry_proyecto pry
+                where pry.seqProyecto = $seqProyecto
+                   or pry.seqProyectoPadre = $seqProyecto
+            )
         ";
         $objRes = $aptBd->execute($sql);
         while($objRes->fields){
@@ -207,6 +211,78 @@ class GestionFinancieraProyectos
     }
 
     private function giros($seqProyecto){
+        global $aptBd;
+
+//                gfi.txtCertificacion,
+//                gfi.bolCedulaOferente,
+//                gfi.bolRitOferente,
+//                gfi.bolRutOferente,
+//                gfi.bolExistenciaOferente,
+//                gfi.bolConstitucionFiducia,
+//                gfi.bolCedulaFiducia,
+//                gfi.bolBancariaFiducia,
+//                gfi.bolSuperintendenciaFiducia,
+//                gfi.bolCamaraFiducia,
+//                gfi.bolRutFiducia,
+//                gfi.bolResolucionProyecto,
+//                gfi.bolMemorandoProyecto,
+//                gfi.fchCreacion,
+//                usu.seqUsuario,
+//                concat(usu.txtNombre,' ',usu.txtApellido) as txtUsuario,
+//                gfd.seqProyecto,
+//                gfi.numSecuencia,
+
+        $sql = "
+            select 
+                gfi.seqGiroFiducia,
+                gfd.seqGiroFiduciaDetalle,
+                gfd.seqUnidadActo,
+                gfd.seqRegistroPresupuestal,
+                gfd.seqUnidadProyecto,
+                gfd.valGiro
+            from t_pry_aad_giro_fiducia gfi
+            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            inner join t_cor_usuario usu on gfi.seqUsuario = usu.seqUsuario
+            where gfd.seqProyecto in (
+                select seqProyecto
+                from t_pry_proyecto pry
+                where pry.seqProyecto = $seqProyecto
+                   or pry.seqProyectoPadre = $seqProyecto
+            )        
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $seqGiroFiducia = $objRes->fields['seqGiroFiducia'];
+            $seqGiroFiduciaDetalle = $objRes->fields['seqGiroFiduciaDetalle'];
+            $seqUnidadActo = $objRes->fields['seqUnidadActo'];
+            $seqRegistroPresupuestal = $objRes->fields['seqRegistroPresupuestal'];
+            $seqUnidadProyecto = intval($objRes->fields['seqUnidadProyecto']);
+
+            $this->arrResoluciones[$seqUnidadActo]['giros'] += $objRes->fields['valGiro'];
+            $this->arrResoluciones[$seqUnidadActo]['saldo'] =
+                $this->arrResoluciones[$seqUnidadActo]['total'] +
+                $this->arrResoluciones[$seqUnidadActo]['liberaciones'] -
+                $this->arrResoluciones[$seqUnidadActo]['giros'];
+
+            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'] += $objRes->fields['valGiro'];
+            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'] =
+                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP'] +
+                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['liberaciones'] -
+                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'];
+
+            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['giros'] += $objRes->fields['valGiro'];
+
+            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['saldo'] =
+                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['valor'] -
+                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['giros'];
+
+            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'][$seqGiroFiducia][$seqGiroFiduciaDetalle] = $objRes->fields['valGiro'];
+
+            $objRes->MoveNext();
+        }
+
+
 
     }
 
@@ -457,6 +533,7 @@ class GestionFinancieraProyectos
             $txtNombreProyecto = trim(mb_strtolower($arrArchivo[$i][1]));
             $seqUnidadProyecto = intval($arrArchivo[$i][2]);
             $txtUnidadProyecto = trim(mb_strtolower($arrArchivo[$i][3]));
+            $valDisponible     = doubleval($arrArchivo[$i][4]);
             $valGiro           = doubleval($arrArchivo[$i][5]);
 
             // valida el identificador del proyecto
@@ -542,6 +619,10 @@ class GestionFinancieraProyectos
             // validacion del monto agirar
             if(! is_numeric($arrArchivo[$i][5])){
                 $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos[5] . " no es válido";
+            }else{
+                if($valGiro > $valDisponible){
+                    $this->arrErrores[] = "Error linea " . ($i + 1) . ": No puede girar mas del monto que tiene disponible";
+                }
             }
 
             if(empty($this->arrErrores)){
@@ -614,39 +695,115 @@ class GestionFinancieraProyectos
             try{
                 $aptBd->BeginTrans();
 
+                $sql = "
+                    insert into t_pry_aad_giro_fiducia (
+                      numSecuencia,
+                      txtCertificacion,
+                      bolCedulaOferente,
+                      bolRitOferente,
+                      bolRutOferente,
+                      bolExistenciaOferente,
+                      bolConstitucionFiducia,
+                      bolCedulaFiducia,
+                      bolBancariaFiducia,
+                      bolSuperintendenciaFiducia,
+                      bolCamaraFiducia,
+                      bolRutFiducia,
+                      bolResolucionProyecto,
+                      bolMemorandoProyecto,
+                      fchCreacion,
+                      seqUsuario
+                  ) values (
+                      " . $this->obtenerSecuencia($arrPost['seqProyecto']) . ",
+                      '" . mb_strtoupper($arrPost['txtCertificacion']) . "',
+                      " . intval($arrPost['documentos']['bolCedulaOferente']) . ",  
+                      " . intval($arrPost['documentos']['bolRitOferente']) . ",  
+                      " . intval($arrPost['documentos']['bolRutOferente']) . ",  
+                      " . intval($arrPost['documentos']['bolExistenciaOferente']) . ",  
+                      " . intval($arrPost['documentos']['bolConstitucionFiducia']) . ",  
+                      " . intval($arrPost['documentos']['bolCedulaFiducia']) . ",  
+                      " . intval($arrPost['documentos']['bolBancariaFiducia']) . ",  
+                      " . intval($arrPost['documentos']['bolSuperintendenciaFiducia']) . ",  
+                      " . intval($arrPost['documentos']['bolCamaraFiducia']) . ",  
+                      " . intval($arrPost['documentos']['bolRutFiducia']) . ",  
+                      " . intval($arrPost['documentos']['bolResolucionProyecto']) . ",  
+                      " . intval($arrPost['documentos']['bolMemorandoProyecto']) . ",  
+                      now(),
+                      " . $_SESSION['seqUsuario'] . "
+                  )
+                ";
+                $aptBd->execute($sql);
 
+                $seqGiroFiducia = $aptBd->Insert_ID();
 
-//                $sql = "
-//                    insert into t_pry_giro_fiducia (
-//                      seqGiroFiducia,
-//                      numSecuencia,
-//                      txtCertificacion,
-//                      bolCedulaOferente,
-//                      bolRitOferente,
-//                      bolRutOferente,
-//                      bolExistenciaOferente,
-//                      bolConstitucionFiducia,
-//                      bolCedulaFiducia,
-//                      bolBancariaFiducia,
-//                      bolSuperintendenciaFiducia,
-//                      bolCamaraFiducia,
-//                      bolRutFiducia,
-//                      bolResolucionProyecto,
-//                      bolMemorandoProyecto,
-//                      fchCreacion,
-//                      seqUsuario
-//                  )
-//                "
+                $seqProyecto = $arrPost['seqProyecto'];
+                $seqUnidadActo = $arrPost['seqUnidadActo'];
+                $seqRegistroPresupuestal = $arrPost['seqRegistroPresupuestal'];
 
+                foreach ($arrPost['unidades'][$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal] as $seqUnidadProyecto => $valGiro){
+
+                    if(intval($seqUnidadProyecto) != 0) {
+                        $seqProyectoInsertar = array_shift(
+                            obtenerDatosTabla(
+                                "t_pry_unidad_proyecto",
+                                array("seqUnidadProyecto", "seqProyecto"),
+                                "seqUnidadProyecto",
+                                "seqUnidadProyecto = " . $seqUnidadProyecto
+                            )
+                        );
+                    }else{
+                        $seqProyectoInsertar = $seqProyecto;
+                        $seqUnidadProyecto = "null";
+                    }
+                    $sql = "
+                        insert into t_pry_aad_giro_fiducia_detalle(
+                            seqGiroFiducia, 
+                            seqProyecto, 
+                            seqUnidadActo, 
+                            seqRegistroPresupuestal, 
+                            seqUnidadProyecto, 
+                            valGiro
+                        ) values (
+                            $seqGiroFiducia,
+                            $seqProyectoInsertar,
+                            $seqUnidadActo,
+                            $seqRegistroPresupuestal,
+                            $seqUnidadProyecto,
+                            $valGiro
+                        ) 
+                    ";
+                    $aptBd->execute($sql);
+                }
+
+                $this->arrMensajes[] = "Registro salvado satisfactoriamente";
 
                 $aptBd->CommitTrans();
             } catch ( Exception $objError ){
                 $aptBd->RollbackTrans();
+                $this->arrMensajes = array();
                 $this->arrErrores[] = $objError->getMessage();
             }
 
         }
 
+    }
+
+    private function obtenerSecuencia($seqProyecto){
+        global $aptBd;
+
+        $sql = "
+            select 
+              if(max(gfi.numSecuencia) is null, 0 ,max(gfi.numSecuencia)) + 1 as numSecuencia
+            from t_pry_aad_giro_fiducia gfi
+            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            where gfd.seqProyecto in (
+                select seqProyecto
+                from t_pry_proyecto pry
+                where pry.seqProyecto = $seqProyecto
+                   or pry.seqProyectoPadre = $seqProyecto
+            ) and year(gfi.fchCreacion) = year(now())
+        ";
+        return array_shift($aptBd->GetAll($sql))['numSecuencia'];
     }
 
 

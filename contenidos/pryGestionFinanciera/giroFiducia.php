@@ -80,7 +80,7 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
     $arrTablaCDP['numeroRP'] = $claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['numeroRP'];
     $arrTablaCDP['fechaRP'] = $claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['fechaRP'];
     $arrTablaCDP['valorRP'] = $claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP'];
-    $arrTablaCDP['giros'] = 0;
+    $arrTablaCDP['giros'] = doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros']);
     $arrTablaCDP['liberaciones'] = doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['liberaciones']);
     $arrTablaCDP['saldo'] = (doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']) == 0)?
         $arrTablaCDP['valorRP'] :
@@ -98,8 +98,6 @@ foreach($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion){
         }
     }
 }
-
-pr($arrUnidades);
 
 $claSmarty->assign("claGestion", $claGestion);
 $claSmarty->assign("arrPost", $_POST);

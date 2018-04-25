@@ -9,15 +9,6 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "GestionFinancieraProyectos.class.php" );
 
-$claGestion = new GestionFinancieraProyectos();
-$claGestion->proyectos();
-
-if(intval($_POST['seqProyecto']) != 0){
-    $claGestion->informacionResoluciones($_POST['seqProyecto']);
-}
-
-$claSmarty->assign("claGestion", $claGestion);
-$claSmarty->assign("arrPost", $_POST);
-$claSmarty->display( "pryGestionFinanciera/liberacion.tpl" );
+pr($_POST);
 
 ?>

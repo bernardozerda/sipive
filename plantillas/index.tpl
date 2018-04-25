@@ -21,7 +21,7 @@
             <link rel="stylesheet" type="text/css" href="./librerias/yui/tabview/assets/skins/sam/tabview.css"/>
             <link rel="stylesheet" type="text/css" href="./librerias/yui/datatable/assets/skins/sam/datatable.css"/>
             <link rel="stylesheet" type="text/css" href="./librerias/yui/paginator/assets/skins/sam/paginator.css"/>
-            <link rel="stylesheet" type="text/css" href="./librerias/yui/autocomplete/assets/skins/sam/autocomplete.css"/>
+            <link rel="stylesheet" type="text/css" href="./librerias/yui/autocomplete/assets/skins/sam/autocomplete-skin.css"/>
             <link rel="stylesheet" type="text/css" href="./librerias/yui/treeview/assets/skins/sam/treeview.css" />
 
             <!-- INCLUSIONES JAVASCRIPT -->	

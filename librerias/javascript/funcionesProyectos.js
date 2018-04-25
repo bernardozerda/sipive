@@ -39,17 +39,21 @@ function  tablas() {
 function almacenarIncripcion() {
     var valid = true;
     $.each($("#frmProyectos input.required"), function (index, value) {
+        $("#val_" + $(this).attr("id")).css("display", "none");
+        $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         if (!$(value).val()) {
             // console.log("paso1");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-             console.log($(this).attr("id") + "input");
+            // console.log($(this).attr("id") + "input");
             valid = false;
         }
 
     });
     // console.log($("#frmProyectos select.required"));
     $.each($("#frmProyectos select.required"), function (index, value) {
+        $("#val_" + $(this).attr("id")).css("display", "none");
+          $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         if ($(value).val() == 0) {
             // console.log($(value).val()+ " ****** "+index+"  ----- "+value);
             // console.log($(this).attr("id") + "select");
@@ -60,8 +64,10 @@ function almacenarIncripcion() {
         }
     });
     $.each($("#frmProyectos input[type=email].required"), function (index, value) {
+        $("#val_" + $(this).attr("id")).css("display", "none");
+          $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-        console.log(caract.test($(value).val()));
+        //console.log(caract.test($(value).val()));
         if (caract.test($(value).val()) == false) {
             $("#val_" + $(this).attr("id")).css("display", "inline");
             $("#val_" + $(this).attr("id")).html("Correo erroneo! ");
@@ -70,6 +76,8 @@ function almacenarIncripcion() {
         }
     });
     $.each($("#frmProyectos textArea.required"), function (index, value) {
+        $("#val_" + $(this).attr("id")).css("display", "none");
+          $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         if ($(value).val() == 0) {
             // console.log("paso3");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
@@ -78,7 +86,30 @@ function almacenarIncripcion() {
             valid = false;
         }
     });
+    $.each($("#frmProyectos input"), function (index, value) {
+        if ($(value).val() != 0 && $(value).val() != null) {
+            // console.log("value : " + $(value).val() + " index -> " + index);
+            var separador = "Tel";
+            var num = $(this).attr("id");
+            if (num != 'undefined' && num != null && num != "") {
 
+                separador = "Tel";
+                num = num.split(separador);
+                if (num.length > 1) {
+                    $("#val_" + $(this).attr("id")).css("display", "none");
+                      $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
+                    //console.log("id : " + $(this).attr("id") + " tel: " + $("#" + $(this).attr("id")).val().length);
+                    if ($("#" + $(this).attr("id")).val().length != 7 && $("#" +  $(this).attr("id")).val().length != 10) {
+                        $("#" + $(this).attr("id")).css("border", "1px solid red");
+                        $("#val_" + $(this).attr("id")).css("display", "inline");
+                        $("#val_" + $(this).attr("id")).html("Debe tener 7 o 10 numeros");
+                        valid = false;
+                    }
+                }
+                console.log("num - > " + num.length + " valid = " + valid);
+            }
+        }
+    });
     if (valid) {
         var url = $("#txtArchivo").val();
         // var url = "./contenidos/proyectos/contenidos/datosOferente.php"; // El script a dónde se realizará la petición.
@@ -106,15 +137,15 @@ function adicionarOferente() {
     });
     fType += "</select></div>";
     fType += "<div class=\"col-md-3\"><label class=\"control-label\" >Nombre Contaco Oferente</label>";
-    fType += "<input name=\"txtNombreContactoOferente[]\" type=\"text\" id=\"txtNombreContactoOferente\" onBlur=\"sinCaracteresEspeciales(this);\" class=\"form-control\" style=\"width:160px;\"/>";
+    fType += "<input name=\"txtNombreContactoOferente[]\" type=\"text\" id=\"txtNombreContactoOferente_"+intId+"\" onBlur=\"sinCaracteresEspeciales(this);\" class=\"form-control\" style=\"width:160px;\"/>";
     fType += "</div>";
     fType += "<div class=\"col-md-3\">";
     fType += "<label class=\"control-label\" >Correo Contacto</label> ";
     fType += "<input name=\"txtCorreoOferente[]\" type=\"text\" id=\"txtCorreoOferente\" value=\"\" onBlur=\"sinCaracteresEspeciales(this);\" class=\"form-control\" style=\"width:140px;\"/></div>";
     fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Telefono Oferente</label>";
-    fType += "<input name=\"numTelContactoOferente[]\" type=\"text\" id=\"numTelContactoOferente\" value=\"\" onBlur=\"sinCaracteresEspeciales(this); soloNumeros(this);\" class=\"form-control\" style=\"position: relative; float: left;width:70%;\"/>";
+    fType += "<input name=\"numTelContactoOferente[]\" type=\"text\" id=\"numTelContactoOferente_"+intId+"\" value=\"\" onBlur=\"sinCaracteresEspeciales(this); soloNumeros(this);\" class=\"form-control\" style=\"position: relative; float: left;width:70%;\"/>";
     fType += "<img src=\"recursos/imagenes/remove.png\" width=\"22px\" onclick=\"removerOferente(table" + intId + ")\" style=\"position: relative; float: left; width:20% \"/>";
-    fType += "</div></div>";
+    fType += "<div id='val_numTelContactoOferente_"+intId+"' class='divError'>Debe diligenciar el numero de contacto del Oferente</div></div></div>";
     fName += fType;
     fName += "</div></div>";
     fieldWrapper.append(fName);
@@ -149,7 +180,6 @@ function obtenerModalidadProyecto(value) {
         }
     });
 }
-
 function showMenu() {
     $(document).ready(function () {
         $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
@@ -163,21 +193,3 @@ function showMenu() {
 }
 
 
-function pdfGiroFiducia() {
-
-    var wndFormato = null;
-    try {
-        var numAlto = YAHOO.util.Dom.getDocumentHeight() - 400;
-        var txtUrl  = "./contenidos/pryGestionFinanciera/pdfGiroFiducia.php";
-            //txtUrl += "?seqCruce=" + seqCruce + "&" + txtFormularios;
-        var txtParametros = "resizable=0,location=0,scrollbars=1,width=900,height=" + numAlto + ",left=100,top=10,titlebar=0";
-        if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
-            throw "ErrorPopUp";
-        }
-    } catch (objError) {
-        if (objError == "ErrorPopUp") {
-            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
-        }
-    }
-
-}

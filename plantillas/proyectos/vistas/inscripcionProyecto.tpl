@@ -40,8 +40,8 @@
                     <li class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}">Licencias <br></a>
                     </li>
-                    {*{/if}
-                    {if $seqPryEstadoProceso > 1}*}
+                {/if}
+                {if $seqPryEstadoProceso > 1}
 
                     <li class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos Financieros</a>
@@ -521,6 +521,7 @@
                                 <div class="form-group" id="field{$seqOferentesProy+1}"> 
                                     <div id="table{$cont}">
                                         <div class="col-md-3">
+
                                             <label class="control-label" >Oferente (*) </label>                                      
                                             <input type="hidden" name="seqProyectoOferente[]" value="{$valueOferentesProy.seqProyectoOferente}" />
                                             <select name="seqOferente[]"
@@ -534,7 +535,11 @@
                                             </select>   
                                             <div id="val_seqOferente_{$cont}" class="divError" style="width: 100%; position: relative;float: left;">Debe seleccionar el oferente</div>
                                         </div>
+
+ <!--  <img src="recursos/imagenes/remove.png" width="20px" onclick="removerOferente(table{$seqOferentesProy+1});" /></div> -->
+
                                     </div>
+
                                     <div class="col-md-3">
                                         <label class="control-label" >Nombre Contacto Oferente</label>   
                                         <input name="txtNombreContactoOferente[]" type="text" id="txtNombreContactoOferente_{$cont}" value="{$valueOferentesProy.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="width:160px;"/>
@@ -547,8 +552,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label" >Telefono Oferente</label>   
-                                        <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente_{$cont}" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);
-                                                soloNumeros(this)" class="form-control required" style="position: relative; float: left;width:60%;"/>
+                                        <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente_{$cont}" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="position: relative; float: left;width:60%;"/>
                                         <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
                                         {if $cont > 1}
                                             <img src="recursos/imagenes/remove.png" width="20px"  style="position: relative; float: left; width:20% "onclick="removerOferente(table{$cont})"/>
@@ -586,9 +590,10 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="control-label" >Telefono Contacto</label>   
-                                    <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this); soloNumeros(this);" class="form-control " style="position: relative; float: left;width:70%;"/>
-                                           <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
-                                    <div id="val_numTelContactoOferente_1" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
+                                    <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);
+                                            soloNumeros(this);" class="form-control " style="position: relative; float: left;width:70%;"/>
+                                    <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
+                                    <div id="val_numTelContactoOferente_" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
                                 </div>
                             {/if}
                         </div>

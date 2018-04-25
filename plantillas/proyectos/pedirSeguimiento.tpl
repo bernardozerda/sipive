@@ -35,7 +35,7 @@
                         <option value="{$seqGrupoGestion}">{$txtGrupoGestion}</option>
                     {/foreach}
                 </select>
-                <div id="val_seqGrupoGestion" class="divError">Seleccione el grupo de la gestión realizada</div>
+                <div id="val_seqGrupoGestion" class="divError">Seleccione el grupo de la gestión</div>
             </div>
         </div>
         <div class="form-group">

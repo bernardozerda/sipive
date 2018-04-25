@@ -77,4 +77,5 @@
             <input type="button" name="btn_enviar" id="btn_enviar" value="Salvar Inscripci&oacute;n" onclick="almacenarIncripcion()" class="btn_volver"/><br>
         </p>
     </fieldset>
-</div><br>
+</div>
+<br>&nbsp;

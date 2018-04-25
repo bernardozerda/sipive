@@ -43,6 +43,7 @@ button.reporteadorExport{
     padding: 3px;
     padding-left: 25px;
     cursor: pointer;
+    
 }	
 
 
@@ -110,10 +111,11 @@ a:hover {
     display: none;
     padding-left: 16px;
     color: red;
-    font-weight: bold;
+    font-weight: bolder;
     position: relative;
     float: left;
     width: 100%;
+    
 }
 
 .msgOk{

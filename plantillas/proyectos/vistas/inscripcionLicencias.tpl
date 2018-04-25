@@ -81,19 +81,19 @@
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha de Licencia</label> 
                     <input name="fchLicencia[]" type="text" id="fchLicencia_1" value="{$valueLic.fchLicencia}" size="12" readonly=""  class="form-control required"  style="width: 70%; position: relative; float: left">
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicencia');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+                    <a href="#" onclick="javascript: calendarioPopUp('fchLicencia_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
                     <div id="val_fchLicencia_1" class="divError">Este campo es requerido</div>
                 </div>
                 <div class="col-md-4">
                     <label class="control-label">Vigencia de Licencia</label> 
                     <input name="fchVigenciaLicencia[]" type="text" id="fchVigenciaLicencia_1" value="{$valueLic.fchVigenciaLicencia}" size="12" readonly="" class="form-control required"  style="width: 70%; position: relative; float: left">
-                    <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaLicencia');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+                    <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaLicencia_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
                     <div id="val_fchVigenciaLicencia_1" class="divError">Este campo es requerido</div>
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Ejecutoria</label> 
                     <input name="fchEjecutoriaLicencia[]" type="text" id="fchEjecutoriaLicencia_1" value="{$valueLic.fchEjecutoriaLicencia}" onblur="sinCaracteresEspeciales(this);"  class="form-control required"  style="width: 70%; position: relative; float: left">
-                    <a href="#" onclick="javascript: calendarioPopUp('fchEjecutoriaLicencia');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+                    <a href="#" onclick="javascript: calendarioPopUp('fchEjecutoriaLicencia_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
                     <div id="val_fchEjecutoriaLicencia_1" class="divError">Este campo es requerido</div>
                 </div>
                 <div class="col-md-4">
@@ -103,13 +103,13 @@
                 </div>   
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga</label> 
-                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrroga" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
+                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
+                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga1</label> 
-                    <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrroga1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
+                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
+                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga2</label> 

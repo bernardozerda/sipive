@@ -65,8 +65,9 @@
                           onBlur="this.style.backgroundColor = '#FFFFFF';"
                           class="form-control required"
                           required="required" ></textarea>
+                <div id="val_txtComentario" class="divError">Por favor diligencie el campo de comentarios</div>
             </div>
-            <div id="val_txtComentario" class="divError">Por favor diligencie el campo de comentarios</div>
+            
         </div>
         <p>&nbsp;</p>
         <p >       

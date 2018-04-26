@@ -69,8 +69,8 @@ if (empty($arrErrores)) {
         $txtPlantilla = "proyectos/vistas/inscripcionOferente.tpl";
         //$claRegistro->registrarActividad("Edicion", 0, $_SESSION['seqUsuario'], "Edicion de Oferente: [" . $_POST['seqEditar'] . "] " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));
     } else {
-        $arrErrores = $claOferente->guardarOferente($_POST);
-        $arrOferente = $claDatosProy->obtenerDatosOferente(0);
+        $seqOferente = $claOferente->guardarOferente($_POST);
+        $arrOferente = $claDatosProy->obtenerDatosOferente($seqOferente);
         $txtPlantilla = "proyectos/vistas/inscripcionOferente.tpl";
         //$claRegistro->registrarActividad("Creacion", 0, $_SESSION['seqUsuario'], "Creacion de Oferente: " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));
     }

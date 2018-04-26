@@ -30,9 +30,10 @@
                                name="numNitOferente" 
                                id="numNitOferente" 
                                value="{$value.numNitOferente}"                                
-                               class="form-control"
+                               class="form-control required"
                                onBlur="sinCaracteresEspeciales(this);
-                                soloNit(this); soloNumeros(this);"
+                                       soloNit(this);
+                                       soloNumeros(this);"
                                style="width: 200px;"
                                />
                         <div id="val_numNitOferente" class="divError">Este campo es requerido</div>
@@ -41,7 +42,7 @@
                 <div class="form-group" >
                     <div class="col-md-4"> 
                         <label class="control-label" for="surname">Nombre de Contacto (*)</label> 
-                        <input name="txtNombreContactoOferente" type="text" id="txtNombreContactoOferente" value="{$value.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control"/>
+                        <input name="txtNombreContactoOferente" type="text" id="txtNombreContactoOferente" value="{$value.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required"/>
                         <div id="val_txtNombreContactoOferente"class="divError">Este campo es requerido</div>
                     </div>
                 </div>
@@ -53,26 +54,26 @@
                         <label class="control-label" for="surname">Ext</label>
                         <input name="numExtensionOferente" type="text" id="numExtensionOferente" value="{$value.numExtensionOferente}" onBlur="sinCaracteresEspeciales(this);
                                 soloNumeros(this);" style="width:60px;position: relative; float: left;width: 20%; left: 2%" class="form-control"/>
-                        <div id="val_numTelefonoOferente"class="divError">Este campo es requerido</div>    
+                        <div id="val_numTelefono1Oferente"class="divError">Este campo es requerido</div>    
                     </div>              
                     <div class="form-group" >
                         <div class="col-md-4"> 
                             <label class="control-label" for="surname">Celular de Contacto</label>   
                             <input name="numCelularOferente" type="text" id="numTelCelularOferente" value="{$value.numCelularOferente}" onBlur="sinCaracteresEspeciales(this);
-                                    soloNumeros(this);" style="width:200px;" class="form-control"/>
+                                    soloNumeros(this);" style="width:200px;" class="form-control required"/>
                             <div id="val_numTelCelularOferente" class="divError">Este campo es requerido</div>
                         </div>
                     </div>  
                     <div class="form-group" >
                         <div class="col-md-4"> 
                             <label class="control-label" for="surname">Correo de Contacto</label>
-                            <input name="txtCorreoOferente" type="email" id="txtCorreoElectronicoOferente" value="{$value.txtCorreoOferente}" class="form-control required" style="width:200px;" />
+                            <input name="txtCorreoOferente" type="email" id="txtCorreoOferente" value="{$value.txtCorreoOferente}" class="form-control required" style="width:200px;" />
                             <div id="val_txtCorreoOferente"class="divError">Este campo es requerido</div>    
                         </div>
                     </div><br>
                     <div><p>&nbsp;</p></div>
                     <legend>
-                        
+
                         <h4 style="position: relative; float: left; width: 100%; margin: 0; padding: 4px;">
                             Datos del Representante Legal 
                         </h4><br>
@@ -80,8 +81,8 @@
                     <div class="form-group" >
                         <div class="col-md-4"> 
                             <label class="control-label" for="surname">Representante Legal</label>   
-                            <input name="txtRepresentanteLegalOferente" type="text" id="txtRepresentanteLegalOferente" class="required" value="{$value.txtRepresentanteLegalOferente}" class="form-control required" onBlur="sinCaracteresEspeciales(this);" style="width:200px;"/>
-                            <div id="val_txtNombreRepresentanteLegal"class="divError">Este campo es requerido</div>
+                            <input name="txtRepresentanteLegalOferente" type="text" id="txtRepresentanteLegalOferente"  value="{$value.txtRepresentanteLegalOferente}" class="form-control required" onBlur="sinCaracteresEspeciales(this);" style="width:200px;"/>
+                            <div id="val_txtRepresentanteLegalOferente"class="divError">Este campo es requerido</div>
                         </div>
                     </div>  
 
@@ -95,9 +96,9 @@
                     </div>
                     <div class="form-group" >
                         <div class="col-md-4"> 
-                            <label class="control-label" for="surname">Direcci&oacute;n Representante</label>
-                            <input name="txtDireccionRepresentanteLegalOferente" type="text" id="txtDireccionRepresentanteLegalOferente" value="{$value.txtDireccionRepresentanteLegalOferente}" class="form-control required" style="width:200px;" />
-                            <div id="val_txtCorreoOferente"class="divError">Este campo es requerido</div>    
+                            <label class="control-label"  onclick="recogerDireccion('txtDireccionRepresentanteLegalOferente', 'objDireccionOcultoSolucion');" style="cursor: hand; text-decoration-line: underline">Direcci&oacute;n</label>
+                            <input name="txtDireccionRepresentanteLegalOferente" type="text" id="txtDireccionRepresentanteLegalOferente" value="{$value.txtDireccionRepresentanteLegalOferente}" class="form-control required"  readonly="" style="width:200px;" />
+                            <div id="val_txtDireccionRepresentanteLegalOferente"class="divError">Este campo es requerido</div>    
                         </div>
                     </div>
                     <div class="form-group" >
@@ -105,7 +106,7 @@
                             <label class="control-label" for="surname">Tel&eacute;fono Fijo de Representante (*)</label>
                             <input name="numTelefonoRepresentanteLegalOferente" type="text" id="numTelefonoRepresentanteLegalOferente" value="{$value.numTelefonoRepresentanteLegalOferente}" onBlur="sinCaracteresEspeciales(this);
                                     soloNumeros(this);" style="width:120px; position: relative; float: left;width: 50%" class="form-control required"/> 
-                            <label class="control-label" for="surname">Ext</label>
+                             <label class="control-label" for="surname">Ext</label>
                             <input name="numExtensionRepresentanteLegalOferente" type="text" id="numExtensionRepresentanteLegalOferente" value="{$value.numExtensionRepresentanteLegalOferente}" onBlur="sinCaracteresEspeciales(this);
                                     soloNumeros(this);" style="width:60px; position: relative; float: left;width: 20%;left: 2%" class="form-control"/>
                             <div id="val_numTelefonoRepresentanteLegalOferente"class="divError">Este campo es requerido</div>    
@@ -122,7 +123,7 @@
                             <div class="col-md-4"> 
                                 <label class="control-label" for="surname">Correo de Contacto</label>
                                 <input name="txtCorreoRepresentanteLegalOferente" type="email" id="txtCorreoRepresentanteLegalOferente" value="{$value.txtCorreoRepresentanteLegalOferente}" class="form-control required" style="width:250px;" />
-                                <div id="val_txtCorreoOferente"class="divError">Este campo es requerido</div>    
+                                <div id="val_txtCorreoRepresentanteLegalOferente"class="divError">Este campo es requerido</div>    
                             </div>
                         </div>
                         <br>
@@ -131,3 +132,4 @@
                     </fieldset>
                 </div>   
                 </form>
+                <div id="objDireccionOcultoSolucion" style="display:none"></div>

@@ -9,7 +9,7 @@
                     Datos del Constructor 
                 </h4>
                 <h6 style="position: relative; float: right; width: 40%; margin: 0; padding: 0;">
-                   
+
                     <input type="hidden" id="seqUsuario" name="seqUsuario" value="{$seqUsuario}" >               
                     <input type="hidden" id="txtArchivo" name="txtArchivo" value="./contenidos/administracionProyectos/salvarConstructor.php">
                 </h6>
@@ -65,7 +65,7 @@
                         <label class="control-label" for="surname">Tel&eacute;fono Fijo de Contacto (*)</label>
                         <input name="numTelefono1Constructor" type="text" id="numTelefono1Constructor" value="{$value.numTelefono1Constructor}" onBlur="sinCaracteresEspeciales(this);
                                 soloNumeros(this);" style="width:120px;" class="form-control required"/> 
-                        <div id="val_numTelefonoOferente"class="divError">Este campo es requerido</div>     
+                        <div id="val_numTelefono1Constructor"class="divError">Este campo es requerido</div>     
                     </div>
                 </div>
                 <div class="form-group" >
@@ -73,6 +73,7 @@
                         <label class="control-label" for="surname">Celular de Contacto</label>   
                         <input name="numTelefono2Constructor" type="text" id="numTelefono2Constructor" value="{$value.numTelefono2Constructor}" onBlur="sinCaracteresEspeciales(this);
                                 soloNumeros(this);" style="width:200px;" class="form-control"/>
+                        <div id="val_numTelefono2Constructor"class="divError">Este campo es requerido</div>
                     </div>
                 </div>  
                 <div class="form-group" >
@@ -82,14 +83,14 @@
                         <div id="val_txtCorreoElectronicoConstructor"class="divError">Este campo es requerido</div>    
                     </div>
                 </div>
-                <div class="form-group" >
+                <!--<div class="form-group" >
                     <div class="col-md-4"> 
                         <label class="control-label" for="surname">Estado:</label><br>   
                         Activo <input type="radio" name="bolActivo" value="1" {if $value.bolActivo == 1} checked  {/if}  >
                         inactivo <input type="radio" name="bolActivo" value="0" {if $value.bolActivo == 0} checked  {/if} ><br>
                     </div>
                     <div><p>&nbsp;</p></div>
-                </div><br>
+                </div><br>-->
                 <div><p>&nbsp;</p>
                     <legend>
                         <div><p>&nbsp;</p>
@@ -116,7 +117,8 @@
                             <div class="form-group" >
                                 <div class="col-md-4"> 
                                     <label class="control-label" for="surname">Correo de Contacto</label>  
-                                    <input name="txtCorreoElectronicoRepresentanteLegal	" type="email" id="txtCorreoElectronicoRepresentanteLegal" value="{$value.txtCorreoElectronicoRepresentanteLegal}" style="width:200px;"/>
+                                    <input name="txtCorreoElectronicoRepresentanteLegal" type="email" id="txtCorreoElectronicoRepresentanteLegal" value="{$value.txtCorreoElectronicoRepresentanteLegal}" style="width:200px;"/>
+                                    <div id="val_txtCorreoElectronicoRepresentanteLegal" class="divError">Este campo es requerido</div>
                                 </div>
                             </div>  
                         {/foreach}

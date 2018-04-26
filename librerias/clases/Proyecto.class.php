@@ -450,7 +450,7 @@ class Proyecto {
                     $valor = 'NULL';
                 }
             }
-            echo "<br>" . $nombre_campo . " = " . $valor;
+            //echo "<br>" . $nombre_campo . " = " . $valor;
             $$nombre_campo = $valor;
         }
         $arrErrores = array();

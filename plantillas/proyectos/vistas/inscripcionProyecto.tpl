@@ -40,8 +40,8 @@
                     <li class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}">Licencias <br></a>
                     </li>
-                    {*{/if}
-                    {if $seqPryEstadoProceso > 1}*}
+                    {/if}
+                    {if $seqPryEstadoProceso > 1}
 
                     <li class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos Financieros</a>

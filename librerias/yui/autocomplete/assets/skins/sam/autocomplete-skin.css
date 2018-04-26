@@ -60,7 +60,7 @@ version: 2.8.0r4
 .yui-skin-sam .yui-ac-content li {
     margin:0;padding:5px 5px;cursor:default;white-space:nowrap;list-style:none;
     zoom:1; /* For IE to trigger mouse events on LI */
-    font-size: 14px;
+    font-size: 12px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 

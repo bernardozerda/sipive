@@ -39,7 +39,7 @@ if (empty($arrErrores)) {
     $arrayconjuntos = Array();
     $arrayTipoViviendas = Array();
     $arraycronograma = Array();
-
+echo "paso";
     // $arrTipoEsquema = $claDatosProy->obtenerlistaEsquema();
     $arrPryTipoModalidad = $claDatosProy->obtenerlistamodalidad();
     $arrOpv = $claDatosProy->obtenerlistaOpv();
@@ -84,6 +84,7 @@ if (empty($arrErrores)) {
 
         //$claRegistro->registrarActividad("Edicion", 0, $_SESSION['seqUsuario'], "Edicion de Oferente: [" . $_POST['seqEditar'] . "] " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));
     } else {
+        echo "paso 2222";
         $seqProyecto = $claProyecto->almacenarProyecto($_POST);
         if ($seqProyecto > 0) {
             $txtCambios = "";

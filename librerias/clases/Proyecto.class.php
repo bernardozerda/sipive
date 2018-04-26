@@ -422,23 +422,35 @@ class Proyecto {
     public function almacenarProyecto($post) {
 
         global $aptBd;
+        $txtNombreInterventor = '';
+        $txtDireccionInterventor = '';
+        $txtCorreoInterventor = '';
+        $bolTipoPersonaInterventor = 0;
+        $numCedulaInterventor = 0;
+        $numTProfesionalInterventor = 0;
+        $numNitInterventor = 0;
+        $txtNombreRepLegalInterventor = '';
+        $numTelefonoRepLegalInterventor = 0;
+        $txtDireccionRepLegalInterventor = '';
+        $txtCorreoRepLegalInterventor = '';
+
 
         foreach ($post as $nombre_campo => $valor) {
             //   echo $asignacion = "\$" . $nombre_campo . "='" . $valor . "';<br>";
             if ($valor == "" && $valor == " " && trim($valor) == "") {
-                if (count(explode('val', $valor)) > 0 || count(explode('NaN', $valor)) > 0 || count(explode('num', $valor)) > 0) {
+                if (count(explode('val', $valor)) > 0 || count(explode('NaN', $valor)) > 0 || count(explode('num', $valor)) > 0 || count(explode('bol', $valor)) > 0) {
                     $valor = 0;
                 } else {
                     $valor = 'NULL';
                 }
             } else if ($valor == null) {
-                if (count(explode('val', $valor)) > 0 || count(explode('NaN', $valor)) > 0 || count(explode('num', $valor)) > 0) {
+                if (count(explode('val', $valor)) > 0 || count(explode('NaN', $valor)) > 0 || count(explode('num', $valor)) > 0 || count(explode('bol', $valor)) > 0) {
                     $valor = 0;
                 } else {
                     $valor = 'NULL';
                 }
-                //echo "<br>" . $nombre_campo . " -> " . $valor;
             }
+            echo "<br>" . $nombre_campo . " = " . $valor;
             $$nombre_campo = $valor;
         }
         $arrErrores = array();
@@ -501,6 +513,7 @@ class Proyecto {
                     valDevolucionIVA,
                     valTotalRecursos,                   
                     txtNombreVendedor,
+                    numNitVendedor,
                     txtCedulaCatastral,
                     txtEscritura,
                     fchEscritura,
@@ -565,6 +578,7 @@ class Proyecto {
                     $valDevolucionIVA,
                     $valTotalRecursos,                    
                     '$txtNombreVendedor',
+                    '$numNitVendedor',
                     '$txtCedulaCatastral',
                     '$txtEscritura',
                     '$fchEscritura',
@@ -573,8 +587,10 @@ class Proyecto {
                     $seqUsuario
                     ) ";
         try {
+            //echo "<br>" . $sql;
+            
             $aptBd->execute($sql);
-            //  echo "<br>" . $sql;
+
             $seqProyecto = $aptBd->Insert_ID();
 
             $band = false;
@@ -630,6 +646,18 @@ class Proyecto {
     public function editarProyecto($post) {
         global $aptBd;
 
+        $txtNombreInterventor = '';
+        $txtDireccionInterventor = '';
+        $txtCorreoInterventor = '';
+        $bolTipoPersonaInterventor = 0;
+        $numCedulaInterventor = 0;
+        $numTProfesionalInterventor = 0;
+        $numNitInterventor = 0;
+        $txtNombreRepLegalInterventor = '';
+        $numTelefonoRepLegalInterventor = 0;
+        $txtDireccionRepLegalInterventor = '';
+        $txtCorreoRepLegalInterventor = '';
+        
         foreach ($post as $nombre_campo => $valor) {
             //echo $asignacion = "\$" . $nombre_campo . "='" . $valor . "';<br>";
             if ($valor == "" && $valor == " " && trim($valor) == "") {
@@ -710,6 +738,7 @@ class Proyecto {
                         valDevolucionIVA = " . $valDevolucionIVA . ",
                         valTotalRecursos = " . $valTotalRecursos . ",                      
                         txtNombreVendedor = '$txtNombreVendedor',
+                        numNitVendedor = '$numNitVendedor',
                         txtCedulaCatastral = '$txtCedulaCatastral',
                         txtEscritura = '$txtEscritura',
                         fchEscritura = '$fchEscritura',
@@ -981,7 +1010,7 @@ class Proyecto {
         // echo "<br>" . $query . "<br>";
         try {
             $aptBd->execute($query);
-           // almacenarLicencias($seqProyecto, $txtLicencia, $txtExpideLicencia, $seqTipoLicencia, $fchLicencia, $fchVigenciaLicencia, $fchEjecutoriaLicencia, $txtResEjecutoria, $fchLicenciaProrroga, $fchLicenciaProrroga1, $fchLicenciaProrroga2)
+            // almacenarLicencias($seqProyecto, $txtLicencia, $txtExpideLicencia, $seqTipoLicencia, $fchLicencia, $fchVigenciaLicencia, $fchEjecutoriaLicencia, $txtResEjecutoria, $fchLicenciaProrroga, $fchLicenciaProrroga1, $fchLicenciaProrroga2)
         } catch (Exception $objError) {
             $arrErrores[] = "No se ha podido cargar las licencias<b></b>";
             pr($objError->getMessage());

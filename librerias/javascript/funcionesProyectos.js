@@ -88,17 +88,16 @@ function almacenarIncripcion() {
     });
     $.each($("#frmProyectos input"), function (index, value) {
         if ($(value).val() != 0 && $(value).val() != null) {
-            // console.log("value : " + $(value).val() + " index -> " + index);
+             //console.log("value : " + $(value).val() + " index -> " + index);
             var separador = "Tel";
             var num = $(this).attr("id");
             if (num != 'undefined' && num != null && num != "") {
-
                 separador = "Tel";
                 num = num.split(separador);
                 if (num.length > 1) {
                     $("#val_" + $(this).attr("id")).css("display", "none");
                       $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
-                    //console.log("id : " + $(this).attr("id") + " tel: " + $("#" + $(this).attr("id")).val().length);
+                   // console.log("id : " + $(this).attr("id") + " tel: " + $("#" + $(this).attr("id")).val().length);
                     if ($("#" + $(this).attr("id")).val().length != 7 && $("#" +  $(this).attr("id")).val().length != 10) {
                         $("#" + $(this).attr("id")).css("border", "1px solid red");
                         $("#val_" + $(this).attr("id")).css("display", "inline");
@@ -106,7 +105,7 @@ function almacenarIncripcion() {
                         valid = false;
                     }
                 }
-                console.log("num - > " + num.length + " valid = " + valid);
+               // console.log("num - > " + num.length + " valid = " + valid);
             }
         }
     });

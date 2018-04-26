@@ -31,9 +31,11 @@
                                id="numNitOferente" 
                                value="{$value.numNitOferente}"                                
                                class="form-control"
+                               onBlur="sinCaracteresEspeciales(this);
+                                soloNit(this); soloNumeros(this);"
                                style="width: 200px;"
                                />
-                        <div id="val_txtDireccionOferente" class="divError">Este campo es requerido</div>
+                        <div id="val_numNitOferente" class="divError">Este campo es requerido</div>
                     </div>
                 </div>
                 <div class="form-group" >
@@ -56,8 +58,9 @@
                     <div class="form-group" >
                         <div class="col-md-4"> 
                             <label class="control-label" for="surname">Celular de Contacto</label>   
-                            <input name="numCelularOferente" type="text" id="numCelularOferente" value="{$value.numCelularOferente}" onBlur="sinCaracteresEspeciales(this);
+                            <input name="numCelularOferente" type="text" id="numTelCelularOferente" value="{$value.numCelularOferente}" onBlur="sinCaracteresEspeciales(this);
                                     soloNumeros(this);" style="width:200px;" class="form-control"/>
+                            <div id="val_numTelCelularOferente" class="divError">Este campo es requerido</div>
                         </div>
                     </div>  
                     <div class="form-group" >
@@ -110,8 +113,9 @@
                         <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label" for="surname">Celular del Representante</label>   
-                                <input name="numCelularRepresentanteLegalOferente" type="text" id="numCelularRepresentanteLegalOferente" value="{$value.numCelularRepresentanteLegalOferente}" onBlur="sinCaracteresEspeciales(this);
+                                <input name="numCelularRepresentanteLegalOferente" type="text" id="numTelCelularRepresentanteLegalOferente" value="{$value.numCelularRepresentanteLegalOferente}" onBlur="sinCaracteresEspeciales(this);
                                         soloNumeros(this);" style="width:200px;" class="form-control"/>
+                                <div id="val_numTelCelularRepresentanteLegalOferente"class="divError">Este campo es requerido</div>
                             </div>
                         </div>  
                         <div class="form-group" >

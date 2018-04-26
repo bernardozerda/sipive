@@ -190,10 +190,13 @@ class Oferente {
 
         try {
             $aptBd->execute($sql);
+            return $seqOferente = $aptBd->Insert_ID();
+            
         } catch (Exception $objError) {
             $arrErrores[] = "No se ha podido guardar el Oferente <b>$txtNombreOferente</b>. Reporte este error al administrador del sistema";
+            pr($objError->getMessage());
         }
-        return $arrErrores;
+        
     }
 
 // Fin guardar Oferente

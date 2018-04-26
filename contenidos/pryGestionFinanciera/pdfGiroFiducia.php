@@ -23,13 +23,13 @@ $arrDatosFormato = $claGestion->pdfGiroFiducia($_GET['seqProyecto'], $_GET['seqG
  * CONFIGURACION INICIAL DEL ARCHIVO PDF
  **************************************************************************************************************/
 
-$numFuenteTitulo = 10;
+$numFuenteTitulo = 11;
 $numFuenteSubTitulo = $numFuenteTitulo - 2;
-$numFuenteTexto = $numFuenteSubTitulo - 2;
+$numFuenteTexto = $numFuenteSubTitulo - 1;
 
 $claPdf =& new Cezpdf( "LETTER" );
 $claPdf->selectFont( $txtPrefijoRuta . "librerias/pdf/fonts/Times-Roman.afm");
-$claPdf->ezSetCmMargins( 0.5 , 1 , 2 , 2 );
+$claPdf->ezSetCmMargins( 0.5 , 0.5 , 2 , 2 );
 
 /**************************************************************************************************************
  * CABECERA DEL ARCHIVO
@@ -74,7 +74,7 @@ $claPdf->ezText(
 );
 
 $claPdf->setLineStyle(1);
-$claPdf->line(60 , 700 , 550, 700);
+$claPdf->line(60 , 695 , 550, 695);
 
 $claPdf->ezText();
 $claPdf->ezText();
@@ -85,8 +85,6 @@ $claPdf->ezText();
 
 foreach($arrDatosFormato['secciones'] as $txtTiutloTabla => $arrSeccion){
 
-    $arrTitulo[0][0] = utf8_decode($txtTiutloTabla);
-
     foreach($arrSeccion as $numFila => $arrFila ){
         foreach($arrFila as $numColumna => $txtValor){
             $arrSeccion[$numFila][$numColumna] = utf8_decode($txtValor);
@@ -94,27 +92,12 @@ foreach($arrDatosFormato['secciones'] as $txtTiutloTabla => $arrSeccion){
     }
 
     $claPdf->ezTable(
-        $arrTitulo,
-        null,
-        null,
-        array(
-            'showHeadings' => 0,
-            'showLines' => 0,
-            'shaded' => 2,
-            'fontSize' => $numFuenteSubTitulo,
-            'width' => 485
-        )
-    );
-
-    $claPdf->ezText();
-
-    $claPdf->ezTable(
         $arrSeccion,
         null,
-        null,
+        utf8_decode($txtTiutloTabla),
         array(
             'showHeadings' => 0,
-            'showLines' => 2,
+            'showLines' => 1,
             'shaded' => 0,
             'fontSize' => $numFuenteTexto,
             'width' => 485,
@@ -126,34 +109,26 @@ foreach($arrDatosFormato['secciones'] as $txtTiutloTabla => $arrSeccion){
         )
     );
 
-    $claPdf->ezText();
-
 }
 
-$arrTitulo[0][0] = utf8_decode("Certificación");
+$arrTitulo[0][0] = utf8_decode(utf8_decode($arrDatosFormato['certificacion']));
 
 $claPdf->ezTable(
     $arrTitulo,
     null,
-    null,
+    utf8_decode('Certificación'),
     array(
         'showHeadings' => 0,
-        'showLines' => 0,
-        'shaded' => 2,
-        'fontSize' => $numFuenteSubTitulo,
+        'showLines' => 1,
+        'shaded' => 0,
+        'fontSize' => $numFuenteTexto,
         'width' => 485
     )
 );
 
-$claPdf->ezText();
-
-$claPdf->ezText(utf8_decode($arrDatosFormato['certificacion']), $numFuenteTexto, array("justification" => "full"));
-
-$claPdf->ezText();
+//$claPdf->ezText();
 
 foreach($arrDatosFormato['documentos'] as $txtTiutloTabla => $arrSeccion){
-
-    $arrTitulo[0][0] = utf8_decode($txtTiutloTabla);
 
     foreach($arrSeccion as $numFila => $arrFila ){
         foreach($arrFila as $numColumna => $txtValor){
@@ -162,27 +137,12 @@ foreach($arrDatosFormato['documentos'] as $txtTiutloTabla => $arrSeccion){
     }
 
     $claPdf->ezTable(
-        $arrTitulo,
-        null,
-        null,
-        array(
-            'showHeadings' => 0,
-            'showLines' => 0,
-            'shaded' => 2,
-            'fontSize' => $numFuenteSubTitulo,
-            'width' => 485
-        )
-    );
-
-    $claPdf->ezText();
-
-    $claPdf->ezTable(
         $arrSeccion,
         null,
-        null,
+        utf8_decode($txtTiutloTabla),
         array(
             'showHeadings' => 0,
-            'showLines' => 2,
+            'showLines' => 1,
             'shaded' => 0,
             'fontSize' => $numFuenteTexto,
             'width' => 485,
@@ -194,12 +154,8 @@ foreach($arrDatosFormato['documentos'] as $txtTiutloTabla => $arrSeccion){
         )
     );
 
-    $claPdf->ezText();
-
 }
 
-$claPdf->ezText();
-$claPdf->ezText();
 $claPdf->ezText();
 $claPdf->ezText();
 $claPdf->ezText();

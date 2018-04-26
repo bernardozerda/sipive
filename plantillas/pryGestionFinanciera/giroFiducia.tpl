@@ -398,7 +398,7 @@
                                             </div>
                                             <div class="col-sm-1">
                                                 <input type="checkbox" name="bolEncargoSubsecretario" class="checkbox"
-                                                        {if isset($arrPost.bolEncargoSubsecretario) } checked {/if}>
+                                                        {if isset($arrPost.bolEncargoSubsecretario) and $arrPost.bolEncargoSubsecretario == 1 } checked {/if}>
                                             </div>
                                         </div>
 
@@ -413,7 +413,7 @@
                                             </div>
                                             <div class="col-sm-1">
                                                 <input type="checkbox" name="bolEncargoSubdirector" class="checkbox"
-                                                        {if isset($arrPost.bolEncargoSubdirector) } checked {/if}>
+                                                        {if isset($arrPost.bolEncargoSubdirector) and $arrPost.bolEncargoSubdirector == 1 } checked {/if}>
                                             </div>
                                         </div>
 
@@ -440,7 +440,7 @@
 
             {if not empty($claGestion->arrMensajes)}
                 <button type="button" name="volver" class="btn btn-danger" style="width: 100px;"
-                        onclick="pdfGiroFiducia();"
+                        onclick="pdfGiroFiducia({$arrPost.seqProyecto},{$seqGiroFiducia});"
                 >PDF</button>
             {/if}
 

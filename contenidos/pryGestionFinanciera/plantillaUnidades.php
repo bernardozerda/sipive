@@ -51,11 +51,6 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
         $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,$seqUnidadProyecto,false);
         $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,$arrUnidad['unidad'],false);
 
-        if(! isset($arrUnidad['saldo'])){
-            $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,$arrUnidad['valor'],false);
-        }else{
-            $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,$arrUnidad['saldo'],false);
-        }
         $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,0,false);
 
         $numFila++;

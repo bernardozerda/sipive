@@ -1,5 +1,8 @@
 <?php
 
+date_default_timezone_set("America/Bogota");
+setlocale(LC_TIME , 'spanish' );
+
 $txtPrefijoRuta = "../../";
 
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
@@ -9,65 +12,195 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "GestionFinancieraProyectos.class.php" );
 include( $txtPrefijoRuta . "librerias/pdf/class.ezpdf.php" );
 
-$numFuenteTitulo = 14;
+/**************************************************************************************************************
+ * OBTENCION DE LOS DATOS DEL GIRO
+ **************************************************************************************************************/
+
+$claGestion = new GestionFinancieraProyectos();
+$arrDatosFormato = $claGestion->pdfGiroFiducia($_GET['seqProyecto'], $_GET['seqGiroFiducia']);
+
+/**************************************************************************************************************
+ * CONFIGURACION INICIAL DEL ARCHIVO PDF
+ **************************************************************************************************************/
+
+$numFuenteTitulo = 11;
 $numFuenteSubTitulo = $numFuenteTitulo - 2;
-$numFuenteTexto = $numFuenteSubTitulo - 2;
+$numFuenteTexto = $numFuenteSubTitulo - 1;
 
 $claPdf =& new Cezpdf( "LETTER" );
-$claPdf->selectFont( $txtPrefijoRuta . "librerias/pdf/fonts/Helvetica.afm");
-$claPdf->ezSetCmMargins( 2 , 1 , 2 , 2 );
+$claPdf->selectFont( $txtPrefijoRuta . "librerias/pdf/fonts/Times-Roman.afm");
+$claPdf->ezSetCmMargins( 0.5 , 0.5 , 2 , 2 );
 
-$claPdf->addJpegFromFile($txtPrefijoRuta . "recursos/imagenes/bta_positiva.jpg",50,675,100);
-$claPdf->addJpegFromFile($txtPrefijoRuta . "recursos/imagenes/bta_positiva.jpg",460,675,100);
+/**************************************************************************************************************
+ * CABECERA DEL ARCHIVO
+ **************************************************************************************************************/
 
-$arrTabla[0][0] = "";
-$arrTabla[0][1] = "Texto\n\n\n";
-$arrTabla[0][2] = "";
+// imagenes laterales de los escudos
+$claPdf->addJpegFromFile($txtPrefijoRuta . "recursos/imagenes/escudo.jpg"      ,60 ,700,70);
+$claPdf->addJpegFromFile($txtPrefijoRuta . "recursos/imagenes/bta_positiva.jpg",460,710,100);
+
+$claPdf->ezText();
+
+$claPdf->ezText(
+    utf8_decode("Secretaría Distrital de Hábitat"),
+    $numFuenteTitulo,
+    array(
+        "justification" => "center"
+    )
+);
+
+$claPdf->ezText(
+    utf8_decode("Solicitud de giro"),
+    $numFuenteSubTitulo,
+    array(
+        "justification" => "center"
+    )
+);
+
+$claPdf->ezText(
+    utf8_decode(ucwords(strftime("%A %#d de %B del %Y"))) . " " . date("H:i:s"),
+    $numFuenteSubTitulo,
+    array(
+        "justification" => "center"
+    )
+);
+
+$claPdf->ezText(
+    utf8_decode( $arrDatosFormato['secuencia'] ),
+    $numFuenteSubTitulo,
+    array(
+        "justification" => "center"
+    )
+);
+
+$claPdf->setLineStyle(1);
+$claPdf->line(60 , 695 , 550, 695);
+
+$claPdf->ezText();
+$claPdf->ezText();
+
+/**************************************************************************************************************
+ * TABLAS DE INFORMACION
+ **************************************************************************************************************/
+
+foreach($arrDatosFormato['secciones'] as $txtTiutloTabla => $arrSeccion){
+
+    foreach($arrSeccion as $numFila => $arrFila ){
+        foreach($arrFila as $numColumna => $txtValor){
+            $arrSeccion[$numFila][$numColumna] = utf8_decode($txtValor);
+        }
+    }
+
+    $claPdf->ezTable(
+        $arrSeccion,
+        null,
+        utf8_decode($txtTiutloTabla),
+        array(
+            'showHeadings' => 0,
+            'showLines' => 1,
+            'shaded' => 0,
+            'fontSize' => $numFuenteTexto,
+            'width' => 485,
+            'cols' => array(
+                0 => array(
+                    'width' => 150
+                )
+            )
+        )
+    );
+
+}
+
+$arrTitulo[0][0] = utf8_decode(utf8_decode($arrDatosFormato['certificacion']));
 
 $claPdf->ezTable(
-    $arrTabla,
-    '',
-    '',
+    $arrTitulo,
+    null,
+    utf8_decode('Certificación'),
+    array(
+        'showHeadings' => 0,
+        'showLines' => 1,
+        'shaded' => 0,
+        'fontSize' => $numFuenteTexto,
+        'width' => 485
+    )
+);
+
+//$claPdf->ezText();
+
+foreach($arrDatosFormato['documentos'] as $txtTiutloTabla => $arrSeccion){
+
+    foreach($arrSeccion as $numFila => $arrFila ){
+        foreach($arrFila as $numColumna => $txtValor){
+            $arrSeccion[$numFila][$numColumna] = utf8_decode($txtValor);
+        }
+    }
+
+    $claPdf->ezTable(
+        $arrSeccion,
+        null,
+        utf8_decode($txtTiutloTabla),
+        array(
+            'showHeadings' => 0,
+            'showLines' => 1,
+            'shaded' => 0,
+            'fontSize' => $numFuenteTexto,
+            'width' => 485,
+            'cols' => array(
+                0 => array(
+                    'width' => 430
+                )
+            )
+        )
+    );
+
+}
+
+$claPdf->ezText();
+$claPdf->ezText();
+$claPdf->ezText();
+
+$claPdf->ezTable(
+    $arrDatosFormato['firmas'],
+    null,
+    null,
     array(
         'showHeadings' => 0,
         'showLines' => 0,
-        'fontSize' => $numFuenteTitulo,
+        'shaded' => 0,
+        'fontSize' => $numFuenteSubTitulo,
         'width' => 485,
         'cols' => array(
             0 => array(
-                'width' => 100
-            ),
-            1 => array(
-                'justification' => 'center'
-            ),
-            2 => array(
-                'width' => 100
+                'width' => 243
             )
         )
     )
 );
 
-$claPdf->setLineStyle(1);
-$claPdf->line(60 , 665 , 550, 665);
+$claPdf->ezText();
+$claPdf->ezText();
+$claPdf->ezText();
 
-$claPdf->ezText("");
-$claPdf->ezText("");
-$claPdf->ezText( "Titulo" , $numFuenteTitulo );
-$claPdf->ezText(  "SubTitulo" , $numFuenteSubTitulo );
-
-$txtTexto  = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras velit mauris, vulputate in risus et, malesuada dignissim augue. ";
-$txtTexto .= "Morbi sed maximus nisi. Duis elementum suscipit urna, ut congue nisi feugiat eu. Sed ligula lectus, convallis interdum purus et, dictum ";
-$txtTexto .= "dignissim elit. Aliquam gravida orci ex, vel mollis turpis egestas eget. Nunc quis nisi quis ante cursus ornare. Aliquam mattis interdum urna, ";
-$txtTexto .= "non placerat enim convallis vel. Nunc hendrerit eros id turpis venenatis, eu pulvinar leo blandit. Fusce sed eros non quam rhoncus cursus. Donec ";
-$txtTexto .= "facilisis purus velit. Duis quis nulla vitae ipsum eleifend tincidunt. Vestibulum eros nulla, interdum in libero at, ullamcorper consequat turpis.";
-
-$claPdf->ezText(
-    $txtTexto ,
-    $numFuenteTexto ,
+$claPdf->ezTable(
+    $arrDatosFormato['subfirmas'],
+    null,
+    null,
     array(
-        'justification' => 'full'
+        'showHeadings' => 0,
+        'showLines' => 0,
+        'shaded' => 0,
+        'fontSize' => $numFuenteTexto,
+        'width' => 485,
+        'cols' => array(
+            0 => array(
+                'width' => 40
+            )
+        )
     )
 );
+
+//pr($arrDatosFormato['firmas']);
 
 // Imprime por pantalla
 $claPdf->ezStream();

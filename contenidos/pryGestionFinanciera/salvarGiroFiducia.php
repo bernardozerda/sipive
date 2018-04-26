@@ -11,7 +11,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "GestionFinancieraProyectos.class.php" );
 
 $claGestion = new GestionFinancieraProyectos();
-$claGestion->salvarGiro($_POST);
+$seqGiroFiducia = $claGestion->salvarGiro($_POST);
 
 $seqProyecto = intval($_POST['seqProyecto']);
 $seqUnidadActo = intval($_POST['seqUnidadActo']);
@@ -75,6 +75,7 @@ $claSmarty->assign("numTotalGiro", $numTotalGiro);
 $claSmarty->assign("numTotalUnidades", $numTotalUnidades);
 $claSmarty->assign("arrTablaCDP", $arrTablaCDP);
 $claSmarty->assign("bolPendientes", $bolPendientes);
+$claSmarty->assign("seqGiroFiducia", $seqGiroFiducia);
 $claSmarty->display("pryGestionFinanciera/giroFiducia.tpl");
 
 ?>

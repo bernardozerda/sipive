@@ -56,7 +56,7 @@
                         <label class="control-label" for="surname">Número de Documento</label> 
 
                         <input type="text" name="numDocumentoConstructor" id="numDocumentoConstructor" value="{$value.numDocumentoConstructor}" onBlur="sinCaracteresEspeciales(this);
-                                soloNit(this);" style="width:200px;"  class="form-control required"/>
+                                soloNit(this); soloNumeros(this);" style="width:200px;"  class="form-control required"/>
                         <div id="val_numDocumentoConstructor" class="divError">Este campo es requerido</div>
                     </div>
                 </div>  

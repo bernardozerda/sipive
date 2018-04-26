@@ -26,7 +26,6 @@ class GestionFinancieraProyectos
         $this->arrTitulos[] = "Nombre del Proyecto";
         $this->arrTitulos[] = "Identificador de la Unidad";
         $this->arrTitulos[] = "Descripcion de la Unidad";
-        $this->arrTitulos[] = "Valor disponible";
         $this->arrTitulos[] = "Valor a Girar";
 
     }
@@ -533,8 +532,7 @@ class GestionFinancieraProyectos
             $txtNombreProyecto = trim(mb_strtolower($arrArchivo[$i][1]));
             $seqUnidadProyecto = intval($arrArchivo[$i][2]);
             $txtUnidadProyecto = trim(mb_strtolower($arrArchivo[$i][3]));
-            $valDisponible     = doubleval($arrArchivo[$i][4]);
-            $valGiro           = doubleval($arrArchivo[$i][5]);
+            $valGiro           = doubleval($arrArchivo[$i][4]);
 
             // valida el identificador del proyecto
             if($seqProyecto == 0){
@@ -617,12 +615,8 @@ class GestionFinancieraProyectos
             }
 
             // validacion del monto agirar
-            if(! is_numeric($arrArchivo[$i][5])){
+            if(! is_numeric($arrArchivo[$i][4])){
                 $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos[5] . " no es válido";
-            }else{
-                if($valGiro > $valDisponible){
-                    $this->arrErrores[] = "Error linea " . ($i + 1) . ": No puede girar mas del monto que tiene disponible";
-                }
             }
 
             if(empty($this->arrErrores)){
@@ -686,6 +680,10 @@ class GestionFinancieraProyectos
             $this->arrErrores[] = "Debe dar el nombre de quien revisa el documento";
         }
 
+        $arrPost['txtSubsecretario'] = (trim($arrPost['txtSubsecretario']) == "")? "null" :  trim($arrPost['txtSubsecretario']);
+        $arrPost['txtSubdirector']   = (trim($arrPost['txtSubdirector']) == "")? "null"   :  trim($arrPost['txtSubdirector']);
+        $arrPost['txtReviso']        = (trim($arrPost['txtReviso']) == "")? "null"        :  trim($arrPost['txtReviso']);
+
         /**
          * SALVA EL REGISTRO
          */
@@ -711,6 +709,11 @@ class GestionFinancieraProyectos
                       bolRutFiducia,
                       bolResolucionProyecto,
                       bolMemorandoProyecto,
+                      txtSubsecretario,
+                      bolEncargoSubsecretario,
+                      txtSubdirector,
+                      bolEncargoSubdirector,
+                      txtReviso,
                       fchCreacion,
                       seqUsuario
                   ) values (
@@ -728,6 +731,11 @@ class GestionFinancieraProyectos
                       " . intval($arrPost['documentos']['bolRutFiducia']) . ",  
                       " . intval($arrPost['documentos']['bolResolucionProyecto']) . ",  
                       " . intval($arrPost['documentos']['bolMemorandoProyecto']) . ",  
+                      '" . $arrPost['txtSubsecretario'] . "',
+                      " . intval($arrPost['bolEncargoSubsecretario']) . ",
+                      '" . $arrPost['txtSubdirector'] . "',
+                      " . intval($arrPost['bolEncargoSubdirector']) . ",
+                      '" . $arrPost['txtReviso'] . "',
                       now(),
                       " . $_SESSION['seqUsuario'] . "
                   )
@@ -778,10 +786,15 @@ class GestionFinancieraProyectos
                 $this->arrMensajes[] = "Registro salvado satisfactoriamente";
 
                 $aptBd->CommitTrans();
+
+                return $seqGiroFiducia;
+
             } catch ( Exception $objError ){
                 $aptBd->RollbackTrans();
                 $this->arrMensajes = array();
                 $this->arrErrores[] = $objError->getMessage();
+
+                return 0;
             }
 
         }
@@ -804,6 +817,232 @@ class GestionFinancieraProyectos
             ) and year(gfi.fchCreacion) = year(now())
         ";
         return array_shift($aptBd->GetAll($sql))['numSecuencia'];
+    }
+
+    public function pdfGiroFiducia($seqProyecto, $seqGiroFiducia){
+        global $aptBd;
+
+        $arrDatosFormato = array();
+
+        $sql = "
+            select 
+                upper(pry.txtNombreProyecto) as txtNombreProyecto,
+                upper(pry.txtNombreVendedor) as txtNombreVendedor,
+                pry.numNitVendedor,
+                pry.seqDatoFiducia,
+                ban.txtBanco, 
+                ban.numNit,
+                dfi.numContrato, 
+                dfi.fchContrato, 
+                dfi.numCuenta, 
+                dfi.txtTipoCuenta
+            from t_pry_proyecto pry
+            left join t_pry_datos_fiducia dfi on pry.seqDatoFiducia = dfi.seqDatoFiducia
+            left join t_frm_banco ban on dfi.seqBanco = ban.seqBanco
+            where seqProyecto = $seqProyecto          
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $arrDatosFormato['secciones']['Beneficiario del giro'][0][0] = "Nombre del Vendedor";
+            $arrDatosFormato['secciones']['Beneficiario del giro'][0][1] = $objRes->fields['txtNombreVendedor'];;
+
+            $arrDatosFormato['secciones']['Beneficiario del giro'][1][0] = "NIT del Vendedor";
+            $arrDatosFormato['secciones']['Beneficiario del giro'][1][1] = $objRes->fields['numNitVendedor'];
+
+            $arrDatosFormato['secciones']['Beneficiario del giro'][2][0] = "Nombre del Proyecto";
+            $arrDatosFormato['secciones']['Beneficiario del giro'][2][1] = $objRes->fields['txtNombreProyecto'];
+
+            $arrDatosFormato['secciones']['Información para el giro'][0][0] = "Número del contrato suscrito";
+            $arrDatosFormato['secciones']['Información para el giro'][0][1] = (intval($objRes->fields['numContrato']) == 0)? "No disponible" : number_format(intval($objRes->fields['numContrato']),0,',','.');
+
+            $arrDatosFormato['secciones']['Información para el giro'][1][0] = "Fecha del contrato suscrito";
+            $arrDatosFormato['secciones']['Información para el giro'][1][1] = (!esFechaValida($objRes->fields['fchContrato']))? "No disponible" : strftime("%d de %B de %Y" , strtotime( $objRes->fields['fchContrato'] ) );
+
+            $arrDatosFormato['secciones']['Información para el giro'][3][0] = "Nombre de la entidad financiera";
+            $arrDatosFormato['secciones']['Información para el giro'][3][1] = $objRes->fields['txtBanco'];
+
+            $arrDatosFormato['secciones']['Información para el giro'][4][0] = "NIT de la entidad financiera";
+            $arrDatosFormato['secciones']['Información para el giro'][4][1] = $objRes->fields['numNit'];
+
+            $arrDatosFormato['secciones']['Información para el giro'][5][0] = "Número de cuenta";
+            $arrDatosFormato['secciones']['Información para el giro'][5][1] = $objRes->fields['numCuenta'];
+
+            $arrDatosFormato['secciones']['Información para el giro'][5][0] = "Tipo de cuenta";
+            $arrDatosFormato['secciones']['Información para el giro'][5][1] = $objRes->fields['txtTipoCuenta'];
+
+            $objRes->MoveNext();
+        }
+
+        $sql = "
+            SELECT
+                gfi.numSecuencia,
+                gfi.txtCertificacion,
+                gfi.bolCedulaOferente,
+                gfi.bolRitOferente,
+                gfi.bolRutOferente,
+                gfi.bolExistenciaOferente,
+                gfi.bolConstitucionFiducia,
+                gfi.bolCedulaFiducia,
+                gfi.bolBancariaFiducia,
+                gfi.bolSuperintendenciaFiducia,
+                gfi.bolCamaraFiducia,
+                gfi.bolRutFiducia,
+                gfi.bolResolucionProyecto,
+                gfi.bolMemorandoProyecto,
+                gfi.txtSubsecretario,
+                gfi.bolEncargoSubsecretario,
+                gfi.txtSubdirector,
+                gfi.bolEncargoSubdirector,
+                gfi.txtReviso,
+                gfi.fchCreacion,
+                gfi.seqUsuario,
+                concat(usu.txtNombre, ' ', usu.txtApellido) as txtUsuario,
+                gfd.seqUnidadActo,
+                gfd.seqRegistroPresupuestal,
+                count(gfd.seqUnidadProyecto) as numUnidades,
+                sum(gfd.valGiro) as valGiros
+            FROM t_pry_aad_giro_fiducia gfi
+            INNER JOIN t_pry_aad_giro_fiducia_detalle gfd ON gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            INNER JOIN t_cor_usuario usu on gfi.seqUsuario = usu.seqUsuario
+            WHERE gfi.seqGiroFiducia = $seqGiroFiducia
+              AND gfd.seqProyecto IN (
+                SELECT pry.seqProyecto
+                FROM t_pry_proyecto pry
+                WHERE pry.seqProyecto = $seqProyecto 
+                   OR pry.seqProyectoPadre = $seqProyecto
+              )
+            GROUP BY 
+                gfi.numSecuencia,
+                gfi.txtCertificacion,
+                gfi.bolCedulaOferente,
+                gfi.bolRitOferente,
+                gfi.bolRutOferente,
+                gfi.bolExistenciaOferente,
+                gfi.bolConstitucionFiducia,
+                gfi.bolCedulaFiducia,
+                gfi.bolBancariaFiducia,
+                gfi.bolSuperintendenciaFiducia,
+                gfi.bolCamaraFiducia,
+                gfi.bolRutFiducia,
+                gfi.bolResolucionProyecto,
+                gfi.bolMemorandoProyecto,
+                gfi.txtSubsecretario,
+                gfi.bolEncargoSubsecretario,
+                gfi.txtSubdirector,
+                gfi.bolEncargoSubdirector,
+                gfi.txtReviso,
+                gfi.fchCreacion,
+                gfi.seqUsuario,
+                concat(usu.txtNombre, ' ', usu.txtApellido),
+                gfd.seqUnidadActo,
+                gfd.seqRegistroPresupuestal      
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $fchCreacion = new DateTime($objRes->fields['fchCreacion']);
+
+            $arrDatosFormato['secuencia'] = "SDHT-SGF-SDRPL-" . $seqProyecto . "-" . $objRes->fields['numSecuencia'] . "-" . $fchCreacion->format(y);
+
+            $arrDatosFormato['secciones']['Beneficiario del giro'][3][0] = "Valor del giro";
+            $arrDatosFormato['secciones']['Beneficiario del giro'][3][1] = "$ " . number_format($objRes->fields['valGiros'],0,',','.');
+
+            $arrDatosFormato['secciones']['Beneficiario del giro'][4][0] = "Cantidad de unidades";
+            $arrDatosFormato['secciones']['Beneficiario del giro'][4][1] = number_format($objRes->fields['numUnidades'],0,',','.');
+
+
+            $arrDatosFormato['certificacion'] = $objRes->fields['txtCertificacion'];
+
+            $arrDatosFormato['documentos']['Del Oferente'][0][0] = "Copia cedula de ciudadanía";
+            $arrDatosFormato['documentos']['Del Oferente'][0][1] = (intval($objRes->fields['bolCedulaOferente']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['Del Oferente'][1][0] = "Copia del Registro de Información Tributaria / RIT";
+            $arrDatosFormato['documentos']['Del Oferente'][1][1] = (intval($objRes->fields['bolRitOferente']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['Del Oferente'][2][0] = "Copia del Registro Único Tributario / RUT";
+            $arrDatosFormato['documentos']['Del Oferente'][2][1] = (intval($objRes->fields['bolRutOferente']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['Del Oferente'][3][0] = "Copia del Certificado de existencia y representación legal";
+            $arrDatosFormato['documentos']['Del Oferente'][3][1] = (intval($objRes->fields['bolExistenciaOferente']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][0][0] = "Copia constitución Encargo Fiduciario";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][0][1] = (intval($objRes->fields['bolConstitucionFiducia']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][1][0] = "Copia cedula de ciudadanía";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][1][1] = (intval($objRes->fields['bolCedulaFiducia']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][2][0] = "Certificación Bancaria de la cuenta en la cual se va a realizar el giro";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][2][1] = (intval($objRes->fields['bolBancariaFiducia']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][3][0] = "Copia del Certificado de existencia y representación legal expedido por la Superintendencia Financiera";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][3][1] = (intval($objRes->fields['bolSuperintendenciaFiducia']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][4][0] = "Copia del Certificado de existencia y representación legal expedido por la Cámara de Comercio";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][4][1] = (intval($objRes->fields['bolCamaraFiducia']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][5][0] = "Copia del Registro Único Tributario – RUT de la entidad financiera";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][5][1] = (intval($objRes->fields['bolRutFiducia']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['Del Proyecto'][0][0] = "Copia Resolución 488 de 2016 y 541 de 2016";
+            $arrDatosFormato['documentos']['Del Proyecto'][0][1] = (intval($objRes->fields['bolResolucionProyecto']) == 1)? "SI" : "NO";
+
+            $arrDatosFormato['documentos']['Del Proyecto'][1][0] = "Copia memorando de solicitud de aprobación póliza de cumplimiento mediante radicado No. 3-2015-35230- con fecha del 05 junio de 2015";
+            $arrDatosFormato['documentos']['Del Proyecto'][1][1] = (intval($objRes->fields['bolMemorandoProyecto']) == 1)? "SI" : "NO";
+
+
+            switch(true){
+
+                // ambas firmas
+                case $objRes->fields['txtSubdirector'] != "" and $objRes->fields['txtSubsecretario'] != "":
+
+                    $txtEncargoSubdirector = ($objRes->fields['bolEncargoSubdirector'] == 1) ? "(E)" : "";
+                    $txtEncargoSubsecretario = ($objRes->fields['bolEncargoSubsecretario'] == 1) ? "(E)" : "";
+
+                    $arrDatosFormato['firmas'][0][0] = utf8_decode("Subdirector(a) de Recursos Públicos " . $txtEncargoSubdirector);
+                    $arrDatosFormato['firmas'][1][0] = utf8_decode(mb_strtoupper($objRes->fields['txtSubdirector']) );
+                    $arrDatosFormato['firmas'][0][1] = utf8_decode("Subsecretario(a) de Gestión Financiera " . $txtEncargoSubsecretario);
+                    $arrDatosFormato['firmas'][1][1] = utf8_decode(mb_strtoupper($objRes->fields['txtSubsecretario']));
+
+                    break;
+
+                // solo firma el secretario
+                case $objRes->fields['txtSubdirector'] == "" and $objRes->fields['txtSubsecretario'] != "":
+
+                    $txtEncargoSubsecretario = ($objRes->fields['bolEncargoSubsecretario'] == 1) ? "(E)" : "";
+
+                    $arrDatosFormato['firmas'][0][0] = utf8_decode("Subsecretario(a) de Gestión Financiera " . $txtEncargoSubsecretario);
+                    $arrDatosFormato['firmas'][1][0] = utf8_decode(mb_strtoupper($objRes->fields['txtSubsecretario']));
+                    $arrDatosFormato['firmas'][0][1] = "";
+                    $arrDatosFormato['firmas'][1][1] = "";
+
+                    break;
+
+                // solo firma el subdirector
+                case $objRes->fields['txtSubdirector'] != "" and $objRes->fields['txtSubsecretario'] == "":
+
+                    $txtEncargoSubdirector = ($objRes->fields['bolEncargoSubdirector'] == 1) ? "(E)" : "";
+
+                    $arrDatosFormato['firmas'][0][0] = utf8_decode("Subdirector(a) de Recursos Públicos " . $txtEncargoSubdirector);
+                    $arrDatosFormato['firmas'][1][0] = utf8_decode(mb_strtoupper($objRes->fields['txtSubdirector']));
+                    $arrDatosFormato['firmas'][0][1] = "";
+                    $arrDatosFormato['firmas'][1][1] = "";
+
+                    break;
+
+            }
+
+            $arrDatosFormato['subfirmas'][0][0] = utf8_decode("Revisó");
+            $arrDatosFormato['subfirmas'][0][1] = utf8_decode($objRes->fields['txtReviso']) . " - Contratista";
+
+            $arrDatosFormato['subfirmas'][1][0] = utf8_decode("Elaboró");
+            $arrDatosFormato['subfirmas'][1][1] = utf8_decode($objRes->fields['txtUsuario']);
+
+            $objRes->MoveNext();
+        }
+
+
+        return $arrDatosFormato;
     }
 
 

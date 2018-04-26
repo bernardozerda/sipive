@@ -141,7 +141,7 @@ class Oferente {
     public function guardarOferente($post) {
 
         global $aptBd;
-
+        $seqOferente = 0;
         foreach ($post as $nombre_campo => $valor) {
             //   echo $asignacion = "\$" . $nombre_campo . "='" . $valor . "';<br>";
             if ($valor == "") {
@@ -190,13 +190,12 @@ class Oferente {
 
         try {
             $aptBd->execute($sql);
-            return $seqOferente = $aptBd->Insert_ID();
-            
+            $seqOferente = $aptBd->Insert_ID();
         } catch (Exception $objError) {
             $arrErrores[] = "No se ha podido guardar el Oferente <b>$txtNombreOferente</b>. Reporte este error al administrador del sistema";
             pr($objError->getMessage());
         }
-        
+        return $seqOferente;
     }
 
 // Fin guardar Oferente

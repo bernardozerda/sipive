@@ -21,7 +21,7 @@
             <input name="txtCorreoInterventor" type="text" id="txtCorreoInterventor" value="{$value.txtCorreoInterventor}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control">
         </div>
         <div class="col-md-4">
-            Natural <input name="bolTipoPersonaInterventor" type="radio" id="bolTipoPersonaInterventor" onclick="escondeCamposTipoPersona(this.value)" value="1" {if $value.bolTipoPersonaInterventor != 0} checked {/if}  > 
+            Natural <input name="bolTipoPersonaInterventor" type="radio" id="bolTipoPersonaInterventor" onclick="escondeCamposTipoPersona(this.value)" value="1" {if $value.bolTipoPersonaInterventor != 0} checked {/if}  checked> 
             Jurídica <input name="bolTipoPersonaInterventor" type="radio" onclick="escondeCamposTipoPersona(this.value)" id="bolTipoPersonaInterventor1" value="0" {if $value.bolTipoPersonaInterventor == 0} checked {/if}> 
         </div>
         <div class="col-md-4 lineaPersonaNatural" id="lineaPersonaNatural" {if $value.bolTipoPersonaInterventor != 1} style="display: none"{/if}> 
@@ -120,7 +120,7 @@
         </fieldset>
     {/if}
     <br/>    
-    paso
+    
    {* {if $valueLic.seqTipoLicencia == 2 || $valueLic.seqTipoLicencia ==""}*}
         <fieldset>
             <legend class="legend">
@@ -137,7 +137,7 @@
                 </div>
                 <div class="col-md-4" style="display: none"> 
                     <label class="control-label">Entidad Expedici&oacute;n</label>                         
-                    <input name="txtExpideLicencia[]" type="text" id="txtExpideLicencia_2" value="{$valueLic.txtExpideLicencia}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
+                    <input name="txtExpideLicencia[]" type="text" id="txtExpideLicencia_2" value="{$valueLic.txtExpideLicencia}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control">
                     <div id="val_txtExpideLicencia_2" class="divError">Este campo es requerido</div>
                 </div>
                 <div class="col-md-4"> 

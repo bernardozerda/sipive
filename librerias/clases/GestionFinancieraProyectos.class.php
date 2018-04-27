@@ -94,7 +94,8 @@ class GestionFinancieraProyectos
                 upr.seqUnidadProyecto,
                 upr.txtNombreUnidad,
                 upr.valSDVEActual,
-                uvi.valIndexado
+                uvi.valIndexado,
+                if(upr.seqUnidadProyecto is null,if(pry.seqProyecto is null,con.bolActivo,pry.bolActivo),upr.bolActivo) as bolActivo
             from t_pry_aad_unidades_vinculadas uvi 
             left join t_pry_unidad_proyecto upr on upr.seqUnidadProyecto = uvi.seqUnidadProyecto
             left join t_pry_proyecto con on uvi.seqProyecto = con.seqProyecto
@@ -142,6 +143,7 @@ class GestionFinancieraProyectos
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['conjunto'] = $objRes->fields['txtNombreConjunto'];
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['unidad'] = $objRes->fields['txtNombreUnidad'];
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['valor'] = $objRes->fields['valIndexado'];
+                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['activo'] = $objRes->fields['bolActivo'];
             }
 
             $objRes->MoveNext();

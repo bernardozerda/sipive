@@ -41,19 +41,20 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
     foreach($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'] as $seqUnidadProyecto => $arrUnidad){
 
         $numColumna = 0;
+        if($arrUnidad['activo'] == 1) {
+            $seqProyecto = ($arrUnidad['conjunto'] == "") ? $arrUnidad['seqProyecto'] : $arrUnidad['seqConjunto'];
+            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $seqProyecto, false);
 
-        $seqProyecto = ($arrUnidad['conjunto'] == "")? $arrUnidad['seqProyecto'] : $arrUnidad['seqConjunto'];
-        $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,$seqProyecto,false);
+            $txtNombreProyecto = ($arrUnidad['conjunto'] == "") ? $arrUnidad['proyecto'] : $arrUnidad['conjunto'];
+            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $txtNombreProyecto, false);
 
-        $txtNombreProyecto = ($arrUnidad['conjunto'] == "")? $arrUnidad['proyecto'] : $arrUnidad['conjunto'];
-        $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,$txtNombreProyecto,false);
+            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $seqUnidadProyecto, false);
+            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['unidad'], false);
 
-        $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,$seqUnidadProyecto,false);
-        $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,$arrUnidad['unidad'],false);
+            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, 0, false);
 
-        $objHoja->setCellValueByColumnAndRow($numColumna++,$numFila,0,false);
-
-        $numFila++;
+            $numFila++;
+        }
     }
 
     // *************************** ESTILOS POR DEFECTO DEL ARCHIVO DE EXCEL ********************************************* //

@@ -40,8 +40,8 @@
                     <li class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}">Licencias <br></a>
                     </li>
-                    {/if}
-                    {if $seqPryEstadoProceso > 1}
+                {/if}
+                {if $seqPryEstadoProceso > 1}
 
                     <li class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos Financieros</a>
@@ -295,30 +295,11 @@
                                 </select>
                                 <div id="val_seqProyectoGrupo" class="divError">Este campo es requerido</div> 
                             </div>
-                        </div>
-                        <!-- <div class="form-group" id="idLineaDireccion">
-                             <div class="col-md-4"> 
-                                 <label class="control-label" >Se conoce la direcci&oacute;n?</label><br> 
-                                 Si <input name="bolDireccion" type="radio" onClick="escondetxtDireccion()" id="bolDireccion" value="1" {if $value.bolDireccion == 1} checked {/if}   class="form-control" style="width: 12px; display: unset"/> 
-                                 No <input name="bolDireccion" type="radio" onClick="escondetxtDireccion()" id="bolDireccion" value="0" {if $value.bolDireccion == 0} checked {/if}   class="form-control" style="width: 12px; display: unset"/> 
-                             </div>
-                         </div><br>
-                        <div class="form-group" >
-                            <div class="col-md-4"> 
-                                <label class="control-label"  onclick="recogerDireccion('txtDireccion', 'objDireccionOcultoSolucion');" style="cursor: hand; text-decoration-line: underline">Direcci&oacute;n</label>                         
-                                <input type="text" 
-                                       name="txtDireccion"                                      
-                                       id="txtDireccion" 
-                                       class="form-control required"
-                                       value="{$value.txtDireccion}"                                
-                                       />
-                            </div>
-                            <div id="val_txtDireccion" class="divError">Digite la dirección</div> 
-                        </div>-->
+                        </div>                   
                         <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label"  onclick="recogerDireccion('txtDireccion', 'objDireccionOcultoSolucion');" style="cursor: hand; text-decoration-line: underline">Direcci&oacute;n</label>
-                                <input name="txtDireccion" type="text" id="txtDireccion" class="form-control required" value="{$value.valTorres}" txtDireccion style="width:150px;" readonly="true"/>
+                                <input name="txtDireccion" type="text" id="txtDireccion" class="form-control required" value="{$value.txtDireccion}" txtDireccion style="width:150px;" readonly="true"/>
                                 <div id="val_txtDireccion" class="divError">Este campo es requerido</div>
                             </div>
                         </div>
@@ -418,16 +399,6 @@
                                 <div id="val_fchRegistroEnajenacion" class="divError" style="position: relative; float: left; width: 100%">Este campo es requerido</div>    
                             </div>
                         </div>
-
-
-
-                        <!-- <div class="form-group"  id="idLineaEquipamientoComunal">
-                             <div class="col-md-4" > 
-                                 <label class="control-label" >Tiene Equipamiento Comunal?</label><br> 
-                                 Si <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="1" {if $value.bolEquipamientoComunal == 1} checked {/if} class="form-control" style="width: 12px; display: unset"/> 
-                                 No <input name="bolEquipamientoComunal" type="radio" onClick="escondetxtDescEquipamientoComunal()" id="bolEquipamientoComunal" value="0" {if $value.bolEquipamientoComunal == 0} checked {/if} class="form-control" style="width: 12px; display: unset"/> 
-                             </div>
-                         </div>  -->
                         <div class="form-group"  id="idTituloDescEquipamientoComunal" >
                             <div class="col-md-8"> 
                                 <label class="control-label">Descripci&oacute;n Equipamiento Comunal</label> 
@@ -435,12 +406,7 @@
                                 <div id="val_txtDescEquipamientoComunal" class="divError" style="position: relative; float: left; width: 100%">Este campo es requerido</div>  
                             </div>
                         </div>
-                        <!--  <div class="form-group" id="idTituloDescEquipamientoComunal" >
-                              <div class="col-md-4" id="lineaDescEquipamientoComunal"  name="lineaDescEquipamientoComunal" style="width:250px; display: none"> 
-                                  <label class="control-label" >Descripci&oacute;n Equipamiento Comunal</label>                        
-                                  <textarea id="txtDescEquipamientoComunal" name="txtDescEquipamientoComunal" type="text"  class="form-control"/>{$value.txtDescEquipamientoComunal}</textarea>                       
-                              </div>
-                          </div>-->
+
                         <div id="idLineaLicenciaUrbanismo1" style="display:none"></div>
                         <div id="idLineaLicenciaUrbanismo2" style="display:none"></div>
                         <div id="idLineaLicenciaUrbanismo3" style="display:none"></div>
@@ -482,7 +448,8 @@
                         </div>
                         <div class="col-md-4"> 
                             <label class="control-label">Nit</label>                         
-                            <input name="numNitVendedor" type="text" id="numNitVendedor" value="{$value.numNitVendedor}" onblur=" sinCaracteresEspeciales(this); soloNumeros(this);" style="width:200px;" class="form-control required">
+                            <input name="numNitVendedor" type="text" id="numNitVendedor" value="{$value.numNitVendedor}" onblur=" sinCaracteresEspeciales(this);
+                                    soloNumeros(this);" style="width:200px;" class="form-control required">
                             <div id="val_numNitVendedor" class="divError">Este campo es requerido</div>
                         </div>
                         <div class="col-md-4"> 
@@ -525,7 +492,8 @@
                                             <input type="hidden" name="seqProyectoOferente[]" value="{$valueOferentesProy.seqProyectoOferente}" />
                                             <select name="seqOferente[]"
                                                     id="seqOferente_{$cont}" 
-                                                    class="form-control required" 
+                                                    class="form-control required"
+                                                    onchange="limpiarOferente({$cont});"
                                                     style="position: relative;float: left; width: 85%">
                                                 <option value="0">Seleccione una opci&oacute;n</option>
                                                 {foreach from=$arrOferente key=seqOferente item=valueOferente}
@@ -563,6 +531,7 @@
                                     <select name="seqOferente[]"
                                             id="seqOferente_1" 
                                             class="form-control required" 
+                                            onchange="limpiarOferente(1);"
                                             style="
                                             position: relative;
                                             float: left;
@@ -586,8 +555,9 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="control-label" >Telefono Contacto</label>   
-                                    <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this); soloNumeros(this);" class="form-control " style="position: relative; float: left;width:70%;"/>
-                                           <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
+                                    <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);
+                                            soloNumeros(this);" class="form-control " style="position: relative; float: left;width:70%;"/>
+                                    <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
                                     <div id="val_numTelContactoOferente_1" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
                                 </div>
                             {/if}
@@ -626,8 +596,8 @@
                 {include file="proyectos/secCronogramaFechas.tpl"}
             </div>
             <div id="datosPolizas" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
-                {*{include file="proyectos/vistas/inscripcionPoliza.tpl"}*}
-                prueba
+                {include file="proyectos/vistas/inscripcionPoliza.tpl"}
+
             </div>
         {/foreach}
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

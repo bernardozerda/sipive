@@ -139,7 +139,7 @@ function adicionarOferente() {
     var intId = $("#buildyourform select").length + 1;
     var fieldWrapper = $("<div class=\"form-group\" id=\"field" + intId + "\" />");
     var fName = "<div id=\"table" + intId + "\"><div class=\"col-md-3\"><label>Oferente(*)</label>";
-    var fType = "<select name=\"seqOferente[]\" id=\"seqOferente_" + intId + "\" class=\"form-control required\"   style=\"position: relative;float: left; width: 85%\">";
+    var fType = "<select name=\"seqOferente[]\" id=\"seqOferente_" + intId + "\" class=\"form-control required\"   onchange=\"limpiarOferente(" + intId + ");\" style=\"position: relative;float: left; width: 85%\">";
     $("#seqOferente_" + (intId - 1) + " option").each(function () {
         fType += "<option value=" + $(this).attr('value') + ">" + $(this).text() + "</option>";
     });
@@ -199,5 +199,13 @@ function showMenu() {
         });
     });
 }
+
+function limpiarOferente(int) { 
+    $("#txtNombreContactoOferente_" + int).val("");   
+    $("#txtCorreoOferente_" + int).val("");
+    $("#numTelContactoOferente_" + int).val("");
+}
+
+
 
 

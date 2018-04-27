@@ -1045,6 +1045,140 @@ class GestionFinancieraProyectos
         return $arrDatosFormato;
     }
 
+    public function listadoGiros(){
+        global $aptBd;
+        $arrListado = array();
+        $sql = "
+            select 
+              if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) as seqProyecto,
+              if(pry1.seqProyecto is null,pry.txtNombreProyecto,pry1.txtNombreProyecto) as txtNombreProyecto,
+              gfi.seqGiroFiducia,
+              gfi.numSecuencia,
+              gfi.fchCreacion,
+              count(gfd.seqProyecto) numUnidades,
+              sum(gfd.valGiro) valGiro
+            from t_pry_aad_giro_fiducia gfi
+            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            inner join t_pry_proyecto pry on gfd.seqProyecto = pry.seqProyecto
+            left join t_pry_proyecto pry1 on pry.seqProyectoPadre = pry1.seqProyecto
+            group by 
+              gfi.seqGiroFiducia,
+              gfi.numSecuencia,
+              gfi.fchCreacion,
+              if(pry1.seqProyecto is null,pry.txtNombreProyecto,pry1.txtNombreProyecto)        
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $seqGiroFiducia = $objRes->fields['seqGiroFiducia'];
+            $fchCreacion = new DateTime($objRes->fields['fchCreacion']);
+
+            $arrListado[$seqGiroFiducia]['proyecto']  = $objRes->fields['txtNombreProyecto'];
+            $arrListado[$seqGiroFiducia]['secuencia'] = "SDHT-SGF-SDRPL-" . $objRes->fields['seqProyecto'] . "-" . $objRes->fields['numSecuencia'] . "-" . $fchCreacion->format(y);
+            $arrListado[$seqGiroFiducia]['unidades']  = $objRes->fields['numUnidades'];
+            $arrListado[$seqGiroFiducia]['giro']      = $objRes->fields['valGiro'];
+
+            $objRes->MoveNext();
+        }
+
+        return $arrListado;
+    }
+
+    public function eliminarGiroFiducia($seqGiroFiducia){
+        global $aptBd;
+
+        try {
+            $aptBd->BeginTrans();
+
+            $sql = "delete from t_pry_aad_giro_fiducia_detalle where seqGiroFiducia = $seqGiroFiducia";
+            $aptBd->execute($sql);
+
+            $sql = "delete from t_pry_aad_giro_fiducia where seqGiroFiducia = $seqGiroFiducia";
+            $aptBd->execute($sql);
+
+            $this->arrMensajes[] = "Ha eliminado el giro con identificador " . $seqGiroFiducia . " de manera satisfactoria";
+            $aptBd->CommitTrans();
+        }catch(Exception $objError){
+            $aptBd->RollbackTrans();
+            $this->arrErrores[] = $objError->getMessage();
+        }
+
+    }
+
+    public function verGiro($seqGiroFiducia){
+        global $aptBd;
+        $arrRetorno = array();
+        $sql = "
+            select 
+                gfi.seqGiroFiducia,  
+                if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) as seqProyecto,
+                gfd.seqUnidadActo,
+                gfd.seqRegistroPresupuestal,
+                gfd.seqUnidadProyecto,
+                gfd.valGiro,
+                gfi.txtCertificacion,
+                gfi.bolCedulaOferente,
+                gfi.bolRitOferente,
+                gfi.bolRutOferente,
+                gfi.bolExistenciaOferente,
+                gfi.bolConstitucionFiducia,
+                gfi.bolCedulaFiducia,
+                gfi.bolBancariaFiducia,
+                gfi.bolSuperintendenciaFiducia,
+                gfi.bolCamaraFiducia,
+                gfi.bolRutFiducia,
+                gfi.bolResolucionProyecto,
+                gfi.bolMemorandoProyecto,
+                gfi.txtSubsecretario,
+                gfi.bolEncargoSubsecretario,
+                gfi.txtSubdirector,
+                gfi.bolEncargoSubdirector,
+                gfi.txtReviso
+            from t_pry_aad_giro_fiducia gfi
+            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            inner join t_pry_proyecto pry on gfd.seqProyecto = pry.seqProyecto
+            left join t_pry_proyecto pry1 on pry.seqProyectoPadre = pry1.seqProyecto
+            where gfi.seqGiroFiducia = $seqGiroFiducia
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $seqUnidadActo = $objRes->fields['seqUnidadActo'];
+            $seqRegistroPresupuestal = $objRes->fields['seqRegistroPresupuestal'];
+            $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
+
+            $arrRetorno['seqProyecto'] = $seqProyecto;
+            $arrRetorno['seqUnidadActo'] = $seqUnidadActo;
+            $arrRetorno['seqRegistroPresupuestal'] = $seqRegistroPresupuestal;
+            $arrRetorno['unidades'][$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal][$seqUnidadProyecto] = $objRes->fields['valGiro'];
+            $arrRetorno['txtCertificacion'] = $objRes->fields['txtCertificacion'];
+            $arrRetorno['documentos']['bolCedulaOferente'] = $objRes->fields['bolCedulaOferente'];
+            $arrRetorno['documentos']['bolRitOferente'] = $objRes->fields['bolRitOferente'];
+            $arrRetorno['documentos']['bolRutOferente'] = $objRes->fields['bolRutOferente'];
+            $arrRetorno['documentos']['bolExistenciaOferente'] = $objRes->fields['bolExistenciaOferente'];
+            $arrRetorno['documentos']['bolConstitucionFiducia'] = $objRes->fields['bolConstitucionFiducia'];
+            $arrRetorno['documentos']['bolCedulaFiducia'] = $objRes->fields['bolCedulaFiducia'];
+            $arrRetorno['documentos']['bolBancariaFiducia'] = $objRes->fields['bolBancariaFiducia'];
+            $arrRetorno['documentos']['bolSuperintendenciaFiducia'] = $objRes->fields['bolSuperintendenciaFiducia'];
+            $arrRetorno['documentos']['bolCamaraFiducia'] = $objRes->fields['bolCamaraFiducia'];
+            $arrRetorno['documentos']['bolRutFiducia'] = $objRes->fields['bolRutFiducia'];
+            $arrRetorno['documentos']['bolResolucionProyecto'] = $objRes->fields['bolResolucionProyecto'];
+            $arrRetorno['documentos']['bolMemorandoProyecto'] = $objRes->fields['bolMemorandoProyecto'];
+            $arrRetorno['txtSubsecretario'] = $objRes->fields['txtSubsecretario'];
+            $arrRetorno['bolEncargoSubsecretario'] = $objRes->fields['bolEncargoSubsecretario'];
+            $arrRetorno['txtSubdirector'] = $objRes->fields['txtSubdirector'];
+            $arrRetorno['bolEncargoSubdirector'] = $objRes->fields['bolEncargoSubdirector'];
+            $arrRetorno['txtReviso'] = $objRes->fields['txtReviso'];
+
+            $objRes->MoveNext();
+        }
+
+        $arrRetorno['seqGiroFiducia'] = $seqGiroFiducia;
+
+        return $arrRetorno;
+
+    }
 
 }
 

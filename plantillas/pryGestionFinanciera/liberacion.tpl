@@ -161,15 +161,17 @@
                                                                                 <td class="text-center" width="150px">{$arrRegistro.fecha->format('Y-m-d H:i:s')}</td>
                                                                                 <td>{$arrRegistro.usuario}</td>
                                                                                 <td width="100px" class="text-right">
-                                                                                    <form id="Del{$seqLiberacion}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/eliminarLiberacion.php',false, true); return false">
-                                                                                        <button type="submit" class="btn btn-danger btn-xs">
-                                                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
-                                                                                        </button>
-                                                                                        <input type="hidden" name="seqUnidadActoPrimario" value="{$seqUnidadActoPrimario}">
-                                                                                        <input type="hidden" name="seqRegistroPresupuestal" value="{$seqRegistroPresupuestal}">
-                                                                                        <input type="hidden" name="seqProyecto" value="{$arrPost.seqProyecto}">
-                                                                                        <input type="hidden" name="seqLiberacion" value="{$seqLiberacion}">
-                                                                                    </form>
+                                                                                    {if isset($smarty.session.arrGrupos.6.20)}
+                                                                                        <form id="Del{$seqLiberacion}" onsubmit="someterFormulario('contenido',this,'./contenidos/pryGestionFinanciera/eliminarLiberacion.php',false, true); return false">
+                                                                                            <button type="submit" class="btn btn-danger btn-xs">
+                                                                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
+                                                                                            </button>
+                                                                                            <input type="hidden" name="seqUnidadActoPrimario" value="{$seqUnidadActoPrimario}">
+                                                                                            <input type="hidden" name="seqRegistroPresupuestal" value="{$seqRegistroPresupuestal}">
+                                                                                            <input type="hidden" name="seqProyecto" value="{$arrPost.seqProyecto}">
+                                                                                            <input type="hidden" name="seqLiberacion" value="{$seqLiberacion}">
+                                                                                        </form>
+                                                                                    {/if}
                                                                                 </td>
                                                                             </tr>
                                                                         {/foreach}

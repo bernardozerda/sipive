@@ -41,11 +41,12 @@ function almacenarIncripcion() {
     $.each($("#frmProyectos input.required"), function (index, value) {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
+        console.log("value : " + $("#txtLicenciaConstructor").val());
         if (!$(value).val()) {
-            // console.log("paso1");
+            console.log("paso1 : " + $(value).val());
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-            console.log($(this).attr("id") + "input");
+            console.log($(this).attr("id") + " input");
             valid = false;
         }
 
@@ -97,7 +98,7 @@ function almacenarIncripcion() {
                 if (num.length > 1) {
                     $("#val_" + $(this).attr("id")).css("display", "none");
                     $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
-                    console.log("id : " + $(this).attr("id") + " tel: " + $("#" + $(this).attr("id")).val().length);
+                    // console.log("id : " + $(this).attr("id") + " tel: " + $("#" + $(this).attr("id")).val().length);
                     if ($("#" + $(this).attr("id")).val().length != 7 && $("#" + $(this).attr("id")).val().length != 10) {
                         $("#" + $(this).attr("id")).css("border", "1px solid red");
                         $("#val_" + $(this).attr("id")).css("display", "inline");
@@ -110,7 +111,6 @@ function almacenarIncripcion() {
         }
     });
     if (valid == false) {
-        console.log("ha sabido pasar");
         $("#mensajes").html("Por favor verifique todos los campos obligatorios(*) resaltados en rojo");
         $("#mensajes").css("color", "red");
         $("#mensajes").css("padding-top", "10px");
@@ -191,7 +191,7 @@ function obtenerModalidadProyecto(value) {
 function showMenu() {
     $(document).ready(function () {
         $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
-            console.log("paso2" + event.preventDefault());
+            //console.log("paso2" + event.preventDefault());
             event.preventDefault();
             event.stopPropagation();
             $(this).parent().siblings().removeClass('open');

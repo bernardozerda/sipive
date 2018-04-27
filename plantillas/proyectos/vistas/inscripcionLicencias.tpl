@@ -130,10 +130,10 @@
             <div class="form-group">
                 <div class="col-md-4"> 
                     <label class="control-label">N&uacute;mero de Licencia</label> 
-                    <input name="txtLicencia[]" type="text" id="txtLicencia_2" value="{$valueLic.txtLicencia}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
+                    <input name="txtLicencia[]" type="text" id="txtLicenciaC" value="{$valueLic.txtLicencia}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
                     <input type="hidden" name="seqProyectoLicencia[]" id="seqProyectoLicencia[]" value="{$valueLic.seqProyectoLicencia}" >
                     <input type="hidden" name="seqTipoLicencia[]" id="seqTipoLicencia[]" value="2" >
-                    <div id="val_txtLicencia_2" class="divError">Este campo es requerido</div>
+                    <div id="val_txtLicenciaC" class="divError">Este campo es requerido</div>
                 </div>
                 <div class="col-md-4" style="display: none"> 
                     <label class="control-label">Entidad Expedici&oacute;n</label>                         

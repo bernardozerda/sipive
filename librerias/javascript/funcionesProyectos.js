@@ -119,6 +119,7 @@ function almacenarIncripcion() {
     console.log("valid : " + valid);
     if (valid) {
         var url = $("#txtArchivo").val();
+        $("#mensajes").html("");
         // var url = "./contenidos/proyectos/contenidos/datosOferente.php"; // El script a dónde se realizará la petición.
         $.ajax({
             type: "POST",

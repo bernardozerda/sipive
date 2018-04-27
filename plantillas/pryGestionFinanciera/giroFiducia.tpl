@@ -230,7 +230,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolCedulaOferente]" value="1"
-                                                            {if isset($arrPost.documentos.bolCedulaOferente) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolCedulaOferente) and $arrPost.documentos.bolCedulaOferente == 1} checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia Cédula de Ciudadanía
                                                 </label>
                                             </div>
@@ -241,7 +241,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolRitOferente]" value="1"
-                                                            {if isset($arrPost.documentos.bolRitOferente) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolRitOferente) and $arrPost.documentos.bolRitOferente == 1 } checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia del Registro de Información Tributaria - RIT
                                                 </label>
                                             </div>
@@ -252,7 +252,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolRutOferente]" value="1"
-                                                            {if isset($arrPost.documentos.bolRutOferente) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolRutOferente) and $arrPost.documentos.bolRutOferente == 1 } checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia del Registro Único Tributario – RUT
                                                 </label>
                                             </div>
@@ -263,7 +263,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolExistenciaOferente]" value="1"
-                                                            {if isset($arrPost.documentos.bolExistenciaOferente) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolExistenciaOferente) and $arrPost.documentos.bolExistenciaOferente == 1} checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia del Certificado de existencia y representación legal<br>&nbsp;
                                                 </label>
                                             </div>
@@ -285,7 +285,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolConstitucionFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolConstitucionFiducia) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolConstitucionFiducia) and $arrPost.documentos.bolConstitucionFiducia == 1 } checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia constitución Encargo Fiduciario
                                                 </label>
                                             </div>
@@ -296,7 +296,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolCedulaFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolCedulaFiducia) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolCedulaFiducia) and $arrPost.documentos.bolCedulaFiducia == 1 } checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia cedula de ciudadanía
                                                 </label>
                                             </div>
@@ -307,7 +307,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolBancariaFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolBancariaFiducia) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolBancariaFiducia) and $arrPost.documentos.bolBancariaFiducia == 1 } checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}>  Certificación Bancaria de la cuenta en la cual se va a realizar el giro
                                                 </label>
                                             </div>
@@ -318,7 +318,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolSuperintendenciaFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolSuperintendenciaFiducia) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolSuperintendenciaFiducia) and $arrPost.documentos.bolSuperintendenciaFiducia == 1 } checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia del Certificado de existencia y representación legal expedido por la Superintendencia Financiera
                                                 </label>
                                             </div>
@@ -329,7 +329,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolCamaraFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolCamaraFiducia) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolCamaraFiducia) and $arrPost.documentos.bolCamaraFiducia == 1 } checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia del Certificado de existencia y representación legal expedido por la Cámara de Comercio
                                                 </label>
                                             </div>
@@ -340,7 +340,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolRutFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolRutFiducia) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolRutFiducia) and $arrPost.documentos.bolRutFiducia == 1 } checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia del Registro Único Tributario – RUT de la entidad financiera
                                                 </label>
                                             </div>
@@ -367,7 +367,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolResolucionProyecto]" value="1"
-                                                            {if isset($arrPost.documentos.bolResolucionProyecto) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolResolucionProyecto) and $arrPost.documentos.bolResolucionProyecto == 1} checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia Resolución 488 de 2016 y 541 de 2016
                                                 </label>
                                             </div>
@@ -378,7 +378,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolMemorandoProyecto]" value="1"
-                                                            {if isset($arrPost.documentos.bolMemorandoProyecto) } checked {/if}
+                                                            {if isset($arrPost.documentos.bolMemorandoProyecto) and $arrPost.documentos.bolMemorandoProyecto == 1} checked {/if}
                                                             {if $bolImprimir == true} disabled {/if}> Copia memorando de solicitud de aprobación póliza de cumplimiento mediante radicado No. 3-2015-35230- con fecha del 05 junio de 2015
                                                 </label>
                                             </div>
@@ -501,22 +501,22 @@
                 {assign var=seqRegistroPresupuestal value=$arrPost.seqRegistroPresupuestal}
                 <table id="listadoAadPry" class="table table-striped" style="width: 100%;">
                     <thead style="width: 100%;">
-                        <tr>
-                            <th style="width: 25%;">Proyecto</th>
-                            <th style="width: 25%;">Conjunto</th>
-                            <th style="width: 25%;">Unidad</th>
-                            <th>Giro</th>
-                        </tr>
+                    <tr>
+                        <th style="width: 25%;">Proyecto</th>
+                        <th style="width: 25%;">Conjunto</th>
+                        <th style="width: 25%;">Unidad</th>
+                        <th>Giro</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {foreach from=$arrUnidades.$seqProyecto.$seqUnidadActo.$seqRegistroPresupuestal key=seqUnidadProyecto item=valGiro}
-                            <tr>
-                                <td>{$claGestion->arrResoluciones.$seqUnidadActo.cdp.$seqRegistroPresupuestal.unidades.$seqUnidadProyecto.proyecto}</td>
-                                <td>{$claGestion->arrResoluciones.$seqUnidadActo.cdp.$seqRegistroPresupuestal.unidades.$seqUnidadProyecto.conjunto}</td>
-                                <td>{$claGestion->arrResoluciones.$seqUnidadActo.cdp.$seqRegistroPresupuestal.unidades.$seqUnidadProyecto.unidad}</td>
-                                <td style="text-align: right">$ {$valGiro|number_format:0:',':'.'}</td>
-                            </tr>
-                        {/foreach}
+                    {foreach from=$arrUnidades.$seqProyecto.$seqUnidadActo.$seqRegistroPresupuestal key=seqUnidadProyecto item=valGiro}
+                        <tr>
+                            <td>{$claGestion->arrResoluciones.$seqUnidadActo.cdp.$seqRegistroPresupuestal.unidades.$seqUnidadProyecto.proyecto}</td>
+                            <td>{$claGestion->arrResoluciones.$seqUnidadActo.cdp.$seqRegistroPresupuestal.unidades.$seqUnidadProyecto.conjunto}</td>
+                            <td>{$claGestion->arrResoluciones.$seqUnidadActo.cdp.$seqRegistroPresupuestal.unidades.$seqUnidadProyecto.unidad}</td>
+                            <td style="text-align: right">$ {$valGiro|number_format:0:',':'.'}</td>
+                        </tr>
+                    {/foreach}
                     </tbody>
                 </table>
                 <div id="listadoAadProyectos"></div>
@@ -545,8 +545,8 @@
                                     <span class="glyphicon glyphicon-warning-sign text-warning"></span>
                                 </td>
                                 <td class="h4">
-                                        <p>Aún tiene saldos pendientes en las resoluciones de liberación</p>
-                                        <small>¿Desea continuar?</small>
+                                    <p>Aún tiene saldos pendientes en las resoluciones de liberación</p>
+                                    <small>¿Desea continuar?</small>
                                 </td>
                             </tr>
                         </table>

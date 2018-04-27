@@ -35,7 +35,7 @@
         </div>
         <div class="col-md-4 lineaPersonaJuridica"  {if $value.bolTipoPersonaInterventor != 0}style="display: none" {/if}>
             <label class="control-label" >NIT</label>
-            <input name="numNitInterventor" type="text" id="numNitInterventor" value="{$value.numNitInterventor}" onblur="sinCaracteresEspeciales(this);
+            <input name="numNitInterventor" type="text" id="numNitInterventor" value="{$value.numNitInterventor}" onblur="sinCaracteresEspeciales(this); soloNumeros();
                     soloNit(this);" style="width:200px;" class="form-control">
         </div>       
         <div class="col-md-4 lineaPersonaJuridica"  {if $value.bolTipoPersonaInterventor != 0} style="display: none" {/if}> 

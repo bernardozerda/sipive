@@ -16,8 +16,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "DatosGeneralesProyectos.class.php" );
 
 $arrOferente[0] = array();
-$txtPlantilla = "proyectos/vistas/listaOferente.tpl";
 $claDatosProy = new DatosGeneralesProyectos();
+$txtPlantilla = "proyectos/vistas/listaOferente.tpl";
 $idOferente = 0;
 $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
 

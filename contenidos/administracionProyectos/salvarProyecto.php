@@ -39,7 +39,7 @@ if (empty($arrErrores)) {
     $arrayconjuntos = Array();
     $arrayTipoViviendas = Array();
     $arraycronograma = Array();
-echo "paso";
+
     // $arrTipoEsquema = $claDatosProy->obtenerlistaEsquema();
     $arrPryTipoModalidad = $claDatosProy->obtenerlistamodalidad();
     $arrOpv = $claDatosProy->obtenerlistaOpv();
@@ -84,8 +84,8 @@ echo "paso";
 
         //$claRegistro->registrarActividad("Edicion", 0, $_SESSION['seqUsuario'], "Edicion de Oferente: [" . $_POST['seqEditar'] . "] " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));
     } else {
-        echo "paso 2222";
-        $seqProyecto = $claProyecto->almacenarProyecto($_POST);
+        
+        $seqProyecto = $claProyecto->almacenarProyecto($_POST);    
         if ($seqProyecto > 0) {
             $txtCambios = "";
             $claSeguimiento->almacenarSeguimiento($seqProyecto, $_POST['txtComentario'], $_POST['seqGestion'], '', '');
@@ -229,7 +229,7 @@ if (empty($arrErrores)) {
     $claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
     $claSmarty->assign("arrCronogramaFecha", $arrCronogramaFecha);
     $claSmarty->assign("arrProyectoGrupo", $arrProyectoGrupo);
-    $claSmarty->assign("page", "datosProyectos.php?tipo=2");
+    $claSmarty->assign("page", "datosProyecto.php?tipo=2");
     $claSmarty->display($txtPlantilla);
 } else {
     imprimirMensajes($arrErrores, array());

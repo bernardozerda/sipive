@@ -482,7 +482,7 @@
                         </div>
                         <div class="col-md-4"> 
                             <label class="control-label">Nit</label>                         
-                            <input name="numNitVendedor" type="text" id="numNitVendedor" value="{$value.numNitVendedor}" onblur="sinCaracteresEspeciales(this);soloNumeros(this);" style="width:200px;" class="form-control required">
+                            <input name="numNitVendedor" type="text" id="numNitVendedor" value="{$value.numNitVendedor}" onblur=" sinCaracteresEspeciales(this); soloNumeros(this);" style="width:200px;" class="form-control required">
                             <div id="val_numNitVendedor" class="divError">Este campo es requerido</div>
                         </div>
                         <div class="col-md-4"> 

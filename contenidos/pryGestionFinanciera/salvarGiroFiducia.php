@@ -67,6 +67,12 @@ foreach($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion){
     }
 }
 
+
+$bolImprimir = false;
+if(! empty($claGestion->arrMensajes)){
+    $bolImprimir = true;
+}
+
 $claSmarty->assign("claGestion", $claGestion);
 $claSmarty->assign("arrPost", $_POST);
 $claSmarty->assign("bolHabilitar", $bolHabilitar);
@@ -76,6 +82,7 @@ $claSmarty->assign("numTotalUnidades", $numTotalUnidades);
 $claSmarty->assign("arrTablaCDP", $arrTablaCDP);
 $claSmarty->assign("bolPendientes", $bolPendientes);
 $claSmarty->assign("seqGiroFiducia", $seqGiroFiducia);
+$claSmarty->assign("bolImprimir", $bolImprimir);
 $claSmarty->display("pryGestionFinanciera/giroFiducia.tpl");
 
 ?>

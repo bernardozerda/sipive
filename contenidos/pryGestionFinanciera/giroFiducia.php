@@ -12,12 +12,19 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExce
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/IOFactory.php" );
 
+$claGestion = new GestionFinancieraProyectos();
+
+$bolImprimir = false;
+if(intval($_POST['seqGiroFiducia']) != 0){
+    $_POST = $claGestion->verGiro($_POST['seqGiroFiducia']);
+    $bolImprimir = true;
+}
+
 $seqProyecto = intval($_POST['seqProyecto']);
 $seqUnidadActo = intval($_POST['seqUnidadActo']);
 $seqRegistroPresupuestal = intval($_POST['seqRegistroPresupuestal']);
 $arrArchivo = array();
 
-$claGestion = new GestionFinancieraProyectos();
 $claGestion->proyectos();
 
 // cuando hay proyecto seleccionado carga la informacion
@@ -107,8 +114,10 @@ $claSmarty->assign("numTotalGiro", $numTotalGiro);
 $claSmarty->assign("numTotalUnidades", $numTotalUnidades);
 $claSmarty->assign("arrTablaCDP", $arrTablaCDP);
 $claSmarty->assign("bolPendientes", $bolPendientes);
+$claSmarty->assign("bolImprimir", $bolImprimir);
+$claSmarty->assign("seqGiroFiducia", intval($_POST['seqGiroFiducia']));
 $claSmarty->display( "pryGestionFinanciera/giroFiducia.tpl" );
 
-//pr($claGestion->arrResoluciones);
+//pr($_POST);
 
 ?>

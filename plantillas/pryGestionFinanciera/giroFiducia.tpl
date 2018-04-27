@@ -25,7 +25,9 @@
     <div class="form-group">
         <label for="seqProyecto" class="col-sm-1 control-label text-left">Proyecto</label>
         <div class="col-sm-10">
-            <select id="seqProyecto" class="form-control input-sm" name="seqProyecto" onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/giroFiducia.php',true,true);">
+            <select id="seqProyecto" class="form-control input-sm" name="seqProyecto"
+                    onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/giroFiducia.php',true,true);"
+                    {if $bolImprimir == true} disabled {/if}>
                 <option value="0">Seleccione Proyecto</option>
                 {foreach from=$claGestion->arrProyectos key=seqProyecto item=txtNombreProyecto}
                     <option value="{$seqProyecto}" {if $arrPost.seqProyecto == $seqProyecto} selected {/if}>{$txtNombreProyecto}</option>
@@ -68,7 +70,8 @@
                         <label for="seqUnidadActo" class="col-sm-1 control-label">Resolución</label>
                         <div class="col-sm-4">
                             <select id="seqUnidadActo" class="form-control input-sm" name="seqUnidadActo"
-                                    onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/giroFiducia.php',true,true);">
+                                    onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/giroFiducia.php',true,true);"
+                                    {if $bolImprimir == true} disabled {/if}>
                                 <option value="0">Seleccione Resolución</option>
                                 {foreach from=$claGestion->arrResoluciones key=seqUnidadActo item=arrResolucion}
                                     {if $arrResolucion.total > 0}
@@ -84,7 +87,8 @@
                         <label for="seqRegistroPresupuestal" class="col-sm-2 control-label">Registro Presupuestal</label>
                         <div class="col-sm-3">
                             <select id="seqRegistroPresupuestal" class="form-control input-sm" name="seqRegistroPresupuestal"
-                                    onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/giroFiducia.php',true,true);">
+                                    onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/giroFiducia.php',true,true);"
+                                    {if $bolImprimir == true} disabled {/if}>
                                 <option value="0">Seleccione RP</option>
                                 {if intval($arrPost.seqUnidadActo) != 0}
                                     {assign var=seqUnidadActo value=$arrPost.seqUnidadActo}
@@ -101,7 +105,7 @@
                         <div class="col-sm-2">
                             <button class="btn btn-success btn-sm" type="button"
                                     onclick="location.href='./contenidos/pryGestionFinanciera/plantillaUnidades.php?seqProyecto={$arrPost.seqProyecto}&seqUnidadActo={$arrPost.seqUnidadActo}&seqRegistroPresupuestal={$arrPost.seqRegistroPresupuestal}'"
-                                    {if $bolHabilitar == false} disabled="disabled" {/if}>
+                                    {if $bolHabilitar == false or $bolImprimir == true} disabled="disabled" {/if}>
                                 <span class="glyphicon glyphicon-export" aria-hidden="true"></span> Plantilla
                             </button>
                         </div>
@@ -115,11 +119,11 @@
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <label class="input-group-btn">
-                            <span class="btn btn-default {if $bolHabilitar == false} disabled {/if}">
-                                <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
-                                <input class="pryFile" type="file" name="archivo" style="display: none;" {if $bolHabilitar == false} disabled="disabled" {/if}
-                                       onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/giroFiducia.php',true,true);">
-                            </span>
+                                    <span class="btn btn-default {if $bolHabilitar == false or $bolImprimir == true} disabled {/if}">
+                                        <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                                        <input class="pryFile" type="file" name="archivo" style="display: none;" {if $bolHabilitar == false} disabled="disabled" {/if}
+                                               onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/giroFiducia.php',true,true);">
+                                    </span>
                                 </label>
                                 <input type="text" id="pryFileContent" class="form-control" readonly="" value="">
                             </div>
@@ -130,9 +134,9 @@
                         <div class="col-sm-2">
                             <div class="input-group input-group-sm">
                                 <label class="input-group-btn" data-toggle="modal" data-target="#modalUnidades">
-                            <span class="btn btn-default {if $bolHabilitar == false} disabled {/if}">
-                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                            </span>
+                                    <span class="btn btn-default {if $bolHabilitar == false} disabled {/if}">
+                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                    </span>
                                 </label>
                                 <input type="text" class="form-control input-sm" value="{$numTotalUnidades}" readonly>
                             </div>
@@ -205,7 +209,8 @@
                     <div class="form-group">
                         <label for="txtCertificacion" class="col-sm-2 control-label">Certificación</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="txtCertificacion" name="txtCertificacion" rows="3">{$arrPost.txtCertificacion}</textarea>
+                            <textarea class="form-control" id="txtCertificacion" name="txtCertificacion" rows="3"
+                                    {if $bolImprimir == true} readonly {/if}>{$arrPost.txtCertificacion}</textarea>
                         </div>
                     </div>
 
@@ -225,7 +230,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolCedulaOferente]" value="1"
-                                                            {if isset($arrPost.documentos.bolCedulaOferente) } checked {/if}> Copia Cédula de Ciudadanía
+                                                            {if isset($arrPost.documentos.bolCedulaOferente) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia Cédula de Ciudadanía
                                                 </label>
                                             </div>
                                         </div>
@@ -235,7 +241,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolRitOferente]" value="1"
-                                                            {if isset($arrPost.documentos.bolRitOferente) } checked {/if}> Copia del Registro de Información Tributaria - RIT
+                                                            {if isset($arrPost.documentos.bolRitOferente) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia del Registro de Información Tributaria - RIT
                                                 </label>
                                             </div>
                                         </div>
@@ -245,7 +252,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolRutOferente]" value="1"
-                                                            {if isset($arrPost.documentos.bolRutOferente) } checked {/if}> Copia del Registro Único Tributario – RUT
+                                                            {if isset($arrPost.documentos.bolRutOferente) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia del Registro Único Tributario – RUT
                                                 </label>
                                             </div>
                                         </div>
@@ -255,7 +263,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolExistenciaOferente]" value="1"
-                                                            {if isset($arrPost.documentos.bolExistenciaOferente) } checked {/if}> Copia del Certificado de existencia y representación legal<br>&nbsp;
+                                                            {if isset($arrPost.documentos.bolExistenciaOferente) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia del Certificado de existencia y representación legal<br>&nbsp;
                                                 </label>
                                             </div>
                                         </div>
@@ -276,7 +285,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolConstitucionFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolConstitucionFiducia) } checked {/if}> Copia constitución Encargo Fiduciario
+                                                            {if isset($arrPost.documentos.bolConstitucionFiducia) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia constitución Encargo Fiduciario
                                                 </label>
                                             </div>
                                         </div>
@@ -286,7 +296,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolCedulaFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolCedulaFiducia) } checked {/if}> Copia cedula de ciudadanía
+                                                            {if isset($arrPost.documentos.bolCedulaFiducia) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia cedula de ciudadanía
                                                 </label>
                                             </div>
                                         </div>
@@ -296,7 +307,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolBancariaFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolBancariaFiducia) } checked {/if}>  Certificación Bancaria de la cuenta en la cual se va a realizar el giro
+                                                            {if isset($arrPost.documentos.bolBancariaFiducia) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}>  Certificación Bancaria de la cuenta en la cual se va a realizar el giro
                                                 </label>
                                             </div>
                                         </div>
@@ -306,7 +318,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolSuperintendenciaFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolSuperintendenciaFiducia) } checked {/if}> Copia del Certificado de existencia y representación legal expedido por la Superintendencia Financiera
+                                                            {if isset($arrPost.documentos.bolSuperintendenciaFiducia) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia del Certificado de existencia y representación legal expedido por la Superintendencia Financiera
                                                 </label>
                                             </div>
                                         </div>
@@ -316,7 +329,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolCamaraFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolCamaraFiducia) } checked {/if}> Copia del Certificado de existencia y representación legal expedido por la Cámara de Comercio
+                                                            {if isset($arrPost.documentos.bolCamaraFiducia) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia del Certificado de existencia y representación legal expedido por la Cámara de Comercio
                                                 </label>
                                             </div>
                                         </div>
@@ -326,7 +340,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolRutFiducia]" value="1"
-                                                            {if isset($arrPost.documentos.bolRutFiducia) } checked {/if}> Copia del Registro Único Tributario – RUT de la entidad financiera
+                                                            {if isset($arrPost.documentos.bolRutFiducia) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia del Registro Único Tributario – RUT de la entidad financiera
                                                 </label>
                                             </div>
                                         </div>
@@ -352,7 +367,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolResolucionProyecto]" value="1"
-                                                            {if isset($arrPost.documentos.bolResolucionProyecto) } checked {/if}> Copia Resolución 488 de 2016 y 541 de 2016
+                                                            {if isset($arrPost.documentos.bolResolucionProyecto) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia Resolución 488 de 2016 y 541 de 2016
                                                 </label>
                                             </div>
                                         </div>
@@ -362,7 +378,8 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="documentos[bolMemorandoProyecto]" value="1"
-                                                            {if isset($arrPost.documentos.bolMemorandoProyecto) } checked {/if}> Copia memorando de solicitud de aprobación póliza de cumplimiento mediante radicado No. 3-2015-35230- con fecha del 05 junio de 2015
+                                                            {if isset($arrPost.documentos.bolMemorandoProyecto) } checked {/if}
+                                                            {if $bolImprimir == true} disabled {/if}> Copia memorando de solicitud de aprobación póliza de cumplimiento mediante radicado No. 3-2015-35230- con fecha del 05 junio de 2015
                                                 </label>
                                             </div>
                                         </div>
@@ -391,14 +408,16 @@
                                         <div class="form-group">
                                             <label for="txtSubsecretario" class="col-sm-12">Subsecretario</label>
                                             <div class="col-sm-11">
-                                                <input type="text" name="txtSubsecretario" id="txtSubsecretario" class="form-control input-sm" value="{$arrPost.txtSubsecretario}">
+                                                <input type="text" name="txtSubsecretario" id="txtSubsecretario" class="form-control input-sm" value="{$arrPost.txtSubsecretario}"
+                                                        {if $bolImprimir == true} readonly {/if}>
                                                 <div class="col-sm-12">
                                                     <div id="txtSubsecretarioContenedor"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-1">
                                                 <input type="checkbox" name="bolEncargoSubsecretario" class="checkbox"
-                                                        {if isset($arrPost.bolEncargoSubsecretario) and $arrPost.bolEncargoSubsecretario == 1 } checked {/if}>
+                                                        {if isset($arrPost.bolEncargoSubsecretario) and $arrPost.bolEncargoSubsecretario == 1 } checked {/if}
+                                                        {if $bolImprimir == true} disabled {/if}>
                                             </div>
                                         </div>
 
@@ -406,14 +425,16 @@
                                         <div class="form-group">
                                             <label for="txtSubdirector" class="col-sm-12">Subdirector</label>
                                             <div class="col-sm-11">
-                                                <input type="text" name="txtSubdirector" id="txtSubdirector" class="form-control input-sm" value="{$arrPost.txtSubdirector}">
+                                                <input type="text" name="txtSubdirector" id="txtSubdirector" class="form-control input-sm" value="{$arrPost.txtSubdirector}"
+                                                        {if $bolImprimir == true} readonly {/if}>
                                                 <div class="col-sm-12">
                                                     <div id="txtSubdirectorContenedor"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-1">
                                                 <input type="checkbox" name="bolEncargoSubdirector" class="checkbox"
-                                                        {if isset($arrPost.bolEncargoSubdirector) and $arrPost.bolEncargoSubdirector == 1 } checked {/if}>
+                                                        {if isset($arrPost.bolEncargoSubdirector) and $arrPost.bolEncargoSubdirector == 1 } checked {/if}
+                                                        {if $bolImprimir == true} disabled {/if}>
                                             </div>
                                         </div>
 
@@ -421,7 +442,8 @@
                                         <div class="form-group">
                                             <label for="txtReviso" class="col-sm-12">Revisó</label>
                                             <div class="col-sm-12">
-                                                <input type="text" name="txtReviso" id="txtReviso" class="form-control input-sm" value="{$arrPost.txtReviso}">
+                                                <input type="text" name="txtReviso" id="txtReviso" class="form-control input-sm" value="{$arrPost.txtReviso}"
+                                                        {if $bolImprimir == true} readonly {/if}>
                                                 <div class="col-sm-12">
                                                     <div id="txtRevisoContenedor"></div>
                                                 </div>
@@ -438,14 +460,14 @@
         </div>
         <div class="panel-footer" align="center">&nbsp;
 
-            {if not empty($claGestion->arrMensajes)}
+            {if $bolImprimir == true}
                 <button type="button" name="volver" class="btn btn-danger" style="width: 100px;"
                         onclick="pdfGiroFiducia({$arrPost.seqProyecto},{$seqGiroFiducia});"
                 >PDF</button>
             {/if}
 
             <button type="button" name="salvar" value="1" class="btn btn-primary" style="width: 100px;"
-                    {if not empty($claGestion->arrMensajes)}
+                    {if $bolImprimir == true}
                         disabled="disabled"
                     {/if}
                     {if $bolPendientes == false}
@@ -457,7 +479,8 @@
                 Salvar Giro
             </button>
             &nbsp;
-            <button type="button" name="volver" class="btn btn-default" style="width: 100px;">Volver</button>
+            <button type="button" name="volver" class="btn btn-default" style="width: 100px;"
+                    onclick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/listadoGirosFiducia.php','',true);">Volver</button>
 
         </div>
     </div>

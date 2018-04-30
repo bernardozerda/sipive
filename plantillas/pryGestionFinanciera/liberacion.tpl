@@ -85,9 +85,9 @@
                                         <tr>
                                             <th width="100px"></th>
                                             <th width="100px"></th>
-                                            <th width="100px" class="text-right">Total</th>
-                                            <th width="100px" class="text-right">Giros</th>
+                                            <th width="100px" class="text-right">Valor RP</th>
                                             <th width="100px" class="text-right">Liberaciones</th>
+                                            <th width="100px" class="text-right">Giros</th>
                                             <th width="100px" class="text-right">Saldo</th>
                                             <th width="120px"></th>
                                             <th></th>
@@ -112,13 +112,13 @@
                                                                 $ {$arrCDP.valorRP|number_format:0:',':'.'}
                                                             </td>
                                                             <td class="text-right">
-                                                                $ {$arrCDP.giros|number_format:0:',':'.'}
-                                                            </td>
-                                                            <td class="text-right">
                                                                 $ {$arrCDP.liberaciones|abs|number_format:0:',':'.'}
                                                             </td>
                                                             <td class="text-right">
-                                                                {if $arrCDP.saldo != 0}
+                                                                $ {$arrCDP.giros|number_format:0:',':'.'}
+                                                            </td>
+                                                            <td class="text-right">
+                                                                {if isset($arrCDP.saldo)}
                                                                     $ {$arrCDP.saldo|number_format:0:',':'.'}
                                                                 {else}
                                                                     $ {$arrCDP.valorRP|number_format:0:',':'.'}

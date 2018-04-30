@@ -200,12 +200,31 @@ function showMenu() {
     });
 }
 
-function limpiarOferente(int) { 
-    $("#txtNombreContactoOferente_" + int).val("");   
+function limpiarOferente(int) {
+    $("#txtNombreContactoOferente_" + int).val("");
     $("#txtCorreoOferente_" + int).val("");
     $("#numTelContactoOferente_" + int).val("");
 }
 
+function addPoliza() {
+
+}
 
 
+var fncActivarMenuNietos = function () {
+    $('.dropdown-submenu a.test').on("click", function (e) {
+        $(this).next('ul').toggle();
+        e.stopPropagation();
+        e.preventDefault();
+    });
+    eliminarObjeto("divNietos");
+    YAHOO.util.Event.onContentReady(
+            "divNietos",
+            fncActivarMenuNietos
+            );
+}
 
+YAHOO.util.Event.onContentReady(
+        "divNietos",
+        fncActivarMenuNietos
+        );

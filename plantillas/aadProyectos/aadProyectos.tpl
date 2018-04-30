@@ -7,8 +7,9 @@
         <h4 class="panel-title">Actos administrativos de unidades</h4>
     </div>
     <div class="panel-body">
-        <table id="listadoAadPry" data-order='[[ 4, "desc" ]]' class="table table-striped table-condensed table-hover" width="100%">
+        <table id="listadoAadPry" data-order='[[ 5, "desc" ]]' class="table table-striped table-condensed table-hover" width="100%">
             <thead>
+                <th align="center">Identificador</th>
                 <th align="center">Tipo de Acto</th>
                 <th align="center">Número</th>
                 <th align="center">Fecha</th>
@@ -22,6 +23,7 @@
             <tbody>
                 {foreach from=$arrActos key=seqUnidadActo item=arrActo}
                     <tr>
+                        <td>{$seqUnidadActo}</td>
                         <td>{$arrActo.tipo}</td>
                         <td>{$arrActo.numero}</td>
                         <td>{$arrActo.fecha}</td>

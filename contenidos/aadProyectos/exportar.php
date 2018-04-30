@@ -28,6 +28,7 @@ $arrTitulos[] = "Creación";
 $arrTitulos[] = "Usuario";
 $arrTitulos[] = "Proyecto";
 $arrTitulos[] = "Conjunto";
+$arrTitulos[] = "Id Unidad";
 $arrTitulos[] = "Unidad";
 $arrTitulos[] = "Valor";
 $arrTitulos[] = "Proyecto de Inversión";
@@ -68,6 +69,7 @@ foreach($claActo->arrUnidades as $seqUnidadActo => $arrUnidad ){
     $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $claActo->txtNombre, false);
     $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['txtNombreProyecto'], false);
     $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['txtNombreConjunto'], false);
+    $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['seqUnidadProyecto'], false);
     $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['txtNombreUnidad'], false);
     $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['valIndexado'], false);
     $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['numProyectoInversionCDP'], false);

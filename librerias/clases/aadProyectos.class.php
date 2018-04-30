@@ -188,6 +188,7 @@ class aadProyectos
                 $this->arrUnidades[$seqUnidadVinculado]['txtNombreProyecto'] = $objRes->fields['txtNombreProyecto'];
                 $this->arrUnidades[$seqUnidadVinculado]['seqConjunto'] = $objRes->fields['seqConjunto'];
                 $this->arrUnidades[$seqUnidadVinculado]['txtNombreConjunto'] = $objRes->fields['txtNombreConjunto'];
+                $this->arrUnidades[$seqUnidadVinculado]['seqUnidadProyecto'] = $objRes->fields['seqUnidadProyecto'];
                 $this->arrUnidades[$seqUnidadVinculado]['txtNombreUnidad'] = $objRes->fields['txtNombreUnidad'];
                 $this->arrUnidades[$seqUnidadVinculado]['valIndexado'] = $objRes->fields['valIndexado'];
                 $this->arrUnidades[$seqUnidadVinculado]['seqRegistroPresupuestal'] = $objRes->fields['seqRegistroPresupuestal'];

@@ -60,7 +60,7 @@
                             <td class="h5 text-right">$ {$arrResolucion.total|abs|number_format:0:',':'.'}</td>
                             <td class="h5 text-right">$ {$arrResolucion.liberaciones|abs|number_format:0:',':'.'}</td>
                             <td class="h5 text-right">
-                                {if $arrResolucion.saldo != 0}
+                                {if isset($arrResolucion.saldo)}
                                     $ {$arrResolucion.saldo|abs|number_format:0:',':'.'}
                                 {else}
                                     $ {$arrResolucion.total|abs|number_format:0:',':'.'}

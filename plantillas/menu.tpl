@@ -39,16 +39,15 @@
                                     {/if}
                                     {if $objHijo->posicion == 3 && $objHijo->seqPadre == $seqPadre}
                                         <li class="dropdown-submenu">
-                                            <a class="test" tabindex="-1" href="#" onClick="cargarContenido('contenido', './contenidos/{$objHijo->txtCodigo}.php', '', true);
-                                                cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqHijo}', false);"> {$objHijo->txtEspanol}  <span class="caret" style="    position: absolute;
-    right: 0;
-    margin-top: 6px;
-    margin-right: 15px;
-    border-top: 4px solid transparent;
-    border-bottom: 4px solid transparent;
-    border-left: 4px dashed;"></span></a>
+                                            <a class="test" tabindex="-1" href="#" > {$objHijo->txtEspanol}  <span class="caret" style="    position: absolute;
+                                                right: 0;
+                                                margin-top: 6px;
+                                                margin-right: 15px;
+                                                border-top: 4px solid transparent;
+                                                border-bottom: 4px solid transparent;
+                                                border-left: 4px dashed;"></span></a>
                                             <ul class="dropdown-menu" style="position: absolute; left: 100%;margin-top: -20px; float: left; z-index: 1000">
-                                                {foreach from=$arrNietos key=seqNieto item=objNieto}
+                                                {foreach from=$arrNietos[$seqHijo] key=seqNieto item=objNieto}                                                    
                                                     {if $objNieto->posicion == 4 && $objNieto->seqPadre == $seqHijo}
                                                         <li><a tabindex="-1" href="#" onClick="cargarContenido('contenido', './contenidos/{$objNieto->txtCodigo}.php', '', true);
                                                                 cargarContenido('rutaMenu', './rutaMenu.php', 'menu={$seqNieto}', false);">{$objNieto->txtEspanol}</a></li>

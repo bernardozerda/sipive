@@ -45,17 +45,16 @@ foreach ($arrMenu as $seqPadre => $objPadre) {
     if (!in_array($seqPadre, $_SESSION['arrPermisos'][$seqProyectoPost])) {
         unset($arrMenu[$seqPadre]);
     } else {
-        foreach ($objPadre->hijos as $seqHijo => $objHijo) {    
-            echo "<br> hijo ->".$seqHijo;
-            $arrNietos = $claMenu->obtenerHijos($seqProyectoPost, $seqHijo);
-            var_dump($arrNietos);
-            if (!in_array($seqHijo, $_SESSION['arrPermisos'][$seqProyectoPost])) {               
+        foreach ($objPadre->hijos as $seqHijo => $objHijo) {          
+            if (!in_array($seqHijo, $_SESSION['arrPermisos'][$seqProyectoPost])) {
                 unset($arrMenu[$seqPadre]->hijos[$seqHijo]);
             }
+            $arrNietos[$seqHijo] = $claMenu->obtenerHijos($seqProyectoPost, $seqHijo);
         }
     }
 }
-foreach ($arrNietos as $seqNieto => $objNieto) {   
+
+foreach ($arrNietos as $seqNieto => $objNieto) {
     if (!in_array($seqNieto, $_SESSION['arrPermisos'][$seqProyectoPost])) {
         unset($arrNietos[$seqNieto]->nietos[$seqNieto]);
     }
@@ -71,7 +70,7 @@ foreach ($_SESSION['arrPermisos'] as $seqProyecto => $arrPrivilegios) {
 // carga el codigo por defecto
 $seqMenuInicial = $arrProyectosA[$seqProyectoPost]->seqMenu;
 if ($seqMenuInicial != 0) {
-    $arrMenuInicial = $claMenu->cargarMenu($seqProyectoPost, $seqMenuInicial);    
+    $arrMenuInicial = $claMenu->cargarMenu($seqProyectoPost, $seqMenuInicial);
     include( $txtPrefijoRuta . "contenidos/" . $arrMenuInicial[$seqMenuInicial]->txtCodigo . ".php" );
 } else {
     $claSmarty->assign("txtArchivoInicio", "sinInicio.tpl");

@@ -45,8 +45,10 @@ foreach ($arrMenu as $seqPadre => $objPadre) {
     if (!in_array($seqPadre, $_SESSION['arrPermisos'][$seqProyectoPost])) {
         unset($arrMenu[$seqPadre]);
     } else {
-        foreach ($objPadre->hijos as $seqHijo => $objHijo) {          
+        foreach ($objPadre->hijos as $seqHijo => $objHijo) {    
+            echo "<br> hijo ->".$seqHijo;
             $arrNietos = $claMenu->obtenerHijos($seqProyectoPost, $seqHijo);
+            var_dump($arrNietos);
             if (!in_array($seqHijo, $_SESSION['arrPermisos'][$seqProyectoPost])) {               
                 unset($arrMenu[$seqPadre]->hijos[$seqHijo]);
             }

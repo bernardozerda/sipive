@@ -61,13 +61,40 @@
     }
 
     // Documento
-    if (intval($_POST['numDocumento']) == 0) {
+    if (doubleval($_POST['numDocumento']) == 0) {
         $arrErrores[] = "El Documento no puede estar vacio";
     }
 
     // Tipo de documento
     if (in_array(intval($_POST['seqTipoDocumento']), array(0, 6, 4, 3))) {
         $arrErrores[] = "El tipo de documento seleccionado no es válido";
+    }elseif( intval($_POST['seqTipoDocumento']) == 1 ){
+
+        // validacion del soporte de documento
+        if(! esFechaValida($_POST['fchExpedicion'])){
+            $arrErrores[] = "Indique la fecha de expedición del documento";
+        }
+
+        if(trim($_POST['txtEntidadDocumento']) == ""){
+            $arrErrores[] = "Indique la entidad que expide el documento";
+        }else{
+            if(trim($_POST['txtEntidadDocumento']) == "Notaria" and intval($_POST['numNotariaDocumento']) == 0){
+                $arrErrores[] = "Indique la notaría en donde se expidió el registro civil del ciudadano";
+            }
+        }
+
+        if(doubleval($_POST['numIndicativoSerial']) == 0){
+            $arrErrores[] = "Digite el indicativo serial del registro civil del ciudadano";
+        }else{
+            if(doubleval($_POST['numIndicativoSerial']) == doubleval($_POST['numDocumento'])) {
+                $arrErrores[] = "El indicativo serial no es el mismo numero de documento, por favor rectifique";
+            }
+        }
+
+        if(intval($_POST['seqCiudadDocumento']) == 0){
+            $arrErrores[] = "Indique la ciudad de expedicion del registro civil del ciudadano";
+        }
+
     }
 
     // Primer nombre
@@ -138,7 +165,107 @@
     $arrEstadoCivil = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil"), "seqEstadoCivil", "bolActivo = 1");
     $seqEstadoCivil = $_POST['seqEstadoCivil'];
     if( ! isset( $arrEstadoCivil[ $seqEstadoCivil ] ) ){
-        $arrErrores[] = "No puede utilizar este estado civil para el ciudadano.";
+        $arrErrores[] = "Seleccione un estado civil válido.";
+    }elseif ( $seqEstadoCivil == 6 ){ // casado
+
+        $_POST['numConsecutivoCSCDL'] = 0;
+        $_POST['txtEntidadCSCDL'] = 0;
+        $_POST['seqEntidadCSCDL'] = "";
+        $_POST['txtCertificacionUnion'] = "";
+        $_POST['numConsecutivoUnion'] = 0;
+        $_POST['seqEntidadUnion'] = 0;
+        $_POST['seqCiudadUnion'] = 0;
+        $_POST['numNotariaSoltero'] = 0;
+        $_POST['seqCiudadSoltero'] = 0;
+
+        if(intval($_POST['numConsecutivoCasado']) == 0){
+            $arrErrores[] = "Digite el numero de consecutivo del soporte del estado civil";
+        }
+
+        if(intval($_POST['numNotariaCasado']) == 0){
+            $arrErrores[] = "Digite el numero de notaría del soporte del estado civil";
+        }
+
+        if(intval($_POST['seqCiudadCasado']) == 0){
+            $arrErrores[] = "Seleccione la ciudad para el soporte del estado civil";
+        }
+
+    }elseif( $seqEstadoCivil == 8){ // Casado(a) con Sociedad Conyugal Disuelta y Liquidada
+
+        $_POST['numConsecutivoCasado'] = 0;
+        $_POST['numNotariaCasado'] = 0;
+        $_POST['seqCiudadCasado'] = 0;
+        $_POST['txtCertificacionUnion'] = "";
+        $_POST['numConsecutivoUnion'] = 0;
+        $_POST['seqEntidadUnion'] = 0;
+        $_POST['seqCiudadUnion'] = 0;
+        $_POST['numNotariaSoltero'] = 0;
+        $_POST['seqCiudadSoltero'] = 0;
+
+        if(intval($_POST['numConsecutivoCSCDL']) == 0){
+            $arrErrores[] = "Digite el numero de consecutivo del soporte del estado civil";
+        }
+
+        if(trim($_POST['txtEntidadCSCDL']) == ""){
+            $arrErrores[] = "Seleccione la entidad del soporte del estado civil";
+        }elseif(trim($_POST['txtEntidadCSCDL']) == "Notaria" and intval($_POST['numNotariaCSCDL']) == 0){
+            $arrErrores[] = "Digite la notaria del soporte del estado civil";
+        }
+
+        if(intval($_POST['seqCiudadCSCDL']) == 0){
+            $arrErrores[] = "Seleccione la ciudad para el soporte del estado civil";
+        }
+
+    }elseif( $seqEstadoCivil == 2 ){ // soltero
+
+        $_POST['numConsecutivoCasado'] = 0;
+        $_POST['numNotariaCasado'] = 0;
+        $_POST['seqCiudadCasado'] = 0;
+        $_POST['numConsecutivoCSCDL'] = 0;
+        $_POST['seqEntidadCSCDL'] = "";
+        $_POST['seqCiudadCSCDL'] = 0;
+        $_POST['txtCertificacionUnion'] = "";
+        $_POST['numConsecutivoUnion'] = 0;
+        $_POST['seqEntidadUnion'] = 0;
+        $_POST['seqCiudadUnion'] = 0;
+
+        if(intval($_POST['numNotariaSoltero']) == 0){
+            $arrErrores[] = "Digite el numero de notaria del soporte del estado civil";
+        }
+
+        if(intval($_POST['seqCiudadSoltero']) == 0){
+            $arrErrores[] = "Seleccione la ciudad para el soporte del estado civil";
+        }
+
+    }elseif ($seqEstadoCivil == 7){ // soltero con union marital
+
+        $_POST['numConsecutivoCasado'] = 0;
+        $_POST['numNotariaCasado'] = 0;
+        $_POST['seqCiudadCasado'] = 0;
+        $_POST['numConsecutivoCSCDL'] = 0;
+        $_POST['txtEntidadCSCDL'] = "";
+        $_POST['seqCiudadCSCDL'] = 0;
+        $_POST['numNotariaSoltero'] = 0;
+        $_POST['seqCiudadSoltero'] = 0;
+
+        if(trim($_POST['txtCertificacionUnion']) == ""){
+            $arrErrores[] = "Seleccione el tipo de certificacion del estado civil";
+        }
+
+        if(doubleval($_POST['numConsecutivoUnion']) == ""){
+            $arrErrores[] = "Digite el numero de consecutivo de la certificación del estado civil";
+        }
+
+        if(trim($_POST['txtEntidadUnion']) == ""){
+            $arrErrores[] = "Seleccione la entidad de la certificacion del estado civil";
+        }elseif(trim($_POST['txtEntidadUnion']) == "Notaria" and intval($_POST['numNotariaUnion']) == 0){
+            $arrErrores[] = "Digite el numero de notaría de la certificación del estado civil";
+        }
+
+        if(intval($_POST['seqCiudadUnion']) == ""){
+            $arrErrores[] = "Seleccione la ciudad de la certificación del estado civil";
+        }
+
     }
 
     // Si hay correo electronico debe ser valido
@@ -257,6 +384,30 @@
         $claCiudadano->txtNombre2 = $_POST['txtNombre2'];
         $claCiudadano->valIngresos = $_POST['valIngresoHogar'];
         $claCiudadano->seqParentesco = 1; // Postulante principal
+
+        // informacion del soporte de documento
+        $claCiudadano->fchExpedicion = $_POST['fchExpedicion'];
+        $claCiudadano->txtEntidadDocumento = $_POST['txtEntidadDocumento'];
+        $claCiudadano->numIndicativoSerial = $_POST['numIndicativoSerial'];
+        $claCiudadano->numNotariaDocumento = $_POST['numNotariaDocumento'];
+        $claCiudadano->seqCiudadDocumento = $_POST['seqCiudadDocumento'];
+
+        // informacion del soporte de estado civil
+        $claCiudadano->numConsecutivoCasado = $_POST['numConsecutivoCasado'];
+        $claCiudadano->numNotariaCasado = $_POST['numNotariaCasado'];
+        $claCiudadano->seqCiudadCasado = $_POST['seqCiudadCasado'];
+        $claCiudadano->numConsecutivoCSCDL = $_POST['numConsecutivoCSCDL'];
+        $claCiudadano->txtEntidadCSCDL = $_POST['txtEntidadCSCDL'];
+        $claCiudadano->seqCiudadCSCDL = $_POST['seqCiudadCSCDL'];
+        $claCiudadano->numNotariaCSCDL = $_POST['numNotariaCSCDL'];
+        $claCiudadano->numNotariaSoltero = $_POST['numNotariaSoltero'];
+        $claCiudadano->seqCiudadSoltero = $_POST['seqCiudadSoltero'];
+        $claCiudadano->txtCertificacionUnion = $_POST['txtCertificacionUnion'];
+        $claCiudadano->numConsecutivoUnion = $_POST['numConsecutivoUnion'];
+        $claCiudadano->txtEntidadUnion = $_POST['txtEntidadUnion'];
+        $claCiudadano->numNotariaUnion = $_POST['numNotariaUnion'];
+        $claCiudadano->seqCiudadUnion = $_POST['seqCiudadUnion'];
+
 
         $seqCiudadano = $claCiudadano->ciudadanoExiste($_POST['seqTipoDocumento'], $_POST['numDocumento']);
         if ($seqCiudadano == 0) {

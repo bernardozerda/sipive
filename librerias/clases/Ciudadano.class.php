@@ -41,6 +41,29 @@ class Ciudadano {
     public $txtNombre2;
     public $valIngresos;
 
+    // informacion del soporte de documento
+    public $fchExpedicion;
+    public $txtEntidadDocumento;
+    public $numIndicativoSerial;
+    public $numNotariaDocumento;
+    public $seqCiudadDocumento;
+
+    // informacion del soporte de estado civil
+    public $numConsecutivoCasado;
+    public $numNotariaCasado;
+    public $seqCiudadCasado;
+    public $numConsecutivoCSCDL;
+    public $txtEntidadCSCDL;
+    public $seqCiudadCSCDL;
+    public $numNotariaCSCDL;
+    public $numNotariaSoltero;
+    public $seqCiudadSoltero;
+    public $txtCertificacionUnion;
+    public $numConsecutivoUnion;
+    public $txtEntidadUnion;
+    public $numNotariaUnion;
+    public $seqCiudadUnion;
+
     /**
      * CONSTRUCTOR
      */
@@ -75,6 +98,30 @@ class Ciudadano {
         $this->txtNombre1 = "";
         $this->txtNombre2 = "";
         $this->valIngresos = 0;
+
+        // informacion del soporte de documento
+        $this->fchExpedicion = null;
+        $this->txtEntidadDocumento = "";
+        $this->numIndicativoSerial = 0;
+        $this->numNotariaDocumento = 0;
+        $this->seqCiudadDocumento = 0;
+
+        // informacion del soporte de estado civil
+        $this->numConsecutivoCasado = 0;
+        $this->numNotariaCasado = 0;
+        $this->seqCiudadCasado = 0;
+        $this->numConsecutivoCSCDL = 0;
+        $this->txtEntidadCSCDL = 0;
+        $this->seqCiudadCSCDL = 0;
+        $this->numNotariaCSCDL = 0;
+        $this->numNotariaSoltero = 0;
+        $this->seqCiudadSoltero = 0;
+        $this->txtCertificacionUnion = "";
+        $this->numConsecutivoUnion = 0;
+        $this->txtEntidadUnion = "";
+        $this->numNotariaUnion = 0;
+        $this->seqCiudadUnion = 0;
+        
     }
 
     public function cargarCiudadano($seqCiudadano) {
@@ -151,6 +198,7 @@ class Ciudadano {
         global $aptBd;
         try {
             $fchNacimiento = (esFechaValida($this->fchNacimiento)) ? "'" . $this->fchNacimiento . "'" : "NULL";
+            $fchExpedicion = (esFechaValida($this->fchExpedicion)) ? "'" . $this->fchExpedicion . "'" : "NULL";
             $sql = "	    	
                 INSERT INTO T_CIU_CIUDADANO (
                     bolBeneficiario,
@@ -177,7 +225,26 @@ class Ciudadano {
                     txtApellido2,
                     txtNombre1,
                     txtNombre2,
-                    valIngresos
+                    valIngresos,
+                    fchExpedicion,
+                    txtEntidadDocumento,
+                    numIndicativoSerial,
+                    numNotariaDocumento,
+                    seqCiudadDocumento,
+                    numConsecutivoCasado,
+                    numNotariaCasado,
+                    seqCiudadCasado,
+                    numConsecutivoCSCDL,
+                    txtEntidadCSCDL,
+                    seqCiudadCSCDL,
+                    numNotariaCSCDL,
+                    numNotariaSoltero,
+                    seqCiudadSoltero,
+                    txtCertificacionUnion,
+                    numConsecutivoUnion,
+                    txtEntidadUnion,
+                    numNotariaUnion,
+                    seqCiudadUnion
                 ) VALUES (
                     " . intval($this->bolBeneficiario) . ",
                     " . intval($this->bolCertificadoElectoral) . ",
@@ -203,7 +270,26 @@ class Ciudadano {
                     '" . trim($this->txtApellido2) . "',
                     '" . trim($this->txtNombre1) . "',
                     '" . trim($this->txtNombre2) . "',
-                    " . doubleval($this->valIngresos) . "
+                    " . doubleval($this->valIngresos) . ",
+                    " . $fchExpedicion . ",
+                    '" . $this->txtEntidadDocumento . "',
+                    " . $this->numIndicativoSerial . ",
+                    " . $this->numNotariaDocumento . ",
+                    " . $this->seqCiudadDocumento . ",
+                    " . $this->numConsecutivoCasado . ",
+                    " . $this->numNotariaCasado . ",
+                    " . $this->seqCiudadCasado . ",
+                    " . $this->numConsecutivoCSCDL . ",
+                    '" . $this->txtEntidadCSCDL . "',
+                    " . $this->seqCiudadCSCDL . ",
+                    " . $this->numNotariaCSCDL . ",
+                    " . $this->numNotariaSoltero . ",
+                    " . $this->seqCiudadSoltero . ",
+                    '" . $this->txtCertificacionUnion . "',
+                    " . $this->numConsecutivoUnion . ",
+                    '" . $this->txtEntidadUnion . "',
+                    " . $this->numNotariaUnion . ",
+                    " . $this->seqCiudadUnion . "
                 )
              ";
             $aptBd->execute($sql);

@@ -10823,3 +10823,77 @@ function pdfGiroFiducia(seqProyecto, seqGiroFiducia) {
     }
 
 }
+
+function soporteDocumento(txtTipo, seqIdentificador) {
+
+    if(txtTipo == "notariaCSCDL"){
+        if(seqIdentificador == "Notaria") {
+            $('#notariaCSCDL').show();
+        }else{
+            $('#notariaCSCDL').hide();
+        }
+    }
+
+    if(txtTipo == "notariaUnion"){
+        if(seqIdentificador == "Notaria") {
+            $('#notariaUnion').show();
+        }else{
+            $('#notariaUnion').hide();
+        }
+    }
+
+    if(txtTipo == "documentoNotaria"){
+        if(seqIdentificador == "Notaria") {
+            $('#documentoNotaria').show();
+        }else{
+            $('#documentoNotaria').hide();
+        }
+    }
+
+    if(txtTipo == "documento"){
+        if(seqIdentificador == 1){
+            $('#soporteCedula').show();
+        }else{
+            $('#soporteCedula').hide();
+        }
+
+    }
+
+    if(txtTipo == "estadoCivil"){
+
+        $('#soporteEstadoCivilCasado').hide();
+        $('#soporteEstadoCivilCSCDL').hide();
+        $('#soporteEstadoCivilUnion').hide();
+        $('#soporteEstadoCivilSoltero').hide();
+
+        if(seqIdentificador == 6){ // casado
+            $('#soporteEstadoCivilCasado').show();
+            $('#soporteEstadoCivilCSCDL').hide();
+            $('#soporteEstadoCivilUnion').hide();
+            $('#soporteEstadoCivilSoltero').hide();
+        }
+
+        if(seqIdentificador == 8){ // CASADO CON SOCIEDAD CONYUGAL DISUELTA Y LIQUIDADA
+            $('#soporteEstadoCivilCasado').hide();
+            $('#soporteEstadoCivilCSCDL').show();
+            $('#soporteEstadoCivilUnion').hide();
+            $('#soporteEstadoCivilSoltero').hide();
+        }
+
+        if(seqIdentificador == 7){ // SOLTERO CON UNION MARITAL DE HECHO
+            $('#soporteEstadoCivilCasado').hide();
+            $('#soporteEstadoCivilCSCDL').hide();
+            $('#soporteEstadoCivilUnion').show();
+            $('#soporteEstadoCivilSoltero').hide();
+        }
+
+        if(seqIdentificador == 2){ // SOLTERO
+            $('#soporteEstadoCivilCasado').hide();
+            $('#soporteEstadoCivilCSCDL').hide();
+            $('#soporteEstadoCivilUnion').hide();
+            $('#soporteEstadoCivilSoltero').show();
+        }
+
+    }
+
+}

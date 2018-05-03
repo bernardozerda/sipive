@@ -90,6 +90,46 @@ class Seguimiento {
         $this->arrConversionCampos['seqGrupoLgtbi']['nombre'] = "Grupo LGTBI";
         $this->arrConversionCampos['seqGrupoLgtbi']['tabla'] = "T_FRM_GRUPO_LGTBI";
 
+        $this->arrConversionCampos['fchExpedicion']['nombre'] = "Fecha de expedición";
+        $this->arrConversionCampos['txtEntidadDocumento']['nombre'] = "Entidad que expide el registro civil";
+        $this->arrConversionCampos['numIndicativoSerial']['nombre'] = "Indicativo serial registro civil";
+        $this->arrConversionCampos['numNotariaDocumento']['nombre'] = "Notaria registro civil";
+        $this->arrConversionCampos['seqCiudadDocumento']['nombre'] = "Ciudad registro civil";
+        $this->arrConversionCampos['numConsecutivoCasado']['nombre'] = "Consecutivo soporte estado civil";
+        $this->arrConversionCampos['numNotariaCasado']['nombre'] = "Notaria soporte estado civil";
+        $this->arrConversionCampos['seqCiudadCasado']['nombre'] = "Ciudad soporte estado civil";
+        $this->arrConversionCampos['numConsecutivoCSCDL']['nombre'] = "Consecutivo soporte estado civil";
+        $this->arrConversionCampos['txtEntidadCSCDL']['nombre'] = "Entidad soporte estado civil";
+        $this->arrConversionCampos['seqCiudadCSCDL']['nombre'] = "Ciudad soporte estado civil";
+        $this->arrConversionCampos['numNotariaCSCDL']['nombre'] = "Notaria soporte estado civil";
+        $this->arrConversionCampos['numNotariaSoltero']['nombre'] = "Notaria soporte estado civil";
+        $this->arrConversionCampos['seqCiudadSoltero']['nombre'] = "Ciudad soporte estado civil";
+        $this->arrConversionCampos['txtCertificacionUnion']['nombre'] = "Tipo de certificado soporte estado civil";
+        $this->arrConversionCampos['numConsecutivoUnion']['nombre'] = "Consecutivo soporte estado civil";
+        $this->arrConversionCampos['txtEntidadUnion']['nombre'] = "Entidad soporte estado civil";
+        $this->arrConversionCampos['numNotariaUnion']['nombre'] = "Notaria soporte estado civil";
+        $this->arrConversionCampos['seqCiudadUnion']['nombre'] = "Ciudad soporte estado civil";
+
+        $this->arrConversionCampos['fchExpedicion']['tabla'] = "";
+        $this->arrConversionCampos['txtEntidadDocumento']['tabla'] = "";
+        $this->arrConversionCampos['numIndicativoSerial']['tabla'] = "";
+        $this->arrConversionCampos['numNotariaDocumento']['tabla'] = "";
+        $this->arrConversionCampos['seqCiudadDocumento']['tabla'] = "T_FRM_CIUDAD";
+        $this->arrConversionCampos['numConsecutivoCasado']['tabla'] = "";
+        $this->arrConversionCampos['numNotariaCasado']['tabla'] = "";
+        $this->arrConversionCampos['seqCiudadCasado']['tabla'] = "T_FRM_CIUDAD";
+        $this->arrConversionCampos['numConsecutivoCSCDL']['tabla'] = "";
+        $this->arrConversionCampos['txtEntidadCSCDL']['tabla'] = "";
+        $this->arrConversionCampos['seqCiudadCSCDL']['tabla'] = "T_FRM_CIUDAD";
+        $this->arrConversionCampos['numNotariaCSCDL']['tabla'] = "";
+        $this->arrConversionCampos['numNotariaSoltero']['tabla'] = "";
+        $this->arrConversionCampos['seqCiudadSoltero']['tabla'] = "T_FRM_CIUDAD";
+        $this->arrConversionCampos['txtCertificacionUnion']['tabla'] = "";
+        $this->arrConversionCampos['numConsecutivoUnion']['tabla'] = "";
+        $this->arrConversionCampos['txtEntidadUnion']['tabla'] = "";
+        $this->arrConversionCampos['numNotariaUnion']['tabla'] = "";
+        $this->arrConversionCampos['seqCiudadUnion']['tabla'] = "T_FRM_CIUDAD";
+
         // CONVERSION DE CAMPOS PARA LOS DATOS DEL HOGAR
         $this->arrConversionCampos['bolCerrado']['nombre'] = "Formulario Cerrado";
         $this->arrConversionCampos['bolCerrado']['tabla'] = "BOOLEANO";

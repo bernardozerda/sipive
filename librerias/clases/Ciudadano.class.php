@@ -153,7 +153,26 @@ class Ciudadano {
                 txtApellido2,
                 txtNombre1,
                 txtNombre2,
-                valIngresos
+                valIngresos,
+                fchExpedicion,
+                txtEntidadDocumento,
+                numIndicativoSerial,
+                numNotariaDocumento,
+                seqCiudadDocumento,
+                numConsecutivoCasado,
+                numNotariaCasado,
+                seqCiudadCasado,
+                numConsecutivoCSCDL,
+                txtEntidadCSCDL,
+                seqCiudadCSCDL,
+                numNotariaCSCDL,
+                numNotariaSoltero,
+                seqCiudadSoltero,
+                txtCertificacionUnion,
+                numConsecutivoUnion,
+                txtEntidadUnion,
+                numNotariaUnion,
+                seqCiudadUnion
             FROM T_CIU_CIUDADANO
             WHERE seqCiudadano = $seqCiudadano		
 		";
@@ -188,7 +207,26 @@ class Ciudadano {
             $this->txtNombre1 = trim($objRes->fields['txtNombre1']);
             $this->txtNombre2 = trim($objRes->fields['txtNombre2']);
             $this->valIngresos = doubleval($objRes->fields['valIngresos']);
-            ;
+            $this->fchExpedicion = (esFechaValida($objRes->fields['fchExpedicion'])) ? $objRes->fields['fchExpedicion'] : null;
+            $this->txtEntidadDocumento =  trim($objRes->fields['txtEntidadDocumento']);
+            $this->numIndicativoSerial = doubleval($objRes->fields['numIndicativoSerial']);
+            $this->numNotariaDocumento = intval($objRes->fields['numNotariaDocumento']);
+            $this->seqCiudadDocumento = intval($objRes->fields['seqCiudadDocumento']);
+            $this->numConsecutivoCasado = doubleval($objRes->fields['numConsecutivoCasado']);
+            $this->numNotariaCasado = intval($objRes->fields['numNotariaCasado']);
+            $this->seqCiudadCasado = intval($objRes->fields['seqCiudadCasado']);
+            $this->numConsecutivoCSCDL = doubleval($objRes->fields['numConsecutivoCSCDL']);
+            $this->txtEntidadCSCDL = trim($objRes->fields['txtEntidadCSCDL']);
+            $this->seqCiudadCSCDL = intval($objRes->fields['seqCiudadCSCDL']);
+            $this->numNotariaCSCDL = intval($objRes->fields['numNotariaCSCDL']);
+            $this->numNotariaSoltero = intval($objRes->fields['numNotariaSoltero']);
+            $this->seqCiudadSoltero = intval($objRes->fields['seqCiudadSoltero']);
+            $this->txtCertificacionUnion = trim($objRes->fields['txtCertificacionUnion']);
+            $this->numConsecutivoUnion = doubleval($objRes->fields['numConsecutivoUnion']);
+            $this->txtEntidadUnion = trim($objRes->fields['txtEntidadUnion']);
+            $this->numNotariaUnion = intval($objRes->fields['numNotariaUnion']);
+            $this->seqCiudadUnion = intval($objRes->fields['seqCiudadUnion']);
+
         } else {
             $this->arrErrores[] = "Ciudadano [$seqCiudadano] no encontrado";
         }
@@ -307,6 +345,7 @@ class Ciudadano {
         global $aptBd;
         try {
             $fchNacimiento = (esFechaValida($this->fchNacimiento)) ? "'" . $this->fchNacimiento . "'" : "NULL";
+            $fchExpedicion = (esFechaValida($this->fchExpedicion)) ? "'" . $this->fchExpedicion . "'" : "NULL";
             $sql = "
                 update t_ciu_ciudadano set
                     bolBeneficiario = " . intval($this->bolBeneficiario) . ",
@@ -333,7 +372,26 @@ class Ciudadano {
                     txtApellido2 = '" . trim($this->txtApellido2) . "',
                     txtNombre1 = '" . trim($this->txtNombre1) . "',
                     txtNombre2 = '" . trim($this->txtNombre2) . "',
-                    valIngresos = " . doubleval($this->valIngresos) . "
+                    valIngresos = " . doubleval($this->valIngresos) . ",
+                    fchExpedicion = " . $fchExpedicion . ",
+                    txtEntidadDocumento = '" . trim($this->txtEntidadDocumento) . "',
+                    numIndicativoSerial = " . doubleval($this->numIndicativoSerial) . ",
+                    numNotariaDocumento = " . intval($this->numNotariaDocumento) . ",
+                    seqCiudadDocumento = " . intval($this->seqCiudadDocumento) . ",
+                    numConsecutivoCasado = " . doubleval($this->numConsecutivoCasado) . ",
+                    numNotariaCasado = " . intval($this->numNotariaCasado) . ",
+                    seqCiudadCasado = " . intval($this->seqCiudadCasado) . ",
+                    numConsecutivoCSCDL = " . doubleval($this->numConsecutivoCSCDL) . ",
+                    txtEntidadCSCDL = '" . trim($this->txtEntidadCSCDL) . "',
+                    seqCiudadCSCDL = " . intval($this->seqCiudadCSCDL) . ",
+                    numNotariaCSCDL = " . intval($this->numNotariaCSCDL) . ",
+                    numNotariaSoltero = " . intval($this->numNotariaSoltero) . ",
+                    seqCiudadSoltero = " . intval($this->seqCiudadSoltero) . ",
+                    txtCertificacionUnion = '" . trim($this->txtCertificacionUnion) . "',
+                    numConsecutivoUnion = " . doubleval($this->numConsecutivoUnion) . ",
+                    txtEntidadUnion = '" . trim($this->txtEntidadUnion) . "',
+                    numNotariaUnion = " . intval($this->numNotariaUnion) . ",
+                    seqCiudadUnion = " . intval($this->seqCiudadUnion) . "
                 where seqCiudadano = $seqCiudadano		
             ";
             $aptBd->execute($sql);

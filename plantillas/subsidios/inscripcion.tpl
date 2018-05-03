@@ -349,7 +349,7 @@
                                                 id="txtEntidadCSCDL"
                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                onchange="soporteDocumento('notariaCSCDL', $('#txtEntidadCSCDL').val())"
+                                                onchange="soporteDocumento('notaria-CSCDL', $('#txtEntidadCSCDL').val())"
                                                 style="width: 260px;"
                                                 >
                                             <option value="">Seleccione</option>
@@ -376,7 +376,7 @@
                                         </select>
                                     </td>
                                     <td colspan="2">
-                                        <table cellpadding="0" cellspacing="0" border="0" width="100%" id="notariaCSCDL" style="display: none">
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%" id="notaria-CSCDL" style="display: none">
                                             <tr>
                                                 <td width="154px">Notaría</td>
                                                 <td>
@@ -434,7 +434,7 @@
                                                 id="txtEntidadUnion"
                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                onchange="soporteDocumento('notariaUnion', $('#txtEntidadUnion').val())"
+                                                onchange="soporteDocumento('notaria-Union', $('#txtEntidadUnion').val())"
                                                 style="width: 260px;"
                                         >
                                             <option value="">Seleccione</option>
@@ -442,7 +442,7 @@
                                             <option value="Notaria">Notaria</option>
                                         </select>
                                     </td>
-                                    <td colspan="2" id="notariaUnion" style="display: none">
+                                    <td colspan="2" id="notaria-Union" style="display: none">
                                         <table cellspacing="0" cellpadding="0" border="0" width="100%">
                                             <tr>
                                                 <td width="123px">Notaria</td>

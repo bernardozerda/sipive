@@ -213,18 +213,174 @@ if (empty($arrErrores)) {
 
             // Debe haber minimo dos personas con estado civil casado
             if ($arrCiudadano['seqEstadoCivil'] == 6) {
+
                 $numCuentaCasado ++;
+
+                // validaciones de soprote de documento de estado civil
+                if(doubleval($arrCiudadano['numConsecutivoCasado']) == 0){
+                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
+                }
+
+                if(intval($arrCiudadano['numNotariaCasado']) == 0){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                }
+
+                if(intval($arrCiudadano['seqCiudadCasado']) == 0){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                }
+
+                // limpia las otras variables del estado civil
+//                $arrCiudadano['numConsecutivoCasado'] = 0;
+//                $arrCiudadano['numNotariaCasado'] = "";
+//                $arrCiudadano['seqCiudadCasado'] = 0;
+                $arrCiudadano['numConsecutivoCSCDL'] = "";
+                $arrCiudadano['txtEntidadCSCDL'] = "";
+                $arrCiudadano['seqCiudadCSCDL'] = 0;
+                $arrCiudadano['numNotariaCSCDL'] = "";
+                $arrCiudadano['numNotariaSoltero'] = "";
+                $arrCiudadano['seqCiudadSoltero'] = 0;
+                $arrCiudadano['txtCertificacionUnion'] = "";
+                $arrCiudadano['numConsecutivoUnion'] = "";
+                $arrCiudadano['txtEntidadUnion'] = "";
+                $arrCiudadano['numNotariaUnion'] = "";
+                $arrCiudadano['seqCiudadUnion'] = 0;
+
             }
 
+            // validacion para el soprote de documentos de estado civil
+            if ($arrCiudadano['seqEstadoCivil'] == 8) {
+
+                if(doubleval($arrCiudadano['numConsecutivoCSCDL']) == 0){
+                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
+                }
+
+                if(trim($arrCiudadano['txtEntidadCSCDL']) == ""){
+                    $arrErrores[] = "Indique la entidad del soprote del estado civil";
+                }
+
+                if(trim($arrCiudadano['txtEntidadCSCDL']) == "Notaria" and intval($arrCiudadano['numNotariaCSCDL']) == 0){
+                    $arrErrores[] = "Indique la notaría del soprote del estado civil";
+                }
+
+                if(intval($arrCiudadano['seqCiudadCSCDL']) == 0){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                }
+
+                // limpia las otras variables del estado civil
+                $arrCiudadano['numConsecutivoCasado'] = 0;
+                $arrCiudadano['numNotariaCasado'] = "";
+                $arrCiudadano['seqCiudadCasado'] = 0;
+//                $arrCiudadano['numConsecutivoCSCDL'] = "";
+//                $arrCiudadano['txtEntidadCSCDL'] = "";
+//                $arrCiudadano['seqCiudadCSCDL'] = 0;
+//                $arrCiudadano['numNotariaCSCDL'] = "";
+                $arrCiudadano['numNotariaSoltero'] = "";
+                $arrCiudadano['seqCiudadSoltero'] = 0;
+                $arrCiudadano['txtCertificacionUnion'] = "";
+                $arrCiudadano['numConsecutivoUnion'] = "";
+                $arrCiudadano['txtEntidadUnion'] = "";
+                $arrCiudadano['numNotariaUnion'] = "";
+                $arrCiudadano['seqCiudadUnion'] = 0;
+
+            }
+
+            if ($arrCiudadano['seqEstadoCivil'] == 2) {
+
+                if(intval($arrCiudadano['numNotariaSoltero']) == 0){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                }
+
+                if(intval($arrCiudadano['seqCiudadSoltero']) == 0){
+                    $arrErrores[] = "Indique la ciudad del soprote del estado civil";
+                }
+
+                // limpia las otras variables del estado civil
+                $arrCiudadano['numConsecutivoCasado'] = 0;
+                $arrCiudadano['numNotariaCasado'] = "";
+                $arrCiudadano['seqCiudadCasado'] = 0;
+                $arrCiudadano['numConsecutivoCSCDL'] = "";
+                $arrCiudadano['txtEntidadCSCDL'] = "";
+                $arrCiudadano['seqCiudadCSCDL'] = 0;
+                $arrCiudadano['numNotariaCSCDL'] = "";
+//                $arrCiudadano['numNotariaSoltero'] = "";
+//                $arrCiudadano['seqCiudadSoltero'] = 0;
+                $arrCiudadano['txtCertificacionUnion'] = "";
+                $arrCiudadano['numConsecutivoUnion'] = "";
+                $arrCiudadano['txtEntidadUnion'] = "";
+                $arrCiudadano['numNotariaUnion'] = "";
+                $arrCiudadano['seqCiudadUnion'] = 0;
+
+            }
 
             // Debe haber minimo dos personas con estado civil union marital
             if ($arrCiudadano['seqEstadoCivil'] == 7) {
+
                 $numCuentaUnionMarital ++;
+
+                if(trim($arrCiudadano['txtCertificacionUnion']) == 0){
+                    $arrErrores[] = "Indique la certificacion del soprote del estado civil";
+                }
+
+                if(doubleval($arrCiudadano['numConsecutivoUnion']) == 0){
+                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
+                }
+
+                if(trim($arrCiudadano['txtEntidadUnion']) == "Notaria" and intval($arrCiudadano['numNotariaUnion']) == 0){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                }
+
+                if(trim($arrCiudadano['txtEntidadUnion']) == 0){
+                    $arrErrores[] = "Indique la entidad del soprote del estado civil";
+                }
+
+                if(intval($arrCiudadano['seqCiudadUnion']) == 0){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                }
+
+                // limpia las otras variables del estado civil
+                $arrCiudadano['numConsecutivoCasado'] = 0;
+                $arrCiudadano['numNotariaCasado'] = "";
+                $arrCiudadano['seqCiudadCasado'] = 0;
+                $arrCiudadano['numConsecutivoCSCDL'] = "";
+                $arrCiudadano['txtEntidadCSCDL'] = "";
+                $arrCiudadano['seqCiudadCSCDL'] = 0;
+                $arrCiudadano['numNotariaCSCDL'] = "";
+                $arrCiudadano['numNotariaSoltero'] = "";
+                $arrCiudadano['seqCiudadSoltero'] = 0;
+//                $arrCiudadano['txtCertificacionUnion'] = "";
+//                $arrCiudadano['numConsecutivoUnion'] = "";
+//                $arrCiudadano['txtEntidadUnion'] = "";
+//                $arrCiudadano['numNotariaUnion'] = "";
+//                $arrCiudadano['seqCiudadUnion'] = 0;
+
             }
 
             // por lo menos debe haber una cedula de ciudadania
             if ($arrCiudadano['seqTipoDocumento'] == 1) {
                 $numCedula++; // si es cedula de ciudadania ( por lo menos 1 colombiano mayor de edad )
+                if( ! esFechaValida($arrCiudadano['fchExpedicion']) ){
+                    $arrErrores[] = "Debe indicar la fecha de expedición del documeno de identidad";
+                }
+            }
+
+            if( in_array( $arrCiudadano['seqTipoDocumento'] , array(1,3,4,7,9) ) ){
+
+                if(trim($arrCiudadano['txtEntidadDocumento']) == ""){
+                    $arrErrores[] = "Indique la entidad de soporte del documento";
+                }
+
+                if(doubleval($arrCiudadano['numIndicativoSerial']) == ""){
+                    $arrErrores[] = "Indique el indicativo serial del soporte del documento";
+                }
+
+                if(trim($arrCiudadano['txtEntidadDocumento']) == "Notaria" and intval($arrCiudadano['numNotariaDocumento']) == ""){
+                    $arrErrores[] = "Indique la notaría del soporte del documento";
+                }
+
+                if(intval($arrCiudadano['seqCiudadDocumento']) == ""){
+                    $arrErrores[] = "Indique ciudad del soporte del documento";
+                }
+
             }
 
             // fecha de nacimiento

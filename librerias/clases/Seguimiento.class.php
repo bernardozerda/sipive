@@ -114,21 +114,21 @@ class Seguimiento {
         $this->arrConversionCampos['txtEntidadDocumento']['tabla'] = "";
         $this->arrConversionCampos['numIndicativoSerial']['tabla'] = "";
         $this->arrConversionCampos['numNotariaDocumento']['tabla'] = "";
-        $this->arrConversionCampos['seqCiudadDocumento']['tabla'] = "T_FRM_CIUDAD";
+        $this->arrConversionCampos['seqCiudadDocumento']['tabla'] = "";
         $this->arrConversionCampos['numConsecutivoCasado']['tabla'] = "";
         $this->arrConversionCampos['numNotariaCasado']['tabla'] = "";
-        $this->arrConversionCampos['seqCiudadCasado']['tabla'] = "T_FRM_CIUDAD";
+        $this->arrConversionCampos['seqCiudadCasado']['tabla'] = "";
         $this->arrConversionCampos['numConsecutivoCSCDL']['tabla'] = "";
         $this->arrConversionCampos['txtEntidadCSCDL']['tabla'] = "";
-        $this->arrConversionCampos['seqCiudadCSCDL']['tabla'] = "T_FRM_CIUDAD";
+        $this->arrConversionCampos['seqCiudadCSCDL']['tabla'] = "";
         $this->arrConversionCampos['numNotariaCSCDL']['tabla'] = "";
         $this->arrConversionCampos['numNotariaSoltero']['tabla'] = "";
-        $this->arrConversionCampos['seqCiudadSoltero']['tabla'] = "T_FRM_CIUDAD";
+        $this->arrConversionCampos['seqCiudadSoltero']['tabla'] = "";
         $this->arrConversionCampos['txtCertificacionUnion']['tabla'] = "";
         $this->arrConversionCampos['numConsecutivoUnion']['tabla'] = "";
         $this->arrConversionCampos['txtEntidadUnion']['tabla'] = "";
         $this->arrConversionCampos['numNotariaUnion']['tabla'] = "";
-        $this->arrConversionCampos['seqCiudadUnion']['tabla'] = "T_FRM_CIUDAD";
+        $this->arrConversionCampos['seqCiudadUnion']['tabla'] = "";
 
         // CONVERSION DE CAMPOS PARA LOS DATOS DEL HOGAR
         $this->arrConversionCampos['bolCerrado']['nombre'] = "Formulario Cerrado";

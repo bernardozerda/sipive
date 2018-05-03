@@ -876,27 +876,25 @@ function agregarMiembroHogar() {
     }
 
     // recoge los datos para soporte de documento y estado civil
-    if (bolValidacionSoporteDocumentos == true) {
-        var objExpedicion = document.getElementById("expedicion");
-        var objEntidadDocumento = document.getElementById("entidadDocumento");
-        var objIndicativoSerial = document.getElementById("indicativoSerial");
-        var objNotariaDocumento = document.getElementById("notariaDocumento");
-        var objCiudadDocumento = document.getElementById("ciudadDocumento");
-        var objConsecutivoCasado = document.getElementById("consecutivoCasado");
-        var objNotariaCasado = document.getElementById("notariaCasado");
-        var objCiudadCasado = document.getElementById("ciudadCasado");
-        var objConsecutivoCSCDL = document.getElementById("consecutivoCSCDL");
-        var objEntidadCSCDL = document.getElementById("entidadCSCDL");
-        var objCiudadCSCDL = document.getElementById("ciudadCSCDL");
-        var objNotariaCSCDL = document.getElementById("notariaCSCDL");
-        var objCertificacionUnion = document.getElementById("certificacionUnion");
-        var objConsecutivoUnion = document.getElementById("consecutivoUnion");
-        var objEntidadUnion = document.getElementById("entidadUnion");
-        var objNotariaUnion = document.getElementById("notariaUnion");
-        var objCiudadUnion = document.getElementById("ciudadUnion");
-        var objNotariaSoltero = document.getElementById("notariaSoltero");
-        var objCiudadSoltero = document.getElementById("ciudadSoltero");
-    }
+    var objExpedicion = document.getElementById("expedicion");
+    var objEntidadDocumento = document.getElementById("entidadDocumento");
+    var objIndicativoSerial = document.getElementById("indicativoSerial");
+    var objNotariaDocumento = document.getElementById("notariaDocumento");
+    var objCiudadDocumento = document.getElementById("ciudadDocumento");
+    var objConsecutivoCasado = document.getElementById("consecutivoCasado");
+    var objNotariaCasado = document.getElementById("notariaCasado");
+    var objCiudadCasado = document.getElementById("ciudadCasado");
+    var objConsecutivoCSCDL = document.getElementById("consecutivoCSCDL");
+    var objEntidadCSCDL = document.getElementById("entidadCSCDL");
+    var objCiudadCSCDL = document.getElementById("ciudadCSCDL");
+    var objNotariaCSCDL = document.getElementById("notariaCSCDL");
+    var objCertificacionUnion = document.getElementById("certificacionUnion");
+    var objConsecutivoUnion = document.getElementById("consecutivoUnion");
+    var objEntidadUnion = document.getElementById("entidadUnion");
+    var objNotariaUnion = document.getElementById("notariaUnion");
+    var objCiudadUnion = document.getElementById("ciudadUnion");
+    var objNotariaSoltero = document.getElementById("notariaSoltero");
+    var objCiudadSoltero = document.getElementById("ciudadSoltero");
 
     var numDocumento = objNumDocumento.value.replace(/[^0-9]/g, "");
     var valIngresos = objIngresos.value.replace(/[^0-9]/g, "");

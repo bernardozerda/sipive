@@ -215,6 +215,7 @@
                                                         <td width="35%" align="center">
                                                             <select onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                                    onchange="soporteDocumento('documento',$('#tipoDocumento').val())"
                                                                     id="tipoDocumento"
                                                                     style="width:90%;"
                                                             >
@@ -396,6 +397,7 @@
                                                         <td align="center">
                                                             <select onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                                    onchange="soporteDocumento('estadoCivil',$('#seqEstadoCivil').val())"
                                                                     id="estadoCivil"
                                                                     style="width:90%;"
                                                             >

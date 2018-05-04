@@ -8510,7 +8510,7 @@ function popUpAyuda( ) {
 //      var numAncho = YAHOO.util.Dom.getDocumentWidth() - 100;
 
     var numAlto = YAHOO.util.Dom.getDocumentHeight() - 200;
-    var numAncho = 400;
+    var numAncho = 900;
 
     var x = YAHOO.util.Dom.getX("ayuda") - (numAncho - 25);
     var y = YAHOO.util.Dom.getY("ayuda") + 10;
@@ -11254,10 +11254,16 @@ function soporteDocumento(txtTipo, seqIdentificador) {
         }
 
         if (txtTipo == "documento") {
+
+            $('#soporteCedula').hide();
+            $('#soportePartida').hide();
+
             if (seqIdentificador == 1 || seqIdentificador == 3 || seqIdentificador == 4 || seqIdentificador == 7) {
                 $('#soporteCedula').show();
-            } else {
-                $('#soporteCedula').hide();
+            }
+
+            if(seqIdentificador == 9) {
+                $('#soportePartida').show();
             }
 
         }

@@ -325,6 +325,55 @@
                                                         </td>
                                                     </tr>
 
+                                                    <!-- SOPORTE PARA EL PARTIDA DE BAUTISMO -->
+                                                    <tr id="soportePartida" style="display: none">
+                                                        <td colspan="4" style="padding-left: 0px; background-color: #FFFFFF;">
+                                                            <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                                                                <tr>
+                                                                    <td width="17%">Consecutivo</td>
+                                                                    <td width="33%">
+                                                                        <input type="text"
+                                                                               id="consecutivoPartida"
+                                                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                                               value=""
+                                                                               style="width:90%;"
+                                                                        />
+                                                                    </td>
+                                                                    <td width="17%">Parroquia</td>
+                                                                    <td width="33%">
+                                                                        <input type="text"
+                                                                               id="parroquiaPartida"
+                                                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                                               value=""
+                                                                               style="width:90%;"
+                                                                        />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Ciudad</td>
+                                                                    <td>
+                                                                        <select id="ciudadPartida"
+                                                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                                                style="width:90%;"
+                                                                        >
+                                                                            <option value="0">Seleccione</option>
+                                                                            {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
+                                                                                <option value="{$seqCiudad}">
+                                                                                    {$txtCiudad}
+                                                                                </option>
+                                                                            {/foreach}
+                                                                        </select>
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
                                                     <tr>
                                                         <!-- PRIMER APELLIDO -->
                                                         <td>Primer Apellido</td>

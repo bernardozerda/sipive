@@ -74,7 +74,6 @@
                         <td width="210px">
                             <select onFocus="this.style.backgroundColor = '#ADD8E6';"
                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                    onchange="soporteDocumento('documento',$('#seqTipoDocumento').val())"
                                     name="seqTipoDocumento"
                                     id="seqTipoDocumento"
                                     style="width:260px;"
@@ -93,35 +92,50 @@
                         </td>
                     </tr>
 
+                    <!-- FECHA DE EXPEDICION DEL DOCUMENTO Y TIPO DE SOPORTE -->
+                    <tr>
+                        <td>Fecha de Expedición</td>
+                        <td >
+                            <input type="text"
+                                   id="fchExpedicion"
+                                   name="fchExpedicion"
+                                   onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                   value=""
+                                   style="width:100px"
+                                   readonly
+                            /> <a onClick="calendarioPopUp('fchExpedicion')" href="#">Calendario</a> &nbsp;&nbsp;
+                            <a onClick="document.getElementById('fchExpedicion').value = '';" href="#">Limpiar</a>
+                        </td>
+                        <td>Tipo de soporte</td>
+                        <td>
+                            <select id="txtTipoSoporte"
+                                    name="txtTipoSoporte"
+                                    style="width:260px"
+                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                    onchange="soporteDocumento('tipoSoporte',$('#txtTipoSoporte').val())"
+                            >
+                                <option value="">Seleccione</option>
+                                <option value="registroCivil">Registro Civil</option>
+                                <option value="partidaBautismo">Partida de Bautismo</option>
+                            </select>
+                        </td>
+                    </tr>
+
                     <!-- SOPORTE PARA EL DOCUMENTO DE IDENTIDAD -->
                     <tr id="soporteCedula" style="display: none">
                         <td colspan="4" style="padding-left: 0px; background-color: #E4E4E4;">
-                            <table cellspacing="0" cellpadding="2" border="0">
+                            <table cellspacing="0" cellpadding="2" border="0" width="100%">
                                 <tr>
-                                    <td width="150px">Fecha de Expedición</td>
-                                    <td width="323px">
-                                        <input type="text"
-                                               id="fchExpedicion"
-                                               name="fchExpedicion"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                               value=""
-                                               readonly
-                                        /> <a onClick="calendarioPopUp('fchExpedicion')" href="#">Calendario</a> &nbsp;&nbsp;
-                                        <a onClick="document.getElementById('fchExpedicion').value = '';" href="#">Limpiar</a>
-                                    </td>
-                                    <td width="120px"></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Entidad del registro civil</td>
+                                    <td width="150px">Entidad del registro civil</td>
                                     <td>
-                                        <select name="txtEntidadDocumento"
-                                                id="txtEntidadDocumento"
+                                        <select id="txtEntidadDocumento"
+                                                name="txtEntidadDocumento"
                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                 onchange="soporteDocumento('documentoNotaria', $('#txtEntidadDocumento').val())"
-                                                style="width: 260px"
+                                                style="width:260px;"
                                         >
                                             <option value="">Seleccione</option>
                                             <option value="Registraduría">Registraduría</option>
@@ -131,15 +145,15 @@
                                             <option value="Inspección de Policía">Inspección de Policía</option>
                                         </select>
                                     </td>
-                                    <td>Indicativo Serial</td>
-                                    <td>
+                                    <td width="120px">Indicativo Serial</td>
+                                    <td width="210px">
                                         <input type="text"
                                                id="numIndicativoSerial"
                                                name="numIndicativoSerial"
                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                value=""
-                                               style="width: 260px;"
+                                               style="width:260px;"
                                         />
                                     </td>
                                 </tr>
@@ -147,14 +161,14 @@
                                     <td colspan="2">
                                         <table cellpadding="0" cellspacing="0" border="0" width="100%" id="documentoNotaria" style="display: none">
                                             <tr>
-                                                <td width="154px">Notaría</td>
+                                                <td width="155px">Notaría</td>
                                                 <td>
                                                     <input type="text"
                                                            id="numNotariaDocumento"
                                                            name="numNotariaDocumento"
                                                            onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                           style="width: 260px;"
+                                                           style="width:260px;"
                                                            value=""
                                                     />
                                                 </td>
@@ -163,11 +177,11 @@
                                     </td>
                                     <td>Ciudad</td>
                                     <td>
-                                        <select name="seqCiudadDocumento"
-                                                id="seqCiudadDocumento"
+                                        <select id="seqCiudadDocumento"
+                                                name="seqCiudadDocumento"
                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                style="width: 260px;"
+                                                style="width:260px;"
                                         >
                                             <option value="0">Seleccione</option>
                                             {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
@@ -177,6 +191,58 @@
                                             {/foreach}
                                         </select>
                                     </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- SOPORTE PARA EL PARTIDA DE BAUTISMO -->
+                    <tr id="soportePartida" style="display: none">
+                        <td colspan="4" style="padding-left: 0px; background-color: #E4E4E4;">
+                            <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                                <tr>
+                                    <td width="150px">Consecutivo</td>
+                                    <td>
+                                        <input type="text"
+                                               id="numConsecutivoPartida"
+                                               name="numConsecutivoPartida"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                               value=""
+                                               style="width:260px;"
+                                        />
+                                    </td>
+                                    <td width="120px">Parroquia</td>
+                                    <td width="210px">
+                                        <input type="text"
+                                               id="txtParroquiaPartida"
+                                               name="txtParroquiaPartida"
+                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                               value=""
+                                               style="width:260px;"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Ciudad</td>
+                                    <td>
+                                        <select id="seqCiudadPartida"
+                                                name="seqCiudadPartida"
+                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                style="width:260px;"
+                                        >
+                                            <option value="0">Seleccione</option>
+                                            {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
+                                                <option value="{$seqCiudad}">
+                                                    {$txtCiudad}
+                                                </option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                             </table>
                         </td>

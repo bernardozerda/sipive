@@ -375,25 +375,29 @@ if (!empty($_POST['hogar'])) {
 
         if($bolValidacionSoporteDocumentos == true) {
 
-            if (in_array($arrCiudadano['seqTipoDocumento'], array(1, 3, 4, 7))) {
+            if( $arrCiudadano['txtTipoSoporte'] == "" ) {
 
-                if (trim($arrCiudadano['txtEntidadDocumento']) == "") {
+                $arrErrores[] = "Digite el tipo de soporte para el documento de identidad";
+
+            }elseif($arrCiudadano['txtTipoSoporte'] == "registroCivil"){
+
+                if(trim($arrCiudadano['txtEntidadDocumento']) == ""){
                     $arrErrores[] = "Indique la entidad de soporte del documento";
                 }
 
-                if (doubleval($arrCiudadano['numIndicativoSerial']) == "") {
+                if(doubleval($arrCiudadano['numIndicativoSerial']) == ""){
                     $arrErrores[] = "Indique el indicativo serial del soporte del documento";
                 }
 
-                if (trim($arrCiudadano['txtEntidadDocumento']) == "Notaria" and intval($arrCiudadano['numNotariaDocumento']) == "") {
+                if(trim($arrCiudadano['txtEntidadDocumento']) == "Notaria" and intval($arrCiudadano['numNotariaDocumento']) == ""){
                     $arrErrores[] = "Indique la notaría del soporte del documento";
                 }
 
-                if (intval($arrCiudadano['seqCiudadDocumento']) == "") {
+                if(intval($arrCiudadano['seqCiudadDocumento']) == 0){
                     $arrErrores[] = "Indique ciudad del soporte del documento";
                 }
 
-            }elseif( $arrCiudadano['seqTipoDocumento'] == 9 ){
+            }elseif($arrCiudadano['txtTipoSoporte'] == "partidaBautismo"){
 
                 if(doubleval($arrCiudadano['numConsecutivoPartida']) == ""){
                     $arrErrores[] = "Indique el consecutivo del soporte del documento";
@@ -403,7 +407,7 @@ if (!empty($_POST['hogar'])) {
                     $arrErrores[] = "Indique la parroquia del soporte del documento";
                 }
 
-                if(intval($arrCiudadano['seqCiudadPartida']) == ""){
+                if(intval($arrCiudadano['seqCiudadPartida']) == 0){
                     $arrErrores[] = "Indique la ciudad del soporte del documento";
                 }
 
@@ -415,6 +419,14 @@ if (!empty($_POST['hogar'])) {
         if ( ! esFechaValida( $arrCiudadano['fchNacimiento'] ) ) {
             $arrErrores[] = "La fecha de Nacimiento del ciudadano " . number_format($numDocumento) . " no es valida, verifique los datos";
         } else {
+
+            // validacion del tipo de soporte
+            if($bolValidacionSoporteDocumentos == true){
+                $fchNacimiento = new DateTime($arrCiudadano['fchNacimiento']);
+                if( $fchNacimiento->format("Y") < 1938 and $arrCiudadano['txtTipoSoporte'] == "registroCivil"){
+                    $arrErrores[] = "Tipo de soporte inválido para personas nacidas antes de 1938 para el ciudadano con documento " . number_format($numDocumento);
+                }
+            }
 
             // fechas para comparar mayor de edad y tercera edad
             $numEdad = strtotime($arrCiudadano['fchNacimiento']);

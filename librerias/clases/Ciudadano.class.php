@@ -43,6 +43,7 @@ class Ciudadano {
 
     // informacion del soporte de documento
     public $fchExpedicion;
+    public $txtTipoSoporte;
     public $txtEntidadDocumento;
     public $numIndicativoSerial;
     public $numNotariaDocumento;
@@ -104,6 +105,7 @@ class Ciudadano {
 
         // informacion del soporte de documento
         $this->fchExpedicion = null;
+        $this->txtTipoSoporte = "";
         $this->txtEntidadDocumento = "";
         $this->numIndicativoSerial = 0;
         $this->numNotariaDocumento = 0;
@@ -181,7 +183,8 @@ class Ciudadano {
                 seqCiudadUnion,
                 numConsecutivoPartida,
                 txtParroquiaPartida,
-                seqCiudadPartida
+                seqCiudadPartida,
+                txtTipoSoporte
             FROM T_CIU_CIUDADANO
             WHERE seqCiudadano = $seqCiudadano		
 		";
@@ -238,6 +241,7 @@ class Ciudadano {
             $this->numConsecutivoPartida = doubleval($objRes->fields['numConsecutivoPartida']);
             $this->txtParroquiaPartida = trim($objRes->fields['txtParroquiaPartida']);
             $this->seqCiudadPartida = intval($objRes->fields['seqCiudadPartida']);
+            $this->txtTipoSoporte = trim($objRes->fields['txtTipoSoporte']);
 
         } else {
             $this->arrErrores[] = "Ciudadano [$seqCiudadano] no encontrado";
@@ -297,7 +301,8 @@ class Ciudadano {
                     seqCiudadUnion,
                     numConsecutivoPartida,
                     txtParroquiaPartida,
-                    seqCiudadPartida
+                    seqCiudadPartida,
+                    txtTipoSoporte
                 ) VALUES (
                     " . intval($this->bolBeneficiario) . ",
                     " . intval($this->bolCertificadoElectoral) . ",
@@ -345,7 +350,8 @@ class Ciudadano {
                     " . intval($this->seqCiudadUnion) . ",
                     " . doubleval($this->numConsecutivoPartida) . ",
                     '" . trim($this->txtParroquiaPartida) . "',
-                    " . intval($this->seqCiudadPartida) . "
+                    " . intval($this->seqCiudadPartida) . ",
+                    '" . trim($this->txtTipoSoporte) . "'
                 )
              ";
             $aptBd->execute($sql);
@@ -353,7 +359,7 @@ class Ciudadano {
         } catch (Exception $objError) {
             $this->seqCiudadano = 0;
             $this->arrErrores[] = "El ciudadano identificado con el n&uacute;mero de documento " . number_format($this->numDocumento) . " no se pudo guardar, puede que ya exista en el aplicativo";
-            //$this->arrErrores[] = $objError->getMessage();
+//            $this->arrErrores[] = $objError->getMessage();
         }
 
         return $this->seqCiudadano;
@@ -412,7 +418,8 @@ class Ciudadano {
                     seqCiudadUnion = " . intval($this->seqCiudadUnion) . ",
                     numConsecutivoPartida = " . doubleval($this->numConsecutivoPartida) . ",
                     txtParroquiaPartida = '" . trim($this->txtParroquiaPartida) . "',
-                    seqCiudadPartida = " . intval($this->seqCiudadPartida) . "
+                    seqCiudadPartida = " . intval($this->seqCiudadPartida) . ",
+                    txtTipoSoporte = '" . trim($this->txtTipoSoporte) . "'
                 where seqCiudadano = $seqCiudadano		
             ";
             $aptBd->execute($sql);

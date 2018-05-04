@@ -75,6 +75,19 @@
             $arrErrores[] = "Indique la fecha de expedición del documento";
         }
 
+    }
+
+    // tipo de soporte del documento
+    if($_POST['txtTipoSoporte'] == "") {
+
+        $arrErrores[] = "Seleccione el tipo de soporte para el documento de identidad";
+
+    }elseif($_POST['txtTipoSoporte'] == "registroCivil"){
+
+        $_POST['numConsecutivoPartida'] = 0;
+        $_POST['txtParroquiaPartida'] = "";
+        $_POST['seqCiudadPartida'] = 0;
+
         if(trim($_POST['txtEntidadDocumento']) == ""){
             $arrErrores[] = "Indique la entidad que expide el documento";
         }else{
@@ -95,6 +108,25 @@
             $arrErrores[] = "Indique la ciudad de expedicion del registro civil del ciudadano";
         }
 
+    }elseif($_POST['txtTipoSoporte'] == "partidaBautismo"){
+
+        $_POST['txtEntidadDocumento'] = "";
+        $_POST['numNotariaDocumento'] = 0;
+        $_POST['numIndicativoSerial'] = 0;
+        $_POST['seqCiudadDocumento'] = 0;
+
+        if(doubleval($_POST['numConsecutivoPartida']) == 0){
+            $arrErrores[] = "Digite el consecutivo del soporte de documento de identidad";
+        }
+
+        if(trim($_POST['txtParroquiaPartida']) == ""){
+            $arrErrores[] = "Digite la parroquia del soporte de documento de identidad";
+        }
+
+        if(intval($_POST['seqCiudadPartida']) == 0){
+            $arrErrores[] = "Digite la ciudad del soporte de documento de identidad";
+        }
+
     }
 
     // Primer nombre
@@ -111,6 +143,12 @@
     if( ! esFechaValida( $_POST['fchNacimiento'] ) ){
         $arrErrores[] = "Seleccione una fecha de nacimiento válida";
     }else{
+
+        // validacion del tipo de soporte
+        $fchNacimiento = new DateTime($_POST['fchNacimiento']);
+        if( $fchNacimiento->format("Y") < 1938 and $_POST['txtTipoSoporte'] == "registroCivil"){
+            $arrErrores[] = "Tipo de soporte inválido para personas nacidas antes de 1938";
+        }
 
         // validaciones relacionadas con la fecha de nacimiento
         $numEdad = strtotime($_POST['fchNacimiento']);
@@ -387,10 +425,14 @@
 
         // informacion del soporte de documento
         $claCiudadano->fchExpedicion = $_POST['fchExpedicion'];
+        $claCiudadano->txtTipoSoporte = $_POST['txtTipoSoporte'];
         $claCiudadano->txtEntidadDocumento = $_POST['txtEntidadDocumento'];
         $claCiudadano->numIndicativoSerial = $_POST['numIndicativoSerial'];
         $claCiudadano->numNotariaDocumento = $_POST['numNotariaDocumento'];
         $claCiudadano->seqCiudadDocumento = $_POST['seqCiudadDocumento'];
+        $claCiudadano->numConsecutivoPartida = $_POST['numConsecutivoPartida'];
+        $claCiudadano->txtParroquiaPartida = $_POST['txtParroquiaPartida'];
+        $claCiudadano->seqCiudadPartida = $_POST['seqCiudadPartida'];
 
         // informacion del soporte de estado civil
         $claCiudadano->numConsecutivoCasado = $_POST['numConsecutivoCasado'];
@@ -407,7 +449,6 @@
         $claCiudadano->txtEntidadUnion = $_POST['txtEntidadUnion'];
         $claCiudadano->numNotariaUnion = $_POST['numNotariaUnion'];
         $claCiudadano->seqCiudadUnion = $_POST['seqCiudadUnion'];
-
 
         $seqCiudadano = $claCiudadano->ciudadanoExiste($_POST['seqTipoDocumento'], $_POST['numDocumento']);
         if ($seqCiudadano == 0) {

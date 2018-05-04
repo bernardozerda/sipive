@@ -4,12 +4,28 @@
 </article>
 <br>
 <article>
-    <strong>Campos del formulario de Inscripci&oacute;n</strong>
-    <strong>No.Doc. (*):</strong> Campo Obligatorio. 
-    Debe ser digitado por el usuario y corresponde al n&uacute;mero de identificaci&oacute;n del ciudadano.
+    <strong>Campos del formulario de Inscripci&oacute;n. Postulante principal / Composici&oacute;n Familiar</strong>. 
     <br>
-    <strong>Tpo.Doc. (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. 
+	<strong>No.Doc. (*):</strong> Campo Obligatorio. 
+    Corresponde al n&uacute;mero de identificaci&oacute;n del ciudadano.
+    <br>
+    <strong>Tipo.Doc. (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. 
     Corresponde al tipo de documento de identificaci&oacute;n del ciudadano.
+    <br>
+	<strong>Fecha Expedición(*):</strong> Campo Obligatorio de tipo selección a partir de ventana emergente 
+    Corresponde a la fecha de expedición del documento de identidad.
+    <br>
+    <strong>Entidad Registro Civil(*):</strong>  Campo Obligatorio de tipo selecci&oacute;n.
+    Corresponde a la entidad que emite el registro civil, ver en documento físico el que corresponda al ciudadano.
+    <br>
+    <strong>Indicativo Serial(*):</strong> Campo Obligatorio debe ser digitado por el usuario. 
+    Corresponde al número único que esta impreso en Registro Civil.
+    <br>
+    <strong>Notaría (*):</strong> Campo Obligatorio digitado por el usuario. 
+    Correspode al número de identificación de la Notaría. Unicamente en los casos que la entidad que emite el RC sea una Notaria.
+    <br>
+	<strong>Ciudad (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. 
+    Correspode al Departamento / Ciudad donde se expidió el RC del ciudadano.
     <br>
     <strong>Apellido 1 (*):</strong> Campo Obligatorio debe ser digitado por el usuario. 
     Corresponde al primer apellido del ciudadano.
@@ -23,14 +39,27 @@
     <strong>Nombre 2:</strong> Campo digitado por el usuario. 
     Corresponde al segundo nombre del ciudadano.
     <br>
+    <strong>Fecha de Nacimiento (*):</strong> Campo Obligatorio de tipo selección a partir de ventana emergente 
+    Corresponde a la fecha de nacimiento del ciudadano.
+    <br>
+    <strong>Estado Civil (*): </strong> Campo Obligatorio de tipo selecci&oacute;n. Valores validos:
+    Soltero(a) - Casado - Soltero(a) con Uni&oacute;n Marital
+    <br>
+    <strong>Tipo Certificación:</strong> Campo Obligatorio digitado por el usuario  
+    Corresponde al documento con el cual se certifica el estado civil Soltero(a) con Uni&oacute;n Marital.
+    <br>
+    <strong>Consecutivo:</strong> Corresponde al número que identifica la certificación del estado civil.
+    <br>
+    <strong>Entidad:</strong> Campo Obligatorio de tipo selecci&oacute;n. 
+    Corresponde a la entidad que certifica el estado civil del ciudadano.
+    <br>
+	<strong>Ciudad (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. 
+    Correspode al Departamento / Ciudad donde se expidió el documento con el cual se certifica el estado civil del ciudadano.
+    <br>
     <strong>Sexo (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. 
     Corresponde al sexo (Femenino o Masculino) del ciudadano.
     <br>
-    <strong>Estado Civil (*): </strong>
-    Campo Obligatorio de tipo selecci&oacute;n. Valores validos:
-    Soltero(a) - Casado - Soltero(a) con Uni&oacute;n Marital
-    <br>
-    <strong>Cond.Étnica:</strong> Campo de tipo selecci&oacute;n. Valores: •Afrocolombiano •Ind&iacute;gena •Palenquero •Raizal •ROM
+	<strong>Cond.Étnica:</strong> Campo de tipo selecci&oacute;n. Valores: •Afrocolombiano •Ind&iacute;gena •Palenquero •Raizal •ROM
     <br>
     <strong>Cond.Especial 1, Cond.Especial 2 y Cond.Especial 3:</strong> Campos de Tipo selecci&oacute;n.
     Si el Ciudadano a inscribir presenta una o las tres condiciones especiales (•1 - Mujer / Hombre Cabeza de Familia; 
@@ -38,73 +67,86 @@
     <br>
     <strong>Nivel Educativo:</strong> Campo de tipo selecci&oacute;n. Hace referencia al &uacute;ltimo nivel educativo o acad&eacute;mico que culmino el ciudadano. 
     <br>
-    <strong>Hecho Victimizante (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. 
+	<strong>Años Aprobados (*): </strong> Campo Obligatorio de tipo texto. 
+    Hace referencia al número de años de estudio que el ciudadano ha terminado y aprobado.
+    <br>
+	<strong>Correo Electrónico(*)</strong>: Campo obligatorio de tipo texto. 
+    Se debe ingresar una direccion de correo electronico valida. Ej. xxxxx@dominio.com
+    <br>
+	<strong>Grupo LGTBI (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. 
+	Valores: •Ninguno; •Lesbiana; •Gay; •Transexual; •Bisexual; •Intersexual.
+    <br>
+	<strong>Hecho Victimizante (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. 
     En caso de que el miembro del hogar que se est&aacute; inscribiendo al sistema haya sido v&iacute;ctima del 
     conflicto armado en alguna de las tipolog&iacute;as relacionadas debe seleccionarse este campo.
     <br>
-    <strong>LGBTI</strong>: Campo de tipo selecci&oacute;n. Permite indicar si el ciudadano es miembro de 
-    la comunidad LGBTI
+    <strong>LGBTI</strong>: Campo de autocompletaci&oacute; Toma valor SI o NO de acuerdo con la selección del grupo LGBTI para al menos un miembro del hogar.
     <br>
-    <strong>Grupo LGTBI (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. Cuando se selecciona SI 
-    en el campo <strong>LGTBI</strong> se activa este campo para que escoja una de las opciones:
-    •Ninguno; •Lesbiana; •Gay; •Transexual; •Bisexual; •Intersexual.
+    <strong>Hogar Víctima</strong>: Campo de autocompletaci&oacute; Toma valor SI con la selección del hecho victimizante Desplazamiento Forzado para al menos un miembro del hogar, o de NO en caso contrario.
     <br>
-    <strong>Correo Electrónico(*)</strong>: Campo obligatorio de tipo texto. 
-    Se debe ingresar una direccion de correo electronico valida. Ej. xxxxx@dominio.com
+	<strong>Ocupaci&oacute;n:</strong> Campo de tipo selecci&oacute;n, hacer referencia a la ocupaci&oacute;n actual del ciudadano.
     <br>
-    <strong>Ocupaci&oacute;n:</strong> Campo de tipo selecci&oacute;n, hacer referencia a la ocupaci&oacute;n actual del ciudadano.
+	<strong>Afiliacio&oacute;n a Salud:</strong> Campo de tipo selecci&oacute;n, hacer referencia al tipo de vinculación actual al regimen de salud del ciudadano
     <br>
     <strong>Direcci&oacute;n (*):</strong> Campo de tipo texto. hace referencia a la direcci&oacute;n de residencia del ciudadano.
     El campo esta deshabilitado para la escritura directa, al hacer click en 
     <font style="color: blue; text-decoration: underline">Direcci&oacute;n (*)</font> 
     se abre una ventana emergente para ingresar la direcci&oacute;n de una forma estandarizada.
     <br>
-    <strong>Localidad (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. Hace referencia a la localidad 
-    donde se encuentra ubicada la direcci&oacute;n de residencia del ciudadano.
-    <br>
-    <strong>Barrio (*): </strong> Campo Obligatorio de tipo selecci&oacute;n. Hace referencia al barrio 
-    donde se encuentra ubicada la direcci&oacute;n de residencia del ciudadano. Se cargan los barrios 
-    correspondientes cuando se selecciona la localidad.
-    <br>
     <strong>Ciudad: </strong> Campo de tipo selecci&oacute;n. Dependiente del campo localidad.
     <br>
+	<strong>Localidad (*):</strong> Campo Obligatorio de tipo selecci&oacute;n. Hace referencia a la localidad 
+    donde se encuentra ubicada la direcci&oacute;n de residencia del ciudadano.
+    <br>
+	<strong>Barrio (*): </strong> Campo Obligatorio de tipo selecci&oacute;n. Hace referencia al barrio 
+    donde se encuentra ubicada la direcci&oacute;n de residencia del ciudadano. Se cargan los barrios 
+    correspondientes cuando se selecciona la localidad.
     <strong>Tel&eacute;fonos (*): </strong> Campos de tipo texto. Es obligatorio ingresar al menos un n&uacute;mero de contacto.
     Hace referencia a los tel&eacute;fonos de 
     contacto del hogar que se est&aacute; inscribiendo. Son tres campos (Fijo 1, Fijo 2 y Celular). 
     Solo se permite el ingreso de caracteres num&eacute;ricos, 7 d&iacute;gitos para los fijos y 10 para los celulares.
     <br>
-    <strong>Vivienda Actual:  </strong> Campo de tipo selecci&oacute;n. Hace referencia al tipo de vivienda actual del ciudadano.
-    <br>
-    <strong>Val. Arriendo(*):  </strong> Campo Obligatorio de tipo selecci&oacute;n. 
-    Hace referencia al valor de arriendo que est&aacute; pagando actualmente el ciudadano.
-    <br>
-    <strong>Modalidad (*): </strong>Campo Obligatorio de tipo selecci&oacute;n. 
+	<strong>Modalidad (*): </strong>Campo Obligatorio de tipo selecci&oacute;n. 
     Hace referencia a la modalidad de subsidio a la cual se est&aacute; inscribiendo el hogar.
     <br>
     <strong>Soluci&oacute;n (*): </strong> Campo Obligatorio de tipo selecci&oacute;n.
     <br>
-    <strong>Ingresos (*): </strong> Campo Obligatorio de tipo texto. 
+	<strong>Ingresos (*): </strong> Campo Obligatorio de tipo texto. 
     Hace referencia a los ingresos totales que recibe el ciudadano mensualmente.
     <br>
-    <strong>Tiene Ahorro (*)</strong> Campo Obligatorio de tipo num&eacute;rico. Hace referencia al 
-    ahorro en dinero que tenga el hogar.
+</article>
+<br>
+<article>
+	<strong>Campos del formulario de Inscripci&oacute;n. Datos del Hogar</strong>. 
+    <br>
+	<strong>Vivienda Actual:  </strong> Campo de tipo selecci&oacute;n. Hace referencia al tipo de vivienda actual del ciudadano.
+    <br>
+    <strong>Val. Arriendo(*):  </strong> Campo Obligatorio de tipo selecci&oacute;n. 
+    Hace referencia al valor de arriendo que est&aacute; pagando actualmente el ciudadano.
+    <br>
+</article>
+<br>
+<article>
+	<strong>Campos del formulario de Inscripci&oacute;n. Informaci&oacute;n Financiera</strong>. 
+    <br>
+    <strong>Ahorro 1 y Ahorro 2 (*)</strong> Campo Obligatorio de tipo num&eacute;rico. Hace referencia al 
+    ahorro en dinero que tenga el hogar. Podra ingresarse información de dos cuentas de ahorro que posea el hogar
     <br>
     <strong>Entidad</strong> Campo de tipo selecci&oacute;n. Debe seleccionar la entidad bancaria donde se encuentra el ahorro.
     <br>
-    <strong>Tiene Cr&eacute;dito (*)</strong> Campo Obligatorio de tipo num&eacute;rico. 
+    <strong>Cr&eacute;dito (*)</strong> Campo Obligatorio de tipo num&eacute;rico. 
     Se debe diligenciar en caso de que el hogar tenga un cr&eacute;dito con alguna entidad.
     <br>
     <strong>Entidad:</strong> Campo de tipo selecci&oacute;n. Debe seleccionar la entidad bancaria que otorgo el cr&eacute;dito.
     <br>
-    <strong>Tiene Subsidio Nacional (*):</strong>Campo Obligatorio de tipo num&eacute;rico. Hace referencia al valor en 
+    <strong>Subsidio Nacional (*):</strong>Campo Obligatorio de tipo num&eacute;rico. Hace referencia al valor en 
     pesos del subsidio otorgado por el Gobierno Nacional en caso de tenerlo. 
     <br>
     <strong>Soporte (No. Carta):</strong> Campo de tipo Texto. Hace referencia al n&uacute;mero de la carta del Subsidio Nacional.
     <br>
-    <strong>Tiene Donaci&oacute;n / Reconocimiento Econ&oacute;mico (*)</strong> Campo Obligatorio de tipo num&eacute;rico.
+    <strong>Donaci&oacute;n / Reconocimiento Econ&oacute;mico (*)</strong> Campo Obligatorio de tipo num&eacute;rico.
     <br>
     <strong>Entidad</strong> Campo de tipo selecci&oacute;n. Hace referencia a la entidad en la que el hogar 
     tiene la  Donaci&oacute;n o el Reconocimiento Econ&oacute;mico
-
-
 </article>
+

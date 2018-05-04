@@ -363,7 +363,11 @@ if (empty($arrErrores)) {
                 }
             }
 
-            if( in_array( $arrCiudadano['seqTipoDocumento'] , array(1,3,4,7) ) ){
+            if( $arrCiudadano['txtTipoSoporte'] == "" ) {
+
+                $arrErrores[] = "Digite el tipo de soporte para el documento de identidad";
+
+            }elseif($arrCiudadano['txtTipoSoporte'] == "registroCivil"){
 
                 if(trim($arrCiudadano['txtEntidadDocumento']) == ""){
                     $arrErrores[] = "Indique la entidad de soporte del documento";
@@ -377,11 +381,11 @@ if (empty($arrErrores)) {
                     $arrErrores[] = "Indique la notaría del soporte del documento";
                 }
 
-                if(intval($arrCiudadano['seqCiudadDocumento']) == ""){
+                if(intval($arrCiudadano['seqCiudadDocumento']) == 0){
                     $arrErrores[] = "Indique ciudad del soporte del documento";
                 }
 
-            }elseif( $arrCiudadano['seqTipoDocumento'] == 9 ){
+            }elseif($arrCiudadano['txtTipoSoporte'] == "partidaBautismo"){
 
                 if(doubleval($arrCiudadano['numConsecutivoPartida']) == ""){
                     $arrErrores[] = "Indique el consecutivo del soporte del documento";
@@ -391,7 +395,7 @@ if (empty($arrErrores)) {
                     $arrErrores[] = "Indique la parroquia del soporte del documento";
                 }
 
-                if(intval($arrCiudadano['seqCiudadPartida']) == ""){
+                if(intval($arrCiudadano['seqCiudadPartida']) == 0){
                     $arrErrores[] = "Indique la ciudad del soporte del documento";
                 }
 
@@ -402,43 +406,42 @@ if (empty($arrErrores)) {
                 $arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " debe tener una fecha de nacimiento.";
             } else {
 
-                // Si es mayor de edad compare contra la fecha de postulacion si debe tener cedula
-                if (!esFechaValida($arrCiudadano['fchNacimiento'])) {
-                    $arrErrores[] = "La fecha de Nacimiento del ciudadano " . number_format($numDocumento) . " no es valida, verifique los datos";
-                } else {
+                // validacion del tipo de soporte
+                $fchNacimiento = new DateTime($arrCiudadano['fchNacimiento']);
+                if( $fchNacimiento->format("Y") < 1938 and $arrCiudadano['txtTipoSoporte'] == "registroCivil"){
+                    $arrErrores[] = "Tipo de soporte inválido para personas nacidas antes de 1938 para el ciudadano con documento " . number_format($numDocumento);
+                }
 
-                    // fechas para comparar mayor de edad y tercera edad
-                    $numEdad = strtotime($arrCiudadano['fchNacimiento']);
+                // fechas para comparar mayor de edad y tercera edad
+                $numEdad = strtotime($arrCiudadano['fchNacimiento']);
 
-                    // la fecha de nacimiento no puede ser mayor a hoy
-                    if( $numEdad > time() ){
-                        $arrErrores[] = "Fecha de nacimiento invalida para el documento " . number_format($numDocumento) . " no puede ser mayor a hoy";
-                    }
+                // la fecha de nacimiento no puede ser mayor a hoy
+                if( $numEdad > time() ){
+                    $arrErrores[] = "Fecha de nacimiento invalida para el documento " . number_format($numDocumento) . " no puede ser mayor a hoy";
+                }
 
-                    // se compara si es mayor de edad al momento de la postulacion
-                    if (($numEdad <= $numMayorEdad) and in_array($arrCiudadano['seqTipoDocumento'], $arrDocumentos)) {
-                        $arrErrores[] = "Tipo de documento errado para " . number_format($numDocumento) . " porque segun su fecha de nacimiento es mayor de edad";
-                    }
+                // se compara si es mayor de edad al momento de la postulacion
+                if (($numEdad <= $numMayorEdad) and in_array($arrCiudadano['seqTipoDocumento'], $arrDocumentos)) {
+                    $arrErrores[] = "Tipo de documento errado para " . number_format($numDocumento) . " porque segun su fecha de nacimiento es mayor de edad";
+                }
 
-                    // se compara si es menor de 65 aNos y tenga condicion especial "Mayor 65 aNos"
-                    if (($numEdad > $numTerceraEdad) and ($arrCiudadano["seqCondicionEspecial"] == $numCondicionEspecialMayor65 or
-                            $arrCiudadano["seqCondicionEspecial2"] == $numCondicionEspecialMayor65 or
-                            $arrCiudadano["seqCondicionEspecial3"] == $numCondicionEspecialMayor65)
-                    ) {
-                        $arrErrores[] = "Condicion especial errada para " . number_format($numDocumento) . " porque segun su fecha de nacimiento es menor de edad y se le esta asignando la condicion especial de Mayor de 65 Año";
-                    }
+                // se compara si es menor de 65 aNos y tenga condicion especial "Mayor 65 aNos"
+                if (($numEdad > $numTerceraEdad) and ($arrCiudadano["seqCondicionEspecial"] == $numCondicionEspecialMayor65 or
+                        $arrCiudadano["seqCondicionEspecial2"] == $numCondicionEspecialMayor65 or
+                        $arrCiudadano["seqCondicionEspecial3"] == $numCondicionEspecialMayor65)
+                ) {
+                    $arrErrores[] = "Condicion especial errada para " . number_format($numDocumento) . " porque segun su fecha de nacimiento es menor de edad y se le esta asignando la condicion especial de Mayor de 65 Año";
+                }
 
-                    // se compara si es menor de edad al momento de la postulacion
-                    if (($numEdad > $numMayorEdad) and in_array($arrCiudadano['seqTipoDocumento'], $arrDocumentosMayorEdad)) {
-                        $arrErrores[] = "Tipo de documento errado para " . number_format($numDocumento) . " porque segun su fecha de nacimiento es menor de edad";
-                    }
+                // se compara si es menor de edad al momento de la postulacion
+                if (($numEdad > $numMayorEdad) and in_array($arrCiudadano['seqTipoDocumento'], $arrDocumentosMayorEdad)) {
+                    $arrErrores[] = "Tipo de documento errado para " . number_format($numDocumento) . " porque segun su fecha de nacimiento es menor de edad";
+                }
 
-                    // se compara si es tercera edad al momento de la postulacion
-                    if (($numEdad <= $numTerceraEdad) and ($arrCiudadano['seqCondicionEspecial'] != 2 and $arrCiudadano['seqCondicionEspecial2'] != 2 and $arrCiudadano['seqCondicionEspecial3'] != 2)) {
-                        $arrErrores[] = "Debe tener condicion especial de Mayor de 65 Años para el ciudadano " . number_format($numDocumento);
-                    }
-
-                } // fin fecha nacimiento valida
+                // se compara si es tercera edad al momento de la postulacion
+                if (($numEdad <= $numTerceraEdad) and ($arrCiudadano['seqCondicionEspecial'] != 2 and $arrCiudadano['seqCondicionEspecial2'] != 2 and $arrCiudadano['seqCondicionEspecial3'] != 2)) {
+                    $arrErrores[] = "Debe tener condicion especial de Mayor de 65 Años para el ciudadano " . number_format($numDocumento);
+                }
 
                 // si es por desplazamiento forzado suma
                 if( $arrCiudadano['seqTipoVictima'] == 2){

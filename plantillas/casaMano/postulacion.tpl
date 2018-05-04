@@ -215,7 +215,6 @@
                                                         <td width="35%" align="center">
                                                             <select onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                                    onchange="soporteDocumento('documento',$('#tipoDocumento').val())"
                                                                     id="tipoDocumento"
                                                                     style="width:90%;"
                                                             >
@@ -240,29 +239,41 @@
                                                         </td>
                                                     </tr>
 
+                                                    <!-- FECHA DE EXPEDICION DEL DOCUMENTO Y TIPO DE SOPORTE -->
+                                                    <tr>
+                                                        <td width="15%">Fecha de Expedición</td>
+                                                        <td width="35%" style="padding-left: 15px;">
+                                                            <input type="text"
+                                                                   id="expedicion"
+                                                                   onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                                   value=""
+                                                                   style="width:100px"
+                                                                   readonly
+                                                            /> <a onClick="calendarioPopUp('expedicion')" href="#">Calendario</a> &nbsp;&nbsp;
+                                                            <a onClick="document.getElementById('expedicion').value = '';" href="#">Limpiar</a>
+                                                        </td>
+                                                        <td width="15%">Tipo de soporte</td>
+                                                        <td width="35%" style="padding-left: 15px;">
+                                                            <select id="tipoSoporte"
+                                                                    style="width:90%;"
+                                                                    onchange="soporteDocumento('tipoSoporte',$('#tipoSoporte').val())"
+                                                                    style="width:90%;"
+                                                            >
+                                                                <option value="">Seleccione</option>
+                                                                <option value="registroCivil">Registro Civil</option>
+                                                                <option value="partidaBautismo">Partida de Bautismo</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+
                                                     <!-- SOPORTE PARA EL DOCUMENTO DE IDENTIDAD -->
                                                     <tr id="soporteCedula" style="display: none">
                                                         <td colspan="4" style="padding-left: 0px; background-color: #FFFFFF;">
                                                             <table cellspacing="0" cellpadding="2" border="0" width="100%">
                                                                 <tr>
-                                                                    <td width="17%">Fecha de Expedición</td>
+                                                                    <td width="17%">Entidad del registro civil</td>
                                                                     <td width="33%">
-                                                                        <input type="text"
-                                                                               id="expedicion"
-                                                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                                               value=""
-                                                                               style="width:100px;"
-                                                                               readonly
-                                                                        /> <a onClick="calendarioPopUp('expedicion')" href="#">Calendario</a> &nbsp;&nbsp;
-                                                                        <a onClick="document.getElementById('expedicion').value = '';" href="#">Limpiar</a>
-                                                                    </td>
-                                                                    <td width="17%"></td>
-                                                                    <td width="33%"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Entidad del registro civil</td>
-                                                                    <td>
                                                                         <select id="entidadDocumento"
                                                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
@@ -277,8 +288,8 @@
                                                                             <option value="Inspección de Policía">Inspección de Policía</option>
                                                                         </select>
                                                                     </td>
-                                                                    <td>Indicativo Serial</td>
-                                                                    <td>
+                                                                    <td width="17%">Indicativo Serial</td>
+                                                                    <td width="33%">
                                                                         <input type="text"
                                                                                id="indicativoSerial"
                                                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
@@ -1013,6 +1024,7 @@
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqTipoDocumento" name="hogar[{$objCiudadano->numDocumento}][seqTipoDocumento]" value="{$objCiudadano->seqTipoDocumento}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-numDocumento" name="hogar[{$objCiudadano->numDocumento}][numDocumento]" value="{$objCiudadano->numDocumento}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-fchExpedicion" name="hogar[{$objCiudadano->numDocumento}][fchExpedicion]" value="{$objCiudadano->fchExpedicion}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-txtTipoSoporte" name="hogar[{$objCiudadano->numDocumento}][txtTipoSoporte]" value="{$objCiudadano->txtTipoSoporte}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-txtEntidadDocumento" name="hogar[{$objCiudadano->numDocumento}][txtEntidadDocumento]" value="{$objCiudadano->txtEntidadDocumento}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-numIndicativoSerial" name="hogar[{$objCiudadano->numDocumento}][numIndicativoSerial]" value="{$objCiudadano->numIndicativoSerial}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaDocumento" name="hogar[{$objCiudadano->numDocumento}][numNotariaDocumento]" value="{$objCiudadano->numNotariaDocumento}">

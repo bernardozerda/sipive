@@ -962,8 +962,8 @@
                                                     >+</div>
                                                 </td>
                                                 <td width="282px" style="padding-left:5px;">
-                                                    {$objCiudadano->txtNombre1} {$objCiudadano->txtNombre2}
-                                                    {$objCiudadano->txtApellido1} {$objCiudadano->txtApellido2}
+                                                    {$objCiudadano->txtNombre1|ucwords} {$objCiudadano->txtNombre2|ucwords}
+                                                    {$objCiudadano->txtApellido1|ucwords} {$objCiudadano->txtApellido2|ucwords}
                                                 </td>
                                                 <td width="140px" align="right" style="padding-right: 15px">
                                                     {if $tipoDocumento == 1}     C.C.
@@ -972,6 +972,9 @@
                                                     {elseif $tipoDocumento == 4} R.C.
                                                     {elseif $tipoDocumento == 5} PAS.
                                                     {elseif $tipoDocumento == 6} NIT.
+                                                    {elseif $tipoDocumento == 7} NUIP.
+                                                    {elseif $tipoDocumento == 8} N/A.
+                                                    {elseif $tipoDocumento == 9} PAR.
                                                     {else} {$arrTipoDocumento.$tipoDocumento}
                                                     {/if}
                                                     {$objCiudadano->numDocumento|number_format:0:'.':'.'}
@@ -1014,6 +1017,9 @@
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-numIndicativoSerial" name="hogar[{$objCiudadano->numDocumento}][numIndicativoSerial]" value="{$objCiudadano->numIndicativoSerial}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaDocumento" name="hogar[{$objCiudadano->numDocumento}][numNotariaDocumento]" value="{$objCiudadano->numNotariaDocumento}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadDocumento" name="hogar[{$objCiudadano->numDocumento}][seqCiudadDocumento]" value="{$objCiudadano->seqCiudadDocumento}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-numConsecutivoPartida" name="hogar[{$objCiudadano->numDocumento}][numConsecutivoPartida]" value="{$objCiudadano->numConsecutivoPartida}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-txtParroquiaPartida" name="hogar[{$objCiudadano->numDocumento}][txtParroquiaPartida]" value="{$objCiudadano->txtParroquiaPartida}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadPartida" name="hogar[{$objCiudadano->numDocumento}][seqCiudadPartida]" value="{$objCiudadano->seqCiudadPartida}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqParentesco" name="hogar[{$objCiudadano->numDocumento}][seqParentesco]" value="{$objCiudadano->seqParentesco}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-valIngresos" name="hogar[{$objCiudadano->numDocumento}][valIngresos]" value="{$objCiudadano->valIngresos}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-fchNacimiento" name="hogar[{$objCiudadano->numDocumento}][fchNacimiento]" value="{$objCiudadano->fchNacimiento}">

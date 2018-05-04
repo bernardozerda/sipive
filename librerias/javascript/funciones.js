@@ -843,6 +843,8 @@ function agregarMiembroHogar() {
     arrAbreviacionesTipoDocumento[5] = "PAS.";
     arrAbreviacionesTipoDocumento[6] = "NIT.";
     arrAbreviacionesTipoDocumento[7] = "N.U.I.";
+    arrAbreviacionesTipoDocumento[8] = "N/A";
+    arrAbreviacionesTipoDocumento[9] = "PAR";
 
     // Variable a recoger del nuevo miembro del hogar
     var objTpoDocumento = document.getElementById("tipoDocumento");
@@ -881,6 +883,9 @@ function agregarMiembroHogar() {
     var objIndicativoSerial = document.getElementById("indicativoSerial");
     var objNotariaDocumento = document.getElementById("notariaDocumento");
     var objCiudadDocumento = document.getElementById("ciudadDocumento");
+    var objConsecutivoPartida = document.getElementById("consecutivoPartida");
+    var objParroquiaPartida = document.getElementById("parroquiaPartida");
+    var objCiudadPartida = document.getElementById("ciudadPartida");
     var objConsecutivoCasado = document.getElementById("consecutivoCasado");
     var objNotariaCasado = document.getElementById("notariaCasado");
     var objCiudadCasado = document.getElementById("ciudadCasado");
@@ -949,12 +954,39 @@ function agregarMiembroHogar() {
 
             // Ciudad documento del soporte del tipo de documento
             if (objCiudadDocumento.value == 0) {
-                alert("Ciudad del soporte del tipo de documento");
+                alert("Digita la ciudad del soporte del tipo de documento");
                 objCiudadDocumento.focus();
                 return false;
             }
 
         }
+
+        // validaciones para el tipo de dicumento partida de bautismo
+        if(objTpoDocumento.value == 9){
+
+            // consecutivo
+            if (objConsecutivoPartida.value == "") {
+                alert("Digita el consecutivo del soporte del tipo de documento");
+                objConsecutivoPartida.focus();
+                return false;
+            }
+
+            // Parroquia
+            if (objParroquiaPartida.value == "") {
+                alert("Digita la parroquia del soporte del tipo de documento");
+                objParroquiaPartida.focus();
+                return false;
+            }
+
+            // Ciudad
+            if (objCiudadPartida.value == 0) {
+                alert("Seleccione la ciudad del soporte del tipo de documento");
+                objCiudadPartida.focus();
+                return false;
+            }
+
+        }
+
 
     }
 
@@ -1207,17 +1239,27 @@ function agregarMiembroHogar() {
             objCiudadDocumento.selectedIndex = 0;
         }
 
+        if(objCiudadPartida.selectedIndex == -1){
+            objCiudadPartida.selectedIndex = 0;
+        }
+
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchExpedicion' name='hogar[" + numDocumento + "][fchExpedicion]' value='" + objExpedicion.value + "'>";
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadDocumento' name='hogar[" + numDocumento + "][txtEntidadDocumento]' value='" + objEntidadDocumento.options[objEntidadDocumento.selectedIndex].value + "'>";
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-numIndicativoSerial' name='hogar[" + numDocumento + "][numIndicativoSerial]' value='" + objIndicativoSerial.value + "'>";
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaDocumento' name='hogar[" + numDocumento + "][numNotariaDocumento]' value='" + objNotariaDocumento.value + "'>";
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadDocumento' name='hogar[" + numDocumento + "][seqCiudadDocumento]' value='" + objCiudadDocumento.options[objCiudadDocumento.selectedIndex].value + "'>";
+        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoPartida' name='hogar[" + numDocumento + "][numConsecutivoPartida]' value='" + objConsecutivoPartida.value + "'>";
+        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtParroquiaPartida' name='hogar[" + numDocumento + "][txtParroquiaPartida]' value='" + objParroquiaPartida.value + "'>";
+        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadPartida' name='hogar[" + numDocumento + "][seqCiudadPartida]' value='" + objCiudadPartida.options[objCiudadPartida.selectedIndex].value + "'>";
     }else{
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchExpedicion' name='hogar[" + numDocumento + "][fchExpedicion]' value=''>";
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadDocumento' name='hogar[" + numDocumento + "][txtEntidadDocumento]' value=''>";
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-numIndicativoSerial' name='hogar[" + numDocumento + "][numIndicativoSerial]' value=''>";
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaDocumento' name='hogar[" + numDocumento + "][numNotariaDocumento]' value=''>";
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadDocumento' name='hogar[" + numDocumento + "][seqCiudadDocumento]' value='0'>";
+        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoPartida' name='hogar[" + numDocumento + "][numConsecutivoPartida]' value=''>";
+        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtParroquiaPartida' name='hogar[" + numDocumento + "][txtParroquiaPartida]' value=''>";
+        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadPartida' name='hogar[" + numDocumento + "][seqCiudadPartida]' value='0'>";
     }
 
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqParentesco' name='hogar[" + numDocumento + "][seqParentesco]' value='" + objParentesco.options[objParentesco.selectedIndex].value + "'>";
@@ -1890,33 +1932,53 @@ function modificarMiembroHogar(numDocumento) {
 
                 if(seqPlanGobierno == 3) {
                     if (arrVariables[i].value == 1 || arrVariables[i].value == 7 || arrVariables[i].value == 3 || arrVariables[i].value == 4) {
+
                         $("#soporteCedula").show();
+                        $("#soportePartida").hide();
+
                         $("#expedicion").val( $( "#" + numDocumentoSinPuntos + "-fchExpedicion").val() );
                         $("#entidadDocumento").val( $( "#" + numDocumentoSinPuntos + "-txtEntidadDocumento").val() );
                         $("#indicativoSerial").val( $( "#" + numDocumentoSinPuntos + "-numIndicativoSerial").val() );
+                        $("#ciudadDocumento").val( $( "#" + numDocumentoSinPuntos + "-seqCiudadDocumento").val() );
 
                         $("#documentoNotaria").hide();
                         if($( "#" + numDocumentoSinPuntos + "-txtEntidadDocumento").val() == "Notaria"){
                             $("#documentoNotaria").show();
-                        }
 
+                        }
                         $("#notariaDocumento").val( $( "#" + numDocumentoSinPuntos + "-numNotariaDocumento").val() );
-                        $("#ciudadDocumento").val( $( "#" + numDocumentoSinPuntos + "-seqCiudadDocumento").val() );
+
+                        $("#consecutivoPartida").val("");
+                        $("#parroquiaPartida").val("");
+                        $("#ciudadPartida").val(0);
+
                     }else{
-                        $("#soporteCedula").show();
-                        $("#expedicion").val("");
-                        $("#entidadDocumento").val("");
-                        $("#indicativoSerial").val("");
-                        $("#notariaDocumento").val("");
-                        $("#ciudadDocumento").val(0);
+                        if(arrVariables[i].value == 9){
+
+                            $("#soporteCedula").hide();
+                            $("#soportePartida").show();
+                            $("#expedicion").val("");
+                            $("#entidadDocumento").val("");
+                            $("#indicativoSerial").val("");
+                            $("#notariaDocumento").val("");
+                            $("#ciudadDocumento").val(0);
+                            $("#consecutivoPartida").val($( "#" + numDocumentoSinPuntos + "-numConsecutivoPartida").val());
+                            $("#parroquiaPartida").val($( "#" + numDocumentoSinPuntos + "-txtParroquiaPartida").val());
+                            $("#ciudadPartida").val($( "#" + numDocumentoSinPuntos + "-seqCiudadPartida").val());
+
+                        }
                     }
                 }else{
                     $("#soporteCedula").hide();
+                    $("#soprotePartida").hide();
                     $("#expedicion").val("");
                     $("#entidadDocumento").val("");
                     $("#indicativoSerial").val("");
                     $("#notariaDocumento").val("");
                     $("#ciudadDocumento").val(0);
+                    $("#consecutivoPartida").val("");
+                    $("#parroquiaPartida").val("");
+                    $("#ciudadPartida").val(0);
                 }
 
             }
@@ -1931,8 +1993,6 @@ function modificarMiembroHogar(numDocumento) {
             document.getElementById("nombre1").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtNombre1") ? arrVariables[ i ].value : document.getElementById("nombre1").value;
             document.getElementById("nombre2").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtNombre2") ? arrVariables[ i ].value : document.getElementById("nombre2").value;
             document.getElementById("cajaCompensacion").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqCajaCompensacion") ? arrVariables[ i ].value : document.getElementById("cajaCompensacion").value;
-
-
 
             if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqParentesco") {
                 for (j = 0; j < document.getElementById("parentesco").length; j++) {

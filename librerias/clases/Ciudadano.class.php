@@ -63,6 +63,9 @@ class Ciudadano {
     public $txtEntidadUnion;
     public $numNotariaUnion;
     public $seqCiudadUnion;
+    public $numConsecutivoPartida;
+    public $txtParroquiaPartida;
+    public $seqCiudadPartida;
 
     /**
      * CONSTRUCTOR
@@ -121,6 +124,9 @@ class Ciudadano {
         $this->txtEntidadUnion = "";
         $this->numNotariaUnion = 0;
         $this->seqCiudadUnion = 0;
+        $this->numConsecutivoPartida = 0;
+        $this->txtParroquiaPartida = "";
+        $this->seqCiudadPartida = 0;
         
     }
 
@@ -172,7 +178,10 @@ class Ciudadano {
                 numConsecutivoUnion,
                 txtEntidadUnion,
                 numNotariaUnion,
-                seqCiudadUnion
+                seqCiudadUnion,
+                numConsecutivoPartida,
+                txtParroquiaPartida,
+                seqCiudadPartida
             FROM T_CIU_CIUDADANO
             WHERE seqCiudadano = $seqCiudadano		
 		";
@@ -226,6 +235,9 @@ class Ciudadano {
             $this->txtEntidadUnion = trim($objRes->fields['txtEntidadUnion']);
             $this->numNotariaUnion = intval($objRes->fields['numNotariaUnion']);
             $this->seqCiudadUnion = intval($objRes->fields['seqCiudadUnion']);
+            $this->numConsecutivoPartida = doubleval($objRes->fields['numConsecutivoPartida']);
+            $this->txtParroquiaPartida = trim($objRes->fields['txtParroquiaPartida']);
+            $this->seqCiudadPartida = intval($objRes->fields['seqCiudadPartida']);
 
         } else {
             $this->arrErrores[] = "Ciudadano [$seqCiudadano] no encontrado";
@@ -282,7 +294,10 @@ class Ciudadano {
                     numConsecutivoUnion,
                     txtEntidadUnion,
                     numNotariaUnion,
-                    seqCiudadUnion
+                    seqCiudadUnion,
+                    numConsecutivoPartida,
+                    txtParroquiaPartida,
+                    seqCiudadPartida
                 ) VALUES (
                     " . intval($this->bolBeneficiario) . ",
                     " . intval($this->bolCertificadoElectoral) . ",
@@ -310,24 +325,27 @@ class Ciudadano {
                     '" . trim($this->txtNombre2) . "',
                     " . doubleval($this->valIngresos) . ",
                     " . $fchExpedicion . ",
-                    '" . $this->txtEntidadDocumento . "',
-                    " . $this->numIndicativoSerial . ",
-                    " . $this->numNotariaDocumento . ",
-                    " . $this->seqCiudadDocumento . ",
-                    " . $this->numConsecutivoCasado . ",
-                    " . $this->numNotariaCasado . ",
-                    " . $this->seqCiudadCasado . ",
-                    " . $this->numConsecutivoCSCDL . ",
-                    '" . $this->txtEntidadCSCDL . "',
-                    " . $this->seqCiudadCSCDL . ",
-                    " . $this->numNotariaCSCDL . ",
-                    " . $this->numNotariaSoltero . ",
-                    " . $this->seqCiudadSoltero . ",
-                    '" . $this->txtCertificacionUnion . "',
-                    " . $this->numConsecutivoUnion . ",
-                    '" . $this->txtEntidadUnion . "',
-                    " . $this->numNotariaUnion . ",
-                    " . $this->seqCiudadUnion . "
+                    '" . trim($this->txtEntidadDocumento) . "',
+                    " . doubleval($this->numIndicativoSerial) . ",
+                    " . intval($this->numNotariaDocumento) . ",
+                    " . intval($this->seqCiudadDocumento) . ",
+                    " . intval($this->numConsecutivoCasado) . ",
+                    " . intval($this->numNotariaCasado) . ",
+                    " . intval($this->seqCiudadCasado) . ",
+                    " . doubleval($this->numConsecutivoCSCDL) . ",
+                    '" . trim($this->txtEntidadCSCDL) . "',
+                    " . intval($this->seqCiudadCSCDL) . ",
+                    " . intval($this->numNotariaCSCDL) . ",
+                    " . intval($this->numNotariaSoltero) . ",
+                    " . intval($this->seqCiudadSoltero) . ",
+                    '" . trim($this->txtCertificacionUnion) . "',
+                    " . doubleval($this->numConsecutivoUnion) . ",
+                    '" . trim($this->txtEntidadUnion) . "',
+                    " . intval($this->numNotariaUnion) . ",
+                    " . intval($this->seqCiudadUnion) . ",
+                    " . doubleval($this->numConsecutivoPartida) . ",
+                    '" . trim($this->txtParroquiaPartida) . "',
+                    " . intval($this->seqCiudadPartida) . "
                 )
              ";
             $aptBd->execute($sql);
@@ -391,7 +409,10 @@ class Ciudadano {
                     numConsecutivoUnion = " . doubleval($this->numConsecutivoUnion) . ",
                     txtEntidadUnion = '" . trim($this->txtEntidadUnion) . "',
                     numNotariaUnion = " . intval($this->numNotariaUnion) . ",
-                    seqCiudadUnion = " . intval($this->seqCiudadUnion) . "
+                    seqCiudadUnion = " . intval($this->seqCiudadUnion) . ",
+                    numConsecutivoPartida = " . doubleval($this->numConsecutivoPartida) . ",
+                    txtParroquiaPartida = '" . trim($this->txtParroquiaPartida) . "',
+                    seqCiudadPartida = " . intval($this->seqCiudadPartida) . "
                 where seqCiudadano = $seqCiudadano		
             ";
             $aptBd->execute($sql);

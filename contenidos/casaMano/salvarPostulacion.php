@@ -375,7 +375,7 @@ if (!empty($_POST['hogar'])) {
 
         if($bolValidacionSoporteDocumentos == true) {
 
-            if (in_array($arrCiudadano['seqTipoDocumento'], array(1, 3, 4, 7, 9))) {
+            if (in_array($arrCiudadano['seqTipoDocumento'], array(1, 3, 4, 7))) {
 
                 if (trim($arrCiudadano['txtEntidadDocumento']) == "") {
                     $arrErrores[] = "Indique la entidad de soporte del documento";
@@ -391,6 +391,20 @@ if (!empty($_POST['hogar'])) {
 
                 if (intval($arrCiudadano['seqCiudadDocumento']) == "") {
                     $arrErrores[] = "Indique ciudad del soporte del documento";
+                }
+
+            }elseif( $arrCiudadano['seqTipoDocumento'] == 9 ){
+
+                if(doubleval($arrCiudadano['numConsecutivoPartida']) == ""){
+                    $arrErrores[] = "Indique el consecutivo del soporte del documento";
+                }
+
+                if(trim($arrCiudadano['txtParroquiaPartida']) == ""){
+                    $arrErrores[] = "Indique la parroquia del soporte del documento";
+                }
+
+                if(intval($arrCiudadano['seqCiudadPartida']) == ""){
+                    $arrErrores[] = "Indique la ciudad del soporte del documento";
                 }
 
             }

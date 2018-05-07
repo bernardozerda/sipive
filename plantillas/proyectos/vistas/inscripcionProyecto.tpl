@@ -50,7 +50,13 @@
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Cronograma </em></a>
                     </li>
                     <li  class="nav-item" style="{$nav}">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosPolizas" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Polizas </em></a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosPolizas" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" 
+                           onclick="
+                           {if isset($smarty.session.arrGrupos.5.13) or isset($smarty.session.arrGrupos.6.20)}
+                                   autocompletar( 'aproboPoliza'   , 'contUsuario'   , './contenidos/cruces2/nombres.php' , '' );
+                           {else}
+                                   document.getElementById('aproboPoliza').disabled = true;
+                           {/if}"><em>Polizas </em></a>
                     </li>
                 {/if}
                 <li class="nav-item"  style="{$nav}">   

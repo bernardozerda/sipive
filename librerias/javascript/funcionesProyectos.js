@@ -135,7 +135,6 @@ function almacenarIncripcion() {
 }
 
 function adicionarOferente() {
-
     var intId = $("#buildyourform select").length + 1;
     var fieldWrapper = $("<div class=\"form-group\" id=\"field" + intId + "\" />");
     var fName = "<div id=\"table" + intId + "\"><div class=\"col-md-3\"><label>Oferente(*)</label>";
@@ -161,7 +160,7 @@ function adicionarOferente() {
 }
 
 function removerOferente(id) {
-    $(id).parent().remove();
+    $(id).remove();
 }
 
 function obtenerModalidadProyecto(value) {
@@ -206,8 +205,40 @@ function limpiarOferente(int) {
     $("#numTelContactoOferente_" + int).val("");
 }
 
-function addPoliza() {
+function addAmparos() {
+    var intId = $("#idAmparos select").length + 1;
+    var fieldWrapper = $("<div class=\"form-group\" id=\"amp" + intId + "\" />");
+    var fType = " <fieldset style=\"border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;\"> <legend style=\"text-align: right\"><p><h5>&nbsp;<img src=\"recursos/imagenes/add.png\" width=\"20px\" onclick=\"addAmparos();\"  /><b>&nbsp; Adicionar  Amparo</b>&nbsp; <img src=\"recursos/imagenes/remove.png\" width=\"20px\"  onclick='removerOferente(amp" + intId + ")'/><b style=\"text-align: right\">&nbsp; Eliminar Amaparo</b></h5></p></legend>";
+    fType += "<div class=\"col-md-3\"> <input name=\"seqAmparo[]\" type=\"hidden\" id=\"seqAmparo\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><label class=\"control-label\" >Tipo de Amparo</label><input name=\"seqAmparoPadre[]\" type=\"hidden\" id=\"seqAmparoPadre\" value='' onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><select id=\"seqTipoAmparo_" + intId + "\" name=\"seqTipoAmparo[]\" class=\"form-control\" style=\"width: 75%\">";
+    $("#seqTipoAmparo_1" + " option").each(function () {
+        fType += "<option value=" + $(this).attr('value') + ">" + $(this).text() + "</option> ";
+    });
+    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:</label><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaIni_" + intId + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaFin_" + intId + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "<div class=\"col-md-3\"><label class=\"control-label\" >Valor Asegurado</label><input name=\"valAsegurado[]\" type=\"text\" id=\"valAsegurado_" + intId + "\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"></div> ";
+    fType += "<div class=\"col-md-2\"><br><br></div>";
+    fType += "<p>&nbsp;</p></fieldset><p>&nbsp;</p></div>";
+    fieldWrapper.append(fType);
+    $("#idAmparos").append(fieldWrapper);
+}
 
+function addProrroga(idPadre, usuario) {
+    //$("#demo" + idPadre).addClass("collapse in");
+    $("#demo" + idPadre).css({"display": "block"});
+
+    var intIdHijo = $("#demo" + idPadre + " select").length + 1;
+
+    var fieldWrapper = $("<div class=\"form-group\" id=\"ampHijo" + idPadre + "_" + intIdHijo + "\" />");
+    var fType = "<div class=\"col-md-3\"><label class=\"control-label\" >Porroga " + intIdHijo + "</label><select id=\"seqTipoAmparo" + idPadre + "_" + intIdHijo + "\" name=\"seqTipoAmparo[]\" class=\"form-control\" style=\"width: 75%\">";
+    fType += "<option value='6'>Prorroga</option>  <input name=\"seqAmparo[]\" type=\"hidden\" id=\"seqAmparo\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><input name=\"seqAmparoPadre[]\" type=\"hidden\" id=\"seqAmparoPadre\" value=\"" + idPadre + "\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\">";
+    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:</label><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaIni" + idPadre + "_" + intIdHijo + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaFin" + idPadre + "_" + intIdHijo + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Valor Asegurado</label><input name=\"valAsegurado[]\" type=\"text\" id=\"valAsegurado" + idPadre + "_" + intIdHijo + "\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"></div> ";
+    fType += " <div class=\"col-md-2\" style=\"width: 5.5%\"><label class=\"control-label\" >Aprobo</label> <br><input name=\"bolAproboAmparo[]\" type=\"checkbox\" id=\"bolAprobo" + idPadre + "_" + intIdHijo + "\"  value=\"1\"  style=\"height: 15px; text-align: center\" onclick=\"selectUsuario(this.id, " + usuario + ")\">&nbsp;&nbsp;<input type=\"hidden\" name=\"seqUsuario[]\" id=\"seqUsuario" + idPadre + "_" + intIdHijo + "\" value=\"'0'\"></div>";
+    fType += "<div class=\"col-md-2\"><br><br><input type=\"button\"  value=\"Prorroga\" class=\"btn_deleted\"  onclick='removerOferente(ampHijo" + idPadre + "_" + intIdHijo + ")'/></div>";
+    fType += "<p>&nbsp;</p></fieldset><p>&nbsp;</p></div>";
+    fieldWrapper.append(fType);
+    $("#demo" + idPadre).append(fieldWrapper);
 }
 
 
@@ -228,3 +259,14 @@ YAHOO.util.Event.onContentReady(
         "divNietos",
         fncActivarMenuNietos
         );
+
+function selectUsuario(valor, user) {
+    var id = valor.split("bolAprobo");
+    if ($("#" + valor).is(':checked')) {
+        // console.log("paso");
+        $("input[id=seqUsuario" + id[1] + "]:hidden").val(user);
+    } else {
+        $("input[id=seqUsuario" + id[1] + "]:hidden").val('0');
+
+    }
+}

@@ -22,6 +22,7 @@ $arrProyectos = array();
 $arrOferentesProy = array();
 $arrTipoVivienda = Array();
 $arrConjuntoResidencial = Array();
+$arraDatosPoliza = Array();
 $arrCronogramaFecha = Array();
 $claDatosProy = new DatosGeneralesProyectos();
 $claProyecto = new Proyecto();
@@ -34,10 +35,13 @@ $id = $_REQUEST['id'];
 $seqPlanGobierno = $_REQUEST['seqPlanGobierno'];
 $arrPryTipoModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $seqPlanGobierno, "seqPlanGobierno DESC, txtModalidad");
 $arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno DESC, txtPlanGobierno");
+$arrAseguradoras = obtenerDatosTabla("t_pry_aseguradoras", array("seqAseguradora", "txtNombreAseguradora"), "seqAseguradora", "", "seqAseguradora DESC, txtNombreAseguradora");
+$arrAmparos = obtenerDatosTabla("t_pry_tipo_amparo", array("seqTipoAmparo", "txtTipoAmparo"), "seqTipoAmparo", "", "seqTipoAmparo DESC, txtTipoAmparo");
 //var_dump($arrPryTipoModalidad);
 
 if (isset($_REQUEST['seqProyecto'])) {
     $idProyecto = $_REQUEST['seqProyecto'];
+
     $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
     $arrProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto);
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($idProyecto);
@@ -47,11 +51,15 @@ if (isset($_REQUEST['seqProyecto'])) {
     $arrTipoVivienda = $claDatosProy->obtenerTipoVivienda($idProyecto);
     $arrConjuntoResidencial = $claDatosProy->obtenerConjuntoResidencial($idProyecto);
     $arrCronogramaFecha = $claDatosProy->obteneCronograma($idProyecto);
+    $arraDatosPoliza = $claDatosProy->obtenerDatosPoliza($idProyecto);
+
+    $arraDatosPoliza = (count($arraDatosPoliza) > 0) ? $arraDatosPoliza : $arraDatosPoliza[0] = 0;
     if ($_REQUEST['tipo'] == '3') {
         $txtPlantilla = "proyectos/vistas/verProyecto.tpl";
     }
 } else {
     $arrProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto);
+    // var_dump($arrProyectos);
     $txtPlantilla = "proyectos/vistas/listaProyectos.tpl";
     if ($_REQUEST['tipo'] == '1') {
         $arrProyectos = array();
@@ -78,7 +86,7 @@ $arrTipoCuenta = $claDatosProy->obtenerlistaTipoCuenta();
 $arrTutorProyecto = $claDatosProy->obtenerlistaTutor();
 $arrOferente = $claDatosProy->obtenerDatosOferente(0);
 $arrConstructor = $claDatosProy->obtenerDatosConstructor(0);
- $arrProyectoGrupo = $claDatosProy->obtenerDatosProyectosGrupo(0);
+$arrProyectoGrupo = $claDatosProy->obtenerDatosProyectosGrupo(0);
 $arrBarrio = $claDatosProy->obtenerListaBarrios();
 $cantDoc = $claDatosProy->obtenerDocumentoProyecto($idProyecto);
 $arrayDocumentos = $claProyecto->obtenerListaDocumentos($idProyecto, $cantDoc);
@@ -86,9 +94,8 @@ $arrayLicencias = $claProyecto->obtenerListaLicencias($idProyecto);
 if (count($arrayLicencias) == 0) {
     $arrayLicencias[0] = 0;
 }
-
+//print_r($arrProyectos);
 $seqUsuario = $_SESSION['seqUsuario'];
-
 $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);
 $claSmarty->assign("numSubsidios", 26);
 $claSmarty->assign("arrTipoEsquema", $arrTipoEsquema);
@@ -121,11 +128,15 @@ $claSmarty->assign("arrTipoVivienda", $arrTipoVivienda);
 $claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
 $claSmarty->assign("arrCronogramaFecha", $arrCronogramaFecha);
 $claSmarty->assign("arrProyectoGrupo", $arrProyectoGrupo);
+$claSmarty->assign("arraDatosPoliza", $arraDatosPoliza);
+$claSmarty->assign("arrAseguradoras", $arrAseguradoras);
+$claSmarty->assign("arrAmparos", $arrAmparos);
 $claSmarty->assign("id", $id);
+$claSmarty->assign("NombreUsuario", $_SESSION['txtNombre'] . "" . $_SESSION['txtApellido']);
+$claSmarty->assign("seqUsuario", $_SESSION['seqUsuario']);
 $claSmarty->assign("page", "datosProyecto.php?tipo=2");
-//$claSmarty->assign("arrCronogramaProyecto", $arrCronogramaProyecto);
-//$claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
 
+//echo "prueba";
 
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);

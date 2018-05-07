@@ -91,19 +91,20 @@ class DatosGeneralesProyectos {
     function obtenerlistaProyectos($seqProyecto) {
         global $aptBd;
 
-        $sql = "SELECT pry.*, txtPlanGobierno,  
+        $sql = "SELECT pry.*, pol.*, pry.seqProyecto As seqProyecto, txtPlanGobierno,  
                 case  when seqProyectoPadre IS NOT NULL 
                 then (select ucwords(txtNombreProyecto) from t_pry_proyecto pry2 where pry2.seqProyecto = pry.seqProyectoPadre) else  '' end AS padre
                 FROM t_pry_proyecto pry 
-                LEFT JOIN t_frm_plan_gobierno USING(seqPlanGobierno) 
+                LEFT JOIN t_frm_plan_gobierno USING(seqPlanGobierno)
+                LEFT JOIN  t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto)
                ";
         if ($seqProyecto > 0) {
-            $sql .= " where seqProyecto = " . $seqProyecto;
+            $sql .= " where pry.seqProyecto = " . $seqProyecto;
         } else {
-            $sql .= " where seqProyectoPadre is null";
+            $sql .= " where pry.seqProyectoPadre is null";
         }
 
-        $sql . " ORDER BY seqProyecto asc";
+        $sql . " ORDER BY pry.seqProyecto asc";
 
         $objRes = $aptBd->execute($sql);
         $datos = Array();
@@ -595,10 +596,10 @@ class DatosGeneralesProyectos {
         while ($objRes->fields) {
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['seqTipoVivienda'] = $objRes->fields['seqTipoVivienda'];
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['txtNombreTipoVivienda'] = $objRes->fields['txtNombreTipoVivienda'];
-            $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numCantidad'] = $objRes->fields['numCantidad'];            
+            $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numCantidad'] = $objRes->fields['numCantidad'];
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numCantUdsDisc'] = $objRes->fields['numCantUdsDisc'];
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numTotalParq'] = $objRes->fields['numTotalParq'];
-            $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numCantParqDisc'] = $objRes->fields['numCantParqDisc'];            
+            $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numCantParqDisc'] = $objRes->fields['numCantParqDisc'];
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numArea'] = $objRes->fields['numArea'];
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['numAnoVenta'] = $objRes->fields['numAnoVenta'];
             $arrTipoVivienda[$objRes->fields['seqTipoVivienda']]['valPrecioVenta'] = $objRes->fields['valPrecioVenta'];
@@ -737,6 +738,38 @@ class DatosGeneralesProyectos {
             $sql .= " and  seqProyectoGrupo = " . $seqProyectoGrupo;
         }
         $sql . " ORDER BY seqProyectoGrupo";
+
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
+    public function obtenerCantPoliza($seqProyecto) {
+        global $aptBd;
+        $sqlIn = "select count(*) AS cant from t_pry_poliza where seqProyecto = " . $seqProyecto;
+        $objResIn = $aptBd->execute($sqlIn);
+        $cant = 0;
+        while ($objResIn->fields) {
+            $cant = $objResIn->fields['cant'];
+            $objResIn->MoveNext();
+        }
+        return $cant;
+    }
+
+    public function obtenerDatosPoliza($seqProyecto) {
+
+        global $aptBd;
+
+        $sql = "SELECT amp.* FROM  t_pry_poliza pol"
+                . " LEFT JOIN t_pry_amparo amp USING(seqPoliza)";
+        if ($seqProyecto > 0) {
+            $sql .= " where pol.seqProyecto = " . $seqProyecto;
+        }
+        $sql . " ORDER BY seqAmaparo";
 
         $objRes = $aptBd->execute($sql);
         $datos = Array();

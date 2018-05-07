@@ -53,3 +53,4 @@ recursos/imagenes/desembolsos
 *.xml
 *.iml
 *.idea*
+*.tpl

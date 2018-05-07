@@ -39,6 +39,7 @@ if (empty($arrErrores)) {
     $arrayconjuntos = Array();
     $arrayTipoViviendas = Array();
     $arraycronograma = Array();
+    $arrayAmparos = Array();
 
     // $arrTipoEsquema = $claDatosProy->obtenerlistaEsquema();
     $arrPryTipoModalidad = $claDatosProy->obtenerlistamodalidad();
@@ -58,6 +59,8 @@ if (empty($arrErrores)) {
     $arrOferente = $claDatosProy->obtenerDatosOferente(0);
     $arrConstructor = $claDatosProy->obtenerDatosConstructor(0);
     $arrProyectoGrupo = $claDatosProy->obtenerDatosProyectosGrupo(0);
+    $arrAseguradoras = obtenerDatosTabla("t_pry_aseguradoras", array("seqAseguradora", "txtNombreAseguradora"), "seqAseguradora", "", "seqAseguradora DESC, txtNombreAseguradora");
+    $arrAmparos = obtenerDatosTabla("t_pry_tipo_amparo", array("seqTipoAmparo", "txtTipoAmparo"), "seqTipoAmparo", "", "seqTipoAmparo DESC, txtTipoAmparo");
     // Verifica si es para crear o editar la Oferente
     $seqProyecto = 0;
     $seqProyecto = $_POST['seqProyecto'];
@@ -70,12 +73,21 @@ if (empty($arrErrores)) {
         } else {
             $claProyecto->modificarDocumentos($seqProyecto, $_POST["documentId_" . $seqProyecto], $_POST["document_" . $seqProyecto], $cantDoc);
         }
-
-        foreach ($_POST as $key => $value) {
-            $arrayDatosProyNew[$key] = $value;
+        //var_dump($_POST);
+        foreach ($_POST as $nombre_campo => $valor) {
+            if (count($valor) > 1) {
+                foreach ($valor as $key => $value) {
+                    $arrayDatosProyNew[$nombre_campo][$key] = $value;
+                }
+            } else {
+                $arrayDatosProyNew[$nombre_campo] = $valor;
+            }
         }
+
+
         $arrayDatosProyOld = $claProyecto->obtenerDatosProyecto($seqProyecto);
-        //var_dump($arrayDatosProyActual);
+
+        // die();
         $arrErrores = $claProyecto->editarProyecto($_POST);
         $claSeguimiento->almacenarSeguimiento($seqProyecto, $_POST['txtComentario'], $_POST['seqGestion'], $arrayDatosProyOld, $arrayDatosProyNew);
         $claSeguimientoProyectos = new SeguimientoProyectos;
@@ -84,8 +96,8 @@ if (empty($arrErrores)) {
 
         //$claRegistro->registrarActividad("Edicion", 0, $_SESSION['seqUsuario'], "Edicion de Oferente: [" . $_POST['seqEditar'] . "] " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));
     } else {
-        
-        $seqProyecto = $claProyecto->almacenarProyecto($_POST);    
+
+        $seqProyecto = $claProyecto->almacenarProyecto($_POST);
         if ($seqProyecto > 0) {
             $txtCambios = "";
             $claSeguimiento->almacenarSeguimiento($seqProyecto, $_POST['txtComentario'], $_POST['seqGestion'], '', '');
@@ -98,12 +110,14 @@ if (empty($arrErrores)) {
         mkdir($nombre_fichero, 0777, true);
     }
     $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
-    $arrProyecto = $claProyecto->obtenerDatosProyectos($seqProyecto);
+
+    print_r($arrProyecto);
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($seqProyecto);
     $cantConjuntos = $claDatosProy->obtenerCantConjuntos($seqProyecto);
     $cantDoc = $claDatosProy->obtenerDocumentoProyecto($seqProyecto);
     $cantLicencias = $claDatosProy->obtenerCantLicencias($seqProyecto);
     $cantCronograma = $claDatosProy->obtenerCantCronogramas($seqProyecto);
+    $cantPoliza = $claDatosProy->obtenerCantPoliza($seqProyecto);
     //echo "<br>conjuntos ->".$cantConjuntos;
     $cantTipoVivienda = $claDatosProy->obtenerCantTipoVivienda($seqProyecto);
 
@@ -151,6 +165,14 @@ if (empty($arrErrores)) {
     $arraycronograma[$seqProyecto]['fchInicialEscrituracion'] = $_POST['fchInicialEscrituracion'];
     $arraycronograma[$seqProyecto]['fchFinalEscrituracion'] = $_POST['fchFinalEscrituracion'];
 
+    $arrayAmparos[$seqProyecto]['seqAmparo'] = $_POST['seqAmparo'];
+    $arrayAmparos[$seqProyecto]['seqAmparoPadre'] = $_POST['seqAmparoPadre'];
+    $arrayAmparos[$seqProyecto]['seqTipoAmparo'] = $_POST['seqTipoAmparo'];
+    $arrayAmparos[$seqProyecto]['fchVigenciaIni'] = $_POST['fchVigenciaIni'];
+    $arrayAmparos[$seqProyecto]['fchVigenciaFin'] = $_POST['fchVigenciaFin'];
+    $arrayAmparos[$seqProyecto]['valAsegurado'] = $_POST['valAsegurado'];
+    $arrayAmparos[$seqProyecto]['seqUsuario'] = $_POST['seqUsuario'];
+    $arrayAmparos[$seqProyecto]['bolAprobo'] = $_POST['bolAprobo'];
 
     if (count($arrayLicencias) == 0) {
         $arrayLicencias[0] = 0;
@@ -171,7 +193,7 @@ if (empty($arrErrores)) {
     if ($cantTipoVivienda == 0 && isset($_POST["txtNombreTipoVivienda"])) {
 //echo "paso" .$cantTipoVivienda;
         $claProyecto->almacenarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
-    } else{
+    } else {
 
         $claProyecto->modificarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
     }
@@ -183,24 +205,31 @@ if (empty($arrErrores)) {
 
         $claProyecto->modificarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
     }
+
+    if ($cantPoliza == 0 && isset($_POST["numPoliza"])) {
+
+        $claProyecto->almacenarPoliza($seqProyecto, $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
+    } else if (isset($_POST["numPoliza"])) {
+        $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
+    }
 }/**
  * Impresion de resultados
  */
 if (empty($arrErrores)) {
-
+    $arrProyecto = $claProyecto->obtenerDatosProyectos($seqProyecto);
     $arrayDocumentos = $claProyecto->obtenerListaDocumentos($seqProyecto, $cantDoc);
     $arrayLicencias = $claProyecto->obtenerListaLicencias($seqProyecto);
     $arrConjuntoResidencial = $claDatosProy->obtenerConjuntoResidencial($seqProyecto);
     $arrTipoVivienda = $claDatosProy->obtenerTipoVivienda($seqProyecto);
     $arrCronogramaFecha = $claDatosProy->obteneCronograma($seqProyecto);
+    $arraDatosPoliza = $claDatosProy->obtenerDatosPoliza($seqProyecto);
     $arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno DESC, txtPlanGobierno");
     //pr ($arrErrores);
     $arrMensajes[] = "El Proyecto <b>" . $_POST['txtNombreProyecto'] . "</b> se ha guardado";
     imprimirMensajes(array(), $arrMensajes, "salvarOferente");
     $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
     $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
-    $claSmarty->assign("arrProyectos", $arrProyecto);
-    $seqUsuario = $_SESSION['seqUsuario'];
+    $claSmarty->assign("arrProyectos", $arrProyecto);    
     $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);
     $claSmarty->assign("numSubsidios", 26);
     $claSmarty->assign("arrTipoEsquema", $arrTipoEsquema);
@@ -229,6 +258,9 @@ if (empty($arrErrores)) {
     $claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
     $claSmarty->assign("arrCronogramaFecha", $arrCronogramaFecha);
     $claSmarty->assign("arrProyectoGrupo", $arrProyectoGrupo);
+    $claSmarty->assign("arrAseguradoras", $arrAseguradoras);
+    $claSmarty->assign("arrAmparos", $arrAmparos);
+    $claSmarty->assign("arraDatosPoliza", $arraDatosPoliza);
     $claSmarty->assign("page", "datosProyecto.php?tipo=2");
     $claSmarty->display($txtPlantilla);
 } else {

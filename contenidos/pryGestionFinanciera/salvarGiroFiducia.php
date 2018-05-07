@@ -53,7 +53,9 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
     $arrTablaCDP['saldo'] = (doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']) == 0)?
         $arrTablaCDP['valorRP'] :
         doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']);
-    $arrTablaCDP['saldo'] = $arrTablaCDP['saldo'] - $numTotalGiro;
+
+    $arrTablaCDP['giros'] = $arrTablaCDP['giros'] - $numTotalGiro;
+
 }
 
 // mira si hay actos administrativos de liberacion y si hay saldo

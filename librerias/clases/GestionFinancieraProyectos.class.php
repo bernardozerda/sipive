@@ -66,6 +66,24 @@ class GestionFinancieraProyectos
 
         $this->giros($seqProyecto);
 
+        // calcula saldos
+        foreach($this->arrResoluciones as $seqUnidadActo => $arrResolucion){
+
+            // saldo por resolucion
+            $this->arrResoluciones[$seqUnidadActo]['saldo'] =
+                doubleval( $this->arrResoluciones[$seqUnidadActo]['total'] ) -
+                doubleval( $this->arrResoluciones[$seqUnidadActo]['liberaciones'] ) -
+                doubleval( $this->arrResoluciones[$seqUnidadActo]['giros'] );
+
+            // saldo por RP
+            foreach($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP){
+                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'] =
+                    doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP']) +
+                    doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['liberaciones']) -
+                    doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros']);
+            }
+        }
+
     }
 
     private function datosBasicos($seqProyecto){
@@ -154,137 +172,140 @@ class GestionFinancieraProyectos
     private function liberaciones($seqProyecto){
         global $aptBd;
 
-        $sql = "
-            select distinct
-                lib.seqLiberacion, 
-                lib.seqUnidadActo,
-                lib.seqRegistroPresupuestal,
-                lib.valLiberado,
-                lib.fchLiberacion,
-                concat(usu.txtNombre, ' ',usu.txtApellido) as txtUsuario
-            from t_pry_aad_liberacion lib
-            inner join t_cor_usuario usu on lib.seqUsuario = usu.seqUsuario
-            inner join t_pry_aad_unidades_vinculadas uvi on lib.seqRegistroPresupuestal = uvi.seqRegistroPresupuestal
-            where uvi.seqProyecto  in (
-                select seqProyecto
-                from t_pry_proyecto pry
-                where pry.seqProyecto = $seqProyecto
-                   or pry.seqProyectoPadre = $seqProyecto
-            )
-        ";
-        $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        $arrRegistrosPresupuestales = $this->obtenerRegistrosPresupuestales();
 
-            $seqLiberacion = $objRes->fields['seqLiberacion'];
-            $seqUnidadActo = $objRes->fields['seqUnidadActo'];
-            $seqRegistroPresupuestal = $objRes->fields['seqRegistroPresupuestal'];
+        if(! empty($arrRegistrosPresupuestales) ) {
+            $sql = "
+                select distinct
+                    lib.seqLiberacion,
+                    lib.seqUnidadActo,
+                    if(con.seqProyectoPadre is null,con.seqProyecto,con.seqProyectoPadre) as seqProyecto,
+                    lib.seqRegistroPresupuestal,
+                    lib.valLiberado,
+                    lib.fchLiberacion,
+                    concat(usu.txtNombre,' ',usu.txtApellido) as txtUsuario
+                from t_pry_aad_liberacion lib
+                inner join t_pry_aad_unidades_vinculadas uvi on lib.seqUnidadActo = uvi.seqUnidadActo
+                inner join t_pry_proyecto con on uvi.seqProyecto = con.seqProyecto
+                inner join t_cor_usuario usu on lib.seqUsuario = usu.seqUsuario
+                where lib.seqRegistroPresupuestal in (" . implode(",", array_keys($arrRegistrosPresupuestales)) . ");        
+            ";
+            $objRes = $aptBd->execute($sql);
+            $arrDetalle = array();
+            while ($objRes->fields) {
 
-            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['total'] += $objRes->fields['valLiberado'];
-            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'][$seqLiberacion]['valor'] = $objRes->fields['valLiberado'];
-            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'][$seqLiberacion]['fecha'] = new DateTime($objRes->fields['fchLiberacion']);
-            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'][$seqLiberacion]['usuario'] = $objRes->fields['txtUsuario'];
+                $seqLiberacion = $objRes->fields['seqLiberacion'];
+                $seqUnidadActo = $objRes->fields['seqUnidadActo'];
+                $seqRegistroPresupuestal = $objRes->fields['seqRegistroPresupuestal'];
 
-            foreach($this->arrResoluciones as $seqUnidadActoResolucion => $arrResoluciones){
-                foreach($arrResoluciones['cdp'] as $seqRegistroPresupuestalResolucion => $arrCDP){
-                    if($seqRegistroPresupuestalResolucion == $seqRegistroPresupuestal and $seqUnidadActo != $seqUnidadActoResolucion){
+                // acumulado para la resolucion de liberacion
+                if (isset($this->arrResoluciones[$seqUnidadActo])) {
+                    $this->arrResoluciones[$seqUnidadActo]['liberaciones'] += $objRes->fields['valLiberado'];
+                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal];
 
-                        $this->arrResoluciones[$seqUnidadActoResolucion]['liberaciones'] += $objRes->fields['valLiberado'];
-                        $this->arrResoluciones[$seqUnidadActoResolucion]['saldo'] =
-                            $this->arrResoluciones[$seqUnidadActoResolucion]['total'] +
-                            $this->arrResoluciones[$seqUnidadActoResolucion]['liberaciones'];
+                    if(isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])) {
+                        $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'][$seqLiberacion]['valor'] = $objRes->fields['valLiberado'];
+                        $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'][$seqLiberacion]['fecha'] = new DateTime($objRes->fields['fchLiberacion']);
+                        $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'][$seqLiberacion]['usuario'] = $objRes->fields['txtUsuario'];
+                    }
 
-                        $this->arrResoluciones[$seqUnidadActo]['liberaciones'] += $objRes->fields['valLiberado'];
-                        $this->arrResoluciones[$seqUnidadActo]['saldo'] =
-                            $this->arrResoluciones[$seqUnidadActo]['total'] -
-                            $this->arrResoluciones[$seqUnidadActo]['liberaciones'];
+                }
 
-                        $this->arrResoluciones[$seqUnidadActoResolucion]['cdp'][$seqRegistroPresupuestalResolucion]['liberaciones'] += $objRes->fields['valLiberado'];
-                        $this->arrResoluciones[$seqUnidadActoResolucion]['cdp'][$seqRegistroPresupuestalResolucion]['saldo'] =
-                            $this->arrResoluciones[$seqUnidadActoResolucion]['cdp'][$seqRegistroPresupuestalResolucion]['valorRP'] +
-                            $this->arrResoluciones[$seqUnidadActoResolucion]['cdp'][$seqRegistroPresupuestalResolucion]['liberaciones'];
+                // acumulado de liberciones por RP
+                $arrRegistrosPresupuestales[$seqRegistroPresupuestal]['liberaciones'] += $objRes->fields['valLiberado'];
+
+                $objRes->MoveNext();
+            }
+
+            foreach($this->arrResoluciones as $seqUnidadActo => $arrResolucion){
+                foreach($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP){
+                    if(isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])) {
+                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal];
+                    }
+                    if(isset($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])){
+                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'] = $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'];
                     }
                 }
             }
 
-            $objRes->MoveNext();
-        }
 
+        }
     }
 
     private function giros($seqProyecto){
         global $aptBd;
 
-//                gfi.txtCertificacion,
-//                gfi.bolCedulaOferente,
-//                gfi.bolRitOferente,
-//                gfi.bolRutOferente,
-//                gfi.bolExistenciaOferente,
-//                gfi.bolConstitucionFiducia,
-//                gfi.bolCedulaFiducia,
-//                gfi.bolBancariaFiducia,
-//                gfi.bolSuperintendenciaFiducia,
-//                gfi.bolCamaraFiducia,
-//                gfi.bolRutFiducia,
-//                gfi.bolResolucionProyecto,
-//                gfi.bolMemorandoProyecto,
-//                gfi.fchCreacion,
-//                usu.seqUsuario,
-//                concat(usu.txtNombre,' ',usu.txtApellido) as txtUsuario,
-//                gfd.seqProyecto,
-//                gfi.numSecuencia,
+        $arrRegistrosPresupuestales = $this->obtenerRegistrosPresupuestales();
 
-        $sql = "
-            select 
-                gfi.seqGiroFiducia,
-                gfd.seqGiroFiduciaDetalle,
-                gfd.seqUnidadActo,
-                gfd.seqRegistroPresupuestal,
-                gfd.seqUnidadProyecto,
-                gfd.valGiro
-            from t_pry_aad_giro_fiducia gfi
-            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
-            inner join t_cor_usuario usu on gfi.seqUsuario = usu.seqUsuario
-            where gfd.seqProyecto in (
-                select seqProyecto
-                from t_pry_proyecto pry
-                where pry.seqProyecto = $seqProyecto
-                   or pry.seqProyectoPadre = $seqProyecto
-            )        
-        ";
-        $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        if(! empty($arrRegistrosPresupuestales) ) {
 
-            $seqGiroFiducia = $objRes->fields['seqGiroFiducia'];
-            $seqGiroFiduciaDetalle = $objRes->fields['seqGiroFiduciaDetalle'];
-            $seqUnidadActo = $objRes->fields['seqUnidadActo'];
-            $seqRegistroPresupuestal = $objRes->fields['seqRegistroPresupuestal'];
-            $seqUnidadProyecto = intval($objRes->fields['seqUnidadProyecto']);
+            $sql = "
+                select
+                    gfi.seqGiroFiducia,
+                    gfd.seqUnidadActo,
+                    if(pry.seqProyectoPadre is null,gfd.seqProyecto,pry.seqProyectoPadre) as seqProyecto,
+                    gfd.seqUnidadProyecto,
+                    gfd.seqRegistroPresupuestal,
+                    gfd.valGiro
+                from t_pry_aad_giro_fiducia gfi
+                inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+                inner join t_pry_proyecto pry on gfd.seqProyecto = pry.seqProyecto
+                where gfd.seqRegistroPresupuestal in (" . implode("," , array_keys($arrRegistrosPresupuestales)) . ")            
+            ";
 
-            $this->arrResoluciones[$seqUnidadActo]['giros'] += $objRes->fields['valGiro'];
-            $this->arrResoluciones[$seqUnidadActo]['saldo'] =
-                $this->arrResoluciones[$seqUnidadActo]['total'] +
-                $this->arrResoluciones[$seqUnidadActo]['liberaciones'] -
-                $this->arrResoluciones[$seqUnidadActo]['giros'];
+            $objRes = $aptBd->execute($sql);
+            $arrDetalle = array();
+            while($objRes->fields){
 
-            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'] += $objRes->fields['valGiro'];
-            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'] =
-                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP'] +
-                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['liberaciones'] -
-                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'];
+                $seqGiroFiducia = $objRes->fields['seqGiroFiducia'];
+                $seqUnidadActo = $objRes->fields['seqUnidadActo'];
+                $seqRegistroPresupuestal = $objRes->fields['seqRegistroPresupuestal'];
+                $seqUnidadProyecto = intval($objRes->fields['seqUnidadProyecto']);
 
-            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['giros'] += $objRes->fields['valGiro'];
+                // acumula el saldo por resolucion
+                if(isset($this->arrResoluciones[$seqUnidadActo])){
+                    $this->arrResoluciones[$seqUnidadActo]['giros'] += $objRes->fields['valGiro'];
 
-            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['saldo'] =
-                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['valor'] -
-                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['giros'];
+                    $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'][$seqGiroFiducia] = $objRes->fields['valGiro'];
 
-            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'][$seqGiroFiducia][$seqGiroFiduciaDetalle] = $objRes->fields['valGiro'];
+                }
 
-            $objRes->MoveNext();
+                // acumulado de giros por RP
+                $arrRegistrosPresupuestales[$seqRegistroPresupuestal]['giros'] += $objRes->fields['valGiro'];
+
+                $objRes->MoveNext();
+            }
+
+            // acumulado de giros por RP
+            foreach($this->arrResoluciones as $seqUnidadActo => $arrResolucion){
+                foreach($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP ){
+                    if(isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])){
+                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal]['giros'];
+                    }
+                    if(isset($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])){
+                        foreach($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'] as $seqUnidadProyecto => $arrDetalleGiro){
+                            if(isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto])){
+                                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'] =
+                                    $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'];
+                            }
+                        }
+                    }
+                }
+            }
+
         }
+    }
 
-
-
+    private function obtenerRegistrosPresupuestales(){
+        $arrRegistrosPresupuestales = array();
+        foreach($this->arrResoluciones as $seqUnidadActo => $arrResolucion){
+            if(isset($arrResolucion['cdp'])){
+                foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP){
+                    $arrRegistrosPresupuestales[$seqRegistroPresupuestal] = $arrCDP;
+                }
+            }
+        }
+        return $arrRegistrosPresupuestales;
     }
 
     public function salvarLiberacion($arrPost){
@@ -400,11 +421,6 @@ class GestionFinancieraProyectos
 
     }
 
-    /**
-     * OBTIENE LOS DATOS CARGADOS EN EL ARCHIVO
-     * SEA UN EXCEL O UN ARCHIVO PLANO
-     * @return array
-     */
     public function cargarArchivo(){
 
         $arrArchivo = array();

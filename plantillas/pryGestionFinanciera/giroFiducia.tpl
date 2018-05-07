@@ -121,7 +121,7 @@
                                 <label class="input-group-btn">
                                     <span class="btn btn-default {if $bolHabilitar == false or $bolImprimir == true} disabled {/if}">
                                         <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
-                                        <input class="pryFile" type="file" name="archivo" style="display: none;" {if $bolHabilitar == false} disabled="disabled" {/if}
+                                        <input class="pryFile" type="file" name="archivo" style="display: none;"{if $bolHabilitar == false or $bolImprimir == true} disabled="disabled" {/if}
                                                onchange="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/giroFiducia.php',true,true);">
                                     </span>
                                 </label>
@@ -165,11 +165,11 @@
                                             <thead>
                                             <tr>
                                                 <th>CDP y RP</th>
-                                                <th>Valor RP</th>
-                                                <th>Giros</th>
-                                                <th>Liberaciones</th>
-                                                <th>Valor a Girar</th>
-                                                <th>Saldo</th>
+                                                <th class="text-right">Valor RP</th>
+                                                <th class="text-right">Liberaciones</th>
+                                                <th class="text-right">Giros</th>
+                                                <th class="text-center">Valor a Girar</th>
+                                                <th class="text-right">Saldo</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -179,8 +179,10 @@
                                                     RP: {$arrTablaCDP.numeroRP} de {$arrTablaCDP.fechaRP->format(Y)}
                                                 </td>
                                                 <td style="vertical-align: middle" class="text-right">$ {$arrTablaCDP.valorRP|number_format:0:',':'.'}</td>
-                                                <td style="vertical-align: middle" class="text-right">$ {$arrTablaCDP.giros|number_format:0:',':'.'}</td>
                                                 <td style="vertical-align: middle" class="text-right">$ {$arrTablaCDP.liberaciones|abs|number_format:0:',':'.'}</td>
+                                                <td style="vertical-align: middle" class="text-right">
+                                                    $ {$arrTablaCDP.giros|number_format:0:',':'.'}
+                                                </td>
                                                 <td class="text-center">
                                                     <input type="text" class="form-control input-sm"
                                                            id="valGiro" value="{$numTotalGiro|@doubleval|number_format:0:',':'.'}"

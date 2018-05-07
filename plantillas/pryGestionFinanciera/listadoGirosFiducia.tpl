@@ -43,8 +43,8 @@
                         <td class="text-center">{$seqGiroFiducia}</td>
                         <td class="text-left">{$arrItemGiro.proyecto}</td>
                         <td class="text-left">{$arrItemGiro.secuencia}</td>
-                        <td class="text-right">{$arrItemGiro.unidades}</td>
-                        <td class="text-right">{$arrItemGiro.giro}</td>
+                        <td class="text-right">{$arrItemGiro.unidades|number_format:0:',':'.'}</td>
+                        <td class="text-right">$ {$arrItemGiro.giro|number_format:0:',':'.'}</td>
                         <td class="text-center">
                             <a href="#" onClick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/giroFiducia.php','seqGiroFiducia={$seqGiroFiducia}',true);">
                                 <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" style="cursor: pointer"></span>

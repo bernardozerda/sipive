@@ -61,7 +61,9 @@
                             <td class="h5 text-right">$ {$arrResolucion.liberaciones|abs|number_format:0:',':'.'}</td>
                             <td class="h5 text-right">
                                 {if isset($arrResolucion.saldo)}
-                                    $ {$arrResolucion.saldo|abs|number_format:0:',':'.'}
+                                    <span class="{if $arrResolucion.saldo > 0} text-danger {/if}">
+                                        $ {$arrResolucion.saldo|abs|number_format:0:',':'.'}
+                                    </span>
                                 {else}
                                     $ {$arrResolucion.total|abs|number_format:0:',':'.'}
                                 {/if}
@@ -86,9 +88,9 @@
                                             <th width="100px"></th>
                                             <th width="100px"></th>
                                             <th width="100px" class="text-right">Valor RP</th>
-                                            <th width="100px" class="text-right">Liberaciones</th>
-                                            <th width="100px" class="text-right">Giros</th>
-                                            <th width="100px" class="text-right">Saldo</th>
+                                            <th width="110px" class="text-right">Liberaciones RP</th>
+                                            <th width="100px" class="text-right">Giros RP</th>
+                                            <th width="100px" class="text-right">Saldo RP</th>
                                             <th width="120px"></th>
                                             <th></th>
                                         </tr>
@@ -119,7 +121,9 @@
                                                             </td>
                                                             <td class="text-right">
                                                                 {if isset($arrCDP.saldo)}
-                                                                    $ {$arrCDP.saldo|number_format:0:',':'.'}
+                                                                    <span class="{if $arrCDP.saldo < 0} text-danger {/if}">
+                                                                        $ {$arrCDP.saldo|number_format:0:',':'.'}
+                                                                    </span>
                                                                 {else}
                                                                     $ {$arrCDP.valorRP|number_format:0:',':'.'}
                                                                 {/if}
@@ -147,6 +151,11 @@
                                                                 style="display: {if not (isset($arrPost.seqRegistroPresupuestal) and $seqRegistroPresupuestal == $arrPost.seqRegistroPresupuestal)} none {/if}">
                                                                 <table class="table table-striped" cellspacing="0" cellpadding="0" width="100%">
                                                                     <thead>
+                                                                        <tr>
+                                                                            <td style="background-color: #FCF8E3; color: #8a6d3b;" colspan="8" class="text-center h5">
+                                                                                Liberaciones para el proyecto
+                                                                            </td>
+                                                                        </tr>
                                                                         <tr>
                                                                             <th class="text-right">Valor</th>
                                                                             <th class="text-center">Fecha</th>

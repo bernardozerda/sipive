@@ -1399,7 +1399,10 @@ class Proyecto {
     function almacenarPoliza($seqProyecto, $seqAseguradora, $numPoliza, $fchExpedicion, $seqUsuario, $bolAprobo, $arrayAmparos) {
         global $aptBd;
         $arrErrores = array();
-
+        if ($seqUsuario == "" && $seqUsuario == 0) {
+            $bolAprobo = 0;
+            $seqUsuario = 0;
+        }
         $sql = "INSERT INTO t_pry_poliza
                 ( numPoliza,fchExpedicion,seqUsuario, bolAprobo,  seqAseguradora, seqProyecto)
                 VALUES
@@ -1433,7 +1436,7 @@ class Proyecto {
             }
             try {
                 $query = substr_replace($query, ';', -1, 1);
-              //  echo "<p>" . $query . "</p>";
+                //  echo "<p>" . $query . "</p>";
                 $aptBd->execute($query);
             } catch (Exception $objError) {
                 $arrErrores[] = "No se ha podido cargar el cronograma<b></b>";
@@ -1450,7 +1453,10 @@ class Proyecto {
 
         global $aptBd;
         $arrErrores = array();
-
+        if ($seqUsuario == "" && $seqUsuario == 0) {
+            $bolAprobo = 0;
+            $seqUsuario = 0;
+        }
         $sql = "UPDATE t_pry_poliza
                 SET                
                 numPoliza = $numPoliza,
@@ -1490,7 +1496,7 @@ class Proyecto {
                         $seqAmparoPadre = 'NULL';
                     }
                 }
-              //  echo "<br>*****" . $seqAmparoPadre . "******<br>";
+                //  echo "<br>*****" . $seqAmparoPadre . "******<br>";
 
                 $datosDiff[] = $seqAmparo;
                 if (in_array($seqAmparo, $datos)) {
@@ -1532,7 +1538,7 @@ class Proyecto {
 
                     $query = substr_replace($query, ';', -1, 1);
                     try {
-                       // echo "<p>" . $query . "</p>";
+                        // echo "<p>" . $query . "</p>";
                         $aptBd->execute($query);
                     } catch (Exception $objError) {
                         $arrErrores[] = "No se ha podido cargar el Amparo<b></b>";

@@ -1278,6 +1278,8 @@ class GestionFinancieraProyectos
     public function plantillaGiroConstructor($seqProyecto){
         global $aptBd;
 
+        $this->informacionGiroConstructor($seqProyecto);
+
         $sql = "
             select
                 con.seqProyecto as 'Identificador del Proyecto',
@@ -1298,7 +1300,17 @@ class GestionFinancieraProyectos
                 upr.seqUnidadProyecto, 
                 upper(upr.txtNombreUnidad)      
         ";
-        return $aptBd->GetAll($sql);
+        $objRes = $aptBd->execute($sql);
+        $arrRetorno = array();
+        while($objRes->fields){
+            $seqUnidadProyecto = intval($objRes->fields['Identificador de la Unidad']);
+            $numPosicion = count($arrRetorno);
+            $objRes->fields['Disponible'] -= $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['giro'];
+            $arrRetorno[$numPosicion] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+
+        return $arrRetorno;
 
     }
 

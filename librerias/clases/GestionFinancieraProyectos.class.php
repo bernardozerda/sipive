@@ -6,35 +6,38 @@ class GestionFinancieraProyectos
     public $arrProyectos;
     public $arrFiducia;
     public $arrResoluciones;
+    public $arrGiroConstructor;
     public $arrErrores;
     public $arrMensajes;
     public $txtCreador;
     public $arrTitulos;
     private $arrExtensiones;
 
-
     public function __construct()
     {
         $this->arrProyectos = array();
         $this->arrFiducia = array();
         $this->arrResoluciones = array();
+        $this->arrGiroConstructor = array();
         $this->arrErrores = array();
         $this->arrMensajes = array();
         $this->arrExtensiones = array("txt","xls","xlsx");
         $this->txtCreador = "SiPIVE - SDHT";
-        $this->arrTitulos[] = "Identificador del Proyecto";
-        $this->arrTitulos[] = "Nombre del Proyecto";
-        $this->arrTitulos[] = "Identificador de la Unidad";
-        $this->arrTitulos[] = "Descripcion de la Unidad";
-        $this->arrTitulos[] = "Valor a Girar";
+
+        $this->arrTitulos['giroFiducia'][] = "Identificador del Proyecto";
+        $this->arrTitulos['giroFiducia'][] = "Nombre del Proyecto";
+        $this->arrTitulos['giroFiducia'][] = "Identificador de la Unidad";
+        $this->arrTitulos['giroFiducia'][] = "Descripcion de la Unidad";
+        $this->arrTitulos['giroFiducia'][] = "Valor a Girar";
+        $this->arrTitulos['giroConstructor'][] = "Identificador del Proyecto";
+        $this->arrTitulos['giroConstructor'][] = "Nombre del Proyecto";
+        $this->arrTitulos['giroConstructor'][] = "Identificador de la Unidad";
+        $this->arrTitulos['giroConstructor'][] = "Descripcion de la Unidad";
+        $this->arrTitulos['giroConstructor'][] = "Disponible";
+        $this->arrTitulos['giroConstructor'][] = "Valor a Girar";
 
     }
 
-    /**
-     * obtiene el listado de proyectos
-     * @author Bernardo Zerda
-     * @version 1.0 Abril 2018
-     */
     public function proyectos(){
         global $aptBd;
 
@@ -538,9 +541,9 @@ class GestionFinancieraProyectos
         return $arrArchivo;
     }
 
-    public function validarArchivo($arrPost, $arrArchivo){
+    public function validarArchivo($arrPost, $arrArchivo, $txtFormato){
 
-        $this->validarTitulos($arrArchivo[0]);
+        $this->validarTitulos($arrArchivo[0], $txtFormato);
 
         $arrRetorno = array();
 
@@ -550,7 +553,13 @@ class GestionFinancieraProyectos
             $txtNombreProyecto = trim(mb_strtolower($arrArchivo[$i][1]));
             $seqUnidadProyecto = intval($arrArchivo[$i][2]);
             $txtUnidadProyecto = trim(mb_strtolower($arrArchivo[$i][3]));
-            $valGiro           = doubleval($arrArchivo[$i][4]);
+            if($txtFormato == "giroConstructor") {
+                $valDisponible = doubleval($arrArchivo[$i][4]);
+                $valGiro       = $arrArchivo[$i][5];
+            }else{
+                $valDisponible = null;
+                $valGiro       = $arrArchivo[$i][4];
+            }
 
             // valida el identificador del proyecto
             if($seqProyecto == 0){
@@ -585,14 +594,7 @@ class GestionFinancieraProyectos
             }
 
             // cantidad de unidades del proyecto
-            $numUnidades = array_shift(
-                obtenerDatosTabla(
-                    "t_pry_unidad_proyecto",
-                    array("seqProyecto","count(seqUnidadProyecto) as cantidad"),
-                    "seqProyecto",
-                    "seqProyecto = " . $seqProyecto
-                )
-            );
+            $numUnidades = $this->cantidadUnidades($seqProyecto);
 
             // validacion de los campos de las unidades
             if($numUnidades == 0){
@@ -613,12 +615,7 @@ class GestionFinancieraProyectos
                 }
 
                 // datos de la unidad
-                $arrUnidad = obtenerDatosTabla(
-                    "t_pry_unidad_proyecto",
-                    array("seqUnidadProyecto","lower(txtNombreUnidad) as txtNombreUnidad","seqProyecto"),
-                    "seqUnidadProyecto",
-                    "seqUnidadProyecto = " . $seqUnidadProyecto
-                );
+                $arrUnidad = $this->proyectoUnidad($seqUnidadProyecto);
 
                 // la unidad debe coincidir en nombre e identificador
                 if($arrUnidad[$seqUnidadProyecto]['txtNombreUnidad'] != $txtUnidadProyecto){
@@ -632,17 +629,29 @@ class GestionFinancieraProyectos
 
             }
 
+            if($txtFormato == "giroConstructor"){
+                if(doubleval($valGiro) > $valDisponible){
+                    $this->arrErrores[] = "Error linea " . ($i + 1) . ": No puede girar un monto mayor al disponible";
+                }
+            }
+
             // validacion del monto agirar
-            if(! is_numeric($arrArchivo[$i][4])){
+            if(! is_numeric($valGiro)){
                 $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos[5] . " no es válido";
             }
 
             if(empty($this->arrErrores)){
-                if($valGiro != 0) {
+                if(doubleval($valGiro) != 0) {
+
                     $seqProyecto = $arrPost['seqProyecto'];
-                    $seqUnidadActo = $arrPost['seqUnidadActo'];
-                    $seqRegistroPresupuestal = $arrPost['seqRegistroPresupuestal'];
-                    $arrRetorno[$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal][$seqUnidadProyecto] = $valGiro;
+
+                    if($txtFormato == "giroConstructor"){
+                        $arrRetorno[$seqProyecto][$seqUnidadProyecto] = $valGiro;
+                    }else {
+                        $seqUnidadActo = $arrPost['seqUnidadActo'];
+                        $seqRegistroPresupuestal = $arrPost['seqRegistroPresupuestal'];
+                        $arrRetorno[$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal][$seqUnidadProyecto] = $valGiro;
+                    }
                 }
             }
 
@@ -651,15 +660,20 @@ class GestionFinancieraProyectos
         return $arrRetorno;
     }
 
-    private function validarTitulos($arrTitulos){
-        foreach($this->arrTitulos as $i => $txtTitulo){
-            if(mb_strtolower(trim($txtTitulo)) != mb_strtolower(trim($arrTitulos[$i]))){
-                $this->arrErrores[] = "La columna del archivo " . $txtTitulo . " no se encuentra o no está en el lugar correcto";
+    private function validarTitulos($arrTitulos, $txtFormato){
+        $arrValidar = $this->arrTitulos[$txtFormato];
+        if(! empty($arrValidar)) {
+            foreach ($arrValidar as $i => $txtTitulo) {
+                if (mb_strtolower(trim($txtTitulo)) != mb_strtolower(trim($arrTitulos[$i]))) {
+                    $this->arrErrores[] = "La columna del archivo " . $txtTitulo . " no se encuentra o no está en el lugar correcto";
+                }
             }
+        }else{
+            $this->arrErrores[] = "Formato de archivo desconocido o no esta definido ($txtFormato)";
         }
     }
 
-    public function salvarGiro($arrPost){
+    public function salvarGiroFiducia($arrPost){
         global $aptBd;
 
         /**
@@ -1063,7 +1077,7 @@ class GestionFinancieraProyectos
         return $arrDatosFormato;
     }
 
-    public function listadoGiros(){
+    public function listadoGirosFiducia(){
         global $aptBd;
         $arrListado = array();
         $sql = "
@@ -1102,6 +1116,44 @@ class GestionFinancieraProyectos
         return $arrListado;
     }
 
+    public function listadoGirosConstructor(){
+        global $aptBd;
+
+        $arrListado = array();
+        $sql = "
+            select 
+                if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) as seqProyecto,
+                if(pry1.seqProyecto is null,pry.txtNombreProyecto,pry1.txtNombreProyecto) as txtNombreProyecto,
+                gcon.seqGiroConstructor,
+                gcon.fchCreacion,
+                count(gcd.seqProyecto) numUnidades,
+                sum(gcd.valGiro) valGiro
+            from t_pry_aad_giro_constructor gcon
+            inner join t_pry_aad_giro_constructor_detalle gcd on gcon.seqGiroConstructor = gcd.seqGiroConstructor
+            inner join t_pry_proyecto pry on gcd.seqProyecto = pry.seqProyecto
+            left join t_pry_proyecto pry1 on pry.seqProyectoPadre = pry1.seqProyecto
+            group by 
+                if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto),
+                if(pry1.seqProyecto is null,pry.txtNombreProyecto,pry1.txtNombreProyecto),
+                gcon.seqGiroConstructor,
+                gcon.fchCreacion 
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqGiroConstructor = $objRes->fields['seqGiroConstructor'];
+            $arrListado[$seqGiroConstructor]['proyecto']  = $objRes->fields['txtNombreProyecto'];
+            $arrListado[$seqGiroConstructor]['unidades']  = $objRes->fields['numUnidades'];
+            $arrListado[$seqGiroConstructor]['giro']      = $objRes->fields['valGiro'];
+            $arrListado[$seqGiroConstructor]['fecha']     = new DateTime($objRes->fields['fchCreacion']);
+            $objRes->MoveNext();
+        }
+
+        return $arrListado;
+
+
+
+    }
+
     public function eliminarGiroFiducia($seqGiroFiducia){
         global $aptBd;
 
@@ -1123,7 +1175,7 @@ class GestionFinancieraProyectos
 
     }
 
-    public function verGiro($seqGiroFiducia){
+    public function verGiroFiducia($seqGiroFiducia){
         global $aptBd;
         $arrRetorno = array();
         $sql = "
@@ -1198,6 +1250,329 @@ class GestionFinancieraProyectos
 
     }
 
+    public function proyectosDisponibles(){
+        global $aptBd;
+
+        $sql = "
+            select
+                if(pry.seqProyecto is null, con.seqProyecto, pry.seqProyecto) as seqProyecto,
+                if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto) as txtNombreProyecto
+            from t_pry_aad_giro_fiducia gfi
+            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            inner join t_pry_proyecto con on gfd.seqProyecto = con.seqProyecto
+            left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
+            group by seqProyecto,txtNombreProyecto
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrProyectos = array();
+        while($objRes->fields){
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $txtNombreProyecto = $objRes->fields['txtNombreProyecto'];
+            $arrProyectos[$seqProyecto] = $txtNombreProyecto;
+            $objRes->MoveNext();
+        }
+
+        return $arrProyectos;
+    }
+
+    public function plantillaGiroConstructor($seqProyecto){
+        global $aptBd;
+
+        $sql = "
+            select
+                con.seqProyecto as 'Identificador del Proyecto',
+                con.txtNombreProyecto as 'Nombre del Proyecto',
+                upr.seqUnidadProyecto as 'Identificador de la Unidad',
+                upper(upr.txtNombreUnidad) as 'Descripcion de la Unidad',
+                sum(gfd.valGiro) as 'Disponible',
+                0 as 'Valor a Girar'
+            from t_pry_aad_giro_fiducia gfi
+            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            inner join t_pry_proyecto con on gfd.seqProyecto = con.seqProyecto
+            left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
+            left join t_pry_unidad_proyecto upr on gfd.seqUnidadProyecto = upr.seqUnidadProyecto
+            where (con.seqProyecto = $seqProyecto or pry.seqProyecto = $seqProyecto)
+            group by 
+                if(pry.seqProyecto is null, con.seqProyecto, pry.seqProyecto), 
+                if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto), 
+                upr.seqUnidadProyecto, 
+                upper(upr.txtNombreUnidad)      
+        ";
+        return $aptBd->GetAll($sql);
+
+    }
+
+    private function cantidadUnidades($seqProyecto){
+        global $aptBd;
+        $sql = "
+            select count(seqUnidadProyecto) as cantidad
+            from t_pry_unidad_proyecto
+            where seqProyecto in (
+            select seqProyecto
+            from t_pry_proyecto
+            where seqProyecto = $seqProyecto
+               or seqProyectoPadre = $seqProyecto
+            )        
+        ";
+        $objRes = $aptBd->execute($sql);
+        return $objRes->fields['cantidad'];
+    }
+
+    private function proyectoUnidad($seqUnidadProyecto){
+        global $aptBd;
+
+        $sql = "
+            select 
+                upr.seqUnidadProyecto,
+                lower(upr.txtNombreUnidad) as txtNombreUnidad,
+                pry.seqProyecto
+            from t_pry_unidad_proyecto upr
+            inner join t_pry_proyecto pry on upr.seqProyecto = pry.seqProyecto
+            where seqUnidadProyecto = $seqUnidadProyecto        
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrUnidad = array();
+        while($objRes->fields){
+            $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
+            $arrUnidad[$seqUnidadProyecto]['txtNombreUnidad'] = $objRes->fields['txtNombreUnidad'];
+            $arrUnidad[$seqUnidadProyecto]['seqProyecto'] = $objRes->fields['seqProyecto'];
+            $objRes->MoveNext();
+        }
+        return $arrUnidad;
+
+    }
+
+    public function informacionGiroConstructor($seqProyecto){
+        global $aptBd;
+
+        // giros realizados a la fiducia
+        $sql = "
+            select
+                if(pry.seqProyecto is null,con.seqProyecto,pry.seqProyecto) as seqProyecto,
+                if(pry.seqProyecto is null,con.txtNombreProyecto,pry.txtNombreProyecto) as txtNombreProyecto,
+                if(pry.seqProyecto is null,null,con.seqProyecto) as seqConjunto,
+                if(pry.seqProyecto is null,null,con.txtNombreProyecto) as txtNombreConjunto,
+                if(upr.seqUnidadProyecto is null, 0,upr.seqUnidadProyecto) as seqUnidadProyecto,
+                upper(upr.txtNombreUnidad) as txtNombreUnidad,
+                sum(gfd.valGiro) as valGiro
+            from t_pry_aad_giro_fiducia gfi
+            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            inner join t_pry_proyecto con on gfd.seqProyecto = con.seqProyecto
+            left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
+            left join t_pry_unidad_proyecto upr on gfd.seqUnidadProyecto = upr.seqUnidadProyecto
+            where (con.seqProyecto = $seqProyecto or pry.seqProyecto = $seqProyecto)
+            group by
+                if(pry.seqProyecto is null,con.seqProyecto,pry.seqProyecto),
+                if(pry.seqProyecto is null,con.txtNombreProyecto,pry.txtNombreProyecto),
+                if(pry.seqProyecto is null,null,con.seqProyecto),
+                if(pry.seqProyecto is null,null,con.txtNombreProyecto),
+                if(upr.seqUnidadProyecto is null, 0,upr.seqUnidadProyecto),
+                upper(upr.txtNombreUnidad)
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
+            $this->arrGiroConstructor['total'] += $objRes->fields['valGiro'];
+            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['total'] = $objRes->fields['valGiro'];
+            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['seqProyecto'] = $objRes->fields['seqProyecto'];
+            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreProyecto'] = $objRes->fields['txtNombreProyecto'];
+            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['seqConjunto'] = $objRes->fields['seqConjunto'];
+            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreConjunto'] = $objRes->fields['txtNombreConjunto'];
+            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreUnidad'] = $objRes->fields['txtNombreUnidad'];
+            $objRes->MoveNext();
+        }
+
+        // giros realizados a constructor
+        $sql = "
+            select
+                if(upr.seqUnidadProyecto is null, 0,upr.seqUnidadProyecto) seqUnidadProyecto,
+                upper(upr.txtNombreUnidad) as txtNombreUnidad,
+                sum(gcd.valGiro) as valGiro
+            from t_pry_aad_giro_constructor gco
+            inner join t_pry_aad_giro_constructor_detalle gcd on gco.seqGiroConstructor = gcd.seqGiroConstructor
+            inner join t_pry_proyecto con on gcd.seqProyecto = con.seqProyecto
+            left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
+            left join t_pry_unidad_proyecto upr on gcd.seqUnidadProyecto = upr.seqUnidadProyecto
+            where (con.seqProyecto = $seqProyecto or pry.seqProyecto = $seqProyecto)
+            group by
+                upr.seqUnidadProyecto,
+                upper(upr.txtNombreUnidad)          
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
+            $this->arrGiroConstructor['giro'] += $objRes->fields['valGiro'];
+            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['giro'] = $objRes->fields['valGiro'];
+            $objRes->MoveNext();
+        }
+
+        $this->arrGiroConstructor['saldo'] = $this->arrGiroConstructor['total'] - $this->arrGiroConstructor['giro'];
+        foreach($this->arrGiroConstructor['detalle'] as $seqUnidadProyecto => $arrGiro){
+            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo'] =
+                $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['total'] -
+                $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['giro'];
+        }
+
+
+
+    }
+
+    public function salvarGiroConstuctor($arrPost){
+        global $aptBd;
+
+        /**
+         * VALIDACIONES DE LOS CAMPOS
+         */
+
+        if($arrPost['seqProyecto'] == 0){
+            $this->arrErrores[] = "Seleccione el proyecto para el que desea hacer el giro";
+        }
+
+        if((! isset($arrPost['unidades'])) or empty($arrPost['unidades'])){
+            $this->arrErrores[] = "No ha seleccionado las unidades para el giro";
+        }else{
+            foreach ($arrPost['unidades'] as $seqProyecto => $arrUnidades){
+                foreach($arrUnidades as $seqUnidadProyecto => $valGiro) {
+                    if($valGiro > $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo']){
+                        $txtTexto = ($seqUnidadProyecto != 0)?
+                            "a la uidad " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreUnidad'] :
+                            "al proyecto " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreProyecto'];
+                        $this->arrErrores[] = "No tiene saldo suficiente para girar " . $txtTexto;
+                    }
+
+                }
+            }
+        }
+
+        /**
+         * SALVA EL REGISTRO
+         */
+
+        if(empty($this->arrErrores)){
+
+            try{
+                $aptBd->BeginTrans();
+
+                $sql = "
+                    insert into t_pry_aad_giro_constructor (
+                      fchCreacion, 
+                      seqUsuario, 
+                      txtComentario
+                  ) values (                      
+                      now(),
+                      " . $_SESSION['seqUsuario'] . ",
+                      '" . trim($arrPost['txtComentario']) . "'
+                  )
+                ";
+                $aptBd->execute($sql);
+
+                $seqGiroConstructor = $aptBd->Insert_ID();
+
+                foreach ($arrPost['unidades'] as $seqProyecto => $arrDato) {
+                    foreach ($arrDato as $seqUnidadProyecto => $valGiro) {
+                        if (intval($seqUnidadProyecto) != 0) {
+                            $seqProyectoInsertar = array_shift(
+                                obtenerDatosTabla(
+                                    "t_pry_unidad_proyecto",
+                                    array("seqUnidadProyecto", "seqProyecto"),
+                                    "seqUnidadProyecto",
+                                    "seqUnidadProyecto = " . $seqUnidadProyecto
+                                )
+                            );
+                        } else {
+                            $seqProyectoInsertar = $seqProyecto;
+                            $seqUnidadProyecto = "null";
+                        }
+                        $sql = "
+                            insert into t_pry_aad_giro_constructor_detalle(
+                                seqGiroConstructor, 
+                                seqProyecto, 
+                                seqUnidadProyecto, 
+                                valGiro
+                            ) values (
+                                $seqGiroConstructor,
+                                $seqProyectoInsertar,
+                                $seqUnidadProyecto,
+                                $valGiro
+                            ) 
+                        ";
+                        $aptBd->execute($sql);
+                    }
+                }
+
+                $this->arrMensajes[] = "Registro salvado satisfactoriamente";
+
+                $aptBd->CommitTrans();
+
+                return $seqGiroConstructor;
+
+            } catch ( Exception $objError ){
+                $aptBd->RollbackTrans();
+                $this->arrMensajes = array();
+                $this->arrErrores[] = $objError->getMessage();
+
+                return 0;
+            }
+
+        }
+
+
+
+
+    }
+
+    public function eliminarGiroConstructor($seqGiroConstructor){
+        global $aptBd;
+
+        try {
+            $aptBd->BeginTrans();
+
+            $sql = "delete from t_pry_aad_giro_constructor_detalle where seqGiroConstructor = $seqGiroConstructor";
+            $aptBd->execute($sql);
+
+            $sql = "delete from t_pry_aad_giro_constructor where seqGiroConstructor = $seqGiroConstructor";
+            $aptBd->execute($sql);
+
+            $this->arrMensajes[] = "Ha eliminado el giro con identificador " . $seqGiroConstructor . " de manera satisfactoria";
+            $aptBd->CommitTrans();
+        }catch(Exception $objError){
+            $aptBd->RollbackTrans();
+            $this->arrErrores[] = $objError->getMessage();
+        }
+
+    }
+
+    public function verGiroConstructor($seqGiroConstructor){
+        global $aptBd;
+        $arrRetorno = array();
+        $sql = "
+            select 
+                gcon.seqGiroConstructor,  
+                if(pry.seqProyectoPadre is null,gcd.seqProyecto,pry.seqProyectoPadre) as seqProyecto,
+                gcd.seqUnidadProyecto,
+                gcd.valGiro,
+                gcon.txtComentario
+            from t_pry_aad_giro_constructor gcon
+            inner join t_pry_aad_giro_constructor_detalle gcd on gcon.seqGiroConstructor = gcd.seqGiroConstructor
+            inner join t_pry_proyecto pry on gcd.seqProyecto = pry.seqProyecto
+            where gcon.seqGiroConstructor = $seqGiroConstructor
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
+            $arrRetorno['seqProyecto'] = $objRes->fields['seqProyecto'];
+            $arrRetorno['unidades'][$seqProyecto][$seqUnidadProyecto] = $objRes->fields['valGiro'];
+            $arrRetorno['txtComentario'] = $objRes->fields['txtComentario'];
+            $arrRetorno['fchCreacion'] = new DateTime($objRes->fields['fchCreacion']);
+            $objRes->MoveNext();
+        }
+
+        $arrRetorno['seqGiroConstructor'] = $seqGiroConstructor;
+
+        return $arrRetorno;
+
+    }
 }
 
 

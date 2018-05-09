@@ -13,7 +13,7 @@ $claGestion = new GestionFinancieraProyectos();
 
 $claGestion->eliminarGiroFiducia($_POST['seqGiroFiducia']);
 
-$arrListado = $claGestion->listadoGiros();
+$arrListado = $claGestion->listadoGirosFiducia();
 
 $claSmarty->assign("arrListado", $arrListado);
 $claSmarty->assign("claGestion", $claGestion);

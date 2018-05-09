@@ -104,7 +104,7 @@
                         <!-- plantilla de unidades a seleccionar -->
                         <div class="col-sm-2">
                             <button class="btn btn-success btn-sm" type="button"
-                                    onclick="location.href='./contenidos/pryGestionFinanciera/plantillaUnidades.php?seqProyecto={$arrPost.seqProyecto}&seqUnidadActo={$arrPost.seqUnidadActo}&seqRegistroPresupuestal={$arrPost.seqRegistroPresupuestal}'"
+                                    onclick="location.href='./contenidos/pryGestionFinanciera/plantillaGiroFiducia.php?seqProyecto={$arrPost.seqProyecto}&seqUnidadActo={$arrPost.seqUnidadActo}&seqRegistroPresupuestal={$arrPost.seqRegistroPresupuestal}'"
                                     {if $bolHabilitar == false or $bolImprimir == true} disabled="disabled" {/if}>
                                 <span class="glyphicon glyphicon-export" aria-hidden="true"></span> Plantilla
                             </button>
@@ -133,7 +133,7 @@
                         <label for="seqProyecto" class="col-sm-2 control-label">Unidades a procesar</label>
                         <div class="col-sm-2">
                             <div class="input-group input-group-sm">
-                                <label class="input-group-btn" data-toggle="modal" data-target="#modalUnidades">
+                                <label class="input-group-btn" {if $bolHabilitar == true} data-toggle="modal" data-target="#modalUnidades" {/if}>
                                     <span class="btn btn-default {if $bolHabilitar == false} disabled {/if}">
                                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                     </span>
@@ -184,7 +184,7 @@
                                                     $ {$arrTablaCDP.giros|number_format:0:',':'.'}
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="text" class="form-control input-sm"
+                                                    <input type="text" class="form-control input-sm text-right"
                                                            id="valGiro" value="{$numTotalGiro|@doubleval|number_format:0:',':'.'}"
                                                            style="width: 110px"
                                                            readonly>
@@ -463,7 +463,7 @@
         <div class="panel-footer" align="center">&nbsp;
 
             {if $bolImprimir == true}
-                <button type="button" name="volver" class="btn btn-danger" style="width: 100px;"
+                <button type="button" class="btn btn-danger" style="width: 100px;"
                         onclick="pdfGiroFiducia({$arrPost.seqProyecto},{$seqGiroFiducia});"
                 >PDF</button>
             {/if}
@@ -501,12 +501,12 @@
                 {assign var=seqProyecto value=$arrPost.seqProyecto}
                 {assign var=seqUnidadActo value=$arrPost.seqUnidadActo}
                 {assign var=seqRegistroPresupuestal value=$arrPost.seqRegistroPresupuestal}
-                <table id="listadoAadPry" class="table table-striped" style="width: 100%;">
-                    <thead style="width: 100%;">
+                <table id="listadoAadPry" class="table table-striped" width="850px">
+                    <thead>
                     <tr>
-                        <th style="width: 25%;">Proyecto</th>
-                        <th style="width: 25%;">Conjunto</th>
-                        <th style="width: 25%;">Unidad</th>
+                        <th>Proyecto</th>
+                        <th>Conjunto</th>
+                        <th>Unidad</th>
                         <th>Giro</th>
                     </tr>
                     </thead>

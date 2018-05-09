@@ -11,9 +11,12 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "Gestion
 
 $claGestion = new GestionFinancieraProyectos();
 
-$arrListado = $claGestion->listadoGirosFiducia();
+$claGestion->eliminarGiroConstructor($_POST['seqGiroConstructor']);
+
+$arrListado = $claGestion->listadoGirosConstructor();
 
 $claSmarty->assign("arrListado", $arrListado);
-$claSmarty->display( "pryGestionFinanciera/listadoGirosFiducia.tpl" );
+$claSmarty->assign("claGestion", $claGestion);
+$claSmarty->display( "pryGestionFinanciera/listadoGirosConstructor.tpl" );
 
 ?>

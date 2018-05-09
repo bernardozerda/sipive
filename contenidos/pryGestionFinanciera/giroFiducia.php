@@ -16,7 +16,7 @@ $claGestion = new GestionFinancieraProyectos();
 
 $bolImprimir = false;
 if(intval($_POST['seqGiroFiducia']) != 0){
-    $_POST = $claGestion->verGiro($_POST['seqGiroFiducia']);
+    $_POST = $claGestion->verGiroFiducia($_POST['seqGiroFiducia']);
     $bolImprimir = true;
 }
 
@@ -46,7 +46,7 @@ if($_FILES['archivo']['error'] === 0){
     $arrArchivo = $claGestion->cargarArchivo();
 
     // validacion de los titulos
-    $arrUnidades = $claGestion->validarArchivo($_POST, $arrArchivo);
+    $arrUnidades = $claGestion->validarArchivo($_POST, $arrArchivo, 'giroFiducia');
 
     // validaciones para el archivo
     if(empty($claGestion->arrErrores)){
@@ -92,9 +92,10 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
     $arrTablaCDP['saldo'] = (doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']) == 0)?
         $arrTablaCDP['valorRP'] :
         doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']);
-    //$arrTablaCDP['saldo'] = $arrTablaCDP['saldo'] - $numTotalGiro;
-
-    $arrTablaCDP['giros'] = $arrTablaCDP['giros'] - $numTotalGiro;
+    if($arrTablaCDP['giros'] != 0) {
+        $arrTablaCDP['giros'] = $arrTablaCDP['giros'] - $numTotalGiro;
+    }
+    $arrTablaCDP['saldo'] = $arrTablaCDP['saldo'] - $numTotalGiro;
 
 }
 

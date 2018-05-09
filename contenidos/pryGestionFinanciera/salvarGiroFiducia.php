@@ -11,7 +11,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "GestionFinancieraProyectos.class.php" );
 
 $claGestion = new GestionFinancieraProyectos();
-$seqGiroFiducia = $claGestion->salvarGiro($_POST);
+$seqGiroFiducia = $claGestion->salvarGiroFiducia($_POST);
 
 $seqProyecto = intval($_POST['seqProyecto']);
 $seqUnidadActo = intval($_POST['seqUnidadActo']);

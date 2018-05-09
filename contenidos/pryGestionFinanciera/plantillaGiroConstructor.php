@@ -11,49 +11,34 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "Gestion
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExcel.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 
-$seqProyecto             = $_GET['seqProyecto'];
-$seqUnidadActo           = $_GET['seqUnidadActo'];
-$seqRegistroPresupuestal = $_GET['seqRegistroPresupuestal'];
-
 $claGestion = new GestionFinancieraProyectos();
-$claGestion->informacionResoluciones($seqProyecto);
+$arrPlantilla = $claGestion->plantillaGiroConstructor($_GET['seqProyecto']);
 
-if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])) {
+if(! empty($arrPlantilla)) {
 
     // *************************** CREA ARCHIVO DE EXCEL CON LOS DATOS ************************************************** //
 
-    $numColumnas = count($claGestion->arrTitulos);
-    $numFilas = count($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades']);
+    $numColumnas = count($arrPlantilla[0]);
+    $numFilas = count($arrPlantilla);
 
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->setActiveSheetIndex(0);
-    $objPHPExcel->getProperties()->setCreator( $claGestion->txtCreador );
+    $objPHPExcel->getProperties()->setCreator($claGestion->txtCreador);
     $objHoja = $objPHPExcel->getActiveSheet();
     $objHoja->setTitle('Unidades Disponibles');
 
     // titulos
-    for ($i = 0; $i < count($claGestion->arrTitulos); $i++) {
-        $objHoja->setCellValueByColumnAndRow($i, 1, $claGestion->arrTitulos[$i], false);
+    $arrTitulos = array_keys($arrPlantilla[0]);
+    for ($i = 0; $i < count($arrTitulos); $i++) {
+        $objHoja->setCellValueByColumnAndRow($i, 1, $arrTitulos[$i], false);
     }
 
     // contenido
-    $numFila = 2;
-    foreach($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'] as $seqUnidadProyecto => $arrUnidad){
-
-        $numColumna = 0;
-        if($arrUnidad['activo'] == 1) {
-            $seqProyecto = ($arrUnidad['conjunto'] == "") ? $arrUnidad['seqProyecto'] : $arrUnidad['seqConjunto'];
-            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $seqProyecto, false);
-
-            $txtNombreProyecto = ($arrUnidad['conjunto'] == "") ? $arrUnidad['proyecto'] : $arrUnidad['conjunto'];
-            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $txtNombreProyecto, false);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $seqUnidadProyecto, false);
-            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['unidad'], false);
-
-            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, 0, false);
-
-            $numFila++;
+    for($i = 0; $i < count($arrPlantilla); $i++){
+        $j = 0;
+        foreach($arrPlantilla[$i] as $txtValor){
+            $objHoja->setCellValueByColumnAndRow($j,($i+2), $txtValor, false);
+            $j++;
         }
     }
 
@@ -85,7 +70,7 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
     // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
 
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename='UnidadesGiroProyectos_" . date("YmdHis") . ".xlsx");
+    header("Content-Disposition: attachment;filename='UnidadesGiroConstructor_" . date("YmdHis") . ".xlsx");
     header('Cache-Control: max-age=0');
     ob_end_clean();
 

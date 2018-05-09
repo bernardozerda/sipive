@@ -46,6 +46,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.settings
+
+# custom ignores
 librerias/smarty/templates_c
 recursos/descargas
 recursos/archivos/lecturaConfiguracion.php
@@ -53,4 +55,3 @@ recursos/imagenes/desembolsos
 *.xml
 *.iml
 *.idea*
-*.tpl

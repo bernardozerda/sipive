@@ -1136,7 +1136,7 @@ class GestionFinancieraProyectos
                 if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto),
                 if(pry1.seqProyecto is null,pry.txtNombreProyecto,pry1.txtNombreProyecto),
                 gcon.seqGiroConstructor,
-                gcon.fchCreacion 
+                gcon.fchCreacion
         ";
         $objRes = $aptBd->execute($sql);
         while($objRes->fields){
@@ -1262,6 +1262,7 @@ class GestionFinancieraProyectos
             inner join t_pry_proyecto con on gfd.seqProyecto = con.seqProyecto
             left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
             group by seqProyecto,txtNombreProyecto
+            order by txtNombreProyecto
         ";
         $objRes = $aptBd->execute($sql);
         $arrProyectos = array();

@@ -14,8 +14,6 @@ include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 $claGestion = new GestionFinancieraProyectos();
 $arrPlantilla = $claGestion->plantillaGiroConstructor($_GET['seqProyecto']);
 
-pr($arrPlantilla);
-
 if(! empty($arrPlantilla)) {
 
     // *************************** CREA ARCHIVO DE EXCEL CON LOS DATOS ************************************************** //

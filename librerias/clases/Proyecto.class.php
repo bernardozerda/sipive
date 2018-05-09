@@ -250,43 +250,6 @@ class Proyecto {
     }
 
 // Fin guardar Proyecto
-
-    /**
-     * MODIFICA LA INFORMACION DE LA Proyecto
-     * SELECCIONADA Y GUARDA LOS NUEVOS DATOS
-     * @author Bernardo Zerda
-     * @param integer seqProyecto
-     * @param String txtNombre
-     * @param Date fchVencimiento
-     * @param Boolean bolActivo
-     * @return Array arrErrores
-     * @version 0,1 Marzo 2009
-     */
-    /* public function editarProyecto($seqProyecto, $txtNombre, $fchVencimiento, $bolActivo, $seqMenu) {
-
-      global $aptBd;
-      $arrErrores = array();
-
-      // Consulta para hacer la actualizacion
-      $sql = "
-      UPDATE T_COR_PROYECTO SET
-      txtProyecto = \"" . ereg_replace('\"', "", $txtNombre) . "\",
-      bolActivo = $bolActivo,
-      fchVencimiento = '$fchVencimiento',
-      seqMenu = $seqMenu
-      WHERE seqProyecto = $seqProyecto
-      ";
-
-      try {
-      $aptBd->execute($sql);
-      } catch (Exception $objError) {
-      $arrProyecto = $this->cargarProyecto($seqProyecto);
-      $arrErrores[] = "No se ha podido editar la Proyecto <b>" . $arrProyecto[$seqProyecto]->txtProyecto . "</b> reporte este error al administrador del sistema";
-      }
-
-      return $arrErrores;
-      } */
-
 // Fin editar Proyecto
 
     /**
@@ -370,43 +333,7 @@ class Proyecto {
 
         global $aptBd;
 
-        /*   $sql = "SELECT pry.seqProyecto,(SELECT CONCAT(numActo, ' - ', DATE_FORMAT(fchActo,'%d %b %y'))
-          FROM T_PRY_AAD_UNIDAD_ACTO
-          LEFT JOIN T_PRY_AAD_UNIDADES_VINCULADAS ON ( T_PRY_AAD_UNIDAD_ACTO.seqUnidadActo = T_PRY_AAD_UNIDADES_VINCULADAS.seqUnidadActo )
-          LEFT JOIN T_PRY_UNIDAD_PROYECTO uni ON ( T_PRY_AAD_UNIDADES_VINCULADAS.seqUnidadProyecto = uni.seqUnidadProyecto )
-          WHERE seqTipoActoUnidad =1 and uni.seqProyecto=" . $seqProyecto . "
-          GROUP BY  numActo) AS elegibilidad,
-          (SELECT CONCAT(numActo, ' - ', DATE_FORMAT(fchActo,'%d %b %y') ) AS elegibilidad
-          FROM T_PRY_AAD_UNIDAD_ACTO
-          LEFT JOIN T_PRY_AAD_UNIDADES_VINCULADAS ON ( T_PRY_AAD_UNIDAD_ACTO.seqUnidadActo = T_PRY_AAD_UNIDADES_VINCULADAS.seqUnidadActo )
-          LEFT JOIN T_PRY_UNIDAD_PROYECTO uni ON ( T_PRY_AAD_UNIDADES_VINCULADAS.seqUnidadProyecto = uni.seqUnidadProyecto )
-          WHERE  seqTipoActoUnidad = 2 and uni.seqProyecto=" . $seqProyecto . "
-          GROUP BY seqTipoActoUnidad) AS resolucion,   txtNombreProyecto, txtBarrio, TxtNombrePlanParcial, txtDireccion, txtLocalidad,  seqProyectoPadre,
-          CASE seqProyectoPadre='' WHEN seqProyectoPadre='' THEN (SELECT txtNombreInterventor FROM T_PRY_PROYECTO WHERE seqProyecto = pry.seqProyectoPadre)
-          ELSE txtNombreInterventor END AS interventor, txtNombreConstructor,
-          CASE seqProyectoPadre='' WHEN seqProyectoPadre='' THEN (SELECT valTotalCostos FROM T_PRY_PROYECTO WHERE seqProyecto = pry.seqProyectoPadre)
-          ELSE valTotalCostos END AS Costos,
-          valNumeroSoluciones AS soluciones,
-          CASE seqProyectoPadre='' WHEN seqProyectoPadre='' THEN (SELECT valSDVE FROM T_PRY_PROYECTO WHERE seqProyecto = pry.seqProyectoPadre)
-          ELSE valSDVE END AS valSDVE,
-          CASE seqProyectoPadre='' WHEN seqProyectoPadre='' THEN (SELECT txtTipoModalidadDesembolso FROM t_pry_tipo_modalidad_desembolso LEFT JOIN T_PRY_PROYECTO pry1
-          USING(seqTipoModalidadDesembolso) WHERE pry1.seqProyecto = pry.seqProyectoPadre)
-          ELSE (SELECT txtTipoModalidadDesembolso FROM t_pry_tipo_modalidad_desembolso LEFT JOIN T_PRY_PROYECTO pry1
-          USING(seqTipoModalidadDesembolso) WHERE pry1.seqProyecto = pry.seqProyecto)  END AS ModalidadDesembolso, txtNombreVendedor AS fiduciaria, valTorres,
-          (SELECT GROUP_CONCAT(txtNombreTipoVivienda, ' - ', numArea  ) FROM t_pry_tipo_vivienda WHERE seqProyecto = " . $seqProyecto . " OR seqProyecto = pry.seqProyectoPadre) AS area,
-          (SELECT COUNT(pru.seqProyecto) as cant
-          FROM t_pry_unidad_proyecto pru
-          LEFT JOIN T_FRM_FORMULARIO USING(seqFormulario)
-          LEFT JOIN t_frm_estado_proceso USING(seqEstadoProceso)
-          WHERE seqFormulario != '' and seqFormulario > 0 and seqEtapa >=4 AND pru.seqProyecto = " . $seqProyecto . ") AS cuposvinculados, txtTipoEsquema
-          FROM T_PRY_PROYECTO pry
-          LEFT JOIN T_FRM_BARRIO br ON(pry.seqBarrio = br.seqBarrio)
-          LEFT JOIN T_FRM_LOCALIDAD lc ON(pry.seqLocalidad = lc.seqLocalidad)
-          LEFT JOIN T_PRY_CONSTRUCTOR con ON(pry.seqConstructor =con.seqConstructor)
-          LEFT JOIN T_PRY_TIPO_ESQUEMA esq ON(pry.seqTipoEsquema =esq.seqTipoEsquema )
-          WHERE pry.seqProyecto = " . $seqProyecto; */
         $sql = "SELECT * FROM T_PRY_PROYECTO pry "
-                // . "INNER JOIN t_pry_entidad_oferente USING(seqOferente)"
                 . "WHERE pry.seqProyecto = " . $seqProyecto;
         $objRes = $aptBd->getAssoc($sql);
 
@@ -593,7 +520,6 @@ class Proyecto {
             //echo "<br>" . $sql;
 
             $aptBd->execute($sql);
-
             $seqProyecto = $aptBd->Insert_ID();
 
             $band = false;
@@ -631,7 +557,10 @@ class Proyecto {
     public function obtenerDatosProyectos($seqProyecto) {
 
         global $aptBd;
-        $sql = "SELECT pry.*, pol.*, pry.seqProyecto as seqProyecto FROM  t_pry_proyecto pry left join t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto)  ";
+        $sql = "SELECT pry.*, pol.*, fid.*, pry.seqProyecto as seqProyecto "
+                . "FROM  t_pry_proyecto pry "
+                . "LEFT JOIN t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto) "
+                . "LEFT JOIN t_pry_datos_fiducia fid on(pry.seqProyecto = fid.seqProyecto)";
         if ($seqProyecto > 0) {
             $sql .= " where  pry.seqProyecto = " . $seqProyecto;
         }
@@ -1482,7 +1411,6 @@ class Proyecto {
         try {
             $aptBd->execute($sql);
             for ($ind = 0; $ind < count($arrayAmparos[$seqProyecto]['seqTipoAmparo']); $ind++) {
-
                 foreach ($arrayAmparos[$seqProyecto] as $key => $value) {
 
                     $$key = $value[$ind];
@@ -1554,9 +1482,16 @@ class Proyecto {
                 }
                 //  print_r($resultado);
                 $delete = substr_replace($delete, '', -1, 1);
-                $sqlDelete = "DELETE FROM t_pry_amparo WHERE seqAmparo in (" . $delete . ")";
+                $sqlDelete = "DELETE FROM t_pry_amparo WHERE seqAmparoPadre in (" . $delete . ")";
+                $sqlDeletePadre = "DELETE FROM t_pry_amparo WHERE seqAmparo in (" . $delete . ")";
                 try {
                     $aptBd->execute($sqlDelete);
+                    try {
+                        $aptBd->execute($sqlDeletePadre);
+                    } catch (Exception $objError) {
+                        $arrErrores[] = "No se ha podido eliminar el Amparo<b></b>";
+                        pr($objError->getMessage());
+                    }
                 } catch (Exception $objError) {
                     $arrErrores[] = "No se ha podido eliminar el Amparo<b></b>";
                     pr($objError->getMessage());
@@ -1565,6 +1500,180 @@ class Proyecto {
         } catch (Exception $objError) {
             $arrErrores[] = "No se ha podido modificar la poliza<b></b>";
             pr($objError->getMessage());
+        }
+    }
+
+    function almacenarFiducia($seqProyecto, $arrayFiducia) {
+
+        global $aptBd;
+        $arrErrores = array();
+        foreach ($arrayFiducia as $key => $value) {
+            $value == "" ? $$key = '0' : $$key = $value;
+            //echo "key = " . $key . " value -> " . $value;
+        }
+
+        $sql = "INSERT INTO t_pry_datos_fiducia
+                (
+                    seqTipoContrato,
+                    numContratoFiducia,
+                    fchContratoFiducia,
+                    numCuentaFiducia,
+                    seqTipoCuentaFiducia,
+                    txtContactoFiducia,
+                    numTelContactoFiducia,
+                    seqEntidadFiducia,
+                    txtEntidadFiducia,
+                    numIdEntidad,
+                    seqCiudad,
+                    valContratoFiducia,
+                    fchVigenciaContratoFiducia,
+                    seqTipoRecursoFiducia,
+                    txtRazonSocialFiducia,
+                    numNitFiducia,
+                    seqBanco,
+                    seqBanco1,
+                    seqProyecto)
+                VALUES (
+                    $seqTipoContrato,
+                    $numContratoFiducia,
+                    '$fchContratoFiducia',
+                    $numCuentaFiducia,
+                    $seqTipoCuentaFiducia,
+                    '$txtContactoFiducia',
+                    $numTelContactoFiducia,
+                    $seqEntidadFiducia,
+                    '$txtEntidadFiducia',
+                    $numIdEntidad,
+                    $seqCiudad,
+                    $valContratoFiducia,
+                    '$fchVigenciaContratoFiducia',
+                    $seqTipoRecursoFiducia,
+                    '$txtRazonSocialFiducia',
+                    $numNitFiducia,
+                    $seqBanco,
+                    $seqBanco1,
+                    $seqProyecto);";
+        try {
+            $aptBd->execute($sql);
+            $seqDatoFiducia = $aptBd->Insert_ID();
+            if (count($arrayFiducia['seqTipoFideicomitente']) > 0) {
+                $insertSql = "INSERT INTO t_pry_fideicomitente (
+                    txtNombreFideicomitente, seqTipoFideicomitente, seqDatoFiducia) VALUES";
+                foreach ($arrayFiducia['seqTipoFideicomitente'] as $keyFid => $valueFid) {
+                    $insertSql .= "('" . $arrayFiducia['txtNombreFideicomitente'][$keyFid] . "', $valueFid, $seqDatoFiducia),";
+                }
+                try {
+                    $insertSql = substr_replace($insertSql, ';', -1, 1);
+                    $aptBd->execute($insertSql);
+                } catch (Exception $objError) {
+                    $arrErrores[] = "<b>No se ha podido almacenar el fideicomitente </b>";
+                    pr($objError->getMessage());
+                }
+            }
+        } catch (Exception $objError) {
+            $arrErrores[] = "No se ha podido insertar la fiducia<b></b>";
+            pr($objError->getMessage());
+        }
+    }
+
+    function modificarFiducia($seqProyecto, $arrayFiducia) {
+
+        global $aptBd;
+        $arrErrores = array();
+        foreach ($arrayFiducia as $key => $value) {
+            $value == "" ? $$key = '0' : $$key = $value;
+        }
+
+        $sql = "UPDATE t_pry_datos_fiducia
+                SET               
+                seqTipoContrato = $seqTipoContrato,
+                numContratoFiducia = $numContratoFiducia,
+                fchContratoFiducia = '$fchContratoFiducia',
+                numCuentaFiducia = $numCuentaFiducia,
+                seqTipoCuentaFiducia = $seqTipoCuentaFiducia,
+                txtContactoFiducia = '$txtContactoFiducia',
+                numTelContactoFiducia = $numTelContactoFiducia,
+                seqEntidadFiducia = $seqEntidadFiducia,
+                txtEntidadFiducia = '$txtEntidadFiducia',
+                numIdEntidad = $numIdEntidad,
+                seqCiudad = $seqCiudad,
+                valContratoFiducia = $valContratoFiducia,
+                fchVigenciaContratoFiducia = '$fchVigenciaContratoFiducia',
+                seqTipoRecursoFiducia = $seqTipoRecursoFiducia,
+                txtRazonSocialFiducia = '$txtRazonSocialFiducia',
+                numNitFiducia = $numNitFiducia,
+                seqBanco = $seqBanco,
+                seqBanco1 = $seqBanco1                
+                WHERE seqProyecto = $seqProyecto";
+        try {
+            $aptBd->execute($sql);
+            $this->modificarFideicomitente($seqDatoFiducia, $arrayFiducia);
+        } catch (Exception $objError) {
+            $arrErrores[] = "No se ha podido insertar la fiducia<b></b>";
+            pr($objError->getMessage());
+        }
+    }
+
+    function modificarFideicomitente($seqDatoFiducia, $arrayFiducia) {
+        global $aptBd;
+        $arrErrores = array();
+        $sqlExistentes = "  SELECT seqFideicomitente FROM t_pry_fideicomitente WHERE seqDatoFiducia = $seqDatoFiducia";
+        $exeExistentes = $aptBd->execute($sqlExistentes);
+        $datos = Array();
+        $datosDiff = Array();
+        while ($exeExistentes->fields) {
+            $datos[] = $exeExistentes->fields['seqFideicomitente'];
+            $exeExistentes->MoveNext();
+        }
+        //var_dump($arrayFiducia);
+        if (count($arrayFiducia['seqTipoFideicomitente']) > 0) {
+            foreach ($arrayFiducia['seqTipoFideicomitente'] as $keyFid => $valueFid) {
+                $seqFideicomitente = $arrayFiducia['seqFideicomitente'][$keyFid];
+                $txtNombreFideicomitente = $arrayFiducia['txtNombreFideicomitente'][$keyFid];
+                $datosDiff[] = $seqFideicomitente;
+                // var_dump($datos);
+                // die();
+                if (in_array($seqFideicomitente, $datos)) {
+                    $updFideicomitente = "UPDATE t_pry_fideicomitente
+                                        SET                                               
+                                        txtNombreFideicomitente ='$txtNombreFideicomitente',
+                                        seqTipoFideicomitente = " . $arrayFiducia['seqTipoFideicomitente'][$keyFid] . "                                                
+                                        WHERE seqFideicomitente = $seqFideicomitente and seqDatoFiducia = $seqDatoFiducia;";
+
+                    try {
+                        // echo "<p>" . $update . "</p>";
+                        $aptBd->execute($updFideicomitente);
+                    } catch (Exception $objError) {
+                        $arrErrores[] = "No se ha podido modificar el fideicomitente<b></b>";
+                        pr($objError->getMessage());
+                    }
+                } else if (count($arrayFiducia['seqTipoFideicomitente']) >= $exeExistentes->numRows() && $seqFideicomitente == "") {
+                    $insertSql = "INSERT INTO t_pry_fideicomitente (
+                    txtNombreFideicomitente, seqTipoFideicomitente, seqDatoFiducia) VALUES('" . $arrayFiducia['txtNombreFideicomitente'][$keyFid] . "', $valueFid, $seqDatoFiducia);";
+                    try {
+                        //  $insertSql = substr_replace($insertSql, ';', -1, 1);
+                        $aptBd->execute($insertSql);
+                    } catch (Exception $objError) {
+                        $arrErrores[] = "<b>No se ha podido almacenar el fideicomitente </b>";
+                        pr($objError->getMessage());
+                    }
+                }
+            }
+            if (count($arrayFiducia['seqTipoFideicomitente']) < $exeExistentes->numRows()) {
+                $resultado = array_diff($datos, $datosDiff);
+                $delete = "";
+                foreach ($resultado as $value) {
+                    $delete .= $value . ",";
+                }
+                $delete = substr_replace($delete, '', -1, 1);
+                $sqlDelete = "DELETE FROM t_pry_fideicomitente WHERE seqFideicomitente in (" . $delete . ")";
+                try {
+                    $aptBd->execute($sqlDelete);
+                } catch (Exception $objError) {
+                    $arrErrores[] = "No se ha podido eliminar el Amparo<b></b>";
+                    pr($objError->getMessage());
+                }
+            }
         }
     }
 

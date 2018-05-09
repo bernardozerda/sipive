@@ -61,7 +61,9 @@ if (empty($arrErrores)) {
     $arrProyectoGrupo = $claDatosProy->obtenerDatosProyectosGrupo(0);
     $arrAseguradoras = obtenerDatosTabla("t_pry_aseguradoras", array("seqAseguradora", "txtNombreAseguradora"), "seqAseguradora", "", "seqAseguradora DESC, txtNombreAseguradora");
     $arrAmparos = obtenerDatosTabla("t_pry_tipo_amparo", array("seqTipoAmparo", "txtTipoAmparo"), "seqTipoAmparo", "", "seqTipoAmparo DESC, txtTipoAmparo");
-    // Verifica si es para crear o editar la Oferente
+    $arrayBanco = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "seqBanco", "", "seqBanco DESC, txtBanco");
+    $arrayCity = obtenerDatosTabla("t_cor_ciudad", array("seqCiudad", "txtNombreCiudad"), "seqCiudad", "", "seqCiudad DESC, txtNombreCiudad");
+// Verifica si es para crear o editar la Oferente
     $seqProyecto = 0;
     $seqProyecto = $_POST['seqProyecto'];
 
@@ -111,7 +113,7 @@ if (empty($arrErrores)) {
     }
     $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
 
-    print_r($arrProyecto);
+   
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($seqProyecto);
     $cantConjuntos = $claDatosProy->obtenerCantConjuntos($seqProyecto);
     $cantDoc = $claDatosProy->obtenerDocumentoProyecto($seqProyecto);
@@ -121,58 +123,8 @@ if (empty($arrErrores)) {
     //echo "<br>conjuntos ->".$cantConjuntos;
     $cantTipoVivienda = $claDatosProy->obtenerCantTipoVivienda($seqProyecto);
 
-    $arrayconjuntos[$seqProyecto]['seqProyectoHijo'] = $_POST["seqProyectoHijo"];
-    $arrayconjuntos[$seqProyecto]['txtNombreProyectoHijo'] = $_POST["txtNombreProyectoHijo"];
-    $arrayconjuntos[$seqProyecto]['txtNombreComercialHijo'] = $_POST["txtNombreComercialHijo"];
-    $arrayconjuntos[$seqProyecto]['txtDireccionHijo'] = $_POST["txtDireccionHijo"];
-    $arrayconjuntos[$seqProyecto]['valNumeroSolucionesHijo'] = $_POST["valNumeroSolucionesHijo"];
-    $arrayconjuntos[$seqProyecto]['txtChipLoteHijo'] = $_POST["txtChipLoteHijo"];
-    $arrayconjuntos[$seqProyecto]['txtMatriculaInmobiliariaLoteHijo'] = $_POST["txtMatriculaInmobiliariaLoteHijo"];
-    $arrayconjuntos[$seqProyecto]['txtLicenciaUrbanismoHijo'] = $_POST["txtLicenciaUrbanismoHijo"];
-    $arrayconjuntos[$seqProyecto]['fchLicenciaUrbanismo1Hijo'] = $_POST["fchLicenciaUrbanismo1Hijo"];
-    $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaUrbanismoHijo'] = $_POST["fchVigenciaLicenciaUrbanismoHijo"];
-    $arrayconjuntos[$seqProyecto]['txtExpideLicenciaUrbanismoHijo'] = $_POST["txtExpideLicenciaUrbanismoHijo"];
-    $arrayconjuntos[$seqProyecto]['txtLicenciaConstruccionHijo'] = $_POST["txtLicenciaConstruccionHijo"];
-    $arrayconjuntos[$seqProyecto]['fchLicenciaConstruccion1Hijo'] = $_POST["fchLicenciaConstruccion1Hijo"];
-    $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaConstruccionHijo'] = $_POST["fchVigenciaLicenciaConstruccionHijo"];
-    $arrayconjuntos[$seqProyecto]['txtNombreVendedorHijo'] = $_POST["txtNombreVendedorHijo"];
-    $arrayconjuntos[$seqProyecto]['numNitVendedorHijo'] = $_POST["numNitVendedorHijo"];
-    $arrayconjuntos[$seqProyecto]['txtCedulaCatastralHijo'] = $_POST["txtCedulaCatastralHijo"];
-    $arrayconjuntos[$seqProyecto]['txtEscrituraHijo'] = $_POST["txtEscrituraHijo"];
-    $arrayconjuntos[$seqProyecto]['fchEscrituraHijo'] = $_POST["fchEscrituraHijo"];
-    $arrayconjuntos[$seqProyecto]['numNotariaHijo'] = $_POST["numNotariaHijo"];
-
-    $arrayTipoViviendas[$seqProyecto]['seqTipoVivienda'] = $_POST["seqTipoVivienda"];
-    $arrayTipoViviendas[$seqProyecto]['txtNombreTipoVivienda'] = $_POST["txtNombreTipoVivienda"];
-    $arrayTipoViviendas[$seqProyecto]['numCantidad'] = $_POST["numCantidad"];
-    $arrayTipoViviendas[$seqProyecto]['numCantUdsDisc'] = $_POST["numCantUdsDisc"];
-    $arrayTipoViviendas[$seqProyecto]['numTotalParq'] = $_POST["numTotalParq"];
-    $arrayTipoViviendas[$seqProyecto]['numCantParqDisc'] = $_POST["numCantParqDisc"];
-    $arrayTipoViviendas[$seqProyecto]['numArea'] = $_POST["numArea"];
-    $arrayTipoViviendas[$seqProyecto]['numAnoVenta'] = $_POST["numAnoVenta"];
-    $arrayTipoViviendas[$seqProyecto]['valPrecioVenta'] = $_POST["valPrecioVenta"];
-    $arrayTipoViviendas[$seqProyecto]['valCierre'] = $_POST["valCierre"];
-    $arrayTipoViviendas[$seqProyecto]['txtDescripcion'] = $_POST["txtDescripcion"];
-
-    $arraycronograma[$seqProyecto]['seqCronogramaFecha'] = $_POST['seqCronogramaFecha'];
-    $arraycronograma[$seqProyecto]['numActaDescriptiva'] = $_POST['numActaDescriptiva'];
-    $arraycronograma[$seqProyecto]['numAnoActaDescriptiva'] = $_POST['numAnoActaDescriptiva'];
-    $arraycronograma[$seqProyecto]['fchInicialProyecto'] = $_POST['fchInicialProyecto'];
-    $arraycronograma[$seqProyecto]['fchFinalProyecto'] = $_POST['fchFinalProyecto'];
-    $arraycronograma[$seqProyecto]['valPlazoEjecucion'] = $_POST['valPlazoEjecucion'];
-    $arraycronograma[$seqProyecto]['fchInicialEntrega'] = $_POST['fchInicialEntrega'];
-    $arraycronograma[$seqProyecto]['fchFinalEntrega'] = $_POST['fchFinalEntrega'];
-    $arraycronograma[$seqProyecto]['fchInicialEscrituracion'] = $_POST['fchInicialEscrituracion'];
-    $arraycronograma[$seqProyecto]['fchFinalEscrituracion'] = $_POST['fchFinalEscrituracion'];
-
-    $arrayAmparos[$seqProyecto]['seqAmparo'] = $_POST['seqAmparo'];
-    $arrayAmparos[$seqProyecto]['seqAmparoPadre'] = $_POST['seqAmparoPadre'];
-    $arrayAmparos[$seqProyecto]['seqTipoAmparo'] = $_POST['seqTipoAmparo'];
-    $arrayAmparos[$seqProyecto]['fchVigenciaIni'] = $_POST['fchVigenciaIni'];
-    $arrayAmparos[$seqProyecto]['fchVigenciaFin'] = $_POST['fchVigenciaFin'];
-    $arrayAmparos[$seqProyecto]['valAsegurado'] = $_POST['valAsegurado'];
-    $arrayAmparos[$seqProyecto]['seqUsuario'] = $_POST['seqUsuario'];
-    $arrayAmparos[$seqProyecto]['bolAprobo'] = $_POST['bolAprobo'];
+    include_once './conjuntoArreglos.php';
+    
 
     if (count($arrayLicencias) == 0) {
         $arrayLicencias[0] = 0;
@@ -212,6 +164,12 @@ if (empty($arrErrores)) {
     } else if (isset($_POST["numPoliza"])) {
         $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
     }
+    
+    if(isset($_POST["numContratoFiducia"]) && $_POST["seqDatoFiducia"] == ""){
+        $claProyecto->almacenarFiducia($seqProyecto, $arrayFiducia);
+    }else if($_POST["seqDatoFiducia"] != "" && $_POST["seqDatoFiducia"] > 0){
+        $claProyecto->modificarFiducia($seqProyecto, $arrayFiducia);
+    }
 }/**
  * Impresion de resultados
  */
@@ -223,13 +181,14 @@ if (empty($arrErrores)) {
     $arrTipoVivienda = $claDatosProy->obtenerTipoVivienda($seqProyecto);
     $arrCronogramaFecha = $claDatosProy->obteneCronograma($seqProyecto);
     $arraDatosPoliza = $claDatosProy->obtenerDatosPoliza($seqProyecto);
+    $arrayFideicomitente = $claDatosProy->obtenerDatosFideicomiso($seqProyecto);
     $arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno DESC, txtPlanGobierno");
     //pr ($arrErrores);
     $arrMensajes[] = "El Proyecto <b>" . $_POST['txtNombreProyecto'] . "</b> se ha guardado";
     imprimirMensajes(array(), $arrMensajes, "salvarOferente");
     $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
     $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
-    $claSmarty->assign("arrProyectos", $arrProyecto);    
+    $claSmarty->assign("arrProyectos", $arrProyecto);
     $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);
     $claSmarty->assign("numSubsidios", 26);
     $claSmarty->assign("arrTipoEsquema", $arrTipoEsquema);
@@ -260,7 +219,10 @@ if (empty($arrErrores)) {
     $claSmarty->assign("arrProyectoGrupo", $arrProyectoGrupo);
     $claSmarty->assign("arrAseguradoras", $arrAseguradoras);
     $claSmarty->assign("arrAmparos", $arrAmparos);
+    $claSmarty->assign("arrayBanco", $arrayBanco);
     $claSmarty->assign("arraDatosPoliza", $arraDatosPoliza);
+    $claSmarty->assign("arrayFideicomitente", $arrayFideicomitente);
+    $claSmarty->assign("arrayCity", $arrayCity);
     $claSmarty->assign("page", "datosProyecto.php?tipo=2");
     $claSmarty->display($txtPlantilla);
 } else {

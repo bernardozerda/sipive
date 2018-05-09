@@ -24,6 +24,8 @@ $arrTipoVivienda = Array();
 $arrConjuntoResidencial = Array();
 $arraDatosPoliza = Array();
 $arrCronogramaFecha = Array();
+$arrayFideicomitente = Array();
+
 $claDatosProy = new DatosGeneralesProyectos();
 $claProyecto = new Proyecto();
 $txtPlantilla = "proyectos/vistas/listaProyectos.tpl";
@@ -37,6 +39,8 @@ $arrPryTipoModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad"
 $arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno DESC, txtPlanGobierno");
 $arrAseguradoras = obtenerDatosTabla("t_pry_aseguradoras", array("seqAseguradora", "txtNombreAseguradora"), "seqAseguradora", "", "seqAseguradora DESC, txtNombreAseguradora");
 $arrAmparos = obtenerDatosTabla("t_pry_tipo_amparo", array("seqTipoAmparo", "txtTipoAmparo"), "seqTipoAmparo", "", "seqTipoAmparo DESC, txtTipoAmparo");
+$arrayBanco = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "seqBanco", "", "seqBanco DESC, txtBanco");
+$arrayCity = obtenerDatosTabla("t_cor_ciudad", array("seqCiudad", "txtNombreCiudad"), "seqCiudad", "", "seqCiudad DESC, txtNombreCiudad");
 //var_dump($arrPryTipoModalidad);
 
 if (isset($_REQUEST['seqProyecto'])) {
@@ -52,8 +56,11 @@ if (isset($_REQUEST['seqProyecto'])) {
     $arrConjuntoResidencial = $claDatosProy->obtenerConjuntoResidencial($idProyecto);
     $arrCronogramaFecha = $claDatosProy->obteneCronograma($idProyecto);
     $arraDatosPoliza = $claDatosProy->obtenerDatosPoliza($idProyecto);
-
+    $arrayFideicomitente = $claDatosProy->obtenerDatosFideicomiso($idProyecto);
+    
     $arraDatosPoliza = (count($arraDatosPoliza) > 0) ? $arraDatosPoliza : $arraDatosPoliza[0] = 0;
+    //var_dump($arrayFideicomitente);
+    $arrayFideicomitente = (count($arrayFideicomitente) > 0) ? $arrayFideicomitente : $arrayFideicomitente[0] = 0;
     if ($_REQUEST['tipo'] == '3') {
         $txtPlantilla = "proyectos/vistas/verProyecto.tpl";
     }
@@ -91,6 +98,7 @@ $arrBarrio = $claDatosProy->obtenerListaBarrios();
 $cantDoc = $claDatosProy->obtenerDocumentoProyecto($idProyecto);
 $arrayDocumentos = $claProyecto->obtenerListaDocumentos($idProyecto, $cantDoc);
 $arrayLicencias = $claProyecto->obtenerListaLicencias($idProyecto);
+
 if (count($arrayLicencias) == 0) {
     $arrayLicencias[0] = 0;
 }
@@ -129,14 +137,18 @@ $claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
 $claSmarty->assign("arrCronogramaFecha", $arrCronogramaFecha);
 $claSmarty->assign("arrProyectoGrupo", $arrProyectoGrupo);
 $claSmarty->assign("arraDatosPoliza", $arraDatosPoliza);
+$claSmarty->assign("arrayFideicomitente", $arrayFideicomitente);
 $claSmarty->assign("arrAseguradoras", $arrAseguradoras);
 $claSmarty->assign("arrAmparos", $arrAmparos);
+$claSmarty->assign("arrayBanco", $arrayBanco);
+$claSmarty->assign("arrayCity", $arrayCity);
 $claSmarty->assign("id", $id);
 $claSmarty->assign("NombreUsuario", $_SESSION['txtNombre'] . "" . $_SESSION['txtApellido']);
 $claSmarty->assign("seqUsuario", $_SESSION['seqUsuario']);
 $claSmarty->assign("page", "datosProyecto.php?tipo=2");
+//$claSmarty->assign("arrCronogramaProyecto", $arrCronogramaProyecto);
+//$claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
 
-//echo "prueba";
 
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);

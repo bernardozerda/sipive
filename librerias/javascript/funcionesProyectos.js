@@ -262,6 +262,7 @@ YAHOO.util.Event.onContentReady(
 
 function selectUsuario(valor, user) {
     var id = valor.split("bolAprobo");
+    console.log("paso" + id[1]);
     if ($("#" + valor).is(':checked')) {
         // console.log("paso");
         $("input[id=seqUsuario" + id[1] + "]:hidden").val(user);
@@ -269,4 +270,52 @@ function selectUsuario(valor, user) {
         $("input[id=seqUsuario" + id[1] + "]:hidden").val('0');
 
     }
+}
+
+function ocultarDivEnt(valor, div) {
+    var id = div.split("Div");
+    if (valor == 1) {
+        $("#" + div).hide();
+
+
+    } else {
+        $("#" + id[0]).val("");
+        $("#" + div).show();
+    }
+}
+
+function addFideicomitente() {
+
+    var intId = $("#fideicomiso select").length + 1;
+    var fieldWrapper = $("<div class=\"form-group\" id=\"fidehijo" + intId + "\" />");
+    var fType = "<div class=\"col-md-4\">";
+    fType += "<label class=\"control-label\" >Tipo </label>";
+    fType += "<select name=\"seqTipoFideicomitente[]\" id=\"seqTipoFideicomitente" + intId + "\" class=\"form-control\" style=\"width: 78%\">";
+    fType += "<option value=\"\">Ninguna</option>";
+    fType += "<option value=\"1\">Fideicomitente</option>";
+    fType += "<option value=\"2\">Beneficiario</option>";
+    fType += "</select></div>";
+    fType += "<div class=\"col-md-4\">";
+    fType += "<label class=\"control-label\" >Nombre Entidad o Raz&oacute;n Social</label>";
+    fType += "<input type=\"text\" name=\"txtNombreFideicomitente[]\" id=\"txtNombreFideicomitente" + intId + "\" value=\"\" class=\"form-control\"> \n\
+    <input name=\"seqFideicomitente[]\" type=\"hidden\" id=\"seqFideicomitente" + intId + "\" value='' onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\">";
+    fType += "<div class=\"col-sm-12\"><div id=\"txtNombreFideicomitenteContenedor" + intId + "\"></div></div></div>";
+    fType += "<div class=\"col-md-3\"><br><br><input type=\"button\"  value=\"Eliminar\" class=\"btn_deleted\"  onclick='removerOferente(fidehijo" + intId + ")'/></div> </div></div></div>";
+    //  fType += "onclick='removerOferente(fideHijo" + intId + ")'/> </div></div></div>";
+    fType += "<div class=\"col-md-3\"><p>&nbsp;</p></div>";
+    fieldWrapper.append(fType);
+    $("#fideicomiso").append(fieldWrapper);
+
+    activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentes.php', intId);
+}
+
+function activarAutocompletar(txtInput, contenedor, url, cant) {
+
+    for (var i = 1; i <= cant; i++) {
+        // console.log('#' + txtInput + '' + i);
+        autocompletar(txtInput + '' + i, contenedor + '' + i, url, '');
+        $('#' + txtInput + '' + i).removeClass('yui-ac-input');
+    }
+    // autocompletar( 'txtSubsecretario' , 'txtSubsecretarioContenedor' , './contenidos/cruces2/nombres.php' , '' ); $('#txtSubsecretario').removeClass('yui-ac-input');
+    //  autocompletar( txtInput , contenedor , url , '' ); $('#'+txtInput).removeClass('yui-ac-input');
 }

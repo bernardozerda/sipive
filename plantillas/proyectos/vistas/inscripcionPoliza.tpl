@@ -33,7 +33,7 @@
     </div>
 </fieldset>
 <p>&nbsp;</p>
-<p>&nbsp;</p>  <p>&nbsp;</p>
+<p>&nbsp;</p>
 <fieldset>
     <legend style="text-align: left" class="legend">
         <h4 style="position: relative; float: left; width: 50%; margin: 0;">
@@ -48,7 +48,7 @@
                     <fieldset style="border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;">
                         <legend style="text-align: right; cursor: hand"><p><h5>&nbsp;<img src="recursos/imagenes/add.png" width="20px" onclick="addAmparos();"  /><b style="" onclick="addAmparos();">&nbsp; Adicionar  Amparo</b> 
                                 {if $numPol > 1}
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="recursos/imagenes/remove.png" width="20px"  onclick='removerOferente(amp{$numPol})'/><b style="text-align: right" onclick='removerOferente(amp{$numPol})'>&nbsp; Eliminar Amaparo</b> 
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="recursos/imagenes/remove.png" width="20px"  onclick='removerOferente(amp{$numPol})'/><b style="text-align: right" onclick='removerOferente(amp{$numPol})'>&nbsp; Eliminar Amparo</b> 
                                 {/if}</h5></p></legend>
                         <div class="col-md-3"> 
                             <a href="#demo{$valueAmparo.seqAmparo}" data-toggle="collapse"><img src="recursos/imagenes/amparo.png" /></a>
@@ -84,9 +84,9 @@
                             <input type="hidden" name="seqUsuario[]" id="seqUsuario{$valueAmparo.seqAmparo}" value="{if $valueAmparo.seqUsuario != 0}{$valueAmparo.seqUsuario}{else}0{/if}">
                         </div> 
                         {if $valueAmparo.seqAmparo != ""}
-                        <div class="col-md-2"><br><br><input type="button"  value="Prorroga" class="btn_add" onclick="addProrroga({$valueAmparo.seqAmparo},{$smarty.session.seqUsuario});" > </div>
-                        {/if}   
-                        {assign var="numPolHijo" value="1"}
+                            <div class="col-md-2"><br><br><input type="button"  value="Prorroga" class="btn_add" onclick="addProrroga({$valueAmparo.seqAmparo},{$smarty.session.seqUsuario});" > </div>
+                            {/if}   
+                            {assign var="numPolHijo" value="1"}
                             {counter start=1 print=false assign=numPolHijo}
                         <div id="demo{$valueAmparo.seqAmparo}" class="collapse" style="left: 15%">
                             {foreach from=$arraDatosPoliza key=seqAmparoHijo item=valueAmparoHijo}        

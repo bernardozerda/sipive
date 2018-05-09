@@ -91,12 +91,13 @@ class DatosGeneralesProyectos {
     function obtenerlistaProyectos($seqProyecto) {
         global $aptBd;
 
-        $sql = "SELECT pry.*, pol.*, pry.seqProyecto As seqProyecto, txtPlanGobierno,  
+        $sql = "SELECT pry.*, pol.*, fid.*, pry.seqProyecto As seqProyecto, txtPlanGobierno,  
                 case  when seqProyectoPadre IS NOT NULL 
                 then (select ucwords(txtNombreProyecto) from t_pry_proyecto pry2 where pry2.seqProyecto = pry.seqProyectoPadre) else  '' end AS padre
                 FROM t_pry_proyecto pry 
                 LEFT JOIN t_frm_plan_gobierno USING(seqPlanGobierno)
                 LEFT JOIN  t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto)
+                LEFT JOIN t_pry_datos_fiducia fid on(pry.seqProyecto = fid.seqProyecto)
                ";
         if ($seqProyecto > 0) {
             $sql .= " where pry.seqProyecto = " . $seqProyecto;
@@ -770,6 +771,26 @@ class DatosGeneralesProyectos {
             $sql .= " where pol.seqProyecto = " . $seqProyecto;
         }
         $sql . " ORDER BY seqAmaparo";
+
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
+    public function obtenerDatosFideicomiso($seqProyecto) {
+
+        global $aptBd;
+
+        $sql = "SELECT fic.* FROM   t_pry_datos_fiducia fid"
+                . " LEFT JOIN t_pry_fideicomitente fic USING(seqDatoFiducia)";
+        if ($seqProyecto > 0) {
+            $sql .= " where fid.seqProyecto = " . $seqProyecto;
+        }
+        $sql . " ORDER BY seqFideicomitente";
 
         $objRes = $aptBd->execute($sql);
         $datos = Array();

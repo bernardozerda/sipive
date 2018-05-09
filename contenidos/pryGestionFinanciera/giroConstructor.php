@@ -49,6 +49,8 @@ if($_FILES['archivo']['error'] === 0){
         }
     }
 
+    $claGestion->arrGiroConstructor['saldo'] = $claGestion->arrGiroConstructor['saldo'] - $numTotalGiro;
+
 }else{
 
     $arrUnidades = array();
@@ -60,12 +62,10 @@ if($_FILES['archivo']['error'] === 0){
         }
     }
 
-}
+    $claGestion->arrGiroConstructor['giro'] -= $numTotalGiro;
 
-if(doubleval($claGestion->arrGiroConstructor['giros'] != 0)){
-    $claGestion->arrGiroConstructor['giros'] -= $numTotalGiro;
+
 }
-$claGestion->arrGiroConstructor['saldo'] -= $numTotalGiro;
 
 $bolImprimir = false;
 if(intval($_POST['seqGiroConstructor']) != 0){

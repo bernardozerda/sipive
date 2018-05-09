@@ -92,10 +92,15 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
     $arrTablaCDP['saldo'] = (doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']) == 0)?
         $arrTablaCDP['valorRP'] :
         doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']);
-    if($arrTablaCDP['giros'] != 0) {
-        $arrTablaCDP['giros'] = $arrTablaCDP['giros'] - $numTotalGiro;
+
+    if(intval($_POST['seqGiroFiducia']) != 0) {
+        if($arrTablaCDP['giros'] != 0) {
+            $arrTablaCDP['giros'] = $arrTablaCDP['giros'] - $numTotalGiro;
+        }
+
+    }else{
+        $arrTablaCDP['saldo'] = $arrTablaCDP['saldo'] - $numTotalGiro;
     }
-    $arrTablaCDP['saldo'] = $arrTablaCDP['saldo'] - $numTotalGiro;
 
 }
 

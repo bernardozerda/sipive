@@ -1560,7 +1560,7 @@ class GestionFinancieraProyectos
         $objRes = $aptBd->execute($sql);
         while($objRes->fields){
             $seqProyecto = $objRes->fields['seqProyecto'];
-            $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
+            $seqUnidadProyecto = intval($objRes->fields['seqUnidadProyecto']);
             $arrRetorno['seqProyecto'] = $objRes->fields['seqProyecto'];
             $arrRetorno['unidades'][$seqProyecto][$seqUnidadProyecto] = $objRes->fields['valGiro'];
             $arrRetorno['txtComentario'] = $objRes->fields['txtComentario'];

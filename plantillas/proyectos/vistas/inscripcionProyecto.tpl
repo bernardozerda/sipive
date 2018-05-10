@@ -605,7 +605,7 @@
             <div id="datosPolizas" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
                 {include file="proyectos/vistas/inscripcionPoliza.tpl"}
                 <div class="tab-pane">
-                    {include file="proyectos/vistas/inscripcionfiducia.tpl"}
+                    {include file="proyectos/vistas/inscripcionFiducia.tpl"}
                 </div>
 
             </div>

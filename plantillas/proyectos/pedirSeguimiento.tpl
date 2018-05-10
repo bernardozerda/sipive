@@ -35,7 +35,7 @@
                         <option value="{$seqGrupoGestion}">{$txtGrupoGestion}</option>
                     {/foreach}
                 </select>
-                <div id="val_seqGrupoGestion" class="divError">Seleccione el grupo de la gestión</div>
+                <div id="val_seqGrupoGestion" class="divError">Seleccione el grupo de la gestión realizada</div>
             </div>
         </div>
         <div class="form-group">
@@ -70,12 +70,13 @@
             
         </div>
         <p>&nbsp;</p>
-        <p >       
+        <p>    
+            {if isset($page)}
             <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
                    onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/{$page}', '', true);
                            cargarContenido('rutaMenu', './rutaMenu.php', 'menu=66', false);" class="btn_volver"/> 
             <input type="button" name="btn_enviar" id="btn_enviar" value="Salvar Inscripci&oacute;n" onclick="almacenarIncripcion()" class="btn_volver"/><br>
+            {/if}
         </p>
     </fieldset>
-</div>
-<br>&nbsp;
+</div><br>

@@ -2249,8 +2249,9 @@ class ProyectoVivienda {
                             T_PRY_PROYECTO.seqProyecto
                         FROM T_PRY_PROYECTO 
                         INNER JOIN t_pry_proyecto_oferente ON (T_PRY_PROYECTO.seqProyecto = t_pry_proyecto_oferente.seqProyecto)
-                        INNER JOIN T_PRY_ENTIDAD_OFERENTE ON (T_PRY_ENTIDAD_OFERENTE.seqOferente = T_PRY_ENTIDAD_OFERENTE.seqOferente)                    
-                        WHERE CONCAT(txtNombreProyecto,' [',txtNombreOferente,']') LIKE'%$txtParametro%' 
+                        INNER JOIN T_PRY_ENTIDAD_OFERENTE ON (T_PRY_ENTIDAD_OFERENTE.seqOferente = T_PRY_ENTIDAD_OFERENTE.seqOferente)   
+                        WHERE txtNombreProyecto LIKE'%$txtParametro%' 
+                       # WHERE CONCAT(txtNombreProyecto,' [',txtNombreOferente,']') LIKE'%$txtParametro%' 
                         GROUP BY seqProyecto LIMIT $numLimiteRegistros ";
         //echo $sql;
         try {

@@ -27,7 +27,7 @@
             <td align="center">{$arrDato.fchFechaRP}</td>
             <td align="center">{$arrDato.valValorRP|number_format}</td>
             <td align="center">{$arrDato.numVigenciaRP}</td>
-            <td align="center">
+            <td align="center" class="text-danger">
                 {if isset($smarty.session.arrGrupos.3.20)}
                     <span class="glyphicon glyphicon-trash"
                           aria-hidden="true"

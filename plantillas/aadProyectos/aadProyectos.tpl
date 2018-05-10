@@ -38,7 +38,7 @@
                         </td>
                         <td>
                             {if isset($smarty.session.arrGrupos.6.20)}
-                                <a href="#" onclick="">
+                                <a href="#" onclick="" class="text-danger">
                                     <span class="glyphicon glyphicon-trash" aria-hidden="true" style="cursor: pointer"></span>
                                 </a>
                             {/if}

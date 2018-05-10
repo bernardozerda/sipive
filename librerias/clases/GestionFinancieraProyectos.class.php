@@ -1586,6 +1586,35 @@ class GestionFinancieraProyectos
         return $arrRetorno;
 
     }
+
+    public function validarFormularioReintegros($arrPost){
+        global $aptBd;
+
+        if($arrPost['salvar'] != "salvar"){
+
+            $txtValidar = $arrPost['salvar'];
+            $arrValidar = $arrPost[$txtValidar];
+
+            if($arrValidar['seqBanco'] == 0){
+                $this->arrErrores[] = "Seleccione el banco para el " . $txtValidar;
+            }
+
+            if(trim($arrValidar['numCuenta']) == ""){
+                $this->arrErrores[] = "Digite el numero de cuenta para el " . $txtValidar;
+            }
+
+            if(! esFechaValida($arrValidar['fchConsignacion'])){
+                $this->arrErrores[] = "Digite una fecha valida para el " . $txtValidar;
+            }
+
+            if(doubleval($arrValidar['valConsignacion']) == 0){
+                $this->arrErrores[] = "Digite el valor del " . $txtValidar;
+            }
+
+        }
+
+    }
+
 }
 
 

@@ -52,7 +52,7 @@
                         </td>
                         <td class="text-center">
                             {if isset($smarty.session.arrGrupos.6.20)}
-                                <a href="#" onclick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/eliminarGiroFiducia.php','seqGiroFiducia={$seqGiroFiducia}',true);">
+                                <a href="#" class="text-danger" onclick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/eliminarGiroFiducia.php','seqGiroFiducia={$seqGiroFiducia}',true);">
                                     <span class="glyphicon glyphicon-trash" aria-hidden="true" style="cursor: pointer"></span>
                                 </a>
                             {/if}

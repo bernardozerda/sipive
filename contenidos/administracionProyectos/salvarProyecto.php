@@ -158,10 +158,9 @@ if (empty($arrErrores)) {
         $claProyecto->modificarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
     }
 
-    if ($cantPoliza == 0 && isset($_POST["numPoliza"])) {
-
+    if ($cantPoliza == 0 && $_POST["numPoliza"] != "") {
         $claProyecto->almacenarPoliza($seqProyecto, $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
-    } else if (isset($_POST["numPoliza"])) {
+    } else if ($_POST["numPoliza"] != "") {
         $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
     }
     

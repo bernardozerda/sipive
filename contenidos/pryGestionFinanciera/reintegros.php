@@ -12,6 +12,12 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "Gestion
 $claGestion = new GestionFinancieraProyectos();
 $claGestion->proyectos();
 
+$bolSalvado = false;
+if(intval($_POST['seqReintegro']) != 0){
+    $_POST = $claGestion->verReintegro($_POST['seqReintegro']);
+    $bolSalvado = true;
+}
+
 $arrBancos = obtenerDatosTabla(
     "t_frm_banco",
     array("seqBanco" , "txtBanco"),
@@ -20,7 +26,7 @@ $arrBancos = obtenerDatosTabla(
     "txtBanco"
 );
 
-if(isset($_POST['salvar'])){
+if(isset($_POST['salvar']) and ! is_numeric($_POST['eliminar'])){
     $claGestion->validarFormularioReintegros($_POST);
     if(empty($claGestion->arrErrores)){
         $txtValidar = $_POST['salvar'];
@@ -34,7 +40,7 @@ if(isset($_POST['salvar'])){
     }
 }
 
-if(isset($_POST['eliminar']) and ! isset($_POST['eliminar'])){
+if( isset($_POST['eliminar']) and is_numeric($_POST['eliminar'])){
     $numPosicion = $_POST['eliminar'];
     $arrRegistros = $_POST['registros'];
     unset($arrRegistros[$numPosicion]);
@@ -45,12 +51,10 @@ if(isset($_POST['eliminar']) and ! isset($_POST['eliminar'])){
     }
 }
 
-
 $claSmarty->assign("claGestion", $claGestion);
 $claSmarty->assign("arrPost", $_POST);
 $claSmarty->assign("arrBancos", $arrBancos);
+$claSmarty->assign("bolSalvado", $bolSalvado);
 $claSmarty->display( "pryGestionFinanciera/reintegros.tpl" );
-
-pr($_POST);
 
 ?>

@@ -463,9 +463,9 @@
         <div class="panel-footer" align="center">&nbsp;
 
             {if $bolImprimir == true}
-                <button type="button" class="btn btn-danger" style="width: 100px;"
-                        onclick="pdfGiroFiducia({$arrPost.seqProyecto},{$seqGiroFiducia});"
-                >PDF</button>
+                {*<button type="button" class="btn btn-danger" style="width: 100px;"*}
+                        {*onclick="pdfGiroFiducia({$arrPost.seqProyecto},{$seqGiroFiducia});"*}
+                {*>PDF</button>*}
             {/if}
 
             <button type="button" name="salvar" value="1" class="btn btn-primary" style="width: 100px;"

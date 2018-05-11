@@ -140,7 +140,7 @@
         </div>
         <div class="panel-footer" align="center">&nbsp;
             {if $bolImprimir == true}
-                <button type="button" name="volver" class="btn btn-danger" style="width: 100px;" onclick="">PDF</button>
+                {*<button type="button" name="volver" class="btn btn-danger" style="width: 100px;" onclick="">PDF</button>*}
             {/if}
             <button type="button" name="salvar" value="1" class="btn btn-primary" style="width: 100px;" {if $bolImprimir == true} disabled {/if}
                     onclick="someterFormulario('contenido',this.form,'./contenidos/pryGestionFinanciera/salvarGiroConstructor.php',false,true);">Salvar Giro</button>

@@ -25,7 +25,7 @@
         <div class="form-group">
             <label for="seqProyecto" class="col-sm-1 control-label text-left">Proyecto</label>
             <div class="col-sm-10">
-                <select id="seqProyecto" class="form-control input-sm" name="seqProyecto">
+                <select id="seqProyecto" class="form-control input-sm" name="seqProyecto" {if $bolSalvado == true} disabled {/if}>
                     <option value="0">Seleccione Proyecto</option>
                     {foreach from=$claGestion->arrProyectos key=seqProyecto item=txtNombreProyecto}
                         <option value="{$seqProyecto}" {if $arrPost.seqProyecto == $seqProyecto} selected {/if}>{$txtNombreProyecto}</option>
@@ -41,11 +41,21 @@
             </div>
             <div class="panel-body">
 
-                <!-- numero del acta y valores del arreglo -->
+                <!-- numero del acta y fecha del arreglo -->
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="numActa">Numero del Acta</label>
-                    <div class="col-sm-4">
-                        <input type="number" id="numActa" name="numActa" value="{$arrPost.numActa}" class="form-control input-sm">
+                    <div class="col-sm-6">
+                        <label class="control-label col-sm-4" for="numActa">Numero del Acta</label>
+                        <div class="col-sm-8">
+                            <input type="number" id="numActa" name="numActa" value="{$arrPost.numActa}" class="form-control input-sm"
+                                    {if $bolSalvado == true} disabled {/if}>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label col-sm-4" for="fchActa">Fecha del Acta</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="fchActa" name="fchActa" value="{$arrPost.fchActa}" class="form-control input-sm"
+                            onfocus="calendarioPopUp('fchActa');" readonly {if $bolSalvado == true} disabled {/if}>
+                        </div>
                     </div>
                 </div>
 
@@ -88,7 +98,7 @@
                             </div>
                         </div>
                         <div class="panel-footer text-center">
-                            <button type="submit" name="salvar" value="reintegro" class="btn btn-default btn-sm">
+                            <button type="submit" name="salvar" value="reintegro" class="btn btn-default btn-sm {if $bolSalvado == true} disabled {/if}" {if $bolSalvado == true} disabled {/if}>
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Adicionar
                             </button>
                         </div>
@@ -135,7 +145,7 @@
                             </div>
                         </div>
                         <div class="panel-footer text-center">
-                            <button type="submit" name="salvar" value="rendimiento" class="btn btn-default">
+                            <button type="submit" name="salvar" value="rendimiento" class="btn btn-default btn-sm {if $bolSalvado == true} disabled {/if}" {if $bolSalvado == true} disabled {/if}>
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Adicionar
                             </button>
                         </div>
@@ -158,7 +168,7 @@
                         <tbody>
                         {foreach from=$arrPost.registros key=numRegistro item=arrRegistro}
                                 <tr>
-                                    <td>{$numRegistro} - {$arrRegistro.txtTipo|mb_strtoupper}</td>
+                                    <td>{$arrRegistro.txtTipo|mb_strtoupper}</td>
                                     <td>
                                         {assign var=seqBanco value=$arrRegistro.seqBanco}
                                         {$arrBancos.$seqBanco}
@@ -167,9 +177,16 @@
                                     <td>{$arrRegistro.fchConsignacion}</td>
                                     <td>$ {$arrRegistro.valConsignacion|number_format:0:',':'.'}</td>
                                     <td>
-                                        <button type="submit" name="eliminar[{$numRegistro}]" value="{$numRegistro}" class="btn btn-default btn-xs" style="border: none;">
-                                            <span class="glyphicon glyphicon-trash text-danger" aria-hidden="true" style="cursor: pointer"></span>
-                                        </button>
+                                        {if $bolSalvado == false}
+                                            <a href="#"
+                                               onclick="
+                                                   $('#eliminar').val({$numRegistro});
+                                                   $('#frmProyecto').submit();
+                                               "
+                                            >
+                                                <span class="glyphicon glyphicon-trash text-danger" aria-hidden="true" style="cursor: pointer"></span>
+                                            </a>
+                                        {/if}
                                     </td>
                                 </tr>
                             {/foreach}
@@ -183,15 +200,17 @@
                             <input type="hidden" name="registros[{$numRegistro}][{$txtClave}]" value="{$txtValor}">
                         {/foreach}
                     {/foreach}
+                    <input type="hidden" id="eliminar" name="eliminar" value="">
 
                 </div>
             </div>
             <div class="panel-footer text-center">
-                <button type="submit" name="salvar" value="1" class="btn btn-primary" style="width: 150px;">
+                <button type="button" name="salvar" value="1" class="btn btn-primary {if $bolSalvado == true} disabled {/if}" style="width: 150px;" {if $bolSalvado == true} disabled {/if}
+                        onclick="someterFormulario('contenido',this.form, './contenidos/pryGestionFinanciera/salvarReintegro.php',false,true)">
                     Salvar Registros
                 </button>
-                &nbsp;
-                <button type="button" name="volver" class="btn btn-default" style="width: 150px;" onclick="">Volver</button>
+                <button type="button" name="volver" class="btn btn-default" style="width: 150px;"
+                        onclick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/listadoReintegros.php','',true);">Volver</button>
             </div>
         </div>
     </form>

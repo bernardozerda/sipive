@@ -21,36 +21,40 @@
 <!-- detalle del giro -->
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h6 class="panel-title">Listado de Giros a Constructor</h6>
+        <h6 class="panel-title">Listado de Reintegros y Rendimientos</h6>
     </div>
     <div class="panel-body">
 
-        <table id="listadoAadPry" data-order='[[ 0, "desc" ]]' class="table table-striped table-condensed table-hover" width="100%">
+        <table id="listadoAadPry" data-order='[[ 0, "desc" ]]' class="table table-striped table-condensed table-hover" width="850px">
             <thead>
             <tr>
                 <th align="center">Identificador</th>
                 <th align="center">Proyecto</th>
-                <th align="center">Unidades</th>
-                <th align="center">Valor</th>
-                <th align="center"></th>
-                <th align="center"></th>
+                <th align="center">Acta</th>
+                <th align="center">Fecha</th>
+                <th align="center">Reintegros</th>
+                <th align="center">Rendimientos</th>
+                <th></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            {foreach from=$arrListado key=seqGiroConstructor item=arrItemGiro}
+            {foreach from=$arrListado key=seqReintegro item=arrItem}
                 <tr>
-                    <td class="text-center">{$seqGiroConstructor}</td>
-                    <td class="text-left">{$arrItemGiro.proyecto}</td>
-                    <td class="text-right">{$arrItemGiro.unidades|number_format:0:',':'.'}</td>
-                    <td class="text-right">$ {$arrItemGiro.giro|number_format:0:',':'.'}</td>
+                    <td class="text-center">{$seqReintegro}</td>
+                    <td class="text-left">{$arrItem.proyecto}</td>
+                    <td class="text-left">{$arrItem.acta}</td>
+                    <td class="text-left">{$arrItem.fecha}</td>
+                    <td class="text-right">$ {$arrItem.reintegro|number_format:0:',':'.'}</td>
+                    <td class="text-right">$ {$arrItem.rendimiento|number_format:0:',':'.'}</td>
                     <td class="text-center">
-                        <a href="#" onClick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/giroConstructor.php','seqGiroConstructor={$seqGiroConstructor}',true);">
+                        <a href="#" onClick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/reintegros.php','seqReintegro={$seqReintegro}',true);">
                             <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" style="cursor: pointer"></span>
                         </a>
                     </td>
                     <td class="text-center">
                         {if isset($smarty.session.arrGrupos.6.20)}
-                            <a href="#" class="text-danger" onclick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/eliminarGiroConstructor.php','seqGiroConstructor={$seqGiroConstructor}',true);">
+                            <a href="#" class="text-danger" onclick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/eliminarReintegro.php','seqReintegro={$seqReintegro}',true);">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true" style="cursor: pointer"></span>
                             </a>
                         {/if}
@@ -63,7 +67,7 @@
     </div>
     <div class="modal-footer">
         <div class="col-sm-12 text-center">
-            <button type="button" class="btn btn-primary" onclick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/giroConstructor.php','',true);">Nuevo Giro</button>
+            <button type="button" class="btn btn-primary" onclick="cargarContenido('contenido','./contenidos/pryGestionFinanciera/reintegros.php','',true);">Nuevo Registro</button>
         </div>
     </div>
 </div>

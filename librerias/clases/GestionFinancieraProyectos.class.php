@@ -1615,6 +1615,232 @@ class GestionFinancieraProyectos
 
     }
 
+    public function salvarReintegros($arrPost){
+        global $aptBd;
+
+        if(
+            intval($arrPost['reintegro']['seqBanco']) != 0 or
+            doubleval($arrPost['reintegro']['numCuenta']) != 0 or
+            esFechaValida($arrPost['reintegro']['fchConsignacion']) == true or
+            doubleval($arrPost['reintegro']['valConsignacion']) != 0
+        ){
+            $this->arrErrores[] = "Falta por adicionar el registro de reintegro para salvar el registro";
+        }
+
+        if(
+            intval($arrPost['rendimiento']['seqBanco']) != 0 or
+            doubleval($arrPost['rendimiento']['numCuenta']) != 0 or
+            esFechaValida($arrPost['rendimiento']['fchConsignacion']) == true or
+            doubleval($arrPost['rendimiento']['valConsignacion']) != 0
+        ){
+            $this->arrErrores[] = "Falta por adicionar el registro de rendimiento para salvar el registro";
+        }
+
+        if(empty($this->arrErrores)) {
+
+            if (intval($arrPost['seqProyecto']) == 0) {
+                $this->arrErrores[] = "Seleccione el proyecto";
+            }
+
+            if (intval($arrPost['numActa']) == 0) {
+                $this->arrErrores[] = "Digite el número del acta de legalizacion";
+            }
+
+            if (!esFechaValida($arrPost['fchActa'])) {
+                $this->arrErrores[] = "Seleccione la fecha del acta de legalizacion";
+            }
+
+            if (empty($arrPost['registros'])) {
+                $this->arrErrores[] = "Adicione al menos un registro de reintegro o rendimientos segun corresponda";
+            }
+
+            $seqReintegro = array_shift(
+                obtenerDatosTabla(
+                    "t_pry_aad_reintegros",
+                    array("seqReintegro","count(seqProyecto) as cuenta"),
+                    "seqReintegro",
+                    "numActa = " . intval($arrPost['numActa']) . " and fchActa = '" . $arrPost['fchActa'] . "'"
+                )
+            );
+
+            if(intval($seqReintegro) != 0){
+                $this->arrErrores[] = "Ya existe un acta " . intval($arrPost['numActa']) . " de " . $arrPost['fchActa'];
+            }
+
+        }
+
+        if(empty($this->arrErrores)) {
+
+            try{
+                $aptBd->BeginTrans();
+
+                $sql = "
+                    insert into t_pry_aad_reintegros (
+                      seqProyecto, 
+                      numActa, 
+                      fchActa, 
+                      fchCreacion, 
+                      seqUsuario
+                  ) values (                      
+                      " . intval($arrPost['seqProyecto']) . ",
+                      " . intval($arrPost['numActa']) . ",
+                      '" . $arrPost['fchActa'] . "',
+                      now(),
+                      " . $_SESSION['seqUsuario'] . "
+                  )
+                ";
+                $aptBd->execute($sql);
+
+                $seqReintegro = $aptBd->Insert_ID();
+
+                foreach ($arrPost['registros'] as $arrDato) {
+
+                    $sql = "
+                        insert into t_pry_aad_reintegros_detalle (
+                            seqReintegro, 
+                            txtTipo, 
+                            seqBanco, 
+                            numCuenta, 
+                            fchConsignacion, 
+                            valConsignacion
+                        ) values (
+                            $seqReintegro,
+                            '" . $arrDato['txtTipo'] . "',
+                            " . $arrDato['seqBanco'] . ",
+                            " . $arrDato['numCuenta'] .  ",
+                            '" . $arrDato['fchConsignacion'] . "',
+                            " . $arrDato['valConsignacion'] . "
+                        ) 
+                    ";
+                    $aptBd->execute($sql);
+
+                }
+
+                $this->arrMensajes[] = "Registro salvado satisfactoriamente";
+
+                $aptBd->CommitTrans();
+
+                return $seqReintegro;
+
+            } catch ( Exception $objError ){
+                $aptBd->RollbackTrans();
+                $this->arrMensajes = array();
+                $this->arrErrores[] = $objError->getMessage();
+
+                return 0;
+            }
+
+        }
+
+
+
+
+    }
+
+    public function listadoReintegros(){
+        global $aptBd;
+
+        $sql = "
+            select 
+                rei.seqReintegro,
+                pry.txtNombreProyecto,
+                rei.numActa, 
+                rei.fchActa,
+                red.txtTipo, 
+                sum(red.valConsignacion) as valConsignacion
+            from t_pry_aad_reintegros rei
+            inner join t_pry_aad_reintegros_detalle red on rei.seqReintegro = red.seqReintegro
+            inner join t_pry_proyecto pry on rei.seqProyecto = pry.seqProyecto
+            group by 
+              rei.seqReintegro, 
+              rei.seqProyecto, 
+              pry.txtNombreProyecto, 
+              rei.numActa, 
+              rei.fchActa, 
+              red.txtTipo
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrListado = array();
+        while($objRes->fields){
+
+            $seqReintegro = $objRes->fields['seqReintegro'];
+            $txtTipo = mb_strtolower($objRes->fields['txtTipo']);
+
+            $arrListado[$seqReintegro]['proyecto'] = $objRes->fields['txtNombreProyecto'];
+            $arrListado[$seqReintegro]['acta'] = $objRes->fields['numActa'];
+            $arrListado[$seqReintegro]['fecha'] = $objRes->fields['fchActa'];
+            $arrListado[$seqReintegro]['tipo'] = $objRes->fields['txtTipo'];
+            $arrListado[$seqReintegro][$txtTipo] += doubleval($objRes->fields['valConsignacion']);
+
+            $objRes->MoveNext();
+        }
+
+        return $arrListado;
+    }
+
+    public function eliminarReintegro($seqReintegro){
+        global $aptBd;
+
+        try {
+            $aptBd->BeginTrans();
+
+            $sql = "delete from t_pry_aad_reintegros_detalle where seqReintegro = $seqReintegro";
+            $aptBd->execute($sql);
+
+            $sql = "delete from t_pry_aad_reintegros where seqReintegro = $seqReintegro";
+            $aptBd->execute($sql);
+
+            $this->arrMensajes[] = "Ha eliminado el registro con identificador " . $seqReintegro . " de manera satisfactoria";
+            $aptBd->CommitTrans();
+        }catch(Exception $objError){
+            $aptBd->RollbackTrans();
+            $this->arrErrores[] = $objError->getMessage();
+        }
+
+    }
+
+    public function verReintegro($seqReintegro){
+        global $aptBd;
+        $arrRetorno = array();
+        $sql = "
+            select  
+                rei.seqProyecto,
+                rei.numActa, 
+                rei.fchActa,
+                red.txtTipo, 
+                red.seqBanco, 
+                red.numCuenta, 
+                red.fchConsignacion, 
+                red.valConsignacion
+            from t_pry_aad_reintegros rei
+            inner join t_pry_aad_reintegros_detalle red on rei.seqReintegro = red.seqReintegro
+            where rei.seqReintegro = $seqReintegro
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $arrRetorno['seqProyecto'] = $objRes->fields['seqProyecto'];
+            $arrRetorno['numActa'] = $objRes->fields['numActa'];
+            $arrRetorno['fchActa'] = $objRes->fields['fchActa'];
+
+            $numPosicion = count($arrRetorno['registros']);
+
+            $arrRetorno['registros'][$numPosicion]['txtTipo'] = $objRes->fields['txtTipo'];
+            $arrRetorno['registros'][$numPosicion]['seqBanco'] = $objRes->fields['seqBanco'];
+            $arrRetorno['registros'][$numPosicion]['numActa'] = $objRes->fields['numActa'];
+            $arrRetorno['registros'][$numPosicion]['fchActa'] = $objRes->fields['fchActa'];
+            $arrRetorno['registros'][$numPosicion]['numCuenta'] = $objRes->fields['numCuenta'];
+            $arrRetorno['registros'][$numPosicion]['fchConsignacion'] = $objRes->fields['fchConsignacion'];
+            $arrRetorno['registros'][$numPosicion]['valConsignacion'] = $objRes->fields['valConsignacion'];
+
+            $objRes->MoveNext();
+        }
+
+        return $arrRetorno;
+
+    }
+
+
 }
 
 

@@ -269,15 +269,15 @@
         </tr>
         <tr>
             <td style="padding-left:20px; padding-right:20px; text-align:justify;">
-
                 {if $seqModalidad != 5}
                     {if $Flujo == "" || $Flujo != "giroAnticipado"}
                         Una vez revisados, técnica, jurídica y financieramente, los documentos aportados por el
                         beneficiario del Subsidio Distrital de Vivienda y por el beneficiario del pago,
                         certificamos que los mismos se encuentran ajustados y acordes con los requisitos
                         establecidos en el reglamento operativo y la normatividad vigente, por lo anterior se
-                        solicita desembolsar, contra finalización de la obra, a la cuenta del Banco indicada en
-                        la carta de autorización.
+                        solicita desembolsar,
+                        {if mb_strtolower($claDesembolso->arrEscrituracion.txtCompraVivienda) == 'nueva' } contra finalización de la obra,{/if}
+                        a la cuenta del Banco indicada en la carta de autorización.
                     {else}
                         Una vez revisados jurídica y financieramente todos los documentos aportados por la
                         constructora y los de la entidad financiera, certificamos que los mismos se encuentran

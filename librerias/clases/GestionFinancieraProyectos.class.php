@@ -1840,6 +1840,305 @@ class GestionFinancieraProyectos
 
     }
 
+    public function reporteGeneral(){
+        global $aptBd;
+
+        $arrReporte = array();
+
+        $sql = "
+            select
+              if(con.seqProyectoPadre is null,con.seqProyecto,con.seqProyectoPadre) as seqProyecto,
+              if(con.seqProyectoPadre is null,con.txtNombreProyecto,pry.txtNombreProyecto) as txtNombreProyecto,
+              -- if(con.seqProyectoPadre is null,con.seqDatoFiducia,pry.seqDatoFiducia) as seqDatoFiducia,
+              uac.seqTipoActoUnidad,
+              uac.numActo,
+              uac.fchActo,
+              sum(uvi.valIndexado) as valIndexado
+            from t_pry_aad_unidad_acto uac
+            inner join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
+            inner join t_pry_proyecto con on uvi.seqProyecto = con.seqProyecto
+            left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
+            group by
+              if(con.seqProyectoPadre is null, con.seqProyecto, con.seqProyectoPadre),
+              if(con.seqProyectoPadre is null, con.txtNombreProyecto, pry.txtNombreProyecto),
+              uac.seqTipoActoUnidad,
+              uac.numActo,
+              uac.fchActo
+            order by
+              if(con.seqProyectoPadre is null, con.txtNombreProyecto, pry.txtNombreProyecto),
+              uac.seqTipoActoUnidad
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $seqProyecto = $objRes->fields['seqProyecto'];
+
+            $arrReporte[$seqProyecto]['nombre'] = $objRes->fields['txtNombreProyecto'];
+
+            $arrReporte[$seqProyecto]['entidad'] = "";
+
+//            $arrReporte[$seqProyecto]['entidad'] = array_shift(
+//                obtenerDatosTabla(
+//                    "t_pry_datos_fiducia",
+//                    array("seqDatoFiducia","txtEntidadFiducia"),
+//                    "seqDatoFiducia",
+//                    "seqDatoFiducia = " . $objRes->fields['seqDatoFiducia']
+//                )
+//            );
+
+            $arrReporte[$seqProyecto]['aprobado'] = doubleval(
+                ($objRes->fields['seqTipoActoUnidad'] == 1)?
+                    $arrReporte[$seqProyecto]['aprobado'] + $objRes->fields['valIndexado'] :
+                    $arrReporte[$seqProyecto]['aprobado']
+            );
+
+            $arrReporte[$seqProyecto]['indexado'] = doubleval(
+                ($objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] > 0)?
+                    $arrReporte[$seqProyecto]['indexado'] + $objRes->fields['valIndexado'] :
+                    $arrReporte[$seqProyecto]['indexado']
+            );
+
+            $arrReporte[$seqProyecto]['menor'] = doubleval(
+                ($objRes->fields['seqTipoActoUnidad'] == 3 or ($objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] < 0))?
+                    $arrReporte[$seqProyecto]['menor'] + abs($objRes->fields['valIndexado']) :
+                    $arrReporte[$seqProyecto]['menor']
+            );
+
+            $arrReporte[$seqProyecto]['actual'] =
+                $arrReporte[$seqProyecto]['aprobado'] +
+                $arrReporte[$seqProyecto]['indexado'] -
+                $arrReporte[$seqProyecto]['menor'];
+
+            $arrReporte[$seqProyecto]['fiducia'] = 0;
+            $arrReporte[$seqProyecto]['reintegro'] = 0;
+            $arrReporte[$seqProyecto]['totalFiducia'] = 0;
+            $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = 0;
+            $arrReporte[$seqProyecto]['constructor'] = 0;
+            $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = 0;
+            $arrReporte[$seqProyecto]['actualFiducia'] = 0;
+            $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = 0;
+            $arrReporte[$seqProyecto]['rendimiento'] = 0;
+            $arrReporte[$seqProyecto]['observaciones'] = "";
+
+            $objRes->MoveNext();
+        }
+
+        // datos fiducia
+        $sql = "
+            select 
+                if(pry.seqProyectoPadre is null,pry.seqProyecto,pry.seqProyectoPadre) as seqProyecto,
+                sum(gfd.valGiro) as valGiroFiducia
+            from t_pry_aad_giro_fiducia gfi
+            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            inner join t_pry_proyecto pry on gfd.seqProyecto = pry.seqProyecto
+            group by 
+                if(pry.seqProyectoPadre is null, pry.seqProyecto, pry.seqProyectoPadre)        
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $arrReporte[$seqProyecto]['fiducia'] = doubleval($objRes->fields['valGiroFiducia']);
+            $objRes->MoveNext();
+        }
+
+        // reintegros
+        $sql = "
+            select 
+                rei.seqProyecto,
+                lower(red.txtTipo) as txtTipo,
+                sum(red.valConsignacion) as valConsignacion
+            from t_pry_aad_reintegros rei
+            inner join t_pry_aad_reintegros_detalle red on rei.seqReintegro = red.seqReintegro 
+            group by 
+                rei.seqProyecto,
+                lower(red.txtTipo)     
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $txtTipo = $objRes->fields['txtTipo'];
+            $arrReporte[$seqProyecto][$txtTipo] = doubleval($objRes->fields['valConsignacion']);
+            $objRes->MoveNext();
+        }
+
+        // giros a constructor
+        $sql = "
+            select 
+                if(pry.seqProyectoPadre is null, pry.seqProyecto, pry.seqProyectoPadre) as seqProyecto,
+                sum(gcd.valGiro) as valGiroConstructor
+            from t_pry_aad_giro_constructor gco
+            inner join t_pry_aad_giro_constructor_detalle gcd on gcd.seqGiroConstructor = gco.seqGiroConstructor
+            inner join t_pry_proyecto pry on gcd.seqProyecto = pry.seqProyecto
+            group by 
+              if(pry.seqProyectoPadre is null, pry.seqProyecto, pry.seqProyectoPadre)
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $arrReporte[$seqProyecto]['constructor'] = doubleval($objRes->fields['valGiroConstructor']);
+            $objRes->MoveNext();
+        }
+
+        // porcentajes
+        foreach($arrReporte as $seqProyecto => $arrDatos){
+
+            // valor total fiducia
+            $arrReporte[$seqProyecto]['totalFiducia'] = doubleval($arrReporte[$seqProyecto]['fiducia']) - doubleval($arrReporte[$seqProyecto]['reintegro']);
+
+            // fiducia
+            if($arrReporte[$seqProyecto]['totalFiducia'] == 0){
+                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = 0;
+            }else {
+                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = round($arrReporte[$seqProyecto]['totalFiducia'] / $arrReporte[$seqProyecto]['actual'] ,2);
+            }
+
+            // constructor
+            if($arrReporte[$seqProyecto]['constructor'] == 0){
+                $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = 0;
+            }else {
+                $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = round($arrReporte[$seqProyecto]['constructor'] / $arrReporte[$seqProyecto]['actual'] ,2);
+            }
+
+            // actual fiducia
+            $arrReporte[$seqProyecto]['actualFiducia'] = doubleval($arrReporte[$seqProyecto]['totalFiducia']) - doubleval($arrReporte[$seqProyecto]['constructor']);
+
+            // actual fiducia
+            if($arrReporte[$seqProyecto]['actualFiducia'] == 0){
+                $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = 0;
+            }else {
+                $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = round($arrReporte[$seqProyecto]['actualFiducia'] / $arrReporte[$seqProyecto]['actual'] ,2);
+            }
+
+        }
+
+        $arrTitulos[0]['nombre'] = "NOMBRE DEL PROYECTO";
+        $arrTitulos[1]['nombre'] = "ENTIDAD FINANCIERA";
+        $arrTitulos[2]['nombre'] = "VALOR PROYECTO APROBADO";
+        $arrTitulos[3]['nombre'] = "VALOR INDEXACIONES APROBADAOS";
+        $arrTitulos[4]['nombre'] = "VALOR TOTAL MENOR VALOR DEL PROYECTO SDHT";
+        $arrTitulos[5]['nombre'] = "ACTUAL VALOR TOTAL DEL PROYECTO";
+        $arrTitulos[6]['nombre'] = "VALOR GIRADO A FIDUCIA";
+        $arrTitulos[7]['nombre'] = "VALOR TOTAL REINTEGROS";
+        $arrTitulos[8]['nombre'] = "VALOR TOTAL GIRADO A FIDUCIA";
+        $arrTitulos[9]['nombre'] = "% VALOR TOTAL GIRADO A FIDUCIA";
+        $arrTitulos[10]['nombre'] = "TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
+        $arrTitulos[11]['nombre'] = "% TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
+        $arrTitulos[12]['nombre'] = "ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
+        $arrTitulos[13]['nombre'] = "% ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
+        $arrTitulos[14]['nombre'] = "TOTAL RENDIMIENTOS REGISTRADOS";
+        $arrTitulos[15]['nombre'] = "OBSERVACIONES";
+
+        $arrTitulos[0]['formato'] = "texto";
+        $arrTitulos[1]['formato'] = "texto";
+        $arrTitulos[2]['formato'] = "moneda";
+        $arrTitulos[3]['formato'] = "moneda";
+        $arrTitulos[4]['formato'] = "moneda";
+        $arrTitulos[5]['formato'] = "moneda";
+        $arrTitulos[6]['formato'] = "moneda";
+        $arrTitulos[7]['formato'] = "moneda";
+        $arrTitulos[8]['formato'] = "moneda";
+        $arrTitulos[9]['formato'] = "porcentaje";
+        $arrTitulos[10]['formato'] = "moneda";
+        $arrTitulos[11]['formato'] = "porcentaje";
+        $arrTitulos[12]['formato'] = "moneda";
+        $arrTitulos[13]['formato'] = "porcentaje";
+        $arrTitulos[14]['formato'] = "moneda";
+        $arrTitulos[15]['formato'] = "texto";
+
+        $this->exportarArchivo("Reporte General", $arrTitulos, $arrReporte);
+
+    }
+
+    public function exportarArchivo($txtNombre, $arrTitulos, $arrReporte){
+
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getProperties()->setCreator($this->txtCreador);
+        $objHoja = $objPHPExcel->getActiveSheet();
+        $objHoja->setTitle($txtNombre);
+
+        $numColumnas = count($arrTitulos);
+        $numFilas = count($arrReporte);
+
+        // titulos
+        for ($i = 0; $i < count($arrTitulos); $i++) {
+            $objHoja->setCellValueByColumnAndRow($i, 1, $arrTitulos[$i]['nombre'], false);
+        }
+
+        $numFila = 2;
+        foreach ($arrReporte as $seqProyecto => $arrDatos){
+            $numColumna = 0;
+            foreach($arrDatos as $txtValor) {
+
+                $objHoja->setCellValueByColumnAndRow($numColumna, $numFila, $txtValor, false);
+
+                switch($arrTitulos[$numColumna]['formato']){
+                    case "texto":
+                        $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
+                            ->getNumberFormat()
+                            ->setFormatCode(
+                                PHPExcel_Style_NumberFormat::FORMAT_GENERAL
+                            );
+                        break;
+                    case "moneda":
+                        $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
+                            ->getNumberFormat()
+                            ->setFormatCode(
+                                PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD
+                            );
+                        break;
+                    case "porcentaje":
+                        $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
+                            ->getNumberFormat()
+                            ->setFormatCode(
+                                PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00
+                            );
+                        break;
+                }
+
+                $numColumna++;
+            }
+            $numFila++;
+        }
+
+        // *************************** ESTILOS POR DEFECTO DEL ARCHIVO DE EXCEL ********************************************* //
+
+        // fuentes para el archivo
+        $arrFuentes['default']['font']['name'] = "Calibri";
+        $arrFuentes['default']['font']['size'] = 8;
+
+        $arrFuentes['titulo']['fill']['type'] = PHPExcel_Style_Fill::FILL_SOLID;
+        $arrFuentes['titulo']['fill']['color'] = array('rgb' => 'E4E4E4');
+        $arrFuentes['titulo']['font']['bold'] = true;
+        $arrFuentes['titulo']['font']['color'] = array('rgb' => '000000');
+
+        // da formato a todas las columnas del libro
+        $objHoja->getStyle(PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas) . ($numFilas + 1))->applyFromArray($arrFuentes['default']);
+
+        // da formato al titulo
+        $objHoja->getStyle(PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")->applyFromArray($arrFuentes['titulo']);
+
+        for ($i = 0; $i < $numColumnas; $i++) {
+            $objHoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+            for ($j = 1; $j < ($numFilas + 2); $j++) {
+                $objHoja->getRowDimension($j)->setRowHeight(12);
+            }
+        }
+
+        // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename='" . mb_ereg_replace("[^0-9A-Za-z]","", $txtNombre) . "_" . date("YmdHis") . ".xlsx");
+        header('Cache-Control: max-age=0');
+        ob_end_clean();
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+
+    }
+
+
 
 }
 

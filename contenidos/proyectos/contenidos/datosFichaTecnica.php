@@ -44,6 +44,8 @@ $cantUnidadesVinculadas = $claDatosProyecto->totalUnidadesPorProyecto(4, $seqPro
 $pendientesPorVincular = $claDatosProyecto->totalUnidadesPorProyecto(2, $seqProyecto);
 $legalizadas = $claDatosProyecto->totalUnidadesPorProyecto(5, $seqProyecto);
 $pendientesPorLegalizar = $cantUnidadesVinculadas - $legalizadas;
+$cantOcupacion = $claProyecto->datosTecnicosOcupacion($seqProyecto);
+$cantExistencia = $claProyecto->datosTecnicosExistencia($seqProyecto);
 
 $arraPoliza = $claProyecto->obtenerDatosPoliza($seqProyecto);
 $nombreAseguradora;
@@ -173,6 +175,8 @@ $claSmarty->assign("nombreAseguradora", $nombreAseguradora);
 $claSmarty->assign("vigEstabilidad", $vigEstabilidad);
 $claSmarty->assign("vigCumplimiento", $vigCumplimiento);
 $claSmarty->assign("vigAnticipo", $vigAnticipo);
+$claSmarty->assign("cantOcupacion", $cantOcupacion);
+$claSmarty->assign("cantExistencia", $cantExistencia);
 // variables para datos financieros
 $claSmarty->assign("arrFinanciera", $arrFinanciera);
 $claSmarty->assign("arrListadoGirosConstructor", $arrListadoGirosConstructor);

@@ -1744,6 +1744,50 @@ class Proyecto {
         return $datos;
     }
 
+    public function datosTecnicosOcupacion($seqProyecto) {
+        global $aptBd;
+        $sql = "select count(*) as cant
+                from  t_pry_tecnico
+                LEFT JOIN t_pry_unidad_proyecto und  using(seqUnidadProyecto)
+                LEFT JOIN t_pry_proyecto USING(seqProyecto)
+                where  txtPermisoOcupacion like UPPER('SI')";
+        if ($seqProyecto > 0) {
+            $sql .= " and case  when seqProyectoPadre IS NOT NULL then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = " . $seqProyecto . ") else  und.seqProyecto = " . $seqProyecto . " end";
+        }
+        // $sql .="  group by tamp.seqTipoAmparo, seqAmparoPadre";
+        // echo "<p>".$sql."</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = 0;
+
+        while ($objRes->fields) {
+            $datos = $objRes->fields['cant'];
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
+    public function datosTecnicosExistencia($seqProyecto) {
+        global $aptBd;
+        $sql = "select count(*) as cant
+                from  t_pry_tecnico
+                LEFT JOIN t_pry_unidad_proyecto und  using(seqUnidadProyecto)
+                LEFT JOIN t_pry_proyecto USING(seqProyecto)
+                where  txtExistencia like UPPER('SI')";
+        if ($seqProyecto > 0) {
+            $sql .= " and case  when seqProyectoPadre IS NOT NULL then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = " . $seqProyecto . ") else  und.seqProyecto = " . $seqProyecto . " end";
+        }
+        //$sql .="  group by tamp.seqTipoAmparo, seqAmparoPadre";
+        //   echo "<p>".$sql."</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = 0;
+
+        while ($objRes->fields) {
+            $datos = $objRes->fields['cant'];
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
 }
 
 // Fin clase

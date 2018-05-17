@@ -288,15 +288,17 @@ class GestionFinancieraProyectos
             // acumulado de giros por RP
             if(is_array($this->arrResoluciones)) {
                 foreach ($this->arrResoluciones as $seqUnidadActo => $arrResolucion) {
-                    foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
-                        if (isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])) {
-                            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal]['giros'];
-                        }
-                        if (isset($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])) {
-                            foreach ($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'] as $seqUnidadProyecto => $arrDetalleGiro) {
-                                if (isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto])) {
-                                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'] =
-                                        $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'];
+                    if(is_array($arrResolucion['cdp'])) {
+                        foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
+                            if (isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])) {
+                                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal]['giros'];
+                            }
+                            if (isset($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])) {
+                                foreach ($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'] as $seqUnidadProyecto => $arrDetalleGiro) {
+                                    if (isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto])) {
+                                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'] =
+                                            $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'];
+                                    }
                                 }
                             }
                         }

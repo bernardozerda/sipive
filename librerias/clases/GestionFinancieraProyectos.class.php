@@ -95,6 +95,7 @@ class GestionFinancieraProyectos
         $sql = "
             select
                 uac.seqUnidadActo,
+                uac.seqTipoActoUnidad,
                 tac.txtTipoActoUnidad,
                 uac.numActo,
                 uac.fchActo,
@@ -143,6 +144,7 @@ class GestionFinancieraProyectos
             $seqUnidadProyecto = intval($objRes->fields['seqUnidadProyecto']);
 
             $this->arrResoluciones[$seqUnidadActo]['tipo'] = $objRes->fields['txtTipoActoUnidad'];
+            $this->arrResoluciones[$seqUnidadActo]['idTipo'] = $objRes->fields['seqTipoActoUnidad'];
             $this->arrResoluciones[$seqUnidadActo]['numero'] = $objRes->fields['numActo'];
             $this->arrResoluciones[$seqUnidadActo]['fecha'] = new DateTime($objRes->fields['fchActo']);
             $this->arrResoluciones[$seqUnidadActo]['total'] += doubleval($objRes->fields['valIndexado']);
@@ -1116,8 +1118,10 @@ class GestionFinancieraProyectos
         return $arrListado;
     }
 
-    public function listadoGirosConstructor(){
+    public function listadoGirosConstructor($seqProyecto = 0){
         global $aptBd;
+
+        $txtCondicion = ($seqProyecto == 0)? "" : "where if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) = $seqProyecto";
 
         $arrListado = array();
         $sql = "
@@ -1132,6 +1136,7 @@ class GestionFinancieraProyectos
             inner join t_pry_aad_giro_constructor_detalle gcd on gcon.seqGiroConstructor = gcd.seqGiroConstructor
             inner join t_pry_proyecto pry on gcd.seqProyecto = pry.seqProyecto
             left join t_pry_proyecto pry1 on pry.seqProyectoPadre = pry1.seqProyecto
+            $txtCondicion
             group by 
                 if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto),
                 if(pry1.seqProyecto is null,pry.txtNombreProyecto,pry1.txtNombreProyecto),
@@ -1141,10 +1146,11 @@ class GestionFinancieraProyectos
         $objRes = $aptBd->execute($sql);
         while($objRes->fields){
             $seqGiroConstructor = $objRes->fields['seqGiroConstructor'];
-            $arrListado[$seqGiroConstructor]['proyecto']  = $objRes->fields['txtNombreProyecto'];
-            $arrListado[$seqGiroConstructor]['unidades']  = $objRes->fields['numUnidades'];
-            $arrListado[$seqGiroConstructor]['giro']      = $objRes->fields['valGiro'];
-            $arrListado[$seqGiroConstructor]['fecha']     = new DateTime($objRes->fields['fchCreacion']);
+            $arrListado[$seqGiroConstructor]['idProyecto'] = $objRes->fields['seqProyecto'];
+            $arrListado[$seqGiroConstructor]['proyecto']   = $objRes->fields['txtNombreProyecto'];
+            $arrListado[$seqGiroConstructor]['unidades']   = $objRes->fields['numUnidades'];
+            $arrListado[$seqGiroConstructor]['giro']       = $objRes->fields['valGiro'];
+            $arrListado[$seqGiroConstructor]['fecha']      = new DateTime($objRes->fields['fchCreacion']);
             $objRes->MoveNext();
         }
 
@@ -1840,7 +1846,7 @@ class GestionFinancieraProyectos
 
     }
 
-    public function reporteGeneral(){
+    public function reporteGeneral($bolRetornarDatos = false){
         global $aptBd;
 
         $arrReporte = array();
@@ -2045,7 +2051,11 @@ class GestionFinancieraProyectos
         $arrTitulos[14]['formato'] = "moneda";
         $arrTitulos[15]['formato'] = "texto";
 
-        $this->exportarArchivo("Reporte General", $arrTitulos, $arrReporte);
+        if($bolRetornarDatos == false) {
+            $this->exportarArchivo("Reporte General", $arrTitulos, $arrReporte);
+        }else{
+            return $arrReporte;
+        }
 
     }
 

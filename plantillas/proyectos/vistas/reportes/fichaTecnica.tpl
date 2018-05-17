@@ -97,8 +97,23 @@
                             <td ></td>
                             <td ></td>  
                             <td></td>
-                            <td> &nbsp;</td>
-                            <td ></td>
+                            <td>
+                                <div class="col-sm-12 text-right">
+                                    $ {$arrFinanciera.$seqProyecto.constructor|number_format:0:',':'.'}
+                                </div>
+                                <div class="col-sm-12 text-right">
+                                    {$arrFinanciera.$seqProyecto.porcentajeTotalConstructor|number_format:2:',':'.'} %
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col-sm-12 text-right">
+                                    $ {$arrFinanciera.$seqProyecto.saldoDesembolso|number_format:0:',':'.'}
+                                </div>
+                                <div class="col-sm-12 text-right">
+                                    {$arrFinanciera.$seqProyecto.porcentajeSaldoDesembolso|number_format:2:',':'.'} %
+                                </div>
+
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -156,20 +171,59 @@
                          </div>-->
                         <thead >
                             <tr>
-                                <th><b>Asignación de Aportes</b></th>
-                                <th><b>Giro a Encargo Fiduciario</b></th>
-                                <th><b>Indexación del Valor del SFV</b></th>
-                                <th><b>Disminución de Aportes</b></th>
-                                <th><b>Giros Del Encargo Fiduciario Al Oferente</b></th>
+                                <th width="20%"><b>Asignación de Aportes</b></th>
+                                <th width="20%"><b>Giro a Encargo Fiduciario</b></th>
+                                <th width="20%"><b>Indexación del Valor del SFV</b></th>
+                                <th width="20%"><b>Disminución de Aportes</b></th>
+                                <th width="20%"><b>Giros Del Encargo Fiduciario Al Oferente</b></th>
 
                             </tr>
                         </thead>
                         <tr>
-                            <td></td>
-                            <td ></td>
-                            <td ></td>  
-                            <td></td>
-                            <td> &nbsp;</td>                           
+                            <td style="text-align: right">
+                                Res. {$arrFinanciera.$seqProyecto.aprobado.numero} de {$arrFinanciera.$seqProyecto.aprobado.fecha}<br>
+                                {$arrFinanciera.$seqProyecto.aprobado.unidades|@count} SFV por <br>
+                                $ {$arrFinanciera.$seqProyecto.aprobado.valor|number_format:0:',':'.'}
+                            </td>
+                            <td style="text-align: right">
+                                Total de giros a fiducia por<br>
+                                $ {$arrFinanciera.$seqProyecto.fiducia|number_format:0:',':'.'}
+                            </td>
+                            <td style="text-align: left">
+                                {foreach from=$arrFinanciera.$seqProyecto.indexado.detalle key=seqUnidadActo item=arrResolucion}
+                                    Res. {$arrResolucion.numero} de {$arrResolucion.fecha}<br>
+                                    {$arrResolucion.unidades|@count} SFV por<br>
+                                    $ {$arrResolucion.valor|number_format:0:',':'.'}
+                                    <br><br>
+                                {/foreach}
+                                Total de indexaciones por <br>
+                                $ {$arrFinanciera.$seqProyecto.indexado.total|number_format:0:',':'.'}
+                            </td>
+                            <td>
+                                {foreach from=$arrFinanciera.$seqProyecto.menor.detalle key=seqUnidadActo item=arrResolucion}
+                                    Res. {$arrResolucion.numero} de {$arrResolucion.fecha}<br>
+                                    {$arrResolucion.unidades} SFV por<br>
+                                    $ {$arrResolucion.valor|number_format:0:',':'.'}
+                                    <br><br>
+                                {/foreach}
+                                Total de disminuciones por<br>
+                                $ {$arrFinanciera.$seqProyecto.menor.total|number_format:0:',':'.'}
+                            </td>
+                            <td>
+                                El total de recursos del SFV es $ {$arrFinanciera.$seqProyecto.actual|number_format:0:',':'.'}
+                                {if count($arrListadoGirosConstructor) > 0}
+                                    de los cuales se
+                                    {if count($arrListadoGirosConstructor) == 1}
+                                        autorizó {$arrListadoGirosConstructor|@count} giro así:
+                                    {else}
+                                        autorizaron {$arrListadoGirosConstructor|@count} giros así:
+                                    {/if}
+                                {/if}<br><br>
+                                {foreach from=$arrListadoGirosConstructor item=arrGiroConstructor}
+                                    {$arrGiroConstructor.unidades} unidades por<br>
+                                    $ {$arrGiroConstructor.giro|number_format:0:',':'.'}<br><br>
+                                {/foreach}
+                            </td>
                         </tr>
                     </table>
                 </div>

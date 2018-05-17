@@ -186,4 +186,4 @@ if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);
 }
 
-pr($arrListadoGirosConstructor);
+//pr($arrListadoGirosConstructor);

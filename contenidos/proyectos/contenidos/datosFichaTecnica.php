@@ -126,3 +126,5 @@ $claSmarty->assign("seqProyecto", $seqProyecto);
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);
 }
+
+//pr($arrFinanciera[$seqProyecto]);

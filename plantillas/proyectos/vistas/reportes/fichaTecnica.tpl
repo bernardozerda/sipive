@@ -223,6 +223,10 @@
                                     {$arrGiroConstructor.unidades} unidades por<br>
                                     $ {$arrGiroConstructor.giro|number_format:0:',':'.'}<br><br>
                                 {/foreach}
+                                {if $arrFinanciera.$seqProyecto.reintegro != 0}
+                                    Total Reintegros por<br>
+                                    $ {$arrFinanciera.$seqProyecto.reintegro|number_format:0:',':'.'}
+                                {/if}
                             </td>
                         </tr>
                     </table>

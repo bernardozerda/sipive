@@ -157,6 +157,9 @@ foreach($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion){
 }
 
 $arrListadoGirosConstructor = $claGestion->listadoGirosConstructor($seqProyecto);
+foreach($arrListadoGirosConstructor as $i => $arrGiro){
+    $arrListadoGirosConstructor[$i]['porcentajeGiro'] = ($arrListadoGirosConstructor[$i]['giro'] / $arrFinanciera[$seqProyecto]['actual']) * 100;
+}
 
 $claSmarty->assign("arrProyectos", $arrProyectos);
 $claSmarty->assign("cantUnidades", $cantUnidades);
@@ -179,4 +182,4 @@ if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);
 }
 
-//pr($arrFinanciera[$seqProyecto]);
+pr($arrListadoGirosConstructor);

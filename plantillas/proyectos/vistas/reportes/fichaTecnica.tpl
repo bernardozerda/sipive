@@ -102,7 +102,7 @@
                                     $ {$arrFinanciera.$seqProyecto.constructor|number_format:0:',':'.'}
                                 </div>
                                 <div class="col-sm-12 text-right">
-                                    {$arrFinanciera.$seqProyecto.porcentajeTotalConstructor|number_format:2:',':'.'} %
+                                    {$arrFinanciera.$seqProyecto.porcentajeTotalConstructor|number_format:2:',':'.'}%
                                 </div>
                             </td>
                             <td>
@@ -110,7 +110,7 @@
                                     $ {$arrFinanciera.$seqProyecto.saldoDesembolso|number_format:0:',':'.'}
                                 </div>
                                 <div class="col-sm-12 text-right">
-                                    {$arrFinanciera.$seqProyecto.porcentajeSaldoDesembolso|number_format:2:',':'.'} %
+                                    {$arrFinanciera.$seqProyecto.porcentajeSaldoDesembolso|number_format:2:',':'.'}%
                                 </div>
 
                             </td>
@@ -210,7 +210,7 @@
                                 $ {$arrFinanciera.$seqProyecto.menor.total|number_format:0:',':'.'}
                             </td>
                             <td>
-                                El total de recursos del SFV es $ {$arrFinanciera.$seqProyecto.actual|number_format:0:',':'.'}
+                                El total de recursos de SDHT es $ {$arrFinanciera.$seqProyecto.actual|number_format:0:',':'.'}
                                 {if count($arrListadoGirosConstructor) > 0}
                                     de los cuales se
                                     {if count($arrListadoGirosConstructor) == 1}
@@ -220,7 +220,7 @@
                                     {/if}
                                 {/if}<br><br>
                                 {foreach from=$arrListadoGirosConstructor item=arrGiroConstructor}
-                                    {$arrGiroConstructor.unidades} unidades por<br>
+                                    El {$arrGiroConstructor.porcentajeGiro|number_format:2:',':'.'}% el {$arrGiroConstructor.fecha->format("Y-m-d")} por<br>
                                     $ {$arrGiroConstructor.giro|number_format:0:',':'.'}<br><br>
                                 {/foreach}
                                 {if $arrFinanciera.$seqProyecto.reintegro != 0}

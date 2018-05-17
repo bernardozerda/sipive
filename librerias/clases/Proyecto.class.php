@@ -616,7 +616,7 @@ class Proyecto {
             $datos[] = $objRes->fields;
             $objRes->MoveNext();
         }
-       // var_dump($datos);
+        // var_dump($datos);
         return $datos;
     }
 
@@ -1720,6 +1720,28 @@ class Proyecto {
                 }
             }
         }
+    }
+
+    public function obtenerDatosPoliza($seqProyecto) {
+
+        global $aptBd;
+        $sql = "SELECT max(fchVigenciaFin) as vigencia , seqTipoAmparo, seqAmparoPadre, txtNombreAseguradora, seqAmparo, txtTipoAmparo
+                FROM t_pry_poliza pol
+                LEFT JOIN t_pry_amparo amp  USING(seqPoliza)
+                LEFT JOIN t_pry_tipo_amparo tamp using(seqTipoAmparo)
+                LEFT JOIN t_pry_aseguradoras ase using(seqAseguradora)";
+        if ($seqProyecto > 0) {
+            $sql .= " where  pol.seqProyecto = " . $seqProyecto;
+        }
+        $sql .="  group by tamp.seqTipoAmparo, seqAmparoPadre";
+        //   echo "<p>".$sql."</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
     }
 
 }

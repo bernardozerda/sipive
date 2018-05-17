@@ -79,11 +79,13 @@ class GestionFinancieraProyectos
                 doubleval( $this->arrResoluciones[$seqUnidadActo]['giros'] );
 
             // saldo por RP
-            foreach($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP){
-                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'] =
-                    doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP']) +
-                    doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['liberaciones']) -
-                    doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros']);
+            if(is_array($arrResolucion['cdp'])) {
+                foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
+                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'] =
+                        doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP']) +
+                        doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['liberaciones']) -
+                        doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros']);
+                }
             }
         }
 
@@ -223,12 +225,14 @@ class GestionFinancieraProyectos
             }
 
             foreach($this->arrResoluciones as $seqUnidadActo => $arrResolucion){
-                foreach($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP){
-                    if(isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])) {
-                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal];
-                    }
-                    if(isset($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])){
-                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'] = $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'];
+                if(is_array($arrResolucion['cdp'])) {
+                    foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
+                        if (isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])) {
+                            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal];
+                        }
+                        if (isset($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])) {
+                            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'] = $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'];
+                        }
                     }
                 }
             }
@@ -282,16 +286,18 @@ class GestionFinancieraProyectos
             }
 
             // acumulado de giros por RP
-            foreach($this->arrResoluciones as $seqUnidadActo => $arrResolucion){
-                foreach($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP ){
-                    if(isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])){
-                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal]['giros'];
-                    }
-                    if(isset($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])){
-                        foreach($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'] as $seqUnidadProyecto => $arrDetalleGiro){
-                            if(isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto])){
-                                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'] =
-                                    $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'];
+            if(is_array($this->arrResoluciones)) {
+                foreach ($this->arrResoluciones as $seqUnidadActo => $arrResolucion) {
+                    foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
+                        if (isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])) {
+                            $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal]['giros'];
+                        }
+                        if (isset($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])) {
+                            foreach ($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'] as $seqUnidadProyecto => $arrDetalleGiro) {
+                                if (isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto])) {
+                                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'] =
+                                        $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'];
+                                }
                             }
                         }
                     }

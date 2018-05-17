@@ -123,9 +123,11 @@ foreach($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion){
         $arrFinanciera[$seqProyecto]['aprobado']['numero'] = $arrResolucion['numero'];
         $arrFinanciera[$seqProyecto]['aprobado']['fecha']  = $arrResolucion['fecha']->format("Y");
         $arrFinanciera[$seqProyecto]['aprobado']['valor']  = $arrResolucion['total'];
-        foreach($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP){
-            foreach($arrCDP['unidades'] as $seqUnidadProyecto => $arrUnidad) {
-                $arrFinanciera[$seqProyecto]['aprobado']['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
+        if(isset($arrResolucion['cdp'])) {
+            foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
+                foreach ($arrCDP['unidades'] as $seqUnidadProyecto => $arrUnidad) {
+                    $arrFinanciera[$seqProyecto]['aprobado']['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
+                }
             }
         }
     }elseif($arrResolucion['idTipo'] == 2 and $arrResolucion['total'] > 0){
@@ -133,9 +135,11 @@ foreach($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion){
         $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
         $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
         $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['valor'] = $arrResolucion['total'];
-        foreach($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP){
-            foreach($arrCDP['unidades'] as $seqUnidadProyecto => $arrUnidad) {
-                $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
+        if(isset($arrResolucion['cdp'] )) {
+            foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
+                foreach ($arrCDP['unidades'] as $seqUnidadProyecto => $arrUnidad) {
+                    $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
+                }
             }
         }
     }elseif($arrResolucion['idTipo'] == 3 or ($arrResolucion['idTipo'] == 2 and $arrResolucion['total'] < 0)){

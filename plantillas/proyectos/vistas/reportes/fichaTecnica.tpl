@@ -159,10 +159,10 @@
                             </tr>
                         </thead>
                         <tr>
-                            <td>&nbsp;</td>
-                            <td >&nbsp;</td>
-                            <td ></td>  
-                            <td> &nbsp;</td>
+                            <td>{$vigAnticipo}</td>
+                            <td>{$vigCumplimiento}</td>
+                            <td>{$vigEstabilidad}</td>  
+                            <td>{$nombreAseguradora}</td>
 
                         </tr>
                     </table>

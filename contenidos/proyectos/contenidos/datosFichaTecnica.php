@@ -45,6 +45,51 @@ $pendientesPorVincular = $claDatosProyecto->totalUnidadesPorProyecto(2, $seqProy
 $legalizadas = $claDatosProyecto->totalUnidadesPorProyecto(5, $seqProyecto);
 $pendientesPorLegalizar = $cantUnidadesVinculadas - $legalizadas;
 
+$arraPoliza = $claProyecto->obtenerDatosPoliza($seqProyecto);
+$nombreAseguradora;
+$vigEstabilidad;
+$seqEstabilidad;
+$vigCumplimiento;
+$seqCumplimiento;
+$vigAnticipo;
+$seqAnticipo;
+
+foreach ($arraPoliza as $key => $value) {
+    $nombreAseguradora = $value['txtNombreAseguradora'];
+    if ($value['seqTipoAmparo'] == 1) {
+        $vigEstabilidad = $value['vigencia'];
+        $seqEstabilidad = $value['seqAmparo'];
+    }
+    if ($value['seqTipoAmparo'] == 2) {
+        $vigCumplimiento = $value['vigencia'];
+        $seqCumplimiento = $value['seqAmparo'];
+    }
+    if ($value['seqTipoAmparo'] == 3) {
+        $vigAnticipo = $value['vigencia'];
+        $seqAnticipo = $value['seqAmparo'];
+    }
+
+    if ($value['seqTipoAmparo'] == 6 && $seqEstabilidad == $value['seqAmparoPadre']) {        
+        $fecha = $vigEstabilidad;       
+        if (strtotime($value['vigencia']) > strtotime($fecha)) {
+            $vigEstabilidad = $value['vigencia'];
+        }     
+       
+    }
+    if ($value['seqTipoAmparo'] == 6 && $seqCumplimiento == $value['seqAmparoPadre']) {        
+        $fecha = $vigCumplimiento;       
+        if (strtotime($value['vigencia']) > strtotime($fecha)) {
+            $vigCumplimiento = $value['vigencia'];
+        }     
+    }
+    if ($value['seqTipoAmparo'] == 6 && $seqAnticipo == $value['seqAmparoPadre']) {        
+        $fecha = $vigAnticipo;       
+        if (strtotime($value['vigencia']) > strtotime($fecha)) {
+            $vigAnticipo = $value['vigencia'];
+        }       
+    }
+}
+
 /*******************************************************************************************************************
  * DATOS FINANCIEROS DEL PROYECTO
  *******************************************************************************************************************/
@@ -117,7 +162,10 @@ $claSmarty->assign("legalizadas", $legalizadas);
 $claSmarty->assign("pendientesPorLegalizar", $pendientesPorLegalizar);
 $claSmarty->assign("arrDatosVivienda", $arrDatosVivienda);
 $claSmarty->assign("arrImagenes", $arraImagenes);
-
+$claSmarty->assign("nombreAseguradora", $nombreAseguradora);
+$claSmarty->assign("vigEstabilidad", $vigEstabilidad);
+$claSmarty->assign("vigCumplimiento", $vigCumplimiento);
+$claSmarty->assign("vigAnticipo", $vigAnticipo);
 // variables para datos financieros
 $claSmarty->assign("arrFinanciera", $arrFinanciera);
 $claSmarty->assign("arrListadoGirosConstructor", $arrListadoGirosConstructor);

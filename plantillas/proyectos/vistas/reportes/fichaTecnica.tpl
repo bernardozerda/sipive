@@ -15,24 +15,28 @@
                         <div id="myCarousel" class="carousel slide" data-ride="carousel" >
                             <!-- Indicators -->
                             <ol class="carousel-indicators">
-                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                                <li data-target="#myCarousel" data-slide-to="1"></li>
-                                <li data-target="#myCarousel" data-slide-to="2"></li>
+                                {foreach from=$arrImagenes key=keyImg item=valueImg} 
+                                    {if $keyImg ==0}
+                                        <li data-target="#myCarousel" data-slide-to="{$keyImg}" class="active"></li>
+                                        {else}
+                                        <li data-target="#myCarousel" data-slide-to="{$keyImg}" ></li>
+                                        {/if}
+                                    {/foreach}
                             </ol>
-
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner" style="height: 190px">
-                                <div class="item active">
-                                    <img src="recursos/imagenes/desembolsos/Imagen1.jpg" alt="Los Angeles" style="width:100%;">
-                                </div>
+                                {foreach from=$arrImagenes key=keyImg item=valueImg} 
+                                    {if $keyImg ==0}
+                                        <div class="item active">
+                                            <img src="recursos/proyectos/{$valueImg}" alt="Los Angeles" style="width:100%;">
+                                        </div>
+                                    {else}
+                                        <div class="item">
+                                            <img src="recursos/proyectos/{$valueImg}" alt="Los Angeles" style="width:100%;">
+                                        </div>
+                                    {/if}
 
-                                <div class="item">
-                                    <img src="recursos/imagenes/desembolsos/Imagen2.jpg" alt="Chicago" style="width:100%;">
-                                </div>
-
-                                <div class="item">
-                                    <img src="recursos/imagenes/desembolsos/Imagen3.jpg" alt="New york" style="width:100%;">
-                                </div>
+                                {/foreach}                               
                             </div>
 
                             <!-- Left and right controls -->
@@ -107,13 +111,13 @@
                         <li><b>Tipo de agrupación:</b> {$value.txtTipoProyecto}</li>
                         <li><b>Numero de torres V.I.P:</b>{$value.valTorres}</li>
                         <li>Altura en Pisos: 17</li>
-                        {foreach from=$arrDatosVivienda key=keyv item=valueV} 
+                            {foreach from=$arrDatosVivienda key=keyv item=valueV} 
                             <li><b>Apartamentos discapacitados:</b>  {$valueV.totalUdsDisc}</li>
                             <li><b>Apartamentos Residentes:</b>  {$valueV.totalUnidades}</li>
                             <li><b>parqueaderos Residentes:</b>  {$valueV.totalParq}</li>
                             <li><b>Parqueos discapacitados: </b> {$valueV.totalParqDisc}</li>
                             <li><b>Total parqueaderos:</b>   {$valueV.totalParq+$valueV.totalParqDisc}</li>
-                        {/foreach}
+                            {/foreach}
                         <p>&nbsp;</p>
                         <li>De acuerdo con el último informe de interventoría de Marzo  2018 se informa un avance de obra de 98.50%. Las obras de viviendas se encuentran terminadas. 
                         </li>

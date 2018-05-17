@@ -26,13 +26,25 @@ $seqProyecto = $_GET['seqProyecto'];
 $arrProyectos = $claProyecto->obtenerDatosProyectosFicha($seqProyecto);
 $arrDatosVivienda = $claProyecto->obtenerDatosViviendaFicha($seqProyecto);
 $arraFinanciera = $claDatosProyecto->reporteGeneralFinaciera($seqProyecto);
-var_dump($arraFinanciera);
+//var_dump($arraFinanciera);
+$directorio = '../../../recursos/proyectos/proyecto-' . $seqProyecto . '/imagenes';
+
+$dir = @dir($directorio);
+$arraImagenes = Array();
+if ($dir) {
+    while (($archivo = $dir->read()) !== false) {
+        if ($archivo[0] != ".") {
+            $arraImagenes[] = 'proyecto-' . $seqProyecto . '/imagenes/' . $archivo;
+            continue;
+        }
+    }
+}
 
 $cantUnidades = $claDatosProyecto->totalUnidadesPorProyecto(1, $seqProyecto);
 $cantUnidadesVinculadas = $claDatosProyecto->totalUnidadesPorProyecto(4, $seqProyecto);
 $pendientesPorVincular = $claDatosProyecto->totalUnidadesPorProyecto(2, $seqProyecto);
 $legalizadas = $claDatosProyecto->totalUnidadesPorProyecto(5, $seqProyecto);
-$pendientesPorLegalizar = $cantUnidadesVinculadas-$legalizadas;
+$pendientesPorLegalizar = $cantUnidadesVinculadas - $legalizadas;
 
 
 // var_dump($arrProyectos);
@@ -43,6 +55,7 @@ $claSmarty->assign("pendientesPorVincular", $pendientesPorVincular);
 $claSmarty->assign("legalizadas", $legalizadas);
 $claSmarty->assign("pendientesPorLegalizar", $pendientesPorLegalizar);
 $claSmarty->assign("arrDatosVivienda", $arrDatosVivienda);
+$claSmarty->assign("arrImagenes", $arraImagenes);
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);
 }

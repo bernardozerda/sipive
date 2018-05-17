@@ -8,6 +8,7 @@
 $txtPrefijoRuta = "../../";
 
 // Autenticacion (si esta logueado no no)
+
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
 
 // Inclusiones necesarias
@@ -70,11 +71,11 @@ if (empty($arrErrores)) {
 
     if (isset($_POST['seqProyecto']) and is_numeric($_POST['seqProyecto']) and $_POST['seqProyecto'] > 0) {
 
-        if ($cantDoc == 0) {
-            $claProyecto->almacenarDocumentos($seqProyecto, $_POST["documentId_" . $seqProyecto], $_POST["document_" . $seqProyecto]);
-        } else {
-            $claProyecto->modificarDocumentos($seqProyecto, $_POST["documentId_" . $seqProyecto], $_POST["document_" . $seqProyecto], $cantDoc);
-        }
+//        if ($cantDoc == 0) {
+//            $claProyecto->almacenarDocumentos($seqProyecto, $_POST["documentId_" . $seqProyecto], $_POST["document_" . $seqProyecto]);
+//        } else {
+//            $claProyecto->modificarDocumentos($seqProyecto, $_POST["documentId_" . $seqProyecto], $_POST["document_" . $seqProyecto], $cantDoc);
+//        }
         //var_dump($_POST);
         foreach ($_POST as $nombre_campo => $valor) {
             if (count($valor) > 1) {
@@ -164,7 +165,8 @@ if (empty($arrErrores)) {
         $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
     }
     
-    if(isset($_POST["numContratoFiducia"]) && $_POST["seqDatoFiducia"] == ""){
+    if($_POST["numContratoFiducia"] != "" && $_POST["numContratoFiducia"] != 0 && $_POST["seqDatoFiducia"] == ""){
+        ECHO  "<P>PASOOOO</P> ";
         $claProyecto->almacenarFiducia($seqProyecto, $arrayFiducia);
     }else if($_POST["seqDatoFiducia"] != "" && $_POST["seqDatoFiducia"] > 0){
         $claProyecto->modificarFiducia($seqProyecto, $arrayFiducia);

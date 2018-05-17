@@ -362,6 +362,9 @@ td,th{
 .nav-tabs.nav-justified > li > a {
     border-radius: 15px 15px 0px 0px;
 }
+.vineta{
+    list-style-image: url('recursos/imagenes/vineta.png');
+}
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print{
     *,:after,:before{

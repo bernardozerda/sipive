@@ -575,6 +575,51 @@ class Proyecto {
         return $datos;
     }
 
+    public function obtenerDatosProyectosFicha($seqProyecto) {
+
+        global $aptBd;
+        $sql = "SELECT pry.*, pol.*, fid.*, con.*, loc.*, pry.seqProyecto as seqProyecto, txtTipoProyecto "
+                . "FROM  t_pry_proyecto pry "
+                . "LEFT JOIN t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto) "
+                . "LEFT JOIN t_pry_datos_fiducia fid on(pry.seqProyecto = fid.seqProyecto) "
+                . "LEFT JOIN t_pry_constructor con USING(seqConstructor) "
+                . "LEFT JOIN t_frm_localidad loc USING(seqLocalidad)"
+                . "LEFT JOIN T_PRY_TIPO_PROYECTO USING(seqTipoProyecto)";
+        if ($seqProyecto > 0) {
+            $sql .= " where  pry.seqProyecto = " . $seqProyecto;
+        }
+        $sql . " ORDER BY  pry.seqProyecto";
+        // echo "<p>".$sql."</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
+    public function obtenerDatosviviendaFicha($seqProyecto) {
+
+        global $aptBd;
+        $sql = "SELECT sum(numCantParqDisc) as totalParqDisc, sum(numCantUdsDisc) as totalUdsDisc,
+                sum(numTotalParq) as totalParq, sum(numCantidad) as totalUnidades 
+                from t_pry_tipo_vivienda ptv";
+        if ($seqProyecto > 0) {
+            $sql .= " where  ptv.seqProyecto = " . $seqProyecto;
+        }
+
+        // echo "<p>".$sql."</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+       // var_dump($datos);
+        return $datos;
+    }
+
     public function editarProyecto($post) {
         global $aptBd;
 

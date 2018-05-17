@@ -347,6 +347,10 @@ a:hover {
     background-color: #E4E4E4;
 }
 
+
+.vineta{
+    list-style-image: url('recursos/imagenes/vineta.png');
+}
 .yui-skin-sam .yui-dt tr.vigenciaRojo,
 .yui-skin-sam .yui-dt tr.vigenciaRojo td.yui-dt-asc,
 .yui-skin-sam .yui-dt tr.vigenciaRojo td.yui-dt-desc,

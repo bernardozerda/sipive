@@ -23,7 +23,7 @@ if ($_REQUEST['seqProyecto']) {
 $claSmarty->assign("arrListaProyectos", $listaProyectos);
 $claSmarty->assign("boolMostrar", $boolMostrar);
 $claSmarty->assign("arrListaEntidades", $listaEntidades);
-//$claSmarty->display("proyectos/fichaTecnicaProyectos.tpl");
+$claSmarty->display("proyectos/vistas/reportes/fichaTecnica.tpl");
 
 //if($_REQUEST['seqProyecto']){
 //    $datos = $classProyecto->obtenerDatosProyecto($_REQUEST['seqProyecto']);

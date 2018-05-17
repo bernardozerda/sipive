@@ -801,4 +801,250 @@ class DatosGeneralesProyectos {
         return $datos;
     }
 
+    public function totalUnidadesPorProyecto($valor, $seqProyecto) {
+
+        global $aptBd;
+        $sql = "";
+        if ($valor == 1) {
+            $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und LEFT JOIN t_pry_proyecto proy USING (seqProyecto) WHERE und.bolActivo =1";
+        } else if ($valor == 2) {
+            $sql = "SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
+                    LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
+                    LEFT JOIN t_pry_proyecto proy ON (und.seqProyecto = proy.seqProyecto)
+                    WHERE (frm.bolCerrado =0  OR (und.seqFormulario IS NULL OR  und.seqFormulario = 0) and und.bolActivo =1)";
+        } else if ($valor == 3) {
+            $sql = "SELECT count(*) as cant, und.seqProyecto FROM T_PRY_UNIDAD_PROYECTO und
+                    LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
+                    LEFT JOIN t_pry_proyecto proy ON (und.seqProyecto = proy.seqProyecto)
+                    WHERE frm.bolCerrado =1  and und.seqFormulario is not null
+                    and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16 OR seqEstadoProceso = 47) and und.bolActivo =1";
+        } else if ($valor == 4) {
+            $sql = "SELECT count(*) as cant, und.seqProyecto FROM T_PRY_UNIDAD_PROYECTO und
+                    LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
+                    LEFT JOIN t_pry_proyecto proy  ON (und.seqProyecto = proy.seqProyecto)
+                    WHERE frm.bolCerrado =1  and und.seqFormulario is not null
+                    and (seqEstadoProceso = 15 OR seqEstadoProceso = 62 OR seqEstadoProceso = 17
+                    OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
+                    OR seqEstadoProceso = 26 OR seqEstadoProceso = 27 OR seqEstadoProceso = 28 OR seqEstadoProceso = 31
+                    OR seqEstadoProceso = 29 OR seqEstadoProceso = 40) and und.bolActivo =1";
+        } else if ($valor == 5) {
+            $sql = "SELECT count(*) as cant, und.seqProyecto FROM t_pry_unidad_proyecto    und
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)
+                    LEFT JOIN t_pry_proyecto proy ON (und.seqProyecto = proy.seqProyecto)
+                     WHERE seqEstadoProceso = 40 AND bolCerrado = 1";
+        } else if ($valor == 6) {
+            $sql = "SELECT count(*) as cant  FROM t_pry_unidad_proyecto    und
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)
+                     WHERE bolCerrado = 1 AND (seqEstadoProceso = 62 OR seqEstadoProceso = 17
+                    OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
+                    OR seqEstadoProceso = 26 OR seqEstadoProceso = 27 OR seqEstadoProceso = 28 OR seqEstadoProceso = 31
+                    OR seqEstadoProceso = 29 OR seqEstadoProceso = 24)";
+        } else if ($valor == 7) {
+            $sql = "SELECT count(*) as cant FROM t_pry_unidad_proyecto    und
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)
+                     WHERE fchDevolucionExpediente is not null and fchDevolucionExpediente != '0000-00-00 00:00:00' AND fchDevolucionExpediente != '' AND bolCerrado = 1 ";
+        } else if ($valor == 8) {
+            $sql = "SELECT count(*) as cant, und.seqProyecto FROM t_pry_unidad_proyecto und
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)
+                     WHERE fchDevolucionExpediente is not null and fchDevolucionExpediente != '0000-00-00 00:00:00' AND fchDevolucionExpediente != '' AND bolCerrado = 1 ";
+        }
+        $sql .= " and case  when seqProyectoPadre IS NOT NULL "
+                . "then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = $seqProyecto) "
+                . "else  und.seqProyecto = $seqProyecto end  ";
+        if ($valor != 7 && $valor != 6) {
+            // $sql .= " GROUP BY und.seqProyecto ";
+        }
+       // echo "<p>".$sql."</p>";
+
+        //$rs = $aptBd->getAssoc($sql);
+        $objRes = $aptBd->execute($sql);
+        $datos = 0;
+
+        $int = 0;
+        while ($objRes->fields) {
+            $datos = $objRes->fields['cant'];
+            $objRes->MoveNext();
+        }
+//echo "ba". $datos;
+        return $datos;
+    }
+    
+    
+    public function reporteGeneralFinaciera($seqProyecto){
+        global $aptBd;
+
+        $arrReporte = array();
+
+       echo  $sql = "
+            select
+              if(con.seqProyectoPadre is null,con.seqProyecto,con.seqProyectoPadre) as seqProyecto,
+              if(con.seqProyectoPadre is null,con.txtNombreProyecto,pry.txtNombreProyecto) as txtNombreProyecto,
+              -- if(con.seqProyectoPadre is null,con.seqDatoFiducia,pry.seqDatoFiducia) as seqDatoFiducia,
+              uac.seqTipoActoUnidad,
+              uac.numActo,
+              uac.fchActo,
+              sum(uvi.valIndexado) as valIndexado
+            from t_pry_aad_unidad_acto uac
+            inner join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
+            inner join t_pry_proyecto con on uvi.seqProyecto = con.seqProyecto
+            left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
+            group by
+              if(con.seqProyectoPadre is null, con.seqProyecto, con.seqProyectoPadre),
+              if(con.seqProyectoPadre is null, con.txtNombreProyecto, pry.txtNombreProyecto),
+              uac.seqTipoActoUnidad,
+              uac.numActo,
+              uac.fchActo
+            order by
+              if(con.seqProyectoPadre is null, con.txtNombreProyecto, pry.txtNombreProyecto),
+              uac.seqTipoActoUnidad
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $seqProyecto = $objRes->fields['seqProyecto'];
+
+            $arrReporte[$seqProyecto]['nombre'] = $objRes->fields['txtNombreProyecto'];
+
+            $arrReporte[$seqProyecto]['entidad'] = "";
+
+//            $arrReporte[$seqProyecto]['entidad'] = array_shift(
+//                obtenerDatosTabla(
+//                    "t_pry_datos_fiducia",
+//                    array("seqDatoFiducia","txtEntidadFiducia"),
+//                    "seqDatoFiducia",
+//                    "seqDatoFiducia = " . $objRes->fields['seqDatoFiducia']
+//                )
+//            );
+
+            $arrReporte[$seqProyecto]['aprobado'] = doubleval(
+                ($objRes->fields['seqTipoActoUnidad'] == 1)?
+                    $arrReporte[$seqProyecto]['aprobado'] + $objRes->fields['valIndexado'] :
+                    $arrReporte[$seqProyecto]['aprobado']
+            );
+
+            $arrReporte[$seqProyecto]['indexado'] = doubleval(
+                ($objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] > 0)?
+                    $arrReporte[$seqProyecto]['indexado'] + $objRes->fields['valIndexado'] :
+                    $arrReporte[$seqProyecto]['indexado']
+            );
+
+            $arrReporte[$seqProyecto]['menor'] = doubleval(
+                ($objRes->fields['seqTipoActoUnidad'] == 3 or ($objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] < 0))?
+                    $arrReporte[$seqProyecto]['menor'] + abs($objRes->fields['valIndexado']) :
+                    $arrReporte[$seqProyecto]['menor']
+            );
+
+            $arrReporte[$seqProyecto]['actual'] =
+                $arrReporte[$seqProyecto]['aprobado'] +
+                $arrReporte[$seqProyecto]['indexado'] -
+                $arrReporte[$seqProyecto]['menor'];
+
+            $arrReporte[$seqProyecto]['fiducia'] = 0;
+            $arrReporte[$seqProyecto]['reintegro'] = 0;
+            $arrReporte[$seqProyecto]['totalFiducia'] = 0;
+            $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = 0;
+            $arrReporte[$seqProyecto]['constructor'] = 0;
+            $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = 0;
+            $arrReporte[$seqProyecto]['actualFiducia'] = 0;
+            $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = 0;
+            $arrReporte[$seqProyecto]['rendimiento'] = 0;
+            $arrReporte[$seqProyecto]['observaciones'] = "";
+
+            $objRes->MoveNext();
+        }
+
+        // datos fiducia
+        $sql = "
+            select 
+                if(pry.seqProyectoPadre is null,pry.seqProyecto,pry.seqProyectoPadre) as seqProyecto,
+                sum(gfd.valGiro) as valGiroFiducia
+            from t_pry_aad_giro_fiducia gfi
+            inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
+            inner join t_pry_proyecto pry on gfd.seqProyecto = pry.seqProyecto
+            group by 
+                if(pry.seqProyectoPadre is null, pry.seqProyecto, pry.seqProyectoPadre)        
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $arrReporte[$seqProyecto]['fiducia'] = doubleval($objRes->fields['valGiroFiducia']);
+            $objRes->MoveNext();
+        }
+
+        // reintegros
+        $sql = "
+            select 
+                rei.seqProyecto,
+                lower(red.txtTipo) as txtTipo,
+                sum(red.valConsignacion) as valConsignacion
+            from t_pry_aad_reintegros rei
+            inner join t_pry_aad_reintegros_detalle red on rei.seqReintegro = red.seqReintegro 
+            group by 
+                rei.seqProyecto,
+                lower(red.txtTipo)     
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $txtTipo = $objRes->fields['txtTipo'];
+            $arrReporte[$seqProyecto][$txtTipo] = doubleval($objRes->fields['valConsignacion']);
+            $objRes->MoveNext();
+        }
+
+        // giros a constructor
+        $sql = "
+            select 
+                if(pry.seqProyectoPadre is null, pry.seqProyecto, pry.seqProyectoPadre) as seqProyecto,
+                sum(gcd.valGiro) as valGiroConstructor
+            from t_pry_aad_giro_constructor gco
+            inner join t_pry_aad_giro_constructor_detalle gcd on gcd.seqGiroConstructor = gco.seqGiroConstructor
+            inner join t_pry_proyecto pry on gcd.seqProyecto = pry.seqProyecto
+            group by 
+              if(pry.seqProyectoPadre is null, pry.seqProyecto, pry.seqProyectoPadre)
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $seqProyecto = $objRes->fields['seqProyecto'];
+            $arrReporte[$seqProyecto]['constructor'] = doubleval($objRes->fields['valGiroConstructor']);
+            $objRes->MoveNext();
+        }
+
+        // porcentajes
+        foreach($arrReporte as $seqProyecto => $arrDatos){
+
+            // valor total fiducia
+            $arrReporte[$seqProyecto]['totalFiducia'] = doubleval($arrReporte[$seqProyecto]['fiducia']) - doubleval($arrReporte[$seqProyecto]['reintegro']);
+
+            // fiducia
+            if($arrReporte[$seqProyecto]['totalFiducia'] == 0){
+                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = 0;
+            }else {
+                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = round($arrReporte[$seqProyecto]['totalFiducia'] / $arrReporte[$seqProyecto]['actual'] ,2);
+            }
+
+            // constructor
+            if($arrReporte[$seqProyecto]['constructor'] == 0){
+                $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = 0;
+            }else {
+                $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = round($arrReporte[$seqProyecto]['constructor'] / $arrReporte[$seqProyecto]['actual'] ,2);
+            }
+
+            // actual fiducia
+            $arrReporte[$seqProyecto]['actualFiducia'] = doubleval($arrReporte[$seqProyecto]['totalFiducia']) - doubleval($arrReporte[$seqProyecto]['constructor']);
+
+            // actual fiducia
+            if($arrReporte[$seqProyecto]['actualFiducia'] == 0){
+                $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = 0;
+            }else {
+                $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = round($arrReporte[$seqProyecto]['actualFiducia'] / $arrReporte[$seqProyecto]['actual'] ,2);
+            }
+
+        }
+
+        return $arrReporte;
+
+        //$this->exportarArchivo("Reporte General", $arrTitulos, $arrReporte);
+
+    }
+
 }

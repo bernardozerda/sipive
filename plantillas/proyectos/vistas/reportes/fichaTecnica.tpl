@@ -2,6 +2,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <div id="wrapper" class="container tab-content">
+    <div class="alert alert-danger">
+        <h5> <strong>Atenci&oacute;n!!! </strong> <b>Esta informaci&oacute;n esta sujeta a verificaci&oacute;n y actualizacion.</b></h5>
+    </div>
     <fieldset>
         {foreach from=$arrProyectos key=key item=value} 
             <div class="form-group" >

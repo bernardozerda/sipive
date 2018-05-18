@@ -20,7 +20,7 @@ try {
 	$sql .= "INNER JOIN T_COR_PROYECTO_GRUPO prg ON per.seqProyectoGrupo = prg.seqProyectoGrupo ";
 	$sql .= "INNER JOIN T_COR_GRUPO gru ON prg.seqGrupo = gru.seqGrupo ";
 	$sql .= "WHERE prg.seqProyecto = 3 ";
-	$sql .= "AND usu.bolActivo = 1 ";
+	//$sql .= "AND usu.bolActivo = 1 ";
 	$sql .= "AND CONCAT( usu.txtNombre , ' ' , usu.txtApellido ) LIKE '%$txtConsulta%' ";
 	$sql .= "ORDER BY nombre";
 

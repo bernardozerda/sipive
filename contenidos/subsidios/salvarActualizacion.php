@@ -176,7 +176,7 @@ if (empty($arrErrores)) {
             }
 
             // Años aprobados
-            if ($_POST['valIngresoHogar'] > 0 && $arrCiudadano['seqNivelEducativo'] != 1 && $arrCiudadano['numAnosAprobados'] == 0) {
+            if ($_POST['valIngresoHogar'] > 0 && $arrCiudadano['seqNivelEducativo'] != 1 && $arrCiudadano['numAnosAprobados'] == 0 and $_POST['seqPlanGobierno'] == 3) {
                 $arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " debe tener años aprobados";
             }
 

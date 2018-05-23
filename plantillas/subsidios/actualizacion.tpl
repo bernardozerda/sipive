@@ -1365,7 +1365,7 @@
                                             {foreach from=$arrSisben key=seqSisben item=arrRegistro}
                                                 <option value="{$seqSisben}"
                                                         {if $objFormulario->seqSisben == $seqSisben} selected {/if}
-                                                        {if $arrRegistro.bolActivo == 0}
+                                                        {if $arrRegistro.bolActivo == 0 and $objFormulario->seqSisben == 3}
                                                             style="color:#666666"
                                                             disabled
                                                         {/if}

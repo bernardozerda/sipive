@@ -179,34 +179,34 @@
                                             </tr>
 
                                             <!-- FECHA DE EXPEDICION DEL DOCUMENTO Y TIPO DE SOPORTE -->
-                                            <tr>
-                                                <td width="15%">Fecha de Expedición</td>
-                                                <td width="35%" style="padding-left: 15px;">
-                                                    <input type="text"
-                                                           id="expedicion"
-                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                           value=""
-                                                           style="width:100px"
-                                                           readonly
-                                                    /> <a onClick="calendarioPopUp('expedicion')" href="#">Calendario</a> &nbsp;&nbsp;
-                                                    <a onClick="document.getElementById('expedicion').value = '';" href="#">Limpiar</a>
-                                                </td>
-                                                <td width="15%">Tipo de soporte</td>
-                                                <td width="35%" style="padding-left: 15px;">
-                                                    <select id="tipoSoporte"
-                                                            style="width:90%;"
-                                                            onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                            onchange="soporteDocumento('tipoSoporte',$('#tipoSoporte').val())"
-                                                            style="width:90%;"
-                                                    >
-                                                        <option value="">Seleccione</option>
-                                                        <option value="registroCivil">Registro Civil</option>
-                                                        <option value="partidaBautismo">Partida de Bautismo</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
+                                            {*<tr>*}
+                                                {*<td width="15%">Fecha de Expedición</td>*}
+                                                {*<td width="35%" style="padding-left: 15px;">*}
+                                                    {*<input type="text"*}
+                                                           {*id="expedicion"*}
+                                                           {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                                           {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                                           {*value=""*}
+                                                           {*style="width:100px"*}
+                                                           {*readonly*}
+                                                    {*/> <a onClick="calendarioPopUp('expedicion')" href="#">Calendario</a> &nbsp;&nbsp;*}
+                                                    {*<a onClick="document.getElementById('expedicion').value = '';" href="#">Limpiar</a>*}
+                                                {*</td>*}
+                                                {*<td width="15%">Tipo de soporte</td>*}
+                                                {*<td width="35%" style="padding-left: 15px;">*}
+                                                    {*<select id="tipoSoporte"*}
+                                                            {*style="width:90%;"*}
+                                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                                            {*onchange="soporteDocumento('tipoSoporte',$('#tipoSoporte').val())"*}
+                                                            {*style="width:90%;"*}
+                                                    {*>*}
+                                                        {*<option value="">Seleccione</option>*}
+                                                        {*<option value="registroCivil">Registro Civil</option>*}
+                                                        {*<option value="partidaBautismo">Partida de Bautismo</option>*}
+                                                    {*</select>*}
+                                                {*</td>*}
+                                            {*</tr>*}
 
                                             <!-- SOPORTE PARA EL DOCUMENTO DE IDENTIDAD -->
                                             <tr id="soporteCedula" style="display: none">

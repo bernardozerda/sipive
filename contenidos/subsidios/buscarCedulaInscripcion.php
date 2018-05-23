@@ -47,7 +47,7 @@ if (!isset($_POST['cedula'])) {
    $arrEstadoCivil = obtenerDatosTabla("T_CIU_ESTADO_CIVIL", array("seqEstadoCivil", "txtEstadoCivil", "bolActivo"), "seqEstadoCivil", "bolActivo = 1", "txtEstadoCivil");
    $arrVivienda = obtenerDatosTabla("T_FRM_VIVIENDA", array("seqVivienda", "txtVivienda"), "seqVivienda", "", "txtVivienda");
    $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $seqPlanGobierno, "seqPlanGobierno DESC, txtModalidad");
-   $bolCondicionSisben = ($_POST['seqPlanGobierno'] == 3)? 1 : 0;
+   $bolCondicionSisben = ($claFormulario->seqPlanGobierno == 3)? 1 : 0;
    $arrSisben = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben", "bolActivo"), "seqSisben", "bolActivo = $bolCondicionSisben");
    $arrBanco = obtenerDatosTabla("T_FRM_BANCO", array("seqBanco", "txtBanco"), "seqBanco", "seqBanco > 1", "txtBanco");
    $arrEstados = estadosProceso();

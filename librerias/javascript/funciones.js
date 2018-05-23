@@ -11376,3 +11376,22 @@ function soporteDocumento(txtTipo, seqIdentificador) {
 
     }
 }
+
+function certificadoHabitabilidadProyecto(seqUnidadProyecto){
+    var wndFormato;
+    try {
+
+        var txtUrl = "./contenidos/proyectos/formatoCertificadoHabitabilidad.php";
+        txtUrl += "?seqUnidadProyecto=" + seqUnidadProyecto;
+
+        var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
+
+        if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
+            throw "ErrorPopUp";
+        }
+    } catch (objError) {
+        if (objError == "ErrorPopUp") {
+            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+        }
+    }
+}

@@ -67,10 +67,10 @@ while ($objRes->fields) {
     $objRes->MoveNext();
 }
 
-$txtFecha = utf8_encode(ucwords(strftime("%A %#d de %B del %Y"))) . " " . date("H:i:s");
-$txtFechaVisita = utf8_encode(ucwords(strftime("%A %#d de %B del %Y", strtotime($objTecnico->fchVisita))));
+$txtFecha = ucwords(strftime("%A %#d de %B del %Y")) . " " . date("H:i:s");
+$txtFechaVisita = ucwords(strftime("%A %#d de %B del %Y", strtotime($objTecnico->fchVisita)));
 $numDiaActual = date("d");
-$txtMesActual = utf8_encode(ucwords(strftime("%B")));
+$txtMesActual = ucwords(strftime("%B"));
 $numAnoActual = date("Y");
 
 $claSmarty->assign("objTecnico"  , $objTecnico );

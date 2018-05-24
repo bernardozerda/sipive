@@ -957,7 +957,7 @@ function agregarMiembroHogar() {
             }
 
             // Notaria documento del soporte del tipo de documento
-            if (objEntidadDocumento.value == "Notaria" && objNotariaDocumento.value == "") {
+            if (objEntidadDocumento.value == "Notaria" && ( objNotariaDocumento.value == "" || objNotariaDocumento.value == 0) ) {
                 alert("Notaria del soporte del tipo de documento");
                 objNotariaDocumento.focus();
                 return false;
@@ -1052,7 +1052,7 @@ function agregarMiembroHogar() {
                 return false;
             }
 
-            if (objNotariaCasado.value == "") {
+            if (objNotariaCasado.value == "" || objNotariaCasado.value == 0) {
                 alert("Digite la notaria del soporte de estado civil");
                 objNotariaCasado.focus();
                 return false;
@@ -1086,7 +1086,7 @@ function agregarMiembroHogar() {
                 return false;
             }
 
-            if (objEntidadCSCDL.value == "Notaria" && objNotariaCSCDL.value == "") {
+            if (objEntidadCSCDL.value == "Notaria" && (objNotariaCSCDL.value == "" || objNotariaCSCDL.value == 0) ) {
                 alert("Digite la notaria del soporte de estado civil");
                 objNotariaCSCDL.focus();
                 return false;
@@ -1096,7 +1096,7 @@ function agregarMiembroHogar() {
 
         if (objEstCivil.value == 2) {
 
-            if (objNotariaSoltero.value == "") {
+            if (objNotariaSoltero.value == "" || objNotariaSoltero.value == 0) {
                 alert("Digite la notaria del soporte de estado civil");
                 objNotariaSoltero.focus();
                 return false;
@@ -1130,7 +1130,7 @@ function agregarMiembroHogar() {
                 return false;
             }
 
-            if (objEntidadUnion.value == "Notaria" && objNotariaUnion.value == "") {
+            if (objEntidadUnion.value == "Notaria" && (objNotariaUnion.value == "" || objNotariaUnion.value == 0) ) {
                 alert("Digite la notaria del soporte de estado civil");
                 objNotariaUnion.focus();
                 return false;

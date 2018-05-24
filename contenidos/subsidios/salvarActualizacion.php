@@ -64,7 +64,8 @@ if($_POST['seqPlanGobierno'] == 3) {
 
 $arrEstadosCiviles = obtenerDatosTabla("t_ciu_estado_civil", array("seqEstadoCivil", "txtEstadoCivil"), "seqEstadoCivil", "bolActivo = 1");
 $arrParentescos = obtenerDatosTabla("t_ciu_parentesco", array("seqParentesco", "txtParentesco"), "seqParentesco", "bolActivo = 1");
-$arrSisben = obtenerDatosTabla("t_frm_sisben", array("seqSisben", "txtSisben"), "seqSisben", $txtCondicion);
+$bolCondicionSisben = ($_POST['seqPlanGobierno'] == 3)? 1 : 0;
+$arrSisben = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben", "bolActivo"), "seqSisben", "bolActivo = $bolCondicionSisben");
 $arrModalidad = obtenerDatosTabla("t_frm_modalidad", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $_POST['seqPlanGobierno']);
 
 /**********************************************************************************************************************
@@ -229,16 +230,16 @@ if (empty($arrErrores)) {
                 $numCuentaCasado ++;
 
                 // validaciones de soprote de documento de estado civil
-                if(doubleval($arrCiudadano['numConsecutivoCasado']) == 0 and false){
-                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
+                if(doubleval($arrCiudadano['numConsecutivoCasado']) == 0 and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil para el documento $numDocumento";
                 }
 
-                if(intval($arrCiudadano['numNotariaCasado']) == 0 and false){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                if(intval($arrCiudadano['numNotariaCasado']) == 0 and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil para el documento $numDocumento";
                 }
 
-                if(intval($arrCiudadano['seqCiudadCasado']) == 0 and false){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                if(intval($arrCiudadano['seqCiudadCasado']) == 0 and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil para el documento $numDocumento";
                 }
 
                 // limpia las otras variables del estado civil
@@ -260,22 +261,22 @@ if (empty($arrErrores)) {
             }
 
             // validacion para el soprote de documentos de estado civil
-            if ($arrCiudadano['seqEstadoCivil'] == 8 and false) {
+            if ($arrCiudadano['seqEstadoCivil'] == 8 and $_POST['seqPlanGobierno'] == 3) {
 
                 if(doubleval($arrCiudadano['numConsecutivoCSCDL']) == 0){
-                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
+                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil para el documento $numDocumento";
                 }
 
                 if(trim($arrCiudadano['txtEntidadCSCDL']) == ""){
-                    $arrErrores[] = "Indique la entidad del soprote del estado civil";
+                    $arrErrores[] = "Indique la entidad del soprote del estado civil para el documento $numDocumento";
                 }
 
                 if(trim($arrCiudadano['txtEntidadCSCDL']) == "Notaria" and intval($arrCiudadano['numNotariaCSCDL']) == 0){
-                    $arrErrores[] = "Indique la notaría del soprote del estado civil";
+                    $arrErrores[] = "Indique la notaría del soprote del estado civil para el documento $numDocumento";
                 }
 
                 if(intval($arrCiudadano['seqCiudadCSCDL']) == 0){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil para el documento $numDocumento";
                 }
 
                 // limpia las otras variables del estado civil
@@ -296,14 +297,14 @@ if (empty($arrErrores)) {
 
             }
 
-            if ($arrCiudadano['seqEstadoCivil'] == 2 and false) {
+            if ($arrCiudadano['seqEstadoCivil'] == 2 and $_POST['seqPlanGobierno'] == 3) {
 
                 if(intval($arrCiudadano['numNotariaSoltero']) == 0){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil para el documento $numDocumento";
                 }
 
                 if(intval($arrCiudadano['seqCiudadSoltero']) == 0){
-                    $arrErrores[] = "Indique la ciudad del soprote del estado civil";
+                    $arrErrores[] = "Indique la ciudad del soprote del estado civil para el documento $numDocumento";
                 }
 
                 // limpia las otras variables del estado civil
@@ -329,24 +330,24 @@ if (empty($arrErrores)) {
 
                 $numCuentaUnionMarital ++;
 
-                if(trim($arrCiudadano['txtCertificacionUnion']) == 0 and false){
-                    $arrErrores[] = "Indique la certificacion del soprote del estado civil";
+                if(trim($arrCiudadano['txtCertificacionUnion']) == 0 and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Indique la certificacion del soprote del estado civil para el documento $numDocumento";
                 }
 
-                if(doubleval($arrCiudadano['numConsecutivoUnion']) == 0 and false){
-                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
+                if(doubleval($arrCiudadano['numConsecutivoUnion']) == 0 and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil para el documento $numDocumento";
                 }
 
-                if(trim($arrCiudadano['txtEntidadUnion']) == "Notaria" and intval($arrCiudadano['numNotariaUnion']) == 0 and false){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                if(trim($arrCiudadano['txtEntidadUnion']) == "Notaria" and intval($arrCiudadano['numNotariaUnion']) == 0 and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil para el documento $numDocumento";
                 }
 
-                if(trim($arrCiudadano['txtEntidadUnion']) == 0 and false){
-                    $arrErrores[] = "Indique la entidad del soprote del estado civil";
+                if(trim($arrCiudadano['txtEntidadUnion']) == 0 and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Indique la entidad del soprote del estado civil para el documento $numDocumento";
                 }
 
-                if(intval($arrCiudadano['seqCiudadUnion']) == 0 and false){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+                if(intval($arrCiudadano['seqCiudadUnion']) == 0 and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Indique la notaria del soprote del estado civil para el documento $numDocumento";
                 }
 
                 // limpia las otras variables del estado civil
@@ -370,45 +371,45 @@ if (empty($arrErrores)) {
             // por lo menos debe haber una cedula de ciudadania
             if ($arrCiudadano['seqTipoDocumento'] == 1) {
                 $numCedula++; // si es cedula de ciudadania ( por lo menos 1 colombiano mayor de edad )
-                if( ! esFechaValida($arrCiudadano['fchExpedicion']) and false){
-                    $arrErrores[] = "Debe indicar la fecha de expedición del documeno de identidad";
+                if( ! esFechaValida($arrCiudadano['fchExpedicion']) and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Debe indicar la fecha de expedición del documeno de identidad para el documento $numDocumento";
                 }
             }
 
-            if( $arrCiudadano['txtTipoSoporte'] == ""  and false) {
+            if( $arrCiudadano['txtTipoSoporte'] == ""  and $_POST['seqPlanGobierno'] == 3) {
 
-                $arrErrores[] = "Digite el tipo de soporte para el documento de identidad";
+                $arrErrores[] = "Digite el tipo de soporte para el documento de identidad para el documento $numDocumento";
 
-            }elseif($arrCiudadano['txtTipoSoporte'] == "registroCivil"  and false){
+            }elseif($arrCiudadano['txtTipoSoporte'] == "registroCivil"  and $_POST['seqPlanGobierno'] == 3){
 
                 if(trim($arrCiudadano['txtEntidadDocumento']) == ""){
-                    $arrErrores[] = "Indique la entidad de soporte del documento";
+                    $arrErrores[] = "Indique la entidad de soporte del documento para el documento $numDocumento";
                 }
 
                 if(doubleval($arrCiudadano['numIndicativoSerial']) == ""){
-                    $arrErrores[] = "Indique el indicativo serial del soporte del documento";
+                    $arrErrores[] = "Indique el indicativo serial del soporte del documento para el documento $numDocumento";
                 }
 
                 if(trim($arrCiudadano['txtEntidadDocumento']) == "Notaria" and intval($arrCiudadano['numNotariaDocumento']) == ""){
-                    $arrErrores[] = "Indique la notaría del soporte del documento";
+                    $arrErrores[] = "Indique la notaría del soporte del documento para el documento $numDocumento";
                 }
 
                 if(intval($arrCiudadano['seqCiudadDocumento']) == 0){
-                    $arrErrores[] = "Indique ciudad del soporte del documento";
+                    $arrErrores[] = "Indique ciudad del soporte del documento para el documento $numDocumento";
                 }
 
-            }elseif($arrCiudadano['txtTipoSoporte'] == "partidaBautismo"  and false){
+            }elseif($arrCiudadano['txtTipoSoporte'] == "partidaBautismo"  and $_POST['seqPlanGobierno'] == 3){
 
                 if(doubleval($arrCiudadano['numConsecutivoPartida']) == ""){
-                    $arrErrores[] = "Indique el consecutivo del soporte del documento";
+                    $arrErrores[] = "Indique el consecutivo del soporte del documento para el documento $numDocumento";
                 }
 
                 if(trim($arrCiudadano['txtParroquiaPartida']) == ""){
-                    $arrErrores[] = "Indique la parroquia del soporte del documento";
+                    $arrErrores[] = "Indique la parroquia del soporte del documento para el documento $numDocumento";
                 }
 
                 if(intval($arrCiudadano['seqCiudadPartida']) == 0){
-                    $arrErrores[] = "Indique la ciudad del soporte del documento";
+                    $arrErrores[] = "Indique la ciudad del soporte del documento para el documento $numDocumento";
                 }
 
             }
@@ -420,8 +421,8 @@ if (empty($arrErrores)) {
 
                 // validacion del tipo de soporte
                 $fchNacimiento = new DateTime($arrCiudadano['fchNacimiento']);
-                if( $fchNacimiento->format("Y") < 1938 and $arrCiudadano['txtTipoSoporte'] == "registroCivil"  and false){
-                    $arrErrores[] = "Tipo de soporte inválido para personas nacidas antes de 1938 para el ciudadano con documento " . number_format($numDocumento);
+                if( $fchNacimiento->format("Y") < 1938 and $arrCiudadano['txtTipoSoporte'] == "registroCivil"  and $_POST['seqPlanGobierno'] == 3){
+                    $arrErrores[] = "Tipo de soporte inválido para personas nacidas antes de 1938 para el ciudadano con documento " . $numDocumento;
                 }
 
                 // fechas para comparar mayor de edad y tercera edad

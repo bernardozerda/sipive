@@ -1430,30 +1430,11 @@ function agregarMiembroHogar() {
     objApellido2.value = "";
     objTpoDocumento.selectedIndex = 0;
     objNumDocumento.value = "";
-    objExpedicion.value = "";
-    objEntidadDocumento.selectedIndex = 0;
-    objIndicativoSerial.value = "";
-    objNotariaDocumento.value = "";
     objParentesco.selectedIndex = 0;
     objFchNacimiento.value = "";
     objCondEspecial.selectedIndex = 0;
     objCondEtnica.selectedIndex = 0;
     objEstCivil.selectedIndex = 0;
-    objConsecutivoCasado.value = "";
-    objCiudadDocumento.selectedIndex = 0;
-    objNotariaCasado.value = "";
-    objCiudadCasado.selectedIndex = 0;
-    objConsecutivoCSCDL.value = "";
-    objEntidadCSCDL.selectedIndex = 0;
-    objCiudadCSCDL.selectedIndex = 0;
-    objNotariaCSCDL.value = "";
-    objCertificacionUnion.value = "";
-    objConsecutivoUnion.value = "";
-    objEntidadUnion.selectedIndex = 0;
-    objNotariaUnion.value = "";
-    objCiudadUnion.selectedIndex = 0;
-    objNotariaSoltero.value = "";
-    objCiudadSoltero.selectedIndex = 0;
     objOcupacion.selectedIndex = 0;
     objSexo.selectedIndex = 0;
     objLgtb.selectedIndex = 0;
@@ -1463,6 +1444,30 @@ function agregarMiembroHogar() {
     objSeqSalud.selectedIndex = 0;
     objSeqTipoVictima.selectedIndex = 0;
     objSeqGrupoLgtbi.selectedIndex = 0;
+
+    // reiniciar el formulario con las variables adicionales de soporte de documento
+    if(bolValidacionSoporteDocumentos == true){
+        objExpedicion.value = "";
+        objEntidadDocumento.selectedIndex = 0;
+        objIndicativoSerial.value = "";
+        objNotariaDocumento.value = "";
+        objCiudadDocumento.selectedIndex = 0;
+        objConsecutivoCasado.value = "";
+        objNotariaCasado.value = "";
+        objCiudadCasado.selectedIndex = 0;
+        objConsecutivoCSCDL.value = "";
+        objEntidadCSCDL.selectedIndex = 0;
+        objCiudadCSCDL.selectedIndex = 0;
+        objNotariaCSCDL.value = "";
+        objCertificacionUnion.value = "";
+        objConsecutivoUnion.value = "";
+        objEntidadUnion.selectedIndex = 0;
+        objNotariaUnion.value = "";
+        objCiudadUnion.selectedIndex = 0;
+        objNotariaSoltero.value = "";
+        objCiudadSoltero.selectedIndex = 0;
+
+    }
 
     mostrarOcultar('agregarMiembro');
 

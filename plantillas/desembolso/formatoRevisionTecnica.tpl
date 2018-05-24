@@ -678,40 +678,30 @@
 			<tr><td>&nbsp;</td></tr>
 			
 			<!-- TEXTO DE PIE DE PAGINA PAGINA 2 -->
-			<tr><td align="justify" style="padding-left: 20px; padding-right: 20px;">
-
-				El presente certificado se expide con base en una visita ocular adelantada por parte del equipo técnico
-				de la Subdirección de Recursos Públicos de la Subsecretaría de Gestión Financiera; en esta no se observa
-				que la vivienda presente afectaciones o fallas estructurales que pongan en riesgo a sus habitantes
-				o afecten la habitabilidad del inmueble. La vivienda dispone de los servicios públicos básicos
-				definitivos y cumple con lo establecido en la Resolución 199 de 27 de abril de 2017 <i>“Por medio de
-				la cual se adopta el reglamento operativo para el otorgamiento de los aportes del Distrito Capital
-				para la generación de vivienda de interés prioritario en el marco del Programa Integral de Vivienda
-				Efectiva y se dictan otras disposiciones”.</i><br>
-				La Secretaria Distrital de Hábitat <strong>NO</strong> garantiza la calidad estructural de la vivienda, la calidad de los
-				materiales empleados, ni la correcta ejecución del proceso constructivo adelantado en la construcción de esta vivienda.
-            	El presente certificado se expide a los {$numDiaActual} dias del mes de {$txtMesActual} de {$numAnoActual}.
+			<tr><td align="justify" style="padding-right: 20px;">
+					El presente certificado se expide con base en una visita ocular adelantada por parte del equipo técnico
+					de la Subdirección de Recursos Públicos de la Subsecretaría de Gestión Financiera; en esta no se observa
+					que la vivienda presente afectaciones o fallas estructurales que pongan en riesgo a sus habitantes
+					o afecten la habitabilidad del inmueble. La vivienda dispone de los servicios públicos básicos
+					definitivos y cumple con lo establecido en la normatividad vigente.<br>
+					La Secretaria Distrital de Hábitat <strong>NO</strong> se hace responsable por la calidad estructural de la vivienda,
+					la calidad de los materiales empleados, ni la correcta ejecución del proceso constructivo adelantado en la construcción de esta vivienda.
+					El presente certificado se expide a los {$numDiaActual} dias del mes de {$txtMesActual} de {$numAnoActual}.
 			</td></tr>
-			
+
 			<!-- FIRMA DEL ARQUITECTO -->
 			<tr>
-				<td><table valign="bottom"  cellspacing="0" cellpadding="1" border="0" width="100%" style="{$txtFuente10}" ><tr><td>
-				
-				<td height ="120px" valign="bottom" align="left" style="padding: 20px">
-                                    
-                                    <!--
-					 VoBo. ________________________________________<br><br>
-					 FABIO H OSPINA J<br> T.P 2570050993CND<br>COORDINADOR AREA TECNICA
-                                    
-                                    -->
-                                    
+				<td>
+					<table valign="bottom"  cellspacing="0" cellpadding="1" border="0" width="100%" style="{$txtFuente10}" >
+						<tr>
+							<td height="120px" valign="bottom" align="right" style="padding: 20px">
+								_____________________________________________<br><br>
+								M.P. {$txtMatriculaProfesional}<br>
+								{$txtUsuarioSesion}
+							</td>
+						</tr>
+					</table>
 				</td>
-				<td height="120px" valign="bottom" align="right" style="padding: 20px">
-					_____________________________________________<br><br>
-					M.P. {$txtMatriculaProfesional}<br><br>
-					{$txtUsuarioSesion}
-				</td>
-				</td></tr></table></td>
 			</tr>
 			
 		</table>

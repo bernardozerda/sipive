@@ -66,42 +66,6 @@ foreach ($claFormulario->arrCiudadano as $objCiudadano) {
 
  */
 
-switch ($_SESSION['seqUsuario']) {
-    case 68:
-        $txtMatriculaProfesional = "2570050993 CND";
-        break;
-    case 105:
-        $txtMatriculaProfesional = "A20992010-80070556";
-        break;
-    case 110:
-        $txtMatriculaProfesional = "25202127963 CND";
-        break;
-	case 422:
-        $txtMatriculaProfesional = "A13832010-1018407205";
-        break;
-	case 423:
-        $txtMatriculaProfesional = "25202-227575 CND";
-        break;
-    case 508:
-        $txtMatriculaProfesional = "25202-329840 CND";
-        break;
-    case 498:
-        $txtMatriculaProfesional = "MP A25222002-79620368";
-        break;
-    case 499:
-        $txtMatriculaProfesional = "A25682008-80926066";
-        break;
-    case 551:
-        $txtMatriculaProfesional = "25202-340510 CND";
-        break;
-    case 283:
-        $txtMatriculaProfesional = "25202-384331 CND";
-        break;
-    default :
-        $txtMatriculaProfesional = "________________________________________";
-        break;
-}
-
 $claSeguimiento = new Seguimiento;
 $claSeguimiento->seqFormulario = $_GET['seqFormulario'];
 
@@ -135,7 +99,7 @@ $claSmarty->assign("txtMesActual", $txtMesActual);
 $claSmarty->assign("numAnoActual", $numAnoActual);
 $claSmarty->assign("numRegistro", $numRegistros);
 $claSmarty->assign("nombreComercial", $nombreComercial);
-$claSmarty->assign("txtMatriculaProfesional", $txtMatriculaProfesional);
+$claSmarty->assign("txtMatriculaProfesional", obtenerMatriculaProfesional() );
 
 $claSmarty->display("desembolso/formatoRevisionTecnica.tpl");
 

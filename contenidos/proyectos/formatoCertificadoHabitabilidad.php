@@ -21,19 +21,21 @@ while($objRes->fields){
 $sql = "
     select 
         if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto) as txtProyecto,
-        if(pry.seqProyecto is null, null, con.txtNombreProyecto) as txtConjunto,
-        upr.txtNombreUnidad,
-        con.txtDireccion,
-        loc.txtLocalidad,
-        bar.txtBarrio,
-        con.txtLicenciaConstruccion,
-        con.fchEjecutoriaLicConstruccion,
-        '' as txtEntidadLicenciaConstruccion
+      if(pry.seqProyecto is null, null, con.txtNombreProyecto) as txtConjunto,
+      upr.txtNombreUnidad,
+      con.txtDireccion,
+      if(locc.seqLocalidad is null,locp.txtLocalidad,locc.txtLocalidad) as txtLocalidad,
+      if(barc.seqBarrio is null,barp.txtBarrio,barc.txtBarrio) as txtBarrio,
+      con.txtLicenciaConstruccion,
+      con.fchEjecutoriaLicConstruccion,
+      '' as txtEntidadLicenciaConstruccion
     from t_pry_unidad_proyecto upr
     inner join t_pry_proyecto con on upr.seqProyecto = con.seqProyecto
     left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
-    left join t_frm_localidad loc on con.seqLocalidad = loc.seqLocalidad
-    left join t_frm_barrio bar on con.seqBarrio = bar.seqBarrio
+    left join t_frm_localidad locc on con.seqLocalidad = locc.seqLocalidad
+    left join t_frm_localidad locp on pry.seqLocalidad = locp.seqLocalidad
+    left join t_frm_barrio barc on con.seqBarrio = barc.seqBarrio
+    left join t_frm_barrio barp on pry.seqBarrio = barp.seqBarrio
     where upr.seqUnidadProyecto = " . intval($_GET['seqUnidadProyecto']) . "
 ";
 $objRes = $aptBd->execute($sql);

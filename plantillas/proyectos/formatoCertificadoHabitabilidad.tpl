@@ -78,8 +78,8 @@
                 </tr>
                 <tr>
                     <td>{$objTecnico->txtLicenciaConstruccion}</td>
-                    <td>{$objTecnico->fchEjecutoriaLicConstruccion}</td>
-                    <td>{$objTecnico->txtEntidadLicenciaConstruccion}</td>
+                    <td>{$objTecnico->fchEjecutaLicConstruccion}</td>
+                    <td>{$objTecnico->txtExpideLicenciaUrbanismo}</td>
                 </tr>
             </table><br>
 
@@ -426,8 +426,8 @@
                 </tr>
                 <tr>
                     <td>{$objTecnico->txtLicenciaConstruccion}</td>
-                    <td>{$objTecnico->fchEjecutoriaLicConstruccion}</td>
-                    <td>{$objTecnico->txtEntidadLicenciaConstruccion}</td>
+                    <td>{$objTecnico->fchEjecutaLicConstruccion}</td>
+                    <td>{$objTecnico->txtExpideLicenciaUrbanismo}</td>
                 </tr>
             </table><br>
 
@@ -626,8 +626,8 @@
                     </tr>
                     <tr>
                         <td>{$objTecnico->txtLicenciaConstruccion}</td>
-                        <td>{$objTecnico->fchEjecutoriaLicConstruccion}</td>
-                        <td>{$objTecnico->txtEntidadLicenciaConstruccion}</td>
+                        <td>{$objTecnico->fchEjecutaLicConstruccion}</td>
+                        <td>{$objTecnico->txtExpideLicenciaUrbanismo}</td>
                     </tr>
                 </table><br>
 

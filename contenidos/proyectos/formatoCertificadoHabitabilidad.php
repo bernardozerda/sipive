@@ -18,17 +18,19 @@ while($objRes->fields){
     $objRes->MoveNext();
 }
 
+
+
 $sql = "
     select 
-        if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto) as txtProyecto,
+      if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto) as txtProyecto,
       if(pry.seqProyecto is null, null, con.txtNombreProyecto) as txtConjunto,
       upr.txtNombreUnidad,
       con.txtDireccion,
       if(locc.seqLocalidad is null,locp.txtLocalidad,locc.txtLocalidad) as txtLocalidad,
       if(barc.seqBarrio is null,barp.txtBarrio,barc.txtBarrio) as txtBarrio,
-      con.txtLicenciaConstruccion,
-      con.fchEjecutoriaLicConstruccion,
-      '' as txtEntidadLicenciaConstruccion
+      if(con.txtLicenciaConstruccion <> '' and con.txtLicenciaConstruccion is not null, con.txtLicenciaConstruccion, pry.txtLicenciaConstruccion) as txtLicenciaConstruccion,
+      if(con.fchEjecutaLicConstruccion <> '' and con.fchEjecutaLicConstruccion is not null, con.fchEjecutaLicConstruccion, pry.fchEjecutaLicConstruccion) as fchEjecutaLicConstruccion,
+      if(con.txtExpideLicenciaUrbanismo <> '' and con.txtExpideLicenciaUrbanismo is not null, con.txtExpideLicenciaUrbanismo, pry.txtExpideLicenciaUrbanismo) as txtExpideLicenciaUrbanismo
     from t_pry_unidad_proyecto upr
     inner join t_pry_proyecto con on upr.seqProyecto = con.seqProyecto
     left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
@@ -45,6 +47,7 @@ while($objRes->fields){
     }
     $objRes->MoveNext();
 }
+
 
 $sql = "select * from t_pry_adjuntos_tecnicos where seqTecnicoUnidad = " . intval($objTecnico->seqTecnicoUnidad);
 $objRes = $aptBd->execute($sql);
@@ -82,9 +85,8 @@ $claSmarty->assign("txtMesActual", $txtMesActual);
 $claSmarty->assign("numAnoActual", $numAnoActual);
 $claSmarty->assign("txtMatriculaProfesional", obtenerMatriculaProfesional() );
 $claSmarty->assign("txtUsuarioSesion", $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']);
-
 $claSmarty->assign("txtFechaVisita"    , $txtFechaVisita );
-
 $claSmarty->display("proyectos/formatoCertificadoHabitabilidad.tpl");
+
 
 ?>

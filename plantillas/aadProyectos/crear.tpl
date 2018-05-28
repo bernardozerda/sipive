@@ -60,8 +60,17 @@
                 <div class="col-sm-2">
                     <strong>Archivo de unidades</strong>
                 </div>
-                <div class="col-sm-10">
-                    <input type="file" name="archivo" id="archivo" style="width: 300px;">
+                <div class="col-sm-6">
+                    <div class="input-group input-group-sm">
+                        <label class="input-group-btn">
+                                    <span class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                                        <input type="file" name="archivo" style="display: none;">
+                                    </span>
+                        </label>
+                        <input type="text" class="form-control" readonly>
+                        <div id="fileSelect"></div>
+                    </div>
                 </div>
             </div>
 

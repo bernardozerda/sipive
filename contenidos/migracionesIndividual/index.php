@@ -156,13 +156,59 @@ foreach ($array as $key => $value) {
 
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=29');">Conformaci&oacute;n Definitiva Documentaci&oacute;n</a></li>
                 <?php } ?>
+
+
+                <!------------------------------------------------------------------------------------------------------
+                    CARGUE DATOS LEGALIZACION
+                 ------------------------------------------------------------------------------------------------------>
+
                 <?php if (in_array("10", $grupos)) { ?>
-                    <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargaMasivosLegalizacion/index.php');" >Cargue Unidades Legalizadas</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Legalización<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/CargaMasivosLegalizacion/index.php'
+                                       );"
+                                >
+                                    Cargue Unidades Legalizadas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/legalizacionVipa/giroFiducia.php'
+                                   );"
+                                >
+                                    Giro a Fiducia Complementariedad VIPA
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onClick="cambiarOpcionLegalizacion(
+                                       'contenidoLegalizacion',
+                                       'contenidos/migracionesIndividual/legalizacionVipa/giroConstructor.php'
+                                   );"
+                                >
+                                    Giro a Constructor Complementariedad VIPA
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                 <?php } ?>
+
+                <!------------------------------------------------------------------------------------------------------
+                    DEVOLUCION DE EXPEDIENTES
+                 ------------------------------------------------------------------------------------------------------>
+
                 <!--<li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargaCopiaDesembolso/index.php');">Migraci&oacute;n Masiva de desembolso a Primer desembolso</a></li>-->
                 <?php if (in_array("8", $grupos) || in_array("1", $grupos)) { ?>
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/DevolucionExpedientes/index.php');">Devolución Expedientes</a></li>
-
                 <?php } ?>
 
             </ul>

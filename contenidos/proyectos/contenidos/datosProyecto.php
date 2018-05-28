@@ -45,7 +45,6 @@ $arrayCity = obtenerDatosTabla("t_cor_ciudad", array("seqCiudad", "txtNombreCiud
 
 if (isset($_REQUEST['seqProyecto'])) {
     $idProyecto = $_REQUEST['seqProyecto'];
-
     $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
     $arrProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto);
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($idProyecto);
@@ -57,7 +56,7 @@ if (isset($_REQUEST['seqProyecto'])) {
     $arrCronogramaFecha = $claDatosProy->obteneCronograma($idProyecto);
     $arraDatosPoliza = $claDatosProy->obtenerDatosPoliza($idProyecto);
     $arrayFideicomitente = $claDatosProy->obtenerDatosFideicomiso($idProyecto);
-    
+
     $arraDatosPoliza = (count($arraDatosPoliza) > 0) ? $arraDatosPoliza : $arraDatosPoliza[0] = 0;
     //var_dump($arrayFideicomitente);
     $arrayFideicomitente = (count($arrayFideicomitente) > 0) ? $arrayFideicomitente : $arrayFideicomitente[0] = 0;
@@ -99,8 +98,24 @@ $cantDoc = $claDatosProy->obtenerDocumentoProyecto($idProyecto);
 $arrayDocumentos = $claProyecto->obtenerListaDocumentos($idProyecto, $cantDoc);
 $arrayLicencias = $claProyecto->obtenerListaLicencias($idProyecto);
 
+//var_dump($arrayLicencias);
+//echo "<p>".count($arrayLicencias)."</p>";
+
+if (count($arrayLicencias) == 1) {
+    foreach ($arrayLicencias as $keyLic => $valueLic) {
+        if ($valueLic['seqTipoLicencia'] == 1) {
+            $arrayLicencias[1] = 0;
+            //   echo "<p>" . $valueLic['seqTipoLicencia'] . "</p>";
+        } else {
+            $arrayLicencias[0] = 0;
+        }
+    }
+}
+
+
 if (count($arrayLicencias) == 0) {
     $arrayLicencias[0] = 0;
+    $arrayLicencias[1] = 0;
 }
 //print_r($arrProyectos);
 $seqUsuario = $_SESSION['seqUsuario'];
@@ -130,6 +145,7 @@ $claSmarty->assign("arrBarrio", $arrBarrio);
 $claSmarty->assign("arrOferentesProy", $arrOferentesProy);
 $claSmarty->assign("arrayDocumentos", $arrayDocumentos);
 $claSmarty->assign("arrayLicencias", $arrayLicencias);
+//$claSmarty->assign("arrayLicConstruccion", $arrayLicConstruccion);
 $claSmarty->assign("arrRegistros", $arrRegistros); // Registros de seguimiento
 //var_dump($arrayDocumentos);
 $claSmarty->assign("arrTipoVivienda", $arrTipoVivienda);

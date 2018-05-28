@@ -59,8 +59,11 @@
         </div>
     </fieldset> <br/>  
 {/if}
+
+{assign var=contador value=$arrayLicencias|@count}
 {foreach from=$arrayLicencias key=keyLic item=valueLic}
-    {if $valueLic.seqTipoLicencia == 1 || $valueLic.seqTipoLicencia =="" }
+ 
+    {if $valueLic.seqTipoLicencia == 1  ||  $keyLic ==0}
         <fieldset>
             <legend class="legend">
                 <h4 style="position: relative; float: left; width: 50%; margin: 0; padding: 5px;">
@@ -122,7 +125,7 @@
     {/if}
     <br/>    
 
-    {if $valueLic.seqTipoLicencia == 2 || $valueLic.seqTipoLicencia ==""}
+    {if $valueLic.seqTipoLicencia == 2 ||  $keyLic ==1}      
         <fieldset>
             <legend class="legend">
                 <h4 style="position: relative; float: left; width: 50%; margin: 0; padding: 5px;">
@@ -150,7 +153,7 @@
                     <div id="val_fchVigenciaLicenciaC" class="divError">Este campo es requerido</div>
                 </div>
 
-                <div class="col-md-4"  style="display: none"> 
+                <div class="col-md-4"> 
                     <label class="control-label">Fecha Ejecutoria</label> 
                     <input name="fchEjecutoriaLicencia[]" type="text" id="fchEjecutoriaLicenciaC" value="{$valueLic.fchEjecutoriaLicencia}" onblur="sinCaracteresEspeciales(this);"  class="form-control"  style="width: 70%; position: relative; float: left">
                     <a href="#" onclick="javascript: calendarioPopUp('fchEjecutoriaLicenciaC');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
@@ -174,9 +177,9 @@
                     <input name="fchLicenciaProrroga2[]" type="text" id="fchLicenciaProrrogaC2" value="{$valueLic.fchLicenciaProrroga2}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
                     <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrrogaC2');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
-
             </div>
         </fieldset>
     {/if}
 {/foreach}
 <p>&nbsp;</p>
+

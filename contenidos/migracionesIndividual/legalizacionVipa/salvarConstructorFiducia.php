@@ -16,6 +16,8 @@ include( $txtPrefijoRuta . "librerias/phpExcel/Classes/PHPExcel/IOFactory.php" )
 $arrErrores = array();
 $arrMensajes = array();
 
+$arrEstados = estadosProceso();
+
 /******************************************************************************************************************
  * validaciones del archivo
  ******************************************************************************************************************/
@@ -349,7 +351,7 @@ if(empty($arrErrores)) {
                         $sql = "update t_frm_formulario set seqEstadoProceso = 40 where seqFormulario = " . $seqFormulario;
                         $aptBd->execute($sql);
                         $txtCambios  = "<b>[ $seqFormulario ] Cambios del Formulario:</b><br>";
-                        $txtCambios .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>seqEstadoProceso, Valor Anterior:" . $seqEstadoProceso . ", Valor Nuevo: 40</b>";
+                        $txtCambios .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Estado del Proceso, Valor Anterior:" . $arrEstados[$seqEstadoProceso] . ", Valor Nuevo: " . $arrEstados[40] . "</b>";
                     }
 
                     $sql = "

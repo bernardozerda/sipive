@@ -1,7 +1,7 @@
 <?php
 
 $txtPrefijoRuta = "../../../";
-$txtTipoGiro = "giroFiducia";
+$txtTipoGiro = "giroConstructor";
 
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
 include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
@@ -13,58 +13,63 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExce
 include( $txtPrefijoRuta . "librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 include( $txtPrefijoRuta . "contenidos/migracionesIndividual/legalizacionVipa/configuracion.php" );
 
-// consulta de hogares en el esquema complementariedad VIPA
 if($_GET['proyecto'] != "") {
 
     $sql = "
-        select 
-            frm.seqFormulario as Identificador, 
-            ciu.numDocumento as Documento, 
-            upper(concat(ciu.txtNombre1,' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2)) as Nombre, 
-            if(frm.txtDireccionSolucion is null or frm.txtDireccionSolucion = '','No Disponible',frm.txtDireccionSolucion) as Proyecto,
-            (frm.valAspiraSubsidio - if(sol.valSolicitado is null,0,sol.valSolicitado) ) as 'Valor Disponible',
-            0 as 'Valor solicitado',
-            0 as 'Valor de orden de pago',
-            '' as 'Numero RP',
-            '' as 'Fecha RP'
-        from t_frm_formulario frm 
-        inner join t_frm_hogar hog on frm.seqFormulario = hog.seqFormulario and hog.seqParentesco = 1 
-        inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano 
-        left join (
-            select
-                seqFormulario,
-                max(seqDesembolso) as seqDesembolso
-            from t_des_desembolso
-            group by seqFormulario
-        ) des on frm.seqFormulario = des.seqFormulario
-        left join (
+        select
+          frm.seqFormulario,
+          ciu.numDocumento,
+          upper( concat( ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2 ) ) as txtNombre,
+          sol.valSolicitado,
+          sol.valOrden
+        from t_frm_formulario frm
+        inner join t_frm_hogar hog on frm.seqFormulario = hog.seqFormulario and hog.seqParentesco = 1
+        inner join t_ciu_ciudadano ciu on ciu.seqCiudadano = hog.seqCiudadano
+        inner join (
             select 
-                sol.seqDesembolso,
-                sum(sol.valSolicitado) as valSolicitado
-            from t_des_solicitud sol
-            inner join(
-                select
-                    seqFormulario,
-                    max(seqDesembolso) as seqDesembolso
-                from t_des_desembolso
-                group by seqFormulario
-            ) des on sol.seqDesembolso = des.seqDesembolso
-            group by des.seqDesembolso
-        ) sol on des.seqDesembolso = sol.seqDesembolso
+            seqFormulario, 
+            max(seqDesembolso) as seqDesembolso
+          from t_des_desembolso 
+          group by seqFormulario
+        ) des on frm.seqFormulario = des.seqFormulario
+        inner join t_des_solicitud sol on des.seqDesembolso = sol.seqDesembolso
         where frm.seqPlanGobierno in (" . implode(",", $arrVariables[$txtTipoGiro]['planGobierno']) . ")
           and frm.seqModalidad in (" . implode(",", $arrVariables[$txtTipoGiro]['modalidad']) . ")
           and frm.seqTipoEsquema in (" . implode(",", $arrVariables[$txtTipoGiro]['esquema']) . ")
           and frm.seqEstadoProceso in (" . implode(",", $arrVariables[$txtTipoGiro]['estados']) . ")
           and lower(frm.txtDireccionSolucion) = '" . mb_strtolower($_GET['proyecto']) . "'
-          and (frm.valAspiraSubsidio - if(sol.valSolicitado is null,0,sol.valSolicitado) ) > 0
-        order by 
-            frm.txtDireccionSolucion, 
-            ciu.numDocumento            
     ";
-    $arrPlantilla = $aptBd->GetAll($sql);
-    $arrTitulos = array_keys($arrPlantilla[0]);
+    $objRes = $aptBd->execute($sql);
+    $arrPlantilla = array();
+    $arrTitulos = array();
+    while ($objRes->fields) {
+
+        $seqFormulario = $objRes->fields['seqFormulario'];
+        $numDocumento = $objRes->fields['numDocumento'];
+        $txtNombre = $objRes->fields['txtNombre'];
+        $valSolicitado = $objRes->fields['valSolicitado'];
+        $valOrden = $objRes->fields['valOrden'];
+
+        $arrPlantilla[$seqFormulario]['Identificador'] = $seqFormulario;
+        $arrPlantilla[$seqFormulario]['Documento'] = $numDocumento;
+        $arrPlantilla[$seqFormulario]['Nombre'] = $txtNombre;
+        if ($valSolicitado != 0) {
+            $arrPlantilla[$seqFormulario]['Disponible'] += $valSolicitado;
+        } else {
+            $arrPlantilla[$seqFormulario]['Disponible'] -= $valOrden;
+        }
+        $arrPlantilla[$seqFormulario]['Giro'] = 0;
+
+        $objRes->MoveNext();
+    }
 
     // *************************** CREA ARCHIVO DE EXCEL CON LOS DATOS ************************************************** //
+
+    $arrTitulos[] = "Identificador";
+    $arrTitulos[] = "Número de Documento";
+    $arrTitulos[] = "Nombre";
+    $arrTitulos[] = "Valor Disponible";
+    $arrTitulos[] = "Valor Giro";
 
     $numColumnas = count($arrTitulos);
     $numFilas = count($arrPlantilla);
@@ -81,12 +86,14 @@ if($_GET['proyecto'] != "") {
     }
 
     // contenido
-    foreach($arrPlantilla as $numLinea => $arrLinea){
+    $numLinea = 0;
+    foreach($arrPlantilla as $seqFormulario => $arrLinea){
         $numColumna = 0;
         foreach($arrLinea as $txtTitulo => $txtValor){
             $objHoja->setCellValueByColumnAndRow($numColumna, ($numLinea + 2), $txtValor, false);
             $numColumna++;
         }
+        $numLinea++;
     }
 
     // *************************** ESTILOS POR DEFECTO DEL ARCHIVO DE EXCEL ********************************************* //
@@ -136,7 +143,7 @@ if($_GET['proyecto'] != "") {
     // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
 
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename='GiroFiduciaVIPA_" . date("YmdHis") . ".xlsx");
+    header("Content-Disposition: attachment;filename='GiroConstructorVIPA_" . date("YmdHis") . ".xlsx");
     header('Cache-Control: max-age=0');
     ob_end_clean();
 
@@ -144,5 +151,6 @@ if($_GET['proyecto'] != "") {
     $objWriter->save('php://output');
 
 }
+
 
 ?>

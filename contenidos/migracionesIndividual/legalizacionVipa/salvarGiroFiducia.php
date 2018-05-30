@@ -533,7 +533,6 @@ if(empty($arrErrores)){
 
                 }catch (Exception $objError){
                     $arrErrores[] = "Error linea " . ($numLinea + 1) . ": Problemas al insertar el registro <hr>" . $objError->getMessage() . "<hr>";
-
                 }
             }
         }

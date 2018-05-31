@@ -132,45 +132,47 @@ if (empty($arrErrores)) {
     if (count($arrayLicencias) == 0) {
         $arrayLicencias[0] = 0;
     }
+    if ($seqProyecto > 0) {
 
-    if ($cantConjuntos == 0 && isset($_POST["txtNombreProyectoHijo"])) {
-        // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
-        $claProyecto->almacenarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
-    } else {
-        $claProyecto->modificarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
-    }
-    if ($cantLicencias == 0 && isset($_POST["txtLicencia"])) {
-        $claProyecto->almacenarLicencias($seqProyecto, $arrayInsLicencias, count($_POST["txtLicencia"]));
-    } else if (isset($_POST["txtLicencia"])) {
-        $claProyecto->modificarLicencias($seqProyecto, $arrayInsLicencias, count($_POST["txtLicencia"]));
-    }
+        if ($cantConjuntos == 0 && isset($_POST["txtNombreProyectoHijo"])) {
+            // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
+            $claProyecto->almacenarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
+        } else {
+            $claProyecto->modificarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
+        }
+        if ($cantLicencias == 0 && isset($_POST["txtLicencia"])) {
+            $claProyecto->almacenarLicencias($seqProyecto, $arrayInsLicencias, count($_POST["txtLicencia"]));
+        } else if (isset($_POST["txtLicencia"])) {
+            $claProyecto->modificarLicencias($seqProyecto, $arrayInsLicencias, count($_POST["txtLicencia"]));
+        }
 
-    if ($cantTipoVivienda == 0 && isset($_POST["txtNombreTipoVivienda"])) {
+        if ($cantTipoVivienda == 0 && isset($_POST["txtNombreTipoVivienda"])) {
 //echo "paso" .$cantTipoVivienda;
-        $claProyecto->almacenarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
-    } else {
+            $claProyecto->almacenarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
+        } else {
 
-        $claProyecto->modificarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
-    }
+            $claProyecto->modificarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
+        }
 
-    if ($cantCronograma == 0 && isset($_POST["numActaDescriptiva"])) {
+        if ($cantCronograma == 0 && isset($_POST["numActaDescriptiva"])) {
 
-        $claProyecto->almacenarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
-    } else if (isset($_POST["numActaDescriptiva"])) {
+            $claProyecto->almacenarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
+        } else if (isset($_POST["numActaDescriptiva"])) {
 
-        $claProyecto->modificarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
-    }
+            $claProyecto->modificarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
+        }
 
-    if ($cantPoliza == 0 && $_POST["numPoliza"] != "") {
-        $claProyecto->almacenarPoliza($seqProyecto, $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
-    } else if ($_POST["numPoliza"] != "") {
-        $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
-    }
+        if ($cantPoliza == 0 && $_POST["numPoliza"] != "") {
+            $claProyecto->almacenarPoliza($seqProyecto, $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
+        } else if ($_POST["numPoliza"] != "") {
+            $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
+        }
 
-    if ($_POST["numContratoFiducia"] != "" && $_POST["numContratoFiducia"] != 0 && $_POST["seqDatoFiducia"] == "") {
-        $claProyecto->almacenarFiducia($seqProyecto, $arrayFiducia);
-    } else if ($_POST["seqDatoFiducia"] != "" && $_POST["seqDatoFiducia"] > 0) {
-        $claProyecto->modificarFiducia($seqProyecto, $arrayFiducia);
+        if ($_POST["numContratoFiducia"] != "" && $_POST["numContratoFiducia"] != 0 && $_POST["seqDatoFiducia"] == "") {
+            $claProyecto->almacenarFiducia($seqProyecto, $arrayFiducia);
+        } else if ($_POST["seqDatoFiducia"] != "" && $_POST["seqDatoFiducia"] > 0) {
+            $claProyecto->modificarFiducia($seqProyecto, $arrayFiducia);
+        }
     }
 }/**
  * Impresion de resultados

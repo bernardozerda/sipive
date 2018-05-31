@@ -48,12 +48,19 @@
                 <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosFichaTecnica.php?tipo=2&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosProyecto.php?tipo=2', '', true);">
                         <img src="recursos/imagenes/report.png" width="24px"></a>
                 </td>
+            {elseif $id == 3}
+                <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosInterventoria.php?&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosProyecto.php?tipo=3&id=3', '', true);">
+                        <img src="recursos/imagenes/record.png" width="24px"></a>
+                </td>
+                {elseif $id == 4}
+                <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosUnidades.php?&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosUnidades.php?tipo=3&id=4', '', true);">
+                        <img src="recursos/imagenes/unity.png" width="24px"></a>
+                </td>
             {else}
                 <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=2&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosProyecto.php?tipo=2', '', true);">
                         <img src="recursos/imagenes/list.png" width="24px"></a>
                 </td>
             {/if}
-
         </tr>
     {/foreach}
 </table>

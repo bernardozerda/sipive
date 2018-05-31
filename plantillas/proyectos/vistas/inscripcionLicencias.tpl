@@ -1,4 +1,4 @@
-<!-- FORMULARIO DE INSCRIPCION CON SEGUIMIENTO -->
+    <!-- FORMULARIO DE INSCRIPCION CON SEGUIMIENTO -->
 <link href="./recursos/estilos/contentProyects.css" rel="stylesheet">
 {if $seqPryEstadoProceso > 1}
     <fieldset>
@@ -67,7 +67,7 @@
         <fieldset>
             <legend class="legend">
                 <h4 style="position: relative; float: left; width: 50%; margin: 0; padding: 5px;">
-                    Licencia de Urbanismo </h4>
+                    Licencia de Urbanizaci&oacute;n </h4>
             </legend>
             <div class="form-group">
                 <div class="col-md-4"> 

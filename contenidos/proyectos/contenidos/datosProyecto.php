@@ -40,7 +40,7 @@ $arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobier
 $arrAseguradoras = obtenerDatosTabla("t_pry_aseguradoras", array("seqAseguradora", "txtNombreAseguradora"), "seqAseguradora", "", "seqAseguradora DESC, txtNombreAseguradora");
 $arrAmparos = obtenerDatosTabla("t_pry_tipo_amparo", array("seqTipoAmparo", "txtTipoAmparo"), "seqTipoAmparo", "", "seqTipoAmparo DESC, txtTipoAmparo");
 $arrayBanco = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "seqBanco", "", "seqBanco DESC, txtBanco");
-$arrayCity = obtenerDatosTabla("t_cor_ciudad", array("seqCiudad", "txtNombreCiudad"), "seqCiudad", "", "seqCiudad DESC, txtNombreCiudad");
+$arrayCity = obtenerDatosTabla("t_frm_ciudad", array("seqCiudad", "txtCiudad"), "seqCiudad", "", "seqCiudad DESC, txtCiudad");
 //var_dump($arrPryTipoModalidad);
 
 if (isset($_REQUEST['seqProyecto'])) {

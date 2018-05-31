@@ -29,7 +29,7 @@ include '../migrarTablero.php';
                                                     FROM T_FRM_FORMULARIO frm
                                                     INNER JOIN T_FRM_HOGAR hog ON frm.seqFormulario = hog.seqFormulario
                                                     INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
-                                                    WHERE ciu.numDocumento = $numDocumento");
+                                                    WHERE ciu.numDocumento = $numDocumento AND frm.seqTipoEsquema <> 12");
                             return $query->seqFormulario;
                         }
                     } else {
@@ -114,7 +114,7 @@ include '../migrarTablero.php';
                             $error .= "<p class='alert alert-danger'><strong>No se pudieron subir las legalizaciones, los siguientes documentos ya se encontraban legalizados: </strong>" . $listaDocumentosLegalizados . ".</p>";
                         }
                         if ($documentosSinUnidad != '') { // Documentos que no existan en la tabla de unidades, muestra error y no actualiza
-                            $error .= "<p class='alert alert-danger'>No se pudieron subir las legalizaciones, los siguientes documentos no tienen una unidad asignada: <strong>" . $documentosSinUnidad . "</strong>.</p>";
+                            $error .= "<p class='alert alert-danger'>No se pudieron subir las legalizaciones, los siguientes documentos no tienen una unidad asignada o pertenecen a VIPA: <strong>" . $documentosSinUnidad . "</strong>.</p>";
                         }
                         if ($listaFormulariosEstadoInvalido != '') { // Documentos con estado diferente a Estudio de Títulos Aprobado (29), muestra error y no actualiza
                             $error .= "<p class='alert alert-danger'>No se pudieron subir las legalizaciones, los siguientes documentos no tienen un estado v&aacute;lido: <strong>" . $listaFormulariosEstadoInvalido . "</strong>.</p>";

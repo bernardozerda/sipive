@@ -1,6 +1,7 @@
 <?php
 
 $txtPrefijoRuta = "../../../";
+$txtTipoGiro = "giroFiducia";
 
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
 include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
@@ -104,7 +105,7 @@ include ( $txtPrefijoRuta . "contenidos/migracionesIndividual/legalizacionVipa/c
                     <div class="form-group">
                         <label for="direccion" class="control-label col-sm-3"
                                onclick="recogerDireccion('direccion', 'direccionOculto')">
-                            <a href="#">Documento del beneficiario</a>
+                            <a href="#">Dirección del beneficiario</a>
                         </label>
                         <div class="col-sm-8">
                             <input type="text"

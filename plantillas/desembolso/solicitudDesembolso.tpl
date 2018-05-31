@@ -120,7 +120,11 @@
 
                                         <div style="width:102px; float:right;" 
                                              onMouseOver="mostrarTooltipSolicitud(this, '{$fchCreacion}', '{$fchActualizacion}')"
-                                             >{$fchSolicitud}</div>
+                                             >{$fchSolicitud}
+                                            {if doubleval($claDesembolso->arrSolicitud.detalles.$seqSolicitud.valSolicitado) == 0}
+                                                [GC]
+                                            {/if}
+                                        </div>
                                     </td></tr>
                                 {/foreach}
                         </table>

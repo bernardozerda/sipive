@@ -370,6 +370,8 @@ if (empty($arrErrores)) {
         	$claFormulario->seqTipoEsquema  = 1;  // Individual
         	$claFormulario->seqPlanGobierno = 2;  // Bogotá Humana
         	//$claFormulario->seqProyecto     = 32; // INDIVIDUAL PROYECTO SDVE
+        }else{
+            $claFormulario->seqPlanGobierno = 3;
         }
 
         $claFormulario->seqCesantias = ($claFormulario->seqCesantias == 0)? 1: $claFormulario->seqCesantias;

@@ -15,8 +15,10 @@ $arrayconjuntos[$seqProyecto]['txtChipLoteHijo'] = $_POST["txtChipLoteHijo"];
 $arrayconjuntos[$seqProyecto]['txtMatriculaInmobiliariaLoteHijo'] = $_POST["txtMatriculaInmobiliariaLoteHijo"];
 $arrayconjuntos[$seqProyecto]['txtLicenciaUrbanismoHijo'] = $_POST["txtLicenciaUrbanismoHijo"];
 $arrayconjuntos[$seqProyecto]['fchLicenciaUrbanismo1Hijo'] = $_POST["fchLicenciaUrbanismo1Hijo"];
+$arrayconjuntos[$seqProyecto]['seqProyectoLicenciaUrbHijo'] = $_POST["seqProyectoLicenciaUrbHijo"];
 $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaUrbanismoHijo'] = $_POST["fchVigenciaLicenciaUrbanismoHijo"];
 $arrayconjuntos[$seqProyecto]['txtExpideLicenciaUrbanismoHijo'] = $_POST["txtExpideLicenciaUrbanismoHijo"];
+$arrayconjuntos[$seqProyecto]['seqProyectoLicenciaConsHijo'] = $_POST["seqProyectoLicenciaConsHijo"];
 $arrayconjuntos[$seqProyecto]['txtLicenciaConstruccionHijo'] = $_POST["txtLicenciaConstruccionHijo"];
 $arrayconjuntos[$seqProyecto]['fchLicenciaConstruccion1Hijo'] = $_POST["fchLicenciaConstruccion1Hijo"];
 $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaConstruccionHijo'] = $_POST["fchVigenciaLicenciaConstruccionHijo"];
@@ -38,6 +40,19 @@ $arrayTipoViviendas[$seqProyecto]['numAnoVenta'] = $_POST["numAnoVenta"];
 $arrayTipoViviendas[$seqProyecto]['valPrecioVenta'] = $_POST["valPrecioVenta"];
 $arrayTipoViviendas[$seqProyecto]['valCierre'] = $_POST["valCierre"];
 $arrayTipoViviendas[$seqProyecto]['txtDescripcion'] = $_POST["txtDescripcion"];
+
+$arrayInsLicencias[$seqProyecto]['seqProyectoLicencia'] = $_POST["seqProyectoLicencia"];
+$arrayInsLicencias[$seqProyecto]['txtLicencia'] = $_POST["txtLicencia"];
+$arrayInsLicencias[$seqProyecto]['txtExpideLicencia'] = $_POST["txtExpideLicencia"];
+$arrayInsLicencias[$seqProyecto]['fchLicencia'] = $_POST["fchLicencia"];
+$arrayInsLicencias[$seqProyecto]['fchVigenciaLicencia'] = $_POST["fchVigenciaLicencia"];
+$arrayInsLicencias[$seqProyecto]['fchLicenciaProrroga'] = $_POST["fchLicenciaProrroga"];
+$arrayInsLicencias[$seqProyecto]['fchLicenciaProrroga1'] = $_POST["fchLicenciaProrroga1"];
+$arrayInsLicencias[$seqProyecto]['fchLicenciaProrroga2'] = $_POST["fchLicenciaProrroga2"];
+$arrayInsLicencias[$seqProyecto]['fchEjecutoriaLicencia'] = $_POST["fchEjecutoriaLicencia"];
+$arrayInsLicencias[$seqProyecto]['txtResEjecutoria'] = $_POST["txtResEjecutoria"];
+$arrayInsLicencias[$seqProyecto]['seqTipoLicencia'] = $_POST["seqTipoLicencia"];
+
 
 $arraycronograma[$seqProyecto]['seqCronogramaFecha'] = $_POST['seqCronogramaFecha'];
 $arraycronograma[$seqProyecto]['numActaDescriptiva'] = $_POST['numActaDescriptiva'];

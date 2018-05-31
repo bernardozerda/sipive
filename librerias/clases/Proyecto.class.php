@@ -383,6 +383,8 @@ class Proyecto {
             //echo "<br>" . $nombre_campo . " = " . $valor;
             $$nombre_campo = $valor;
         }
+        $numNitProyecto = str_replace(".", "", $numNitProyecto);
+        $numNitProyecto = str_replace(" ", "", $numNitProyecto);
         $arrErrores = array();
         // Instruccion para insertar el Oferente en la base de datos
         $sql = "INSERT INTO t_pry_proyecto
@@ -405,6 +407,9 @@ class Proyecto {
                     txtOtrosBarrios,
                     txtDireccion,
                     valNumeroSoluciones, 
+                    numCantSolDisc,
+                    numParqueaderos,
+                    numParqueaderosDisc,
                     valTorres,
                     valAreaLote,
                     valAreaConstruida,
@@ -469,7 +474,10 @@ class Proyecto {
                     $seqBarrio,
                     '$txtOtrosBarrios',                   
                     '$txtDireccion',
-                    $valNumeroSoluciones,                   
+                    $valNumeroSoluciones,  
+                    $numCantSolDisc,
+                    $numParqueaderos,
+                    $numParqueaderosDisc,
                     $valTorres,
                     $valAreaLote,
                     $valAreaConstruida,
@@ -589,7 +597,7 @@ class Proyecto {
             $sql .= " where  pry.seqProyecto = " . $seqProyecto;
         }
         $sql . " ORDER BY  pry.seqProyecto";
-        // echo "<p>".$sql."</p>";
+        echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -677,6 +685,9 @@ class Proyecto {
                         txtOtrosBarrios  = '" . $txtOtrosBarrios . "',                       
                         txtDireccion  = '" . $txtDireccion . "',
                         valNumeroSoluciones = " . $valNumeroSoluciones . ", 
+                        numCantSolDisc = " . $numCantSolDisc . ",
+                        numParqueaderos = " . $numParqueaderos . ",
+                        numParqueaderosDisc = " . $numParqueaderosDisc . ",
                         valTorres = " . $valTorres . ",
                         valAreaLote = " . $valAreaLote . ",
                         valAreaConstruida = " . $valAreaConstruida . ",
@@ -856,16 +867,35 @@ class Proyecto {
         return $arrErrores;
     }
 
-    public function almacenarLicencias($seqProyecto, $txtLicencia, $txtExpideLicencia, $seqTipoLicencia, $fchLicencia, $fchVigenciaLicencia, $fchEjecutoriaLicencia, $txtResEjecutoria, $fchLicenciaProrroga, $fchLicenciaProrroga1, $fchLicenciaProrroga2) {
+    public function almacenarLicencias($seqProyecto, $array, $cant) {
         global $aptBd;
         $arrErrores = array();
         $sql = "INSERT INTO t_pry_proyecto_licencias (txtLicencia, txtExpideLicencia, fchLicencia, fchVigenciaLicencia, fchEjecutoriaLicencia, txtResEjecutoria, seqTipoLicencia,  fchLicenciaProrroga, fchLicenciaProrroga1, fchLicenciaProrroga2, seqProyecto) VALUES";
-        foreach ($seqTipoLicencia as $key => $value) {
-            $sqlLicencia .= "('" . $txtLicencia[$key] . "', '" . $txtExpideLicencia[$key] . "', '" . $fchLicencia[$key] . "', '" . $fchVigenciaLicencia[$key] . "', '" . $fchEjecutoriaLicencia[$key] . "', '" . $txtResEjecutoria[$key] . "', " . $value . ", '" . $fchLicenciaProrroga[$key] . "', '" . $fchLicenciaProrroga1[$key] . "', '" . $fchLicenciaProrroga2[$key] . "'," . $seqProyecto . "),";
+
+        for ($index = 0; $index < $cant; $index++) {
+            foreach ($array[$seqProyecto] as $key => $value) {
+                if ($value[($index)] == NULL && $value[($index)] == "") {
+                    $$key = 0;
+                } else {
+                    $$key = $value[($index)];
+                }
+            }            //if ($txtNombreProyectoHijo != "") {
+            $sql .= "(
+                        '$txtLicencia', 
+                        '$txtExpideLicencia',
+                        '$fchLicencia',
+                        '$fchVigenciaLicencia',
+                        '$fchEjecutoriaLicencia',
+                        '$txtResEjecutoria',
+                        '$seqTipoLicencia',
+                        '$fchLicenciaProrroga',
+                        '$fchLicenciaProrroga1',
+                        '$fchLicenciaProrroga2',
+                        " . $seqProyecto . "),";
         }
-        $sqlLicencia = substr_replace($sqlLicencia, ';', -1, 1);
-        $sql .= $sqlLicencia;
-        //echo $sql;
+        $sql = substr_replace($sql, ';', -1, 1);
+        //$sql .= $sqlLicencia;
+        // echo "<br><br> update" . $sql;
         try {
             $aptBd->execute($sql);
         } catch (Exception $objError) {
@@ -888,29 +918,69 @@ class Proyecto {
         return $datos;
     }
 
-    public function modificarLicencias($seqProyecto, $seqProyectoLicencia, $txtLicencia, $txtExpideLicencia, $seqTipoLicencia, $fchLicencia, $fchVigenciaLicencia, $fchEjecutoriaLicencia, $txtResEjecutoria, $fchLicenciaProrroga, $fchLicenciaProrroga1, $fchLicenciaProrroga2) {
+    public function modificarLicencias($seqProyecto, $array, $cant) {
+
+
         global $aptBd;
         $arrErrores = array();
-        foreach ($seqProyectoLicencia as $key => $value) {
-            $sql = 'UPDATE t_pry_proyecto_licencias
-            SET            
-            txtLicencia = "' . $txtLicencia[$key] . '",
-            txtExpideLicencia = "' . $txtExpideLicencia[$key] . '",
-            fchLicencia ="' . $fchLicencia[$key] . '",
-            fchVigenciaLicencia = "' . $fchVigenciaLicencia[$key] . '",
-            fchLicenciaProrroga = "' . $fchLicenciaProrroga[$key] . '",
-            fchLicenciaProrroga1 = "' . $fchLicenciaProrroga1[$key] . '",
-            fchLicenciaProrroga2 = "' . $fchLicenciaProrroga2[$key] . '",
-            fchEjecutoriaLicencia ="' . $fchEjecutoriaLicencia[$key] . '",
-            txtResEjecutoria = "' . $txtResEjecutoria[$key] . '"  
-            WHERE seqProyectoLicencia = ' . $value . ' and seqProyecto = "' . $seqProyecto . '" and seqTipoLicencia = "' . $seqTipoLicencia[$key] . '";';
-            try {
-                $aptBd->execute($sql);
-            } catch (Exception $objError) {
-                $arrErrores[] = "No se ha podido cargar las licencias<b></b>";
-                pr($objError->getMessage());
-            }
+        $sqlExistentes = "SELECT seqProyectoLicencia FROM t_pry_proyecto_licencias WHERE seqProyecto = $seqProyecto";
+        $exeExistentes = $aptBd->execute($sqlExistentes);
+        //$cant = $exeExistentes->numRows();
+        $datos = Array();
+        $datosDiff = Array();
+        while ($exeExistentes->fields) {
+            $datos[] = $exeExistentes->fields['seqProyectoLicencia'];
+            $exeExistentes->MoveNext();
         }
+        for ($index = 0; $index < $cant; $index++) {
+            $txtNombreProyectoHijo = '';
+            foreach ($array[$seqProyecto] as $key => $value) {
+                if ($value[($index)] == NULL && $value[($index)] == "") {
+                    $$key = 0;
+                } else {
+                    $$key = $value[($index)];
+                }
+            }
+            $datosDiff[] = $seqProyectoLicencia;
+
+            if (in_array($seqProyectoLicencia, $datos)) {
+                $query = 'UPDATE t_pry_proyecto_licencias
+                            SET            
+                            txtLicencia = "' . $txtLicencia . '",
+                            txtExpideLicencia = "' . $txtExpideLicencia . '",
+                            fchLicencia ="' . $fchLicencia . '",
+                            fchVigenciaLicencia = "' . $fchVigenciaLicencia . '",
+                            fchLicenciaProrroga = "' . $fchLicenciaProrroga . '",
+                            fchLicenciaProrroga1 = "' . $fchLicenciaProrroga1 . '",
+                            fchLicenciaProrroga2 = "' . $fchLicenciaProrroga2 . '",
+                            fchEjecutoriaLicencia ="' . $fchEjecutoriaLicencia . '",
+                            txtResEjecutoria = "' . $txtResEjecutoria . '"  
+                            WHERE seqProyectoLicencia = ' . $seqProyectoLicencia . ' '
+                        . 'and seqProyecto = "' . $seqProyecto . '" '
+                        . 'and seqTipoLicencia = "' . $seqTipoLicencia . '";';
+                try {
+                    $aptBd->execute($query);
+                } catch (Exception $objError) {
+                    $arrErrores[] = "No se ha podido cargar las licencias<b></b>";
+                    pr($objError->getMessage());
+                }
+            } else if ($cant >= $exeExistentes->numRows()) {
+              
+                $arrayInsLicencias = Array();
+                $arrayInsLicencias[$seqProyecto]['txtLicencia'][] = $txtLicencia;
+                $arrayInsLicencias[$seqProyecto]['txtExpideLicencia'][] = $txtExpideLicencia;
+                $arrayInsLicencias[$seqProyecto]['fchLicencia'][] = $fchLicencia;
+                $arrayInsLicencias[$seqProyecto]['fchVigenciaLicencia'][] = $fchVigenciaLicencia;
+                $arrayInsLicencias[$seqProyecto]['fchLicenciaProrroga'][] = $fchLicenciaProrroga;
+                $arrayInsLicencias[$seqProyecto]['fchLicenciaProrroga1'][] = $fchLicenciaProrroga1;
+                $arrayInsLicencias[$seqProyecto]['fchLicenciaProrroga2'][] = $fchLicenciaProrroga2;
+                $arrayInsLicencias[$seqProyecto]['txtResEjecutoria'][] = $txtResEjecutoria;
+                $arrayInsLicencias[$seqProyecto]['seqTipoLicencia'][] = $seqTipoLicencia;
+                $this->almacenarLicencias($seqProyecto, $arrayInsLicencias, count($arrayInsLicencias));
+            }
+            //echo "<br><br> update" . $query;
+        }
+
         return $arrErrores;
     }
 
@@ -918,6 +988,7 @@ class Proyecto {
 
         global $aptBd;
         $arrErrores = array();
+
         $query = "INSERT INTO T_PRY_PROYECTO (
                 txtNombreProyecto,
                 txtNombreComercial,
@@ -925,14 +996,7 @@ class Proyecto {
                 txtDireccion,
                 valNumeroSoluciones,
                 txtMatriculaInmobiliariaLote,
-                txtChipLote,
-                txtLicenciaUrbanismo,
-                fchLicenciaUrbanismo1,
-                fchVigenciaLicenciaUrbanismo,
-                txtExpideLicenciaUrbanismo,
-                txtLicenciaConstruccion,
-                fchLicenciaConstruccion1,
-                fchVigenciaLicenciaConstruccion,
+                txtChipLote,               
                 txtNombreVendedor,
                 numNitVendedor,
                 txtCedulaCatastral,
@@ -962,14 +1026,7 @@ class Proyecto {
                         '$txtDireccionHijo',
                         '$valNumeroSolucionesHijo',
                         '$txtMatriculaInmobiliariaLoteHijo',
-                        '$txtChipLoteHijo',
-                        '$txtLicenciaUrbanismoHijo',
-                        '$fchLicenciaUrbanismo1Hijo',
-                        '$fchVigenciaLicenciaUrbanismoHijo',
-                        '$txtExpideLicenciaUrbanismoHijo',
-                        '$txtLicenciaConstruccionHijo',
-                        '$fchLicenciaConstruccion1Hijo',
-                        '$fchVigenciaLicenciaConstruccionHijo',
+                        '$txtChipLoteHijo',                         
                         '$txtNombreVendedorHijo',
                         '$numNitVendedorHijo',
                         '$txtCedulaCatastralHijo',
@@ -980,18 +1037,29 @@ class Proyecto {
                         '2',
                         '$fchGestion',
                         '$fchGestion',
-                        " . $_SESSION['seqUsuario'] . "),";
-            // }
+                        " . $_SESSION['seqUsuario'] . ");";
+            try {
+                $aptBd->execute($query);
+                $idProyecto = $aptBd->Insert_ID();
+                $arrayInsLicencias = Array();
+                $arrayInsLicencias[$idProyecto]['txtLicencia'][0] = $txtLicenciaUrbanismoHijo;
+                $arrayInsLicencias[$idProyecto]['txtExpideLicencia'][0] = $txtExpideLicenciaUrbanismoHijo;
+                $arrayInsLicencias[$idProyecto]['fchLicencia'][0] = $fchLicenciaUrbanismo1Hijo;
+                $arrayInsLicencias[$idProyecto]['fchVigenciaLicencia'][0] = $fchVigenciaLicenciaUrbanismoHijo;
+                $arrayInsLicencias[$idProyecto]['seqTipoLicencia'][0] = 1;
+                $arrayInsLicencias[$idProyecto]['txtLicencia'][1] = $txtLicenciaConstruccionHijo;
+                $arrayInsLicencias[$idProyecto]['fchLicencia'][1] = $fchLicenciaConstruccion1Hijo;
+                $arrayInsLicencias[$idProyecto]['fchVigenciaLicencia'][1] = $fchVigenciaLicenciaConstruccionHijo;
+                $arrayInsLicencias[$idProyecto]['seqTipoLicencia'][1] = 2;
+                //var_dump($arrayInsLicencias);
+                $this->almacenarLicencias($idProyecto, $arrayInsLicencias, 2);
+            } catch (Exception $objError) {
+                $arrErrores[] = "No se ha podido cargar las licencias<b></b>";
+                pr($objError->getMessage());
+            }
         }
-        $query = substr_replace($query, ';', -1, 1);
+
         // echo "<br>" . $query . "<br>";
-        try {
-            $aptBd->execute($query);
-            // almacenarLicencias($seqProyecto, $txtLicencia, $txtExpideLicencia, $seqTipoLicencia, $fchLicencia, $fchVigenciaLicencia, $fchEjecutoriaLicencia, $txtResEjecutoria, $fchLicenciaProrroga, $fchLicenciaProrroga1, $fchLicenciaProrroga2)
-        } catch (Exception $objError) {
-            $arrErrores[] = "No se ha podido cargar las licencias<b></b>";
-            pr($objError->getMessage());
-        }
     }
 
     function modificarConjuntos($seqProyecto, $arrayConjuntos, $cant) {
@@ -1026,14 +1094,7 @@ class Proyecto {
                         txtDireccion = '$txtDireccionHijo',
                         valNumeroSoluciones = '$valNumeroSolucionesHijo',
                         txtChipLote = '$txtChipLoteHijo',
-                        txtMatriculaInmobiliariaLote = '$txtMatriculaInmobiliariaLoteHijo',
-                        txtLicenciaUrbanismo = '$txtLicenciaUrbanismoHijo',
-                        fchLicenciaUrbanismo1 = '$fchLicenciaUrbanismo1Hijo',
-                        fchVigenciaLicenciaUrbanismo = '$fchVigenciaLicenciaUrbanismoHijo',
-                        txtExpideLicenciaUrbanismo = '$txtExpideLicenciaUrbanismoHijo',
-                        txtLicenciaConstruccion = '$txtLicenciaConstruccionHijo',
-                        fchLicenciaConstruccion1 = '$fchLicenciaConstruccion1Hijo',
-                        fchVigenciaLicenciaConstruccion = '$fchVigenciaLicenciaConstruccionHijo',
+                        txtMatriculaInmobiliariaLote = '$txtMatriculaInmobiliariaLoteHijo',                        
                         txtNombreVendedor = '$txtNombreVendedorHijo',
                         numNitVendedor = '$numNitVendedorHijo',
                         txtCedulaCatastral = '$txtCedulaCatastralHijo',
@@ -1044,6 +1105,19 @@ class Proyecto {
                         fchUltimaActualizacion = '$fchGestion', 
                         seqUsuario = " . $_SESSION['seqUsuario'] . " 
                     WHERE seqProyecto = $seqProyectoHijo;";
+                $arrayInsLicencias = Array();
+                $arrayInsLicencias[$seqProyectoHijo]['seqProyectoLicencia'][0] = $seqProyectoLicenciaUrbHijo;
+                $arrayInsLicencias[$seqProyectoHijo]['txtLicencia'][0] = $txtLicenciaUrbanismoHijo;
+                $arrayInsLicencias[$seqProyectoHijo]['txtExpideLicencia'][0] = $txtExpideLicenciaUrbanismoHijo;
+                $arrayInsLicencias[$seqProyectoHijo]['fchLicencia'][0] = $fchLicenciaUrbanismo1Hijo;
+                $arrayInsLicencias[$seqProyectoHijo]['fchVigenciaLicencia'][0] = $fchVigenciaLicenciaUrbanismoHijo;
+                $arrayInsLicencias[$seqProyectoHijo]['seqTipoLicencia'][0] = 1;
+                $arrayInsLicencias[$seqProyectoHijo]['seqProyectoLicencia'][1] = $seqProyectoLicenciaConsHijo;
+                $arrayInsLicencias[$seqProyectoHijo]['txtLicencia'][1] = $txtLicenciaConstruccionHijo;
+                $arrayInsLicencias[$seqProyectoHijo]['fchLicencia'][1] = $fchLicenciaConstruccion1Hijo;
+                $arrayInsLicencias[$seqProyectoHijo]['fchVigenciaLicencia'][1] = $fchVigenciaLicenciaConstruccionHijo;
+                $arrayInsLicencias[$seqProyectoHijo]['seqTipoLicencia'][1] = 2;
+                $this->modificarLicencias($seqProyectoHijo, $arrayInsLicencias, count($arrayInsLicencias));
             } else if ($cant >= $exeExistentes->numRows()) {
 
                 $arrayconjuntos = Array();
@@ -1121,7 +1195,7 @@ class Proyecto {
             foreach ($array[$seqProyecto] as $key => $value) {
 
                 if ($value[($index)] == NULL && $value[($index)] == "") {
-                    $$key = 0;
+                    $$key = 0;  
                 } else {
                     $$key = $value[($index)];
                 }

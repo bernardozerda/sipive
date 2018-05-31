@@ -7,8 +7,8 @@ include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "aadProyectos.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExcel.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "aadProyectos.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "PHPExcel.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 
 // *************************** OBTIENE LOS DATOS ******************************************************************** //
@@ -18,9 +18,8 @@ $arrFormato = $claActo->plantilla($_GET['seqTipoActoUnidad']);
 
 // contenido de la plantilla (cuando aplica)
 $arrContenido = array();
-switch($_GET['seqTipoActoUnidad']){
+switch ($_GET['seqTipoActoUnidad']) {
     case 1: // aprobación
-
         // las unidades que no tienen actos administrativos
         // UNION
         // las unidades que en la suma de actos administrativos es cero
@@ -113,30 +112,28 @@ $numColumnas = count($arrFormato) - 1;
 
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->setActiveSheetIndex(0);
-$objPHPExcel->getProperties()->setCreator( $claActo->txtCreador );
+$objPHPExcel->getProperties()->setCreator($claActo->txtCreador);
 $objHoja = $objPHPExcel->getActiveSheet();
-$objHoja->setTitle( $arrFormato[0]['nombreActo'] );
+$objHoja->setTitle($arrFormato[0]['nombreActo']);
 
 // titulos
-for( $i = 0 ; $i < count($arrFormato) ; $i++ ) {
-    $objHoja->setCellValueByColumnAndRow( $i , 1 , $arrFormato[$i]['nombre'] , false );
-
+for ($i = 0; $i < count($arrFormato); $i++) {
+    $objHoja->setCellValueByColumnAndRow($i, 1, $arrFormato[$i]['nombre'], false);
 }
 
 // contenido
-foreach($arrContenido as $numFila => $arrLinea){
+foreach ($arrContenido as $numFila => $arrLinea) {
     $numColumna = 0;
-    foreach($arrLinea as $txtValor) {
+    foreach ($arrLinea as $txtValor) {
         $objHoja->setCellValueByColumnAndRow($numColumna, ($numFila + 2), $txtValor, false);
         $numColumna++;
     }
 }
 
 // da formato a todas las columnas del libro
-$numFilas = (count($arrContenido) == 0)? 200 : (count($arrContenido) + 1);
+$numFilas = (count($arrContenido) == 0) ? 200 : (count($arrContenido) + 1);
 
 // *************************** ESTILOS POR DEFECTO DEL ARCHIVO DE EXCEL ********************************************* //
-
 // fuentes para el archivo
 $arrFuentes['default']['font']['name'] = "Calibri";
 $arrFuentes['default']['font']['size'] = 8;
@@ -165,11 +162,11 @@ for ($i = 2; $i <= $numFilas; $i++) {
 }
 
 // estilos colores y otras cosas
-$objHoja->getStyle(  PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas) . $numFilas )->applyFromArray($arrFuentes['default']);
-$objHoja->getStyle(  PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas) . "1" )->applyFromArray($arrFuentes['titulo']);
+$objHoja->getStyle(PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas) . $numFilas)->applyFromArray($arrFuentes['default']);
+$objHoja->getStyle(PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas) . "1")->applyFromArray($arrFuentes['titulo']);
 
 // ajusta el tamaño de las columans en ancho y alto
-for( $i = 0 ; $i < count($arrFormato) ; $i++ ) {
+for ($i = 0; $i < count($arrFormato); $i++) {
     $objHoja->getColumnDimensionByColumn($i)->setAutoSize(true);
 }
 $objHoja->getRowDimension(1)->setRowHeight(12);
@@ -183,5 +180,4 @@ ob_end_clean();
 
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save('php://output');
-
 ?>

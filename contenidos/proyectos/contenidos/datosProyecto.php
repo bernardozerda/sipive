@@ -25,7 +25,7 @@ $arrConjuntoResidencial = Array();
 $arraDatosPoliza = Array();
 $arrCronogramaFecha = Array();
 $arrayFideicomitente = Array();
-
+$arraConjuntoLicencias = Array();
 $claDatosProy = new DatosGeneralesProyectos();
 $claProyecto = new Proyecto();
 $txtPlantilla = "proyectos/vistas/listaProyectos.tpl";
@@ -53,6 +53,10 @@ if (isset($_REQUEST['seqProyecto'])) {
     $arrRegistros = $claSeguimientoProyectos->obtenerRegistros(100);
     $arrTipoVivienda = $claDatosProy->obtenerTipoVivienda($idProyecto);
     $arrConjuntoResidencial = $claDatosProy->obtenerConjuntoResidencial($idProyecto);
+    foreach ($arrConjuntoResidencial as $keyCon => $valueCon) {        
+        $arraConjuntoLicencias[] = $claProyecto->obtenerListaLicencias($valueCon['seqProyecto']);
+    }
+    
     $arrCronogramaFecha = $claDatosProy->obteneCronograma($idProyecto);
     $arraDatosPoliza = $claDatosProy->obtenerDatosPoliza($idProyecto);
     $arrayFideicomitente = $claDatosProy->obtenerDatosFideicomiso($idProyecto);
@@ -98,9 +102,6 @@ $cantDoc = $claDatosProy->obtenerDocumentoProyecto($idProyecto);
 $arrayDocumentos = $claProyecto->obtenerListaDocumentos($idProyecto, $cantDoc);
 $arrayLicencias = $claProyecto->obtenerListaLicencias($idProyecto);
 
-//var_dump($arrayLicencias);
-//echo "<p>".count($arrayLicencias)."</p>";
-
 if (count($arrayLicencias) == 1) {
     foreach ($arrayLicencias as $keyLic => $valueLic) {
         if ($valueLic['seqTipoLicencia'] == 1) {
@@ -111,7 +112,6 @@ if (count($arrayLicencias) == 1) {
         }
     }
 }
-
 
 if (count($arrayLicencias) == 0) {
     $arrayLicencias[0] = 0;
@@ -163,7 +163,7 @@ $claSmarty->assign("NombreUsuario", $_SESSION['txtNombre'] . "" . $_SESSION['txt
 $claSmarty->assign("seqUsuario", $_SESSION['seqUsuario']);
 $claSmarty->assign("page", "datosProyecto.php?tipo=2");
 //$claSmarty->assign("arrCronogramaProyecto", $arrCronogramaProyecto);
-//$claSmarty->assign("arrConjuntoResidencial", $arrConjuntoResidencial);
+$claSmarty->assign("arraConjuntoLicencias", $arraConjuntoLicencias);
 
 
 if ($txtPlantilla != "") {

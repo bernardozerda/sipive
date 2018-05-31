@@ -38,21 +38,22 @@
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Conjuntos Residenciales</em></a>
                     </li>
                     <li class="nav-item" style="{$nav}">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}">Licencias <br></a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick="activarEditorTiny('comentarios', 1);
+                                activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', 1);">Licencias <br></a>
                     </li>
                 {/if}
                 {if $seqPryEstadoProceso > 1}
 
                     <li class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos Financieros</a>
-                    </li>
+                    </li>                    
                     <li  class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Cronograma </em></a>
                     </li>
                     <li  class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosPolizas" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" 
                            onclick="
-                               {* {if isset($smarty.session.arrGrupos.5.13) or isset($smarty.session.arrGrupos.6.20)}*}
+                           {* {if isset($smarty.session.arrGrupos.5.13) or isset($smarty.session.arrGrupos.6.20)}*}
                                    activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentes.php', {$arrayFideicomitente|@sizeof});
                            "><em>Polizas  y Fiducia</em></a>
                     </li>
@@ -82,15 +83,38 @@
                             <input type="hidden" id="txtArchivo" name="txtArchivo" value="./contenidos/administracionProyectos/salvarProyecto.php">
                         </h6>
                     </legend>
-                    <div id="divContent">
+                    <div id="divContent">                                   
                         <div class="form-group">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="control-label" for="nome">Nombre Comit&eacute; Elegibilidad (*)</label>
-                                <input name="txtNombreProyecto" type="text" id="txtNombreProyecto" value="{$value.txtNombreProyecto}" class="form-control required" onBlur="sinCaracteresEspeciales(this);" style="width:250px;"/>
+                                {* <input name="txtNombreProyecto" type="text" id="txtNombreProyecto" value="{$value.txtNombreProyecto}" class="form-control required" onBlur="sinCaracteresEspeciales(this);" style="width:250px;"/>*}
+                                <textarea name="txtNombreProyecto" type="text"  id="txtNombreProyecto" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style=" height: 40px" >{$value.txtNombreProyecto}</textarea>
                                 <div id="val_txtNombreProyecto" class="divError">Debe diligenciar el campo Nombre del Proyecto</div>
                             </div>
                         </div>
+                        <div class="form-group"  id="idLineaTipoSolucionDescripcion">
+                            <div class="col-md-6"> 
+                                <label class="control-label" >Descripci&oacute;n del Proyecto</label>
+                                <textarea name="txtDescripcionProyecto" type="text"  id="txtDescripcionProyecto" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style=" height: 40px" >{$value.txtDescripcionProyecto}</textarea>
+                                <div id="val_txtDescripcionProyecto" class="divError">Debe diligenciar el campo Descripción del Proyecto</div>
+                            </div>
+                        </div> 
                         <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label" >Nit del Proyecto (*)</label>
+                                <input type="text" 
+                                       name="numNitProyecto" 
+                                       id="numNitProyecto" 
+                                       value="{$value.numNitProyecto}"
+                                       onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                                       onBlur="soloNumeros(this);
+                                               this.style.backgroundColor = '#FFFFFF';"
+                                       onkeyup="formatoSeparadores(this)" onchange="formatoSeparadores(this)"
+                                       class="form-control required" style="width:250px;"  
+                                       {if $value.numNitProyecto > 0}readonly {/if}
+
+                                       />
+                            </div>
                             <div class="col-md-4">
                                 <label class="control-label" ><div id="idTituloPlanParcial">Nombre del Plan Parcial</div></label>    
                                 {if $arrPrivilegios.editar == 1}
@@ -98,17 +122,8 @@
                                 {else}
                                     {assign var=soloLectura value="readonly"}
                                 {/if}
-                                <input type="hidden" 
-                                       name="numNitProyecto" 
-                                       id="numNitProyecto" 
-                                       value="{if $value.numNitProyecto == ""}0{else}{$value.numNitProyecto}{/if}"
-                                       onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                       onBlur="soloNumeros(this);
-                                               this.style.backgroundColor = '#FFFFFF';"
-                                       onkeyup="formatoSeparadores(this)" onchange="formatoSeparadores(this)"
-                                       style="width:100px; text-align: right;"
-                                       readonly
-                                       />
+
+
                                 <div id="idCampoPlanParcial">
                                     <input name="txtNombrePlanParcial" type="text" id="txtNombrePlanParcial"  value="{$value.txtNombrePlanParcial}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:250px;"/></div>
                             </div>
@@ -119,12 +134,7 @@
                                 <input name="txtNombreComercial" type="text" id="txtNombreComercial" value="{$value.txtNombreComercial}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:250px;"/>
                             </div>
                         </div>
-                        <div class="form-group"  id="idLineaTipoSolucionDescripcion">
-                            <div class="col-md-11"> 
-                                <label class="control-label" >Descripci&oacute;n del Proyecto</label>
-                                <textarea name="txtDescripcionProyecto" type="text"  id="txtDescripcionProyecto" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style=" height: 40px" >{$value.txtDescripcionProyecto}</textarea>
-                            </div>
-                        </div> 
+
                         <!-- TIPO DE MODALIDAD  onchange="obtenerModalidadProyecto(this.value)"-->
                         <div class="form-group" >
                             <div class="col-md-4" > 
@@ -357,6 +367,35 @@
                                 <div id="val_valNumeroSoluciones" class="divError">Debe diligenciar el número de soluciones</div>
                             </div>
                         </div>
+                        <div class="form-group" >
+                            <div class="col-md-4"> 
+                                <label class="control-label" >N&uacute;m de Soluciones Disc (*)</label> 
+                                <input name="numCantSolDisc" type="text" id="numCantSolDisc" class="form-control required" value="{$value.numCantSolDisc}" onBlur="sinCaracteresEspeciales(this);
+                                        soloNumeros(this);" style="width:65px;"/>
+                                <div id="val_numCantSolDisc" class="divError">Este campo es requerido</div>
+                            </div>
+                        </div> 
+                        <div class="form-group" >
+                            <div class="col-md-4"> 
+                                <label class="control-label" >Cant. Parqueaderos (*)</label> 
+                                <input name="numParqueaderos" type="text" id="numParqueaderos" class="form-control required" value="{$value.numParqueaderos}" onBlur="sinCaracteresEspeciales(this);
+                                        soloNumeros(this);" style="width:65px;"/>
+                                <div id="val_numParqueaderos" class="divError">Este campo es requerido</div>
+                            </div>
+                        </div> 
+                        <div class="form-group" >
+                            <div class="col-md-4"> 
+                                <label class="control-label" >Parqueaderos Discapacitados (*)</label> 
+                                <input name="numParqueaderosDisc" type="text" id="numParqueaderosDisc" class="form-control required" value="{$value.numParqueaderosDisc}" onBlur="sinCaracteresEspeciales(this);
+                                        soloNumeros(this);" style="width:65px;"/>
+                                <div id="val_numParqueaderosDisc" class="divError">Este campo es requerido</div>
+                            </div>
+                        </div>   
+
+
+
+
+
                         <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label" >Torres (*)</label> 

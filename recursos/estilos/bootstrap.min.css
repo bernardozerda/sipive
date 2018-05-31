@@ -1770,7 +1770,7 @@ tbody.collapse.in {
     font-size: 14px;
     text-align: left;
     list-style: none;
-    background-color: #fff;
+    background-color: #e7e7e7;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
     border: 1px solid #ccc;
@@ -1785,9 +1785,9 @@ tbody.collapse.in {
 }
 .dropdown-menu .divider {
     height: 1px;
-    margin: 9px 0;
+    margin: 2px 0;
     overflow: hidden;
-    background-color: #e5e5e5
+    background-color: #ccc
 }
 .dropdown-menu>li>a {
     display: block;
@@ -1827,7 +1827,8 @@ tbody.collapse.in {
 
 }
 .open>.dropdown-menu {
-    display: block
+    display: block;
+   
 }
 .open>a {
     outline: 0
@@ -2248,10 +2249,7 @@ textarea.input-group-sm>.input-group-btn>.btn {
     border-color: #337ab7
 }
 .nav .nav-divider {
-    height: 1px;
-    margin: 9px 0;
-    overflow: hidden;
-    background-color: #e5e5e5
+   height:1px; margin:0px 0;overflow:hidden;background-color:#ccc;
 }
 .nav>li>a>img {
     max-width: none

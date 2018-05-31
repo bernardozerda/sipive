@@ -8,6 +8,8 @@
 <div style="width:100%; padding-left: 3%">
     <table border="0" cellspacing="2" cellpadding="0"  id="tablaConjuntoResidencial" style="padding-left: 3px; width: 98%">
         {assign var="num" value="0"}
+        {assign var="cont" value="0"}
+
         {counter start=0 print=false assign=num}
         {foreach from=$arrConjuntoResidencial key=seqProyecto item=arrConjunto}
             {if $num++%2 == 0} <tr class="fila_0">
@@ -66,67 +68,77 @@
                             <p>&nbsp;</p>
                         </div>
                     </div>
-                    <div class="form-group" >
-                        <div class="col-md-12">
-                            <fieldset>
-                                <legend class="legend">
-                                    <h4 style="position: relative; float: left; width: 50%; margin: 0px; padding: 5px">
-                                        Licencia de urbanismo</h4>
-                                </legend>
 
-                                <div class="col-md-3">
-                                    <label class="control-label" >Lic. Urbanismo</label><br />             
-                                    <input type='text' name='txtLicenciaUrbanismoHijo[]' id='txtLicenciaUrbanismoHijo' value="{$arrConjunto.txtLicenciaUrbanismo}" onBlur='sinCaracteresEspeciales(this);' size='18' >
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="control-label" >Entidad Expedición</label><br />
-                                    <input type='text' name='txtExpideLicenciaUrbanismoHijo[]' id='txtExpideLicenciaUrbanismoHijo' value="{$arrConjunto.txtExpideLicenciaUrbanismo}" onBlur='sinCaracteresEspeciales(this);' size='13' >
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="control-label" >Fecha&nbsp;Licencia</label><br />           
-                                    <input name="fchLicenciaUrbanismo1Hijo[]" type="text" id="fchLicenciaUrbanismo1Hijo[]" value="{$arrConjunto.fchLicenciaUrbanismo1}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaUrbanismo1Hijo[]');"><img src="recursos/imagenes/calendar.png"></a>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="control-label" >Vigencia&nbsp;Licencia</label><br />            
-                                    <input name="fchVigenciaLicenciaUrbanismoHijo[]" type="text" id="fchVigenciaLicenciaUrbanismoHijo[]" value="{$arrConjunto.fchVigenciaLicenciaUrbanismo}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaUrbanismoHijo[]');"><img src="recursos/imagenes/calendar.png"></a>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
 
-                    <div class="form-group" >
-                        <div class="col-md-12">
-                            <fieldset>
-                                <legend class="legend">
-                                    <h4 style="position: relative; float: left; width: 50%; margin: 0px; padding: 5px">
-                                        Licencia de Construccion</h4>
-                                </legend>
-                                <div class="form-group" >
-                                    <div class="col-md-3">
-                                        <label class="control-label" >Lic. Construcci&oacute;n</label><br />            
-                                        <input type='text' name='txtLicenciaConstruccionHijo[]' id='txtLicenciaConstruccionHijo' value="{$arrConjunto.txtLicenciaConstruccion}" onBlur='sinCaracteresEspeciales(this);' size='18' >
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label" >Fecha&nbsp;Licencia</label><br />             
-                                        <input name="fchLicenciaConstruccion1Hijo[]" type="text" id="fchLicenciaConstruccion1Hijo[]" value="{$arrConjunto.fchLicenciaConstruccion1}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaConstruccion1Hijo[]');"><img src="recursos/imagenes/calendar.png"></a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label" >Vigencia&nbsp;Licencia</label><br />            
-                                        <input name="fchVigenciaLicenciaConstruccionHijo[]" type="text" id="fchVigenciaLicenciaConstruccionHijo[]" value="{$arrConjunto.fchVigenciaLicenciaConstruccion}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaConstruccionHijo[]');"><img src="recursos/imagenes/calendar.png"></a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label" >Eliminar</label><br />     
-                                        <img src="recursos/imagenes/remove.png" width="22px" onclick="return confirmaRemoverLineaFormulario(this);" style="position: relative; float: left; width:15% ">
+                    {foreach from=$arraConjuntoLicencias[$cont] key=keyLicenciaCon item=valLicConj}
+                        {if $valLicConj.seqTipoLicencia == 1}
+                            <div class="form-group" >
+                                <div class="col-md-12">
+                                    <fieldset>
+                                        <legend class="legend">
+                                            <h4 style="position: relative; float: left; width: 50%; margin: 0px; padding: 5px">
+                                                Licencia de urbanismo</h4>
+                                        </legend>
 
-                                    </div>
+                                        <div class="col-md-3">
+                                            <label class="control-label" >Lic. Urbanismo</label><br />  
+                                            <input type="hidden" name="seqProyectoLicenciaUrbHijo[]" id="seqProyectoLicenciaUrbHijo" value="{$valLicConj.seqProyectoLicencia}" >
+                                            <input type='text' name='txtLicenciaUrbanismoHijo[]' id='txtLicenciaUrbanismoHijo' value="{$valLicConj.txtLicencia}" onBlur='sinCaracteresEspeciales(this);' size='18' >
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="control-label" >Entidad Expedición</label><br />
+                                            <input type='text' name='txtExpideLicenciaUrbanismoHijo[]' id='txtExpideLicenciaUrbanismoHijo' value="{$valLicConj.txtExpideLicencia}" onBlur='sinCaracteresEspeciales(this);' size='13' >
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="control-label" >Fecha&nbsp;Licencia</label><br />           
+                                            <input name="fchLicenciaUrbanismo1Hijo[]" type="text" id="fchLicenciaUrbanismo1Hijo[]" value="{$valLicConj.fchLicencia}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaUrbanismo1Hijo[]');"><img src="recursos/imagenes/calendar.png"></a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="control-label" >Vigencia&nbsp;Licencia</label><br />            
+                                            <input name="fchVigenciaLicenciaUrbanismoHijo[]" type="text" id="fchVigenciaLicenciaUrbanismoHijo[]" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaUrbanismoHijo[]');"><img src="recursos/imagenes/calendar.png"></a>
+                                        </div>
+                                    </fieldset>
                                 </div>
-                            </fieldset>
-                        </div>
-                        <p>&nbsp;</p>
-                    </div>                  
+                            </div>
+                        {else}
+                            <div class="form-group" >
+                                <div class="col-md-12">
+                                    <fieldset>
+                                        <legend class="legend">
+                                            <h4 style="position: relative; float: left; width: 50%; margin: 0px; padding: 5px">
+                                                Licencia de Construccion</h4>
+                                        </legend>
+                                        <div class="form-group" >
+                                            <div class="col-md-3">
+                                                <label class="control-label" >Lic. Construcci&oacute;n</label><br />  
+                                                <input type="hidden" name="seqProyectoLicenciaConsHijo[]" id="seqProyectoLicencia" value="{$valLicConj.seqProyectoLicencia}" >
+                                                <input type='text' name='txtLicenciaConstruccionHijo[]' id='txtLicenciaConstruccionHijo' value="{$valLicConj.txtLicencia}" onBlur='sinCaracteresEspeciales(this);' size='18' >
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="control-label" >Fecha&nbsp;Licencia</label><br />             
+                                                <input name="fchLicenciaConstruccion1Hijo[]" type="text" id="fchLicenciaConstruccion1Hijo[]" value="{$valLicConj.fchLicencia}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaConstruccion1Hijo[]');"><img src="recursos/imagenes/calendar.png"></a>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="control-label" >Vigencia&nbsp;Licencia</label><br />            
+                                                <input name="fchVigenciaLicenciaConstruccionHijo[]" type="text" id="fchVigenciaLicenciaConstruccionHijo[]" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaConstruccionHijo[]');"><img src="recursos/imagenes/calendar.png"></a>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="control-label" >Eliminar</label><br />     
+                                                <img src="recursos/imagenes/remove.png" width="22px" onclick="return confirmaRemoverLineaFormulario(this);" style="position: relative; float: left; width:15% ">
+
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <p>&nbsp;</p>
+                            </div>  
+                        {/if} 
+                    {/foreach}
+                    <p>&nbsp;</p>
                 </td>
                 <!---->
             </tr>
+            {assign var="cont" value=$cont+1}
         {/foreach}
     </table>
 </div>

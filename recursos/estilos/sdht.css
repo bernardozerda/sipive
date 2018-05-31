@@ -10,7 +10,6 @@
 /** FUENTES GENERALES **/
 
 
-
 body {
     background: White;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -43,7 +42,6 @@ button.reporteadorExport{
     padding: 3px;
     padding-left: 25px;
     cursor: pointer;
-    
 }	
 
 
@@ -111,11 +109,10 @@ a:hover {
     display: none;
     padding-left: 16px;
     color: red;
-    font-weight: bolder;
+    font-weight: bold;
     position: relative;
     float: left;
     width: 100%;
-    
 }
 
 .msgOk{
@@ -347,9 +344,8 @@ a:hover {
     background-color: #E4E4E4;
 }
 
-
 .vineta{
-    list-style-image: url('recursos/imagenes/vineta.png');
+    list-style-image: url('vineta.png');
 }
 .yui-skin-sam .yui-dt tr.vigenciaRojo,
 .yui-skin-sam .yui-dt tr.vigenciaRojo td.yui-dt-asc,

@@ -7,7 +7,7 @@
 
 /**
  * CARGA LA SALIDA DE txtArchivoPhp EN EL OBJETO DOM CON
- * IDENTIFICADOR txtDivDestino, SE LE PUEDEN PASAR LOS
+ * IDENTIFICADOR txtDivDestino, SE LE PUEDEN PASAR LOS 
  * PARAMETROS EN FORMATO GET EN EL STING txtParametros
  * Y ESTAS VARIABLES SON ENVIADAS POST. EL PARAMETRO bolCargando
  * ES TRUE CUANDO QUIERA QUE SE BLOQUEE AL USUARIO MIENTRAS
@@ -46,16 +46,16 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
 
     // Objeto de respuesta si es satisfactoria la carga
     var handleSuccess =
-        function (o) {
-            if (o.responseText !== undefined) {
+            function (o) {
+                if (o.responseText !== undefined) {
 
-                // Toda respuesta del archivo en el parametro se muestra en el objeto destino
-                document.getElementById(txtDivDestino).innerHTML = o.responseText;
+                    // Toda respuesta del archivo en el parametro se muestra en el objeto destino
+                    document.getElementById(txtDivDestino).innerHTML = o.responseText;
 
-                // si hubo pantalla de bloque al usuario, se oculta
-                if (bolCargando == 1) {
-                    objCargando.hide();
-                    tablas();
+                    // si hubo pantalla de bloque al usuario, se oculta
+                    if (bolCargando == 1) {
+                        objCargando.hide();
+                        tablas();
 //                        $(document).ready(function () {
 //                            $("#accordion").accordion();
 //                            $('#example').DataTable({
@@ -64,39 +64,39 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
 //                                "order": [[2, "desc"]]
 //                            });
 //                        });
+                    }
                 }
-            }
-        };
+            };
 
     // Objeto de respuesta si la carga falla
     var handleFailure =
-        function (o) {
-            if (o.responseText !== undefined) {
-                // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
-                if (o.status == "401") {
-                    document.location = 'index.php';
-                } else {
+            function (o) {
+                if (o.responseText !== undefined) {
+                    // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
+                    if (o.status == "401") {
+                        document.location = 'index.php';
+                    } else {
 
-                    // Mensaje cuando la pagina no es encontrada
-                    var htmlCode = "";
-                    htmlCode = +o.status + " " + o.statusText;
+                        // Mensaje cuando la pagina no es encontrada
+                        var htmlCode = "";
+                        htmlCode = +o.status + " " + o.statusText;
 
-                    // Otros mensajes de error son mostrados directamente en el div
-                    document.getElementById(txtDivDestino).innerHTML = htmlCode;
+                        // Otros mensajes de error son mostrados directamente en el div
+                        document.getElementById(txtDivDestino).innerHTML = htmlCode;
+                    }
+                    if (bolCargando == 1) {
+                        objCargando.hide();
+                    }
+                    return false;
                 }
-                if (bolCargando == 1) {
-                    objCargando.hide();
-                }
-                return false;
-            }
-        };
+            };
 
     // Objeto de respuestas
     var callback =
-        {
-            success: handleSuccess,
-            failure: handleFailure
-        };
+            {
+                success: handleSuccess,
+                failure: handleFailure
+            };
 
     // si hay pantalla de bloque al usuario se muestra
     if (bolCargando == 1) {
@@ -110,7 +110,7 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
 }
 
 /**
- * RETORNA UN OBJETO PANEL QUE SE MUESTRA
+ * RETORNA UN OBJETO PANEL QUE SE MUESTRA 
  * MIENTRAS CARGA UNA PETICION DEL USUARIO
  * @author Bernardo Zerda
  * @param Void
@@ -121,15 +121,15 @@ function obtenerObjetoCargando() {
 
     // Instancia un objeto panel
     var objCargando = new YAHOO.widget.Panel(
-        "wait",
-        {
-            width: "250px",
-            fixedcenter: true,
-            close: false,
-            draggable: false,
-            modal: true,
-            visible: false
-        }
+            "wait",
+            {
+                width: "250px",
+                fixedcenter: true,
+                close: false,
+                draggable: false,
+                modal: true,
+                visible: false
+            }
     );
 
     // Encabezado
@@ -159,21 +159,21 @@ function soloLetras(objLimpiar) {
         txtCaracter = txtTexto.charAt(i);
 
         if (
-            txtCaracter.toString().charCodeAt(0) != 225 && //  a
-            txtCaracter.toString().charCodeAt(0) != 233 && //  e
-            txtCaracter.toString().charCodeAt(0) != 237 && //  i
-            txtCaracter.toString().charCodeAt(0) != 243 && //  o
-            txtCaracter.toString().charCodeAt(0) != 250 && //  u
-            txtCaracter.toString().charCodeAt(0) != 252 && //  u + dieresis
-            txtCaracter.toString().charCodeAt(0) != 241 && //  ï¿½ (enie)
-            txtCaracter.toString().charCodeAt(0) != 193 && //  A
-            txtCaracter.toString().charCodeAt(0) != 201 && //  E
-            txtCaracter.toString().charCodeAt(0) != 205 && //  I
-            txtCaracter.toString().charCodeAt(0) != 211 && //  O
-            txtCaracter.toString().charCodeAt(0) != 218 && //  U
-            txtCaracter.toString().charCodeAt(0) != 220 && //  U + dieresis
-            txtCaracter.toString().charCodeAt(0) != 209    //  ï¿½ (enie mayuscula)
-        ) {
+                txtCaracter.toString().charCodeAt(0) != 225 && //  a
+                txtCaracter.toString().charCodeAt(0) != 233 && //  e
+                txtCaracter.toString().charCodeAt(0) != 237 && //  i
+                txtCaracter.toString().charCodeAt(0) != 243 && //  o
+                txtCaracter.toString().charCodeAt(0) != 250 && //  u
+                txtCaracter.toString().charCodeAt(0) != 252 && //  u + dieresis
+                txtCaracter.toString().charCodeAt(0) != 241 && //  ï¿½ (enie)
+                txtCaracter.toString().charCodeAt(0) != 193 && //  A
+                txtCaracter.toString().charCodeAt(0) != 201 && //  E
+                txtCaracter.toString().charCodeAt(0) != 205 && //  I
+                txtCaracter.toString().charCodeAt(0) != 211 && //  O
+                txtCaracter.toString().charCodeAt(0) != 218 && //  U
+                txtCaracter.toString().charCodeAt(0) != 220 && //  U + dieresis
+                txtCaracter.toString().charCodeAt(0) != 209    //  ï¿½ (enie mayuscula)
+                ) {
             txtResultado += txtCaracter.replace(/[^A-Za-z\ ]/, ""); // solo se permiten letras, numeros, punto(.), slash(/), arroba(@), espacios( ) y tildes
         } else {
             txtResultado += txtCaracter;
@@ -197,21 +197,21 @@ function soloLetrasEspacio(objLimpiar) {
         txtCaracter = txtTexto.charAt(i);
 
         if (
-            txtCaracter.toString().charCodeAt(0) != 225 && //  a
-            txtCaracter.toString().charCodeAt(0) != 233 && //  e
-            txtCaracter.toString().charCodeAt(0) != 237 && //  i
-            txtCaracter.toString().charCodeAt(0) != 243 && //  o
-            txtCaracter.toString().charCodeAt(0) != 250 && //  u
-            txtCaracter.toString().charCodeAt(0) != 252 && //  u + dieresis
-            txtCaracter.toString().charCodeAt(0) != 241 && //  ï¿½ (enie)
-            txtCaracter.toString().charCodeAt(0) != 193 && //  A
-            txtCaracter.toString().charCodeAt(0) != 201 && //  E
-            txtCaracter.toString().charCodeAt(0) != 205 && //  I
-            txtCaracter.toString().charCodeAt(0) != 211 && //  O
-            txtCaracter.toString().charCodeAt(0) != 218 && //  U
-            txtCaracter.toString().charCodeAt(0) != 220 && //  U + dieresis
-            txtCaracter.toString().charCodeAt(0) != 209    //  ï¿½ (enie mayuscula)
-        ) {
+                txtCaracter.toString().charCodeAt(0) != 225 && //  a
+                txtCaracter.toString().charCodeAt(0) != 233 && //  e
+                txtCaracter.toString().charCodeAt(0) != 237 && //  i
+                txtCaracter.toString().charCodeAt(0) != 243 && //  o
+                txtCaracter.toString().charCodeAt(0) != 250 && //  u
+                txtCaracter.toString().charCodeAt(0) != 252 && //  u + dieresis
+                txtCaracter.toString().charCodeAt(0) != 241 && //  ï¿½ (enie)
+                txtCaracter.toString().charCodeAt(0) != 193 && //  A
+                txtCaracter.toString().charCodeAt(0) != 201 && //  E
+                txtCaracter.toString().charCodeAt(0) != 205 && //  I
+                txtCaracter.toString().charCodeAt(0) != 211 && //  O
+                txtCaracter.toString().charCodeAt(0) != 218 && //  U
+                txtCaracter.toString().charCodeAt(0) != 220 && //  U + dieresis
+                txtCaracter.toString().charCodeAt(0) != 209    //  ï¿½ (enie mayuscula)
+                ) {
             txtResultado += txtCaracter.replace(/[^A-Za-z\ ]/, ""); // solo se permiten letras, numeros, punto(.), slash(/), arroba(@), espacios( ) y tildes
         } else {
             txtResultado += txtCaracter;
@@ -235,21 +235,21 @@ function soloLetrasNumeros(objLimpiar) {
         txtCaracter = txtTexto.charAt(i);
 
         if (
-            txtCaracter.toString().charCodeAt(0) != 225 && //  a
-            txtCaracter.toString().charCodeAt(0) != 233 && //  e
-            txtCaracter.toString().charCodeAt(0) != 237 && //  i
-            txtCaracter.toString().charCodeAt(0) != 243 && //  o
-            txtCaracter.toString().charCodeAt(0) != 250 && //  u
-            txtCaracter.toString().charCodeAt(0) != 252 && //  u + dieresis
-            txtCaracter.toString().charCodeAt(0) != 241 && //  ï¿½ (enie)
-            txtCaracter.toString().charCodeAt(0) != 193 && //  A
-            txtCaracter.toString().charCodeAt(0) != 201 && //  E
-            txtCaracter.toString().charCodeAt(0) != 205 && //  I
-            txtCaracter.toString().charCodeAt(0) != 211 && //  O
-            txtCaracter.toString().charCodeAt(0) != 218 && //  U
-            txtCaracter.toString().charCodeAt(0) != 220 && //  U + dieresis
-            txtCaracter.toString().charCodeAt(0) != 209    //  ï¿½ (enie mayuscula)
-        ) {
+                txtCaracter.toString().charCodeAt(0) != 225 && //  a
+                txtCaracter.toString().charCodeAt(0) != 233 && //  e
+                txtCaracter.toString().charCodeAt(0) != 237 && //  i
+                txtCaracter.toString().charCodeAt(0) != 243 && //  o
+                txtCaracter.toString().charCodeAt(0) != 250 && //  u
+                txtCaracter.toString().charCodeAt(0) != 252 && //  u + dieresis
+                txtCaracter.toString().charCodeAt(0) != 241 && //  ï¿½ (enie)
+                txtCaracter.toString().charCodeAt(0) != 193 && //  A
+                txtCaracter.toString().charCodeAt(0) != 201 && //  E
+                txtCaracter.toString().charCodeAt(0) != 205 && //  I
+                txtCaracter.toString().charCodeAt(0) != 211 && //  O
+                txtCaracter.toString().charCodeAt(0) != 218 && //  U
+                txtCaracter.toString().charCodeAt(0) != 220 && //  U + dieresis
+                txtCaracter.toString().charCodeAt(0) != 209    //  ï¿½ (enie mayuscula)
+                ) {
             txtResultado += txtCaracter.replace(/[^A-Za-z0-9\ ]/, ""); // solo se permiten letras, numeros, punto(.), slash(/), arroba(@), espacios( ) y tildes
         } else {
             txtResultado += txtCaracter;
@@ -303,21 +303,21 @@ function sinCaracteresEspeciales(objLimpiar) {
         txtCaracter = txtTexto.charAt(i);
 
         if (
-            txtCaracter.toString().charCodeAt(0) != 225 && //  a
-            txtCaracter.toString().charCodeAt(0) != 233 && //  e
-            txtCaracter.toString().charCodeAt(0) != 237 && //  i
-            txtCaracter.toString().charCodeAt(0) != 243 && //  o
-            txtCaracter.toString().charCodeAt(0) != 250 && //  u
-            txtCaracter.toString().charCodeAt(0) != 252 && //  u + dieresis
-            txtCaracter.toString().charCodeAt(0) != 241 && //  ï¿½ (enie)
-            txtCaracter.toString().charCodeAt(0) != 193 && //  A
-            txtCaracter.toString().charCodeAt(0) != 201 && //  E
-            txtCaracter.toString().charCodeAt(0) != 205 && //  I
-            txtCaracter.toString().charCodeAt(0) != 211 && //  O
-            txtCaracter.toString().charCodeAt(0) != 218 && //  U
-            txtCaracter.toString().charCodeAt(0) != 220 && //  U + dieresis
-            txtCaracter.toString().charCodeAt(0) != 209    //  ï¿½ (enie mayuscula)
-        ) {
+                txtCaracter.toString().charCodeAt(0) != 225 && //  a
+                txtCaracter.toString().charCodeAt(0) != 233 && //  e
+                txtCaracter.toString().charCodeAt(0) != 237 && //  i
+                txtCaracter.toString().charCodeAt(0) != 243 && //  o
+                txtCaracter.toString().charCodeAt(0) != 250 && //  u
+                txtCaracter.toString().charCodeAt(0) != 252 && //  u + dieresis
+                txtCaracter.toString().charCodeAt(0) != 241 && //  ï¿½ (enie)
+                txtCaracter.toString().charCodeAt(0) != 193 && //  A
+                txtCaracter.toString().charCodeAt(0) != 201 && //  E
+                txtCaracter.toString().charCodeAt(0) != 205 && //  I
+                txtCaracter.toString().charCodeAt(0) != 211 && //  O
+                txtCaracter.toString().charCodeAt(0) != 218 && //  U
+                txtCaracter.toString().charCodeAt(0) != 220 && //  U + dieresis
+                txtCaracter.toString().charCodeAt(0) != 209    //  ï¿½ (enie mayuscula)
+                ) {
             txtResultado += txtCaracter.replace(/[^a-zA-Z0-9\-\_\.\@\ \/]/, "");
         } else {
             txtResultado += txtCaracter;
@@ -414,71 +414,71 @@ function someterFormulario(txtDivDestino, objFormulario, txtArchivo, cargaArchiv
 
     // Objeto de respuesta si es satisfactoria la carga 
     var handleSuccess =
-        function (o) {
+            function (o) {
 
-            if (o.responseText !== undefined) {
-                //        	alert('ok');
-                // oculta la pantalla de bloqueo segin sea el caso
-                if (objetoCargando == 1) {
-                    objCargando.hide();
+                if (o.responseText !== undefined) {
+                    //        	alert('ok');
+                    // oculta la pantalla de bloqueo segin sea el caso
+                    if (objetoCargando == 1) {
+                        objCargando.hide();
+                    }
+
+                    // toda respuesta se envia al objeto destino
+                    document.getElementById(txtDivDestino).innerHTML = o.responseText;
                 }
 
-                // toda respuesta se envia al objeto destino
-                document.getElementById(txtDivDestino).innerHTML = o.responseText;
-            }
-
-        };
+            };
 
     // Objeto de respuesta si la carga falla
     var handleFailure =
-        function (o) {
-            //    	alert('fallo');
-            if (o.responseText !== undefined) {
-                // Cuando se vence la sesion la respuesta es
-                // HTTP 401 = Not Authorized
-                // Lo envï¿½a a la pagina de login
-                if (o.status == "401") {
-                    document.location = 'index.php';
+            function (o) {
+                //    	alert('fallo');
+                if (o.responseText !== undefined) {
+                    // Cuando se vence la sesion la respuesta es
+                    // HTTP 401 = Not Authorized
+                    // Lo envï¿½a a la pagina de login
+                    if (o.status == "401") {
+                        document.location = 'index.php';
+                    }
+
+                    // Otros mensajes de error son mostrados directamente en el div
+                    document.getElementById('mensajes').innerHTML = o.status + "<br>";
+                    document.getElementById('mensajes').innerHTML += o.statusText;
+                    if (objetoCargando == 1) {
+                        objCargando.hide();
+                    }
+
                 }
 
-                // Otros mensajes de error son mostrados directamente en el div
-                document.getElementById('mensajes').innerHTML = o.status + "<br>";
-                document.getElementById('mensajes').innerHTML += o.statusText;
-                if (objetoCargando == 1) {
-                    objCargando.hide();
-                }
-
-            }
-
-        };
+            };
 
     // Objeto de respuesta para la carga de archivos   
     // Esto es cuando en el form hay un inpuy de tipo file y se coloca true en el paramentro correspondiente
     // en la firma de esta funcion.
     var handleUpload =
-        function (o) {
-            //    	alert('upload');
-            if (o.responseText !== undefined) {
+            function (o) {
+                //    	alert('upload');
+                if (o.responseText !== undefined) {
 
-                // oculta la pantalla de bloqueo segin sea el caso
-                if (objetoCargando == 1) {
-                    objCargando.hide();
+                    // oculta la pantalla de bloqueo segin sea el caso
+                    if (objetoCargando == 1) {
+                        objCargando.hide();
+                    }
+
+                    // toda respuesta se envia al objeto destino
+                    document.getElementById(txtDivDestino).innerHTML = o.responseText;
+
                 }
 
-                // toda respuesta se envia al objeto destino
-                document.getElementById(txtDivDestino).innerHTML = o.responseText;
-
-            }
-
-        };
+            };
 
     // Objeto de respuestas con upload de archivos
     var callbackError =
-        {
-            success: handleSuccess,
-            failure: handleFailure,
-            upload: handleUpload
-        };
+            {
+                success: handleSuccess,
+                failure: handleFailure,
+                upload: handleUpload
+            };
 
     if (objetoCargando == 1) {
         objCargando.show();
@@ -571,13 +571,13 @@ function eliminarRegistro(seqRegistro, txtPregunta, txtArchivo) {
         // si la respuesta es satisfactoria, de ser asi, elimina de la pantalla el 
         // objeto que contiene el registro en pantalla
         YAHOO.util.Event.onContentReady(
-            "tablaMensajes",
-            function () {
-                // Cambiar 'msgOk' si la clase (css) que muestra los mensajes satisfactorios no se llama asi
-                if (document.getElementById('tablaMensajes').className == "msgOk") {
-                    eliminarObjeto(seqRegistro);
+                "tablaMensajes",
+                function () {
+                    // Cambiar 'msgOk' si la clase (css) que muestra los mensajes satisfactorios no se llama asi
+                    if (document.getElementById('tablaMensajes').className == "msgOk") {
+                        eliminarObjeto(seqRegistro);
+                    }
                 }
-            }
         );
 
         this.hide(); // oculta el objeto de confirmacion
@@ -612,7 +612,7 @@ function eliminarRegistro(seqRegistro, txtPregunta, txtArchivo) {
 }
 
 /**
- * ESTA FUNCION TOMA UNA CADENA DE TEXTO Y LA
+ * ESTA FUNCION TOMA UNA CADENA DE TEXTO Y LA 
  * ENCRYPTA CON sha-1 VER ARCHIVO ENCRIPCION.JS
  * @author Bernardo Zerda
  * @param object objTexto
@@ -698,7 +698,7 @@ function mostrarOcultar(idObj) {
 }
 
 /**
- * POP UP QUE SE MUESTRA CUANDO EL
+ * POP UP QUE SE MUESTRA CUANDO EL 
  * USUARIO SOLICITA CAMBIAR LA CONTRASENA
  * @author Bernardo Zerda
  * @param txtUsuario
@@ -792,7 +792,7 @@ function olvidoContrasena(txtUsuario) {
 }
 
 /**
- * TOMA LA CEDULA QUE EL USUARIO DIGITA Y LA
+ * TOMA LA CEDULA QUE EL USUARIO DIGITA Y LA 
  * ENVIA PARA BUSCAR EN LA BASE DE DATOS
  * @autor Bernardo Zerda
  * @version 1.0 Mayo 2009
@@ -833,26 +833,22 @@ function buscarCedula(txtNombreArchivo) {
 
 function agregarMiembroHogar() {
 
-    var objPlanGobierno = document.getElementById("seqPlanGobierno");
-
     var arrAbreviacionesTipoDocumento = new Array();
-    arrAbreviacionesTipoDocumento[1] = "C.C.";
-    arrAbreviacionesTipoDocumento[2] = "C.E.";
-    arrAbreviacionesTipoDocumento[3] = "T.I.";
-    arrAbreviacionesTipoDocumento[4] = "R.C.";
-    arrAbreviacionesTipoDocumento[5] = "PAS.";
-    arrAbreviacionesTipoDocumento[6] = "NIT.";
-    arrAbreviacionesTipoDocumento[7] = "N.U.I.";
-    arrAbreviacionesTipoDocumento[8] = "N/A";
-    arrAbreviacionesTipoDocumento[9] = "PAR";
+    arrAbreviacionesTipoDocumento[ 1 ] = "C.C.";
+    arrAbreviacionesTipoDocumento[ 2 ] = "C.E.";
+    arrAbreviacionesTipoDocumento[ 3 ] = "T.I.";
+    arrAbreviacionesTipoDocumento[ 4 ] = "R.C.";
+    arrAbreviacionesTipoDocumento[ 5 ] = "PAS.";
+    arrAbreviacionesTipoDocumento[ 6 ] = "NIT.";
+    arrAbreviacionesTipoDocumento[ 7 ] = "N.U.I.";
 
     // Variable a recoger del nuevo miembro del hogar
-    var objTpoDocumento = document.getElementById("tipoDocumento");
-    var objNumDocumento = document.getElementById("numeroDoc");
     var objNombre1 = document.getElementById("nombre1");
     var objNombre2 = document.getElementById("nombre2");
     var objApellido1 = document.getElementById("apellido1");
     var objApellido2 = document.getElementById("apellido2");
+    var objTpoDocumento = document.getElementById("tipoDocumento");
+    var objNumDocumento = document.getElementById("numeroDoc");
     var objParentesco = document.getElementById("parentesco");
     var objFchNacimiento = document.getElementById("fechaNac");
     var objCondEspecial = document.getElementById("condicionEspecial");
@@ -871,134 +867,28 @@ function agregarMiembroHogar() {
     var objSeqGrupoLgtbi = document.getElementById("seqGrupoLgtbi");
     var objSeqCajaCompensacion = document.getElementById("cajaCompensacion");
 
-    // si es plan de gobierno 3 se activarán las validaciones de soporte de documentos adicionales
-    var bolValidacionSoporteDocumentos = false;
-    if (objPlanGobierno.value == 3) {
-        bolValidacionSoporteDocumentos = true;
-    }
-
-    // recoge los datos para soporte de documento y estado civil
-    var objExpedicion = document.getElementById("expedicion");
-    var objTipoSoporte = document.getElementById("tipoSoporte");
-    var objEntidadDocumento = document.getElementById("entidadDocumento");
-    var objIndicativoSerial = document.getElementById("indicativoSerial");
-    var objNotariaDocumento = document.getElementById("notariaDocumento");
-    var objCiudadDocumento = document.getElementById("ciudadDocumento");
-    var objConsecutivoPartida = document.getElementById("consecutivoPartida");
-    var objParroquiaPartida = document.getElementById("parroquiaPartida");
-    var objCiudadPartida = document.getElementById("ciudadPartida");
-    var objConsecutivoCasado = document.getElementById("consecutivoCasado");
-    var objNotariaCasado = document.getElementById("notariaCasado");
-    var objCiudadCasado = document.getElementById("ciudadCasado");
-    var objConsecutivoCSCDL = document.getElementById("consecutivoCSCDL");
-    var objEntidadCSCDL = document.getElementById("entidadCSCDL");
-    var objCiudadCSCDL = document.getElementById("ciudadCSCDL");
-    var objNotariaCSCDL = document.getElementById("notariaCSCDL");
-    var objCertificacionUnion = document.getElementById("certificacionUnion");
-    var objConsecutivoUnion = document.getElementById("consecutivoUnion");
-    var objEntidadUnion = document.getElementById("entidadUnion");
-    var objNotariaUnion = document.getElementById("notariaUnion");
-    var objCiudadUnion = document.getElementById("ciudadUnion");
-    var objNotariaSoltero = document.getElementById("notariaSoltero");
-    var objCiudadSoltero = document.getElementById("ciudadSoltero");
-
     var numDocumento = objNumDocumento.value.replace(/[^0-9]/g, "");
     var valIngresos = objIngresos.value.replace(/[^0-9]/g, "");
 
+    // Si el nivel educativo es ninguno no valida los anios aprobados
+    if ($("#nivelEducativo").val() == 0) {
+        alert("Seleccione el nivel educativo");
+        objNvlEducativo.focus();
+        return false;
+    } else {
+        if ($("#nivelEducativo").val() != 1) {
+            if (objAnosAprobados != null) {
+                if ($("#numAnosAprobados").val() == "" || $("#numAnosAprobados").val() == 0) {
+                    alert("Seleccione los a" + String.fromCharCode(241) + "os aprobados");
+                    objAnosAprobados.focus();
+                    return false;
+                }
+            }
+        }
+    }
+
     // Celda que contiene los miembros del hogar
     var objHogar = document.getElementById("datosHogar");
-
-    // Validacion del tipo de documento
-    if (objTpoDocumento.value == 0) {
-        alert("Debe seleccionar el tipo de documento");
-        objTpoDocumento.focus();
-        return false;
-    }
-
-    // Tiene que tener numero de documento
-    if (objNumDocumento.value == "") {
-        alert("No puede registrar una persona sin el numero de docuemnto");
-        objNumDocumento.focus();
-        return false;
-    }
-
-    if (bolValidacionSoporteDocumentos == true) {
-
-        // valida la fecha de expedicion de la cedula
-        if(objTpoDocumento.value == 1){
-            if (!esFechaValida(objExpedicion)) {
-                objExpedicion.focus()
-                return false;
-            }
-        }
-
-        // valida el tipo de soporte
-        if(objTipoSoporte.value == ""){
-            alert("Seleccione el tipo de soporte para el documento de identidad");
-            objTipoSoporte.focus()
-            return false;
-        }
-
-        // validaciones para el soporte del documento con registro civil
-        if (objTipoSoporte.value == "registroCivil") {
-
-            // entidad del soporte del tipo de documento
-            if (objEntidadDocumento.value == "") {
-                alert("Seleccione la entidad del soporte del tipo de documento");
-                objEntidadDocumento.focus();
-                return false;
-            }
-
-            // indicativo serial del soporte del tipo de documento
-            if (objIndicativoSerial.value == "") {
-                alert("Seleccione el indicativo serial del soporte del tipo de documento");
-                objIndicativoSerial.focus();
-                return false;
-            }
-
-            // Notaria documento del soporte del tipo de documento
-            if (objEntidadDocumento.value == "Notaria" && ( objNotariaDocumento.value == "" || objNotariaDocumento.value == 0) ) {
-                alert("Notaria del soporte del tipo de documento");
-                objNotariaDocumento.focus();
-                return false;
-            }
-
-            // Ciudad documento del soporte del tipo de documento
-            if (objCiudadDocumento.value == 0) {
-                alert("Digita la ciudad del soporte del tipo de documento");
-                objCiudadDocumento.focus();
-                return false;
-            }
-
-        }
-
-        // validaciones para el soporte del documento con registro civil
-        if (objTipoSoporte.value == "partidaBautismo") {
-
-            // consecutivo
-            if (objConsecutivoPartida.value == "") {
-                alert("Digita el consecutivo del soporte del tipo de documento");
-                objConsecutivoPartida.focus();
-                return false;
-            }
-
-            // Parroquia
-            if (objParroquiaPartida.value == "") {
-                alert("Digita la parroquia del soporte del tipo de documento");
-                objParroquiaPartida.focus();
-                return false;
-            }
-
-            // Ciudad
-            if (objCiudadPartida.value == 0) {
-                alert("Seleccione la ciudad del soporte del tipo de documento");
-                objCiudadPartida.focus();
-                return false;
-            }
-
-        }
-
-    }
 
     // Primer Apellido no puede estar vacio
     if (objApellido1.value == "") {
@@ -1011,6 +901,13 @@ function agregarMiembroHogar() {
     if (objNombre1.value == "") {
         alert("El primer nombre no puede estar vac" + String.fromCharCode(237) + "o");
         objNombre1.focus();
+        return false;
+    }
+
+    // Tiene que tener numero de documento
+    if (objNumDocumento.value == "") {
+        alert("No puede registrar una persona sin el numero de docuemnto");
+        objNumDocumento.focus();
         return false;
     }
 
@@ -1041,128 +938,6 @@ function agregarMiembroHogar() {
         return false;
     }
 
-    // validaciones para el soporte de documento del estado civil
-    if (bolValidacionSoporteDocumentos == true) {
-
-        if (objEstCivil.value == 6) {
-
-            if (objConsecutivoCasado.value == "") {
-                alert("Digite el consecutivo del soporte de estado civil");
-                objConsecutivoCasado.focus();
-                return false;
-            }
-
-            if (objNotariaCasado.value == "" || objNotariaCasado.value == 0) {
-                alert("Digite la notaria del soporte de estado civil");
-                objNotariaCasado.focus();
-                return false;
-            }
-
-            if (objCiudadCasado.value == 0) {
-                alert("Seleccione la ciudad del soporte de estado civil");
-                objCiudadCasado.focus();
-                return false;
-            }
-
-        }
-
-        if (objEstCivil.value == 8) {
-
-            if (objConsecutivoCSCDL.value == "") {
-                alert("Digite el consecutivo del soporte de estado civil");
-                objConsecutivoCSCDL.focus();
-                return false;
-            }
-
-            if (objEntidadCSCDL.value == "") {
-                alert("Digite la entidad del soporte de estado civil");
-                objEntidadCSCDL.focus();
-                return false;
-            }
-
-            if (objCiudadCSCDL.value == 0) {
-                alert("Seleccione la ciudad del soporte de estado civil");
-                objCiudadCSCDL.focus();
-                return false;
-            }
-
-            if (objEntidadCSCDL.value == "Notaria" && (objNotariaCSCDL.value == "" || objNotariaCSCDL.value == 0) ) {
-                alert("Digite la notaria del soporte de estado civil");
-                objNotariaCSCDL.focus();
-                return false;
-            }
-
-        }
-
-        if (objEstCivil.value == 2) {
-
-            if (objNotariaSoltero.value == "" || objNotariaSoltero.value == 0) {
-                alert("Digite la notaria del soporte de estado civil");
-                objNotariaSoltero.focus();
-                return false;
-            }
-
-            if (objCiudadSoltero.value == 0) {
-                alert("Seleccione la ciudad del soporte de estado civil");
-                objCiudadSoltero.focus();
-                return false;
-            }
-
-        }
-
-        if (objEstCivil.value == 7) {
-
-            if (objCertificacionUnion.value == 0) {
-                alert("Seleccione el tipo de certificación del soporte de estado civil");
-                objCertificacionUnion.focus();
-                return false;
-            }
-
-            if (objConsecutivoUnion.value == "") {
-                alert("Digite el consecutivo del soporte de estado civil");
-                objConsecutivoUnion.focus();
-                return false;
-            }
-
-            if (objEntidadUnion.value == 0) {
-                alert("Seleccione la entidad del soporte de estado civil");
-                objEntidadUnion.focus();
-                return false;
-            }
-
-            if (objEntidadUnion.value == "Notaria" && (objNotariaUnion.value == "" || objNotariaUnion.value == 0) ) {
-                alert("Digite la notaria del soporte de estado civil");
-                objNotariaUnion.focus();
-                return false;
-            }
-
-            if (objCiudadUnion.value == 0) {
-                alert("Seleccione la ciudad del soporte de estado civil");
-                objCiudadUnion.focus();
-                return false;
-            }
-
-        }
-
-    }
-
-    // Si el nivel educativo es ninguno no valida los anios aprobados
-    if ($("#nivelEducativo").val() == 0) {
-        alert("Seleccione el nivel educativo");
-        objNvlEducativo.focus();
-        return false;
-    } else {
-        if ($("#nivelEducativo").val() != 1) {
-            if (objAnosAprobados != null) {
-                if ($("#numAnosAprobados").val() == "" || $("#numAnosAprobados").val() == 0) {
-                    alert("Seleccione los a" + String.fromCharCode(241) + "os aprobados");
-                    objAnosAprobados.focus();
-                    return false;
-                }
-            }
-        }
-    }
-
     // Afiliacion a salud
     if (objSeqSalud.selectedIndex == 0) {
         alert("Debe seleccionar la afiliacion a salud");
@@ -1170,27 +945,24 @@ function agregarMiembroHogar() {
         return false;
     }
 
+
     // Validacion de cedula -- Si ya esta incluido
     var arrMiembros = objHogar.getElementsByTagName("table");
     for (i = 0; i < arrMiembros.length; i++) {
-        if (numDocumento == arrMiembros[i].id) {
+        if (numDocumento == arrMiembros[ i ].id) {
             alert("Ya esta registrada una persona con cedula " + objNumDocumento.value);
             return false;
         }
     }
 
     // Ciudadano
-    var txtNombreCiudadano =
-        ucwords(objNombre1.value.toString().toLowerCase() + " " +
-            objNombre2.value.toString().toLowerCase() + " " +
-            objApellido1.value.toString().toLowerCase() + " " +
-            objApellido2.value.toString().toLowerCase());
+    var txtNombreCiudadano = ucwords(objNombre1.value.toString().toLowerCase() + " " + objNombre2.value.toString().toLowerCase() + " " + objApellido1.value.toString().toLowerCase() + " " + objApellido2.value.toString().toLowerCase());
 
     // Abreviacion del tipo de documento
-    var seqTipoDocumento = objTpoDocumento.options[objTpoDocumento.selectedIndex].value;
-    var txtTipoDocumento = arrAbreviacionesTipoDocumento[seqTipoDocumento];
-    var txtParentesco = objParentesco.options[objParentesco.selectedIndex].text;
-    var txtOcupacion = objOcupacion.options[objOcupacion.selectedIndex].text;
+    var seqTipoDocumento = objTpoDocumento.options[ objTpoDocumento.selectedIndex ].value;
+    var txtTipoDocumento = arrAbreviacionesTipoDocumento[ seqTipoDocumento ];
+    var txtParentesco = objParentesco.options[ objParentesco.selectedIndex ].text;
+    var txtOcupacion = objOcupacion.options[ objOcupacion.selectedIndex ].text;
     txtOcupacion = txtOcupacion.toString().toLowerCase();
     txtOcupacion = ucwords(txtOcupacion);
 
@@ -1225,7 +997,7 @@ function agregarMiembroHogar() {
     txtInsertar += "		</td> ";
     txtInsertar += "	</tr> ";
 
-    txtInsertar += "<input type='hidden' id='parentesco-" + numDocumento + "' value='" + objParentesco.options[objParentesco.selectedIndex].value + "'>";
+    txtInsertar += "<input type='hidden' id='parentesco-" + numDocumento + "' value='" + objParentesco.options[ objParentesco.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='ingreso-" + numDocumento + "' value='" + valIngresos + "'>";
 
     if (objAnosAprobados.selectedIndex == -1) {
@@ -1236,117 +1008,15 @@ function agregarMiembroHogar() {
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtNombre2' name='hogar[" + numDocumento + "][txtNombre2]' value='" + objNombre2.value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtApellido1' name='hogar[" + numDocumento + "][txtApellido1]' value='" + objApellido1.value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtApellido2' name='hogar[" + numDocumento + "][txtApellido2]' value='" + objApellido2.value + "'>";
-    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqTipoDocumento' name='hogar[" + numDocumento + "][seqTipoDocumento]' value='" + objTpoDocumento.options[objTpoDocumento.selectedIndex].value + "'>";
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqTipoDocumento' name='hogar[" + numDocumento + "][seqTipoDocumento]' value='" + objTpoDocumento.options[ objTpoDocumento.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numDocumento' name='hogar[" + numDocumento + "][numDocumento]' value='" + numDocumento + "'>";
-
-    if(bolValidacionSoporteDocumentos == true) {
-
-        if(objTipoSoporte.selectedIndex == -1){
-            objTipoSoporte.selectedIndex = 0;
-        }
-
-        if(objEntidadDocumento.selectedIndex == -1){
-            objEntidadDocumento.selectedIndex = 0;
-        }
-
-        if(objCiudadDocumento.selectedIndex == -1){
-            objCiudadDocumento.selectedIndex = 0;
-        }
-
-        if(objCiudadPartida.selectedIndex == -1){
-            objCiudadPartida.selectedIndex = 0;
-        }
-
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchExpedicion' name='hogar[" + numDocumento + "][fchExpedicion]' value='" + objExpedicion.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtTipoSoporte' name='hogar[" + numDocumento + "][txtTipoSoporte]' value='" + objTipoSoporte.options[objTipoSoporte.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadDocumento' name='hogar[" + numDocumento + "][txtEntidadDocumento]' value='" + objEntidadDocumento.options[objEntidadDocumento.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numIndicativoSerial' name='hogar[" + numDocumento + "][numIndicativoSerial]' value='" + objIndicativoSerial.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaDocumento' name='hogar[" + numDocumento + "][numNotariaDocumento]' value='" + objNotariaDocumento.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadDocumento' name='hogar[" + numDocumento + "][seqCiudadDocumento]' value='" + objCiudadDocumento.options[objCiudadDocumento.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoPartida' name='hogar[" + numDocumento + "][numConsecutivoPartida]' value='" + objConsecutivoPartida.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtParroquiaPartida' name='hogar[" + numDocumento + "][txtParroquiaPartida]' value='" + objParroquiaPartida.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadPartida' name='hogar[" + numDocumento + "][seqCiudadPartida]' value='" + objCiudadPartida.options[objCiudadPartida.selectedIndex].value + "'>";
-    }else{
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchExpedicion' name='hogar[" + numDocumento + "][fchExpedicion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtTipoSoporte' name='hogar[" + numDocumento + "][txtTipoSoporte]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadDocumento' name='hogar[" + numDocumento + "][txtEntidadDocumento]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numIndicativoSerial' name='hogar[" + numDocumento + "][numIndicativoSerial]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaDocumento' name='hogar[" + numDocumento + "][numNotariaDocumento]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadDocumento' name='hogar[" + numDocumento + "][seqCiudadDocumento]' value='0'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoPartida' name='hogar[" + numDocumento + "][numConsecutivoPartida]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtParroquiaPartida' name='hogar[" + numDocumento + "][txtParroquiaPartida]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadPartida' name='hogar[" + numDocumento + "][seqCiudadPartida]' value='0'>";
-    }
-
-    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqParentesco' name='hogar[" + numDocumento + "][seqParentesco]' value='" + objParentesco.options[objParentesco.selectedIndex].value + "'>";
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqParentesco' name='hogar[" + numDocumento + "][seqParentesco]' value='" + objParentesco.options[ objParentesco.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchNacimiento' name='hogar[" + numDocumento + "][fchNacimiento]' value='" + objFchNacimiento.value + "'>";
-    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCondicionEspecial' name='hogar[" + numDocumento + "][seqCondicionEspecial]' value='" + objCondEspecial.options[objCondEspecial.selectedIndex].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCondicionEspecial2' name='hogar[" + numDocumento + "][seqCondicionEspecial2]' value='" + objCondEspecial2.options[objCondEspecial2.selectedIndex].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCondicionEspecial3' name='hogar[" + numDocumento + "][seqCondicionEspecial3]' value='" + objCondEspecial3.options[objCondEspecial3.selectedIndex].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqEtnia' name='hogar[" + numDocumento + "][seqEtnia]' value='" + objCondEtnica.options[objCondEtnica.selectedIndex].value + "'>";
-    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqEstadoCivil' name='hogar[" + numDocumento + "][seqEstadoCivil]' value='" + objEstCivil.options[objEstCivil.selectedIndex].value + "'>";
-
-    if(bolValidacionSoporteDocumentos == true){
-
-        if(objCiudadCasado.selectedIndex == -1){
-            objCiudadCasado.selectedIndex = 0;
-        }
-
-        if(objEntidadCSCDL.selectedIndex == -1){
-            objEntidadCSCDL.selectedIndex = 0;
-        }
-
-        if(objCiudadCSCDL.selectedIndex == -1){
-            objCiudadCSCDL.selectedIndex = 0;
-        }
-
-        if(objCiudadSoltero.selectedIndex == -1){
-            objCiudadSoltero.selectedIndex = 0;
-        }
-
-        if(objCertificacionUnion.selectedIndex == -1){
-            objCertificacionUnion.selectedIndex = 0;
-        }
-
-        if(objEntidadUnion.selectedIndex == -1){
-            objEntidadUnion.selectedIndex = 0;
-        }
-
-        if(objCiudadUnion.selectedIndex == -1){
-            objCiudadUnion.selectedIndex = 0;
-        }
-
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCasado' name='hogar[" + numDocumento + "][numConsecutivoCasado]' value='" + objConsecutivoCasado.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCasado' name='hogar[" + numDocumento + "][numNotariaCasado]' value='" + objNotariaCasado.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCasado' name='hogar[" + numDocumento + "][seqCiudadCasado]' value='" + objCiudadCasado.options[objCiudadCasado.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCSCDL' name='hogar[" + numDocumento + "][numConsecutivoCSCDL]' value='" + objConsecutivoCSCDL.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadCSCDL' name='hogar[" + numDocumento + "][txtEntidadCSCDL]' value='" + objEntidadCSCDL.options[objEntidadCSCDL.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCSCDL' name='hogar[" + numDocumento + "][seqCiudadCSCDL]' value='" + objCiudadCSCDL.options[objCiudadCSCDL.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCSCDL' name='hogar[" + numDocumento + "][numNotariaCSCDL]' value='" + objNotariaCSCDL.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaSoltero' name='hogar[" + numDocumento + "][numNotariaSoltero]' value='" + objNotariaSoltero.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadSoltero' name='hogar[" + numDocumento + "][seqCiudadSoltero]' value='" + objCiudadSoltero.options[objCiudadSoltero.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtCertificacionUnion' name='hogar[" + numDocumento + "][txtCertificacionUnion]' value='" + objCertificacionUnion.options[objCertificacionUnion.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoUnion' name='hogar[" + numDocumento + "][numConsecutivoUnion]' value='" + objConsecutivoUnion.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadUnion' name='hogar[" + numDocumento + "][txtEntidadUnion]' value='" + objEntidadUnion.options[objEntidadUnion.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaUnion' name='hogar[" + numDocumento + "][numNotariaUnion]' value='" + objNotariaUnion.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadUnion' name='hogar[" + numDocumento + "][seqCiudadUnion]' value='" + objCiudadUnion.options[objCiudadUnion.selectedIndex].value + "'>";
-    }else{
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCasado' name='hogar[" + numDocumento + "][numConsecutivoCasado]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCasado' name='hogar[" + numDocumento + "][numNotariaCasado]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCasado' name='hogar[" + numDocumento + "][seqCiudadCasado]' value='0'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCSCDL' name='hogar[" + numDocumento + "][numConsecutivoCSCDL]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadCSCDL' name='hogar[" + numDocumento + "][txtEntidadCSCDL]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCSCDL' name='hogar[" + numDocumento + "][seqCiudadCSCDL]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCSCDL' name='hogar[" + numDocumento + "][numNotariaCSCDL]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaSoltero' name='hogar[" + numDocumento + "][numNotariaSoltero]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadSoltero' name='hogar[" + numDocumento + "][seqCiudadSoltero]' value='0'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtCertificacionUnion' name='hogar[" + numDocumento + "][txtCertificacionUnion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoUnion' name='hogar[" + numDocumento + "][numConsecutivoUnion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadUnion' name='hogar[" + numDocumento + "][txtEntidadUnion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaUnion' name='hogar[" + numDocumento + "][numNotariaUnion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadUnion' name='hogar[" + numDocumento + "][seqCiudadUnion]' value='0'>";
-    }
-
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCondicionEspecial' name='hogar[" + numDocumento + "][seqCondicionEspecial]' value='" + objCondEspecial.options[ objCondEspecial.selectedIndex ].value + "'>";
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCondicionEspecial2' name='hogar[" + numDocumento + "][seqCondicionEspecial2]' value='" + objCondEspecial2.options[ objCondEspecial2.selectedIndex ].value + "'>";
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCondicionEspecial3' name='hogar[" + numDocumento + "][seqCondicionEspecial3]' value='" + objCondEspecial3.options[ objCondEspecial3.selectedIndex ].value + "'>";
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqEtnia' name='hogar[" + numDocumento + "][seqEtnia]' value='" + objCondEtnica.options[ objCondEtnica.selectedIndex ].value + "'>";
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqEstadoCivil' name='hogar[" + numDocumento + "][seqEstadoCivil]' value='" + objEstCivil.options[ objEstCivil.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqOcupacion' name='hogar[" + numDocumento + "][seqOcupacion]' value='" + objOcupacion.options[ objOcupacion.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqSexo' name='hogar[" + numDocumento + "][seqSexo]' value='" + objSexo.options[ objSexo.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-bolLgtb' name='hogar[" + numDocumento + "][bolLgtb]' value='" + objLgtb.options[ objLgtb.selectedIndex ].value + "'>";
@@ -1445,30 +1115,6 @@ function agregarMiembroHogar() {
     objSeqTipoVictima.selectedIndex = 0;
     objSeqGrupoLgtbi.selectedIndex = 0;
 
-    // reiniciar el formulario con las variables adicionales de soporte de documento
-    if(bolValidacionSoporteDocumentos == true){
-        objExpedicion.value = "";
-        objEntidadDocumento.selectedIndex = 0;
-        objIndicativoSerial.value = "";
-        objNotariaDocumento.value = "";
-        objCiudadDocumento.selectedIndex = 0;
-        objConsecutivoCasado.value = "";
-        objNotariaCasado.value = "";
-        objCiudadCasado.selectedIndex = 0;
-        objConsecutivoCSCDL.value = "";
-        objEntidadCSCDL.selectedIndex = 0;
-        objCiudadCSCDL.selectedIndex = 0;
-        objNotariaCSCDL.value = "";
-        objCertificacionUnion.value = "";
-        objConsecutivoUnion.value = "";
-        objEntidadUnion.selectedIndex = 0;
-        objNotariaUnion.value = "";
-        objCiudadUnion.selectedIndex = 0;
-        objNotariaSoltero.value = "";
-        objCiudadSoltero.selectedIndex = 0;
-
-    }
-
     mostrarOcultar('agregarMiembro');
 
     // Actualizar el valor de bolDesplazado
@@ -1503,19 +1149,14 @@ function agregarMiembroHogar() {
             bolDesactivarModalidad = false;
         }
         $("#seqTipoEsquema").append(
-            $('<option>', {
-                value: 11,
-                text: "Opción Retorno / Reubicación",
-                disabled: bolDesactivarModalidad
-            })
-        );
+                $('<option>', {
+                    value: 11,
+                    text: "Opción Retorno / Reubicación",
+                    disabled: bolDesactivarModalidad
+                })
+                );
     }
 
-    $("#soporteCedula").hide();
-    $("#soporteEstadoCivilCasado").hide();
-    $("#soporteEstadoCivilCSCDL").hide();
-    $("#soporteEstadoCivilUnion").hide();
-    $("#soporteEstadoCivilSoltero").hide();
 
     // Recalcular el valor del subsidio
     valorSubsidio();
@@ -1592,10 +1233,10 @@ function quitarMiembroYSalvar(numDocumento) {
         constraintoviewport: true,
         modal: true,
         constraintoviewport : true,
-        buttons: [
-            {text: "Aceptar", handler: fncSubmit},
-            {text: "Cancelar", handler: fncCancel, isDefault: true}
-        ]
+                buttons: [
+                    {text: "Aceptar", handler: fncSubmit},
+                    {text: "Cancelar", handler: fncCancel, isDefault: true}
+                ]
     };
 
     var objDialogo = new YAHOO.widget.Dialog("qmys", objConfiguracion);
@@ -1932,9 +1573,7 @@ function sumarTotalRecursos() {
 
 function modificarMiembroHogar(numDocumento) {
 
-    var numDocumentoSinPuntos = numDocumento.replace(/[^0-9]/g, "");
-
-    var seqPlanGobierno = $("#seqPlanGobierno").val();
+    numDocumentoSinPuntos = numDocumento.replace(/[^0-9]/g, "");
 
     // Muestra la tabla
     document.getElementById("agregarMiembro").style.display = "";
@@ -1945,88 +1584,22 @@ function modificarMiembroHogar(numDocumento) {
 
         if (arrVariables[ i ].name != "") {
 
-            if(seqPlanGobierno == 3) {
-
-                if(arrVariables[ i ].id == numDocumentoSinPuntos + "-txtTipoSoporte"){
-
-                    $("#soporteCedula").hide();
-                    $("#soportePartida").hide();
-                    $("#tipoSoporte").val("");
-                    $("#entidadDocumento").val("");
-                    $("#indicativoSerial").val("");
-                    $("#notariaDocumento").val("");
-                    $("#ciudadDocumento").val(0);
-                    $("#consecutivoPartida").val("");
-                    $("#parroquiaPartida").val("");
-                    $("#ciudadPartida").val(0);
-                    $("#tipoSoporte").val( $( "#" + numDocumentoSinPuntos + "-txtTipoSoporte").val() );
-
-                    if(arrVariables[ i ].value == "registroCivil"){
-                        $("#soporteCedula").show();
-                        $("#entidadDocumento").val( $( "#" + numDocumentoSinPuntos + "-txtEntidadDocumento").val() );
-                        $("#indicativoSerial").val( $( "#" + numDocumentoSinPuntos + "-numIndicativoSerial").val() );
-                        $("#ciudadDocumento").val( $( "#" + numDocumentoSinPuntos + "-seqCiudadDocumento").val() );
-                        $("#documentoNotaria").hide();
-                        if($( "#" + numDocumentoSinPuntos + "-txtEntidadDocumento").val() == "Notaria"){
-                            $("#documentoNotaria").show();
-
-                        }
-                        $("#notariaDocumento").val( $( "#" + numDocumentoSinPuntos + "-numNotariaDocumento").val() );
-                        $("#consecutivoPartida").val("");
-                        $("#parroquiaPartida").val("");
-                        $("#ciudadPartida").val(0);
-                    }
-
-                    if(arrVariables[ i ].value == "partidaBautismo"){
-                        $("#soportePartida").show();
-                        $("#entidadDocumento").val("");
-                        $("#indicativoSerial").val("");
-                        $("#notariaDocumento").val("");
-                        $("#ciudadDocumento").val(0);
-                        $("#consecutivoPartida").val($( "#" + numDocumentoSinPuntos + "-numConsecutivoPartida").val());
-                        $("#parroquiaPartida").val($( "#" + numDocumentoSinPuntos + "-txtParroquiaPartida").val());
-                        $("#ciudadPartida").val($( "#" + numDocumentoSinPuntos + "-seqCiudadPartida").val());
-                    }
-
-                }
-
-            }else{
-                $("#soporteCedula").hide();
-                $("#soprotePartida").hide();
-                $("#expedicion").val("");
-                $("#tipoSoporte").val("");
-                $("#entidadDocumento").val("");
-                $("#indicativoSerial").val("");
-                $("#notariaDocumento").val("");
-                $("#ciudadDocumento").val(0);
-                $("#consecutivoPartida").val("");
-                $("#parroquiaPartida").val("");
-                $("#ciudadPartida").val(0);
-            }
+            document.getElementById("apellido1").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtApellido1") ? arrVariables[ i ].value : document.getElementById("apellido1").value;
+            document.getElementById("apellido2").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtApellido2") ? arrVariables[ i ].value : document.getElementById("apellido2").value;
+            document.getElementById("nombre1").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtNombre1") ? arrVariables[ i ].value : document.getElementById("nombre1").value;
+            document.getElementById("nombre2").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtNombre2") ? arrVariables[ i ].value : document.getElementById("nombre2").value;
+            document.getElementById("cajaCompensacion").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqCajaCompensacion") ? arrVariables[ i ].value : document.getElementById("cajaCompensacion").value;
 
             if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqTipoDocumento") {
-
                 for (j = 0; j < document.getElementById("tipoDocumento").length; j++) {
                     document.getElementById("tipoDocumento").selectedIndex = (document.getElementById("tipoDocumento").options[ j ].value == document.getElementById(numDocumentoSinPuntos + "-seqTipoDocumento").value) ? j : document.getElementById("tipoDocumento").selectedIndex;
                 }
-
-                $("#expedicion").val("");
-                if(arrVariables[ i ].value == 1){
-                    $("#expedicion").val( $( "#" + numDocumentoSinPuntos + "-fchExpedicion").val() );
-                }
-
             }
 
             document.getElementById("numeroDoc").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-numDocumento") ? arrVariables[ i ].value : document.getElementById("numeroDoc").value;
             if (!isNaN(document.getElementById("numeroDoc").value)) {
                 formatoSeparadores(document.getElementById("numeroDoc"));
             }
-
-            document.getElementById("apellido1").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtApellido1") ? arrVariables[ i ].value : document.getElementById("apellido1").value;
-            document.getElementById("apellido2").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtApellido2") ? arrVariables[ i ].value : document.getElementById("apellido2").value;
-            document.getElementById("nombre1").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtNombre1") ? arrVariables[ i ].value : document.getElementById("nombre1").value;
-            document.getElementById("nombre2").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtNombre2") ? arrVariables[ i ].value : document.getElementById("nombre2").value;
-            document.getElementById("cajaCompensacion").value = (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqCajaCompensacion") ? arrVariables[ i ].value : document.getElementById("cajaCompensacion").value;
 
             if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqParentesco") {
                 for (j = 0; j < document.getElementById("parentesco").length; j++) {
@@ -2078,77 +1651,10 @@ function modificarMiembroHogar(numDocumento) {
             }
 
             if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqEstadoCivil") {
-
                 for (j = 0; j < document.getElementById("estadoCivil").length; j++) {
                     seqEstadoCivil = document.getElementById("estadoCivil").options[ j ].value;
                     document.getElementById("estadoCivil").selectedIndex = (document.getElementById("estadoCivil").options[ j ].value == document.getElementById(numDocumentoSinPuntos + "-seqEstadoCivil").value) ? j : document.getElementById("estadoCivil").selectedIndex;
                 }
-
-                $("#soporteEstadoCivilCasado").hide();
-                $("#soporteEstadoCivilCSCDL").hide();
-                $("#soporteEstadoCivilSoltero").hide();
-                $("#soporteEstadoCivilUnion").hide();
-                $("#notaria-CSCDL").hide();
-                $("#notaria-Union").hide();
-
-                $("#consecutivoCasado").val("");
-                $("#notariaCasado").val("");
-                $("#ciudadCasado").val(0);
-                $("#consecutivoCSCDL").val("");
-                $("#entidadCSCDL").val(0);
-                $("#notariaCSCDL").val("");
-                $("#ciudadCSCDL").val(0);
-                $("#notariaSoltero").val("");
-                $("#ciudadSoltero").val(0);
-                $("#certificacionUnion").val("");
-                $("#consecutivoUnion").val("");
-                $("#notariaUnion").val("");
-                $("#ciudadUnion").val(0);
-
-                if(seqPlanGobierno == 3) {
-
-                    if (arrVariables[i].value == 6) {
-                        $("#soporteEstadoCivilCasado").show();
-                        $("#consecutivoCasado").val($("#" + numDocumentoSinPuntos + "-numConsecutivoCasado").val());
-                        $("#notariaCasado").val($("#" + numDocumentoSinPuntos + "-numNotariaCasado").val());
-                        $("#ciudadCasado").val($("#" + numDocumentoSinPuntos + "-seqCiudadCasado").val());
-                    }
-
-                    if (arrVariables[i].value == 8) {
-                        $("#soporteEstadoCivilCSCDL").show();
-
-                        if($("#" + numDocumentoSinPuntos + "-txtEntidadCSCDL").val() == "Notaria"){
-                            $("#notaria-CSCDL").show();
-                        }
-
-                        $("#consecutivoCSCDL").val($("#" + numDocumentoSinPuntos + "-numConsecutivoCSCDL").val());
-                        $("#entidadCSCDL").val($("#" + numDocumentoSinPuntos + "-txtEntidadCSCDL").val());
-                        $("#notariaCSCDL").val($("#" + numDocumentoSinPuntos + "-numNotariaCSCDL").val());
-                        $("#ciudadCSCDL").val($("#" + numDocumentoSinPuntos + "-seqCiudadCSCDL").val());
-                    }
-
-                    if (arrVariables[i].value == 2) {
-                        $("#soporteEstadoCivilSoltero").show();
-                        $("#notariaSoltero").val($("#" + numDocumentoSinPuntos + "-numNotariaSoltero").val());
-                        $("#ciudadSoltero").val($("#" + numDocumentoSinPuntos + "-seqCiudadSoltero").val());
-                    }
-
-                    if (arrVariables[i].value == 7) {
-                        $("#soporteEstadoCivilUnion").show();
-                        $("#entidadUnion").val($("#" + numDocumentoSinPuntos + "-txtEntidadUnion").val());
-                        $("#certificacionUnion").val($("#" + numDocumentoSinPuntos + "-txtCertificacionUnion").val());
-                        $("#consecutivoUnion").val($("#" + numDocumentoSinPuntos + "-numConsecutivoUnion").val());
-
-                        if($("#" + numDocumentoSinPuntos + "-txtEntidadUnion").val() == "Notaria"){
-                            $("#notaria-Union").show();
-                        }
-
-                        $("#notariaUnion").val($("#" + numDocumentoSinPuntos + "-numNotariaUnion").val());
-                        $("#ciudadUnion").val($("#" + numDocumentoSinPuntos + "-seqCiudadUnion").val());
-                    }
-
-                }
-
             }
 
             if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqOcupacion") {
@@ -2230,6 +1736,27 @@ function modificarMiembroHogar(numDocumento) {
 
 }
 
+// function asignarValorSubsidio(objTipoSolucion, bolDesplazado) {
+//
+//     var objDesplazado = YAHOO.util.Dom.get(bolDesplazado);
+//     var objModalidad = YAHOO.util.Dom.get("seqModalidad");
+//
+//     var seqModalidad = document.getElementById("seqModalidad").value;
+//     var seqSolucion = document.getElementById("seqSolucion").value;
+//     var bolDesplazado = document.getElementById("bolDesplazado").value;
+//
+//     var objValSubsidio = document.getElementById("tdValSubsidio");
+//     if( objValSubsidio != null ){
+//         cargarContenido(
+//             "tdValSubsidio",
+//             "./contenidos/subsidios/valorSubsidio.php",
+//             "modalidad=" + seqModalidad + "&solucion=" + seqSolucion + "&desplazado=" + bolDesplazado,
+//             false
+//         );
+//     }
+//
+// }
+
 function valorSubsidio() {
 
     if ($("#bolCerrado").is(":checked") == true) {
@@ -2275,11 +1802,11 @@ function asignarValorSubsidioUnidadProyecto(objUnidadProyecto) {
     var objValSubsidio = document.getElementById("tdValSubsidio");
     if (objValSubsidio != null) {
         cargarContenido(
-            "tdValSubsidio",
-            "./contenidos/subsidios/valorSubsidioUnidadProyecto.php",
-            "unidadProyecto=" + seqUnidadProyecto,
-            false
-        );
+                "tdValSubsidio",
+                "./contenidos/subsidios/valorSubsidioUnidadProyecto.php",
+                "unidadProyecto=" + seqUnidadProyecto,
+                false
+                );
     }
 }
 
@@ -2289,11 +1816,11 @@ function asignarSoporteCambioSubsidioUnidadProyecto(objUnidadProyecto) {
     var objTxtSoporteCambio = document.getElementById("tdTxtSoporteCambio");
     if (objTxtSoporteCambio != null) {
         cargarContenido(
-            "tdTxtSoporteCambio",
-            "./contenidos/subsidios/valorSoporteCambioSubsidio.php",
-            "unidadProyecto=" + seqUnidadProyecto,
-            false
-        );
+                "tdTxtSoporteCambio",
+                "./contenidos/subsidios/valorSoporteCambioSubsidio.php",
+                "unidadProyecto=" + seqUnidadProyecto,
+                false
+                );
     }
 }
 
@@ -2356,83 +1883,83 @@ function pedirConfirmacion(txtDestino, objFormulario, txtArchivo) {
         someterFormulario(txtDestino, objFormulario, txtArchivo, false, true);
 
         YAHOO.util.Event.onContentReady(
-            "dlgPedirConfirmacionListener",
-            function () {
-                var handleSubmit = function () {
-                    eliminarObjeto("tablaMensajes");
-                    this.submit();
-                    YAHOO.util.Event.onContentReady(
-                        "tablaMensajes",
-                        function () {
-                            var objMensajes = YAHOO.util.Dom.get('mensajes');
-                            var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
-                            if (objTablaMensajes.className == "msgOk") {
-                                var txtMensajes = objMensajes.innerHTML;
-                                $('#buscarCedula').trigger('click');
-                                objMensajes.innerHTML = txtMensajes;
-                            }
-                        }
-                    );
-                };
+                "dlgPedirConfirmacionListener",
+                function () {
+                    var handleSubmit = function () {
+                        eliminarObjeto("tablaMensajes");
+                        this.submit();
+                        YAHOO.util.Event.onContentReady(
+                                "tablaMensajes",
+                                function () {
+                                    var objMensajes = YAHOO.util.Dom.get('mensajes');
+                                    var objTablaMensajes = YAHOO.util.Dom.get('tablaMensajes');
+                                    if (objTablaMensajes.className == "msgOk") {
+                                        var txtMensajes = objMensajes.innerHTML;
+                                        $('#buscarCedula').trigger('click');
+                                        objMensajes.innerHTML = txtMensajes;
+                                    }
+                                }
+                        );
+                    };
 
-                // Cancela la accion de someter el formulario y cierra el cuadro de dialogo
-                var handleCancel = function () {
-                    this.cancel();
-                };
+                    // Cancela la accion de someter el formulario y cierra el cuadro de dialogo
+                    var handleCancel = function () {
+                        this.cancel();
+                    };
 
-                // Cuando da Submit al formulario del dialogo este es la funcion que contesta
-                var handleSuccess = function (o) {
-                    var response = o.responseText;
-                    response = response.split("<!")[0];
-                    document.getElementById("mensajes").innerHTML = response;
-                    var tmpObj = null;
-                    tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
-                    while (tmpObj != null) {
-                        //alert( tmpObj );
-                        eliminarObjeto("dlgPedirConfirmacion_mask");
+                    // Cuando da Submit al formulario del dialogo este es la funcion que contesta
+                    var handleSuccess = function (o) {
+                        var response = o.responseText;
+                        response = response.split("<!")[0];
+                        document.getElementById("mensajes").innerHTML = response;
+                        var tmpObj = null;
                         tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
-                    }
-                };
-
-                // Cuando se da submit y la accion falla este es el mensaje
-                var handleFailure = function (o) {
-                    alert("Submission failed: " + o.status);
-                };
-
-                // Objeto de configuracion
-                var objConfiguracion = {
-                    width: "350px",
-                    fixedcenter: true,
-                    close: false,
-                    draggable: false,
-                    modal: true,
-                    buttons: [{
-                        text: "Salvar Información",
-                        handler: handleSubmit,
-                        isDefault: true
-                    },
-                        {
-                            text: "Cancelar",
-                            handler: handleCancel
+                        while (tmpObj != null) {
+                            //alert( tmpObj );
+                            eliminarObjeto("dlgPedirConfirmacion_mask");
+                            tmpObj = document.getElementById('dlgPedirConfirmacion_mask');
                         }
-                    ],
-                    constraintoviewport: true
-                };
+                    };
 
-                // Instancia el cuadro de dialogo
-                var dialog1 = new YAHOO.widget.Dialog("dlgPedirConfirmacion", objConfiguracion);
+                    // Cuando se da submit y la accion falla este es el mensaje
+                    var handleFailure = function (o) {
+                        alert("Submission failed: " + o.status);
+                    };
 
-                // Objeto callback del formulario para manejar la respuesta de este
-                dialog1.callback = {
-                    success: handleSuccess,
-                    failure: handleFailure
-                };
+                    // Objeto de configuracion
+                    var objConfiguracion = {
+                        width: "350px",
+                        fixedcenter: true,
+                        close: false,
+                        draggable: false,
+                        modal: true,
+                        buttons: [{
+                                text: "Salvar Información",
+                                handler: handleSubmit,
+                                isDefault: true
+                            },
+                            {
+                                text: "Cancelar",
+                                handler: handleCancel
+                            }
+                        ],
+                        constraintoviewport: true
+                    };
 
-                // Muestra el cuadro de dialogo
-                dialog1.render();
-                dialog1.show();
+                    // Instancia el cuadro de dialogo
+                    var dialog1 = new YAHOO.widget.Dialog("dlgPedirConfirmacion", objConfiguracion);
 
-            }
+                    // Objeto callback del formulario para manejar la respuesta de este
+                    dialog1.callback = {
+                        success: handleSuccess,
+                        failure: handleFailure
+                    };
+
+                    // Muestra el cuadro de dialogo
+                    dialog1.render();
+                    dialog1.show();
+
+                }
         );
     } else {
         objMensajes.className = "msgError";
@@ -2461,35 +1988,35 @@ function desembolsoBusquedaOferta(seqFormulario, seqCasaMano, bolEscrituracion) 
     someterFormulario('mensajes', objFormulario, './contenidos/' + txtCarpeta + '/pedirConfirmacion.php', false, true);
 
     YAHOO.util.Event.onContentReady(
-        "tablaMensajes",
-        function () {
+            "tablaMensajes",
+            function () {
 
-            var objTabla = YAHOO.util.Dom.get("tablaMensajes");
+                var objTabla = YAHOO.util.Dom.get("tablaMensajes");
 
-            if (seqCasaMano == 0 && txtCarpeta == "casaMano") {
-                var objIdCasaMano = YAHOO.util.Dom.get("casaMano");
-                seqCasaMano = objIdCasaMano.value;
-            }
+                if (seqCasaMano == 0 && txtCarpeta == "casaMano") {
+                    var objIdCasaMano = YAHOO.util.Dom.get("casaMano");
+                    seqCasaMano = objIdCasaMano.value;
+                }
 
-            if (objTabla.className == "msgOk") {
-                var wndFormato;
-                try {
+                if (objTabla.className == "msgOk") {
+                    var wndFormato;
+                    try {
 
-                    var txtUrl = "./contenidos/desembolso/formatoBusquedaOferta.php";
-                    txtUrl += "?seqFormulario=" + seqFormulario + "&seqCasaMano=" + seqCasaMano + "&bolEscrituracion=" + bolEscrituracion;
+                        var txtUrl = "./contenidos/desembolso/formatoBusquedaOferta.php";
+                        txtUrl += "?seqFormulario=" + seqFormulario + "&seqCasaMano=" + seqCasaMano + "&bolEscrituracion=" + bolEscrituracion;
 
-                    var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
+                        var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
 
-                    if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
-                        throw "ErrorPopUp";
-                    }
-                } catch (objError) {
-                    if (objError == "ErrorPopUp") {
-                        alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
+                            throw "ErrorPopUp";
+                        }
+                    } catch (objError) {
+                        if (objError == "ErrorPopUp") {
+                            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        }
                     }
                 }
             }
-        }
     );
 }
 
@@ -2499,17 +2026,17 @@ function obtenerTipoSolucionDesplazado(objDesplazado, txtIdModalidad) {
     var objModalidad = document.getElementById(txtIdModalidad);
 
     cargarContenido(
-        'tdTipoSolucion',
-        './contenidos/subsidios/tipoSolucion.php',
-        'modalidad=' + objModalidad.options[ objModalidad.selectedIndex ].value + '&desplazado=' + objDesplazado.options[ objDesplazado.selectedIndex ].value,
-        true
-    );
+            'tdTipoSolucion',
+            './contenidos/subsidios/tipoSolucion.php',
+            'modalidad=' + objModalidad.options[ objModalidad.selectedIndex ].value + '&desplazado=' + objDesplazado.options[ objDesplazado.selectedIndex ].value,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        "seqSolucion",
-        function () {
-            document.getElementById("seqSolucion").focus();
-        }
+            "seqSolucion",
+            function () {
+                document.getElementById("seqSolucion").focus();
+            }
     );
 
 }
@@ -2519,14 +2046,14 @@ function datosPestanaPostulacion(txtModo) {
     var objDesplazado = YAHOO.util.Dom.get("bolDesplazado");
 
     var txtParametros =
-        "modo=" + txtModo + "&" +
-        "seqFormulario=" + $("#seqFormulario").val() + "&" +
-        "seqModalidad=" + $("#seqModalidad").val() + "&" +
-        "seqTipoEsquema=" + $("#seqTipoEsquema").val() + "&" +
-        "seqPlanGobierno=" + $("#seqPlanGobierno").val() + "&" +
-        "seqProyecto=" + $("#seqProyecto").val() + "&" +
-        "seqProyectoHijo=" + $("#seqProyectoHijo").val() + "&" +
-        "bolDesplazado=" + objDesplazado.options[ objDesplazado.selectedIndex ].value; // jQuery retorna NULL porque los option son disabled
+            "modo=" + txtModo + "&" +
+            "seqFormulario=" + $("#seqFormulario").val() + "&" +
+            "seqModalidad=" + $("#seqModalidad").val() + "&" +
+            "seqTipoEsquema=" + $("#seqTipoEsquema").val() + "&" +
+            "seqPlanGobierno=" + $("#seqPlanGobierno").val() + "&" +
+            "seqProyecto=" + $("#seqProyecto").val() + "&" +
+            "seqProyectoHijo=" + $("#seqProyectoHijo").val() + "&" +
+            "bolDesplazado=" + objDesplazado.options[ objDesplazado.selectedIndex ].value; // jQuery retorna NULL porque los option son disabled
 
     var objCargando = obtenerObjetoCargando();
     objCargando.show();
@@ -2548,11 +2075,11 @@ function datosPestanaPostulacion(txtModo) {
             $("#seqSolucion").empty();
             for (i = 0; i < objRespuesta.solucion.length; i++) {
                 $("#seqSolucion").append(
-                    $('<option>', {
-                        value: objRespuesta.solucion[i].valor,
-                        text: objRespuesta.solucion[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.solucion[i].valor,
+                            text: objRespuesta.solucion[i].texto
+                        })
+                        );
             }
             if ($('#seqSolucion').children('option').length == 2) {
                 $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
@@ -2562,11 +2089,11 @@ function datosPestanaPostulacion(txtModo) {
             $("#seqTipoEsquema").empty();
             for (i = 0; i < objRespuesta.esquema.length; i++) {
                 $("#seqTipoEsquema").append(
-                    $('<option>', {
-                        value: objRespuesta.esquema[i].valor,
-                        text: objRespuesta.esquema[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.esquema[i].valor,
+                            text: objRespuesta.esquema[i].texto
+                        })
+                        );
             }
             $('#seqTipoEsquema').val(objRespuesta.esquema[0].valor).prop('selected', true);
 
@@ -2574,33 +2101,33 @@ function datosPestanaPostulacion(txtModo) {
             $("#seqProyecto").empty();
             for (i = 0; i < objRespuesta.proyecto.length; i++) {
                 $("#seqProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.proyecto[i].valor,
-                        text: objRespuesta.proyecto[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.proyecto[i].valor,
+                            text: objRespuesta.proyecto[i].texto
+                        })
+                        );
             }
 
             // conjuntos
             $("#seqProyectoHijo").empty();
             for (i = 0; i < objRespuesta.conjuntos.length; i++) {
                 $("#seqProyectoHijo").append(
-                    $('<option>', {
-                        value: objRespuesta.conjuntos[i].valor,
-                        text: objRespuesta.conjuntos[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.conjuntos[i].valor,
+                            text: objRespuesta.conjuntos[i].texto
+                        })
+                        );
             }
 
             // unidades
             $("#seqUnidadProyecto").empty();
             for (i = 0; i < objRespuesta.unidades.length; i++) {
                 $("#seqUnidadProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.unidades[i].valor,
-                        text: objRespuesta.unidades[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.unidades[i].valor,
+                            text: objRespuesta.unidades[i].texto
+                        })
+                        );
             }
 
             // direccion + matricula + chip
@@ -2653,33 +2180,33 @@ function datosPestanaPostulacion(txtModo) {
             $("#seqProyecto").empty();
             for (i = 0; i < objRespuesta.proyecto.length; i++) {
                 $("#seqProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.proyecto[i].valor,
-                        text: objRespuesta.proyecto[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.proyecto[i].valor,
+                            text: objRespuesta.proyecto[i].texto
+                        })
+                        );
             }
 
             // conjuntos
             $("#seqProyectoHijo").empty();
             for (i = 0; i < objRespuesta.conjuntos.length; i++) {
                 $("#seqProyectoHijo").append(
-                    $('<option>', {
-                        value: objRespuesta.conjuntos[i].valor,
-                        text: objRespuesta.conjuntos[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.conjuntos[i].valor,
+                            text: objRespuesta.conjuntos[i].texto
+                        })
+                        );
             }
 
             // unidades
             $("#seqUnidadProyecto").empty();
             for (i = 0; i < objRespuesta.unidades.length; i++) {
                 $("#seqUnidadProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.unidades[i].valor,
-                        text: objRespuesta.unidades[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.unidades[i].valor,
+                            text: objRespuesta.unidades[i].texto
+                        })
+                        );
             }
 
             // direccion + matricula + chip
@@ -2700,22 +2227,22 @@ function datosPestanaPostulacion(txtModo) {
             $("#seqProyectoHijo").empty();
             for (i = 0; i < objRespuesta.conjuntos.length; i++) {
                 $("#seqProyectoHijo").append(
-                    $('<option>', {
-                        value: objRespuesta.conjuntos[i].valor,
-                        text: objRespuesta.conjuntos[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.conjuntos[i].valor,
+                            text: objRespuesta.conjuntos[i].texto
+                        })
+                        );
             }
 
             // unidades
             $("#seqUnidadProyecto").empty();
             for (i = 0; i < objRespuesta.unidades.length; i++) {
                 $("#seqUnidadProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.unidades[i].valor,
-                        text: objRespuesta.unidades[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.unidades[i].valor,
+                            text: objRespuesta.unidades[i].texto
+                        })
+                        );
             }
 
             // direccion + matricula + chip
@@ -2730,11 +2257,11 @@ function datosPestanaPostulacion(txtModo) {
             $("#seqUnidadProyecto").empty();
             for (i = 0; i < objRespuesta.unidades.length; i++) {
                 $("#seqUnidadProyecto").append(
-                    $('<option>', {
-                        value: objRespuesta.unidades[i].valor,
-                        text: objRespuesta.unidades[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.unidades[i].valor,
+                            text: objRespuesta.unidades[i].texto
+                        })
+                        );
             }
 
         }
@@ -2747,11 +2274,11 @@ function datosPestanaPostulacion(txtModo) {
             $("#seqSolucion").empty();
             for (i = 0; i < objRespuesta.solucion.length; i++) {
                 $("#seqSolucion").append(
-                    $('<option>', {
-                        value: objRespuesta.solucion[i].valor,
-                        text: objRespuesta.solucion[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.solucion[i].valor,
+                            text: objRespuesta.solucion[i].texto
+                        })
+                        );
             }
             if ($('#seqSolucion').children('option').length == 2) {
                 $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
@@ -2765,11 +2292,11 @@ function datosPestanaPostulacion(txtModo) {
             $("#seqSolucion").empty();
             for (i = 0; i < objRespuesta.solucion.length; i++) {
                 $("#seqSolucion").append(
-                    $('<option>', {
-                        value: objRespuesta.solucion[i].valor,
-                        text: objRespuesta.solucion[i].texto
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.solucion[i].valor,
+                            text: objRespuesta.solucion[i].texto
+                        })
+                        );
             }
             if ($('#seqSolucion').children('option').length == 2) {
                 $('#seqSolucion').val(objRespuesta.solucion[i - 1].valor).prop('selected', true);
@@ -2784,12 +2311,12 @@ function datosPestanaPostulacion(txtModo) {
             $("#seqTipoEsquema").empty();
             for (i = 0; i < objRespuesta.esquema.length; i++) {
                 $("#seqTipoEsquema").append(
-                    $('<option>', {
-                        value: objRespuesta.esquema[i].valor,
-                        text: objRespuesta.esquema[i].texto,
-                        disabled: bolDesactivarModalidad
-                    })
-                );
+                        $('<option>', {
+                            value: objRespuesta.esquema[i].valor,
+                            text: objRespuesta.esquema[i].texto,
+                            disabled: bolDesactivarModalidad
+                        })
+                        );
 
             }
             if ($("#seqModalidad").val() == 12 || $("#seqModalidad").val() == 13) {
@@ -2818,11 +2345,11 @@ function datosPestanaPostulacion(txtModo) {
     };
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/casaMano/datosPestanaPostulacion.php",
-        callback,
-        txtParametros
-    );
+            "POST",
+            "./contenidos/casaMano/datosPestanaPostulacion.php",
+            callback,
+            txtParametros
+            );
 }
 
 /**
@@ -2850,17 +2377,17 @@ function obtenerTipoSolucion(objModalidad) {
     document.getElementById("tdTipoSolucion").innerHTML = "";
 
     cargarContenido(
-        'tdTipoSolucion',
-        './contenidos/subsidios/tipoSolucion.php',
-        'modalidad=' + objModalidad.options[ objModalidad.selectedIndex ].value,
-        true
-    );
+            'tdTipoSolucion',
+            './contenidos/subsidios/tipoSolucion.php',
+            'modalidad=' + objModalidad.options[ objModalidad.selectedIndex ].value,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        "seqSolucion",
-        function () {
-            document.getElementById("seqSolucion").focus();
-        }
+            "seqSolucion",
+            function () {
+                document.getElementById("seqSolucion").focus();
+            }
     );
 }
 
@@ -2869,17 +2396,17 @@ function obtenerConjuntoResidencial(objProyectoPadre) {
     document.getElementById("tdConjuntoResidencial").innerHTML = "";
 
     cargarContenido(
-        'tdConjuntoResidencial',
-        './contenidos/subsidios/conjuntoResidencial.php',
-        'proyectoPadre=' + objProyectoPadre.options[ objProyectoPadre.selectedIndex ].value,
-        true
-    );
+            'tdConjuntoResidencial',
+            './contenidos/subsidios/conjuntoResidencial.php',
+            'proyectoPadre=' + objProyectoPadre.options[ objProyectoPadre.selectedIndex ].value,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        "seqProyectoHijo",
-        function () {
-            document.getElementById("seqProyectoHijo").focus();
-        }
+            "seqProyectoHijo",
+            function () {
+                document.getElementById("seqProyectoHijo").focus();
+            }
     );
 }
 
@@ -2888,17 +2415,17 @@ function obtenerUnidadProyecto(objProyecto) {
     document.getElementById("tdUnidadProyecto").innerHTML = "";
 
     cargarContenido(
-        'tdUnidadProyecto',
-        './contenidos/subsidios/unidadProyecto.php',
-        'proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
-        true
-    );
+            'tdUnidadProyecto',
+            './contenidos/subsidios/unidadProyecto.php',
+            'proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        "seqUnidadProyecto",
-        function () {
-            document.getElementById("seqUnidadProyecto").focus();
-        }
+            "seqUnidadProyecto",
+            function () {
+                document.getElementById("seqUnidadProyecto").focus();
+            }
     );
 }
 
@@ -2907,17 +2434,17 @@ function obtenerUnidadEstudioTecnico(objProyecto) {
     document.getElementById("tdUnidadProyecto").innerHTML = "";
 
     cargarContenido(
-        'tdUnidadProyecto',
-        './contenidos/unidadProyecto/unidadEstudioTecnico.php',
-        'proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
-        true
-    );
+            'tdUnidadProyecto',
+            './contenidos/unidadProyecto/unidadEstudioTecnico.php',
+            'proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        "seqUnidadProyecto",
-        function () {
-            document.getElementById("seqUnidadProyecto").focus();
-        }
+            "seqUnidadProyecto",
+            function () {
+                document.getElementById("seqUnidadProyecto").focus();
+            }
     );
 }
 
@@ -2926,18 +2453,18 @@ function obtenerGestion(objGrupoGestion, idDestino, idSelectDestino) {
     eliminarObjeto(idSelectDestino);
 
     cargarContenido(
-        idDestino,
-        './contenidos/desembolso/cambiarGestion.php',
-        'grupo=' + objGrupoGestion.options[ objGrupoGestion.selectedIndex ].value + '&idSelect=' + idSelectDestino,
-        true
-    );
+            idDestino,
+            './contenidos/desembolso/cambiarGestion.php',
+            'grupo=' + objGrupoGestion.options[ objGrupoGestion.selectedIndex ].value + '&idSelect=' + idSelectDestino,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        idSelectDestino,
-        function () {
-            document.getElementById("txtComentario").style.background = "#FFFFFF";
-            document.getElementById(idSelectDestino).focus();
-        }
+            idSelectDestino,
+            function () {
+                document.getElementById("txtComentario").style.background = "#FFFFFF";
+                document.getElementById(idSelectDestino).focus();
+            }
     );
 
 }
@@ -2947,18 +2474,18 @@ function obtenerGestionProyectos(objGrupoGestion, idDestino, idSelectDestino) {
     eliminarObjeto(idSelectDestino);
 
     cargarContenido(
-        idDestino,
-        './contenidos/proyectos/cambiarGestionProyectos.php',
-        'grupo=' + objGrupoGestion.options[ objGrupoGestion.selectedIndex ].value + '&idSelect=' + idSelectDestino,
-        true
-    );
+            idDestino,
+            './contenidos/proyectos/cambiarGestionProyectos.php',
+            'grupo=' + objGrupoGestion.options[ objGrupoGestion.selectedIndex ].value + '&idSelect=' + idSelectDestino,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        idSelectDestino,
-        function () {
-            document.getElementById("txtComentario").style.background = "#FFFFFF";
-            document.getElementById(idSelectDestino).focus();
-        }
+            idSelectDestino,
+            function () {
+                document.getElementById("txtComentario").style.background = "#FFFFFF";
+                document.getElementById(idSelectDestino).focus();
+            }
     );
 
 }
@@ -2968,7 +2495,7 @@ function fechasFuturas(objSelectOrigen, idSelectDestino) {
     // Select destino
     var objSelectDestino = document.getElementById(idSelectDestino);
 
-    // Limpiando el select destino
+    // Limpiando el select destino 
     for (i = objSelectDestino.options.length; i >= 0; i--) {
         objSelectDestino.remove(i);
     }
@@ -2997,28 +2524,28 @@ function imprimirPostulacion(objFormulario) {
     someterFormulario('mensajes', objFormulario, './contenidos/subsidios/salvarPostulacion.php', false, true);
 
     YAHOO.util.Event.onContentReady(
-        "tablaMensajes",
-        function () {
-            var objTablaMensajes = document.getElementById("tablaMensajes");
-            var arrFilas = objTablaMensajes.getElementsByTagName("td");
-            if (arrFilas[ 0 ].className != "msgError") {
-                var wndPostulacion;
-                try {
-                    var seqFormulario = document.getElementById("seqFormularioEditar").value;
-                    wndPostulacion = window.open("./contenidos/subsidios/formatoPostulacionImprimir.php?seqFormulario=" + seqFormulario,
-                        "_blank",
-                        "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100"
-                    );
-                    if (!wndPostulacion) {
-                        throw "ErrorPopUp";
-                    }
-                } catch (objError) {
-                    if (objError == "ErrorPopUp") {
-                        alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+            "tablaMensajes",
+            function () {
+                var objTablaMensajes = document.getElementById("tablaMensajes");
+                var arrFilas = objTablaMensajes.getElementsByTagName("td");
+                if (arrFilas[ 0 ].className != "msgError") {
+                    var wndPostulacion;
+                    try {
+                        var seqFormulario = document.getElementById("seqFormularioEditar").value;
+                        wndPostulacion = window.open("./contenidos/subsidios/formatoPostulacionImprimir.php?seqFormulario=" + seqFormulario,
+                                "_blank",
+                                "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100"
+                                );
+                        if (!wndPostulacion) {
+                            throw "ErrorPopUp";
+                        }
+                    } catch (objError) {
+                        if (objError == "ErrorPopUp") {
+                            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        }
                     }
                 }
             }
-        }
     );
 
 }
@@ -3034,7 +2561,7 @@ function desplegarDetallesMiembroHogar(numDocumento) {
 }
 
 function ucwords(str) {
-    // Uppercase the first character of every word in a string
+    // Uppercase the first character of every word in a string 
     //
     // version: 909.322
     // discuss at: http://phpjs.org/functions/ucwords
@@ -3083,9 +2610,9 @@ function continuarCalificacion() {
         icon: YAHOO.widget.SimpleDialog.ICON_HELP,
         constraintoviewport: true,
         buttons: [{
-            text: "Si",
-            handler: handleYes
-        },
+                text: "Si",
+                handler: handleYes
+            },
             {
                 text: "No",
                 handler: handleNo,
@@ -3156,59 +2683,59 @@ function cuadroBusquedaAvanzada(idDestino) {
 function calendarioPopUp(idInputDestino) {
 
     var objPanel = new YAHOO.widget.Panel(
-        "calendar",
-        {
-            width: "200px",
-            height: "280px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: false,
-            visible: false
-        }
+            "calendar",
+            {
+                width: "200px",
+                height: "280px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: false,
+                visible: false
+            }
     );
 
     YAHOO.util.Event.onContentReady(
-        "calendarioPopUp",
-        function () {
+            "calendarioPopUp",
+            function () {
 
-            var objInputDestino = document.getElementById(idInputDestino);
+                var objInputDestino = document.getElementById(idInputDestino);
 
-            var sleeccionaFecha = function (type, args, obj) {
-                var dates = args[0];
-                var date = dates[0];
-                var year = date[0], month = date[1], day = date[2];
+                var sleeccionaFecha = function (type, args, obj) {
+                    var dates = args[0];
+                    var date = dates[0];
+                    var year = date[0], month = date[1], day = date[2];
 
-                objInputDestino.value = year + "-" + month + "-" + day;
+                    objInputDestino.value = year + "-" + month + "-" + day;
 
-                objPanel.hide();
+                    objPanel.hide();
+                }
+
+                var navConfig = {
+                    strings: {
+                        month: "Seleccione Mes",
+                        year: "Digite A&ntilde;o",
+                        submit: "OK",
+                        cancel: "Cancelar",
+                        invalidYear: "Ingrese un a&ntilde;o v&aacute;lido"
+                    },
+                    monthFormat: YAHOO.widget.Calendar.SHORT,
+                    initialFocus: "year"
+                };
+
+
+                var objCalendario = new YAHOO.widget.Calendar("calendarioPopUp", {
+                    navigator: navConfig
+                });
+                objCalendario.cfg.setProperty("MONTHS_LONG", ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]);
+                objCalendario.cfg.setProperty("MONTHS_SHORT", ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]);
+                objCalendario.cfg.setProperty("WEEKDAYS_MEDIUM", ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]);
+                objCalendario.selectEvent.subscribe(sleeccionaFecha, objCalendario, true);
+
+                //alert( objInputDestino );
+
+                objCalendario.render( );
             }
-
-            var navConfig = {
-                strings: {
-                    month: "Seleccione Mes",
-                    year: "Digite A&ntilde;o",
-                    submit: "OK",
-                    cancel: "Cancelar",
-                    invalidYear: "Ingrese un a&ntilde;o v&aacute;lido"
-                },
-                monthFormat: YAHOO.widget.Calendar.SHORT,
-                initialFocus: "year"
-            };
-
-
-            var objCalendario = new YAHOO.widget.Calendar("calendarioPopUp", {
-                navigator: navConfig
-            });
-            objCalendario.cfg.setProperty("MONTHS_LONG", ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]);
-            objCalendario.cfg.setProperty("MONTHS_SHORT", ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]);
-            objCalendario.cfg.setProperty("WEEKDAYS_MEDIUM", ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]);
-            objCalendario.selectEvent.subscribe(sleeccionaFecha, objCalendario, true);
-
-            //alert( objInputDestino );
-
-            objCalendario.render( );
-        }
     );
 
 
@@ -3224,83 +2751,83 @@ function calendarioPopUpCalcula(idInputDestino, actual, campo) {
     /**/
 
     var objPanel = new YAHOO.widget.Panel(
-        "calendar",
-        {
-            width: "195px",
-            height: "230px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: false,
-            visible: false
-        }
+            "calendar",
+            {
+                width: "195px",
+                height: "230px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: false,
+                visible: false
+            }
     );
 
     YAHOO.util.Event.onContentReady(
-        "calendarioPopUp",
-        function () {
+            "calendarioPopUp",
+            function () {
 
-            var objInputDestino = document.getElementById(idInputDestino);
+                var objInputDestino = document.getElementById(idInputDestino);
 
-            var sleeccionaFecha = function (type, args, obj) {
-                var dates = args[0];
-                var date = dates[0];
-                var year = date[0], month = date[1], day = date[2];
+                var sleeccionaFecha = function (type, args, obj) {
+                    var dates = args[0];
+                    var date = dates[0];
+                    var year = date[0], month = date[1], day = date[2];
 
-                objInputDestino.value = year + "-" + month + "-" + day;
-                ///////////////////////// inicio
-                var vlrInicial = objInputDestino.value;
-                if (vlrInicial.substr(6, 1) == "-") {
-                    var Parte1n = vlrInicial.substr(0, 5);
-                    var Parte2n = "0"
-                    var Parte3n = vlrInicial.substr(5, 5);
-                    var vlrInicialNuevo = Parte1n + Parte2n + Parte3n;
-                } else {
-                    var vlrInicialNuevo = vlrInicial;
+                    objInputDestino.value = year + "-" + month + "-" + day;
+                    ///////////////////////// inicio
+                    var vlrInicial = objInputDestino.value;
+                    if (vlrInicial.substr(6, 1) == "-") {
+                        var Parte1n = vlrInicial.substr(0, 5);
+                        var Parte2n = "0"
+                        var Parte3n = vlrInicial.substr(5, 5);
+                        var vlrInicialNuevo = Parte1n + Parte2n + Parte3n;
+                    } else {
+                        var vlrInicialNuevo = vlrInicial;
+                    }
+
+                    var vlrActual = actual.value;
+                    if (vlrActual.substr(6, 1) == "-") {
+                        var Parte1 = vlrActual.substr(0, 5);
+                        var Parte2 = "0"
+                        var Parte3 = vlrActual.substr(5, 5);
+                        var vlrActualNuevo = Parte1 + Parte2 + Parte3;
+                    } else {
+                        var vlrActualNuevo = vlrActual;
+                    }
+                    var diff = Math.floor((Date.parse(vlrActualNuevo) - Date.parse(vlrInicialNuevo)) / 86400000);
+                    if (isNaN(diff)) {
+                        document.getElementById(campo).value = 0;
+                    } else {
+                        document.getElementById(campo).value = diff;
+                    }
+                    ////////////////////////// fin
+                    objPanel.hide();
                 }
 
-                var vlrActual = actual.value;
-                if (vlrActual.substr(6, 1) == "-") {
-                    var Parte1 = vlrActual.substr(0, 5);
-                    var Parte2 = "0"
-                    var Parte3 = vlrActual.substr(5, 5);
-                    var vlrActualNuevo = Parte1 + Parte2 + Parte3;
-                } else {
-                    var vlrActualNuevo = vlrActual;
-                }
-                var diff = Math.floor((Date.parse(vlrActualNuevo) - Date.parse(vlrInicialNuevo)) / 86400000);
-                if (isNaN(diff)) {
-                    document.getElementById(campo).value = 0;
-                } else {
-                    document.getElementById(campo).value = diff;
-                }
-                ////////////////////////// fin
-                objPanel.hide();
+                var navConfig = {
+                    strings: {
+                        month: "Seleccione Mes",
+                        year: "Digite A&ntilde;o",
+                        submit: "OK",
+                        cancel: "Cancelar",
+                        invalidYear: "Ingrese un a&ntilde;o v&aacute;lido"
+                    },
+                    monthFormat: YAHOO.widget.Calendar.SHORT,
+                    initialFocus: "year"
+                };
+
+
+                var objCalendario = new YAHOO.widget.Calendar("calendarioPopUp", {
+                    navigator: navConfig
+                });
+                objCalendario.cfg.setProperty("MONTHS_LONG", ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]);
+                objCalendario.cfg.setProperty("MONTHS_SHORT", ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]);
+                objCalendario.cfg.setProperty("WEEKDAYS_MEDIUM", ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]);
+                objCalendario.selectEvent.subscribe(sleeccionaFecha, objCalendario, true);
+
+                objCalendario.render( );
             }
-
-            var navConfig = {
-                strings: {
-                    month: "Seleccione Mes",
-                    year: "Digite A&ntilde;o",
-                    submit: "OK",
-                    cancel: "Cancelar",
-                    invalidYear: "Ingrese un a&ntilde;o v&aacute;lido"
-                },
-                monthFormat: YAHOO.widget.Calendar.SHORT,
-                initialFocus: "year"
-            };
-
-
-            var objCalendario = new YAHOO.widget.Calendar("calendarioPopUp", {
-                navigator: navConfig
-            });
-            objCalendario.cfg.setProperty("MONTHS_LONG", ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]);
-            objCalendario.cfg.setProperty("MONTHS_SHORT", ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]);
-            objCalendario.cfg.setProperty("WEEKDAYS_MEDIUM", ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]);
-            objCalendario.selectEvent.subscribe(sleeccionaFecha, objCalendario, true);
-
-            objCalendario.render( );
-        }
     );
 
 
@@ -3315,86 +2842,86 @@ function calendarioPopUpCalcula(idInputDestino, actual, campo) {
 function calendarioPopUpIncrementa(idInputDestino, diasIncremento, campoDestino) {
 
     var objPanel = new YAHOO.widget.Panel(
-        "calendar",
-        {
-            width: "195px",
-            height: "230px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: false,
-            visible: false
-        }
+            "calendar",
+            {
+                width: "195px",
+                height: "230px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: false,
+                visible: false
+            }
     );
 
     YAHOO.util.Event.onContentReady(
-        "calendarioPopUp",
-        function () {
+            "calendarioPopUp",
+            function () {
 
-            var objInputDestino = document.getElementById(idInputDestino);
+                var objInputDestino = document.getElementById(idInputDestino);
 
-            var sleeccionaFecha = function (type, args, obj) {
-                var dates = args[0];
-                var date = dates[0];
-                var year = date[0], month = date[1], day = date[2];
+                var sleeccionaFecha = function (type, args, obj) {
+                    var dates = args[0];
+                    var date = dates[0];
+                    var year = date[0], month = date[1], day = date[2];
 
-                objInputDestino.value = year + "-" + month + "-" + day;
-                // inicio
-                var fechaOriginal = year + "-" + month + "-" + day;
-                if (fechaOriginal.substr(6, 1) == "-") {
-                    var Parte1 = fechaOriginal.substr(0, 5);
-                    var Parte2 = "0"
-                    var Parte3 = fechaOriginal.substr(5, 5);
-                    var fechaOriginalNueva = Parte1 + Parte2 + Parte3;
-                } else {
-                    var fechaOriginalNueva = fechaOriginal;
+                    objInputDestino.value = year + "-" + month + "-" + day;
+                    // inicio
+                    var fechaOriginal = year + "-" + month + "-" + day;
+                    if (fechaOriginal.substr(6, 1) == "-") {
+                        var Parte1 = fechaOriginal.substr(0, 5);
+                        var Parte2 = "0"
+                        var Parte3 = fechaOriginal.substr(5, 5);
+                        var fechaOriginalNueva = Parte1 + Parte2 + Parte3;
+                    } else {
+                        var fechaOriginalNueva = fechaOriginal;
+                    }
+                    //alert (fechaOriginalNueva);
+                    ms = Date.parse(fechaOriginalNueva);
+                    fecha = new Date(ms);
+                    dayx = fecha.getDate();
+                    monthx = fecha.getMonth() + 1;
+                    yearx = fecha.getFullYear();
+
+                    tiempo = fecha.getTime();
+                    milisegundos = parseInt(diasIncremento * 24 * 60 * 60 * 1000);
+                    total = fecha.setTime(tiempo + milisegundos);
+                    dayx = fecha.getDate();
+                    monthx = fecha.getMonth() + 1;
+                    yearx = fecha.getFullYear();
+
+                    var fechaVence = yearx + "-" + monthx + "-" + dayx;
+                    document.getElementById(campoDestino).value = fechaVence;
+                    // fin
+
+                    objPanel.hide();
                 }
-                //alert (fechaOriginalNueva);
-                ms = Date.parse(fechaOriginalNueva);
-                fecha = new Date(ms);
-                dayx = fecha.getDate();
-                monthx = fecha.getMonth() + 1;
-                yearx = fecha.getFullYear();
 
-                tiempo = fecha.getTime();
-                milisegundos = parseInt(diasIncremento * 24 * 60 * 60 * 1000);
-                total = fecha.setTime(tiempo + milisegundos);
-                dayx = fecha.getDate();
-                monthx = fecha.getMonth() + 1;
-                yearx = fecha.getFullYear();
+                var navConfig = {
+                    strings: {
+                        month: "Seleccione Mes",
+                        year: "Digite A&ntilde;o",
+                        submit: "OK",
+                        cancel: "Cancelar",
+                        invalidYear: "Ingrese un a&ntilde;o v&aacute;lido"
+                    },
+                    monthFormat: YAHOO.widget.Calendar.SHORT,
+                    initialFocus: "year"
+                };
 
-                var fechaVence = yearx + "-" + monthx + "-" + dayx;
-                document.getElementById(campoDestino).value = fechaVence;
-                // fin
 
-                objPanel.hide();
+                var objCalendario = new YAHOO.widget.Calendar("calendarioPopUp", {
+                    navigator: navConfig
+                });
+                objCalendario.cfg.setProperty("MONTHS_LONG", ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]);
+                objCalendario.cfg.setProperty("MONTHS_SHORT", ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]);
+                objCalendario.cfg.setProperty("WEEKDAYS_MEDIUM", ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]);
+                objCalendario.selectEvent.subscribe(sleeccionaFecha, objCalendario, true);
+
+                //alert( objInputDestino );
+
+                objCalendario.render( );
             }
-
-            var navConfig = {
-                strings: {
-                    month: "Seleccione Mes",
-                    year: "Digite A&ntilde;o",
-                    submit: "OK",
-                    cancel: "Cancelar",
-                    invalidYear: "Ingrese un a&ntilde;o v&aacute;lido"
-                },
-                monthFormat: YAHOO.widget.Calendar.SHORT,
-                initialFocus: "year"
-            };
-
-
-            var objCalendario = new YAHOO.widget.Calendar("calendarioPopUp", {
-                navigator: navConfig
-            });
-            objCalendario.cfg.setProperty("MONTHS_LONG", ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]);
-            objCalendario.cfg.setProperty("MONTHS_SHORT", ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]);
-            objCalendario.cfg.setProperty("WEEKDAYS_MEDIUM", ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"]);
-            objCalendario.selectEvent.subscribe(sleeccionaFecha, objCalendario, true);
-
-            //alert( objInputDestino );
-
-            objCalendario.render( );
-        }
     );
 
 
@@ -3550,70 +3077,70 @@ function verCambiosFormulario(seqFormulario, seqSeguimiento) {
 
     // Objeto de respuesta si es satisfactoria la carga
     var handleSuccess =
-        function (o) {
+            function (o) {
 
-            var tmpObj = null;
-            tmpObj = document.getElementById('cambios_mask');
-            while (tmpObj != null) {
-                //alert( tmpObj );
-                eliminarObjeto("cambios_mask");
+                var tmpObj = null;
                 tmpObj = document.getElementById('cambios_mask');
-            }
-
-            var tmpObj = null;
-            tmpObj = document.getElementById('cambios_c');
-            while (tmpObj != null) {
-                //alert( tmpObj );
-                eliminarObjeto("cambios_c");
-                tmpObj = document.getElementById('cambios_c');
-            }
-
-            if (o.responseText !== undefined) {
-
-                var objConfiguracion = {
-                    width: numAncho,
-                    height: numAlto,
-                    fixedcenter: true,
-                    close: true,
-                    draggable: true,
-                    modal: true,
-                    visible: false
+                while (tmpObj != null) {
+                    //alert( tmpObj );
+                    eliminarObjeto("cambios_mask");
+                    tmpObj = document.getElementById('cambios_mask');
                 }
 
-                var objPanel = new YAHOO.widget.Panel(
-                    "cambios",
-                    objConfiguracion
-                );
+                var tmpObj = null;
+                tmpObj = document.getElementById('cambios_c');
+                while (tmpObj != null) {
+                    //alert( tmpObj );
+                    eliminarObjeto("cambios_c");
+                    tmpObj = document.getElementById('cambios_c');
+                }
 
-                objPanel.setHeader("Ver Cambios en el Formulario");
-                objPanel.setBody(o.responseText);
+                if (o.responseText !== undefined) {
 
-                objPanel.render(document.body);
-                objPanel.show();
+                    var objConfiguracion = {
+                        width: numAncho,
+                        height: numAlto,
+                        fixedcenter: true,
+                        close: true,
+                        draggable: true,
+                        modal: true,
+                        visible: false
+                    }
 
-            }
-        };
+                    var objPanel = new YAHOO.widget.Panel(
+                            "cambios",
+                            objConfiguracion
+                            );
+
+                    objPanel.setHeader("Ver Cambios en el Formulario");
+                    objPanel.setBody(o.responseText);
+
+                    objPanel.render(document.body);
+                    objPanel.show();
+
+                }
+            };
 
     // Objeto de respuesta si la carga falla
     var handleFailure =
-        function (o) {
-            if (o.responseText !== undefined) {
+            function (o) {
+                if (o.responseText !== undefined) {
 
-                // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
-                if (o.status == "401") {
-                    document.location = 'index.php';
-                } else {
+                    // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
+                    if (o.status == "401") {
+                        document.location = 'index.php';
+                    } else {
 
-                    // Mensaje cuando la pagina no es encontrada
-                    var htmlCode = "";
-                    htmlCode = +o.status + " " + o.statusText;
+                        // Mensaje cuando la pagina no es encontrada
+                        var htmlCode = "";
+                        htmlCode = +o.status + " " + o.statusText;
 
-                    // Otros mensajes de error son mostrados directamente en el div
-                    document.getElementById("mensajes").innerHTML = htmlCode;
+                        // Otros mensajes de error son mostrados directamente en el div
+                        document.getElementById("mensajes").innerHTML = htmlCode;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        };
+            };
 
     // Objeto de respuestas
     var callback = {
@@ -3633,53 +3160,53 @@ function verCambiosFormularioProyectos(seqProyecto, seqSeguimiento) {
 
     // Objeto de respuesta si es satisfactoria la carga
     var handleSuccess =
-        function (o) {
-            if (o.responseText !== undefined) {
+            function (o) {
+                if (o.responseText !== undefined) {
 
-                var objConfiguracion = {
-                    width: numAncho,
-                    height: numAlto,
-                    fixedcenter: true,
-                    close: true,
-                    draggable: true,
-                    modal: true,
-                    visible: false
+                    var objConfiguracion = {
+                        width: numAncho,
+                        height: numAlto,
+                        fixedcenter: true,
+                        close: true,
+                        draggable: true,
+                        modal: true,
+                        visible: false
+                    }
+
+                    var objPanel = new YAHOO.widget.Panel(
+                            "cambios",
+                            objConfiguracion
+                            );
+
+                    objPanel.setHeader("Ver Cambios en el Proyecto");
+                    objPanel.setBody(o.responseText);
+
+                    objPanel.render(document.body);
+                    objPanel.show();
+
                 }
-
-                var objPanel = new YAHOO.widget.Panel(
-                    "cambios",
-                    objConfiguracion
-                );
-
-                objPanel.setHeader("Ver Cambios en el Proyecto");
-                objPanel.setBody(o.responseText);
-
-                objPanel.render(document.body);
-                objPanel.show();
-
-            }
-        };
+            };
 
     // Objeto de respuesta si la carga falla
     var handleFailure =
-        function (o) {
-            if (o.responseText !== undefined) {
+            function (o) {
+                if (o.responseText !== undefined) {
 
-                // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
-                if (o.status == "401") {
-                    document.location = 'index.php';
-                } else {
+                    // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
+                    if (o.status == "401") {
+                        document.location = 'index.php';
+                    } else {
 
-                    // Mensaje cuando la pagina no es encontrada
-                    var htmlCode = "";
-                    htmlCode = +o.status + " " + o.statusText;
+                        // Mensaje cuando la pagina no es encontrada
+                        var htmlCode = "";
+                        htmlCode = +o.status + " " + o.statusText;
 
-                    // Otros mensajes de error son mostrados directamente en el div
-                    document.getElementById("mensajes").innerHTML = htmlCode;
+                        // Otros mensajes de error son mostrados directamente en el div
+                        document.getElementById("mensajes").innerHTML = htmlCode;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        };
+            };
 
     // Objeto de respuestas
     var callback = {
@@ -3797,11 +3324,11 @@ function adicionarCondicion() {
         document.getElementById("wCondiciones").innerHTML += "<div id='wDivCondicion" + numCondiciones + "'></div>";
 
         var txtParametros = "condicion=wDivCondicion" + numCondiciones
-            + "&wCampo=" + objCampo.value
-            + "&wCriterio=" + objCriterio.selectedIndex
-            + "&wValor=" + objValor.value
-            + "&wCondicion=" + txtValCondicion
-        ;
+                + "&wCampo=" + objCampo.value
+                + "&wCriterio=" + objCriterio.selectedIndex
+                + "&wValor=" + objValor.value
+                + "&wCondicion=" + txtValCondicion
+                ;
 
         cargarContenido("wDivCondicion" + numCondiciones, "./contenidos/reportes/adicionarCondiciones.php", txtParametros, true);
 
@@ -3868,11 +3395,11 @@ function adicionarCondicionProyectos() {
         document.getElementById("wCondiciones").innerHTML += "<div id='wDivCondicion" + numCondiciones + "'></div>";
 
         var txtParametros = "condicion=wDivCondicion" + numCondiciones
-            + "&wCampo=" + objCampo.value
-            + "&wCriterio=" + objCriterio.selectedIndex
-            + "&wValor=" + objValor.value
-            + "&wCondicion=" + txtValCondicion
-        ;
+                + "&wCampo=" + objCampo.value
+                + "&wCriterio=" + objCriterio.selectedIndex
+                + "&wValor=" + objValor.value
+                + "&wCondicion=" + txtValCondicion
+                ;
 
         cargarContenido("wDivCondicion" + numCondiciones, "./contenidos/reportesProyectos/adicionarCondiciones.php", txtParametros, true);
 
@@ -3945,29 +3472,29 @@ function desembolsoRevisionJuridica(seqFormulario, seqCasaMano) {
     someterFormulario('mensajes', objFormulario, './contenidos/' + txtCarpeta + '/pedirConfirmacion.php', false, true);
 
     YAHOO.util.Event.onContentReady(
-        "tablaMensajes",
-        function () {
+            "tablaMensajes",
+            function () {
 
-            var objTabla = YAHOO.util.Dom.get("tablaMensajes");
-            if (objTabla.className == "msgOk") {
-                var wndFormato;
-                try {
+                var objTabla = YAHOO.util.Dom.get("tablaMensajes");
+                if (objTabla.className == "msgOk") {
+                    var wndFormato;
+                    try {
 
-                    var txtUrl = "./contenidos/desembolso/formatoRevisionJuridica.php";
-                    txtUrl += "?seqFormulario=" + seqFormulario + txtCasaMano;
+                        var txtUrl = "./contenidos/desembolso/formatoRevisionJuridica.php";
+                        txtUrl += "?seqFormulario=" + seqFormulario + txtCasaMano;
 
-                    var txtParametros = "resizable=0,location=0,scrollbars=1,width=750,height=700,left=100,top=100";
+                        var txtParametros = "resizable=0,location=0,scrollbars=1,width=750,height=700,left=100,top=100";
 
-                    if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
-                        throw "ErrorPopUp";
-                    }
-                } catch (objError) {
-                    if (objError == "ErrorPopUp") {
-                        alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
+                            throw "ErrorPopUp";
+                        }
+                    } catch (objError) {
+                        if (objError == "ErrorPopUp") {
+                            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        }
                     }
                 }
             }
-        }
     );
 
 }
@@ -4038,28 +3565,28 @@ function desembolsoRevisionTecnica(seqFormulario, seqCasaMano) {
     var objFormulario = YAHOO.util.Dom.get("frmBusquedaOferta");
     someterFormulario('mensajes', objFormulario, './contenidos/' + txtCarpeta + '/pedirConfirmacion.php', false, true);
     YAHOO.util.Event.onContentReady(
-        "tablaMensajes",
-        function () {
-            var objTabla = YAHOO.util.Dom.get("tablaMensajes");
-            if (objTabla.className == "msgOk") {
-                var wndFormato;
-                try {
+            "tablaMensajes",
+            function () {
+                var objTabla = YAHOO.util.Dom.get("tablaMensajes");
+                if (objTabla.className == "msgOk") {
+                    var wndFormato;
+                    try {
 
-                    var txtUrl = "./contenidos/desembolso/formatoRevisionTecnica.php";
-                    txtUrl += "?seqFormulario=" + seqFormulario + txtCasaMano;
+                        var txtUrl = "./contenidos/desembolso/formatoRevisionTecnica.php";
+                        txtUrl += "?seqFormulario=" + seqFormulario + txtCasaMano;
 
-                    var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
+                        var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
 
-                    if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
-                        throw "ErrorPopUp";
-                    }
-                } catch (objError) {
-                    if (objError == "ErrorPopUp") {
-                        alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
+                            throw "ErrorPopUp";
+                        }
+                    } catch (objError) {
+                        if (objError == "ErrorPopUp") {
+                            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        }
                     }
                 }
             }
-        }
     );
 
 }
@@ -4122,14 +3649,14 @@ function sumarAreas(idArea) {
 }
 
 var objHint = new YAHOO.widget.Panel(
-    "hint",
-    {
-        width: "400px",
-        close: false,
-        modal: false,
-        fixedCenter: true,
-        draggable: false
-    }
+        "hint",
+        {
+            width: "400px",
+            close: false,
+            modal: false,
+            fixedCenter: true,
+            draggable: false
+        }
 );
 
 function mostrarHint(txtTexto) {
@@ -4226,10 +3753,10 @@ function recogerValor(arrDestinos, txtTipoDato, idVariables) {
         },
         draggable: false,
         buttons: [{
-            text: "Aceptar",
-            handler: aceptar,
-            isDefault: true
-        },
+                text: "Aceptar",
+                handler: aceptar,
+                isDefault: true
+            },
             {
                 text: "Cancelar",
                 handler: cancelar
@@ -4305,92 +3832,92 @@ function calendarioDesembolso(arrDestinos, idVariables) {
     var objVariables = YAHOO.util.Dom.get(idVariables);
 
     var objPanel = new YAHOO.widget.Panel(
-        "calendar",
-        {
-            width: "195px",
-            height: "230px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: false,
-            visible: false
-        }
+            "calendar",
+            {
+                width: "195px",
+                height: "230px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: false,
+                visible: false
+            }
     );
 
     YAHOO.util.Event.onContentReady(
-        "calendarioPopUp",
-        function () {
+            "calendarioPopUp",
+            function () {
 
-            var sleeccionaFecha = function (type, args, obj) {
-                var dates = args[0];
-                var date = dates[0];
-                var year = date[0], month = date[1], day = date[2];
+                var sleeccionaFecha = function (type, args, obj) {
+                    var dates = args[0];
+                    var date = dates[0];
+                    var year = date[0], month = date[1], day = date[2];
 
-                var fecha = year + "-" + month + "-" + day;
+                    var fecha = year + "-" + month + "-" + day;
 
-                for (i = 0; i < arrDestinos.length; i++) {
-                    cargarContenido(arrDestinos[ i ], "./contenidos/desembolso/cambiarValor.php", "tipoDato=fecha&valor=" + fecha, true);
+                    for (i = 0; i < arrDestinos.length; i++) {
+                        cargarContenido(arrDestinos[ i ], "./contenidos/desembolso/cambiarValor.php", "tipoDato=fecha&valor=" + fecha, true);
 
-                    if (YAHOO.util.Dom.get("var" + arrDestinos[ i ]) != null) {
-                        eliminarObjeto("var" + arrDestinos[ i ]);
+                        if (YAHOO.util.Dom.get("var" + arrDestinos[ i ]) != null) {
+                            eliminarObjeto("var" + arrDestinos[ i ]);
+                        }
+
+                        objVariables.innerHTML += "<input type='hidden' id='var" + arrDestinos[ i ] + "' name='" + arrDestinos[ i ] + "' value='" + fecha + "' />";
                     }
 
-                    objVariables.innerHTML += "<input type='hidden' id='var" + arrDestinos[ i ] + "' name='" + arrDestinos[ i ] + "' value='" + fecha + "' />";
+                    objPanel.hide();
                 }
 
-                objPanel.hide();
+                var navConfig = {
+                    strings: {
+                        month: "Seleccione Mes",
+                        year: "Digite AÃ±o",
+                        submit: "OK",
+                        cancel: "Cancelar",
+                        invalidYear: "Ingrese un aÃ±o valido"
+                    },
+                    monthFormat: YAHOO.widget.Calendar.SHORT,
+                    initialFocus: "year"
+                };
+
+                var objCalendario = new YAHOO.widget.Calendar("calendarioPopUp", {
+                    navigator: navConfig
+                });
+
+                objCalendario.cfg.setProperty(
+                        "MONTHS_LONG",
+                        [
+                            "Enero",
+                            "Febrero",
+                            "Marzo",
+                            "Abril",
+                            "Mayo",
+                            "Junio",
+                            "Julio",
+                            "Agosto",
+                            "Septiembre",
+                            "Octubre",
+                            "Noviembre",
+                            "Diciembre"
+                        ]
+                        );
+
+                objCalendario.cfg.setProperty(
+                        "WEEKDAYS_SHORT",
+                        [
+                            "Do",
+                            "Lu",
+                            "Ma",
+                            "Mi",
+                            "Ju",
+                            "Vi",
+                            "Sa"
+                        ]
+                        );
+
+                objCalendario.selectEvent.subscribe(sleeccionaFecha, objCalendario, true);
+                objCalendario.render();
             }
-
-            var navConfig = {
-                strings: {
-                    month: "Seleccione Mes",
-                    year: "Digite AÃ±o",
-                    submit: "OK",
-                    cancel: "Cancelar",
-                    invalidYear: "Ingrese un aÃ±o valido"
-                },
-                monthFormat: YAHOO.widget.Calendar.SHORT,
-                initialFocus: "year"
-            };
-
-            var objCalendario = new YAHOO.widget.Calendar("calendarioPopUp", {
-                navigator: navConfig
-            });
-
-            objCalendario.cfg.setProperty(
-                "MONTHS_LONG",
-                [
-                    "Enero",
-                    "Febrero",
-                    "Marzo",
-                    "Abril",
-                    "Mayo",
-                    "Junio",
-                    "Julio",
-                    "Agosto",
-                    "Septiembre",
-                    "Octubre",
-                    "Noviembre",
-                    "Diciembre"
-                ]
-            );
-
-            objCalendario.cfg.setProperty(
-                "WEEKDAYS_SHORT",
-                [
-                    "Do",
-                    "Lu",
-                    "Ma",
-                    "Mi",
-                    "Ju",
-                    "Vi",
-                    "Sa"
-                ]
-            );
-
-            objCalendario.selectEvent.subscribe(sleeccionaFecha, objCalendario, true);
-            objCalendario.render();
-        }
     );
 
     objPanel.setHeader("Seleccione la fecha");
@@ -4415,28 +3942,28 @@ function desembolsoEstudioTitulos(seqFormulario) {
     var objFormulario = YAHOO.util.Dom.get("frmBusquedaOferta");
     someterFormulario('mensajes', objFormulario, './contenidos/desembolso/pedirConfirmacion.php', false, true);
     YAHOO.util.Event.onContentReady(
-        "tablaMensajes",
-        function () {
-            var objTabla = YAHOO.util.Dom.get("tablaMensajes");
-            if (objTabla.className == "msgOk") {
-                var wndFormato;
-                try {
+            "tablaMensajes",
+            function () {
+                var objTabla = YAHOO.util.Dom.get("tablaMensajes");
+                if (objTabla.className == "msgOk") {
+                    var wndFormato;
+                    try {
 
-                    var txtUrl = "./contenidos/desembolso/formatoEstudioTitulos.php";
-                    txtUrl += "?seqFormulario=" + seqFormulario;
+                        var txtUrl = "./contenidos/desembolso/formatoEstudioTitulos.php";
+                        txtUrl += "?seqFormulario=" + seqFormulario;
 
-                    var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
+                        var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
 
-                    if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
-                        throw "ErrorPopUp";
-                    }
-                } catch (objError) {
-                    if (objError == "ErrorPopUp") {
-                        alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
+                            throw "ErrorPopUp";
+                        }
+                    } catch (objError) {
+                        if (objError == "ErrorPopUp") {
+                            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        }
                     }
                 }
             }
-        }
     );
 
 }
@@ -4536,11 +4063,11 @@ function cargarRegistroDesembolso(seqFormulario, seqSolicitud) {
     objCargando.show();
 
     var callObj = YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/desembolso/cargarSolicitud.php",
-        callback,
-        "formulario=" + seqFormulario + "&solicitud=" + seqSolicitud
-    );
+            "POST",
+            "./contenidos/desembolso/cargarSolicitud.php",
+            callback,
+            "formulario=" + seqFormulario + "&solicitud=" + seqSolicitud
+            );
 
 }
 
@@ -4570,13 +4097,13 @@ function desembolsoSolicitud(seqFormulario, seqSolicitud) {
  * FUNCION QUE MANEJA EL CAMBIO DE FASES EN DESEMBOLSO
  * PARA MOSTRAR LA INFORMACION PERTINENTE DE CADA HOGAR
  * SEGUN EL ESTADO DEL PROCESO O LA SOLICITUD DEL USUARIO
- * @author Bernardo Zerda
+ * @author Bernardo Zerda 
  * @param String idContenido   ==> Donde va ubicado el resultado del llamado asincrono
  * @param String idImprimir    ==> Identificador del objeto donde se ubica el link de impresion
  * @param String txtCodigo     ==> Nombre del archivo php que responde la peticion
  * @param String txtImprimir   ==> Texto de la funcion JS que se llama para imprimir el formulario
  * @param String txtFase	   ==> Nombre de la fase
- * @param String txtParametros ==> Parametros adicionales para el formulario escritos en forma GET Ej: foo=hola&var=mundo
+ * @param String txtParametros ==> Parametros adicionales para el formulario escritos en forma GET Ej: foo=hola&var=mundo 
  */
 
 function cambiarFase(idContenido, idImprimir, txtCodigo, txtImprimir, txtFase, txtParametros) {
@@ -4593,7 +4120,7 @@ function cambiarFase(idContenido, idImprimir, txtCodigo, txtImprimir, txtFase, t
     var objFase = YAHOO.util.Dom.get("fase");
     objFase.value = txtFase;
 
-    // Carga el contenido de la fase
+    // Carga el contenido de la fase 
     cargarContenido(idContenido, txtCodigo, txtParametros, true);
 
 }
@@ -4691,20 +4218,20 @@ function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
 
     // Objeto de respuesta si es satisfactoria la carga
     var handleSuccess =
-        function (o) {
-            if (o.responseText !== undefined) {
-                // Toda respuesta del archivo en el parametro se muestra en el objeto destino
-                document.getElementById(txtDivDestino).innerHTML = o.responseText;
-            }
-        };
+            function (o) {
+                if (o.responseText !== undefined) {
+                    // Toda respuesta del archivo en el parametro se muestra en el objeto destino
+                    document.getElementById(txtDivDestino).innerHTML = o.responseText;
+                }
+            };
 
     // Objeto de respuesta si la carga falla
     var handleFailure =
-        function (o) {
-            if (o.responseText !== undefined) {
-                return false;
-            }
-        };
+            function (o) {
+                if (o.responseText !== undefined) {
+                    return false;
+                }
+            };
 
     // Objeto de respuestas
     var callback = {
@@ -4744,11 +4271,11 @@ function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
                 bolAlerta = true;
             } else {
                 if (
-                    YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
-                    YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
-                    YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
-                    YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
-                ) {
+                        YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
+                        YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
+                        YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
+                        YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
+                        ) {
                     alert("Complete la dirección");
                     bolAlerta = true;
                 }
@@ -4789,10 +4316,10 @@ function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
         },
         draggable: false,
         buttons: [{
-            text: "Aceptar",
-            handler: aceptar,
-            isDefault: true
-        },
+                text: "Aceptar",
+                handler: aceptar,
+                isDefault: true
+            },
             {
                 text: "Cancelar",
                 handler: cancelar
@@ -4838,9 +4365,9 @@ function eventoCambioCalleDireccion( ) {
     var frmCheckSurNumero = document.getElementById('frmCheckSurNumero');
 
     if (txtDireccionTipoVia == 'CL' ||
-        txtDireccionTipoVia == 'DG' ||
-        txtDireccionTipoVia == 'AC'
-    )
+            txtDireccionTipoVia == 'DG' ||
+            txtDireccionTipoVia == 'AC'
+            )
     {
         frmCheckEsteVia.disabled = true;
         frmCheckSurNumero.disabled = true;
@@ -4900,7 +4427,7 @@ function actualizarDireccion(txtDivDireccionGenerada)
     }
 
     if (valTipoDireccion != 1) {
-        // var txtDireccionForm = document.getElementById( 'txtDireccion' );
+        // var txtDireccionForm = document.getElementById( 'txtDireccion' );			
         var valTipoVia = document.getElementById('txtDireccionTipoVia').value;
         var valNumeroVia = document.getElementById('txtNumeroVia').value;
         var valLetraCalle = document.getElementById('txtLetraVia').value;
@@ -4953,11 +4480,11 @@ function actualizarDireccion(txtDivDireccionGenerada)
         var txtDireccionAdicional = document.getElementById('txtDireccionAdicional').value;
 
         txtDireccion = valTipoVia + ' ' + valNumeroVia + ' ' + valLetraCalle + ' ' +
-            valViaBis + ' ' + valLetraViaBis + ' ' + valViaEste + ' ' +
-            valViaSur + ' ' + valNumero + ' ' + valLetraNumero + ' ' +
-            // valNumeroBis + ' ' + valorLetraNumeroBis+ ' '
-            valorNumeroAdicional + ' ' +
-            valNumeroEste + ' ' + valNumeroSur + ' ' + txtDireccionAdicional;
+                valViaBis + ' ' + valLetraViaBis + ' ' + valViaEste + ' ' +
+                valViaSur + ' ' + valNumero + ' ' + valLetraNumero + ' ' +
+                // valNumeroBis + ' ' + valorLetraNumeroBis+ ' ' 
+                valorNumeroAdicional + ' ' +
+                valNumeroEste + ' ' + valNumeroSur + ' ' + txtDireccionAdicional;
     } else {
         txtDireccion = document.getElementById('txtDireccionRural').value;
     }
@@ -5019,27 +4546,27 @@ function salvarBVU(txtForm) {
 
     someterFormulario('mensajes', txtForm, './contenidos/bvu/salvarFormulario.php', false, true);
     YAHOO.util.Event.onContentReady(
-        "tablaMensajes",
-        function () {
-            var objTabla = YAHOO.util.Dom.get("tablaMensajes");
-            if (objTabla.className == "msgOk") {
-                try {
-                    borrarFormulario(txtForm);
+            "tablaMensajes",
+            function () {
+                var objTabla = YAHOO.util.Dom.get("tablaMensajes");
+                if (objTabla.className == "msgOk") {
+                    try {
+                        borrarFormulario(txtForm);
 
-                    var wndFormato;
-                    var txtUrl = "./contenidos/bvu/formatoFormularioBVU.php";
-                    var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
-                    if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
-                        throw "ErrorPopUp";
-                    }
+                        var wndFormato;
+                        var txtUrl = "./contenidos/bvu/formatoFormularioBVU.php";
+                        var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
+                        if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
+                            throw "ErrorPopUp";
+                        }
 
-                } catch (objError) {
-                    if (objError == "ErrorPopUp") {
-                        alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                    } catch (objError) {
+                        if (objError == "ErrorPopUp") {
+                            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        }
                     }
                 }
             }
-        }
     );
 }
 
@@ -5074,15 +4601,15 @@ function verAyudaReporteador(idTipoAyuda) {
     }
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "500px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "500px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     // Encabezado
@@ -5123,15 +4650,15 @@ function verAyudaReporteadorProyectos(idTipoAyuda) {
     }
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "500px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "500px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     // Encabezado
@@ -5159,15 +4686,15 @@ function plantillaModuloOperativoConceptos(  ) {
     txtBody += "</ol>";
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "500px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "500px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     // Encabezado
@@ -5197,15 +4724,15 @@ function plantillaModuloOperativoNomina( ) {
     txtBody += "</ol>";
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "500px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "500px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     // Encabezado
@@ -5226,15 +4753,15 @@ function plantillaActoAdministrativo2(txtObjetoSelect) {
     var objSelect = YAHOO.util.Dom.get(txtObjetoSelect);
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "650px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "650px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     var fncExito = function (objRespuesta) {
@@ -5257,11 +4784,11 @@ function plantillaActoAdministrativo2(txtObjetoSelect) {
     }
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/actosAdministrativos/plantillaActoAdministrativo.php",
-        objRetorno,
-        "seqTipoActo=" + objSelect.options[ objSelect.selectedIndex ].value
-    );
+            "POST",
+            "./contenidos/actosAdministrativos/plantillaActoAdministrativo.php",
+            objRetorno,
+            "seqTipoActo=" + objSelect.options[ objSelect.selectedIndex ].value
+            );
 
 }
 
@@ -5270,15 +4797,15 @@ function plantillaCargueEstudioTecnicoUnidad(txtObjetoSelect) {
     var objSelect = YAHOO.util.Dom.get(txtObjetoSelect);
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "700px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "700px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     var fncExito = function (objRespuesta) {
@@ -5301,11 +4828,11 @@ function plantillaCargueEstudioTecnicoUnidad(txtObjetoSelect) {
     }
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/unidadProyecto/plantillaCargaEstudiosTecnicos.php",
-        objRetorno,
-        "seqTipoActo=1"
-    );
+            "POST",
+            "./contenidos/unidadProyecto/plantillaCargaEstudiosTecnicos.php",
+            objRetorno,
+            "seqTipoActo=1"
+            );
 
 }
 
@@ -5314,15 +4841,15 @@ function plantillaCargaCartaHabitabilidad(txtObjetoSelect) {
     var objSelect = YAHOO.util.Dom.get(txtObjetoSelect);
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "700px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "700px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     var fncExito = function (objRespuesta) {
@@ -5345,27 +4872,27 @@ function plantillaCargaCartaHabitabilidad(txtObjetoSelect) {
     }
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/unidadProyecto/plantillaCargaCartaHabitabilidad.php",
-        objRetorno,
-        "seqTipoActo=1"
-    );
+            "POST",
+            "./contenidos/unidadProyecto/plantillaCargaCartaHabitabilidad.php",
+            objRetorno,
+            "seqTipoActo=1"
+            );
 
 }
 
 function plantillaProyectoUnidadHabitacional( ) {
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            height: "500px",
-            width: "900px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                height: "500px",
+                width: "900px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     var fncExito = function (objRespuesta) {
@@ -5388,10 +4915,10 @@ function plantillaProyectoUnidadHabitacional( ) {
     }
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/actosAdministrativos/plantillaProyectoUnidadHabitacional.php",
-        objRetorno
-    );
+            "POST",
+            "./contenidos/actosAdministrativos/plantillaProyectoUnidadHabitacional.php",
+            objRetorno
+            );
 
 }
 
@@ -5399,16 +4926,16 @@ function plantillaProyectoUnidadHabitacional( ) {
 function plantillaProyectos( ) {
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            height: "500px",
-            width: "900px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                height: "500px",
+                width: "900px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     var fncExito = function (objRespuesta) {
@@ -5431,10 +4958,10 @@ function plantillaProyectos( ) {
     }
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/aad/guiaProyectos.php",
-        objRetorno
-    );
+            "POST",
+            "./contenidos/aad/guiaProyectos.php",
+            objRetorno
+            );
 
 }
 
@@ -5530,15 +5057,15 @@ function plantillaActoAdministrativo(idTipoActo) {
     txtBody += "</table>";
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "650px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "650px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     // Encabezado
@@ -5572,7 +5099,7 @@ function mostrarAyudaGeneralReporteadorProyectos( ) {
 
 /**
  * Filtro dependiendo el tipo de Acto Administrativo que se elija
- *
+ * 
  */
 function filtarActosAdministrativos( ) {
 
@@ -5583,7 +5110,7 @@ function filtarActosAdministrativos( ) {
     var txtParametros;
 
     txtParametros = "numActo=" + numActo
-        + "&seqTipoActo=" + seqTipoActo;
+            + "&seqTipoActo=" + seqTipoActo;
 
     cargarContenido("listadoResoluciones", "./contenidos/asignacion/listadoResoluciones.php", txtParametros, true)
 }
@@ -5610,21 +5137,21 @@ function explode(delimiter, string, limit) {
 
     // third argument is not required
     if (arguments.length < 2 ||
-        typeof arguments[0] == 'undefined' ||
-        typeof arguments[1] == 'undefined') {
+            typeof arguments[0] == 'undefined' ||
+            typeof arguments[1] == 'undefined') {
         return null;
     }
 
     if (delimiter === '' ||
-        delimiter === false ||
-        delimiter === null) {
+            delimiter === false ||
+            delimiter === null) {
         return false;
     }
 
     if (typeof delimiter == 'function' ||
-        typeof delimiter == 'object' ||
-        typeof string == 'function' ||
-        typeof string == 'object') {
+            typeof delimiter == 'object' ||
+            typeof string == 'function' ||
+            typeof string == 'object') {
         return emptyArray;
     }
 
@@ -5715,7 +5242,7 @@ function reporteIndicadores(txtConsultaReporte, txtTipoReporte, txtColor) {
     }
 
     parametros = "txtTipoReporte=" + txtTipoReporte +
-        "&txtConsultaReporte=" + txtConsultaReporte;
+            "&txtConsultaReporte=" + txtConsultaReporte;
     if (txtColor != "") {
         parametros += "&txtColor=" + txtColor
     }
@@ -5726,8 +5253,8 @@ function reporteTotalHoySemanaDia(txtTipoReporte, txtEstado) {
     var seqUsuario = YAHOO.util.Dom.get("seqUsuario").value;
     var parametros;
     parametros = "txtTipoReporte=" + txtTipoReporte +
-        "&txtEstado=" + txtEstado +
-        "&seqUsuario=" + seqUsuario;
+            "&txtEstado=" + txtEstado +
+            "&seqUsuario=" + seqUsuario;
     cargarContenido("divDataTableTutoresIndicadoresDesembolso", "./contenidos/crm/dataTableIndicadoresDiaSemanaMes.php", parametros, true);
 }
 
@@ -5742,7 +5269,7 @@ function reporteDiaSemanaMesRango(txtConsultaReporte, txtTipoReporte, txtForm) {
 
     var parametros;
     parametros = "?txtConsultaReporte=" + txtConsultaReporte +
-        "&txtTipoReporte=" + txtTipoReporte;
+            "&txtTipoReporte=" + txtTipoReporte;
 
     someterFormulario("divDataTableTutoresIndicadoresDesembolso", txtForm, "./contenidos/crm/reporteDiaSemanaMesRango.php" + parametros, true, bolCargar);
 }
@@ -5763,17 +5290,17 @@ function salvarConsignacion(idContenedor) {
 
     // Obtiene los input de la consignacion
     var arrInput = YAHOO.util.Dom.getElementsBy(
-        fncSeleccionarCampos,
-        "input",
-        idContenedor
-    );
+            fncSeleccionarCampos,
+            "input",
+            idContenedor
+            );
 
     // Obtiene los select de la consignacion
     var arrSelect = YAHOO.util.Dom.getElementsBy(
-        fncSeleccionarCampos,
-        "select",
-        idContenedor
-    );
+            fncSeleccionarCampos,
+            "select",
+            idContenedor
+            );
 
     // Organizando los datos input para enviarlos
     for (i = 0; i < arrInput.length; i++) {
@@ -5793,10 +5320,10 @@ function salvarConsignacion(idContenedor) {
     var objGestion = YAHOO.util.Dom.get('seqGestion');
 
     txtParametros = txtParametros + "seqFormulario=" + objFormulario.value + "&" +
-        "txtComentario=" + objComentario.value + "&" +
-        "cedula=" + objCedula.value + "&" +
-        "nombre=" + objNombre.value + "&" +
-        "seqGestion=" + objGestion.options[ objGestion.selectedIndex ].value;
+            "txtComentario=" + objComentario.value + "&" +
+            "cedula=" + objCedula.value + "&" +
+            "nombre=" + objNombre.value + "&" +
+            "seqGestion=" + objGestion.options[ objGestion.selectedIndex ].value;
 
     cargarContenido("mensajes", "./contenidos/desembolso/salvarConsignacion.php", txtParametros, true);
 
@@ -5807,7 +5334,7 @@ function cargarIndicadoresDiaSemanaMes(txtEstado) {
     var seqUsuario = YAHOO.util.Dom.get("seqUsuario");
     var parametros;
     parametros = "txtEstado=" + txtEstado +
-        "&seqUsuario=" + seqUsuario.value;
+            "&seqUsuario=" + seqUsuario.value;
 
     cargarContenido("divRangosEstados", "./contenidos/crm/cargarIndicadoresDiaSemanaMes.php", parametros, true);
 }
@@ -5850,13 +5377,13 @@ function cargaIndicadoresTutorDesembolso( ) {
     }
 
     cargarContenido("divIndicadoresTutorDesembolso",
-        "./contenidos/crm/indicadoresTutoresDesembolso.php",
-        parametros,
-        true);
+            "./contenidos/crm/indicadoresTutoresDesembolso.php",
+            parametros,
+            true);
 }
 
 /**
- * MUESTRA LA AYUDA PARA CARGAR
+ * MUESTRA LA AYUDA PARA CARGAR 
  * LA PREVIABILIZACION DEL BANCO DE VIVIENDA
  * @author Bernardo Zerda
  */
@@ -5925,15 +5452,15 @@ function plantillaPreviabilizacion() {
     txtBody += "</table>";
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "430px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "430px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     // Encabezado
@@ -5961,12 +5488,12 @@ function pedirConfirmacionEjecutarNomina( ) {
     // COMPORTAMIENTO SI SE PRESIONA -- SI -- EN EL CUADRO
     var handleYes = function () {
         someterFormulario(
-            'mensajes',
-            'frmAgregarNomina',
-            './contenidos/crm/salvarNomina.php',
-            false,
-            true
-        );
+                'mensajes',
+                'frmAgregarNomina',
+                './contenidos/crm/salvarNomina.php',
+                false,
+                true
+                );
         this.cancel();
     }
 
@@ -6022,11 +5549,11 @@ function pedirConfirmacionBorrarConcepto(seqConcepto) {
     // COMPORTAMIENTO SI SE PRESIONA -- SI -- EN EL CUADRO
     var handleYes = function () {
         cargarContenido(
-            'mensajes',
-            './contenidos/crm/borrarConcepto.php',
-            'seqConcepto=' + seqConcepto,
-            true
-        );
+                'mensajes',
+                './contenidos/crm/borrarConcepto.php',
+                'seqConcepto=' + seqConcepto,
+                true
+                );
         this.cancel();
     }
 
@@ -6085,10 +5612,10 @@ function generarDataTableVigencias(objDataTable, txtDiv, tituloVigencia) {
     var myDataSource = new YAHOO.util.DataSource(datos);
     myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     myDataSource.responseSchema =
-        {
-            resultsList: "items",
-            fields: titulos
-        };
+            {
+                resultsList: "items",
+                fields: titulos
+            };
 
     var myColumnDefs = new Array();
     for (i = 0; i < titulos.length; i++) {
@@ -6116,11 +5643,11 @@ function generarDataTableVigencias(objDataTable, txtDiv, tituloVigencia) {
 
 
     var myDataTable = new YAHOO.widget.ScrollingDataTable(
-        txtDiv,
-        myColumnDefs,
-        myDataSource,
-        myConfigs
-    );
+            txtDiv,
+            myColumnDefs,
+            myDataSource,
+            myConfigs
+            );
 
     return {
         oDS: myDataSource,
@@ -6138,10 +5665,10 @@ function generarGraficaSeriesIndicadorSolicitudDesembolso(objGrafica, txtTipoGra
 
     var formatoNumero = function (value) {
         return YAHOO.util.Number.format(value,
-            {
-                prefix: prefijo,
-                thousandsSeparator: ","
-            }
+                {
+                    prefix: prefijo,
+                    thousandsSeparator: ","
+                }
         );
     }
 
@@ -6193,12 +5720,12 @@ function generarGraficaSeriesIndicadorSolicitudDesembolso(objGrafica, txtTipoGra
         case "columnas":
 
             var mychart = new YAHOO.widget.ColumnChart(nombre, myDataSource,
-                {
-                    series: seriesDef,
-                    xField: "ejex",
-                    yAxis: currencyAxis,
-                    dataTipFunction: toolTipColumnas
-                }
+                    {
+                        series: seriesDef,
+                        xField: "ejex",
+                        yAxis: currencyAxis,
+                        dataTipFunction: toolTipColumnas
+                    }
             );
             break;
 
@@ -6206,53 +5733,53 @@ function generarGraficaSeriesIndicadorSolicitudDesembolso(objGrafica, txtTipoGra
 
             if (bolMostrarSeries === true) {
                 mychartMostrar = new YAHOO.widget.LineChart(nombre, myDataSource,
-                    {
-                        series: seriesDef,
-                        xField: "mes",
-                        yAxis: currencyAxis,
-                        xAxis: categoryAxis,
-                        dataTipFunction: toolTipSeries,
-                        style:
-                            {
-                                xAxis:
+                        {
+                            series: seriesDef,
+                            xField: "mes",
+                            yAxis: currencyAxis,
+                            xAxis: categoryAxis,
+                            dataTipFunction: toolTipSeries,
+                            style:
                                     {
-                                        labelRotation: -90
-                                    },
-                                legend: {
-                                    display: "bottom",
-                                    font:
-                                        {
-                                            family: "Arial",
-                                            size: 10
+                                        xAxis:
+                                                {
+                                                    labelRotation: -90
+                                                },
+                                        legend: {
+                                            display: "bottom",
+                                            font:
+                                                    {
+                                                        family: "Arial",
+                                                        size: 10
+                                                    }
                                         }
-                                }
-                            }
-                    }
+                                    }
+                        }
                 );
             } else {
                 var mychart = new YAHOO.widget.LineChart(nombre, myDataSource,
-                    {
-                        series: seriesDef,
-                        xField: "mes",
-                        yAxis: currencyAxis,
-                        xAxis: categoryAxis,
-                        dataTipFunction: toolTipSeries,
-                        style:
-                            {
-                                xAxis:
+                        {
+                            series: seriesDef,
+                            xField: "mes",
+                            yAxis: currencyAxis,
+                            xAxis: categoryAxis,
+                            dataTipFunction: toolTipSeries,
+                            style:
                                     {
-                                        labelRotation: -90
-                                    },
-                                legend: {
-                                    display: "bottom",
-                                    font:
-                                        {
-                                            family: "Arial",
-                                            size: 10
+                                        xAxis:
+                                                {
+                                                    labelRotation: -90
+                                                },
+                                        legend: {
+                                            display: "bottom",
+                                            font:
+                                                    {
+                                                        family: "Arial",
+                                                        size: 10
+                                                    }
                                         }
-                                }
-                            }
-                    }
+                                    }
+                        }
                 );
             }
             break;
@@ -6261,53 +5788,53 @@ function generarGraficaSeriesIndicadorSolicitudDesembolso(objGrafica, txtTipoGra
 
             if (bolMostrarSeries === true) {
                 mychartMostrar = new YAHOO.widget.LineChart(nombre, myDataSource,
-                    {
-                        series: seriesDef,
-                        xField: "resolucion",
-                        yAxis: currencyAxis,
-                        xAxis: categoryAxis,
-                        dataTipFunction: toolTipSeriesResolucion,
-                        style:
-                            {
-                                xAxis:
+                        {
+                            series: seriesDef,
+                            xField: "resolucion",
+                            yAxis: currencyAxis,
+                            xAxis: categoryAxis,
+                            dataTipFunction: toolTipSeriesResolucion,
+                            style:
                                     {
-                                        labelRotation: -90
-                                    },
-                                legend: {
-                                    display: "right",
-                                    font:
-                                        {
-                                            family: "Arial",
-                                            size: 8
+                                        xAxis:
+                                                {
+                                                    labelRotation: -90
+                                                },
+                                        legend: {
+                                            display: "right",
+                                            font:
+                                                    {
+                                                        family: "Arial",
+                                                        size: 8
+                                                    }
                                         }
-                                }
-                            }
-                    }
+                                    }
+                        }
                 );
             } else {
                 var mychart = new YAHOO.widget.LineChart(nombre, myDataSource,
-                    {
-                        series: seriesDef,
-                        xField: "resolucion",
-                        yAxis: currencyAxis,
-                        xAxis: categoryAxis,
-                        dataTipFunction: toolTipSeriesResolucion,
-                        style:
-                            {
-                                xAxis:
+                        {
+                            series: seriesDef,
+                            xField: "resolucion",
+                            yAxis: currencyAxis,
+                            xAxis: categoryAxis,
+                            dataTipFunction: toolTipSeriesResolucion,
+                            style:
                                     {
-                                        labelRotation: -90
-                                    },
-                                legend: {
-                                    display: "right",
-                                    font:
-                                        {
-                                            family: "Arial",
-                                            size: 8
+                                        xAxis:
+                                                {
+                                                    labelRotation: -90
+                                                },
+                                        legend: {
+                                            display: "right",
+                                            font:
+                                                    {
+                                                        family: "Arial",
+                                                        size: 8
+                                                    }
                                         }
-                                }
-                            }
-                    }
+                                    }
+                        }
                 );
             }
             break;
@@ -6547,10 +6074,10 @@ function mostrarDataTable(datos, titulos, txtDiv, numRegistros, arrPaginacion, n
     var myDataSource = new YAHOO.util.DataSource(datos);
     myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     myDataSource.responseSchema =
-        {
-            resultsList: "items",
-            fields: titulos
-        };
+            {
+                resultsList: "items",
+                fields: titulos
+            };
 
     var myColumnDefs = new Array();
     for (i = 0; i < titulos.length; i++) {
@@ -6577,11 +6104,11 @@ function mostrarDataTable(datos, titulos, txtDiv, numRegistros, arrPaginacion, n
     }
 
     var myDataTable = new YAHOO.widget.ScrollingDataTable(
-        txtDiv,
-        myColumnDefs,
-        myDataSource,
-        myConfigs
-    );
+            txtDiv,
+            myColumnDefs,
+            myDataSource,
+            myConfigs
+            );
 
     return {
         oDS: myDataSource,
@@ -6601,27 +6128,27 @@ function graficaPie(nombre, datos) {
 
 
     var mychart = new YAHOO.widget.PieChart(nombre, opinionData,
-        {
-            categoryField: "ejeX",
-            dataField: "conteo",
-            //only needed for flash player express install
-            expressInstall: "librerias/yui/assets/expressinstall.swf",
-            style:
-                {
-                    padding: 20,
-                    legend:
+            {
+                categoryField: "ejeX",
+                dataField: "conteo",
+                //only needed for flash player express install
+                expressInstall: "librerias/yui/assets/expressinstall.swf",
+                style:
                         {
-                            display: "right",
-                            padding: 10,
-                            spacing: 5,
-                            font:
-                                {
-                                    family: "Arial",
-                                    size: 13
-                                }
+                            padding: 20,
+                            legend:
+                                    {
+                                        display: "right",
+                                        padding: 10,
+                                        spacing: 5,
+                                        font:
+                                                {
+                                                    family: "Arial",
+                                                    size: 13
+                                                }
+                                    }
                         }
-                }
-        }
+            }
     );
 
 }
@@ -6631,9 +6158,9 @@ function graficaColumna(nombre, ejes, datos) {
     var myDataSource = new YAHOO.util.DataSource(datos);
     myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     myDataSource.responseSchema =
-        {
-            fields: ejes
-        };
+            {
+                fields: ejes
+            };
 
     var seriesDef = new Array();
 
@@ -6659,14 +6186,14 @@ function graficaColumna(nombre, ejes, datos) {
     }
 
     var columnChart = new YAHOO.widget.ColumnChart(nombre, myDataSource,
-        {
-            series: seriesDef,
-            xField: "ejeX",
-            dataTipFunction: getYAxisDataTipText,
-            //only needed for flash player express install
-            expressInstall: "librerias/yui/assets/expressinstall.swf"
+            {
+                series: seriesDef,
+                xField: "ejeX",
+                dataTipFunction: getYAxisDataTipText,
+                //only needed for flash player express install
+                expressInstall: "librerias/yui/assets/expressinstall.swf"
 
-        });
+            });
 
 }
 
@@ -6676,9 +6203,9 @@ function graficaBar(nombre, ejes, datos) {
     var myDataSource = new YAHOO.util.DataSource(datos);
     myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     myDataSource.responseSchema =
-        {
-            fields: ejes
-        };
+            {
+                fields: ejes
+            };
 
     var seriesDef = new Array();
 
@@ -6703,12 +6230,12 @@ function graficaBar(nombre, ejes, datos) {
     }
 
     var barChart = new YAHOO.widget.BarChart(nombre, myDataSource,
-        {
-            series: seriesDef,
-            yField: "ejeX",
-            dataTipFunction: getXAxisDataTipText
+            {
+                series: seriesDef,
+                yField: "ejeX",
+                dataTipFunction: getXAxisDataTipText
 
-        });
+            });
 
 }
 
@@ -6760,9 +6287,9 @@ function graficasTablas() {
         var myDataSource = new YAHOO.util.DataSource(datos);
         myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
         myDataSource.responseSchema =
-            {
-                fields: ejes
-            };
+                {
+                    fields: ejes
+                };
 
         var myColumnDefs = new Array();
         myColumnDefs[0] = {
@@ -6782,10 +6309,10 @@ function graficasTablas() {
 
 
         var myDataTable = new YAHOO.widget.DataTable(
-            nombre + "_tabla",
-            myColumnDefs,
-            myDataSource, {
-            }
+                nombre + "_tabla",
+                myColumnDefs,
+                myDataSource, {
+                }
         );
 
     }
@@ -7012,13 +6539,13 @@ function mostrarSeriesGrafica(objGrafica) {
     }
 
     cargarContenido(
-        "divCheckGraficasMostrarSeries",
-        "./contenidos/crm/crearCheckGraficasMostrarSeries.php",
-        "nombre=" + nombre +
-        "&cuentaSeries=" + series.length +
-        "&nombreSeries=" + arrNombresSeries,
-        true
-    );
+            "divCheckGraficasMostrarSeries",
+            "./contenidos/crm/crearCheckGraficasMostrarSeries.php",
+            "nombre=" + nombre +
+            "&cuentaSeries=" + series.length +
+            "&nombreSeries=" + arrNombresSeries,
+            true
+            );
 }
 
 function filtarActosAdministrativosNotificacion( ) {
@@ -7126,8 +6653,8 @@ function agendas() {
         var objTutor = YAHOO.util.Dom.get("tutor");
 
         var txtParametros = "desde=" + fchPrimerDia.getFullYear() + "-" + (fchPrimerDia.getMonth() + 1) + "-" + fchPrimerDia.getDate() +
-            "&hasta=" + fchUltimoDia.getFullYear() + "-" + (fchUltimoDia.getMonth() + 1) + "-" + fchUltimoDia.getDate() +
-            "&tutor=" + objTutor.options[ objTutor.selectedIndex ].value;
+                "&hasta=" + fchUltimoDia.getFullYear() + "-" + (fchUltimoDia.getMonth() + 1) + "-" + fchUltimoDia.getDate() +
+                "&tutor=" + objTutor.options[ objTutor.selectedIndex ].value;
 
         cargarContenido("programacion", "./contenidos/agenda/programacion.php", txtParametros, true);
 
@@ -7193,7 +6720,7 @@ function animarListadoGrupos() {
 
 }
 
-// Función que abre la pagina http://www.bogota.gov.co/mad/buscador.php en la cual se localiza
+// Función que abre la pagina http://www.bogota.gov.co/mad/buscador.php en la cual se localiza 
 // la direccion ingresada en el formulario inscripción
 function mostrarMapa(inputDireccion) {
     var origen = document.getElementById(inputDireccion.form.id);
@@ -7231,7 +6758,7 @@ function ponerPlaceholder(idObjeto, txtMensaje) {
  * Funcion que evalua si el navegador acepta el atributo HTML5 placeholder
  * @author Jose Camilo Bernal
  * @author Jaison Ospina
- * @version 1.0 Jun 2013
+ * @version 1.0 Jun 2013 
  */
 
 function soportaPlaceHolder() {
@@ -7243,7 +6770,7 @@ function soportaPlaceHolder() {
  * Funcion que simula un placeholder a un campo input
  * @author Jose Camilo Bernal
  * @author Jaison Ospina
- * @version 1.0 Jun 2013
+ * @version 1.0 Jun 2013 
  */
 function addicionarPlaceholder(idObjeto, txtMensaje) {
 
@@ -7269,9 +6796,9 @@ function addicionarPlaceholder(idObjeto, txtMensaje) {
     objContenedor.onblur();
 }
 
-// funcion que valida el formato del numero (digitos de 0-9 minimo 1 maximo 3
+// funcion que valida el formato del numero (digitos de 0-9 minimo 1 maximo 3 
 // un separador decimal que puede aparecer 1 vez o no aparecer y digitos entre 0-9 maximo 2)
-// evalua si el numero escrito esta en el rango de 0 a 100.
+// evalua si el numero escrito esta en el rango de 0 a 100. 
 // Si alguna de estas dos condiciones no se cumple el campo queda vacio.
 
 function validarDecimalSisben(campo) {
@@ -7297,13 +6824,13 @@ function tieneSisben(valor) {
 
 /*
  funcion que muestra u oculta el selector de nombre del proyecto de la pestaña
- datos del inmueble proceso desembolso. (busquedaOferta.tpl)cuando se selecciona
+ datos del inmueble proceso desembolso. (busquedaOferta.tpl)cuando se selecciona 
  alguno de los radiobuttons:
  1 - Bogotá Contraescritura
  2 - Fuera de Bogotá
  3 - Giro Anticipado
  4 - Proyecto Constructivo
-
+ 
  */
 /*
  function MuestraOculta(id) {
@@ -7320,7 +6847,7 @@ function tieneSisben(valor) {
  document.getElementById('fchEscritura').value = '';
  document.getElementById('numNotaria').value = '';
  //document.getElementById('txtCiudad').value = '';
-
+ 
  }
  }
  }
@@ -7330,35 +6857,35 @@ function tieneSisben(valor) {
  *funcion que llena los campos con la informacion del proyecto seleccionado
  *en el selector de proyecto
  *
-
+ 
  function obtenerProyectoSolucion(objProyecto) {
-
+ 
  document.getElementById('seleccionado').value = 'selected';
  document.getElementById("NombreVendedor").innerHTML = "";
  document.getElementById("DireccionInmueble").innerHTML = "";
  document.getElementById("Barrio").innerHTML = "";
-
+ 
  cargarContenido(
  'NombreVendedor',
  './contenidos/subsidios/datosProyectoSolucion.php',
  'dato=NombreVendedor&proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
  true
  );
-
+ 
  cargarContenido(
  'DireccionInmueble',
  './contenidos/subsidios/datosProyectoSolucion.php',
  'dato=DireccionInmueble&proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
  true
  );
-
+ 
  cargarContenido(
  'Barrio',
  './contenidos/subsidios/datosProyectoSolucion.php',
  'dato=Barrio&proyecto=' + objProyecto.options[ objProyecto.selectedIndex ].value,
  true
  );
-
+ 
  cargarContenido(
  'Escritura_ga',
  './contenidos/subsidios/datosProyectoSolucion.php',
@@ -7557,51 +7084,51 @@ function obtenerCiudad(objLocalidad) {
     upzFueradebogota(objLocalidad.options[ objLocalidad.selectedIndex ].value);
     document.getElementById("tdCiudad").innerHTML = "";
     cargarContenido(
-        'tdCiudad',
-        './contenidos/subsidios/localidadCiudad.php',
-        'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value,
-        true
-    );
+            'tdCiudad',
+            './contenidos/subsidios/localidadCiudad.php',
+            'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        "seqCiudad",
-        function () {
-            document.getElementById("seqCiudad").focus();
-        }
+            "seqCiudad",
+            function () {
+                document.getElementById("seqCiudad").focus();
+            }
     );
 }
 
 function obtenerBarrio(objLocalidad) {
     document.getElementById("tdBarrio").innerHTML = "";
     cargarContenido(
-        'tdBarrio',
-        './contenidos/subsidios/localidadBarrio.php',
-        'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value,
-        true
-    );
+            'tdBarrio',
+            './contenidos/subsidios/localidadBarrio.php',
+            'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        "seqBarrio",
-        function () {
-            document.getElementById("seqBarrio").focus();
-        }
+            "seqBarrio",
+            function () {
+                document.getElementById("seqBarrio").focus();
+            }
     );
 }
 
 function obtenerBarrioProyecto(objLocalidad) {
     document.getElementById("tdBarrio").innerHTML = "";
     cargarContenido(
-        'tdBarrio',
-        './contenidos/proyectos/localidadBarrio.php',
-        'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value,
-        true
-    );
+            'tdBarrio',
+            './contenidos/proyectos/localidadBarrio.php',
+            'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        "seqBarrio",
-        function () {
-            document.getElementById("seqBarrio").focus();
-        }
+            "seqBarrio",
+            function () {
+                document.getElementById("seqBarrio").focus();
+            }
     );
 }
 
@@ -7609,16 +7136,16 @@ function obtenerUpz(objBarrio) {
     if (document.getElementById("tdupz") != null) {
         document.getElementById("tdupz").innerHTML = "";
         cargarContenido(
-            'tdupz',
-            './contenidos/subsidios/barrioUpz.php',
-            'seqBarrio=' + objBarrio.options[objBarrio.selectedIndex].value,
-            true
-        );
+                'tdupz',
+                './contenidos/subsidios/barrioUpz.php',
+                'seqBarrio=' + objBarrio.options[objBarrio.selectedIndex].value,
+                true
+                );
         YAHOO.util.Event.onContentReady(
-            "seqUpz",
-            function () {
-                document.getElementById("seqBarrio").focus();
-            }
+                "seqUpz",
+                function () {
+                    document.getElementById("seqBarrio").focus();
+                }
         );
     }
 }
@@ -7626,17 +7153,17 @@ function obtenerUpz(objBarrio) {
 function cambiarCiudad(objCiudad) {
     cargarContenido('tdlocalidad', './contenidos/subsidios/cambiarLocalidad.php', 'ciudad=' + objCiudad.options[ objCiudad.selectedIndex ].value, true);
     YAHOO.util.Event.onContentReady(
-        "seqLocalidad",
-        function () {
-            var objLocalidad = YAHOO.util.Dom.get("seqLocalidad");
-            cargarContenido(
-                'tdBarrio',
-                './contenidos/subsidios/localidadBarrio.php',
-                'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value,
-                true
-            );
-            document.getElementById("seqLocalidad").focus();
-        }
+            "seqLocalidad",
+            function () {
+                var objLocalidad = YAHOO.util.Dom.get("seqLocalidad");
+                cargarContenido(
+                        'tdBarrio',
+                        './contenidos/subsidios/localidadBarrio.php',
+                        'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value,
+                        true
+                        );
+                document.getElementById("seqLocalidad").focus();
+            }
     );
 }
 
@@ -7646,16 +7173,16 @@ function upzFueradebogota(localidad) {
     if (lalocalidad == 22) {
         document.getElementById("tdupz").innerHTML = "";
         cargarContenido(
-            'tdupz',
-            './contenidos/subsidios/barrioUpz.php',
-            'seqBarrio=' + 1144,
-            true
-        );
+                'tdupz',
+                './contenidos/subsidios/barrioUpz.php',
+                'seqBarrio=' + 1144,
+                true
+                );
         YAHOO.util.Event.onContentReady(
-            "seqBarrio",
-            function () {
-                document.getElementById("seqBarrio").focus();
-            }
+                "seqBarrio",
+                function () {
+                    document.getElementById("seqBarrio").focus();
+                }
         );
 
     }
@@ -7667,23 +7194,23 @@ function obtenerBarrioPostulacion(Localidad) {
 
     document.getElementById("tdBarrio").innerHTML = "";
     cargarContenido(
-        'tdBarrio',
-        './contenidos/subsidios/localidadBarrio.php',
-        'seqLocalidad=' + Localidad.options[ Localidad.selectedIndex ].value,
-        true
-    );
+            'tdBarrio',
+            './contenidos/subsidios/localidadBarrio.php',
+            'seqLocalidad=' + Localidad.options[ Localidad.selectedIndex ].value,
+            true
+            );
 
     YAHOO.util.Event.onContentReady(
-        "seqBarrio",
-        function () {
-            document.getElementById("seqBarrio").focus();
-        }
+            "seqBarrio",
+            function () {
+                document.getElementById("seqBarrio").focus();
+            }
     );
 }
 /******* FIN FUNCIONES COMBOS DEPENDIENTES **********************/
 
 /**
- * CARGA LAS PANTALLAS DE PLANTILLAS
+ * CARGA LAS PANTALLAS DE PLANTILLAS 
  * DE LA PANTALLA DE CASA EN MANO
  * @param string txtArchivo
  * @param string txtParametros
@@ -7915,14 +7442,14 @@ function cargarCruce() {
 
 
     var objDialogo = new YAHOO.widget.Dialog("dlgCargaCruces",
-        {width: "600px",
-            fixedcenter: true,
-            visible: false,
-            zIndex: 1,
-            constraintoviewport: true,
-            buttons: [{text: "Aceptar", handler: handleSubmit, isDefault: true},
-                {text: "Cancelar", handler: handleCancel}]
-        });
+            {width: "600px",
+                fixedcenter: true,
+                visible: false,
+                zIndex: 1,
+                constraintoviewport: true,
+                buttons: [{text: "Aceptar", handler: handleSubmit, isDefault: true},
+                    {text: "Cancelar", handler: handleCancel}]
+            });
 
     objDialogo.callback = {success: handleSuccess, failure: handleFailure};
     objDialogo.render();
@@ -7956,14 +7483,14 @@ function cargarUnidadesProyecto() {
 
 
     var objDialogo = new YAHOO.widget.Dialog("dlgCargaUnidades",
-        {width: "600px",
-            fixedcenter: true,
-            visible: false,
-            zIndex: 1,
-            constraintoviewport: true,
-            buttons: [{text: "Aceptar", handler: handleSubmit, isDefault: true},
-                {text: "Cancelar", handler: handleCancel}]
-        });
+            {width: "600px",
+                fixedcenter: true,
+                visible: false,
+                zIndex: 1,
+                constraintoviewport: true,
+                buttons: [{text: "Aceptar", handler: handleSubmit, isDefault: true},
+                    {text: "Cancelar", handler: handleCancel}]
+            });
 
     objDialogo.callback = {success: handleSuccess, failure: handleFailure};
     objDialogo.render();
@@ -8094,28 +7621,28 @@ function imprimirPostulacionCEM(objFormulario, txtArchivo) {
     someterFormulario('mensajes', objFormulario, txtArchivo, true, true);
 
     YAHOO.util.Event.onContentReady(
-        "tablaMensajes",
-        function () {
-            var objTablaMensajes = document.getElementById("tablaMensajes");
-            var arrFilas = objTablaMensajes.getElementsByTagName("td");
-            if (arrFilas[ 0 ].className != "msgError") {
-                var wndPostulacion;
-                try {
-                    var seqFormulario = document.getElementById("seqFormulario").value;
-                    wndPostulacion = window.open("./contenidos/subsidios/formatoPostulacionImprimir.php?seqFormulario=" + seqFormulario,
-                        "_blank",
-                        "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100"
-                    );
-                    if (!wndPostulacion) {
-                        throw "ErrorPopUp";
-                    }
-                } catch (objError) {
-                    if (objError == "ErrorPopUp") {
-                        alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+            "tablaMensajes",
+            function () {
+                var objTablaMensajes = document.getElementById("tablaMensajes");
+                var arrFilas = objTablaMensajes.getElementsByTagName("td");
+                if (arrFilas[ 0 ].className != "msgError") {
+                    var wndPostulacion;
+                    try {
+                        var seqFormulario = document.getElementById("seqFormulario").value;
+                        wndPostulacion = window.open("./contenidos/subsidios/formatoPostulacionImprimir.php?seqFormulario=" + seqFormulario,
+                                "_blank",
+                                "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100"
+                                );
+                        if (!wndPostulacion) {
+                            throw "ErrorPopUp";
+                        }
+                    } catch (objError) {
+                        if (objError == "ErrorPopUp") {
+                            alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
+                        }
                     }
                 }
             }
-        }
     );
 
 }
@@ -8305,7 +7832,7 @@ function escondeCamposTipoPersona(valor) {
     }
 
 //    if (document.getElementById("bolTipoPersonaInterventor") != null) {
-//
+//        
 //        if (document.getElementById("bolTipoPersonaInterventor").checked == 1) {
 ////            document.getElementById("lineaPersonaNatural").style.display = "inline";
 ////            document.getElementById("lineaPersonaJuridica").style.display = "none";
@@ -8359,7 +7886,7 @@ function calculaSubsidioProyecto() {
 /**
  * Funcion que pregunta si guardar el proyecto
  * @author Jaison Ospina
- * @version 1.0 Septiembre 2013
+ * @version 1.0 Septiembre 2013 
  */
 
 function preguntarGuardarProyecto() {
@@ -8427,11 +7954,11 @@ function obtenerModalidad(objEsquema) {
     document.getElementById("tdModalidad").innerHTML = "";
 
     cargarContenido(
-        'tdModalidad',
-        './contenidos/proyectos/modalidadEsquema.php',
-        'seqTipoEsquema=' + objEsquema.options[ objEsquema.selectedIndex ].value,
-        true
-    );
+            'tdModalidad',
+            './contenidos/proyectos/modalidadEsquema.php',
+            'seqTipoEsquema=' + objEsquema.options[ objEsquema.selectedIndex ].value,
+            true
+            );
 
 //    YAHOO.util.Event.onContentReady(
 //            "seqTipoEsquema",
@@ -8584,7 +8111,7 @@ function popUpAyuda( ) {
 //      var numAncho = YAHOO.util.Dom.getDocumentWidth() - 100;
 
     var numAlto = YAHOO.util.Dom.getDocumentHeight() - 200;
-    var numAncho = 900;
+    var numAncho = 400;
 
     var x = YAHOO.util.Dom.getX("ayuda") - (numAncho - 25);
     var y = YAHOO.util.Dom.getY("ayuda") + 10;
@@ -8593,18 +8120,18 @@ function popUpAyuda( ) {
 
         // Instancia un objeto panel
         var objAyuda = new YAHOO.widget.Panel(
-            "wait",
-            {
-                width: numAncho,
-                height: numAlto,
-                fixedcenter: true,
-                close: true,
-                draggable: false,
-                modal: true,
-                visible: false,
-                x: x,
-                y: y
-            }
+                "wait",
+                {
+                    width: numAncho,
+                    height: numAlto,
+                    fixedcenter: true,
+                    close: true,
+                    draggable: false,
+                    modal: true,
+                    visible: false,
+                    x: x,
+                    y: y
+                }
         );
 
         // Encabezado
@@ -8630,11 +8157,11 @@ function popUpAyuda( ) {
     }
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/ayuda/ayuda.php",
-        callback,
-        "alto=" + numAlto
-    );
+            "POST",
+            "./contenidos/ayuda/ayuda.php",
+            callback,
+            "alto=" + numAlto
+            );
 
 }
 
@@ -8699,7 +8226,7 @@ function eliminarInscripcion(objFormulario) {
 
 
 //   function cartasAsignacion( numActo , fchActo , numDocumento ){
-//
+//      
 //      var wndFormato = null;
 //      try {
 //          var numAlto  = 900;
@@ -8714,7 +8241,7 @@ function eliminarInscripcion(objFormulario) {
 //              alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
 //          }
 //      }
-//
+//      
 //   }
 
 function autocompletar2(txtInput, txtContenedor, txtArchivo, txtParametros) {
@@ -8736,15 +8263,15 @@ function autocompletar2(txtInput, txtContenedor, txtArchivo, txtParametros) {
     objAutocomplete.allowBrowserAutocomplete = false;
     objAutocomplete.queryDelay = 0.3;
 
-    // Define an event handler to populate a hidden form field
-    // when an item gets selected
+    // Define an event handler to populate a hidden form field 
+    // when an item gets selected 
     var myHiddenField = YAHOO.util.Dom.get("myHidden");
     var myHandler = function (sType, aArgs) {
-        var myAC = aArgs[0]; // reference back to the AC instance
-        var elLI = aArgs[1]; // reference to the selected LI element
-        var oData = aArgs[2]; // object literal of selected item's result data
+        var myAC = aArgs[0]; // reference back to the AC instance 
+        var elLI = aArgs[1]; // reference to the selected LI element 
+        var oData = aArgs[2]; // object literal of selected item's result data 
 
-        // update hidden form field with the selected item's ID
+        // update hidden form field with the selected item's ID 
         myHiddenField.value = oData.seqProyecto;
     };
     oAC.itemSelectEvent.subscribe(myHandler);
@@ -8873,7 +8400,7 @@ var fncDataTableCartasAsignacion = function (bolEstado) {
 
         //objMensajes.innerHTML = "salto=" + txtSalto + "&separador=" + txtSeparador + "&" + txtParametro;
 
-        // DataTable configuration
+        // DataTable configuration 
         var objConfiguracion = {
             initialRequest: "bolEstado=" + bolEstado + "&salto=" + txtSalto + "&separador=" + txtSeparador + "&" + txtParametro,
             height: "272px",
@@ -8882,11 +8409,11 @@ var fncDataTableCartasAsignacion = function (bolEstado) {
         };
 
         objTablaCA = new YAHOO.widget.ScrollingDataTable(
-            "tablaCiudadanos",
-            objColumnas,
-            objFuente,
-            objConfiguracion
-        );
+                "tablaCiudadanos",
+                objColumnas,
+                objFuente,
+                objConfiguracion
+                );
 
         var fncSeleccionado = function (objParametro) {
             var objCheckbox = objParametro.target;
@@ -10124,11 +9651,11 @@ function obtenerDatosProyecto(objSelect, seqPlanGobierno) {
     }
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/postulacionIndividual/datosProyectos.php",
-        objRetorno,
-        "seqProyecto=" + objSelect.options[ objSelect.selectedIndex ].value + "&seqPlanGobierno=" + seqPlanGobierno
-    );
+            "POST",
+            "./contenidos/postulacionIndividual/datosProyectos.php",
+            objRetorno,
+            "seqProyecto=" + objSelect.options[ objSelect.selectedIndex ].value + "&seqPlanGobierno=" + seqPlanGobierno
+            );
 
 }
 
@@ -10170,16 +9697,16 @@ function eliminarRegistroProyectos(seqRegistro, txtPregunta, txtArchivo) {
         cargarContenido("mensajes", txtArchivo, "seqBorrar=" + seqRegistro, true);
 
         // cuando la respuesta esta lista, verifica por medio de la clase (css)
-        // si la respuesta es satisfactoria, de ser asi, elimina de la pantalla el
+        // si la respuesta es satisfactoria, de ser asi, elimina de la pantalla el 
         // objeto que contiene el registro en pantalla
         YAHOO.util.Event.onContentReady(
-            "tablaMensajes",
-            function () {
-                // Cambiar 'msgOk' si la clase (css) que muestra los mensajes satisfactorios no se llama asi
-                if (document.getElementById('tablaMensajes').className == "msgOk") {
-                    eliminarObjeto(seqRegistro);
+                "tablaMensajes",
+                function () {
+                    // Cambiar 'msgOk' si la clase (css) que muestra los mensajes satisfactorios no se llama asi
+                    if (document.getElementById('tablaMensajes').className == "msgOk") {
+                        eliminarObjeto(seqRegistro);
+                    }
                 }
-            }
         );
 
         this.hide(); // oculta el objeto de confirmacion
@@ -10309,7 +9836,7 @@ function sumaMesVencimientoRevalidacion(days) {
     objFchVenceRevalidacionLicConstruccion.value = fechaVencimientoRevalidacion;
 }
 
-// Muestra la linea Descripcion contrato de interventoría
+// Muestra la linea Descripcion contrato de interventoría 
 function escondeLineaObservacionesContratoInterventoria() {
     if (document.getElementById("optVoBoContratoInterventoria").value == 2) {
         document.getElementById("lineaObservacionesContratoInterventoria").style.display = "table-row";
@@ -10396,53 +9923,53 @@ function verInformacionActoUnidad(seqActo) {
 
     // Objeto de respuesta si es satisfactoria la carga
     var handleSuccess =
-        function (o) {
-            if (o.responseText !== undefined) {
+            function (o) {
+                if (o.responseText !== undefined) {
 
-                var objConfiguracion = {
-                    width: numAncho,
-                    height: numAlto,
-                    fixedcenter: true,
-                    close: true,
-                    draggable: true,
-                    modal: true,
-                    visible: false
+                    var objConfiguracion = {
+                        width: numAncho,
+                        height: numAlto,
+                        fixedcenter: true,
+                        close: true,
+                        draggable: true,
+                        modal: true,
+                        visible: false
+                    }
+
+                    var objPanel = new YAHOO.widget.Panel(
+                            "cambios",
+                            objConfiguracion
+                            );
+
+                    objPanel.setHeader("Ver Información del Acto");
+                    objPanel.setBody(o.responseText);
+
+                    objPanel.render(document.body);
+                    objPanel.show();
+
                 }
-
-                var objPanel = new YAHOO.widget.Panel(
-                    "cambios",
-                    objConfiguracion
-                );
-
-                objPanel.setHeader("Ver Información del Acto");
-                objPanel.setBody(o.responseText);
-
-                objPanel.render(document.body);
-                objPanel.show();
-
-            }
-        };
+            };
 
     // Objeto de respuesta si la carga falla
     var handleFailure =
-        function (o) {
-            if (o.responseText !== undefined) {
+            function (o) {
+                if (o.responseText !== undefined) {
 
-                // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
-                if (o.status == "401") {
-                    document.location = 'index.php';
-                } else {
+                    // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
+                    if (o.status == "401") {
+                        document.location = 'index.php';
+                    } else {
 
-                    // Mensaje cuando la pagina no es encontrada
-                    var htmlCode = "";
-                    htmlCode = +o.status + " " + o.statusText;
+                        // Mensaje cuando la pagina no es encontrada
+                        var htmlCode = "";
+                        htmlCode = +o.status + " " + o.statusText;
 
-                    // Otros mensajes de error son mostrados directamente en el div
-                    document.getElementById("mensajes").innerHTML = htmlCode;
+                        // Otros mensajes de error son mostrados directamente en el div
+                        document.getElementById("mensajes").innerHTML = htmlCode;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        };
+            };
 
     // Objeto de respuestas
     var callback = {
@@ -10460,15 +9987,15 @@ function construccionArchivoIndexacion(txtObjetoSelect) {
     var objSelect = YAHOO.util.Dom.get(txtObjetoSelect);
 
     var objPopUp = new YAHOO.widget.Panel(
-        "pop",
-        {
-            width: "650px",
-            fixedcenter: true,
-            close: true,
-            draggable: true,
-            modal: true,
-            visible: true
-        }
+            "pop",
+            {
+                width: "650px",
+                fixedcenter: true,
+                close: true,
+                draggable: true,
+                modal: true,
+                visible: true
+            }
     );
 
     var fncExito = function (objRespuesta) {
@@ -10491,10 +10018,10 @@ function construccionArchivoIndexacion(txtObjetoSelect) {
     }
 
     YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/actosUnidades/plantillaConstruccionIndexacion.php",
-        objRetorno
-    );
+            "POST",
+            "./contenidos/actosUnidades/plantillaConstruccionIndexacion.php",
+            objRetorno
+            );
 }
 
 /*function certificadoHabitabilidadUnidades(seqFormulario) { //(SI NO SE USA BORRAR)
@@ -10505,12 +10032,12 @@ function construccionArchivoIndexacion(txtObjetoSelect) {
  if (objTabla.className == "msgOk") {
  var wndFormato;
  try {
-
+ 
  //var txtUrl = "./contenidos/unidadProyecto/formatoRevisionTecnica.php";
  var txtUrl = "./contenidos/unidadProyecto/procesaCargaCartaHabitabilidad.php";
  txtUrl += "?seqFormulario=" + seqFormulario + txtCasaMano;
  var txtParametros = "resizable=0,location=0,scrollbars=1,width=780,height=700,left=100,top=100";
-
+ 
  if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
  throw "ErrorPopUp";
  }
@@ -10586,12 +10113,12 @@ function mostrarToolTip() {
             objCartaLeasing.value = objRespuesta.valor;
             formatoSeparadores(objCartaLeasing);
             var objToolTip = new YAHOO.widget.Tooltip(
-                "myToolTip",
-                {
-                    context: "seqConvenioToolTip",
-                    width: "300px",
-                    text: objRespuesta.convenio
-                }
+                    "myToolTip",
+                    {
+                        context: "seqConvenioToolTip",
+                        width: "300px",
+                        text: objRespuesta.convenio
+                    }
             );
             valorSubsidio();
         } catch (e) {
@@ -10605,25 +10132,25 @@ function mostrarToolTip() {
     }
 
     var callback =
-        {
-            success: fncSuccess,
-            failure: fncError
-        };
+            {
+                success: fncSuccess,
+                failure: fncError
+            };
 
     var callObj = YAHOO.util.Connect.asyncRequest(
-        "POST",
-        "./contenidos/casaMano/textoConvenio.php",
-        callback,
-        "seqConvenio=" + objSelect.options[selectedIndex].value
-    );
+            "POST",
+            "./contenidos/casaMano/textoConvenio.php",
+            callback,
+            "seqConvenio=" + objSelect.options[selectedIndex].value
+            );
 
 }
 
 YAHOO.util.Event.onContentReady(
-    "seqConvenioToolTip",
-    function () {
-        mostrarToolTip();
-    }
+        "seqConvenioToolTip",
+        function () {
+            mostrarToolTip();
+        }
 );
 
 
@@ -10997,20 +10524,20 @@ var detallesAAD = function () {
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "select",
-        "detallesAAD_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "detallesAAD_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "input",
-        "detallesAAD_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "detallesAAD_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
@@ -11032,25 +10559,25 @@ YAHOO.util.Event.onContentReady("listenerDetallesAAD", detallesAAD);
 function enrutarAAD(objSelect) {
 
     if (
-        objSelect.options[objSelect.selectedIndex].value == 1 ||
-        objSelect.options[objSelect.selectedIndex].value == 6 ||
-        objSelect.options[objSelect.selectedIndex].value == 10
-    ) {
+            objSelect.options[objSelect.selectedIndex].value == 1 ||
+            objSelect.options[objSelect.selectedIndex].value == 6 ||
+            objSelect.options[objSelect.selectedIndex].value == 10
+            ) {
         // usa el modulo nuevo
         cargarContenido(
-            'informacion',
-            './contenidos/aad/informacion.php',
-            'seqTipoActo=' + objSelect.options[objSelect.selectedIndex].value,
-            true
-        );
+                'informacion',
+                './contenidos/aad/informacion.php',
+                'seqTipoActo=' + objSelect.options[objSelect.selectedIndex].value,
+                true
+                );
     } else {
         // usa el modulo actual
         cargarContenido(
-            'informacion',
-            './contenidos/actosAdministrativos/informacionActo.php',
-            'seqTipoActo=' + objSelect.options[ objSelect.selectedIndex ].value,
-            true
-        );
+                'informacion',
+                './contenidos/actosAdministrativos/informacionActo.php',
+                'seqTipoActo=' + objSelect.options[ objSelect.selectedIndex ].value,
+                true
+                );
     }
 
 }
@@ -11064,20 +10591,20 @@ var listadoCruces = function () {
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "select",
-        "listadoCruces_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "listadoCruces_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "input",
-        "listadoCruces_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "listadoCruces_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "in1putLogin";
@@ -11103,20 +10630,20 @@ var auditoriaCruces = function () {
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "select",
-        "auditoriaCruces_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "auditoriaCruces_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "input",
-        "auditoriaCruces_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "auditoriaCruces_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
@@ -11133,59 +10660,59 @@ function cambiarFuenteInhabilidad(objSelectFuente) {
 
     // Objeto de respuesta si es satisfactoria la carga
     var handleSuccess =
-        function (o) {
-            if (o.responseText !== undefined) {
-                var objCausas = JSON.parse(o.responseText);
-                var objSelectCausas = YAHOO.util.Dom.get('seqCausa');
-                var i = 0;
-                for (i = (objSelectCausas.length - 1); i > 0; i--) {
-                    objSelectCausas.remove(i);
-                }
-                for (seqCausa in objCausas) {
-                    i = objSelectCausas.length;
-                    var objOption = document.createElement('option');
-                    objOption.value = seqCausa;
-                    objOption.text = objCausas[seqCausa];
-                    objSelectCausas.add(objOption);
-                }
-                if (objSelectFuente.options[objSelectFuente.selectedIndex].value == 8) {
-                    var objInhabilitar = YAHOO.util.Dom.get('bolInhabilitar');
-                    objInhabilitar.selectedIndex = 2;
-                }
+            function (o) {
+                if (o.responseText !== undefined) {
+                    var objCausas = JSON.parse(o.responseText);
+                    var objSelectCausas = YAHOO.util.Dom.get('seqCausa');
+                    var i = 0;
+                    for (i = (objSelectCausas.length - 1); i > 0; i--) {
+                        objSelectCausas.remove(i);
+                    }
+                    for (seqCausa in objCausas) {
+                        i = objSelectCausas.length;
+                        var objOption = document.createElement('option');
+                        objOption.value = seqCausa;
+                        objOption.text = objCausas[seqCausa];
+                        objSelectCausas.add(objOption);
+                    }
+                    if (objSelectFuente.options[objSelectFuente.selectedIndex].value == 8) {
+                        var objInhabilitar = YAHOO.util.Dom.get('bolInhabilitar');
+                        objInhabilitar.selectedIndex = 2;
+                    }
 
 
-            }
-        };
+                }
+            };
 
     // Objeto de respuesta si la carga falla
     var handleFailure =
-        function (o) {
-            if (o.responseText !== undefined) {
-                // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
-                if (o.status == "401") {
-                    document.location = 'index.php';
-                } else {
+            function (o) {
+                if (o.responseText !== undefined) {
+                    // Cuando se vence la sesion la respuesta es HTTP 401 = Not Authorized
+                    if (o.status == "401") {
+                        document.location = 'index.php';
+                    } else {
 
-                    // Mensaje cuando la pagina no es encontrada
-                    var htmlCode = "";
-                    htmlCode = +o.status + " " + o.statusText;
+                        // Mensaje cuando la pagina no es encontrada
+                        var htmlCode = "";
+                        htmlCode = +o.status + " " + o.statusText;
 
-                    // Otros mensajes de error son mostrados directamente en el div
-                    document.getElementById(txtDivDestino).innerHTML = htmlCode;
+                        // Otros mensajes de error son mostrados directamente en el div
+                        document.getElementById(txtDivDestino).innerHTML = htmlCode;
+                    }
+                    if (bolCargando == 1) {
+                        objCargando.hide();
+                    }
+                    return false;
                 }
-                if (bolCargando == 1) {
-                    objCargando.hide();
-                }
-                return false;
-            }
-        };
+            };
 
     // Objeto de respuestas
     var callback =
-        {
-            success: handleSuccess,
-            failure: handleFailure
-        };
+            {
+                success: handleSuccess,
+                failure: handleFailure
+            };
 
     // peticion asincrona al servidor
     var callObj = YAHOO.util.Connect.asyncRequest("POST", "./contenidos/cruces2/cambiarFuenteInhabilidad.php", callback, 'seqFuente=' + objSelectFuente.options[objSelectFuente.selectedIndex].value);
@@ -11206,20 +10733,20 @@ var listadoAadProyectos = function () {
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "select",
-        "listadoAadPry_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "listadoAadPry_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "input",
-        "listadoAadPry_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "listadoAadPry_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
@@ -11252,20 +10779,20 @@ var listadoCdpProyectos = function () {
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "select",
-        "listadoCdp_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "listadoCdp_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "input",
-        "listadoCdp_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "listadoCdp_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
@@ -11283,7 +10810,7 @@ function pdfGiroFiducia(seqProyecto, seqGiroFiducia) {
     var wndFormato = null;
     try {
         var numAlto = YAHOO.util.Dom.getDocumentHeight() - 400;
-        var txtUrl  = "./contenidos/pryGestionFinanciera/pdfGiroFiducia.php";
+        var txtUrl = "./contenidos/pryGestionFinanciera/pdfGiroFiducia.php";
         txtUrl += "?seqProyecto=" + seqProyecto + "&seqGiroFiducia=" + seqGiroFiducia;
         var txtParametros = "resizable=0,location=0,scrollbars=1,width=900,height=" + numAlto + ",left=100,top=10,titlebar=0";
         if (!(wndFormato = window.open(txtUrl, '_blank', txtParametros))) {
@@ -11294,25 +10821,24 @@ function pdfGiroFiducia(seqProyecto, seqGiroFiducia) {
             alert("Ooops, al parecer tu navegador tiene bloqueado las ventanas emergentes, desactiva esa opcion y vuelve a intentar");
         }
     }
-
 }
 
 function soporteDocumento(txtTipo, seqIdentificador) {
 
     var seqPlanGobierno = $("#seqPlanGobierno").val();
 
-    if(seqPlanGobierno == 3) {
+    if (seqPlanGobierno == 3) {
 
-        if(txtTipo == "tipoSoporte"){
+        if (txtTipo == "tipoSoporte") {
 
             $('#soporteCedula').hide();
             $('#soportePartida').hide();
 
-            if(seqIdentificador == "registroCivil"){
+            if (seqIdentificador == "registroCivil") {
                 $('#soporteCedula').show();
             }
 
-            if(seqIdentificador == "partidaBautismo"){
+            if (seqIdentificador == "partidaBautismo") {
                 $('#soportePartida').show();
             }
 
@@ -11382,7 +10908,7 @@ function soporteDocumento(txtTipo, seqIdentificador) {
     }
 }
 
-function certificadoHabitabilidadProyecto(seqUnidadProyecto){
+function certificadoHabitabilidadProyecto(seqUnidadProyecto) {
     var wndFormato;
     try {
 
@@ -11401,27 +10927,27 @@ function certificadoHabitabilidadProyecto(seqUnidadProyecto){
     }
 }
 
-var fncFileSelect = function() {
-
+var fncFileSelect = function () {
     // We can attach the `fileselect` event to all file inputs on the page
-    $(document).on('change', ':file', function() {
+    $(document).on('change', ':file', function () {
         var input = $(this),
-            numFiles = input.get(0).files ? input.get(0).files.length : 1,
-            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
         input.trigger('fileselect', [numFiles, label]);
     });
 
     // We can watch for our custom `fileselect` event like this
-    $(document).ready( function() {
-        $(':file').on('fileselect', function(event, numFiles, label) {
+    $(document).ready(function () {
+        $(':file').on('fileselect', function (event, numFiles, label) {
 
             var input = $(this).parents('.input-group').find(':text'),
-                log = numFiles > 1 ? numFiles + ' files selected' : label;
+                    log = numFiles > 1 ? numFiles + ' files selected' : label;
 
-            if( input.length ) {
+            if (input.length) {
                 input.val(log);
             } else {
-                if( log ) alert(log);
+                if (log)
+                    alert(log);
             }
 
         });
@@ -11429,12 +10955,52 @@ var fncFileSelect = function() {
 
     eliminarObjeto("fileSelect");
     YAHOO.util.Event.onContentReady(
-        "fileSelect",
-        fncFileSelect
-    );
+            "fileSelect",
+            fncFileSelect
+            );
 }
 
 YAHOO.util.Event.onContentReady(
-    "fileSelect",
-    fncFileSelect
-);
+        "fileSelect",
+        fncFileSelect
+        );
+
+
+
+
+var fileAction = function () {
+    // We can attach the `fileselect` event to all file inputs on the page
+
+    $(document).on('change', ':file', function () {
+        var input = $(this),
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileAction', [numFiles, label]);
+
+    });
+
+    $(document).ready(function () {
+        $(':file').on('fileAction', function (event, numFiles, label) {
+            // console.log("numFiles -> " + numFiles + " label ->" + label + " event ->" + event);
+
+            var input = $(this).parents('.custom-file-input').find(':file'),
+                    log = numFiles > 1 ? numFiles + ' files selected' : label;
+            // console.log("input.length -> " + input + " log ->" + log);
+
+
+//
+            if (input.length) {
+                input.val(log);
+            } else {
+                if (log)
+                    $("#nameArchivo").text(log);
+                input.val(log);
+            }
+
+        });
+    });
+}
+YAHOO.util.Event.onContentReady(
+        "fileAction",
+        fileAction
+        );

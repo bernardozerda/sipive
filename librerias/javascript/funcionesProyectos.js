@@ -34,9 +34,8 @@ function  tablas() {
         }
     }
 }
-// Autora: Liliana Basto
-// Funcion que almacena todos los formularios 
-function almacenarIncripcion() {
+
+function validarCampos() {
     var valid = true;
     $.each($("#frmProyectos input.required"), function (index, value) {
         $("#val_" + $(this).attr("id")).css("display", "none");
@@ -56,7 +55,7 @@ function almacenarIncripcion() {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         if ($(value).val() == 0) {
-            // console.log($(value).val()+ " ****** "+index+"  ----- "+value);
+            console.log($(value).val() + " ****** " + index + "  ----- " + value);
             // console.log($(this).attr("id") + "select");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
@@ -110,6 +109,14 @@ function almacenarIncripcion() {
             }
         }
     });
+
+    return valid;
+
+}
+// Autora: Liliana Basto
+// Funcion que almacena todos los formularios 
+function almacenarIncripcion() {
+    var valid = validarCampos();
     if (valid == false) {
         $("#mensajes").html("Por favor verifique todos los campos obligatorios(*) resaltados en rojo");
         $("#mensajes").css("color", "red");
@@ -262,7 +269,7 @@ YAHOO.util.Event.onContentReady(
 
 function selectUsuario(valor, user) {
     var id = valor.split("bolAprobo");
-    console.log("paso" + id[1]);
+    //console.log("paso" + id[1]);
     if ($("#" + valor).is(':checked')) {
         // console.log("paso");
         $("input[id=seqUsuario" + id[1] + "]:hidden").val(user);
@@ -319,3 +326,103 @@ function activarAutocompletar(txtInput, contenedor, url, cant) {
     // autocompletar( 'txtSubsecretario' , 'txtSubsecretarioContenedor' , './contenidos/cruces2/nombres.php' , '' ); $('#txtSubsecretario').removeClass('yui-ac-input');
     //  autocompletar( txtInput , contenedor , url , '' ); $('#'+txtInput).removeClass('yui-ac-input');
 }
+
+function activarEditorTiny(id, cant) {
+    tinymce.remove();
+    for (var i = 1; i <= cant; i++) {
+
+        tinymce.init({
+            selector: 'textarea#' + id + "" + i,
+            height: 100,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code help wordcount'
+            ],
+            toolbar: 'undo redo | styleselect fontselect fontsizeselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify |  bullist numlist outdent indent'
+        });
+    }
+}
+
+function addInterventoria() {
+    var intId = $("#interventoria textarea").length + 1;
+    var fieldWrapper = $("<div class=\"form-group\" id=\"intV" + intId + "\" />");
+    var fType = "<fieldset style='border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;'>";
+    fType += "<legend style='text-align: right; cursor: hand'><p></p><h5>&nbsp;<img src='recursos/imagenes/add.png' width='20px' onclick='addInterventoria();'><b style='' onclick='addInterventoria();'>&nbsp; Adicionar  Interventoria</b> ";
+    fType += "&nbsp;&nbsp;&nbsp;&nbsp;<img src='recursos/imagenes/remove.png' width='20px' onclick='removerOferente(intV" + intId + ")'><b style='text-align: right' onclick='removerOferente(intV" + intId + ")'>&nbsp; Eliminar Interventoria</b> ";
+    fType += "</h5><p></p></legend>";
+    fType += "<div class=\"col-md-4\">";
+    fType += "<label class='control-label' >Nombre Interventor</label>";
+    fType += "<input name='txtNombreInformador' type='text' id='txtNombreInformador" + intId + "' value='' onblur='sinCaracteresEspeciales(this);'  class='form-control'>";
+    fType += "<div id='txtNombreInformadorContenedor" + intId + "' class='yui-ac-container'></div>";
+    fType += "</div>";
+    fType += "<div class='col-md-4'> ";
+    fType += "<label class='control-label' >Fecha Interventoria</label> ";
+    fType += "<input name='fchInterventoria[]' type='text' id='fchInterventoria" + intId + "' value='' size='12' readonly=''  class='form-control required'  style='width: 60%; position: relative; float: left'>";
+    fType += "<a href='#' onclick='javascript: calendarioPopUp('fchInterventoria" + intId + "');'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 9%; position: relative; float: left; left: 2%'></a>";
+    fType += "</div>";
+    fType += "<div class='col-md-4'>";
+    fType += "<label class='control-label' >Activar</label> <br>";
+    fType += "<input type='checkbox' id='bolInterventoria' name='bolInterventoria[]' />";
+    fType += "</div>";
+    fType += "<div class='col-md-10'> ";
+    fType += "<label class='control-label' >Observaciones de Interventoria</label> ";
+    fType += "<textarea rows='10' cols='200' id='comentarios" + intId + "'></textarea>";
+    fType += "</div> ";
+    fType += "<p>&nbsp;</p> </fieldset></div>";
+    fieldWrapper.append(fType);
+    $("#interventoria").append(fieldWrapper);
+    activarEditorTiny('comentarios', intId);
+    activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', intId);
+}
+
+var fncEditor = function () {
+    activarEditorTiny('comentarios', 1);
+    activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', 1);
+    eliminarObjeto('segOculto');
+    YAHOO.util.Event.onContentReady('segOculto', fncEditor);
+}
+YAHOO.util.Event.onContentReady('segOculto', fncEditor)
+
+function dataForm_Archivos(formulario) {
+    console.log("formulario -> " + formulario);
+    var nuevoFormulario = new FormData();
+    $(formulario).find(':input').each(function () {
+        var elemento = this;
+        console.log("elemento -> " + elemento);
+        //Si recibe tipo archivo 'file'
+        if (elemento.type === 'file') {
+            console.log("elemento.type -> " + elemento.type);
+            console.log("elemento.value -> " + elemento.value);
+            if (elemento.value !== '') {
+                console.log("$('input[type=file]')[0].files -> " + $('input[type="file"]')[0].files);
+                var file_data = $('input[type="file"]')[0].files;
+                console.log(file_data);
+                console.log("file_data.length -> " + file_data.length);
+                for (var i = 0; i < file_data.length; i++) {
+                    console.log("elemento.name -> " + elemento.name + "file_data[" + i + "]" + file_data[i]);
+                    nuevoFormulario.append(elemento.name, file_data[i]);
+                }
+            }
+        }
+    });
+
+    return nuevoFormulario;
+}
+
+function obtenerPlantillaUnidades() {
+    var valid = true;
+    console.log("proyecto " + $('select[name=seqProyecto]').val());
+    if ($('select[name=seqProyecto]').val() == "" || $('select[name=seqProyecto]').val() == null) {
+        $("#mensajes").html("<div class='alert alert-danger'><h5>Alerta!!! seleccione un proyecto </h5></div>");
+        $("#seqProyecto").css("border", "1px solid #ccc");
+        $("#val_seqProyecto").css("display", "inline");
+        valid = false;
+    }    
+    if (valid) {
+        location.href = './contenidos/proyectos/plantillas/plantillaUnidades.php?seqProyecto=' + $('select[name=seqProyecto]').val();
+    }
+
+}
+

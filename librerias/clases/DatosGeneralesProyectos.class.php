@@ -102,8 +102,8 @@ class DatosGeneralesProyectos {
         if ($seqProyecto > 0) {
             $sql .= " where pry.seqProyecto = " . $seqProyecto;
         } else {
-            //$sql .= " where pry.seqProyectoPadre is null";
-             $sql .= " where pry.seqProyectoPadre is null and pry.seqProyecto in (select concat(seqProyecto, ', ') from t_pry_tablero_control group by seqProyecto)";
+            $sql .= " where pry.seqProyectoPadre is null";
+            // $sql .= " where pry.seqProyectoPadre is null and pry.seqProyecto in (select concat(seqProyecto, ', ') from t_pry_tablero_control group by seqProyecto)";
         }
 
         $sql . " ORDER BY pry.seqProyecto asc";
@@ -641,7 +641,6 @@ class DatosGeneralesProyectos {
         global $aptBd;
 
         $arrConjuntoResidencial = Array();
-
         $sql = "SELECT
                 seqProyecto,
                 seqProyectoPadre,
@@ -650,14 +649,7 @@ class DatosGeneralesProyectos {
                 txtDireccion,
                 valNumeroSoluciones,
                 txtChipLote,
-                txtMatriculaInmobiliariaLote,
-                txtLicenciaUrbanismo,
-                fchLicenciaUrbanismo1,
-                fchVigenciaLicenciaUrbanismo,
-                txtExpideLicenciaUrbanismo,
-                txtLicenciaConstruccion,
-                fchLicenciaConstruccion1,
-                fchVigenciaLicenciaConstruccion,
+                txtMatriculaInmobiliariaLote,                
                 txtNombreVendedor,
                 numNitVendedor,
                 txtCedulaCatastral,
@@ -683,13 +675,6 @@ class DatosGeneralesProyectos {
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['valNumeroSoluciones'] = $objRes->fields['valNumeroSoluciones'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtChipLote'] = $objRes->fields['txtChipLote'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtMatriculaInmobiliariaLote'] = $objRes->fields['txtMatriculaInmobiliariaLote'];
-            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtLicenciaUrbanismo'] = $objRes->fields['txtLicenciaUrbanismo'];
-            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['fchLicenciaUrbanismo1'] = $objRes->fields['fchLicenciaUrbanismo1'];
-            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['fchVigenciaLicenciaUrbanismo'] = $objRes->fields['fchVigenciaLicenciaUrbanismo'];
-            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtExpideLicenciaUrbanismo'] = $objRes->fields['txtExpideLicenciaUrbanismo'];
-            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtLicenciaConstruccion'] = $objRes->fields['txtLicenciaConstruccion'];
-            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['fchLicenciaConstruccion1'] = $objRes->fields['fchLicenciaConstruccion1'];
-            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['fchVigenciaLicenciaConstruccion'] = $objRes->fields['fchVigenciaLicenciaConstruccion'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtNombreVendedor'] = $objRes->fields['txtNombreVendedor'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['numNitVendedor'] = $objRes->fields['numNitVendedor'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtCedulaCatastral'] = $objRes->fields['txtCedulaCatastral'];
@@ -855,8 +840,7 @@ class DatosGeneralesProyectos {
         if ($valor != 7 && $valor != 6) {
             // $sql .= " GROUP BY und.seqProyecto ";
         }
-       // echo "<p>".$sql."</p>";
-
+        // echo "<p>".$sql."</p>";
         //$rs = $aptBd->getAssoc($sql);
         $objRes = $aptBd->execute($sql);
         $datos = 0;

@@ -126,7 +126,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     for ($i = 0; $i < $cantUDisponible; $i++) {
         $cols = $i + 2;
         $sheet->setCellValue('A' . $cols, '');
-        $sheet->setCellValue('B' . $cols, 70);
+        $sheet->setCellValue('B' . $cols, '');
         $sheet->setCellValue('C' . $cols, 0);
         $sheet->setCellValue('D' . $cols, 0);
         $sheet->setCellValue('E' . $cols, 'Seleccione');

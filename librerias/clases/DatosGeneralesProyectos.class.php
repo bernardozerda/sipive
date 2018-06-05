@@ -103,7 +103,7 @@ class DatosGeneralesProyectos {
             $sql .= " where pry.seqProyecto = " . $seqProyecto;
         } else {
            // $sql .= " where pry.seqProyectoPadre is null";
-             $sql .= " where pry.seqProyectoPadre is null and pry.seqProyecto in (select concat(seqProyecto, ', ') from t_pry_tablero_control group by seqProyecto)";
+             $sql .= " where pry.seqProyecto in (select concat(seqProyecto, ', ') from t_pry_tablero_control group by seqProyecto)";
         }
 
         $sql . " ORDER BY pry.seqProyecto asc";

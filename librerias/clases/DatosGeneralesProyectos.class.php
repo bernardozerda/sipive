@@ -107,7 +107,7 @@ class DatosGeneralesProyectos {
         }
 
         $sql . " ORDER BY pry.seqProyecto asc ";
-        echo "<p>".$sql."</p>";
+       // echo "<p>".$sql."</p>";
 
         $objRes = $aptBd->execute($sql);
         $datos = Array();

@@ -106,7 +106,8 @@ class DatosGeneralesProyectos {
              $sql .= " where pry.seqProyecto in (select concat(seqProyecto, ', ') from t_pry_tablero_control group by seqProyecto)";
         }
 
-        $sql . " ORDER BY pry.seqProyecto asc";
+        $sql . " ORDER BY pry.seqProyecto asc ";
+        echo "<p>".$sql."</p>";
 
         $objRes = $aptBd->execute($sql);
         $datos = Array();

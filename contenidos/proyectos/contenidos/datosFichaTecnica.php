@@ -96,72 +96,72 @@ foreach ($arraPoliza as $key => $value) {
  * DATOS FINANCIEROS DEL PROYECTO
  *******************************************************************************************************************/
 
-$claGestion = new GestionFinancieraProyectos();
-$arrFinanciera = $claGestion->reporteGeneral(true);
-$claGestion->informacionResoluciones($seqProyecto);
-
-$arrFinanciera[$seqProyecto]['porcentajeTotalConstructor'] = $arrFinanciera[$seqProyecto]['porcentajeTotalConstructor'] * 100;
-$arrFinanciera[$seqProyecto]['saldoDesembolso'] = $arrFinanciera[$seqProyecto]['actual'] - $arrFinanciera[$seqProyecto]['constructor'];
-$arrFinanciera[$seqProyecto]['porcentajeSaldoDesembolso'] = ($arrFinanciera[$seqProyecto]['saldoDesembolso'] / $arrFinanciera[$seqProyecto]['actual']) * 100;
-
-// redefine la clave aprobado para ampliar informacion
-unset($arrFinanciera[$seqProyecto]['aprobado']);
-$arrFinanciera[$seqProyecto]['aprobado']['numero'] = 0;
-$arrFinanciera[$seqProyecto]['aprobado']['fecha'] = null;
-$arrFinanciera[$seqProyecto]['aprobado']['valor'] = 0;
-$arrFinanciera[$seqProyecto]['aprobado']['unidades'] = array();
-
-// redefine la clave indexado para ampliar la informacion
-unset($arrFinanciera[$seqProyecto]['indexado']);
-$arrFinanciera[$seqProyecto]['indexado'] = array();
-
-// redefine la clave menor para ampliar la informacion
-unset($arrFinanciera[$seqProyecto]['menor']);
-$arrFinanciera[$seqProyecto]['menor'] = array();
-
-// procesando el resumen de proyecto para ordenar los datos
-foreach($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion){
-    if($arrResolucion['idTipo'] == 1){
-        $arrFinanciera[$seqProyecto]['aprobado']['numero'] = $arrResolucion['numero'];
-        $arrFinanciera[$seqProyecto]['aprobado']['fecha']  = $arrResolucion['fecha']->format("Y");
-        $arrFinanciera[$seqProyecto]['aprobado']['valor']  = $arrResolucion['total'];
-        if(isset($arrResolucion['cdp'])) {
-            foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
-                foreach ($arrCDP['unidades'] as $seqUnidadProyecto => $arrUnidad) {
-                    $arrFinanciera[$seqProyecto]['aprobado']['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
-                }
-            }
-        }
-    }elseif($arrResolucion['idTipo'] == 2 and $arrResolucion['total'] > 0){
-        $arrFinanciera[$seqProyecto]['indexado']['total'] += $arrResolucion['total'];
-        $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
-        $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
-        $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['valor'] = $arrResolucion['total'];
-        if(isset($arrResolucion['cdp'] )) {
-            foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
-                foreach ($arrCDP['unidades'] as $seqUnidadProyecto => $arrUnidad) {
-                    $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
-                }
-            }
-        }
-    }elseif($arrResolucion['idTipo'] == 3 or ($arrResolucion['idTipo'] == 2 and $arrResolucion['total'] < 0)){
-
-        $arrFinanciera[$seqProyecto]['menor']['total'] += abs($arrResolucion['total']);
-        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
-        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
-        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['valor'] = abs($arrResolucion['total']);
-
-        $sql = "select count(seqUnidadVinculado) as cuenta from t_pry_aad_unidades_vinculadas where seqUnidadActo = $seqUnidadActo";
-        $arrCantidad = $aptBd->GetAll($sql);
-        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['unidades'] = $arrCantidad[0]['cuenta'];
-
-    }
-}
-
-$arrListadoGirosConstructor = $claGestion->listadoGirosConstructor($seqProyecto);
-foreach($arrListadoGirosConstructor as $i => $arrGiro){
-    $arrListadoGirosConstructor[$i]['porcentajeGiro'] = ($arrListadoGirosConstructor[$i]['giro'] / $arrFinanciera[$seqProyecto]['actual']) * 100;
-}
+//$claGestion = new GestionFinancieraProyectos();
+//$arrFinanciera = $claGestion->reporteGeneral(true);
+//$claGestion->informacionResoluciones($seqProyecto);
+//
+//$arrFinanciera[$seqProyecto]['porcentajeTotalConstructor'] = $arrFinanciera[$seqProyecto]['porcentajeTotalConstructor'] * 100;
+//$arrFinanciera[$seqProyecto]['saldoDesembolso'] = $arrFinanciera[$seqProyecto]['actual'] - $arrFinanciera[$seqProyecto]['constructor'];
+//$arrFinanciera[$seqProyecto]['porcentajeSaldoDesembolso'] = ($arrFinanciera[$seqProyecto]['saldoDesembolso'] / $arrFinanciera[$seqProyecto]['actual']) * 100;
+//
+//// redefine la clave aprobado para ampliar informacion
+//unset($arrFinanciera[$seqProyecto]['aprobado']);
+//$arrFinanciera[$seqProyecto]['aprobado']['numero'] = 0;
+//$arrFinanciera[$seqProyecto]['aprobado']['fecha'] = null;
+//$arrFinanciera[$seqProyecto]['aprobado']['valor'] = 0;
+//$arrFinanciera[$seqProyecto]['aprobado']['unidades'] = array();
+//
+//// redefine la clave indexado para ampliar la informacion
+//unset($arrFinanciera[$seqProyecto]['indexado']);
+//$arrFinanciera[$seqProyecto]['indexado'] = array();
+//
+//// redefine la clave menor para ampliar la informacion
+//unset($arrFinanciera[$seqProyecto]['menor']);
+//$arrFinanciera[$seqProyecto]['menor'] = array();
+//
+//// procesando el resumen de proyecto para ordenar los datos
+//foreach($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion){
+//    if($arrResolucion['idTipo'] == 1){
+//        $arrFinanciera[$seqProyecto]['aprobado']['numero'] = $arrResolucion['numero'];
+//        $arrFinanciera[$seqProyecto]['aprobado']['fecha']  = $arrResolucion['fecha']->format("Y");
+//        $arrFinanciera[$seqProyecto]['aprobado']['valor']  = $arrResolucion['total'];
+//        if(isset($arrResolucion['cdp'])) {
+//            foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
+//                foreach ($arrCDP['unidades'] as $seqUnidadProyecto => $arrUnidad) {
+//                    $arrFinanciera[$seqProyecto]['aprobado']['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
+//                }
+//            }
+//        }
+//    }elseif($arrResolucion['idTipo'] == 2 and $arrResolucion['total'] > 0){
+//        $arrFinanciera[$seqProyecto]['indexado']['total'] += $arrResolucion['total'];
+//        $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
+//        $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
+//        $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['valor'] = $arrResolucion['total'];
+//        if(isset($arrResolucion['cdp'] )) {
+//            foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
+//                foreach ($arrCDP['unidades'] as $seqUnidadProyecto => $arrUnidad) {
+//                    $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
+//                }
+//            }
+//        }
+//    }elseif($arrResolucion['idTipo'] == 3 or ($arrResolucion['idTipo'] == 2 and $arrResolucion['total'] < 0)){
+//
+//        $arrFinanciera[$seqProyecto]['menor']['total'] += abs($arrResolucion['total']);
+//        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
+//        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
+//        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['valor'] = abs($arrResolucion['total']);
+//
+//        $sql = "select count(seqUnidadVinculado) as cuenta from t_pry_aad_unidades_vinculadas where seqUnidadActo = $seqUnidadActo";
+//        $arrCantidad = $aptBd->GetAll($sql);
+//        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['unidades'] = $arrCantidad[0]['cuenta'];
+//
+//    }
+//}
+//
+//$arrListadoGirosConstructor = $claGestion->listadoGirosConstructor($seqProyecto);
+//foreach($arrListadoGirosConstructor as $i => $arrGiro){
+//    $arrListadoGirosConstructor[$i]['porcentajeGiro'] = ($arrListadoGirosConstructor[$i]['giro'] / $arrFinanciera[$seqProyecto]['actual']) * 100;
+//}
 
 $claSmarty->assign("arrProyectos", $arrProyectos);
 $claSmarty->assign("cantUnidades", $cantUnidades);
@@ -178,9 +178,9 @@ $claSmarty->assign("vigAnticipo", $vigAnticipo);
 $claSmarty->assign("cantOcupacion", $cantOcupacion);
 $claSmarty->assign("cantExistencia", $cantExistencia);
 // variables para datos financieros
-$claSmarty->assign("arrFinanciera", $arrFinanciera);
-$claSmarty->assign("arrListadoGirosConstructor", $arrListadoGirosConstructor);
-$claSmarty->assign("seqProyecto", $seqProyecto);
+//$claSmarty->assign("arrFinanciera", $arrFinanciera);
+//$claSmarty->assign("arrListadoGirosConstructor", $arrListadoGirosConstructor);
+//$claSmarty->assign("seqProyecto", $seqProyecto);
 
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);

@@ -597,7 +597,7 @@ class Proyecto {
             $sql .= " where  pry.seqProyecto = " . $seqProyecto;
         }
         $sql . " ORDER BY  pry.seqProyecto";
-        echo "<p>" . $sql . "</p>";
+        //echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {

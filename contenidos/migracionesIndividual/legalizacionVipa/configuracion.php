@@ -4,7 +4,8 @@
     $arrVariables['giroFiducia']['planGobierno'] = array(3);
     $arrVariables['giroFiducia']['modalidad'] = array(12);
     $arrVariables['giroFiducia']['esquema'] = array(12);
-    $arrVariables['giroFiducia']['estados'] = array(27,22,23,25,26,28,24,31,29);
+//    $arrVariables['giroFiducia']['estados'] = array(27,22,23,25,26,28,24,31,29);
+    $arrVariables['giroFiducia']['estados'] = array_keys(estadosProceso());
 
     $arrVariables['giroConstructor']['planGobierno'] = array(3);
     $arrVariables['giroConstructor']['modalidad'] = array(12);

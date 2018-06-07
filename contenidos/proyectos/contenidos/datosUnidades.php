@@ -27,7 +27,7 @@ $arrayProyectos = Array();
 $seqPryEstadoProceso = 0;
 $cantidadUnidades = 0;
 $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
-$arrayProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto);
+$arrayProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto, $id);
 
 $arrConjuntoResidencial = $claDatosProy->obtenerConjuntoResidencial($idProyecto);
 

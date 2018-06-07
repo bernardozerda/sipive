@@ -102,14 +102,16 @@
                                              onClick="desembolsoSolicitud({$claDesembolso->seqFormulario}, {$seqSolicitud});"
                                              >I</div>
                                         <div style="text-align:center; width:3px; height:14px; float:left"></div>
-                                        <div style="text-align:center; width:10px; height:14px; cursor:pointer; border: 1px solid #999999; float:left"
-                                             onMouseOver="this.style.backgroundColor = '#FFA4A4';"
-                                             onMouseOut="this.style.backgroundColor = '#F9F9F9'"
-                                             onClick="eliminarRegistro(
-                                                             '{$claDesembolso->seqFormulario}#{$seqSolicitud}',
-                                                                             '<center>Esta a punto de eliminar una solicitud de desembolso. Tenga en cuenta que esta acción no se podra deshacer.<br><b>¿ Desea Continuar con la Operación ?</b><br><br><span class=\'msgError\'><input type=\'checkbox\' id=\'borrarAAD\'>&nbsp;Borrar el registro de actos administrativos tambi&eacute;n.</span></center>',
-                                                                             './contenidos/desembolso/eliminarSolicitud.php');"
-                                             >X</div>
+                                        {if isset($smarty.session.arrGrupos.3.20)}
+                                            <div style="text-align:center; width:10px; height:14px; cursor:pointer; border: 1px solid #999999; float:left"
+                                                 onMouseOver="this.style.backgroundColor = '#FFA4A4';"
+                                                 onMouseOut="this.style.backgroundColor = '#F9F9F9'"
+                                                 onClick="eliminarRegistro(
+                                                                 '{$claDesembolso->seqFormulario}#{$seqSolicitud}',
+                                                                                 '<center>Esta a punto de eliminar una solicitud de desembolso. Tenga en cuenta que esta acción no se podra deshacer.<br><b>¿ Desea Continuar con la Operación ?</b><br><br><span class=\'msgError\'><input type=\'checkbox\' id=\'borrarAAD\'>&nbsp;Borrar el registro de actos administrativos tambi&eacute;n.</span></center>',
+                                                                                 './contenidos/desembolso/eliminarSolicitud.php');"
+                                                 >X</div>
+                                        {/if}
                                         <div style="text-align:center; width:5px; height:14px; float:left"></div>
                                         <div style="widht:15px; padding-top:4px; float:left;">
                                             <img id="imagen-{$seqSolicitud}" src="./recursos/imagenes/bulletRojo.png"/>

@@ -63,8 +63,8 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     $titulos = Array();
     $titulos[0] = "ID Unidad";
     $titulos[1] = "Proyecto";
-    $titulos[2] = "Conjunto";
-    $titulos[3] = "Nombre de la unidad";
+    $titulos[2] = "Nombre de la unidad";
+    $titulos[3] = "Conjunto"; 
     $titulos[4] = "Estado Actual";
     $titulos[5] = "Nuevo Estado";
 //    $titulos[4] = "Plan de Gobierno";

@@ -61,10 +61,12 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     );
 
     $titulos = Array();
-    $titulos[0] = "Proyecto";
-    $titulos[1] = "Conjunto";
-    $titulos[2] = "Nombre de la unidad";
-    $titulos[3] = "Estado";
+    $titulos[0] = "ID Unidad";
+    $titulos[1] = "Proyecto";
+    $titulos[2] = "Conjunto";
+    $titulos[3] = "Nombre de la unidad";
+    $titulos[4] = "Estado Actual";
+    $titulos[5] = "Nuevo Estado";
 //    $titulos[4] = "Plan de Gobierno";
 //    $titulos[5] = "Modalidad";
 //    $titulos[6] = "Esquema";
@@ -91,35 +93,44 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     $excel->createSheet(1);
     $int = 2;
     foreach ($arrEstadoUnidad as $key => $value) {
-        $excel->getSheet(1)->SetCellValue("D" . $int, $key . '-' . $value);
+        $excel->getSheet(1)->SetCellValue("F" . $int, $key . '-' . $value);
         $int++;
     }
     $excel->addNamedRange(
             new PHPExcel_NamedRange(
-            'seleccion', $excel->getSheet(1), 'D2:E' . $int
+            'seleccion', $excel->getSheet(1), 'F2:F' . $int
             )
     );
 
     //for ($i = 0; $i < $unidadesReg; $i++) {
     $cols = 2;
     foreach ($arrayDatos as $key => $value) {
+        $estadoActual = ($value['estado'] == "") ? 'Ninguno' : $value['estado'];
+        $tipoVivienda = ($value['estado'] == "") ? 'Ninguno' : strtoupper($value['txtNombreTipoVivienda']);
         //echo "<br>". $cols." ->".$value['txtNombreProyecto'];
-        $sheet->setCellValue('A' . $cols, $value['txtNombreProyecto']);
-        $sheet->setCellValue('B' . $cols, $value['txtNombreUnidad']);
-        $sheet->setCellValue('C' . $cols, $value['txtNombreTipoVivienda']);
-        $sheet->setCellValue('D' . $cols, $value['estado']);
+        $sheet->setCellValue('A' . $cols, $value['seqUnidadProyecto']);
+        $sheet->setCellValue('B' . $cols, $value['txtNombreProyecto']);
+        $sheet->setCellValue('C' . $cols, $value['txtNombreUnidad']);
+        $sheet->setCellValue('D' . $cols, $tipoVivienda);
+        $sheet->setCellValue('E' . $cols, $estadoActual);
+        $sheet->setCellValue('F' . $cols, 'Seleccione');
+        $objValidation = $excel->getActiveSheet()->getCell('F' . $cols)->getDataValidation();
+        $objValidation->setType(PHPExcel_Cell_DataValidation::TYPE_LIST);
+        $objValidation->setErrorStyle(PHPExcel_Cell_DataValidation::STYLE_STOP);
+        $objValidation->setAllowBlank(true);
+        $objValidation->setShowInputMessage(true);
+        $objValidation->setShowErrorMessage(true);
+        $objValidation->setShowDropDown(true);
+        $objValidation->setErrorTitle('Error');
+        $objValidation->setError('Valor no esta en la lista');
+        $objValidation->setPromptTitle('Seleccion');
+        $objValidation->setPrompt('Seleccione un valor de la lista');
+        $objValidation->setFormula1("=seleccion");
         $cols++;
     }
 
-//        
-    //}
-    //die();
-//exportamos nuestro documento 
-//    $writer = new PHPExcel_Writer_Excel5($excel);
-
-
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename='PlantillaUnidades.xlsx");
+    header("Content-Disposition: attachment;filename='PlantillaEstadoUnidades.xlsx");
     header('Cache-Control: max-age=0');
     ob_end_clean();
 

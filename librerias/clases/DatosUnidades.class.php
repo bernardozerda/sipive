@@ -143,7 +143,7 @@ class DatosUnidades {
                 seqTipoEsquema)
                 VALUES";
         foreach ($array as $key => $value) {
-            echo "<p> RRRRR". $value[4]."</p>";
+            echo "<p> RRRRR" . $value[4] . "</p>";
             $sql .= " (" . $seqProyecto . ",
                 '" . $value[0] . "',
                 '',
@@ -166,12 +166,12 @@ class DatosUnidades {
                 '',
                 '',
                 1,
-                " . explode('-',$value[4])[0] . ",
-                " . explode('-',$value[5])[0]. ",
-                " . explode('-',$value[6])[0] . " ),";
+                " . explode('-', $value[4])[0] . ",
+                " . explode('-', $value[5])[0] . ",
+                " . explode('-', $value[6])[0] . " ),";
         }
         $sql = substr_replace($sql, ';', -1, 1);
-       // echo "<p>".$sql."</p>";die();
+        // echo "<p>".$sql."</p>";die();
         try {
             $aptBd->execute($sql);
         } catch (Exception $objError) {
@@ -179,6 +179,29 @@ class DatosUnidades {
             pr($objError->getMessage());
         }
         return $arrErrores;
+    }
+
+    function obtenerDatosUnidades($seqProyecto) {
+        global $aptBd;
+        $sql = "SELECT txtNombreProyecto, txtNombreUnidad, txtNombreTipoVivienda, seqUnidadProyecto, concat(seqEstadoUnidad ,'-', txtEstadoUnidad) as estado
+                FROM t_pry_proyecto pry 
+                LEFT JOIN t_pry_unidad_proyecto und USING(seqProyecto) 
+                LEFT JOIN t_pry_tipo_vivienda tip using(seqProyecto)
+                LEFT JOIN t_pry_estado_unidad EST USING(seqEstadoUnidad)";
+        if ($seqProyecto > 0) {
+            $sql .= " where  und.seqProyecto = " . $seqProyecto;
+        }
+
+        $sql .= " GROUP BY seqUnidadProyecto";
+       //  echo "<p>" . $sql . "</p>"; die();
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+
+        return $datos;
     }
 
 }

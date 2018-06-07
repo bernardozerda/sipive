@@ -26,6 +26,8 @@ $arraDatosPoliza = Array();
 $arrCronogramaFecha = Array();
 $arrayFideicomitente = Array();
 $arraConjuntoLicencias = Array();
+$arrayComiteActa = Array();
+
 $claDatosProy = new DatosGeneralesProyectos();
 $claProyecto = new Proyecto();
 $txtPlantilla = "proyectos/vistas/listaProyectos.tpl";
@@ -41,22 +43,24 @@ $arrAseguradoras = obtenerDatosTabla("t_pry_aseguradoras", array("seqAseguradora
 $arrAmparos = obtenerDatosTabla("t_pry_tipo_amparo", array("seqTipoAmparo", "txtTipoAmparo"), "seqTipoAmparo", "", "seqTipoAmparo DESC, txtTipoAmparo");
 $arrayBanco = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "seqBanco", "", "seqBanco DESC, txtBanco");
 $arrayCity = obtenerDatosTabla("v_frm_ciudad", array("seqCiudad", "txtCiudad"), "seqCiudad", "", "seqCiudad DESC, txtCiudad");
+$arrayEntComite = obtenerDatosTabla("t_pry_entidad_comite", array("seqEntidadComite", "txtEntidadComite"), "seqEntidadComite", "", "seqEntidadComite DESC, txtEntidadComite");
 //var_dump($arrPryTipoModalidad);
 
 if (isset($_REQUEST['seqProyecto'])) {
     $idProyecto = $_REQUEST['seqProyecto'];
     $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
-    $arrProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto);
+    $arrProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto, $id);
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($idProyecto);
     $claSeguimientoProyectos = new SeguimientoProyectos;
     $claSeguimientoProyectos->seqProyecto = $idProyecto;
     $arrRegistros = $claSeguimientoProyectos->obtenerRegistros(100);
     $arrTipoVivienda = $claDatosProy->obtenerTipoVivienda($idProyecto);
     $arrConjuntoResidencial = $claDatosProy->obtenerConjuntoResidencial($idProyecto);
-    foreach ($arrConjuntoResidencial as $keyCon => $valueCon) {        
+
+    foreach ($arrConjuntoResidencial as $keyCon => $valueCon) {
         $arraConjuntoLicencias[] = $claProyecto->obtenerListaLicencias($valueCon['seqProyecto']);
     }
-    
+    $arrayComiteActa = $claDatosProy->obtenerActasComite($idProyecto);
     $arrCronogramaFecha = $claDatosProy->obteneCronograma($idProyecto);
     $arraDatosPoliza = $claDatosProy->obtenerDatosPoliza($idProyecto);
     $arrayFideicomitente = $claDatosProy->obtenerDatosFideicomiso($idProyecto);
@@ -68,7 +72,7 @@ if (isset($_REQUEST['seqProyecto'])) {
         $txtPlantilla = "proyectos/vistas/verProyecto.tpl";
     }
 } else {
-    $arrProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto);
+    $arrProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto, $id);
     // var_dump($arrProyectos);
     $txtPlantilla = "proyectos/vistas/listaProyectos.tpl";
     if ($_REQUEST['tipo'] == '1') {
@@ -112,7 +116,9 @@ if (count($arrayLicencias) == 1) {
         }
     }
 }
-
+if (count($arrayComiteActa) == 0) {
+    $arrayComiteActa[0] = 0;
+}
 if (count($arrayLicencias) == 0) {
     $arrayLicencias[0] = 0;
     $arrayLicencias[1] = 0;
@@ -161,9 +167,11 @@ $claSmarty->assign("arrayCity", $arrayCity);
 $claSmarty->assign("id", $id);
 $claSmarty->assign("NombreUsuario", $_SESSION['txtNombre'] . "" . $_SESSION['txtApellido']);
 $claSmarty->assign("seqUsuario", $_SESSION['seqUsuario']);
+$claSmarty->assign("arrayEntComite", $arrayEntComite);
 $claSmarty->assign("page", "datosProyecto.php?tipo=2");
 //$claSmarty->assign("arrCronogramaProyecto", $arrCronogramaProyecto);
 $claSmarty->assign("arraConjuntoLicencias", $arraConjuntoLicencias);
+$claSmarty->assign("arrayComiteActa", $arrayComiteActa);
 
 
 if ($txtPlantilla != "") {

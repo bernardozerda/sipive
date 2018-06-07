@@ -152,9 +152,7 @@ class Proyecto {
                 $objProyecto->fchVencimiento = $objRes->fields['fchVencimiento'];
                 $objProyecto->bolActivo = $objRes->fields['bolActivo'];
                 $objProyecto->seqMenu = $objRes->fields['seqMenu'];
-
                 $arrProyectos[$seqProyecto] = $objProyecto; // arreglo de objetos
-
                 $objRes->MoveNext();
             }
 
@@ -454,6 +452,12 @@ class Proyecto {
                     fchEscritura,
                     numNotaria,
                     seqProyectoGrupo,
+                    numRadicadoJuridico,
+                    fchRadicadoJuridico,
+                    numRadicadoTecnico,
+                    fchRadicadoTecnico,
+                    numRadicadoFinanciero,
+                    fchRadicadoFinanciero,
                     seqUsuario)
                     VALUES (
                     $seqPryEstadoProceso,
@@ -522,6 +526,12 @@ class Proyecto {
                     '$fchEscritura',
                     $numNotaria,
                     $seqProyectoGrupo,
+                    $numRadicadoJuridico,
+                    '$fchRadicadoJuridico',
+                    $numRadicadoTecnico,
+                    '$fchRadicadoTecnico',
+                    $numRadicadoFinanciero,
+                    '$fchRadicadoFinanciero',
                     $seqUsuario
                     ) ";
         try {
@@ -731,7 +741,13 @@ class Proyecto {
                         txtEscritura = '$txtEscritura',
                         fchEscritura = '$fchEscritura',
                         numNotaria = $numNotaria,
-                        seqProyectoGrupo = $seqProyectoGrupo
+                        seqProyectoGrupo = $seqProyectoGrupo,
+                        numRadicadoJuridico = $numRadicadoJuridico,
+                        fchRadicadoJuridico = '$fchRadicadoJuridico',
+                        numRadicadoTecnico = $numRadicadoTecnico,
+                        fchRadicadoTecnico = '$fchRadicadoTecnico',
+                        numRadicadoFinanciero = $numRadicadoFinanciero,
+                        fchRadicadoFinanciero = '$fchRadicadoFinanciero'
                         WHERE seqProyecto = $seqProyecto
             ";
         //echo  $sql; //die();
@@ -965,7 +981,7 @@ class Proyecto {
                     pr($objError->getMessage());
                 }
             } else if ($cant >= $exeExistentes->numRows()) {
-              
+
                 $arrayInsLicencias = Array();
                 $arrayInsLicencias[$seqProyecto]['txtLicencia'][] = $txtLicencia;
                 $arrayInsLicencias[$seqProyecto]['txtExpideLicencia'][] = $txtExpideLicencia;
@@ -1195,7 +1211,7 @@ class Proyecto {
             foreach ($array[$seqProyecto] as $key => $value) {
 
                 if ($value[($index)] == NULL && $value[($index)] == "") {
-                    $$key = 0;  
+                    $$key = 0;
                 } else {
                     $$key = $value[($index)];
                 }
@@ -1860,6 +1876,142 @@ class Proyecto {
             $objRes->MoveNext();
         }
         return $datos;
+    }
+
+    function almacenarActaComite($seqProyecto, $arrayActasComite, $cant) {
+        
+        global $aptBd;
+        $arrErrores = array();
+        $sql = "INSERT INTO t_pry_proyecto_comite
+                (
+                numActaComite,
+                fchActaComite,
+                numResolucionComite,
+                fchResolucionComite,
+                txtObservacionesComite,
+                bolCondicionesComite,
+                txtCondicionesComite,
+                bolAproboProyecto,
+                seqProyecto,
+                seqEntidadComite)
+                VALUES";
+        for ($index = 0; $index < $cant; $index++) {
+
+            foreach ($arrayActasComite[$seqProyecto] as $key => $value) {
+                //echo "<p>".count($value)."</p>";
+                if (count($value) >= 1) {
+                    echo $value[($index)] == "" ? $$key = '0' : $$key = $value[($index)];
+                    // $$key = $value[($index)];
+                } else {
+                    $value == "" ? $$key = '0' : $$key = $value;
+                    // $$key = $value;
+                }
+                //echo "key = " . $key . " value -> " . $value;
+                //echo "<br>***".$value[($index)]."***<br>";
+            }
+            $sql .= "(
+                        $numActaComite,
+                        '$fchActaComite',
+                        $numResolucionComite,
+                        '$fchResolucionComite',
+                        '$txtObservacionesComite',
+                        $bolCondicionesComite,
+                       '$txtCondicionesComite',
+                        $bolAproboProyecto,
+                        $seqProyecto,
+                        $seqEntidadComite),";
+        }
+
+        try {
+            $sql = substr_replace($sql, ';', -1, 1);
+           // echo "<p>" . $sql . "</p>";
+            $aptBd->execute($sql);
+        } catch (Exception $objError) {
+            $arrErrores[] = "<b>No se ha podido almacenar el El acta del comite </b>";
+            pr($objError->getMessage());
+        }
+    }
+
+    function modificarActasComite($seqProyecto, $arrayActasComite, $cant) {
+
+        global $aptBd;
+        $arrErrores = array();
+        $sqlExistentes = "SELECT seqProyectoComite FROM t_pry_proyecto_comite WHERE seqProyecto = $seqProyecto";
+        $exeExistentes = $aptBd->execute($sqlExistentes);
+        //$cant = $exeExistentes->numRows();
+        $datos = Array();
+        $datosDiff = Array();
+        while ($exeExistentes->fields) {
+            $datos[] = $exeExistentes->fields['seqProyectoComite'];
+            $exeExistentes->MoveNext();
+        }
+
+        for ($index = 0; $index < $cant; $index++) {
+            $txtNombreProyectoHijo = '';
+            foreach ($arrayActasComite[$seqProyecto] as $key => $value) {
+                if ($value[($index)] == NULL && $value[($index)] == "") {
+                    $$key = 0;
+                } else {
+                    $$key = $value[($index)];
+                }
+
+                //  ECHO "<BR>".$key ." -> ".$$key;
+            }
+            $datosDiff[] = $seqProyectoComite;
+
+            if (in_array($seqProyectoComite, $datos)) {
+                $query = "UPDATE t_pry_proyecto_comite 
+                        SET                   
+                        numActaComite = $numActaComite,
+                        fchActaComite = '$fchActaComite',
+                        numResolucionComite = $numResolucionComite,
+                        fchResolucionComite = '$fchResolucionComite',
+                        txtObservacionesComite = '$txtObservacionesComite',
+                        bolCondicionesComite = $bolCondicionesComite,
+                        txtCondicionesComite = '$txtCondicionesComite',
+                        bolAproboProyecto = $bolAproboProyecto,
+                        seqEntidadComite = $seqEntidadComite"
+                        . " WHERE seqProyectoComite = $seqProyectoComite"
+                        . " AND seqProyecto = $seqProyecto;
+                        ";
+            } else if ($cant >= $exeExistentes->numRows() && ($seqProyectoComite == "" || $seqProyectoComite == 0)) {
+                $arrayActasComite = Array();
+                $arrayActasComite[$seqProyecto]['numActaComite'][] = $numActaComite;
+                $arrayActasComite[$seqProyecto]['fchActaComite'][] = $fchActaComite;
+                $arrayActasComite[$seqProyecto]['bolAproboProyecto'][] = $bolAproboProyecto;
+                $arrayActasComite[$seqProyecto]['numResolucionComite'][] = $numResolucionComite;
+                $arrayActasComite[$seqProyecto]['fchResolucionComite'][] = $fchResolucionComite;
+                $arrayActasComite[$seqProyecto]['txtObservacionesComite'][] = $txtObservacionesComite;
+                $arrayActasComite[$seqProyecto]['bolCondicionesComite'][] = $bolCondicionesComite;
+                $arrayActasComite[$seqProyecto]['txtCondicionesComite'][] = $txtCondicionesComite;
+                $arrayActasComite[$seqProyecto]['seqEntidadComite'][] = $seqEntidadComite;
+                $this->almacenarActaComite($seqProyecto, $arrayActasComite, count($arrayActasComite));
+            }
+            //echo "<p>" . $query . "</p><br>";
+            try {
+                $aptBd->execute($query);
+            } catch (Exception $objError) {
+                $arrErrores[] = "No se ha podido cargar las actas de comite<b></b>";
+                pr($objError->getMessage());
+            }
+        }
+        //  die();
+        if ($cant < $exeExistentes->numRows()) {
+            $resultado = array_diff($datos, $datosDiff);
+            $delete = "";
+            foreach ($resultado as $value) {
+                $delete .= $value . ",";
+            }
+            //  print_r($resultado);
+            $delete = substr_replace($delete, '', -1, 1);
+            $sql = "DELETE FROM t_pry_proyecto_comite WHERE seqProyectoComite in (" . $delete . ")";
+            try {
+                $aptBd->execute($sql);
+            } catch (Exception $objError) {
+                $arrErrores[] = "No se ha podido eliminar Acta de comite<b></b>";
+                pr($objError->getMessage());
+            }
+        }
     }
 
 }

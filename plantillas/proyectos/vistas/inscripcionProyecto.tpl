@@ -16,11 +16,11 @@
             {assign var=style value = "border-radius: 0 15px 0 0;"}
             {assign var=styleLic value = "border-radius: 0 0 0 0;"}
             {assign var=nav value = "width: 19%"}
-            {assign var=nav1 value = "width: 24%"}
+            {assign var=nav1 value = "width: 20%"}
         {else}
             {assign var=style value = "border-radius: 0 0 0 0;"}
             {assign var=styleLic value = "border-radius: 0 15px 0 0;"}
-            {assign var=nav value = "width: 25%"}
+            {assign var=nav value = "width: 20%"}
             {assign var=nav1 value = "width: 25%"}
         {/if}
 
@@ -28,16 +28,16 @@
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%">
                 {if $seqPryEstadoProceso == "" or $seqPryEstadoProceso >= 1}
 
-                    <li class="nav-item active"  style="{$nav}">
+                    <li class="nav-item active"  style="{$nav1}">
                         <a class="nav-item" id="home-tab" data-toggle="tab" href="#datos" role="tab" aria-controls="home" aria-selected="true" >Datos Básicos</a>
                     </li>
-                    <li  class="nav-item"  style="{$nav}">
+                    <li  class="nav-item"  style="{$nav1}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Tipos Vivienda</em></a>
                     </li>
                     <li  class="nav-item"  style="{$nav1}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Conjuntos Residenciales</em></a>
                     </li>
-                    <li class="nav-item" style="{$nav}">
+                    <li class="nav-item" style="{$nav1}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick="activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', 1);">Licencias <br></a>
                     </li>
                 {/if}
@@ -45,7 +45,10 @@
 
                     <li class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos Financieros</a>
-                    </li>                    
+                    </li>             
+                    <li  class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosComite" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Comite </em></a>
+                    </li>
                     <li  class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Cronograma </em></a>
                     </li>
@@ -56,6 +59,7 @@
                                    activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentes.php', {$arrayFideicomitente|@sizeof});
                            "><em>Polizas  y Fiducia</em></a>
                     </li>
+
                 {/if}
                 <li class="nav-item"  style="{$nav}">   
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="{$style}">Seguimientos <br></a>
@@ -67,14 +71,14 @@
                         <h4 style="position: relative; float: left; width: 50%; margin: 0; padding: 5px;">
                             Datos del Proyecto 
                         </h4>
-                        <div class="dropdown" style="position: relative; float: left; width: 30%; margin: 0; ">
+                        <!--<div class="dropdown" style="position: relative; float: left; width: 30%; margin: 0; ">
                             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="margin: 0; ">INFORMACIÓN
                                 <span class="caret"></span></button>
                             <ul class="dropdown-menu">
                                 <li><a href="#"  data-toggle="modal" data-target="#myModal">Documentos</a></li>
 
                             </ul>
-                        </div>
+                        </div>-->
 
                         <h6 style="position: relative; float: right; width: 50%; margin: 0; padding: 0;">
                             <input type="hidden" id="seqProyecto" name="seqProyecto" value="{if $value.seqProyecto != ""}{$value.seqProyecto}{else}0{/if}" > 
@@ -642,7 +646,9 @@
                 <div class="tab-pane">
                     {include file="proyectos/vistas/inscripcionFiducia.tpl"}
                 </div>
-
+            </div>
+            <div id="datosComite" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
+                {include file="proyectos/vistas/inscripcionComite.tpl"}
             </div>
         {/foreach}
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -30,6 +30,10 @@ $arrayDatosProyNew = array();
 /**
  * Salvar o editar Proyectos si no hay errores
  */
+//echo "<br> 1. " .$_POST['bolAproboProyecto'][0];
+//echo "<br> 2. " .$_POST['bolAproboProyecto'][1];
+//die();
+
 if (empty($arrErrores)) {
     $arrOferentesProy = array();
     $arrRegistros = array();
@@ -43,6 +47,7 @@ if (empty($arrErrores)) {
     $arrayAmparos = Array();
     $arrayInsLicencias = Array();
     $arraConjuntoLicencias = Array();
+    $arrayActasComite = Array();
 
     // $arrTipoEsquema = $claDatosProy->obtenerlistaEsquema();
     $arrPryTipoModalidad = $claDatosProy->obtenerlistamodalidad();
@@ -66,6 +71,7 @@ if (empty($arrErrores)) {
     $arrAmparos = obtenerDatosTabla("t_pry_tipo_amparo", array("seqTipoAmparo", "txtTipoAmparo"), "seqTipoAmparo", "", "seqTipoAmparo DESC, txtTipoAmparo");
     $arrayBanco = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "seqBanco", "", "seqBanco DESC, txtBanco");
     $arrayCity = obtenerDatosTabla("v_frm_ciudad", array("seqCiudad", "txtCiudad"), "seqCiudad", "", "seqCiudad DESC, txtCiudad");
+    $arrayEntComite = obtenerDatosTabla("t_pry_entidad_comite", array("seqEntidadComite", "txtEntidadComite"), "seqEntidadComite", "", "seqEntidadComite DESC, txtEntidadComite");
 // Verifica si es para crear o editar la Oferente
     $seqProyecto = 0;
     $seqProyecto = $_POST['seqProyecto'];
@@ -118,6 +124,7 @@ if (empty($arrErrores)) {
 
 
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($seqProyecto);
+    $arrayComiteActa =  $claDatosProy->obtenerActasComite($seqProyecto);
     $cantConjuntos = $claDatosProy->obtenerCantConjuntos($seqProyecto);
     $cantDoc = $claDatosProy->obtenerDocumentoProyecto($seqProyecto);
     $cantLicencias = $claDatosProy->obtenerCantLicencias($seqProyecto);
@@ -125,6 +132,7 @@ if (empty($arrErrores)) {
     $cantPoliza = $claDatosProy->obtenerCantPoliza($seqProyecto);
     //echo "<br>conjuntos ->".$cantConjuntos;
     $cantTipoVivienda = $claDatosProy->obtenerCantTipoVivienda($seqProyecto);
+    $cantActaComite = $claDatosProy->obtenerCantActaComite($seqProyecto);
 
     include_once './conjuntoArreglos.php';
 
@@ -173,6 +181,14 @@ if (empty($arrErrores)) {
         } else if ($_POST["seqDatoFiducia"] != "" && $_POST["seqDatoFiducia"] > 0) {
             $claProyecto->modificarFiducia($seqProyecto, $arrayFiducia);
         }
+
+        if ($cantActaComite == 0 && isset($_POST["numActaComite"])) {
+            // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
+            $claProyecto->almacenarActaComite($seqProyecto, $arrayActasComite, count($_POST["numActaComite"]));
+        } else if($cantActaComite > 0){
+         
+            $claProyecto->modificarActasComite($seqProyecto, $arrayActasComite, count($_POST["numActaComite"]));
+        }
     }
 }/**
  * Impresion de resultados
@@ -186,6 +202,7 @@ if (empty($arrErrores)) {
     $arrCronogramaFecha = $claDatosProy->obteneCronograma($seqProyecto);
     $arraDatosPoliza = $claDatosProy->obtenerDatosPoliza($seqProyecto);
     $arrayFideicomitente = $claDatosProy->obtenerDatosFideicomiso($seqProyecto);
+   $arrayComiteActa =  $claDatosProy->obtenerActasComite($seqProyecto);
     $arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno DESC, txtPlanGobierno");
 
     foreach ($arrConjuntoResidencial as $keyCon => $valueCon) {
@@ -232,6 +249,8 @@ if (empty($arrErrores)) {
     $claSmarty->assign("arrayFideicomitente", $arrayFideicomitente);
     $claSmarty->assign("arrayCity", $arrayCity);
     $claSmarty->assign("arraConjuntoLicencias", $arraConjuntoLicencias);
+    $claSmarty->assign("arrayEntComite", $arrayEntComite);
+    $claSmarty->assign("arrayComiteActa", $arrayComiteActa);
     $claSmarty->assign("page", "datosProyecto.php?tipo=2");
     $claSmarty->display($txtPlantilla);
 } else {

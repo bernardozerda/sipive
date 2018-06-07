@@ -280,11 +280,10 @@ function selectUsuario(valor, user) {
 }
 
 function ocultarDivEnt(valor, div) {
+    // console.log(valor + " div " + div)
     var id = div.split("Div");
     if (valor == 1) {
         $("#" + div).hide();
-
-
     } else {
         $("#" + id[0]).val("");
         $("#" + div).show();
@@ -312,7 +311,6 @@ function addFideicomitente() {
     fType += "<div class=\"col-md-3\"><p>&nbsp;</p></div>";
     fieldWrapper.append(fType);
     $("#fideicomiso").append(fieldWrapper);
-
     activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentes.php', intId);
 }
 
@@ -386,22 +384,22 @@ var fncEditor = function () {
 YAHOO.util.Event.onContentReady('segOculto', fncEditor)
 
 function dataForm_Archivos(formulario) {
-    console.log("formulario -> " + formulario);
+    // console.log("formulario -> " + formulario);
     var nuevoFormulario = new FormData();
     $(formulario).find(':input').each(function () {
         var elemento = this;
         console.log("elemento -> " + elemento);
         //Si recibe tipo archivo 'file'
         if (elemento.type === 'file') {
-            console.log("elemento.type -> " + elemento.type);
-            console.log("elemento.value -> " + elemento.value);
+            // console.log("elemento.type -> " + elemento.type);
+            //console.log("elemento.value -> " + elemento.value);
             if (elemento.value !== '') {
-                console.log("$('input[type=file]')[0].files -> " + $('input[type="file"]')[0].files);
+                // console.log("$('input[type=file]')[0].files -> " + $('input[type="file"]')[0].files);
                 var file_data = $('input[type="file"]')[0].files;
-                console.log(file_data);
-                console.log("file_data.length -> " + file_data.length);
+                //console.log(file_data);
+                // console.log("file_data.length -> " + file_data.length);
                 for (var i = 0; i < file_data.length; i++) {
-                    console.log("elemento.name -> " + elemento.name + "file_data[" + i + "]" + file_data[i]);
+                    // console.log("elemento.name -> " + elemento.name + "file_data[" + i + "]" + file_data[i]);
                     nuevoFormulario.append(elemento.name, file_data[i]);
                 }
             }
@@ -411,18 +409,92 @@ function dataForm_Archivos(formulario) {
     return nuevoFormulario;
 }
 
-function obtenerPlantillaUnidades() {
+function obtenerPlantillaUnidades(tipo) {
     var valid = true;
-    console.log("proyecto " + $('select[name=seqProyecto]').val());
+    //console.log("proyecto " + $('select[name=seqProyecto]').val());
     if ($('select[name=seqProyecto]').val() == "" || $('select[name=seqProyecto]').val() == null) {
         $("#mensajes").html("<div class='alert alert-danger'><h5>Alerta!!! seleccione un proyecto </h5></div>");
         $("#seqProyecto").css("border", "1px solid #ccc");
         $("#val_seqProyecto").css("display", "inline");
         valid = false;
-    }    
+    }
     if (valid) {
-        location.href = './contenidos/proyectos/plantillas/plantillaUnidades.php?seqProyecto=' + $('select[name=seqProyecto]').val();
+        if (tipo == 1) {
+            location.href = './contenidos/proyectos/plantillas/plantillaUnidades.php?seqProyecto=' + $('select[name=seqProyecto]').val();
+        } else {
+            location.href = './contenidos/proyectos/plantillas/plantillaEstadoUnidades.php?seqProyecto=' + $('select[name=seqProyecto]').val();
+        }
+
     }
 
+}
+
+function addComite() {
+    var intId = $("#actasComite select").length + 1;
+    var fieldWrapper = $("<div id=\"subComite" + intId + "\" />");
+    var fType = "<fieldset style='border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;'>";
+    fType += "<legend style='text-align: right; cursor: hand'><p><h5>&nbsp;<img src='recursos/imagenes/add.png' width='20px' onclick='addComite();'  /><b style='' onclick='addComite();'>&nbsp; Adicionar Actas</b>&nbsp;\n\
+               <img src='recursos/imagenes/remove.png' width='20px' onclick='removerOferente(subComite" + intId + ")'><b style='text-align: right' onclick='removerOferente(subComite" + intId + ")'>&nbsp; Eliminar Acta</b>";
+    fType += "</h5></p></legend>";
+    fType += "<div class='col-md-4'>";
+    fType += "<label class='control-label' >Número de Acta</label><br>";
+    fType += "<input type='number' name='numActaComite[]' id='numActaComite" + intId + "' value='' class='form-control'>";
+    fType += "<input type='hidden' name='seqProyectoComite[]' id='seqProyectoComite" + intId + "' value=''>";
+    fType += "</div>";
+    fType += "<div class='col-md-3'> ";
+    fType += "<label class='control-label' >Fecha Acta</label> ";
+    fType += "<input name='fchActaComite[]' type='text' id='fchActaComite" + intId + "' value='' size='12' readonly=''  class='form-control'  style='width: 70%; position: relative; float: left'>";
+    fType += "<a href='#' onclick='calendarioPopUp(\"fchActaComite" + intId + "\");'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 11%; position: relative; float: right; right:15%'></a>";
+    fType += "</div>";
+    fType += "<div class='col-md-4' style='text-align: right'>";
+    fType += "<div class='btn-group btn-group-toggle' data-toggle='buttons'>";
+    fType += "<label class='btn btn-secondary active alert-success' onclick='document.getElementById(\"bolAproboProyecto" + intId + "\").value =1;'>";
+    fType += "<input type='radio' name='radio[]' id='bolAproboProyectoAp" + intId + "' value='1' autocomplete='off' > Aprobado";
+    fType += "</label>";
+    fType += "<label class='btn btn-secondary alert-danger' onclick='document.getElementById(\"bolAproboProyecto" + intId + "\").value =0;'>";
+    fType += "<input type='radio' name='radio[]' id='bolAproboProyectoNoap" + intId + "' value='0'   autocomplete='off'> No Aprobado";
+    fType += "</label>";
+    fType += "<input type='hidden' name='bolAproboProyecto[]' id='bolAproboProyecto" + intId + "' value=''>";
+    fType += "</div></div>";
+    fType += "<div class='col-md-4'> ";
+    fType += "<label class='control-label' >Número de resoluci&oacute;n</label><br>   ";
+    fType += "<input type='number' name='numResolucionComite[]' id='numResolucionComite' value='' class='form-control'>";
+    fType += "</div>";
+    fType += "<div class='col-md-3'> ";
+    fType += "<label class='control-label' >Fecha Resoluci&oacute;n</label> ";
+    fType += "<input name='fchResolucionComite[]' type='text' id='fchResolucionComite" + intId + "' value='' size='12' readonly=''  class='form-control'  style='width: 70%; position: relative; float: left'>";
+    fType += "<a href='#' onclick='calendarioPopUp(\"fchResolucionComite" + intId + "\");'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 11%; position: relative; float: right; right:15%'></a>";
+    fType += "</div> ";
+    fType += "<div class='col-md-4'> ";
+    fType += "<label class='control-label' >Entidad</label> ";
+    fType += "<select name='seqEntidadComite[]' id='seqEntidadComite" + intId + "' class='form-control'>";
+    fType += "	<option value=''>Seleccione</option>";
+    $("#seqEntidadComite1 option").each(function () {
+        fType += "<option value=" + $(this).attr('value') + ">" + $(this).text() + "</option>";
+    });
+    fType += "</select>";
+    fType += "</div> ";
+    fType += "<div class='col-md-12'> ";
+    fType += "<label class='control-label' >Observaciones Acta</label>";
+    fType += "<textarea name='txtObservacionesComite[]' id='txtObservacionesComite" + intId + "' class='form-control'></textarea>";
+    fType += "</div>";
+    fType += "<div class='col-md-4'>";
+    fType += "<label class='control-label' >Comite Aprobado Condicionado?</label>";
+    fType += "<div class='btn-group btn-group-toggle' data-toggle='buttons'>";
+    fType += "<label class='btn btn-secondary active alert-success' style='margin: 0' onclick='ocultarDivEnt(0, \"txtCondicionesComite" + intId + "Div\");document.getElementById(\"bolCondicionesComite" + intId + "\").value =1;'>";
+    fType += "<input type='radio' name='bolCondiciones[]' id='bolCondiciones" + intId + "'  autocomplete='off' value='1' > SI";
+    fType += "</label>";
+    fType += "<label class='btn btn-secondary alert-danger' style='margin: 0' onclick='ocultarDivEnt(1, \"txtCondicionesComite" + intId + "Div\");document.getElementById(\"bolCondicionesComite" + intId + "\").value =0;'>";
+    fType += "<input type='radio' name='bolCondiciones[]' id='bolCondiciones" + intId + "' value='0' autocomplete='off'  > NO </label>  ";
+    fType += "<input type='hidden' name='bolCondicionesComite[]' id='bolCondicionesComite" + intId + "' value='0'>";
+    fType += "</div></div>";
+    fType += "<div class='col-md-8' id='txtCondicionesComite" + intId + "Div'  > ";
+    fType += "<label class='control-label' >Condiciones</label>  ";
+    fType += "<textarea name='txtCondicionesComite[]' id='txtCondicionesComite{$numcomite}' class='form-control'></textarea>";
+    fType += "</div>";
+    fType += "<p>&nbsp;</p></fieldset>";
+    fType += "</div>";
+    fieldWrapper.append(fType);
+    $("#actasComite").append(fieldWrapper);
 }
 

@@ -88,7 +88,7 @@ class DatosGeneralesProyectos {
         return $arrGrupoGestion;
     }
 
-    function obtenerlistaProyectos($seqProyecto) {
+    function obtenerlistaProyectos($seqProyecto, $id) {
         global $aptBd;
 
         $sql = "SELECT pry.*, pol.*, fid.*, pry.seqProyecto As seqProyecto, txtPlanGobierno,  
@@ -102,12 +102,17 @@ class DatosGeneralesProyectos {
         if ($seqProyecto > 0) {
             $sql .= " where pry.seqProyecto = " . $seqProyecto;
         } else {
-           // $sql .= " where pry.seqProyectoPadre is null";
-             $sql .= " where pry.seqProyecto in (select concat(seqProyecto, ', ') from t_pry_tablero_control group by seqProyecto)";
+            // $sql .= " where pry.seqProyectoPadre is null";
+            if ($id == 2) {
+                $sql .= "  where pry.seqPryEstadoProceso in(5,6)";
+            } else {
+                $sql .= "  where pry.seqPryEstadoProceso != 7";
+            }
+             $sql .= " AND (seqProyectoPadre =  0 or seqProyectoPadre is null)";
         }
 
         $sql . " ORDER BY pry.seqProyecto asc ";
-       // echo "<p>".$sql."</p>";
+       //  echo "<p>".$sql."</p>";
 
         $objRes = $aptBd->execute($sql);
         $datos = Array();
@@ -637,6 +642,18 @@ class DatosGeneralesProyectos {
         return $cant;
     }
 
+    public function obtenerCantActaComite($seqProyecto) {
+        global $aptBd;
+        $sqlIn = "select count(*) AS cant from t_pry_proyecto_comite where seqProyecto = " . $seqProyecto;
+        $objResIn = $aptBd->execute($sqlIn);
+        $cant = 0;
+        while ($objResIn->fields) {
+            $cant = $objResIn->fields['cant'];
+            $objResIn->MoveNext();
+        }
+        return $cant;
+    }
+
     public function obtenerConjuntoResidencial($seqProyecto) {
 
         global $aptBd;
@@ -853,6 +870,37 @@ class DatosGeneralesProyectos {
         }
 //echo "ba". $datos;
         return $datos;
+    }
+
+    public function obtenerActasComite($seqProyecto) {
+
+        global $aptBd;
+
+        $sql = "SELECT *
+            FROM
+                    t_pry_proyecto_comite
+            WHERE
+                    seqProyecto = " . $seqProyecto . "
+            ORDER BY
+                    fchActaComite desc";
+       // echo $sql;
+        $arrActasComite = Array();
+        $objRes = $aptBd->execute($sql);
+        while ($objRes->fields) {
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['seqProyectoComite'] = $objRes->fields['seqProyectoComite'];
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['numActaComite'] = $objRes->fields['numActaComite'];
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['fchActaComite'] = $objRes->fields['fchActaComite'];
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['numResolucionComite'] = $objRes->fields['numResolucionComite'];
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['fchResolucionComite'] = $objRes->fields['fchResolucionComite'];
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['txtObservacionesComite'] = $objRes->fields['txtObservacionesComite'];
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['bolCondicionesComite'] = $objRes->fields['bolCondicionesComite'];
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['txtCondicionesComite'] = $objRes->fields['txtCondicionesComite'];
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['bolAproboProyecto'] = $objRes->fields['bolAproboProyecto'];
+            $arrActasComite[$objRes->fields['seqProyectoComite']]['seqEntidadComite'] = $objRes->fields['seqEntidadComite'];
+
+            $objRes->MoveNext();
+        }
+        return $arrActasComite;
     }
 
 }

@@ -98,7 +98,20 @@ $arrayFiducia['seqTipoFideicomitente'] = $_POST['seqTipoFideicomitente'];
 $arrayFiducia['txtNombreFideicomitente'] = $_POST['txtNombreFideicomitente'];
 $arrayFiducia['seqFideicomitente'] = $_POST['seqFideicomitente'];
 
-//foreach ($arrayFiducia['seqTipoFideicomitente'] as $key => $value) {
-//    echo "key = ".$key ." value -> ".$value."   nombre = ".$arrayFiducia['txtFideicomitiente'][$key];
+$arrayActasComite[$seqProyecto]['seqProyectoComite'] = $_POST["seqProyectoComite"];
+$arrayActasComite[$seqProyecto]['numActaComite'] = $_POST["numActaComite"];
+$arrayActasComite[$seqProyecto]['fchActaComite'] = $_POST["fchActaComite"];
+$arrayActasComite[$seqProyecto]['numResolucionComite'] = $_POST["numResolucionComite"];
+$arrayActasComite[$seqProyecto]['fchResolucionComite'] = $_POST["fchResolucionComite"];
+$arrayActasComite[$seqProyecto]['bolAproboProyecto'] = $_POST["bolAproboProyecto"];
+$arrayActasComite[$seqProyecto]['txtObservacionesComite'] = $_POST["txtObservacionesComite"];
+$arrayActasComite[$seqProyecto]['bolCondicionesComite'] = $_POST["bolCondicionesComite"];
+$arrayActasComite[$seqProyecto]['txtCondicionesComite'] = $_POST["txtCondicionesComite"];
+$arrayActasComite[$seqProyecto]['seqEntidadComite'] = $_POST["seqEntidadComite"];
+
+//var_dump($arrayActasComite);
+
+//foreach ($arrayActasComite['numActaComite'] as $key => $value) {
+//    echo "key = ".$key ." value -> ".$value."   nombre = ".$arrayActasComite['txtFideicomitiente'][$key];
 //}
 

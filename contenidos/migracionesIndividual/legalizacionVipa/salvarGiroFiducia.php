@@ -61,14 +61,14 @@ if($_POST['banco'] == 0){
 //if(! esFechaValida($_POST['fechaRadicado'])){
 //    $arrErrores[] = "Indique la fecha de radicado de la solicitud";
 //}
-//
-//if(intval($_POST['orden']) == 0){
-//    $arrErrores[] = "Indique el número de orden de la solicitud";
-//}
-//
-//if(! esFechaValida($_POST['fechaOrden'])){
-//    $arrErrores[] = "Indique la fecha de orden de la solicitud";
-//}
+
+if(intval($_POST['orden']) == 0){
+    $arrErrores[] = "Indique el número de orden de la solicitud";
+}
+
+if(! esFechaValida($_POST['fechaOrden'])){
+    $arrErrores[] = "Indique la fecha de orden de la solicitud";
+}
 
 if(trim($_POST['txtSubsecretaria']) == "" and trim($_POST['txtSubdireccion']) == ""){
     $arrErrores[] = "Indique el nombre del Subsecretario(a) o Subdirector(a)";

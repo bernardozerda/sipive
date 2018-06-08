@@ -617,7 +617,7 @@ class Proyecto {
         }
         return $datos;
     }
-    
+
     public function datosOferenteProyecto($seqProyecto) {
         global $aptBd;
         $sql = "SELECT group_concat(txtNombreOferente separator ' ') as oferente FROM  t_pry_proyecto_oferente
@@ -633,7 +633,7 @@ class Proyecto {
             $datos = $objRes->fields['oferente'];
             $objRes->MoveNext();
         }
-        return $datos;        
+        return $datos;
     }
 
     public function obtenerDatosviviendaFicha($seqProyecto) {
@@ -654,6 +654,23 @@ class Proyecto {
             $objRes->MoveNext();
         }
         // var_dump($datos);
+        return $datos;
+    }
+
+    public function datosAvanceObraFicha($seqProyecto) {
+        global $aptBd;
+        $sql = "SELECT porcIncTerreno FROM t_pry_cronograma_obras ";
+        if ($seqProyecto > 0) {
+            $sql .= " where  seqProyecto = " . $seqProyecto;
+        }
+        $sql . " ORDER BY txtNombreOferente ASC";
+        //echo "<p>" . $sql . "</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = "";
+        while ($objRes->fields) {
+            $datos = $objRes->fields['porcIncTerreno'];
+            $objRes->MoveNext();
+        }
         return $datos;
     }
 

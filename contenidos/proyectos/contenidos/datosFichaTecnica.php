@@ -26,6 +26,7 @@ $seqProyecto = $_GET['seqProyecto'];
 $arrProyectos = $claProyecto->obtenerDatosProyectosFicha($seqProyecto);
 $arrDatosVivienda = $claProyecto->obtenerDatosViviendaFicha($seqProyecto);
 $nombreOferente = $claProyecto->datosOferenteProyecto($seqProyecto);
+$avance = $claProyecto->datosAvanceObraFicha($seqProyecto);
 
 $directorio = '../../../recursos/proyectos/proyecto-' . $seqProyecto . '/imagenes';
 
@@ -189,6 +190,7 @@ $claSmarty->assign("cantOcupacion", $cantOcupacion);
 $claSmarty->assign("cantExistencia", $cantExistencia);
 // variables para datos financieros
 $claSmarty->assign("arrFinanciera", $arrFinanciera);
+$claSmarty->assign("avance", $avance);
 $claSmarty->assign("nombreOferente", $nombreOferente);
 $claSmarty->assign("arrListadoGirosConstructor", $arrListadoGirosConstructor);
 $claSmarty->assign("seqProyecto", $seqProyecto);

@@ -98,8 +98,8 @@
                         <tr>
                             <td>{$avance}</td>
                             <td>{$fechaAvance}</td>
-                            <td >{$cantOcupacion}</td>  
-                            <td>{$cantExistencia}</td>
+                            <td >{$cantOcupacion} Unidades</td>  
+                            <td>{$cantExistencia} Unidades</td>
                             <td>
                                 <div class="col-sm-12 text-right">
                                     $ {$arrFinanciera.$seqProyecto.constructor|number_format:0:',':'.'}

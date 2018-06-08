@@ -497,7 +497,7 @@ class Proyecto {
                     '$txtCorreoInterventor',
                     $bolTipoPersonaInterventor,
                     $numCedulaInterventor,
-                    $numTProfesionalInterventor,
+                    '$numTProfesionalInterventor',
                     $numNitInterventor,
                     '$txtNombreRepLegalInterventor',
                     $numTelefonoRepLegalInterventor,
@@ -713,7 +713,7 @@ class Proyecto {
                         txtCorreoInterventor = 	'" . $txtCorreoInterventor . "' , 
                         bolTipoPersonaInterventor = " . $bolTipoPersonaInterventor . ",
                         numCedulaInterventor = 	" . $numCedulaInterventor . ",
-                        numTProfesionalInterventor =" . $numTProfesionalInterventor . ",
+                        numTProfesionalInterventor ='" . $numTProfesionalInterventor . "',
                         numNitInterventor =" . $numNitInterventor . ",
                         txtNombreRepLegalInterventor = '" . $txtNombreRepLegalInterventor . "' , 
                         numTelefonoRepLegalInterventor =" . $numTelefonoRepLegalInterventor . ",
@@ -1879,7 +1879,7 @@ class Proyecto {
     }
 
     function almacenarActaComite($seqProyecto, $arrayActasComite, $cant) {
-        
+
         global $aptBd;
         $arrErrores = array();
         $sql = "INSERT INTO t_pry_proyecto_comite
@@ -1900,14 +1900,10 @@ class Proyecto {
             foreach ($arrayActasComite[$seqProyecto] as $key => $value) {
                 //echo "<p>".count($value)."</p>";
                 if (count($value) >= 1) {
-                    echo $value[($index)] == "" ? $$key = '0' : $$key = $value[($index)];
-                    // $$key = $value[($index)];
+                    $value[($index)] == "" ? $$key = '0' : $$key = $value[($index)];
                 } else {
                     $value == "" ? $$key = '0' : $$key = $value;
-                    // $$key = $value;
                 }
-                //echo "key = " . $key . " value -> " . $value;
-                //echo "<br>***".$value[($index)]."***<br>";
             }
             $sql .= "(
                         $numActaComite,
@@ -1924,7 +1920,7 @@ class Proyecto {
 
         try {
             $sql = substr_replace($sql, ';', -1, 1);
-           // echo "<p>" . $sql . "</p>";
+            // echo "<p>" . $sql . "</p>";
             $aptBd->execute($sql);
         } catch (Exception $objError) {
             $arrErrores[] = "<b>No se ha podido almacenar el El acta del comite </b>";
@@ -1954,8 +1950,6 @@ class Proyecto {
                 } else {
                     $$key = $value[($index)];
                 }
-
-                //  ECHO "<BR>".$key ." -> ".$$key;
             }
             $datosDiff[] = $seqProyectoComite;
 

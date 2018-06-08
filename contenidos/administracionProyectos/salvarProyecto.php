@@ -124,7 +124,7 @@ if (empty($arrErrores)) {
 
 
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($seqProyecto);
-    $arrayComiteActa =  $claDatosProy->obtenerActasComite($seqProyecto);
+    $arrayComiteActa = $claDatosProy->obtenerActasComite($seqProyecto);
     $cantConjuntos = $claDatosProy->obtenerCantConjuntos($seqProyecto);
     $cantDoc = $claDatosProy->obtenerDocumentoProyecto($seqProyecto);
     $cantLicencias = $claDatosProy->obtenerCantLicencias($seqProyecto);
@@ -161,18 +161,15 @@ if (empty($arrErrores)) {
 
             $claProyecto->modificarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
         }
-
         if ($cantCronograma == 0 && isset($_POST["numActaDescriptiva"])) {
-
             $claProyecto->almacenarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
-        } else if (isset($_POST["numActaDescriptiva"])) {
-
+        } else if ($cantCronograma > 0 || count($_POST["numActaDescriptiva"]) > 0) {
             $claProyecto->modificarCronograma($seqProyecto, $arraycronograma, count($_POST["numActaDescriptiva"]));
         }
 
         if ($cantPoliza == 0 && $_POST["numPoliza"] != "") {
             $claProyecto->almacenarPoliza($seqProyecto, $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
-        } else if ($_POST["numPoliza"] != "") {
+        } else if ($_POST["numPoliza"] != "" || $cantPoliza > 0) {
             $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
         }
 
@@ -181,12 +178,11 @@ if (empty($arrErrores)) {
         } else if ($_POST["seqDatoFiducia"] != "" && $_POST["seqDatoFiducia"] > 0) {
             $claProyecto->modificarFiducia($seqProyecto, $arrayFiducia);
         }
-
-        if ($cantActaComite == 0 && isset($_POST["numActaComite"])) {
+       // echo $cantActaComite ."== 0 &&" . $_POST["numActaComite"]. " !=  &&". $_POST["numActaComite"]." >  0";
+        if ($cantActaComite == 0 && $_POST["numActaComite"] != "" && $_POST["numActaComite"] >  0) {
             // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
             $claProyecto->almacenarActaComite($seqProyecto, $arrayActasComite, count($_POST["numActaComite"]));
-        } else if($cantActaComite > 0){
-         
+        } else if ($cantActaComite > 0) {
             $claProyecto->modificarActasComite($seqProyecto, $arrayActasComite, count($_POST["numActaComite"]));
         }
     }
@@ -202,7 +198,7 @@ if (empty($arrErrores)) {
     $arrCronogramaFecha = $claDatosProy->obteneCronograma($seqProyecto);
     $arraDatosPoliza = $claDatosProy->obtenerDatosPoliza($seqProyecto);
     $arrayFideicomitente = $claDatosProy->obtenerDatosFideicomiso($seqProyecto);
-   $arrayComiteActa =  $claDatosProy->obtenerActasComite($seqProyecto);
+    $arrayComiteActa = $claDatosProy->obtenerActasComite($seqProyecto);
     $arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno DESC, txtPlanGobierno");
 
     foreach ($arrConjuntoResidencial as $keyCon => $valueCon) {

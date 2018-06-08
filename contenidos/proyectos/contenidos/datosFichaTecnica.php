@@ -31,7 +31,6 @@ $arraAvance = explode("**", $datosAvance);
 $avance = $arraAvance[0];
 $fechaAvance = $arraAvance[1];
 
-
 $directorio = '../../../recursos/proyectos/proyecto-' . $seqProyecto . '/imagenes';
 
 $dir = @dir($directorio);
@@ -108,6 +107,7 @@ $claGestion->informacionResoluciones($seqProyecto);
 
 $arrFinanciera[$seqProyecto]['porcentajeTotalConstructor'] = $arrFinanciera[$seqProyecto]['porcentajeTotalConstructor'] * 100;
 $arrFinanciera[$seqProyecto]['saldoDesembolso'] = $arrFinanciera[$seqProyecto]['actual'] - $arrFinanciera[$seqProyecto]['constructor'];
+if($arrFinanciera[$seqProyecto]['actual'] > 0)
 $arrFinanciera[$seqProyecto]['porcentajeSaldoDesembolso'] = ($arrFinanciera[$seqProyecto]['saldoDesembolso'] / $arrFinanciera[$seqProyecto]['actual']) * 100;
 
 // redefine la clave aprobado para ampliar informacion
@@ -156,7 +156,6 @@ foreach($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion){
         $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
         $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
         $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['valor'] = abs($arrResolucion['total']);
-
         $sql = "select count(seqUnidadVinculado) as cuenta from t_pry_aad_unidades_vinculadas where seqUnidadActo = $seqUnidadActo";
         $arrCantidad = $aptBd->GetAll($sql);
         $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['unidades'] = $arrCantidad[0]['cuenta'];
@@ -177,7 +176,6 @@ $arrFinanciera[$seqProyecto]['entidadFiducia'] = array_shift(obtenerDatosTabla(
 ));
 
 //pr($arrFinanciera);
-
 $claSmarty->assign("arrProyectos", $arrProyectos);
 $claSmarty->assign("cantUnidades", $cantUnidades);
 $claSmarty->assign("cantUnidadesVinculadas", $cantUnidadesVinculadas);

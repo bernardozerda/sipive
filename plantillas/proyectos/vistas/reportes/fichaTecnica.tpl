@@ -27,21 +27,36 @@
                                     {/foreach}
                             </ol>
                             <!-- Wrapper for slides -->
-                            <div class="carousel-inner" style="height: 190px">
+                            <div class="carousel-inner" style="height: 195px">
                                 {foreach from=$arrImagenes key=keyImg item=valueImg} 
                                     {if $keyImg ==0}
                                         <div class="item active">
-                                            <img src="recursos/proyectos/{$valueImg}" alt="Los Angeles" style="width:100%;">
+                                            <img src="recursos/proyectos/{$valueImg}" alt="Los Angeles" style="width:100%; height: 90%"  data-toggle="modal" data-target="#{$keyImg}">
                                         </div>
                                     {else}
                                         <div class="item">
-                                            <img src="recursos/proyectos/{$valueImg}" alt="Los Angeles" style="width:100%;">
+                                            <img src="recursos/proyectos/{$valueImg}" alt="Los Angeles" style="width:100%; height: 90%" data-toggle="modal" data-target="#{$keyImg}">
                                         </div>
                                     {/if}
+                                    <div class="modal fade" id="{$keyImg}" tabindex="-1" role="dialog" aria-labelledby="{$keyImg}" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="{$keyImg}">IMAGEN DETALLADA</h5>                                                    
+                                                </div>
+                                                <div class="modal-body" style="text-align: center">
+                                                    <img src="recursos/proyectos/{$valueImg}" alt="Los Angeles" >
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 {/foreach}                               
                             </div>
-
+                            <!-- Modal -->
                             <!-- Left and right controls -->
                             <a class="left carousel-control" href="#myCarousel" data-slide="prev">
                                 <span class="glyphicon glyphicon-chevron-left"></span>
@@ -73,8 +88,8 @@
                         </thead>
                         <tr>
                             <td>{$nombreOferente}</td>
-                            <td>{$value.txtLocalidad}</td>
-                            <td>{$value.txtProyectoGrupo}</td>  
+                            <td >{$value.txtLocalidad}</td>
+                            <td >{$value.txtProyectoGrupo}</td>  
                             <td> {$cantUnidades}</td>
                             <td> {$cantUnidadesVinculadas}</td>
                             <td >{$pendientesPorVincular}</td>
@@ -145,7 +160,7 @@
                         </li> 
                         <li>En reunión efectuada el 01 de Junio con apoyo a la construcción y el constructor, se determinó que radicarán solicitud de recursos para llegar al 90% del desembolso y así subsanar inconvenientes financieros. 
                         </li>
-                         <li>Pendiente terminar salón comunal para solicitar permiso
+                        <li>Pendiente terminar salón comunal para solicitar permiso
                         </li>
                     </ui>
                     <p>&nbsp;</p>

@@ -137,13 +137,16 @@
                             <li><b>Total parqueaderos:</b>   {$valueV.totalParq+$valueV.totalParqDisc}</li>
                             {/foreach}
                         <p>&nbsp;</p>
-                        <li>De acuerdo con el último informe de interventoría de Marzo  2018 se informa un avance de obra de 98.50%. Las obras de viviendas se encuentran terminadas. 
+                        <li>De acuerdo con el último informe de interventoría de abril 2018 se establece un avance de obra de 98.50%. Las obras de viviendas se encuentran terminadas. 
                         </li>
-                        <li>La interventoría informa que continúan pendientes las obras de urbanismo externo (Salón comunal y parques). Razón por la cual la alcaldía no ha expedido el permiso de ocupación de 34 VIP. Estas obras se encuentran suspendidas desde enero de 2018 bajo la justificación que no hay flujo de caja y que según lo informado por el constructor, se reiniciaran obras a inicios de mayo de 2018.
+                        <li>La interventoría informa que continúan pendientes obras de urbanismo externo (Salón comunal), razón por la cual la alcaldía no ha expedido permiso de ocupación de 34 VIP. Estas obras se encuentran suspendidas desde enero (2018) con la justificación que no hay flujo de caja (según lo informado por el constructor).
                         </li>
-                        <li>La Constructora radicó nueva solicitud de prórroga al cronograma bajo radicado 1-2018-06131 del 28-02-2018 con fecha final de entrega el 30/06/2018, con la justificación de que falta la expedición del permiso de ocupación. La solicitud no es presentada dentro de los plazos vigentes del proyecto y no se presenta con el concepto y aval de la interventoría con soportes. Se emitirá un oficio dando a conocer una fecha limite para la culminación de procesos pendientes y entrega de las VIP. Fecha estimada 30-06-2018.
-                        </li>                       
-
+                        <li>El 04/05/2018 la SDHT informó que no es procedente la solicitud de prorroga teniendo en cuenta que el cronograma se encuentra vencido.
+                        </li> 
+                        <li>En reunión efectuada el 01 de Junio con apoyo a la construcción y el constructor, se determinó que radicarán solicitud de recursos para llegar al 90% del desembolso y así subsanar inconvenientes financieros. 
+                        </li>
+                         <li>Pendiente terminar salón comunal para solicitar permiso
+                        </li>
                     </ui>
                     <p>&nbsp;</p>
 

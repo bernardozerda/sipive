@@ -73,8 +73,8 @@
                         </thead>
                         <tr>
                             <td>{$nombreOferente}</td>
-                            <td >{$value.txtLocalidad}</td>
-                            <td ></td>  
+                            <td>{$value.txtLocalidad}</td>
+                            <td>{$value.txtProyectoGrupo}</td>  
                             <td> {$cantUnidades}</td>
                             <td> {$cantUnidadesVinculadas}</td>
                             <td >{$pendientesPorVincular}</td>

@@ -97,7 +97,7 @@
                         </thead>
                         <tr>
                             <td>{$avance}</td>
-                            <td ></td>
+                            <td>{$fechaAvance}</td>
                             <td >{$cantOcupacion}</td>  
                             <td>{$cantExistencia}</td>
                             <td>

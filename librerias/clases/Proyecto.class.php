@@ -659,7 +659,7 @@ class Proyecto {
 
     public function datosAvanceObraFicha($seqProyecto) {
         global $aptBd;
-        $sql = "SELECT porcIncTerreno FROM t_pry_cronograma_obras ";
+        $sql = "SELECT concat(porcIncTerreno ,'**', fchFinalTerreno ) as datosAvance FROM t_pry_cronograma_obras ";
         if ($seqProyecto > 0) {
             $sql .= " where  seqProyecto = " . $seqProyecto;
         }
@@ -668,7 +668,7 @@ class Proyecto {
         $objRes = $aptBd->execute($sql);
         $datos = "";
         while ($objRes->fields) {
-            $datos = $objRes->fields['porcIncTerreno'];
+            $datos = $objRes->fields['datosAvance'];
             $objRes->MoveNext();
         }
         return $datos;

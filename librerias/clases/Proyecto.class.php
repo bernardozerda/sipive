@@ -596,12 +596,13 @@ class Proyecto {
     public function obtenerDatosProyectosFicha($seqProyecto) {
 
         global $aptBd;
-        $sql = "SELECT pry.*, pol.*, fid.*, con.*, loc.*, pry.seqProyecto as seqProyecto, txtTipoProyecto "
+        $sql = "SELECT pry.*, pol.*, fid.*, con.*, loc.*, gru.*, pry.seqProyecto as seqProyecto, txtTipoProyecto "
                 . "FROM  t_pry_proyecto pry "
                 . "LEFT JOIN t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto) "
                 . "LEFT JOIN t_pry_datos_fiducia fid on(pry.seqProyecto = fid.seqProyecto) "
                 . "LEFT JOIN t_pry_constructor con USING(seqConstructor) "
-                . "LEFT JOIN t_frm_localidad loc USING(seqLocalidad)"
+                . "LEFT JOIN t_frm_localidad loc USING(seqLocalidad) "
+                . "LEFT JOIN t_pry_proyecto_grupo gru USING(seqProyectoGrupo) "
                 . "LEFT JOIN T_PRY_TIPO_PROYECTO USING(seqTipoProyecto)";
         if ($seqProyecto > 0) {
             $sql .= " where  pry.seqProyecto = " . $seqProyecto;

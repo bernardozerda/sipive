@@ -72,7 +72,7 @@
                             </tr>
                         </thead>
                         <tr>
-                            <td>{$value.txtNombreConstructor}</td>
+                            <td>{$nombreOferente}</td>
                             <td >{$value.txtLocalidad}</td>
                             <td ></td>  
                             <td> {$cantUnidades}</td>

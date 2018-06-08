@@ -616,6 +616,24 @@ class Proyecto {
         }
         return $datos;
     }
+    
+    public function datosOferenteProyecto($seqProyecto) {
+        global $aptBd;
+        $sql = "SELECT group_concat(txtNombreOferente separator ' ') as oferente FROM  t_pry_proyecto_oferente
+                LEFT JOIN t_pry_entidad_oferente using(seqOferente)  ";
+        if ($seqProyecto > 0) {
+            $sql .= " where  seqProyecto = " . $seqProyecto;
+        }
+        $sql . " ORDER BY txtNombreOferente ASC";
+        //echo "<p>" . $sql . "</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = "";
+        while ($objRes->fields) {
+            $datos = $objRes->fields['oferente'];
+            $objRes->MoveNext();
+        }
+        return $datos;        
+    }
 
     public function obtenerDatosviviendaFicha($seqProyecto) {
 

@@ -190,7 +190,9 @@
                             </td>
                             <td style="text-align: right">
                                 Total de giros a fiducia por<br>
-                                $ {$arrFinanciera.$seqProyecto.fiducia|number_format:0:',':'.'}
+                                $ {$arrFinanciera.$seqProyecto.fiducia|number_format:0:',':'.'}<br>
+                                Recursos girados a: {$arrFinanciera.$seqProyecto.entidadFiducia.txtRazonSocialFiducia}
+                                [{$arrFinanciera.$seqProyecto.entidadFiducia.numNitFiducia}]
                             </td>
                             <td style="text-align: left">
                                 {foreach from=$arrFinanciera.$seqProyecto.indexado.detalle key=seqUnidadActo item=arrResolucion}

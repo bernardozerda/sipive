@@ -2003,14 +2003,14 @@ class GestionFinancieraProyectos
             if($arrReporte[$seqProyecto]['totalFiducia'] == 0){
                 $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = 0;
             }else {
-                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = round($arrReporte[$seqProyecto]['totalFiducia'] / $arrReporte[$seqProyecto]['actual'] ,2);
+                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = round($arrReporte[$seqProyecto]['totalFiducia'] / $arrReporte[$seqProyecto]['actual'] ,4);
             }
 
             // constructor
             if($arrReporte[$seqProyecto]['constructor'] == 0){
                 $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = 0;
             }else {
-                $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = round($arrReporte[$seqProyecto]['constructor'] / $arrReporte[$seqProyecto]['actual'] ,2);
+                $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = round($arrReporte[$seqProyecto]['constructor'] / $arrReporte[$seqProyecto]['actual'] ,4);
             }
 
             // actual fiducia
@@ -2020,7 +2020,7 @@ class GestionFinancieraProyectos
             if($arrReporte[$seqProyecto]['actualFiducia'] == 0){
                 $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = 0;
             }else {
-                $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = round($arrReporte[$seqProyecto]['actualFiducia'] / $arrReporte[$seqProyecto]['actual'] ,2);
+                $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = round($arrReporte[$seqProyecto]['actualFiducia'] / $arrReporte[$seqProyecto]['actual'] ,4);
             }
 
         }

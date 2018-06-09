@@ -190,6 +190,7 @@ $claSmarty->assign("vigCumplimiento", $vigCumplimiento);
 $claSmarty->assign("vigAnticipo", $vigAnticipo);
 $claSmarty->assign("cantOcupacion", $cantOcupacion);
 $claSmarty->assign("cantExistencia", $cantExistencia);
+
 // variables para datos financieros
 $claSmarty->assign("arrFinanciera", $arrFinanciera);
 $claSmarty->assign("avance", $avance);
@@ -202,4 +203,4 @@ if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);
 }
 
-//pr($arrListadoGirosConstructor);
+//pr($arrFinanciera);

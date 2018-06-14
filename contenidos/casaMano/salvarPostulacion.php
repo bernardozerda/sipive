@@ -104,10 +104,10 @@ $seqEstadoProcesoFormulario = array_shift(
     )
 );
 
-$bolValidacionSoporteDocumentos = false;
-if($_POST['seqPlanGobierno'] == 3 and $seqEstadoProcesoFormulario == 6){
-    $bolValidacionSoporteDocumentos = true;
-}
+//$bolValidacionSoporteDocumentos = false;
+//if($_POST['seqPlanGobierno'] == 3 and $seqEstadoProcesoFormulario == 6){
+//    $bolValidacionSoporteDocumentos = true;
+//}
 
 /**********************************************************************************************************************
  * LIMPIEZA DE CARACTERES
@@ -210,154 +210,154 @@ if (!empty($_POST['hogar'])) {
 
             $numCuentaCasado ++;
 
-            if($bolValidacionSoporteDocumentos == true){
-
-                // validaciones de soprote de documento de estado civil
-                if(doubleval($arrCiudadano['numConsecutivoCasado']) == 0){
-                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
-                }
-
-                if(intval($arrCiudadano['numNotariaCasado']) == 0){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
-                }
-
-                if(intval($arrCiudadano['seqCiudadCasado']) == 0){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
-                }
-
-                // limpia las otras variables del estado civil
-//                $arrCiudadano['numConsecutivoCasado'] = 0;
-//                $arrCiudadano['numNotariaCasado'] = "";
-//                $arrCiudadano['seqCiudadCasado'] = 0;
-                $arrCiudadano['numConsecutivoCSCDL'] = "";
-                $arrCiudadano['txtEntidadCSCDL'] = "";
-                $arrCiudadano['seqCiudadCSCDL'] = 0;
-                $arrCiudadano['numNotariaCSCDL'] = "";
-                $arrCiudadano['numNotariaSoltero'] = "";
-                $arrCiudadano['seqCiudadSoltero'] = 0;
-                $arrCiudadano['txtCertificacionUnion'] = "";
-                $arrCiudadano['numConsecutivoUnion'] = "";
-                $arrCiudadano['txtEntidadUnion'] = "";
-                $arrCiudadano['numNotariaUnion'] = "";
-                $arrCiudadano['seqCiudadUnion'] = 0;
-
-            }
-
-        }
-
-        // validacion para el soprote de documentos de estado civil
-        if ($arrCiudadano['seqEstadoCivil'] == 8) {
-
-            if($bolValidacionSoporteDocumentos == true) {
-                if (doubleval($arrCiudadano['numConsecutivoCSCDL']) == 0) {
-                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
-                }
-
-                if (trim($arrCiudadano['txtEntidadCSCDL']) == "") {
-                    $arrErrores[] = "Indique la entidad del soprote del estado civil";
-                }
-
-                if (trim($arrCiudadano['txtEntidadCSCDL']) == "Notaria" and intval($arrCiudadano['numNotariaCSCDL']) == 0) {
-                    $arrErrores[] = "Indique la notaría del soprote del estado civil";
-                }
-
-                if (intval($arrCiudadano['seqCiudadCSCDL']) == 0) {
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
-                }
-
-                // limpia las otras variables del estado civil
-                $arrCiudadano['numConsecutivoCasado'] = 0;
-                $arrCiudadano['numNotariaCasado'] = "";
-                $arrCiudadano['seqCiudadCasado'] = 0;
+//            if($bolValidacionSoporteDocumentos == true){
+//
+//                // validaciones de soprote de documento de estado civil
+//                if(doubleval($arrCiudadano['numConsecutivoCasado']) == 0){
+//                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
+//                }
+//
+//                if(intval($arrCiudadano['numNotariaCasado']) == 0){
+//                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+//                }
+//
+//                if(intval($arrCiudadano['seqCiudadCasado']) == 0){
+//                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+//                }
+//
+//                // limpia las otras variables del estado civil
+////                $arrCiudadano['numConsecutivoCasado'] = 0;
+////                $arrCiudadano['numNotariaCasado'] = "";
+////                $arrCiudadano['seqCiudadCasado'] = 0;
 //                $arrCiudadano['numConsecutivoCSCDL'] = "";
 //                $arrCiudadano['txtEntidadCSCDL'] = "";
 //                $arrCiudadano['seqCiudadCSCDL'] = 0;
 //                $arrCiudadano['numNotariaCSCDL'] = "";
-                $arrCiudadano['numNotariaSoltero'] = "";
-                $arrCiudadano['seqCiudadSoltero'] = 0;
-                $arrCiudadano['txtCertificacionUnion'] = "";
-                $arrCiudadano['numConsecutivoUnion'] = "";
-                $arrCiudadano['txtEntidadUnion'] = "";
-                $arrCiudadano['numNotariaUnion'] = "";
-                $arrCiudadano['seqCiudadUnion'] = 0;
-            }
-
-        }
-
-        if ($arrCiudadano['seqEstadoCivil'] == 2) {
-
-            if($bolValidacionSoporteDocumentos == true) {
-
-                if (intval($arrCiudadano['numNotariaSoltero']) == 0) {
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
-                }
-
-                if (intval($arrCiudadano['seqCiudadSoltero']) == 0) {
-                    $arrErrores[] = "Indique la ciudad del soprote del estado civil";
-                }
-
-                // limpia las otras variables del estado civil
-                $arrCiudadano['numConsecutivoCasado'] = 0;
-                $arrCiudadano['numNotariaCasado'] = "";
-                $arrCiudadano['seqCiudadCasado'] = 0;
-                $arrCiudadano['numConsecutivoCSCDL'] = "";
-                $arrCiudadano['txtEntidadCSCDL'] = "";
-                $arrCiudadano['seqCiudadCSCDL'] = 0;
-                $arrCiudadano['numNotariaCSCDL'] = "";
 //                $arrCiudadano['numNotariaSoltero'] = "";
 //                $arrCiudadano['seqCiudadSoltero'] = 0;
-                $arrCiudadano['txtCertificacionUnion'] = "";
-                $arrCiudadano['numConsecutivoUnion'] = "";
-                $arrCiudadano['txtEntidadUnion'] = "";
-                $arrCiudadano['numNotariaUnion'] = "";
-                $arrCiudadano['seqCiudadUnion'] = 0;
-            }
-
-        }
-
-        // Debe haber minimo dos personas con estado civil union marital
-        if ($arrCiudadano['seqEstadoCivil'] == 7) {
-            $numCuentaUnionMarital ++;
-
-            if($bolValidacionSoporteDocumentos == true){
-
-                if(trim($arrCiudadano['txtCertificacionUnion']) == 0){
-                    $arrErrores[] = "Indique la certificacion del soprote del estado civil";
-                }
-
-                if(doubleval($arrCiudadano['numConsecutivoUnion']) == 0){
-                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
-                }
-
-                if(trim($arrCiudadano['txtEntidadUnion']) == "Notaria" and intval($arrCiudadano['numNotariaUnion']) == 0){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
-                }
-
-                if(trim($arrCiudadano['txtEntidadUnion']) == 0){
-                    $arrErrores[] = "Indique la entidad del soprote del estado civil";
-                }
-
-                if(intval($arrCiudadano['seqCiudadUnion']) == 0){
-                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
-                }
-
-                // limpia las otras variables del estado civil
-                $arrCiudadano['numConsecutivoCasado'] = 0;
-                $arrCiudadano['numNotariaCasado'] = "";
-                $arrCiudadano['seqCiudadCasado'] = 0;
-                $arrCiudadano['numConsecutivoCSCDL'] = "";
-                $arrCiudadano['txtEntidadCSCDL'] = "";
-                $arrCiudadano['seqCiudadCSCDL'] = 0;
-                $arrCiudadano['numNotariaCSCDL'] = "";
-                $arrCiudadano['numNotariaSoltero'] = "";
-                $arrCiudadano['seqCiudadSoltero'] = 0;
 //                $arrCiudadano['txtCertificacionUnion'] = "";
 //                $arrCiudadano['numConsecutivoUnion'] = "";
 //                $arrCiudadano['txtEntidadUnion'] = "";
 //                $arrCiudadano['numNotariaUnion'] = "";
 //                $arrCiudadano['seqCiudadUnion'] = 0;
+//
+//            }
 
-            }
+        }
+
+        // validacion para el soprote de documentos de estado civil
+//        if ($arrCiudadano['seqEstadoCivil'] == 8) {
+//
+//            if($bolValidacionSoporteDocumentos == true) {
+//                if (doubleval($arrCiudadano['numConsecutivoCSCDL']) == 0) {
+//                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
+//                }
+//
+//                if (trim($arrCiudadano['txtEntidadCSCDL']) == "") {
+//                    $arrErrores[] = "Indique la entidad del soprote del estado civil";
+//                }
+//
+//                if (trim($arrCiudadano['txtEntidadCSCDL']) == "Notaria" and intval($arrCiudadano['numNotariaCSCDL']) == 0) {
+//                    $arrErrores[] = "Indique la notaría del soprote del estado civil";
+//                }
+//
+//                if (intval($arrCiudadano['seqCiudadCSCDL']) == 0) {
+//                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+//                }
+//
+//                // limpia las otras variables del estado civil
+//                $arrCiudadano['numConsecutivoCasado'] = 0;
+//                $arrCiudadano['numNotariaCasado'] = "";
+//                $arrCiudadano['seqCiudadCasado'] = 0;
+////                $arrCiudadano['numConsecutivoCSCDL'] = "";
+////                $arrCiudadano['txtEntidadCSCDL'] = "";
+////                $arrCiudadano['seqCiudadCSCDL'] = 0;
+////                $arrCiudadano['numNotariaCSCDL'] = "";
+//                $arrCiudadano['numNotariaSoltero'] = "";
+//                $arrCiudadano['seqCiudadSoltero'] = 0;
+//                $arrCiudadano['txtCertificacionUnion'] = "";
+//                $arrCiudadano['numConsecutivoUnion'] = "";
+//                $arrCiudadano['txtEntidadUnion'] = "";
+//                $arrCiudadano['numNotariaUnion'] = "";
+//                $arrCiudadano['seqCiudadUnion'] = 0;
+//            }
+//
+//        }
+
+//        if ($arrCiudadano['seqEstadoCivil'] == 2) {
+//
+//            if($bolValidacionSoporteDocumentos == true) {
+//
+//                if (intval($arrCiudadano['numNotariaSoltero']) == 0) {
+//                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+//                }
+//
+//                if (intval($arrCiudadano['seqCiudadSoltero']) == 0) {
+//                    $arrErrores[] = "Indique la ciudad del soprote del estado civil";
+//                }
+//
+//                // limpia las otras variables del estado civil
+//                $arrCiudadano['numConsecutivoCasado'] = 0;
+//                $arrCiudadano['numNotariaCasado'] = "";
+//                $arrCiudadano['seqCiudadCasado'] = 0;
+//                $arrCiudadano['numConsecutivoCSCDL'] = "";
+//                $arrCiudadano['txtEntidadCSCDL'] = "";
+//                $arrCiudadano['seqCiudadCSCDL'] = 0;
+//                $arrCiudadano['numNotariaCSCDL'] = "";
+////                $arrCiudadano['numNotariaSoltero'] = "";
+////                $arrCiudadano['seqCiudadSoltero'] = 0;
+//                $arrCiudadano['txtCertificacionUnion'] = "";
+//                $arrCiudadano['numConsecutivoUnion'] = "";
+//                $arrCiudadano['txtEntidadUnion'] = "";
+//                $arrCiudadano['numNotariaUnion'] = "";
+//                $arrCiudadano['seqCiudadUnion'] = 0;
+//            }
+//
+//        }
+
+        // Debe haber minimo dos personas con estado civil union marital
+        if ($arrCiudadano['seqEstadoCivil'] == 7) {
+            $numCuentaUnionMarital ++;
+
+//            if($bolValidacionSoporteDocumentos == true){
+//
+//                if(trim($arrCiudadano['txtCertificacionUnion']) == 0){
+//                    $arrErrores[] = "Indique la certificacion del soprote del estado civil";
+//                }
+//
+//                if(doubleval($arrCiudadano['numConsecutivoUnion']) == 0){
+//                    $arrErrores[] = "Indique el consecutivo del soprote del estado civil";
+//                }
+//
+//                if(trim($arrCiudadano['txtEntidadUnion']) == "Notaria" and intval($arrCiudadano['numNotariaUnion']) == 0){
+//                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+//                }
+//
+//                if(trim($arrCiudadano['txtEntidadUnion']) == 0){
+//                    $arrErrores[] = "Indique la entidad del soprote del estado civil";
+//                }
+//
+//                if(intval($arrCiudadano['seqCiudadUnion']) == 0){
+//                    $arrErrores[] = "Indique la notaria del soprote del estado civil";
+//                }
+//
+//                // limpia las otras variables del estado civil
+//                $arrCiudadano['numConsecutivoCasado'] = 0;
+//                $arrCiudadano['numNotariaCasado'] = "";
+//                $arrCiudadano['seqCiudadCasado'] = 0;
+//                $arrCiudadano['numConsecutivoCSCDL'] = "";
+//                $arrCiudadano['txtEntidadCSCDL'] = "";
+//                $arrCiudadano['seqCiudadCSCDL'] = 0;
+//                $arrCiudadano['numNotariaCSCDL'] = "";
+//                $arrCiudadano['numNotariaSoltero'] = "";
+//                $arrCiudadano['seqCiudadSoltero'] = 0;
+////                $arrCiudadano['txtCertificacionUnion'] = "";
+////                $arrCiudadano['numConsecutivoUnion'] = "";
+////                $arrCiudadano['txtEntidadUnion'] = "";
+////                $arrCiudadano['numNotariaUnion'] = "";
+////                $arrCiudadano['seqCiudadUnion'] = 0;
+//
+//            }
 
         }
 
@@ -365,55 +365,55 @@ if (!empty($_POST['hogar'])) {
         if ($arrCiudadano['seqTipoDocumento'] == 1) {
             $numCedula++; // si es cedula de ciudadania ( por lo menos 1 colombiano mayor de edad )
 
-            if($bolValidacionSoporteDocumentos == true){
-                if( ! esFechaValida($arrCiudadano['fchExpedicion']) ){
-                    $arrErrores[] = "Debe indicar la fecha de expedición del documeno de identidad";
-                }
-            }
+//            if($bolValidacionSoporteDocumentos == true){
+//                if( ! esFechaValida($arrCiudadano['fchExpedicion']) ){
+//                    $arrErrores[] = "Debe indicar la fecha de expedición del documeno de identidad";
+//                }
+//            }
 
         }
 
-        if($bolValidacionSoporteDocumentos == true) {
-
-            if( $arrCiudadano['txtTipoSoporte'] == "" ) {
-
-                $arrErrores[] = "Digite el tipo de soporte para el documento de identidad";
-
-            }elseif($arrCiudadano['txtTipoSoporte'] == "registroCivil"){
-
-                if(trim($arrCiudadano['txtEntidadDocumento']) == ""){
-                    $arrErrores[] = "Indique la entidad de soporte del documento";
-                }
-
-                if(doubleval($arrCiudadano['numIndicativoSerial']) == ""){
-                    $arrErrores[] = "Indique el indicativo serial del soporte del documento";
-                }
-
-                if(trim($arrCiudadano['txtEntidadDocumento']) == "Notaria" and intval($arrCiudadano['numNotariaDocumento']) == ""){
-                    $arrErrores[] = "Indique la notaría del soporte del documento";
-                }
-
-                if(intval($arrCiudadano['seqCiudadDocumento']) == 0){
-                    $arrErrores[] = "Indique ciudad del soporte del documento";
-                }
-
-            }elseif($arrCiudadano['txtTipoSoporte'] == "partidaBautismo"){
-
-                if(doubleval($arrCiudadano['numConsecutivoPartida']) == ""){
-                    $arrErrores[] = "Indique el consecutivo del soporte del documento";
-                }
-
-                if(trim($arrCiudadano['txtParroquiaPartida']) == ""){
-                    $arrErrores[] = "Indique la parroquia del soporte del documento";
-                }
-
-                if(intval($arrCiudadano['seqCiudadPartida']) == 0){
-                    $arrErrores[] = "Indique la ciudad del soporte del documento";
-                }
-
-            }
-
-        }
+//        if($bolValidacionSoporteDocumentos == true) {
+//
+//            if( $arrCiudadano['txtTipoSoporte'] == "" ) {
+//
+//                $arrErrores[] = "Digite el tipo de soporte para el documento de identidad";
+//
+//            }elseif($arrCiudadano['txtTipoSoporte'] == "registroCivil"){
+//
+//                if(trim($arrCiudadano['txtEntidadDocumento']) == ""){
+//                    $arrErrores[] = "Indique la entidad de soporte del documento";
+//                }
+//
+//                if(doubleval($arrCiudadano['numIndicativoSerial']) == ""){
+//                    $arrErrores[] = "Indique el indicativo serial del soporte del documento";
+//                }
+//
+//                if(trim($arrCiudadano['txtEntidadDocumento']) == "Notaria" and intval($arrCiudadano['numNotariaDocumento']) == ""){
+//                    $arrErrores[] = "Indique la notaría del soporte del documento";
+//                }
+//
+//                if(intval($arrCiudadano['seqCiudadDocumento']) == 0){
+//                    $arrErrores[] = "Indique ciudad del soporte del documento";
+//                }
+//
+//            }elseif($arrCiudadano['txtTipoSoporte'] == "partidaBautismo"){
+//
+//                if(doubleval($arrCiudadano['numConsecutivoPartida']) == ""){
+//                    $arrErrores[] = "Indique el consecutivo del soporte del documento";
+//                }
+//
+//                if(trim($arrCiudadano['txtParroquiaPartida']) == ""){
+//                    $arrErrores[] = "Indique la parroquia del soporte del documento";
+//                }
+//
+//                if(intval($arrCiudadano['seqCiudadPartida']) == 0){
+//                    $arrErrores[] = "Indique la ciudad del soporte del documento";
+//                }
+//
+//            }
+//
+//        }
 
         // Si es mayor de edad compare contra la fecha de postulacion si debe tener cedula
         if ( ! esFechaValida( $arrCiudadano['fchNacimiento'] ) ) {
@@ -421,12 +421,12 @@ if (!empty($_POST['hogar'])) {
         } else {
 
             // validacion del tipo de soporte
-            if($bolValidacionSoporteDocumentos == true){
-                $fchNacimiento = new DateTime($arrCiudadano['fchNacimiento']);
-                if( $fchNacimiento->format("Y") < 1938 and $arrCiudadano['txtTipoSoporte'] == "registroCivil"){
-                    $arrErrores[] = "Tipo de soporte inválido para personas nacidas antes de 1938 para el ciudadano con documento " . number_format($numDocumento);
-                }
-            }
+//            if($bolValidacionSoporteDocumentos == true){
+//                $fchNacimiento = new DateTime($arrCiudadano['fchNacimiento']);
+//                if( $fchNacimiento->format("Y") < 1938 and $arrCiudadano['txtTipoSoporte'] == "registroCivil"){
+//                    $arrErrores[] = "Tipo de soporte inválido para personas nacidas antes de 1938 para el ciudadano con documento " . number_format($numDocumento);
+//                }
+//            }
 
             // fechas para comparar mayor de edad y tercera edad
             $numEdad = strtotime($arrCiudadano['fchNacimiento']);

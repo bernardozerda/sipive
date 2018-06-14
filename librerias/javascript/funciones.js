@@ -10823,90 +10823,90 @@ function pdfGiroFiducia(seqProyecto, seqGiroFiducia) {
     }
 }
 
-function soporteDocumento(txtTipo, seqIdentificador) {
-
-    var seqPlanGobierno = $("#seqPlanGobierno").val();
-
-    if (seqPlanGobierno == 3) {
-
-        if (txtTipo == "tipoSoporte") {
-
-            $('#soporteCedula').hide();
-            $('#soportePartida').hide();
-
-            if (seqIdentificador == "registroCivil") {
-                $('#soporteCedula').show();
-            }
-
-            if (seqIdentificador == "partidaBautismo") {
-                $('#soportePartida').show();
-            }
-
-        }
-
-        if (txtTipo == "documentoNotaria") {
-            if (seqIdentificador == "Notaria") {
-                $('#documentoNotaria').show();
-            } else {
-                $('#documentoNotaria').hide();
-            }
-        }
-
-        if (txtTipo == "estadoCivil") {
-
-            $('#soporteEstadoCivilCasado').hide();
-            $('#soporteEstadoCivilCSCDL').hide();
-            $('#soporteEstadoCivilUnion').hide();
-            $('#soporteEstadoCivilSoltero').hide();
-
-            if (seqIdentificador == 6) { // casado
-                $('#soporteEstadoCivilCasado').show();
-                $('#soporteEstadoCivilCSCDL').hide();
-                $('#soporteEstadoCivilUnion').hide();
-                $('#soporteEstadoCivilSoltero').hide();
-            }
-
-            if (seqIdentificador == 8) { // CASADO CON SOCIEDAD CONYUGAL DISUELTA Y LIQUIDADA
-                $('#soporteEstadoCivilCasado').hide();
-                $('#soporteEstadoCivilCSCDL').show();
-                $('#soporteEstadoCivilUnion').hide();
-                $('#soporteEstadoCivilSoltero').hide();
-            }
-
-            if (seqIdentificador == 7) { // SOLTERO CON UNION MARITAL DE HECHO
-                $('#soporteEstadoCivilCasado').hide();
-                $('#soporteEstadoCivilCSCDL').hide();
-                $('#soporteEstadoCivilUnion').show();
-                $('#soporteEstadoCivilSoltero').hide();
-            }
-
-            if (seqIdentificador == 2) { // SOLTERO
-                $('#soporteEstadoCivilCasado').hide();
-                $('#soporteEstadoCivilCSCDL').hide();
-                $('#soporteEstadoCivilUnion').hide();
-                $('#soporteEstadoCivilSoltero').show();
-            }
-
-        }
-
-        if (txtTipo == "notaria-CSCDL") {
-            if (seqIdentificador == "Notaria") {
-                $('#notaria-CSCDL').show();
-            } else {
-                $('#notaria-CSCDL').hide();
-            }
-        }
-
-        if (txtTipo == "notaria-Union") {
-            if (seqIdentificador == "Notaria") {
-                $('#notaria-Union').show();
-            } else {
-                $('#notaria-Union').hide();
-            }
-        }
-
-    }
-}
+// function soporteDocumento(txtTipo, seqIdentificador) {
+//
+//     var seqPlanGobierno = $("#seqPlanGobierno").val();
+//
+//     if (seqPlanGobierno == 3) {
+//
+//         if (txtTipo == "tipoSoporte") {
+//
+//             $('#soporteCedula').hide();
+//             $('#soportePartida').hide();
+//
+//             if (seqIdentificador == "registroCivil") {
+//                 $('#soporteCedula').show();
+//             }
+//
+//             if (seqIdentificador == "partidaBautismo") {
+//                 $('#soportePartida').show();
+//             }
+//
+//         }
+//
+//         if (txtTipo == "documentoNotaria") {
+//             if (seqIdentificador == "Notaria") {
+//                 $('#documentoNotaria').show();
+//             } else {
+//                 $('#documentoNotaria').hide();
+//             }
+//         }
+//
+//         if (txtTipo == "estadoCivil") {
+//
+//             $('#soporteEstadoCivilCasado').hide();
+//             $('#soporteEstadoCivilCSCDL').hide();
+//             $('#soporteEstadoCivilUnion').hide();
+//             $('#soporteEstadoCivilSoltero').hide();
+//
+//             if (seqIdentificador == 6) { // casado
+//                 $('#soporteEstadoCivilCasado').show();
+//                 $('#soporteEstadoCivilCSCDL').hide();
+//                 $('#soporteEstadoCivilUnion').hide();
+//                 $('#soporteEstadoCivilSoltero').hide();
+//             }
+//
+//             if (seqIdentificador == 8) { // CASADO CON SOCIEDAD CONYUGAL DISUELTA Y LIQUIDADA
+//                 $('#soporteEstadoCivilCasado').hide();
+//                 $('#soporteEstadoCivilCSCDL').show();
+//                 $('#soporteEstadoCivilUnion').hide();
+//                 $('#soporteEstadoCivilSoltero').hide();
+//             }
+//
+//             if (seqIdentificador == 7) { // SOLTERO CON UNION MARITAL DE HECHO
+//                 $('#soporteEstadoCivilCasado').hide();
+//                 $('#soporteEstadoCivilCSCDL').hide();
+//                 $('#soporteEstadoCivilUnion').show();
+//                 $('#soporteEstadoCivilSoltero').hide();
+//             }
+//
+//             if (seqIdentificador == 2) { // SOLTERO
+//                 $('#soporteEstadoCivilCasado').hide();
+//                 $('#soporteEstadoCivilCSCDL').hide();
+//                 $('#soporteEstadoCivilUnion').hide();
+//                 $('#soporteEstadoCivilSoltero').show();
+//             }
+//
+//         }
+//
+//         if (txtTipo == "notaria-CSCDL") {
+//             if (seqIdentificador == "Notaria") {
+//                 $('#notaria-CSCDL').show();
+//             } else {
+//                 $('#notaria-CSCDL').hide();
+//             }
+//         }
+//
+//         if (txtTipo == "notaria-Union") {
+//             if (seqIdentificador == "Notaria") {
+//                 $('#notaria-Union').show();
+//             } else {
+//                 $('#notaria-Union').hide();
+//             }
+//         }
+//
+//     }
+// }
 
 function certificadoHabitabilidadProyecto(seqUnidadProyecto) {
     var wndFormato;

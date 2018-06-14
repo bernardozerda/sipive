@@ -596,7 +596,9 @@ class Proyecto {
     public function obtenerDatosProyectosFicha($seqProyecto) {
 
         global $aptBd;
-        $sql = "SELECT pry.*, pol.*, fid.*, con.*, loc.*, gru.*, pry.seqProyecto as seqProyecto, txtTipoProyecto "
+        $sql = "SELECT pry.*, pol.*, fid.*, con.*, loc.*, gru.*, pry.seqProyecto as seqProyecto, txtTipoProyecto, "
+                . "(SELECT group_concat(txtNombreOferente separator ', ')  FROM  t_pry_proyecto_oferente pOf
+                LEFT JOIN t_pry_entidad_oferente entO using(seqOferente) where pry.seqProyecto = pOf.seqProyecto) as oferente "
                 . "FROM  t_pry_proyecto pry "
                 . "LEFT JOIN t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto) "
                 . "LEFT JOIN t_pry_datos_fiducia fid on(pry.seqProyecto = fid.seqProyecto) "
@@ -625,8 +627,8 @@ class Proyecto {
         if ($seqProyecto > 0) {
             $sql .= " where  seqProyecto = " . $seqProyecto;
         }
-        $sql . " ORDER BY txtNombreOferente ASC";
-        //echo "<p>" . $sql . "</p>";
+        $sql .=" Group by seqProyecto ORDER BY txtNombreOferente ASC";
+        //  echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = "";
         while ($objRes->fields) {
@@ -1362,7 +1364,7 @@ class Proyecto {
     }
 
     function almacenarCronograma($seqProyecto, $arrayCronograma, $cant) {
-        
+
         global $aptBd;
         $arrErrores = array();
         $query = "  INSERT INTO t_pry_cronograma_fechas
@@ -1470,7 +1472,7 @@ class Proyecto {
                 pr($objError->getMessage());
             }
         }
-       
+
         if ($cant < $exeExistentes->numRows()) {
             $resultado = array_diff($datos, $datosDiff);
             $delete = "";
@@ -2037,7 +2039,58 @@ class Proyecto {
         }
     }
 
+    public function almacenarSeguimientoFicha($post) {
+
+        global $aptBd;
+        $arrErrores = array();
+        $numSeguimientoFicha = 0;
+        $fchSeguimientoFicha = '0000-00-00';
+        $bolCerrar = 0;
+        $seqProyecto;
+        foreach ($post as $key => $value) {
+
+            $$key = $value;
+            //  echo "<br>" . $key . " ->" . $value;
+        }
+        $bolCerrar == "" ? 0 : 1;
+
+        $sql = "INSERT INTO t_pry_seguimiento_ficha
+                    (
+                    numSeguimientoFicha,
+                    fchSeguimientoFicha,
+                    bolCerrar,
+                    seqProyecto)
+                    VALUES
+                    (
+                    $numSeguimientoFicha,
+                    '$fchSeguimientoFicha',
+                    $bolCerrar,
+                    $seqProyecto);";
+        try {
+
+            $aptBd->execute($sql);
+            $seqSeguimientoFicha = $aptBd->Insert_ID();
+            $query = "INSERT INTO t_pry_ficha_texto
+                    (
+                        txtFichaTexto,
+                        fchFichaTexto,
+                        seqSeguimientoFicha) VALUES";
+            foreach ($txtFichaTexto as $keyText => $valueText) {
+                $query .= "('$valueText', 'NOW', $seqSeguimientoFicha),";
+            }
+            try {
+                $query = substr_replace($query, ';', -1, 1);
+                $aptBd->execute($query);
+            } catch (Exception $ex) {
+                pr($ex->getMessage());
+            }
+        } catch (Exception $objError) {
+            $arrErrores[] = "No se ha podido guardar los datos de seguimiento de la ficha consulte este error al administrador del sistema";
+            pr($objError->getMessage());
+        }
+    }
+
+    // Fin clase 
 }
 
-// Fin clase
 ?>

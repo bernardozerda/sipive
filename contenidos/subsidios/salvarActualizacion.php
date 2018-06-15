@@ -65,7 +65,9 @@ if($_POST['seqPlanGobierno'] == 3) {
 $arrEstadosCiviles = obtenerDatosTabla("t_ciu_estado_civil", array("seqEstadoCivil", "txtEstadoCivil"), "seqEstadoCivil", "bolActivo = 1");
 $arrParentescos = obtenerDatosTabla("t_ciu_parentesco", array("seqParentesco", "txtParentesco"), "seqParentesco", "bolActivo = 1");
 $bolCondicionSisben = ($_POST['seqPlanGobierno'] == 3)? 1 : 0;
-$arrSisben = obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben", "bolActivo"), "seqSisben", "bolActivo = $bolCondicionSisben");
+$arrSisben[1]['txtSisben'] = "Ninguno";
+$arrSisben[1]['bolActivo'] = $bolCondicionSisben;
+$arrSisben += obtenerDatosTabla("T_FRM_SISBEN", array("seqSisben", "txtSisben", "bolActivo"), "seqSisben", "bolActivo = $bolCondicionSisben");
 $arrModalidad = obtenerDatosTabla("t_frm_modalidad", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $_POST['seqPlanGobierno']);
 
 /**********************************************************************************************************************

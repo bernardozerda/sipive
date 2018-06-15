@@ -71,9 +71,9 @@
     }elseif( intval($_POST['seqTipoDocumento']) == 1 ){
 
         // validacion del soporte de documento
-        if(! esFechaValida($_POST['fchExpedicion'])){
-            $arrErrores[] = "Indique la fecha de expedición del documento";
-        }
+//        if(! esFechaValida($_POST['fchExpedicion'])){
+//            $arrErrores[] = "Indique la fecha de expedición del documento";
+//        }
 
     }
 

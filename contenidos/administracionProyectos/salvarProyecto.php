@@ -179,10 +179,10 @@ if (empty($arrErrores)) {
             $claProyecto->modificarFiducia($seqProyecto, $arrayFiducia);
         }
        // echo $cantActaComite ."== 0 &&" . $_POST["numActaComite"]. " !=  &&". $_POST["numActaComite"]." >  0";
-        if ($cantActaComite == 0 && $_POST["numActaComite"] != "" && $_POST["numActaComite"] >  0) {
+        if ($cantActaComite == 0 && $_POST["numActaComite"][0] != "" && $_POST["numActaComite"] >  0) {
             // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
             $claProyecto->almacenarActaComite($seqProyecto, $arrayActasComite, count($_POST["numActaComite"]));
-        } else if ($cantActaComite > 0) {
+        } else if ($cantActaComite > 0) {   
             $claProyecto->modificarActasComite($seqProyecto, $arrayActasComite, count($_POST["numActaComite"]));
         }
     }

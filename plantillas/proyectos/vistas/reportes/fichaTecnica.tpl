@@ -13,8 +13,8 @@
                 </div>
             </div>
             <div class="form-group" >
-                <div class="col-md-3" style="background: #006779; border-bottom: 3px solid #ffffff">                 
-                    <div class="container" style="width: 100%; ">                     
+                <div class="col-md-4" style="background: #006779; border-bottom: 3px solid #ffffff">                 
+                    <div class="container" style="width: 100%;  height: 243px">                     
                         <div id="myCarousel" class="carousel slide" data-ride="carousel" >
                             <!-- Indicators -->
                             <ol class="carousel-indicators">
@@ -27,7 +27,7 @@
                                     {/foreach}
                             </ol>
                             <!-- Wrapper for slides -->
-                            <div class="carousel-inner" style="height: 195px">
+                            <div class="carousel-inner" style="height: 210px">
                                 {foreach from=$arrImagenes key=keyImg item=valueImg} 
                                     {if $keyImg ==0}
                                         <div class="item active">
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-8">
                     <table id="ejemplo" class="table table-striped table-bordered" cellspacing="0" width="100%" >
                         <!-- <divclass="col-sm-7">                            
                          </div>-->
@@ -138,8 +138,8 @@
             </div>
             <p>&nbsp;</p>
             <div class="form-group" >
-                <div class="col-md-3" style="background: #f5f5f5; border: 1px solid #ccc; border-bottom: 3px solid #ffffff; text-align: justify">                 
-                    <p>&nbsp;</p><h3>Generalidades</h3>
+                <div class="col-md-4" style="background: #f5f5f5; border: 1px solid #ccc; border-bottom: 3px solid #ffffff; text-align: justify">                 
+                    <h3>Generalidades</h3>
                     <ui style="list-style-image: url('recursos/imagenes/vineta.png');">
                         <li><b>Tipo de agrupación:</b> {$value.txtTipoProyecto}</li>
                         <li><b>Numero de torres V.I.P:</b>{$value.valTorres}</li>
@@ -152,21 +152,14 @@
                             <li><b>Total parqueaderos:</b>   {$valueV.totalParq+$valueV.totalParqDisc}</li>
                             {/foreach}
                         <p>&nbsp;</p>
-                        <li>De acuerdo con el último informe de interventoría de abril 2018 se establece un avance de obra de 98.50%. Las obras de viviendas se encuentran terminadas. 
-                        </li>
-                        <li>La interventoría informa que continúan pendientes obras de urbanismo externo (Salón comunal), razón por la cual la alcaldía no ha expedido permiso de ocupación de 34 VIP. Estas obras se encuentran suspendidas desde enero (2018) con la justificación que no hay flujo de caja (según lo informado por el constructor).
-                        </li>
-                        <li>El 04/05/2018 la SDHT informó que no es procedente la solicitud de prorroga teniendo en cuenta que el cronograma se encuentra vencido.
-                        </li> 
-                        <li>En reunión efectuada el 01 de Junio con apoyo a la construcción y el constructor, se determinó que radicarán solicitud de recursos para llegar al 90% del desembolso y así subsanar inconvenientes financieros. 
-                        </li>
-                        <li>Pendiente terminar salón comunal para solicitar permiso
-                        </li>
+                        {foreach from=$listaTextosSeguimiento key=keySeg item=txtTexto}
+                            {$txtTexto.txtFichaTexto} 
+                        {/foreach}
                     </ui>
                     <p>&nbsp;</p>
 
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-8">
                     <table id="ejemplo" class="table table-striped table-bordered" cellspacing="0" width="100%" >                        
                         <thead>
                             <tr>

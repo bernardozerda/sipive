@@ -327,10 +327,20 @@ function activarAutocompletar(txtInput, contenedor, url, cant) {
 
 function activarEditorTiny(id, cant) {
     tinymce.remove();
+    var bolCerrar = 0;
     for (var i = 1; i <= cant; i++) {
+        if ($("#bolCerrar").is(":checked")) {
+            bolCerrar = 1;
+        }
 
         tinymce.init({
             selector: 'textarea#' + id + "" + i,
+            setup: function (editor) {
+                editor.on('change', function () {
+                    tinymce.triggerSave();
+                });
+            },
+            readonly: bolCerrar,
             height: 100,
             menubar: false,
             plugins: [
@@ -343,34 +353,35 @@ function activarEditorTiny(id, cant) {
     }
 }
 
-function addInterventoria() {
-    var intId = $("#interventoria textarea").length + 1;
+function addSeguimientoFicha() {
+    var intId = $("#ficha textarea").length + 1;
     var fieldWrapper = $("<div class=\"form-group\" id=\"intV" + intId + "\" />");
     var fType = "<fieldset style='border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;'>";
-    fType += "<legend style='text-align: right; cursor: hand'><p></p><h5>&nbsp;<img src='recursos/imagenes/add.png' width='20px' onclick='addInterventoria();'><b style='' onclick='addInterventoria();'>&nbsp; Adicionar  Interventoria</b> ";
-    fType += "&nbsp;&nbsp;&nbsp;&nbsp;<img src='recursos/imagenes/remove.png' width='20px' onclick='removerOferente(intV" + intId + ")'><b style='text-align: right' onclick='removerOferente(intV" + intId + ")'>&nbsp; Eliminar Interventoria</b> ";
+    fType += "<legend style='text-align: right; cursor: hand'><p></p><h5>&nbsp;<img src='recursos/imagenes/add.png' width='20px' onclick='addSeguimientoFicha();'><b style='' onclick='addSeguimientoFicha();'>&nbsp; Adicionar Texto</b> ";
+    fType += "&nbsp;&nbsp;&nbsp;&nbsp;<img src='recursos/imagenes/remove.png' width='20px' onclick='removerOferente(intV" + intId + ")'><b style='text-align: right' onclick='removerOferente(intV" + intId + ")'>&nbsp; Eliminar Texto</b> ";
     fType += "</h5><p></p></legend>";
-    fType += "<div class=\"col-md-4\">";
-    fType += "<label class='control-label' >Nombre Interventor</label>";
-    fType += "<input name='txtNombreInformador' type='text' id='txtNombreInformador" + intId + "' value='' onblur='sinCaracteresEspeciales(this);'  class='form-control'>";
-    fType += "<div id='txtNombreInformadorContenedor" + intId + "' class='yui-ac-container'></div>";
-    fType += "</div>";
-    fType += "<div class='col-md-4'> ";
-    fType += "<label class='control-label' >Fecha Interventoria</label> ";
-    fType += "<input name='fchInterventoria[]' type='text' id='fchInterventoria" + intId + "' value='' size='12' readonly=''  class='form-control required'  style='width: 60%; position: relative; float: left'>";
-    fType += "<a href='#' onclick='javascript: calendarioPopUp('fchInterventoria" + intId + "');'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 9%; position: relative; float: left; left: 2%'></a>";
-    fType += "</div>";
-    fType += "<div class='col-md-4'>";
-    fType += "<label class='control-label' >Activar</label> <br>";
-    fType += "<input type='checkbox' id='bolInterventoria' name='bolInterventoria[]' />";
-    fType += "</div>";
+    //    fType += "<div class=\"col-md-4\">";
+    //    fType += "<label class='control-label' >Nombre Interventor</label>";
+    //    fType += "<input name='txtNombreInformador' type='text' id='txtNombreInformador" + intId + "' value='' onblur='sinCaracteresEspeciales(this);'  class='form-control'>";
+    //    fType += "<div id='txtNombreInformadorContenedor" + intId + "' class='yui-ac-container'></div>";
+    //    fType += "</div>";
+    //    fType += "<div class='col-md-4'> ";
+    //    fType += "<label class='control-label' >Fecha Interventoria</label> ";
+    //    fType += "<input name='fchInterventoria[]' type='text' id='fchInterventoria" + intId + "' value='' size='12' readonly=''  class='form-control required'  style='width: 60%; position: relative; float: left'>";
+    //    fType += "<a href='#' onclick='javascript: calendarioPopUp('fchInterventoria" + intId + "');'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 9%; position: relative; float: left; left: 2%'></a>";
+    //    fType += "</div>";
+    //    fType += "<div class='col-md-4'>";
+    //    fType += "<label class='control-label' >Activar</label> <br>";
+    //    fType += "<input type='checkbox' id='bolInterventoria' name='bolInterventoria[]' />";
+    //    fType += "</div>";
     fType += "<div class='col-md-10'> ";
     fType += "<label class='control-label' >Observaciones de Interventoria</label> ";
-    fType += "<textarea rows='10' cols='200' id='comentarios" + intId + "'></textarea>";
+    fType += "<input type='hidden' name='seqFichaTexto[]' id='seqFichaTexto' value=''>";
+    fType += "<textarea rows='10' cols='200' name='txtFichaTexto[]' id='comentarios" + intId + "'></textarea>";
     fType += "</div> ";
     fType += "<p>&nbsp;</p> </fieldset></div>";
     fieldWrapper.append(fType);
-    $("#interventoria").append(fieldWrapper);
+    $("#ficha").append(fieldWrapper);
     activarEditorTiny('comentarios', intId);
     activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', intId);
 }
@@ -383,23 +394,25 @@ var fncEditor = function () {
 }
 YAHOO.util.Event.onContentReady('segOculto', fncEditor)
 
+var fncTiny = function () {
+    activarEditorTiny('comentarios', $("#segOcultoSeg").html());
+    eliminarObjeto('segOcultoSeg');
+    YAHOO.util.Event.onContentReady('segOcultoSeg', fncTiny);
+
+}
+
+YAHOO.util.Event.onContentReady('segOcultoSeg', fncTiny);
+
 function dataForm_Archivos(formulario) {
     // console.log("formulario -> " + formulario);
     var nuevoFormulario = new FormData();
     $(formulario).find(':input').each(function () {
         var elemento = this;
-        console.log("elemento -> " + elemento);
         //Si recibe tipo archivo 'file'
         if (elemento.type === 'file') {
-            // console.log("elemento.type -> " + elemento.type);
-            //console.log("elemento.value -> " + elemento.value);
             if (elemento.value !== '') {
-                // console.log("$('input[type=file]')[0].files -> " + $('input[type="file"]')[0].files);
                 var file_data = $('input[type="file"]')[0].files;
-                //console.log(file_data);
-                // console.log("file_data.length -> " + file_data.length);
                 for (var i = 0; i < file_data.length; i++) {
-                    // console.log("elemento.name -> " + elemento.name + "file_data[" + i + "]" + file_data[i]);
                     nuevoFormulario.append(elemento.name, file_data[i]);
                 }
             }
@@ -496,5 +509,9 @@ function addComite() {
     fType += "</div>";
     fieldWrapper.append(fType);
     $("#actasComite").append(fieldWrapper);
+}
+
+function mostrarListaSeg() {
+
 }
 

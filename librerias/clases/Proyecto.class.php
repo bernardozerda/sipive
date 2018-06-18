@@ -2048,11 +2048,10 @@ class Proyecto {
         $bolCerrar = 0;
         $seqProyecto;
         foreach ($post as $key => $value) {
-
             $$key = $value;
             //  echo "<br>" . $key . " ->" . $value;
         }
-        $bolCerrar == "" ? 0 : 1;
+        $bolCerrar != "" ? $bolCerrar = 1 : $bolCerrar = 0;
 
         $sql = "INSERT INTO t_pry_seguimiento_ficha
                     (
@@ -2076,7 +2075,7 @@ class Proyecto {
                         fchFichaTexto,
                         seqSeguimientoFicha) VALUES";
             foreach ($txtFichaTexto as $keyText => $valueText) {
-                $query .= "('$valueText', 'NOW', $seqSeguimientoFicha),";
+                $query .= "('$valueText', NOW(), $seqSeguimientoFicha),";
             }
             try {
                 $query = substr_replace($query, ';', -1, 1);
@@ -2088,6 +2087,103 @@ class Proyecto {
             $arrErrores[] = "No se ha podido guardar los datos de seguimiento de la ficha consulte este error al administrador del sistema";
             pr($objError->getMessage());
         }
+    }
+
+    public function editarSeguimientoFicha($post) {
+
+        global $aptBd;
+        $bolCerrar = 0;
+        $seqSeguimientoFicha = 0;
+        $sqlExistentes = "SELECT seqFichaTexto FROM t_pry_ficha_texto WHERE seqSeguimientoFicha = $seqSeguimientoFicha";
+        $exeExistentes = $aptBd->execute($sqlExistentes);
+        //$cant = $exeExistentes->numRows();
+        $datos = Array();
+        $datosDiff = Array();
+        while ($exeExistentes->fields) {
+            $datos[] = $exeExistentes->fields['seqFichaTexto'];
+            $exeExistentes->MoveNext();
+        }
+        foreach ($post as $key => $value) {
+            $$key = $value;
+            //  echo "<br>" . $key . " ->" . $value;
+        }
+        $bolCerrar != "" ? $bolCerrar = 1 : $bolCerrar = 0;
+
+        $sql = "UPDATE t_pry_seguimiento_ficha
+            SET
+            numSeguimientoFicha = $numSeguimientoFicha,
+            fchSeguimientoFicha = '$fchSeguimientoFicha',
+            bolCerrar = $bolCerrar
+            WHERE seqSeguimientoFicha = $seqSeguimientoFicha and seqProyecto = $seqProyecto;";
+        try {
+            $aptBd->execute($sql);
+            $ind = 0;
+            foreach ($txtFichaTexto as $keyText => $valueText) {
+                $datosDiff[] = $seqFichaTexto[$ind];
+
+                if ($seqFichaTexto[$ind] > 0 && $valueText != "") {
+                    $queryUP = "UPDATE t_pry_ficha_texto
+                        SET
+                        txtFichaTexto = '$valueText'
+                        WHERE seqFichaTexto = $seqFichaTexto[$ind]
+                        AND seqSeguimientoFicha = $seqSeguimientoFicha";
+                    $aptBd->execute($queryUP);
+                } else if ($seqFichaTexto[$ind] == "" && $valueText != "") {
+                    $query = "INSERT INTO t_pry_ficha_texto
+                    (
+                        txtFichaTexto,
+                        fchFichaTexto,
+                        seqSeguimientoFicha) VALUES";
+                    try {
+
+                        $query .= "('$valueText', NOW(), $seqSeguimientoFicha);";
+                        echo $query;
+                        $aptBd->execute($query);
+                    } catch (Exception $ex) {
+                        pr($ex->getMessage());
+                    }
+                }
+                $ind++;
+            }
+            if ($cant < $exeExistentes->numRows()) {
+                $resultado = array_diff($datos, $datosDiff);
+                $delete = "";
+                foreach ($resultado as $value) {
+                    $delete .= $value . ",";
+                }
+                //  print_r($resultado);
+                $delete = substr_replace($delete, '', -1, 1);
+                $sql = "DELETE FROM t_pry_ficha_texto WHERE seqFichaTexto in (" . $delete . ")";
+                try {
+                    $aptBd->execute($sql);
+                } catch (Exception $objError) {
+                    $arrErrores[] = "No se ha podido eliminar El texto de la ficha<b></b>";
+                    pr($objError->getMessage());
+                }
+            }
+        } catch (Exception $ex) {
+            $arrErrores[] = "No se ha podido modificar los datos de seguimiento de la ficha consulte este error al administrador del sistema";
+            pr($objError->getMessage());
+        }
+    }
+
+    function obtenerDatosSeguimiento($idProyectos) {
+
+        global $aptBd;
+        $sql = "SELECT  t_pry_ficha_texto.* FROM "
+                . "t_pry_seguimiento_ficha LEFT JOIN t_pry_ficha_texto USING(seqSeguimientoFicha)";
+        if ($idProyectos > 0) {
+            $sql .=" where seqProyecto =" . $idProyectos . " AND fchSeguimientoFicha = (select max(fchSeguimientoFicha)"
+                    . " FROM t_pry_ficha_texto where seqProyecto = $idProyectos   AND bolCerrar = 1 ORDER BY fchSeguimientoFicha DESC limit 1)";
+        }
+        $sql .=" ORDER BY fchSeguimientoFicha DESC ";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
     }
 
     // Fin clase 

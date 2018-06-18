@@ -904,13 +904,16 @@ class DatosGeneralesProyectos {
         }
         return $arrActasComite;
     }
-    
-     function obtenerSeguimientosFicha() {
+
+    function obtenerSeguimientosFicha($idProyectos, $seqSeguimientoFicha) {
+       
         global $aptBd;
 
-        $sql = "select * from t_pry_seguimiento_ficha ORDER BY seqProyecto ASC, fchSeguimientoFicha desc ";
-   
-
+        $sql = "SELECT * FROM t_pry_seguimiento_ficha";
+        if ($idProyectos > 0) {
+            $sql .=" where seqProyecto = " . $idProyectos . " AND seqSeguimientoFicha =" . $seqSeguimientoFicha;
+        }
+        $sql .=" ORDER BY seqProyecto ASC, fchSeguimientoFicha desc";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -918,6 +921,43 @@ class DatosGeneralesProyectos {
             $objRes->MoveNext();
         }
         return $datos;
+    }
+
+    function obtenerlistaTextos($seqSeguimientoFicha) {
+        global $aptBd;
+
+        $sql = "SELECT * FROM t_pry_ficha_texto";
+        if ($seqSeguimientoFicha > 0) {
+            $sql .=" where seqSeguimientoFicha =" . $seqSeguimientoFicha;
+        }
+        $sql .=" ORDER BY fchFichaTexto ";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+    
+    function obtenerDatosSeguimiento($idProyectos, $seqSeguimientoFicha) {
+       
+        global $aptBd;
+
+        $sql = "SELECT MAX(fchSeguimientoFicha), t_pry_ficha_texto.* FROM "
+                . "t_pry_seguimiento_ficha LEFT JOIN t_pry_ficha_texto USING(seqSeguimientoFicha)";
+        if ($idProyectos > 0) {
+            $sql .=" where seqProyecto =" . $idProyectos ." AND ";
+        }
+        $sql .=" ORDER BY fchSeguimientoFicha DESC  ";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+        
     }
 
 }

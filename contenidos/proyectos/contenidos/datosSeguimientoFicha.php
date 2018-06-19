@@ -40,19 +40,21 @@ $arraImagenes[0] = 0;
 
 $id = str_replace(".php", "", $id);
 
-if ((isset($_REQUEST['seqProyecto']) || isset($_REQUEST['seqSeguimientoFicha'])) && $id != 2) {
-   
+if ((isset($_REQUEST['seqProyecto']) || isset($_REQUEST['seqSeguimientoFicha'])) && $id == 1) {
+
     $idProyecto = $_REQUEST['seqProyecto'];
     $seqSeguimientoFicha = $_REQUEST['seqSeguimientoFicha'];
     $txtPlantilla = "proyectos/vistas/inscripcionSeguimiento.tpl";
     if (isset($_REQUEST['seqSeguimientoFicha'])) {
         $seqSeguimientoFicha = $_REQUEST['seqSeguimientoFicha'];
         $arrayTextos = $claDatosProy->obtenerlistaTextos($seqSeguimientoFicha);
-       
     }
+   $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha); 
+}else if($id == 1){
+    $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha); 
 }
- $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha);
- 
+
+
 if ($id == 2) {
     $idProyecto = $_REQUEST['seqProyecto'];
     $txtPlantilla = "proyectos/vistas/listaImagenes.tpl";
@@ -71,6 +73,12 @@ if ($id == 2) {
     }
 }
 
+if ($id == 3) {
+    $arraSegFicha[0] = 0;
+    $arrayTextos[0] = 0;
+    $txtPlantilla = "proyectos/vistas/inscripcionSeguimiento.tpl";
+}
+
 $arrProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto, $id);
 
 
@@ -85,7 +93,7 @@ $claSmarty->assign("seqProyecto", $_REQUEST['seqProyecto']);
 $claSmarty->assign("arraSegFicha", $arraSegFicha);
 $claSmarty->assign("arrayTextos", $arrayTextos);
 $claSmarty->assign("arrImagenes", $arraImagenes);
-$claSmarty->assign("page", "datosSeguimientoFicha.php?tipo=1&id=" . $id);
+$claSmarty->assign("page", "datosSeguimientoFicha.php?tipo=1&id=1" );
 
 
 if ($txtPlantilla != "") {

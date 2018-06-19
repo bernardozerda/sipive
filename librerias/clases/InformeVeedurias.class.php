@@ -59,25 +59,19 @@ class InformeVeedurias
                 pry1.txtNombreProyecto as txtNombreProyectoPadre, 
                 pry1.numNitProyecto as txtNitProyectoPadre, 
                 loc1.txtLocalidad as txtLocalidadPadre,
-                bar1.txtBarrio as txtBarrioPadre, 
-                -- eof11.txtNombreOferente as txtNombreOferentePadre1,
+                bar1.txtBarrio as txtBarrioPadre,
                 (
                   SELECT group_concat(txtNombreOferente separator ', ')  
                   FROM  t_pry_proyecto_oferente pOf 
                   LEFT JOIN t_pry_entidad_oferente entO using(seqOferente) 
                   where pry.seqProyecto = pOf.seqProyecto
                 ) as txtNombreOferentePadre1,
-                -- eof11.numNitOferente as numNitOferentePadre1,
                 (
                   SELECT group_concat(numNitOferente separator ', ')  
                   FROM  t_pry_proyecto_oferente pOf 
                   LEFT JOIN t_pry_entidad_oferente entO using(seqOferente) 
                   where pry.seqProyecto = pOf.seqProyecto
                 ) as numNitOferente, 
-                -- eof12.txtNombreOferente as txtNombreOferentePadre2,
-                -- eof12.numNitOferente as numNitOferentePadre2, 
-                -- eof13.txtNombreOferente as txtNombreOferentePadre3,
-                -- eof13.numNitOferente as numNitOferentePadre3, 
                 con1.txtNombreConstructor as txtNombreConstructorPadre,
                 con1.numDocumentoConstructor as numDocumentoConstructorPadre,
                 pry1.txtNombreVendedor as txtNombreVendedorPadre, 
@@ -86,24 +80,18 @@ class InformeVeedurias
                 pry.numNitProyecto as numNitProyectoHijo, 
                 loc2.txtLocalidad as txtLocalidadHijo,
                 bar2.txtBarrio as txtBarrioHijo,
-                -- eof.txtNombreOferente as txtNombreOferenteHijo1,
                 (
                   SELECT group_concat(txtNombreOferente separator ', ')  
                   FROM  t_pry_proyecto_oferente pOf 
                   LEFT JOIN t_pry_entidad_oferente entO using(seqOferente) 
                   where pry1.seqProyecto = pOf.seqProyecto
                 ) as txtNombreOferenteHijo1,
-                -- eof.numNitOferente as numNitOferenteHijo1, 
                 (
                   SELECT group_concat(txtNombreOferente separator ', ')  
                   FROM  t_pry_proyecto_oferente pOf 
                   LEFT JOIN t_pry_entidad_oferente entO using(seqOferente) 
                   where pry1.seqProyecto = pOf.seqProyecto
-                ) as numNitOferente,
-                -- eof2.txtNombreOferente as txtNombreOferenteHijo2,
-                -- eof2.numNitOferente as numNitOferenteHijo2, 
-                -- eof3.txtNombreOferente as txtNombreOferenteHijo3,
-                -- eof3.numNitOferente as numNitOferenteHijo3, 
+                ) as numNitOferente, 
                 con2.txtNombreConstructor as txtNombreConstructorHijo,
                 con2.numDocumentoConstructor as numDocumentoConstructorHijo,
                 pry.txtNombreVendedor as txtNombreVendedorHijo, 
@@ -184,21 +172,6 @@ class InformeVeedurias
             inner join t_pry_tipo_esquema tes on upr.seqTipoEsquema = tes.seqTipoEsquema
             left  join t_frm_localidad loc1 on pry1.seqLocalidad = loc1.seqLocalidad
             left  join t_frm_barrio bar1 on pry1.seqBarrio = bar1.seqBarrio
-            
-            -- left  join t_pry_proyecto_oferente pofe1 on pry1.seqProyecto = pofe1.seqProyecto
-            -- left  join t_pry_entidad_oferente eof11 on pofe1.seqOferente = eof11.seqOferente
-            
-            -- left  join t_pry_entidad_oferente eof11 on pry1.seqProyecto = eof11.seqProyecto
-            -- left  join t_pry_entidad_oferente eof12 on pry1.seqProyecto = eof12.seqProyecto
-            -- left  join t_pry_entidad_oferente eof13 on pry1.seqProyecto = eof13.seqProyecto
-            
-            -- left  join t_pry_proyecto_oferente pofe2 on pry.seqProyecto = pofe2.seqProyecto
-            -- left  join t_pry_entidad_oferente eof on pofe2.seqOferente = eof.seqOferente
-            
-            -- left  join t_pry_entidad_oferente eof on pry.seqProyecto = eof.seqProyecto
-            -- left  join t_pry_entidad_oferente eof2 on pry.seqProyecto = eof2.seqProyecto
-            -- left  join t_pry_entidad_oferente eof3 on pry.seqProyecto = eof3.seqProyecto
-            
             left  join t_pry_constructor con1 on pry1.seqConstructor = con1.seqConstructor
             left  join t_pry_constructor con2 on pry.seqConstructor = con2.seqConstructor
             left  join t_frm_localidad loc2 on pry.seqLocalidad = loc2.seqLocalidad

@@ -906,13 +906,17 @@ class DatosGeneralesProyectos {
     }
 
     function obtenerSeguimientosFicha($idProyectos, $seqSeguimientoFicha) {
-       
+
         global $aptBd;
 
         $sql = "SELECT * FROM t_pry_seguimiento_ficha";
         if ($idProyectos > 0) {
-            $sql .=" where seqProyecto = " . $idProyectos . " AND seqSeguimientoFicha =" . $seqSeguimientoFicha;
+            $sql .=" where seqProyecto = " . $idProyectos;
+            if ($seqSeguimientoFicha > 0) {
+                $sql .=" AND seqSeguimientoFicha =" . $seqSeguimientoFicha;
+            }
         }
+
         $sql .=" ORDER BY seqProyecto ASC, fchSeguimientoFicha desc";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
@@ -939,15 +943,15 @@ class DatosGeneralesProyectos {
         }
         return $datos;
     }
-    
+
     function obtenerDatosSeguimiento($idProyectos, $seqSeguimientoFicha) {
-       
+
         global $aptBd;
 
         $sql = "SELECT MAX(fchSeguimientoFicha), t_pry_ficha_texto.* FROM "
                 . "t_pry_seguimiento_ficha LEFT JOIN t_pry_ficha_texto USING(seqSeguimientoFicha)";
         if ($idProyectos > 0) {
-            $sql .=" where seqProyecto =" . $idProyectos ." AND ";
+            $sql .=" where seqProyecto =" . $idProyectos . " AND ";
         }
         $sql .=" ORDER BY fchSeguimientoFicha DESC  ";
         $objRes = $aptBd->execute($sql);
@@ -957,7 +961,6 @@ class DatosGeneralesProyectos {
             $objRes->MoveNext();
         }
         return $datos;
-        
     }
 
 }

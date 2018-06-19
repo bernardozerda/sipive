@@ -38,27 +38,31 @@ $arraSegFicha[0] = 0;
 $arrayTextos[0] = 0;
 $arraImagenes[0] = 0;
 
-if ((isset($_REQUEST['seqProyecto']) || isset($_REQUEST['seqSeguimientoFicha'])) && $id != 2) {    
+$id = str_replace(".php", "", $id);
+
+if ((isset($_REQUEST['seqProyecto']) || isset($_REQUEST['seqSeguimientoFicha'])) && $id != 2) {
    
     $idProyecto = $_REQUEST['seqProyecto'];
     $seqSeguimientoFicha = $_REQUEST['seqSeguimientoFicha'];
-   
     $txtPlantilla = "proyectos/vistas/inscripcionSeguimiento.tpl";
+    if (isset($_REQUEST['seqSeguimientoFicha'])) {
+        $seqSeguimientoFicha = $_REQUEST['seqSeguimientoFicha'];
+        $arrayTextos = $claDatosProy->obtenerlistaTextos($seqSeguimientoFicha);
+       
+    }
 }
-if (isset($_REQUEST['seqSeguimientoFicha'])) {
-    $arrayTextos = $claDatosProy->obtenerlistaTextos($seqSeguimientoFicha);
-     $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha);
-}
+ $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha);
+ 
 if ($id == 2) {
     $idProyecto = $_REQUEST['seqProyecto'];
     $txtPlantilla = "proyectos/vistas/listaImagenes.tpl";
     $directorio = '../../../recursos/proyectos/proyecto-' . $idProyecto . '/imagenes';
 
     $dir = @dir($directorio);
-     
+
     $arraImagenes = Array();
     if ($dir) {
-      
+
         while (($archivo = $dir->read()) !== false) {
             if ($archivo[0] != ".") {
                 $arraImagenes[] = 'proyecto-' . $idProyecto . '/imagenes/' . $archivo;

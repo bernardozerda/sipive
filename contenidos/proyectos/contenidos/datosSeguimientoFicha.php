@@ -42,11 +42,12 @@ if ((isset($_REQUEST['seqProyecto']) || isset($_REQUEST['seqSeguimientoFicha']))
     echo "paso";
     $idProyecto = $_REQUEST['seqProyecto'];
     $seqSeguimientoFicha = $_REQUEST['seqSeguimientoFicha'];
-    $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha);
+   
     $txtPlantilla = "proyectos/vistas/inscripcionSeguimiento.tpl";
 }
 if (isset($_REQUEST['seqSeguimientoFicha'])) {
     $arrayTextos = $claDatosProy->obtenerlistaTextos($seqSeguimientoFicha);
+     $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha);
 }
 if ($id == 2) {
     $idProyecto = $_REQUEST['seqProyecto'];

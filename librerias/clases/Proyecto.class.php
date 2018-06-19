@@ -2087,6 +2087,7 @@ class Proyecto {
             $arrErrores[] = "No se ha podido guardar los datos de seguimiento de la ficha consulte este error al administrador del sistema";
             pr($objError->getMessage());
         }
+        return $seqSeguimientoFicha;
     }
 
     public function editarSeguimientoFicha($post, $cant) {

@@ -39,7 +39,8 @@ if (empty($arrErrores)) {
 
 
     if (isset($_POST['seqSeguimientoFicha']) and is_numeric($_POST['seqSeguimientoFicha']) and $_POST['seqSeguimientoFicha'] > 0) {
-        $arrErrores = $claProyecto->editarSeguimientoFicha($_POST);
+       
+        $arrErrores = $claProyecto->editarSeguimientoFicha($_POST, count($_POST['txtFichaTexto']));
         $idProyecto = $_REQUEST['seqProyecto'];
         $seqSeguimientoFicha = $_REQUEST['seqSeguimientoFicha'];
         //$claRegistro->registrarActividad("Edicion", 0, $_SESSION['seqUsuario'], "Edicion de Oferente: [" . $_POST['seqEditar'] . "] " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));

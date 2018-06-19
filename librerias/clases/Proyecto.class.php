@@ -2089,11 +2089,17 @@ class Proyecto {
         }
     }
 
-    public function editarSeguimientoFicha($post) {
+    public function editarSeguimientoFicha($post, $cant) {
 
         global $aptBd;
         $bolCerrar = 0;
         $seqSeguimientoFicha = 0;
+
+        foreach ($post as $key => $value) {
+            $$key = $value;
+            //  echo "<br>" . $key . " ->" . $value;
+        }
+
         $sqlExistentes = "SELECT seqFichaTexto FROM t_pry_ficha_texto WHERE seqSeguimientoFicha = $seqSeguimientoFicha";
         $exeExistentes = $aptBd->execute($sqlExistentes);
         //$cant = $exeExistentes->numRows();
@@ -2103,11 +2109,9 @@ class Proyecto {
             $datos[] = $exeExistentes->fields['seqFichaTexto'];
             $exeExistentes->MoveNext();
         }
-        foreach ($post as $key => $value) {
-            $$key = $value;
-            //  echo "<br>" . $key . " ->" . $value;
-        }
         $bolCerrar != "" ? $bolCerrar = 1 : $bolCerrar = 0;
+
+
 
         $sql = "UPDATE t_pry_seguimiento_ficha
             SET
@@ -2137,7 +2141,7 @@ class Proyecto {
                     try {
 
                         $query .= "('$valueText', NOW(), $seqSeguimientoFicha);";
-                        echo $query;
+
                         $aptBd->execute($query);
                     } catch (Exception $ex) {
                         pr($ex->getMessage());
@@ -2145,6 +2149,7 @@ class Proyecto {
                 }
                 $ind++;
             }
+
             if ($cant < $exeExistentes->numRows()) {
                 $resultado = array_diff($datos, $datosDiff);
                 $delete = "";

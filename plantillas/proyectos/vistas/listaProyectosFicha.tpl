@@ -15,6 +15,7 @@
                 <th bgcolor="#E4E4E4" >&nbsp;</th>
                 {/if}
             <th>&nbsp;</th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tfoot>
@@ -28,18 +29,22 @@
                 <th bgcolor="#E4E4E4" >&nbsp;</th>
                 {/if}
             <th>&nbsp;</th>
+            <th>&nbsp;</th>
         </tr>
     </tfoot>
     {foreach from=$arrProyectos key=keyProyecto item=value}                    
         <tr>
             <td  align="center"><b>{$value.seqProyecto}</b>&nbsp;</td>
-            <td nowrap>{$value.txtNombreProyecto|upper}</td>                       
-            <td >{$value.oferente}</td>
-            <td width="5%">
+            <td width="40%">{$value.txtNombreProyecto|upper}</td>                       
+            <td width="45%">{$value.oferente}</td>
+            <td width="3%">
                 <img src="recursos/imagenes/Show.png" width="24px" data-toggle="modal" data-target="#div{$value.seqProyecto}">
             </td>
             <td> <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=1&tipo=2', '', true);">
                     <img src="recursos/imagenes/add.png" width="24px">
+                </a></td>
+                <td> <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=2&tipo=2', '', true);">
+                    <img src="recursos/imagenes/imagesList.png" width="24px">
                 </a></td> 
         </tr>  
         <div class="modal fade" id="div{$value.seqProyecto}" tabindex="-1" role="dialog" aria-labelledby="div{$value.seqProyecto}" aria-hidden="true">

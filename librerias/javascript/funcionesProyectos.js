@@ -328,10 +328,14 @@ function activarAutocompletar(txtInput, contenedor, url, cant) {
 function activarEditorTiny(id, cant) {
     tinymce.remove();
     var bolCerrar = 0;
+
     for (var i = 1; i <= cant; i++) {
-        if ($("#bolCerrar").is(":checked")) {
-            bolCerrar = 1;
+        if ($("#bolCerrar").length > 0) {
+            if ($("#bolCerrar").is(":checked")) {
+                bolCerrar = 1;
+            }
         }
+
 
         tinymce.init({
             selector: 'textarea#' + id + "" + i,
@@ -357,9 +361,8 @@ function addSeguimientoFicha() {
     var intId = $("#ficha textarea").length + 1;
     var fieldWrapper = $("<div class=\"form-group\" id=\"intV" + intId + "\" />");
     var fType = "<fieldset style='border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;'>";
-    fType += "<legend style='text-align: right; cursor: hand'><p></p><h5>&nbsp;<img src='recursos/imagenes/add.png' width='20px' onclick='addSeguimientoFicha();'><b style='' onclick='addSeguimientoFicha();'>&nbsp; Adicionar Texto</b> ";
-    fType += "&nbsp;&nbsp;&nbsp;&nbsp;<img src='recursos/imagenes/remove.png' width='20px' onclick='removerOferente(intV" + intId + ")'><b style='text-align: right' onclick='removerOferente(intV" + intId + ")'>&nbsp; Eliminar Texto</b> ";
-    fType += "</h5><p></p></legend>";
+    fType += "<legend style='text-align: right; cursor: hand; width: 23%;'><p>&nbsp;</p><input type='button' value='Adicionar' class='btn_add' onclick='addSeguimientoFicha();'><input type='button'  value='Eliminar' class='btn_deleted'  onclick='removerOferente(intV" + intId + ")'/>";
+    fType += "<p>&nbsp;</p></legend>";
     //    fType += "<div class=\"col-md-4\">";
     //    fType += "<label class='control-label' >Nombre Interventor</label>";
     //    fType += "<input name='txtNombreInformador' type='text' id='txtNombreInformador" + intId + "' value='' onblur='sinCaracteresEspeciales(this);'  class='form-control'>";
@@ -374,7 +377,7 @@ function addSeguimientoFicha() {
     //    fType += "<label class='control-label' >Activar</label> <br>";
     //    fType += "<input type='checkbox' id='bolInterventoria' name='bolInterventoria[]' />";
     //    fType += "</div>";
-    fType += "<div class='col-md-10'> ";
+    fType += "<div class='col-md-12'> ";
     fType += "<label class='control-label' >Observaciones de Interventoria</label> ";
     fType += "<input type='hidden' name='seqFichaTexto[]' id='seqFichaTexto' value=''>";
     fType += "<textarea rows='10' cols='200' name='txtFichaTexto[]' id='comentarios" + intId + "'></textarea>";

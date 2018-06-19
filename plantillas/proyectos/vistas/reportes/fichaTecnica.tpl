@@ -138,7 +138,7 @@
             </div>
             <p>&nbsp;</p>
             <div class="form-group" >
-                <div class="col-md-4" style="background: #f5f5f5; border: 1px solid #ccc; border-bottom: 3px solid #ffffff; text-align: justify">                 
+                <div class="col-md-4" style="background: #f5f5f5; border: 1px solid #ccc; text-align: justify; max-height: 400px; overflow-y: auto;">                 
                     <h3>Generalidades</h3>
                     <ui style="list-style-image: url('recursos/imagenes/vineta.png');">
                         <li><b>Tipo de agrupación:</b> {$value.txtTipoProyecto}</li>

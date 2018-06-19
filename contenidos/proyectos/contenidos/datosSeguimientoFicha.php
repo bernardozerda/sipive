@@ -62,7 +62,6 @@ if ($id == 2) {
 
     $arraImagenes = Array();
     if ($dir) {
-
         while (($archivo = $dir->read()) !== false) {
             if ($archivo[0] != ".") {
                 $arraImagenes[] = 'proyecto-' . $idProyecto . '/imagenes/' . $archivo;

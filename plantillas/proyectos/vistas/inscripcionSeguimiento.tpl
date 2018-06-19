@@ -54,35 +54,48 @@
                                 {counter start=1 print=false assign=numSegTexto}
                                 {foreach from=$arrayTextos key=keyTextos item=valueTextos} 
                                     <div class="form-group"  id="intV{$numSegTexto}" >
+                                        {if $value.bolCerrar != 1}  
+                                            {assign var=nav value = "width: 25%"}
+                                        {else}
+                                            {assign var=nav value = "width: 2%"}
+                                        {/if}
                                         <fieldset style="border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;">
-                                            <legend style="text-align: right; cursor: hand"><p></p><h5>&nbsp; {if $value.bolCerrar != 1}<img src="recursos/imagenes/add.png" width="20px" onclick="addSeguimientoFicha();" /><b style="" onclick="addSeguimientoFicha();">&nbsp; Adicionar Texto {if $numSegTexto >1 }
-                                                        <img src="recursos/imagenes/remove.png" width="20px" onclick="removerOferente(intV{$numSegTexto})" /><b style="text-align: right" onclick="removerOferente(intV{$numSegTexto})">&nbsp; Eliminar Texto</b>{/if}</b> 
-                                                    <!--<img src="recursos/imagenes/remove.png" width="20px" onclick="removerOferente(intV1)"><b style="text-align: right" onclick="removerOferente(intV1)">&nbsp; Eliminar Interventoria</b> -->
-                                                    {/if}</h5></legend><p></p>
-                                                <div class="col-md-10"> 
-                                                    <label class="control-label" >Seguimientos</label> 
-                                                    <input type="hidden" name="seqFichaTexto[]" id="seqFichaTexto{$numSegTexto}" value="{$valueTextos.seqFichaTexto}"/>
-                                                    <textarea rows="10" cols="200" name="txtFichaTexto[]" id="comentarios{$numSegTexto}"  {if $value.bolCerrar == 1} readonly="true"{/if}>{$valueTextos.txtFichaTexto}</textarea>
-                                                </div> 
-                                                <p>&nbsp;</p> 
-                                            </fieldset>
-                                        </div>
-                                        {assign var="numSegTexto" value=$numSegTexto+1}
-                                        {/foreach}
-                                        </div>
-                                        <p>&nbsp;</p> 
-                                    </fieldset>   
-                                </div>
-                            </div> 
-                        </div>
+
+                                            <legend style="text-align: left; cursor: hand;{$nav}; text-align: right"><p>&nbsp;</p>
+                                                {if $value.bolCerrar!= 1}  
+                                                    <input type="button" value="Adicionar" class="btn_add" onclick="addSeguimientoFicha();"> 
+                                                    {if $numSegTexto > 1}
+                                                        <input type="button"  value="Eliminar" class="btn_deleted"  onclick="removerOferente(intV{$numSegTexto})"/>
+                                                    {/if}
+                                                {/if}
+                                            </legend>     
+
+                                            <div class="col-md-12"> 
+                                                <label class="control-label" >Seguimientos</label> 
+                                                <input type="hidden" name="seqFichaTexto[]" id="seqFichaTexto{$numSegTexto}" value="{$valueTextos.seqFichaTexto}"/>
+                                                <textarea rows="10" cols="200" name="txtFichaTexto[]" id="comentarios{$numSegTexto}"  {if $value.bolCerrar == 1} readonly="true"{/if}>{$valueTextos.txtFichaTexto}</textarea>
+                                            </div> 
+                                            <p>&nbsp;</p> 
+
+                                        </fieldset>
+                                    </div>
+
+                                    {assign var="numSegTexto" value=$numSegTexto+1}
+                                {/foreach}
+                            </div>
+                            <p>&nbsp;</p> 
+                        </fieldset>   
                     </div>
-                    {/foreach}
+                </div> 
+            </div>
+        </div>
+    {/foreach}
 
-                    </form>
-                    <div id="segOcultoSeg">{$contador}</div>
+</form>
+<div id="segOcultoSeg">{$contador}</div>
 
 
-                    <!-- ******************************************** INICIO DE MODALES INFORMATIVOS ********************************* -->
+<!-- ******************************************** INICIO DE MODALES INFORMATIVOS ********************************* -->
 
-                    <!-- Modal -->
+<!-- Modal -->
 

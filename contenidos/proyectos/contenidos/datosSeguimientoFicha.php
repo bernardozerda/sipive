@@ -39,7 +39,7 @@ $arrayTextos[0] = 0;
 $arraImagenes[0] = 0;
 
 if ((isset($_REQUEST['seqProyecto']) || isset($_REQUEST['seqSeguimientoFicha'])) && $id != 2) {    
-    
+    echo "paso";
     $idProyecto = $_REQUEST['seqProyecto'];
     $seqSeguimientoFicha = $_REQUEST['seqSeguimientoFicha'];
     $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha);

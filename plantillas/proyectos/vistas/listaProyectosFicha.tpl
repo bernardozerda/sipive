@@ -40,7 +40,7 @@
             <td width="3%">
                 <img src="recursos/imagenes/Show.png" width="24px" data-toggle="modal" data-target="#div{$value.seqProyecto}">
             </td>
-            <td> <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=1&tipo=2', '', true);">
+            <td> <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=3&tipo=2', '', true);">
                     <img src="recursos/imagenes/add.png" width="24px">
                 </a></td>
                 <td> <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=2&tipo=2', '', true);">

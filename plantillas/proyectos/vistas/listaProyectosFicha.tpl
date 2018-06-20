@@ -43,7 +43,8 @@
             <td> <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=3&tipo=2', '', true);">
                     <img src="recursos/imagenes/add.png" width="24px">
                 </a></td>
-                <td> <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=2&tipo=2', '', true);">
+                <td> <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=2&tipo=2', '', true);listenerFile('fileAction', 'nameArchivo');
+                        removeFile('fileAction', 'nameArchivo')">
                     <img src="recursos/imagenes/imagesList.png" width="24px">
                 </a></td> 
         </tr>  

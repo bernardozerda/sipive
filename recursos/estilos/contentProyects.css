@@ -239,6 +239,12 @@ html input[disabled]{
     background-repeat: no-repeat;
     background-position-y: 4px;
 }   
+#importImg{    
+    background-image: url("../imagenes/uploadImage.png");
+    background-repeat: no-repeat;
+    background-position-y: 4px;
+    background-position-x: 4px;
+}
 
 #plantillaUnidad{
     background: #84CA84;

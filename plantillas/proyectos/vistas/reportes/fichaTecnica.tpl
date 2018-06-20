@@ -186,9 +186,9 @@
                         <thead >
                             <tr>
                                 <th width="20%"><b>Asignación de Aportes</b></th>
-                                <th width="20%"><b>Giro a Encargo Fiduciario</b></th>
                                 <th width="20%"><b>Indexación del Valor del SFV</b></th>
                                 <th width="20%"><b>Disminución de Aportes</b></th>
+                                <th width="20%"><b>Giro a Encargo Fiduciario</b></th>
                                 <th width="20%"><b>Giros Del Encargo Fiduciario Al Oferente</b></th>
 
                             </tr>
@@ -198,12 +198,6 @@
                                 Res. {$arrFinanciera.$seqProyecto.aprobado.numero} de {$arrFinanciera.$seqProyecto.aprobado.fecha}<br>
                                 {$arrFinanciera.$seqProyecto.aprobado.unidades|@count} SFV por <br>
                                 $ {$arrFinanciera.$seqProyecto.aprobado.valor|number_format:0:',':'.'}
-                            </td>
-                            <td style="text-align: right">
-                                Total de giros a fiducia por<br>
-                                $ {$arrFinanciera.$seqProyecto.fiducia|number_format:0:',':'.'}<br>
-                                Recursos girados a: {$arrFinanciera.$seqProyecto.entidadFiducia.txtRazonSocialFiducia}
-                                [{$arrFinanciera.$seqProyecto.entidadFiducia.numNitFiducia}]
                             </td>
                             <td style="text-align: left">
                                 {foreach from=$arrFinanciera.$seqProyecto.indexado.detalle key=seqUnidadActo item=arrResolucion}
@@ -224,6 +218,12 @@
                                 {/foreach}
                                 Total de disminuciones por<br>
                                 $ {$arrFinanciera.$seqProyecto.menor.total|number_format:0:',':'.'}
+                            </td>
+                            <td style="text-align: right">
+                                Total de giros a fiducia por<br>
+                                $ {$arrFinanciera.$seqProyecto.fiducia|number_format:0:',':'.'}<br>
+                                Recursos girados a: {$arrFinanciera.$seqProyecto.entidadFiducia.txtRazonSocialFiducia}
+                                [{$arrFinanciera.$seqProyecto.entidadFiducia.numNitFiducia}]
                             </td>
                             <td>
                                 El total de recursos de SDHT es $ {$arrFinanciera.$seqProyecto.actual|number_format:0:',':'.'}

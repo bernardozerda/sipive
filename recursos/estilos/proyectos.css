@@ -157,3 +157,7 @@ input[type="hidden" ], input[type="image" ], input[type="file" ] {
 button, input {
     overflow: visible;
 }
+
+.img-circle{
+    border-radius:50%
+}

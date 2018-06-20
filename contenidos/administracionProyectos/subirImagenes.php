@@ -1,4 +1,5 @@
 <?php
+
 if (isset($_FILES["archivo"])) {
     $retorna = "";
 
@@ -7,6 +8,9 @@ if (isset($_FILES["archivo"])) {
     $url = str_replace('index.php', '', $_SERVER['HTTP_REFERER']);
     $tmax = 200000;
 
+    if (!file_exists($destino)) {
+        mkdir($destino, 0777, true);
+    }
     chmod($destino, 0777);
     $dir = @dir($destino);
     $arraImagenes = Array();
@@ -22,8 +26,8 @@ if (isset($_FILES["archivo"])) {
     foreach ($arraImagenes as $key => $value) {
         $nombreImg = explode("/", $value)[2];
         $retorna .=' <div class = "col-md-3">
-        <label ><h5><b>'.$nombreImg.'</b></h5></label><br>
-            <img src = "'.$url.'recursos/proyectos/'.$value.'" class = "img-circle" alt = "Card image cap" height = "100" width = "100" />
+        <label ><h5><b>' . $nombreImg . '</b></h5></label><br>
+            <img src = "' . $url . 'recursos/proyectos/' . $value . '" class = "img-circle" alt = "Card image cap" height = "100" width = "100" />
             </div>';
     }
 
@@ -66,7 +70,6 @@ if (isset($_FILES["archivo"])) {
         }
     }
     echo $retorna;
-
 }
 /* 
  * To change this license header, choose License Headers in Project Properties.

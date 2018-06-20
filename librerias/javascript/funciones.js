@@ -4245,10 +4245,90 @@ function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
     return callObj;
 }
 
-function recogerDireccion(txtInputDireccion, txtDivDireccionOculto) {
+function recogerDireccion_old(txtInputDireccion, txtDivDireccionOculto) {
     cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto);
     setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 100);
 }
+
+function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
+
+    // obtiene el id oculto
+    var objModal = $('#' + txtDivDireccionOculto);
+
+    // inicializa el modal
+    objModal.addClass("modal fade");
+    objModal.attr("tabindex" , "-1");
+    objModal.attr("role" , "dialog");
+    objModal.attr("aria-labelledby" , "myModalLabel");
+    objModal.empty();
+
+    // divs visibles del popup
+    var objModalOverlay = $('<div class="modal-dialog" role="document"></div>');
+    var objModalContent = $('<div class="modal-content" style="width: 850px;"></div>');
+    var objModalHeader  = $('<div class="modal-header" style="font-size: 20px;">Introduzca la Dirección</div>');
+    var objModalBody    = $('<div class="modal-body"></div>');
+    var objModalFooter  = $('<div class="modal-footer"></div>');
+    var objBotonClose   = $('<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>')
+    var objBotonSalvar  = $('<button type="button" class="btn btn-primary btn-sm" onclick="validacionDireccion(' + txtInputDireccion + ', ' + txtDivDireccionOculto + ')">Aceptar</button>')
+
+    // contenido dinamico del body (form de direccion)
+    $.ajax({
+        url: './contenidos/subsidios/obtenerDireccionPlano.php',
+        type: 'post',
+        data: 'txtDireccion=' + $("#" + txtInputDireccion).val() + '&txtExtraDiv=' + txtInputDireccion,
+        success: function(res){
+            objModalBody.html(res);
+        },
+        fail: function () {
+            alert('Problemas al mostrar el popup de direccion');
+        }
+    });
+
+    // anidando divs
+    objModalFooter.append(objBotonClose, objBotonSalvar);
+    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
+    objModalOverlay.append(objModalContent);
+    objModal.append(objModalOverlay);
+
+    // muestra el popup
+    objModal.modal('show');
+
+}
+
+function validacionDireccion(txtInputDireccion, txtDivDireccionOculto){
+
+    // obtiene el id oculto
+    var objModal = $(txtDivDireccionOculto);
+
+    // si hay errores
+    var bolAlerta = false;
+
+    // validacion de la direccion
+    if($("#radTipoDireccion").is(":checked")){
+        if($("#divDireccionGenerada_" + txtInputDireccion.id ).html().substring(0,1) == "-"){
+            alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
+            bolAlerta = true;
+        }else{
+            if (
+                $('#txtDireccionTipoVia').val()   == "---" ||
+                $('#txtNumeroVia').val()          == ""    ||
+                $('#txtDireccionNumeroVia').val() == ""    ||
+                $('#txtNumeroAdicional').val()    == ""
+            ) {
+                alert("Complete la dirección");
+                bolAlerta = true;
+            }
+        }
+    }
+
+    // oculta el popup
+    if(bolAlerta == false) {
+        $(txtInputDireccion).val( $("#divDireccionGenerada_" + txtInputDireccion.id ).html() );
+        objModal.modal('hide');
+    }
+
+}
+
 
 function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
 
@@ -4411,9 +4491,8 @@ function eventoActivarLetraBis(idCheck, idSelect) {
     }
 }
 
+function actualizarDireccion(txtDivDireccionGenerada) {
 
-function actualizarDireccion(txtDivDireccionGenerada)
-{
     //alert (document.getElementById('radTipoDireccion').value);
     var radTipoDireccion = document.getElementsByName('radTipoDireccion');
     var direccionGenerada = document.getElementById(txtDivDireccionGenerada);

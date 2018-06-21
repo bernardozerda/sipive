@@ -77,7 +77,7 @@
                             <tr>
                                 <th><b>Constructora</b></th>
                                 <th><b>Localidad</b></th>
-                                <th><b>Composicion 88</b></th>
+                                <th><b>Composicion</b></th>
                                 <th><b>Unidades Vivienda</b></th>
                                 <th><b>Hogares Vinculados</b></th>
                                 <th><b>Pendientes por Vincular</b></th>

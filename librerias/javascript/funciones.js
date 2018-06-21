@@ -4268,8 +4268,7 @@ function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
     var objModalHeader  = $('<div class="modal-header" style="font-size: 20px;">Introduzca la Dirección</div>');
     var objModalBody    = $('<div class="modal-body"></div>');
     var objModalFooter  = $('<div class="modal-footer"></div>');
-    var objBotonClose   = $('<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>')
-    var objBotonSalvar  = $('<button type="button" class="btn btn-primary btn-sm" onclick="validacionDireccion(' + txtInputDireccion + ', ' + txtDivDireccionOculto + ')">Aceptar</button>')
+    var objBotonSalvar  = $('<button type="button" class="btn btn-primary btn-sm" onclick="validacionDireccion(' + txtInputDireccion + ', ' + txtDivDireccionOculto + ')">Aceptar</button>');
 
     // contenido dinamico del body (form de direccion)
     $.ajax({
@@ -4285,7 +4284,7 @@ function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
     });
 
     // anidando divs
-    objModalFooter.append(objBotonClose, objBotonSalvar);
+    objModalFooter.append(objBotonSalvar);
     objModalContent.append(objModalHeader,objModalBody,objModalFooter);
     objModalOverlay.append(objModalContent);
     objModal.append(objModalOverlay);

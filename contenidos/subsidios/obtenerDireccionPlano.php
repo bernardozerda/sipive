@@ -349,7 +349,7 @@
         <td width="60px">
             <input type='text'
                    id='txtNumeroVia'
-                   style='width: 100%;'
+                   style='width: 100%; height: 16px;'
                    onkeyup='actualizarDireccion("<?php echo $divDireccionGenerada; ?>");'
                    value="<?php echo $arrDireccionDefinitiva[$j]; $j++; ?>"
                    maxlength='3'
@@ -453,7 +453,7 @@
         <td width="60px">
             <span id=''>#</span>&nbsp;
             <input type='text'
-                   style='width: 70%'
+                   style='width: 70%; height: 16px;'
                    onkeyup='actualizarDireccion("<?php echo $divDireccionGenerada; ?>");'
                    maxlength='3'
                    value="<?php echo $arrDireccionDefinitiva[$j]; $j++; ?>"
@@ -482,7 +482,7 @@
         <td width="60px">
             -
             <input type='text'
-                   style='width: 80%;'
+                   style='width: 80%; height: 16px;'
                    onkeyup='actualizarDireccion("<?php echo $divDireccionGenerada; ?>");'
                    maxlength='3'
                    value="<?php echo $arrDireccionDefinitiva[$j]; $j++; ?>"
@@ -541,7 +541,7 @@
                    value='<?php echo $txtAdicional; ?>'
                    onkeyup='actualizarDireccion("<?php echo $divDireccionGenerada; ?>");'
                    onblur="sinCaracteresEspeciales( this ); "
-                   style='width:100%'
+                   style='width:100%; height: 16px;'
             />
         </td>
 
@@ -571,14 +571,14 @@
 
     <!-- CAMPO DE DIRECCION RURAL -->
     <tr>
-        <td colspan='11' height="70px">
+        <td colspan='11' height="70px" align="center">
             <input type='text'
                    id='txtDireccionRural'
                    value='<?php if(empty($arrDireccionDefinitiva)){ echo $txtDireccion; } ?>'
                    onkeyup='actualizarDireccion("<?php echo $divDireccionGenerada; ?>");'
                    onblur="sinCaracteresEspeciales( this );"
                    onfocus="document.getElementById('radTipoDireccionR').checked = true; actualizarDireccion('<?php echo $divDireccionGenerada; ?>');"
-                   style='width:100%'
+                   style='width:100%; height: 18px;'
             />
         </td>
     </tr>

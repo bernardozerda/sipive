@@ -167,11 +167,16 @@ foreach ($arrListadoGirosConstructor as $i => $arrGiro) {
     $arrListadoGirosConstructor[$i]['porcentajeGiro'] = ($arrListadoGirosConstructor[$i]['giro'] / $arrFinanciera[$seqProyecto]['actual']) * 100;
 }
 
+$arrListadoGirosFiducia = $claGestion->listadoGirosFiducia($seqProyecto);
+foreach ($arrListadoGirosFiducia as $i => $arrGiro) {
+    $arrListadoGirosFiducia[$i]['porcentajeGiro'] = ($arrListadoGirosFiducia[$i]['giro'] / $arrFinanciera[$seqProyecto]['actual']) * 100;
+}
+
 $arrFinanciera[$seqProyecto]['entidadFiducia'] = array_shift(obtenerDatosTabla(
                 "t_pry_datos_fiducia", array("seqProyecto", "txtRazonSocialFiducia", "numNitFiducia"), "seqProyecto", "seqProyecto = " . $seqProyecto
         ));
 
-//pr($arrFinanciera);
+
 $claSmarty->assign("arrProyectos", $arrProyectos);
 $claSmarty->assign("cantUnidades", $cantUnidades);
 $claSmarty->assign("cantUnidadesVinculadas", $cantUnidadesVinculadas);
@@ -193,10 +198,11 @@ $claSmarty->assign("avance", $avance);
 $claSmarty->assign("fechaAvance", $fechaAvance);
 $claSmarty->assign("nombreOferente", $nombreOferente);
 $claSmarty->assign("arrListadoGirosConstructor", $arrListadoGirosConstructor);
+$claSmarty->assign("arrListadoGirosFiducia", $arrListadoGirosFiducia);
 $claSmarty->assign("seqProyecto", $seqProyecto);
 
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);
 }
 
-//pr($arrListadoGirosConstructor);
+//pr($arrFinanciera[$seqProyecto]);

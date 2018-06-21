@@ -220,10 +220,29 @@
                                 $ {$arrFinanciera.$seqProyecto.menor.total|number_format:0:',':'.'}
                             </td>
                             <td style="text-align: right">
-                                Total de giros a fiducia por<br>
+
+                                El total de recursos de SDHT es $ {$arrFinanciera.$seqProyecto.actual|number_format:0:',':'.'}
+
+                                {if count($arrListadoGirosFiducia) > 0}
+                                    de los cuales se
+                                {if count($arrListadoGirosFiducia) == 1}
+                                    autorizó {$arrListadoGirosFiducia|@count} giro así:
+                                {else}
+                                    autorizaron {$arrListadoGirosFiducia|@count} giros así:
+                                {/if}
+                                {/if}<br><br>
+                                {foreach from=$arrListadoGirosFiducia item=arrGiroFiducia}
+                                    El {$arrGiroFiducia.porcentajeGiro|number_format:2:',':'.'}% el {$arrGiroFiducia.fecha->format("Y-m-d")} por<br>
+                                    $ {$arrGiroFiducia.giro|number_format:0:',':'.'}<br><br>
+                                {/foreach}
+
+                                Para un total de:<br>
                                 $ {$arrFinanciera.$seqProyecto.fiducia|number_format:0:',':'.'}<br>
-                                Recursos girados a: {$arrFinanciera.$seqProyecto.entidadFiducia.txtRazonSocialFiducia}
-                                [{$arrFinanciera.$seqProyecto.entidadFiducia.numNitFiducia}]
+                                {if $arrFinanciera.$seqProyecto.entidadFiducia.txtRazonSocialFiducia != ""}
+                                    Recursos girados a: {$arrFinanciera.$seqProyecto.entidadFiducia.txtRazonSocialFiducia}
+                                    [{$arrFinanciera.$seqProyecto.entidadFiducia.numNitFiducia}]
+                                {/if}
+
                             </td>
                             <td>
                                 El total de recursos de SDHT es $ {$arrFinanciera.$seqProyecto.actual|number_format:0:',':'.'}
@@ -239,6 +258,8 @@
                                     El {$arrGiroConstructor.porcentajeGiro|number_format:2:',':'.'}% el {$arrGiroConstructor.fecha->format("Y-m-d")} por<br>
                                     $ {$arrGiroConstructor.giro|number_format:0:',':'.'}<br><br>
                                 {/foreach}
+                                Para un total de:<br>
+                                $ {$arrFinanciera.$seqProyecto.constructor|number_format:0:',':'.'}<br>
                                 {if $arrFinanciera.$seqProyecto.reintegro != 0}
                                     Total Reintegros por<br>
                                     $ {$arrFinanciera.$seqProyecto.reintegro|number_format:0:',':'.'}

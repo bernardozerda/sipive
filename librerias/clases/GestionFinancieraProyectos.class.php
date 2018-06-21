@@ -1087,9 +1087,10 @@ class GestionFinancieraProyectos
         return $arrDatosFormato;
     }
 
-    public function listadoGirosFiducia(){
+    public function listadoGirosFiducia($seqProyecto = 0){
         global $aptBd;
         $arrListado = array();
+        $txtCondicion = ($seqProyecto == 0)? "" : "where if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) = $seqProyecto";
         $sql = "
             select 
               if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) as seqProyecto,
@@ -1103,6 +1104,7 @@ class GestionFinancieraProyectos
             inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
             inner join t_pry_proyecto pry on gfd.seqProyecto = pry.seqProyecto
             left join t_pry_proyecto pry1 on pry.seqProyectoPadre = pry1.seqProyecto
+            $txtCondicion
             group by 
               gfi.seqGiroFiducia,
               gfi.numSecuencia,
@@ -1119,6 +1121,7 @@ class GestionFinancieraProyectos
             $arrListado[$seqGiroFiducia]['secuencia'] = "SDHT-SGF-SDRPL-" . $objRes->fields['seqProyecto'] . "-" . $objRes->fields['numSecuencia'] . "-" . $fchCreacion->format(y);
             $arrListado[$seqGiroFiducia]['unidades']  = $objRes->fields['numUnidades'];
             $arrListado[$seqGiroFiducia]['giro']      = $objRes->fields['valGiro'];
+            $arrListado[$seqGiroFiducia]['fecha']     = $fchCreacion;
 
             $objRes->MoveNext();
         }

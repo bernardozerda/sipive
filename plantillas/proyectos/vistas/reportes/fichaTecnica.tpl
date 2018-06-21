@@ -69,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-8" style="min-height: 247px">
                     <table id="ejemplo" class="table table-striped table-bordered" cellspacing="0" width="100%" >
                         <!-- <divclass="col-sm-7">                            
                          </div>-->

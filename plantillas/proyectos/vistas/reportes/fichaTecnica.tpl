@@ -142,8 +142,7 @@
                     <h3>Generalidades</h3>
                     <ui style="list-style-image: url('recursos/imagenes/vineta.png');">
                         <li><b>Tipo de agrupación:</b> {$value.txtTipoProyecto}</li>
-                        <li><b>Numero de torres V.I.P:</b>{$value.valTorres}</li>
-                        <li>Altura en Pisos: 17</li>
+                        <li><b>Numero de torres V.I.P:</b>{$value.valTorres}</li>                        
                             {foreach from=$arrDatosVivienda key=keyv item=valueV} 
                             <li><b>Apartamentos discapacitados:</b>  {$valueV.totalUdsDisc}</li>
                             <li><b>Apartamentos Residentes:</b>  {$valueV.totalUnidades}</li>

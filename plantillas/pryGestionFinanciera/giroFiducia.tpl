@@ -146,9 +146,12 @@
                         {assign var=seqProyecto value=$arrPost.seqProyecto}
                         {assign var=seqUnidadActo value=$arrPost.seqUnidadActo}
                         {assign var=seqRegistroPresupuestal value=$arrPost.seqRegistroPresupuestal}
-                        {foreach from=$arrUnidades.$seqProyecto.$seqUnidadActo.$seqRegistroPresupuestal key=seqUnidadProyecto item=valGiro}
-                            <input type="hidden" name="unidades[{$seqProyecto}][{$seqUnidadActo}][{$seqRegistroPresupuestal}][{$seqUnidadProyecto}]" value="{$valGiro}">
-                        {/foreach}
+
+                        <input type="hidden" name="unidades" value='{$arrUnidades|@json_encode}'>
+
+                        {*{foreach from=$arrUnidades.$seqProyecto.$seqUnidadActo.$seqRegistroPresupuestal key=seqUnidadProyecto item=valGiro}*}
+                            {*<input type="hidden" name="unidades[{$seqProyecto}][{$seqUnidadActo}][{$seqRegistroPresupuestal}][{$seqUnidadProyecto}]" value="{$valGiro}">*}
+                        {*{/foreach}*}
 
                     </div>
 

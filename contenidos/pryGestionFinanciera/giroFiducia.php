@@ -127,6 +127,4 @@ $claSmarty->assign("bolImprimir", $bolImprimir);
 $claSmarty->assign("seqGiroFiducia", intval($_POST['seqGiroFiducia']));
 $claSmarty->display( "pryGestionFinanciera/giroFiducia.tpl" );
 
-//pr($_POST);
-
 ?>

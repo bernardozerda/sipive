@@ -231,8 +231,18 @@
             <td>$ {$arrSolicitud.valSolicitado|number_format:0:',':'.'}</td>
         </tr>
         <tr>
-            <td><b>Saldo del Desembolso:</b></td>
-            <!--<td>$ 0</td>-->
+            <td>
+                {if
+                ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
+                ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+                ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
+                ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+                }
+                    <b>Valor SDVE en proyecto:</b>
+                {else}
+                    <b>Saldo del Desembolso:</b>
+                {/if}
+            </td>
             <td>
                 {if
                 ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||

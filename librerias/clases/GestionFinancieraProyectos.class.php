@@ -503,7 +503,7 @@ class GestionFinancieraProyectos
 
                     // obtiene los datos del rango obtenido
                     for( $numFila = 1; $numFila <= $numFilas; $numFila++ ){
-                        for( $numColumna = 0; $numColumna < $numColumnas; $numColumna++ ){
+                        for( $numColumna = 0; $numColumna <= $numColumnas; $numColumna++ ){
                             $numFilaArreglo = $numFila - 1;
                             $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna,$numFila)->getValue();
                             if( $this->arrFormatoArchivo[$numColumna]['tipo'] == "fecha" and is_numeric( $arrArchivo[$numFilaArreglo][$numColumna] ) ) {
@@ -672,6 +672,7 @@ class GestionFinancieraProyectos
 
     private function validarTitulos($arrTitulos, $txtFormato){
         $arrValidar = $this->arrTitulos[$txtFormato];
+
         if(! empty($arrValidar)) {
             foreach ($arrValidar as $i => $txtTitulo) {
                 if (mb_strtolower(trim($txtTitulo)) != mb_strtolower(trim($arrTitulos[$i]))) {

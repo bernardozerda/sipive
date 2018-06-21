@@ -296,11 +296,11 @@
                 <tr>
                     <td width="30px">
                         <input type="radio"
-                               onClick='actualizarDireccion("<?php echo $divDireccionGenerada; ?>"); actualizaTipoDireccion(this)'
+                               onClick='actualizarDireccion("<?php echo $divDireccionGenerada; ?>"); actualizaTipoDireccion(this);'
                                name="radTipoDireccion"
                                id="radTipoDireccion"
                                value="0"
-                               <?php if(! empty($arrDireccionDefinitiva)){ ?> checked <?php } ?>
+                               <?php if( (! empty($arrDireccionDefinitiva)) or ( empty($arrDireccionDefinitiva) and trim($txtDireccion) ) == "" ){ ?> checked <?php } ?>
                         />
                     </td>
                     <td style="font-size: 14px;">
@@ -556,9 +556,9 @@
                         <input type="radio"
                                name="radTipoDireccion"
                                onClick='actualizarDireccion("<?php echo $divDireccionGenerada; ?>"); actualizaTipoDireccion(this)'
-                               id="radTipoDireccion"
+                               id="radTipoDireccionR"
                                value="1"
-                               <?php if(empty($arrDireccionDefinitiva)){ ?> checked <?php } ?>
+                               <?php if(empty($arrDireccionDefinitiva) and trim($txtDireccion) != ""){ ?> checked <?php } ?>
                         />
                     </td>
                     <td style="font-size: 14px;">
@@ -577,6 +577,7 @@
                    value='<?php if(empty($arrDireccionDefinitiva)){ echo $txtDireccion; } ?>'
                    onkeyup='actualizarDireccion("<?php echo $divDireccionGenerada; ?>");'
                    onblur="sinCaracteresEspeciales( this );"
+                   onfocus="document.getElementById('radTipoDireccionR').checked = true; actualizarDireccion('<?php echo $divDireccionGenerada; ?>');"
                    style='width:100%'
             />
         </td>

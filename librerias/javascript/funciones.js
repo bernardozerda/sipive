@@ -4245,10 +4245,10 @@ function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
     return callObj;
 }
 
-function recogerDireccion_old(txtInputDireccion, txtDivDireccionOculto) {
-    cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto);
-    setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 100);
-}
+// function recogerDireccion_old(txtInputDireccion, txtDivDireccionOculto) {
+//     cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto);
+//     setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 100);
+// }
 
 function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
 
@@ -4330,109 +4330,109 @@ function validacionDireccion(txtInputDireccion, txtDivDireccionOculto){
 }
 
 
-function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
-
-    var direccionGenerada;
-    var txtDireccionForm = document.getElementById(txtInputDireccion);
-    var txtDivDireccionGenerada = "divDireccionGenerada_" + txtInputDireccion;
-
-    var respuesta = function (o) {
-    }
-    var falla = function (o) {
-        alert("falla = " + o.status + ": " + o.responseText);
-    }
-
-    var aceptar = function () {
-
-        var bolAlerta = false;
-        if (YAHOO.util.Dom.get('radTipoDireccion').checked) {
-            if (YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0, 1) == "-") {
-                alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
-                bolAlerta = true;
-            } else {
-                if (
-                        YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
-                        YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
-                        YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
-                        YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
-                        ) {
-                    alert("Complete la dirección");
-                    bolAlerta = true;
-                }
-            }
-        }
-
-        if (bolAlerta == false) {
-            direccionGenerada = document.getElementById(txtDivDireccionGenerada);
-            txtDireccionForm.value.replace(/s{2,}/g, ' ');
-            txtDireccionForm.value = direccionGenerada.innerHTML;
-            this.cancel();
-
-            direccionGenerada.innerHTML = txtDireccionForm.value;
-            //mostrarMapa(txtDireccionForm);
-
-            var objCiudad = document.getElementById("seqCiudad");
-            if (objCiudad != null) {
-                objCiudad.focus();
-            }
-        }
-    }
-
-    var cancelar = function () {
-        // txtDireccionForm.value = "";
-
-        this.cancel();
-    }
-
-    var objConfiguracion = {
-        width: "640px",
-        height: "310px",
-        fixedcenter: true,
-        modal: false,
-        close: true,
-        effect: {
-            effect: YAHOO.widget.ContainerEffect.FADE,
-            duration: 0.75
-        },
-        draggable: false,
-        buttons: [{
-                text: "Aceptar",
-                handler: aceptar,
-                isDefault: true
-            },
-            {
-                text: "Cancelar",
-                handler: cancelar
-            }]
-    }
-
-    var objPanel = new YAHOO.widget.Dialog("dialog1", objConfiguracion);
-    objPanel.validate = function () {
-        var objDatos = this.getData();
-        if (objDatos.valor == "") {
-            alert("Digite un valor");
-            return false;
-        }
-        return true;
-    }
-
-    var objDireccionOculto = document.getElementById(txtDivDireccionOculto);
-    objPanel.callback = {
-        success: respuesta,
-        failure: falla
-    }
-
-    objPanel.setHeader("Introduzca la Dirección");
-
-    objPanel.setBody(objDireccionOculto.innerHTML);
-
-    objPanel.render(document.body);
-    objPanel.show();
-    eventoActivarLetraBis("chkViaBis", "txtLetraViaBis");
-    eventoCambioCalleDireccion( );
-    actualizarDireccion(txtDivDireccionGenerada);
-
-}
+// function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
+//
+//     var direccionGenerada;
+//     var txtDireccionForm = document.getElementById(txtInputDireccion);
+//     var txtDivDireccionGenerada = "divDireccionGenerada_" + txtInputDireccion;
+//
+//     var respuesta = function (o) {
+//     }
+//     var falla = function (o) {
+//         alert("falla = " + o.status + ": " + o.responseText);
+//     }
+//
+//     var aceptar = function () {
+//
+//         var bolAlerta = false;
+//         if (YAHOO.util.Dom.get('radTipoDireccion').checked) {
+//             if (YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0, 1) == "-") {
+//                 alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
+//                 bolAlerta = true;
+//             } else {
+//                 if (
+//                         YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
+//                         YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
+//                         YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
+//                         YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
+//                         ) {
+//                     alert("Complete la dirección");
+//                     bolAlerta = true;
+//                 }
+//             }
+//         }
+//
+//         if (bolAlerta == false) {
+//             direccionGenerada = document.getElementById(txtDivDireccionGenerada);
+//             txtDireccionForm.value.replace(/s{2,}/g, ' ');
+//             txtDireccionForm.value = direccionGenerada.innerHTML;
+//             this.cancel();
+//
+//             direccionGenerada.innerHTML = txtDireccionForm.value;
+//             //mostrarMapa(txtDireccionForm);
+//
+//             var objCiudad = document.getElementById("seqCiudad");
+//             if (objCiudad != null) {
+//                 objCiudad.focus();
+//             }
+//         }
+//     }
+//
+//     var cancelar = function () {
+//         // txtDireccionForm.value = "";
+//
+//         this.cancel();
+//     }
+//
+//     var objConfiguracion = {
+//         width: "640px",
+//         height: "310px",
+//         fixedcenter: true,
+//         modal: false,
+//         close: true,
+//         effect: {
+//             effect: YAHOO.widget.ContainerEffect.FADE,
+//             duration: 0.75
+//         },
+//         draggable: false,
+//         buttons: [{
+//                 text: "Aceptar",
+//                 handler: aceptar,
+//                 isDefault: true
+//             },
+//             {
+//                 text: "Cancelar",
+//                 handler: cancelar
+//             }]
+//     }
+//
+//     var objPanel = new YAHOO.widget.Dialog("dialog1", objConfiguracion);
+//     objPanel.validate = function () {
+//         var objDatos = this.getData();
+//         if (objDatos.valor == "") {
+//             alert("Digite un valor");
+//             return false;
+//         }
+//         return true;
+//     }
+//
+//     var objDireccionOculto = document.getElementById(txtDivDireccionOculto);
+//     objPanel.callback = {
+//         success: respuesta,
+//         failure: falla
+//     }
+//
+//     objPanel.setHeader("Introduzca la Dirección");
+//
+//     objPanel.setBody(objDireccionOculto.innerHTML);
+//
+//     objPanel.render(document.body);
+//     objPanel.show();
+//     eventoActivarLetraBis("chkViaBis", "txtLetraViaBis");
+//     eventoCambioCalleDireccion( );
+//     actualizarDireccion(txtDivDireccionGenerada);
+//
+// }
 
 function eventoCambioCalleDireccion( ) {
 
@@ -4443,6 +4443,9 @@ function eventoCambioCalleDireccion( ) {
     var frmCheckSurVia = document.getElementById('frmCheckSurVia');
     var frmCheckEsteNumero = document.getElementById('frmCheckEsteNumero');
     var frmCheckSurNumero = document.getElementById('frmCheckSurNumero');
+
+    var chkTipoDireccion = document.getElementById('radTipoDireccion');
+        chkTipoDireccion.checked = true;
 
     if (txtDireccionTipoVia == 'CL' ||
             txtDireccionTipoVia == 'DG' ||

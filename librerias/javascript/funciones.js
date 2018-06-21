@@ -4205,45 +4205,45 @@ function imprimir() {
     window.print();
 }
 
-function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
-
-
-    var objDireccion = YAHOO.util.Dom.get(txtInputDireccion);
-
-    var txtDivDestino = txtDivDireccionOculto;
-    var txtArchivoPhp = './contenidos/subsidios/obtenerDireccionPlano.php';
-    var txtParametros = 'txtDireccion=' + objDireccion.value + '&txtExtraDiv=' + txtInputDireccion;
-
-    document.getElementById(txtDivDestino).innerHTML = '';
-
-    // Objeto de respuesta si es satisfactoria la carga
-    var handleSuccess =
-            function (o) {
-                if (o.responseText !== undefined) {
-                    // Toda respuesta del archivo en el parametro se muestra en el objeto destino
-                    document.getElementById(txtDivDestino).innerHTML = o.responseText;
-                }
-            };
-
-    // Objeto de respuesta si la carga falla
-    var handleFailure =
-            function (o) {
-                if (o.responseText !== undefined) {
-                    return false;
-                }
-            };
-
-    // Objeto de respuestas
-    var callback = {
-        success: handleSuccess,
-        failure: handleFailure
-    };
-
-    // peticion asincrona al servidor
-    var callObj = YAHOO.util.Connect.asyncRequest("POST", txtArchivoPhp, callback, txtParametros);
-
-    return callObj;
-}
+// function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
+//
+//
+//     var objDireccion = YAHOO.util.Dom.get(txtInputDireccion);
+//
+//     var txtDivDestino = txtDivDireccionOculto;
+//     var txtArchivoPhp = './contenidos/subsidios/obtenerDireccionPlano.php';
+//     var txtParametros = 'txtDireccion=' + objDireccion.value + '&txtExtraDiv=' + txtInputDireccion;
+//
+//     document.getElementById(txtDivDestino).innerHTML = '';
+//
+//     // Objeto de respuesta si es satisfactoria la carga
+//     var handleSuccess =
+//             function (o) {
+//                 if (o.responseText !== undefined) {
+//                     // Toda respuesta del archivo en el parametro se muestra en el objeto destino
+//                     document.getElementById(txtDivDestino).innerHTML = o.responseText;
+//                 }
+//             };
+//
+//     // Objeto de respuesta si la carga falla
+//     var handleFailure =
+//             function (o) {
+//                 if (o.responseText !== undefined) {
+//                     return false;
+//                 }
+//             };
+//
+//     // Objeto de respuestas
+//     var callback = {
+//         success: handleSuccess,
+//         failure: handleFailure
+//     };
+//
+//     // peticion asincrona al servidor
+//     var callObj = YAHOO.util.Connect.asyncRequest("POST", txtArchivoPhp, callback, txtParametros);
+//
+//     return callObj;
+// }
 
 // function recogerDireccion_old(txtInputDireccion, txtDivDireccionOculto) {
 //     cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto);

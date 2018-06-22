@@ -835,8 +835,8 @@ class InformeVeedurias
                 ciu.seqOcupacion,
                 ciu.seqEstadoCivil,
                 ciu.seqSexo,
-                FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365)) AS Edad,
-                rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365))) AS 'Rango Edad',
+                FLOOR((DATEDIFF(cor.fchCorte, ciu.fchNacimiento) / 365)) AS Edad,
+                rangoEdad(FLOOR((DATEDIFF(cor.fchCorte, ciu.fchNacimiento) / 365))) AS 'Rango Edad',
                 ciu.seqNivelEducativo,
                 ciu.numAnosAprobados,
                 ciu.seqEtnia,
@@ -849,8 +849,9 @@ class InformeVeedurias
                 frm.bolDesplazado,
                 ciu.seqTipoVictima
             from t_vee_formulario frm
-            inner join t_vee_hogar hog ON frm.seqFormularioVeeduria = hog.seqFormularioVeeduria
-            inner join t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria and ciu.seqCorte = $seqCorte
+            inner join t_vee_hogar hog on frm.seqFormularioVeeduria = hog.seqFormularioVeeduria
+            inner join t_vee_ciudadano ciu on hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria and ciu.seqCorte = $seqCorte
+            inner join t_vee_corte cor on cor.seqCorte = frm.seqCorte
               and frm.seqCorte = $seqCorte
               and frm.seqFormularioVeeduria IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )     
         ";

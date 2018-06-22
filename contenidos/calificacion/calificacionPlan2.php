@@ -372,7 +372,7 @@ while ($rowHogar = mysql_fetch_array($exeQueryHogar)) {
 }
 
 // CALCULANDO PROMEDIOS Y DESVIACION ESTANDAR DEL TOTAL DE HOGARES POR ITEM DE CALIFICACION (ojo: sería bueno guardarlos en la tabla calificacion_estadisticas)
-/* $qryEstadisticaHogar = "SELECT
+ $qryEstadisticaHogar = "SELECT
   AVG(valB1) AS prmB1, SQRT(((VARIANCE(valB1))/(COUNT(*)-1)) * COUNT(*)) AS varB1,
   AVG(valB2) AS prmB2, SQRT(((VARIANCE(valB2))/(COUNT(*)-1)) * COUNT(*)) AS varB2,
   AVG(valB3) AS prmB3, SQRT(((VARIANCE(valB3))/(COUNT(*)-1)) * COUNT(*)) AS varB3,
@@ -420,7 +420,7 @@ while ($rowHogar = mysql_fetch_array($exeQueryHogar)) {
 
 
 
-  mysql_query($qryGuardaEstadisticas); */
+  mysql_query($qryGuardaEstadisticas);
 
 //Después de el proximo calculo de promedios y desviación estandar, queda esta linea
 $qryEstadisticaGeneral = "SELECT * FROM T_FRM_CALIFICACION_ESTADISTICA WHERE seqCalificacion = ( SELECT MAX( seqCalificacion ) FROM T_FRM_CALIFICACION_ESTADISTICA )";

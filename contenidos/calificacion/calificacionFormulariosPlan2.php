@@ -109,7 +109,7 @@ while ($objRes->fields) {
     $objRes->MoveNext();
 }
 
-$txtArchivo = $txtPrefijoRuta . "recursos/descargas/formulariosAbiertos" . date("Ymd") . ".xls";
+$txtArchivo = $txtPrefijoRuta . "descargas/formulariosAbiertos" . date("Ymd") . ".xls";
 $aptArchivo = fopen($txtArchivo, "w");
 if ($aptArchivo) {
     foreach ($arrArchivo as $numLinea => $arrLinea) {
@@ -127,5 +127,5 @@ $claSmarty->assign("arrPlanGobierno", $arrPlanGobierno);
 $claSmarty->assign("arrReporte", $arrReporte);
 $claSmarty->assign("arrTotales", $arrTotales);
 $claSmarty->assign("txtArchivo", $txtArchivo);
-$claSmarty->display("calificacion/calificacionFormularios.tpl");
+$claSmarty->display("calificacion/calificacionFormulariosPlan2.tpl");
 ?>

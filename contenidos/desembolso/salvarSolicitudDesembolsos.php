@@ -36,7 +36,7 @@
                     $txtPatron = "/[^0-9A-Za-z\ \-\/]/";
                 break;
                 case "txt":
-                    $txtPatron = "/[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,]/";
+                    $txtPatron = "/[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,\+\&]/";
                 break;
                 default:
                     if( ! in_array( $txtClave , array("valor","registro1","registro2","numeroRadicado","numeroOrden","monto") ) ) {
@@ -46,7 +46,9 @@
                     }
                 break;
             }
+            echo $txtClave . " ==> " . $_POST[ $txtClave ] . "<br>";
             $_POST[ $txtClave ] = preg_replace( $txtPatron , "" , $txtValor );
+            echo $txtClave . " ==> " . $_POST[ $txtClave ] . "<hr>";
         }
     }
     

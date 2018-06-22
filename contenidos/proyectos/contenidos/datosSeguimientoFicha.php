@@ -59,7 +59,9 @@ if ($id == 2) {
     $idProyecto = $_REQUEST['seqProyecto'];
     $txtPlantilla = "proyectos/vistas/listaImagenes.tpl";
     $directorio = '../../../recursos/proyectos/proyecto-' . $idProyecto . '/imagenes';
-
+    if (!file_exists($directorio)) {
+        mkdir($directorio, 0777, true);
+    }
     $dir = @dir($directorio);
 
     $arraImagenes = Array();
@@ -73,12 +75,14 @@ if ($id == 2) {
     }
 
     $directorioIn = '../../../recursos/proyectos/proyecto-' . $idProyecto . '/inactivas';
-
+    if (!file_exists($directorioIn)) {
+        mkdir($directorioIn, 0777, true);
+    }
     $dirIn = @dir($directorioIn);
 
     $arraImagenesIn = Array();
     if ($dir) {
-        while (($archivoIn = $dirIn->read()) !== false) {            
+        while (($archivoIn = $dirIn->read()) !== false) {
             if ($archivoIn[0] != ".") {
                 $arraImagenesIn[] = 'proyecto-' . $idProyecto . '/inactivas/' . $archivoIn;
                 continue;

@@ -80,11 +80,16 @@
                             </span>
                         </label>
                         <input type="text" class="form-control input-sm" value="{$numTotalUnidades}" readonly>
-                        {foreach from=$arrUnidades key=seqProyecto item=arrDatos}
-                            {foreach from=$arrDatos key=seqUnidadProyecto item=valGiro}
-                                <input type="hidden" name="unidades[{$seqProyecto}][{$seqUnidadProyecto}]" value="{$valGiro}">
-                            {/foreach}
-                        {/foreach}
+
+
+                        <input type="hidden" name="unidades" value='{$arrUnidades|@json_encode}'>
+
+                        {*{foreach from=$arrUnidades key=seqProyecto item=arrDatos}*}
+                            {*{foreach from=$arrDatos key=seqUnidadProyecto item=valGiro}*}
+                                {*<input type="hidden" name="unidades[{$seqProyecto}][{$seqUnidadProyecto}]" value="{$valGiro}">*}
+                            {*{/foreach}*}
+                        {*{/foreach}*}
+
                     </div>
                 </div>
 

@@ -9,6 +9,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "GestionFinancieraProyectos.class.php" );
 
+$_POST['unidades'] = json_decode($_POST['unidades'], true);
+
 $claGestion = new GestionFinancieraProyectos();
 
 // cuando hay proyecto seleccionado carga la informacion

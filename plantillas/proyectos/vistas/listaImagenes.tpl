@@ -4,7 +4,7 @@
 {assign var=nav value = "width: 100%;"}
 
 <!-- CODIGO PARA EL POPUP DE SEGUIMIENTO -->
-<div id="wrapper" class="container tab-content">    
+<div id="wrapper" class="container tab-content" style="height: 550px; overflow-y: auto">    
     <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%">                
         <li class="nav-item active"  style="{$nav}">   
             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#Unidades" role="tab" aria-controls="profile" aria-selected="false" style="{$style}">Módulo de Imagenes de Ficha T&eacute;cnica<br></a>
@@ -46,16 +46,26 @@
                 {assign var="charprice" value="/"|explode:$valueImg}
                 {*  <img src="recursos/proyectos/{$valueImg}" >{$valueImg}*}
                 <div class="col-md-3">
-                    <label ><h5><b>{$charprice[2]}</b></h5></label><br>
+                    <label ><h5><b>{$charprice[2]}</b><img src="recursos/imagenes/deleted.png"  onclick="moverImagen('{$valueImg}',1, '{$charprice[2]}', {$seqProyecto});"/></h5></label><br>
                     <img src="recursos/proyectos/{$valueImg}" class="img-circle" alt="Card image cap" height="100" width="100" />        
                 </div>
             {/foreach}
         </div>
-        {*<div class="form-group" style="text-align: center" id="div2">
-
-        </div>*}
         <p>&nbsp;</p>
-
+    </fieldset>
+    <p>&nbsp;</p>
+    <fieldset style="border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;">        
+        <legend style="text-align:  left"><h4>&nbsp; Lista de Imagenes Inactivas </h4></legend>
+        <div class="form-group" style="text-align: center" id="div3">
+            {foreach from=$arraImagenesIn key=keyImgIn item=valueImgIn} 
+                {assign var="nombreIn" value="/"|explode:$valueImgIn}
+                <div class="col-md-3">
+                    <label ><h5><b>{$nombreIn[2]}</b>&nbsp;<img src="recursos/imagenes/return.png" onclick="moverImagen('{$valueImgIn}',2, '{$nombreIn[2]}', {$seqProyecto});"/></h5></label><br>
+                    <img src="recursos/proyectos/{$valueImgIn}" class="img-circle" alt="Card image cap" height="100" width="100" />        
+                </div>
+            {/foreach}
+        </div>       
+        <p>&nbsp;</p>
     </fieldset>
     <p>&nbsp;</p>
 </div>

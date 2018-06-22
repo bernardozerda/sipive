@@ -24,7 +24,7 @@ $arraDatosPoliza = Array();
 $arrCronogramaFecha = Array();
 $arrayFideicomitente = Array();
 $arraImagenes = Array();
-
+$arraImagenesIn = Array();
 
 $txtPlantilla = "proyectos/vistas/listaProyectosFicha.tpl";
 $idProyecto = 0;
@@ -49,9 +49,9 @@ if ((isset($_REQUEST['seqProyecto']) || isset($_REQUEST['seqSeguimientoFicha']))
         $seqSeguimientoFicha = $_REQUEST['seqSeguimientoFicha'];
         $arrayTextos = $claDatosProy->obtenerlistaTextos($seqSeguimientoFicha);
     }
-   $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha); 
-}else if($id == 1){
-    $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha); 
+    $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha);
+} else if ($id == 1) {
+    $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha);
 }
 
 
@@ -71,8 +71,21 @@ if ($id == 2) {
             }
         }
     }
-}
 
+    $directorioIn = '../../../recursos/proyectos/proyecto-' . $idProyecto . '/inactivas';
+
+    $dirIn = @dir($directorioIn);
+
+    $arraImagenesIn = Array();
+    if ($dir) {
+        while (($archivoIn = $dirIn->read()) !== false) {            
+            if ($archivoIn[0] != ".") {
+                $arraImagenesIn[] = 'proyecto-' . $idProyecto . '/inactivas/' . $archivoIn;
+                continue;
+            }
+        }
+    }
+}
 if ($id == 3) {
     $arraSegFicha[0] = 0;
     $arrayTextos[0] = 0;
@@ -93,7 +106,8 @@ $claSmarty->assign("seqProyecto", $_REQUEST['seqProyecto']);
 $claSmarty->assign("arraSegFicha", $arraSegFicha);
 $claSmarty->assign("arrayTextos", $arrayTextos);
 $claSmarty->assign("arrImagenes", $arraImagenes);
-$claSmarty->assign("page", "datosSeguimientoFicha.php?tipo=1&id=1" );
+$claSmarty->assign("arraImagenesIn", $arraImagenesIn);
+$claSmarty->assign("page", "datosSeguimientoFicha.php?tipo=1&id=1");
 
 
 if ($txtPlantilla != "") {

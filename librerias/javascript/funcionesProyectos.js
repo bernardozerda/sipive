@@ -40,12 +40,12 @@ function validarCampos() {
     $.each($("#frmProyectos input.required"), function (index, value) {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
-        console.log("value : " + $("#txtLicenciaConstructor").val());
+        //console.log("value : " + $("#txtLicenciaConstructor").val());
         if (!$(value).val()) {
-            console.log("paso1 : " + $(value).val());
+            //console.log("paso1 : " + $(value).val());
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-            console.log($(this).attr("id") + " input");
+            // console.log($(this).attr("id") + " input");
             valid = false;
         }
 
@@ -55,7 +55,7 @@ function validarCampos() {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         if ($(value).val() == 0) {
-            console.log($(value).val() + " ****** " + index + "  ----- " + value);
+            //  console.log($(value).val() + " ****** " + index + "  ----- " + value);
             // console.log($(this).attr("id") + "select");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
@@ -71,7 +71,7 @@ function validarCampos() {
         if (caract.test($(value).val()) == false) {
             $("#val_" + $(this).attr("id")).css("display", "inline");
             $("#val_" + $(this).attr("id")).html("Correo erroneo! ");
-            console.log($(this).attr("id") + " input email");
+            // console.log($(this).attr("id") + " input email");
             valid = false;
         }
     });
@@ -82,7 +82,7 @@ function validarCampos() {
             // console.log("paso3");
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
-            console.log($(this).attr("id"));
+            // console.log($(this).attr("id"));
             valid = false;
         }
     });
@@ -123,7 +123,7 @@ function almacenarIncripcion() {
         $("#mensajes").css("padding-top", "10px");
         $("#mensajes").css("font-weight", "bold");
     }
-    console.log("valid : " + valid);
+    // console.log("valid : " + valid);
     if (valid) {
         var url = $("#txtArchivo").val();
         $("#mensajes").html("");
@@ -363,20 +363,6 @@ function addSeguimientoFicha() {
     var fType = "<fieldset style='border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;'>";
     fType += "<legend style='text-align: right; cursor: hand; width: 23%;'><p>&nbsp;</p><input type='button' value='Adicionar' class='btn_add' onclick='addSeguimientoFicha();'><input type='button'  value='Eliminar' class='btn_deleted'  onclick='removerOferente(intV" + intId + ")'/>";
     fType += "<p>&nbsp;</p></legend>";
-    //    fType += "<div class=\"col-md-4\">";
-    //    fType += "<label class='control-label' >Nombre Interventor</label>";
-    //    fType += "<input name='txtNombreInformador' type='text' id='txtNombreInformador" + intId + "' value='' onblur='sinCaracteresEspeciales(this);'  class='form-control'>";
-    //    fType += "<div id='txtNombreInformadorContenedor" + intId + "' class='yui-ac-container'></div>";
-    //    fType += "</div>";
-    //    fType += "<div class='col-md-4'> ";
-    //    fType += "<label class='control-label' >Fecha Interventoria</label> ";
-    //    fType += "<input name='fchInterventoria[]' type='text' id='fchInterventoria" + intId + "' value='' size='12' readonly=''  class='form-control required'  style='width: 60%; position: relative; float: left'>";
-    //    fType += "<a href='#' onclick='javascript: calendarioPopUp('fchInterventoria" + intId + "');'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 9%; position: relative; float: left; left: 2%'></a>";
-    //    fType += "</div>";
-    //    fType += "<div class='col-md-4'>";
-    //    fType += "<label class='control-label' >Activar</label> <br>";
-    //    fType += "<input type='checkbox' id='bolInterventoria' name='bolInterventoria[]' />";
-    //    fType += "</div>";
     fType += "<div class='col-md-12'> ";
     fType += "<label class='control-label' >Observaciones de Interventoria</label> ";
     fType += "<input type='hidden' name='seqFichaTexto[]' id='seqFichaTexto' value=''>";
@@ -514,7 +500,27 @@ function addComite() {
     $("#actasComite").append(fieldWrapper);
 }
 
-function mostrarListaSeg() {
+function moverImagen(ruta, tipo, nombre, idProyecto) {
+    var url = "./contenidos/administracionProyectos/moverImagenes.php"; // El script a dónde se realizará la petición.
+    var parametros = {
+        "ruta": ruta,
+        "nombre": nombre,
+        "tipo": tipo,
+        "idProyecto": idProyecto
+    };
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: parametros, // Adjuntar los campos del formulario enviado.
+        success: function (data)
+        {
 
+           var res = data.split("***");
+           // console.log(res[1]);
+            $("#div2").html(res[0]); // Mostrar la respuestas del script PHP.
+            $("#div3").html(res[1]);
+        }
+    });
 }
+
 

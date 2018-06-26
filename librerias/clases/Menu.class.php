@@ -12,8 +12,8 @@ class Menu {
     public $txtIngles;      // Etigueta del menu en ingles
     public $txtCodigo;      // nombre del archivo php que atiende esta opcion de menu, no debe llevar la extension php ( nombre sin el .php )
     public $numOrden;       // Orden de aparicion en las opciones de menu
-    public $seqPadre;       // Padre o menu principal al que pertenece (identificador) cero para los menu principales
-    public $numPosicion;    // Nivel 1: Padre, Nivel 2: Hijo, Nivel 3: Nieto
+    public $seqPadre;
+    public $posicion;// Padre o menu principal al que pertenece (identificador) cero para los menu principales
     public $arrGrupo;       // grupos que estan autorizados para ver el menu [seqProyecto][seqGrupo] = seqProyectoGrupo
 
     /**
@@ -30,7 +30,7 @@ class Menu {
         $this->txtCodigo = "";
         $this->numOrden = "";
         $this->seqPadre = "";
-        $this->numPosicion = "";
+        $this->posicion = "";
         $this->arrGrupo = array();
     }
 
@@ -56,7 +56,7 @@ class Menu {
         $objMenu->txtIngles = $txtIngles;
         $objMenu->txtCodigo = $txtCodigo;
         $objMenu->numOrden = $numOrden;
-        $objMenu->numPosicion = (intval($seqMenuPadre) == 0)? 0 : 2;
+         $objMenu->posicion = $posicion;
         $objMenu->seqPadre = $seqMenuPadre;
         $objMenu->arrGrupo = $arrGrupos;
 
@@ -90,15 +90,13 @@ class Menu {
                             txtMenuEn, 
                             txtCodigo, 
                             seqMenuPadre, 
-                            numOrden,
-                            posicion
+                            numOrden
                         ) VALUES (
                             \"" . $objMenu->txtEspanol . "\", 
                             \"" . $objMenu->txtIngles . "\", 
                             \"" . $objMenu->txtCodigo . "\", 
                             " . $objMenu->seqPadre . ", 
-                            " . $objMenu->numOrden . ",
-                            " . $objMenu->numPosicion . "
+                            " . $objMenu->numOrden . "
                         ) 
                     ";
 
@@ -108,7 +106,6 @@ class Menu {
                 } catch (Exception $objError) {
                     $seqMenu = 0;
                     $arrErrores[] = "No se ha podido insertar la opcion de menu <b>" . $objMenu->txtEspanol . "</b>, reporte este error al administrador";
-//                    $arrErrores[] = $objError->getMessage();
                 }
 
                 // Almacena las relaciones de los menus con los grupos
@@ -200,7 +197,7 @@ class Menu {
 	                    ucwords(men.txtMenuEn) as txtMenuEn,
 	                    men.txtCodigo,
 	                    men.numOrden, 
-                        men.posicion
+                            men.posicion
 	                FROM 
 	                    T_COR_PERMISO per,
 	                    T_COR_PROYECTO_GRUPO egr,
@@ -237,7 +234,7 @@ class Menu {
                 $objMenu->txtIngles = $txtIngles;
                 $objMenu->txtCodigo = $txtCodigo;
                 $objMenu->numOrden = $numOrden;
-                $objMenu->numPosicion = $posicion;
+                $objMenu->posicion = $posicion;
                 $objMenu->seqPadre = $seqPadre;   
 
                 $arrMenu[$seqMenu] = $objMenu;
@@ -364,8 +361,6 @@ class Menu {
             $objMenu->numOrden = $numOrden;
             $objMenu->seqPadre = $seqPadre;
             $objMenu->arrGrupo = $arrGrupo;
-            $objMenu->numPosicion = (intval($seqPadre) == 0)? 0 : $arrMenu[$seqMenu]->numPosicion;
-
 
             // obtiene los hermanos nuevos para re-ordenar las opciones
             $arrHermanos = $this->obtenerHijos($seqProyecto, $seqPadre);
@@ -412,8 +407,7 @@ class Menu {
                                 txtMenuEn = \"" . $objMenu->txtIngles . "\", 
                                 txtCodigo = \"" . $objMenu->txtCodigo . "\", 
                                 seqMenuPadre = " . $objMenu->seqPadre . ", 
-                                numOrden = " . $objMenu->numOrden . ",
-                                posicion = " . $objMenu->numPosicion . "
+                                numOrden = " . $objMenu->numOrden . " 
                             WHERE seqMenu = $seqMenu
                         ";
                 } else {

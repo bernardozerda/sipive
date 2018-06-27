@@ -912,7 +912,7 @@ class DatosGeneralesProyectos {
         $sql = "SELECT * FROM t_pry_seguimiento_ficha";
         if ($idProyectos > 0) {
             $sql .=" where seqProyecto = " . $idProyectos;
-            if ($seqSeguimientoFicha > 0) {
+            if ($seqSeguimientoFicha > 0 && $seqSeguimientoFicha != "") {
                 $sql .=" AND seqSeguimientoFicha =" . $seqSeguimientoFicha;
             }
         }
@@ -954,6 +954,59 @@ class DatosGeneralesProyectos {
             $sql .=" where seqProyecto =" . $idProyectos . " AND ";
         }
         $sql .=" ORDER BY fchSeguimientoFicha DESC  ";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
+    function obtenerDatosInterventoria($idProyectos, $seqInformeInterventoria) {
+
+        global $aptBd;
+
+        $sql = "SELECT * FROM t_pry_informe_interventoria";
+        if ($idProyectos > 0) {
+            $sql .=" where seqProyecto = " . $idProyectos;
+            if ($seqInformeInterventoria > 0 && $seqInformeInterventoria != "") {
+                $sql .=" AND seqInformeInterventoria =" . $seqInformeInterventoria;
+            }
+        }
+
+        $sql .=" ORDER BY seqProyecto ASC, fchInformeInterventoria desc";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
+    function obtenerNombreArchivo($idProyecto, $name) {
+
+        global $aptBd;
+
+        $sql = "SELECT txtNombreArchivo FROM t_pry_informe_interventoria where txtNombreArchivo = '$name' AND seqProyecto = $idProyecto";
+         $objRes = $aptBd->execute($sql);
+        
+        if ($objRes->numRows() > 0){
+            return false;
+        }else{
+             return true;
+        }
+        return $datos;
+    }
+    function obtenerlistaTextosInterventoria($seqInformeInterventoria) {
+        global $aptBd;
+
+        $sql = "SELECT * FROM t_pry_interventoria_texto";
+        if ($seqInformeInterventoria > 0) {
+            $sql .=" where seqInformeInterventoria =" . $seqInformeInterventoria;
+        }
+        $sql .=" ORDER BY fchTexto ";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {

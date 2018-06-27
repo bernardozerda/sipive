@@ -662,11 +662,11 @@ class Proyecto {
 
     public function datosAvanceObraFicha($seqProyecto) {
         global $aptBd;
-        $sql = "SELECT concat(porcIncTerreno ,'**', fchFinalTerreno ) as datosAvance FROM t_pry_cronograma_obras ";
+        $sql = "SELECT concat(numPorcentajeEjecucion ,'**', fchInformeInterventoria, '**', valEjecutado ) as datosAvance FROM t_pry_informe_interventoria ";
         if ($seqProyecto > 0) {
             $sql .= " where  seqProyecto = " . $seqProyecto;
         }
-        $sql . " ORDER BY txtNombreOferente ASC";
+        $sql . " ORDER BY fchInformeInterventoria DESC LIMIT 1";
         //echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = "";
@@ -2191,6 +2191,142 @@ class Proyecto {
             $objRes->MoveNext();
         }
         return $datos;
+    }
+
+    public function almacenarInformeInterventoria($post, $file) {
+
+        global $aptBd;
+        $arrErrores = array();
+        $numPorcentajeEjecucion = 0;
+        $fchCreacionInforme = 'NOW()';
+        $seqProyecto;
+        $txtNombreArchivo = $file;
+
+
+        foreach ($post as $key => $value) {
+            $$key = $value;
+            //  echo "<br>" . $key . " ->" . $value;
+        }
+        $sql = "INSERT INTO t_pry_informe_interventoria
+                    (
+                    txtInformeInterventoria,
+                    fchInformeInterventoria,
+                    fchCreacionInforme,
+                    txtNombreArchivo,
+                    numPorcentajeEjecucion,
+                    valEjecutado,
+                    seqProyecto)
+                    VALUES
+                    (
+                    '$txtInformeInterventoria',
+                    '$fchInformeInterventoria',
+                    $fchCreacionInforme,
+                    '$txtNombreArchivo',
+                    $numPorcentajeEjecucion,
+                    $valEjecutado,
+                    $seqProyecto);";
+        try {
+            $aptBd->execute($sql);
+            $seqInformeInterventoria = $aptBd->Insert_ID();
+            $query = "INSERT INTO t_pry_interventoria_texto
+                    (
+                        txtObservaciones,
+                        fchTexto,
+                        seqInformeInterventoria) VALUES";
+            foreach ($txtObservaciones as $keyText => $valueText) {
+                $query .= "('$valueText', NOW(), $seqInformeInterventoria),";
+            }
+            try {
+                $query = substr_replace($query, ';', -1, 1);
+                $aptBd->execute($query);
+            } catch (Exception $ex) {
+                pr($ex->getMessage());
+            }
+        } catch (Exception $objError) {
+            $arrErrores[] = "No se ha podido guardar los datos de seguimiento de la ficha consulte este error al administrador del sistema";
+            pr($objError->getMessage());
+        }
+        return $seqInformeInterventoria;
+    }
+
+    public function editarDatosInterventoria($post, $cant) {
+
+        global $aptBd;
+
+        $seqInformeInterventoria = 0;
+
+        foreach ($post as $key => $value) {
+            $$key = $value;
+            //  echo "<br>" . $key . " ->" . $value;
+        }
+
+        $sqlExistentes = "SELECT seqInterventoriaTexto FROM t_pry_interventoria_texto WHERE seqInformeInterventoria = $seqInformeInterventoria";
+        $exeExistentes = $aptBd->execute($sqlExistentes);
+        //$cant = $exeExistentes->numRows();
+        $datos = Array();
+        $datosDiff = Array();
+        while ($exeExistentes->fields) {
+            $datos[] = $exeExistentes->fields['seqInterventoriaTexto'];
+            $exeExistentes->MoveNext();
+        }
+        $sql = "UPDATE t_pry_informe_interventoria
+            SET
+            txtInformeInterventoria = '$txtInformeInterventoria',
+            fchInformeInterventoria = '$fchInformeInterventoria',
+            numPorcentajeEjecucion = $numPorcentajeEjecucion,
+            valEjecutado = $valEjecutado          
+            WHERE seqInformeInterventoria = $seqInformeInterventoria and seqProyecto = $seqProyecto;";
+        try {
+            // echo "<p>" . $sql . "</p>";
+            $aptBd->execute($sql);
+            $ind = 0;
+            foreach ($txtObservaciones as $keyText => $valueText) {
+                $datosDiff[] = $seqInterventoriaTexto[$ind];
+
+                if ($seqInterventoriaTexto[$ind] > 0 && $valueText != "") {
+                    $queryUP = "UPDATE t_pry_interventoria_texto
+                        SET
+                        txtObservaciones = '$valueText'
+                        WHERE seqInterventoriaTexto = $seqInterventoriaTexto[$ind]
+                        AND seqInformeInterventoria = $seqInformeInterventoria";
+                    $aptBd->execute($queryUP);
+                } else if ($seqInterventoriaTexto[$ind] == "" && $valueText != "") {
+                    $query = "INSERT INTO t_pry_interventoria_texto
+                    (
+                        txtObservaciones,
+                        fchTexto,
+                        seqInformeInterventoria) VALUES";
+                    try {
+                        //echo "<p>" . $query . "</p>";
+                        $query .= "('$valueText', NOW(), $seqInformeInterventoria);";
+                        $aptBd->execute($query);
+                    } catch (Exception $ex) {
+                        pr($ex->getMessage());
+                    }
+                }
+                $ind++;
+            }
+
+            if ($cant < $exeExistentes->numRows()) {
+                $resultado = array_diff($datos, $datosDiff);
+                $delete = "";
+                foreach ($resultado as $value) {
+                    $delete .= $value . ",";
+                }
+                //  print_r($resultado);
+                $delete = substr_replace($delete, '', -1, 1);
+                $sql = "DELETE FROM t_pry_interventoria_texto WHERE seqInterventoriaTexto in (" . $delete . ")";
+                try {
+                    $aptBd->execute($sql);
+                } catch (Exception $objError) {
+                    $arrErrores[] = "No se ha podido eliminar El texto de la ficha<b></b>";
+                    pr($objError->getMessage());
+                }
+            }
+        } catch (Exception $ex) {
+            $arrErrores[] = "No se ha podido modificar los datos de seguimiento de la ficha consulte este error al administrador del sistema";
+            pr($objError->getMessage());
+        }
     }
 
     // Fin clase 

@@ -77,7 +77,7 @@
                             <tr>
                                 <th><b>Constructora</b></th>
                                 <th><b>Localidad</b></th>
-                                <th><b>Composicion 88</b></th>
+                                <th><b>Composicion</b></th>
                                 <th><b>Unidades Vivienda</b></th>
                                 <th><b>Hogares Vinculados</b></th>
                                 <th><b>Pendientes por Vincular</b></th>
@@ -111,7 +111,7 @@
                             </tr>
                         </thead>
                         <tr>
-                            <td>{$avance}</td>
+                            <td>{$avance}<b>%</b><br><b>$</b>{$valAvance|number_format:0:".":","}</td>
                             <td>{$fechaAvance}</td>
                             <td >{$cantOcupacion} Unidades</td>  
                             <td>{$cantExistencia} Unidades</td>
@@ -224,11 +224,11 @@
 
                                 {if count($arrListadoGirosFiducia) > 0}
                                     de los cuales se
-                                {if count($arrListadoGirosFiducia) == 1}
-                                    autorizó {$arrListadoGirosFiducia|@count} giro así:
-                                {else}
-                                    autorizaron {$arrListadoGirosFiducia|@count} giros así:
-                                {/if}
+                                    {if count($arrListadoGirosFiducia) == 1}
+                                        autorizó {$arrListadoGirosFiducia|@count} giro así:
+                                    {else}
+                                        autorizaron {$arrListadoGirosFiducia|@count} giros así:
+                                    {/if}
                                 {/if}<br><br>
                                 {foreach from=$arrListadoGirosFiducia item=arrGiroFiducia}
                                     El {$arrGiroFiducia.porcentajeGiro|number_format:2:',':'.'}% el {$arrGiroFiducia.fecha->format("Y-m-d")} por<br>

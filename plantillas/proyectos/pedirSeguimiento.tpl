@@ -1,6 +1,6 @@
 
 <!-- TABLA QUE MUESTRA LAS CATEGORIAS DE SEGUIMIENTO -->
-<link href="./recursos/estilos/contentProyects.css" rel="stylesheet">
+<link href="{$prefijo}recursos/estilos/contentProyects.css" rel="stylesheet">
 <div id="wrapper" class="container" style="overflow-y: hidden; padding: 5px 0; ">
     <fieldset>
         <legend class="legend">
@@ -67,16 +67,22 @@
                           required="required" ></textarea>
                 <div id="val_txtComentario" class="divError">Por favor diligencie el campo de comentarios</div>
             </div>
-            
+
         </div>
         <p>&nbsp;</p>
         <p>    
             {if isset($page)}
-            <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
-                   onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/{$page}', '', true);
+                <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
+                       onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/{$page}', '', true);
                            cargarContenido('rutaMenu', './rutaMenu.php', 'menu=66', false);" class="btn_volver"/> 
-            <input type="button" name="btn_enviar" id="btn_enviar" value="Salvar Inscripci&oacute;n" onclick="almacenarIncripcion()" class="btn_volver"/><br>
+                <input type="button" name="btn_enviar" id="btn_enviar" value="Salvar Inscripci&oacute;n" onclick="almacenarIncripcion()" class="btn_volver"/><br>
+            {else if($id == 4)}
+                <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
+                       onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/{$pages}', '', true);
+                           cargarContenido('rutaMenu', './rutaMenu.php', 'menu=66', false);" class="btn_volver"/> 
+                <input type="button" name="btn_enviar" id="btn_enviar" value="Salvar Inscripci&oacute;n" onclick="if(validarCampos()) someterFormulario('contenido', this.form, 'contenidos/administracionProyectos/salvarInformeInterventoria.php', true, false)" class="btn_volver"/><br>
             {/if}
         </p>
     </fieldset>
 </div><br>
+

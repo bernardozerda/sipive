@@ -5,13 +5,11 @@ $txtPrefijoRuta = "../../../";
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
 include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
-
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "DatosGeneralesProyectos.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "SeguimientoProyectos.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Proyecto.class.php" );
-
 
 $claDatosProy = new DatosGeneralesProyectos();
 $claProyecto = new Proyecto();
@@ -54,7 +52,6 @@ if ((isset($_REQUEST['seqProyecto']) || isset($_REQUEST['seqSeguimientoFicha']))
     $arraSegFicha = $claDatosProy->obtenerSeguimientosFicha($idProyecto, $seqSeguimientoFicha);
 }
 
-
 if ($id == 2) {
     $idProyecto = $_REQUEST['seqProyecto'];
     $txtPlantilla = "proyectos/vistas/listaImagenes.tpl";
@@ -78,6 +75,7 @@ if ($id == 2) {
     if (!file_exists($directorioIn)) {
         mkdir($directorioIn, 0777, true);
     }
+
     $dirIn = @dir($directorioIn);
 
     $arraImagenesIn = Array();
@@ -95,24 +93,28 @@ if ($id == 3) {
     $arrayTextos[0] = 0;
     $txtPlantilla = "proyectos/vistas/inscripcionSeguimiento.tpl";
 }
+if ($id == 4) {
+    $arrayDatosInterventoria = $claDatosProy->obtenerDatosInterventoria($idProyecto, 0);
+    $arrayTextos[0] = 0;
+    $txtPlantilla = "proyectos/vistas/listaProyectosFicha.tpl";
+}
 
 $arrProyectos = $claDatosProy->obtenerlistaProyectos($idProyecto, $id);
-
-
 $seqUsuario = $_SESSION['seqUsuario'];
 $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
 $claSmarty->assign("arrProyectos", $arrProyectos);
-
 $claSmarty->assign("id", $id);
 $claSmarty->assign("NombreUsuario", $_SESSION['txtNombre'] . "" . $_SESSION['txtApellido']);
 $claSmarty->assign("seqUsuario", $_SESSION['seqUsuario']);
 $claSmarty->assign("seqProyecto", $_REQUEST['seqProyecto']);
 $claSmarty->assign("arraSegFicha", $arraSegFicha);
+$claSmarty->assign("arrayDatosInterventoria", $arrayDatosInterventoria);
 $claSmarty->assign("arrayTextos", $arrayTextos);
 $claSmarty->assign("arrImagenes", $arraImagenes);
 $claSmarty->assign("arraImagenesIn", $arraImagenesIn);
-$claSmarty->assign("page", "datosSeguimientoFicha.php?tipo=1&id=1");
-
+if ($id != 4) {
+   $claSmarty->assign("page", "datosSeguimientoFicha.php?tipo=1&id=1"); 
+}
 
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);

@@ -30,6 +30,7 @@ $datosAvance = $claProyecto->datosAvanceObraFicha($seqProyecto);
 $arraAvance = explode("**", $datosAvance);
 $avance = $arraAvance[0];
 $fechaAvance = $arraAvance[1];
+$valAvance = $arraAvance[2];
 
 $directorio = '../../../recursos/proyectos/proyecto-' . $seqProyecto . '/imagenes';
 
@@ -196,6 +197,7 @@ $claSmarty->assign("listaTextosSeguimiento", $listaTextosSeguimiento);
 $claSmarty->assign("arrFinanciera", $arrFinanciera);
 $claSmarty->assign("avance", $avance);
 $claSmarty->assign("fechaAvance", $fechaAvance);
+$claSmarty->assign("valAvance", $valAvance);
 $claSmarty->assign("nombreOferente", $nombreOferente);
 $claSmarty->assign("arrListadoGirosConstructor", $arrListadoGirosConstructor);
 $claSmarty->assign("arrListadoGirosFiducia", $arrListadoGirosFiducia);

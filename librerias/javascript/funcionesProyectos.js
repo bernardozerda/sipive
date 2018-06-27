@@ -54,9 +54,7 @@ function validarCampos() {
     $.each($("#frmProyectos select.required"), function (index, value) {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
-        if ($(value).val() == 0) {
-            //  console.log($(value).val() + " ****** " + index + "  ----- " + value);
-            // console.log($(this).attr("id") + "select");
+        if ($(value).val() == 0) {          
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
             console.log($(this).attr("id") + "select");
@@ -326,6 +324,7 @@ function activarAutocompletar(txtInput, contenedor, url, cant) {
 }
 
 function activarEditorTiny(id, cant) {
+
     tinymce.remove();
     var bolCerrar = 0;
 
@@ -364,7 +363,7 @@ function addSeguimientoFicha() {
     fType += "<legend style='text-align: right; cursor: hand; width: 23%;'><p>&nbsp;</p><input type='button' value='Adicionar' class='btn_add' onclick='addSeguimientoFicha();'><input type='button'  value='Eliminar' class='btn_deleted'  onclick='removerOferente(intV" + intId + ")'/>";
     fType += "<p>&nbsp;</p></legend>";
     fType += "<div class='col-md-12'> ";
-    fType += "<label class='control-label' >Observaciones de Interventoria</label> ";
+    fType += "<label class='control-label' >Seguimiento</label> ";
     fType += "<input type='hidden' name='seqFichaTexto[]' id='seqFichaTexto' value=''>";
     fType += "<textarea rows='10' cols='200' name='txtFichaTexto[]' id='comentarios" + intId + "'></textarea>";
     fType += "</div> ";
@@ -374,7 +373,23 @@ function addSeguimientoFicha() {
     activarEditorTiny('comentarios', intId);
     activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', intId);
 }
+function addObsInterventoria() {
+    var intId = $("#ficha textarea").length + 1;
+    var fieldWrapper = $("<div class=\"form-group\" id=\"intV" + intId + "\" />");
+    var fType = "<fieldset style='border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;'>";
+    fType += "<legend style='text-align: right; cursor: hand; width: 23%;'><p>&nbsp;</p><input type='button' value='Adicionar' class='btn_add' onclick='addObsInterventoria();'><input type='button'  value='Eliminar' class='btn_deleted'  onclick='removerOferente(intV" + intId + ")'/>";
+    fType += "<p>&nbsp;</p></legend>";
+    fType += "<div class='col-md-12'> ";
+    fType += "<label class='control-label' >Conclusiones de Interventoria</label> ";
+    fType += "<input type='hidden' name='seqFichaTexto[]' id='seqFichaTexto' value=''>";
+    fType += "<textarea rows='10' cols='200' name='txtObservaciones[]' id='comentarios" + intId + "'></textarea>";
+    fType += "</div> ";
+    fType += "<p>&nbsp;</p> </fieldset></div>";
+    fieldWrapper.append(fType);
+    $("#ficha").append(fieldWrapper);
+    activarEditorTiny('comentarios', intId);
 
+}
 var fncEditor = function () {
     activarEditorTiny('comentarios', 1);
     activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', 1);
@@ -515,8 +530,8 @@ function moverImagen(ruta, tipo, nombre, idProyecto) {
         success: function (data)
         {
 
-           var res = data.split("***");
-           // console.log(res[1]);
+            var res = data.split("***");
+            // console.log(res[1]);
             $("#div2").html(res[0]); // Mostrar la respuestas del script PHP.
             $("#div3").html(res[1]);
         }

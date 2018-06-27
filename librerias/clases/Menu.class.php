@@ -5,6 +5,7 @@
  * DE CREACION Y EDICION DE LAS OPCIONES DE MENU
  * @author Bernardo Zerda
  * @version 1.0 abril 2009
+ * @version 1.1 Junio 2018
  */
 class Menu {
 
@@ -13,7 +14,6 @@ class Menu {
     public $txtCodigo;      // nombre del archivo php que atiende esta opcion de menu, no debe llevar la extension php ( nombre sin el .php )
     public $numOrden;       // Orden de aparicion en las opciones de menu
     public $seqPadre;
-    public $posicion;// Padre o menu principal al que pertenece (identificador) cero para los menu principales
     public $arrGrupo;       // grupos que estan autorizados para ver el menu [seqProyecto][seqGrupo] = seqProyectoGrupo
 
     /**
@@ -24,17 +24,14 @@ class Menu {
      * @version 1.0 abril 2009
      */
 
-    public function Menu() {
+    public function __construct() {
         $this->txtEspanol = "";
         $this->txtIngles = "";
         $this->txtCodigo = "";
         $this->numOrden = "";
         $this->seqPadre = "";
-        $this->posicion = "";
         $this->arrGrupo = array();
     }
-
-// Fin constructor
 
     /**
      * ALMACENA LAS OPCIONES DEL MENU
@@ -56,7 +53,6 @@ class Menu {
         $objMenu->txtIngles = $txtIngles;
         $objMenu->txtCodigo = $txtCodigo;
         $objMenu->numOrden = $numOrden;
-         $objMenu->posicion = $posicion;
         $objMenu->seqPadre = $seqMenuPadre;
         $objMenu->arrGrupo = $arrGrupos;
 
@@ -163,8 +159,6 @@ class Menu {
         return $arrErrores;
     }
 
-// Guardar menu
-
     /**
      * OBTIENE LA INFORMACION DE UNA OPCION DE 
      * MENU, SI EL PARAMETRO NO ES FACILITADO
@@ -196,8 +190,7 @@ class Menu {
 	                    ucwords(men.txtMenuEs) as txtMenuEs,
 	                    ucwords(men.txtMenuEn) as txtMenuEn,
 	                    men.txtCodigo,
-	                    men.numOrden, 
-                            men.posicion
+	                    men.numOrden
 	                FROM 
 	                    T_COR_PERMISO per,
 	                    T_COR_PROYECTO_GRUPO egr,
@@ -227,14 +220,12 @@ class Menu {
                 $txtIngles = $objRes->fields['txtMenuEn'];
                 $txtCodigo = $objRes->fields['txtCodigo'];
                 $numOrden = $objRes->fields['numOrden'];
-                $posicion = $objRes->fields['posicion'];
 
                 $objMenu = new Menu;
                 $objMenu->txtEspanol = $txtEspanol;
                 $objMenu->txtIngles = $txtIngles;
                 $objMenu->txtCodigo = $txtCodigo;
                 $objMenu->numOrden = $numOrden;
-                $objMenu->posicion = $posicion;
                 $objMenu->seqPadre = $seqPadre;   
 
                 $arrMenu[$seqMenu] = $objMenu;
@@ -246,19 +237,19 @@ class Menu {
             if (!empty($arrMenu)) {
 
                 $sql = "
-	                    SELECT
-	                        per.seqMenu,
-	                        egr.seqProyecto,
-	                        egr.seqGrupo,
-	                        egr.seqProyectoGrupo
-	                    FROM
-	                        T_COR_PERMISO per,
-	                        T_COR_PROYECTO_GRUPO egr
-	                    WHERE
-	                          per.seqProyectoGrupo = egr.seqProyectoGrupo
-	                    AND egr.seqProyecto = $seqProyecto
-	                    AND per.seqMenu IN ( " . implode(",", array_keys($arrMenu)) . " )
-	                ";
+                    SELECT
+                        per.seqMenu,
+                        egr.seqProyecto,
+                        egr.seqGrupo,
+                        egr.seqProyectoGrupo
+                    FROM
+                        T_COR_PERMISO per,
+                        T_COR_PROYECTO_GRUPO egr
+                    WHERE
+                          per.seqProyectoGrupo = egr.seqProyectoGrupo
+                    AND egr.seqProyecto = $seqProyecto
+                    AND per.seqMenu IN ( " . implode(",", array_keys($arrMenu)) . " )
+                ";
 
                 $objRes = $aptBd->execute($sql);
                 while ($objRes->fields) {
@@ -275,8 +266,6 @@ class Menu {
 
         return $arrMenu;
     }
-
-// fin cargar menu
 
     /**
      * DADOS UNA Proyecto Y UN PADRE SON RETORMADOS
@@ -321,8 +310,6 @@ class Menu {
 
         return $arrMenuHijos;
     }
-
-// fin obtener hijos
 
     /**
      * MODIFICA UNA OPCION DE MENU
@@ -487,8 +474,6 @@ class Menu {
         return $arrErrores;
     }
 
-// Fin edicion menu
-
     /**
      * ELIMINA LAS OPCIONES DE MENU 
      * @author Bernardo Zerda
@@ -547,6 +532,12 @@ class Menu {
         return $arrErrores;
     }
 
+    /**
+     * OBTIENE LA RUTA ACTUAL DEL MENU PARA LA MIGA DE PAN
+     * @param $seqMenu
+     * @param string $txtRuta
+     * @return string $txtRuta
+     */
     public function obtenerRutaMenu($seqMenu, $txtRuta = "") {
         global $aptBd;
 
@@ -562,15 +553,154 @@ class Menu {
 				";
             $objRes = $aptBd->execute($sql);
             if ($objRes->fields) {
-                $txtRuta = $objRes->fields['txtMenuES'] . "/" . $txtRuta;
+                $txtRuta = $objRes->fields['txtMenuES'] . " / " . $txtRuta;
                 $txtRuta = $this->obtenerRutaMenu($objRes->fields['seqMenuPadre'], $txtRuta);
             }
         }
 
-        return trim($txtRuta, "/");
+        return trim($txtRuta, " / ");
+    }
+
+    /**
+     * OBTIENE EL ARBOL DE MENU COMPLETO
+     * PARA UN PROYECTO EN GENERAL
+     * @param $seqProyecto
+     * @return $arrArbolMenu
+     */
+    public function arbolMenu($seqProyecto, $seqPadre = 0){
+        global $aptBd;
+
+        $arrArbolMenu = array();
+
+        $sql = "
+            select distinct
+              men.seqMenu, 
+              men.txtMenuEs, 
+              men.txtCodigo,
+              men.seqMenuPadre
+            from t_cor_menu men
+            inner join t_cor_permiso per on men.seqMenu = per.seqMenu
+            inner join t_cor_proyecto_grupo pgr on per.seqProyectoGrupo = pgr.seqProyectoGrupo
+            inner join t_cor_proyecto pro on pgr.seqProyecto = pro.seqProyecto
+            where pro.seqProyecto = $seqProyecto
+              and men.seqMenuPadre = $seqPadre
+            order by 
+              men.numOrden
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $seqMenu   = $objRes->fields['seqMenu'];
+            $txtMenu   = $objRes->fields['txtMenuEs'];
+            $txtCodigo = $objRes->fields['txtCodigo'];
+            $txtSufijo = ( strpos($txtCodigo,".php") !== false )? "" : ".php";
+
+            $arrArbolMenu[$seqMenu]['nombre'] = $txtMenu;
+            $arrArbolMenu[$seqMenu]['codigo'] = $txtCodigo . $txtSufijo;
+            $arrArbolMenu[$seqMenu]['hijos']  = $this->arbolMenu($seqProyecto, $seqMenu);
+
+            $objRes->MoveNext();
+        }
+
+        return $arrArbolMenu;
+
+    }
+
+    public function imprimirSelectMenu($seqProyecto){
+
+        $arrArbolMenu = $this->arbolMenu($seqProyecto);
+        $txtSelect  = "<select name='padre' id='padre' style='width:200px;' ";
+        $txtSelect .= "onChange=\"cargarContenido( 'selectOrden' , './contenidos/administracion/recalcularOrden.php' , 'proyecto=" . $seqProyecto . "&padre='+this.options[ this.selectedIndex ].value , true );\"> ";
+        $txtSelect .= "<option value='0'>Es Menu Principal</option>";
+        $txtSelect .= $this->imprimirOptionsSelectMenu($arrArbolMenu, 0);
+        $txtSelect .= "</select>";
+        return $txtSelect;
+
+    }
+
+    private function imprimirOptionsSelectMenu($arrArbolMenu, $numNivel){
+        $txtRetorno = "";
+        foreach($arrArbolMenu as $seqMenu => $arrMenu){
+            $txtSelected = ($seqMenu == $this->seqPadre)? "selected" : "";
+            $txtRetorno .= "<option value='$seqMenu' $txtSelected>" . str_repeat("&nbsp;" , ( $numNivel * 4 ) ) . " - " . $arrMenu['nombre'] . "</option>";
+            if(! empty($arrMenu['hijos'])){
+                $txtRetorno .= $this->imprimirOptionsSelectMenu($arrMenu['hijos'], ($numNivel + 1) );
+            }
+        }
+        return $txtRetorno;
+    }
+
+    public function obtenerCantidadOpciones($arrArbolMenu, $seqPadre){
+        $numOpciones = 0;
+        if($seqPadre != 0) {
+            if (isset($arrArbolMenu[$seqPadre])) {
+                $numOpciones = count($arrArbolMenu[$seqPadre]['hijos']);
+            } else {
+                foreach ($arrArbolMenu as $seqMenu => $arrMenu) {
+                    if($numOpciones == 0) {
+                        $numOpciones = $this->obtenerCantidadOpciones($arrMenu['hijos'], $seqPadre);
+                    }
+                }
+            }
+        }else{
+            $numOpciones = count($arrArbolMenu);
+        }
+        return $numOpciones;
+    }
+
+    public function depuracionPermisos($arrMenu){
+        $seqProyecto = $_SESSION['seqProyecto'];
+        foreach($arrMenu as $seqMenu => $arrSubmenu){
+            if(! empty($arrDatos['hijos'])){
+                $arrMenu[$seqMenu]['hijos'] = $this->depuracionPermisos($arrSubmenu['hijos']);
+            }else{
+                if (!in_array($seqMenu, $_SESSION['arrPermisos'][$seqProyecto])) {
+                    unset($arrMenu[$seqMenu]);
+                }
+            }
+
+        }
+        return $arrMenu;
+    }
+
+    public function imprimirMenuPrincipal($arrMenu , $numNivel = 0){
+        $txtMenu = "";
+        foreach($arrMenu as $seqMenu => $arrSubmenu){
+
+            $txtClaseLi = ( ( ! empty( $arrSubmenu['hijos'] ) ) and $numNivel > 0 )? "class=\"dropdown-submenu\"" : "" ;
+            $txtClaseA  = ( ! empty( $arrSubmenu['hijos'] ) )? "class=\"dropdown-toggle\" data-toggle=\"dropdown\"" : "";
+            $txtClaseUl = ( ( ! empty( $arrSubmenu['hijos'] ) ) and $numNivel == 0 )? "multi-level" : "";
+
+            $txtMenu .= "<li $txtClaseLi>";
+            $txtMenu .= "<a href=\"#\" $txtClaseA ";
+
+            if(mb_strtolower($arrSubmenu["nombre"]) == "inicio") {
+                $txtMenu .= "onClick=\"location.reload(true)\"";
+            }elseif($txtClaseA == ""){
+                $txtMenu .= "onClick=\"cargarContenido('contenido', './contenidos/" . $arrSubmenu["codigo"] . "', '', true); ";
+                $txtMenu .= "cargarContenido('rutaMenu', './rutaMenu.php', 'menu=$seqMenu', false);\"";
+            }
+
+            $txtMenu .= ">" . $arrSubmenu["nombre"];
+
+            if($txtClaseA != "" and $numNivel == 0){
+                $txtMenu .= " <b class=\"caret\"></b>";
+            }
+
+            $txtMenu .= "</a>";
+
+            if(! empty($arrSubmenu['hijos']) ){
+                $txtMenu .= "<ul class=\"dropdown-menu $txtClaseUl\">";
+                $txtMenu .= $this->imprimirMenuPrincipal($arrSubmenu['hijos'], $numNivel + 1);
+                $txtMenu .= "</ul>";
+            }
+
+            $txtMenu .= "</li>";
+
+        }
+        return $txtMenu;
     }
 
 }
 
-// Fin clase
 ?>

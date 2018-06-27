@@ -41,7 +41,6 @@
 		<script language="JavaScript" type="text/javascript" src="./librerias/yui/treeview/treeview-min.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/encripcion.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/funciones.js"></script>
-		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/funcionesProyectos.js"></script>
 		<script language="JavaScript" type="text/javascript" src="./librerias/javascript/listeners.js"></script>
 
 		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -60,7 +59,7 @@
 			
 			<!-- IMAGEN SUBSIDIO DE VIVIENDA -->
 			<tr>
-				<td rowspan="2" width="17%" height="46px">
+				<td rowspan="2" width="134px" height="46px">
 					<img src="{$txtRutaImagenes}subsidiodvgeneral.jpg" />
 				</td>
 				<td height="10px"></td>

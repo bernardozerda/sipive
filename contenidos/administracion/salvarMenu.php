@@ -20,7 +20,7 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "Menu.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "RegistroActividades.class.php" );
-    
+
     // Arreglo de erores
     $arrErrores = array();
     
@@ -28,16 +28,13 @@
      * VALIDACIONES DEL FORMULARIO
      */
          
-    // Validar de la etiqueta en espa�ol
+    // Validar de la etiqueta en español
     if( ! isset( $_POST['es'] ) or trim( $_POST['es'] ) == "" ){
-        $arrErrores[] = "No debe colocar la etiquieta en espa&ntilde;ol vacia";
+        $arrErrores[] = "No debe colocar la etiquieta vacia";
+    }else{
+        $_POST['en'] = $_POST['es'];
     }
 
-    // Validar de la etiqueta en ingles
-    if( ! isset( $_POST['en'] ) or trim( $_POST['en'] ) == "" ){
-        $arrErrores[] = "No debe colocar la etiquieta en ingles vacia";
-    }
-    
     // Validar el codigo fuente
     if( ! isset( $_POST['codigo'] ) or trim( $_POST['codigo'] ) == "" ){
         $arrErrores[] = "Debe referenciar un codigo fuente para esta opci&oacute;n de men&uacute;";

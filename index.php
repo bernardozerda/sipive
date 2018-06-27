@@ -18,10 +18,6 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Proyecto.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Menu.class.php" );
 
-
-// Obtiene los permisos del usuario ya registrado
-$claMenu = new Menu;
-
 // Proyecto en session
 if (!isset($_POST['proyecto'])) {
     $seqProyectoPost = key($_SESSION['arrPermisos']);
@@ -30,36 +26,13 @@ if (!isset($_POST['proyecto'])) {
 }
 $_SESSION['seqProyecto'] = $seqProyectoPost;
 
-$arrNietos = Array();
-// Obtiene las opciones de menu para cada proyecto en sesion
-$arrMenu = $claMenu->obtenerHijos($seqProyectoPost, 0); // los hijos del padre cero(0) son el menu principal
-
-foreach ($arrMenu as $seqMenu => $objMenu) {
-    //  echo "<br><menu ->" . $seqMenu;
-    $arrMenu[$seqMenu]->hijos = $claMenu->obtenerHijos($seqProyectoPost, $seqMenu);
-}
-
+// Obtiene el arbol de menu de la aplicacion
+$claMenu = new Menu;
+$arrMenu = $claMenu->arbolMenu( $_SESSION['seqProyecto'] );
 
 // Depurando menu segun los permisos del usuario
-foreach ($arrMenu as $seqPadre => $objPadre) {
-    if (!in_array($seqPadre, $_SESSION['arrPermisos'][$seqProyectoPost])) {
-        unset($arrMenu[$seqPadre]);
-    } else {
-        foreach ($objPadre->hijos as $seqHijo => $objHijo) {          
-            if (!in_array($seqHijo, $_SESSION['arrPermisos'][$seqProyectoPost])) {
-                unset($arrMenu[$seqPadre]->hijos[$seqHijo]);
-            }
-            $arrNietos[$seqHijo] = $claMenu->obtenerHijos($seqProyectoPost, $seqHijo);
-        }
-    }
-}
+$arrMenu = $claMenu->depuracionPermisos($arrMenu);
 
-foreach ($arrNietos as $seqNieto => $objNieto) {
-    if (!in_array($seqNieto, $_SESSION['arrPermisos'][$seqProyectoPost])) {
-        unset($arrNietos[$seqNieto]->nietos[$seqNieto]);
-    }
-}
-//var_dump($arrMenu);
 // Obtiene las Proyectos autorizadas al usuario
 $arrProyectosA = array();
 foreach ($_SESSION['arrPermisos'] as $seqProyecto => $arrPrivilegios) {
@@ -75,9 +48,10 @@ if ($seqMenuInicial != 0) {
 } else {
     $claSmarty->assign("txtArchivoInicio", "sinInicio.tpl");
 }
+
 // Asignacion de variables a la plantilla
 $claSmarty->assign("arrMenu", $arrMenu);
-$claSmarty->assign("arrNietos", $arrNietos);
+$claSmarty->assign("claMenu" , $claMenu);
 $claSmarty->assign("seqProyectoPost", $seqProyectoPost);
 $claSmarty->assign("arrProyectos", $arrProyectosA);
 $claSmarty->assign("txtIdioma", $_SESSION['idioma']);
@@ -85,11 +59,6 @@ $claSmarty->assign("txtRutaImagenes", $arrConfiguracion['carpetas']['imagenes'])
 $claSmarty->assign("txtNombreUsuario", $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']);
 $claSmarty->assign("arrGruposSesion", $_SESSION['arrGrupos']);
 
-// Muestra la plantilla
-//if ($seqProyectoPost == 6) {
-//    var_dump($seqProyectoPost);
-//$claSmarty->display("indexProyectos.tpl");
-//} else {
 $claSmarty->display("index.tpl");
-//}
+
 ?>

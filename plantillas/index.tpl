@@ -66,46 +66,44 @@
 
     </head>
     <body class="yui-skin-sam" id="bodyHtml" topMargin="0"> 
-
         <center>
-
             <table cellpadding="0" cellspacing="0" border="0" bgcolor="#F9F9F9" id="tablePrincipal" class="tablePrincipal">
-
                 <tr>
-                    <td>
-                        <div style="position: relative; top: 10px; height: 80px; width: 900px"><img src="./recursos/imagenes/cabezote_ws.png" width="900px">
-                                <div id="rutaMenu" style="position: absolute; width: 30%; float: left; top: 8px;left: 10%;"> 
-                                    <span class="menuLateral" >Inicio: {$txtRutaInicio}</span></div>
-                                <div style="position: absolute; width: 30%; float: left; top: 5px;left:41%;"> <b><i>En sesión:</b> {$txtNombreUsuario}</i></div>   
-                                <div style="position: absolute; width: 24%; float: left; top: 1px;left:93%;">
-                                    <a href="#" onClick="location.href = './autenticacion.php'" >
-                                        <img src="./recursos/imagenes/Logout.png" />
-                                    </a>
-                                </div> 
-                                <div></div>
-
+                    <td colspan="2">
+                        <div style="position: relative; top: 5px; height: 80px; width: 900px">
+                            <img src="./recursos/imagenes/cabezote_ws.png" width="900px">
+                            <div style="position: absolute; width: 24%; float: left; top: 1px;left:93%;">
+                                <a href="#" onClick="location.href = './autenticacion.php'" >
+                                    <img src="./recursos/imagenes/Logout.png" />
+                                </a>
+                            </div>
                         </div>
                     </td>
-                    <tr>
-                        <td colspan="3">
-                            <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                                <tr>
-                                    <td>{include file="menu.tpl"}</td>
+                </tr>
+                <tr>
+                    <td height="15px;" id="rutaMenu" style="padding-left: 10px;">
+                        <span class="menuLateral">Inicio: {$txtRutaInicio}</span>
+                    </td>
+                    <td width="350px" align="right" style="padding-right: 10px;">
+                        <b><i>En sesión:</b> {$txtNombreUsuario}</i>
+                    </td>
+                </tr>
 
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>			
-                    <!-- MENSAJES -->
-                    <tr>
-                        <td height="20px" colspan="3" style="padding-left:10px;" id="mensajes"> &nbsp; </td>
-                    </tr>
-                    <!-- TODO EL CONTENIDO SE CARGA AQUI -->
-                    <tr>
-                        <td colspan="3" id="contenido" height="550px" aign="left" valign="top" style="padding-left:10px; padding-top:5px; padding-bottom:5px;">
-                            {include file="$txtArchivoInicio"}
-                        </td>
-                    </tr>
+                <!-- MENU -->
+                <tr>
+                    <td colspan="2">{include file="menu.tpl"}</td>
+                </tr>
+
+                <!-- MENSAJES -->
+                <tr>
+                    <td height="20px" colspan="3" style="padding-left:10px;" id="mensajes">&nbsp;</td>
+                </tr>
+
+                <!-- TODO EL CONTENIDO SE CARGA AQUI -->
+                <tr>
+                    <td colspan="3" id="contenido" height="550px" aign="left" valign="top" style="padding-left:10px; padding-top:5px; padding-bottom:5px;">{include file="$txtArchivoInicio"}</td>
+                </tr>
+
             </table>
         </center>
         <footer>           
@@ -122,9 +120,6 @@
                     <div style=" position: relative; float: left; width:100%">
                         <img src="./recursos/imagenes/pie_ws.png" /><br>
                     </div>
-
-
-                    <!--<img src="./recursos/imagenes/background_menupie.png" width="450px" height="20px"/>-->
                 </center>
             </div>
         </footer>

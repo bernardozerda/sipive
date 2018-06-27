@@ -55,15 +55,9 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
                     // si hubo pantalla de bloque al usuario, se oculta
                     if (bolCargando == 1) {
                         objCargando.hide();
-                        tablas();
-//                        $(document).ready(function () {
-//                            $("#accordion").accordion();
-//                            $('#example').DataTable({
-//                                "pagingType": "full_numbers",
-//                                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-//                                "order": [[2, "desc"]]
-//                            });
-//                        });
+                        if( typeof tablas != "undefined"){
+                            tablas();
+                        }
                     }
                 }
             };
@@ -8192,7 +8186,7 @@ function popUpAyuda( ) {
 //      var numAncho = YAHOO.util.Dom.getDocumentWidth() - 100;
 
     var numAlto = YAHOO.util.Dom.getDocumentHeight() - 200;
-    var numAncho = 400;
+    var numAncho = 900;
 
     var x = YAHOO.util.Dom.getX("ayuda") - (numAncho - 25);
     var y = YAHOO.util.Dom.getY("ayuda") + 10;

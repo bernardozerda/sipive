@@ -52,8 +52,8 @@
             // Obtiene los grupos
             $sql = "
                 SELECT 
-                    seqGrupo , 
-                    ucwords(txtGrupo) as txtGrupo,
+                    seqGrupo, 
+                    txtGrupo,
                     txtDescripcion
                 FROM 
                     T_COR_GRUPO
@@ -67,7 +67,7 @@
                 $seqGrupo = $objRes->fields['seqGrupo'];
                 
                 $objGrupo = new Grupo;
-                $objGrupo->txtNombre = $objRes->fields['txtGrupo'];
+                $objGrupo->txtNombre = ucwords(mb_strtolower($objRes->fields['txtGrupo']));
                 $objGrupo->txtDescripcion = $objRes->fields['txtDescripcion'];
                 
                 $arrGrupos[ $seqGrupo ] = $objGrupo;

@@ -129,7 +129,7 @@ class Proyecto {
         $sql = "
 	    		SELECT
             		seqProyecto, 
-	    			ucwords(txtProyecto) as txtProyecto,
+	    			txtProyecto,
 	    			fchVencimiento,
 	    			bolActivo,
 					seqMenu
@@ -148,7 +148,7 @@ class Proyecto {
                 $seqProyecto = $objRes->fields['seqProyecto'];
 
                 $objProyecto = new Proyecto;
-                $objProyecto->txtProyecto = $objRes->fields['txtProyecto'];
+                $objProyecto->txtProyecto = ucwords(mb_strtolower($objRes->fields['txtProyecto']));
                 $objProyecto->fchVencimiento = $objRes->fields['fchVencimiento'];
                 $objProyecto->bolActivo = $objRes->fields['bolActivo'];
                 $objProyecto->seqMenu = $objRes->fields['seqMenu'];

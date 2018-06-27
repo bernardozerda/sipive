@@ -423,7 +423,7 @@ while ($rowHogar = $exeQueryHogar->fields) {
     $exeQueryHogar->MoveNext();
 
 }
-
+/*
 // CALCULANDO PROMEDIOS Y DESVIACION ESTANDAR DEL TOTAL DE HOGARES POR ITEM DE CALIFICACION (ojo: sería bueno guardarlos en la tabla calificacion_estadisticas)
 $qryEstadisticaHogar = "
     SELECT
@@ -472,7 +472,7 @@ $qryGuardaEstadisticas = "
     )
 ";
 $aptBd->execute($qryGuardaEstadisticas);
-
+*/
 //Después de el proximo calculo de promedios y desviación estandar, queda esta linea
 $qryEstadisticaGeneral = "
   SELECT * 

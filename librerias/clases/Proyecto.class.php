@@ -662,12 +662,14 @@ class Proyecto {
 
     public function datosAvanceObraFicha($seqProyecto) {
         global $aptBd;
-        $sql = "SELECT concat(numPorcentajeEjecucion ,'**', fchInformeInterventoria, '**', valEjecutado ) as datosAvance FROM t_pry_informe_interventoria ";
+         $sql = "SELECT  fchFinalTerreno as fecha FROM t_pry_cronograma_obras ";
+        $sql = "SELECT concat(numPorcentajeEjecucion,'**', "
+                . "(SELECT fchFinalTerreno as fecha FROM t_pry_cronograma_obras where seqProyecto = $seqProyecto ORDER BY fchFinalTerreno DESC LIMIT 1),'**',valEjecutado ) as datosAvance FROM t_pry_informe_interventoria ";
         if ($seqProyecto > 0) {
             $sql .= " where  seqProyecto = " . $seqProyecto;
         }
         $sql . " ORDER BY fchInformeInterventoria DESC LIMIT 1";
-        //echo "<p>" . $sql . "</p>";
+      //  echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = "";
         while ($objRes->fields) {

@@ -2117,6 +2117,20 @@ class GestionFinancieraProyectos
                                 PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00
                             );
                         break;
+                    case "numero":
+                        $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
+                            ->getNumberFormat()
+                            ->setFormatCode(
+                                PHPExcel_Style_NumberFormat::FORMAT_NUMBER
+                            );
+                        break;
+                    case "fecha":
+                        $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
+                            ->getNumberFormat()
+                            ->setFormatCode(
+                                PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2
+                            );
+                        break;
                 }
 
                 $numColumna++;
@@ -2160,7 +2174,394 @@ class GestionFinancieraProyectos
 
     }
 
+    public function reporteFichaTecnica(){
+        global $aptBd;
 
+        $sql = "
+            select pry.seqProyecto
+            from t_pry_proyecto pry
+            where pry.seqPryEstadoProceso in(5,6)
+              and (pry.seqProyectoPadre =  0 or pry.seqProyectoPadre is null)
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+
+            $seqProyecto = $objRes->fields['seqProyecto'];
+
+            $sql = "
+                select 
+                    pry.seqProyecto,
+                    pry.txtNombreProyecto,
+                    group_concat(eof.txtNombreOferente) as txtNombreOferente,
+                    loc.txtLocalidad,
+                    tfi.txtTipoFinanciacion,
+                    (
+                      select count(upr.seqUnidadProyecto)
+                      from t_pry_unidad_proyecto upr
+                      where seqProyecto in (
+                          select seqProyecto
+                          from t_pry_proyecto
+                          where seqProyecto = pry.seqProyecto
+                             or seqProyectoPadre = pry.seqProyecto
+                      )
+                    ) as numCantidadUnidades,
+                    (
+                      select count(upr.seqUnidadProyecto) 
+                      from t_pry_unidad_proyecto upr
+                      inner join t_frm_formulario frm on upr.seqFormulario = frm.seqFormulario
+                      where upr.seqProyecto in (
+                        select seqProyecto 
+                        from t_pry_proyecto 
+                        where seqProyecto = pry.seqProyecto 
+                           or seqProyectoPadre = pry.seqProyecto
+                      ) and ( 
+                           upr.seqFormulario is not null 
+                        or upr.seqFormulario <> 0 
+                      ) and upr.bolActivo = 1
+                        and frm.bolCerrado = 1
+                        and frm.seqEstadoProceso in (15,62,17,19,22,23,25,26,27,28,31,29,40)
+                    ) as numHogaresVinculados,
+                    (
+                      select count(upr.seqUnidadProyecto) as numUnidadesPendientes
+                      from t_pry_unidad_proyecto upr
+                      left join t_frm_formulario frm on upr.seqFormulario = frm.seqFormulario
+                      where upr.seqProyecto in (
+                        select seqProyecto 
+                        from t_pry_proyecto 
+                        where seqProyecto = pry.seqProyecto
+                           or seqProyectoPadre = pry.seqProyecto
+                      ) and ( 
+                           upr.seqFormulario is null 
+                        or upr.seqFormulario = 0   
+                      ) and upr.bolActivo = 1
+                         or frm.bolCerrado = 0
+                    ) as numPendientesVincular,
+                    (
+                      select count(upr.seqUnidadProyecto) 
+                      from t_pry_unidad_proyecto upr
+                      inner join t_frm_formulario frm on upr.seqFormulario = frm.seqFormulario
+                      where upr.seqProyecto in (
+                        select seqProyecto 
+                        from t_pry_proyecto 
+                        where seqProyecto = pry.seqProyecto 
+                           or seqProyectoPadre = pry.seqProyecto
+                      ) and ( 
+                           upr.seqFormulario is not null 
+                        or upr.seqFormulario <> 0 
+                      ) and upr.bolActivo = 1
+                        and frm.bolCerrado = 1
+                        and frm.seqEstadoProceso in (40)
+                    ) as numLegalizados,
+                    (
+                      (
+                        select count(upr.seqUnidadProyecto) 
+                        from t_pry_unidad_proyecto upr
+                        inner join t_frm_formulario frm on upr.seqFormulario = frm.seqFormulario
+                        where upr.seqProyecto in (
+                          select seqProyecto 
+                          from t_pry_proyecto 
+                          where seqProyecto = pry.seqProyecto 
+                             or seqProyectoPadre = pry.seqProyecto
+                        ) and ( 
+                             upr.seqFormulario is not null 
+                          or upr.seqFormulario <> 0 
+                        ) and upr.bolActivo = 1
+                          and frm.bolCerrado = 1
+                          and frm.seqEstadoProceso in (15,62,17,19,22,23,25,26,27,28,31,29,40)
+                      ) - (
+                        select count(upr.seqUnidadProyecto) 
+                        from t_pry_unidad_proyecto upr
+                        inner join t_frm_formulario frm on upr.seqFormulario = frm.seqFormulario
+                        where upr.seqProyecto in (
+                          select seqProyecto 
+                          from t_pry_proyecto 
+                          where seqProyecto = pry.seqProyecto 
+                             or seqProyectoPadre = pry.seqProyecto
+                        ) and ( 
+                             upr.seqFormulario is not null 
+                          or upr.seqFormulario <> 0 
+                        ) and upr.bolActivo = 1
+                          and frm.bolCerrado = 1
+                          and frm.seqEstadoProceso in (40)
+                      )
+                    ) as numPendientesLegalizar,
+                    ava.numPorcentajeEjecucion,
+                    ava.valEjecutado,
+                    ava.fchFinalTerreno,
+                    (
+                      select count(tec.seqTecnicoUnidad)
+                      from  t_pry_tecnico tec
+                      LEFT JOIN t_pry_unidad_proyecto upr on upr.seqUnidadProyecto = tec.seqUnidadProyecto
+                      where upr.seqProyecto in (
+                        select seqProyecto 
+                        from t_pry_proyecto  
+                        where seqProyecto = pry.seqProyecto
+                           or seqProyectoPadre = pry.seqProyecto
+                      ) and tec.txtPermisoOcupacion like UPPER('SI')
+                    ) as numPermisoOcupacion,
+                    (
+                      select count(tec.seqTecnicoUnidad)
+                      from  t_pry_tecnico tec
+                      LEFT JOIN t_pry_unidad_proyecto upr on upr.seqUnidadProyecto = tec.seqUnidadProyecto
+                      where upr.seqProyecto in (
+                        select seqProyecto 
+                        from t_pry_proyecto
+                        where seqProyecto = pry.seqProyecto
+                           or seqProyectoPadre = pry.seqProyecto
+                      ) and tec.txtExistencia like UPPER('SI')
+                    ) as numCertificadoExistencia,
+                    tpr.txtTipoProyecto,
+                    pry.valTorres,
+                    cun.numUnidadesDiscapacidad,
+                    cun.numTotalUnidades,
+                    cun.numParqueaderoDiscapacidad, 
+                    cun.numTotalParqueaderosResidentes,
+                    (cun.numTotalParqueaderosResidentes + cun.numParqueaderoDiscapacidad) as numTotalParqueaderos,
+                    (
+                      SELECT
+                        max(amp.fchVigenciaFin) as fchVigencia
+                      FROM t_pry_poliza pol
+                      LEFT JOIN t_pry_amparo amp on amp.seqPoliza = pol.seqPoliza
+                      WHERE pol.seqProyecto = pry.seqProyecto
+                        and amp.seqTipoAmparo = 3
+                      GROUP BY 
+                        pol.seqProyecto
+                    ) as fchAnticipo,
+                    (
+                      SELECT
+                        max(amp.fchVigenciaFin) as fchVigencia
+                      FROM t_pry_poliza pol
+                      LEFT JOIN t_pry_amparo amp on amp.seqPoliza = pol.seqPoliza
+                      WHERE pol.seqProyecto = pry.seqProyecto
+                        and amp.seqTipoAmparo = 2
+                      GROUP BY 
+                        pol.seqProyecto
+                    ) as fchCumplimiento,
+                    (
+                      SELECT
+                        max(amp.fchVigenciaFin) as fchVigencia
+                      FROM t_pry_poliza pol
+                      LEFT JOIN t_pry_amparo amp on amp.seqPoliza = pol.seqPoliza
+                      WHERE pol.seqProyecto = pry.seqProyecto
+                        and amp.seqTipoAmparo = 1
+                      GROUP BY 
+                        pol.seqProyecto
+                    ) as fchEstabilidad,
+                    (
+                      SELECT
+                        ase.txtNombreAseguradora
+                      FROM t_pry_poliza pol
+                      left join t_pry_aseguradoras ase on pol.seqPoliza = ase.seqAseguradora
+                      WHERE pol.seqProyecto = pry.seqProyecto 
+                      GROUP BY 
+                        pol.seqProyecto
+                    ) as txtNombreAseguradora,
+                    (
+                      select distinct
+                      uac.numActo
+                      from t_pry_aad_unidad_acto uac
+                      left join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
+                      where uac.seqTipoActoUnidad = 1
+                      and uvi.seqProyecto in (
+                      select seqProyecto
+                          from t_pry_proyecto
+                          where seqProyecto = pry.seqProyecto 
+                             or seqProyectoPadre = pry.seqProyecto 
+                      )
+                    ) as numActo,
+                    (
+                      select distinct
+                      uac.fchActo
+                      from t_pry_aad_unidad_acto uac
+                      left join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
+                      where uac.seqTipoActoUnidad = 1
+                      and uvi.seqProyecto in (
+                      select seqProyecto
+                          from t_pry_proyecto
+                          where seqProyecto = pry.seqProyecto 
+                             or seqProyectoPadre = pry.seqProyecto 
+                      )
+                    ) as fchActo,
+                    (
+                      select 
+                      sum(uvi.valIndexado) as valAprobado
+                      from t_pry_aad_unidad_acto uac
+                      left join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
+                      where uac.seqTipoActoUnidad = 1
+                      and uvi.seqProyecto in (
+                      select seqProyecto
+                          from t_pry_proyecto
+                          where seqProyecto = pry.seqProyecto 
+                             or seqProyectoPadre = pry.seqProyecto 
+                      )
+                    ) as valAprobado,
+                    (
+                      select 
+                      sum(uvi.valIndexado) as valIndexado
+                      from t_pry_aad_unidad_acto uac
+                      left join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
+                      where uac.seqTipoActoUnidad = 2
+                      and uvi.valIndexado > 0
+                      and uvi.seqProyecto in (
+                      select seqProyecto
+                          from t_pry_proyecto
+                          where seqProyecto = pry.seqProyecto 
+                             or seqProyectoPadre = pry.seqProyecto 
+                      )
+                    ) as valIndexado,
+                    (
+                      select 
+                      (sum(uvi.valIndexado) * -1) as valDisminucion
+                      from t_pry_aad_unidad_acto uac
+                      left join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
+                      where uac.seqTipoActoUnidad = 2
+                      and uvi.valIndexado < 0
+                      and uvi.seqProyecto in (
+                      select seqProyecto
+                          from t_pry_proyecto
+                          where seqProyecto = pry.seqProyecto 
+                             or seqProyectoPadre = pry.seqProyecto 
+                      )
+                    ) as valDisminucion,
+                    (
+                      select 
+                      sum(valGiro)
+                      from t_pry_aad_giro_fiducia_detalle gfd
+                      where gfd.seqProyecto in (
+                        select seqProyecto
+                        from t_pry_proyecto
+                        where seqProyecto = pry.seqProyecto 
+                           or seqProyectoPadre = pry.seqProyecto 
+                      )
+                    ) as valFiducia,
+                    (
+                      select 
+                      sum(gcd.valGiro) as valGiroConstructor
+                      from t_pry_aad_giro_constructor_detalle gcd
+                      where gcd.seqProyecto in (
+                        select seqProyecto
+                        from t_pry_proyecto
+                        where seqProyecto = pry.seqProyecto
+                           or seqProyectoPadre = pry.seqProyecto
+                      )
+                    ) as valDesembolsado
+                from t_pry_proyecto pry
+                left join t_pry_proyecto_oferente pof on pry.seqProyecto = pof.seqProyecto
+                left join t_pry_entidad_oferente eof on pof.seqOferente = eof.seqOferente
+                left join t_frm_localidad loc on pry.seqLocalidad = loc.seqLocalidad
+                left join t_frm_tipo_financiacion tfi on pry.seqTipoFinanciacion = tfi.seqTipoFinanciacion
+                left join t_pry_tipo_proyecto tpr on pry.seqTipoProyecto = tpr.seqTipoProyecto
+                left join (
+                  select 
+                    iin.seqProyecto,
+                    iin.numPorcentajeEjecucion,
+                    iin.valEjecutado,
+                    tmp.fchFinalTerreno
+                  from t_pry_informe_interventoria iin
+                  left join (
+                    select cob.seqProyecto, cob.fchFinalTerreno
+                    from t_pry_cronograma_obras cob
+                    where cob.seqCronogramaObras = (
+                      select max(cob1.seqCronogramaObras) 
+                      from t_pry_cronograma_obras cob1
+                      where cob1.seqProyecto = $seqProyecto
+                    )
+                  ) tmp on iin.seqProyecto = tmp.seqProyecto
+                  where iin.seqProyecto in (
+                    select pry1.seqProyecto 
+                    from t_pry_proyecto pry1 
+                    where pry1.seqProyecto = $seqProyecto
+                       or pry1.seqProyectoPadre = $seqProyecto
+                  )
+                ) ava on ava.seqProyecto = pry.seqProyecto
+                left join (
+                  select 
+                    seqProyecto,
+                    sum(numCantParqDisc) as numParqueaderoDiscapacidad, 
+                    sum(numCantUdsDisc) as numUnidadesDiscapacidad,
+                    sum(numTotalParq) as numTotalParqueaderosResidentes, 
+                    sum(numCantidad) as numTotalUnidades 
+                  from t_pry_tipo_vivienda ptv
+                  where seqProyecto = $seqProyecto
+                ) cun on pry.seqProyecto = cun.seqProyecto
+                where pry.seqProyecto = $seqProyecto
+            ";
+            $arrReporte[] = array_shift($aptBd->GetAll($sql));
+
+            $objRes->MoveNext();
+        }
+
+        $arrTitulos[0]['nombre'] = 'Identificador';
+        $arrTitulos[1]['nombre'] = 'Nombre';
+        $arrTitulos[2]['nombre'] = 'Constructora';
+        $arrTitulos[3]['nombre'] = 'Localidad';
+        $arrTitulos[4]['nombre'] = 'Composición';
+        $arrTitulos[5]['nombre'] = 'Unidades Vivienda';
+        $arrTitulos[6]['nombre'] = 'Hogares Vinculados';
+        $arrTitulos[7]['nombre'] = 'Pendientes por Vincular';
+        $arrTitulos[8]['nombre'] = 'Legalizados';
+        $arrTitulos[9]['nombre'] = 'Pendientes Por Legalizar';
+        $arrTitulos[10]['nombre'] = 'Avance Físico (%)';
+        $arrTitulos[11]['nombre'] = 'Valor Ejecutado';
+        $arrTitulos[12]['nombre'] = 'Fecha Terminación';
+        $arrTitulos[13]['nombre'] = 'Permiso Ocupación';
+        $arrTitulos[14]['nombre'] = 'Certificado Existencia y Habitabilidad';
+        $arrTitulos[15]['nombre'] = 'Tipo de Agrupación';
+        $arrTitulos[16]['nombre'] = 'Numero de torres';
+        $arrTitulos[17]['nombre'] = 'Apartamentos discapacitados';
+        $arrTitulos[18]['nombre'] = 'Apartamentos Residentes';
+        $arrTitulos[19]['nombre'] = 'Parqueos discapacitados';
+        $arrTitulos[20]['nombre'] = 'Parqueaderos Residentes';
+        $arrTitulos[21]['nombre'] = 'Total parqueaderos';
+        $arrTitulos[22]['nombre'] = 'Anticipo';
+        $arrTitulos[23]['nombre'] = 'Cumplimiento';
+        $arrTitulos[24]['nombre'] = 'Estabilidad';
+        $arrTitulos[25]['nombre'] = 'Aseguradora';
+        $arrTitulos[26]['nombre'] = 'Numero de Resolución';
+        $arrTitulos[27]['nombre'] = 'Fecha de Resolución';
+        $arrTitulos[28]['nombre'] = 'Asignacion de aportes';
+        $arrTitulos[29]['nombre'] = 'Indexacion del valor del SFV';
+        $arrTitulos[30]['nombre'] = 'Disminución de aportes';
+        $arrTitulos[31]['nombre'] = 'Giro a encargo fiduciario';
+        $arrTitulos[32]['nombre'] = 'Valor Desembolsado a constuctor';
+
+        $arrTitulos[0]['formato'] = 'Identificador';
+        $arrTitulos[1]['formato'] = 'Nombre';
+        $arrTitulos[2]['formato'] = 'Constructora';
+        $arrTitulos[3]['formato'] = 'Localidad';
+        $arrTitulos[4]['formato'] = 'Composición';
+        $arrTitulos[5]['formato'] = 'Unidades Vivienda';
+        $arrTitulos[6]['formato'] = 'Hogares Vinculados';
+        $arrTitulos[7]['formato'] = 'Pendientes por Vincular';
+        $arrTitulos[8]['formato'] = 'Legalizados';
+        $arrTitulos[9]['formato'] = 'Pendientes Por Legalizar';
+        $arrTitulos[10]['formato'] = 'Avance Físico (%)';
+        $arrTitulos[11]['formato'] = 'Valor Ejecutado';
+        $arrTitulos[12]['formato'] = 'Fecha Terminación';
+        $arrTitulos[13]['formato'] = 'Permiso Ocupación';
+        $arrTitulos[14]['formato'] = 'Certificado Existencia y Habitabilidad';
+        $arrTitulos[15]['formato'] = 'Tipo de Agrupación';
+        $arrTitulos[16]['formato'] = 'Numero de torres';
+        $arrTitulos[17]['formato'] = 'Apartamentos discapacitados';
+        $arrTitulos[18]['formato'] = 'Apartamentos Residentes';
+        $arrTitulos[19]['formato'] = 'Parqueos discapacitados';
+        $arrTitulos[20]['formato'] = 'Parqueaderos Residentes';
+        $arrTitulos[21]['formato'] = 'Total parqueaderos';
+        $arrTitulos[22]['formato'] = 'Anticipo';
+        $arrTitulos[23]['formato'] = 'Cumplimiento';
+        $arrTitulos[24]['formato'] = 'Estabilidad';
+        $arrTitulos[25]['formato'] = 'Aseguradora';
+        $arrTitulos[26]['formato'] = 'Numero de Resolución';
+        $arrTitulos[27]['formato'] = 'Fecha de Resolución';
+        $arrTitulos[28]['formato'] = 'Asignacion de aportes';
+        $arrTitulos[29]['formato'] = 'Indexacion del valor del SFV';
+        $arrTitulos[30]['formato'] = 'Disminución de aportes';
+        $arrTitulos[31]['formato'] = 'Giro a encargo fiduciario';
+        $arrTitulos[32]['formato'] = 'Valor Desembolsado a constuctor';
+
+        $this->exportarArchivo("Reporte Ficha Técnica", $arrTitulos, $arrReporte);
+
+    }
 
 }
 

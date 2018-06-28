@@ -13,9 +13,14 @@ include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/IOFactory.php" );
 
 $arrReporte = array();
+
 $arrReporte['general']['funcion'] = "reporteGeneral";
 $arrReporte['general']['titulo'] = "Exportable General";
 $arrReporte['general']['descripcion'] = "Información general de proyectos en cifras";
+
+$arrReporte['fichaTecnica']['funcion'] = "reporteFichaTecnica";
+$arrReporte['fichaTecnica']['titulo'] = "Exportable Ficha Técnica";
+$arrReporte['fichaTecnica']['descripcion'] = "Obtiene la información consignada en la ficha técnica de todos los proyectos";
 
 if($_GET['reporte'] != "") {
 

@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 //var_dump($_SESSION);
 //exit();
@@ -75,7 +74,7 @@ $pdf->SetTitle('Carta de Movilización');
 
 $pdf->SetSubject('Carta de Movilización');
 
-
+$pdf->SetProtection(array('print', 'copy','modify'), "ourcodeworld", $_GET['documento'], 0, null);
 
 // set default header data
 
@@ -183,8 +182,9 @@ $pdf->writeHTML("<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><b>GUILLERMO EDUARDO ALF
 $pdf->writeHTML("Subdirector Recursos Públicos ", true, false, true, false, '');
 
 
-/* $pdf->WriteHTML('<p align="center" style="font-size:10px;"><br>El presente documento público expedido electrónicamente con firma mecánica, garantiza su plena validez jurídica y probatoria.
-  Para verificar la integridad e inalterabilidad del presente documento comuníquese con la Subdirección de Recursos Públicos (Tel. 3581600 Ext. 1102),
-  indicando el código de verificación que se encuentra impreso en este documento.</p>');
- */
-$pdf->Output('example_001.pdf', 'I');
+/*$pdf->WriteHTML('<p align="center" style="font-size:10px;"><br>El presente documento público expedido electrónicamente con firma mecánica, garantiza su plena validez jurídica y probatoria.
+Para verificar la integridad e inalterabilidad del presente documento comuníquese con la Subdirección de Recursos Públicos (Tel. 3581600 Ext. 1102), 
+indicando el código de verificación que se encuentra impreso en este documento.</p>');
+*/
+$prueba = $pdf->Output('example_001.pdf', 'I');
+

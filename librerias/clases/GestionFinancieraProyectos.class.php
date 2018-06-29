@@ -1858,7 +1858,10 @@ class GestionFinancieraProyectos
 
     }
 
-
+    public function reporteGeneral(){
+        $claReporte = new Reportes();
+        return $claReporte->reporteGeneral(true);
+    }
 
 }
 

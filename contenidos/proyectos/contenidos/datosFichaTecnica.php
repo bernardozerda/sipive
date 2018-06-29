@@ -16,6 +16,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Proyecto.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "DatosGeneralesProyectos.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "ReportesProyectos.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "GestionFinancieraProyectos.class.php" );
 
 $claProyecto = new Proyecto;

@@ -24,6 +24,7 @@ if ($_FILES['fileDocumentos']['error'] == 0) {
 			  WHERE hog.seqParentesco = 1 
 			    AND ciu.seqTipoDocumento IN (1, 2)
 			    AND frm.seqPlanGobierno = 2
+			    AND frm.bolCerrado = 0
 				AND ciu.numDocumento = " . $arrDocumentos[$numLinea];
             $qryPpal = $aptBd->execute($sql);
             $cuenta = $qryPpal->recordCount();
@@ -93,6 +94,7 @@ if ($ejecutaConsultaPersonalizada == 1) {
         WHERE frm.seqFormulario IN ($formulariosPpalFormat)
           AND hog.seqParentesco = 1
           AND frm.seqPlanGobierno = 2
+          AND frm.bolCerrado = 0
           AND ciu.fchNacimiento <> '0000-00-00'
     ";
 } else {
@@ -107,10 +109,10 @@ if ($ejecutaConsultaPersonalizada == 1) {
         INNER JOIN T_FRM_HOGAR hog ON frm.seqFormulario = hog.seqFormulario
 		INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
 		WHERE frm.seqEstadoProceso IN (37)
-		  AND frm.seqModalidad IN (6)
-		  AND frm.seqTipoEsquema IN (1)
-		  AND frm.seqParentesco = 1
+		  AND frm.seqModalidad IN (6)		  
+		  AND hog.seqParentesco = 1
 		  AND frm.seqPlanGobierno = 2
+		  AND frm.bolCerrado = 0
 		  AND ciu.fchNacimiento <> '0000-00-00'
 	";
 }
@@ -119,7 +121,7 @@ $exeQueryHogar = $aptBd->execute($qryHogar);
 $cuentaHogares = $exeQueryHogar->recordCount();
 
 if(intval($cuantosNoPpal) != 0){
-    print_r("<span class='msgError'>Los siguientes documentos no son postulantes principales o no pertenecen al plan de gobierno \"Bogota Humana\": " . $documentosNoPpal);
+    print_r("<span class='msgError'>Los siguientes documentos no son postulantes principales o no pertenecen al plan de gobierno \"Bogota Humana\" o su formulario está cerrado: " . $documentosNoPpal);
     die();
 }
 

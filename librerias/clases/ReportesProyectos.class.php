@@ -3449,6 +3449,7 @@ class Reportes {
             from t_pry_proyecto pry
             where pry.seqPryEstadoProceso in(5,6)
               and (pry.seqProyectoPadre =  0 or pry.seqProyectoPadre is null)
+            order by pry.txtNombreProyecto
         ";
         $objRes = $aptBd->execute($sql);
         while($objRes->fields){
@@ -3470,7 +3471,7 @@ class Reportes {
                           from t_pry_proyecto
                           where seqProyecto = pry.seqProyecto
                              or seqProyectoPadre = pry.seqProyecto
-                      )
+                      ) and upr.bolActivo = 1
                     ) as numCantidadUnidades,
                     (
                       select count(upr.seqUnidadProyecto) 

@@ -129,7 +129,7 @@ class Proyecto {
         $sql = "
 	    		SELECT
             		seqProyecto, 
-	    			txtProyecto,
+	    			ucwords(txtProyecto) as txtProyecto,
 	    			fchVencimiento,
 	    			bolActivo,
 					seqMenu
@@ -148,7 +148,7 @@ class Proyecto {
                 $seqProyecto = $objRes->fields['seqProyecto'];
 
                 $objProyecto = new Proyecto;
-                $objProyecto->txtProyecto = ucwords(mb_strtolower($objRes->fields['txtProyecto']));
+                $objProyecto->txtProyecto = $objRes->fields['txtProyecto'];
                 $objProyecto->fchVencimiento = $objRes->fields['fchVencimiento'];
                 $objProyecto->bolActivo = $objRes->fields['bolActivo'];
                 $objProyecto->seqMenu = $objRes->fields['seqMenu'];
@@ -662,14 +662,14 @@ class Proyecto {
 
     public function datosAvanceObraFicha($seqProyecto) {
         global $aptBd;
-         $sql = "SELECT  fchFinalTerreno as fecha FROM t_pry_cronograma_obras ";
+        $sql = "SELECT  fchFinalTerreno as fecha FROM t_pry_cronograma_obras ";
         $sql = "SELECT concat(numPorcentajeEjecucion,'**', "
                 . "(SELECT fchFinalTerreno as fecha FROM t_pry_cronograma_obras where seqProyecto = $seqProyecto ORDER BY fchFinalTerreno DESC LIMIT 1),'**',valEjecutado ) as datosAvance FROM t_pry_informe_interventoria ";
         if ($seqProyecto > 0) {
             $sql .= " where  seqProyecto = " . $seqProyecto;
         }
         $sql . " ORDER BY fchInformeInterventoria DESC LIMIT 1";
-      //  echo "<p>" . $sql . "</p>";
+        //  echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = "";
         while ($objRes->fields) {

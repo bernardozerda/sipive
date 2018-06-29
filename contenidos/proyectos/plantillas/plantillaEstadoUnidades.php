@@ -26,6 +26,7 @@ $arrEstadoUnidad = obtenerDatosTabla("t_pry_estado_unidad", array("seqEstadoUnid
 if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
 
     $seqProyecto = $_REQUEST['seqProyecto'];
+
     $arrayDatos = $claDatosUnidades->obtenerDatosUnidades($seqProyecto);
     $infCantUnidades = $claDatosUnidades->ObtenerCantUnidadesProyecto($seqProyecto);
     $unidadesReg = $infCantUnidades['cantidad'];
@@ -106,6 +107,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     $cols = 2;
     foreach ($arrayDatos as $key => $value) {
         $estadoActual = ($value['estado'] == "") ? 'Ninguno' : $value['estado'];
+        $estadoNuevo = ($value['estado'] == "") ? 'Seleccione' : $value['estado'];
         $tipoVivienda = ($value['estado'] == "") ? 'Ninguno' : strtoupper($value['txtNombreTipoVivienda']);
         //echo "<br>". $cols." ->".$value['txtNombreProyecto'];
         $sheet->setCellValue('A' . $cols, $value['seqUnidadProyecto']);
@@ -113,7 +115,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
         $sheet->setCellValue('C' . $cols, $value['txtNombreUnidad']);
         $sheet->setCellValue('D' . $cols, $tipoVivienda);
         $sheet->setCellValue('E' . $cols, $estadoActual);
-        $sheet->setCellValue('F' . $cols, 'Seleccione');
+        $sheet->setCellValue('F' . $cols, $estadoNuevo);
         $objValidation = $excel->getActiveSheet()->getCell('F' . $cols)->getDataValidation();
         $objValidation->setType(PHPExcel_Cell_DataValidation::TYPE_LIST);
         $objValidation->setErrorStyle(PHPExcel_Cell_DataValidation::STYLE_STOP);

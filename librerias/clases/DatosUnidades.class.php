@@ -143,7 +143,7 @@ class DatosUnidades {
                 seqTipoEsquema)
                 VALUES";
         foreach ($array as $key => $value) {
-            echo "<p> RRRRR" . $value[4] . "</p>";
+            //  echo "<p> RRRRR" . $value[4] . "</p>";
             $sql .= " (" . $seqProyecto . ",
                 '" . $value[0] . "',
                 '',
@@ -181,6 +181,28 @@ class DatosUnidades {
         return $arrErrores;
     }
 
+    function modificarEstadoUnidad($array, $seqProyecto) {
+
+        global $aptBd;
+        foreach ($array as $key => $value) {
+            if ($value[5] != "Seleccione") {
+                $estado = explode("-", $value[5])[0];
+                if ($estado > 0) {
+                    $sql = "UPDATE t_pry_unidad_proyecto
+                SET
+                seqEstadoUnidad = $estado 
+                WHERE seqUnidadProyecto = $value[0];";
+                    try {
+                        $aptBd->execute($sql);
+                    } catch (Exception $objError) {
+                        $arrErrores[] = "No se ha podido modificar los estado de las unidades<b></b>";
+                        pr($objError->getMessage());
+                    }
+                }
+            }
+        }
+    }
+
     function obtenerDatosUnidades($seqProyecto) {
         global $aptBd;
         $sql = "SELECT txtNombreProyecto, txtNombreUnidad, txtNombreTipoVivienda, seqUnidadProyecto, concat(seqEstadoUnidad ,'-', txtEstadoUnidad) as estado
@@ -191,9 +213,8 @@ class DatosUnidades {
         if ($seqProyecto > 0) {
             $sql .= " where  und.seqProyecto = " . $seqProyecto;
         }
-
         $sql .= " GROUP BY seqUnidadProyecto";
-       //  echo "<p>" . $sql . "</p>"; die();
+        // echo "<p>" . $sql . "</p>"; die();
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {

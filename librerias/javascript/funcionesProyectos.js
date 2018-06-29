@@ -54,7 +54,7 @@ function validarCampos() {
     $.each($("#frmProyectos select.required"), function (index, value) {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
-        if ($(value).val() == 0) {          
+        if ($(value).val() == 0) {
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
             console.log($(this).attr("id") + "select");
@@ -427,19 +427,26 @@ function dataForm_Archivos(formulario) {
 }
 
 function obtenerPlantillaUnidades(tipo) {
+
     var valid = true;
     //console.log("proyecto " + $('select[name=seqProyecto]').val());
-    if ($('select[name=seqProyecto]').val() == "" || $('select[name=seqProyecto]').val() == null) {
+    if (($('select[name=seqProyecto]').val() == "" || $('select[name=seqProyecto]').val() == null) && tipo == 1) {
         $("#mensajes").html("<div class='alert alert-danger'><h5>Alerta!!! seleccione un proyecto </h5></div>");
         $("#seqProyecto").css("border", "1px solid #ccc");
         $("#val_seqProyecto").css("display", "inline");
+        valid = false;
+    }
+    if (($('select[name=seqProyectoPadre]').val() == "" || $('select[name=seqProyectoPadre]').val() == null) && tipo == 2) {
+        $("#mensajes").html("<div class='alert alert-danger'><h5>Alerta!!! seleccione un proyecto </h5></div>");
+        $("#seqProyectoPadre").css("border", "1px solid #ccc");
+        $("#val_seqProyectoPadre").css("display", "inline");
         valid = false;
     }
     if (valid) {
         if (tipo == 1) {
             location.href = './contenidos/proyectos/plantillas/plantillaUnidades.php?seqProyecto=' + $('select[name=seqProyecto]').val();
         } else {
-            location.href = './contenidos/proyectos/plantillas/plantillaEstadoUnidades.php?seqProyecto=' + $('select[name=seqProyecto]').val();
+            location.href = './contenidos/proyectos/plantillas/plantillaEstadoUnidades.php?seqProyecto=' + $('select[name=seqProyectoPadre]').val();
         }
 
     }
@@ -534,6 +541,31 @@ function moverImagen(ruta, tipo, nombre, idProyecto) {
             // console.log(res[1]);
             $("#div2").html(res[0]); // Mostrar la respuestas del script PHP.
             $("#div3").html(res[1]);
+        }
+    });
+}
+
+function obtenerDatosSelect(value, variable, idSelect) {
+
+    var parametros = {
+        "seqProyectoPadre": value
+    };
+    $.ajax({
+        data: parametros,
+        url: 'contenidos/proyectos/contenidos/datosSelect.php',
+        type: 'post',
+        dataType: "json",
+        success: function (response) {
+            console.log("hola");
+            var select = $('#' + idSelect);
+            $('#' + idSelect).empty();
+            var options = select.attr('options');
+            var selectedOption = '';
+            $('#' + idSelect).append('<option value="0">Seleccione</option>');
+            $.each(response, function (val, text) {
+
+                $('#' + idSelect).append('<option value=' + val + '>' + text + '</option>');
+            });
         }
     });
 }

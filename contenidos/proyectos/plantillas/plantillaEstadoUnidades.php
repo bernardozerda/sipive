@@ -65,7 +65,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     $titulos[0] = "ID Unidad";
     $titulos[1] = "Proyecto";
     $titulos[2] = "Nombre de la unidad";
-    $titulos[3] = "Conjunto"; 
+    $titulos[3] = "Conjunto";
     $titulos[4] = "Estado Actual";
     $titulos[5] = "Nuevo Estado";
 //    $titulos[4] = "Plan de Gobierno";
@@ -128,9 +128,21 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
         $objValidation->setPromptTitle('Seleccion');
         $objValidation->setPrompt('Seleccione un valor de la lista');
         $objValidation->setFormula1("=seleccion");
+
         $cols++;
     }
-
+    
+    $excel->getSecurity()->setLockWindows(false);
+        $excel->getSecurity()->setLockStructure(false);
+        $excel->getSheet(0)->getProtection()->setSheet(true);
+        $excel->getActiveSheet()->getProtection()->setSort(true);
+        $excel->getActiveSheet()->getProtection()->setInsertRows(true);
+        $excel->getActiveSheet()->getProtection()->setFormatCells(true);
+       // $excel->getActiveSheet()->getProtection()->setPassword('SDHT');
+    
+    $excel->getActiveSheet()->getStyle('F2:F' . $cols)->getProtection()
+            ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+    
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     header("Content-Disposition: attachment;filename='PlantillaEstadoUnidades.xlsx");
     header('Cache-Control: max-age=0');

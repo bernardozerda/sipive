@@ -55,9 +55,15 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
                     // si hubo pantalla de bloque al usuario, se oculta
                     if (bolCargando == 1) {
                         objCargando.hide();
-                        if( typeof tablas != "undefined"){
-                            tablas();
-                        }
+                        tablas();
+//                        $(document).ready(function () {
+//                            $("#accordion").accordion();
+//                            $('#example').DataTable({
+//                                "pagingType": "full_numbers",
+//                                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+//                                "order": [[2, "desc"]]
+//                            });
+//                        });
                     }
                 }
             };
@@ -416,7 +422,6 @@ function someterFormulario(txtDivDestino, objFormulario, txtArchivo, cargaArchiv
                     if (objetoCargando == 1) {
                         objCargando.hide();
                     }
-
                     // toda respuesta se envia al objeto destino
                     document.getElementById(txtDivDestino).innerHTML = o.responseText;
                 }
@@ -4199,233 +4204,154 @@ function imprimir() {
     window.print();
 }
 
-// function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
-//
-//
-//     var objDireccion = YAHOO.util.Dom.get(txtInputDireccion);
-//
-//     var txtDivDestino = txtDivDireccionOculto;
-//     var txtArchivoPhp = './contenidos/subsidios/obtenerDireccionPlano.php';
-//     var txtParametros = 'txtDireccion=' + objDireccion.value + '&txtExtraDiv=' + txtInputDireccion;
-//
-//     document.getElementById(txtDivDestino).innerHTML = '';
-//
-//     // Objeto de respuesta si es satisfactoria la carga
-//     var handleSuccess =
-//             function (o) {
-//                 if (o.responseText !== undefined) {
-//                     // Toda respuesta del archivo en el parametro se muestra en el objeto destino
-//                     document.getElementById(txtDivDestino).innerHTML = o.responseText;
-//                 }
-//             };
-//
-//     // Objeto de respuesta si la carga falla
-//     var handleFailure =
-//             function (o) {
-//                 if (o.responseText !== undefined) {
-//                     return false;
-//                 }
-//             };
-//
-//     // Objeto de respuestas
-//     var callback = {
-//         success: handleSuccess,
-//         failure: handleFailure
-//     };
-//
-//     // peticion asincrona al servidor
-//     var callObj = YAHOO.util.Connect.asyncRequest("POST", txtArchivoPhp, callback, txtParametros);
-//
-//     return callObj;
-// }
+function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
 
-// function recogerDireccion_old(txtInputDireccion, txtDivDireccionOculto) {
-//     cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto);
-//     setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 100);
-// }
 
-function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
+    var objDireccion = YAHOO.util.Dom.get(txtInputDireccion);
 
-    // obtiene el id oculto
-    var objModal = $('#' + txtDivDireccionOculto);
+    var txtDivDestino = txtDivDireccionOculto;
+    var txtArchivoPhp = './contenidos/subsidios/obtenerDireccionPlano.php';
+    var txtParametros = 'txtDireccion=' + objDireccion.value + '&txtExtraDiv=' + txtInputDireccion;
 
-    // inicializa el modal
-    objModal.addClass("modal fade");
-    objModal.attr("tabindex" , "-1");
-    objModal.attr("role" , "dialog");
-    objModal.attr("aria-labelledby" , "myModalLabel");
-    objModal.empty();
+    document.getElementById(txtDivDestino).innerHTML = '';
 
-    // divs visibles del popup
-    var objModalOverlay = $('<div class="modal-dialog" role="document"></div>');
-    var objModalContent = $('<div class="modal-content" style="width: 850px;"></div>');
-    var objModalHeader  = $('<div class="modal-header" style="font-size: 20px;">Introduzca la Dirección</div>');
-    var objModalBody    = $('<div class="modal-body"></div>');
-    var objModalFooter  = $('<div class="modal-footer"></div>');
-    var objBotonSalvar  = $('<button type="button" class="btn btn-primary btn-sm" onclick="validacionDireccion(' + txtInputDireccion + ', ' + txtDivDireccionOculto + ')">Aceptar</button>');
+    // Objeto de respuesta si es satisfactoria la carga
+    var handleSuccess =
+            function (o) {
+                if (o.responseText !== undefined) {
+                    // Toda respuesta del archivo en el parametro se muestra en el objeto destino
+                    document.getElementById(txtDivDestino).innerHTML = o.responseText;
+                }
+            };
 
-    // contenido dinamico del body (form de direccion)
-    $.ajax({
-        url: './contenidos/subsidios/obtenerDireccionPlano.php',
-        type: 'post',
-        data: 'txtDireccion=' + $("#" + txtInputDireccion).val() + '&txtExtraDiv=' + txtInputDireccion,
-        success: function(res){
-            objModalBody.html(res);
-        },
-        fail: function () {
-            alert('Problemas al mostrar el popup de direccion');
-        }
-    });
+    // Objeto de respuesta si la carga falla
+    var handleFailure =
+            function (o) {
+                if (o.responseText !== undefined) {
+                    return false;
+                }
+            };
 
-    // anidando divs
-    objModalFooter.append(objBotonSalvar);
-    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
-    objModalOverlay.append(objModalContent);
-    objModal.append(objModalOverlay);
+    // Objeto de respuestas
+    var callback = {
+        success: handleSuccess,
+        failure: handleFailure
+    };
 
-    // muestra el popup
-    objModal.modal('show');
+    // peticion asincrona al servidor
+    var callObj = YAHOO.util.Connect.asyncRequest("POST", txtArchivoPhp, callback, txtParametros);
 
+    return callObj;
 }
 
-function validacionDireccion(txtInputDireccion, txtDivDireccionOculto){
+function recogerDireccion(txtInputDireccion, txtDivDireccionOculto) {
+    cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto);
+    setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 100);
+}
 
-    // obtiene el id oculto
-    var objModal = $(txtDivDireccionOculto);
+function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
 
-    // si hay errores
-    var bolAlerta = false;
+    var direccionGenerada;
+    var txtDireccionForm = document.getElementById(txtInputDireccion);
+    var txtDivDireccionGenerada = "divDireccionGenerada_" + txtInputDireccion;
 
-    // validacion de la direccion
-    if($("#radTipoDireccion").is(":checked")){
-        if($("#divDireccionGenerada_" + txtInputDireccion.id ).html().substring(0,1) == "-"){
-            alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
-            bolAlerta = true;
-        }else{
-            if (
-                $('#txtDireccionTipoVia').val()   == "---" ||
-                $('#txtNumeroVia').val()          == ""    ||
-                $('#txtDireccionNumeroVia').val() == ""    ||
-                $('#txtNumeroAdicional').val()    == ""
-            ) {
-                alert("Complete la dirección");
+    var respuesta = function (o) {
+    }
+    var falla = function (o) {
+        alert("falla = " + o.status + ": " + o.responseText);
+    }
+
+    var aceptar = function () {
+
+        var bolAlerta = false;
+        if (YAHOO.util.Dom.get('radTipoDireccion').checked) {
+            if (YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0, 1) == "-") {
+                alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
                 bolAlerta = true;
+            } else {
+                if (
+                        YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
+                        YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
+                        YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
+                        YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
+                        ) {
+                    alert("Complete la dirección");
+                    bolAlerta = true;
+                }
+            }
+        }
+
+        if (bolAlerta == false) {
+            direccionGenerada = document.getElementById(txtDivDireccionGenerada);
+            txtDireccionForm.value.replace(/s{2,}/g, ' ');
+            txtDireccionForm.value = direccionGenerada.innerHTML;
+            this.cancel();
+
+            direccionGenerada.innerHTML = txtDireccionForm.value;
+            //mostrarMapa(txtDireccionForm);
+
+            var objCiudad = document.getElementById("seqCiudad");
+            if (objCiudad != null) {
+                objCiudad.focus();
             }
         }
     }
 
-    // oculta el popup
-    if(bolAlerta == false) {
-        $(txtInputDireccion).val( $("#divDireccionGenerada_" + txtInputDireccion.id ).html() );
-        objModal.modal('hide');
+    var cancelar = function () {
+        // txtDireccionForm.value = "";
+
+        this.cancel();
     }
 
+    var objConfiguracion = {
+        width: "640px",
+        height: "310px",
+        fixedcenter: true,
+        modal: false,
+        close: true,
+        effect: {
+            effect: YAHOO.widget.ContainerEffect.FADE,
+            duration: 0.75
+        },
+        draggable: false,
+        buttons: [{
+                text: "Aceptar",
+                handler: aceptar,
+                isDefault: true
+            },
+            {
+                text: "Cancelar",
+                handler: cancelar
+            }]
+    }
+
+    var objPanel = new YAHOO.widget.Dialog("dialog1", objConfiguracion);
+    objPanel.validate = function () {
+        var objDatos = this.getData();
+        if (objDatos.valor == "") {
+            alert("Digite un valor");
+            return false;
+        }
+        return true;
+    }
+
+    var objDireccionOculto = document.getElementById(txtDivDireccionOculto);
+    objPanel.callback = {
+        success: respuesta,
+        failure: falla
+    }
+
+    objPanel.setHeader("Introduzca la Dirección");
+
+    objPanel.setBody(objDireccionOculto.innerHTML);
+
+    objPanel.render(document.body);
+    objPanel.show();
+    eventoActivarLetraBis("chkViaBis", "txtLetraViaBis");
+    eventoCambioCalleDireccion( );
+    actualizarDireccion(txtDivDireccionGenerada);
+
 }
-
-
-// function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
-//
-//     var direccionGenerada;
-//     var txtDireccionForm = document.getElementById(txtInputDireccion);
-//     var txtDivDireccionGenerada = "divDireccionGenerada_" + txtInputDireccion;
-//
-//     var respuesta = function (o) {
-//     }
-//     var falla = function (o) {
-//         alert("falla = " + o.status + ": " + o.responseText);
-//     }
-//
-//     var aceptar = function () {
-//
-//         var bolAlerta = false;
-//         if (YAHOO.util.Dom.get('radTipoDireccion').checked) {
-//             if (YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0, 1) == "-") {
-//                 alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
-//                 bolAlerta = true;
-//             } else {
-//                 if (
-//                         YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
-//                         YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
-//                         YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
-//                         YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
-//                         ) {
-//                     alert("Complete la dirección");
-//                     bolAlerta = true;
-//                 }
-//             }
-//         }
-//
-//         if (bolAlerta == false) {
-//             direccionGenerada = document.getElementById(txtDivDireccionGenerada);
-//             txtDireccionForm.value.replace(/s{2,}/g, ' ');
-//             txtDireccionForm.value = direccionGenerada.innerHTML;
-//             this.cancel();
-//
-//             direccionGenerada.innerHTML = txtDireccionForm.value;
-//             //mostrarMapa(txtDireccionForm);
-//
-//             var objCiudad = document.getElementById("seqCiudad");
-//             if (objCiudad != null) {
-//                 objCiudad.focus();
-//             }
-//         }
-//     }
-//
-//     var cancelar = function () {
-//         // txtDireccionForm.value = "";
-//
-//         this.cancel();
-//     }
-//
-//     var objConfiguracion = {
-//         width: "640px",
-//         height: "310px",
-//         fixedcenter: true,
-//         modal: false,
-//         close: true,
-//         effect: {
-//             effect: YAHOO.widget.ContainerEffect.FADE,
-//             duration: 0.75
-//         },
-//         draggable: false,
-//         buttons: [{
-//                 text: "Aceptar",
-//                 handler: aceptar,
-//                 isDefault: true
-//             },
-//             {
-//                 text: "Cancelar",
-//                 handler: cancelar
-//             }]
-//     }
-//
-//     var objPanel = new YAHOO.widget.Dialog("dialog1", objConfiguracion);
-//     objPanel.validate = function () {
-//         var objDatos = this.getData();
-//         if (objDatos.valor == "") {
-//             alert("Digite un valor");
-//             return false;
-//         }
-//         return true;
-//     }
-//
-//     var objDireccionOculto = document.getElementById(txtDivDireccionOculto);
-//     objPanel.callback = {
-//         success: respuesta,
-//         failure: falla
-//     }
-//
-//     objPanel.setHeader("Introduzca la Dirección");
-//
-//     objPanel.setBody(objDireccionOculto.innerHTML);
-//
-//     objPanel.render(document.body);
-//     objPanel.show();
-//     eventoActivarLetraBis("chkViaBis", "txtLetraViaBis");
-//     eventoCambioCalleDireccion( );
-//     actualizarDireccion(txtDivDireccionGenerada);
-//
-// }
 
 function eventoCambioCalleDireccion( ) {
 
@@ -4436,9 +4362,6 @@ function eventoCambioCalleDireccion( ) {
     var frmCheckSurVia = document.getElementById('frmCheckSurVia');
     var frmCheckEsteNumero = document.getElementById('frmCheckEsteNumero');
     var frmCheckSurNumero = document.getElementById('frmCheckSurNumero');
-
-    var chkTipoDireccion = document.getElementById('radTipoDireccion');
-        chkTipoDireccion.checked = true;
 
     if (txtDireccionTipoVia == 'CL' ||
             txtDireccionTipoVia == 'DG' ||
@@ -4487,8 +4410,9 @@ function eventoActivarLetraBis(idCheck, idSelect) {
     }
 }
 
-function actualizarDireccion(txtDivDireccionGenerada) {
 
+function actualizarDireccion(txtDivDireccionGenerada)
+{
     //alert (document.getElementById('radTipoDireccion').value);
     var radTipoDireccion = document.getElementsByName('radTipoDireccion');
     var direccionGenerada = document.getElementById(txtDivDireccionGenerada);
@@ -8186,7 +8110,7 @@ function popUpAyuda( ) {
 //      var numAncho = YAHOO.util.Dom.getDocumentWidth() - 100;
 
     var numAlto = YAHOO.util.Dom.getDocumentHeight() - 200;
-    var numAncho = 900;
+    var numAncho = 400;
 
     var x = YAHOO.util.Dom.getX("ayuda") - (numAncho - 25);
     var y = YAHOO.util.Dom.getY("ayuda") + 10;
@@ -10898,90 +10822,90 @@ function pdfGiroFiducia(seqProyecto, seqGiroFiducia) {
     }
 }
 
-// function soporteDocumento(txtTipo, seqIdentificador) {
-//
-//     var seqPlanGobierno = $("#seqPlanGobierno").val();
-//
-//     if (seqPlanGobierno == 3) {
-//
-//         if (txtTipo == "tipoSoporte") {
-//
-//             $('#soporteCedula').hide();
-//             $('#soportePartida').hide();
-//
-//             if (seqIdentificador == "registroCivil") {
-//                 $('#soporteCedula').show();
-//             }
-//
-//             if (seqIdentificador == "partidaBautismo") {
-//                 $('#soportePartida').show();
-//             }
-//
-//         }
-//
-//         if (txtTipo == "documentoNotaria") {
-//             if (seqIdentificador == "Notaria") {
-//                 $('#documentoNotaria').show();
-//             } else {
-//                 $('#documentoNotaria').hide();
-//             }
-//         }
-//
-//         if (txtTipo == "estadoCivil") {
-//
-//             $('#soporteEstadoCivilCasado').hide();
-//             $('#soporteEstadoCivilCSCDL').hide();
-//             $('#soporteEstadoCivilUnion').hide();
-//             $('#soporteEstadoCivilSoltero').hide();
-//
-//             if (seqIdentificador == 6) { // casado
-//                 $('#soporteEstadoCivilCasado').show();
-//                 $('#soporteEstadoCivilCSCDL').hide();
-//                 $('#soporteEstadoCivilUnion').hide();
-//                 $('#soporteEstadoCivilSoltero').hide();
-//             }
-//
-//             if (seqIdentificador == 8) { // CASADO CON SOCIEDAD CONYUGAL DISUELTA Y LIQUIDADA
-//                 $('#soporteEstadoCivilCasado').hide();
-//                 $('#soporteEstadoCivilCSCDL').show();
-//                 $('#soporteEstadoCivilUnion').hide();
-//                 $('#soporteEstadoCivilSoltero').hide();
-//             }
-//
-//             if (seqIdentificador == 7) { // SOLTERO CON UNION MARITAL DE HECHO
-//                 $('#soporteEstadoCivilCasado').hide();
-//                 $('#soporteEstadoCivilCSCDL').hide();
-//                 $('#soporteEstadoCivilUnion').show();
-//                 $('#soporteEstadoCivilSoltero').hide();
-//             }
-//
-//             if (seqIdentificador == 2) { // SOLTERO
-//                 $('#soporteEstadoCivilCasado').hide();
-//                 $('#soporteEstadoCivilCSCDL').hide();
-//                 $('#soporteEstadoCivilUnion').hide();
-//                 $('#soporteEstadoCivilSoltero').show();
-//             }
-//
-//         }
-//
-//         if (txtTipo == "notaria-CSCDL") {
-//             if (seqIdentificador == "Notaria") {
-//                 $('#notaria-CSCDL').show();
-//             } else {
-//                 $('#notaria-CSCDL').hide();
-//             }
-//         }
-//
-//         if (txtTipo == "notaria-Union") {
-//             if (seqIdentificador == "Notaria") {
-//                 $('#notaria-Union').show();
-//             } else {
-//                 $('#notaria-Union').hide();
-//             }
-//         }
-//
-//     }
-// }
+function soporteDocumento(txtTipo, seqIdentificador) {
+
+    var seqPlanGobierno = $("#seqPlanGobierno").val();
+
+    if (seqPlanGobierno == 3) {
+
+        if (txtTipo == "tipoSoporte") {
+
+            $('#soporteCedula').hide();
+            $('#soportePartida').hide();
+
+            if (seqIdentificador == "registroCivil") {
+                $('#soporteCedula').show();
+            }
+
+            if (seqIdentificador == "partidaBautismo") {
+                $('#soportePartida').show();
+            }
+
+        }
+
+        if (txtTipo == "documentoNotaria") {
+            if (seqIdentificador == "Notaria") {
+                $('#documentoNotaria').show();
+            } else {
+                $('#documentoNotaria').hide();
+            }
+        }
+
+        if (txtTipo == "estadoCivil") {
+
+            $('#soporteEstadoCivilCasado').hide();
+            $('#soporteEstadoCivilCSCDL').hide();
+            $('#soporteEstadoCivilUnion').hide();
+            $('#soporteEstadoCivilSoltero').hide();
+
+            if (seqIdentificador == 6) { // casado
+                $('#soporteEstadoCivilCasado').show();
+                $('#soporteEstadoCivilCSCDL').hide();
+                $('#soporteEstadoCivilUnion').hide();
+                $('#soporteEstadoCivilSoltero').hide();
+            }
+
+            if (seqIdentificador == 8) { // CASADO CON SOCIEDAD CONYUGAL DISUELTA Y LIQUIDADA
+                $('#soporteEstadoCivilCasado').hide();
+                $('#soporteEstadoCivilCSCDL').show();
+                $('#soporteEstadoCivilUnion').hide();
+                $('#soporteEstadoCivilSoltero').hide();
+            }
+
+            if (seqIdentificador == 7) { // SOLTERO CON UNION MARITAL DE HECHO
+                $('#soporteEstadoCivilCasado').hide();
+                $('#soporteEstadoCivilCSCDL').hide();
+                $('#soporteEstadoCivilUnion').show();
+                $('#soporteEstadoCivilSoltero').hide();
+            }
+
+            if (seqIdentificador == 2) { // SOLTERO
+                $('#soporteEstadoCivilCasado').hide();
+                $('#soporteEstadoCivilCSCDL').hide();
+                $('#soporteEstadoCivilUnion').hide();
+                $('#soporteEstadoCivilSoltero').show();
+            }
+
+        }
+
+        if (txtTipo == "notaria-CSCDL") {
+            if (seqIdentificador == "Notaria") {
+                $('#notaria-CSCDL').show();
+            } else {
+                $('#notaria-CSCDL').hide();
+            }
+        }
+
+        if (txtTipo == "notaria-Union") {
+            if (seqIdentificador == "Notaria") {
+                $('#notaria-Union').show();
+            } else {
+                $('#notaria-Union').hide();
+            }
+        }
+
+    }
+}
 
 function certificadoHabitabilidadProyecto(seqUnidadProyecto) {
     var wndFormato;
@@ -11016,7 +10940,7 @@ var fncFileSelect = function () {
         $(':file').on('fileselect', function (event, numFiles, label) {
 
             var input = $(this).parents('.input-group').find(':text'),
-                    log = numFiles > 1 ? numFiles + ' files selected' : label;
+                    log = numFiles > 1 ? numFiles + ' Archivos seleccionados' : label;
 
             if (input.length) {
                 input.val(log);
@@ -11043,39 +10967,59 @@ YAHOO.util.Event.onContentReady(
 
 
 
-var fileAction = function () {
+var fileAction = function (name) {
+    var div = this.id;
     // We can attach the `fileselect` event to all file inputs on the page
 
     $(document).on('change', ':file', function () {
         var input = $(this),
                 numFiles = input.get(0).files ? input.get(0).files.length : 1,
                 label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-        input.trigger('fileAction', [numFiles, label]);
+        input.trigger(div, [numFiles, label]);
 
     });
 
     $(document).ready(function () {
-        $(':file').on('fileAction', function (event, numFiles, label) {
+        $(':file').on(div, function (event, numFiles, label) {
             // console.log("numFiles -> " + numFiles + " label ->" + label + " event ->" + event);
-
             var input = $(this).parents('.custom-file-input').find(':file'),
-                    log = numFiles > 1 ? numFiles + ' files selected' : label;
-            // console.log("input.length -> " + input + " log ->" + log);
-
-
-//
+                    log = numFiles > 1 ? numFiles + ' Archivos seleccionados' : label;
+            // console.log("input.length -> " + input + " log ->" + log);//
             if (input.length) {
                 input.val(log);
             } else {
                 if (log)
-                    $("#nameArchivo").text(log);
+                    $("#" + name).text(log);
                 input.val(log);
             }
 
         });
     });
+    removeFile(div, name);
 }
+
+
+function listenerFile(div, name) {    
+    YAHOO.util.Event.onContentReady(
+            div,
+            fileAction,
+            name
+            );
+}
+
+function removeFile(div, name) {
+    $("#" + div).empty();
+    $("#" + name).text("Seleccione Archivo");
+}
+
 YAHOO.util.Event.onContentReady(
         "fileAction",
-        fileAction
+        fileAction,
+        'nameArchivo'
+        );
+
+YAHOO.util.Event.onContentReady(
+        "fileActionEstados",
+        fileAction,
+        'nameEstado'
         );

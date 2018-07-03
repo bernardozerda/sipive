@@ -13,7 +13,7 @@
                         removeFile('fileAction', 'nameArchivo')">Crear Unidades <br></a>
             </li>
             <li class="nav-item"  style="{$nav}">   
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#estados" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick="listenerFile('fileActionEstados', 'nameEstados');
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#estados" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick="listenerFile('fileActionEstados', 'nameEstado');
                         removeFile('fileActionEstados', 'nameEstados')">Modificar Estados <br></a>
             </li>
         </ul>

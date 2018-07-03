@@ -40,6 +40,7 @@ $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
 $claSmarty->assign("arrayProyectos", $arrayProyectos);
 $claSmarty->assign("idProyecto", $idProyecto);
 $claSmarty->assign("id", $id);
+$claSmarty->assign("page", "datosProyecto.php?id=".$id);
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);
 }

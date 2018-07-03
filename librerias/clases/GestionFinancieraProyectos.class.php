@@ -393,6 +393,10 @@ class GestionFinancieraProyectos
 
                 $this->arrMensajes[] = "Registro de liberación de recursos ha sido salvado";
 
+                $claSeguimiento = new SeguimientoProyectos();
+                $claSeguimiento->salvarLiberacion($arrPost['seqProyecto'], $seqUnidadActoPrimario, $seqRegistroPresupuestal, $valLiberado);
+                $this->arrErrores = $claSeguimiento->arrErrores;
+
                 // carga la informacion posterior a la salvada del registro
                 $this->informacionResoluciones($arrPost['seqProyecto']);
 
@@ -412,6 +416,10 @@ class GestionFinancieraProyectos
 
         try{
             $aptBd->BeginTrans();
+
+            $claSeguimiento = new SeguimientoProyectos();
+            $claSeguimiento->eliminarLiberacion($arrPost['seqProyecto'], $arrPost['seqLiberacion']);
+            $this->arrErrores = $claSeguimiento->arrErrores;
 
             $sql = "
                 delete 
@@ -790,6 +798,7 @@ class GestionFinancieraProyectos
                 $seqProyecto = $arrPost['seqProyecto'];
                 $seqUnidadActo = $arrPost['seqUnidadActo'];
                 $seqRegistroPresupuestal = $arrPost['seqRegistroPresupuestal'];
+                $valTotalGiro = 0;
 
                 foreach ($arrPost['unidades'][$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal] as $seqUnidadProyecto => $valGiro){
 
@@ -824,9 +833,22 @@ class GestionFinancieraProyectos
                         ) 
                     ";
                     $aptBd->execute($sql);
+
+                    $valTotalGiro += $valGiro;
                 }
 
                 $this->arrMensajes[] = "Registro salvado satisfactoriamente";
+
+                $claSeguimiento = new SeguimientoProyectos();
+                $claSeguimiento->giroFiducia(
+                    $seqProyecto,
+                    $seqUnidadActo,
+                    $seqRegistroPresupuestal,
+                    count($arrPost['unidades'][$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal]),
+                    $valTotalGiro
+                );
+
+                $this->arrErrores = $claSeguimiento->arrErrores;
 
                 $aptBd->CommitTrans();
 
@@ -1178,6 +1200,10 @@ class GestionFinancieraProyectos
         try {
             $aptBd->BeginTrans();
 
+            $claSeguimiento = new SeguimientoProyectos();
+            $claSeguimiento->eliminarGiroFiducia($seqGiroFiducia);
+            $this->arrErrores = $claSeguimiento->arrErrores;
+
             $sql = "delete from t_pry_aad_giro_fiducia_detalle where seqGiroFiducia = $seqGiroFiducia";
             $aptBd->execute($sql);
 
@@ -1498,6 +1524,8 @@ class GestionFinancieraProyectos
                 $aptBd->execute($sql);
 
                 $seqGiroConstructor = $aptBd->Insert_ID();
+                $valTotalGiro = 0;
+                $numUnidades = 0;
 
                 foreach ($arrPost['unidades'] as $seqProyecto => $arrDato) {
                     foreach ($arrDato as $seqUnidadProyecto => $valGiro) {
@@ -1528,10 +1556,18 @@ class GestionFinancieraProyectos
                             ) 
                         ";
                         $aptBd->execute($sql);
+
+                        $valTotalGiro += $valGiro;
+                        $numUnidades++;
                     }
                 }
 
                 $this->arrMensajes[] = "Registro salvado satisfactoriamente";
+
+                $claSeguimiento = new SeguimientoProyectos();
+                $claSeguimiento->giroConstructor($arrPost['seqProyecto'], $numUnidades, $valTotalGiro);
+                $this->arrErrores = $claSeguimiento->arrErrores;
+
 
                 $aptBd->CommitTrans();
 
@@ -1557,6 +1593,10 @@ class GestionFinancieraProyectos
 
         try {
             $aptBd->BeginTrans();
+
+            $claSeguimiento = new SeguimientoProyectos();
+            $claSeguimiento->eliminarGiroConstructor($seqGiroConstructor);
+            $this->arrErrores = $claSeguimiento->arrErrores;
 
             $sql = "delete from t_pry_aad_giro_constructor_detalle where seqGiroConstructor = $seqGiroConstructor";
             $aptBd->execute($sql);
@@ -1711,7 +1751,12 @@ class GestionFinancieraProyectos
 
                 $seqReintegro = $aptBd->Insert_ID();
 
+                $arrTotalReintegros = array();
+
                 foreach ($arrPost['registros'] as $arrDato) {
+
+                    $txtTipo = $arrDato['txtTipo'];
+                    $arrTotalReintegros[$txtTipo] += $arrDato['valConsignacion'];
 
                     $sql = "
                         insert into t_pry_aad_reintegros_detalle (
@@ -1735,6 +1780,10 @@ class GestionFinancieraProyectos
                 }
 
                 $this->arrMensajes[] = "Registro salvado satisfactoriamente";
+
+                $claSeguimiento = new SeguimientoProyectos();
+                $claSeguimiento->salvarReintegros($arrPost, $arrTotalReintegros);
+                $this->arrErrores = $claSeguimiento->arrErrores;
 
                 $aptBd->CommitTrans();
 
@@ -1801,6 +1850,10 @@ class GestionFinancieraProyectos
 
         try {
             $aptBd->BeginTrans();
+
+            $claSeguimiento = new SeguimientoProyectos();
+            $claSeguimiento->eliminarReintegro($seqReintegro);
+            $this->arrErrores = $claSeguimiento->arrErrores;
 
             $sql = "delete from t_pry_aad_reintegros_detalle where seqReintegro = $seqReintegro";
             $aptBd->execute($sql);

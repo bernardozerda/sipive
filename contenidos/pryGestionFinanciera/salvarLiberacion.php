@@ -8,6 +8,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "GestionFinancieraProyectos.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "SeguimientoProyectos.class.php" );
 
 $claGestion = new GestionFinancieraProyectos();
 $claGestion->proyectos();

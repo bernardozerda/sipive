@@ -6,7 +6,7 @@
  */
 
 $txtPrefijoRuta = "../../";
-
+//var_dump($_FILES);
 include( "../../librerias/phpExcel/Classes/PHPExcel.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/IOFactory.php" );
@@ -27,11 +27,11 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
     $totalUnidades = $infCantUnidades['valNumeroSoluciones'];
     $cantUDisponible = $totalUnidades - $unidadesReg;
     // echo "<p>" . $cantUDisponible . "</p>";
-    if ( $_FILES["archivo"] != "" && is_uploaded_file($_FILES["archivo"]['tmp_name'])) {
+    if ( $_FILES["archivoEstado"] != "" && is_uploaded_file($_FILES["archivoEstado"]['tmp_name'])) {
 
-        $txtTipoArchivo = PHPExcel_IOFactory::identify($_FILES["archivo"]['tmp_name']);
+        $txtTipoArchivo = PHPExcel_IOFactory::identify($_FILES["archivoEstado"]['tmp_name']);
         $objReader = PHPExcel_IOFactory::createReader($txtTipoArchivo);
-        $objPHPExcel = $objReader->load($_FILES["archivo"]['tmp_name']);
+        $objPHPExcel = $objReader->load($_FILES["archivoEstado"]['tmp_name']);
         $objHoja = $objPHPExcel->getSheet(0);
         $arrayNum = array(0); //
         $arrayVal = array(2,3);
@@ -41,7 +41,7 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
       //  echo $numColumnas;
 
 // obtiene los datos del rango obtenido
-        for ($numFila = 1; $numFila <= $numFilas; $numFila++) {
+        for ($numFila = 1; $numFila <= $numFilas-1; $numFila++) {
             if ($numFila != 1) {
                 for ($numColumna = 0; $numColumna <= $numColumnas; $numColumna++) {
                     $numFilaArreglo = $numFila - 1;

@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="col-md-5" style="text-align: left">
                                     <div class="custom-file">
-                                        <input type="file" name="archivo" class="custom-file-input" id="customFile">
+                                        <input type="file" name="archivoEstado" class="custom-file-input" id="customFile">
                                         <label class="custom-file-label" for="customFile" id="nameArchivo">Seleccione Archivo</label>
                                     </div>
                                     <div id="fileAction"></div>

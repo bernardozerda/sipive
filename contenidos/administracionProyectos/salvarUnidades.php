@@ -15,9 +15,11 @@ include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "SeguimientoProyectos.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "DatosUnidades.class.php" );
 
 $claDatosUnidades = new DatosUnidades();
+$claSeguimiento = new SeguimientoProyectos();
 
 if ($_POST['seqProyecto'] != "" && $_POST['seqProyecto'] != null) {
 
@@ -30,6 +32,7 @@ if ($_POST['seqProyecto'] != "" && $_POST['seqProyecto'] != null) {
     if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name'])) {
 
         $txtTipoArchivo = PHPExcel_IOFactory::identify($_FILES['archivo']['tmp_name']);
+        $name = basename($_FILES['archivoEstado']['name']);        
         $objReader = PHPExcel_IOFactory::createReader($txtTipoArchivo);
         $objPHPExcel = $objReader->load($_FILES['archivo']['tmp_name']);
         $objHoja = $objPHPExcel->getSheet(0);
@@ -71,9 +74,19 @@ if ($_POST['seqProyecto'] != "" && $_POST['seqProyecto'] != null) {
             }
         }
         if (empty($arrErrores)) {
-
             $array = $claDatosUnidades->AlmacenarUnidades($arrArchivo, $seqProyecto);
             if (empty($array)) {
+                $txtComentarios = $_POST['txtComentario'];
+                $seqGestion = $_POST['seqGestion'];
+                $arrayDatosProyNew = Array();
+                $arrayDatosProyOld = Array();
+                $arrayDatosProyOld[$seqProyecto]['unidades'] = "De un total de <b>" . $numFilaArreglo . "</b> Unidades ";
+                $arrayDatosProyOld[$seqProyecto]['nombreArchivo'] = "";
+                $arrayDatosProyNew[$seqProyecto]['unidades'] = " Se Almacenaron  <b>" . $numFilaArreglo . "</b> Unidades";
+                $arrayDatosProyNew[$seqProyecto]['nombreArchivo'] = "Se realiz&oacute; La creaci&oacute; de la unidades bajo las especificaciones del archivo <b>" . $name . "</b>";
+                var_dump($_POST);
+                // $txtComentarios = "Se realizó cambios de estado en ". count($arrayDatosProyNew[$seqProyecto])." unidades, bajo las especificaciones del archivo <b>".$name."</b>";
+                $claSeguimiento->almacenarSeguimiento($seqProyecto, $txtComentarios, $seqGestion, $arrayDatosProyOld, $arrayDatosProyNew);
                 ?>
                 <div class='alert alert-success'><h5><b>Exito!!!</b> Los datos que se almacenaron se listan a continuación: </h5></div>
                 <table>

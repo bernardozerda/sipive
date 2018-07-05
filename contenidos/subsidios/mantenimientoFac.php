@@ -71,7 +71,7 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
                 $seqEstadoProceso = array_shift(array_keys($arrEstados,$txtEstado));
             }
 
-            $arrSql[] = "update t_aad_formulario_acto set seqEstadoProceso = $seqEstadoProceso where seqFormularioActo = $seqFormularioActo";
+            $arrSql[] = "update t_aad_formulario_acto set seqEstadoProceso = $seqEstadoProceso, fchUltimaActualizacion = now() where seqFormularioActo = $seqFormularioActo";
 
         }
 

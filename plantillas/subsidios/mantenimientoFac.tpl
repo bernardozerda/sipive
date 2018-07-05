@@ -14,7 +14,7 @@
                 <li class="h5">{$txtError}</li>
             {/foreach}
         </div>
-    {else}
+    {elseif not empty($arrMensajes)}
         <div class="alert alert-success" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             {foreach from=$arrMensajes item=txtMensaje}
@@ -57,7 +57,15 @@
 
     </div>
     <div class="panel-footer text-center">
+
         <button type="submit" class="btn btn-primary btn-sm">Salvar Cambios</button>
+        &nbsp;
+        <button type="button"
+                class="btn btn-success btn-sm"
+                onclick="location.href='./contenidos/subsidios/exportarFac.php?principal='+$('#principal').prop('checked')"
+        >Exportar Estados</button>
+        <input type="checkbox" id="principal" value="1"> Solo Postulante Principal
+
     </div>
 </div>
 

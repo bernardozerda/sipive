@@ -1042,4 +1042,136 @@ function obtenerMatriculaProfesional(){
 }
 
 
+/**
+ * RETORNA EN UN ARRAR EL CONTENIDO DE UN ARCHIVO
+ * YA SEA EN TEXTO O EN EXCEL, EL FORMATO DEL RETORNO ES
+ *
+ * $arrFormato[__numero_columna__] = 'fecha'
+ * -- solo funciona con fechas y en los archivos de excel, en los txt no funciona
+ *
+ * @param $txtNombreFile
+ * @param array $arrFormato
+ * @return array $arrRetorno
+ *      $arrRetorno['errores'] = array();
+ *      $arrRetorno['archivo'] = array();
+ */
+function cargarArchivo($txtNombreFile, $arrFormato = array()){
+
+    $arrArchivo = array();
+
+    // valida si el archivo fue cargado y si corresponde a las extensiones válidas
+    switch ($_FILES[$txtNombreFile]['error']) {
+        case UPLOAD_ERR_INI_SIZE:
+            $arrErrores[] = "El archivo \"" . $_FILES[$txtNombreFile]['name'] . "\" Excede el tamaño permitido 1 ";
+            break;
+        case UPLOAD_ERR_FORM_SIZE:
+            $arrErrores[] = "El archivo \"" . $_FILES[$txtNombreFile]['name'] . "\" Excede el tamaño permitido 2";
+            break;
+        case UPLOAD_ERR_PARTIAL:
+            $arrErrores[] = "El archivo \"" . $_FILES[$txtNombreFile]['name'] . "\" no fue completamente cargado, intente de nuevo, si el error persiste contacte al administrador";
+            break;
+        case UPLOAD_ERR_NO_FILE:
+            $arrErrores[] = "Debe especificar un archivo para cargar";
+            break;
+        case UPLOAD_ERR_NO_TMP_DIR:
+            $arrErrores[] = "El archivo \"" . $_FILES[$txtNombreFile]['name'] . "\" no se pudo cargar por falta de carpeta temporal, contacte al administrador";
+            break;
+        case UPLOAD_ERR_CANT_WRITE:
+            $arrErrores[] = "El archivo \"" . $_FILES[$txtNombreFile]['name'] . "\" no se pudo guardar en el servidor, contacte al administrador";
+            break;
+        case UPLOAD_ERR_EXTENSION:
+            $arrErrores[] = "El archivo \"" . $_FILES[$txtNombreFile]['name'] . "\" no se pudo guardar en el servidor por un problema de extensiones, contacte al administrador";
+            break;
+        default:
+            $numPunto = strpos($_FILES[$txtNombreFile]['name'], ".") + 1;
+            $numRestar = ( strlen($_FILES[$txtNombreFile]['name']) - $numPunto ) * -1;
+            $txtExtension = substr($_FILES[$txtNombreFile]['name'], $numRestar);
+            if (!in_array(strtolower($txtExtension), array("txt","xls","xlsx") )) {
+                $arrErrores[] = "Tipo de Archivo no permitido $txtExtension ";
+            }
+            break;
+    }
+
+    if( empty( $arrErrores ) ){
+
+        // si es un archivo de texto obtiene los datos
+        if( $_FILES[$txtNombreFile]['type'] == "text/plain" ){
+            foreach( file( $_FILES[$txtNombreFile]['tmp_name'] ) as $numLinea => $txtLinea ){
+                if( trim( $txtLinea ) != "" ) {
+                    $arrArchivo[$numLinea] = explode("\t", trim($txtLinea));
+                    foreach( $arrArchivo[$numLinea] as $numColumna => $txtCelda ){
+                        if( $numColumna < count( $arrFormato ) ) {
+                            if($arrFormato[$numColumna] == "fecha"){
+                                $claFecha = new DateTime(trim($txtCelda));
+                                $arrArchivo[$numLinea][$numColumna] = $claFecha->format("Y-m-d");
+                            }else{
+                                $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
+                            }
+                        }else{
+                            unset( $arrArchivo[$numLinea][$numColumna] );
+                        }
+                    }
+                }
+            }
+        }else{
+
+            try{
+
+                // crea las clases para la obtencion de los datos
+                $txtTipoArchivo = PHPExcel_IOFactory::identify($_FILES[$txtNombreFile]['tmp_name']);
+                $objReader = PHPExcel_IOFactory::createReader($txtTipoArchivo);
+                $objPHPExcel = $objReader->load($_FILES[$txtNombreFile]['tmp_name']);
+                $objHoja = $objPHPExcel->getSheet(0);
+
+                // obtiene las dimensiones del archivo para la obtencion del contenido por rangos
+                $numFilas = $objHoja->getHighestRow();
+                $numColumnas = PHPExcel_Cell::columnIndexFromString( $objHoja->getHighestColumn() ) - 1;
+
+                // obtiene los datos del rango obtenido
+                for( $numFila = 1; $numFila <= $numFilas; $numFila++ ){
+                    for( $numColumna = 0; $numColumna <= $numColumnas; $numColumna++ ){
+                        $numFilaArreglo = $numFila - 1;
+                        $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna,$numFila)->getValue();
+                        if( $arrFormato[$numColumna] == "fecha" and is_numeric( $arrArchivo[$numFilaArreglo][$numColumna] ) ) {
+                            $claFecha = PHPExcel_Shared_Date::ExcelToPHPObject($arrArchivo[$numFilaArreglo][$numColumna]);
+                            $arrArchivo[$numFilaArreglo][$numColumna] = $claFecha->format("Y-m-d");
+
+                        }
+                    }
+                }
+
+                // limpia las lineas vacias
+                foreach ($arrArchivo as $numLinea => $arrLinea) {
+                    $bolLineaVacia = true;
+                    foreach ($arrLinea as $numColumna => $txtCelda) {
+                        if ($txtCelda != "") {
+                            $bolLineaVacia = false;
+                            $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
+                        }
+                    }
+                    if ($bolLineaVacia == true) {
+                        unset($arrArchivo[$numLinea]);
+                    }
+                }
+
+            } catch ( Exception $objError ){
+                $arrErrores[] = $objError->getMessage();
+            }
+
+
+        }
+
+    }
+
+    if(count($arrArchivo) == 1){
+        $arrErrores[] = "Un archivo que contiene solo los titulos se considera vacío";
+    }
+
+    $arrRetorno['errores'] = $arrErrores;
+    $arrRetorno['archivo'] = $arrArchivo;
+
+    return $arrRetorno;
+}
+
+
 ?>

@@ -10,16 +10,20 @@
         <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%">                
             <li class="nav-item active"  style="{$nav}">   
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#Unidades" role="tab" aria-controls="profile" aria-selected="false" style="{$style}" onclick="listenerFile('fileAction', 'nameArchivo');
-                        removeFile('fileAction', 'nameArchivo')">Crear Unidades <br></a>
+                        removeFile('fileAction', 'nameArchivo');
+                        $('#seqProyectoPadre').removeClass('required');
+                        $('#seqProyecto').addClass('required');">Crear Unidades <br></a>
             </li>
             <li class="nav-item"  style="{$nav}">   
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#estados" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick="listenerFile('fileActionEstados', 'nameEstado');
-                        removeFile('fileActionEstados', 'nameEstados')">Modificar Estados <br></a>
+                        removeFile('fileActionEstados', 'nameEstados');
+                        $('#seqProyecto').removeClass('required');
+                        $('#seqProyectoPadre').addClass('required');">Modificar Estados <br></a>
             </li>
         </ul>
         <div id="Unidades" class="tab-pane active"  role="tabpanel" aria-labelledby="profile-tab" style="min-height: 300px; max-height: 550px; overflow-y: auto">
 
-            <div class="form-group" >
+            <div class="form-group">
                 <div class="col-md12" style="padding: 20px"> 
                     <fieldset>
                         <legend class="legend">
@@ -54,7 +58,8 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="control-label" >&nbsp;</label><br>
-                                    <input type="button" class="btn_volver" value="Importar Archivo &nbsp;" id="enviarDoc" onclick="someterFormulario('div2', this.form, 'contenidos/administracionProyectos/salvarUnidades.php', true, false)"/>
+                                    <input type="button" class="btn_volver" value="Importar Archivo &nbsp;" id="enviarDoc" onclick="if (validarCampos())
+                                                someterFormulario('div2', this.form, 'contenidos/administracionProyectos/salvarUnidades.php', true, false);"/>
                                 </div>
                                 <p>&nbsp;</p> 
 
@@ -80,7 +85,7 @@
                         <select name="seqProyectoPadre"
                                 id="seqProyectoPadre"
                                 style="width:230px;" 
-                                class="form-control required" >                              
+                                class="form-control" >                              
                             <option value="">Seleccione</option>
                             {foreach from=$arrayProyectos key=key item=value} 
                                 <option value="{$value.seqProyecto}">{$value.txtNombreProyecto}</option>
@@ -99,7 +104,8 @@
                     </div>
                     <div class="col-md-2">
                         <label class="control-label" >&nbsp;</label><br>
-                        <input type="button" class="btn_volver" value="Importar&nbsp;" id="enviarDoc" onclick="someterFormulario('divEstados', this.form, 'contenidos/administracionProyectos/modificarEstadoUnidades.php', true, false)"/>
+                        <input type="button" class="btn_volver" value="Importar&nbsp;" id="enviarDoc" onclick="if (validarCampos())
+                                    someterFormulario('divEstados', this.form, 'contenidos/administracionProyectos/modificarEstadoUnidades.php', true, false)"/>
                     </div>
                     <div class="col-md-2" style="text-align: center">
                         <label class="control-label" >&nbsp;</label><br>

@@ -225,4 +225,24 @@ class DatosUnidades {
         return $datos;
     }
 
+    function ValidarUnidadesProyecto($seqProyecto, $seqUnidad) {
+
+        global $aptBd;
+        $sql = "SELECT * FROM   t_pry_unidad_proyecto und";
+        if ($seqProyecto > 0) {
+            $sql .= " where  und.seqProyecto = " . $seqProyecto;
+        }
+        if ($seqUnidad > 0 && $seqUnidad != "") {
+            $sql .= " and  und.seqUnidadProyecto = " . $seqUnidad;
+        }
+        $sql .="  group by seqUnidadProyecto";
+        //   echo "<p>".$sql."</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = false;
+        if ($objRes->numRows() > 0) {
+            $datos = true;
+        }
+        return $datos;
+    }
+
 }

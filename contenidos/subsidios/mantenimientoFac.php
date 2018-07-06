@@ -93,8 +93,21 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
 
 }
 
+$sql = "
+    select distinct
+      epr.seqEstadoProceso as seqEstado,
+      concat(eta.txtEtapa,' - ',epr.txtEstadoProceso) as txtEstado
+    from t_aad_formulario_acto fac
+    inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo and hvi.seqTipoActo = 1
+    inner join t_frm_estado_proceso epr on fac.seqEstadoProceso = epr.seqEstadoProceso
+    inner join t_frm_etapa eta on epr.seqEtapa = eta.seqEtapa
+    order by concat(eta.txtEtapa,' - ',epr.txtEstadoProceso)
+";
+$arrEstados = $aptBd->GetAll($sql);
+
 $claSmarty->assign("arrErrores",$arrArchivo['errores']);
 $claSmarty->assign("arrMensajes",$arrMensajes);
+$claSmarty->assign("arrEstados", $arrEstados);
 $claSmarty->display( "subsidios/mantenimientoFac.tpl" );
 
 ?>

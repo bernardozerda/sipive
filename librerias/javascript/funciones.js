@@ -4287,6 +4287,41 @@ function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
 
 }
 
+function validacionDireccion(txtInputDireccion, txtDivDireccionOculto){
+
+    // obtiene el id oculto
+    var objModal = $(txtDivDireccionOculto);
+
+    // si hay errores
+    var bolAlerta = false;
+
+    // validacion de la direccion
+    if($("#radTipoDireccion").is(":checked")){
+        if($("#divDireccionGenerada_" + txtInputDireccion.id ).html().substring(0,1) == "-"){
+            alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
+            bolAlerta = true;
+        }else{
+            if (
+                $('#txtDireccionTipoVia').val()   == "---" ||
+                $('#txtNumeroVia').val()          == ""    ||
+                $('#txtDireccionNumeroVia').val() == ""    ||
+                $('#txtNumeroAdicional').val()    == ""
+            ) {
+                alert("Complete la dirección");
+                bolAlerta = true;
+            }
+        }
+    }
+
+    // oculta el popup
+    if(bolAlerta == false) {
+        $(txtInputDireccion).val( $("#divDireccionGenerada_" + txtInputDireccion.id ).html() );
+        objModal.modal('hide');
+    }
+
+}
+
+
 // function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
 //
 //     var direccionGenerada;

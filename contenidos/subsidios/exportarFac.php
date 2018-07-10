@@ -84,6 +84,7 @@ header('Cache-Control: max-age=0');
 ob_clean();
 
 echo date("Y/m/d") . "|" . count($arrArchivo) . "\r\n";
+echo implode("|",array_keys($arrArchivo[0])) . "\r\n";
 foreach($arrArchivo as $numLinea => $arrLinea){
     echo utf8_decode(implode("|",$arrLinea)) . "\r\n";
 }

@@ -27,7 +27,7 @@ $sql = "
           if(fac.valAspiraSubsidio is null, 0, fac.valAspiraSubsidio) + 
           if(fac.valComplementario is null, 0, fac.valComplementario) +
           if(fac.valCartaLeasing is null, 0, fac.valCartaLeasing)
-        ) as VAL_ASIGN_2,
+        ) as VAL_ASIGN,
         case upper(sol.txtDescripcion)
           when 'VIP' then 1
           when 'VIP TIPO 1' then 2
@@ -52,7 +52,11 @@ $sql = "
           when 7 then 0
           when 8 then 0
         end as TIP_DOC,
-        '' as observaciones
+        '' as observaciones,
+        fac.seqFormularioActo,
+        fac.seqFormulario,
+        fac.fchUltimaActualizacion,
+        concat(fac.seqFormulario,'Res. ',hvi.numActo,'de',year(hvi.fchActo)) as clave
     from t_aad_formulario_acto fac
     inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
     inner join t_frm_estado_proceso epr on fac.seqEstadoProceso = epr.seqEstadoProceso

@@ -4198,154 +4198,198 @@ function imprimir() {
     window.print();
 }
 
-function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
+// function cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto) {
+//
+//
+//     var objDireccion = YAHOO.util.Dom.get(txtInputDireccion);
+//
+//     var txtDivDestino = txtDivDireccionOculto;
+//     var txtArchivoPhp = './contenidos/subsidios/obtenerDireccionPlano.php';
+//     var txtParametros = 'txtDireccion=' + objDireccion.value + '&txtExtraDiv=' + txtInputDireccion;
+//
+//     document.getElementById(txtDivDestino).innerHTML = '';
+//
+//     // Objeto de respuesta si es satisfactoria la carga
+//     var handleSuccess =
+//             function (o) {
+//                 if (o.responseText !== undefined) {
+//                     // Toda respuesta del archivo en el parametro se muestra en el objeto destino
+//                     document.getElementById(txtDivDestino).innerHTML = o.responseText;
+//                 }
+//             };
+//
+//     // Objeto de respuesta si la carga falla
+//     var handleFailure =
+//             function (o) {
+//                 if (o.responseText !== undefined) {
+//                     return false;
+//                 }
+//             };
+//
+//     // Objeto de respuestas
+//     var callback = {
+//         success: handleSuccess,
+//         failure: handleFailure
+//     };
+//
+//     // peticion asincrona al servidor
+//     var callObj = YAHOO.util.Connect.asyncRequest("POST", txtArchivoPhp, callback, txtParametros);
+//
+//     return callObj;
+// }
 
+// function recogerDireccion_old(txtInputDireccion, txtDivDireccionOculto) {
+//     cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto);
+//     setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 100);
+// }
 
-    var objDireccion = YAHOO.util.Dom.get(txtInputDireccion);
+function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
 
-    var txtDivDestino = txtDivDireccionOculto;
-    var txtArchivoPhp = './contenidos/subsidios/obtenerDireccionPlano.php';
-    var txtParametros = 'txtDireccion=' + objDireccion.value + '&txtExtraDiv=' + txtInputDireccion;
+    // obtiene el id oculto
+    var objModal = $('#' + txtDivDireccionOculto);
 
-    document.getElementById(txtDivDestino).innerHTML = '';
+    // inicializa el modal
+    objModal.addClass("modal fade");
+    objModal.attr("tabindex" , "-1");
+    objModal.attr("role" , "dialog");
+    objModal.attr("aria-labelledby" , "myModalLabel");
+    objModal.empty();
 
-    // Objeto de respuesta si es satisfactoria la carga
-    var handleSuccess =
-            function (o) {
-                if (o.responseText !== undefined) {
-                    // Toda respuesta del archivo en el parametro se muestra en el objeto destino
-                    document.getElementById(txtDivDestino).innerHTML = o.responseText;
-                }
-            };
+    // divs visibles del popup
+    var objModalOverlay = $('<div class="modal-dialog" role="document"></div>');
+    var objModalContent = $('<div class="modal-content" style="width: 850px;"></div>');
+    var objModalHeader  = $('<div class="modal-header" style="font-size: 20px;">Introduzca la Dirección</div>');
+    var objModalBody    = $('<div class="modal-body"></div>');
+    var objModalFooter  = $('<div class="modal-footer"></div>');
+    var objBotonSalvar  = $('<button type="button" class="btn btn-primary btn-sm" onclick="validacionDireccion(' + txtInputDireccion + ', ' + txtDivDireccionOculto + ')">Aceptar</button>');
 
-    // Objeto de respuesta si la carga falla
-    var handleFailure =
-            function (o) {
-                if (o.responseText !== undefined) {
-                    return false;
-                }
-            };
-
-    // Objeto de respuestas
-    var callback = {
-        success: handleSuccess,
-        failure: handleFailure
-    };
-
-    // peticion asincrona al servidor
-    var callObj = YAHOO.util.Connect.asyncRequest("POST", txtArchivoPhp, callback, txtParametros);
-
-    return callObj;
-}
-
-function recogerDireccion(txtInputDireccion, txtDivDireccionOculto) {
-    cargarContenidoPlano(txtInputDireccion, txtDivDireccionOculto);
-    setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 100);
-}
-
-function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
-
-    var direccionGenerada;
-    var txtDireccionForm = document.getElementById(txtInputDireccion);
-    var txtDivDireccionGenerada = "divDireccionGenerada_" + txtInputDireccion;
-
-    var respuesta = function (o) {
-    }
-    var falla = function (o) {
-        alert("falla = " + o.status + ": " + o.responseText);
-    }
-
-    var aceptar = function () {
-
-        var bolAlerta = false;
-        if (YAHOO.util.Dom.get('radTipoDireccion').checked) {
-            if (YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0, 1) == "-") {
-                alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
-                bolAlerta = true;
-            } else {
-                if (
-                        YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
-                        YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
-                        YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
-                        YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
-                        ) {
-                    alert("Complete la dirección");
-                    bolAlerta = true;
-                }
-            }
-        }
-
-        if (bolAlerta == false) {
-            direccionGenerada = document.getElementById(txtDivDireccionGenerada);
-            txtDireccionForm.value.replace(/s{2,}/g, ' ');
-            txtDireccionForm.value = direccionGenerada.innerHTML;
-            this.cancel();
-
-            direccionGenerada.innerHTML = txtDireccionForm.value;
-            //mostrarMapa(txtDireccionForm);
-
-            var objCiudad = document.getElementById("seqCiudad");
-            if (objCiudad != null) {
-                objCiudad.focus();
-            }
-        }
-    }
-
-    var cancelar = function () {
-        // txtDireccionForm.value = "";
-
-        this.cancel();
-    }
-
-    var objConfiguracion = {
-        width: "640px",
-        height: "310px",
-        fixedcenter: true,
-        modal: false,
-        close: true,
-        effect: {
-            effect: YAHOO.widget.ContainerEffect.FADE,
-            duration: 0.75
+    // contenido dinamico del body (form de direccion)
+    $.ajax({
+        url: './contenidos/subsidios/obtenerDireccionPlano.php',
+        type: 'post',
+        data: 'txtDireccion=' + $("#" + txtInputDireccion).val() + '&txtExtraDiv=' + txtInputDireccion,
+        success: function(res){
+            objModalBody.html(res);
         },
-        draggable: false,
-        buttons: [{
-                text: "Aceptar",
-                handler: aceptar,
-                isDefault: true
-            },
-            {
-                text: "Cancelar",
-                handler: cancelar
-            }]
-    }
-
-    var objPanel = new YAHOO.widget.Dialog("dialog1", objConfiguracion);
-    objPanel.validate = function () {
-        var objDatos = this.getData();
-        if (objDatos.valor == "") {
-            alert("Digite un valor");
-            return false;
+        fail: function () {
+            alert('Problemas al mostrar el popup de direccion');
         }
-        return true;
-    }
+    });
 
-    var objDireccionOculto = document.getElementById(txtDivDireccionOculto);
-    objPanel.callback = {
-        success: respuesta,
-        failure: falla
-    }
+    // anidando divs
+    objModalFooter.append(objBotonSalvar);
+    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
+    objModalOverlay.append(objModalContent);
+    objModal.append(objModalOverlay);
 
-    objPanel.setHeader("Introduzca la Dirección");
-
-    objPanel.setBody(objDireccionOculto.innerHTML);
-
-    objPanel.render(document.body);
-    objPanel.show();
-    eventoActivarLetraBis("chkViaBis", "txtLetraViaBis");
-    eventoCambioCalleDireccion( );
-    actualizarDireccion(txtDivDireccionGenerada);
+    // muestra el popup
+    objModal.modal('show');
 
 }
+
+// function mostrarObjDireccionOculto(txtInputDireccion, txtDivDireccionOculto) {
+//
+//     var direccionGenerada;
+//     var txtDireccionForm = document.getElementById(txtInputDireccion);
+//     var txtDivDireccionGenerada = "divDireccionGenerada_" + txtInputDireccion;
+//
+//     var respuesta = function (o) {
+//     }
+//     var falla = function (o) {
+//         alert("falla = " + o.status + ": " + o.responseText);
+//     }
+//
+//     var aceptar = function () {
+//
+//         var bolAlerta = false;
+//         if (YAHOO.util.Dom.get('radTipoDireccion').checked) {
+//             if (YAHOO.util.Dom.get(txtDivDireccionGenerada).innerHTML.substring(0, 1) == "-") {
+//                 alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
+//                 bolAlerta = true;
+//             } else {
+//                 if (
+//                         YAHOO.util.Dom.get('txtDireccionTipoVia').selectedIndex == 0 ||
+//                         YAHOO.util.Dom.get('txtNumeroVia').value == "" ||
+//                         YAHOO.util.Dom.get('txtDireccionNumeroVia').value == "" ||
+//                         YAHOO.util.Dom.get('txtNumeroAdicional').value == ""
+//                         ) {
+//                     alert("Complete la dirección");
+//                     bolAlerta = true;
+//                 }
+//             }
+//         }
+//
+//         if (bolAlerta == false) {
+//             direccionGenerada = document.getElementById(txtDivDireccionGenerada);
+//             txtDireccionForm.value.replace(/s{2,}/g, ' ');
+//             txtDireccionForm.value = direccionGenerada.innerHTML;
+//             this.cancel();
+//
+//             direccionGenerada.innerHTML = txtDireccionForm.value;
+//             //mostrarMapa(txtDireccionForm);
+//
+//             var objCiudad = document.getElementById("seqCiudad");
+//             if (objCiudad != null) {
+//                 objCiudad.focus();
+//             }
+//         }
+//     }
+//
+//     var cancelar = function () {
+//         // txtDireccionForm.value = "";
+//
+//         this.cancel();
+//     }
+//
+//     var objConfiguracion = {
+//         width: "640px",
+//         height: "310px",
+//         fixedcenter: true,
+//         modal: false,
+//         close: true,
+//         effect: {
+//             effect: YAHOO.widget.ContainerEffect.FADE,
+//             duration: 0.75
+//         },
+//         draggable: false,
+//         buttons: [{
+//                 text: "Aceptar",
+//                 handler: aceptar,
+//                 isDefault: true
+//             },
+//             {
+//                 text: "Cancelar",
+//                 handler: cancelar
+//             }]
+//     }
+//
+//     var objPanel = new YAHOO.widget.Dialog("dialog1", objConfiguracion);
+//     objPanel.validate = function () {
+//         var objDatos = this.getData();
+//         if (objDatos.valor == "") {
+//             alert("Digite un valor");
+//             return false;
+//         }
+//         return true;
+//     }
+//
+//     var objDireccionOculto = document.getElementById(txtDivDireccionOculto);
+//     objPanel.callback = {
+//         success: respuesta,
+//         failure: falla
+//     }
+//
+//     objPanel.setHeader("Introduzca la Dirección");
+//
+//     objPanel.setBody(objDireccionOculto.innerHTML);
+//
+//     objPanel.render(document.body);
+//     objPanel.show();
+//     eventoActivarLetraBis("chkViaBis", "txtLetraViaBis");
+//     eventoCambioCalleDireccion( );
+//     actualizarDireccion(txtDivDireccionGenerada);
+//
+// }
 
 function eventoCambioCalleDireccion( ) {
 

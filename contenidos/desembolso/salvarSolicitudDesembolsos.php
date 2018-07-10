@@ -46,9 +46,6 @@
                     }
                 break;
             }
-            echo $txtClave . " ==> " . $_POST[ $txtClave ] . "<br>";
-            $_POST[ $txtClave ] = preg_replace( $txtPatron , "" , $txtValor );
-            echo $txtClave . " ==> " . $_POST[ $txtClave ] . "<hr>";
         }
     }
     

@@ -57,6 +57,7 @@ $sql = "
         fac.seqFormulario,
         fac.fchUltimaActualizacion,
         moa.txtModalidad,
+        concat(eta.txtEtapa,' - ',epr.txtEstadoProceso) as txtEstado,
         concat(fac.seqFormulario,'Res. ',hvi.numActo,'de',year(hvi.fchActo)) as clave
     from t_aad_formulario_acto fac
     inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo

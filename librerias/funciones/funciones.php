@@ -1098,17 +1098,17 @@ function cargarArchivo($txtNombreFile, $arrFormato = array()){
         if( $_FILES[$txtNombreFile]['type'] == "text/plain" ){
             foreach( file( $_FILES[$txtNombreFile]['tmp_name'] ) as $numLinea => $txtLinea ){
                 if( trim( $txtLinea ) != "" ) {
-                    $arrArchivo[$numLinea] = explode("\t", trim($txtLinea));
+                    $arrArchivo[$numLinea] = explode("\t", trim(utf8_encode($txtLinea)));
                     foreach( $arrArchivo[$numLinea] as $numColumna => $txtCelda ){
-                        if( $numColumna < count( $arrFormato ) ) {
-                            if($arrFormato[$numColumna] == "fecha"){
+                        if($arrFormato[$numColumna] == "fecha" and $txtCelda != ""){
+                            try {
                                 $claFecha = new DateTime(trim($txtCelda));
                                 $arrArchivo[$numLinea][$numColumna] = $claFecha->format("Y-m-d");
-                            }else{
+                            }catch(Exception $objError){
                                 $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
                             }
                         }else{
-                            unset( $arrArchivo[$numLinea][$numColumna] );
+                            $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
                         }
                     }
                 }

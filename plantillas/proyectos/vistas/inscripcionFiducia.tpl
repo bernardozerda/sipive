@@ -91,7 +91,7 @@
         </div>
         <div class="col-md-3"> 
             <label class="control-label" >Nit</label><br>      
-            <input type="text" name="numNitFiducia" id="numNitFiducia" value="{$value.numNitFiducia}" class="form-control">
+            <input type="text" name="numNitFiducia" id="numNitFiducia" value="{$value.numNitFiducia}"  onblur="sinCaracteresEspeciales(this);" class="form-control">
         </div>
     </div>
 </fieldset>
@@ -156,7 +156,7 @@
         </div>
         <div class="col-md-3"> 
             <label class="control-label" >Numero Cuenta</label><br>      
-            <input type="text" name="numCuentaFiducia" id="numCuentaFiducia" value="{$value.numCuentaFiducia}" class="form-control">
+            <input type="text" name="numCuentaFiducia" id="numCuentaFiducia" value="{$value.numCuentaFiducia}" onblur="sinCaracteresEspeciales(this);" class="form-control">
         </div>
 
     </div>

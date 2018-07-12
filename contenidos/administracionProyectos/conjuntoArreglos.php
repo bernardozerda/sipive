@@ -92,7 +92,7 @@ $arrayFiducia['seqTipoRecursoFiducia'] = $_POST['seqTipoRecursoFiducia'];
 $arrayFiducia['txtRazonSocialFiducia'] = $_POST['txtRazonSocialFiducia'];
 $arrayFiducia['numNitFiducia'] = $_POST['numNitFiducia'];
 $arrayFiducia['seqBanco'] = $_POST['seqBanco'];
-$arrayFiducia['seqBanco1'] = $_POST['seqBanco1'];
+$arrayFiducia['seqFiducia'] = $_POST['seqFiducia'];
 
 $arrayFiducia['seqTipoFideicomitente'] = $_POST['seqTipoFideicomitente'];
 $arrayFiducia['txtNombreFideicomitente'] = $_POST['txtNombreFideicomitente'];

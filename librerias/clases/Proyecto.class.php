@@ -331,8 +331,14 @@ class Proyecto {
 
         global $aptBd;
 
-        $sql = "SELECT * FROM T_PRY_PROYECTO pry "
-                . "WHERE pry.seqProyecto = " . $seqProyecto;
+        $sql = "SELECT pry.*, pol.*, fid.*, pry.seqProyecto as seqProyecto "
+                . "FROM  t_pry_proyecto pry "
+                . "LEFT JOIN t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto) "
+                . "LEFT JOIN t_pry_datos_fiducia fid on(pry.seqProyecto = fid.seqProyecto)";
+        if ($seqProyecto > 0) {
+            $sql .= " where  pry.seqProyecto = " . $seqProyecto;
+        }
+        $sql . " ORDER BY  pry.seqProyecto";
         $objRes = $aptBd->getAssoc($sql);
 
         return $objRes;
@@ -536,7 +542,6 @@ class Proyecto {
                     ) ";
         try {
             //echo "<br>" . $sql;
-
             $aptBd->execute($sql);
             $seqProyecto = $aptBd->Insert_ID();
 
@@ -974,9 +979,20 @@ class Proyecto {
         }
         return $datos;
     }
+    public function obtenerListaLicenciasPadre($seqProyecto) {
+        global $aptBd;
+        $sql = "select lic.* from t_pry_proyecto_licencias lic left join t_pry_proyecto Using(seqProyecto) where seqProyectoPadre = " . $seqProyecto . " ORDER BY seqTipoLicencia";
+        $objRes = $aptBd->execute($sql);
+
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
 
     public function modificarLicencias($seqProyecto, $array, $cant) {
-
 
         global $aptBd;
         $arrErrores = array();
@@ -1216,8 +1232,10 @@ class Proyecto {
             }
             //  print_r($resultado);
             $delete = substr_replace($delete, '', -1, 1);
+            $sqlLic = "DELETE  FROM  t_pry_proyecto_licencias WHERE seqProyecto in (" . $delete . ")";
             $sql = "DELETE FROM T_PRY_PROYECTO WHERE seqProyecto in (" . $delete . ")";
             try {
+                $aptBd->execute($sqlLic);
                 $aptBd->execute($sql);
             } catch (Exception $objError) {
                 $arrErrores[] = "No se ha podido eliminar conjunto<b></b>";
@@ -1700,7 +1718,7 @@ class Proyecto {
                     txtRazonSocialFiducia,
                     numNitFiducia,
                     seqBanco,
-                    seqBanco1,
+                    seqFiducia,
                     seqProyecto)
                 VALUES (
                     $seqTipoContrato,
@@ -1720,7 +1738,7 @@ class Proyecto {
                     '$txtRazonSocialFiducia',
                     $numNitFiducia,
                     $seqBanco,
-                    $seqBanco1,
+                    $seqFiducia,
                     $seqProyecto);";
         try {
             $aptBd->execute($sql);
@@ -1772,9 +1790,10 @@ class Proyecto {
                 txtRazonSocialFiducia = '$txtRazonSocialFiducia',
                 numNitFiducia = $numNitFiducia,
                 seqBanco = $seqBanco,
-                seqBanco1 = $seqBanco1                
+                seqFiducia = $seqFiducia                
                 WHERE seqProyecto = $seqProyecto";
         try {
+            
             $aptBd->execute($sql);
             $this->modificarFideicomitente($seqDatoFiducia, $arrayFiducia);
         } catch (Exception $objError) {

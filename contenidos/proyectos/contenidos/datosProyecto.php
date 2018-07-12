@@ -44,6 +44,7 @@ $arrAmparos = obtenerDatosTabla("t_pry_tipo_amparo", array("seqTipoAmparo", "txt
 $arrayBanco = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "seqBanco", "", "seqBanco DESC, txtBanco");
 $arrayCity = obtenerDatosTabla("v_frm_ciudad", array("seqCiudad", "txtCiudad"), "seqCiudad", "", "seqCiudad DESC, txtCiudad");
 $arrayEntComite = obtenerDatosTabla("t_pry_entidad_comite", array("seqEntidadComite", "txtEntidadComite"), "seqEntidadComite", "", "seqEntidadComite DESC, txtEntidadComite");
+$arrayEntFiduciaria = obtenerDatosTabla("T_PRY_FIDUCIARIA", array("seqFiduciaria", "txtNombreFiduciaria"), "seqFiduciaria", "", "seqFiduciaria DESC, txtNombreFiduciaria");
 //var_dump($arrPryTipoModalidad);
 
 if (isset($_REQUEST['seqProyecto'])) {
@@ -168,6 +169,7 @@ $claSmarty->assign("id", $id);
 $claSmarty->assign("NombreUsuario", $_SESSION['txtNombre'] . "" . $_SESSION['txtApellido']);
 $claSmarty->assign("seqUsuario", $_SESSION['seqUsuario']);
 $claSmarty->assign("arrayEntComite", $arrayEntComite);
+$claSmarty->assign("arrayEntFiduciaria", $arrayEntFiduciaria);
 $claSmarty->assign("page", "datosProyecto.php?tipo=2");
 //$claSmarty->assign("arrCronogramaProyecto", $arrCronogramaProyecto);
 $claSmarty->assign("arraConjuntoLicencias", $arraConjuntoLicencias);

@@ -72,6 +72,7 @@ if (empty($arrErrores)) {
     $arrayBanco = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "seqBanco", "", "seqBanco DESC, txtBanco");
     $arrayCity = obtenerDatosTabla("v_frm_ciudad", array("seqCiudad", "txtCiudad"), "seqCiudad", "", "seqCiudad DESC, txtCiudad");
     $arrayEntComite = obtenerDatosTabla("t_pry_entidad_comite", array("seqEntidadComite", "txtEntidadComite"), "seqEntidadComite", "", "seqEntidadComite DESC, txtEntidadComite");
+    $arrayEntFiduciaria = obtenerDatosTabla("T_PRY_FIDUCIARIA", array("seqFiduciaria", "txtNombreFiduciaria"), "seqFiduciaria", "", "seqFiduciaria DESC, txtNombreFiduciaria");
 // Verifica si es para crear o editar la Oferente
     $seqProyecto = 0;
     $seqProyecto = $_POST['seqProyecto'];
@@ -247,6 +248,7 @@ if (empty($arrErrores)) {
     $claSmarty->assign("arraConjuntoLicencias", $arraConjuntoLicencias);
     $claSmarty->assign("arrayEntComite", $arrayEntComite);
     $claSmarty->assign("arrayComiteActa", $arrayComiteActa);
+    $claSmarty->assign("arrayEntFiduciaria", $arrayEntFiduciaria);
     $claSmarty->assign("page", "datosProyecto.php?tipo=2");
     $claSmarty->display($txtPlantilla);
 } else {

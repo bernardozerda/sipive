@@ -62,10 +62,10 @@
         </div> 
         <div class="col-md-3"> 
             <label class="control-label" >Entidad fiduciaria</label><br>    
-            <select id="seqBanco1" name="seqBanco1" class="form-control" style="width: 78%">
+            <select id="seqFiducia" name="seqFiducia" class="form-control" style="width: 78%">
                 <option value="">Ninguna</option>
-                {foreach from=$arrayBanco key=seqBanco item=txtBanco}                    
-                    <option value="{$seqBanco}" {if $value.seqBanco1 == $seqBanco} selected {/if}>{$txtBanco}</option>                 
+                {foreach from=$arrayEntFiduciaria key=seqFiducia item=txtFiducia}                    
+                    <option value="{$seqFiducia}" {if $value.seqFiducia == $seqFiducia} selected {/if}>{$txtFiducia}</option>                 
                 {/foreach}         
             </select>
         </div>
@@ -158,7 +158,7 @@
             <label class="control-label" >Numero Cuenta</label><br>      
             <input type="text" name="numCuentaFiducia" id="numCuentaFiducia" value="{$value.numCuentaFiducia}" class="form-control">
         </div>
-      
+
     </div>
 </fieldset>
 <p>&nbsp;</p>

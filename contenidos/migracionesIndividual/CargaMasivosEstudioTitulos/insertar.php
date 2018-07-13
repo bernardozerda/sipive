@@ -233,7 +233,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $intNV++;
                 }
             } else if ($band == 1) {
-                echo "Por favor verifique el registro # " . ($registros + 1) . " todos los campos en el hogar " . $seqFormulario . " en la(s) casilla(s) # " . $casilla . " con valor vacio o el formato de fecha no es el indicado";
+                echo "Por favor verifique el registro # " . ($registros) . " todos los campos en el hogar " . $seqFormulario . " en la(s) casilla(s) # " . $casilla . " con valor vacio o el formato de fecha no es el indicado";
                 exit();
             } else if ($band == 2) {
                 echo "Por favor verifique los datos de titulos del registro # " . ($registros + 1) . " en el hogar " . $seqFormulario . " en la(s) casilla(s) # " . $casilla . " no corresponden con los datos de escrituración en la base de datos";

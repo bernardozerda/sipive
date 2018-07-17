@@ -149,10 +149,10 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrTitulos['numNotaria'] != $arrEscrituracion['numNotaria'] or
                     mb_strtolower(trim($arrTitulos['txtCiudad'])) != mb_strtolower(trim($arrEscrituracion['txtCiudad']))
             ) {
-                /*echo "<br>" . $arrTitulos['numEscritura'] . " != " . $arrEscrituracion['numEscritura'];
-                echo $arrTitulos['fchEscritura'] . " != " . $arrEscrituracion['fchEscritura'];
-                echo $arrTitulos['numNotaria'] . " != " . $arrEscrituracion['numNotaria'];
-                echo $arrTitulos['txtCiudad'] . " != " . $arrEscrituracion['txtCiudad'] . "<br>"; */
+                /* echo "<br>" . $arrTitulos['numEscritura'] . " != " . $arrEscrituracion['numEscritura'];
+                  echo $arrTitulos['fchEscritura'] . " != " . $arrEscrituracion['fchEscritura'];
+                  echo $arrTitulos['numNotaria'] . " != " . $arrEscrituracion['numNotaria'];
+                  echo $arrTitulos['txtCiudad'] . " != " . $arrEscrituracion['txtCiudad'] . "<br>"; */
                 $casilla .= "18,19,20,21";
                 $band = 2;
             }

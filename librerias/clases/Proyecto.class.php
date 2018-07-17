@@ -981,7 +981,7 @@ class Proyecto {
     }
     public function obtenerListaLicenciasPadre($seqProyecto) {
         global $aptBd;
-        $sql = "select lic.* from t_pry_proyecto_licencias lic left join t_pry_proyecto Using(seqProyecto) where seqProyectoPadre = " . $seqProyecto . " ORDER BY seqTipoLicencia";
+        $sql = "select lic.* from t_pry_proyecto_licencias lic left join t_pry_proyecto Using(seqProyecto) where seqProyecto = " . $seqProyecto . " ORDER BY seqTipoLicencia";
         $objRes = $aptBd->execute($sql);
 
         $datos = Array();

@@ -78,10 +78,10 @@
                             <div class="col-md-4" style="text-align: right">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-secondary active alert-success" onclick="$('#bolAproboProyecto{$numcomite}').val('1');">
-                                        <input type="radio" name="radio[]" id="bolAproboProyectoAp{$numcomite}" value="1" autocomplete="off" {if $valueComiteActa.bolAproboProyecto == 1} checked {/if}  > Aprobado
+                                        <input type="radio"  id="bolAproboProyectoAp{$numcomite}" value="1" autocomplete="off" {if $valueComiteActa.bolAproboProyecto == 1} checked {/if}  > Aprobado
                                     </label>
                                     <label class="btn btn-secondary alert-danger" onclick="$('#bolAproboProyecto{$numcomite}').val('0');">
-                                        <input type="radio" name="radio[]" id="bolAproboProyectoNoap{$numcomite}" value="0" {if $valueComiteActa.bolAproboProyecto == 0} checked {/if}  autocomplete="off"> No Aprobado
+                                        <input type="radio"  id="bolAproboProyectoNoap{$numcomite}" value="0" {if $valueComiteActa.bolAproboProyecto == 0} checked {/if}  autocomplete="off"> No Aprobado
                                     </label> 
                                     <input type="hidden" name="bolAproboProyecto[]" id="bolAproboProyecto{$numcomite}" value="{$valueComiteActa.bolAproboProyecto }">
                                 </div>
@@ -113,11 +113,11 @@
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-secondary active alert-success" style="margin: 0" onclick="$('#bolCondicionesComite{$numcomite}').val('1');
                                                     ocultarDivEnt(0, 'txtCondicionesComite{$numcomite}Div');">
-                                        <input type="radio" name="bolCondiciones[]" id="bolCondiciones{$numcomite}" {if $valueComiteActa.bolCondicionesComite == 1} checked {/if} autocomplete="off" value="1" > SI
+                                        <input type="radio"  id="bolCondiciones{$numcomite}" {if $valueComiteActa.bolCondicionesComite == 1} checked {/if} autocomplete="off" value="1" > SI
                                     </label>
                                     <label class="btn btn-secondary alert-danger" style="margin: 0" onclick="$('#bolCondicionesComite{$numcomite}').val('0');
                                                     ocultarDivEnt(1, 'txtCondicionesActa{$numcomite}Div');">
-                                        <input type="radio" name="bolCondiciones[]" id="bolCondiciones{$numcomite}" value="0" autocomplete="off"  {if $valueComiteActa.bolCondicionesComite == 0} checked {/if} > NO
+                                        <input type="radio"  id="bolCondiciones{$numcomite}" value="0" autocomplete="off"  {if $valueComiteActa.bolCondicionesComite == 0} checked {/if} > NO
                                     </label>   
                                     <input type="hidden" name="bolCondicionesComite[]" id="bolCondicionesComite{$numcomite}" value="{$valueComiteActa.bolCondicionesComite }">
                                 </div>

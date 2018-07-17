@@ -10,15 +10,14 @@
         <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%">                
             <li class="nav-item active"  style="{$nav}">   
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#Unidades" role="tab" aria-controls="profile" aria-selected="false" style="{$style}" onclick="listenerFile('fileAction', 'nameArchivo');
-                        removeFile('fileAction', 'nameArchivo');
-                        $('#seqProyectoPadre').removeClass('required');
-                        $('#seqProyecto').addClass('required');">Crear Unidades <br></a>
+                        removeFile('fileAction', 'nameArchivo'); $('#div2').html('');$('#divEstados').html(''); $('#seqProyecto').addClass('required'); $('#seqProyectoPadre').removeClass('required');
+                        ">Crear Unidades <br></a>
             </li>
             <li class="nav-item"  style="{$nav}">   
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#estados" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick="listenerFile('fileActionEstados', 'nameEstado');
                         removeFile('fileActionEstados', 'nameEstados');
                         $('#seqProyecto').removeClass('required');
-                        $('#seqProyectoPadre').addClass('required');">Modificar Estados <br></a>
+                        $('#seqProyectoPadre').addClass('required'); $('#div2').html('');$('#divEstados').html('');">Modificar Estados <br></a>
             </li>
         </ul>
         <div id="Unidades" class="tab-pane active"  role="tabpanel" aria-labelledby="profile-tab" style="min-height: 300px; max-height: 550px; overflow-y: auto">
@@ -47,24 +46,23 @@
                                     </select>
                                     <div id="val_seqProyecto" class="divError">Debe Seleccionar proyecto</div> 
                                 </div>
-                                <div class="col-md-5" style="text-align: left">
-                                    <div class="custom-file">
-                                        <input type="file" name="archivoEstado" class="custom-file-input" id="customFile">
+                                <div class="col-md-4" style="text-align: left">
+                                    <div class="custom-file" style="top: 5px">
+                                        <input type="file" name="archivo" class="custom-file-input" id="customFile">
                                         <label class="custom-file-label" for="customFile" id="nameArchivo">Seleccione Archivo</label>
                                     </div>
                                     <div id="fileAction"></div>
-                                    <p>&nbsp;</p> 
 
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="control-label" >&nbsp;</label><br>
-                                    <input type="button" class="btn_volver" value="Importar Archivo &nbsp;" id="enviarDoc" onclick="if (validarCampos())
+                                    <input type="button" class="btn_volver" value="Importar &nbsp;" id="enviarDoc" onclick="if (validarCampos())
                                                 someterFormulario('div2', this.form, 'contenidos/administracionProyectos/salvarUnidades.php', true, false);"/>
                                 </div>
-                                <p>&nbsp;</p> 
 
-                                <div class="col-md-4" style="text-align: center">
-                                    <input type="button" class="btn_volver" value="Plantilla &nbsp;" id="plantillaUnidad" onclick="obtenerPlantillaUnidades(1);" re/>
+                                <div class="col-md-2" style="text-align: center">
+                                    <label class="control-label" >&nbsp;</label><br>
+                                    <input type="button" class="btn_volver" value="Plantilla &nbsp;" id="plantillaUnidad" onclick="obtenerPlantillaUnidades(1);" />
                                 </div>                               
                                 <p>&nbsp;</p> 
                                 <div id="div2"></div>
@@ -96,7 +94,7 @@
 
                     <div class="col-md-4" style="text-align: left">                        
                         <div class="custom-file" style="top: 5px">
-                            <input type="file" name="archivo" class="custom-file-input" id="archivo" >
+                            <input type="file" name="archivoEstado" class="custom-file-input" id="customFile" >
                             <label class="custom-file-label" for="customFile" id="nameEstado" >Seleccione Archivo</label>
                         </div>
                         <div id="fileActionEstados"></div>
@@ -109,7 +107,7 @@
                     </div>
                     <div class="col-md-2" style="text-align: center">
                         <label class="control-label" >&nbsp;</label><br>
-                        <input type="button" class="btn_volver" value="Plantilla Estados &nbsp;" id="plantillaUnidad" onclick="obtenerPlantillaUnidades(2);"/>
+                        <input type="button" class="btn_volver" value="Plantilla&nbsp;" id="plantillaUnidad" onclick="obtenerPlantillaUnidades(2);"/>
                     </div>
                     <p>&nbsp;</p> 
                     <p>&nbsp;</p> 

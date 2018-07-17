@@ -85,19 +85,11 @@ if (empty($arrErrores)) {
 //        } else {
 //            $claProyecto->modificarDocumentos($seqProyecto, $_POST["documentId_" . $seqProyecto], $_POST["document_" . $seqProyecto], $cantDoc);
 //        }
-
-        foreach ($_POST as $nombre_campo => $valor) {
-            if (count($valor) > 1) {
-                foreach ($valor as $key => $value) {
-                    $arrayDatosProyNew[$nombre_campo][$key] = $value;
-                }
-            } else {
-                $arrayDatosProyNew[$nombre_campo] = $valor;
-            }
-        }
-
+//$arrProyecto = $claProyecto->obtenerDatosProyectos($seqProyecto);
 
         $arrayDatosProyOld = $claProyecto->obtenerDatosProyecto($seqProyecto);
+
+        include './arregloSeguimientos.php';
 
         // die();
         $arrErrores = $claProyecto->editarProyecto($_POST);
@@ -126,6 +118,7 @@ if (empty($arrErrores)) {
 
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($seqProyecto);
     $arrayComiteActa = $claDatosProy->obtenerActasComite($seqProyecto);
+    //  var_dump($arrayComiteActa);
     $cantConjuntos = $claDatosProy->obtenerCantConjuntos($seqProyecto);
     $cantDoc = $claDatosProy->obtenerDocumentoProyecto($seqProyecto);
     $cantLicencias = $claDatosProy->obtenerCantLicencias($seqProyecto);
@@ -179,11 +172,11 @@ if (empty($arrErrores)) {
         } else if ($_POST["seqDatoFiducia"] != "" && $_POST["seqDatoFiducia"] > 0) {
             $claProyecto->modificarFiducia($seqProyecto, $arrayFiducia);
         }
-       // echo $cantActaComite ."== 0 &&" . $_POST["numActaComite"]. " !=  &&". $_POST["numActaComite"]." >  0";
-        if ($cantActaComite == 0 && $_POST["numActaComite"][0] != "" && $_POST["numActaComite"] >  0) {
+        // echo $cantActaComite ."== 0 &&" . $_POST["numActaComite"]. " !=  &&". $_POST["numActaComite"]." >  0";
+        if ($cantActaComite == 0 && $_POST["numActaComite"][0] != "" && $_POST["numActaComite"] > 0) {
             // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
             $claProyecto->almacenarActaComite($seqProyecto, $arrayActasComite, count($_POST["numActaComite"]));
-        } else if ($cantActaComite > 0) {   
+        } else if ($cantActaComite > 0) {
             $claProyecto->modificarActasComite($seqProyecto, $arrayActasComite, count($_POST["numActaComite"]));
         }
     }

@@ -112,7 +112,7 @@
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga1</label> 
-                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
+                    <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
                     <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
                 <div class="col-md-4"> 

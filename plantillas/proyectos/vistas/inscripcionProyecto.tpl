@@ -209,7 +209,7 @@
                         <div class="form-group"  id="lineaTDirigida" style="display:none">
                             <div class="col-md-4"> 
                                 <label class="control-label" >Objeto del Proyecto (*)</label>   
-                                <textarea name="txtObjetoProyecto" type="text" rows="2" id="txtObjetoProyecto"  class="form-group" onBlur="sinCaracteresEspeciales(this);" style="width:250px; height: 26px"/>{$value.txtObjetoProyecto}</textarea>
+                                <textarea name="txtObjetoProyecto" type="text" rows="2" id="txtObjetoProyecto"  class="form-group" onBlur="sinCaracteresEspeciales(this);" style="width:250px; height: 26px" >{$value.txtObjetoProyecto}</textarea>
                                 <div id="val_txtObjetoProyecto" class="divError">Este campo es requerido</div>
                             </div>
                         </div>
@@ -548,7 +548,7 @@
                                             </select>   
                                             <div id="val_seqOferente_{$cont}" class="divError" style="width: 100%; position: relative;float: left;">Debe seleccionar el oferente</div>
                                         </div>
-                                    </div>
+
                                     <div class="col-md-3">
                                         <label class="control-label" >Nombre Contacto Oferente</label>   
                                         <input name="txtNombreContactoOferente[]" type="text" id="txtNombreContactoOferente_{$cont}" value="{$valueOferentesProy.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="width:160px;"/>
@@ -569,6 +569,7 @@
                                         {/if}
                                         <div id="val_numTelContactoOferente_{$cont}" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
                                     </div> 
+                                </div> 
                                 </div> 
                             {/foreach} 
                             {if !$arrOferentesProy|@count gt 0}
@@ -651,7 +652,7 @@
                 {include file="proyectos/vistas/inscripcionComite.tpl"}
             </div>
         {/foreach}
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    {*    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -682,7 +683,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </form>
 <div id="postulacionTabView"></div>
 <div id="objDireccionOculto" style="display:none"></div>

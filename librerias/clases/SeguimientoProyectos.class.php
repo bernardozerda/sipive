@@ -126,8 +126,32 @@ class SeguimientoProyectos {
         // CAMPOS QUE NO SE MOSTRARAN POR AHROA
         $this->arrIgnorarCampos[] = "";
         $this->arrIgnorarCampos[] = "arrErrores";
+		$this->arrIgnorarCampos[] = "bolActivo";
+        $this->arrIgnorarCampos[] = "bolAprobacion";
+        $this->arrIgnorarCampos[] = "valTotalProyectosVIP";
+        $this->arrIgnorarCampos[] = "bolDireccion";
+        $this->arrIgnorarCampos[] = "fchInscripcion";
+        $this->arrIgnorarCampos[] = "seqProfesionalResponsable";
+        $this->arrIgnorarCampos[] = "valMaximoSubsidio";
+        $this->arrIgnorarCampos[] = "valCierreFinanciero";
+        $this->arrIgnorarCampos[] = "seqTipoEsquema";
+        $this->arrIgnorarCampos[] = "bolEquipamientoComunal";
+        $this->arrIgnorarCampos[] = "txtArchivo";
+        $this->arrIgnorarCampos[] = "txtComentario";
+        $this->arrIgnorarCampos[] = "seqTipoModalidadDesembolso";
+        $this->arrIgnorarCampos[] = "valSalarioMinimo";
+        $this->arrIgnorarCampos[] = "numSubsidios";
+        $this->arrIgnorarCampos[] = "seqGestion";
+        $this->arrIgnorarCampos[] = "seqGrupoGestion";
+        $this->arrIgnorarCampos[] = "seqProyecto";
+        $this->arrIgnorarCampos[] = "txtExpideLicencia";
+        $this->arrIgnorarCampos[] = "seqUsuarioPol";
+        $this->arrIgnorarCampos[] = "seqUsuario";
+        $this->arrIgnorarCampos[] = "seqFideicomitente";
+        $this->arrIgnorarCampos[] = "seqTipoFideicomitente";
+        $this->arrIgnorarCampos[] = "radio";
 
-        $this->arrTipoDato['txtNombreProyecto'] = "texto";
+		$this->arrTipoDato['txtNombreProyecto'] = "texto";
         $this->arrTipoDato['txtNombrePlanParcial'] = "texto";
         $this->arrTipoDato['seqTipoEsquema'] = "numero";
         $this->arrTipoDato['seqPryTipoModalidad'] = "numero";
@@ -548,29 +572,58 @@ class SeguimientoProyectos {
         return $txtCambios;
     }
 
-    public function validarCampos($seqProyecto, $objAnterior, $objNuevo) {
+	public function validarCampos($seqProyecto, $objAnterior, $objNuevo) {
+//        echo "<p><b>************** Arreglo Anterior **************</b></p>";
 //        pr($objAnterior);
+//         echo "<p><b>************** Arreglo Nuevo **************</b></p>";
 //        pr($objNuevo);
-        //public function cambiosPostulacion( $seqProyecto ){
 
         $txtSeparador = $this->txtSeparador;
         $txtSalto = $this->txtSalto;
 
-        // Cambios en el formulario
+        // Cambios en el formulario       
 
         $txtCambios .= "<b>[ " . $seqProyecto . " ] Cambios en el Proyecto</b>" . $txtSalto;
 //        var_dump($objAnterior);
         if (is_array($objNuevo)) {
             foreach ($objAnterior[$seqProyecto] as $txtClave => $txtValorAnterior) {
-//                echo "<br>***".$txtClave. " <br>";
                 if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                    $txtValorNuevo = $objNuevo[$txtClave];
-                    if ($objNuevo[$seqProyecto][$txtClave] != "") {
-                        $txtValorNuevo = $objNuevo[$seqProyecto][$txtClave];
+
+                    foreach ($objNuevo[$seqProyecto] as $key => $txtValorNuevo) {
+                        if (!in_array($key, $this->arrIgnorarCampos)) {
+                            if ($key == $txtClave && $txtValorNuevo != $txtValorAnterior) {
+                                $txtCambios .= $this->compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, 1);
+//                                echo "<p> ### " . $key . " = " . $txtValorNuevo;
+//                                echo $txtClave . " = " . $txtValorAnterior . "</p>";
+                            }
+                        }
                     }
-//                    echo $txtClave . " ANTERIOR: " . $txtValorAnterior . " -> \t";
-//                    echo " NUEVO: " . $txtValorNuevo . "<BR>";
-                    $txtCambios .= $this->compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, 1);
+                }
+            }
+            $arrayDatosAnteriores[$seqProyecto] = array_diff_key($objAnterior[$seqProyecto], $objNuevo[$seqProyecto]);
+
+            foreach ($arrayDatosAnteriores[$seqProyecto] as $keyAnt => $valueAnt) {
+                if (!in_array($keyAnt, $this->arrIgnorarCampos)) {
+                    //echo "<p> ### " . $key . " = " . $objNuevo[$seqProyecto][$key] ;
+                    if ($valueAnt != "") {
+//                        echo "<p> *** " . $keyAnt . " = " . $valueAnt;
+//                        echo $keyAnt . " = " . $objNuevo[$seqProyecto][$keyAnt] . "</p>";
+                        $txtCambios .= $this->compararValores($keyAnt, "<b>Se Elimino el campo</b> " . $valueAnt, $objNuevo[$seqProyecto][$keyAnt], 1);
+                    }
+                }
+            }
+            $arrayDatosNuevos[$seqProyecto] = array_diff_key($objNuevo[$seqProyecto], $objAnterior[$seqProyecto]);
+            //  pr($arrayDatosNuevos);
+
+            foreach ($arrayDatosNuevos[$seqProyecto] as $keyNew => $valueNew) {
+                if (!in_array($keyNew, $this->arrIgnorarCampos)) {
+                    $valueNew = trim($valueNew);
+                    //echo "<p> ### " . $key . " = " . $objNuevo[$seqProyecto][$key] ;
+                    if ($valueNew != "" && $valueNew != null) {
+//                        echo "<p> *** " . $keyNew . " = " . $objAnterior[$seqProyecto][$keyNew];
+//                        echo $keyNew . " = " . $objNuevo[$seqProyecto][$keyNew] . "</p>";
+                        $txtCambios .= $this->compararValores($keyNew, $objAnterior[$seqProyecto][$keyNew], "<b>Se Adiciono el campo</b> " . $valueNew, 1);
+                    }
                 }
             }
         }
@@ -613,11 +666,11 @@ class SeguimientoProyectos {
             $arrErrores[] = "El Proyecto se ha salvado pero no ha quedado registro de la actividad";
         }
     }
-
-    public function giroFiducia($seqProyecto, $seqUnidadActo, $seqRegistroPresupuestal, $numUnidades, $valTotalGiro){
+	
+    public function giroFiducia($seqProyecto, $seqUnidadActo, $seqRegistroPresupuestal, $numUnidades, $valTotalGiro) {
         global $aptBd;
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
@@ -664,14 +717,11 @@ class SeguimientoProyectos {
 
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-
-        } catch( Exception $objError ){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "Error al salvar el movimiento de registro a fiducia";
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollbackTrans();
         }
-
-
     }
 
     public function eliminarGiroFiducia($seqGiroFiducia){
@@ -767,9 +817,6 @@ class SeguimientoProyectos {
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollbackTrans();
         }
-
-
-
     }
 
     public function eliminarGiroConstructor($seqGiroConstructor){
@@ -1027,13 +1074,10 @@ class SeguimientoProyectos {
             ";
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "Error al salvar el seguimiento de la eliminacion del giro a fiducia";
             $aptBd->RollbackTrans();
         }
-
-
     }
 
 }

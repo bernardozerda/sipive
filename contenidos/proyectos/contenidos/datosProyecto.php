@@ -45,6 +45,8 @@ $arrayBanco = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "s
 $arrayCity = obtenerDatosTabla("v_frm_ciudad", array("seqCiudad", "txtCiudad"), "seqCiudad", "", "seqCiudad DESC, txtCiudad");
 $arrayEntComite = obtenerDatosTabla("t_pry_entidad_comite", array("seqEntidadComite", "txtEntidadComite"), "seqEntidadComite", "", "seqEntidadComite DESC, txtEntidadComite");
     $arrayEntFiduciaria = obtenerDatosTabla("T_PRY_FIDUCIARIA", array("seqFiduciaria", "txtNombreFiduciaria"), "seqFiduciaria", "", "txtNombreFiduciaria ASC, txtNombreFiduciaria");
+        
+        
 //var_dump($arrPryTipoModalidad);
 
 if (isset($_REQUEST['seqProyecto'])) {
@@ -106,6 +108,7 @@ $arrBarrio = $claDatosProy->obtenerListaBarrios();
 $cantDoc = $claDatosProy->obtenerDocumentoProyecto($idProyecto);
 $arrayDocumentos = $claProyecto->obtenerListaDocumentos($idProyecto, $cantDoc);
 $arrayLicencias = $claProyecto->obtenerListaLicencias($idProyecto);
+$nombreOferente = $claProyecto->datosOferenteProyecto($idProyecto);
 
 if (count($arrayLicencias) == 1) {
     foreach ($arrayLicencias as $keyLic => $valueLic) {
@@ -125,7 +128,7 @@ if (count($arrayLicencias) == 0) {
     $arrayLicencias[1] = 0;
 }
 //print_r($arrProyectos);
-$seqUsuario = $_SESSION['seqUsuario'];
+//var_dump($arrProyectos);
 $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);
 $claSmarty->assign("numSubsidios", 26);
 $claSmarty->assign("arrTipoEsquema", $arrTipoEsquema);
@@ -147,7 +150,6 @@ $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
 $claSmarty->assign("arrProyectos", $arrProyectos);
 $claSmarty->assign("arrConstructor", $arrConstructor);
 $claSmarty->assign("arrOferente", $arrOferente);
-$claSmarty->assign("seqUsuario", $seqUsuario);
 $claSmarty->assign("arrBarrio", $arrBarrio);
 $claSmarty->assign("arrOferentesProy", $arrOferentesProy);
 $claSmarty->assign("arrayDocumentos", $arrayDocumentos);
@@ -170,6 +172,7 @@ $claSmarty->assign("NombreUsuario", $_SESSION['txtNombre'] . "" . $_SESSION['txt
 $claSmarty->assign("seqUsuario", $_SESSION['seqUsuario']);
 $claSmarty->assign("arrayEntComite", $arrayEntComite);
 $claSmarty->assign("arrayEntFiduciaria", $arrayEntFiduciaria);
+$claSmarty->assign("nombreOferente", $nombreOferente);
 $claSmarty->assign("page", "datosProyecto.php?tipo=2");
 //$claSmarty->assign("arrCronogramaProyecto", $arrCronogramaProyecto);
 $claSmarty->assign("arraConjuntoLicencias", $arraConjuntoLicencias);

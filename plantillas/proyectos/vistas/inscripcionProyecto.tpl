@@ -394,11 +394,6 @@
                                 <div id="val_numParqueaderosDisc" class="divError">Este campo es requerido</div>
                             </div>
                         </div>   
-
-
-
-
-
                         <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label" >Torres (*)</label> 
@@ -534,7 +529,7 @@
                                 <div class="form-group" id="field{$seqOferentesProy+1}"> 
                                     <div id="table{$cont}">
                                         <div class="col-md-3">
-                                            <label class="control-label" >Oferente (*) </label>                                      
+                                            <label class="control-label" >Oferente (*) uu</label>                                      
                                             <input type="hidden" name="seqProyectoOferente[]" value="{$valueOferentesProy.seqProyectoOferente}" />
                                             <select name="seqOferente[]"
                                                     id="seqOferente_{$cont}" 
@@ -549,27 +544,27 @@
                                             <div id="val_seqOferente_{$cont}" class="divError" style="width: 100%; position: relative;float: left;">Debe seleccionar el oferente</div>
                                         </div>
 
-                                    <div class="col-md-3">
-                                        <label class="control-label" >Nombre Contacto Oferente</label>   
-                                        <input name="txtNombreContactoOferente[]" type="text" id="txtNombreContactoOferente_{$cont}" value="{$valueOferentesProy.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="width:160px;"/>
-                                        <div id="val_txtNombreContactoOferente_{$cont}" class="divError">Debe diligenciar el nombre de contacto oferente</div>
-                                    </div>                                
-                                    <div class="col-md-3">
-                                        <label class="control-label" >Correo Contacto</label>   
-                                        <input name="txtCorreoOferente[]" type="text" id="txtCorreoOferente_{$cont}" value="{$valueOferentesProy.txtCorreoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:140px;"/>
-                                        <div id="val_txtCorreoOferente_{$cont}" class="divError">Debe diligenciar el correo de contacto del Oferente</div>
+                                        <div class="col-md-3">
+                                            <label class="control-label" >Nombre Contacto Oferente</label>   
+                                            <input name="txtNombreContactoOferente[]" type="text" id="txtNombreContactoOferente_{$cont}" value="{$valueOferentesProy.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="width:160px;"/>
+                                            <div id="val_txtNombreContactoOferente_{$cont}" class="divError">Debe diligenciar el nombre de contacto oferente</div>
+                                        </div>                                
+                                        <div class="col-md-3">
+                                            <label class="control-label" >Correo Contacto</label>   
+                                            <input name="txtCorreoOferente[]" type="text" id="txtCorreoOferente_{$cont}" value="{$valueOferentesProy.txtCorreoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:140px;"/>
+                                            <div id="val_txtCorreoOferente_{$cont}" class="divError">Debe diligenciar el correo de contacto del Oferente</div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="control-label" >Telefono Oferente</label>   
+                                            <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente_{$cont}" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);
+                                                    soloNumeros(this)" class="form-control required" style="position: relative; float: left;width:60%;"/>
+                                            <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
+                                            {if $cont > 1}
+                                                <img src="recursos/imagenes/remove.png" width="20px"  style="position: relative; float: left; width:20% "onclick="removerOferente(table{$cont})"/>
+                                            {/if}
+                                            <div id="val_numTelContactoOferente_{$cont}" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
+                                        </div> 
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="control-label" >Telefono Oferente</label>   
-                                        <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente_{$cont}" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);
-                                                soloNumeros(this)" class="form-control required" style="position: relative; float: left;width:60%;"/>
-                                        <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
-                                        {if $cont > 1}
-                                            <img src="recursos/imagenes/remove.png" width="20px"  style="position: relative; float: left; width:20% "onclick="removerOferente(table{$cont})"/>
-                                        {/if}
-                                        <div id="val_numTelContactoOferente_{$cont}" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
-                                    </div> 
-                                </div> 
                                 </div> 
                             {/foreach} 
                             {if !$arrOferentesProy|@count gt 0}
@@ -603,7 +598,7 @@
                                 <div class="col-md-2">
                                     <label class="control-label" >Telefono Contacto</label>   
                                     <input name="numTelContactoOferente[]" type="text" id="numTelContactoOferente" value="{$valueOferentesProy.numTelContactoOferente}" onBlur="sinCaracteresEspeciales(this);
-                                            soloNumeros(this);" class="form-control " style="position: relative; float: left;width:70%;"/>
+                                            soloNumeros(this);" class="form-control" style="position: relative; float: left;width:70%;"/>
                                     <img src="recursos/imagenes/add.png" width="20px" onclick="adicionarOferente();"  style="position: relative; float: left; width:20% "/>
                                     <div id="val_numTelContactoOferente_1" class="divError">Debe diligenciar el numero de contacto del Oferente</div>
                                 </div>
@@ -652,37 +647,38 @@
                 {include file="proyectos/vistas/inscripcionComite.tpl"}
             </div>
         {/foreach}
-    {*    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLabel">HISTORIAL DE SEGUIMIENTOS</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" style="height: 45%">
-                        {foreach from=$arrayDocumentos key=keyDoc item=valueDoc}
-                            <div class="form-group" >                       
-                                <div class="col-md-8" style="text-align: left"> 
-                                    <label class="control-label" >{$valueDoc.txtNombreDocumento}</label>  
-                                </div>
-                                <div class="col-md-3" style="text-align: left; ">                            
-                                    <input type="file" id="file" name="file">
-                                    <input type="hidden" name="documentId_{$value.seqProyecto}[{$valueDoc.seqDocumento}]" value="{$valueDoc.seqDocumento}" />
-                                </div> 
-                                <div class="col-md-1" style="text-align: left"> 
-                                    <input type="checkbox" name="document_{$value.seqProyecto}[{$valueDoc.seqDocumento}]"  value="{$valueDoc.seqDocumento}" {if $valueDoc.bolEstado == 1 } checked {/if}/>                           
-                                </div>
-                            </div>  
-                        {/foreach}
-                    </div>                
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
-                    </div>
-                </div>
-            </div>
+        {*    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">HISTORIAL DE SEGUIMIENTOS</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
         </div>
+        <div class="modal-body" style="height: 45%">
+        {foreach from=$arrayDocumentos key=keyDoc item=valueDoc}
+        <div class="form-group" >                       
+        <div class="col-md-8" style="text-align: left"> 
+        <label class="control-label" >{$valueDoc.txtNombreDocumento}</label>  
+        </div>
+        <div class="col-md-3" style="text-align: left; ">                            
+        <input type="file" id="file" name="file">
+        <input type="hidden" name="documentId_{$value.seqProyecto}[{$valueDoc.seqDocumento}]" value="{$valueDoc.seqDocumento}" />
+        </div> 
+        <div class="col-md-1" style="text-align: left"> 
+        <input type="checkbox" name="document_{$value.seqProyecto}[{$valueDoc.seqDocumento}]"  value="{$valueDoc.seqDocumento}" {if $valueDoc.bolEstado == 1 } checked {/if}/>                           
+        </div>
+        </div>  
+        {/foreach}
+        </div>                
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                
+        </div>
+        </div>
+        </div>
+        </div> *}
+    </div>
 </form>
 <div id="postulacionTabView"></div>
 <div id="objDireccionOculto" style="display:none"></div>

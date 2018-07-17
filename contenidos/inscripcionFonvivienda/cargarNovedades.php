@@ -12,7 +12,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "InscripcionFonvivienda.class.php" );
 
-$txtComando = "php " . __DIR__ . "/script/novedades.php &";
+$txtComando = "/opt/lamp/bin/php " . __DIR__ . "/script/novedades.php &";
 
 echo $txtComando . "<br>";
 

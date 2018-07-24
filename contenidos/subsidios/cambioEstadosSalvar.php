@@ -115,7 +115,8 @@ if ($_FILES['archivo']['error'] != UPLOAD_ERR_NO_FILE) {
             $txtComentario = ( trim($txtComentario) == "" ) ? trim($_POST['txtComentario']) : trim($txtComentario);
 
             // numero de documento en la base de datos
-            $seqFormulario = Ciudadano::formularioVinculado($numDocumento, false, true);
+            $claCiudadanoCambio = new Ciudadano();
+            $seqFormulario = $claCiudadanoCambio->formularioVinculado($numDocumento, false, true);
             if ($seqFormulario == 0) {
                 $arrErrores[] = "Error Linea $numLinea: El número de documento no existe en la base de datos";
             }

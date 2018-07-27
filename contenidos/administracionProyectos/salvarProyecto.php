@@ -5,6 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 $txtPrefijoRuta = "../../";
 
 // Autenticacion (si esta logueado no no)
@@ -74,8 +75,10 @@ if (empty($arrErrores)) {
     $arrayEntComite = obtenerDatosTabla("t_pry_entidad_comite", array("seqEntidadComite", "txtEntidadComite"), "seqEntidadComite", "", "seqEntidadComite DESC, txtEntidadComite");
     $arrayEntFiduciaria = obtenerDatosTabla("T_PRY_FIDUCIARIA", array("seqFiduciaria", "txtNombreFiduciaria"), "seqFiduciaria", "", "txtNombreFiduciaria ASC, txtNombreFiduciaria");
 // Verifica si es para crear o editar la Oferente
+
     $seqProyecto = 0;
     $seqProyecto = $_POST['seqProyecto'];
+
 
 
     if (isset($_POST['seqProyecto']) and is_numeric($_POST['seqProyecto']) and $_POST['seqProyecto'] > 0) {
@@ -102,10 +105,10 @@ if (empty($arrErrores)) {
     } else {
 
         $seqProyecto = $claProyecto->almacenarProyecto($_POST);
+
         if ($seqProyecto > 0) {
             $txtCambios = "";
             $claSeguimiento->almacenarSeguimiento($seqProyecto, $_POST['txtComentario'], $_POST['seqGestion'], '', '');
-            //$claProyecto->almacenarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
         }
     }
 
@@ -114,7 +117,6 @@ if (empty($arrErrores)) {
         mkdir($nombre_fichero, 0777, true);
     }
     $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
-
 
     $arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($seqProyecto);
     $arrayComiteActa = $claDatosProy->obtenerActasComite($seqProyecto);
@@ -136,22 +138,21 @@ if (empty($arrErrores)) {
     }
     if ($seqProyecto > 0) {
 
-        if ($cantConjuntos == 0 && isset($_POST["txtNombreProyectoHijo"])) {
+        if ($cantConjuntos == 0 && $_POST["txtNombreProyectoHijo"][0] != "") {
             // echo "<br>**".count($_POST["txtNombreProyectoHijo"]);
             $claProyecto->almacenarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
-        } else {
+        } else if ($_POST["txtNombreProyectoHijo"][0] != "") {
             $claProyecto->modificarConjuntos($seqProyecto, $arrayconjuntos, count($_POST["txtNombreProyectoHijo"]));
         }
-        if ($cantLicencias == 0 && isset($_POST["txtLicencia"])) {
+        if ($cantLicencias == 0 && $_POST["txtLicencia"][0] != "") {
             $claProyecto->almacenarLicencias($seqProyecto, $arrayInsLicencias, count($_POST["txtLicencia"]));
-        } else if (isset($_POST["txtLicencia"])) {
+        } else if ($_POST["txtLicencia"][0] != "") {
             $claProyecto->modificarLicencias($seqProyecto, $arrayInsLicencias, count($_POST["txtLicencia"]));
         }
 
-        if ($cantTipoVivienda == 0 && isset($_POST["txtNombreTipoVivienda"])) {
-//echo "paso" .$cantTipoVivienda;
+        if ($cantTipoVivienda == 0 && $_POST["numCantidad"][0] != "") {
             $claProyecto->almacenarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
-        } else {
+        } else if ($_POST["numCantidad"][0] != "") {
 
             $claProyecto->modificarTipoVivienda($seqProyecto, $arrayTipoViviendas, count($_POST["txtNombreTipoVivienda"]));
         }
@@ -197,6 +198,32 @@ if (empty($arrErrores)) {
 
     foreach ($arrConjuntoResidencial as $keyCon => $valueCon) {
         $arraConjuntoLicencias[] = $claProyecto->obtenerListaLicencias($valueCon['seqProyecto']);
+    }
+
+    if (count($arrayLicencias) == 1) {
+        foreach ($arrayLicencias as $keyLic => $valueLic) {
+            if ($valueLic['seqTipoLicencia'] == 1) {
+                $arrayLicencias[1] = 0;
+                //   echo "<p>" . $valueLic['seqTipoLicencia'] . "</p>";
+            } else {
+                $arrayLicencias[0] = 0;
+            }
+        }
+    }
+    if (count($arrayComiteActa) == 0) {
+        $arrayComiteActa[0] = 0;
+    }
+    if (count($arrayLicencias) == 0) {
+        $arrayLicencias[0] = 0;
+        $arrayLicencias[1] = 0;
+    }
+    if (count($arrayFideicomitente) == 0) {
+        $arrayFideicomitente[0] = 0;
+    }
+
+
+    if (count($arraConjuntoLicencias) == 0) {
+        $arraConjuntoLicencias[0] = 0;
     }
 //pr ($arrErrores);
     $arrMensajes[] = "El Proyecto <b>" . $_POST['txtNombreProyecto'] . "</b> se ha guardado";

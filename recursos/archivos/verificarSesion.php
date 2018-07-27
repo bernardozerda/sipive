@@ -8,7 +8,7 @@
 session_start();
 
 // solo funciona bajo https
-define("HTTPS_ONLY", true);
+define("HTTPS_ONLY", false);
 
 // Tiempo de valides de la sesion en segundos
 define("TIMEOUT", 1800);
@@ -35,7 +35,7 @@ if ($bolMatarSesion) {
 
     // redirecciona a la pantalla de autenticacion
     $txtRuta  = (HTTPS_ONLY == true)? "https://" : "http://";
-    $txtRuta .=  $_SERVER['SERVER_NAME'] . "/" . mb_split("/",$_SERVER['REQUEST_URI'])[1] . "/autenticacion.php";
+    $txtRuta .=  $_SERVER['SERVER_NAME'] . "/" . mb_split("/",$_SERVER['REQUEST_URI'])[1] . "sipive/autenticacion.php";
 
     header("Location: " . $txtRuta);
 

@@ -25,9 +25,9 @@
                             {assign var="actual" value="r_$num"}
                             <input type="hidden" name="seqTipoVivienda[]" id="seqTipoVivienda_{$num}" value="{$arrTipoV.seqTipoVivienda}" >
                             <!--<input type="text" name="txtNombreTipoVivienda[]" id="txtNombreTipoVivienda" value="{$arrTipoV.txtNombreTipoVivienda}" style="width:150px;" onblur="sinCaracteresEspeciales(this);">-->
-                            <select name="txtNombreTipoVivienda[]" id="txtNombreTipoVivienda"
-                                    style="width:150px"
-                                    class="form-control">
+                            <select name="txtNombreTipoVivienda[]" id="txtNombreTipoVivienda_{$num}"
+                                    style="width:160px"
+                                    class="form-control required3">
                                 <option value="">Seleccione Tipo Vivienda</option>
                                 {if $arrTipoV.txtNombreTipoVivienda != ""} 
                                     <option value="{$arrTipoV.txtNombreTipoVivienda}" {if $arrTipoV.txtNombreTipoVivienda != ""} selected{/if}>{$arrTipoV.txtNombreTipoVivienda}</option>
@@ -43,48 +43,57 @@
                             <label class="control-label" >Total Uds</label><br />
                             <input type="text" name="numCantidad[]" id="numCantidad_{$num}" value="{$arrTipoV.numCantidad}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales(this);
                                     soloNumeros(this);
-                                    sumaVentas();">
+                                    sumaVentas();" class="form-control required3">
+                            <div id="val_numCantidad_{$num}" class="divError">Diligenciar Campo</div>
                         </div>                        
                         <div class="col-md-3"> 
                             <label class="control-label">Uds. Discapacitados</label><br />
                             <input type="text" name="numCantUdsDisc[]" id="numCantParqDisc_{$num}" value="{$arrTipoV.numCantUdsDisc}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales(this);
-                                    soloNumeros(this);">
+                                    soloNumeros(this);" class="form-control required3">
+                            <div id="val_numCantParqDisc_{$num}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-3"> 
                             <label class="control-label">Total Parq.</label><br />
                             <input type="text" name="numTotalParq[]" id="numTotalParq_{$num}" value="{$arrTipoV.numTotalParq}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales(this);
-                                    soloNumeros(this);">
+                                    soloNumeros(this);" class="form-control required3">
+                            <div id="val_numTotalParq_{$num}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-3"> 
                             <label class="control-label">Cant. Parq Discapacitados</label><br />
                             <input type="text" name="numCantParqDisc[]" id="numCantParqDisc_{$num}" value="{$arrTipoV.numCantParqDisc}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales(this);
-                                    soloNumeros(this);">
+                                    soloNumeros(this);" class="form-control required3">
+                            <div id="val_numCantParqDisc_{$num}" class="divError">Diligenciar Campo</div>
                         </div> 
 
                         <div class="col-md-3"> 
                             <label class="control-label">&Aacute;rea</label><br />
                             <input type="text" name="numArea[]" id="numArea_{$num}" value="{$arrTipoV.numArea}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales(this);
-                                    soloNumeros(this);">&nbsp;m²
+                                    soloNumeros(this);" class="form-control required3">&nbsp;
+                             <div id="val_numArea_{$num}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-3"> 
                             <label class="control-label">A&ntilde;o Venta</label><br />
                             <input type="text" name="numAnoVenta[]" id="numAnoVenta_{$num}" value="{$arrTipoV.numAnoVenta}" style="width:50px; text-align:right" onblur="sinCaracteresEspeciales(this);
-                                    soloNumeros(this);">
+                                    soloNumeros(this);" class="form-control required4">
+                            <div id="val_numAnoVenta_{$num}" class="divError">Diligenciar Campo</div>
                         </div>    
                         <div class="col-md-3"> 
                             <label class="control-label">Precio Venta</label><br />
-                            $ <input type="text" name="valPrecioVenta[]" id="valPrecioVenta_{$num}" value="{$arrTipoV.valPrecioVenta}" style="width:80px; text-align:right" onblur="sinCaracteresEspeciales(this);
+                             <input type="text" name="valPrecioVenta[]" id="valPrecioVenta_{$num}" value="{$arrTipoV.valPrecioVenta}" style="width:70px; text-align:right" onblur="sinCaracteresEspeciales(this);
                                     soloNumeros(this);
-                                    sumaVentas();">
+                                    sumaVentas();" class="form-control required4">
+                             <div id="val_valPrecioVenta_{$num}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-3"> 
                             <label class="control-label">Cierre</label><br />
-                            $ <input type="text" name="valCierre[]" id="valCierre_{$num}" value="{$arrTipoV.valCierre}" style="width:80px; text-align:right" onblur="sinCaracteresEspeciales(this);
-                                    soloNumeros(this);">
+                             <input type="text" name="valCierre[]" id="valCierre_{$num}" value="{$arrTipoV.valCierre}" style="width:70px; text-align:right" onblur="sinCaracteresEspeciales(this);
+                                    soloNumeros(this);" class='form-control required4'>
+                             <div id="val_valCierre_{$num}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-6"> 
                             <label class="control-label">Descripci&oacute;n</label><br />
-                            <textarea name="txtDescripcion[]" id="txtDescripcion_{$num}" style="width:380px" >{$arrTipoV.txtDescripcion}</textarea>
+                            <textarea name="txtDescripcion[]" id="txtDescripcion_{$num}" style="width:380px" class="form-control required3">{$arrTipoV.txtDescripcion}</textarea>
+                            <div id="val_txtDescripcion_{$num}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-2"> 
                             <label class="control-label">Eliminar</label><br />

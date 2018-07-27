@@ -6,22 +6,25 @@
     <div class="form-group">
         <div class="col-md-4"> 
             <label class="control-label" >Nombre Aseguradora</label> 
-            <select id="seqAseguradora" name="seqAseguradora" class="form-control" style="width: 78%">
+            <select id="seqAseguradora" name="seqAseguradora" class="form-control required5" style="width: 78%">
                 <option value="">Ninguna</option>
                 {foreach from=$arrAseguradoras key=seqAseguradora item=txtNombreAseguradora}
                     <option value="{$seqAseguradora}" {if $value.seqAseguradora == $seqAseguradora} selected {/if} >{$txtNombreAseguradora}</option>
                 {/foreach}
             </select>
+            <div id="val_seqAseguradora" class="divError">Diligenciar Campo</div>
         </div>  
         <div class="col-md-3"> 
             <label class="control-label" >N&uacute;mero de P&oacute;liza</label> 
-            <input name="numPoliza" type="text" id="numPoliza" value="{$value.numPoliza}" onblur="sinCaracteresEspeciales(this);"  class="form-control">
+            <input name="numPoliza" type="text" id="numPoliza" value="{$value.numPoliza}" onblur="sinCaracteresEspeciales(this);"  class="form-control required5">
             <input name="seqPoliza" type="hidden" id="seqPoliza" value="{$value.seqPoliza}" onblur="sinCaracteresEspeciales(this);"  class="form-control">
+            <div id="val_seqPoliza" class="divError">Diligenciar Campo</div>
         </div>  
         <div class="col-md-3"> 
             <label class="control-label" >Fecha de Expedici&oacute;n</label> 
-            <input name="fchExpedicion" type="text" id="fchExpedicion" value="{$value.fchExpedicion}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+            <input name="fchExpedicion" type="text" id="fchExpedicion" value="{$value.fchExpedicion}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
             <a href="#" onclick="javascript: calendarioPopUp('fchExpedicion');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+            <div id="val_fchExpedicion" class="divError">Diligenciar Campo</div>
         </div> 
         {if isset($smarty.session.arrGrupos.6.13) or isset($smarty.session.arrGrupos.6.20)}
             <div class="col-md-2">            
@@ -55,7 +58,7 @@
                             <label class="control-label" >Tipo de Amparo</label> 
                             <input name="seqAmparoPadre[]" type="hidden" id="seqAmparoPadre" value="{$valueAmparo.seqAmparoPadre}" onblur="sinCaracteresEspeciales(this);"  class="form-control">
                             <input name="seqAmparo[]" type="hidden" id="seqAmparo" value="{$valueAmparo.seqAmparo}" onblur="sinCaracteresEspeciales(this);"  class="form-control">
-                            <select id="seqTipoAmparo_{$numPol}" name="seqTipoAmparo[]" class="form-control" style="width: 75%">
+                            <select id="seqTipoAmparo_{$numPol}" name="seqTipoAmparo[]" class="form-control required5" style="width: 75%">
                                 <option value="">Ninguna</option>
                                 {foreach from=$arrAmparos key=seqTipoAmparo item=txtTipoAmparo}
                                     {if $seqTipoAmparo != 6}
@@ -63,20 +66,25 @@
                                     {/if}
                                 {/foreach}
                             </select>
+                            fchExpedicion
+                            <div id="val_seqTipoAmparo_{$numPol}" class="divError">Diligenciar Campo</div>
                         </div>              
                         <div class="col-md-2"> 
                             <label class="control-label" >Vigencia Desde:</label> 
-                            <input name="fchVigenciaIni[]" type="text" id="fchVigenciaIni_{$numPol}" value="{$valueAmparo.fchVigenciaIni}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+                            <input name="fchVigenciaIni[]" type="text" id="fchVigenciaIni_{$numPol}" value="{$valueAmparo.fchVigenciaIni}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
                             <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaIni_{$numPol}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 18%; position: relative; float: right; right:10%"></a>
+                            <div id="val_fchVigenciaIni_{$numPol}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-2"> 
                             <label class="control-label" >Vigencia Hasta:</label> 
-                            <input name="fchVigenciaFin[]" type="text" id="fchVigenciaFin_{$numPol}" value="{$valueAmparo.fchVigenciaFin}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+                            <input name="fchVigenciaFin[]" type="text" id="fchVigenciaFin_{$numPol}" value="{$valueAmparo.fchVigenciaFin}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
                             <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaFin_{$numPol}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 18%; position: relative; float: right; right:10%"></a>
+                            <div id="val_fchVigenciaFin_{$numPol}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-2"> 
                             <label class="control-label" >Valor Asegurado</label> 
-                            <input name="valAsegurado[]" type="text" id="valAsegurado_{$numPol}" value="{$valueAmparo.valAsegurado}" onblur="sinCaracteresEspeciales(this);"  class="form-control">
+                            <input name="valAsegurado[]" type="text" id="valAsegurado_{$numPol}" value="{$valueAmparo.valAsegurado}" onblur="sinCaracteresEspeciales(this);"  class="form-control required5">
+                            <div id="val_valAsegurado_{$numPol}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-2" style="width: 5.5%"> 
                             <label class="control-label" >Aprobo</label> <br>
@@ -96,27 +104,31 @@
                                             <label class="control-label" >Prorroga {$numPolHijo}</label> 
                                             <input name="seqAmparo[]" type="hidden" id="seqAmparo" value="{$valueAmparoHijo.seqAmparo}" onblur="sinCaracteresEspeciales(this);"  class="form-control">
                                             <input name="seqAmparoPadre[]" type="hidden" id="seqAmparoPadre" value="{$valueAmparoHijo.seqAmparoPadre}" onblur="sinCaracteresEspeciales(this);"  class="form-control">
-                                            <select id="seqTipoAmparo{$seqAmparo}_{$numPolHijo}" name="seqTipoAmparo[]" class="form-control" style="width: 75%" >                                              
+                                            <select id="seqTipoAmparo{$seqAmparo}_{$numPolHijo}" name="seqTipoAmparo[]" class="form-control required5" style="width: 75%" >                                              
                                                 {foreach from=$arrAmparos key=seqTipoAmparo item=txtTipoAmparo}
                                                     {if $seqTipoAmparo == 6}
                                                         <option value="{$seqTipoAmparo}" {if $valueAmparoHijo.seqTipoAmparo == $seqTipoAmparo} selected {/if}>{$txtTipoAmparo}</option>
                                                     {/if}
                                                 {/foreach}
                                             </select>
+                                            <div id="val_seqTipoAmparo_{$numPol}" class="divError">Diligenciar Campo</div>
                                         </div>     
                                         <div class="col-md-2"> 
                                             <label class="control-label" >Vigencia Desde:</label> 
-                                            <input name="fchVigenciaIni[]" type="text" id="fchVigenciaIni{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.fchVigenciaIni}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+                                            <input name="fchVigenciaIni[]" type="text" id="fchVigenciaIni{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.fchVigenciaIni}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
                                             <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaIni{$valueAmparo.seqAmparo}_{$numPolHijo}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 18%; position: relative; float: right; right:10%"></a>
+                                            <div id="val_fchVigenciaIni_{$numPol}" class="divError">Diligenciar Campo</div>
                                         </div> 
                                         <div class="col-md-2"> 
                                             <label class="control-label" >Vigencia Hasta:</label> 
-                                            <input name="fchVigenciaFin[]" type="text" id="fchVigenciaFin{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.fchVigenciaFin}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+                                            <input name="fchVigenciaFin[]" type="text" id="fchVigenciaFin{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.fchVigenciaFin}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
                                             <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaFin{$valueAmparo.seqAmparo}_{$numPolHijo}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 18%; position: relative; float: right; right:10%"></a>
+                                            <div id="val_fchVigenciaFin_{$numPol}" class="divError">Diligenciar Campo</div>
                                         </div> 
                                         <div class="col-md-2"> 
                                             <label class="control-label" >Valor Asegurado</label> 
-                                            <input name="valAsegurado[]" type="text" id="valAsegurado{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.valAsegurado}" onblur="sinCaracteresEspeciales(this);"  class="form-control">
+                                            <input name="valAsegurado[]" type="text" id="valAsegurado{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.valAsegurado}" onblur="sinCaracteresEspeciales(this);"  class="form-control required5">
+                                            <div id="val_valAsegurado_{$numPol}" class="divError">Diligenciar Campo</div>
                                         </div>  
                                         <div class="col-md-2" style="width: 5.5%"> 
                                             <label class="control-label" >Aprobo</label> <br>
@@ -142,4 +154,3 @@
     <p>&nbsp;</p>
 </fieldset>
 <p>&nbsp;</p>
-

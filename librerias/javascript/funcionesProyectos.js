@@ -37,12 +37,23 @@ function  tablas() {
 
 function validarCampos() {
     var valid = true;
-    $.each($("#frmProyectos input.required"), function (index, value) {
+    var estado = $("#seqPryEstadoProceso").val();
+    var required = "";
+
+    for (var i = 1; i <= estado; i++) {
+        if (i == 1) {
+            required = "required";
+
+        } else {
+            required = "required" + i;
+        }
+
+        $.each($("#frmProyectos input." + required), function (index, value) {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         //console.log("value : " + $("#txtLicenciaConstructor").val());
         if (!$(value).val()) {
-            //console.log("paso1 : " + $(value).val());
+                //  console.log("paso : " + required + " -> " + $(value).val());
             $("#" + $(this).attr("id")).css("border", "1px solid red");
             $("#val_" + $(this).attr("id")).css("display", "inline");
             // console.log($(this).attr("id") + " input");
@@ -50,8 +61,9 @@ function validarCampos() {
         }
 
     });
+
     // console.log($("#frmProyectos select.required"));
-    $.each($("#frmProyectos select.required"), function (index, value) {
+        $.each($("#frmProyectos select." + required), function (index, value) {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         if ($(value).val() == 0) {
@@ -61,7 +73,8 @@ function validarCampos() {
             valid = false;
         }
     });
-    $.each($("#frmProyectos input[type=email].required"), function (index, value) {
+
+        $.each($("#frmProyectos input[type=email]." + required), function (index, value) {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
@@ -73,7 +86,8 @@ function validarCampos() {
             valid = false;
         }
     });
-    $.each($("#frmProyectos textArea.required"), function (index, value) {
+
+        $.each($("#frmProyectos textArea." + required), function (index, value) {
         $("#val_" + $(this).attr("id")).css("display", "none");
         $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
         if ($(value).val() == 0) {
@@ -84,6 +98,9 @@ function validarCampos() {
             valid = false;
         }
     });
+        console.log("paso"+i);
+    }
+    
     $.each($("#frmProyectos input"), function (index, value) {
         if ($(value).val() != 0 && $(value).val() != null) {
             //console.log("value : " + $(value).val() + " index -> " + index);
@@ -214,13 +231,13 @@ function addAmparos() {
     var intId = $("#idAmparos select").length + 1;
     var fieldWrapper = $("<div class=\"form-group\" id=\"amp" + intId + "\" />");
     var fType = " <fieldset style=\"border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;\"> <legend style=\"text-align: right\"><p><h5>&nbsp;<img src=\"recursos/imagenes/add.png\" width=\"20px\" onclick=\"addAmparos();\"  /><b>&nbsp; Adicionar  Amparo</b>&nbsp; <img src=\"recursos/imagenes/remove.png\" width=\"20px\"  onclick='removerOferente(amp" + intId + ")'/><b style=\"text-align: right\">&nbsp; Eliminar Amaparo</b></h5></p></legend>";
-    fType += "<div class=\"col-md-3\"> <input name=\"seqAmparo[]\" type=\"hidden\" id=\"seqAmparo\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><label class=\"control-label\" >Tipo de Amparo</label><input name=\"seqAmparoPadre[]\" type=\"hidden\" id=\"seqAmparoPadre\" value='' onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><select id=\"seqTipoAmparo_" + intId + "\" name=\"seqTipoAmparo[]\" class=\"form-control\" style=\"width: 75%\">";
+    fType += "<div class=\"col-md-3\"> <input name=\"seqAmparo[]\" type=\"hidden\" id=\"seqAmparo\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><label class=\"control-label\" >Tipo de Amparo</label><input name=\"seqAmparoPadre[]\" type=\"hidden\" id=\"seqAmparoPadre\" value='' onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><select id=\"seqTipoAmparo_" + intId + "\" name=\"seqTipoAmparo[]\" class=\"form-control required5\" style=\"width: 75%\">";
     $("#seqTipoAmparo_1" + " option").each(function () {
         fType += "<option value=" + $(this).attr('value') + ">" + $(this).text() + "</option> ";
     });
-    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:</label><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaIni_" + intId + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
-    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaFin_" + intId + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
-    fType += "<div class=\"col-md-3\"><label class=\"control-label\" >Valor Asegurado</label><input name=\"valAsegurado[]\" type=\"text\" id=\"valAsegurado_" + intId + "\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"></div> ";
+    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:</label><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaIni_" + intId + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaFin_" + intId + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "<div class=\"col-md-3\"><label class=\"control-label\" >Valor Asegurado</label><input name=\"valAsegurado[]\" type=\"text\" id=\"valAsegurado_" + intId + "\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control required5\"></div> ";
     fType += "<div class=\"col-md-2\"><br><br></div>";
     fType += "<p>&nbsp;</p></fieldset><p>&nbsp;</p></div>";
     fieldWrapper.append(fType);
@@ -234,11 +251,11 @@ function addProrroga(idPadre, usuario) {
     var intIdHijo = $("#demo" + idPadre + " select").length + 1;
 
     var fieldWrapper = $("<div class=\"form-group\" id=\"ampHijo" + idPadre + "_" + intIdHijo + "\" />");
-    var fType = "<div class=\"col-md-3\"><label class=\"control-label\" >Porroga " + intIdHijo + "</label><select id=\"seqTipoAmparo" + idPadre + "_" + intIdHijo + "\" name=\"seqTipoAmparo[]\" class=\"form-control\" style=\"width: 75%\">";
-    fType += "<option value='6'>Prorroga</option>  <input name=\"seqAmparo[]\" type=\"hidden\" id=\"seqAmparo\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><input name=\"seqAmparoPadre[]\" type=\"hidden\" id=\"seqAmparoPadre\" value=\"" + idPadre + "\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\">";
-    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:</label><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaIni" + idPadre + "_" + intIdHijo + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
-    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaFin" + idPadre + "_" + intIdHijo + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
-    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Valor Asegurado</label><input name=\"valAsegurado[]\" type=\"text\" id=\"valAsegurado" + idPadre + "_" + intIdHijo + "\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"></div> ";
+    var fType = "<div class=\"col-md-3\"><label class=\"control-label\" >Porroga " + intIdHijo + "</label><select id=\"seqTipoAmparo" + idPadre + "_" + intIdHijo + "\" name=\"seqTipoAmparo[]\" class=\"form-control required5\" style=\"width: 75%\">";
+    fType += "<option value='6'>Prorroga</option>  <input name=\"seqAmparo[]\" type=\"hidden\" id=\"seqAmparo\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><input name=\"seqAmparoPadre[]\" type=\"hidden\" id=\"seqAmparoPadre\" value=\"" + idPadre + "\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control required5\">";
+    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:</label><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaIni" + idPadre + "_" + intIdHijo + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaFin" + idPadre + "_" + intIdHijo + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Valor Asegurado</label><input name=\"valAsegurado[]\" type=\"text\" id=\"valAsegurado" + idPadre + "_" + intIdHijo + "\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control required5\"></div> ";
     fType += " <div class=\"col-md-2\" style=\"width: 5.5%\"><label class=\"control-label\" >Aprobo</label> <br><input name=\"bolAproboAmparo[]\" type=\"checkbox\" id=\"bolAprobo" + idPadre + "_" + intIdHijo + "\"  value=\"1\"  style=\"height: 15px; text-align: center\" onclick=\"selectUsuario(this.id, " + usuario + ")\">&nbsp;&nbsp;<input type=\"hidden\" name=\"seqUsuario[]\" id=\"seqUsuario" + idPadre + "_" + intIdHijo + "\" value=\"'0'\"></div>";
     fType += "<div class=\"col-md-2\"><br><br><input type=\"button\"  value=\"Prorroga\" class=\"btn_deleted\"  onclick='removerOferente(ampHijo" + idPadre + "_" + intIdHijo + ")'/></div>";
     fType += "<p>&nbsp;</p></fieldset><p>&nbsp;</p></div>";
@@ -294,14 +311,14 @@ function addFideicomitente() {
     var fieldWrapper = $("<div class=\"form-group\" id=\"fidehijo" + intId + "\" />");
     var fType = "<div class=\"col-md-4\">";
     fType += "<label class=\"control-label\" >Tipo </label>";
-    fType += "<select name=\"seqTipoFideicomitente[]\" id=\"seqTipoFideicomitente" + intId + "\" class=\"form-control\" style=\"width: 78%\">";
+    fType += "<select name=\"seqTipoFideicomitente[]\" id=\"seqTipoFideicomitente" + intId + "\" class=\"form-control required5\" style=\"width: 78%\">";
     fType += "<option value=\"\">Ninguna</option>";
     fType += "<option value=\"1\">Fideicomitente</option>";
     fType += "<option value=\"2\">Beneficiario</option>";
     fType += "</select></div>";
     fType += "<div class=\"col-md-4\">";
     fType += "<label class=\"control-label\" >Nombre Entidad o Raz&oacute;n Social</label>";
-    fType += "<input type=\"text\" name=\"txtNombreFideicomitente[]\" id=\"txtNombreFideicomitente" + intId + "\" value=\"\" class=\"form-control\"> \n\
+    fType += "<input type=\"text\" name=\"txtNombreFideicomitente[]\" id=\"txtNombreFideicomitente" + intId + "\" value=\"\" class=\"form-control required5\"> \n\
     <input name=\"seqFideicomitente[]\" type=\"hidden\" id=\"seqFideicomitente" + intId + "\" value='' onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\">";
     fType += "<div class=\"col-sm-12\"><div id=\"txtNombreFideicomitenteContenedor" + intId + "\"></div></div></div>";
     fType += "<div class=\"col-md-3\"><br><br><input type=\"button\"  value=\"Eliminar\" class=\"btn_deleted\"  onclick='removerOferente(fidehijo" + intId + ")'/></div> </div></div></div>";
@@ -462,59 +479,59 @@ function addComite() {
     fType += "</h5></p></legend>";
     fType += "<div class='col-md-4'>";
     fType += "<label class='control-label' >Número de Acta</label><br>";
-    fType += "<input type='number' name='numActaComite[]' id='numActaComite" + intId + "' value='' class='form-control'>";
+    fType += "<input type='number' name='numActaComite[]' id='numActaComite" + intId + "' value='' class='form-control required4'>";
     fType += "<input type='hidden' name='seqProyectoComite[]' id='seqProyectoComite" + intId + "' value=''>";
-    fType += "</div>";
+    fType += "<div id='val_numActaComite" + intId + "' class='divError'>Diligenciar Campo</div></div>";
     fType += "<div class='col-md-3'> ";
     fType += "<label class='control-label' >Fecha Acta</label> ";
-    fType += "<input name='fchActaComite[]' type='text' id='fchActaComite" + intId + "' value='' size='12' readonly=''  class='form-control'  style='width: 70%; position: relative; float: left'>";
+    fType += "<input name='fchActaComite[]' type='text' id='fchActaComite" + intId + "' value='' size='12' readonly=''  class='form-control required4'  style='width: 70%; position: relative; float: left'>";
     fType += "<a href='#' onclick='calendarioPopUp(\"fchActaComite" + intId + "\");'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 11%; position: relative; float: right; right:15%'></a>";
-    fType += "</div>";
+    fType += "<div id='val_fchActaComite" + intId + "' class='divError'>Diligenciar Campo</div></div>";
     fType += "<div class='col-md-4' style='text-align: right'>";
     fType += "<div class='btn-group btn-group-toggle' data-toggle='buttons'>";
     fType += "<label class='btn btn-secondary active alert-success' onclick='document.getElementById(\"bolAproboProyecto" + intId + "\").value =1;'>";
-    fType += "<input type='radio' name='radio[]' id='bolAproboProyectoAp" + intId + "' value='1' autocomplete='off' > Aprobado";
+    fType += "<input type='radio'  id='bolAproboProyectoAp" + intId + "' value='1' autocomplete='off' > Aprobado";
     fType += "</label>";
     fType += "<label class='btn btn-secondary alert-danger' onclick='document.getElementById(\"bolAproboProyecto" + intId + "\").value =0;'>";
-    fType += "<input type='radio' name='radio[]' id='bolAproboProyectoNoap" + intId + "' value='0'   autocomplete='off'> No Aprobado";
+    fType += "<input type='radio'  id='bolAproboProyectoNoap" + intId + "' value='0'   autocomplete='off'> No Aprobado";
     fType += "</label>";
     fType += "<input type='hidden' name='bolAproboProyecto[]' id='bolAproboProyecto" + intId + "' value=''>";
     fType += "</div></div>";
     fType += "<div class='col-md-4'> ";
     fType += "<label class='control-label' >Número de resoluci&oacute;n</label><br>   ";
-    fType += "<input type='number' name='numResolucionComite[]' id='numResolucionComite' value='' class='form-control'>";
-    fType += "</div>";
+    fType += "<input type='number' name='numResolucionComite[]' id='numResolucionComite' value='' class='form-control required4'>";
+    fType += "<div id='val_numResolucionComite" + intId + "' class='divError'>Diligenciar Campo</div></div>";
     fType += "<div class='col-md-3'> ";
     fType += "<label class='control-label' >Fecha Resoluci&oacute;n</label> ";
-    fType += "<input name='fchResolucionComite[]' type='text' id='fchResolucionComite" + intId + "' value='' size='12' readonly=''  class='form-control'  style='width: 70%; position: relative; float: left'>";
+    fType += "<input name='fchResolucionComite[]' type='text' id='fchResolucionComite" + intId + "' value='' size='12' readonly=''  class='form-control required4'  style='width: 70%; position: relative; float: left'>";
     fType += "<a href='#' onclick='calendarioPopUp(\"fchResolucionComite" + intId + "\");'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 11%; position: relative; float: right; right:15%'></a>";
-    fType += "</div> ";
+    fType += "<div id='val_fchResolucionComite" + intId + "' class='divError'>Diligenciar Campo</div></div> ";
     fType += "<div class='col-md-4'> ";
     fType += "<label class='control-label' >Entidad</label> ";
-    fType += "<select name='seqEntidadComite[]' id='seqEntidadComite" + intId + "' class='form-control'>";
+    fType += "<select name='seqEntidadComite[]' id='seqEntidadComite" + intId + "' class='form-control required4'>";
     fType += "	<option value=''>Seleccione</option>";
     $("#seqEntidadComite1 option").each(function () {
         fType += "<option value=" + $(this).attr('value') + ">" + $(this).text() + "</option>";
     });
     fType += "</select>";
-    fType += "</div> ";
+    fType += "<div id='val_seqEntidadComite" + intId + "' class='divError'>Diligenciar Campo</div></div> ";
     fType += "<div class='col-md-12'> ";
     fType += "<label class='control-label' >Observaciones Acta</label>";
-    fType += "<textarea name='txtObservacionesComite[]' id='txtObservacionesComite" + intId + "' class='form-control'></textarea>";
-    fType += "</div>";
+    fType += "<textarea name='txtObservacionesComite[]' id='txtObservacionesComite" + intId + "' class='form-control required4'>prueba</textarea>";
+    fType += "<div id='val_txtObservacionesComite" + intId + "' class='divError'>Diligenciar Campo</div></div>";
     fType += "<div class='col-md-4'>";
     fType += "<label class='control-label' >Comite Aprobado Condicionado?</label>";
     fType += "<div class='btn-group btn-group-toggle' data-toggle='buttons'>";
     fType += "<label class='btn btn-secondary active alert-success' style='margin: 0' onclick='ocultarDivEnt(0, \"txtCondicionesComite" + intId + "Div\");document.getElementById(\"bolCondicionesComite" + intId + "\").value =1;'>";
-    fType += "<input type='radio' name='bolCondiciones[]' id='bolCondiciones" + intId + "'  autocomplete='off' value='1' > SI";
+    fType += "<input type='radio'  id='bolCondiciones" + intId + "'  autocomplete='off' value='1' > SI";
     fType += "</label>";
     fType += "<label class='btn btn-secondary alert-danger' style='margin: 0' onclick='ocultarDivEnt(1, \"txtCondicionesComite" + intId + "Div\");document.getElementById(\"bolCondicionesComite" + intId + "\").value =0;'>";
-    fType += "<input type='radio' name='bolCondiciones[]' id='bolCondiciones" + intId + "' value='0' autocomplete='off'  > NO </label>  ";
+    fType += "<input type='radio'  id='bolCondiciones" + intId + "' value='0' autocomplete='off'  > NO </label>  ";
     fType += "<input type='hidden' name='bolCondicionesComite[]' id='bolCondicionesComite" + intId + "' value='0'>";
     fType += "</div></div>";
-    fType += "<div class='col-md-8' id='txtCondicionesComite" + intId + "Div'  > ";
+    fType += "<div class='col-md-8' id='txtCondicionesComite" + intId + "Div'> ";
     fType += "<label class='control-label' >Condiciones</label>  ";
-    fType += "<textarea name='txtCondicionesComite[]' id='txtCondicionesComite{$numcomite}' class='form-control'></textarea>";
+    fType += "<textarea name='txtCondicionesComite[]' id='txtCondicionesComite" + intId + "' class='form-control'></textarea>";
     fType += "</div>";
     fType += "<p>&nbsp;</p></fieldset>";
     fType += "</div>";
@@ -556,7 +573,6 @@ function obtenerDatosSelect(value, variable, idSelect) {
         type: 'post',
         dataType: "json",
         success: function (response) {
-            console.log("hola");
             var select = $('#' + idSelect);
             $('#' + idSelect).empty();
             var options = select.attr('options');

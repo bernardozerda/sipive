@@ -54,7 +54,7 @@ $claSmarty->assign("seqProyecto", $idProyecto);
 $claSmarty->assign("arrayDatosInterventoria", $arrayDatosInterventoria);
 $claSmarty->assign("arrayTextos", $arrayTextos);
 $claSmarty->assign("prefijo", "./");
-$claSmarty->assign("pages", "datosSeguimientoFicha.php?tipo=1&id=" . $id);
+$claSmarty->assign("page", "datosSeguimientoFicha.php?tipo=1&id=" . $id);
 
 
 if ($txtPlantilla != "") {

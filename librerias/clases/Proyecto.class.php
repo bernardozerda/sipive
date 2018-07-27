@@ -370,21 +370,19 @@ class Proyecto {
 
 
         foreach ($post as $nombre_campo => $valor) {
-            //   echo $asignacion = "\$" . $nombre_campo . "='" . $valor . "';<br>";
-            if ($valor == "" && $valor == " " && trim($valor) == "") {
-                if (count(explode('val', $valor)) > 0 || count(explode('NaN', $valor)) > 0 || count(explode('num', $valor)) > 0 || count(explode('bol', $valor)) > 0) {
+
+            if ($valor == "" || $valor == " " || $valor == null) {
+                $valor = (count(explode('txt', $nombre_campo)) > 1) ? NULL : 'NULL';
+                //$valor = (count(explode('seq', $nombre_campo)) > 1) ? 0 : 'NULL'              
+                if (count(explode('seq', $nombre_campo)) > 1) {
                     $valor = 0;
-                } else {
-                    $valor = 'NULL';
-                }
-            } else if ($valor == null) {
-                if (count(explode('val', $valor)) > 0 || count(explode('NaN', $valor)) > 0 || count(explode('num', $valor)) > 0 || count(explode('bol', $valor)) > 0) {
-                    $valor = 0;
-                } else {
-                    $valor = 'NULL';
                 }
             }
-            //echo "<br>" . $nombre_campo . " = " . $valor;
+            if ($valor == 'NaN') {
+                $valor = 0;
+            }
+
+            //echo " 2. " . $asignacion = "\$" . $nombre_campo . "='" . $valor . "';<br><br>";
             $$nombre_campo = $valor;
         }
         $numNitProyecto = str_replace(".", "", $numNitProyecto);
@@ -453,6 +451,7 @@ class Proyecto {
                     valTotalRecursos,                   
                     txtNombreVendedor,
                     numNitVendedor,
+                    txtCorreoVendedor,
                     txtCedulaCatastral,
                     txtEscritura,
                     fchEscritura,
@@ -527,6 +526,7 @@ class Proyecto {
                     $valTotalRecursos,                    
                     '$txtNombreVendedor',
                     '$numNitVendedor',
+                    '$txtCorreoVendedor',
                     '$txtCedulaCatastral',
                     '$txtEscritura',
                     '$fchEscritura',
@@ -541,10 +541,11 @@ class Proyecto {
                     $seqUsuario
                     ) ";
         try {
-            //echo "<br>" . $sql;
+            // echo "<br>" . $sql;
+//            die();
             $aptBd->execute($sql);
             $seqProyecto = $aptBd->Insert_ID();
-
+            // 
             $band = false;
             $sqlInsOfe = "INSERT INTO t_pry_proyecto_oferente
                         (
@@ -691,29 +692,24 @@ class Proyecto {
         $txtDireccionInterventor = '';
         $txtCorreoInterventor = '';
         $bolTipoPersonaInterventor = 0;
-        $numCedulaInterventor = 0;
-        $numTProfesionalInterventor = 0;
-        $numNitInterventor = 0;
+        $numCedulaInterventor = 'NULL';
+        $numTProfesionalInterventor = 'NULL';
+        $numNitInterventor = 'NULL';
         $txtNombreRepLegalInterventor = '';
-        $numTelefonoRepLegalInterventor = 0;
+        $numTelefonoRepLegalInterventor = 'NULL';
         $txtDireccionRepLegalInterventor = '';
         $txtCorreoRepLegalInterventor = '';
 
         foreach ($post as $nombre_campo => $valor) {
             //echo $asignacion = "\$" . $nombre_campo . "='" . $valor . "';<br>";
-            if ($valor == "" && $valor == " " && trim($valor) == "") {
-                if (count(explode('var', $valor)) > 0 || count(explode('NaN', $valor)) > 0 || count(explode('num', $valor)) > 0) {
+            if ($valor == "" || $valor == " " || $valor == null) {
+                $valor = (count(explode('txt', $nombre_campo)) > 1) ? NULL : 'NULL';
+                if (count(explode('seq', $nombre_campo)) > 1) {
                     $valor = 0;
-                } else {
-                    $valor = 'null';
                 }
-            } else if ($valor == null) {
-                if (count(explode('var', $valor)) > 0 || count(explode('NaN', $valor)) > 0 || count(explode('num', $valor)) > 0) {
-                    $valor = 0;
-                } else {
-                    $valor = 'null';
-                }
-                //  echo "<br>" . $nombre_campo . " -> " . $valor;
+            }
+            if ($valor == 'NaN') {
+                $valor = 0;
             }
             $$nombre_campo = $valor;
         }
@@ -783,6 +779,7 @@ class Proyecto {
                         valTotalRecursos = " . $valTotalRecursos . ",                      
                         txtNombreVendedor = '$txtNombreVendedor',
                         numNitVendedor = '$numNitVendedor',
+                        txtCorreoVendedor = '$txtCorreoVendedor',
                         txtCedulaCatastral = '$txtCedulaCatastral',
                         txtEscritura = '$txtEscritura',
                         fchEscritura = '$fchEscritura',
@@ -796,7 +793,8 @@ class Proyecto {
                         fchRadicadoFinanciero = '$fchRadicadoFinanciero'
                         WHERE seqProyecto = $seqProyecto
             ";
-        //echo  $sql; //die();
+        //  echo $sql;
+        // die();
 
         try {
             $band = false;
@@ -979,6 +977,7 @@ class Proyecto {
         }
         return $datos;
     }
+
     public function obtenerListaLicenciasPadre($seqProyecto) {
         global $aptBd;
         $sql = "select lic.* from t_pry_proyecto_licencias lic left join t_pry_proyecto Using(seqProyecto) where seqProyecto = " . $seqProyecto . " ORDER BY seqTipoLicencia";
@@ -1086,7 +1085,8 @@ class Proyecto {
             $txtNombreProyectoHijo = '';
             foreach ($arrayConjuntos[$seqProyecto] as $key => $value) {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
-                    $$key = 0;
+                    //$$key = 0;
+                    $$key = (count(explode('txt', $key)) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }
@@ -1152,7 +1152,8 @@ class Proyecto {
             $txtNombreProyectoHijo = '';
             foreach ($arrayConjuntos[$seqProyecto] as $key => $value) {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
-                    $$key = 0;
+                    // $$key = 0;
+                    $$key = (count(explode('txt', $key)) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }
@@ -1268,9 +1269,10 @@ class Proyecto {
         for ($index = 0; $index <= $cant; $index++) {
 
             foreach ($array[$seqProyecto] as $key => $value) {
-
+                ECHO "<P> KEY -> " . $key . "</P>";
                 if ($value[($index)] == NULL && $value[($index)] == "") {
-                    $$key = 0;
+                    $$key = (count(explode('txt', $key)) > 1) ? NULL : 'NULL';
+                    // $$key = 0;
                 } else {
                     $$key = $value[($index)];
                 }
@@ -1793,7 +1795,7 @@ class Proyecto {
                 seqFiducia = $seqFiducia                
                 WHERE seqProyecto = $seqProyecto";
         try {
-            
+
             $aptBd->execute($sql);
             $this->modificarFideicomitente($seqDatoFiducia, $arrayFiducia);
         } catch (Exception $objError) {

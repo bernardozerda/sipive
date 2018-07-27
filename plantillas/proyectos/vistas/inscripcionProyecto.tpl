@@ -198,7 +198,7 @@
                                         {/foreach}
                                     </select>
                                     <div id="val_seqOpv" class="divError">Este campo es requerido</div>
-                            </div>
+                            </div>  
                         </div>
                         <div class="form-group"  id="lineaTDirigida" style="display:none">
                             <div class="col-md-4"> 
@@ -326,7 +326,7 @@
                                 <label class="control-label" >Nombre del Tutor (*)</label>
                                 <select name="seqTutorProyecto"
                                         id="seqTutorProyecto"
-                                        class="form-control required">
+                                        class="form-control required2">
                                     <option value="0">Seleccione una opci&oacute;n</option>
                                     {foreach from=$arrTutorProyecto key=seqTutorProyecto item=txtTutorProyecto}
                                         <option value="{$seqTutorProyecto}" {if $value.seqTutorProyecto == $seqTutorProyecto} selected {/if}>{$txtTutorProyecto}</option>
@@ -340,7 +340,7 @@
                                 <label class="control-label" >Constructor (*)</label> 
                                 <select name="seqConstructor"
                                         id="seqConstructor" 
-                                        class="form-control required">
+                                        class="form-control required2">
                                     <option value="0">Seleccione una opci&oacute;n</option>
                                     {foreach from=$arrConstructor key=seqConstructor item=txtNombreConstructor}
                                         <option value="{$txtNombreConstructor.seqConstructor}" {if $value.seqConstructor == $txtNombreConstructor.seqConstructor} selected {/if}>{$txtNombreConstructor.txtNombreConstructor}</option>
@@ -352,7 +352,7 @@
                         <div class="form-group" id="idLineaAreaLoteConstruida">
                             <div class="col-md-4"> 
                                 <label class="control-label" >Area a Construir en <b>m²</b> (*)</label> 
-                                <input name="valAreaConstruida" type="text" id="valAreaConstruida" class="form-control required" value="{$value.valAreaConstruida}" onBlur="sinCaracteresEspeciales(this);
+                                <input name="valAreaConstruida" type="text" id="valAreaConstruida" class="form-control required2" value="{$value.valAreaConstruida}" onBlur="sinCaracteresEspeciales(this);
                                         soloNumeros(this);" style="width:65px;"/>
                                 <div id="val_valAreaConstruida" class="divError">Este campo es requerido</div>    
                             </div>
@@ -364,7 +364,7 @@
                                        onBlur="sinCaracteresEspeciales(this);
                                                soloNumeros(this);"
                                        style="width:65px;"
-                                       class="form-control"/>                                       
+                                       class="form-control required"/>                                       
                                 <input name="valSalarioMinimo" type="hidden" id="valSalarioMinimo" value="{$valSalarioMinimo}"  class="form-control"/>
                                 <input name="numSubsidios" type="hidden" id="numSubsidios" value="{$numSubsidios}"  class="form-control"/>
                                 <div id="val_valNumeroSoluciones" class="divError">Debe diligenciar el número de soluciones</div>
@@ -373,7 +373,7 @@
                         <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label" >N&uacute;m de Soluciones Disc (*)</label> 
-                                <input name="numCantSolDisc" type="text" id="numCantSolDisc" class="form-control required" value="{$value.numCantSolDisc}" onBlur="sinCaracteresEspeciales(this);
+                                <input name="numCantSolDisc" type="text" id="numCantSolDisc" class="form-control required3" value="{$value.numCantSolDisc}" onBlur="sinCaracteresEspeciales(this);
                                         soloNumeros(this);" style="width:65px;"/>
                                 <div id="val_numCantSolDisc" class="divError">Este campo es requerido</div>
                             </div>
@@ -381,7 +381,7 @@
                         <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label" >Cant. Parqueaderos (*)</label> 
-                                <input name="numParqueaderos" type="text" id="numParqueaderos" class="form-control required" value="{$value.numParqueaderos}" onBlur="sinCaracteresEspeciales(this);
+                                <input name="numParqueaderos" type="text" id="numParqueaderos" class="form-control required3" value="{$value.numParqueaderos}" onBlur="sinCaracteresEspeciales(this);
                                         soloNumeros(this);" style="width:65px;"/>
                                 <div id="val_numParqueaderos" class="divError">Este campo es requerido</div>
                             </div>
@@ -389,15 +389,15 @@
                         <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label" >Parqueaderos Discapacitados (*)</label> 
-                                <input name="numParqueaderosDisc" type="text" id="numParqueaderosDisc" class="form-control required" value="{$value.numParqueaderosDisc}" onBlur="sinCaracteresEspeciales(this);
+                                <input name="numParqueaderosDisc" type="text" id="numParqueaderosDisc" class="form-control required3" value="{$value.numParqueaderosDisc}" onBlur="sinCaracteresEspeciales(this);
                                         soloNumeros(this);" style="width:65px;"/>
                                 <div id="val_numParqueaderosDisc" class="divError">Este campo es requerido</div>
                             </div>
-                        </div>   
+                        </div>  
                         <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label" >Torres (*)</label> 
-                                <input name="valTorres" type="text" id="valTorres" class="form-control required" value="{$value.valTorres}" onBlur="sinCaracteresEspeciales(this);
+                                <input name="valTorres" type="text" id="valTorres" class="form-control required3" value="{$value.valTorres}" onBlur="sinCaracteresEspeciales(this);
                                         soloNumeros(this);" style="width:65px;"/>
                                 <div id="val_valTorres" class="divError">Este campo es requerido</div>
                             </div>
@@ -405,30 +405,17 @@
                         <div class="form-group" id="idLineaAreaLoteConstruida">
                             <div class="col-md-4"> 
                                 <label class="control-label" >Area Lote en <b>m²</b> (*)</label> 
-                                <input name="valAreaLote" type="text" id="valAreaLote" class="form-control required" value="{$value.valAreaLote}" onBlur="sinCaracteresEspeciales(this);
+                                <input name="valAreaLote" type="text" id="valAreaLote" class="form-control required3" value="{$value.valAreaLote}" onBlur="sinCaracteresEspeciales(this);
                                         soloNumeros(this);" style="width:65px;"/>
                                 <div id="val_valAreaLote" class="divError">Debe diligenciar el Area del Lote</div>
                             </div>
                         </div>
 
-                        <div class="form-group" id="idLineaChipLoteMatricula" >
-                            <div class="col-md-4"> 
-                                <label class="control-label" >Chip Lote</label>
-                                <input name="txtChipLote" type="text" id="txtChipLote" value="{$value.txtChipLote}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:150px;"/>
-                            </div>
-                            <div id="val_txtChipLote" class="divError">Debe diligenciar el Chip del Lote</div>    
-                        </div>
-                        <div class="form-group" id="idLineaChipLoteMatricula"  >
-                            <div class="col-md-4"> 
-                                <label class="control-label" >Matr&iacute;cula Inmobiliaria Lote (*)</label>  
-                                <input name="txtMatriculaInmobiliariaLote" type="text" id="txtMatriculaInmobiliariaLote" value="{$value.txtMatriculaInmobiliariaLote}" onBlur="sinCaracteresEspeciales(this);" style="width:150px;" class="form-control"/>
-                                <div id="val_txtMatriculaInmobiliariaLote" class="divError">Debe diligenciar la Matricula Inmobiliaria del Lote</div> 
-                            </div>
-                        </div>  
+
                         <div class="form-group" id="idLineaRegistroFechaEnajenacion">
                             <div class="col-md-4"> 
                                 <label class="control-label" >Registro de Enajenaci&oacute;n (*)</label> 
-                                <input name="txtRegistroEnajenacion" type="text" id="txtRegistroEnajenacion" value="{$value.txtRegistroEnajenacion}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:150px;" />
+                                <input name="txtRegistroEnajenacion" type="text" id="txtRegistroEnajenacion" value="{$value.txtRegistroEnajenacion}" onBlur="sinCaracteresEspeciales(this);" class="form-control required3" style="width:150px;" />
                                 <div id="val_txtRegistroEnajenacion" class="divError">Debe diligenciar el Registro de Enajenación</div> 
                             </div>
                         </div>  
@@ -441,9 +428,9 @@
                             </div>
                         </div>
                         <div class="form-group"  id="idTituloDescEquipamientoComunal" >
-                            <div class="col-md-8"> 
+                            <div class="col-md-4"> 
                                 <label class="control-label">Descripci&oacute;n Equipamiento Comunal</label> 
-                                <textarea id="txtDescEquipamientoComunal" name="txtDescEquipamientoComunal"  class="form-control required" style="height: 30px">{$value.txtDescEquipamientoComunal}</textarea>
+                                <textarea id="txtDescEquipamientoComunal" name="txtDescEquipamientoComunal"  class="form-control required3" style="height: 30px">{$value.txtDescEquipamientoComunal}</textarea>
                                 <div id="val_txtDescEquipamientoComunal" class="divError" style="position: relative; float: left; width: 100%">Este campo es requerido</div>  
                             </div>
                         </div>
@@ -482,40 +469,75 @@
                             Datos Lote Mayor Extensi&oacute;n</h4>
                     </legend>
                     <div class="form-group">
-                        <div class="col-md-4"> 
-                            <label class="control-label">Nombre del vendedor</label> 
-                            <input name="txtNombreVendedor" type="text" id="txtNombreVendedor" value="{$value.txtNombreVendedor}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
-                            <div id="val_txtNombreVendedor" class="divError">Este campo es requerido</div>
-                        </div>
-                        <div class="col-md-4"> 
-                            <label class="control-label">Nit</label>                         
-                            <input name="numNitVendedor" type="text" id="numNitVendedor" value="{$value.numNitVendedor}" onblur=" sinCaracteresEspeciales(this);
-                                    soloNumeros(this);" style="width:200px;" class="form-control required">
-                            <div id="val_numNitVendedor" class="divError">Este campo es requerido</div>
-                        </div>
+
                         <div class="col-md-4"> 
                             <label class="control-label">Cédula Catastral</label> <br>
-                            <input name="txtCedulaCatastral" type="text" id="txtCedulaCatastral" value="{$value.txtCedulaCatastral}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
+                            <input name="txtCedulaCatastral" type="text" id="txtCedulaCatastral" value="{$value.txtCedulaCatastral}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required3">
                             <div id="val_txtCedulaCatastral" class="divError">Este campo es requerido</div>
                         </div>
                         <div class="col-md-4">
                             <label class="control-label">No. Escritura</label><br> 
-                            <input name="txtEscritura" type="text" id="txtEscritura" value="{$value.txtEscritura}" onblur="sinCaracteresEspeciales(this);" class="form-control required"  style="width: 30%; position: relative; float: left"> <b style="width: 5%; position: relative; float: left; left: 2%;top: 5px">Del</b>
+                            <input name="txtEscritura" type="text" id="txtEscritura" value="{$value.txtEscritura}" onblur="sinCaracteresEspeciales(this);" class="form-control required3"  style="width: 30%; position: relative; float: left"> <b style="width: 5%; position: relative; float: left; left: 2%;top: 5px">Del</b>
 
-                            <input name="fchEscritura" type="text" id="fchEscritura" value="{$value.fchEscritura}" size="10" readonly="" class="form-control required"  style="width: 35%; position: relative; float: left;left: 5%;">
+                            <input name="fchEscritura" type="text" id="fchEscritura" value="{$value.fchEscritura}" size="10" readonly="" class="form-control required3"  style="width: 35%; position: relative; float: left;left: 5%;">
                             <a href="#" onclick="javascript: calendarioPopUp('fchEscritura');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:10%; "></a><br />
                             <div id="val_fchEscritura" class="divError" style="width: 50%; position: relative;float: left;">Este campo es requerido</div>
                             <div id="val_txtEscritura" class="divError" style="width: 50%; position: relative;float: right;">Este campo es requerido</div>
                         </div>  
                         <div class="col-md-4"> 
                             <label class="control-label">No. Notaría</label> 
-                            <input name="numNotaria" type="text" id="numNotaria" value="{$value.numNotaria}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required">
+                            <input name="numNotaria" type="text" id="numNotaria" value="{$value.numNotaria}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required3">
                             <div id="val_numNotaria" class="divError">Este campo es requerido</div>
                         </div>
+                        <div class="form-group" id="idLineaChipLoteMatricula" >
+                            <div class="col-md-4"> 
+                                <label class="control-label" >Chip Lote</label>
+                                <input name="txtChipLote" type="text" id="txtChipLote" value="{$value.txtChipLote}" onBlur="sinCaracteresEspeciales(this);" class="form-control required2" style="width:150px;"/>
+                            </div>
+                            <div id="val_txtChipLote" class="divError">Debe diligenciar el Chip del Lote</div>    
+                        </div>
+                        <div class="form-group" id="idLineaChipLoteMatricula"  >
+                            <div class="col-md-4"> 
+                                <label class="control-label" >Matr&iacute;cula Inmobiliaria Lote (*)</label>  
+                                <input name="txtMatriculaInmobiliariaLote" type="text" id="txtMatriculaInmobiliariaLote" value="{$value.txtMatriculaInmobiliariaLote}" onBlur="sinCaracteresEspeciales(this);" style="width:150px;" class="form-control required"/>
+                                <div id="val_txtMatriculaInmobiliariaLote" class="divError">Debe diligenciar la Matricula Inmobiliaria del Lote</div> 
+                            </div>
+                        </div>  
                     </div>
                 </fieldset>
                 <p>&nbsp;</p>
                 <div>
+                    <fieldset>
+                        <legend class="legend">
+                            <h4 style="position: relative; float: left; width: 100%; margin: 0; padding: 5px;">
+                                Datos del Vendedor
+                            </h4>
+                        </legend>
+                        <div class="form-group">
+                            <div class="col-md-4"> 
+                                <label class="control-label">Nombre del vendedor</label> 
+                                <input name="txtNombreVendedor" type="text" id="txtNombreVendedor" value="{$value.txtNombreVendedor}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required5">
+                                <div id="val_txtNombreVendedor" class="divError">Este campo es requerido</div>
+                            </div>
+                            <div class="col-md-4"> 
+                                <label class="control-label">Nit</label>                         
+                                <input name="numNitVendedor" type="text" id="numNitVendedor" value="{$value.numNitVendedor}" onblur=" sinCaracteresEspeciales(this);
+                                        soloNumeros(this);" style="width:200px;" class="form-control required5">
+                                <div id="val_numNitVendedor" class="divError">Este campo es requerido</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label" >Correo del Vendedor</label>   
+                                <input name="txtCorreoVendedor" type="text" id="txtCorreoVendedor" value="{$value.txtCorreoVendedor}" onBlur="sinCaracteresEspeciales(this);" class="form-control required5"/>
+                                <div id="val_txtCorreoOferente_{$cont}" class="divError">Debe diligenciar el correo del vendedor</div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                </div>
+
+                <p>&nbsp;</p>
+                <div>
+
                     <fieldset>
                         <legend class="legend">
                             <h4 style="position: relative; float: left; width: 100%; margin: 0; padding: 5px;">
@@ -529,7 +551,7 @@
                                 <div class="form-group" id="field{$seqOferentesProy+1}"> 
                                     <div id="table{$cont}">
                                         <div class="col-md-3">
-                                            <label class="control-label" >Oferente (*) uu</label>                                      
+                                            <label class="control-label" >Oferente (*)</label>                                      
                                             <input type="hidden" name="seqProyectoOferente[]" value="{$valueOferentesProy.seqProyectoOferente}" />
                                             <select name="seqOferente[]"
                                                     id="seqOferente_{$cont}" 
@@ -551,7 +573,7 @@
                                         </div>                                
                                         <div class="col-md-3">
                                             <label class="control-label" >Correo Contacto</label>   
-                                            <input name="txtCorreoOferente[]" type="text" id="txtCorreoOferente_{$cont}" value="{$valueOferentesProy.txtCorreoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:140px;"/>
+                                            <input name="txtCorreoOferente[]" type="text" id="txtCorreoOferente_{$cont}" value="{$valueOferentesProy.txtCorreoOferente}" onBlur="sinCaracteresEspeciales(this);" class="form-control required" style="width:140px;"/>
                                             <div id="val_txtCorreoOferente_{$cont}" class="divError">Debe diligenciar el correo de contacto del Oferente</div>
                                         </div>
                                         <div class="col-md-2">

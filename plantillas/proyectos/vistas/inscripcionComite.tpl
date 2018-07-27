@@ -10,30 +10,36 @@
                 <fieldset style="border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;">                  
                     <div class="col-md-3"> 
                         <label class="control-label" >Radicado Jur&iacute;dico</label><br>      
-                        <input type="number" name="numRadicadoJuridico" id="numRadicadoJuridico" value="{$value.numRadicadoJuridico}" class="form-control">
+                        <input type="number" name="numRadicadoJuridico" id="numRadicadoJuridico" value="{$value.numRadicadoJuridico}" class="form-control required4">
+                        <div id="val_numRadicadoJuridico" class="divError">Este campo es requerido</div> 
                     </div>
                     <div class="col-md-3"> 
                         <label class="control-label" >Fecha Radicado Jur&iacutedico</label> 
-                        <input name="fchRadicadoJuridico" type="text" id="fchRadicadoJuridico" value="{$value.fchRadicadoJuridico}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+                        <input name="fchRadicadoJuridico" type="text" id="fchRadicadoJuridico" value="{$value.fchRadicadoJuridico}" size="12" readonly=""  class="form-control required4"  style="width: 70%; position: relative; float: left">
                         <a href="#" onclick="javascript: calendarioPopUp('fchRadicadoJuridico');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 11%; position: relative; float: right; right:15%"></a>
+                        <div id="val_fchRadicadoJuridico" class="divError">Este campo es requerido</div> 
                     </div> 
                     <div class="col-md-3"> 
                         <label class="control-label" >Radicado T&eacute;cnico</label><br>      
-                        <input type="number" name="numRadicadoTecnico" id="numRadicadoTecnico" value="{$value.numRadicadoTecnico}" class="form-control">
+                        <input type="number" name="numRadicadoTecnico" id="numRadicadoTecnico" value="{$value.numRadicadoTecnico}" class="form-control required4">
+                        <div id="val_numRadicadoTecnico" class="divError">Este campo es requerido</div> 
                     </div>
                     <div class="col-md-3"> 
                         <label class="control-label" >Fecha Radicado T&eacute;cnico</label> 
-                        <input name="fchRadicadoTecnico" type="text" id="fchRadicadoTecnico" value="{$value.fchRadicadoTecnico}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+                        <input name="fchRadicadoTecnico" type="text" id="fchRadicadoTecnico" value="{$value.fchRadicadoTecnico}" size="12" readonly=""  class="form-control required4"  style="width: 70%; position: relative; float: left">
                         <a href="#" onclick="javascript: calendarioPopUp('fchRadicadoTecnico');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 11%; position: relative; float: right; right:15%"></a>
+                        <div id="val_fchRadicadoTecnico" class="divError">Este campo es requerido</div>
                     </div> 
                     <div class="col-md-3"> 
                         <label class="control-label" >Radicado Financiero</label><br>      
-                        <input type="number" name="numRadicadoFinanciero" id="numRadicadoFinanciero" value="{$value.numRadicadoFinanciero}" class="form-control">
+                        <input type="number" name="numRadicadoFinanciero" id="numRadicadoFinanciero" value="{$value.numRadicadoFinanciero}" class="form-control required4">
+                        <div id="val_numRadicadoFinanciero" class="divError">Este campo es requerido</div>
                     </div>
                     <div class="col-md-3"> 
                         <label class="control-label" >Fecha Radicado Financiero</label> 
-                        <input name="fchRadicadoFinanciero" type="text" id="fchRadicadoFinanciero" value="{$value.fchRadicadoFinanciero}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+                        <input name="fchRadicadoFinanciero" type="text" id="fchRadicadoFinanciero" value="{$value.fchRadicadoFinanciero}" size="12" readonly=""  class="form-control required4"  style="width: 70%; position: relative; float: left">
                         <a href="#" onclick="javascript: calendarioPopUp('fchRadicadoFinanciero');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 11%; position: relative; float: right; right:15%"></a>
+                        <div id="val_fchRadicadoFinanciero" class="divError">Este campo es requerido</div>
                     </div>
                     <div class="col-md-12"> 
                         <p>&nbsp;</p>
@@ -67,13 +73,15 @@
                                 </h5></p></legend>
                             <div class="col-md-4"> 
                                 <label class="control-label" >Número de Acta</label><br>      
-                                <input type="number" name="numActaComite[]" id="numActaComite{$numcomite}" value="{$valueComiteActa.numActaComite}" class="form-control">
+                                <input type="number" name="numActaComite[]" id="numActaComite{$numcomite}" value="{$valueComiteActa.numActaComite}" class="form-control required4">
                                 <input type="hidden" name="seqProyectoComite[]" id="seqProyectoComite{$numcomite}" value="{$valueComiteActa.seqProyectoComite }">
+                                <div id="val_numActaComite{$numcomite}" class="divError">Este campo es requerido</div>
                             </div>
                             <div class="col-md-3"> 
                                 <label class="control-label" >Fecha Acta</label> 
-                                <input name="fchActaComite[]" type="text" id="fchActaComite{$numcomite}" value="{$valueComiteActa.fchActaComite}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+                                <input name="fchActaComite[]" type="text" id="fchActaComite{$numcomite}" value="{$valueComiteActa.fchActaComite}" size="12" readonly=""  class="form-control required4"  style="width: 70%; position: relative; float: left">
                                 <a href="#" onclick="javascript: calendarioPopUp('fchActaComite{$numcomite}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 11%; position: relative; float: right; right:15%"></a>
+                                <div id="val_fchActaComite{$numcomite}" class="divError">Este campo es requerido</div>
                             </div>                    
                             <div class="col-md-4" style="text-align: right">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -84,39 +92,43 @@
                                         <input type="radio"  id="bolAproboProyectoNoap{$numcomite}" value="0" {if $valueComiteActa.bolAproboProyecto == 0} checked {/if}  autocomplete="off"> No Aprobado
                                     </label> 
                                     <input type="hidden" name="bolAproboProyecto[]" id="bolAproboProyecto{$numcomite}" value="{$valueComiteActa.bolAproboProyecto }">
+
                                 </div>
                             </div>
                             <div class="col-md-4"> 
                                 <label class="control-label" >Número de resoluci&oacute;n</label><br>      
-                                <input type="number" name="numResolucionComite[]" id="numResolucionComite" value="{$valueComiteActa.numResolucionComite}" class="form-control">
+                                <input type="number" name="numResolucionComite[]" id="numResolucionComite{$numcomite}" value="{$valueComiteActa.numResolucionComite}" class="form-control required4">
+                                <div id="val_numResolucionComite{$numcomite}" class="divError">Este campo es requerido</div>
                             </div>
                             <div class="col-md-3"> 
                                 <label class="control-label" >Fecha Resoluci&oacute;n</label> 
-                                <input name="fchResolucionComite[]" type="text" id="fchResolucionComite{$numcomite}" value="{$valueComiteActa.fchResolucionComite}" size="12" readonly=""  class="form-control"  style="width: 70%; position: relative; float: left">
+                                <input name="fchResolucionComite[]" type="text" id="fchResolucionComite{$numcomite}" value="{$valueComiteActa.fchResolucionComite}" size="12" readonly=""  class="form-control required4"  style="width: 70%; position: relative; float: left">
                                 <a href="#" onclick="javascript: calendarioPopUp('fchResolucionComite{$numcomite}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 11%; position: relative; float: right; right:15%"></a>
+                                <div id="val_fchResolucionComite{$numcomite}" class="divError">Este campo es requerido</div>
                             </div> 
                             <div class="col-md-4"> 
                                 <label class="control-label" >Entidad</label> 
-                                <select name="seqEntidadComite[]" id="seqEntidadComite{$numcomite}" class="form-control">
+                                <select name="seqEntidadComite[]" id="seqEntidadComite{$numcomite}" class="form-control required4">
                                     <option value="">Seleccione</option>                            
                                     {foreach from=$arrayEntComite key=seqEntidadComite item=txtEntidadComite}
                                         <option value="{$seqEntidadComite}" {if $valueComiteActa.seqEntidadComite == $seqEntidadComite} selected {/if}>{$txtEntidadComite}</option>
                                     {/foreach}
                                 </select>
+                                <div id="val_seqEntidadComite{$numcomite}" class="divError">Este campo es requerido</div>
                             </div> 
                             <div class="col-md-12"> 
                                 <label class="control-label" >Observaciones Acta</label>   
-                                <textarea name="txtObservacionesComite[]" id="txtObservacionesComite{$numcomite}" class="form-control">{$valueComiteActa.txtObservacionesComite}</textarea>
+                                <textarea name="txtObservacionesComite[]" id="txtObservacionesComite{$numcomite}" class="form-control required4">{$valueComiteActa.txtObservacionesComite}</textarea>
                             </div>
                             <div class="col-md-4">
                                 <label class="control-label" >Comite Aprobado Condicionado?</label>
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-secondary active alert-success" style="margin: 0" onclick="$('#bolCondicionesComite{$numcomite}').val('1');
-                                                    ocultarDivEnt(0, 'txtCondicionesComite{$numcomite}Div');">
+                                            ocultarDivEnt(0, 'txtCondicionesComite{$numcomite}Div');">
                                         <input type="radio"  id="bolCondiciones{$numcomite}" {if $valueComiteActa.bolCondicionesComite == 1} checked {/if} autocomplete="off" value="1" > SI
                                     </label>
                                     <label class="btn btn-secondary alert-danger" style="margin: 0" onclick="$('#bolCondicionesComite{$numcomite}').val('0');
-                                                    ocultarDivEnt(1, 'txtCondicionesActa{$numcomite}Div');">
+                                            ocultarDivEnt(1, 'txtCondicionesActa{$numcomite}Div');">
                                         <input type="radio"  id="bolCondiciones{$numcomite}" value="0" autocomplete="off"  {if $valueComiteActa.bolCondicionesComite == 0} checked {/if} > NO
                                     </label>   
                                     <input type="hidden" name="bolCondicionesComite[]" id="bolCondicionesComite{$numcomite}" value="{$valueComiteActa.bolCondicionesComite }">
@@ -125,6 +137,7 @@
                             <div class="col-md-8" id="txtCondicionesComite{$numcomite}Div"  style="{$styleFid}"> 
                                 <label class="control-label" >Condiciones</label>                          
                                 <textarea name="txtCondicionesComite[]" id="txtCondicionesComite{$numcomite}" class="form-control">{$valueComiteActa.txtCondicionesComite}</textarea>
+                                <div id="val_txtCondicionesComite{$numcomite}" class="divError">Este campo es requerido</div>
                             </div>
                             <p>&nbsp;</p>
                         </fieldset>

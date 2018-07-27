@@ -11,57 +11,73 @@
         {assign var="cont" value="0"}
 
         {counter start=0 print=false assign=num}
+        {counter start=0 print=false assign=cont}
+
         {foreach from=$arrConjuntoResidencial key=seqProyecto item=arrConjunto}
-            {if $num++%2 == 0} <tr class="fila_0">
+
+            {if $cont%2 == 0} <tr class="fila_0">
+
                 {else} 
                 <tr class="fila_1">
-                {/if}             
-                {counter print=false}
-                {assign var="actual" value="r_$num"}               
+                {/if}   
+
+
+
+                {assign var="actual" value="r_$cont"}               
                 <td>
                     <div class="form-group" >
                         <div class="col-md-6"> 
                             <label class="control-label" >Nombre </label><br /> 
                             <input type="hidden" name="seqProyectoHijo[]" id="seqProyectoHijo" value="{$arrConjunto.seqProyecto}" >
                             <input type="hidden" name="seqProyectoPadre[]" id="seqProyectoPadre" value="{$arrConjunto.seqProyectoPadre}" >
-                            <input type="text" name="txtNombreProyectoHijo[]" id="txtNombreProyectoHijo" value="{$arrConjunto.txtNombreProyecto}" size='80' onblur="sinCaracteresEspeciales(this);">
+                            <input type="text" name="txtNombreProyectoHijo[]" id="txtNombreProyectoHijo" value="{$arrConjunto.txtNombreProyecto}" size='80' onblur="sinCaracteresEspeciales(this);" class="form-control required4">
+                            <div id="val_txtNombreProyectoHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-6">
                             <label class="control-label" >Nombre Comercial</label><br />
-                            <input type="text" name="txtNombreComercialHijo[]" id="txtNombreComercialHijo" value="{$arrConjunto.txtNombreComercial}" size='80' onblur="sinCaracteresEspeciales(this);">
+                            <input type="text" name="txtNombreComercialHijo[]" id="txtNombreComercialHijo_{$cont}" value="{$arrConjunto.txtNombreComercial}" size='80' onblur="sinCaracteresEspeciales(this);">
+                            <div id="val_txtNombreComercialHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >Direcci&oacute;n&nbsp;del&nbsp;Conjunto</label><br />                            
-                            <input type="text" name='txtDireccionHijo[]' id="txtDireccionHijo[]" value="{$arrConjunto.txtDireccion}" size="20" style="background-color:#E4E4E4;" readonly />
-                            <a href="#" onClick="recogerDireccion('txtDireccionHijo[]', 'objDireccionOculto')"><img src="recursos/imagenes/gps.png"></a>
+                            <input type="text" name='txtDireccionHijo[]' id="txtDireccionHijo_{$cont}" value="{$arrConjunto.txtDireccion}" size="20" style="background-color:#E4E4E4; width: 90%;position: relative; float: left" readonly  class="form-control required4"/>
+                            <a href="#" onClick="recogerDireccion('txtDireccionHijo_{$cont}', 'objDireccionOculto')"><img src="recursos/imagenes/gps.png"></a>
+                            <div id="val_txtDireccionHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >Unidades</label><br />
-                            <input type='text' name='valNumeroSolucionesHijo[]' id='valNumeroSolucionesHijo' value="{$arrConjunto.valNumeroSoluciones}" onBlur='sinCaracteresEspeciales(this);' size='6' >
+                            <input type='text' name='valNumeroSolucionesHijo[]' id='valNumeroSolucionesHijo_{$cont}' value="{$arrConjunto.valNumeroSoluciones}" onBlur='sinCaracteresEspeciales(this);' size='6' class="form-control required4">
+                            <div id="val_valNumeroSolucionesHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >Chip</label><br />
-                            <input type='text' name='txtChipLoteHijo[]' id='txtChipLoteHijo' value="{$arrConjunto.txtChipLote}" onBlur='sinCaracteresEspeciales(this);' size='13' >
+                            <input type='text' name='txtChipLoteHijo[]' id='txtChipLoteHijo_{$cont}' value="{$arrConjunto.txtChipLote}" onBlur='sinCaracteresEspeciales(this);' size='13' class="form-control required4">
+                            <div id="val_txtChipLoteHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >Matr&iacute;cula Inmobiliaria</label><br />            
-                            <input type='text' name='txtMatriculaInmobiliariaLoteHijo[]' id='txtMatriculaInmobiliariaLoteHijo' value="{$arrConjunto.txtMatriculaInmobiliariaLote}" size='13' onBlur='sinCaracteresEspeciales(this);' >
+                            <input type='text' name='txtMatriculaInmobiliariaLoteHijo[]' id='txtMatriculaInmobiliariaLoteHijo_{$cont}' value="{$arrConjunto.txtMatriculaInmobiliariaLote}" size='13' onBlur='sinCaracteresEspeciales(this);' class="form-control required4">
+                            <div id="val_txtMatriculaInmobiliariaLoteHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">                            
                             <label class="control-label" >C&eacute;dula Catastral</label><br />
-                            <input type='text' name='txtCedulaCatastralHijo[]' id='txtCedulaCatastralHijo' value="{$arrConjunto.txtCedulaCatastral}" onBlur='sinCaracteresEspeciales(this);' size='22' >
+                            <input type='text' name='txtCedulaCatastralHijo[]' id='txtCedulaCatastralHijo_{$cont}' value="{$arrConjunto.txtCedulaCatastral}" onBlur='sinCaracteresEspeciales(this);' size='22' class="form-control required4">
+                            <div id="val_txtCedulaCatastralHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >No. Escritura</label><br /> 
-                            <input type='text' name='txtEscrituraHijo[]' id='txtEscrituraHijo' value="{$arrConjunto.txtEscritura}" onBlur='sinCaracteresEspeciales(this);' size='12' >
+                            <input type='text' name='txtEscrituraHijo[]' id='txtEscrituraHijo_{$cont}' value="{$arrConjunto.txtEscritura}" onBlur='sinCaracteresEspeciales(this);' size='12' class="form-control required4">
+                            <div id="val_txtEscrituraHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >Fecha&nbsp;Escritura</label><br /> 
-                            <input name="fchEscrituraHijo[]" type="text" id="fchEscrituraHijo[]" value="{$arrConjunto.fchEscritura}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchEscrituraHijo[]');"><img src="recursos/imagenes/calendar.png"></a>
+                            <input name="fchEscrituraHijo[]" type="text" id="fchEscrituraHijo_{$cont}" value="{$arrConjunto.fchEscritura}" size="12" style="text-align:center; background-color:#E4E4E4; width: 90%;position: relative; float: left" readonly class="form-control required4"/><a href="#" onClick="javascript: calendarioPopUp('fchEscrituraHijo_{$cont}');"><img src="recursos/imagenes/calendar.png"></a>
+                            <div id="val_fchEscrituraHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >No. Notar&iacute;a</label><br />
-                            <input type='text' name='numNotariaHijo[]' id='numNotariaHijo' value="{$arrConjunto.numNotaria}" onBlur='sinCaracteresEspeciales(this);' size='12' >
+                            <input type='text' name='numNotariaHijo[]' id='numNotariaHijo_{$cont}' value="{$arrConjunto.numNotaria}" onBlur='sinCaracteresEspeciales(this);' size='12' class="form-control required4">
+                            <div id="val_numNotariaHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
 
                         <div class="col-md-6">
@@ -70,7 +86,7 @@
                     </div>
 
 
-                    {foreach from=$arraConjuntoLicencias[$cont] key=keyLicenciaCon item=valLicConj}
+                    {foreach from=$arraConjuntoLicencias[$num] key=keyLicenciaCon item=valLicConj}
                         {if $valLicConj.seqTipoLicencia == 1}
                             <div class="form-group" >
                                 <div class="col-md-12">
@@ -82,20 +98,24 @@
 
                                         <div class="col-md-3">
                                             <label class="control-label" >Lic. Urbanismo</label><br />  
-                                            <input type="hidden" name="seqProyectoLicenciaUrbHijo[]" id="seqProyectoLicenciaUrbHijo" value="{$valLicConj.seqProyectoLicencia}" >
-                                            <input type='text' name='txtLicenciaUrbanismoHijo[]' id='txtLicenciaUrbanismoHijo' value="{$valLicConj.txtLicencia}" onBlur='sinCaracteresEspeciales(this);' size='18' >
+                                            <input type="hidden" name="seqProyectoLicenciaUrbHijo[]" id="seqProyectoLicenciaUrbHijo_{$cont}" value="{$valLicConj.seqProyectoLicencia}" >
+                                            <input type='text' name='txtLicenciaUrbanismoHijo[]' id='txtLicenciaUrbanismoHijo_{$cont}' value="{$valLicConj.txtLicencia}" onBlur='sinCaracteresEspeciales(this);' size='18' class="form-control required4">
+                                            <div id="val_txtLicenciaUrbanismoHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                         </div>
                                         <div class="col-md-3">
                                             <label class="control-label" >Entidad Expedición</label><br />
-                                            <input type='text' name='txtExpideLicenciaUrbanismoHijo[]' id='txtExpideLicenciaUrbanismoHijo' value="{$valLicConj.txtExpideLicencia}" onBlur='sinCaracteresEspeciales(this);' size='13' >
+                                            <input type='text' name='txtExpideLicenciaUrbanismoHijo[]' id='txtExpideLicenciaUrbanismoHijo_{$cont}' value="{$valLicConj.txtExpideLicencia}" onBlur='sinCaracteresEspeciales(this);' size='13' class="form-control required4">
+                                            <div id="val_txtExpideLicenciaUrbanismoHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                         </div>
                                         <div class="col-md-3">
                                             <label class="control-label" >Fecha&nbsp;Licencia</label><br />           
-                                            <input name="fchLicenciaUrbanismo1Hijo[]" type="text" id="fchLicenciaUrbanismo1Hijo[]" value="{$valLicConj.fchLicencia}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaUrbanismo1Hijo[]');"><img src="recursos/imagenes/calendar.png"></a>
+                                            <input name="fchLicenciaUrbanismo1Hijo[]" type="text" id="fchLicenciaUrbanismo1Hijo_{$cont}" value="{$valLicConj.fchLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaUrbanismo1Hijo_{$cont}');"><img src="recursos/imagenes/calendar.png"></a>
+                                            <div id="val_fchLicenciaUrbanismo1Hijo_{$cont}" class="divError">Diligenciar Campo</div>
                                         </div>
                                         <div class="col-md-3">
                                             <label class="control-label" >Vigencia&nbsp;Licencia</label><br />            
-                                            <input name="fchVigenciaLicenciaUrbanismoHijo[]" type="text" id="fchVigenciaLicenciaUrbanismoHijo[]" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaUrbanismoHijo[]');"><img src="recursos/imagenes/calendar.png"></a>
+                                            <input name="fchVigenciaLicenciaUrbanismoHijo[]" type="text" id="fchVigenciaLicenciaUrbanismoHijo_{$cont}" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaUrbanismoHijo_{$cont}');" ><img src="recursos/imagenes/calendar.png"></a>
+                                            <div id="val_fchVigenciaLicenciaUrbanismoHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                         </div>
                                     </fieldset>
                                 </div>
@@ -112,15 +132,18 @@
                                             <div class="col-md-3">
                                                 <label class="control-label" >Lic. Construcci&oacute;n</label><br />  
                                                 <input type="hidden" name="seqProyectoLicenciaConsHijo[]" id="seqProyectoLicencia" value="{$valLicConj.seqProyectoLicencia}" >
-                                                <input type='text' name='txtLicenciaConstruccionHijo[]' id='txtLicenciaConstruccionHijo' value="{$valLicConj.txtLicencia}" onBlur='sinCaracteresEspeciales(this);' size='18' >
+                                                <input type='text' name='txtLicenciaConstruccionHijo[]' id='txtLicenciaConstruccionHijo_{$cont}' value="{$valLicConj.txtLicencia}" onBlur='sinCaracteresEspeciales(this);' size='18' class="form-control required4">
+                                                <div id="val_txtLicenciaConstruccionHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="control-label" >Fecha&nbsp;Licencia</label><br />             
-                                                <input name="fchLicenciaConstruccion1Hijo[]" type="text" id="fchLicenciaConstruccion1Hijo[]" value="{$valLicConj.fchLicencia}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaConstruccion1Hijo[]');"><img src="recursos/imagenes/calendar.png"></a>
+                                                <input name="fchLicenciaConstruccion1Hijo[]" type="text" id="fchLicenciaConstruccion1Hijo_{$cont}" value="{$valLicConj.fchLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaConstruccion1Hijo[]');" class="form-control required4"><img src="recursos/imagenes/calendar.png"></a>
+                                                <div id="val_fchLicenciaConstruccion1Hijo_{$cont}" class="divError">Diligenciar Campo</div>
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="control-label" >Vigencia&nbsp;Licencia</label><br />            
-                                                <input name="fchVigenciaLicenciaConstruccionHijo[]" type="text" id="fchVigenciaLicenciaConstruccionHijo[]" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="text-align:center; background-color:#E4E4E4" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaConstruccionHijo[]');"><img src="recursos/imagenes/calendar.png"></a>
+                                                <input name="fchVigenciaLicenciaConstruccionHijo[]" type="text" id="fchVigenciaLicenciaConstruccionHijo_{$cont}" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaConstruccionHijo_{$cont}');"><img src="recursos/imagenes/calendar.png"></a>
+                                                <div id="val_fchVigenciaLicenciaConstruccionHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="control-label" >Eliminar</label><br />     

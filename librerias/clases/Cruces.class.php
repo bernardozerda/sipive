@@ -1038,8 +1038,9 @@ WHERE
                     }
                 }
 
-                if($claFormulario->valIngresoHogar > ($arrConfiguracion['constantes']['salarioMinimo'] * 2)){
-                    $txtMensaje = "Error Formulario " . $seqFormulario . ": Hogar con ingresos superiores a 2 SMMLV";
+                $numLimiteSalarios = ($claFormulario->seqPlanGobierno == 3)? 2 : 4;
+                if($claFormulario->valIngresoHogar > ($arrConfiguracion['constantes']['salarioMinimo'] * $numLimiteSalarios)){
+                    $txtMensaje = "Error Formulario " . $seqFormulario . ": Hogar con ingresos superiores a $numLimiteSalarios SMMLV";
                     if (!in_array($txtMensaje, $this->arrErrores)) {
                         $this->arrErrores[] = $txtMensaje;
                     }

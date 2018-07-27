@@ -107,6 +107,12 @@ while ($rowCalifica = mysql_fetch_assoc($resCal)) {
     $consecutivo = $consecutivo + 1;
     $telefonos = explode("-", $rowCalifica['telefonos']);
 
+    foreach($rowCalifica as $txtClave => $txtValor){
+        if(is_numeric($rowCalifica[$txtClave])){
+            $rowCalifica[$txtClave] = number_format($txtValor,10, ",","");
+        }
+    }
+
     echo ($consecutivo) . "\t";
     echo ($rowCalifica['seqFormulario']) . "\t";
     echo ($rowCalifica['numDocumento']) . "\t";

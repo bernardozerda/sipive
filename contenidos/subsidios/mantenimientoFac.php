@@ -39,6 +39,7 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
         $arrEstados["VINCULACION"] = 15;
         $arrEstados["VINCULACION - LEGALIZADO"] = 40;
 
+        // recoge la equivalencia entre formulario y formulario-acto
         $sql = "
             select 
                 fac.seqFormulario,

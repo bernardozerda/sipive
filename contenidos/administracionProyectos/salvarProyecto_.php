@@ -60,7 +60,7 @@ if (empty($arrErrores)) {
     if (isset($_POST['seqProyecto']) and is_numeric($_POST['seqProyecto']) and $_POST['seqProyecto'] > 0) {
 
         $seqProyecto = $_POST['seqProyecto'];
-        $arrErrores = $claProyecto->editarProyecto($_POST);
+        $arrErrores = $claProyecto->editarProyectoPRY($_POST);
         //$claRegistro->registrarActividad("Edicion", 0, $_SESSION['seqUsuario'], "Edicion de Oferente: [" . $_POST['seqEditar'] . "] " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));
     } else {
         $seqProyecto = $claProyecto->almacenarProyecto($_POST);

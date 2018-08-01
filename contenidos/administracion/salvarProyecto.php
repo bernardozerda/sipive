@@ -54,7 +54,7 @@
         
         // Verifica si es para crear o editar la proyecto
         if( isset( $_POST['seqEditar'] ) and is_numeric( $_POST['seqEditar'] ) and $_POST['seqEditar'] > 0 ){
-            $arrErrores = $claProyecto->editarProyecto( $_POST['seqEditar'] , trim( $_POST['nombre'] ) , $_POST['vencimiento'] , $_POST['estado'] , $_POST['seqMenu'] );
+            $arrErrores = $claProyecto->editarProyectoPRY( $_POST['seqEditar'] , trim( $_POST['nombre'] ) , $_POST['vencimiento'] , $_POST['estado'] , $_POST['seqMenu'] );
            	$claRegistro->registrarActividad( "Edicion" , 0 , $_SESSION['seqUsuario'] , "Edicion de Proyecto: [" . $_POST['seqEditar'] . "] " . trim( $_POST['nombre'] ) . " Mensaje: " . implode( "," , $arrErrores ) );
         }else{
             $arrErrores = $claProyecto->guardarProyecto( trim( $_POST['nombre'] ) , $_POST['vencimiento'] , $_POST['estado'], $_POST['seqMenu'] );

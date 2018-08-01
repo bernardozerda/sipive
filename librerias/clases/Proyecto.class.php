@@ -685,7 +685,43 @@ class Proyecto {
         return $datos;
     }
 
-    public function editarProyecto($post) {
+    /**
+     * MODIFICA LA INFORMACION DE LA Proyecto
+     * SELECCIONADA Y GUARDA LOS NUEVOS DATOS
+     * @author Bernardo Zerda
+     * @param integer seqProyecto
+     * @param String txtNombre
+     * @param Date fchVencimiento
+     * @param Boolean bolActivo
+     * @return Array arrErrores
+     * @version 0,1 Marzo 2009
+     */
+    public function editarProyecto($seqProyecto, $txtNombre, $fchVencimiento, $bolActivo, $seqMenu) {
+
+        global $aptBd;
+        $arrErrores = array();
+
+        // Consulta para hacer la actualizacion
+        $sql = "
+                UPDATE T_COR_PROYECTO SET
+                    txtProyecto = \"" . ereg_replace('\"', "", $txtNombre) . "\", 
+                    bolActivo = $bolActivo,
+                    fchVencimiento = '$fchVencimiento',
+					seqMenu = $seqMenu
+                WHERE seqProyecto = $seqProyecto
+            ";
+
+        try {
+            $aptBd->execute($sql);
+        } catch (Exception $objError) {
+            $arrProyecto = $this->cargarProyecto($seqProyecto);
+            $arrErrores[] = "No se ha podido editar la Proyecto <b>" . $arrProyecto[$seqProyecto]->txtProyecto . "</b> reporte este error al administrador del sistema";
+        }
+
+        return $arrErrores;
+    }
+
+    public function editarProyectoPRY($post) {
         global $aptBd;
 
         $txtNombreInterventor = '';
@@ -720,7 +756,7 @@ class Proyecto {
                 UPDATE t_pry_proyecto
                     SET                    
                         txtNombreProyecto = \"" . ereg_replace('\"', "", $txtNombreProyecto) . "\", 
-                        numNitProyecto = " . $numNitProyecto . ",
+                        numNitProyecto = " . doubleval($numNitProyecto) . ",
                         txtNombrePlanParcial = '" . $txtNombrePlanParcial . "',
                         txtNombreComercial = '" . $txtNombreComercial . "',  
                         seqPlanGobierno = " . $seqPlanGobierno . ",

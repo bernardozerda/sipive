@@ -35,7 +35,7 @@
         <td align="center" valign="middle" style="padding:20px; {$txtFuente12}">
             <b>Subsidio Distrital de Vivienda</b><br>
             <b>Solicitud de Desembolso</b><br>
-            <b>Modalidad de {$arrModalidad.$seqModalidad}</b> ## {$txtModalidad} ##
+            <b>Modalidad de {$txtModalidad}</b>
             <hr>
             <div style="{$txtFuente10}; text-align:left; width:100%">
                 <b>Fecha:</b> {$txtFecha}<br>

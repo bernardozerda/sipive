@@ -720,7 +720,7 @@ class Proyecto {
                 UPDATE t_pry_proyecto
                     SET                    
                         txtNombreProyecto = \"" . ereg_replace('\"', "", $txtNombreProyecto) . "\", 
-                        numNitProyecto = " . $numNitProyecto . ",
+                        numNitProyecto = " . doubleval($numNitProyecto) . ",
                         txtNombrePlanParcial = '" . $txtNombrePlanParcial . "',
                         txtNombreComercial = '" . $txtNombreComercial . "',  
                         seqPlanGobierno = " . $seqPlanGobierno . ",

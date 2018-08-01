@@ -219,16 +219,16 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrNoViabilizados['txtCiudadMatricula'][$intNV] = $txtCiudadMatricula;
                     $arrNoViabilizados['txtElaboro'][$intNV] = $txtElaboro;
                     $arrNoViabilizados['numdocumento'][$intNV] = $numDocumento;
-                    $arrNoViabilizados['beneficiarios'][$intNV] = (trim($datos [27]) == 'SI') ? $observacion1 : '';
-                    $arrNoViabilizados['estado'][$intNV] = (trim($datos [32]) == 'SI') ? $observacion2 : '';
-                    $arrNoViabilizados['constitucion'][$intNV] = (trim($datos [29]) == 'SI') ? $observacion3 : '';
-                    $arrNoViabilizados['resticciones'][$intNV] = (trim($datos [31]) == 'SI') ? $observacion4 : '';
-                    $arrNoViabilizados['patrimonio'][$intNV] = (trim($datos [36]) == 'SI') ? $observacion5 : '';
-                    $arrNoViabilizados['propietarios'][$intNV] = (trim($datos [28]) == 'SI') ? $observacion6 : '';
+                    $arrNoViabilizados['beneficiarios'][$intV] = $observacion1;
+                    $arrNoViabilizados['estado'][$intV] = $observacion2;
+                    $arrNoViabilizados['constitucion'][$intV] = $observacion3;
+                    $arrNoViabilizados['resticciones'][$intV] = $observacion4;
+                    $arrNoViabilizados['patrimonio'][$intV] = $observacion5;
+                    $arrNoViabilizados['propietarios'][$intV] = $observacion6;
                     $arrNoViabilizados['compraVenta'][$intNV] = $observacion7;
-                    $arrNoViabilizados['noEscritura'][$intNV] = (trim($datos [18]) == 'SI') ? $documentos1 : '';
-                    $arrNoViabilizados['folio'][$intNV] = (trim($datos [2]) == 'SI') ? $documentos2 : '';
-                    $arrNoViabilizados['certificado'][$intNV] = (trim($datos [9]) == 'SI') ? $documentos3 : '';
+                    $arrNoViabilizados['noEscritura'][$intNV] = $documentos1;
+                    $arrNoViabilizados['folio'][$intNV] = $documentos2;
+                    $arrNoViabilizados['certificado'][$intNV] = $documentos3;
                     $arrNoViabilizados['observacion'][$intNV] = ($txtConcepto);
                     $intNV++;
                 }

@@ -1100,16 +1100,7 @@ function cargarArchivo($txtNombreFile, $arrFormato = array()){
                 if( trim( $txtLinea ) != "" ) {
                     $arrArchivo[$numLinea] = explode("\t", trim(utf8_encode($txtLinea)));
                     foreach( $arrArchivo[$numLinea] as $numColumna => $txtCelda ){
-                        if($arrFormato[$numColumna] == "fecha" and $txtCelda != ""){
-                            try {
-                                $claFecha = new DateTime(trim($txtCelda));
-                                $arrArchivo[$numLinea][$numColumna] = $claFecha->format("Y-m-d");
-                            }catch(Exception $objError){
-                                $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
-                            }
-                        }else{
-                            $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
-                        }
+                        $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
                     }
                 }
             }

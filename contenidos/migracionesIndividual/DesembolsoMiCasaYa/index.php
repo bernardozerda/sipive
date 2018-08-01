@@ -208,7 +208,7 @@ echo "&nbsp;";
     ?>
 
     <div class="hero-unit-header" style="background-color: #289bae; color: white; text-align: center">
-        Cargue masivo de desembolso<br>para el esquema <strong>Mi casa ya</strong>
+        Cargue masivo de desembolso<br>para el esquema <strong>Complementariedad VIPA</strong>
     </div>
     <div class="well">
         <form method="post"

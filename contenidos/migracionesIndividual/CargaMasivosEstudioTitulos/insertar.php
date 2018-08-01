@@ -17,6 +17,7 @@ $observacion7 = 'COMPRAVENTA REALIZADA CON SDV';
 $documentos1 = 'ESCRITURA PÚBLICA';
 $documentos2 = 'FOLIO DE MATRÍCULA INMOBILIARIA';
 $documentos3 = 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD VIABILIZADO';
+$documentos4 = 'RESOLUCIÓN O CARTA DE VINCULACIÓN DEL BENEFICIO OTORGADO POR SDHT';
 
 
 $arrViabilizados = Array();
@@ -191,6 +192,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrViabilizados['noEscritura'][$intV] = $documentos1;
                     $arrViabilizados['folio'][$intV] = $documentos2;
                     $arrViabilizados['certificado'][$intV] = $documentos3;
+                    $arrViabilizados['carta'][$intV] = $documentos4;
                     $arrViabilizados['observacion'][$intV] = utf8_decode($txtConcepto);
                     $intV++;
                     //echo "jkchsadk";
@@ -219,16 +221,17 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrNoViabilizados['txtCiudadMatricula'][$intNV] = $txtCiudadMatricula;
                     $arrNoViabilizados['txtElaboro'][$intNV] = $txtElaboro;
                     $arrNoViabilizados['numdocumento'][$intNV] = $numDocumento;
-                    $arrNoViabilizados['beneficiarios'][$intV] = $observacion1;
-                    $arrNoViabilizados['estado'][$intV] = $observacion2;
-                    $arrNoViabilizados['constitucion'][$intV] = $observacion3;
-                    $arrNoViabilizados['resticciones'][$intV] = $observacion4;
-                    $arrNoViabilizados['patrimonio'][$intV] = $observacion5;
-                    $arrNoViabilizados['propietarios'][$intV] = $observacion6;
+                    $arrNoViabilizados['beneficiarios'][$intNV] = $observacion1;
+                    $arrNoViabilizados['estado'][$intNV] = $observacion2;
+                    $arrNoViabilizados['constitucion'][$intNV] = $observacion3;
+                    $arrNoViabilizados['resticciones'][$intNV] = $observacion4;
+                    $arrNoViabilizados['patrimonio'][$intNV] = $observacion5;
+                    $arrNoViabilizados['propietarios'][$intNV] = $observacion6;
                     $arrNoViabilizados['compraVenta'][$intNV] = $observacion7;
                     $arrNoViabilizados['noEscritura'][$intNV] = $documentos1;
                     $arrNoViabilizados['folio'][$intNV] = $documentos2;
                     $arrNoViabilizados['certificado'][$intNV] = $documentos3;
+                    $arrNoViabilizados['carta'][$intNV] = $documentos4;
                     $arrNoViabilizados['observacion'][$intNV] = ($txtConcepto);
                     $intNV++;
                 }
@@ -515,7 +518,9 @@ function insertarAdjuntosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
                 if ($arreglo['certificado'][$int] != "") {
                     $valueObs2 .= "(1," . $seqEstudioTitulos . ",'" . $arreglo['certificado'][$int] . "'),";
                 }
-
+                if ($arreglo['carta'][$int] != "") {
+                    $valueObs2 .= "(1," . $seqEstudioTitulos . ",'" . $arreglo['carta'][$int] . "'),";
+                }
                 if ($arreglo['observacion'][$int] != "") {
                     $valueObs3 .= "(2," . $seqEstudioTitulos . ",'" . $arreglo['observacion'][$int] . "'),";
                 }

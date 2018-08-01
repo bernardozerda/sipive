@@ -63,7 +63,7 @@ foreach ($array as $key => $value) {
                                        'contenidos/migracionesIndividual/DesembolsoMiCasaYa/index.php'
                                    );"
                                 >
-                                    Mi Casa Ya
+                                    Complementariedad VIPA
                                 </a>
                             </li>
                             <li>

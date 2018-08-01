@@ -18,11 +18,7 @@ $arrMensajes = array();
 
 if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
 
-    $arrFormato[3] = "fecha";
-    $arrFormato[5] = "fecha";
-    $arrFormato[9] = "fecha";
-
-    $arrArchivo = cargarArchivo("archivo", $arrFormato);
+    $arrArchivo = cargarArchivo("archivo");
 
     if(empty($arrArchivo['errores'])){
 
@@ -47,6 +43,7 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
             select 
                 fac.seqFormulario,
                 fac.seqFormularioActo,
+                fac.seqEstadoProceso,
                 hvi.numActo,
                 hvi.fchActo
             from t_aad_formulario_acto fac
@@ -59,6 +56,7 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
 
             $seqFormulario     = $objRes->fields['seqFormulario'];
             $seqFormularioActo = $objRes->fields['seqFormularioActo'];
+            $seqEstadoProceso  = $objRes->fields['seqEstadoProceso'];
             $numResolucion     = $objRes->fields['numActo'];
             $fchResolucion     = $objRes->fields['fchActo'];
 

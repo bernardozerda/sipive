@@ -27,30 +27,29 @@
             $txtPatron = "";
             switch( substr( $txtClave , 0 , 3 ) ){
                 case "num":
-                    $txtPatron = "/[^0-9A-Za-z\ ]/";
+                    $txtPatron = "[^0-9A-Za-z\ ]";
                 break;
                 case "seq":
-                    $txtPatron = "/[^0-9]/";
+                    $txtPatron = "[^0-9]";
                 break;
                 case "fch":
-                    $txtPatron = "/[^0-9A-Za-z\ \-\/]/";
+                    $txtPatron = "[^0-9A-Za-z\ \-\/]";
                 break;
                 case "txt":
-                    $txtPatron = "/[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,\+\&]/";
+                    $txtPatron = "[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,\+\&]";
                 break;
                 default:
                     if( ! in_array( $txtClave , array("valor","registro1","registro2","numeroRadicado","numeroOrden","monto") ) ) {
-                        $txtPatron = "/[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,]/";
+                        $txtPatron = "[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,]";
                     }else{
-                        $txtPatron = "/[^0-9A-Za-z\ ]/";
+                        $txtPatron = "[^0-9A-Za-z\ ]";
                     }
                 break;
             }
         }
+        $_POST[$txtClave] = mb_ereg_replace($txtPatron,"",$txtValor);
     }
-    
-    //pr( $_POST );
-    
+
     if( $claFormulario->seqTipoEsquema != 1 ){
     
         /**

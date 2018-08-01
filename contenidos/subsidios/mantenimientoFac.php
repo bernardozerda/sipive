@@ -25,7 +25,22 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
 
     if(empty($arrArchivo['errores'])){
 
-        $arrEstados = estadosProceso();
+        // equivalencias entre los estados a reportar
+        $arrEstados["DESEMBOLSADO"] = 33;
+        $arrEstados["DESEMBOLSADO - PENDIENTE REINTEGRO"] = 59;
+        $arrEstados["DESEMBOLSADO - REINTEGRADO"] = 60;
+        $arrEstados["DESEMBOLSO - LEGALIZADO"] = 40;
+        $arrEstados["DESVINCULACION"] = 57;
+        $arrEstados["EXCLUIDO. VINCULACION"] = 57;
+        $arrEstados["EXCLUIDO. VIVIENDA GRATUITA"] = 63;
+        $arrEstados["PERDIDA"] = 21;
+        $arrEstados["PROCESO DESEMBOLSO"] = 15;
+        $arrEstados["PROCESO LEGALIZACION"] = 15;
+        $arrEstados["RENUNCIA"] = 18;
+        $arrEstados["REVOCADO"] = 58;
+        $arrEstados["VENCIDO"] = 34;
+        $arrEstados["VINCULACION"] = 15;
+        $arrEstados["VINCULACION - LEGALIZADO"] = 40;
 
         $sql = "
             select 
@@ -57,7 +72,7 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
             $seqFormulario = $arrLinea[2];
             $numResolucion = mb_ereg_replace("[^0-9]","",$arrLinea[7]);
             $fchResolucion = $arrLinea[9];
-            $txtEstado     = trim($arrLinea[10]);
+            $txtEstado     = trim(mb_strtoupper($arrLinea[10]));
 
             $seqFormularioActo = intval($arrFormularios[$numResolucion . "-" . $fchResolucion][$seqFormulario]);
             if($seqFormularioActo == 0){
@@ -65,10 +80,10 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
             }
 
             $seqEstadoProceso = 0;
-            if(! in_array($txtEstado, $arrEstados)){
-                $arrArchivo['errores'][] = "Error Linea " . ( $numLinea + 1 ) . ": El estado no existe";
+            if(! isset($arrEstados[$txtEstado])){
+                $arrArchivo['errores'][] = "Error Linea " . ( $numLinea + 1 ) . ": No se encuentra la equivalencia del estado '$txtEstado'";
             }else{
-                $seqEstadoProceso = array_shift(array_keys($arrEstados,$txtEstado));
+                $seqEstadoProceso = $arrEstados[$txtEstado];
             }
 
             $arrSql[] = "update t_aad_formulario_acto set seqEstadoProceso = $seqEstadoProceso, fchUltimaActualizacion = now() where seqFormularioActo = $seqFormularioActo";

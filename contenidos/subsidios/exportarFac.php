@@ -58,7 +58,21 @@ $sql = "
         fac.fchUltimaActualizacion,
         moa.txtModalidad,
         concat(eta.txtEtapa,' - ',epr.txtEstadoProceso) as txtEstado,
-        concat(fac.seqFormulario,'Res. ',hvi.numActo,'de',year(hvi.fchActo)) as clave
+        concat(fac.seqFormulario,'Res. ',hvi.numActo,'de',year(hvi.fchActo)) as clave,
+        case 
+          when fac.seqEstadoProceso = 33 then 'DESEMBOLSADO' 
+          when fac.seqEstadoProceso = 59 then 'DESEMBOLSADO - PENDIENTE REINTEGRO' 
+          when fac.seqEstadoProceso = 60 then 'DESEMBOLSADO - REINTEGRADO' 
+          when fac.seqEstadoProceso = 40 then 'DESEMBOLSO - LEGALIZADO | VINCULACION - LEGALIZADO' 
+          when fac.seqEstadoProceso = 57 then 'DESVINCULACION | EXCLUIDO. VINCULACION' 
+          when fac.seqEstadoProceso = 63 then 'EXCLUIDO. VIVIENDA GRATUITA'
+          when fac.seqEstadoProceso = 21 then 'PERDIDA'
+          when fac.seqEstadoProceso = 15 then 'PROCESO DESEMBOLSO | PROCESO LEGALIZACION | VINCULACION'
+          when fac.seqEstadoProceso = 18 then 'RENUNCIA'
+          when fac.seqEstadoProceso = 58 then 'REVOCADO'
+          when fac.seqEstadoProceso = 34 then 'VENCIDO'
+          else 'NO HAY ESTADO EQUIVALENTE'
+        end as txtEstadoEquivalente
     from t_aad_formulario_acto fac
     inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
     inner join t_frm_estado_proceso epr on fac.seqEstadoProceso = epr.seqEstadoProceso

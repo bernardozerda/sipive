@@ -19,7 +19,6 @@ $documentos2 = 'FOLIO DE MATRÍCULA INMOBILIARIA';
 $documentos3 = 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD VIABILIZADO';
 $documentos4 = 'RESOLUCIÓN O CARTA DE VINCULACIÓN DEL BENEFICIO OTORGADO POR SDHT';
 
-
 $arrViabilizados = Array();
 $arrNoViabilizados = Array();
 $idHogar = "";
@@ -35,9 +34,9 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     $intNV = 1;
     $band = 0;
     $cant = count($lineas);
-
+    $valid = "";
     foreach ($lineas as $linea_num => $linea) {
-
+        $valid = "";
         if ($linea_num != 0) {
             $datos = explode("\t", $linea);
             foreach ($datos as $i => $txtValor) {
@@ -131,6 +130,11 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $casilla .= (trim($datos[42]) == '') ? "42," : '';
                 $band = 1;
             }
+
+
+            if ($datos[26] == "NO APLICA" || $datos[29] == "NO APLICA") {
+                $valid = "NO";
+            }
 //        echo "<br>***" . $registros . " fchEscrituraIdentificacion -> " . $fchEscrituraIdentificacion . " fchMatricula-> " . $fchMatricula;
 //        echo "<br>***" . $registros . " fchEscrituraIdentificacion -> " . strtotime($fchEscrituraIdentificacion) . " fchMatricula-> " . strtotime($fchMatricula);
             if (strtotime($fchEscrituraIdentificacion) == "" || strtotime($fchMatricula) == "") {
@@ -183,10 +187,12 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrViabilizados['txtElaboro'][$intV] = $txtElaboro;
                     $arrViabilizados['numdocumento'][$intV] = $numDocumento;
                     $arrViabilizados['beneficiarios'][$intV] = $observacion1;
-                    $arrViabilizados['estado'][$intV] = $observacion2;
+                    //$arrViabilizados['estado'][$intV] = $observacion2;
+                    $arrViabilizados['estado'][$intV] = ($valid == 'NO') ? '' : $observacion2;
                     $arrViabilizados['constitucion'][$intV] = $observacion3;
                     $arrViabilizados['resticciones'][$intV] = $observacion4;
-                    $arrViabilizados['patrimonio'][$intV] = $observacion5;
+                    // $arrViabilizados['patrimonio'][$intV] = $observacion5;
+                    $arrViabilizados['patrimonio'][$intV] = ($valid == 'NO') ? '' : $observacion5;
                     $arrViabilizados['propietarios'][$intV] = $observacion6;
                     $arrViabilizados['compraVenta'][$intV] = $observacion7;
                     $arrViabilizados['noEscritura'][$intV] = $documentos1;
@@ -222,10 +228,12 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrNoViabilizados['txtElaboro'][$intNV] = $txtElaboro;
                     $arrNoViabilizados['numdocumento'][$intNV] = $numDocumento;
                     $arrNoViabilizados['beneficiarios'][$intNV] = $observacion1;
-                    $arrNoViabilizados['estado'][$intNV] = $observacion2;
+                    //$arrNoViabilizados['estado'][$intNV] = $observacion2;
+                    $arrNoViabilizados['estado'][$intNV] = ($valid == 'NO') ? '' : $observacion2;
                     $arrNoViabilizados['constitucion'][$intNV] = $observacion3;
                     $arrNoViabilizados['resticciones'][$intNV] = $observacion4;
-                    $arrNoViabilizados['patrimonio'][$intNV] = $observacion5;
+                    //$arrNoViabilizados['patrimonio'][$intNV] = $observacion5;
+                    $arrNoViabilizados['patrimonio'][$intNV] = ($valid == 'NO') ? '' : $observacion5;
                     $arrNoViabilizados['propietarios'][$intNV] = $observacion6;
                     $arrNoViabilizados['compraVenta'][$intNV] = $observacion7;
                     $arrNoViabilizados['noEscritura'][$intNV] = $documentos1;

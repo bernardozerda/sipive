@@ -95,7 +95,7 @@ if (empty($arrErrores)) {
         include './arregloSeguimientos.php';
 
         // die();
-        $arrErrores = $claProyecto->editarProyecto($_POST);
+        $arrErrores = $claProyecto->editarProyectoPRY($_POST);
         $claSeguimiento->almacenarSeguimiento($seqProyecto, $_POST['txtComentario'], $_POST['seqGestion'], $arrayDatosProyOld, $arrayDatosProyNew);
         $claSeguimientoProyectos = new SeguimientoProyectos;
         $claSeguimientoProyectos->seqProyecto = $seqProyecto;

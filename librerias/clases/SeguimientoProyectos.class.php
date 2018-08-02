@@ -575,7 +575,7 @@ class SeguimientoProyectos {
 	public function validarCampos($seqProyecto, $objAnterior, $objNuevo) {
 //        echo "<p><b>************** Arreglo Anterior **************</b></p>";
 //        pr($objAnterior);
-//         echo "<p><b>************** Arreglo Nuevo **************</b></p>";
+//        echo "<p><b>************** Arreglo Nuevo **************</b></p>";
 //        pr($objNuevo);
 
         $txtSeparador = $this->txtSeparador;
@@ -600,6 +600,7 @@ class SeguimientoProyectos {
                     }
                 }
             }
+
             $arrayDatosAnteriores[$seqProyecto] = array_diff_key($objAnterior[$seqProyecto], $objNuevo[$seqProyecto]);
 
             foreach ($arrayDatosAnteriores[$seqProyecto] as $keyAnt => $valueAnt) {
@@ -631,12 +632,28 @@ class SeguimientoProyectos {
         return $txtCambios;
     }
 
+    function ValidarCamposNew($seqProyecto, $arrayDatosProyNew) {
+
+        foreach ($arrayDatosProyNew[0] as $keyNew => $valueNew) {
+            if (!in_array($keyNew, $this->arrIgnorarCampos)) {
+                $valueNew = trim($valueNew);
+                //echo "<p> ### " . $key . " = " . $objNuevo[$seqProyecto][$key] ;
+                if ($valueNew != "" && $valueNew != null) {//                       
+                    $txtCambios .= $this->compararValores($keyNew, '', "<b>Se Adiciono el campo</b> " . $valueNew, 1);
+                }
+            }
+        }
+        return $txtCambios;
+    }
+
     public function almacenarSeguimiento($seqProyecto, $txtComentarios, $seqGestion, $arrayDatosProyOld, $arrayDatosProyNew) {
 
         global $aptBd;
         $txtCambios = "";
         if ($arrayDatosProyOld != "") {
             $txtCambios = $this->validarCampos($seqProyecto, $arrayDatosProyOld, $arrayDatosProyNew);
+        } else {
+            $txtCambios = $this->ValidarCamposNew($seqProyecto, $arrayDatosProyNew);
         }
         $sql = "
                 INSERT INTO T_SEG_SEGUIMIENTO_PROYECTOS (
@@ -657,7 +674,7 @@ class SeguimientoProyectos {
                         1
                 )
 		";
-        //echo " <br>SEGUIMIENTO ACTUALIZACION: " . $sql;
+       // echo " <br>SEGUIMIENTO ACTUALIZACION: " . $sql;
 
         try {
             $aptBd->execute($sql);

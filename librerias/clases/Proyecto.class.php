@@ -368,7 +368,6 @@ class Proyecto {
         $txtDireccionRepLegalInterventor = '';
         $txtCorreoRepLegalInterventor = '';
 
-
         foreach ($post as $nombre_campo => $valor) {
 
             if ($valor == "" || $valor == " " || $valor == null) {
@@ -381,7 +380,6 @@ class Proyecto {
             if ($valor == 'NaN') {
                 $valor = 0;
             }
-
             //echo " 2. " . $asignacion = "\$" . $nombre_campo . "='" . $valor . "';<br><br>";
             $$nombre_campo = $valor;
         }

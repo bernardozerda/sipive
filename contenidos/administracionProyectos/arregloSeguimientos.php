@@ -12,8 +12,9 @@ $arrConjuntoResidencial = $claDatosProy->obtenerConjuntoResidencial($seqProyecto
 $arrTipoVivienda = $claDatosProy->obtenerTipoVivienda($seqProyecto);
 $arrCronogramaFecha = $claDatosProy->obteneCronograma($seqProyecto);
 
-$arrOferentesProy = $claDatosProy->obtenerDatosOferenteProy($seqProyecto);
+$arrOferentesProySeg = $claDatosProy->obtenerDatosOferenteProy($seqProyecto);
 $arrayComiteActa = $claDatosProy->obtenerActasComite($seqProyecto);
+$arrayFideicomitenteSeg = $claDatosProy->obtenerDatosFideicomiso($seqProyecto);
 
 
 
@@ -44,9 +45,11 @@ foreach ($_POST as $nombre_campo => $valor) {
         foreach ($valor as $key => $value) {
             $arrayDatosProyNew[$seqProyecto][$nombre_campoNew . "_" . $key] = $value;
         }
-        foreach ($arrOferentesProy as $keyOf => $valueOF) {
+
+        foreach ($arrOferentesProySeg as $keyOf => $valueOF) {
 
             if (isset($valueOF[$nombre_campo])) {
+                //echo "<p>".$nombre_campo." = ".$valueOF[$nombre_campo]." key = ".$keyOf."</p>";
                 $arrayDatosProyOld[$seqProyecto][$nombre_campo . "_" . $keyOf] = $valueOF[$nombre_campo];
             }
         }
@@ -61,8 +64,10 @@ foreach ($_POST as $nombre_campo => $valor) {
             }
 
             if (isset($valueLic[$valNombre])) {
-                // echo "<p>#####@@@@@@" . $nombre_campo . "_" . $keyLic . "=" . $valueLic[$valNombre] . "<p>";
-                $arrayDatosProyOld[$seqProyecto][$nombre_campo . "_" . $keyLic] = $valueLic[$valNombre];
+                if ($nombre_campo . "_" . $keyLic != 'txtExpideLicencia_1') {
+                    //  echo "<p>#####@@@@@@" . $nombre_campo . "_" . $keyLic . "=" . $valueLic[$valNombre] . "<p>";
+                    $arrayDatosProyOld[$seqProyecto][$nombre_campo . "_" . $keyLic] = $valueLic[$valNombre];
+                }
                 $indLic++;
             }
         }
@@ -123,14 +128,21 @@ foreach ($_POST as $nombre_campo => $valor) {
                 $indCom++;
             }
         }
+        // var_dump($arrayFideicomitenteSeg);
+        foreach ($arrayFideicomitenteSeg as $keyFid => $valueFid) {
+            if (isset($valueFid[$nombre_campo])) {
+                // echo "<p> @@@@" . $nombre_campo . " - " . $valueFid[$nombre_campo] . "keyFid = ".$keyFid."@@@@</p>";
+                $arrayDatosProyOld[$seqProyecto][$nombre_campo . "_" . $keyFid] = $valueFid[$nombre_campo];
+                $indCom++;
+            }
+        }
     }
 }
 
-
+//pr($arrayDatosProyOld);
 if (count($arrayDatosProyNew) > 0) {
     ksort($arrayDatosProyOld[$seqProyecto]);
     ksort($arrayDatosProyNew[$seqProyecto]);
-
 } else {
 
     $resultBefore[0] = null;

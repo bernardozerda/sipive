@@ -79,6 +79,8 @@ if (empty($arrErrores)) {
     $seqProyecto = 0;
     $seqProyecto = $_POST['seqProyecto'];
 
+    $claSeguimiento->seqProyecto = $seqProyecto;
+
 
 
     if (isset($_POST['seqProyecto']) and is_numeric($_POST['seqProyecto']) and $_POST['seqProyecto'] > 0) {
@@ -97,18 +99,16 @@ if (empty($arrErrores)) {
         // die();
         $arrErrores = $claProyecto->editarProyectoPRY($_POST);
         $claSeguimiento->almacenarSeguimiento($seqProyecto, $_POST['txtComentario'], $_POST['seqGestion'], $arrayDatosProyOld, $arrayDatosProyNew);
-        $claSeguimientoProyectos = new SeguimientoProyectos;
-        $claSeguimientoProyectos->seqProyecto = $seqProyecto;
-        $arrRegistros = $claSeguimientoProyectos->obtenerRegistros(100);
+
 
         //$claRegistro->registrarActividad("Edicion", 0, $_SESSION['seqUsuario'], "Edicion de Oferente: [" . $_POST['seqEditar'] . "] " . trim($_POST['nombre']) . " Mensaje: " . implode(",", $arrErrores));
     } else {
-
+        include './arregloSeguimientos.php';
         $seqProyecto = $claProyecto->almacenarProyecto($_POST);
-
         if ($seqProyecto > 0) {
+            $claSeguimiento->almacenarSeguimiento($seqProyecto, $_POST['txtComentario'], $_POST['seqGestion'], '', $arrayDatosProyNew);
             $txtCambios = "";
-            $claSeguimiento->almacenarSeguimiento($seqProyecto, $_POST['txtComentario'], $_POST['seqGestion'], '', '');
+            // $claSeguimiento->almacenarSeguimiento($seqProyecto, $_POST['txtComentario'], $_POST['seqGestion'], '', '');
         }
     }
 
@@ -195,7 +195,8 @@ if (empty($arrErrores)) {
     $arrayFideicomitente = $claDatosProy->obtenerDatosFideicomiso($seqProyecto);
     $arrayComiteActa = $claDatosProy->obtenerActasComite($seqProyecto);
     $arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno DESC, txtPlanGobierno");
-
+    $claSeguimiento->seqProyecto = $seqProyecto;
+    $arrRegistros = $claSeguimiento->obtenerRegistros(100);
     foreach ($arrConjuntoResidencial as $keyCon => $valueCon) {
         $arraConjuntoLicencias[] = $claProyecto->obtenerListaLicencias($valueCon['seqProyecto']);
     }

@@ -1570,7 +1570,7 @@ class Proyecto {
                     //  echo "<p> key = " . $key . " value = " . $value[$ind] . "</p>";
                     $$key = $value[$ind];
                 }
-                if ($seqUsuario > 0) {
+                if ($bolAproboAmparo != "") {
                     $bolAproboAmparo = 1;
                 } else {
                     $bolAproboAmparo = 0;
@@ -1605,10 +1605,7 @@ class Proyecto {
 
         global $aptBd;
         $arrErrores = array();
-        if ($seqUsuario == "" && $seqUsuario == 0) {
-            $bolAprobo = 0;
-            $seqUsuario = 0;
-        }
+
         $sql = "UPDATE t_pry_poliza
                 SET                
                 numPoliza = $numPoliza,
@@ -1637,11 +1634,11 @@ class Proyecto {
                 foreach ($arrayAmparos[$seqProyecto] as $key => $value) {
 
                     $$key = $value[$ind];
-                    if ($seqUsuario > 0) {
+                    //echo "<br>key => ".$key ." valor => ".$value[$ind];
+                    if ($bolAproboAmparo != "") {
                         $bolAproboAmparo = 1;
                     } else {
                         $bolAproboAmparo = 0;
-                        $seqUsuario = 0;
                     }
                     if ($seqAmparoPadre == "") {
                         $seqAmparoPadre = 'NULL';

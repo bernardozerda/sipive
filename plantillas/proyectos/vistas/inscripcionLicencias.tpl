@@ -107,17 +107,17 @@
                 </div>   
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga</label> 
-                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control required5"  style="width: 70%; position: relative; float: left"> 
+                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
                     <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga1</label> 
-                    <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control required5"  style="width: 70%; position: relative; float: left"> 
+                    <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
                     <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga2</label> 
-                    <input name="fchLicenciaProrroga2[]" type="text" id="fchLicenciaProrroga2" value="{$valueLic.fchLicenciaProrroga2}" size="12" readonly="" class="form-control required5"  style="width: 70%; position: relative; float: left"> 
+                    <input name="fchLicenciaProrroga2[]" type="text" id="fchLicenciaProrroga2" value="{$valueLic.fchLicenciaProrroga2}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
                     <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga2');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
             </div>
@@ -160,21 +160,21 @@
                 </div>
                 <div class="col-md-4"  style="display: none">
                     <label class="control-label">Resoluci&oacute;n Ejecutoria</label>
-                    <input name="txtResEjecutoria[]" type="text" id="txtResEjecutoria" value="{$valueLic.txtResEjecutoria}" onblur="sinCaracteresEspeciales(this);"   style="width:200px;" class="form-control required5">
+                    <input name="txtResEjecutoria[]" type="text" id="txtResEjecutoria[]" value="{$valueLic.txtResEjecutoria}" onblur="sinCaracteresEspeciales(this);"   style="width:200px;" class="form-control">
                 </div>   
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga</label> 
-                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrrogaC" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control required5"  style="width: 70%; position: relative; float: left"> 
+                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrrogaC" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
                     <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrrogaC');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga1</label> 
-                    <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrrogaC1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control required5"  style="width: 70%; position: relative; float: left"> 
+                    <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrrogaC1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
                     <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrrogaC1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga2</label> 
-                    <input name="fchLicenciaProrroga2[]" type="text" id="fchLicenciaProrrogaC2" value="{$valueLic.fchLicenciaProrroga2}" size="12" readonly="" class="form-control required5"  style="width: 70%; position: relative; float: left"> 
+                    <input name="fchLicenciaProrroga2[]" type="text" id="fchLicenciaProrrogaC2" value="{$valueLic.fchLicenciaProrroga2}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
                     <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrrogaC2');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
                 </div>
             </div>

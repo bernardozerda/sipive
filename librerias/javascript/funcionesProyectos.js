@@ -40,6 +40,23 @@ function validarCampos() {
     var estado = $("#seqPryEstadoProceso").val();
     var required = "";
 
+    if ($('input[id="bolTipoPersonaInterventor"]').is(':checked')) {
+        $("#numNitInterventor").attr('class', 'form-control');
+        $("#txtNombreRepLegalInterventor").attr('class', 'form-control');
+        $("#numTelefonoRepLegalInterventor").attr('class', 'form-control');
+        $("#txtDireccionRepLegalInterventor").attr('class', 'form-control');
+        $("#txtCorreoRepLegalInterventor").attr('class', 'form-control');
+
+    }
+    if ($('input[id="bolTipoPersonaInterventor1"]').is(':checked')) {
+        $("#numCedulaInterventor").attr('class', 'form-control');
+        $("#numTProfesionalInterventor").attr('class', 'form-control');
+    }
+    
+    if ($('input[id="seqTipoLicencia2"]').val() == 2) {
+        $("#txtResEjecutoria2").attr('class', 'form-control');        
+    }
+
     for (var i = 1; i <= estado; i++) {
         if (i == 1) {
             required = "required";
@@ -49,58 +66,58 @@ function validarCampos() {
         }
 
         $.each($("#frmProyectos input." + required), function (index, value) {
-        $("#val_" + $(this).attr("id")).css("display", "none");
-        $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
-        //console.log("value : " + $("#txtLicenciaConstructor").val());
-        if (!$(value).val()) {
+            $("#val_" + $(this).attr("id")).css("display", "none");
+            $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
+            //console.log("value : " + $("#txtLicenciaConstructor").val());
+            if (!$(value).val()) {
                 //  console.log("paso : " + required + " -> " + $(value).val());
-            $("#" + $(this).attr("id")).css("border", "1px solid red");
-            $("#val_" + $(this).attr("id")).css("display", "inline");
-            // console.log($(this).attr("id") + " input");
-            valid = false;
-        }
+                $("#" + $(this).attr("id")).css("border", "1px solid red");
+                $("#val_" + $(this).attr("id")).css("display", "inline");
+                console.log($(this).attr("id") + " input");
+                valid = false;
+            }
 
-    });
+        });
 
-    // console.log($("#frmProyectos select.required"));
+        // console.log($("#frmProyectos select.required"));
         $.each($("#frmProyectos select." + required), function (index, value) {
-        $("#val_" + $(this).attr("id")).css("display", "none");
-        $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
-        if ($(value).val() == 0) {
-            $("#" + $(this).attr("id")).css("border", "1px solid red");
-            $("#val_" + $(this).attr("id")).css("display", "inline");
-            console.log($(this).attr("id") + "select");
-            valid = false;
-        }
-    });
+            $("#val_" + $(this).attr("id")).css("display", "none");
+            $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
+            if ($(value).val() == 0) {
+                $("#" + $(this).attr("id")).css("border", "1px solid red");
+                $("#val_" + $(this).attr("id")).css("display", "inline");
+                console.log($(this).attr("id") + "select");
+                valid = false;
+            }
+        });
 
         $.each($("#frmProyectos input[type=email]." + required), function (index, value) {
-        $("#val_" + $(this).attr("id")).css("display", "none");
-        $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
-        var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-        //console.log(caract.test($(value).val()));
-        if (caract.test($(value).val()) == false) {
-            $("#val_" + $(this).attr("id")).css("display", "inline");
-            $("#val_" + $(this).attr("id")).html("Correo erroneo! ");
-            // console.log($(this).attr("id") + " input email");
-            valid = false;
-        }
-    });
+            $("#val_" + $(this).attr("id")).css("display", "none");
+            $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
+            var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+            console.log(caract.test($(value).val()));
+            if (caract.test($(value).val()) == false) {
+                $("#val_" + $(this).attr("id")).css("display", "inline");
+                $("#val_" + $(this).attr("id")).html("Correo erroneo! ");
+                // console.log($(this).attr("id") + " input email");
+                valid = false;
+            }
+        });
 
         $.each($("#frmProyectos textArea." + required), function (index, value) {
-        $("#val_" + $(this).attr("id")).css("display", "none");
-        $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
-        if ($(value).val() == 0) {
-            // console.log("paso3");
-            $("#" + $(this).attr("id")).css("border", "1px solid red");
-            $("#val_" + $(this).attr("id")).css("display", "inline");
-            // console.log($(this).attr("id"));
-            valid = false;
-        }
-    });
-        console.log("paso"+i);
+            $("#val_" + $(this).attr("id")).css("display", "none");
+            $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
+            if ($(value).val() == 0) {
+                // console.log("paso3");
+                $("#" + $(this).attr("id")).css("border", "1px solid red");
+                $("#val_" + $(this).attr("id")).css("display", "inline");
+                console.log($(this).attr("id"));
+                valid = false;
+            }
+        });
+        console.log("paso" + i);
     }
-    
+
     $.each($("#frmProyectos input"), function (index, value) {
         if ($(value).val() != 0 && $(value).val() != null) {
             //console.log("value : " + $(value).val() + " index -> " + index);
@@ -326,7 +343,7 @@ function addFideicomitente() {
     fType += "<div class=\"col-md-3\"><p>&nbsp;</p></div>";
     fieldWrapper.append(fType);
     $("#fideicomiso").append(fieldWrapper);
-    activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentes.php', intId);
+    activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentesAdd.php', intId);
 }
 
 function activarAutocompletar(txtInput, contenedor, url, cant) {

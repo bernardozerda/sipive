@@ -163,9 +163,15 @@ if (empty($arrErrores)) {
         }
 
         if ($cantPoliza == 0 && $_POST["numPoliza"] != "") {
-            $claProyecto->almacenarPoliza($seqProyecto, $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
+            if ($_POST["bolAprobo"] == "") {
+                $_POST["bolAprobo"] = 0;
+            }
+            $claProyecto->almacenarPoliza($seqProyecto, $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_SESSION['seqUsuario'], $_POST["bolAprobo"], $arrayAmparos);
         } else if ($_POST["numPoliza"] != "" || $cantPoliza > 0) {
-            $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
+            if ($_POST["bolAprobo"] == "") {
+                $_POST["bolAprobo"] = 0;
+            }
+            $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_SESSION['seqUsuario'], $_POST["bolAprobo"], $arrayAmparos);
         }
 
         if ($_POST["numContratoFiducia"] != "" && $_POST["numContratoFiducia"] != 0 && $_POST["seqDatoFiducia"] == "") {

@@ -65,8 +65,7 @@
                                         <option value="{$seqTipoAmparo}" {if $valueAmparo.seqTipoAmparo == $seqTipoAmparo} selected {/if}>{$txtTipoAmparo}</option>
                                     {/if}
                                 {/foreach}
-                            </select>
-                            fchExpedicion
+                            </select>                           
                             <div id="val_seqTipoAmparo_{$numPol}" class="divError">Diligenciar Campo</div>
                         </div>              
                         <div class="col-md-2"> 

@@ -1551,9 +1551,8 @@ class Proyecto {
     function almacenarPoliza($seqProyecto, $seqAseguradora, $numPoliza, $fchExpedicion, $seqUsuario, $bolAprobo, $arrayAmparos) {
         global $aptBd;
         $arrErrores = array();
-        if ($seqUsuario == "" && $seqUsuario == 0) {
+        if ($bolAprobo == "") {
             $bolAprobo = 0;
-            $seqUsuario = 0;
         }
         $sql = "INSERT INTO t_pry_poliza
                 ( numPoliza,fchExpedicion,seqUsuario, bolAprobo,  seqAseguradora, seqProyecto)
@@ -1605,10 +1604,12 @@ class Proyecto {
 
         global $aptBd;
         $arrErrores = array();
-
+        if ($bolAprobo == "") {
+            $bolAprobo = 0;
+        }
         $sql = "UPDATE t_pry_poliza
                 SET                
-                numPoliza = $numPoliza,
+                numPoliza = '$numPoliza',
                 fchExpedicion = '$fchExpedicion',
                 seqUsuario = $seqUsuario,
                 bolAprobo = $bolAprobo,

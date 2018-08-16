@@ -134,7 +134,7 @@
                         <div class="form-group" >
                             <div class="col-md-4"> 
                                 <label class="control-label" >Nombre Comercial</label>   
-                                <input name="txtNombreComercial" type="text" id="txtNombreComercial" value="{$value.txtNombreComercial}" onBlur="sinCaracteresEspeciales(this);" class="form-control" style="width:250px;"/>
+                                <input name="txtNombreComercial" type="text" id="txtNombreComercial" value="{$value.txtNombreComercial}" onBlur="sinCaracteresEspeciales(this);" class="form-control required5" style="width:250px;"/>
                             </div>
                         </div>
 

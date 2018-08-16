@@ -36,6 +36,10 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
 
     verificarSesion();
 
+    if(document.getElementById(txtDivDestino) == null){
+        return false;
+    }
+
     document.getElementById(txtDivDestino).innerHTML = '';
 
     // Determina si la ventan de bloque al usuario mientras carga el script se muestra		
@@ -11095,3 +11099,187 @@ YAHOO.util.Event.onContentReady(
         fileAction,
         'nameEstado'
         );
+
+function verErroresFNV(seqCargue){
+
+    // obtiene el id oculto
+    var objModal = $('#verErroresFNV');
+
+    // inicializa el modal
+    objModal.addClass("modal fade");
+    objModal.attr("tabindex" , "-1");
+    objModal.attr("role" , "dialog");
+    objModal.attr("aria-labelledby" , "myModalLabel");
+    objModal.empty();
+
+    // divs visibles del popup
+    var objModalOverlay = $('<div class="modal-dialog" role="document"></div>');
+    var objModalContent = $('<div class="modal-content" style="width: 850px;"></div>');
+    var objModalHeader  = $('<div class="modal-header" style="font-size: 20px;">Visor de errores</div>');
+    var objModalBody    = $('<div class="modal-body"></div>');
+    var objModalFooter  = $('<div class="modal-footer"></div>');
+    var objBotonSalvar  = $('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#verErroresFNV">Cerrar</button>');
+
+    // contenido dinamico del body (form de direccion)
+    $.ajax({
+        url: './contenidos/inscripcionFonvivienda/verErrores.php',
+        type: 'post',
+        data: 'seqCargue=' + seqCargue,
+        success: function(res){
+            objModalBody.html(res);
+        },
+        fail: function () {
+            alert('Problemas al mostrar el popup de errores');
+        }
+    });
+
+    // anidando divs
+    objModalFooter.append(objBotonSalvar);
+    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
+    objModalOverlay.append(objModalContent);
+    objModal.append(objModalOverlay);
+
+    // muestra el popup
+    objModal.modal('show');
+
+}
+
+var listadoErroresFNV = function () {
+
+    $('#tablaErroresFNV').DataTable({
+        "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, 'Todos']],
+        "order": [[0, "desc"]],
+        "scrollX": true,
+        "dom": 'lftipr'
+    });
+
+    objSelect = YAHOO.util.Dom.getElementBy(
+        function () {
+            return true;
+        },
+        "select",
+        "listadoAadPry_wrapper"
+    );
+
+    objInput = YAHOO.util.Dom.getElementBy(
+        function () {
+            return true;
+        },
+        "input",
+        "listadoAadPry_wrapper"
+    );
+
+    objSelect.className = "inputLogin";
+    objInput.className = "inputLogin";
+
+    objPaginador = YAHOO.util.Dom.get("listadoAadPry_paginate");
+    objPaginador.style.textAlign = "center";
+
+    eliminarObjeto("listadoErroresFNV");
+    YAHOO.util.Event.onContentReady("listadoErroresFNV", listadoErroresFNV);
+}
+YAHOO.util.Event.onContentReady("listadoErroresFNV", listadoErroresFNV);
+
+
+function varProgresoFNV(seqCargue){
+    $.ajax({
+        url: './contenidos/inscripcionFonvivienda/barraProgreso.php',
+        type: 'post',
+        data: 'seqCargue=' + seqCargue,
+        success: function(res){
+            $("#progreso").html(res);
+        },
+        fail: function () {
+            alert('Problemas procesar el codigo');
+        }
+    });
+}
+
+var fncProgresoFNV = function(){
+    seqCargue = $("#progresoFNV").html();
+    setTimeout("varProgresoFNV(" + seqCargue + ")", 2000);
+    eliminarObjeto("progresoFNV");
+    YAHOO.util.Event.onContentReady("progresoFNV", fncProgresoFNV);
+}
+YAHOO.util.Event.onContentReady("progresoFNV", fncProgresoFNV);
+
+function verCoincidencias(seqCargue, numHogar, numDocumento, txtNombre){
+
+    // obtiene el id oculto
+    var objModal = $('#verCoindidencias');
+
+    // inicializa el modal
+    objModal.addClass("modal fade");
+    objModal.attr("tabindex" , "-1");
+    objModal.attr("role" , "dialog");
+    objModal.attr("aria-labelledby" , "myModalLabel");
+    objModal.empty();
+
+    // divs visibles del popup
+    var objModalOverlay     = $('<div class="modal-dialog" role="document"></div>');
+    var objModalContent     = $('<div class="modal-content" style="width: 850px;"></div>');
+    var objModalHeader      = $('<div class="modal-header" style="font-size: 20px;"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>Nombres coincidentes para <br><h6>(' + numDocumento + ') ' + txtNombre + '</h6></div>');
+    var objModalBody        = $('<div class="modal-body"></div>');
+    var objModalFooter      = $('<div class="modal-footer"></div>');
+    var objBotonSeleccionar = $('<button type="button" class="btn btn-primary btn-sm" onclick="someterCoincidenciasFNV()">Seleccionar</button>');
+
+    // contenido dinamico del body (form de direccion)
+    $.ajax({
+        url: './contenidos/inscripcionFonvivienda/coincidencias.php',
+        type: 'post',
+        data: 'seqCargue=' + seqCargue + '&numHogar=' + numHogar + '&numDocumento=' + numDocumento,
+        success: function(res){
+            objModalBody.html(res);
+        },
+        fail: function () {
+            alert('Problemas al mostrar el popup de errores');
+        }
+    });
+
+    // anidando divs
+    objModalFooter.append(objBotonSeleccionar);
+    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
+    objModalOverlay.append(objModalContent);
+    objModal.append(objModalOverlay);
+
+    // muestra el popup
+    objModal.modal('show');
+
+}
+
+function someterCoincidenciasFNV(){
+
+    var bolRadioSelected = false;
+    var seqFormulario = $("#seqFormulario").val();
+    var numDocumento = $("#numDocumentoFNV").val();
+    var seqCiudadano = null;
+
+    var objInputs = $("#fnvCoincidencias :input");
+
+    objInputs.each(function() {
+        if( $(this).is(":checked") ){
+            bolRadioSelected = true;
+            seqFormulario = $(this).val();
+            seqCiudadano = $("#" + seqFormulario).val();
+        }
+    })
+
+    if(bolRadioSelected == true){
+        var objModal = $('#verCoindidencias');
+        $("#seqFormulario").val(seqFormulario);
+        $("#numDocumento").val(numDocumento);
+        $("#seqCiudadano").val(seqCiudadano);
+        someterFormulario(
+            'contenido',
+            document.getElementById("insFNV"),
+            './contenidos/inscripcionFonvivienda/detalles.php',
+            false,
+            false
+        );
+        objModal.modal("hide");
+    }else{
+        $("#coincidenciasError").addClass("alert alert-danger alert-dismissible");
+        $("#coincidenciasError").html("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button> Seleccione una opción");
+    }
+
+}

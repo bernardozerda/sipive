@@ -113,6 +113,7 @@ class FormularioSubsidios {
     public $valSubsidioNacional;
     public $valTotal;
     public $valTotalRecursos;
+    public $txtRangoIngresosHogar;
 
     public function FormularioSubsidios() {
 
@@ -216,6 +217,7 @@ class FormularioSubsidios {
         $this->valSubsidioNacional = 0;
         $this->valTotal = 0;
         $this->valTotalRecursos = 0;
+        $this->txtRangoIngresosHogar = null;
 
     }
 
@@ -335,7 +337,8 @@ class FormularioSubsidios {
                 valSaldoCuentaAhorro2,
                 valSubsidioNacional,
                 valTotal,
-                valTotalRecursos
+                valTotalRecursos,
+                txtRangoIngresosHogar
             ) VALUES (
                 " . $this->bolAltaCon . ",
                 " . $this->bolCerrado . ",
@@ -435,7 +438,8 @@ class FormularioSubsidios {
                 " . $this->valSaldoCuentaAhorro2 . ",
                 " . $this->valSubsidioNacional . ",
                 " . $this->valTotal . ",
-                " . $this->valTotalRecursos . "
+                " . $this->valTotalRecursos . ",
+                '" . $this->txtRangoIngresosHogar . "'
             )		
         ";
 
@@ -585,7 +589,8 @@ class FormularioSubsidios {
                     valSaldoCuentaAhorro2,
                     valSubsidioNacional,
                     valTotal,
-                    valTotalRecursos
+                    valTotalRecursos,
+                    txtRangoIngresosHogar
                 FROM T_FRM_FORMULARIO
                 WHERE seqFormulario = $seqFormulario
             ";
@@ -694,6 +699,7 @@ class FormularioSubsidios {
                 $this->valSubsidioNacional = doubleval($objRes->fields['valSubsidioNacional']);
                 $this->valTotal = doubleval($objRes->fields['valTotal']);
                 $this->valTotalRecursos = doubleval($objRes->fields['valTotalRecursos']);
+                $this->txtRangoIngresosHogar = trim($objRes->fields['txtRangoIngresosHogar']);
 
             } else {
                 $this->arrErrores[] = "No se encuentra el formulario [$seqFormulario]";
@@ -815,7 +821,8 @@ class FormularioSubsidios {
                     valSaldoCuentaAhorro2 = ". doubleval( $this->valSaldoCuentaAhorro2 ) .",
                     valSubsidioNacional = ". doubleval( $this->valSubsidioNacional ) .",
                     valTotal = ". doubleval( $this->valTotal ) .",
-                    valTotalRecursos = " . doubleval( $this->valTotalRecursos ) . "
+                    valTotalRecursos = " . doubleval( $this->valTotalRecursos ) . ",
+                    txtRangoIngresosHogar = '" . trim($this->txtRangoIngresosHogar) . "'
                 where seqFormulario = " . $seqFormulario . "
             ";
             $aptBd->execute($sql);

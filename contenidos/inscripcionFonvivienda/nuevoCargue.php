@@ -12,6 +12,17 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "InscripcionFonvivienda.class.php" );
 
+$claInscripcion = new InscripcionFonvivienda();
+
+if(isset($_POST['crear']) and intval($_POST['crear']) == 1) {
+    $claInscripcion->validarTitulos();
+    if(empty($claInscripcion->arrErrores)){
+        $claInscripcion->crearCargue();
+    }
+}
+
+$claSmarty->assign("bolPendientes" , $claInscripcion->hayCarguesPendientes());
+$claSmarty->assign("claInscripcion", $claInscripcion);
 $claSmarty->display("inscripcionFonvivienda/nuevoCargue.tpl")
 
 ?>

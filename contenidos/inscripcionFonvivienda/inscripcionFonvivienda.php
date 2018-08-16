@@ -12,6 +12,9 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "InscripcionFonvivienda.class.php" );
 
+$claInscripcion = new InscripcionFonvivienda();
+
+$claSmarty->assign("claInscripcion" , $claInscripcion);
 $claSmarty->display("inscripcionFonvivienda/inscripcionFonvivienda.tpl")
 
 ?>

@@ -916,7 +916,12 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     $arrEsquema[3][12][] = 12;
     $arrEsquema[3][12][] = 14;
     $arrEsquema[3][12][] = 15;
+    $arrEsquema[3][12][] = 16;
+    $arrEsquema[3][12][] = 17;
+
     $arrEsquema[3][13][] = 9;
+    $arrEsquema[3][13][] = 16;
+    $arrEsquema[3][13][] = 17;
 
     if( $bolDesplazado == 1 ) {
         $arrEsquema[3][12][] = 11;
@@ -1033,6 +1038,9 @@ function obtenerMatriculaProfesional(){
             break;
         case 283:
             $txtMatriculaProfesional = "25202-384331 CND";
+            break;
+        case 566:
+            $txtMatriculaProfesional = "15202-358658 BYC";
             break;
         default :
             $txtMatriculaProfesional = "________________________________________";

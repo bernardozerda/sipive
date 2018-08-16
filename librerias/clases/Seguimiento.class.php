@@ -271,6 +271,10 @@ class Seguimiento {
         $this->arrConversionCampos['valAporteLote']['tabla'] = "";
         $this->arrConversionCampos['txtSoporteAporteLote']['nombre'] = "Soporte Acuerdo Pago Lote Terreno";
         $this->arrConversionCampos['txtSoporteAporteLote']['tabla'] = "";
+        $this->arrConversionCampos['txtRangoIngresosHogar']['nombre'] = "Rango de Ingresos del Hogar";
+        $this->arrConversionCampos['txtRangoIngresosHogar']['tabla'] = "";
+
+
 
         $this->arrTipoDato['bolBeneficiario'] = 'booleano';
         $this->arrTipoDato['bolCerrado'] = 'booleano';
@@ -675,6 +679,7 @@ class Seguimiento {
      * MIRA LOS CAMBIOS EN EL FORMULARIO DE POSTULACION / INSCRIPCION
      */
     public function cambiosPostulacionActo($seqFormulario, $objAnterior, $objNuevo) {
+        global $aptBd;
 
         $txtSeparador = $this->txtSeparador;
         $txtSalto = $this->txtSalto;
@@ -713,8 +718,10 @@ class Seguimiento {
 
         // Para detectar ciudadanos eliminados
         $sqlEstado = "SELECT seqEstadoProceso FROM t_aad_formulario_acto WHERE seqFormularioActo = " . $seqFormulario;
-        $exeEstado = mysql_query($sqlEstado);
-        $rowEstado = mysql_fetch_array($exeEstado);
+        $exeEstado = $aptBd->execute($sqlEstado);
+        $rowEstado = $exeEstado->fields;
+//        $exeEstado = mysql_query($sqlEstado);
+//        $rowEstado = mysql_fetch_array($exeEstado);
         if ($rowEstado['seqEstadoProceso'] == 35 || $rowEstado['seqEstadoProceso'] == 36) {
             $a = "no haga nada";
         } else {

@@ -21,13 +21,15 @@ try {
             UPPER(txtNombreConstructor) AS nombre
         FROM
             t_pry_constructor  where txtNombreConstructor like '%$txtConsulta%' 
+                UNION ALL
+                SELECT DISTINCT
+                    UPPER(txtNombreFideicomitente) AS nombre
+                    FROM T_PRY_FIDEICOMITENTE            
             group by nombre
             order by nombre";
-
-
     $objRes = $aptBd->execute($sql);
     while ($objRes->fields) {
-        $arrResultados[] = $objRes->fields['nombre']." ". $txtConsulta;
+        $arrResultados[] = $objRes->fields['nombre'];
         $objRes->MoveNext();
     }
 } catch (Exception $objError) {

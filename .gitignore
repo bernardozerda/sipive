@@ -55,3 +55,4 @@ recursos/imagenes/desembolsos
 *.xml
 *.iml
 *.idea*
+*.svn*

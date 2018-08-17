@@ -65,7 +65,7 @@
             <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
 
     </head>
-    <body class="yui-skin-sam" id="bodyHtml" topMargin="0"> 
+    <body class="yui-skin-sam" id="bodyHtml" topMargin="0" style="background-color: white;">
         <center>
             <table cellpadding="0" cellspacing="0" border="0" bgcolor="#F9F9F9" id="tablePrincipal" class="tablePrincipal">
                 <tr>
@@ -118,7 +118,22 @@
                     </div>
 
                     <div style=" position: relative; float: left; width:100%">
-                        <img src="./recursos/imagenes/pie_ws.png" /><br>
+                        <div class="well well-small" style="background-color: white;">
+                            <div class="row">
+                                <div class="col-sm-4 col-sm-offset-3" style="font-size: 11px; text-align: left">
+                                    <strong>Dirección:</strong> Carrera 13 # 52 - 25, Bogotá D.C.<br>
+                                    <strong>Código postal:</strong> 110231<br>
+                                    <strong>Teléfono:</strong> +57 (1) 358 16 00, Extensión: 1000 a 1003<br>
+                                    <strong>Correo electrónico institucional:</strong> <a href="mailto:servicioalciudadano@habitatbogota.gov.co">servicioalciudadano@habitatbogota.gov.co</a><br>
+                                    <strong>Correo electrónico notificaciones judiciales:</strong> <a href="mailto:servicioalciudadano@habitatbogota.gov.co">notificacionesjudiciales@habitatbogota.gov.co</a><br>
+                                    <strong>Horario de Atención:</strong> Lunes a viernes de 7:00 am. a 4:30 pm.<br>
+                                    <strong>Ciudad:</strong> Bogotá - Colombia
+                                </div>
+                                <div class="col-sm-2" style="padding-top: 20px;">
+                                    <img src="./recursos/imagenes/pie_ws.png">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </center>
             </div>

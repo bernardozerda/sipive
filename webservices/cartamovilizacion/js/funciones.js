@@ -1,6 +1,7 @@
 
 function paginaPrincipal(){
-    location.href = 'http://localhost/CartasMovilizacion/samples/Cliente.php';
+  // location.href = 'http://localhost/CartasMovilizacion/samples/Cliente.php';
+	location.href = 'http://sdv.habitatbogota.gov.co/CartasMovilizacion/samples/Cliente.php';
   //  $(location).href('http://localhost/CartasMovilizacion/samples/Cliente.php');
 //  var url = "samples/Cliente.php"; // El script a dónde se realizará la petición.
 //    $.ajax({

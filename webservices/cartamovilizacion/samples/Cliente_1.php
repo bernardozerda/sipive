@@ -63,11 +63,12 @@ and open the template in the editor.
     <?php
     //echo "hola"; die();
     session_start();
+    
     ?>
     <div class="head" >
-        <h5>Sistema en Construcción</h5>
+        <h5>SOLICITUD DE CARTA DE AUTORIZACIÓN DE MOVILIZACIÓN DE RECURSOS EN ENTIDADES FINANCIERAS</h5>
     </div>
-   <!-- <p>&nbsp;</p>
+    <p>&nbsp;</p>
     <body>
         <div id="content" >
             <div class="content" style=" padding-left: 12%;">
@@ -91,7 +92,7 @@ and open the template in the editor.
                             </div>
 
                             <!-- title="De click en registrar peticionario para guardar la información en el sistema. Recuerde verificar la información antes de guardar."-->
-                   <!--     </div>
+                        </div>
 
                         <div class="col-md-8 mb-3" style="text-align: center;">                            
                             <img id="imagenCaptcha" src="../lib/captcha/CaptchaSecurityImages.php?width=200&height=50&characters=4" alt="captcha" />
@@ -106,7 +107,7 @@ and open the template in the editor.
                                 <input  class="btn btn-primary" id="guardar" type="button" value="Enviar Solicitud" onclick="if (validar())
                                             enviarDatos()">
                                 <!-- title="De click en registrar peticionario para guardar la información en el sistema. Recuerde verificar la información antes de guardar."-->
-                          <!--  </div>
+                            </div>
                         </div>
                     </div>  
                 </form>

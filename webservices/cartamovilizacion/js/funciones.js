@@ -1,3 +1,19 @@
+
+function paginaPrincipal(){
+    location.href = 'http://localhost/CartasMovilizacion/samples/Cliente.php';
+  //  $(location).href('http://localhost/CartasMovilizacion/samples/Cliente.php');
+//  var url = "samples/Cliente.php"; // El script a dónde se realizará la petición.
+//    $.ajax({
+//        type: "POST",
+//        url: url,
+//        data: $("#formulario").serialize(), // Adjuntar los campos del formulario enviado.
+//        success: function (data) {
+//            //console.log(data);
+//            $("#content").html(data); // Mostrar la respuestas del script PHP.
+//        }
+//    });
+}
+var variable = 0;
 function validar() {
 
     var valid = true;
@@ -11,15 +27,20 @@ function validar() {
                 $("#val_" + $(this).attr("id")).show();
                 valid = false;
             } else if ($(this).attr("id") == "codigo") {
-                var codigo = ObtenerCodigo();
+                var codigo = ObtenerCodigo(variable);
                 // console.log(codigo + " => " + $("#codigo").val());
                 if (codigo != $("#codigo").val()) {
+                    variable++;
+                    $("#valCaptcha").val(variable);
+                    if(variable > 2){
+                        validaCaptcha();
+                    }
                     $("#val_codigo").show();
                     $("#val_codigo").html("El Codigo no coincide Por favor Verifique!!");
                     valid = false;
                 }
             }
-            // console.log($('input[name="radioBanco"]').is(':checked'));
+
         }
     });
     $('form#formulario').find('input[type="radio"]').each(function () {
@@ -66,7 +87,23 @@ function enviarDatos() {
     });
 }
 
-function ObtenerCodigo() {
+function ObtenerCodigo(valor) {
+    var url = "code.php?variable="+valor;
+    var result = false;
+    //alert("paso => " + $("#numeroIdentificacion").val());
+    $.ajax({
+        type: "POST",
+        url: url,
+        async: false,
+        success: function (data) {
+            result = data;
+        }
+    });
+    console.log(result);
+    return result;
+}
+
+function validaCaptcha() {
     var url = "code.php";
     var result = false;
     //alert("paso => " + $("#numeroIdentificacion").val());

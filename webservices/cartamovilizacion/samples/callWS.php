@@ -13,6 +13,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
     <script src="../js/funciones.js" ></script>
 </head>
+<style>
+    .btn-primary{
+        background-color: rgba(0,62,101,0.9);
+        border: 1px solid rgba(0,62,101,0.9);
+        left: 30%;
+    }
+</style>
 <?php
 require_once('../lib/nusoap.php');
 include '../lib/tcpdf/tcpdf.php';
@@ -45,8 +52,7 @@ if (isset($_POST['numeroIdentificacion'])) {
     $cuenta = $_POST['radioBanco'];
     $dirIp = $_POST['dirIp'];
 
-    $datos_persona_entrada = array(
-        "datos_persona_entrada" => array(
+    $datos_persona_entrada = array("datos_persona_entrada" => array(
             'documento' => $_POST['numeroIdentificacion'],
             'nombre' => $_POST['nombre'],
             'banco' => $seqBanco,
@@ -54,9 +60,8 @@ if (isset($_POST['numeroIdentificacion'])) {
             'dirIp' => $dirIp
         )
     );
-
     $resultado = $cliente->call('obtenerDatosCarta', $datos_persona_entrada);
-    //echo json_encode($resultado);
+    // echo json_encode($resultado);
     //var_dump($resultado);
     $arrBanco = $resultado['banco'];
     $seqFormulario = trim($resultado['formulario']);

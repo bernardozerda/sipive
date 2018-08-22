@@ -1,9 +1,11 @@
 
 function paginaPrincipal() {
-    location.href = 'http://localhost/CartasMovilizacion/samples/Cliente.php';
+    //location.href = 'http://localhost/CartasMovilizacion/samples/Cliente.php';
+    location.href = 'https://sdv.habitatbogota.gov.co/CartasMovilizacion/samples/Cliente.php';
 }
 function validadorDatos() {
-    location.href = 'http://localhost/CartasMovilizacion/samples/validadorCarta.php';
+    //location.href = 'http://localhost/CartasMovilizacion/samples/validadorCarta.php';
+    location.href = 'https://sdv.habitatbogota.gov.co/CartasMovilizacion/samples/validadorCarta.php';
 }
 var variable = 0;
 function validar() {

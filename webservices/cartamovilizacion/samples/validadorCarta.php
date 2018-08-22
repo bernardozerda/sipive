@@ -66,8 +66,7 @@ and open the template in the editor.
     
     ?>
     <div class="head" >
-        <h5>SOLICITUD DE CARTA DE AUTORIZACIÓN DE MOVILIZACIÓN DE RECURSOS EN ENTIDADES FINANCIERAS &nbsp;&nbsp;&nbsp;<img src="../img/dates.png" alt="" width="38px" onclick="validadorDatos()"/></h5>
-        
+        <h5>VALIDADOR DE DATOS DE CARTAS DE MOVILIZACIÓN DE RECURSOS</h5>
     </div>
     <p>&nbsp;</p>
     <body>
@@ -77,16 +76,16 @@ and open the template in the editor.
                 <form name="formulario" id="formulario" class="needs-validation"  method="post" >
                     <div class="form-row"> 
                         <div class="col-md-8 mb-3">
-                            <label for="numeroIdentificacion">Número de Identificación *</label>
-                            <input type="text" class="form-control" id="numeroIdentificacion" name="numeroIdentificacion" placeholder="N&uacute;mero Identificaci&oacute;n" value="" maxlength="11" required>
+                            <label for="codeVerificador">Codigo de Verificación</label>
+                            <input type="text" class="form-control" id="codeVerificador" name="codeVerificador"  value="" maxlength="11" required>
                             <input id="dirIp" name="dirIp" type="hidden" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>" />
-                            <div class="invalid-tooltip" id="val_numeroIdentificacion">
-                                Por Favor Digitar N&uacute;mero de Identificaci&oacute;n
+                            <div class="invalid-tooltip" id="val_codeVerificador">
+                                Por Favor Digitar El codigo a ser verificados
                             </div>
                         </div>
 
                         <div class="col-md-8 mb-3">
-                            <label for="numeroIdentificacion">Codigo *</label>
+                            <label for="numeroIdentificacion">Codigo captcha*</label>
                             <input type="text" id="codigo" class="form-control"  name="codigo"   required="" autocomplete="off">
                             <div class="invalid-tooltip" id="val_codigo">
                                 Por Favor Digitar El codigo Captcha
@@ -106,7 +105,7 @@ and open the template in the editor.
                             <label>&nbsp;</label>
                             <div class="input-group" style="text-align: center">
                                 <input  class="btn btn-primary" id="guardar" type="button" value="Enviar Solicitud" onclick="if (validar())
-                                            enviarDatos()">
+                                            validarCodigo()">
                                 <!-- title="De click en registrar peticionario para guardar la información en el sistema. Recuerde verificar la información antes de guardar."-->
                             </div>
                         </div>

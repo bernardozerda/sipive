@@ -1,18 +1,9 @@
 
-function paginaPrincipal(){
-  // location.href = 'http://localhost/CartasMovilizacion/samples/Cliente.php';
-	location.href = 'http://sdv.habitatbogota.gov.co/CartasMovilizacion/samples/Cliente.php';
-  //  $(location).href('http://localhost/CartasMovilizacion/samples/Cliente.php');
-//  var url = "samples/Cliente.php"; // El script a dónde se realizará la petición.
-//    $.ajax({
-//        type: "POST",
-//        url: url,
-//        data: $("#formulario").serialize(), // Adjuntar los campos del formulario enviado.
-//        success: function (data) {
-//            //console.log(data);
-//            $("#content").html(data); // Mostrar la respuestas del script PHP.
-//        }
-//    });
+function paginaPrincipal() {
+    location.href = 'http://localhost/CartasMovilizacion/samples/Cliente.php';
+}
+function validadorDatos() {
+    location.href = 'http://localhost/CartasMovilizacion/samples/validadorCarta.php';
 }
 var variable = 0;
 function validar() {
@@ -33,7 +24,7 @@ function validar() {
                 if (codigo != $("#codigo").val()) {
                     variable++;
                     $("#valCaptcha").val(variable);
-                    if(variable > 2){
+                    if (variable > 2) {
                         validaCaptcha();
                     }
                     $("#val_codigo").show();
@@ -88,8 +79,23 @@ function enviarDatos() {
     });
 }
 
+function validarCodigo() {
+    //document.write('<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>');
+
+    var url = "callWSCode.php"; // El script a dónde se realizará la petición.
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#formulario").serialize(), // Adjuntar los campos del formulario enviado.
+        success: function (data) {
+            //console.log(data);
+            $("#content").html(data); // Mostrar la respuestas del script PHP.
+        }
+    });
+}
+
 function ObtenerCodigo(valor) {
-    var url = "code.php?variable="+valor;
+    var url = "code.php?variable=" + valor;
     var result = false;
     //alert("paso => " + $("#numeroIdentificacion").val());
     $.ajax({

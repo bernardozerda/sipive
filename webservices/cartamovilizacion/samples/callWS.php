@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
     <script src="../js/funciones.js" ></script>
 </head>
+
 <?php
 require_once('../lib/nusoap.php');
 include '../lib/tcpdf/tcpdf.php';
@@ -28,6 +29,7 @@ $cuenta = 0;
 $cuenta1 = 0;
 $cuenta2 = 0;
 $nombreWs = '';
+$numIngresos = 0;
 
 if (isset($_POST['numeroIdentificacion'])) {
 
@@ -45,8 +47,7 @@ if (isset($_POST['numeroIdentificacion'])) {
     $cuenta = $_POST['radioBanco'];
     $dirIp = $_POST['dirIp'];
 
-    $datos_persona_entrada = array(
-        "datos_persona_entrada" => array(
+    $datos_persona_entrada = array("datos_persona_entrada" => array(
             'documento' => $_POST['numeroIdentificacion'],
             'nombre' => $_POST['nombre'],
             'banco' => $seqBanco,
@@ -54,10 +55,9 @@ if (isset($_POST['numeroIdentificacion'])) {
             'dirIp' => $dirIp
         )
     );
-
     $resultado = $cliente->call('obtenerDatosCarta', $datos_persona_entrada);
-    //echo json_encode($resultado);
-    //var_dump($resultado);
+    // echo json_encode($resultado);
+
     $arrBanco = $resultado['banco'];
     $seqFormulario = trim($resultado['formulario']);
     $msn1 = $resultado['msn1'];
@@ -69,11 +69,17 @@ if (isset($_POST['numeroIdentificacion'])) {
     $ahorro2 = $resultado['ahorro2'];
 
     $cuenta2 = $resultado['cuenta2'];
+    $numIngresos = $resultado['numIngresos'];
     // documento=" + documento + "&cuenta=" + radio + "&tipo=" + tipo + "&banco=" + entidad + "&nombre=" + nombre     
     $data = mb_split("\"", $resultado['mensaje']);
 }
 ?>
-<?php if (isset($msn1) && $msn1 != "" && $msn1 != NULL) { ?>
+
+<?php if ($numIngresos > 3) {
+    ?>
+    <div class="content"><?php echo 'Lo sentimos excedio la capacidad de intentos de exportació<n de cartas'; ?></div>
+
+<?php } else if (isset($msn1) && $msn1 != "" && $msn1 != NULL) { ?>
     <div class="content" id="content">
         <form name="formulario" id="formulario" class="needs-validation" action="clienteWS.php" method="post" >
             <fieldset>
@@ -210,3 +216,4 @@ if (isset($_POST['numeroIdentificacion'])) {
 <?php } else if (isset($msn3) && $msn3 != "" && $msn3 != NULL && !isset($data[4])) { ?>
     <div class="content"><?php echo $msn3; ?></div>
 <?php } ?>
+

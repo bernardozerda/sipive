@@ -39,7 +39,8 @@ $server->wsdl->addComplexType('datos_persona_salidad', 'complexType', 'struct', 
     'ahorro1' => array('name' => 'ahorro1', 'type' => 'xsd:int'),
     'ahorro2' => array('name' => 'ahorro2', 'type' => 'xsd:int'),
     'cuenta1' => array('name' => 'cuenta1', 'type' => 'xsd:int'),
-    'cuenta2' => array('name' => 'cuenta2', 'type' => 'xsd:int')
+    'cuenta2' => array('name' => 'cuenta2', 'type' => 'xsd:int'),
+    'numIngresos' => array('name' => 'numIngresos', 'type' => 'xsd:int')
         )
 );
 $server->register('obtenerDatosCarta', // nombre del metodo o funcion
@@ -78,7 +79,9 @@ function obtenerDatosCarta($datos) {
 
         $validarMovilizacion = $claCiudadano->ValidarMovilizacion($seqFormulario);
         $name = $claCiudadano->obtenerNombre($documentCiu);
+        $numIngresos = $claCiudadano->obtenerIp($dirIp);
         //$nameBanco = $datos['banco'];
+		
 
         $datos_ws = Array();
         //$name = $datos['nombre'];
@@ -94,33 +97,38 @@ function obtenerDatosCarta($datos) {
             if ($nameBanco != null && $nameBanco != "") {
                 $tipo = 1;
                 $name = $datos['nombre'];
+                $numIngresos = $claCiudadano->obtenerIp($dirIp);
                 //$nameBanco = $datos['banco'];
 				
                 include 'prueba.php';				
-                return array('mensaje' => $prueba);
+                return array('mensaje' => $prueba, 'numIngresos' => $numIngresos);
             } else {
                 $msn1 = 'El usuario presenta registro en la Secretaría Distrital Del Hábitat';
                 $msn2 = 'Por favor Verifique las siguiente Información';
+                $sessionIp = $claCiudadano->obtenerIp($dirIp);
                 //return array('banco' => $banc, 'formulario' => $seqFormulario, 'msn1' => $msn1, 'msn2' => $msn2, 'nombre' => $datos_ws['txtNombre']);
                 return array('banco' => $banc, 'formulario' => $seqFormulario, 'msn1' => $msn1, 'msn2' => $msn2, 'nombre' => $name,
                     'ahorro1' => $claFormulario->valSaldoCuentaAhorro, 'ahorro2' => $claFormulario->valSaldoCuentaAhorro2,
-                    'cuenta1' => $claFormulario->seqBancoCuentaAhorro, 'cuenta2' => $claFormulario->seqBancoCuentaAhorro2);
+                    'cuenta1' => $claFormulario->seqBancoCuentaAhorro, 'cuenta2' => $claFormulario->seqBancoCuentaAhorro2, 'numIngresos' => $numIngresos);
             }
         } else {
             $msn3 = 'El estado de avance del hogar en el proceso no permite generación directa de la carta. Se solicita que el ciudadano radique solicitud formal en la Sede Principal para que sea atendida por el equipo de desembolsos de la Subsecretaria de Gestión Financiera';
-            return array('msn3' => $msn3, 'formulario' => $seqFormulario,);
+            return array('msn3' => $msn3, 'formulario' => $seqFormulario, 'numIngresos' => $numIngresos);
         }
     } else {
         if ($datos['banco'] != null && $datos['banco'] != "") {
             $tipo = 2;
             $name = $datos['nombre'];
+            $numIngresos = $claCiudadano->obtenerIp($dirIp);
+            
             //$nameBanco = $datos['banco'];
             include 'prueba.php';
-            return array('mensaje' => $prueba, 'banco' => $banc, 'formulario' => $seqFormulario, 'msn1' => '', 'msn2' => '', 'nombre' => $name);
+            return array('mensaje' => $prueba, 'banco' => $banc, 'formulario' => $seqFormulario, 'msn1' => '', 'msn2' => '', 'nombre' => $name, 'numIngresos' => $numIngresos);
         } else {
             $msn1 = 'El usuario no presenta registro en la Secretaría Distrital Del Hábitat';
             $msn2 = 'Por favor digite las siguiente Información';
-            return array('mensaje' => '', 'banco' => $banc, 'formulario' => $seqFormulario, 'msn1' => $msn1, 'msn2' => $msn2, 'nombre' => $name);
+            $numIngresos = $claCiudadano->obtenerIp($dirIp);
+            return array('mensaje' => '', 'banco' => $banc, 'formulario' => $seqFormulario, 'msn1' => $msn1, 'msn2' => $msn2, 'nombre' => $name, 'numIngresos' => $numIngresos);
         }
     }
     //$url = "https://localhost/sipive/contenidos/ciudadano/pdfCartaMovilizacion.php?documento=111&cuenta=&tipo=1&banco=prueba&nombre=prueba2";

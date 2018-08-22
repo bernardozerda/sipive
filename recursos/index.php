@@ -1,7 +1,5 @@
+<script>location.href = 'https://sdv.habitatbogota.gov.co/sipive/autenticacion.php';</script>
 <?php
-
-session_start();
-echo $_SESSION['codigo'];
 
 /* 
  * To change this license header, choose License Headers in Project Properties.

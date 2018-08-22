@@ -6,3 +6,15 @@ fieldset{
 h2{
     font-size: 1em;
 }
+.icon-refresh {
+    background-position: -240px -24px;
+}
+
+small {
+    font-size: 10px;
+}
+ .btn-primary{
+                background-color: rgba(0,62,101,0.9);
+                border: 1px solid rgba(0,62,101,0.9);
+                left: 30%;
+            }

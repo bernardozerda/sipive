@@ -680,6 +680,21 @@ class Ciudadano {
         return $txtNombre;
     }
 
+     public function obtenerIp($ip) {
+        global $aptBd;
+        setlocale(LC_TIME,"es_ES");
+       $today = date("Y-m-d");  
+        //echo $day;
+        $numIp = 0;
+        $sql = " 
+            SELECT count(txtDirIp) as contador FROM t_ciu_carta where fchCarta like '".$today."' and txtDirIp like '".$ip."'";
+        $objRes = $aptBd->execute($sql);
+        if ($objRes->fields) {         
+            $numIp = trim($objRes->fields['contador']);           
+}
+        return $numIp;
+    }
+
 }
 
 // fin clase

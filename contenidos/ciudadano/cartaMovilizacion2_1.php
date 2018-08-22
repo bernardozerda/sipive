@@ -177,7 +177,6 @@ $sql1 = "
    1
   );
   ";
-
 $aptBd->execute($sql1);
 $txtCambios = '';
 

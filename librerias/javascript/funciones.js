@@ -10639,12 +10639,20 @@ function enrutarAAD(objSelect) {
             objSelect.options[objSelect.selectedIndex].value == 10
             ) {
         // usa el modulo nuevo
+        // cargarContenido(
+        //         'informacion',
+        //         './contenidos/aad/informacion.php',
+        //         'seqTipoActo=' + objSelect.options[objSelect.selectedIndex].value,
+        //         true
+        //         );
+
         cargarContenido(
-                'informacion',
-                './contenidos/aad/informacion.php',
-                'seqTipoActo=' + objSelect.options[objSelect.selectedIndex].value,
-                true
-                );
+            'informacion',
+            './contenidos/actosAdministrativos/informacionActo.php',
+            'seqTipoActo=' + objSelect.options[ objSelect.selectedIndex ].value,
+            true
+        );
+
     } else {
         // usa el modulo actual
         cargarContenido(

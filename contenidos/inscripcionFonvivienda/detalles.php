@@ -24,6 +24,7 @@ $claInscripcion->arrHogares[$numHogar]['txtObservaciones'] = ($txtObservaciones 
 if(isset($_POST['seqFormulario'])){
     $claInscripcion->arrHogares[$numHogar]['seqFormulario'] = intval($_POST['seqFormulario']);
     foreach($claInscripcion->arrHogares[$numHogar]['ciudadanos'] as $idCiudadano => $arrCiudadano){
+        $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['seqCiudadanoCoincidencia'] = null;
         if($numDocumento == $arrCiudadano['numDocumento']){
             $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['seqCiudadanoCoincidencia'] = $seqCiudadano;
         }
@@ -50,8 +51,5 @@ $claSmarty->assign("numDocumento"   , $numDocumento);
 $claSmarty->assign("seqCiudadano"   , $seqCiudadano);
 $claSmarty->assign("claInscripcion" , $claInscripcion);
 $claSmarty->display("inscripcionFonvivienda/detalles.tpl");
-
-
-
 
 ?>

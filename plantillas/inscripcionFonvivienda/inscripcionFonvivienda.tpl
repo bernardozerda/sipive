@@ -22,7 +22,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h6 class="panel-title">Listado de cargues FONVIVIENDA</h6>
+        <h6 class="panel-title">Listado cargues complementariedad</h6>
     </div>
     <div class="panel-body">
 
@@ -30,6 +30,7 @@
             <thead>
                 <tr>
                     <th>Id</th>
+                    <th>Tipo</th>
                     <th>Fecha Cargue</th>
                     <th>Archivo</th>
                     <th>Estado</th>
@@ -43,6 +44,7 @@
                 {foreach from=$claInscripcion->listadoCargues() item=arrCargue}
                     <tr>
                         <td width="30px">{$arrCargue.seqCargue}</td>
+                        <td width="30px">{$arrCargue.txtTipo}</td>
                         <td width="120px">{$arrCargue.fchCargue}</td>
                         <td>{$arrCargue.txtArchivo}</td>
                         <td width="120px">{$arrCargue.txtEstado}</td>

@@ -14,6 +14,7 @@
     </div>
 {/if}
 
+
 <form id="insFNV"
       onsubmit="someterFormulario(
           'contenido',
@@ -30,117 +31,106 @@
         </div>
         <div class="panel-body">
 
-            <!-- estado del hogar -->
-            <div class="col-sm-8">
-                <div class="form-group">
-                    <label for="seqEstadoHogar" class="control-label col-sm-2 h5">Estado</label>
-                    <div class="col-sm-8 col-sm-offset-1">
-                        <select id="seqEstadoHogar"
-                                name="seqEstadoHogar"
-                                class="form-control input-sm {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}"
-                                {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}
-                        >
-                            <option value="0">Seleccione</option>
-                            {foreach from=$claInscripcion->estadosHogar() item=arrEstadoHogar}
-                                <option value="{$arrEstadoHogar.seqEstadoHogar}"
-                                        {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == $arrEstadoHogar.seqEstadoHogar}
-                                            selected
-                                        {/if}
-                                        {if $arrEstadoHogar.seqEstadoHogar == 4}
-                                            disabled
-                                        {/if}
-                                >
-                                    {$arrEstadoHogar.txtEstadoHogar}
-                                </option>
-                            {/foreach}
-                        </select>
-                    </div>
+            <!-- select de estado del hogar -->
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-2 h5" for="seqEstadoHogar">Estado</label>
+                <div class="col-sm-4">
+                    <select class="form-control input-sm" id="seqEstadoHogar" name="seqEstadoHogar">
+                        <option value="0">Seleccione</option>
+                        {foreach from=$claInscripcion->estadosHogar() item=arrEstadoHogar}
+                            <option value="{$arrEstadoHogar.seqEstadoHogar}"
+                                    {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == $arrEstadoHogar.seqEstadoHogar}
+                                        selected
+                                    {/if}
+                                    {if $arrEstadoHogar.seqEstadoHogar == 4}
+                                        disabled
+                                    {/if}
+                            >
+                                {$arrEstadoHogar.txtEstadoHogar}
+                            </option>
+                        {/foreach}
+                    </select>
                 </div>
-            </div>
-
-            <!-- datos generales -->
-            <div class="col-sm-4">
-                <ul>
-                    <li><strong>Ingresos:</strong> {$claInscripcion->arrHogares.$numHogar.txtIngresos}</li>
-                    <li><strong>Solución:</strong> {$claInscripcion->arrHogares.$numHogar.txtSolucion}</li>
-                    <li><strong>Modalidad:</strong> {$claInscripcion->arrHogares.$numHogar.txtModalidad}</li>
-                    <li><strong>Dirección Solución:</strong> {$claInscripcion->arrHogares.$numHogar.txtDireccionSolucion}</li>
-                </ul>
             </div>
 
             <!-- observaciones -->
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="control-label col-sm-2 h5" for="txtObservaciones">Observaciónes</label>
-                    <div class="col-sm-9">
-                        <textarea class="form-control input-sm {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}"
-                                  id="txtObservaciones"
-                                  name="txtObservaciones"
-                                {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}
-                        >{$claInscripcion->arrHogares.$numHogar.txtObservaciones}</textarea><br>
-                    </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-2 h5" for="seqEstadoHogar">Observaciones</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control input-sm" name="txtObservaciones">{$claInscripcion->arrHogares.$numHogar.txtObservaciones}</textarea>
                 </div>
             </div>
 
-            <!-- formulario seleccionado -->
-            <div class="col-sm-12">
-                <div class="alert alert-warning">
+            <!-- formulario seleccionado y datos del formulario -->
+            <div class="form-group col-sm-12">
+                <div class="col-sm-6">
+                    <div class="alert alert-warning text-center" style="height: 60px;">
 
-                    {if is_null($claInscripcion->arrHogares.$numHogar.seqFormulario)}
-                        <a href="#"
-                           {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar != 4}
-                                onclick="
-                                $('#seqFormulario').val(0);
-                                $('#numDocumento').val(0);
-                                someterFormulario(
-                                    'contenido',
-                                    document.getElementById('insFNV'),
-                                    './contenidos/inscripcionFonvivienda/detalles.php',
-                                    false,
-                                    true
-                                );
-                                "
-                           {/if}
-                           class="text-primary"
-                        >
-                            ¿Crear Formulario Nuevo?
-                        </a>
-                    {elseif intval($claInscripcion->arrHogares.$numHogar.seqFormulario) == 0}
-                        Formulario Seleccionado: <span class="text-success">Nuevo Formulario</span>
-                    {elseif intval($claInscripcion->arrHogares.$numHogar.seqFormulario) != 0}
-                        Formulario Seleccionado: <span class="text-success">{$claInscripcion->arrHogares.$numHogar.seqFormulario}</span>
-                        <a href="#"
-                           {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar != 4}
-                                onclick="
-                                $('#seqFormulario').val(0);
-                                $('#numDocumento').val(0);
-                                someterFormulario(
-                                    'contenido',
-                                    document.getElementById('insFNV'),
-                                    './contenidos/inscripcionFonvivienda/detalles.php',
-                                    false,
-                                    true
-                                );
-                                "
-                           {/if}
-                           class="text-primary"
-                        >
-                            ¿Es un formulario nuevo?
-                        </a>
-                    {/if}
+                        {if is_null($claInscripcion->arrHogares.$numHogar.seqFormulario)}
+                            <a href="#"
+                                    {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar != 4}
+                                        onclick="
+                                    $('#seqFormulario').val(0);
+                                    $('#numDocumento').val(0);
+                                    someterFormulario(
+                                        'contenido',
+                                        document.getElementById('insFNV'),
+                                        './contenidos/inscripcionFonvivienda/detalles.php',
+                                        false,
+                                        true
+                                    );
+                                    "
+                                    {/if}
+                               class="text-primary"
+                            >
+                                ¿Crear Formulario Nuevo?
+                            </a>
+                        {elseif intval($claInscripcion->arrHogares.$numHogar.seqFormulario) == 0}
+                            Formulario Seleccionado: <br><span class="text-success">Nuevo Formulario</span>
+                        {elseif intval($claInscripcion->arrHogares.$numHogar.seqFormulario) != 0}
+                            Formulario Seleccionado: <span class="text-success">{$claInscripcion->arrHogares.$numHogar.seqFormulario}</span><br>
+                            <a href="#"
+                                    {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar != 4}
+                                        onclick="
+                                    $('#seqFormulario').val(0);
+                                    $('#numDocumento').val(0);
+                                    $('#seqCiudadano').val(0);
+                                    someterFormulario(
+                                        'contenido',
+                                        document.getElementById('insFNV'),
+                                        './contenidos/inscripcionFonvivienda/detalles.php',
+                                        false,
+                                        true
+                                    );
+                                    "
+                                    {/if}
+                               class="text-primary"
+                            >
+                                ¿Es un formulario nuevo?
+                            </a>
+                        {/if}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <strong>Modalidad:</strong> {$claInscripcion->arrHogares.$numHogar.txtModalidad} <br>
+                    <strong>Esquema:</strong> {$claInscripcion->arrHogares.$numHogar.txtTipoEsquema} <br>
+                    <strong>Rango de Ingresos:</strong> {$claInscripcion->arrHogares.$numHogar.txtRangoIngresos} <br>
+                    <strong>Solución:</strong> {$claInscripcion->arrHogares.$numHogar.txtDescripcion} <br>
+                    <strong>Dirección Solución:</strong> {$claInscripcion->arrHogares.$numHogar.txtDireccionSolucion}
                 </div>
             </div>
 
             <!-- tabla de ciudadanos y coincidencias -->
             <div class="col-sm-12">
+
                 <table id="listadoAadPry" class="table table-hover" data-order='[[ 0, "asc" ]]' width="830px">
                     <thead>
                     <tr>
                         <th style="display: none;"></th>
-                        <th>Documento</th>
-                        <th>Nombre</th>
+                        <th width="120px">Documento</th>
+                        <th width="250px">Nombre</th>
                         <th>Acción</th>
-                        <th>Ver</th>
+                        <th width="50px">Ver</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -159,8 +149,10 @@
                                     {$arrCiudadano.numDocumento}
                                 </td>
                                 <td>
-                                    {$arrCiudadano.txtNombres|mb_strtoupper}<br>
-                                    {$arrCiudadano.txtApellidos|mb_strtoupper}
+                                    {$arrCiudadano.txtNombre1|mb_strtoupper}
+                                    {$arrCiudadano.txtNombre2|mb_strtoupper}
+                                    {$arrCiudadano.txtApellido1|mb_strtoupper}
+                                    {$arrCiudadano.txtApellido2|mb_strtoupper}
                                 </td>
                                 <td width="300px;">
                                     {assign var=numDocumentoCoincidencia value=$arrCiudadano.numDocumento}
@@ -181,7 +173,7 @@
                                                 {$seqCargue},
                                                 {$numHogar},
                                                 {$arrCiudadano.numDocumento},
-                                                '{$arrCiudadano.txtNombres|mb_strtoupper} {$arrCiudadano.txtApellidos|mb_strtoupper}'
+                                                '{$arrCiudadano.txtNombre1|mb_strtoupper} {$arrCiudadano.txtNombre2|mb_strtoupper} {$arrCiudadano.txtApellido1|mb_strtoupper} {$arrCiudadano.txtApellido2|mb_strtoupper}'
                                             );">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                     </a>
@@ -203,8 +195,10 @@
                                     {$arrCiudadano.numDocumento|number_format:0:'.':'.'}
                                 </td>
                                 <td>
-                                    {$arrCiudadano.txtNombres|mb_strtoupper}<br>
-                                    {$arrCiudadano.txtApellidos|mb_strtoupper}
+                                    {$arrCiudadano.txtNombre1|mb_strtoupper}
+                                    {$arrCiudadano.txtNombre2|mb_strtoupper}
+                                    {$arrCiudadano.txtApellido1|mb_strtoupper}
+                                    {$arrCiudadano.txtApellido2|mb_strtoupper}
                                 </td>
                                 <td>
                                     {assign var=numDocumentoCoincidencia value=$arrCiudadano.numDocumento}
@@ -225,7 +219,7 @@
                                                 {$seqCargue},
                                                 {$numHogar},
                                                 {$arrCiudadano.numDocumento},
-                                                '{$arrCiudadano.txtNombres|mb_strtoupper} {$arrCiudadano.txtApellidos|mb_strtoupper}'
+                                                '{$arrCiudadano.txtNombre1|mb_strtoupper} {$arrCiudadano.txtNombre2|mb_strtoupper} {$arrCiudadano.txtApellido1|mb_strtoupper} {$arrCiudadano.txtApellido2|mb_strtoupper}'
                                             );">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                     </a>
@@ -242,19 +236,19 @@
         <div class="panel-footer text-center">
             <div class="row text-center">
                 <div class="col-sm-offset-3 col-sm-4 text-center">
-                    <button type="submit"
-                            class="btn btn-primary btn-sm {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}"
-                            {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}
-                    >
-                        Guardar Cambios
-                    </button>
-                </div>
-                <div class="col-sm-4 text-center">
                     <button type="button"
                             class="btn btn-default btn-sm"
                             onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/informacion.php','seqCargue={$claInscripcion->seqCargue}',true);"
                     >
                         Volver
+                    </button>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <button type="submit"
+                            class="btn btn-primary btn-sm {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}"
+                            {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}
+                    >
+                        Guardar Cambios
                     </button>
                 </div>
             </div>

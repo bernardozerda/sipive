@@ -109,10 +109,15 @@ function proximoVencimiento($numDias) {
 function esFechaValida($fchFecha) {
     if (trim($fchFecha) != "") {
         list( $ano, $mes, $dia ) = mb_split("[\/-]", $fchFecha);
-        if (!@checkdate($mes, $dia, $ano)) {
+        if($ano >= 1901) {
+            if (!@checkdate($mes, $dia, $ano)) {
+                return false;
+            }else{
+                return true;
+            }
+        }else{
             return false;
         }
-        return true;
     } else {
         return false;
     }

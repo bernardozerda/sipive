@@ -47,9 +47,10 @@
                         <tr>
                             <td class="h4" width="30px">{$numHogar}</td>
                             <td>
-                                <strong>Ingresos:</strong> {$arrHogar.txtIngresos} <br>
-                                <strong>Solución:</strong> {$arrHogar.txtSolucion} <br>
                                 <strong>Modalidad:</strong> {$arrHogar.txtModalidad} <br>
+                                <strong>Esquema:</strong> {$arrHogar.txtTipoEsquema} <br>
+                                <strong>Rango de Ingresos:</strong> {$arrHogar.txtRangoIngresos} <br>
+                                <strong>Solución:</strong> {$arrHogar.txtDescripcion} <br>
                                 <strong>Dirección Solución:</strong> {$arrHogar.txtDireccionSolucion}
                             </td>
                             <td width="150px">

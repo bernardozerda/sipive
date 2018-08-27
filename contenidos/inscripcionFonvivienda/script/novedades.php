@@ -17,27 +17,31 @@ if(isset($_SERVER['HTTP_HOST'])){
 
     include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
+    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "InscripcionFonvivienda.class.php" );
 
     $claInscripcion = new InscripcionFonvivienda();
 
     // obtiene el cargue a procesar
-    $seqCargue = $claInscripcion->carguePorProcesar();
+    $arrCargue = $claInscripcion->carguePorProcesar();
+    $seqCargue = $arrCargue['seqCargue'];
+    $seqTipo   = $arrCargue['seqTipo'];
     if($seqCargue != 0){
 
         // pone el cargue "en proceso"
-        $claInscripcion->iniciarCargue($seqCargue, 2);
+        $claInscripcion->iniciarCargue($seqCargue, 2); // 2
         if(empty($claInscripcion->arrErrores)){
 
             // obtiene el archivo
-            $arrArchivo = $claInscripcion->cargarArchivo($seqCargue);
+            $arrArchivo = $claInscripcion->cargarArchivo($seqTipo, $seqCargue);
+
             if(empty($claInscripcion->arrErrores)) {
 
                 // se deshace de todas las lineas que no se deben procesar
-                $arrArchivo = $claInscripcion->limpiezaArchivo($arrArchivo);
+                $arrArchivo = $claInscripcion->limpiezaArchivo($seqTipo, $arrArchivo);
 
                 // arma los hogares como quedaran despues de procesar el archivo
-                $claInscripcion->hogares($arrArchivo);
+                $claInscripcion->hogares($seqTipo, $arrArchivo);
 
                 // busca coincidencias para cada miembro de hogar
                 if(empty($claInscripcion->arrErrores)) {
@@ -60,6 +64,7 @@ if(isset($_SERVER['HTTP_HOST'])){
                 }else{
                     mensaje($claInscripcion->arrErrores);
                 }
+
             }else{
                 mensaje($claInscripcion->arrErrores);
             }
@@ -69,9 +74,9 @@ if(isset($_SERVER['HTTP_HOST'])){
 
         // al terminar el cargue cambia el estado
         if(! empty($claInscripcion->arrErrores)){
-            $claInscripcion->finalizarCargue($seqCargue, 3);
+            $claInscripcion->finalizarCargue($seqCargue, 3);  // 3
         }else{
-            $claInscripcion->finalizarCargue($seqCargue, 4);
+            $claInscripcion->finalizarCargue($seqCargue, 4); // 4
         }
 
     }else{

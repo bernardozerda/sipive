@@ -15,6 +15,7 @@ $observacion5 = 'PATRIMONIO DE FAMILIA REGISTRADO';
 $observacion6 = 'NOMBRE Y CÉDULA DE LOS PROPIETARIOS';
 $observacion7 = 'COMPRAVENTA REALIZADA CON SDV';
 $observacion8 = 'INDAGACION AFECTACION A VIVIENDA FAMILIAR';
+$observacion9 = 'PROHIBICION DE TRANSFERENCIA Y DERECHO DE PREFERENCIA REGISTRADOS';
 $documentos1 = 'ESCRITURA PÚBLICA';
 $documentos2 = 'FOLIO DE MATRÍCULA INMOBILIARIA';
 $documentos3 = 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD VIABILIZADO';
@@ -195,6 +196,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrViabilizados['propietarios'][$intV] = $observacion6;
                     $arrViabilizados['compraVenta'][$intV] = $observacion7;
                     $arrViabilizados['indagacion'][$intV] = ($datos[30] == 'NO APLICA') ? '' : $observacion8;
+                    $arrViabilizados['transferencia'][$intV] = $observacion9;
                     $arrViabilizados['noEscritura'][$intV] = ($valid == 'NO') ? '' : $documentos1;
                     $arrViabilizados['folio'][$intV] = $documentos2;
                     $arrViabilizados['certificado'][$intV] = ($valid == 'NO') ? '' : $documentos3;
@@ -235,6 +237,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $arrNoViabilizados['propietarios'][$intNV] = $observacion6;
                     $arrNoViabilizados['compraVenta'][$intNV] = $observacion7;
                     $arrNoViabilizados['indagacion'][$intNV] = ($datos[30] == 'NO APLICA') ? '' : $observacion8;
+                    $arrNoViabilizados['transferencia'][$intNV] = $observacion9;
                     $arrNoViabilizados['noEscritura'][$intNV] = ($valid == 'NO') ? '' : $documentos1;
                     $arrNoViabilizados['folio'][$intNV] = $documentos2;
                     $arrNoViabilizados['certificado'][$intNV] = ($valid == 'NO') ? '' : $documentos3;
@@ -518,7 +521,10 @@ function insertarAdjuntosTitulos($arreglo, $cantF, $tipo, $intD, $dato, $idSeqDe
                 }
                 if ($arreglo['indagacion'][$int] != "") {
                     $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . $arreglo['indagacion'][$int] . "'),";
-                }              
+                }     
+                if ($arreglo['transferencia'][$int] != "") {
+                    $valueObs1 .= "(4," . $seqEstudioTitulos . ",'" . $arreglo['transferencia'][$int] . "'),";
+                } 
                 if ($arreglo['noEscritura'][$int] != "") {
                     $valueObs2 .= "(1," . $seqEstudioTitulos . ",'" . $arreglo['noEscritura'][$int] . "'),";
                 }

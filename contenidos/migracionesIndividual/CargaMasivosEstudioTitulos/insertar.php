@@ -1,7 +1,7 @@
 <?php
 
 include_once '../conecta.php';
-//include_once "../generarExcel.php";
+
 include '../migrarTablero.php';
 
 $sql = "SET CHARSET utf8";

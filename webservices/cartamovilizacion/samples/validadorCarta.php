@@ -66,7 +66,8 @@ and open the template in the editor.
     
     ?>
     <div class="head" >
-        <h5>VALIDADOR DE DATOS DE CARTAS DE MOVILIZACIÓN DE RECURSOS</h5>
+        <h5><img src="../img/home.png" alt="" width="40" onclick="paginaPrincipal()"/> &nbsp;&nbsp; VALIDADOR DE DATOS DE CARTAS DE MOVILIZACIÓN DE RECURSOS</h5>
+        
     </div>
     <p>&nbsp;</p>
     <body>

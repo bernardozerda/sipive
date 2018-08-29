@@ -17,10 +17,17 @@ $arrReporte = array();
 $arrReporte['general']['funcion'] = "reporteGeneral";
 $arrReporte['general']['titulo'] = "Exportable General";
 $arrReporte['general']['descripcion'] = "Información general de proyectos en dinero";
+$arrReporte['general']['url'] = null;
 
 $arrReporte['fichaTecnica']['funcion'] = "reporteFichaTecnica";
 $arrReporte['fichaTecnica']['titulo'] = "Exportable Ficha Técnica";
 $arrReporte['fichaTecnica']['descripcion'] = "Obtiene la información consignada en la ficha técnica de todos los proyectos";
+$arrReporte['fichaTecnica']['url'] = null;
+
+$arrReporte['unidadesAsignadas']['funcion'] = "analisisUnidadesAsignadas";
+$arrReporte['unidadesAsignadas']['titulo'] = "Unidades Asignadas";
+$arrReporte['unidadesAsignadas']['descripcion'] = "Información de las unidades por cada proyecto asignadas a los hogares";
+$arrReporte['unidadesAsignadas']['url'] = "./contenidos/otros/analisisUnidadesAsignadas/analisisUnidadesAsignadas.php";
 
 if($_GET['reporte'] != "") {
     $txtClave = $_GET['reporte'];

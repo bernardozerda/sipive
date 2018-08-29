@@ -23,8 +23,15 @@
                             <td width="300px">{$arrDatos.titulo}</td>
                             <td>{$arrDatos.descripcion}</td>
                             <td width="30px" align="center">
-                                <a href="#" onClick="location.href='./contenidos/reportesProyectos/reportes.php?reporte={$txtClave}'">
-                                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                                <a href="#"
+                                   onClick="
+                                        {if $arrDatos.url == ''}
+                                            location.href='./contenidos/reportesProyectos/reportes.php?reporte={$txtClave}
+                                        {else}
+                                            location.href='{$arrDatos.url}';
+                                        {/if}
+                                   ">
+                                   <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                                 </a>
                             </td>
                         </tr>

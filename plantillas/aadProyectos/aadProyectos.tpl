@@ -49,7 +49,7 @@
         </table>
     </div>
     <div class="panel-footer" align="center">
-        {if isset($smarty.session.arrGrupos.3.20)}
+        {if isset($smarty.session.arrGrupos.6.7) or isset($smarty.session.arrGrupos.6.20)}
             <button class="btn btn-primary" onclick="cargarContenido('contenido','./contenidos/aadProyectos/crear.php','',true);">
                 Nuevo Acto Administrativo
             </button>

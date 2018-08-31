@@ -48,7 +48,7 @@ $sql = "
     left join (
       select 
         frm.seqFormulario,  
-        sum(sol.valSolicitado) as valConstructor
+        sum(sol.valOrden) as valConstructor
       from t_frm_formulario frm
       inner join (
         select 

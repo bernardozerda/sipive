@@ -13,6 +13,7 @@ include ( $txtPrefijoRuta . "contenidos/migracionesIndividual/legalizacionVipa/c
 $sql = "
     select
         frm.seqformulario as 'Formulario',
+        est.txtEstado as 'Estado',
         frm.valAspiraSubsidio as 'Valor subsidio',
         tdo.txtTipoDocumento as 'Tipo de documento',
         ciu.numDocumento as 'Documento',
@@ -23,6 +24,7 @@ $sql = "
     inner join t_frm_hogar hog on frm.seqFormulario = hog.seqFormulario and hog.seqParentesco = 1
     inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
     inner join t_ciu_tipo_documento tdo on ciu.seqTipoDocumento = tdo.seqTipoDocumento
+    inner join v_frm_estado est on frm.seqEstadoProceso = est.seqEstadoProceso
     left join (
       select 
         frm.seqFormulario,  

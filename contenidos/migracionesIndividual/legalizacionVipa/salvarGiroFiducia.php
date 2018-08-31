@@ -155,6 +155,7 @@ if(empty($arrErrores)){
     $arrFormatoArchivo[] = "Identificador";
     $arrFormatoArchivo[] = "Documento";
     $arrFormatoArchivo[] = "Nombre";
+    $arrFormatoArchivo[] = "Valor Subsidio";
     $arrFormatoArchivo[] = "Proyecto";
     $arrFormatoArchivo[] = "Valor Disponible";
     $arrFormatoArchivo[] = "Valor solicitado";
@@ -173,14 +174,15 @@ if(empty($arrErrores)){
         unset($arrArchivo[0]);
         foreach ($arrArchivo as $numLinea => $arrLinea) {
 
-            $seqFormulario = intval($arrLinea[0]);
-            $numDocumento  = doubleval($arrLinea[1]);
-            $txtNombre     = trim($arrLinea[2]);
-            $valDisponible = doubleval(mb_ereg_replace("[^0-9]","", $arrLinea[4]));
-            $valSolicitado = doubleval(mb_ereg_replace("[^0-9]","", $arrLinea[5]));
-            $valOrden      = doubleval(mb_ereg_replace("[^0-9]","", $arrLinea[6]));
-            $numRegistro   = intval($arrLinea[7]);
-            $fchRegistro   = (esFechaValida($arrLinea[8])) ? $arrLinea[8] : null;
+            $seqFormulario     = intval($arrLinea[0]);
+            $numDocumento      = doubleval($arrLinea[1]);
+            $txtNombre         = trim($arrLinea[2]);
+            $valAspiraSubsidio = doubleval(mb_ereg_replace("[^0-9]","", $arrLinea[3]));
+            $valDisponible     = doubleval(mb_ereg_replace("[^0-9]","", $arrLinea[5]));
+            $valSolicitado     = doubleval(mb_ereg_replace("[^0-9]","", $arrLinea[6]));
+            $valOrden          = doubleval(mb_ereg_replace("[^0-9]","", $arrLinea[7]));
+            $numRegistro       = intval($arrLinea[8]);
+            $fchRegistro       = (esFechaValida($arrLinea[9])) ? $arrLinea[9] : null;
 
             // saldo segun la base de datos
             $sql = "
@@ -209,6 +211,8 @@ if(empty($arrErrores)){
                         where seqFormulario = $seqFormulario
                         group by seqFormulario
                     ) des on sol.seqDesembolso = des.seqDesembolso
+                    where sol.numOrden is not null 
+                      and sol.numOrden <> 0
                     group by des.seqDesembolso
                 ) sol on des.seqDesembolso = sol.seqDesembolso
                 where frm.seqFormulario = $seqFormulario
@@ -273,6 +277,8 @@ if(empty($arrErrores)){
                 $arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor solicitado no puede ser cero";
             }elseif($valDisponible < $valSolicitado){
                 $arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor solicitado no puede ser superior al valor disponible";
+            }elseif($valAspiraSubsidio < $valSolicitado){
+                $arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor solicitado no puede ser superior al subsidio asignado";
             }
 
             // valor orden de pago

@@ -70,6 +70,7 @@ if(empty($arrErrores)) {
     $arrFormatoArchivo[] = "Identificador";
     $arrFormatoArchivo[] = "Número de Documento";
     $arrFormatoArchivo[] = "Nombre";
+    $arrFormatoArchivo[] = "Valor Subsidio";
     $arrFormatoArchivo[] = "Valor Disponible";
     $arrFormatoArchivo[] = "Valor Giro";
 
@@ -87,8 +88,9 @@ if(empty($arrErrores)) {
             $seqFormulario = intval($arrLinea[0]);
             $numDocumento  = doubleval($arrLinea[1]);
             $txtNombre     = trim($arrLinea[2]);
-            $valDisponible = doubleval(mb_ereg_replace("[^0-9]", "", $arrLinea[3]));
-            $valGiro       = doubleval(mb_ereg_replace("[^0-9]", "", $arrLinea[4]));
+            $valAspiraSubsidio = doubleval(mb_ereg_replace("[^0-9]", "", $arrLinea[3]));
+            $valDisponible = doubleval(mb_ereg_replace("[^0-9]", "", $arrLinea[4]));
+            $valGiro       = doubleval(mb_ereg_replace("[^0-9]", "", $arrLinea[5]));
 
             // saldo en la base de datos
             $sql = "
@@ -194,6 +196,8 @@ if(empty($arrErrores)) {
             // saldo del giro
             if($valGiro > $valSaldo){
                 $arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor solicitado supera el valor disponible para girar";
+            }elseif($valGiro > $valAspiraSubsidio){
+                $arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor solicitado supera el valor del subsidio asignado";
             }
 
             if(empty($arrErrores)) {

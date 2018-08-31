@@ -20,6 +20,7 @@ if($_GET['proyecto'] != "") {
           frm.seqFormulario,
           ciu.numDocumento,
           upper( concat( ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2 ) ) as txtNombre,
+          frm.valAspiraSubsidio,
           sol.valSolicitado,
           sol.valOrden
         from t_frm_formulario frm
@@ -47,12 +48,14 @@ if($_GET['proyecto'] != "") {
         $seqFormulario = $objRes->fields['seqFormulario'];
         $numDocumento = $objRes->fields['numDocumento'];
         $txtNombre = $objRes->fields['txtNombre'];
+        $valAspiraSubsidio = $objRes->fields['valAspiraSubsidio'];
         $valSolicitado = $objRes->fields['valSolicitado'];
         $valOrden = $objRes->fields['valOrden'];
 
         $arrPlantilla[$seqFormulario]['Identificador'] = $seqFormulario;
         $arrPlantilla[$seqFormulario]['Documento'] = $numDocumento;
         $arrPlantilla[$seqFormulario]['Nombre'] = $txtNombre;
+        $arrPlantilla[$seqFormulario]['Valor Subsidio'] = $valAspiraSubsidio;
         if ($valSolicitado != 0) {
             $arrPlantilla[$seqFormulario]['Disponible'] += $valSolicitado;
         } else {
@@ -68,6 +71,7 @@ if($_GET['proyecto'] != "") {
     $arrTitulos[] = "Identificador";
     $arrTitulos[] = "Número de Documento";
     $arrTitulos[] = "Nombre";
+    $arrTitulos[] = "Valor Subsidio";
     $arrTitulos[] = "Valor Disponible";
     $arrTitulos[] = "Valor Giro";
 

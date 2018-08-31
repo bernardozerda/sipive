@@ -20,7 +20,8 @@ if($_GET['proyecto'] != "") {
         select 
             frm.seqFormulario as Identificador, 
             ciu.numDocumento as Documento, 
-            upper(concat(ciu.txtNombre1,' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2)) as Nombre, 
+            upper(concat(ciu.txtNombre1,' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2)) as Nombre,
+            frm.valAspiraSubsidio as 'Valor Subsidio', 
             if(frm.txtDireccionSolucion is null or frm.txtDireccionSolucion = '','No Disponible',frm.txtDireccionSolucion) as Proyecto,
             (frm.valAspiraSubsidio - if(sol.valSolicitado is null,0,sol.valSolicitado) ) as 'Valor Disponible',
             0 as 'Valor solicitado',
@@ -61,6 +62,7 @@ if($_GET['proyecto'] != "") {
             frm.txtDireccionSolucion, 
             ciu.numDocumento            
     ";
+
     $arrPlantilla = $aptBd->GetAll($sql);
     $arrTitulos = array_keys($arrPlantilla[0]);
 

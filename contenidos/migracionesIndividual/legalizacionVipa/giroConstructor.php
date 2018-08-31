@@ -58,7 +58,7 @@ include ( $txtPrefijoRuta . "contenidos/migracionesIndividual/legalizacionVipa/c
                 <div class="col-sm-4 col-sm-offset-5" style="text-align: center">
                     <div class="col-sm-6">
                         <button type="button"
-                                class="btn btn-success btn-sm"
+                                class="btn btn-success"
                                 data-toggle="modal" data-target="#modalProyectos"
                         >Plantilla</button>
                     </div>

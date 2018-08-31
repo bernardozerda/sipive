@@ -487,17 +487,23 @@ include ( $txtPrefijoRuta . "contenidos/migracionesIndividual/legalizacionVipa/c
 
             <!-- plantilla y boton de cargar -->
             <div class="form-group">
-                <div class="col-sm-4 col-sm-offset-5" style="text-align: center">
-                    <div class="col-sm-6">
+                <div class="col-sm-6 col-sm-offset-3" style="text-align: center">
+                    <div class="col-sm-4">
                         <button type="button"
-                                class="btn btn-success btn-sm"
+                                class="btn btn-success"
                                 data-toggle="modal" data-target="#modalProyectos"
                         >Plantilla</button>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <button type="submit"
                                 class="btn btn-primary"
                         >Cargar</button>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="button"
+                                class="btn btn-info"
+                                onClick="location.href='./contenidos/migracionesIndividual/legalizacionVipa/exportableFiducia.php'"
+                        >Exportar Datos</button>
                     </div>
                 </div>
             </div>

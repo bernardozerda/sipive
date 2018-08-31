@@ -4,22 +4,22 @@ include_once '../conecta.php';
 
 include '../migrarTablero.php';
 
-$sql = "SET CHARSET utf8";
-$db->get_results($sql);
+//$sql = "SET CHARSET utf8";
+//$db->get_results($sql);
 
 $observacion1 = 'PROPIETARIOS SON BENEFICIARIOS DEL SDV';
 $observacion2 = 'ESTADO CIVIL COINCIDENTE';
-$observacion3 = 'CONSTITUCIÓN PATRIMONIO DE FAMILIA';
+$observacion3 = 'CONSTITUCI&Oacute;N PATRIMONIO DE FAMILIA';
 $observacion4 = 'RESTRICCIONES EN ESCRITURA';
 $observacion5 = 'PATRIMONIO DE FAMILIA REGISTRADO';
-$observacion6 = 'NOMBRE Y CÉDULA DE LOS PROPIETARIOS';
+$observacion6 = 'NOMBRE Y C&Eacute;DULA DE LOS PROPIETARIOS';
 $observacion7 = 'COMPRAVENTA REALIZADA CON SDV';
 $observacion8 = 'INDAGACION AFECTACION A VIVIENDA FAMILIAR';
 $observacion9 = 'PROHIBICION DE TRANSFERENCIA Y DERECHO DE PREFERENCIA REGISTRADOS';
-$documentos1 = 'ESCRITURA PÚBLICA';
-$documentos2 = 'FOLIO DE MATRÍCULA INMOBILIARIA';
+$documentos1 = 'ESCRITURA P&Uacute;BLICA';
+$documentos2 = 'FOLIO DE MATR&Iacute;CULA INMOBILIARIA';
 $documentos3 = 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD VIABILIZADO';
-$documentos4 = 'RESOLUCIÓN O CARTA DE VINCULACIÓN DEL BENEFICIO OTORGADO POR SDHT';
+$documentos4 = 'RESOLUCI&Oacute;N O CARTA DE VINCULACI&Oacute;N DEL BENEFICIO OTORGADO POR SDHT';
 
 $arrViabilizados = Array();
 $arrNoViabilizados = Array();

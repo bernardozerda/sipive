@@ -92,10 +92,10 @@ class Ciudadano {
         $this->seqGrupoLgtbi = 0;
         $this->seqNivelEducativo = 1;
         $this->seqOcupacion = 20;
-        $this->seqParentesco = 0;
+        $this->seqParentesco = 12;
         $this->seqSalud = 0;
-        $this->seqSexo = 0;
-        $this->seqTipoDocumento = 0;
+        $this->seqSexo = 2;
+        $this->seqTipoDocumento = 8;
         $this->seqTipoVictima = 0;
         $this->txtApellido1 = "";
         $this->txtApellido2 = "";

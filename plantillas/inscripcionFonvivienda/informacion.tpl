@@ -33,10 +33,10 @@
             </div>
         {else}
 
-            <table id="listadoAadPry" class="table table-hover" data-order='[[ 0, "desc" ]]' width="850px">
+            <table id="listadoAadPry" class="table table-hover" data-order='[[ 0, "asc" ]]' width="850px">
                 <thead>
                 <tr>
-                    <th>Id Hogar</th>
+                    <th>Id Hogar del Cargue</th>
                     <th>Datos</th>
                     <th>Estado</th>
                     <th></th>
@@ -45,7 +45,7 @@
                 <tbody>
                     {foreach from=$claInscripcion->arrHogares key=numHogar item=arrHogar}
                         <tr>
-                            <td class="h4" width="30px">{$numHogar}</td>
+                            <td class="text-center h4" width="30px">{$numHogar}</td>
                             <td>
                                 <strong>Modalidad:</strong> {$arrHogar.txtModalidad} <br>
                                 <strong>Esquema:</strong> {$arrHogar.txtTipoEsquema} <br>

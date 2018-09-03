@@ -1138,28 +1138,6 @@
                                     </tr>
                                 </table>
 
-                                <!-- SI TIENE RANGO DE INGRESOS LO MUESTRA - MI CASA YA -->
-                                {if $claFormulario->txtRangoIngresosHogar != ""}
-                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                                        <tr bgcolor="#CCCCCC">
-                                            <td align="center" height="20px" width="584px">
-                                                <b>Rango de ingresos MCY</b>
-                                            </td>
-                                            <td style="padding-right:7px" align="right" id="valTotalMostrar">
-                                                {$claFormulario->txtRangoIngresosHogar}
-                                            </td>
-                                            <td width="18px">&nbsp;</td>
-                                            <td width="18px">&nbsp;</td>
-
-                                            <input type="hidden"
-                                                   name="txtRangoIngresos"
-                                                   id="txtRangoIngresos"
-                                                   value="{$claFormulario->txtRangoIngresosHogar}"
-                                            >
-                                        </tr>
-                                    </table>
-                                {/if}
-
                             </p>
                         </div>
 

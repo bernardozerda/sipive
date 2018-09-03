@@ -62,6 +62,14 @@
         <div class="panel-footer text-center">
             <div class="row">
                 <div class="col-sm-3"></div>
+                <div class="col-sm-3">
+                    <button type="button"
+                            class="btn btn-default btn-sm"
+                            onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/inscripcionFonvivienda.php','',true);"
+                    >
+                        Volver
+                    </button>
+                </div>
                 <div class="col-sm-4">
                     <button type="submit"
                             class="btn btn-primary btn-sm {if $bolPendientes == true} disabled {/if}"
@@ -70,14 +78,6 @@
                         Crear cargue
                     </button>
                     <input type="hidden" name="crear" value="1">
-                </div>
-                <div class="col-sm-3">
-                    <button type="button"
-                            class="btn btn-default btn-sm"
-                            onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/inscripcionFonvivienda.php','',true);"
-                    >
-                        Volver
-                    </button>
                 </div>
             </div>
         </div>

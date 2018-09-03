@@ -27,7 +27,7 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h6 class="panel-title">Identificador Fonvivienda {$numHogar}</h6>
+            <h6 class="panel-title">Identificador del hogar {$numHogar}</h6>
         </div>
         <div class="panel-body">
 

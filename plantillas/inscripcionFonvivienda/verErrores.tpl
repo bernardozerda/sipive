@@ -1,14 +1,14 @@
 
-<table class="table table-striped" id="tablaErroresFNV" width="800px;">
+<table class="table table-striped" id="tablaErroresFNV" data-order='[[ 0, "asc" ]]'>
     <thead>
         <tr>
-            <th width="800px">Mensajes</th>
+            <th>Mensajes</th>
         </tr>
     </thead>
     <tbody>
         {foreach from=$arrErrores item=txtMensaje}
             <tr>
-                <td width="800px">{$txtMensaje}</td>
+                <td width="850px;">{$txtMensaje}</td>
             </tr>
         {/foreach}
     </tbody>

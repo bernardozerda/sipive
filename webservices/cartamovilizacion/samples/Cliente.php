@@ -33,7 +33,7 @@ and open the template in the editor.
             -webkit-box-shadow: 0 1px 3px #aaa;
             box-shadow: 0 1px 3px #aaa;
             margin-top: 10px;
-            padding: 3%;
+            padding: 2%;
 
         }
         .head{
@@ -63,11 +63,13 @@ and open the template in the editor.
     <?php
     //echo "hola"; die();
     session_start();
+    $_SESSION['intentos'] = 3;
     ?>
     <div class="head" >
-        <h5>Sistema en Construcción</h5>
+        <h5>SOLICITUD DE CARTA DE AUTORIZACIÓN DE MOVILIZACIÓN DE RECURSOS EN ENTIDADES FINANCIERAS &nbsp;&nbsp;&nbsp;</h5>
+
     </div>
-   <!-- <p>&nbsp;</p>
+    <p>&nbsp;</p>
     <body>
         <div id="content" >
             <div class="content" style=" padding-left: 12%;">
@@ -91,7 +93,7 @@ and open the template in the editor.
                             </div>
 
                             <!-- title="De click en registrar peticionario para guardar la información en el sistema. Recuerde verificar la información antes de guardar."-->
-                   <!--     </div>
+                        </div>
 
                         <div class="col-md-8 mb-3" style="text-align: center;">                            
                             <img id="imagenCaptcha" src="../lib/captcha/CaptchaSecurityImages.php?width=200&height=50&characters=4" alt="captcha" />
@@ -106,12 +108,18 @@ and open the template in the editor.
                                 <input  class="btn btn-primary" id="guardar" type="button" value="Enviar Solicitud" onclick="if (validar())
                                             enviarDatos()">
                                 <!-- title="De click en registrar peticionario para guardar la información en el sistema. Recuerde verificar la información antes de guardar."-->
-                          <!--  </div>
+                            </div>
                         </div>
                     </div>  
                 </form>
+                <p>&nbsp;</p>
+                <div class="form-row" style="width: 100%; position: relative; float: left; left: -10%; font-size: 14px">
+                    Consultar código de verificación y validez a carta de autorización de movilización &nbsp;<a href="#" onclick="validadorDatos()"> Clic Aquí</a>
+                </div>
             </div>
+
         </div>     
+
         <p>&nbsp;</p>
         <div class="form-row" style="width: 70%; position: relative; float: left; left: 20%">
             <div class="col-md-6 mb-3" style="font-size: 11px">

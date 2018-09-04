@@ -33,7 +33,7 @@ and open the template in the editor.
             -webkit-box-shadow: 0 1px 3px #aaa;
             box-shadow: 0 1px 3px #aaa;
             margin-top: 10px;
-            padding: 3%;
+            padding: 2%;
 
         }
         .head{
@@ -63,11 +63,10 @@ and open the template in the editor.
     <?php
     //echo "hola"; die();
     session_start();
-    
     ?>
     <div class="head" >
-        <h5><img src="../img/home.png" alt="" width="40" onclick="paginaPrincipal()"/> &nbsp;&nbsp; VALIDADOR DE DATOS DE CARTAS DE MOVILIZACIÓN DE RECURSOS</h5>
-        
+        <h5><!--<img src="../img/home.png" alt="" width="40" onclick="paginaPrincipal()" /> -->&nbsp;&nbsp; VALIDADOR DE DATOS DE CARTAS DE MOVILIZACIÓN DE RECURSOS</h5>
+
     </div>
     <p>&nbsp;</p>
     <body>
@@ -112,6 +111,10 @@ and open the template in the editor.
                         </div>
                     </div>  
                 </form>
+                <p>&nbsp;</p>
+                <div class="form-row" style="width: 100%; position: relative; float: left; left: -15%; font-size: 11.4px; text-align: center">
+                    Esta opción de validación aplica para cartas generadas por medio virtual, a nombre de la persona y número de identificación que solicitó la carta, para una entidad financiera especifica. 
+                </div>
             </div>
         </div>     
         <p>&nbsp;</p>

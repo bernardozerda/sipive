@@ -1548,7 +1548,7 @@ class InscripcionFonvivienda
                                     break;
                                 }elseif($arrCiudadano['seqCiudadanoCoincidencia'] === null and $objCiudadano->numDocumento == $arrCiudadano['numDocumento']){
 
-                                    $objCiudadano->seqParentesci = $arrCiudadano['seqParentesco'];
+                                    $objCiudadano->seqParentesco = $arrCiudadano['seqParentesco'];
                                     $objCiudadano->txtNombre1    = $arrCiudadano['txtNombre1'];
                                     $objCiudadano->txtNombre2    = $arrCiudadano['txtNombre1'];
                                     $objCiudadano->txtApellido1  = $arrCiudadano['txtApellido1'];
@@ -1827,6 +1827,7 @@ class InscripcionFonvivienda
     private function parentesco($seqTipo,$txtParentesco,$numLinea){
         $seqParentesco = 0;
         if($seqTipo == 2){
+            $txtParentesco = ($txtParentesco == "")? 'Desconocido' : $txtParentesco;
             $arrParentesco = obtenerDatosTabla(
                 "t_ciu_parentesco",
                 array("seqParentesco","txtParentesco"),
@@ -1840,7 +1841,7 @@ class InscripcionFonvivienda
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][10] . " es desconocido";
             }
         }else{
-            $seqParentesco = 12;
+            $seqParentesco = 14;
         }
         return $seqParentesco;
     }

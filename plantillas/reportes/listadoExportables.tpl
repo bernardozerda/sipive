@@ -65,7 +65,9 @@
 {assign var=encuestasPive        		    value=$arrExportables.encuestasPive}
 {assign var=inconsistenciasInscripcion	    value=$arrExportables.inconsistenciasInscripcion}
 {assign var=estudioTitulosLeasing   	    value=$arrExportables.estudioTitulosLeasing}
-{assign var=soporteResolucionVinculacion   value=$arrExportables.soporteResolucionVinculacion}
+{assign var=soporteResolucionVinculacion    value=$arrExportables.soporteResolucionVinculacion}
+{assign var=girosVIPA                       value=$arrExportables.girosVIPA}
+
 
 <form id="listadoExportable" >
     <center>
@@ -1131,6 +1133,23 @@
                     </td>
                 </tr>
             {/if}
+
+
+            {if $girosVIPA == 1}
+                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                    <td class="tituloCampo" align="left" width="60%">Hogares VIPA con Giros</td>
+                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                        <a onclick="someterFormulario(
+                                        'mensajes',
+                                        'listadoExportable',
+                                        './contenidos/reportes/ReportesExportables.php?reporte=girosVIPA',
+                                        true,
+                                        false)"
+                           href="#">Exportable</a>
+                    </td>
+                </tr>
+            {/if}
+
 
         </center>
         <input type="hidden" id="txtComentario" name="txtComentario" />

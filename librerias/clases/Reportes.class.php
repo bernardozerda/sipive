@@ -6,7 +6,8 @@ include "../../contenidos/reportes/informeProyectoActo.php";
 include "../../contenidos/reportes/reporteInformacionCvp.php";
 ini_set('memory_limit', '1024M');
 
-class Reportes {
+class Reportes
+{
 
     public $arrTablas;
     public $arrGraficas;
@@ -24,7 +25,8 @@ class Reportes {
     public $arrSeqFormularios;
     public $seqFormularios;
 
-    public function Reportes() {
+    public function Reportes()
+    {
         $this->arrTablas = array();
         $this->arrGraficas = array();
         $this->arrErrores = array();
@@ -43,7 +45,8 @@ class Reportes {
 
 // fin constructor de la clase
 
-    public function crearListadoReportes() {
+    public function crearListadoReportes()
+    {
 
 
         $this->arrTablas['titulos'][] = "Listado Exportables";
@@ -138,13 +141,14 @@ class Reportes {
         $datosFila[] = $this->formArchivo("fileSecuenciales");
     }
 
-    public function exportableReporteFormsEliminados() {
+    public function exportableReporteFormsEliminados()
+    {
         global $aptBd;
 
         try {
 
-            $txtCondiciones = ( $_POST['fchInicio'] != "" ) ? "AND bor.fchBorrado >= '" . $_POST['fchInicio'] . " 00:00:00'" : "";
-            $txtCondiciones .= ( $_POST['fchFin'] != "" ) ? "AND bor.fchBorrado <= '" . $_POST['fchFin'] . " 23:59:59'" : "";
+            $txtCondiciones = ($_POST['fchInicio'] != "") ? "AND bor.fchBorrado >= '" . $_POST['fchInicio'] . " 00:00:00'" : "";
+            $txtCondiciones .= ($_POST['fchFin'] != "") ? "AND bor.fchBorrado <= '" . $_POST['fchFin'] . " 23:59:59'" : "";
 
             $sql = "
             SELECT
@@ -167,7 +171,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteDatosDeContacto() {
+    public function exportableReporteDatosDeContacto()
+    {
 
         global $aptBd;
 
@@ -226,7 +231,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteAnalisisPoblacion() {
+    public function exportableReporteAnalisisPoblacion()
+    {
         global $aptBd;
         $arrErrores = &$this->arrErrores;
         if (empty($arrErrores)) {
@@ -379,7 +385,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteGeneral() {
+    public function exportableReporteGeneral()
+    {
 
         global $aptBd;
 
@@ -607,7 +614,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteMiembrosHogar() {
+    public function exportableReporteMiembrosHogar()
+    {
 
         global $aptBd;
 
@@ -662,7 +670,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteInscritosNoCC() {
+    public function exportableReporteInscritosNoCC()
+    {
 
         global $aptBd;
 
@@ -737,7 +746,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteAhorroCreditoSoporte() {
+    public function exportableReporteAhorroCreditoSoporte()
+    {
 
         global $aptBd;
 
@@ -828,7 +838,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteVerificaModalidadSolucion() {
+    public function exportableReporteVerificaModalidadSolucion()
+    {
 
         global $aptBd;
 
@@ -902,7 +913,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteTodosConEstado() {
+    public function exportableReporteTodosConEstado()
+    {
 
         global $aptBd;
 
@@ -960,7 +972,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteVRSubsidioMejoramiento() {
+    public function exportableReporteVRSubsidioMejoramiento()
+    {
 
         global $aptBd;
         global $arrConfiguracion;
@@ -1030,7 +1043,8 @@ class Reportes {
      * 
      */
 
-    public function exportableReporteCierreFinancieroConPromesa() {
+    public function exportableReporteCierreFinancieroConPromesa()
+    {
 
         global $aptBd;
 
@@ -1110,7 +1124,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteBeneficiariosCajaCompensacion() {
+    public function exportableReporteBeneficiariosCajaCompensacion()
+    {
 
         global $aptBd;
 
@@ -1200,7 +1215,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteBeneficiariosSubsidio() {
+    public function exportableReporteBeneficiariosSubsidio()
+    {
 
         global $aptBd;
 
@@ -1292,7 +1308,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteIngresosVsReglamento() {
+    public function exportableReporteIngresosVsReglamento()
+    {
 
         global $aptBd;
 
@@ -1346,7 +1363,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteCondicionMayorEdad() {
+    public function exportableReporteCondicionMayorEdad()
+    {
 
         global $aptBd;
 
@@ -1463,7 +1481,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteIdRepetido() {
+    public function exportableReporteIdRepetido()
+    {
 
         global $aptBd;
 
@@ -1494,8 +1513,8 @@ class Reportes {
                     $objRes->MoveNext();
                 }
 
-                $arrNumDocumento = ( empty($arrNumDocumento) ) ? "null" :
-                        implode($arrNumDocumento, ",");
+                $arrNumDocumento = (empty($arrNumDocumento)) ? "null" :
+                    implode($arrNumDocumento, ",");
 
                 $sql = "SELECT 
 							DISTINCT hog.seqFormulario
@@ -1518,8 +1537,8 @@ class Reportes {
                         $arrSeqFormularios[] = $objRes->fields['seqFormulario'];
                         $objRes->MoveNext();
                     }
-                    $arrSeqFormularios = ( empty($arrSeqFormularios) ) ? "null" :
-                            implode($arrSeqFormularios, ",");
+                    $arrSeqFormularios = (empty($arrSeqFormularios)) ? "null" :
+                        implode($arrSeqFormularios, ",");
 
 
                     $sql = "SELECT 
@@ -1592,7 +1611,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteSoacha() {
+    public function exportableReporteSoacha()
+    {
 
         global $aptBd;
 
@@ -1647,7 +1667,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteTipoDocPasExt() {
+    public function exportableReporteTipoDocPasExt()
+    {
 
         global $aptBd;
 
@@ -1726,7 +1747,8 @@ class Reportes {
         }
     }
 
-    public function obtenerJsReporteador($objRes, $arrTitulosCampos) {
+    public function obtenerJsReporteador($objRes, $arrTitulosCampos)
+    {
 
         $txtJs = "var objReporteador = { ";
         $txtJs .= "datos: [";
@@ -1755,13 +1777,15 @@ class Reportes {
         return $txtJs;
     }
 
-    public function obtenerReportesGeneralReporteador($objRes, $nombreArchivo) {
+    public function obtenerReportesGeneralReporteador($objRes, $nombreArchivo)
+    {
         $this->arrErrores = array();
         $this->obtenerReportesGeneral($objRes, $nombreArchivo);
         return;
     }
 
-    public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array()) {
+    public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array())
+    {
 
         if ($this) {
             $arrErrores = $this->arrErrores;
@@ -1793,7 +1817,7 @@ class Reportes {
                 //print_r ($objRes->fields[CAmbios]);
                 while ($objRes->fields) {
                     //echo ( utf8_decode(implode("\t", preg_replace("/\s+/", " ", $objRes->fields))) ) . "\r\n";
-                    $dato = ( utf8_decode(implode("\t", preg_replace("/\s+/", " ", $objRes->fields))) );
+                    $dato = (utf8_decode(implode("\t", preg_replace("/\s+/", " ", $objRes->fields))));
                     $dato = str_replace('&nbsp;', ' ', $dato); // Reemplaza caracter por espacios
                     $dato = str_replace('<b>', '', $dato); // Reemplaza caracter por espacios
                     $dato = str_replace('</b>', '', $dato); // Reemplaza caracter por espacios
@@ -1824,7 +1848,8 @@ class Reportes {
         }
     }
 
-    private function textoFormLinks($idForm, $txtNombreArchivo = "") {
+    private function textoFormLinks($idForm, $txtNombreArchivo = "")
+    {
 
         if ($txtNombreArchivo == "") {
             $txtForm = "<a onclick = \"someterFormulario( 'mensajes', document.formFiltros , 
@@ -1839,7 +1864,8 @@ class Reportes {
         return $txtForm;
     }
 
-    public function consolidadoPrograma() {
+    public function consolidadoPrograma()
+    {
 
         global $aptBd;
         $arrErrores = array();
@@ -1945,15 +1971,15 @@ class Reportes {
 
                 $arrConsolidadoPrograma["Inscritos"]["estadoProceso"] = "Inscritos";
                 $arrConsolidadoPrograma["Inscritos"]["Independiente"] += $grupo ? $objRes->fields["cuenta"] : 0;
-                $arrConsolidadoPrograma["Inscritos"]["Desplazado"] += ( $grupo == "Desplazado" ) ? $objRes->fields["cuenta"] : 0;
+                $arrConsolidadoPrograma["Inscritos"]["Desplazado"] += ($grupo == "Desplazado") ? $objRes->fields["cuenta"] : 0;
                 $arrConsolidadoPrograma["Inscritos"]["Total"] += $objRes->fields["cuenta"];
 
                 $arrDatosGrafica["Inscritos - $grupo"] += $objRes->fields["cuenta"];
 
                 if (in_array($objRes->fields["seqEstadoProceso"], $arrAsignados)) {
                     $arrConsolidadoPrograma["Asignados"]["estadoProceso"] = "Asignados";
-                    $arrConsolidadoPrograma["Asignados"]["Independiente"] += ( $grupo == "Independiente" ) ? $objRes->fields["cuenta"] : 0;
-                    $arrConsolidadoPrograma["Asignados"]["Desplazado"] += ( $grupo == "Desplazado" ) ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Asignados"]["Independiente"] += ($grupo == "Independiente") ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Asignados"]["Desplazado"] += ($grupo == "Desplazado") ? $objRes->fields["cuenta"] : 0;
                     $arrConsolidadoPrograma["Asignados"]["Total"] += $objRes->fields["cuenta"];
 
                     $arrDatosGrafica["Asignados - $grupo"] += $objRes->fields["cuenta"];
@@ -1961,8 +1987,8 @@ class Reportes {
 
                 if (in_array($objRes->fields["seqEstadoProceso"], $arrInscritos)) {
                     $arrConsolidadoPrograma["En Inscripcion"]["estadoProceso"] = "En Inscripcion";
-                    $arrConsolidadoPrograma["En Inscripcion"]["Independiente"] += ( $grupo == "Independiente" ) ? $objRes->fields["cuenta"] : 0;
-                    $arrConsolidadoPrograma["En Inscripcion"]["Desplazado"] += ( $grupo == "Desplazado" ) ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["En Inscripcion"]["Independiente"] += ($grupo == "Independiente") ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["En Inscripcion"]["Desplazado"] += ($grupo == "Desplazado") ? $objRes->fields["cuenta"] : 0;
                     $arrConsolidadoPrograma["En Inscripcion"]["Total"] += $objRes->fields["cuenta"];
 
                     $arrDatosGrafica["En Inscripcion - $grupo"] += $objRes->fields["cuenta"];
@@ -1970,8 +1996,8 @@ class Reportes {
 
                 if (in_array($objRes->fields["seqEstadoProceso"], $arrPostulados)) {
                     $arrConsolidadoPrograma["Postulados"]["estadoProceso"] = "Postulados";
-                    $arrConsolidadoPrograma["Postulados"]["Independiente"] += ( $grupo == "Independiente" ) ? $objRes->fields["cuenta"] : 0;
-                    $arrConsolidadoPrograma["Postulados"]["Desplazado"] += ( $grupo == "Desplazado" ) ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Postulados"]["Independiente"] += ($grupo == "Independiente") ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Postulados"]["Desplazado"] += ($grupo == "Desplazado") ? $objRes->fields["cuenta"] : 0;
                     $arrConsolidadoPrograma["Postulados"]["Total"] += $objRes->fields["cuenta"];
 
                     $arrDatosGrafica["Postulados - $grupo"] += $objRes->fields["cuenta"];
@@ -1979,8 +2005,8 @@ class Reportes {
 
                 if ($objRes->fields["seqEstadoProceso"] == $valPostuladoCosecha && $objRes->fields["bolCerrado"] == 1) {
                     $arrConsolidadoPrograma["Postulados"]["estadoProceso"] = "Postulados";
-                    $arrConsolidadoPrograma["Postulados"]["Independiente"] += ( $grupo == "Independiente" ) ? $objRes->fields["cuenta"] : 0;
-                    $arrConsolidadoPrograma["Postulados"]["Desplazado"] += ( $grupo == "Desplazado" ) ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Postulados"]["Independiente"] += ($grupo == "Independiente") ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Postulados"]["Desplazado"] += ($grupo == "Desplazado") ? $objRes->fields["cuenta"] : 0;
                     $arrConsolidadoPrograma["Postulados"]["Total"] += $objRes->fields["cuenta"];
 
                     $arrDatosGrafica["Postulados - $grupo"] += $objRes->fields["cuenta"];
@@ -1988,8 +2014,8 @@ class Reportes {
 
                 if ($objRes->fields["seqEstadoProceso"] == $valPostuladoInhabilitado) {
                     $arrConsolidadoPrograma["Postulados Inhabilitados"]["estadoProceso"] = "Postulados Inhabilitados";
-                    $arrConsolidadoPrograma["Postulados Inhabilitados"]["Independiente"] += ( $grupo == "Independiente" ) ? $objRes->fields["cuenta"] : 0;
-                    $arrConsolidadoPrograma["Postulados Inhabilitados"]["Desplazado"] += ( $grupo == "Desplazado" ) ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Postulados Inhabilitados"]["Independiente"] += ($grupo == "Independiente") ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Postulados Inhabilitados"]["Desplazado"] += ($grupo == "Desplazado") ? $objRes->fields["cuenta"] : 0;
                     $arrConsolidadoPrograma["Postulados Inhabilitados"]["Total"] += $objRes->fields["cuenta"];
 
                     $arrDatosGrafica["Postulados Inhabilitados - $grupo"] += $objRes->fields["cuenta"];
@@ -1997,8 +2023,8 @@ class Reportes {
 
                 if (in_array($objRes->fields["seqEstadoProceso"], $arrDesembolso)) {
                     $arrConsolidadoPrograma["Desembolso"]["estadoProceso"] = "En Desembolso";
-                    $arrConsolidadoPrograma["Desembolso"]["Independiente"] += ( $grupo == "Independiente" ) ? $objRes->fields["cuenta"] : 0;
-                    $arrConsolidadoPrograma["Desembolso"]["Desplazado"] += ( $grupo == "Desplazado" ) ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Desembolso"]["Independiente"] += ($grupo == "Independiente") ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Desembolso"]["Desplazado"] += ($grupo == "Desplazado") ? $objRes->fields["cuenta"] : 0;
                     $arrConsolidadoPrograma["Desembolso"]["Total"] += $objRes->fields["cuenta"];
 
                     $arrDatosGrafica["Desembolso - $grupo"] += $objRes->fields["cuenta"];
@@ -2006,13 +2032,12 @@ class Reportes {
 
                 if (in_array($objRes->fields["seqEstadoProceso"], $arrProcesoPostulacion) && $objRes->fields["bolCerrado"] == 0) {
                     $arrConsolidadoPrograma["Proceso Postulacion"]["estadoProceso"] = "Proceso Postulacion";
-                    $arrConsolidadoPrograma["Proceso Postulacion"]["Independiente"] += ( $grupo == "Independiente" ) ? $objRes->fields["cuenta"] : 0;
-                    $arrConsolidadoPrograma["Proceso Postulacion"]["Desplazado"] += ( $grupo == "Desplazado" ) ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Proceso Postulacion"]["Independiente"] += ($grupo == "Independiente") ? $objRes->fields["cuenta"] : 0;
+                    $arrConsolidadoPrograma["Proceso Postulacion"]["Desplazado"] += ($grupo == "Desplazado") ? $objRes->fields["cuenta"] : 0;
                     $arrConsolidadoPrograma["Proceso Postulacion"]["Total"] += $objRes->fields["cuenta"];
 
                     $arrDatosGrafica["Proceso Postulacion - $grupo"] += $objRes->fields["cuenta"];
                 }
-
 
 
                 $objRes->MoveNext();
@@ -2047,7 +2072,8 @@ class Reportes {
         }
     }
 
-    public function resumenPrograma() {
+    public function resumenPrograma()
+    {
 
         global $aptBd;
 
@@ -2292,7 +2318,8 @@ class Reportes {
         }
     }
 
-    public function exportableReporteCruzarEdadTodFchPos() {
+    public function exportableReporteCruzarEdadTodFchPos()
+    {
 
         global $aptBd;
 
@@ -2364,7 +2391,8 @@ class Reportes {
         }
     }
 
-    public function exportableResumenPrograma() {
+    public function exportableResumenPrograma()
+    {
 
         global $aptBd;
 
@@ -2399,7 +2427,8 @@ class Reportes {
         }
     }
 
-    public function exportableEstadoCorte() {
+    public function exportableEstadoCorte()
+    {
 
         global $aptBd;
 
@@ -2486,7 +2515,8 @@ class Reportes {
         }
     }
 
-    public function exportableCartasAsignacion() {
+    public function exportableCartasAsignacion()
+    {
 
         global $aptBd;
 
@@ -2541,7 +2571,8 @@ class Reportes {
         }
     }
 
-    public function inscritosostuladosConsulta() {
+    public function inscritosostuladosConsulta()
+    {
 
         global $aptBd;
 
@@ -2683,7 +2714,8 @@ class Reportes {
 //			pr( $this );
     }
 
-    public function estadoCorte() {
+    public function estadoCorte()
+    {
 
         global $aptBd;
 
@@ -2853,15 +2885,16 @@ class Reportes {
     }
 
     /**
-     * TOMA UN ARREGLO DE PHP Y RETORNA UN 
+     * TOMA UN ARREGLO DE PHP Y RETORNA UN
      * STRING CON SINTAXIS JAVASCRITPT
-     * @author Diego Felipe Gaitan 
+     * @author Diego Felipe Gaitan
      * @author Bernardo Zerda
      * @param Array Void
      * @return String txtJs
      * @version 0.1 Marzo 2010
      */
-    public function php2js() {
+    public function php2js()
+    {
 
         $arrGraficas = $this->arrGraficas;
         $txtJs = "var objGraficas = { ";
@@ -2881,7 +2914,7 @@ class Reportes {
             foreach ($arrEjeX as $txtNombreEjeX => $arrSeries) {
                 $txtJs .= "{ ejeX: '$txtNombreEjeX' , ";
                 foreach ($arrSeries as $txtNombreSerie => $numValorSerie) {
-                    $numValorSerie = ( is_numeric($numValorSerie) ) ? $numValorSerie : "'$numValorSerie'";
+                    $numValorSerie = (is_numeric($numValorSerie)) ? $numValorSerie : "'$numValorSerie'";
                     $txtJs .= ereg_replace(" ", "", $txtNombreSerie) . ": $numValorSerie , ";
                 }
                 $txtJs = trim($txtJs, ", ");
@@ -2896,7 +2929,8 @@ class Reportes {
         return $txtJs;
     }
 
-    private function formArchivo($nomVariable) {
+    private function formArchivo($nomVariable)
+    {
 
         $txtFile = "<input 
 						type='file'
@@ -2906,7 +2940,8 @@ class Reportes {
         return $txtFile;
     }
 
-    private function leerArchivoSecuenciales() {
+    private function leerArchivoSecuenciales()
+    {
 
         global $aptBd;
 
@@ -2940,7 +2975,8 @@ class Reportes {
         }
     }
 
-    public function cargarSecuencialesFormulario() {
+    public function cargarSecuencialesFormulario()
+    {
 
         global $aptBd;
 
@@ -2963,8 +2999,7 @@ class Reportes {
         }
 
 
-
-        if (empty($arrErrores) and $bolExisteFileSecuenciales and ! empty($_FILES['fileSecuenciales'])) {
+        if (empty($arrErrores) and $bolExisteFileSecuenciales and !empty($_FILES['fileSecuenciales'])) {
             $this->leerArchivoSecuenciales();
         }
 
@@ -2994,25 +3029,26 @@ class Reportes {
                     $objRes->MoveNext();
                 }
 
-                $seqFormularios = ( empty($arrSeqFormularios) ) ? "null" :
-                        implode($arrSeqFormularios, ",");
+                $seqFormularios = (empty($arrSeqFormularios)) ? "null" :
+                    implode($arrSeqFormularios, ",");
             } catch (Exception $objError) {
                 $arrErrores[] = "Se ha producido un error al consultar los datos";
             }
         }
     }
 
-    public function pasivosExigibles($fchDesde, $fchHasta) {
+    public function pasivosExigibles($fchDesde, $fchHasta)
+    {
         global $aptBd;
 
         // Validacion de la fecha de inicio
-        list( $ano, $mes, $dia ) = split("-", $fchDesde);
+        list($ano, $mes, $dia) = split("-", $fchDesde);
         if (@checkdate($mes, $dia, $ano) === false) {
             $this->arrErrores[] = "La fecha de inicio no es válida";
         }
 
         // Validacion de la fecha de fin
-        list( $ano, $mes, $dia ) = split("-", $fchHasta);
+        list($ano, $mes, $dia) = split("-", $fchHasta);
         if (@checkdate($mes, $dia, $ano) === false) {
             $this->arrErrores[] = "La fecha de fin no es válida";
         }
@@ -3067,7 +3103,8 @@ class Reportes {
      * @return Integer valCierreFinanciero
      * @version 1.0 Ene 2011
      */
-    public function valorCierreFinanciero($seqModalidad, $seqSolucion) {
+    public function valorCierreFinanciero($seqModalidad, $seqSolucion)
+    {
         global $aptBd;
         global $arrConfiguracion;
 
@@ -3089,13 +3126,13 @@ class Reportes {
                 if ($seqModalidad != 5) {
                     switch ($objRes->fields['txtSolucion']) {
                         case "<= 50 SMMLV":
-                            $valCierreFinanciero = ( 50 * $arrConfiguracion['constantes']['salarioMinimo'] ) - $objRes->fields['valSubsidio'];
+                            $valCierreFinanciero = (50 * $arrConfiguracion['constantes']['salarioMinimo']) - $objRes->fields['valSubsidio'];
                             break;
                         case "> 50 y <= 70 SMMLV":
-                            $valCierreFinanciero = ( 50 * $arrConfiguracion['constantes']['salarioMinimo'] ) - $objRes->fields['valSubsidio'];
+                            $valCierreFinanciero = (50 * $arrConfiguracion['constantes']['salarioMinimo']) - $objRes->fields['valSubsidio'];
                             break;
                         case "> 70 y <= 135 SMMLV":
-                            $valCierreFinanciero = ( 70 * $arrConfiguracion['constantes']['salarioMinimo'] ) - $objRes->fields['valSubsidio'];
+                            $valCierreFinanciero = (70 * $arrConfiguracion['constantes']['salarioMinimo']) - $objRes->fields['valSubsidio'];
                             break;
                         default:
                             $valCierreFinanciero = 0;
@@ -3115,7 +3152,8 @@ class Reportes {
         return $valCierreFinanciero;
     }
 
-    public function seguimientoDesembolsos($arrDocumentos) {
+    public function seguimientoDesembolsos($arrDocumentos)
+    {
         global $aptBd;
 
         if (!empty($arrDocumentos)) {
@@ -3158,12 +3196,14 @@ class Reportes {
         }
     }
 
-    public function obtenerEscrituracion($arrDocumentos) {
+    public function obtenerEscrituracion($arrDocumentos)
+    {
 
         obtenerReporteEscrituracion($arrDocumentos);
     }
 
-    public function exportableCartasMovilizacion() {
+    public function exportableCartasMovilizacion()
+    {
         global $aptBd;
 
         $sql = "
@@ -3194,7 +3234,8 @@ class Reportes {
 
       } */
 
-    public function exportableHogaresCalificados() {
+    public function exportableHogaresCalificados()
+    {
 
         global $aptBd;
 
@@ -3204,8 +3245,8 @@ class Reportes {
 
         if (empty($arrErrores)) {
 
-            $txtCondiciones = ( $_POST['fchInicio'] != "" ) ? "AND fchCalificacion >= '" . $_POST['fchInicio'] . " 00:00:00'" : "";
-            $txtCondiciones .= ( $_POST['fchFin'] != "" ) ? "AND fchCalificacion <= '" . $_POST['fchFin'] . " 23:59:59'" : "";
+            $txtCondiciones = ($_POST['fchInicio'] != "") ? "AND fchCalificacion >= '" . $_POST['fchInicio'] . " 00:00:00'" : "";
+            $txtCondiciones .= ($_POST['fchFin'] != "") ? "AND fchCalificacion <= '" . $_POST['fchFin'] . " 23:59:59'" : "";
 
             $sql = "SELECT 
 						T_FRM_CALIFICACION_PLAN2.seqFormulario,
@@ -3241,7 +3282,8 @@ class Reportes {
         }
     }
 
-    public function exportableActosAdministrativosAsignacion() {
+    public function exportableActosAdministrativosAsignacion()
+    {
         global $aptBd;
 
         // Se ocultan los campos:
@@ -3306,7 +3348,8 @@ class Reportes {
         $this->obtenerReportesGeneral($objRes, "reporteAsignadosAAD");
     }
 
-    public function exportableAsignacionUnidades() {
+    public function exportableAsignacionUnidades()
+    {
         global $aptBd;
 
         $sql = "(
@@ -3353,7 +3396,8 @@ class Reportes {
         $this->obtenerReportesGeneral($objRes, "reporteAsignacionUnidades");
     }
 
-    public function exportableAsignacionUnidadesMejoramiento() {
+    public function exportableAsignacionUnidadesMejoramiento()
+    {
         global $aptBd;
 
         $sql = "SELECT
@@ -3385,7 +3429,8 @@ class Reportes {
         $this->obtenerReportesGeneral($objRes, "reporteAsignacionUnidadesMejoramiento");
     }
 
-    public function exportableActosAdministrativosEpigrafe() {
+    public function exportableActosAdministrativosEpigrafe()
+    {
         global $aptBd;
 
         $sql = "
@@ -3410,7 +3455,8 @@ ORDER BY aad.fchActo DESC;
         $this->obtenerReportesGeneral($objRes, "reporteEpigrafeAAD");
     }
 
-    public function Caracterizacion() {
+    public function Caracterizacion()
+    {
 
 
         global $aptBd;
@@ -3624,7 +3670,8 @@ ORDER BY aad.fchActo DESC;
         }
     }
 
-    public function reporteBasedeDatosPoblacional() {
+    public function reporteBasedeDatosPoblacional()
+    {
 
         global $aptBd;
 
@@ -3645,7 +3692,6 @@ ORDER BY aad.fchActo DESC;
         }
 
         $txtCondicion = implode(" and ", $arrCondiciones);
-
 
 
         $sql = "SELECT ciu.seqCiudadano AS id,
@@ -3793,7 +3839,8 @@ ORDER BY aad.fchActo DESC;
         $this->obtenerReportesGeneral($objRes, "reporteBasedeDatosPoblacional");
     }
 
-    public function InformacionSolucion() {
+    public function InformacionSolucion()
+    {
         global $aptBd;
 
         $arrErrores = &$this->arrErrores;
@@ -3868,15 +3915,18 @@ ORDER BY aad.fchActo DESC;
     }
 
     //Plantilla Estudio Titulos 
-    public function plantillaestudiotitulos() {
+    public function plantillaestudiotitulos()
+    {
         plantillaestudiotitulos($this->seqFormularios);
     }
 
-    public function informeProyectos() {
+    public function informeProyectos()
+    {
         informeProyectosActo();
     }
 
-    public function registrosCiudadano($arrDocumentos) {
+    public function registrosCiudadano($arrDocumentos)
+    {
 
         obtenerRegistroCiudadano($arrDocumentos);
     }
@@ -4112,7 +4162,8 @@ ORDER BY aad.fchActo DESC;
 //
 //    }
 
-    public function encuestasPiveCruces() {
+    public function encuestasPiveCruces()
+    {
         global $aptBd;
 
         $arrCalificados = array();
@@ -4175,13 +4226,13 @@ ORDER BY aad.fchActo DESC;
                             $numEtnias++;
                         }
                         if (intval($objCiudadano->seqCondicionEspecial) == 3 or
-                                intval($objCiudadano->seqCondicionEspecial2) == 3 or
-                                intval($objCiudadano->seqCondicionEspecial3) == 3
+                            intval($objCiudadano->seqCondicionEspecial2) == 3 or
+                            intval($objCiudadano->seqCondicionEspecial3) == 3
                         ) {
                             $numCondiciones++;
                         }
                         if (intval($objCiudadano->seqSalud) == 1 or
-                                intval($objCiudadano->seqSalud) == 2
+                            intval($objCiudadano->seqSalud) == 2
                         ) {
                             $numSalud++;
                         }
@@ -4389,7 +4440,8 @@ ORDER BY aad.fchActo DESC;
         }
     }
 
-    public function estudioTitulosLeasing() {
+    public function estudioTitulosLeasing()
+    {
         global $txtPrefijoRuta, $arrConfiguracion, $aptBd;
 
         // consulta de los datos
@@ -4517,55 +4569,55 @@ ORDER BY aad.fchActo DESC;
 
             // formato por defecto dela hoja
             $objHoja->getStyle(
-                            PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
-                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . ($numFilas + 1))
-                    ->applyFromArray($arrEstilos);
+                PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . ($numFilas + 1))
+                ->applyFromArray($arrEstilos);
 
             // colores en los titulos
             $objHoja->getStyle(
-                            PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
-                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
-                    ->getFont()
-                    ->setBold(true);
+                PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
+                ->getFont()
+                ->setBold(true);
 
             $objHoja->getStyle(
-                            PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
-                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
-                    ->getFill()
-                    ->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
+                ->getFill()
+                ->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 
             $objHoja->getStyle(
-                            PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
-                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
-                    ->getFill()
-                    ->getStartColor()
-                    ->setARGB('A9A9A9');
+                PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
+                ->getFill()
+                ->getStartColor()
+                ->setARGB('A9A9A9');
 
             $objHoja->getStyle(
-                            PHPExcel_Cell::stringFromColumnIndex(23) . "1:" .
-                            PHPExcel_Cell::stringFromColumnIndex(34) . "1")
-                    ->getFill()
-                    ->getStartColor()
-                    ->setARGB('FF0000');
+                PHPExcel_Cell::stringFromColumnIndex(23) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex(34) . "1")
+                ->getFill()
+                ->getStartColor()
+                ->setARGB('FF0000');
 
             // formatos de fecha
             $objPHPExcel->getActiveSheet()->getStyle(
-                            PHPExcel_Cell::stringFromColumnIndex(16) . "1:" .
-                            PHPExcel_Cell::stringFromColumnIndex(16) . ($numFilas + 1))
-                    ->getNumberFormat()
-                    ->setFormatCode("yyyy-mm-dd");
+                PHPExcel_Cell::stringFromColumnIndex(16) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex(16) . ($numFilas + 1))
+                ->getNumberFormat()
+                ->setFormatCode("yyyy-mm-dd");
 
             $objPHPExcel->getActiveSheet()->getStyle(
-                            PHPExcel_Cell::stringFromColumnIndex(22) . "1:" .
-                            PHPExcel_Cell::stringFromColumnIndex(22) . ($numFilas + 1))
-                    ->getNumberFormat()
-                    ->setFormatCode("yyyy-mm-dd");
+                PHPExcel_Cell::stringFromColumnIndex(22) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex(22) . ($numFilas + 1))
+                ->getNumberFormat()
+                ->setFormatCode("yyyy-mm-dd");
 
             $objHoja->getStyle(
-                            PHPExcel_Cell::stringFromColumnIndex(12) . "1:" .
-                            PHPExcel_Cell::stringFromColumnIndex(12) . ($numFilas + 1))
-                    ->getNumberFormat()
-                    ->setFormatCode('#,##');
+                PHPExcel_Cell::stringFromColumnIndex(12) . "1:" .
+                PHPExcel_Cell::stringFromColumnIndex(12) . ($numFilas + 1))
+                ->getNumberFormat()
+                ->setFormatCode('#,##');
 
 
             // listas
@@ -4596,10 +4648,10 @@ ORDER BY aad.fchActo DESC;
 
             //desprotege las celdas editables
             $objPHPExcel->getActiveSheet()->getStyle(
-                            PHPExcel_Cell::stringFromColumnIndex(15) . "2:" .
-                            PHPExcel_Cell::stringFromColumnIndex($numColumnas) . ($numFilas + 1))
-                    ->getProtection()
-                    ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+                PHPExcel_Cell::stringFromColumnIndex(15) . "2:" .
+                PHPExcel_Cell::stringFromColumnIndex($numColumnas) . ($numFilas + 1))
+                ->getProtection()
+                ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
             header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             header("Content-Disposition: attachment;filename='Platilla_Estudio_Titulos_Leasing.xlsx");
@@ -4613,7 +4665,8 @@ ORDER BY aad.fchActo DESC;
         }
     }
 
-    public function soporteResVinculacion($arrDocumentos) {
+    public function soporteResVinculacion($arrDocumentos)
+    {
         global $aptBd;
 
         if (!empty($arrDocumentos)) {
@@ -4684,6 +4737,88 @@ WHERE
             imprimirMensajes($this->arrErrores, array());
         }
     }
+
+    public function girosVIPA(){
+        global $aptBd;
+
+        $sql = "
+            select 
+                fac.seqFormulario, 
+                fac.seqFormularioActo,
+                tdo.txtTipoDocumento,    
+                cac.numDocumento,
+                upper(concat(cac.txtNombre1,' ',cac.txtNombre2,' ',cac.txtApellido1,' ',cac.txtApellido2)) as txtNombre,
+                est.txtEstado,
+                hvi.numActo, 
+                hvi.fchActo,
+                fac.valAspiraSubsidio,
+                if(gir.valSolicitado is null, 0, gir.valSolicitado) as valSolicitado,
+                if(concat(gir.numRegistroPresupuestal1, ' de ', year(gir.fchRegistroPresupuestal1)) is null, 'No aplica',concat(gir.numRegistroPresupuestal1, ' de ', year(gir.fchRegistroPresupuestal1)))  as rp1,
+                if(concat(gir.numRegistroPresupuestal2, ' de ', year(gir.numRegistroPresupuestal2)) is null, 'No aplica',concat(gir.numRegistroPresupuestal2, ' de ', year(gir.numRegistroPresupuestal2)))  as rp2
+            from t_aad_formulario_acto fac
+            inner join t_aad_hogar_acto hac on fac.seqFormularioActo = hac.seqFormularioActo and hac.seqParentesco = 1
+            inner join t_aad_ciudadano_acto cac on hac.seqCiudadanoActo = cac.seqCiudadanoActo
+            inner join t_ciu_tipo_documento tdo on cac.seqTipoDocumento = tdo.seqTipoDocumento
+            inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
+            inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
+            left join t_aad_giro gir on fac.seqFormularioActo = gir.seqFormularioActo
+            where fac.seqPlanGobierno = 3
+            and fac.seqModalidad = 12
+            and fac.seqTipoEsquema = 12
+            and hvi.seqTipoActo = 1     
+            order by 
+                fac.seqFormulario, 
+                fac.seqFormularioActo   
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrDatos = array();
+        while($objRes->fields){
+
+            $seqFormulario = $objRes->fields['seqFormulario'];
+            $fchResolucion = date("Y", strtotime($objRes->fields['fchActo']));
+            $txtResolucion = "Res. " . $objRes->fields['numActo'] . " de " . $fchResolucion;
+
+            $arrDatos[$seqFormulario]['hogar']['tipo'] = $objRes->fields['txtTipoDocumento'];
+            $arrDatos[$seqFormulario]['hogar']['documento'] = $objRes->fields['numDocumento'];
+            $arrDatos[$seqFormulario]['hogar']['nombre'] = $objRes->fields['txtNombre'];
+            $arrDatos[$seqFormulario]['hogar']['subsidio'] = $objRes->fields['valAspiraSubsidio'];
+            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['fac'] = $objRes->fields['seqFormularioActo'];
+            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['rp1'] = $objRes->fields['rp1'];
+            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['rp2'] = $objRes->fields['rp2'];
+            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['estado'] = $objRes->fields['txtEstado'];
+            $arrDatos[$seqFormulario]['detalle'][$txtResolucion] += $objRes->fields['valSolicitado'];
+            $arrDatos[$seqFormulario]['acumulado'] += $objRes->fields['valSolicitado'];
+
+            $objRes->MoveNext();
+        }
+
+        $arrReporte = array();
+        foreach($arrDatos as $seqFormulario => $arrInformacion){
+            foreach($arrInformacion['detalle'] as $txtResolucion => $valGiro){
+
+                $numPosicion = count($arrReporte);
+
+                $arrReporte[$numPosicion]['Formulario'] = $seqFormulario;
+                $arrReporte[$numPosicion]['Formulario Acto'] = $arrInformacion['hogar'][$txtResolucion]['fac'];
+                $arrReporte[$numPosicion]['Tipo de documento'] = $arrInformacion['hogar']['tipo'];
+                $arrReporte[$numPosicion]['Documento'] = $arrInformacion['hogar']['documento'];
+                $arrReporte[$numPosicion]['Nombre'] = $arrInformacion['hogar']['nombre'];
+                $arrReporte[$numPosicion]['Estado'] = $arrInformacion['hogar'][$txtResolucion]['estado'];
+                $arrReporte[$numPosicion]['Resolucion'] = $txtResolucion;
+                $arrReporte[$numPosicion]['Registro Presupuestal 1'] = $arrInformacion['hogar'][$txtResolucion]['rp1'];
+                $arrReporte[$numPosicion]['Registro Presupuestal 2'] = $arrInformacion['hogar'][$txtResolucion]['rp2'];
+                $arrReporte[$numPosicion]['Subsidio'] =  number_format($arrInformacion['hogar']['subsidio'],0,',','.');
+                $arrReporte[$numPosicion]['Acumulado'] =  number_format($arrInformacion['acumulado'],0,',','.');
+                $arrReporte[$numPosicion]['Giro'] = number_format($valGiro,0,',','.');
+
+            }
+        }
+
+        $this->obtenerReportesGeneral($arrReporte, "GirosVIPA");
+
+    }
+
+
 
 }
 

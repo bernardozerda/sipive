@@ -76,7 +76,7 @@ $arrExportables["encuestasPive"] = 0; // Encuestas PIVE
 $arrExportables["inconsistenciasInscripcion"] = 0; // Reporte de inconsistencias de inscripcion
 $arrExportables["estudioTitulosLeasing"] = 0; // Plantilla Estudio de Titulos Leasing
 $arrExportables["soporteResolucionVinculacion"] = 0;
-
+$arrExportables["girosVIPA"] = 0; // GIROS VIPA
 
 foreach ($arrGruposPertenece as $seqGrupo) {
 
@@ -217,6 +217,7 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["inconsistenciasInscripcion"] = 1;
             $arrExportables["estudioTitulosLeasing"] = 1;
             $arrExportables["soporteResolucionVinculacion"] = 1;
+            $arrExportables["girosVIPA"] = 1;
             break;
         case 34: // Cruce Información Cvp
             $arrExportables["reporteInformacionCvp"] = 1;

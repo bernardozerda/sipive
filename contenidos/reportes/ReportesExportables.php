@@ -1,15 +1,15 @@
 <?php
 
 $txtPrefijoRuta = "../../";
-include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
-include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Reportes.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Encuestas.class.php" );
+include($txtPrefijoRuta . "recursos/archivos/verificarSesion.php");
+include($txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php");
+include($txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php");
+include($txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php");
+include($txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php");
+include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Reportes.class.php");
+include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php");
+include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php");
+include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Encuestas.class.php");
 
 
 $claReporte = new Reportes;
@@ -171,32 +171,32 @@ switch ($reporte) {
                     unset($arrDocumentos[$numLinea]);
                 }
             }
-             $claReporte->obtenerEscrituracion($arrDocumentos);
-        }else{
+            $claReporte->obtenerEscrituracion($arrDocumentos);
+        } else {
             echo '<span style="color:#c10;text-align:center;"><b>Selecione un archivo en filtros->Datos!</b></span>';
         }
-       
-       
+
+
         break;
 
     case "informeProyectos":
         $claReporte->informeProyectos();
         break;
-    
+
     case "reporteInformacionCvp":
-	
-       if ($_FILES['fileSecuenciales']['error'] == 0) {
-            $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileSecuenciales']['tmp_name']));            
+
+        if ($_FILES['fileSecuenciales']['error'] == 0) {
+            $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileSecuenciales']['tmp_name']));
             foreach ($arrDocumentos as $numLinea => $numDocumento) {
                 if (intval($numDocumento) != 0) {
-                    $arrDocumentos[$numLinea] = intval($numDocumento);                    
+                    $arrDocumentos[$numLinea] = intval($numDocumento);
                 } else {
                     unset($arrDocumentos[$numLinea]);
                 }
             }
-			
+
             $claReporte->registrosCiudadano($arrDocumentos);
-        }else{
+        } else {
             echo '<span style="color:#c10;text-align:center;"><b>Selecione un archivo en filtros->Datos!</b></span>';
         }
         break;
@@ -209,23 +209,27 @@ switch ($reporte) {
     case "estudioTitulosLeasing":
         $claReporte->estudioTitulosLeasing();
         break;
-    
-     case "soporteResolucionVinculacion":
-	
-       if ($_FILES['fileSecuenciales']['error'] == 0) {
-            $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileSecuenciales']['tmp_name']));            
+
+    case "soporteResolucionVinculacion":
+
+        if ($_FILES['fileSecuenciales']['error'] == 0) {
+            $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileSecuenciales']['tmp_name']));
             foreach ($arrDocumentos as $numLinea => $numDocumento) {
                 if (intval($numDocumento) != 0) {
-                    $arrDocumentos[$numLinea] = intval($numDocumento);                    
+                    $arrDocumentos[$numLinea] = intval($numDocumento);
                 } else {
                     unset($arrDocumentos[$numLinea]);
                 }
             }
-			
+
             $claReporte->soporteResVinculacion($arrDocumentos);
-        }else{
+        } else {
             echo '<span style="color:#c10;text-align:center;"><b>Selecione un archivo en filtros->Datos!</b></span>';
         }
+        break;
+
+    case "girosVIPA":
+        $claReporte->girosVIPA();
         break;
 }
 ?>

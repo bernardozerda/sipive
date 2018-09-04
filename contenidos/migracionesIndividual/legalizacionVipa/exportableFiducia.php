@@ -102,12 +102,9 @@ $sql = "
             inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
             left join t_aad_giro gir on fac.seqFormularioActo = gir.seqFormularioActo
             where fac.seqPlanGobierno in (" . implode("," , $arrVariables[$txtTipoGiro]['planGobierno']) . ")
-            and fac.seqModalidad in (" . implode("," , $arrVariables[$txtTipoGiro]['modalidad']) . ")
-            and fac.seqTipoEsquema in (" . implode("," , $arrVariables[$txtTipoGiro]['esquema']) . ")
-            and hvi.seqTipoActo = 1    
-            
-            
-             
+              and fac.seqModalidad in (" . implode("," , $arrVariables[$txtTipoGiro]['modalidad']) . ")
+              and fac.seqTipoEsquema in (" . implode("," , $arrVariables[$txtTipoGiro]['esquema']) . ")
+              and hvi.seqTipoActo = 1    
             order by 
                 fac.seqFormulario, 
                 fac.seqFormularioActo   

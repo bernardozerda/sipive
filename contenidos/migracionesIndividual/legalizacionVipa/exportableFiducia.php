@@ -101,10 +101,13 @@ $sql = "
             inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
             inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
             left join t_aad_giro gir on fac.seqFormularioActo = gir.seqFormularioActo
-            where fac.seqPlanGobierno = 3
-            and fac.seqModalidad = 12
-            and fac.seqTipoEsquema = 12
-            and hvi.seqTipoActo = 1     
+            where fac.seqPlanGobierno in (" . implode("," , $arrVariables[$txtTipoGiro]['planGobierno']) . ")
+            and fac.seqModalidad in (" . implode("," , $arrVariables[$txtTipoGiro]['modalidad']) . ")
+            and fac.seqTipoEsquema in (" . implode("," , $arrVariables[$txtTipoGiro]['esquema']) . ")
+            and hvi.seqTipoActo = 1    
+            
+            
+             
             order by 
                 fac.seqFormulario, 
                 fac.seqFormularioActo   

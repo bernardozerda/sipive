@@ -90,6 +90,7 @@ $sql = "
                 est.txtEstado,
                 hvi.numActo, 
                 hvi.fchActo,
+                frm.valAspiraSubsidio as valActual,
                 fac.valAspiraSubsidio,
                 if(gir.valSolicitado is null, 0, gir.valSolicitado) as valSolicitado,
                 if(concat(gir.numRegistroPresupuestal1, ' de ', year(gir.fchRegistroPresupuestal1)) is null, 'No aplica',concat(gir.numRegistroPresupuestal1, ' de ', year(gir.fchRegistroPresupuestal1)))  as rp1,
@@ -101,6 +102,7 @@ $sql = "
             inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
             inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
             left join t_aad_giro gir on fac.seqFormularioActo = gir.seqFormularioActo
+            left join t_frm_formulario frm on fac.seqFormulario = frm.seqFormulario
             where fac.seqPlanGobierno in (" . implode("," , $arrVariables[$txtTipoGiro]['planGobierno']) . ")
               and fac.seqModalidad in (" . implode("," , $arrVariables[$txtTipoGiro]['modalidad']) . ")
               and fac.seqTipoEsquema in (" . implode("," , $arrVariables[$txtTipoGiro]['esquema']) . ")
@@ -120,6 +122,7 @@ while($objRes->fields){
     $arrDatos[$seqFormulario]['hogar']['tipo'] = $objRes->fields['txtTipoDocumento'];
     $arrDatos[$seqFormulario]['hogar']['documento'] = $objRes->fields['numDocumento'];
     $arrDatos[$seqFormulario]['hogar']['nombre'] = $objRes->fields['txtNombre'];
+    $arrDatos[$seqFormulario]['hogar']['actual'] = $objRes->fields['valActual'];
     $arrDatos[$seqFormulario]['hogar']['subsidio'] = $objRes->fields['valAspiraSubsidio'];
     $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['fac'] = $objRes->fields['seqFormularioActo'];
     $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['rp1'] = $objRes->fields['rp1'];
@@ -146,7 +149,8 @@ foreach($arrDatos as $seqFormulario => $arrInformacion){
         $arrReporte[$numPosicion]['Resolucion'] = $txtResolucion;
         $arrReporte[$numPosicion]['Registro Presupuestal 1'] = $arrInformacion['hogar'][$txtResolucion]['rp1'];
         $arrReporte[$numPosicion]['Registro Presupuestal 2'] = $arrInformacion['hogar'][$txtResolucion]['rp2'];
-        $arrReporte[$numPosicion]['Valor Subsidio'] = $arrInformacion['hogar']['subsidio'];
+        $arrReporte[$numPosicion]['Valor Subsidio Actual'] = $arrInformacion['hogar']['subsidio'];
+        $arrReporte[$numPosicion]['Valor Subsidio'] = $arrInformacion['hogar']['actual'];
         $arrReporte[$numPosicion]['Valor Giro'] = $valGiro;
         $arrReporte[$numPosicion]['Valor Acumulado'] = $arrInformacion['acumulado'];
 

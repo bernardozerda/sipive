@@ -4837,11 +4837,7 @@ WHERE
               cac.numDocumento as numDocumento,
               upper(concat(cac.txtNombre1,' ',cac.txtNombre2,' ',cac.txtApellido1,' ',cac.txtApellido2)) as txtNombre,
               hvi.fchActo as fchAsignacion, 
-              (
-                if(fac.valAspiraSubsidio is null,0,fac.valAspiraSubsidio) +
-                if(fac.valComplementario is null,0,fac.valComplementario) +
-                if(fac.valCartaLeasing is null,0,fac.valCartaLeasing)
-              ) as valAsignado
+              0 as valAsignado
             from t_aad_hogares_vinculados hvi
             inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
             inner join t_aad_hogar_acto hac on hac.seqFormularioActo = fac.seqFormularioActo

@@ -1807,12 +1807,16 @@ class Reportes
             // si es el objeto ResultSet
             if (is_object($objRes)) {
                 if (!empty($objRes->fields)) {
-                    echo utf8_decode(implode("\t", array_keys($objRes->fields))) . "\r\n";
-                } else {
-                    foreach ($arrTitulosCampos as $txtTitulo) {
-                        echo utf8_decode($txtTitulo) . "\t";
+                    if(! empty($arrTitulosCampos)) {
+                        echo utf8_decode(implode("\t", array_keys($objRes->fields))) . "\r\n";
                     }
-                    echo "\r\n";
+                } else {
+                    if(! empty($arrTitulosCampos)) {
+                        foreach ($arrTitulosCampos as $txtTitulo) {
+                            echo utf8_decode($txtTitulo) . "\t";
+                        }
+                        echo "\r\n";
+                    }
                 }
                 //print_r ($objRes->fields[CAmbios]);
                 while ($objRes->fields) {
@@ -1831,12 +1835,16 @@ class Reportes
             } elseif (is_array($objRes)) {
 
                 if (!empty($objRes)) {
-                    echo utf8_decode(implode("\t", array_keys($objRes[0]))) . "\r\n";
-                } else {
-                    foreach ($arrTitulosCampos as $txtTitulo) {
-                        echo utf8_decode($txtTitulo) . "\t";
+                    if(! empty($arrTitulosCampos)) {
+                        echo utf8_decode(implode("\t", array_keys($objRes[0]))) . "\r\n";
                     }
-                    echo "\r\n";
+                } else {
+                    if(! empty($arrTitulosCampos)) {
+                        foreach ($arrTitulosCampos as $txtTitulo) {
+                            echo utf8_decode($txtTitulo) . "\t";
+                        }
+                        echo "\r\n";
+                    }
                 }
 
                 foreach ($objRes as $arrDatos) {
@@ -4818,7 +4826,128 @@ WHERE
 
     }
 
+    public function crucesFnv($bolExepciones = false){
+        global $aptBd;
 
+        $sql = "
+            select
+              '8999990619' as numSDHT,
+              'SECRETARÍA DISTRITAL DE HÁBITAT' as txtSDHT,
+              if(cac.seqTipoDocumento = 7,1,cac.seqTipoDocumento) as seqTipoDocumento, 
+              cac.numDocumento as numDocumento,
+              upper(concat(cac.txtNombre1,' ',cac.txtNombre2,' ',cac.txtApellido1,' ',cac.txtApellido2)) as txtNombre,
+              hvi.fchActo as fchAsignacion, 
+              (
+                if(fac.valAspiraSubsidio is null,0,fac.valAspiraSubsidio) +
+                if(fac.valComplementario is null,0,fac.valComplementario) +
+                if(fac.valCartaLeasing is null,0,fac.valCartaLeasing)
+              ) as valAsignado
+            from t_aad_hogares_vinculados hvi
+            inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
+            inner join t_aad_hogar_acto hac on hac.seqFormularioActo = fac.seqFormularioActo
+            inner join t_aad_ciudadano_acto cac on hac.seqCiudadanoActo = cac.seqCiudadanoActo
+            inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
+            where hvi.seqTipoActo = 1
+              and cac.numDocumento = 140532
+              and fac.seqEstadoProceso in (15,33,40,59)
+              and cac.seqTipoDocumento in (1,2)
+              /*or (
+                    cac.seqTipoDocumento = 7 
+                and YEAR(CURDATE()) - YEAR(cac.fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') >= DATE_FORMAT(cac.fchNacimiento,'%m-%d'), 0, -1) >= 18
+              )*/
+            order by
+              hvi.fchActo        
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrReporte = array();
+        while($objRes->fields){
+            $numDocumento = $objRes->fields['numDocumento'];
+            if(! isset($arrReporte[$numDocumento])) {
+                $arrReporte[$numDocumento] = $objRes->fields;
+                $arrReporte[$numDocumento]['txtEntidad'] = "SDHT";
+                $arrReporte[$numDocumento]['txtObservaciones'] = "";
+            }
+            $objRes->MoveNext();
+        }
+
+
+        $sql = "
+            select 
+                '8999990619' as nitSDHT,
+                'SECRETARÍA DISTRITAL DE HÁBITAT' as txtSDHT,
+                doc.seqTipoDocumento as seqTipoDocumento, 
+                doc.numDocumento as numDocumento,
+                doc.txtNombre as txtNombre,
+                null as fchAsignacion,
+                0 as valAsignado,
+                fue.txtEntidad,
+                if(fue.txtEntidad is null,doc.txtObservaciones,'') as txtObservaciones
+            from (
+              select
+                res.seqTipoDocumento,
+                res.numDocumento,
+                upper(res.txtNombre) as txtNombre,
+                group_concat(res.txtObservaciones) as txtObservaciones
+              from t_cru_resultado res
+              where res.seqFormulario = 0
+                and res.seqTipoDocumento in (1,2)
+              group by 
+                res.seqTipoDocumento,
+                res.numDocumento
+            ) doc
+            left join (
+              select
+                res.numDocumento,
+                group_concat(res.txtEntidad) as txtEntidad
+              from t_cru_resultado res
+              where res.seqFormulario = 0
+                and res.bolInhabilitar = 1
+              group by res.numDocumento
+            ) fue on doc.numDocumento = fue.numDocumento    
+        ";
+        $objRes = $aptBd->execute($sql);
+        while($objRes->fields){
+            $numDocumento = $objRes->fields['numDocumento'];
+            if(! isset($arrReporte[$numDocumento])) {
+                $arrReporte[$numDocumento] = $objRes->fields;
+            }else{
+                if($objRes->fields['txtEntidad'] != "") {
+                    $arrReporte[$numDocumento]['txtEntidad'] .= "," . $objRes->fields['txtEntidad'];
+                }
+                if($objRes->fields['txtObservaciones'] != "") {
+                    $arrReporte[$numDocumento]['txtObservaciones'] .= "," . $objRes->fields['txtObservaciones'];
+                }
+            }
+            $objRes->MoveNext();
+        }
+
+        foreach($arrReporte as $numDocumento => $arrDatos){
+            if($bolExepciones == false){
+                if($arrDatos['txtEntidad'] == ""){
+                    unset($arrReporte[$numDocumento]);
+                }
+                unset($arrReporte[$numDocumento]['txtObservaciones']);
+            }else{
+                if($arrDatos['txtEntidad'] != ""){
+                    unset($arrReporte[$numDocumento]);
+                }
+                unset($arrReporte[$numDocumento]['nitSDHT']);
+                unset($arrReporte[$numDocumento]['txtSDHT']);
+                unset($arrReporte[$numDocumento]['txtNombre']);
+                unset($arrReporte[$numDocumento]['fchAsignacion']);
+                unset($arrReporte[$numDocumento]['valAsignado']);
+                unset($arrReporte[$numDocumento]['txtEntidad']);
+            }
+        }
+
+        $txtReporte = ($bolExepciones == false)? "ReporteCruces" : "ReporteExcepciones";
+        $this->obtenerReportesGeneral($arrReporte, $txtReporte);
+
+    }
+
+    public function excepcionesFnv(){
+        $this->crucesFnv(true);
+    }
 
 }
 

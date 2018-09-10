@@ -1380,8 +1380,8 @@ WHERE
                 res.txtDetalle,
                 res.bolInhabilitar, 
                 res.txtObservaciones,
-                if(ppal.numDocumento is null, res.numDocumento,ppal.numDocumento) as numDocumentoPrincipal,
-                if(ppal.txtNombre is null, res.txtNombre, ppal.txtNombre) as txtNombrePrincipal,
+                if(ppal.numDocumento is null,0,ppal.numDocumento) as numDocumentoPrincipal,
+                if(ppal.txtNombre is null, 'HOGAR EN COMPLEMENTARIEDAD', ppal.txtNombre) as txtNombrePrincipal,
                 if(ppal.seqEstadoProceso is null, res.seqEstadoProceso,ppal.seqEstadoProceso) as seqEstadoProceso,
                 if(ppal.txtEstadoFormulario is null, (
                     select est.txtEstado 

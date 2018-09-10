@@ -11,13 +11,13 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Reportes.
 $arrReporte = array();
 
 $arrReporte['crucesFnv']['funcion'] = "crucesFnv";
-$arrReporte['crucesFnv']['titulo'] = "Reporte Cruces Fonvivienda";
-$arrReporte['crucesFnv']['descripcion'] = "Beneficiarios y cruces para el reporte de fonvivienda";
+$arrReporte['crucesFnv']['titulo'] = "Reporte Cruces Mi Casa Ya";
+$arrReporte['crucesFnv']['descripcion'] = "Beneficiarios y cruces para el reporte de Mi casa ya, formato Transunion";
 $arrReporte['crucesFnv']['url'] = null;
 
 $arrReporte['excepcionesFnv']['funcion'] = "excepcionesFnv";
-$arrReporte['excepcionesFnv']['titulo'] = "Reporte Excepciones Fonvivienda";
-$arrReporte['excepcionesFnv']['descripcion'] = "Información de los hogares reportados en los cruces que han sido levantados";
+$arrReporte['excepcionesFnv']['titulo'] = "Reporte Excepciones Mi Casa Ya";
+$arrReporte['excepcionesFnv']['descripcion'] = "Información de los hogares reportados en los cruces que han sido levantados, formato Transunion";
 $arrReporte['excepcionesFnv']['url'] = null;
 
 if($_GET['reporte'] == "") {

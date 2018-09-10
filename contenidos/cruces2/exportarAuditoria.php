@@ -31,7 +31,7 @@ $arrTitulos[] = "INHABILITAR";
 $arrTitulos[] = "OBSERVACIONES";
 
 $seqCruce = (intval($_GET['seqCruce']) != 0)? $_GET['seqCruce'] : null;
-$seqFormulario = (intval($_GET['seqFormulario']) != 0)? $_GET['seqFormulario'] : null;
+$seqFormulario = (isset($_GET['seqFormulario']))? $_GET['seqFormulario'] : null;
 
 $claCruces = new Cruces();
 $claCruces->cargar($seqCruce, $seqFormulario);

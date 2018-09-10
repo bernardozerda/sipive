@@ -4847,14 +4847,13 @@ WHERE
             inner join t_aad_hogar_acto hac on hac.seqFormularioActo = fac.seqFormularioActo
             inner join t_aad_ciudadano_acto cac on hac.seqCiudadanoActo = cac.seqCiudadanoActo
             inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
-            where hvi.seqTipoActo = 1
-              and cac.numDocumento = 140532
+            where hvi.seqTipoActo = 1              
               and fac.seqEstadoProceso in (15,33,40,59)
               and cac.seqTipoDocumento in (1,2)
-              /*or (
+              or (
                     cac.seqTipoDocumento = 7 
                 and YEAR(CURDATE()) - YEAR(cac.fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') >= DATE_FORMAT(cac.fchNacimiento,'%m-%d'), 0, -1) >= 18
-              )*/
+              )
             order by
               hvi.fchActo        
         ";

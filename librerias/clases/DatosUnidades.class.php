@@ -245,4 +245,67 @@ class DatosUnidades {
         return $datos;
     }
 
+    function ObtenerCantUnidadesLegalizadasProyecto($seqProyecto) {
+
+        global $aptBd;
+        $sql = "SELECT count(*) As cantidad, valNumeroSoluciones
+                FROM t_pry_proyecto  pry
+                LEFT JOIN t_pry_unidad_proyecto und USING(seqProyecto) 
+                LEFT JOIN t_frm_formulario frm USING(seqFormulario)";
+        if ($seqProyecto > 0) {
+             $sql .= " where case  when seqProyectoPadre IS NOT NULL then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = " . $seqProyecto . ") else  und.seqProyecto = " . $seqProyecto . " end";
+}
+        //echo "<p>" . $sql . "</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = 0;
+        while ($objRes->fields) {
+            $datos= $objRes->fields['cantidad'];
+            //$datos['valNumeroSoluciones'] = $objRes->fields['valNumeroSoluciones'];
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+    
+    public function datosTecnicosPermisoOcup($seqProyecto) {
+        global $aptBd;
+        $sql = "select count(*) as cant
+                from  t_pry_tecnico
+                LEFT JOIN t_pry_unidad_proyecto und  using(seqUnidadProyecto)
+                LEFT JOIN t_pry_proyecto USING(seqProyecto)
+                where  txtPermisoOcupacion like UPPER('SI')";
+        if ($seqProyecto > 0) {
+            $sql .= " and case  when seqProyectoPadre IS NOT NULL then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = " . $seqProyecto . ") else  und.seqProyecto = " . $seqProyecto . " end";
+        }
+        //$sql .="  group by tamp.seqTipoAmparo, seqAmparoPadre";
+        //   echo "<p>".$sql."</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = 0;
+
+        while ($objRes->fields) {
+            $datos = $objRes->fields['cant'];
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+    
+    function ObtenerCantUnidadesLegalizadasUnd($seqProyecto) {
+
+        global $aptBd;
+        $sql = "SELECT count(*) As cantidad
+                FROM t_pry_proyecto  pry
+                LEFT JOIN t_pry_unidad_proyecto und USING(seqProyecto)";
+        if ($seqProyecto > 0) {
+             $sql .= " where  seqEstadoUnidad = 6 and case  when seqProyectoPadre IS NOT NULL then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = " . $seqProyecto . ") else  und.seqProyecto = " . $seqProyecto . " end";
+        }
+        // echo "<p>" . $sql . "</p>";
+        $objRes = $aptBd->execute($sql);
+        $datos = 0;
+        while ($objRes->fields) {
+            $datos= $objRes->fields['cantidad'];
+            //$datos['valNumeroSoluciones'] = $objRes->fields['valNumeroSoluciones'];
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
 }

@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 /**
  * CLASE QUE REALIZA TODAS LAS OPERACIONES DE SEGUIMIENTO
@@ -18,7 +18,6 @@ class Seguimiento {
     public $seqFormulario;
     public $arrErrores;
     public $arrIgnorarCampos;
-
     private $arrConversionCampos;
     private $txtSeparador;
     private $txtSalto;
@@ -493,7 +492,7 @@ class Seguimiento {
         return $arrRegistros;
     }
 
-    /*******************************************************************************************************
+    /*     * *****************************************************************************************************
      * Función Creada por Ing Liliana Basto pata obtener los registros de cada Acto Administrativo
      * **************************************************************************************************** */
 
@@ -762,10 +761,10 @@ class Seguimiento {
      * OBTIENE EL TEXTO DE CAMBIOS PARA EL FORMULARIO DE INSCRIPCION (EL PEQUEÑO)
      * EN ESTE CASO NO HAY NADA CON QUE COMPARAR CON LA BASE DE DATOS
      */
-    public function cambiosInscripcion($arrPost){
+    public function cambiosInscripcion($arrPost) {
 
         $seqFormulario = $arrPost['seqFormulario'];
-        unset( $arrPost['seqFormulario'] );
+        unset($arrPost['seqFormulario']);
 
         // Formulario actual en la base de datos
         $claFormulario = new FormularioSubsidios();
@@ -774,18 +773,18 @@ class Seguimiento {
 
         // CIUDADANO ADICIONADO (SOLO HAY UNO)
         foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
-            $txtCambiosHogar .= str_repeat( $this->txtSeparador , 2 ) .
-                $objCiudadano->txtNombre1 . " " .
-                $objCiudadano->txtNombre2 . " " .
-                $objCiudadano->txtApellido1 . " " .
-                $objCiudadano->txtApellido2 . " [ " .
-                $objCiudadano->numDocumento . " ] <span class=\'msgOk\'>Adicionado</span>" . $this->txtSalto;
+            $txtCambiosHogar .= str_repeat($this->txtSeparador, 2) .
+                    $objCiudadano->txtNombre1 . " " .
+                    $objCiudadano->txtNombre2 . " " .
+                    $objCiudadano->txtApellido1 . " " .
+                    $objCiudadano->txtApellido2 . " [ " .
+                    $objCiudadano->numDocumento . " ] <span class=\'msgOk\'>Adicionado</span>" . $this->txtSalto;
         }
 
         // Cambios en los datos del formulario
         unset($claFormulario->arrCiudadano);
         foreach ($claFormulario as $txtClave => $txtValor) {
-            if( isset( $arrPost[$txtClave] ) ) {
+            if (isset($arrPost[$txtClave])) {
                 if (isset($arrPost[$txtClave]) || is_null($arrPost[$txtClave])) {
                     $arrPost[$txtClave] = regularizarCampo($txtClave, $arrPost[$txtClave]);
                     $txtCambiosFormulario .= $this->compararValores($txtClave, null, $arrPost[$txtClave], 2);
@@ -794,11 +793,11 @@ class Seguimiento {
         }
 
         $txtCambios = "";
-        if( trim($txtCambiosHogar) != "" ){
+        if (trim($txtCambiosHogar) != "") {
             $txtCambios .= "<b>[ " . $claFormulario->seqFormulario . " ] Cambios en el hogar</b>" . $this->txtSalto . $txtCambiosHogar;
         }
 
-        if( trim($txtCambiosFormulario) != "" ){
+        if (trim($txtCambiosFormulario) != "") {
             $txtCambios .= "<b>[ " . $claFormulario->seqFormulario . " ] Cambios en el formulario</b>" . $this->txtSalto . $txtCambiosFormulario;
         }
 
@@ -826,32 +825,32 @@ class Seguimiento {
             if (isset($arrPost['hogar'][$numDocumento])) {
                 foreach ($objCiudadano as $txtClave => $txtValor) {
                     if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                        if (array_key_exists($numDocumento,$arrPost['hogar']) and array_key_exists($txtClave,$arrPost['hogar'][$numDocumento])) {
-                            $arrPost['hogar'][$numDocumento][$txtClave] = regularizarCampo($txtClave,$arrPost['hogar'][$numDocumento][$txtClave]);
-                            $txtCambiosHogar .= $this->compararValores($txtClave, $txtValor, $arrPost['hogar'][$numDocumento][$txtClave],2);
+                        if (array_key_exists($numDocumento, $arrPost['hogar']) and array_key_exists($txtClave, $arrPost['hogar'][$numDocumento])) {
+                            $arrPost['hogar'][$numDocumento][$txtClave] = regularizarCampo($txtClave, $arrPost['hogar'][$numDocumento][$txtClave]);
+                            $txtCambiosHogar .= $this->compararValores($txtClave, $txtValor, $arrPost['hogar'][$numDocumento][$txtClave], 2);
                         }
                     }
                 }
             } else {
                 $txtCambiosHogar .=
-                    $objCiudadano->txtNombre1 . " " .
-                    $objCiudadano->txtNombre2 . " " .
-                    $objCiudadano->txtApellido1 . " " .
-                    $objCiudadano->txtApellido2 . " [ " .
-                    $objCiudadano->numDocumento . " ] <span class=\'msgError\'>Eliminado</span>" . $this->txtSalto;
+                        $objCiudadano->txtNombre1 . " " .
+                        $objCiudadano->txtNombre2 . " " .
+                        $objCiudadano->txtApellido1 . " " .
+                        $objCiudadano->txtApellido2 . " [ " .
+                        $objCiudadano->numDocumento . " ] <span class=\'msgError\'>Eliminado</span>" . $this->txtSalto;
             }
         }
 
         // Determina cuando un ciudadano fue adicionado
-        if( isset( $arrPost['hogar'] ) ) {
+        if (isset($arrPost['hogar'])) {
             foreach ($arrPost['hogar'] as $numDocumento => $arrMiembro) {
                 if (!in_array($numDocumento, $arrCedulasFormulario)) {
                     $txtCambiosHogar .=
-                        $arrMiembro['txtNombre1'] . " " .
-                        $arrMiembro['txtNombre2'] . " " .
-                        $arrMiembro['txtApellido1'] . " " .
-                        $arrMiembro['txtApellido2'] . " [ " .
-                        $arrMiembro['numDocumento'] . " ] <span class=\'msgOk\'>Adicionado</span>" . $this->txtSalto;
+                            $arrMiembro['txtNombre1'] . " " .
+                            $arrMiembro['txtNombre2'] . " " .
+                            $arrMiembro['txtApellido1'] . " " .
+                            $arrMiembro['txtApellido2'] . " [ " .
+                            $arrMiembro['numDocumento'] . " ] <span class=\'msgOk\'>Adicionado</span>" . $this->txtSalto;
                 }
             }
         }
@@ -860,7 +859,7 @@ class Seguimiento {
         unset($claFormulario->arrCiudadano);
         foreach ($claFormulario as $txtClave => $txtValor) {
             if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                if( array_key_exists( $txtClave, $arrPost ) ) {
+                if (array_key_exists($txtClave, $arrPost)) {
                     $arrPost[$txtClave] = regularizarCampo($txtClave, $arrPost[$txtClave]);
                     $txtCambiosFormulario .= $this->compararValores($txtClave, $txtValor, $arrPost[$txtClave], 2);
                 }
@@ -868,11 +867,11 @@ class Seguimiento {
         }
 
         $txtCambios = "";
-        if( trim($txtCambiosHogar) != "" ){
+        if (trim($txtCambiosHogar) != "") {
             $txtCambios .= "<b>[ " . $claFormulario->seqFormulario . " ] Cambios en el hogar</b>" . $this->txtSalto . $txtCambiosHogar;
         }
 
-        if( trim($txtCambiosFormulario) != "" ){
+        if (trim($txtCambiosFormulario) != "") {
             $txtCambios .= "<b>[ " . $claFormulario->seqFormulario . " ] Cambios en el formulario</b>" . $this->txtSalto . $txtCambiosFormulario;
         }
 
@@ -881,78 +880,78 @@ class Seguimiento {
 
     public function cambiosCambioEstados($seqFormulario, $objAnterior, $objNuevo) {
 
-            $txtSeparador = $this->txtSeparador;
-            $txtSalto = $this->txtSalto;
+        $txtSeparador = $this->txtSeparador;
+        $txtSalto = $this->txtSalto;
 
-            $txtCambios = "<b>[ " . $seqFormulario . " ] Cambios en el hogar</b>" . $txtSalto;
+        $txtCambios = "<b>[ " . $seqFormulario . " ] Cambios en el hogar</b>" . $txtSalto;
 
-            // detecta cuidadanos nuevos y cambios en cada ciudadano
-            if (is_object($objNuevo)) {
-                foreach ($objNuevo->arrCiudadano as $seqCiudadano => $objCiudadano) {
-                    $txtCambios .= $txtSeparador . "<b>" .
+        // detecta cuidadanos nuevos y cambios en cada ciudadano
+        if (is_object($objNuevo)) {
+            foreach ($objNuevo->arrCiudadano as $seqCiudadano => $objCiudadano) {
+                $txtCambios .= $txtSeparador . "<b>" .
                         $objCiudadano->txtNombre1 . " " .
                         $objCiudadano->txtNombre2 . " " .
                         $objCiudadano->txtApellido1 . " " .
                         $objCiudadano->txtApellido2 . " [ " .
                         $objCiudadano->numDocumento . " ]</b> ";
 
-                    if (!isset($objAnterior->arrCiudadano[$seqCiudadano])) {
-                        $txtCambios .= "<span class='msgOk'>Adicionado</span>" . $txtSalto;
-                    } else {
-                        $txtCambios .= $txtSalto;
-                        foreach ($objCiudadano as $txtClave => $txtValorNuevo) {
-                            if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                                $txtValorAnterior = $objAnterior->arrCiudadano[$seqCiudadano]->$txtClave;
-                                if (($txtClave == "seqCiudadano") && ($txtValorNuevo == 0)) {
-                                    $txtCambios .= "";
-                                } else {
-                                    $txtCambios .= $this->compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, 2);
-                                }
+                if (!isset($objAnterior->arrCiudadano[$seqCiudadano])) {
+                    $txtCambios .= "<span class='msgOk'>Adicionado</span>" . $txtSalto;
+                } else {
+                    $txtCambios .= $txtSalto;
+                    foreach ($objCiudadano as $txtClave => $txtValorNuevo) {
+                        if (!in_array($txtClave, $this->arrIgnorarCampos)) {
+                            $txtValorAnterior = $objAnterior->arrCiudadano[$seqCiudadano]->$txtClave;
+                            if (($txtClave == "seqCiudadano") && ($txtValorNuevo == 0)) {
+                                $txtCambios .= "";
+                            } else {
+                                $txtCambios .= $this->compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, 2);
                             }
                         }
                     }
                 }
             }
+        }
 
-            // Para detectar ciudadanos eliminados
-            $sqlEstado = "SELECT seqEstadoProceso FROM T_FRM_FORMULARIO WHERE seqFormulario = " . $seqFormulario;
-            $exeEstado = mysql_query($sqlEstado);
-            $rowEstado = mysql_fetch_array($exeEstado);
-            if ($rowEstado['seqEstadoProceso'] == 35 || $rowEstado['seqEstadoProceso'] == 36) {
-                $a = "no haga nada";
-            } else {
-                if (is_object($objAnterior)) {
-                    foreach ($objAnterior->arrCiudadano as $seqCiudadano => $objCiudadano) {
-                        if (!isset($objNuevo->arrCiudadano[$seqCiudadano])) {
-                            $txtCambios .= $txtSeparador . "<b>" .
+        // Para detectar ciudadanos eliminados
+        $sqlEstado = "SELECT seqEstadoProceso FROM T_FRM_FORMULARIO WHERE seqFormulario = " . $seqFormulario;
+        $exeEstado = mysql_query($sqlEstado);
+        $rowEstado = mysql_fetch_array($exeEstado);
+        if ($rowEstado['seqEstadoProceso'] == 35 || $rowEstado['seqEstadoProceso'] == 36) {
+            $a = "no haga nada";
+        } else {
+            if (is_object($objAnterior)) {
+                foreach ($objAnterior->arrCiudadano as $seqCiudadano => $objCiudadano) {
+                    if (!isset($objNuevo->arrCiudadano[$seqCiudadano])) {
+                        $txtCambios .= $txtSeparador . "<b>" .
                                 $objCiudadano->txtNombre1 . " " .
                                 $objCiudadano->txtNombre2 . " " .
                                 $objCiudadano->txtApellido1 . " " .
                                 $objCiudadano->txtApellido2 . " [ " .
                                 $objCiudadano->numDocumento . " ]</b> ";
-                            $txtCambios .= "<span class='msgError'>Eliminado</span>" . $txtSalto;
-                        }
+                        $txtCambios .= "<span class='msgError'>Eliminado</span>" . $txtSalto;
                     }
                 }
             }
-
-            // Cambios en el formulario
-            unset($objAnterior->arrCiudadano);
-            unset($objNuevo->arrCiudadano);
-
-            $txtCambios .= "<b>[ " . $seqFormulario . " ] Cambios en el formulario</b>" . $txtSalto;
-            if (is_object($objNuevo)) {
-                foreach ($objNuevo as $txtClave => $txtValorNuevo) {
-                    $txtClave = trim($txtClave);
-                    if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                        $txtValorAnterior = $objAnterior->$txtClave;
-                        $txtCambios .= $this->compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, 1);
-                    }
-                }
-            }
-
-            return $txtCambios;
         }
+
+        // Cambios en el formulario
+        unset($objAnterior->arrCiudadano);
+        unset($objNuevo->arrCiudadano);
+
+        $txtCambios .= "<b>[ " . $seqFormulario . " ] Cambios en el formulario</b>" . $txtSalto;
+        if (is_object($objNuevo)) {
+            foreach ($objNuevo as $txtClave => $txtValorNuevo) {
+                $txtClave = trim($txtClave);
+                if (!in_array($txtClave, $this->arrIgnorarCampos)) {
+                    $txtValorAnterior = $objAnterior->$txtClave;
+                    $txtCambios .= $this->compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, 1);
+                }
+            }
+        }
+
+        return $txtCambios;
+    }
 
     /**
      * COMPARACION DE VALORES
@@ -980,8 +979,8 @@ class Seguimiento {
                 break;
             case "fecha":
 
-                $txtValorAnterior = ( ! esFechaValida($txtValorAnterior) ) ? null : $txtValorAnterior;
-                $txtValorNuevo    = ( ! esFechaValida($txtValorNuevo)    ) ? null : $txtValorNuevo;
+                $txtValorAnterior = (!esFechaValida($txtValorAnterior) ) ? null : $txtValorAnterior;
+                $txtValorNuevo = (!esFechaValida($txtValorNuevo) ) ? null : $txtValorNuevo;
 
                 list( $ano, $mes, $dia ) = split("[/-]", $txtValorAnterior);
                 if (@checkdate($mes, $dia, $ano) === false) {
@@ -1050,7 +1049,7 @@ class Seguimiento {
                 }
                 break;
             default:
-                if( ! is_array( $txtValorAnterior ) and ! is_array( $txtValorNuevo ) ){
+                if (!is_array($txtValorAnterior) and ! is_array($txtValorNuevo)) {
                     $txtValorAnterior = strtolower(trim($txtValorAnterior));
                     $txtValorNuevo = strtolower(trim($txtValorNuevo));
                 }
@@ -4036,7 +4035,6 @@ class Seguimiento {
         return $txtCambios;
     }
 
-
     /**
      * FUNCION GENERICA PARA EL SALVADO DE SEGUIMIENTOS EN
      * TODA LA APLICACION
@@ -4045,7 +4043,7 @@ class Seguimiento {
      * @param $txtFuncion <Funcion que ejecutará la comparacion entre el post y la base de datos>
      * @version 1.0 Jun 2017
      */
-    public function salvarSeguimiento($arrPost,$txtFuncion){
+    public function salvarSeguimiento($arrPost, $txtFuncion) {
         global $aptBd;
 
         if (intval($arrPost['seqGrupoGestion']) == 0) {
@@ -4076,7 +4074,7 @@ class Seguimiento {
                 $txtCambios = "";
             }
 
-            if( intval( $_POST['bolSoloSeguimiento'] ) == 1){
+            if (intval($_POST['bolSoloSeguimiento']) == 1) {
                 $txtCambios = "";
             }
 
@@ -4104,8 +4102,8 @@ class Seguimiento {
             try {
                 $aptBd->execute($sql);
                 $this->arrMensajes[] = "Ha salvado un registro de actividad, el número del registro es " .
-                    number_format($aptBd->Insert_ID(), 0, ".", ",") . ". Conserve este " .
-                    "número para su referencia.";
+                        number_format($aptBd->Insert_ID(), 0, ".", ",") . ". Conserve este " .
+                        "número para su referencia.";
                 return true;
             } catch (Exception $objError) {
                 $this->arrErrores[] = "No se ha podido registrar el seguimiento, contacte al administrador del sistema";
@@ -4113,16 +4111,15 @@ class Seguimiento {
 //                $this->arrErrores[] = $sql;
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
 
-    private function cambiosCruces($arrPost){
+    private function cambiosCruces($arrPost) {
 
 //        $claFormulario = new FormularioSubsidios();
 //        $claFormulario->cargarFormulario($arrPost['seqFormulario']);
-
         // Estado del proceso
 //        $txtCambios = "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Formulario:</b>" . $this->txtSalto;
 //        $txtValorAnterior = $claFormulario->seqEstadoProceso;
@@ -4135,13 +4132,13 @@ class Seguimiento {
         return "";
     }
 
-    private function cambiosRegistroOferta($arrPost){
+    private function cambiosRegistroOferta($arrPost) {
 
         $claFormulario = new FormularioSubsidios;
         $claFormulario->cargarFormulario($arrPost['seqFormulario']);
 
         $claCasaMano = new CasaMano();
-        $arrCasaMano = $claCasaMano->cargar($arrPost['seqFormulario'],$arrPost['seqCasaMano']);
+        $arrCasaMano = $claCasaMano->cargar($arrPost['seqFormulario'], $arrPost['seqCasaMano']);
         $claCasaMano = end($arrCasaMano);
         $objAnterior = $claCasaMano->objRegistroOferta;
 
@@ -4153,7 +4150,7 @@ class Seguimiento {
         if ($txtValorAnterior != $txtValorNuevo) {
             $arrEstados = estadosProceso();
             $txtCambios .= $this->txtSeparador . "Estado del Proceso, Valor Anterior: " . $arrEstados[$txtValorAnterior] . ", " .
-                "Valor Nuevo: " . $arrEstados[$txtValorNuevo] . $this->txtSalto;
+                    "Valor Nuevo: " . $arrEstados[$txtValorNuevo] . $this->txtSalto;
         }
 
         $txtCambios .= "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Inmueble:</b>" . $this->txtSalto;
@@ -4165,7 +4162,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Nombre del Vendedor, Valor Anterior: " . strtoupper($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . strtoupper($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . strtoupper($txtValorNuevo) . $this->txtSalto;
         }
 
         // Tipo de documento del vendedor
@@ -4175,7 +4172,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : obtenerNombres("T_CIU_TIPO_DOCUMENTO", "seqTipoDocumento", $txtValorAnterior);
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : obtenerNombres("T_CIU_TIPO_DOCUMENTO", "seqTipoDocumento", $txtValorNuevo);
             $txtCambios .= $this->txtSeparador . "Tipo Documento Vendedor, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Documento del vendedor
@@ -4185,7 +4182,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" or $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" or $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "NÃºmero Documento Vendedor, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Numero de telefono del vendedor
@@ -4195,7 +4192,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Teléfono del Vendedor, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Numero de telefono del vendedor 2
@@ -4205,7 +4202,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Teléfono del Vendedor 2, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Correo Electronico del vendedor
@@ -4215,7 +4212,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Correo Electrónico del Vendedor, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
         // Compra de vivienda
         $txtValorAnterior = $objAnterior->txtCompraVivienda;
@@ -4224,7 +4221,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Compra de Vivienda, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Direccion del inmueble
@@ -4234,7 +4231,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Direccion del Inmueble, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
 // ----------------------
@@ -4245,7 +4242,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Titulo de Propiedad, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Texto del titulo de propiedad --> VALOR ANTERIOR
@@ -4253,16 +4250,16 @@ class Seguimiento {
         switch (strtolower(trim($objAnterior->txtPropiedad))) {
             case "escritura":
                 $txtValorAnterior = "Escritura Publica " . $objAnterior->txtEscritura . " del " . $objAnterior->fchEscritura .
-                    " Notaria " . $objAnterior->numNotaria . " Cuidad " . $objAnterior->txtCiudad;
+                        " Notaria " . $objAnterior->numNotaria . " Cuidad " . $objAnterior->txtCiudad;
 
                 break;
             case "sentencia":
                 $txtValorAnterior = "Sentencia " . $objAnterior->fchSentencia . " Juzgado " . $objAnterior->numJuzgado .
-                    " Ciudada " . $objAnterior->txtCiudadSentencia;
+                        " Ciudada " . $objAnterior->txtCiudadSentencia;
                 break;
             case "resolucion":
                 $txtValorAnterior = "Resolucion " . $objAnterior->numResolucion . " del " . $objAnterior->fchResolucion .
-                    " Entidad " . $objAnterior->txtEntidad . " Ciudad " . $objAnterior->txtCiudadResolucion;
+                        " Entidad " . $objAnterior->txtEntidad . " Ciudad " . $objAnterior->txtCiudadResolucion;
                 break;
         }
 
@@ -4271,16 +4268,16 @@ class Seguimiento {
         switch (strtolower(trim($arrPost['txtPropiedad']))) {
             case "escritura":
                 $txtValorNuevo = "Escritura Publica " . $arrPost['txtEscritura'] . " del " . $arrPost['fchEscritura'] .
-                    " Notaria " . $arrPost['numNotaria'] . " Cuidad " . $arrPost['txtCiudad'];
+                        " Notaria " . $arrPost['numNotaria'] . " Cuidad " . $arrPost['txtCiudad'];
 
                 break;
             case "sentencia":
                 $txtValorNuevo = "Sentencia " . $arrPost['fchSentencia'] . " Juzgado " . $arrPost['numJuzgado'] .
-                    " Ciudada " . $arrPost['txtCiudadSentencia'];
+                        " Ciudada " . $arrPost['txtCiudadSentencia'];
                 break;
             case "resolucion":
                 $txtValorNuevo = "Resolucion " . $arrPost['numResolucion'] . " del " . $arrPost['fchResolucion'] .
-                    " Entidad " . $arrPost['txtEntidad'] . " Ciudad " . $arrPost['txtCiudadResolucion'];
+                        " Entidad " . $arrPost['txtEntidad'] . " Ciudad " . $arrPost['txtCiudadResolucion'];
                 break;
         }
 
@@ -4289,7 +4286,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Descripción, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
 // ----------------------
@@ -4300,7 +4297,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : obtenerNombres("T_FRM_CIUDAD", "seqCiudad", $txtValorAnterior);
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : obtenerNombres("T_FRM_CIUDAD", "seqCiudad", $txtValorNuevo);
             $txtCambios .= $this->txtSeparador . "Ciudad, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Localidad
@@ -4310,7 +4307,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : obtenerNombres("T_FRM_LOCALIDAD", "seqLocalidad", $txtValorAnterior);
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : obtenerNombres("T_FRM_LOCALIDAD", "seqLocalidad", $txtValorNuevo);
             $txtCambios .= $this->txtSeparador . "Localidad, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Barrio
@@ -4320,7 +4317,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Barrio, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Matricula inmobiliaria
@@ -4330,7 +4327,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Matrícula Inmobiliaria, Valor Anterior: " . strtoupper($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . strtoupper($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . strtoupper($txtValorNuevo) . $this->txtSalto;
         }
 
         // CHIP
@@ -4340,7 +4337,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Chip, Valor Anterior: " . strtoupper($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . strtoupper($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . strtoupper($txtValorNuevo) . $this->txtSalto;
         }
 
         // Cedula Catastral
@@ -4350,7 +4347,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Cedula Catastral, Valor Anterior: " . strtoupper($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . strtoupper($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . strtoupper($txtValorNuevo) . $this->txtSalto;
         }
 
         // Area lote
@@ -4360,7 +4357,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Ã�rea del Lote, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Area Construida
@@ -4370,7 +4367,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Ã�rea del Construida, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Valor Avaluo
@@ -4380,7 +4377,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Valor Avaluo, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Valor Inmueble
@@ -4390,7 +4387,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Valor Inmueble, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Tipo de Inmueble
@@ -4400,7 +4397,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Tipo de Predio, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Estrato del inmueble
@@ -4410,7 +4407,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Estrato del inmueble, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         /**
@@ -4425,7 +4422,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Escritura Publica, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones escritura publica
@@ -4435,7 +4432,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Escritura PÃºblica, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Folios certificado de tradicion
@@ -4445,7 +4442,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Certificado de Tradicion y Libertad, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones certificado de tradicion
@@ -4455,7 +4452,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Certificado de Tradicion y Libertad, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Folios carta de asignacion
@@ -4465,7 +4462,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Carta de Asignación, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones carta de asignacion
@@ -4475,7 +4472,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Carta de Asignación, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios certificado de alto riesgo
@@ -4485,7 +4482,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Certificado de Alto Riesgo, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones certificado de alto riesgo
@@ -4495,7 +4492,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Certificado de Alto Riesgo, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios certificado de habitabilidad
@@ -4505,7 +4502,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Certificado de Habitabilidad, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones certificado de habitabilidad
@@ -4515,7 +4512,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Certificado de Habitabilidad, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios boletin catastral
@@ -4525,7 +4522,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Boletin Catastral, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones boletin catastral
@@ -4535,7 +4532,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Boletín Catastral, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios licencia de construccion
@@ -4545,7 +4542,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Licencia de Construcción, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones licencia de construccion
@@ -4555,7 +4552,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Licencia de Construcción, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios ultimo predial
@@ -4565,7 +4562,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Ultimo Predial, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones ultimo predial
@@ -4575,7 +4572,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Ultimo Predial, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios ultimo rebibo de agua
@@ -4585,7 +4582,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Ultimo Recibo de Agua, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones rebibo de agua
@@ -4595,7 +4592,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Ultimo Recibo de Agua, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios ultimo rebibo de energia
@@ -4605,7 +4602,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Ultimo Recibo de Energía, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones rebibo de energia
@@ -4615,7 +4612,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Ultimo Recibo de Agua, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios acta de entrega
@@ -4625,7 +4622,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Acta de Entrega, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones acta de entrega
@@ -4635,7 +4632,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Acta Entrega, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios certificacion vendedor
@@ -4645,7 +4642,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Certificacion Bancaria del Vendedor, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones certificacion vendedor
@@ -4655,7 +4652,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Certificacion Bancaria del Vendedor, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios Autorizacion de desembiolso
@@ -4665,7 +4662,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Autorizacon de Desembolso, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones autorizacion de desembolso
@@ -4675,7 +4672,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Autorizacon de Desembolso, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // folios cedula del vendedor
@@ -4685,7 +4682,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Fotocopia Cedula del Vendedor, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones cedula del vendedor
@@ -4695,7 +4692,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Fotocopia Cedula del Vendedor, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Folios RUT
@@ -4705,7 +4702,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios RUT, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones RUT
@@ -4715,7 +4712,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones RUT, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Folios RIT
@@ -4725,7 +4722,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios RIT, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones RIT
@@ -4735,7 +4732,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones RIT, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Folios NIT
@@ -4745,7 +4742,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios NIT, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones NIT
@@ -4755,7 +4752,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones NIT, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         // Folios Otros
@@ -4765,7 +4762,7 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == 0 ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == 0 ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Folios Otros, Valor Anterior: " . $txtValorAnterior . ", " .
-                "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
+                    "Valor Nuevo: " . $txtValorNuevo . $this->txtSalto;
         }
 
         // Observaciones NIT
@@ -4775,65 +4772,59 @@ class Seguimiento {
             $txtValorAnterior = ( $txtValorAnterior == "" ) ? "Ninguno" : $txtValorAnterior;
             $txtValorNuevo = ( $txtValorNuevo == "" ) ? "Ninguno" : $txtValorNuevo;
             $txtCambios .= $this->txtSeparador . "Observaciones Otros, Valor Anterior: " . ucwords($txtValorAnterior) . ", " .
-                "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
+                    "Valor Nuevo: " . ucwords($txtValorNuevo) . $this->txtSalto;
         }
 
         return $txtCambios;
-
     }
 
-    private function cambiosRevisionJuridicaCEM($arrPost){
+    private function cambiosRevisionJuridicaCEM($arrPost) {
 
         $claCasaMano = new CasaMano();
-        $arrCasaMano = $claCasaMano->cargar($arrPost['seqFormulario'],$arrPost['seqCasaMano']);
+        $arrCasaMano = $claCasaMano->cargar($arrPost['seqFormulario'], $arrPost['seqCasaMano']);
         $claCasaMano = end($arrCasaMano);
         $objAnterior = new stdClass();
         $objAnterior->arrJuridico = $claCasaMano->objRevisionJuridica;
 
-        return $this->cambiosRevisionJuridica($objAnterior,$arrPost);
-
+        return $this->cambiosRevisionJuridica($objAnterior, $arrPost);
     }
 
-    private function cambiosRevisionTecnicaCEM($arrPost){
+    private function cambiosRevisionTecnicaCEM($arrPost) {
 
         $claCasaMano = new CasaMano();
-        $arrCasaMano = $claCasaMano->cargar($arrPost['seqFormulario'],$arrPost['seqCasaMano']);
+        $arrCasaMano = $claCasaMano->cargar($arrPost['seqFormulario'], $arrPost['seqCasaMano']);
         $claCasaMano = end($arrCasaMano);
         $objAnterior = new stdClass();
         $objAnterior->arrTecnico = $claCasaMano->objRevisionTecnica;
 
-        return $this->cambiosRevisionTecnica($objAnterior,$arrPost);
-
+        return $this->cambiosRevisionTecnica($objAnterior, $arrPost);
     }
 
     /**
      *
      */
-    public function actosAdministrativos( $seqTipoActo, $numActo, $fchActo, $arrCambios ){
+    public function actosAdministrativos($seqTipoActo, $numActo, $fchActo, $arrCambios) {
         global $aptBd;
 
         // obtiene el nombre del tipo de acto
         $arrTipoActo = aadTipo::cargarTipoActo($seqTipoActo);
 
         // Aplica los seguimientos para todos los hogares
-        foreach( $arrCambios as $seqFormulario => $arrDatos){
+        foreach ($arrCambios as $seqFormulario => $arrDatos) {
 
             $txtCambios = "<strong>[" . $seqFormulario . "] Cambios al formulario:</strong><br>";
-            foreach( $arrDatos['cambios'] as $arrRegistro ){
+            foreach ($arrDatos['cambios'] as $arrRegistro) {
                 $txtCambios .=
-                    str_repeat($this->txtSeparador , 5) .
-                    $arrRegistro['campo'] .
-                    ", Valor Anterior: " . $arrRegistro['anterior'] .
-                    ", Valor Nuevo: " . $arrRegistro['nuevo'] . $this->txtSalto;
+                        str_repeat($this->txtSeparador, 5) .
+                        $arrRegistro['campo'] .
+                        ", Valor Anterior: " . $arrRegistro['anterior'] .
+                        ", Valor Nuevo: " . $arrRegistro['nuevo'] . $this->txtSalto;
             }
 
             $txtNombre = array_shift(
-                obtenerDatosTabla(
-                    "T_CIU_CIUDADANO",
-                    array( "numDocumento" , "upper(concat(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) as txtNombre" ),
-                    "numDocumento",
-                    "numDocumento" . $arrDatos['documento'] . " and seqTipoDocumento in (1,2)"
-                )
+                    obtenerDatosTabla(
+                            "T_CIU_CIUDADANO", array("numDocumento", "upper(concat(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) as txtNombre"), "numDocumento", "numDocumento" . $arrDatos['documento'] . " and seqTipoDocumento in (1,2)"
+                    )
             );
 
             $sql = "
@@ -4858,14 +4849,32 @@ class Seguimiento {
                 )
             ";
             $aptBd->execute($sql);
-
         }
-
     }
 
+    public function validarSeguimientoPive($documento) {
 
+        global $aptBd;
+        $txtComentarios = "";
 
+        $sql = "SELECT txtCambios FROM t_seg_seguimiento WHERE numDocumento = " . $documento . ""
+                . " and txtComentario like '%Conforme lo establecido en la Res. 182 de 2018,%'";
+
+        try {
+            $objRes = $aptBd->execute($sql);
+            while ($objRes->fields) {
+                $txtComentarios = str_replace("&nbsp;", "", $objRes->fields['txtCambios']);
+                $txtComentarios = str_replace("<b>Cambios en el formulario</b>", "", $txtComentarios);
+                $objRes->MoveNext();
+            }
+        } catch (Exception $objError) {
+            $txtComentarios = '';
+        }
+
+        return $txtComentarios;
+    }
 
 }
+
 // fin clase seguimiento
 ?>

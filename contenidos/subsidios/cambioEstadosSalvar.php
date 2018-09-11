@@ -412,7 +412,7 @@ if (empty($arrErrores)) {
                 $arrErrores[] = "No se ha podido registrar el seguimiento del formulario";
             }
 
-            $numModificados++;
+     
         } else {
             $numErrores++;
             $arrErrores[] = "No se pudo actualizar la informacion del formulario $seqFormulario ( " . $claFormulario->numDocumento . " )";

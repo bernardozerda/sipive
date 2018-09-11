@@ -601,6 +601,216 @@ function obtenerDatosSelect(value, variable, idSelect) {
             });
         }
     });
+
+
 }
 
+var fileActionUnit = function (name) {
+
+    var div = name;
+    // We can attach the `fileselect` event to all file inputs on the page
+
+    $(document).on('change', ':file', function () {
+        var input = $(this),
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger(name, [numFiles, label]);
+        console.log(name + " [" + numFiles + "," + label + "]");//
+    });
+
+    $(document).ready(function () {
+        $(':file').on(div, function (event, numFiles, label) {
+            // console.log("numFiles -> " + numFiles + " label ->" + label + " event ->" + event);
+            var input = $(this).parents('.custom-file-input').find(':file'),
+                    log = numFiles > 1 ? numFiles + ' Archivos seleccionados' : label;
+            console.log("input.length -> " + input + " log ->" + log);//
+            if (input.length) {
+                //input.val(log);
+            } else {
+                if (log)
+                    $("#" + name).text(log);
+                //input.val(log);
+            }
+
+        });
+    });
+    removeFile(div, name);
+}
+
+
+function SubirInformes(form) {
+
+    var idProyecto = $("#idProyecto").val();
+    $("#seqInformes").addClass("required");
+    $("#customFile").addClass("required");
+    $("#seqInformes").css("border", "1px solid #red");
+    $("#val_seqInformes").css("display", "inline");
+    $("#val_customFile").css("display", "inline");
+
+    if (validarCampos()) {
+
+        $("#idProgress").show();
+        var valor = 0;
+        var formData = new FormData(document.getElementById(form));
+        formData.append("dato", "valor");
+        $.ajax({
+            url: "contenidos/proyectos/contenidos/recibeArchivo.php",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".progress-bar").css("width", "10%");
+                // console.log("prueba1");
+                valor = 90;
+            },
+            xhr: function () {
+                var xhr = $.ajaxSettings.xhr();
+                xhr.upload.onprogress = function (e) {
+                    // For uploads
+                    if (e.lengthComputable) {
+                        valor = (e.loaded / e.total) * 100 - 10;
+                        for (var i = 10; i < valor; i++) {
+                            setTimeout(
+                                    function () {
+                                        $(".progress-bar").css("width", i + "%");
+                                    }, 1000);
+                        }
+                    }
+                };
+                return xhr;
+            },
+            success: function (data) {
+                setTimeout(
+                        function () {
+                            for (var i = 89; i <= 100; i++) {
+                                //console.log("valor " + i);
+                                $(".progress-bar").css("width", i + "%");
+                                valor = i;
+                            }
+                        }, 100);
+
+                setTimeout(
+                        function () {
+                            if (valor == 100) {
+                                $("#multiUpload").html(data);
+                            }
+                        }, 1000);
+
+                // Mostrar la respuestas del script PHP.
+            },
+            complete: function () {
+                $("#seqGrupoGestion").val("0");
+                $("#seqGestion").val("0");
+                $("#txtComentario").val('');
+                cargarContenido('contenido', './contenidos/proyectos/contenidos/datosLiquidacion.php?&seqProyecto=' + idProyecto + '&page=datosLiquidacion.php?tipo=3&id=5', '', true);
+            }
+        });
+    }
+}
+
+function eliminarArchivo(archivo) {
+    var idProyecto = $("#idProyecto").val();
+    $("#seqInformes").removeClass("required");
+    $("#customFile").removeClass("required");
+    $("#seqInformes").css("border", "1px solid #ced4da");
+    $("#val_seqInformes").css("display", "none");
+    $("#val_customFile").css("display", "none");
+
+    if (validarCampos()) {
+        $("#mi-modal").modal('show');
+        $("#modal-btn-si").on("click", function () {
+
+            //alert("confirmo");
+            var valor = 0;
+            $("#idProgress").show();
+            $(".progress-bar").css("width", "10%");
+            valor = 10;
+            var parametros = {
+                "ruta": archivo,
+                "idProyecto": $("#idProyecto").val(),
+                "seqGestion": $("#seqGestion").val(),
+                "seqPryEstadoProceso": $("#seqPryEstadoProceso").val(),
+                "txtComentario": $("#txtComentario").val()
+            };
+            $.ajax({
+                data: parametros,
+                url: "contenidos/proyectos/contenidos/eliminaArchivo.php",
+                type: 'post',
+                dataType: "html",
+                success: function (data) {
+                    setTimeout(
+                            function () {
+                                for (var i = valor; i <= 100; i++) {
+                                    //  console.log("valor " + i);
+                                    $(".progress-bar").css("width", i + "%");
+                                    valor = i;
+                                }
+                            }, 1000);
+
+                    setTimeout(
+                            function () {
+                                if (valor == 100) {
+                                    $("#multiUpload").html(data);
+                                }
+                            }, 1000);
+
+                    // Mostrar la respuestas del script PHP.
+                },
+                complete: function () {
+                    $("#seqGrupoGestion").val("0");
+                    $("#seqGestion").val("0");
+                    $("#txtComentario").val('');
+                    $("#mi-modal").modal('hide');
+                    cargarContenido('contenido', './contenidos/proyectos/contenidos/datosLiquidacion.php?&seqProyecto=' + idProyecto + '&page=datosLiquidacion.php?tipo=3&id=5', '', true);
+
+                }
+            });
+        });
+        $("#modal-btn-no").on("click", function () {
+            $("#mi-modal").modal('hide');
+        });
+    }
+}
+
+function cerrarProyecto() {
+
+    var idProyecto = $("#idProyecto").val();
+    $("#seqInformes").removeClass("required");
+    $("#customFile").removeClass("required");
+    $("#seqInformes").css("border", "1px solid #ced4da");
+    $("#val_seqInformes").css("display", "none");
+    $("#val_customFile").css("display", "none");
+
+    if (validarCampos()) {
+        var parametros = {
+            "seqProyecto": idProyecto,
+            "seqGestion": $("#seqGestion").val(),
+            "txtComentario": $("#txtComentario").val(),
+            "seqPryEstadoProcesoAnt": $("#seqPryEstadoProceso").val()
+        };
+        $.ajax({
+            data: parametros,
+            url: "contenidos/proyectos/contenidos/cerrarProyecto.php",
+            type: 'post',
+            dataType: "html",
+            success: function (data) {
+                if (data != 'true') {
+                    $("#mensajes").html(data);
+                } else {
+                    $("#mensajes").html("<div class='alert alert-danger' style='font-size: 12px'><strong>Success! </strong>Se realizo cierre del proyecto correctamente</div>");
+                }
+
+                // Mostrar la respuestas del script PHP.
+            },
+            complete: function () {
+
+                cargarContenido('contenido', './contenidos/proyectos/contenidos/datosLiquidacion.php?&seqProyecto=' + idProyecto + '&page=datosLiquidacion.php?tipo=3&id=5', '', true);
+
+            }
+        });
+    }
+}
 

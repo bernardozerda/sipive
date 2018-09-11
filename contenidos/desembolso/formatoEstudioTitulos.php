@@ -124,6 +124,7 @@ foreach ($arrActos as $txtClave => $arrInformacion) {
     }
 }
 
+
 $claSmarty->assign("txtFuente12", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 11px;");
 $claSmarty->assign("txtFuente10", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 9px;");
 $claSmarty->assign("txtFecha", $txtFecha);

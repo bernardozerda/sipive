@@ -769,6 +769,7 @@ Class ActoAdministrativo {
                 $objActoAdministrativo->arrCaracteristicas[$seqCaracteristica] = trim($objRes->fields['txtValorCaracteristica']);
                 if (!empty($arrDocumentos)) {
                     $objActoAdministrativo->seqformActo = $objRes->fields['seqFormularioActo'];
+                    $objActoAdministrativo->idEstadoProceso = $objRes->fields['seqEstadoProceso'];
                     $objActoAdministrativo->seqEstadoProceso = $seqEstadoForm[$objRes->fields['seqEstadoProceso']];
                 } else {
                     $objActoAdministrativo->seqformActo = 0;
@@ -2674,6 +2675,7 @@ Class ActoAdministrativo {
                     $arrInformacion[$txtClave]['acto']['valor'] = $arrMasInformacion['valAspiraSubsidio'];
                     $arrInformacion[$txtClave]['acto']['seqformActo'] = $objActo->seqformActo;
                     $arrInformacion[$txtClave]['acto']['seqEstadoProceso'] = $objActo->seqEstadoProceso;
+                    $arrInformacion[$txtClave]['acto']['idEstadoProceso'] = $objActo->idEstadoProceso;
                     break;
                 case 2: // Modificatoria
                     $arrActos[$txtClave]->obtenerModificaciones($seqFormulario);

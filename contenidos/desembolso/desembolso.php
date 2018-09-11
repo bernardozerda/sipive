@@ -108,8 +108,17 @@ if (is_numeric($valCedulaFormat) and $valCedulaFormat > 0) {
             // obtiene el ultimo acto adminsitrativo de asignacion
             $arrResolucionAsignacion = array();
             $arrResolucionIndexacion = array();
+            $arrResolucionVigente    = array();
             foreach ($arrActos as $txtClave => $arrInformacion) {
                 if ($arrInformacion["acto"]["tipo"] == 1) {
+
+                    if( in_array($arrInformacion['acto']['idEstadoProceso'],array(15,32,33,40,59))){
+                        $arrResolucionVigente['numero'] = $arrInformacion['acto']['numero'];
+                        $arrResolucionVigente['fecha'] = date("Y-m-d", $arrInformacion['acto']['marca']);
+                        $arrResolucionVigente['valor'] = $arrInformacion['acto']['valor']; // Aqui esta el valor original de la resolucion de asignacion
+
+                    }
+
                     $arrResolucionAsignacion['numero'] = $arrInformacion['acto']['numero'];
                     $arrResolucionAsignacion['fecha'] = date("Y-m-d", $arrInformacion['acto']['marca']);
                     $arrResolucionAsignacion['valor'] = $arrInformacion['acto']['valor']; // Aqui esta el valor original de la resolucion de asignacion
@@ -129,6 +138,9 @@ if (is_numeric($valCedulaFormat) and $valCedulaFormat > 0) {
                                     foreach ($arrRelacionado['modificaciones'] as $arrModificacion) {
                                         if ($arrModificacion['txtCampo'] == "VR SUBSIDIO" or $arrModificacion['txtCampo'] == "Valor Del Subsidio") {
                                             $arrResolucionAsignacion['valor'] = $arrModificacion['txtCorrecto'];
+                                            if($arrResolucionAsignacion['numero'] == $arrResolucionVigente['numero']){
+                                                $arrResolucionVigente['valor'] = $arrModificacion['txtCorrecto'];
+                                            }
                                         }
                                     }
                                 }
@@ -149,10 +161,10 @@ if (is_numeric($valCedulaFormat) and $valCedulaFormat > 0) {
                 $arrNombreProyectos[488] = "Instrumentos de Financiación para Adquisición, Construcción y Mejoramiento de Vivienda";
             }
 
-            $claDesembolso->arrJuridico['numResolucion'] = $arrResolucionAsignacion['numero'];
-            $claDesembolso->arrJuridico['fchResolucion'] = $arrResolucionAsignacion['fecha'];
-            $claDesembolso->arrJuridico['valResolucion'] = $arrResolucionAsignacion['valor'];
-            $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrResolucionAsignacion['fecha']))));
+            $claDesembolso->arrJuridico['numResolucion'] = $arrResolucionVigente['numero'];
+            $claDesembolso->arrJuridico['fchResolucion'] = $arrResolucionVigente['fecha'];
+            $claDesembolso->arrJuridico['valResolucion'] = $arrResolucionVigente['valor'];
+            $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrResolucionVigente['fecha']))));
 
             $arrConvenio = obtenerDatosTabla(
                 "v_frm_convenio",

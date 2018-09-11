@@ -99,12 +99,15 @@ $txtTutor = $claCRM->obtenerTutorHogar($seqFormulario);
 //echo "<br> ***************** " . $claDesembolso->arrJuridico['numResolucion'] . "*******<br>";
 foreach ($arrActos as $txtClave => $arrInformacion) {
     if ($arrInformacion['acto']['tipo'] == 1) {
-        $claDesembolso->arrJuridico['numResolucion'] = $arrInformacion['acto']['numero'];
-        $claDesembolso->arrJuridico['fchResolucion'] = $arrInformacion['acto']['fecha'];
-        $claDesembolso->arrJuridico['valResolucion'] = $arrInformacion['acto']['valor'];
-        $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrInformacion['acto']['fecha']))));
+        if(in_array($arrInformacion['acto']['idEstadoProceso'],array(15,32,33,40,59))){
+            $claDesembolso->arrJuridico['numResolucion'] = $arrInformacion['acto']['numero'];
+            $claDesembolso->arrJuridico['fchResolucion'] = $arrInformacion['acto']['fecha'];
+            $claDesembolso->arrJuridico['valResolucion'] = $arrInformacion['acto']['valor'];
+            $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrInformacion['acto']['fecha']))));
+        }
     }
 }
+
 $claSmarty->assign("arrActos", $arrActos);
 $claSmarty->assign("txtHoy", $txtHoy);
 $claSmarty->assign("objCiudadano", $objCiudadano); // Postulante principal

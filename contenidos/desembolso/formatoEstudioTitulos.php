@@ -46,9 +46,10 @@ $arrActos = $claActosAdministrativos->cronologia($numDoc);
 $fecha = strtotime('2009-01-01');
 if ($claDesembolso->arrJuridico['numResolucion'] == 0) {
     foreach ($arrActos as $txtClave => $arrInformacion) {
-        if ($arrInformacion['acto']['tipo'] == 1) {            
-           $fecha2 = formatoFechaGeneral($arrInformacion['acto']['fecha']);
-           
+        if ($arrInformacion['acto']['tipo'] == 1) {
+
+            $fecha2 = formatoFechaGeneral($arrInformacion['acto']['fecha']);
+
             if ($fecha2 > $fecha) {
                 $fecha = $fecha2;
                 $claDesembolso->arrJuridico['numResolucion'] = $arrInformacion['acto']['numero'];
@@ -56,6 +57,7 @@ if ($claDesembolso->arrJuridico['numResolucion'] == 0) {
                 $claDesembolso->arrJuridico['valResolucion'] = $arrInformacion['acto']['valor'];
                 $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrInformacion['acto']['fecha']))));
             }
+
         }
     }
 }
@@ -113,10 +115,12 @@ $arrActos = $claActosAdministrativos->cronologia($numDocumento);
 
 foreach ($arrActos as $txtClave => $arrInformacion) {
     if ($arrInformacion['acto']['tipo'] == 1) {
-        $claDesembolso->arrJuridico['numResolucion'] = $arrInformacion['acto']['numero'];
-        $claDesembolso->arrJuridico['fchResolucion'] = $arrInformacion['acto']['fecha'];
-        $claDesembolso->arrJuridico['valResolucion'] = $arrInformacion['acto']['valor'];
-        $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrInformacion['acto']['fecha']))));
+        if(in_array($arrInformacion['acto']['idEstadoProceso'],array(15,32,33,40,59))) {
+            $claDesembolso->arrJuridico['numResolucion'] = $arrInformacion['acto']['numero'];
+            $claDesembolso->arrJuridico['fchResolucion'] = $arrInformacion['acto']['fecha'];
+            $claDesembolso->arrJuridico['valResolucion'] = $arrInformacion['acto']['valor'];
+            $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrInformacion['acto']['fecha']))));
+        }
     }
 }
 

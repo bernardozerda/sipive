@@ -58,52 +58,54 @@ if (empty($arrErrores)) {
     $texto = str_replace(" ", "", $claSeguimiento->validarSeguimientoPive($numDocumento));
     $characters = array("[", "]", "<b>", "</b>");
     $arrayTexto = explode("<br>", $texto);
+
     if ($texto != '') {
         $arrTextoForm = str_replace("Cambiosenelformulario", "", $arrayTexto[0]);
         $seqFormulario = str_replace($characters, '', trim($arrTextoForm));
-
         $claFormularioActual = new FormularioSubsidios();
         $claFormularioActual->cargarFormulario($seqFormulario);
 
         $claFormulario = new FormularioSubsidios();
         $claFormulario->cargarFormulario($seqFormulario);
+        $validarPlanGobierno = $claFormularioActual->seqPlanGobierno;
 
-        $arrEstadoProceso = str_replace("seqEstadoProceso,", "", $arrayTexto[1]);
-        $arrSeqPlanGobierno = str_replace("seqPlanGobierno,", "", $arrayTexto[2]);
-        $arrSeqModalidad = str_replace("seqModalidad,", "", $arrayTexto[3]);
-        $arrSeqTipoEsquema = str_replace("seqTipoEsquema,", "", $arrayTexto[4]);
+        if ($validarPlanGobierno != 3) {
+            $arrEstadoProceso = str_replace("seqEstadoProceso,", "", $arrayTexto[1]);
+            $arrSeqPlanGobierno = str_replace("seqPlanGobierno,", "", $arrayTexto[2]);
+            $arrSeqModalidad = str_replace("seqModalidad,", "", $arrayTexto[3]);
+            $arrSeqTipoEsquema = str_replace("seqTipoEsquema,", "", $arrayTexto[4]);
 
-        $seqEstadoProcesoAnt = str_replace("ValorAnterior:", "", explode(",", $arrEstadoProceso)[0]);
-        $seqEstadoProcesoNew = str_replace("ValorNuevo:", "", explode(",", $arrEstadoProceso)[1]);
+            $seqEstadoProcesoAnt = str_replace("ValorAnterior:", "", explode(",", $arrEstadoProceso)[0]);
+            $seqEstadoProcesoNew = str_replace("ValorNuevo:", "", explode(",", $arrEstadoProceso)[1]);
 
-        $seqPlanGobiernoAnt = str_replace("ValorAnterior:", "", explode(",", $arrSeqPlanGobierno)[0]);
-        $seqPlanGobiernoNew = str_replace("ValorNuevo:", "", explode(",", $arrSeqPlanGobierno)[1]);
+            $seqPlanGobiernoAnt = str_replace("ValorAnterior:", "", explode(",", $arrSeqPlanGobierno)[0]);
+            $seqPlanGobiernoNew = str_replace("ValorNuevo:", "", explode(",", $arrSeqPlanGobierno)[1]);
 
-        $seqModalidadAnt = str_replace("ValorAnterior:", "", explode(",", $arrSeqModalidad)[0]);
-        $seqoModalidadNew = str_replace("ValorNuevo:", "", explode(",", $arrSeqModalidad)[1]);
+            $seqModalidadAnt = str_replace("ValorAnterior:", "", explode(",", $arrSeqModalidad)[0]);
+            $seqoModalidadNew = str_replace("ValorNuevo:", "", explode(",", $arrSeqModalidad)[1]);
 
-        $seqTipoEsquemaAnt = str_replace("ValorAnterior:", "", explode(",", $arrSeqTipoEsquema)[0]);
-        $seqTipoEsquemaNew = str_replace("ValorNuevo:", "", explode(",", $arrSeqTipoEsquema)[1]);
+            $seqTipoEsquemaAnt = str_replace("ValorAnterior:", "", explode(",", $arrSeqTipoEsquema)[0]);
+            $seqTipoEsquemaNew = str_replace("ValorNuevo:", "", explode(",", $arrSeqTipoEsquema)[1]);
 
-        $claFormulario->seqEstadoProceso = $seqEstadoProcesoAnt;
-        $claFormulario->seqPlanGobierno = $seqPlanGobiernoAnt;
-        $claFormulario->seqModalidad = $seqModalidadAnt;
-        $claFormulario->seqTipoEsquema = $seqTipoEsquemaAnt;
-        $claFormulario->editarFormulario($seqFormulario);
-        if (empty($claFormulario->arrErrores)) {
+            $claFormulario->seqEstadoProceso = $seqEstadoProcesoAnt;
+            $claFormulario->seqPlanGobierno = $seqPlanGobiernoAnt;
+            $claFormulario->seqModalidad = $seqModalidadAnt;
+            $claFormulario->seqTipoEsquema = $seqTipoEsquemaAnt;
+            $claFormulario->editarFormulario($seqFormulario);
+            if (empty($claFormulario->arrErrores)) {
 
 
-            $txtNombre = "";
-            foreach ($claFormulario->arrCiudadano as $seqCiudadano => $claCiudadano) {
-                if ($claCiudadano->numDocumento == $numDocumento) {
-                    $txtNombre = $claCiudadano->txtNombre1 . " " . $claCiudadano->txtNombre2 .
-                            $claCiudadano->txtApellido1 . " " . $claCiudadano->txtApellido2;
+                $txtNombre = "";
+                foreach ($claFormulario->arrCiudadano as $seqCiudadano => $claCiudadano) {
+                    if ($claCiudadano->numDocumento == $numDocumento) {
+                        $txtNombre = $claCiudadano->txtNombre1 . " " . $claCiudadano->txtNombre2 .
+                                $claCiudadano->txtApellido1 . " " . $claCiudadano->txtApellido2;
+                    }
                 }
-            }
-            $claSeguimiento = new Seguimiento();
-            $txtCambios = $claSeguimiento->cambiosCambioEstados($seqFormulario, $claFormularioActual, $claFormulario);
-            global $aptBd;
-            $sql = "INSERT INTO T_SEG_SEGUIMIENTO (
+                $claSeguimiento = new Seguimiento();
+                $txtCambios = $claSeguimiento->cambiosCambioEstados($seqFormulario, $claFormularioActual, $claFormulario);
+                global $aptBd;
+                $sql = "INSERT INTO T_SEG_SEGUIMIENTO (
                             seqFormulario, 
                             fchMovimiento, 
                             seqUsuario, 
@@ -123,13 +125,16 @@ if (empty($arrErrores)) {
                             " . $_POST['seqGestion'] . "
                     )";
 
-            try {
-                $aptBd->execute($sql);
-            } catch (Exception $objError) {
-                $arrErrores[] = "No se ha podido registrar el seguimiento del formulario";
-            }
+                try {
+                    $aptBd->execute($sql);
+                } catch (Exception $objError) {
+                    $arrErrores[] = "No se ha podido registrar el seguimiento del formulario";
+                }
 
-            $numModificados++;
+                $numModificados++;
+            }
+        } else {
+            $arrErrores[] = "El Documento registrado se encuentra actualmente en plan de gobierno Bogota Mejor Para Todos!";
         }
     } else {
 

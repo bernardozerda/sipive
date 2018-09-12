@@ -134,11 +134,11 @@ if (empty($arrErrores)) {
                 $numModificados++;
             }
         } else {
-            $arrErrores[] = "El Documento registrado se encuentra actualmente en plan de gobierno Bogota Mejor Para Todos!";
+            $arrErrores[] = "El Documento registrado se encuentra actualmente en plan de gobierno Bogota Mejor Para Todos, para las modalidades de PIVE";
         }
     } else {
 
-        $arrErrores[] = "El Documento registrado no permite la modificacion de plan de gobierno";
+        $arrErrores[] = "El Documento Consultado no fue objeto de aplicacion de la Resolucion 182 del 2018, por tanto no aplica regreso de estado a modalidades de PIVE";
         //imprimirMensajes($arrErrores, $arrMensajes, $txtDivListener);
     }
 }

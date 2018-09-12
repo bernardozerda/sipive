@@ -34,6 +34,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     $totalUnidades = $infCantUnidades['valNumeroSoluciones'];
     $cantUDisponible = $totalUnidades - $unidadesReg;
 
+    echo $cantUDisponible ."7777"; die();
 
     $excel = new PHPExcel();
 //Usamos el worsheet por defecto 

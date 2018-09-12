@@ -26,7 +26,7 @@ $arrPryEsquema = obtenerDatosTabla("t_pry_tipo_esquema", array("seqTipoEsquema",
 if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
 
     $seqProyecto = $_REQUEST['seqProyecto'];
-    $infCantUnidades = $claDatosUnidades->ObtenerCantUnidadesProyecto($seqProyecto);
+    $infCantUnidades = $claDatosUnidades->ObtenerCantUnidadesProyecto($seqProyecto, 0);
     $unidadesReg = $infCantUnidades['cantidad'];
     $totalUnidades = $infCantUnidades['valNumeroSoluciones'];
     $cantUDisponible = $totalUnidades - $unidadesReg;
@@ -169,9 +169,6 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
         $objValidation->setPrompt('Seleccione un valor de la lista');
         $objValidation->setFormula1("=seleccionEsq");
     }
-//exportamos nuestro documento 
-//    $writer = new PHPExcel_Writer_Excel5($excel);
-
 
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     header("Content-Disposition: attachment;filename='PlantillaUnidades.xlsx");

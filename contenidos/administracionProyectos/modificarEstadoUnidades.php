@@ -34,7 +34,7 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
         $txtTipoArchivo = PHPExcel_IOFactory::identify($_FILES["archivo"]['tmp_name']);
         $objReader = PHPExcel_IOFactory::createReader($txtTipoArchivo);
         $objPHPExcel = $objReader->load($_FILES["archivo"]['tmp_name']);
-        $name = basename($_FILES['archivoEstado']['name']);
+        $name = basename($_FILES['archivo']['name']);
         $objHoja = $objPHPExcel->getSheet(0);
         $arrayNum = array(0); //
         $arrayVal = array(2, 3);
@@ -72,15 +72,16 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                 if ($value[5] != "Seleccione" && $value[4] != $value[5]) {
                     // echo "<br> ***** " . $value[4] . " != " . $value[5];
                     $arrayDatosProyNew[$seqProyecto][] = $value[5];
+
                     $bandUnidades = $claDatosUnidades->ValidarUnidadesProyecto($seqProyecto, $value[0]);
-                    if (!$bandUnidades) {
+                    if (!$bandUnidades) {                        
                         $band = false;
                     }
                 }
             }
-            if ($band) {
-                $array = $claDatosUnidades->modificarEstadoUnidad($arrArchivo, $seqProyecto);
 
+            if ($band) {              
+                $array = $claDatosUnidades->modificarEstadoUnidad($arrArchivo, $seqProyecto);
                 if (empty($array)) {
                     $cantOld = count($arrayDatosProyOld[$seqProyecto]);
                     $cantNew = count($arrayDatosProyNew[$seqProyecto]);
@@ -124,9 +125,10 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                     } else {
                         imprimirMensajes($array, array(), 'mensajes');
                     }
+                } else {
+                    $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Por favor verifique que las unidades correspondan al proyecto seleccionado</b></h5></div>";
+                    imprimirMensajes($arrErrores, array(), 'mensajes');
                 }
-                $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Por favor verifique que las unidades correspondan al proyecto seleccionado</b></h5></div>";
-                imprimirMensajes($arrErrores, array(), 'mensajes');
                 ?>
             </table>
             <?php

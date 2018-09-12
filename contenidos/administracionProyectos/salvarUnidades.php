@@ -84,7 +84,7 @@ if ($_POST['seqProyecto'] != "" && $_POST['seqProyecto'] != null) {
                 $arrayDatosProyOld[$seqProyecto]['nombreArchivo'] = "";
                 $arrayDatosProyNew[$seqProyecto]['unidades'] = " Se Almacenaron  <b>" . $numFilaArreglo . "</b> Unidades";
                 $arrayDatosProyNew[$seqProyecto]['nombreArchivo'] = "Se realiz&oacute; La creaci&oacute; de la unidades bajo las especificaciones del archivo <b>" . $name . "</b>";
-                var_dump($_POST);
+              
                 // $txtComentarios = "Se realizó cambios de estado en ". count($arrayDatosProyNew[$seqProyecto])." unidades, bajo las especificaciones del archivo <b>".$name."</b>";
                 $claSeguimiento->almacenarSeguimiento($seqProyecto, $txtComentarios, $seqGestion, $arrayDatosProyOld, $arrayDatosProyNew);
                 ?>

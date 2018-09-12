@@ -70,8 +70,8 @@
 
         </div>
         <p>&nbsp;</p>
-        <p>    
-            {if isset($page) && $id != 4 }
+        <p>            
+            {if isset($page) && $id == 4 || $id == 6}
                 <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
                        onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/{$page}', '', true);
                                cargarContenido('rutaMenu', './rutaMenu.php', 'menu=66', false);" class="btn_volver"/> 
@@ -85,7 +85,7 @@
 
                 <input type="button" name="btn_enviar" id="btn_enviar" value="Salvar Inscripci&oacute;n" onclick="if (validarCampos())
                             someterFormulario('contenido', this.form, 'contenidos/administracionProyectos/salvarInformeInterventoria.php', true, false)" class="btn_volver"/><br>
-            {/if}
+            {/if}           
         </p>
     </fieldset>
 </div><br>

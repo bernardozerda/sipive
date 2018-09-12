@@ -20,8 +20,14 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Proyecto.
 $claDatosProy = new DatosGeneralesProyectos();
 $claProyecto = new Proyecto();
 
-$txtPlantilla = "proyectos/vistas/inscripcionUnidades.tpl";
+
 $id = $_REQUEST['id'];
+if ($id == 4) {
+    $txtPlantilla = "proyectos/vistas/inscripcionUnidades.tpl";
+} else {
+    $txtPlantilla = "proyectos/vistas/cambioEstadoUnidades.tpl";
+}
+
 $idProyecto = $_REQUEST['seqProyecto'];
 $arrayProyectos = Array();
 $seqPryEstadoProceso = 0;
@@ -34,6 +40,7 @@ $arrConjuntoResidencial = $claDatosProy->obtenerConjuntoResidencial($idProyecto)
 if (count($arrConjuntoResidencial) > 0) {
     $arrayProyectos = $arrConjuntoResidencial;
 }
+
 $arrErrores = array();
 $claSmarty->assign("seqPryEstadoProceso", $seqPryEstadoProceso);
 $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
@@ -41,7 +48,8 @@ $claSmarty->assign("arrayProyectos", $arrayProyectos);
 $claSmarty->assign("idProyecto", $idProyecto);
 $claSmarty->assign("id", $id);
 $claSmarty->assign("tipo", 3);
-$claSmarty->assign("page", "datosProyecto.php?id=".$id);
+$claSmarty->assign("onload", "listenerFile('fileAction', 'nameArchivo')");
+$claSmarty->assign("page", "datosProyecto.php?id=" . $id);
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);
 }

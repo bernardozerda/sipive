@@ -26,7 +26,7 @@
                                 <a href="#"
                                    onClick="
                                         {if $arrDatos.url == ''}
-                                            location.href='./contenidos/reportesProyectos/reportes.php?reporte={$txtClave}
+                                            location.href='./contenidos/reportesProyectos/reportes.php?reporte={$txtClave}'
                                         {else}
                                             location.href='{$arrDatos.url}';
                                         {/if}

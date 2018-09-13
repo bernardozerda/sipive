@@ -138,6 +138,7 @@ class DatosUnidades {
                 fchInformacionTitulos,
                 fchDevolucionExpediente,
                 bolActivo,
+                seqEstadoUnidad,
                 seqPlanGobierno,
                 seqModalidad,
                 seqTipoEsquema)
@@ -166,6 +167,7 @@ class DatosUnidades {
                 '',
                 '',
                 1,
+                1,
                 " . explode('-', $value[4])[0] . ",
                 " . explode('-', $value[5])[0] . ",
                 " . explode('-', $value[6])[0] . " ),";
@@ -187,10 +189,11 @@ class DatosUnidades {
         foreach ($array as $key => $value) {
             if ($value[5] != "Seleccione") {
                 $estado = explode("-", $value[5])[0];
+                $activo = ($value[6] == "SI") ? 1 : 0;
                 if ($estado > 0) {
                     $sql = "UPDATE t_pry_unidad_proyecto
                 SET
-                seqEstadoUnidad = $estado 
+                seqEstadoUnidad = $estado, bolActivo =  $activo
                 WHERE seqUnidadProyecto = $value[0];";
                     try {
                         $aptBd->execute($sql);
@@ -205,7 +208,7 @@ class DatosUnidades {
 
     function obtenerDatosUnidades($seqProyecto) {
         global $aptBd;
-        $sql = "SELECT txtNombreProyecto, txtNombreUnidad, txtNombreTipoVivienda, seqUnidadProyecto, concat(seqEstadoUnidad ,'-', txtEstadoUnidad) as estado
+        $sql = "SELECT txtNombreProyecto, txtNombreUnidad, txtNombreTipoVivienda, seqUnidadProyecto, concat(seqEstadoUnidad ,'-', txtEstadoUnidad) as estado, und.bolActivo
                 FROM t_pry_proyecto pry 
                 LEFT JOIN t_pry_unidad_proyecto und USING(seqProyecto) 
                 LEFT JOIN t_pry_tipo_vivienda tip using(seqProyecto)
@@ -259,7 +262,7 @@ class DatosUnidades {
         $objRes = $aptBd->execute($sql);
         $datos = 0;
         while ($objRes->fields) {
-            $datos= $objRes->fields['cantidad'];
+            $datos = $objRes->fields['cantidad'];
             //$datos['valNumeroSoluciones'] = $objRes->fields['valNumeroSoluciones'];
             $objRes->MoveNext();
         }
@@ -301,7 +304,7 @@ class DatosUnidades {
         $objRes = $aptBd->execute($sql);
         $datos = 0;
         while ($objRes->fields) {
-            $datos= $objRes->fields['cantidad'];
+            $datos = $objRes->fields['cantidad'];
             //$datos['valNumeroSoluciones'] = $objRes->fields['valNumeroSoluciones'];
             $objRes->MoveNext();
         }

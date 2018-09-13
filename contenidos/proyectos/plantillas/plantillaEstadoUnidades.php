@@ -34,7 +34,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     $totalUnidades = $infCantUnidades['valNumeroSoluciones'];
     $cantUDisponible = $totalUnidades - $unidadesReg;
 
-   $excel = new PHPExcel();
+    $excel = new PHPExcel();
 //Usamos el worsheet por defecto 
     $sheet = $excel->getActiveSheet();
 //creamos nuestro array con los estilos para titulos 
@@ -67,6 +67,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     $titulos[3] = "Conjunto";
     $titulos[4] = "Estado Actual";
     $titulos[5] = "Nuevo Estado";
+    $titulos[6] = "Activo";
 //    $titulos[4] = "Plan de Gobierno";
 //    $titulos[5] = "Modalidad";
 //    $titulos[6] = "Esquema";
@@ -101,13 +102,21 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
             'seleccion', $excel->getSheet(1), 'F2:F' . $int
             )
     );
+    $excel->getSheet(1)->SetCellValue("G2", "SI");
+    $excel->getSheet(1)->SetCellValue("G3", "NO");
+    $excel->addNamedRange(
+            new PHPExcel_NamedRange(
+            'seleccion1', $excel->getSheet(1), 'G2:G3'
+            )
+    );
 
     //for ($i = 0; $i < $unidadesReg; $i++) {
     $cols = 2;
     foreach ($arrayDatos as $key => $value) {
         $estadoActual = ($value['estado'] == "") ? 'Ninguno' : $value['estado'];
         $estadoNuevo = ($value['estado'] == "") ? 'Seleccione' : $value['estado'];
-        $tipoVivienda = ($value['estado'] == "") ? 'Ninguno' : strtoupper($value['txtNombreTipoVivienda']);
+        $tipoVivienda = ($value['txtNombreTipoVivienda'] == "") ? 'Ninguno' : strtoupper($value['txtNombreTipoVivienda']);
+        $validacion = ($value['bolActivo'] == 1) ? 'SI' : 'NO';
         //echo "<br>". $cols." ->".$value['txtNombreProyecto'];
         $sheet->setCellValue('A' . $cols, $value['seqUnidadProyecto']);
         $sheet->setCellValue('B' . $cols, $value['txtNombreProyecto']);
@@ -127,21 +136,34 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
         $objValidation->setPromptTitle('Seleccion');
         $objValidation->setPrompt('Seleccione un valor de la lista');
         $objValidation->setFormula1("=seleccion");
+        $sheet->setCellValue('G' . $cols, $validacion);
+        $objValidation = $excel->getActiveSheet()->getCell('G' . $cols)->getDataValidation();
+        $objValidation->setType(PHPExcel_Cell_DataValidation::TYPE_LIST);
+        $objValidation->setErrorStyle(PHPExcel_Cell_DataValidation::STYLE_STOP);
+        $objValidation->setAllowBlank(true);
+        $objValidation->setShowInputMessage(true);
+        $objValidation->setShowErrorMessage(true);
+        $objValidation->setShowDropDown(true);
+        $objValidation->setErrorTitle('Error');
+        $objValidation->setError('Valor no esta en la lista');
+        $objValidation->setPromptTitle('Seleccion');
+        $objValidation->setPrompt('Seleccione un valor de la lista');
+        $objValidation->setFormula1("=seleccion1");
 
         $cols++;
     }
-    
+
     $excel->getSecurity()->setLockWindows(false);
-        $excel->getSecurity()->setLockStructure(false);
-        $excel->getSheet(0)->getProtection()->setSheet(true);
-        $excel->getActiveSheet()->getProtection()->setSort(true);
-        $excel->getActiveSheet()->getProtection()->setInsertRows(true);
-        $excel->getActiveSheet()->getProtection()->setFormatCells(true);
-       // $excel->getActiveSheet()->getProtection()->setPassword('SDHT');
-    
-    $excel->getActiveSheet()->getStyle('F2:F' . $cols)->getProtection()
+    $excel->getSecurity()->setLockStructure(false);
+    $excel->getSheet(0)->getProtection()->setSheet(true);
+    $excel->getActiveSheet()->getProtection()->setSort(true);
+    $excel->getActiveSheet()->getProtection()->setInsertRows(true);
+    $excel->getActiveSheet()->getProtection()->setFormatCells(true);
+    // $excel->getActiveSheet()->getProtection()->setPassword('SDHT');
+
+    $excel->getActiveSheet()->getStyle('F2:G' . $cols)->getProtection()
             ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-    
+
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     header("Content-Disposition: attachment;filename='PlantillaEstadoUnidades.xlsx");
     header('Cache-Control: max-age=0');

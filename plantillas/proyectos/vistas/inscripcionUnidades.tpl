@@ -53,7 +53,7 @@
                                 <div class="col-md-2">
                                     <label class="control-label" >&nbsp;</label><br>
                                     <input type="button" class="btn_volver" value="Importar &nbsp;" id="enviarDoc" onclick="if (validarCampos())
-                                                someterFormulario('div2', this.form, 'contenidos/administracionProyectos/salvarUnidades.php', true, false);"/>
+                                                someterFormulario('div2', this.form, 'contenidos/administracionProyectos/salvarUnidades.php', true, true);"/>
                                 </div>            
 
                                 <div class="col-md-2" style="text-align: center">

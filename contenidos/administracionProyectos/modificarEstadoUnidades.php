@@ -81,6 +81,7 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
             }
 
             if ($band) {              
+               
                 $array = $claDatosUnidades->modificarEstadoUnidad($arrArchivo, $seqProyecto);
                 if (empty($array)) {
                     $cantOld = count($arrayDatosProyOld[$seqProyecto]);
@@ -107,6 +108,7 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                             <th>Conjunto</th>
                             <th>Estado Anterior</th>
                             <th>Nuevo Estado </th>                        
+                            <th>Activo </th>
                         </tr>
                         <?php
                         foreach ($arrArchivo as $key => $value) {
@@ -118,7 +120,7 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                                 <td><?php echo $value[3] ?></td>
                                 <td><?php echo $value[4] ?></td>
                                 <td><?php echo $value[5] ?></td>
-
+                                <td><?php echo $value[6] ?></td>
                             </tr>
                             <?php
                         }

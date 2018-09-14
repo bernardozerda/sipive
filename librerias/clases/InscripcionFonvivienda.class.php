@@ -169,6 +169,74 @@ class InscripcionFonvivienda
 
         $this->arrNovedades = array();
 
+        $arrCeroYUno  = array(0,1);
+        $arrSiYNo     = array("SI","NO");
+        $arrCeroAOnce = array(0,1,2,3,4,5,6,7,8,9,10,11);
+
+        // Datos para la plantilla del exportable
+        $this->arrPlantilla[2]['ID HOGAR'] = null;
+        $this->arrPlantilla[2]['NO. DOCUMENTO'] = null;
+        $this->arrPlantilla[2]['TIPO DOCUMENTO'] = obtenerDatosTabla("t_ciu_tipo_documento",array("seqTipoDocumento","txtTipoDocumento"),"seqTipoDocumento");
+        $this->arrPlantilla[2]['NOMBRE 1'] = null;
+        $this->arrPlantilla[2]['NOMBRE 2'] = null;
+        $this->arrPlantilla[2]['APELLIDO 1'] = null;
+        $this->arrPlantilla[2]['APELLIDO 2'] = null;
+        $this->arrPlantilla[2]['SEXO'] = obtenerDatosTabla("t_ciu_sexo",array("seqSexo","txtSexo"),"seqSexo");
+        $this->arrPlantilla[2]['ESTADO CIVIL'] = obtenerDatosTabla("t_ciu_estado_civil",array("seqEstadoCivil","txtEstadoCivil"),"seqEstadoCivil");
+        $this->arrPlantilla[2]['FECHA NACIMIENTO'] = null;
+        $this->arrPlantilla[2]['PARENTESCO'] = obtenerDatosTabla("t_ciu_parentesco",array("seqParentesco","txtParentesco"),"seqParentesco");
+        $this->arrPlantilla[2]['COND. ÉTNICA'] = obtenerDatosTabla("t_ciu_etnia",array("seqEtnia","txtEtnia"),"seqEtnia");
+        $this->arrPlantilla[2]['DISCAPACIDAD'] = $arrCeroYUno;
+        $this->arrPlantilla[2]['MAYOR A 65 AÑOS'] = $arrCeroYUno;
+        $this->arrPlantilla[2]['CABEZA DE HOGAR'] = $arrCeroYUno;
+        $arrSalud = obtenerDatosTabla("t_ciu_salud",array("seqSalud","txtSalud"),"seqSalud");
+        foreach($arrSalud as $i => $txtValor){
+            $arrSalud[$i] = mb_ereg_replace(",",";",$txtValor);
+        }
+        $this->arrPlantilla[2]['AFILIACIÓN SALUD'] = $arrSalud;
+        $this->arrPlantilla[2]['NIVEL EDUCATIVO'] = obtenerDatosTabla("t_ciu_nivel_educativo",array("seqNivelEducativo","txtNivelEducativo"),"seqNivelEducativo");
+        $this->arrPlantilla[2]['AÑOS APROBADOS'] = $arrCeroAOnce;
+        $this->arrPlantilla[2]['HECHO VICTIMIZANTE'] = obtenerDatosTabla("t_frm_tipovictima",array("seqTipoVictima","txtTipoVictima"),"seqTipoVictima");
+        $this->arrPlantilla[2]['LGTBI'] = $arrCeroYUno;
+        $this->arrPlantilla[2]['GRUPO LGBTI'] = obtenerDatosTabla("t_frm_grupo_lgtbi",array("seqGrupoLgtbi","txtGrupoLgtbi"),"seqGrupoLgtbi");
+        $arrOcupacion = obtenerDatosTabla("t_ciu_ocupacion",array("seqOcupacion","txtOcupacion"),"seqOcupacion");
+        foreach($arrOcupacion as $i => $txtValor){
+            $arrOcupacion[$i] = mb_ereg_replace("[/]","-",$txtValor);
+        }
+        $this->arrPlantilla[2]['OCUPACIÓN'] = $arrOcupacion;
+        $this->arrPlantilla[2]['CORREO ELECTRÓNICO'] = null;
+        $this->arrPlantilla[2]['DIRECCIÓN'] = null;
+        $this->arrPlantilla[2]['LOCALIDAD'] = obtenerDatosTabla("t_frm_localidad",array("seqLocalidad","txtLocalidad"),"seqLocalidad");
+        $arrBarrios = obtenerDatosTabla("t_frm_barrio",array("seqBarrio","txtBarrio"),"seqBarrio","","txtBarrio");
+        foreach($arrBarrios as $txtBarrio){
+            if(! in_array($txtBarrio,$this->arrPlantilla[2]['BARRIO'])){
+                $this->arrPlantilla[2]['BARRIO'][] = $txtBarrio;
+            }
+        }
+        $this->arrPlantilla[2]['BARRIO'] = $arrBarrios;
+        $this->arrPlantilla[2]['CIUDAD'] = obtenerDatosTabla("v_frm_ciudad",array("seqCiudad","txtCiudad"),"seqCiudad","","txtCiudad");
+        $this->arrPlantilla[2]['TELEFONOS1'] = null;
+        $this->arrPlantilla[2]['TELEFONO2'] = null;
+        $this->arrPlantilla[2]['CELULAR'] = null;
+        $this->arrPlantilla[2]['VIVIENDA ACTUAL'] = obtenerDatosTabla("t_frm_vivienda",array("seqVivienda","txtVivienda"),"seqVivienda");
+        $this->arrPlantilla[2]['VAL. ARRIENDO'] = null;
+        $this->arrPlantilla[2]['HOGARES EN VIVIENDA'] = null;
+        $this->arrPlantilla[2]['DORMITORIOS QUE EMPLEA EL HOGAR'] = null;
+        $this->arrPlantilla[2]['ENCUESTA SISBEN'] = obtenerDatosTabla("t_frm_sisben",array("seqSisben","txtSisben"),"seqSisben","bolActivo = 1");
+        $this->arrPlantilla[2]['INGRESOS'] = null;
+        $this->arrPlantilla[2]['VALOR AHORRO'] = null;
+        $this->arrPlantilla[2]['ENTIDAD AHORRO'] = obtenerDatosTabla("t_frm_banco",array("seqBanco","txtBanco"),"seqBanco");
+        $this->arrPlantilla[2]['VALOR CREDITO'] = null;
+        $this->arrPlantilla[2]['ENTIDAD CRÉDITO'] = obtenerDatosTabla("t_frm_banco",array("seqBanco","txtBanco"),"seqBanco");
+        $this->arrPlantilla[2]['VALOR SUBSIDIO NACIONAL'] = null;
+        $this->arrPlantilla[2]['SOPORTE DEL SFV'] = null;
+        $this->arrPlantilla[2]['RANGO DE INGRESOS'] = $this->arrRangoIngresos[2];
+        $this->arrPlantilla[2]['PROYECTO'] = null;
+        $this->arrPlantilla[2]['VALOR DONACIÓN / RECONOCIMIENTO ECONÓMICO'] = null;
+        $this->arrPlantilla[2]['ENTIDAD DE DONACIÓN / RECONOCIMIENTO'] = obtenerDatosTabla("t_frm_empresa_donante",array("seqEmpresaDonante","txtEmpresaDonante"),"seqEmpresaDonante");
+        $this->arrPlantilla[2]['SOPORTE DONACIÓN'] = null;
+        $this->arrPlantilla[2]['LINEA VALIDADA'] = $arrSiYNo;
+
     }
 
     /**
@@ -2485,6 +2553,10 @@ class InscripcionFonvivienda
         if(mb_strtolower(trim($txtLineaValidada)) == "no"){
             $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La linea no ha sido validada previamente";
         }
+    }
+
+    public function obtenerTitulos($seqTipo){
+        return $this->arrFormato[$seqTipo];
     }
 
 }

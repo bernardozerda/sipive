@@ -40,6 +40,11 @@
                         {/foreach}
                     </select>
                 </div>
+                <div class="col-sm-4">
+                    <button class="btn btn-success btn-sm" type="button" onclick="location.href='./contenidos/inscripcionFonvivienda/plantilla.php?tipo=' + $('#seqTipo').val()">
+                        Plantilla de carga
+                    </button>
+                </div>
             </div>
 
             <div class="form-group row">

@@ -51,22 +51,21 @@ $arrArchivo = array();
 
 if (empty($arrErrores)) {
     // fin validacion de lineas
-
+    $claFormulario = new FormularioSubsidios();
 
     $numDocumento = str_replace(".", "", $_POST['buscaCedula']);
-
-    $texto = str_replace(" ", "", $claSeguimiento->validarSeguimientoPive($numDocumento));
+    $seqFormulario = $claFormulario->obtenerFormulario($numDocumento);
+    $claFormularioActual = new FormularioSubsidios();
+    $claFormularioActual->cargarFormulario($seqFormulario);
+    $claFormulario->cargarFormulario($seqFormulario);
+    $texto = str_replace(" ", "", $claSeguimiento->validarSeguimientoPive($seqFormulario));
     $characters = array("[", "]", "<b>", "</b>");
     $arrayTexto = explode("<br>", $texto);
 
     if ($texto != '') {
         $arrTextoForm = str_replace("Cambiosenelformulario", "", $arrayTexto[0]);
-        $seqFormulario = str_replace($characters, '', trim($arrTextoForm));
-        $claFormularioActual = new FormularioSubsidios();
-        $claFormularioActual->cargarFormulario($seqFormulario);
+        //$seqFormulario = str_replace($characters, '', trim($arrTextoForm));
 
-        $claFormulario = new FormularioSubsidios();
-        $claFormulario->cargarFormulario($seqFormulario);
         $validarPlanGobierno = $claFormularioActual->seqPlanGobierno;
 
         if ($validarPlanGobierno != 3) {

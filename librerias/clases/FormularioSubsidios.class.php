@@ -10,7 +10,6 @@ class FormularioSubsidios {
 
     // Variables para el ciudadano
     public $arrCiudadano;
-
     // Variables del formulario
     // en orden alfabetico para poderlas encontrar mas facil
     public $arrErrores;
@@ -216,7 +215,6 @@ class FormularioSubsidios {
         $this->valSubsidioNacional = 0;
         $this->valTotal = 0;
         $this->valTotalRecursos = 0;
-
     }
 
     // Fin Constructor
@@ -224,16 +222,16 @@ class FormularioSubsidios {
     public function guardarFormulario() {
         global $aptBd;
 
-        $this->fchAperturaCuentaAhorro = ( esFechaValida( $this->fchAperturaCuentaAhorro ) )? "'" . $this->fchAperturaCuentaAhorro . "'" : "NULL";
-        $this->fchAperturaCuentaAhorro2 = ( esFechaValida( $this->fchAperturaCuentaAhorro2 ) )? "'" . $this->fchAperturaCuentaAhorro2 . "'" : "NULL";
-        $this->fchAprobacionCredito = ( esFechaValida( $this->fchAprobacionCredito ) )? "'" . $this->fchAprobacionCredito . "'" : "NULL";
-        $this->fchInscripcion = ( esFechaValida( $this->fchInscripcion ) )? "'" . $this->fchInscripcion . "'" : "NULL";
-        $this->fchPostulacion = ( esFechaValida( $this->fchPostulacion ) )? "'" . $this->fchPostulacion . "'" : "NULL";
-        $this->fchVencimiento = ( esFechaValida( $this->fchVencimiento ) )? "'" . $this->fchVencimiento . "'" : "NULL";
-        $this->fchUltimaActualizacion = ( esFechaValida( $this->fchUltimaActualizacion ) )? "'" . $this->fchUltimaActualizacion . "'" : "NULL";
-        $this->fchArriendoDesde = ( esFechaValida( $this->fchArriendoDesde ) )? "'" . $this->fchArriendoDesde . "'" : "NULL";
-        $this->fchNotificacion = ( esFechaValida( $this->fchNotificacion ) )? "'" . $this->fchNotificacion . "'" : "NULL";
-        $this->fchVigencia = ( esFechaValida( $this->fchVigencia ) )? "'" . $this->fchVigencia . "'" : "NULL";
+        $this->fchAperturaCuentaAhorro = ( esFechaValida($this->fchAperturaCuentaAhorro) ) ? "'" . $this->fchAperturaCuentaAhorro . "'" : "NULL";
+        $this->fchAperturaCuentaAhorro2 = ( esFechaValida($this->fchAperturaCuentaAhorro2) ) ? "'" . $this->fchAperturaCuentaAhorro2 . "'" : "NULL";
+        $this->fchAprobacionCredito = ( esFechaValida($this->fchAprobacionCredito) ) ? "'" . $this->fchAprobacionCredito . "'" : "NULL";
+        $this->fchInscripcion = ( esFechaValida($this->fchInscripcion) ) ? "'" . $this->fchInscripcion . "'" : "NULL";
+        $this->fchPostulacion = ( esFechaValida($this->fchPostulacion) ) ? "'" . $this->fchPostulacion . "'" : "NULL";
+        $this->fchVencimiento = ( esFechaValida($this->fchVencimiento) ) ? "'" . $this->fchVencimiento . "'" : "NULL";
+        $this->fchUltimaActualizacion = ( esFechaValida($this->fchUltimaActualizacion) ) ? "'" . $this->fchUltimaActualizacion . "'" : "NULL";
+        $this->fchArriendoDesde = ( esFechaValida($this->fchArriendoDesde) ) ? "'" . $this->fchArriendoDesde . "'" : "NULL";
+        $this->fchNotificacion = ( esFechaValida($this->fchNotificacion) ) ? "'" . $this->fchNotificacion . "'" : "NULL";
+        $this->fchVigencia = ( esFechaValida($this->fchVigencia) ) ? "'" . $this->fchVigencia . "'" : "NULL";
 
         $sql = "
             INSERT INTO T_FRM_FORMULARIO (
@@ -473,10 +471,10 @@ class FormularioSubsidios {
             $claCiudadano->cargarCiudadano($objRes->fields['seqCiudadano']);
             $claCiudadano->bolSoporteDocumento = $objRes->fields['bolSoporteDocumento'];
             $claCiudadano->seqParentesco = $objRes->fields['seqParentesco'];
-            if(empty($claCiudadano->arrErrores)) {
+            if (empty($claCiudadano->arrErrores)) {
                 $this->arrCiudadano[$objRes->fields['seqCiudadano']] = $claCiudadano;
-            }else{
-                foreach($claCiudadano->arrErrores as $txtError){
+            } else {
+                foreach ($claCiudadano->arrErrores as $txtError) {
                     $this->arrErrores[] = $txtError;
                 }
             }
@@ -484,7 +482,7 @@ class FormularioSubsidios {
         }
 
         // Obtiene los datos del formulario
-        if (empty($this->arrErrores) and (!empty($this->arrCiudadano))) {
+        if (empty($this->arrErrores) and ( !empty($this->arrCiudadano))) {
             $sql = "
                 SELECT
                     bolAltaCon,
@@ -589,8 +587,8 @@ class FormularioSubsidios {
                 FROM T_FRM_FORMULARIO
                 WHERE seqFormulario = $seqFormulario
             ";
-            
-      //      echo $sql;
+
+            //      echo $sql;
             $objRes = $aptBd->execute($sql);
             if ($objRes->fields) {
 
@@ -610,16 +608,16 @@ class FormularioSubsidios {
                 $this->bolSecSalud = doubleval($objRes->fields['bolSecSalud']);
                 $this->bolViabilidadLeasing = doubleval($objRes->fields['bolViabilidadLeasing']);
                 $this->bolViabilizada = doubleval($objRes->fields['bolViabilizada']);
-                $this->fchAperturaCuentaAhorro = (esFechaValida($objRes->fields['fchAperturaCuentaAhorro']))? $objRes->fields['fchAperturaCuentaAhorro'] : NULL;
-                $this->fchAperturaCuentaAhorro2 = (esFechaValida($objRes->fields['fchAperturaCuentaAhorro2']))? $objRes->fields['fchAperturaCuentaAhorro2'] : NULL;
-                $this->fchAprobacionCredito = (esFechaValida($objRes->fields['fchAprobacionCredito']))? $objRes->fields['fchAprobacionCredito'] : NULL;
-                $this->fchArriendoDesde = (esFechaValida($objRes->fields['fchArriendoDesde']))? $objRes->fields['fchArriendoDesde'] : NULL;
-                $this->fchInscripcion = (esFechaValida($objRes->fields['fchInscripcion']))? $objRes->fields['fchInscripcion'] : NULL;
-                $this->fchNotificacion = (esFechaValida($objRes->fields['fchNotificacion']))? $objRes->fields['fchNotificacion'] : NULL;
-                $this->fchPostulacion = (esFechaValida($objRes->fields['fchPostulacion']))? $objRes->fields['fchPostulacion'] : NULL;
-                $this->fchUltimaActualizacion = (esFechaValida($objRes->fields['fchUltimaActualizacion']))? $objRes->fields['fchUltimaActualizacion'] : NULL;
-                $this->fchVencimiento = (esFechaValida($objRes->fields['fchVencimiento']))? $objRes->fields['fchVencimiento'] : NULL;
-                $this->fchVigencia = (esFechaValida($objRes->fields['fchVigencia']))? $objRes->fields['fchVigencia'] : NULL;
+                $this->fchAperturaCuentaAhorro = (esFechaValida($objRes->fields['fchAperturaCuentaAhorro'])) ? $objRes->fields['fchAperturaCuentaAhorro'] : NULL;
+                $this->fchAperturaCuentaAhorro2 = (esFechaValida($objRes->fields['fchAperturaCuentaAhorro2'])) ? $objRes->fields['fchAperturaCuentaAhorro2'] : NULL;
+                $this->fchAprobacionCredito = (esFechaValida($objRes->fields['fchAprobacionCredito'])) ? $objRes->fields['fchAprobacionCredito'] : NULL;
+                $this->fchArriendoDesde = (esFechaValida($objRes->fields['fchArriendoDesde'])) ? $objRes->fields['fchArriendoDesde'] : NULL;
+                $this->fchInscripcion = (esFechaValida($objRes->fields['fchInscripcion'])) ? $objRes->fields['fchInscripcion'] : NULL;
+                $this->fchNotificacion = (esFechaValida($objRes->fields['fchNotificacion'])) ? $objRes->fields['fchNotificacion'] : NULL;
+                $this->fchPostulacion = (esFechaValida($objRes->fields['fchPostulacion'])) ? $objRes->fields['fchPostulacion'] : NULL;
+                $this->fchUltimaActualizacion = (esFechaValida($objRes->fields['fchUltimaActualizacion'])) ? $objRes->fields['fchUltimaActualizacion'] : NULL;
+                $this->fchVencimiento = (esFechaValida($objRes->fields['fchVencimiento'])) ? $objRes->fields['fchVencimiento'] : NULL;
+                $this->fchVigencia = (esFechaValida($objRes->fields['fchVigencia'])) ? $objRes->fields['fchVigencia'] : NULL;
                 $this->numAdultosNucleo = doubleval($objRes->fields['numAdultosNucleo']);
                 $this->numCelular = doubleval($objRes->fields['numCelular']);
                 $this->numCortes = doubleval($objRes->fields['numCortes']);
@@ -694,7 +692,6 @@ class FormularioSubsidios {
                 $this->valSubsidioNacional = doubleval($objRes->fields['valSubsidioNacional']);
                 $this->valTotal = doubleval($objRes->fields['valTotal']);
                 $this->valTotalRecursos = doubleval($objRes->fields['valTotalRecursos']);
-
             } else {
                 $this->arrErrores[] = "No se encuentra el formulario [$seqFormulario]";
             }
@@ -706,116 +703,116 @@ class FormularioSubsidios {
     public function editarFormulario($seqFormulario) {
         global $aptBd;
         try {
-            $fchAperturaCuentaAhorro = ( esFechaValida( $this->fchAperturaCuentaAhorro ) )? "'" . $this->fchAperturaCuentaAhorro . "'" : "NULL";
-            $fchAperturaCuentaAhorro2 = ( esFechaValida( $this->fchAperturaCuentaAhorro2 ) )? "'" . $this->fchAperturaCuentaAhorro2 . "'" : "NULL";
-            $fchAprobacionCredito = ( esFechaValida( $this->fchAprobacionCredito ) )? "'" . $this->fchAprobacionCredito . "'" : "NULL";
-            $fchArriendoDesde = ( esFechaValida( $this->fchArriendoDesde ) )? "'" . $this->fchArriendoDesde . "'" : "NULL";
-            $fchInscripcion = ( esFechaValida( $this->fchInscripcion ) )? "'" . $this->fchInscripcion . "'" : "NULL";
-            $fchNotificacion = ( esFechaValida( $this->fchNotificacion ) )? "'" . $this->fchNotificacion . "'" : "NULL";
-            $fchPostulacion = ( esFechaValida( $this->fchPostulacion ) )? "'" . $this->fchPostulacion . "'" : "NULL";
-            $fchUltimaActualizacion = ( esFechaValida( $this->fchUltimaActualizacion ) )? "'" . $this->fchUltimaActualizacion . "'" : "NULL";
-            $fchVencimiento = ( esFechaValida( $this->fchVencimiento ) )? "'" . $this->fchVencimiento . "'" : "NULL";
-            $fchVigencia = ( esFechaValida( $this->fchVigencia ) )? "'" . $this->fchVigencia . "'" : "NULL";
+            $fchAperturaCuentaAhorro = ( esFechaValida($this->fchAperturaCuentaAhorro) ) ? "'" . $this->fchAperturaCuentaAhorro . "'" : "NULL";
+            $fchAperturaCuentaAhorro2 = ( esFechaValida($this->fchAperturaCuentaAhorro2) ) ? "'" . $this->fchAperturaCuentaAhorro2 . "'" : "NULL";
+            $fchAprobacionCredito = ( esFechaValida($this->fchAprobacionCredito) ) ? "'" . $this->fchAprobacionCredito . "'" : "NULL";
+            $fchArriendoDesde = ( esFechaValida($this->fchArriendoDesde) ) ? "'" . $this->fchArriendoDesde . "'" : "NULL";
+            $fchInscripcion = ( esFechaValida($this->fchInscripcion) ) ? "'" . $this->fchInscripcion . "'" : "NULL";
+            $fchNotificacion = ( esFechaValida($this->fchNotificacion) ) ? "'" . $this->fchNotificacion . "'" : "NULL";
+            $fchPostulacion = ( esFechaValida($this->fchPostulacion) ) ? "'" . $this->fchPostulacion . "'" : "NULL";
+            $fchUltimaActualizacion = ( esFechaValida($this->fchUltimaActualizacion) ) ? "'" . $this->fchUltimaActualizacion . "'" : "NULL";
+            $fchVencimiento = ( esFechaValida($this->fchVencimiento) ) ? "'" . $this->fchVencimiento . "'" : "NULL";
+            $fchVigencia = ( esFechaValida($this->fchVigencia) ) ? "'" . $this->fchVigencia . "'" : "NULL";
             $sql = "
                 update t_frm_formulario set        
-                    bolAltaCon = ". doubleval( $this->bolAltaCon ).",
-                    bolCerrado = ". doubleval( $this->bolCerrado ) .",
-                    bolDesplazado = ". doubleval( $this->bolDesplazado ) .",
-                    bolIdentificada = ". doubleval( $this->bolIdentificada ) .",
-                    bolInmovilizadoCuentaAhorro = ". doubleval( $this->bolInmovilizadoCuentaAhorro ) .",
-                    bolInmovilizadoCuentaAhorro2 = ". doubleval( $this->bolInmovilizadoCuentaAhorro2 ) .",
-                    bolIntegracionSocial = ". doubleval( $this->bolIntegracionSocial ) .",
-                    bolIpes = ". doubleval( $this->bolIpes ) .",
-                    bolPromesaFirmada = ". doubleval( $this->bolPromesaFirmada ) .",
-                    bolSancion = ". doubleval( $this->bolSancion ) .",
-                    bolSecEducacion = ". doubleval( $this->bolSecEducacion ) .",
-                    bolSecMujer = ". doubleval( $this->bolSecMujer ) .",
-                    bolSecSalud = ". doubleval( $this->bolSecSalud ) .",
-                    bolViabilidadLeasing = ". doubleval( $this->bolViabilidadLeasing ) .",
-                    bolViabilizada = ". doubleval( $this->bolViabilizada ) .",
-                    fchAperturaCuentaAhorro = ". $fchAperturaCuentaAhorro .",
-                    fchAperturaCuentaAhorro2 = ". $fchAperturaCuentaAhorro2 .",
-                    fchAprobacionCredito = ". $fchAprobacionCredito .",
-                    fchArriendoDesde = ". $fchArriendoDesde .",
-                    fchInscripcion = ". $fchInscripcion .",
-                    fchNotificacion = ". $fchNotificacion .",
-                    fchPostulacion = ". $fchPostulacion .",
-                    fchUltimaActualizacion = ". $fchUltimaActualizacion .",
-                    fchVencimiento = ". $fchVencimiento .",
-                    fchVigencia = ". $fchVigencia .",
-                    numAdultosNucleo = ". doubleval( $this->numAdultosNucleo ) .",
-                    numCelular = ". doubleval( $this->numCelular ) .",
-                    numDuracionLeasing = ". doubleval( $this->numDuracionLeasing ) .",
-                    numCortes = ". doubleval( $this->numCortes ) .",
-                    numHabitaciones = ". doubleval( $this->numHabitaciones ) .",
-                    numHacinamiento = ". doubleval( $this->numHacinamiento ) .",
-                    numNinosNucleo = ". doubleval( $this->numNinosNucleo ) .",
-                    numPuntajeSisben = ". doubleval( $this->numPuntajeSisben ) .",
-                    numTelefono1 = ". doubleval( $this->numTelefono1 ) .",
-                    numTelefono2 = ". doubleval( $this->numTelefono2 ) .",
-                    seqBancoCredito = ". doubleval( $this->seqBancoCredito ) .",
-                    seqBancoCuentaAhorro = ". doubleval( $this->seqBancoCuentaAhorro ) .",
-                    seqBancoCuentaAhorro2 = ". doubleval( $this->seqBancoCuentaAhorro2 ) .",
-                    seqBarrio = ". doubleval( $this->seqBarrio ) .",
-                    seqCesantias = ". doubleval( $this->seqCesantias ) .",
-                    seqCiudad = ". doubleval( $this->seqCiudad ) .",
-                    seqConvenio = ". doubleval( $this->seqConvenio ) .",
-                    seqEmpresaDonante = ". doubleval( $this->seqEmpresaDonante ) .",
-                    seqEntidadSubsidio = ". doubleval( $this->seqEntidadSubsidio ) .",
-                    seqEstadoProceso = ". doubleval( $this->seqEstadoProceso ) .",    
-                    seqLocalidad = ". doubleval( $this->seqLocalidad ) .",
-                    seqModalidad = ". doubleval( $this->seqModalidad ) .",
-                    seqPeriodo = ". doubleval( $this->seqPeriodo ) .",
-                    seqPlanGobierno = ". doubleval( $this->seqPlanGobierno ) .",
-                    seqProyecto = ". doubleval( $this->seqProyecto ) .",
-                    seqProyectoHijo = ". doubleval( $this->seqProyectoHijo ) .",
-                    seqPuntoAtencion = ". doubleval( $this->seqPuntoAtencion ) .",
-                    seqSisben = ". doubleval( $this->seqSisben ) .",
-                    seqSolucion = ". doubleval( $this->seqSolucion ) .",
-                    seqTipoDireccion = ". doubleval( $this->seqTipoDireccion ) .",
-                    seqTipoEsquema = ". doubleval( $this->seqTipoEsquema ) .",
-                    seqTipoFinanciacion = ". doubleval( $this->seqTipoFinanciacion ) .",
-                    seqUnidadProyecto = ". doubleval( $this->seqUnidadProyecto ) .",
-                    seqUpz = ". doubleval( $this->seqUpz ) .",
-                    seqUsuario = ". doubleval( $this->seqUsuario ) .",
-                    seqVivienda = ". doubleval( $this->seqVivienda ) .",
-                    txtBarrio = '". trim( $this->txtBarrio ) ."',
-                    txtChip = '". trim( $this->txtChip ) ."',
-                    txtComprobanteArriendo = '". trim( $this->txtComprobanteArriendo ) ."',
-                    txtCorreo = '". trim( $this->txtCorreo ) ."',
-                    txtDireccion = '". trim( $this->txtDireccion ) ."',
-                    txtDireccionSolucion = '". trim( $this->txtDireccionSolucion ) ."',
-                    txtFormulario = '". trim( $this->txtFormulario ) ."',
-                    txtMatriculaInmobiliaria = '". trim( $this->txtMatriculaInmobiliaria ) ."',
-                    txtOtro = '". trim( $this->txtOtro ) ."',
-                    txtSoporteAporteLote = '". trim( $this->txtSoporteAporteLote ) ."',
-                    txtSoporteAporteMateriales = '". trim( $this->txtSoporteAporteMateriales ) ."',
-                    txtSoporteAvanceObra = '". trim( $this->txtSoporteAvanceObra ) ."',
-                    txtSoporteCesantias = '". trim( $this->txtSoporteCesantias ) ."',
-                    txtSoporteCredito = '". trim( $this->txtSoporteCredito ) ."',
-                    txtSoporteCuentaAhorro = '". trim( $this->txtSoporteCuentaAhorro ) ."',
-                    txtSoporteCuentaAhorro2 = '". trim( $this->txtSoporteCuentaAhorro2 ) ."',
-                    txtSoporteDonacion = '". trim( $this->txtSoporteDonacion ) ."',
-                    txtSoporteSubsidio = '". trim( $this->txtSoporteSubsidio ) ."',
-                    txtSoporteSubsidioNacional = '". trim( $this->txtSoporteSubsidioNacional ) ."',
-                    valAporteAvanceObra = ". doubleval( $this->valAporteAvanceObra ) .",
-                    valAporteLote = ". doubleval( $this->valAporteLote ) .",
-                    valAporteMateriales = ". doubleval( $this->valAporteMateriales ) .",
-                    valArriendo = ". doubleval( $this->valArriendo ) .",
-                    valAspiraSubsidio = ". doubleval( $this->valAspiraSubsidio ) .",
-                    valAvaluo = ". doubleval( $this->valAvaluo ) .",
-                    valCartaLeasing = ". doubleval( $this->valCartaLeasing ) .",
-                    valComplementario = ". doubleval( $this->valComplementario ) .",
-                    valCredito = ". doubleval( $this->valCredito ) .",
-                    valDonacion = ". doubleval( $this->valDonacion ) .",
-                    valIngresoHogar = ". doubleval( $this->valIngresoHogar ) .",
-                    valPresupuesto = ". doubleval( $this->valPresupuesto ) .",
-                    valSaldoCesantias = ". doubleval( $this->valSaldoCesantias ) .",
-                    valSaldoCuentaAhorro = ". doubleval( $this->valSaldoCuentaAhorro ) .",
-                    valSaldoCuentaAhorro2 = ". doubleval( $this->valSaldoCuentaAhorro2 ) .",
-                    valSubsidioNacional = ". doubleval( $this->valSubsidioNacional ) .",
-                    valTotal = ". doubleval( $this->valTotal ) .",
-                    valTotalRecursos = " . doubleval( $this->valTotalRecursos ) . "
+                    bolAltaCon = " . doubleval($this->bolAltaCon) . ",
+                    bolCerrado = " . doubleval($this->bolCerrado) . ",
+                    bolDesplazado = " . doubleval($this->bolDesplazado) . ",
+                    bolIdentificada = " . doubleval($this->bolIdentificada) . ",
+                    bolInmovilizadoCuentaAhorro = " . doubleval($this->bolInmovilizadoCuentaAhorro) . ",
+                    bolInmovilizadoCuentaAhorro2 = " . doubleval($this->bolInmovilizadoCuentaAhorro2) . ",
+                    bolIntegracionSocial = " . doubleval($this->bolIntegracionSocial) . ",
+                    bolIpes = " . doubleval($this->bolIpes) . ",
+                    bolPromesaFirmada = " . doubleval($this->bolPromesaFirmada) . ",
+                    bolSancion = " . doubleval($this->bolSancion) . ",
+                    bolSecEducacion = " . doubleval($this->bolSecEducacion) . ",
+                    bolSecMujer = " . doubleval($this->bolSecMujer) . ",
+                    bolSecSalud = " . doubleval($this->bolSecSalud) . ",
+                    bolViabilidadLeasing = " . doubleval($this->bolViabilidadLeasing) . ",
+                    bolViabilizada = " . doubleval($this->bolViabilizada) . ",
+                    fchAperturaCuentaAhorro = " . $fchAperturaCuentaAhorro . ",
+                    fchAperturaCuentaAhorro2 = " . $fchAperturaCuentaAhorro2 . ",
+                    fchAprobacionCredito = " . $fchAprobacionCredito . ",
+                    fchArriendoDesde = " . $fchArriendoDesde . ",
+                    fchInscripcion = " . $fchInscripcion . ",
+                    fchNotificacion = " . $fchNotificacion . ",
+                    fchPostulacion = " . $fchPostulacion . ",
+                    fchUltimaActualizacion = " . $fchUltimaActualizacion . ",
+                    fchVencimiento = " . $fchVencimiento . ",
+                    fchVigencia = " . $fchVigencia . ",
+                    numAdultosNucleo = " . doubleval($this->numAdultosNucleo) . ",
+                    numCelular = " . doubleval($this->numCelular) . ",
+                    numDuracionLeasing = " . doubleval($this->numDuracionLeasing) . ",
+                    numCortes = " . doubleval($this->numCortes) . ",
+                    numHabitaciones = " . doubleval($this->numHabitaciones) . ",
+                    numHacinamiento = " . doubleval($this->numHacinamiento) . ",
+                    numNinosNucleo = " . doubleval($this->numNinosNucleo) . ",
+                    numPuntajeSisben = " . doubleval($this->numPuntajeSisben) . ",
+                    numTelefono1 = " . doubleval($this->numTelefono1) . ",
+                    numTelefono2 = " . doubleval($this->numTelefono2) . ",
+                    seqBancoCredito = " . doubleval($this->seqBancoCredito) . ",
+                    seqBancoCuentaAhorro = " . doubleval($this->seqBancoCuentaAhorro) . ",
+                    seqBancoCuentaAhorro2 = " . doubleval($this->seqBancoCuentaAhorro2) . ",
+                    seqBarrio = " . doubleval($this->seqBarrio) . ",
+                    seqCesantias = " . doubleval($this->seqCesantias) . ",
+                    seqCiudad = " . doubleval($this->seqCiudad) . ",
+                    seqConvenio = " . doubleval($this->seqConvenio) . ",
+                    seqEmpresaDonante = " . doubleval($this->seqEmpresaDonante) . ",
+                    seqEntidadSubsidio = " . doubleval($this->seqEntidadSubsidio) . ",
+                    seqEstadoProceso = " . doubleval($this->seqEstadoProceso) . ",    
+                    seqLocalidad = " . doubleval($this->seqLocalidad) . ",
+                    seqModalidad = " . doubleval($this->seqModalidad) . ",
+                    seqPeriodo = " . doubleval($this->seqPeriodo) . ",
+                    seqPlanGobierno = " . doubleval($this->seqPlanGobierno) . ",
+                    seqProyecto = " . doubleval($this->seqProyecto) . ",
+                    seqProyectoHijo = " . doubleval($this->seqProyectoHijo) . ",
+                    seqPuntoAtencion = " . doubleval($this->seqPuntoAtencion) . ",
+                    seqSisben = " . doubleval($this->seqSisben) . ",
+                    seqSolucion = " . doubleval($this->seqSolucion) . ",
+                    seqTipoDireccion = " . doubleval($this->seqTipoDireccion) . ",
+                    seqTipoEsquema = " . doubleval($this->seqTipoEsquema) . ",
+                    seqTipoFinanciacion = " . doubleval($this->seqTipoFinanciacion) . ",
+                    seqUnidadProyecto = " . doubleval($this->seqUnidadProyecto) . ",
+                    seqUpz = " . doubleval($this->seqUpz) . ",
+                    seqUsuario = " . doubleval($this->seqUsuario) . ",
+                    seqVivienda = " . doubleval($this->seqVivienda) . ",
+                    txtBarrio = '" . trim($this->txtBarrio) . "',
+                    txtChip = '" . trim($this->txtChip) . "',
+                    txtComprobanteArriendo = '" . trim($this->txtComprobanteArriendo) . "',
+                    txtCorreo = '" . trim($this->txtCorreo) . "',
+                    txtDireccion = '" . trim($this->txtDireccion) . "',
+                    txtDireccionSolucion = '" . trim($this->txtDireccionSolucion) . "',
+                    txtFormulario = '" . trim($this->txtFormulario) . "',
+                    txtMatriculaInmobiliaria = '" . trim($this->txtMatriculaInmobiliaria) . "',
+                    txtOtro = '" . trim($this->txtOtro) . "',
+                    txtSoporteAporteLote = '" . trim($this->txtSoporteAporteLote) . "',
+                    txtSoporteAporteMateriales = '" . trim($this->txtSoporteAporteMateriales) . "',
+                    txtSoporteAvanceObra = '" . trim($this->txtSoporteAvanceObra) . "',
+                    txtSoporteCesantias = '" . trim($this->txtSoporteCesantias) . "',
+                    txtSoporteCredito = '" . trim($this->txtSoporteCredito) . "',
+                    txtSoporteCuentaAhorro = '" . trim($this->txtSoporteCuentaAhorro) . "',
+                    txtSoporteCuentaAhorro2 = '" . trim($this->txtSoporteCuentaAhorro2) . "',
+                    txtSoporteDonacion = '" . trim($this->txtSoporteDonacion) . "',
+                    txtSoporteSubsidio = '" . trim($this->txtSoporteSubsidio) . "',
+                    txtSoporteSubsidioNacional = '" . trim($this->txtSoporteSubsidioNacional) . "',
+                    valAporteAvanceObra = " . doubleval($this->valAporteAvanceObra) . ",
+                    valAporteLote = " . doubleval($this->valAporteLote) . ",
+                    valAporteMateriales = " . doubleval($this->valAporteMateriales) . ",
+                    valArriendo = " . doubleval($this->valArriendo) . ",
+                    valAspiraSubsidio = " . doubleval($this->valAspiraSubsidio) . ",
+                    valAvaluo = " . doubleval($this->valAvaluo) . ",
+                    valCartaLeasing = " . doubleval($this->valCartaLeasing) . ",
+                    valComplementario = " . doubleval($this->valComplementario) . ",
+                    valCredito = " . doubleval($this->valCredito) . ",
+                    valDonacion = " . doubleval($this->valDonacion) . ",
+                    valIngresoHogar = " . doubleval($this->valIngresoHogar) . ",
+                    valPresupuesto = " . doubleval($this->valPresupuesto) . ",
+                    valSaldoCesantias = " . doubleval($this->valSaldoCesantias) . ",
+                    valSaldoCuentaAhorro = " . doubleval($this->valSaldoCuentaAhorro) . ",
+                    valSaldoCuentaAhorro2 = " . doubleval($this->valSaldoCuentaAhorro2) . ",
+                    valSubsidioNacional = " . doubleval($this->valSubsidioNacional) . ",
+                    valTotal = " . doubleval($this->valTotal) . ",
+                    valTotalRecursos = " . doubleval($this->valTotalRecursos) . "
                 where seqFormulario = " . $seqFormulario . "
             ";
             $aptBd->execute($sql);
@@ -825,7 +822,7 @@ class FormularioSubsidios {
         }
 
         // Actualiza la unidad del proyecto
-        if ( empty($this->arrErrores) ) {
+        if (empty($this->arrErrores)) {
             try {
                 $sql = "
                     update t_pry_unidad_proyecto set
@@ -833,7 +830,7 @@ class FormularioSubsidios {
                     where seqFormulario = " . $this->seqFormulario . "
                 ";
                 $aptBd->execute($sql);
-                if( $this->seqUnidadProyecto > 1 ) {
+                if ($this->seqUnidadProyecto > 1) {
                     $sql = "
                         update t_pry_unidad_proyecto set
                           seqFormulario = " . $this->seqFormulario . "
@@ -841,7 +838,7 @@ class FormularioSubsidios {
                     ";
                     $aptBd->execute($sql);
                 }
-            }catch(Exception $objError) {
+            } catch (Exception $objError) {
                 $this->arrErrores[] = "No se ha podido actualizar la unidad del proyecto relacionada";
                 $this->arrErrores[] = $objError->getMessage();
             }
@@ -1147,16 +1144,16 @@ class FormularioSubsidios {
         $aptBd->execute($sql);
     }
 
-    public function relacionarCiudadanoFormulario(){
+    public function relacionarCiudadanoFormulario() {
         global $aptBd;
-        try{
+        try {
             $sql = "
                 delete
                 from t_frm_hogar
                 where seqFormulario = " . $this->seqFormulario . "
             ";
             $aptBd->execute($sql);
-            foreach($this->arrCiudadano as $seqCiudadano => $objCiudadano){
+            foreach ($this->arrCiudadano as $seqCiudadano => $objCiudadano) {
                 $sql = "
                     insert into t_frm_hogar (
                       seqCiudadano, 
@@ -1164,21 +1161,36 @@ class FormularioSubsidios {
                       bolSoporteDocumento, 
                       seqParentesco
                     ) values (
-                      ". $seqCiudadano .",
-                      ". $this->seqFormulario .",
-                      ". $objCiudadano->bolSoporteDocumento .",
-                      ". $objCiudadano->seqParentesco ."
+                      " . $seqCiudadano . ",
+                      " . $this->seqFormulario . ",
+                      " . $objCiudadano->bolSoporteDocumento . ",
+                      " . $objCiudadano->seqParentesco . "
                     );
                 ";
                 $aptBd->execute($sql);
             }
-        } catch ( Exception $objError ){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "No se ha podido establecer la relación entre los ciudadanos y el formulario " . $this->seqFormulario;
             $this->arrErrores[] = $objError->getMessage();
         }
         return true;
     }
 
+    public function obtenerFormulario($numDocumento) {
+
+        global $aptBd;
+        $sql = "SELECT seqFormulario FROM T_CIU_CIUDADANO LEFT JOIN T_FRM_HOGAR USING(seqCiudadano) where numDocumento = " . $numDocumento;
+        try {
+            $objRes = $aptBd->execute($sql);
+            if ($objRes->fields["seqFormulario"] != "") {
+                return $objRes->fields["seqFormulario"];
+            } else {
+                return "El Ciudadano  $numDocumento no existe";
+            }
+        } catch (Exception $objError) {
+            return "El secuencial del formulario no puede ser vacio";
+        }
+    }
 
 }
 

@@ -4852,12 +4852,12 @@ class Seguimiento {
         }
     }
 
-    public function validarSeguimientoPive($documento) {
+    public function validarSeguimientoPive($formulario) {
 
         global $aptBd;
         $txtComentarios = "";
 
-        $sql = "SELECT txtCambios FROM t_seg_seguimiento WHERE numDocumento = " . $documento . ""
+        $sql = "SELECT txtCambios FROM t_seg_seguimiento WHERE seqFormulario = " . $formulario . ""
                 . " and txtComentario like '%Conforme lo establecido en la Res. 182 de 2018,%'";
 
         try {

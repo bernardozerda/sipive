@@ -25,6 +25,7 @@ $destino = "";
 $arraArchivos = Array();
 $arrGrupoGestion = Array();
 $arraTipoArchivos = Array();  
+$arraTipoInformes = Array();
 $cantArchivosValid = 0;
 $validar = false;
 if (isset($_REQUEST['seqProyecto'])) {
@@ -35,6 +36,7 @@ if (isset($_REQUEST['seqProyecto'])) {
     $cantUnidadesPermiso = $claUnidades->datosTecnicosPermisoOcup($idProyecto);
     $cantUnidadesLegalizadasXUnd = $claUnidades->ObtenerCantUnidadesLegalizadasUnd($idProyecto);
     $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
+    $arraTipoInformes = $claUnidades->datosTiposInformes();    
     $cantSoluciones = $arrProyectos[0]['valNumeroSoluciones'];
     if ($cantSoluciones == $cantUnidadesLegalizadas && $cantSoluciones == $cantUnidadesExistencia && $cantSoluciones == $cantUnidadesPermiso && $cantSoluciones == $cantUnidadesLegalizadasXUnd) {
         $validar = true;
@@ -89,6 +91,7 @@ $claSmarty->assign("cantUnidadesPermiso", $cantUnidadesPermiso);
 $claSmarty->assign("cantUnidadesExistencia", $cantUnidadesExistencia);
 $claSmarty->assign("arraArchivos", $arraArchivos);
 $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
+$claSmarty->assign("arraTipoInformes", $arraTipoInformes);
 $claSmarty->assign("validar", $validar);
 
 if ($txtPlantilla != "") {

@@ -50,14 +50,12 @@
                                             <i class='glyphicon glyphicon-trash'></i>
                                             <span>Cerrar Proyecto</span>
                                         </button>  
-
                                     {else}
                                         <div class='alert alert-info' style='font-size: 12px; width: 70%'>El Proyecto se encuentra cerrado!</div>
                                     {/if}
                                 </div>
                             {/if}
                         </fieldset>
-
                     </div>
                     <p>&nbsp;</p> 
                     <fieldset style="border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;">  
@@ -68,15 +66,20 @@
                                 <select name="seqInformes"
                                         id="seqInformes"
                                         style="width:170px;" 
-                                        class="form-control required" >                              
+                                        class="form-control required" 
+                                        onchange = "mostrarOpcionInforme(this.id)">                              
                                     <option value="">Seleccione</option>
-                                    <option value="Informe-de-Interventoria">Informe de Interventoria</option>
-                                    <option value="Informe-Fiducia">Informe Fiducia</option>
-                                    <option value="Informe">Informe</option>
-                                    <option value="Revision-Oferente">Revisión Oferente</option>
+                                    {foreach from=$arraTipoInformes key=keyA item=valueA} 
+                                        <option value="{$keyA}">{$valueA}</option>
+                                    {/foreach}
                                 </select>
                                 <input type="hidden" name="idProyecto" id="idProyecto" value="{$idProyecto}" />
                                 <div id="val_seqInformes" class="divError">Debe Seleccionar un tipo de informe</div> 
+                            </div>
+                            <div class="col-md-2" style="text-align: left; display: none" id="informeId">   
+                                <label class="control-label" >Cual?</label>
+                                <input type="text" name="txtInforme" id="txtInforme" value="{$txtInforme}"  class="form-control" />
+                                <div id='val_txtInforme' class='divError'>Debe digitar un tipo de informe</div> 
                             </div>
                             <div class="col-md-5" style="text-align: left">                        
                                 <div class="custom-file">
@@ -96,13 +99,19 @@
                                 <label class="control-label" >&nbsp;</label><br>
                                 <input type="button" class="btn_volver subir" value="Importar&nbsp;" id="subir"  onclick="SubirInformes('frmProyectos');"/>
                             </div>
+                            <div class="col-md-12" id="idProgress" style="display: none;">
+                                <label class="control-label" >&nbsp;</label><br>
+                                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                    <div class="progress-bar progress-bar-success" style="width:10%;"></div>
+                                </div>
+                            </div>
                                 <div class="col-md-12" ><p>&nbsp;</p> <p>&nbsp;</p> </div>
                             <table role='presentation' class='table table-striped' >
                                 <tbody class='files' style="padding: 0; margin: 0">
                                     {foreach from=$arraArchivos key=keyArc item=valueArc} 
                                         {assign var=name value="_"|explode:$valueArc.nombre} 
                                         <tr class='template-download fade in'>
-                                            <td>{$name[0]|replace:"-":" "}</td>
+                                            <td>{$name[0]|replace:"-":" "|replace:"Otro":"Otro - "}</td>
                                             <td style="padding: 0; margin: 0"><p class='name' style="padding: 12px; margin: 0">
                                                     <a href='{$valueArc.destino}{$valueArc.nombre}' title='' download='{$valueArc.nombre}'>{$valueArc.nombre}</a>
                                                 </p>
@@ -121,9 +130,6 @@
                                     {/foreach}
                                 </tbody>
                             </table>
-
-                            
-
                         </div>
                     </fieldset>
                 </div>

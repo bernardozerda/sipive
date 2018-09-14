@@ -52,9 +52,9 @@ function validarCampos() {
         $("#numCedulaInterventor").attr('class', 'form-control');
         $("#numTProfesionalInterventor").attr('class', 'form-control');
     }
-    
+
     if ($('input[id="seqTipoLicencia2"]').val() == 2) {
-        $("#txtResEjecutoria2").attr('class', 'form-control');        
+        $("#txtResEjecutoria2").attr('class', 'form-control');
     }
 
     for (var i = 1; i <= estado; i++) {
@@ -73,7 +73,7 @@ function validarCampos() {
                 //  console.log("paso : " + required + " -> " + $(value).val());
                 $("#" + $(this).attr("id")).css("border", "1px solid red");
                 $("#val_" + $(this).attr("id")).css("display", "inline");
-                console.log($(this).attr("id") + " input");
+                // console.log($(this).attr("id") + " input");
                 valid = false;
             }
 
@@ -95,7 +95,7 @@ function validarCampos() {
             $("#val_" + $(this).attr("id")).css("display", "none");
             $("#" + $(this).attr("id")).css("border", "1px solid #ccc");
             var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-            console.log(caract.test($(value).val()));
+            //console.log(caract.test($(value).val()));
             if (caract.test($(value).val()) == false) {
                 $("#val_" + $(this).attr("id")).css("display", "inline");
                 $("#val_" + $(this).attr("id")).html("Correo erroneo! ");
@@ -111,7 +111,7 @@ function validarCampos() {
                 // console.log("paso3");
                 $("#" + $(this).attr("id")).css("border", "1px solid red");
                 $("#val_" + $(this).attr("id")).css("display", "inline");
-                console.log($(this).attr("id"));
+                // console.log($(this).attr("id"));
                 valid = false;
             }
         });
@@ -812,5 +812,17 @@ function cerrarProyecto() {
             }
         });
     }
+}
+
+function mostrarOpcionInforme(id) {
+
+    if ($("#" + id).val() == 'Otro') {
+        $("#informeId").show();
+        $("#txtInforme").addClass("required");
+    } else {
+        $("#informeId").hide();
+        $("#txtInforme").removeClass("required");
+    }
+
 }
 

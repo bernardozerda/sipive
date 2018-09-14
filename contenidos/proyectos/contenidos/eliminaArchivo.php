@@ -5,9 +5,13 @@ include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
 include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "SeguimientoProyectos.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "DatosUnidades.class.php" );
 
 
 $claSeguimiento = new SeguimientoProyectos();
+$claUnidades = new DatosUnidades();
+$arraTipoInformes = Array();
+$arraTipoInformes = $claUnidades->datosTiposInformes();
 
 if (file_exists($txtPrefijoRuta . '' . $_POST['ruta'])) {
     $idProyecto = $_REQUEST['idProyecto'];
@@ -17,6 +21,7 @@ if (file_exists($txtPrefijoRuta . '' . $_POST['ruta'])) {
     $seqGestion = $_POST['seqGestion'];
     $txtComentarios = $_POST['txtComentario'];
     $seqPryEstadoProceso = $_POST['seqPryEstadoProceso'];
+
     if (unlink($txtPrefijoRuta . '' . $_POST['ruta'])) {
         $retorna .="<div class='alert alert-success' style='font-size: 12px'><strong>Success!</strong> Se ha eliminado el archivo " . $nameArchivo[1] . "</div>";
         $arrayDatosProyNew = Array();
@@ -54,17 +59,23 @@ if (file_exists($txtPrefijoRuta . '' . $_POST['ruta'])) {
                     <select name='seqInformes'
                             id='seqInformes'
                             style='width:170px;' 
-                            class='form-control required' >                              
-                        <option value=''>Seleccione</option>
-                        <option value='Informe-de-Interventoria'>Informe de Interventoria</option>
-                        <option value='Informe-Fiducia'>Informe Fiducia</option>
-                        <option value='Informe'>Informe</option>
-                        <option value='Revision-Oferente'>Revisión Oferente</option>
+                            class='form-control required'
+                            onchange = 'mostrarOpcionInforme(this.id)'>                              
+                        <option value=''>Seleccione</option>";
+    foreach ($arraTipoInformes as $key => $value) {
+        $retorna .="<option value='" . $key . "'>" . $value . "</option>";
+    }
+
+    $retorna .="
                     </select>
                     <input type='hidden' name='idProyecto' id='idProyecto' value='" . $idProyecto . "' />
                     <div id='val_seqInformes' class='divError'>Debe Seleccionar un tipo de informe</div> 
                 </div>
-
+                <div class='col-md-2' style='text-align: left; display: none' id='informeId'>   
+                    <label class='control-label' >Cual?</label>
+                    <input type='text' name='txtInforme' id='txtInforme' value='' />
+                    <div id='val_txtInforme' class='divError'>Debe digitar un tipo de informe</div> 
+                </div>
                 <div class='col-md-5' style='text-align: left'>                        
                     <div class='custom-file'>
                         <input type='file' name='archivoInforme' class='custom-file-input required' id='customFile' >
@@ -73,6 +84,7 @@ if (file_exists($txtPrefijoRuta . '' . $_POST['ruta'])) {
                     <p>&nbsp;</p><br>
                     <div id='val_customFile' class='divError'>Debe Seleccionar un archivo</div> 
                 </div>
+               
                 <div class='col-md-2' id='idProgress' style='display: none;'>
                     <label class='control-label' >&nbsp;</label><br>
                     <div class='progress progress-striped active' role='progressbar' aria-valuemin='0' aria-valuemax='100' aria-valuenow='0'>
@@ -90,7 +102,7 @@ if (file_exists($txtPrefijoRuta . '' . $_POST['ruta'])) {
     foreach ($arraArchivos as $key => $value) {
         $nombreArchivo = explode("/", $value)[2];
         $name = explode("_", $nombreArchivo);
-        $retorna .=" <tr class='template-download fade in'><td>" . str_replace('-', ' ', $name[0]) . "</td><td style='padding: 12px; margin: 0'><p class='name'>
+        $retorna .=" <tr class='template-download fade in'><td>" . str_replace('Otro', 'Otro - ', str_replace('-', ' ', $name[0])) . "</td><td style='padding: 12px; margin: 0'><p class='name'>
                     <a href='recursos/proyectos/proyecto-" . $idProyecto . "/liquidacion/" . $nombreArchivo . " ' title='' download='" . $nombreArchivo . "'>" . $nombreArchivo . "</a>
                 </p>
             </td>

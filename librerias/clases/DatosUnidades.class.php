@@ -256,8 +256,8 @@ class DatosUnidades {
                 LEFT JOIN t_pry_unidad_proyecto und USING(seqProyecto) 
                 LEFT JOIN t_frm_formulario frm USING(seqFormulario)";
         if ($seqProyecto > 0) {
-             $sql .= " where case  when seqProyectoPadre IS NOT NULL then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = " . $seqProyecto . ") else  und.seqProyecto = " . $seqProyecto . " end";
-}
+            $sql .= " where case  when seqProyectoPadre IS NOT NULL then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = " . $seqProyecto . ") else  und.seqProyecto = " . $seqProyecto . " end";
+        }
         //echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = 0;
@@ -268,7 +268,7 @@ class DatosUnidades {
         }
         return $datos;
     }
-    
+
     public function datosTecnicosPermisoOcup($seqProyecto) {
         global $aptBd;
         $sql = "select count(*) as cant
@@ -290,7 +290,7 @@ class DatosUnidades {
         }
         return $datos;
     }
-    
+
     function ObtenerCantUnidadesLegalizadasUnd($seqProyecto) {
 
         global $aptBd;
@@ -298,7 +298,7 @@ class DatosUnidades {
                 FROM t_pry_proyecto  pry
                 LEFT JOIN t_pry_unidad_proyecto und USING(seqProyecto)";
         if ($seqProyecto > 0) {
-             $sql .= " where  seqEstadoUnidad = 6 and case  when seqProyectoPadre IS NOT NULL then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = " . $seqProyecto . ") else  und.seqProyecto = " . $seqProyecto . " end";
+            $sql .= " where  seqEstadoUnidad = 6 and case  when seqProyectoPadre IS NOT NULL then  und.seqProyecto in (select concat(seqProyecto, ',') from  t_pry_proyecto where seqProyectoPadre = " . $seqProyecto . ") else  und.seqProyecto = " . $seqProyecto . " end";
         }
         // echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
@@ -308,6 +308,18 @@ class DatosUnidades {
             //$datos['valNumeroSoluciones'] = $objRes->fields['valNumeroSoluciones'];
             $objRes->MoveNext();
         }
+        return $datos;
+    }
+
+    function datosTiposInformes() {
+
+        $datos = Array();
+        $datos['Informe Fiducia'] = 'Informe Fiducia';
+        $datos['Informe de Interventoria'] = 'Informe de Interventoria';
+        $datos['Informe'] = 'Informe';
+        $datos['Remision Oferente'] = 'Remision Oferente';
+        $datos['Otro'] = 'Otro';
+
         return $datos;
     }
 

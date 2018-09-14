@@ -30,7 +30,8 @@ $sql = "
         pgo.txtPlanGobierno,
         moa.txtModalidad,
         tes.txtTipoEsquema,
-        IF(und.bolActivo=0,'NO','SI') as bolActivo
+        IF(und.bolActivo=0,'NO','SI') as bolActivo,
+        CONCAT(und.seqEstadoUnidad ,'-', est.txtEstadoUnidad) as estado
     FROM T_PRY_UNIDAD_PROYECTO und 
     INNER JOIN T_PRY_PROYECTO pry ON und.seqProyecto = pry.seqProyecto
     LEFT  JOIN T_PRY_PROYECTO pryP ON pry.seqProyectoPadre = pryP.seqProyecto
@@ -43,11 +44,12 @@ $sql = "
     LEFT  JOIN T_FRM_ESTADO_PROCESO epr ON frm.seqEstadoProceso = epr.seqEstadoProceso
     LEFT  JOIN T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
     LEFT  JOIN T_PRY_TECNICO tec ON und.seqUnidadProyecto = tec.seqUnidadProyecto
+    LEFT JOIN T_PRY_ESTADO_UNIDAD est ON est.seqEstadoUnidad = und.seqEstadoUnidad
     WHERE pry.seqTipoEsquema in (1,2)
 ";
 $arrRegistros = $aptBd->GetAll($sql);
-foreach($arrRegistros as $numLinea => $arrRegistro){
-    if( trim( $arrRegistro['txtNombreProyectoPadre'] ) == "" ){
+foreach ($arrRegistros as $numLinea => $arrRegistro) {
+    if (trim($arrRegistro['txtNombreProyectoPadre']) == "") {
         $txtProyecto = $arrRegistro['txtNombreProyecto'];
         $txtConjunto = "";
     } else {
@@ -56,40 +58,45 @@ foreach($arrRegistros as $numLinea => $arrRegistro){
     }
     $arrRegistros[$numLinea]['txtNombreProyectoPadre'] = $txtProyecto;
     $arrRegistros[$numLinea]['txtNombreProyecto'] = $txtConjunto;
+
+    if (trim($arrRegistro['estado']) == "") {
+        $arrRegistros[$numLinea]['estado'] = "Ninguno";
+    }
 }
 
 $txtSeparador = "\t";
-$txtSalto     = "\r\n";
+$txtSalto = "\r\n";
 
 //$txtSeparador = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 //$txtSalto     = "<br>";
 
-$txtArchivo =  "Proyecto" . $txtSeparador;
-$txtArchivo .=  "Conjunto Residencial" . $txtSeparador;
-$txtArchivo .=  "seqUnidadProyecto" . $txtSeparador;
-$txtArchivo .=  "Unidad Proyecto" . $txtSeparador;
-$txtArchivo .=  "Nombre Unidad Referencia" . $txtSeparador;
-$txtArchivo .=  "Nombre Unidad Auxiliar" . $txtSeparador;
-$txtArchivo .=  "Valor Aprobado" . $txtSeparador;
-$txtArchivo .=  "Valor Complementario" . $txtSeparador;
-$txtArchivo .=  "Valor Actual" . $txtSeparador;
-$txtArchivo .=  "Viabilidad Técnica" . $txtSeparador;
-$txtArchivo .=  "seqFormulario" . $txtSeparador;
-$txtArchivo .=  "Documento" . $txtSeparador;
-$txtArchivo .=  "Nombre" . $txtSeparador;
-$txtArchivo .=  "txtFormulario" . $txtSeparador;
-$txtArchivo .=  "Estado del Proceso" . $txtSeparador;
-$txtArchivo .=  "Matrícula Inmobiliaria" . $txtSeparador;
-$txtArchivo .=  "Legalizado" . $txtSeparador;
-$txtArchivo .=  "Fecha Legalizado" . $txtSeparador;
-$txtArchivo .=  "Devolución" . $txtSeparador;
-$txtArchivo .=  "Plan de Gobierno" . $txtSeparador;
-$txtArchivo .=  "Modalidad" . $txtSeparador;
-$txtArchivo .=  "Esquema" . $txtSeparador;
-$txtArchivo .=  "Activo". $txtSeparador;
-$txtArchivo .=  $txtSalto;
-foreach( $arrRegistros as $arrRegistro ){
-    $txtArchivo .=  implode($txtSeparador,$arrRegistro) . $txtSalto;
+$txtArchivo = "Proyecto" . $txtSeparador;
+$txtArchivo .= "Conjunto Residencial" . $txtSeparador;
+$txtArchivo .= "seqUnidadProyecto" . $txtSeparador;
+$txtArchivo .= "Unidad Proyecto" . $txtSeparador;
+$txtArchivo .= "Nombre Unidad Referencia" . $txtSeparador;
+$txtArchivo .= "Nombre Unidad Auxiliar" . $txtSeparador;
+$txtArchivo .= "Valor Aprobado" . $txtSeparador;
+$txtArchivo .= "Valor Complementario" . $txtSeparador;
+$txtArchivo .= "Valor Actual" . $txtSeparador;
+$txtArchivo .= "Viabilidad Técnica" . $txtSeparador;
+$txtArchivo .= "seqFormulario" . $txtSeparador;
+$txtArchivo .= "Documento" . $txtSeparador;
+$txtArchivo .= "Nombre" . $txtSeparador;
+$txtArchivo .= "txtFormulario" . $txtSeparador;
+$txtArchivo .= "Estado del Proceso" . $txtSeparador;
+$txtArchivo .= "Matrícula Inmobiliaria" . $txtSeparador;
+$txtArchivo .= "Legalizado" . $txtSeparador;
+$txtArchivo .= "Fecha Legalizado" . $txtSeparador;
+$txtArchivo .= "Devolución" . $txtSeparador;
+$txtArchivo .= "Plan de Gobierno" . $txtSeparador;
+$txtArchivo .= "Modalidad" . $txtSeparador;
+$txtArchivo .= "Esquema" . $txtSeparador;
+$txtArchivo .= "Activo" . $txtSeparador;
+$txtArchivo .= "Estado" . $txtSeparador;
+$txtArchivo .= $txtSalto;
+foreach ($arrRegistros as $arrRegistro) {
+    $txtArchivo .= implode($txtSeparador, $arrRegistro) . $txtSalto;
 }
 
 header("Content-Type: application/vnd.ms-excel");

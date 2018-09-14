@@ -42,6 +42,7 @@ if(! empty($claInscripcion->arrPlantilla[$seqTipo])) {
         if ($arrDato != null) {
             $objHoja = $objPHPExcel->createSheet();
             $objHoja->setTitle(substr(mb_ereg_replace("[/\ ]", "", $txtCampo), 0, 30));
+            $objHoja->setSheetState(PHPExcel_Worksheet::SHEETSTATE_VERYHIDDEN);
             $numFila = 1;
             foreach ($arrDato as $txtValor) {
                 $objHoja->setCellValueByColumnAndRow(0, $numFila, $txtValor, flase);

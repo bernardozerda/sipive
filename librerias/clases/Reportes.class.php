@@ -1784,8 +1784,10 @@ class Reportes
         return;
     }
 
-    public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array())
+    public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array(),$txtSeparador = "\t")
     {
+
+        $txtSeparador = ($txtSeparador == null)? "\t" : $txtSeparador;
 
         if ($this) {
             $arrErrores = $this->arrErrores;
@@ -1808,25 +1810,22 @@ class Reportes
             if (is_object($objRes)) {
                 if (!empty($objRes->fields)) {
                     if(! empty($arrTitulosCampos)) {
-                        echo utf8_decode(implode("\t", array_keys($objRes->fields))) . "\r\n";
+                        echo utf8_decode(implode($txtSeparador, array_keys($objRes->fields))) . "\r\n";
                     }
                 } else {
                     if(! empty($arrTitulosCampos)) {
                         foreach ($arrTitulosCampos as $txtTitulo) {
-                            echo utf8_decode($txtTitulo) . "\t";
+                            echo utf8_decode($txtTitulo) . $txtSeparador;
                         }
                         echo "\r\n";
                     }
                 }
-                //print_r ($objRes->fields[CAmbios]);
                 while ($objRes->fields) {
-                    //echo ( utf8_decode(implode("\t", preg_replace("/\s+/", " ", $objRes->fields))) ) . "\r\n";
-                    $dato = (utf8_decode(implode("\t", preg_replace("/\s+/", " ", $objRes->fields))));
+                    $dato = (utf8_decode(implode($txtSeparador, preg_replace("/\s+/", " ", $objRes->fields))));
                     $dato = str_replace('&nbsp;', ' ', $dato); // Reemplaza caracter por espacios
                     $dato = str_replace('<b>', '', $dato); // Reemplaza caracter por espacios
                     $dato = str_replace('</b>', '', $dato); // Reemplaza caracter por espacios
                     $dato = str_replace('<br>', ';', $dato); // Reemplaza caracter por espacios
-                    //$dato = str_replace('<br>', '"&CARACTER(10)&"', $dato);
                     echo $dato . "\r\n";
                     $objRes->MoveNext();
                 }
@@ -1836,19 +1835,19 @@ class Reportes
 
                 if (!empty($objRes)) {
                     if(! empty($arrTitulosCampos)) {
-                        echo utf8_decode(implode("\t", array_keys($objRes[0]))) . "\r\n";
+                        echo utf8_decode(implode($txtSeparador, array_keys($objRes[0]))) . "\r\n";
                     }
                 } else {
                     if(! empty($arrTitulosCampos)) {
                         foreach ($arrTitulosCampos as $txtTitulo) {
-                            echo utf8_decode($txtTitulo) . "\t";
+                            echo utf8_decode($txtTitulo) . $txtSeparador;
                         }
                         echo "\r\n";
                     }
                 }
 
                 foreach ($objRes as $arrDatos) {
-                    echo utf8_decode(implode("\t", $arrDatos)) . "\r\n";
+                    echo utf8_decode(implode($txtSeparador, $arrDatos)) . "\r\n";
                 }
             }
         } else {
@@ -4935,8 +4934,21 @@ WHERE
             }
         }
 
+
+        if($bolExepciones == false){
+            $arrReporte[0]['numSDHT'] = date("Y/m/d");
+            $arrReporte[0]['txtSDHT'] = count($arrReporte) - 1;
+            $arrReporte[0]['seqTipoDocumento'] = null;
+            $arrReporte[0]['numDocumento'] = null;
+            $arrReporte[0]['txtNombre'] = null;
+            $arrReporte[0]['fchAsignacion'] = null;
+            $arrReporte[0]['valAsignado'] = null;
+            $arrReporte[0]['txtEntidad'] = null;
+            ksort($arrReporte);
+        }
+
         $txtReporte = ($bolExepciones == false)? "ReporteCruces" : "ReporteExcepciones";
-        $this->obtenerReportesGeneral($arrReporte, $txtReporte);
+        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null,"|");
 
     }
 

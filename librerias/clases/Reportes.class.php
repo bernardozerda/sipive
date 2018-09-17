@@ -4934,18 +4934,17 @@ WHERE
             }
         }
 
-
-        if($bolExepciones == false){
-            $arrReporte[0]['numSDHT'] = date("Y/m/d");
-            $arrReporte[0]['txtSDHT'] = count($arrReporte) - 1;
-            $arrReporte[0]['seqTipoDocumento'] = null;
-            $arrReporte[0]['numDocumento'] = null;
-            $arrReporte[0]['txtNombre'] = null;
-            $arrReporte[0]['fchAsignacion'] = null;
-            $arrReporte[0]['valAsignado'] = null;
-            $arrReporte[0]['txtEntidad'] = null;
-            ksort($arrReporte);
-        }
+//        if($bolExepciones == false){
+//            $arrReporte[0]['numSDHT'] = date("Y/m/d");
+//            $arrReporte[0]['txtSDHT'] = count($arrReporte) - 1;
+//            $arrReporte[0]['seqTipoDocumento'] = null;
+//            $arrReporte[0]['numDocumento'] = null;
+//            $arrReporte[0]['txtNombre'] = null;
+//            $arrReporte[0]['fchAsignacion'] = null;
+//            $arrReporte[0]['valAsignado'] = null;
+//            $arrReporte[0]['txtEntidad'] = null;
+//            ksort($arrReporte);
+//        }
 
         $txtReporte = ($bolExepciones == false)? "ReporteCruces" : "ReporteExcepciones";
         $this->obtenerReportesGeneral($arrReporte, $txtReporte, null,"|");

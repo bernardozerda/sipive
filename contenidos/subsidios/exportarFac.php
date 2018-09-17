@@ -16,49 +16,31 @@ if(! empty($_POST['estados'])) {
 }
 
 $sql = "
-    select 
-        '8999990619' as NIT_ENTID,
-        ciu.numDocumento as DOC_BENEF,
-        upper(concat(ciu.txtApellido1,if(ciu.txtApellido2 <> '',concat(' ',ciu.txtApellido2),''))) as APE_BENEF, 
-        upper(concat(ciu.txtNombre1  ,if(ciu.txtNombre2   <> '',concat(' ',ciu.txtNombre2  ),''))) as NOM_BENEF,
-        'SECRETARÍA DISTRITAL DE HÁBITAT' as NOM_ENTID,
-        hvi.fchActo as FEC_ASIGN,
+    select
+        fac.seqFormularioActo as 'Formulario Acto',
+        fac.seqFormulario as 'Formulario',
+        ciu.seqTipoDocumento as 'Tipo de Documento',
+        ciu.numDocumento as 'Documento',
+        upper(concat(ciu.txtNombre1  ,if(ciu.txtNombre2   <> '',concat(' ',ciu.txtNombre2  ),''))) as 'Nombres',
+        upper(concat(ciu.txtApellido1,if(ciu.txtApellido2 <> '',concat(' ',ciu.txtApellido2),''))) as 'Apellidos', 
+        hvi.numActo as 'Número de Resolución',
+        hvi.fchActo as 'Fecha de Resolución',
         (
           if(fac.valAspiraSubsidio is null, 0, fac.valAspiraSubsidio) + 
           if(fac.valComplementario is null, 0, fac.valComplementario) +
           if(fac.valCartaLeasing is null, 0, fac.valCartaLeasing)
-        ) as VAL_ASIGN,
+        ) as 'Valor Asignado',
         case upper(sol.txtDescripcion)
           when 'VIP' then 1
           when 'VIP TIPO 1' then 2
           when 'VIP TIPO 2' then 3
           when 'VIS' then 6
           else 0
-        end as TIP_VIVIE,
-        hvi.numActo as NUM_RESOL,
-        '' as CIC_CARGUE,
-        '' as PRE_SELEC,
-        '' as FEC_INFORMACION,
-        '' as FEC_RECIBO,
-        '' as FEC_CARGUE,
-        0 as MARCA_CCF,
-        case ciu.seqTipoDocumento
-          when 1 then 1
-          when 2 then 2
-          when 3 then 7
-          when 4 then 6
-          when 5 then 5
-          when 6 then 4
-          when 7 then 0
-          when 8 then 0
-        end as TIP_DOC,
-        '' as observaciones,
-        fac.seqFormularioActo,
-        fac.seqFormulario,
-        fac.fchUltimaActualizacion,
-        moa.txtModalidad,
-        concat(eta.txtEtapa,' - ',epr.txtEstadoProceso) as txtEstado,
-        concat(fac.seqFormulario,'Res. ',hvi.numActo,'de',year(hvi.fchActo)) as clave,
+        end as 'Tipo Vivienda',
+        fac.fchUltimaActualizacion as 'Última Actualización',
+        moa.txtModalidad as 'Modalidad',
+        concat(eta.txtEtapa,' - ',epr.txtEstadoProceso) as 'Estado',
+        concat(fac.seqFormulario,'Res. ',hvi.numActo,'de',year(hvi.fchActo)) as 'Clave',
         case 
           when fac.seqEstadoProceso = 33 then 'DESEMBOLSADO' 
           when fac.seqEstadoProceso = 59 then 'DESEMBOLSADO - PENDIENTE REINTEGRO' 
@@ -72,7 +54,9 @@ $sql = "
           when fac.seqEstadoProceso = 58 then 'REVOCADO'
           when fac.seqEstadoProceso = 34 then 'VENCIDO'
           else 'NO HAY ESTADO EQUIVALENTE'
-        end as txtEstadoEquivalente
+        end as 'Estado Equivalente 1',
+        '' as 'Estado Equivalente 2',
+        '' as 'Estado Equivalente 3'
     from t_aad_formulario_acto fac
     inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
     inner join t_frm_estado_proceso epr on fac.seqEstadoProceso = epr.seqEstadoProceso
@@ -104,10 +88,9 @@ header("Content-Disposition: attachment;filename='FormularioActo_" . date("YmdHi
 header('Cache-Control: max-age=0');
 ob_clean();
 
-echo date("Y/m/d") . "|" . count($arrArchivo) . "\r\n";
-echo implode("|",array_keys($arrArchivo[0])) . "\r\n";
+echo utf8_decode(implode("\t",array_keys($arrArchivo[0]))) . "\r\n";
 foreach($arrArchivo as $numLinea => $arrLinea){
-    echo utf8_decode(implode("|",$arrLinea)) . "\r\n";
+    echo mb_ereg_replace("[\|]","\t",utf8_decode(implode("\t",$arrLinea))) . "\r\n";
 }
 
 ?>

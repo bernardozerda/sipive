@@ -128,17 +128,26 @@ class InscripcionFonvivienda
         $this->arrFormato[2][] = 'SOPORTE DONACIÓN';
         $this->arrFormato[2][] = 'LINEA VALIDADA';
 
+        // formato para EPI
+        $this->arrFormato[3] = $this->arrFormato[2];
+
+
         $this->arrEstados[] = "por asignar";
 
         $this->arrEstadosCoincidencias = array(1,35,36,37,41,43,44,46,53);
 
+        // MCY
         $this->arrRangoIngresos[1][] = "HASTA 2 SMMLV"; // 10 salarios
         $this->arrRangoIngresos[1][] = "DE 2 SMMLV HASTA 3 SMMLV"; // 8 salarios
         $this->arrRangoIngresos[1][] = "DE 3 SMMLV HASTA 4 SMMLV"; // 8 salarios
         $this->arrRangoIngresos[1][] = "SUPERIORES A 2 SMMLV Y HASTA 4 SMMLV"; // 8 salarios
 
+        // VIPA
         $this->arrRangoIngresos[2][] = "HASTA 1.6 SMMLV"; // 5 SMMLV
         $this->arrRangoIngresos[2][] = "DE 1.6 A 2 SMMLV"; // 10 SMMLV
+
+        // EPI
+        $this->arrRangoIngresos[3] = $this->arrRangoIngresos[2];
 
         $this->arrModalidad[12] = "CRÉDITO"; // modalidad de cierre financiero
         $this->arrModalidad[13] = "LEASING"; // modalidad de leasing habitacional
@@ -208,6 +217,7 @@ class InscripcionFonvivienda
         $this->arrPlantilla[2]['DIRECCIÓN'] = null;
         $this->arrPlantilla[2]['LOCALIDAD'] = obtenerDatosTabla("t_frm_localidad",array("seqLocalidad","txtLocalidad"),"seqLocalidad");
         $arrBarrios = obtenerDatosTabla("t_frm_barrio",array("seqBarrio","txtBarrio"),"seqBarrio","","txtBarrio");
+        $this->arrPlantilla[2]['BARRIO'] = array();
         foreach($arrBarrios as $txtBarrio){
             if(! in_array($txtBarrio,$this->arrPlantilla[2]['BARRIO'])){
                 $this->arrPlantilla[2]['BARRIO'][] = $txtBarrio;
@@ -236,6 +246,8 @@ class InscripcionFonvivienda
         $this->arrPlantilla[2]['ENTIDAD DE DONACIÓN / RECONOCIMIENTO'] = obtenerDatosTabla("t_frm_empresa_donante",array("seqEmpresaDonante","txtEmpresaDonante"),"seqEmpresaDonante");
         $this->arrPlantilla[2]['SOPORTE DONACIÓN'] = null;
         $this->arrPlantilla[2]['LINEA VALIDADA'] = $arrSiYNo;
+
+        $this->arrPlantilla[3] = $this->arrPlantilla[2];
 
     }
 
@@ -619,7 +631,7 @@ class InscripcionFonvivienda
                     // VARIABLES DEL HOGAR
                     $numHogar = $arrLinea[0];
                     $txtRangoIngresos = $this->ingresos($seqTipo, $arrLinea[42],$numLinea,$numDocumento);
-                    $seqPlanGobierno = 3;
+                    $seqPlanGobierno = ($seqTipo == 2)? 3 : 2;
                     $seqModalidad = $this->modalidad($seqTipo,null,$numLinea);
                     $seqTipoEsquema = $this->esquema($seqTipo, $arrLinea[42]);
                     $seqSolucion = $this->solucion($seqTipo, null, null,$numLinea);
@@ -1484,8 +1496,10 @@ class InscripcionFonvivienda
                 $arrSolucion = array_keys($this->arrSoluciones[$seqModalidad],$txtSolucion);
                 $seqSolucion = $arrSolucion[0];
             }
-        }else{
+        }elseif($seqTipo == 2){
             $seqSolucion = 19;
+        }else{
+            $seqSolucion = 13;
         }
         return $seqSolucion;
     }
@@ -1506,8 +1520,10 @@ class InscripcionFonvivienda
                 $arrModalidad = array_keys($this->arrModalidad,$txtModalidad);
                 $seqModalidad = $arrModalidad[0];
             }
-        }else{
+        }elseif($seqTipo == 2){
             $seqModalidad = 12;
+        }else{
+            $seqModalidad = 6;
         }
         return $seqModalidad;
     }
@@ -1853,7 +1869,7 @@ class InscripcionFonvivienda
     }
 
     private function estadoCivil($seqTipo,$txtEstadoCivil,$numLinea){
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrEstadoCivil = obtenerDatosTabla(
                 "t_ciu_estado_civil",
                 array("seqEstadoCivil","txtEstadoCivil"),
@@ -1894,7 +1910,7 @@ class InscripcionFonvivienda
 
     private function parentesco($seqTipo,$txtParentesco,$numLinea){
         $seqParentesco = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $txtParentesco = ($txtParentesco == "")? 'Desconocido' : $txtParentesco;
             $arrParentesco = obtenerDatosTabla(
                 "t_ciu_parentesco",
@@ -1916,7 +1932,7 @@ class InscripcionFonvivienda
 
     private function etnia($seqTipo,$txtEtnia,$numLinea){
         $seqEtnia = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrEtnia = obtenerDatosTabla(
                 "t_ciu_etnia",
                 array("seqEtnia","txtEtnia"),
@@ -1941,7 +1957,7 @@ class InscripcionFonvivienda
         $arrCondicionEspecial[2] = 6;
         $arrCondicionEspecial[3] = 6;
 
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
 
             if($numDiscapacidad != 0 and $numDiscapacidad != 1 ){
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][12] . " es desconocido";
@@ -1968,7 +1984,7 @@ class InscripcionFonvivienda
 
     private function salud($seqTipo,$txtSalud,$numLinea){
         $seqSalud = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrSalud = obtenerDatosTabla(
                 "t_ciu_salud",
                 array("seqSalud","txtSalud"),
@@ -1989,7 +2005,7 @@ class InscripcionFonvivienda
 
     private function nivelEducativo($seqTipo,$txtNivelEducativo,$numAniosAprobados,$numLinea){
         $seqNivelEducativo = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrNivelEducativo = obtenerDatosTabla(
                 "t_ciu_nivel_educativo",
                 array("seqNivelEducativo","txtNivelEducativo"),
@@ -2066,7 +2082,7 @@ class InscripcionFonvivienda
 
     private function tipoVictima($seqTipo,$txtTipoVictima,$numLinea){
         $seqTipoVictima = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrTipoVictima = obtenerDatosTabla(
                 "t_frm_tipovictima",
                 array("seqTipoVictima","txtTipoVictima"),
@@ -2087,7 +2103,7 @@ class InscripcionFonvivienda
     
     private function lgtbi($seqTipo,$bolLgtbi,$txtLgtbi,$numLinea){
         $seqGrupoLgtbi = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrGrupoLgtbi = obtenerDatosTabla(
                 "t_frm_grupo_lgtbi",
                 array("seqGrupoLgtbi","txtGrupoLgtbi"),
@@ -2120,7 +2136,7 @@ class InscripcionFonvivienda
 
     private function ocupacion($seqTipo,$txtOcupacion,$numLinea){
         $seqOcupacion = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrOcupacion = obtenerDatosTabla(
                 "t_ciu_ocupacion",
                 array("seqOcupacion","txtOcupacion"),
@@ -2141,7 +2157,7 @@ class InscripcionFonvivienda
 
     private function localidad($seqTipo,$txtLocalidad,$numLinea){
         $seqLocalidad = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrLocalidad = obtenerDatosTabla(
                 "t_frm_localidad",
                 array("seqLocalidad","txtLocalidad"),
@@ -2162,7 +2178,7 @@ class InscripcionFonvivienda
 
     private function barrio($seqTipo,$seqLocalidad,$txtBarrio,$numLinea){
         $seqBarrio = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
 
             if(trim($txtBarrio) == ""){
                 $txtBarrio = "DESCONOCIDO";
@@ -2191,7 +2207,7 @@ class InscripcionFonvivienda
 
     private function ciudad($seqTipo,$seqLocalidad,$txtCiudad,$numLinea){
         $seqCiudad = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrCiudad = obtenerDatosTabla(
                 "v_frm_ciudad",
                 array("seqCiudad","txtCiudad"),
@@ -2222,7 +2238,7 @@ class InscripcionFonvivienda
 
     private function vivienda($seqTipo,$txtVivienda,$valArriendo,$numLinea){
         $seqVivienda = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrVivienda = obtenerDatosTabla(
                 "t_frm_vivienda",
                 array("seqVivienda","txtVivienda"),
@@ -2250,7 +2266,7 @@ class InscripcionFonvivienda
 
     private function sisben($seqTipo,$txtSisben,$numLinea){
 
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             switch(mb_strtolower(trim($txtSisben))){
                 case "ninguno":
                     $seqSisben = 1;
@@ -2271,7 +2287,7 @@ class InscripcionFonvivienda
 
     private function banco($seqTipo,$txtAhorro,$valAhorro,$numLinea,$numPosicion){
         $seqAhorro = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrAhorro = obtenerDatosTabla(
                 "t_frm_banco",
                 array("seqBanco","txtBanco"),
@@ -2321,7 +2337,7 @@ class InscripcionFonvivienda
 
     private function donacion($seqTipo,$txtDonacion,$valDonacion,$txtSoporteDonacion,$numLinea){
         $seqDonacion = 0;
-        if($seqTipo == 2){
+        if($seqTipo == 2 or $seqTipo == 3){
             $arrDonacion = obtenerDatosTabla(
                 "t_frm_empresa_donante",
                 array("seqEmpresaDonante","txtEmpresaDonante"),
@@ -2370,7 +2386,7 @@ class InscripcionFonvivienda
                     $seqTipoEsquema = 16;
                     break;
             }
-        }else{
+        }elseif($seqTipo == 2){
             switch($txtRangoIngresos){
                 case "HASTA 1.6 SMMLV": // 5 SMMLV
                     $seqTipoEsquema = 12;
@@ -2379,6 +2395,8 @@ class InscripcionFonvivienda
                     $seqTipoEsquema = 18;
                     break;
             }
+        }else{
+            $seqTipoEsquema = 1;
         }
         return $seqTipoEsquema;
     }
@@ -2391,12 +2409,14 @@ class InscripcionFonvivienda
             } else { // MCY de 2 a 4 SMMLV
                 $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
             }
-        }else{
+        }elseif($seqTipo == 2){
             if($seqTipoEsquema == 12){ // VIPA de 0 a 1.6 SMMLV
                 $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 5;
             } else { // VIPA de 1.6 a 2 SMMLV
                 $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 10;
             }
+        }else{
+            $valAspiraSubsidio = 0;
         }
         return $valAspiraSubsidio;
     }

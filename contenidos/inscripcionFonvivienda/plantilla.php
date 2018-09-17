@@ -18,7 +18,17 @@ $arrTitulos = $claInscripcion->obtenerTitulos($seqTipo);
 
 // *************************** CREA ARCHIVO DE EXCEL CON LOS DATOS ************************************************** //
 
-$txtNombreHoja = ($seqTipo == 1) ? "MCY" : "VIPA";
+switch($seqTipo){
+    case 1:
+        $txtNombreHoja = "MCY";
+        break;
+    case 2:
+        $txtNombreHoja = "VIPA";
+        break;
+    case 3:
+        $txtNombreHoja = "EPI";
+        break;
+}
 
 // fuentes para el archivo
 $arrFuentes['default']['font']['name'] = "Calibri";

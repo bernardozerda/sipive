@@ -29,7 +29,7 @@
                         <li>
                             {foreach from=$arrProyectos key=seqProyecto item=objProyecto}
                                 <a href="#" onClick="cargarContenido('bodyHtml', './index.php', 'proyecto={$seqProyecto}', true);">
-                                    <img src="./recursos/imagenes/casa.png" width="10px"> {$objProyecto->txtProyecto}88
+                                    <img src="./recursos/imagenes/casa.png" width="10px"> {$objProyecto->txtProyecto}
                                 </a>
                             {/foreach}
                         </li>

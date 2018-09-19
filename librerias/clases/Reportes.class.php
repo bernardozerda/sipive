@@ -1761,20 +1761,31 @@ class Reportes {
         return;
     }
 
-    public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array(), $txtSeparador = "\t") {
 
+    /**
+     * FUNCION GENERICA PARA LA IMPRESION DE REPORTES POR ARCHIVO
+     * @param $objRes ==> PUEDE SER UN RESULSET DE ADODB O ARRAY
+     * @param $nombreArchivo
+     * @param array $arrTitulosCampos
+     * @param bool $bolTitulos
+     * @param string $txtSeparador
+     * @return bool
+     */
+    public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array(), $bolTitulos = true, $txtSeparador = "\t") {
+
+        // asegura que la variable de titulos quede boolean
+        $bolTitulos   = ($bolTitulos !== false)? true : false;
+
+        // separador por defecto tabulador
         $txtSeparador = ($txtSeparador == null) ? "\t" : $txtSeparador;
 
-        if ($this) {
-            $arrErrores = $this->arrErrores;
-        } else {
-            $arrErrores = array();
-        }
+        // si no hay errores continual
+        if(empty($this->arrErrores)){
 
-        if (empty($arrErrores)) {
-
+            // nombre del archivo
             $txtNombreArchivo = $nombreArchivo . date("Ymd_His") . ".xls";
 
+            // cambiando headers
             header("Content-disposition: attachment; filename=$txtNombreArchivo");
             header("Content-Type: application/force-download");
             header("Content-Type: application/vnd.ms-excel; charset=utf-8;");
@@ -1782,51 +1793,126 @@ class Reportes {
             header("Pragma: no-cache");
             header("Expires: 1");
 
-            // si es el objeto ResultSet
+            // si es un resultset (else array)
             if (is_object($objRes)) {
-                if (!empty($objRes->fields)) {
-                    echo utf8_decode(implode("\t", array_keys($objRes->fields))) . "\r\n";
-                } else {
-                    foreach ($arrTitulosCampos as $txtTitulo) {
-                        echo utf8_decode($txtTitulo) . "\t";
+
+                // debe ir con titulos
+                if($bolTitulos == true){
+
+                    // si no hay arreglo de titulos
+                    if(empty($arrTitulosCampos)){
+                        $arrTitulosCampos = array_keys($objRes->fields);
                     }
-                    echo "\r\n";
+
+                    // echo de titulos
+                    echo utf8_decode(implode($txtSeparador, $arrTitulosCampos)) . "\r\n";
+
                 }
 
-
+                // echo contenidos
                 while ($objRes->fields) {
                     $dato = (utf8_decode(implode($txtSeparador, preg_replace("/\s+/", " ", $objRes->fields))));
                     $dato = str_replace('&nbsp;', ' ', $dato); // Reemplaza caracter por espacios
                     $dato = str_replace('<b>', '', $dato); // Reemplaza caracter por espacios
                     $dato = str_replace('</b>', '', $dato); // Reemplaza caracter por espacios
                     $dato = str_replace('<br>', ';', $dato); // Reemplaza caracter por espacios
+                    $dato = str_replace('<br />', ';', $dato); // Reemplaza caracter por espacios
                     echo $dato . "\r\n";
                     $objRes->MoveNext();
                 }
 
-                // Si es un arreglo
-            } elseif (is_array($objRes)) {
+            }else{
 
-                if (!empty($objRes)) {
-                    if (!empty($arrTitulosCampos)) {
-                        echo utf8_decode(implode($txtSeparador, array_keys($objRes[0]))) . "\r\n";
-                    }
-                } else {
-                    if (!empty($arrTitulosCampos)) {
-                        foreach ($arrTitulosCampos as $txtTitulo) {
-                            echo utf8_decode($txtTitulo) . $txtSeparador;
+                // debe ir con titulos
+                if($bolTitulos == true){
+
+                    // si no hay arreglo de titulos
+                    if(empty($arrTitulosCampos)){
+                        foreach($objRes as $i => $arrPrimero) {
+                            $arrTitulosCampos = array_keys($arrPrimero);
+                            break;
                         }
-                        echo "\r\n";
                     }
+
+                    // echo de titulos
+                    echo utf8_decode(implode($txtSeparador, $arrTitulosCampos)) . "\r\n";
+
                 }
 
+                // contenido del archivo
                 foreach ($objRes as $arrDatos) {
                     echo utf8_decode(implode($txtSeparador, $arrDatos)) . "\r\n";
                 }
+
             }
-        } else {
-            imprimirMensajes($arrErrores, array());
+
+        }else{
+            imprimirMensajes($this->arrErrores);
         }
+
+//        if ($this) {
+//            $arrErrores = $this->arrErrores;
+//        } else {
+//            $arrErrores = array();
+//        }
+//
+//        if (empty($arrErrores)) {
+//
+//            $txtNombreArchivo = $nombreArchivo . date("Ymd_His") . ".xls";
+//
+//            header("Content-disposition: attachment; filename=$txtNombreArchivo");
+//            header("Content-Type: application/force-download");
+//            header("Content-Type: application/vnd.ms-excel; charset=utf-8;");
+//            header("Content-Transfer-Encoding: binary");
+//            header("Pragma: no-cache");
+//            header("Expires: 1");
+//
+//            // si es el objeto ResultSet
+//            if (is_object($objRes)) {
+//                if (!empty($objRes->fields)) {
+//                    echo utf8_decode(implode("\t", array_keys($objRes->fields))) . "\r\n";
+//                } else {
+//                    foreach ($arrTitulosCampos as $txtTitulo) {
+//                        echo utf8_decode($txtTitulo) . "\t";
+//                    }
+//                    echo "\r\n";
+//                }
+//
+//
+//                while ($objRes->fields) {
+//                    $dato = (utf8_decode(implode($txtSeparador, preg_replace("/\s+/", " ", $objRes->fields))));
+//                    $dato = str_replace('&nbsp;', ' ', $dato); // Reemplaza caracter por espacios
+//                    $dato = str_replace('<b>', '', $dato); // Reemplaza caracter por espacios
+//                    $dato = str_replace('</b>', '', $dato); // Reemplaza caracter por espacios
+//                    $dato = str_replace('<br>', ';', $dato); // Reemplaza caracter por espacios
+//                    echo $dato . "\r\n";
+//                    $objRes->MoveNext();
+//                }
+//
+//                // Si es un arreglo
+//            } elseif (is_array($objRes)) {
+//
+//                if (!empty($objRes)) {
+//                    if (!empty($arrTitulosCampos)) {
+//                        echo utf8_decode(implode($txtSeparador, array_keys($objRes[0]))) . "\r\n";
+//                    }
+//                } else {
+//                    if (!empty($arrTitulosCampos)) {
+//                        foreach ($arrTitulosCampos as $txtTitulo) {
+//                            echo utf8_decode($txtTitulo) . $txtSeparador;
+//                        }
+//                        echo "\r\n";
+//                    }
+//                }
+//
+//                foreach ($objRes as $arrDatos) {
+//                    echo utf8_decode(implode($txtSeparador, $arrDatos)) . "\r\n";
+//                }
+//            }
+//        } else {
+//            imprimirMensajes($arrErrores, array());
+//        }
+
     }
 
     private function textoFormLinks($idForm, $txtNombreArchivo = "") {
@@ -4874,6 +4960,8 @@ WHERE
             }
         }
 
+        // pone la fecha y la cantidad de archivos dentro de la primera linea
+        // en duda si este requerimiento se va a usar o no
 //        if($bolExepciones == false){
 //            $arrReporte[0]['numSDHT'] = date("Y/m/d");
 //            $arrReporte[0]['txtSDHT'] = count($arrReporte) - 1;
@@ -4887,7 +4975,7 @@ WHERE
 //        }
 
         $txtReporte = ($bolExepciones == false) ? "ReporteCruces" : "ReporteExcepciones";
-        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null, "|");
+        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null, false, "|");
     }
 
     public function excepcionesFnv() {

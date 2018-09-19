@@ -15,6 +15,9 @@ include( $txtPrefijoRuta . "/librerias/phpExcel/Classes/PHPExcel/Writer/Excel200
 $seqTipo = intval($_GET['tipo']);
 $claInscripcion = new InscripcionFonvivienda();
 $arrTitulos = $claInscripcion->obtenerTitulos($seqTipo);
+if(empty($arrTitulos)){
+    $arrTitulos[] = "Seleccione el programa de complementariedad en el formulario";
+}
 
 // *************************** CREA ARCHIVO DE EXCEL CON LOS DATOS ************************************************** //
 
@@ -66,6 +69,7 @@ if(! empty($claInscripcion->arrPlantilla[$seqTipo])) {
 foreach ($arrTitulos as $i => $txtTitulo) {
     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($i, 1, $txtTitulo, flase);
 }
+
 
 // contenido
 $numFilas = 100;

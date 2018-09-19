@@ -835,7 +835,7 @@ class InscripcionFonvivienda
         try {
             $aptBd->BeginTrans();
 
-            $txtErrores = (empty($this->arrErrores))? "null" : "'" . json_encode($this->arrErrores) . "'";
+            $txtErrores = (empty($this->arrErrores))? "null" : "'" . json_encode($this->arrErrores, JSON_UNESCAPED_UNICODE) . "'";
 
             $sql = "
               update t_fnv_cargue set 

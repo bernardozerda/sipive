@@ -6,8 +6,7 @@ include "../../contenidos/reportes/informeProyectoActo.php";
 include "../../contenidos/reportes/reporteInformacionCvp.php";
 ini_set('memory_limit', '1024M');
 
-class Reportes
-{
+class Reportes {
 
     public $arrTablas;
     public $arrGraficas;
@@ -25,8 +24,7 @@ class Reportes
     public $arrSeqFormularios;
     public $seqFormularios;
 
-    public function Reportes()
-    {
+    public function Reportes() {
         $this->arrTablas = array();
         $this->arrGraficas = array();
         $this->arrErrores = array();
@@ -45,8 +43,7 @@ class Reportes
 
 // fin constructor de la clase
 
-    public function crearListadoReportes()
-    {
+    public function crearListadoReportes() {
 
 
         $this->arrTablas['titulos'][] = "Listado Exportables";
@@ -141,8 +138,7 @@ class Reportes
         $datosFila[] = $this->formArchivo("fileSecuenciales");
     }
 
-    public function exportableReporteFormsEliminados()
-    {
+    public function exportableReporteFormsEliminados() {
         global $aptBd;
 
         try {
@@ -171,8 +167,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteDatosDeContacto()
-    {
+    public function exportableReporteDatosDeContacto() {
 
         global $aptBd;
 
@@ -231,8 +226,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteAnalisisPoblacion()
-    {
+    public function exportableReporteAnalisisPoblacion() {
         global $aptBd;
         $arrErrores = &$this->arrErrores;
         if (empty($arrErrores)) {
@@ -385,8 +379,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteGeneral()
-    {
+    public function exportableReporteGeneral() {
 
         global $aptBd;
 
@@ -614,8 +607,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteMiembrosHogar()
-    {
+    public function exportableReporteMiembrosHogar() {
 
         global $aptBd;
 
@@ -670,8 +662,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteInscritosNoCC()
-    {
+    public function exportableReporteInscritosNoCC() {
 
         global $aptBd;
 
@@ -746,8 +737,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteAhorroCreditoSoporte()
-    {
+    public function exportableReporteAhorroCreditoSoporte() {
 
         global $aptBd;
 
@@ -838,8 +828,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteVerificaModalidadSolucion()
-    {
+    public function exportableReporteVerificaModalidadSolucion() {
 
         global $aptBd;
 
@@ -913,8 +902,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteTodosConEstado()
-    {
+    public function exportableReporteTodosConEstado() {
 
         global $aptBd;
 
@@ -972,8 +960,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteVRSubsidioMejoramiento()
-    {
+    public function exportableReporteVRSubsidioMejoramiento() {
 
         global $aptBd;
         global $arrConfiguracion;
@@ -1043,8 +1030,7 @@ class Reportes
      * 
      */
 
-    public function exportableReporteCierreFinancieroConPromesa()
-    {
+    public function exportableReporteCierreFinancieroConPromesa() {
 
         global $aptBd;
 
@@ -1124,8 +1110,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteBeneficiariosCajaCompensacion()
-    {
+    public function exportableReporteBeneficiariosCajaCompensacion() {
 
         global $aptBd;
 
@@ -1215,8 +1200,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteBeneficiariosSubsidio()
-    {
+    public function exportableReporteBeneficiariosSubsidio() {
 
         global $aptBd;
 
@@ -1308,8 +1292,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteIngresosVsReglamento()
-    {
+    public function exportableReporteIngresosVsReglamento() {
 
         global $aptBd;
 
@@ -1363,8 +1346,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteCondicionMayorEdad()
-    {
+    public function exportableReporteCondicionMayorEdad() {
 
         global $aptBd;
 
@@ -1481,8 +1463,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteIdRepetido()
-    {
+    public function exportableReporteIdRepetido() {
 
         global $aptBd;
 
@@ -1514,7 +1495,7 @@ class Reportes
                 }
 
                 $arrNumDocumento = (empty($arrNumDocumento)) ? "null" :
-                    implode($arrNumDocumento, ",");
+                        implode($arrNumDocumento, ",");
 
                 $sql = "SELECT 
 							DISTINCT hog.seqFormulario
@@ -1538,7 +1519,7 @@ class Reportes
                         $objRes->MoveNext();
                     }
                     $arrSeqFormularios = (empty($arrSeqFormularios)) ? "null" :
-                        implode($arrSeqFormularios, ",");
+                            implode($arrSeqFormularios, ",");
 
 
                     $sql = "SELECT 
@@ -1611,8 +1592,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteSoacha()
-    {
+    public function exportableReporteSoacha() {
 
         global $aptBd;
 
@@ -1667,8 +1647,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteTipoDocPasExt()
-    {
+    public function exportableReporteTipoDocPasExt() {
 
         global $aptBd;
 
@@ -1747,8 +1726,7 @@ class Reportes
         }
     }
 
-    public function obtenerJsReporteador($objRes, $arrTitulosCampos)
-    {
+    public function obtenerJsReporteador($objRes, $arrTitulosCampos) {
 
         $txtJs = "var objReporteador = { ";
         $txtJs .= "datos: [";
@@ -1777,17 +1755,15 @@ class Reportes
         return $txtJs;
     }
 
-    public function obtenerReportesGeneralReporteador($objRes, $nombreArchivo)
-    {
+    public function obtenerReportesGeneralReporteador($objRes, $nombreArchivo) {
         $this->arrErrores = array();
         $this->obtenerReportesGeneral($objRes, $nombreArchivo);
         return;
     }
 
-    public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array(),$txtSeparador = "\t")
-    {
+    public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array(), $txtSeparador = "\t") {
 
-        $txtSeparador = ($txtSeparador == null)? "\t" : $txtSeparador;
+        $txtSeparador = ($txtSeparador == null) ? "\t" : $txtSeparador;
 
         if ($this) {
             $arrErrores = $this->arrErrores;
@@ -1809,17 +1785,15 @@ class Reportes
             // si es el objeto ResultSet
             if (is_object($objRes)) {
                 if (!empty($objRes->fields)) {
-                    if(! empty($arrTitulosCampos)) {
-                        echo utf8_decode(implode($txtSeparador, array_keys($objRes->fields))) . "\r\n";
-                    }
+                    echo utf8_decode(implode("\t", array_keys($objRes->fields))) . "\r\n";
                 } else {
-                    if(! empty($arrTitulosCampos)) {
-                        foreach ($arrTitulosCampos as $txtTitulo) {
-                            echo utf8_decode($txtTitulo) . $txtSeparador;
-                        }
-                        echo "\r\n";
+                    foreach ($arrTitulosCampos as $txtTitulo) {
+                        echo utf8_decode($txtTitulo) . "\t";
                     }
+                    echo "\r\n";
                 }
+
+
                 while ($objRes->fields) {
                     $dato = (utf8_decode(implode($txtSeparador, preg_replace("/\s+/", " ", $objRes->fields))));
                     $dato = str_replace('&nbsp;', ' ', $dato); // Reemplaza caracter por espacios
@@ -1834,11 +1808,11 @@ class Reportes
             } elseif (is_array($objRes)) {
 
                 if (!empty($objRes)) {
-                    if(! empty($arrTitulosCampos)) {
+                    if (!empty($arrTitulosCampos)) {
                         echo utf8_decode(implode($txtSeparador, array_keys($objRes[0]))) . "\r\n";
                     }
                 } else {
-                    if(! empty($arrTitulosCampos)) {
+                    if (!empty($arrTitulosCampos)) {
                         foreach ($arrTitulosCampos as $txtTitulo) {
                             echo utf8_decode($txtTitulo) . $txtSeparador;
                         }
@@ -1855,8 +1829,7 @@ class Reportes
         }
     }
 
-    private function textoFormLinks($idForm, $txtNombreArchivo = "")
-    {
+    private function textoFormLinks($idForm, $txtNombreArchivo = "") {
 
         if ($txtNombreArchivo == "") {
             $txtForm = "<a onclick = \"someterFormulario( 'mensajes', document.formFiltros , 
@@ -1871,8 +1844,7 @@ class Reportes
         return $txtForm;
     }
 
-    public function consolidadoPrograma()
-    {
+    public function consolidadoPrograma() {
 
         global $aptBd;
         $arrErrores = array();
@@ -2079,8 +2051,7 @@ class Reportes
         }
     }
 
-    public function resumenPrograma()
-    {
+    public function resumenPrograma() {
 
         global $aptBd;
 
@@ -2325,8 +2296,7 @@ class Reportes
         }
     }
 
-    public function exportableReporteCruzarEdadTodFchPos()
-    {
+    public function exportableReporteCruzarEdadTodFchPos() {
 
         global $aptBd;
 
@@ -2398,8 +2368,7 @@ class Reportes
         }
     }
 
-    public function exportableResumenPrograma()
-    {
+    public function exportableResumenPrograma() {
 
         global $aptBd;
 
@@ -2434,8 +2403,7 @@ class Reportes
         }
     }
 
-    public function exportableEstadoCorte()
-    {
+    public function exportableEstadoCorte() {
 
         global $aptBd;
 
@@ -2522,8 +2490,7 @@ class Reportes
         }
     }
 
-    public function exportableCartasAsignacion()
-    {
+    public function exportableCartasAsignacion() {
 
         global $aptBd;
 
@@ -2578,8 +2545,7 @@ class Reportes
         }
     }
 
-    public function inscritosostuladosConsulta()
-    {
+    public function inscritosostuladosConsulta() {
 
         global $aptBd;
 
@@ -2721,8 +2687,7 @@ class Reportes
 //			pr( $this );
     }
 
-    public function estadoCorte()
-    {
+    public function estadoCorte() {
 
         global $aptBd;
 
@@ -2900,8 +2865,7 @@ class Reportes
      * @return String txtJs
      * @version 0.1 Marzo 2010
      */
-    public function php2js()
-    {
+    public function php2js() {
 
         $arrGraficas = $this->arrGraficas;
         $txtJs = "var objGraficas = { ";
@@ -2936,8 +2900,7 @@ class Reportes
         return $txtJs;
     }
 
-    private function formArchivo($nomVariable)
-    {
+    private function formArchivo($nomVariable) {
 
         $txtFile = "<input 
 						type='file'
@@ -2947,8 +2910,7 @@ class Reportes
         return $txtFile;
     }
 
-    private function leerArchivoSecuenciales()
-    {
+    private function leerArchivoSecuenciales() {
 
         global $aptBd;
 
@@ -2982,8 +2944,7 @@ class Reportes
         }
     }
 
-    public function cargarSecuencialesFormulario()
-    {
+    public function cargarSecuencialesFormulario() {
 
         global $aptBd;
 
@@ -3006,7 +2967,7 @@ class Reportes
         }
 
 
-        if (empty($arrErrores) and $bolExisteFileSecuenciales and !empty($_FILES['fileSecuenciales'])) {
+        if (empty($arrErrores) and $bolExisteFileSecuenciales and ! empty($_FILES['fileSecuenciales'])) {
             $this->leerArchivoSecuenciales();
         }
 
@@ -3037,15 +2998,14 @@ class Reportes
                 }
 
                 $seqFormularios = (empty($arrSeqFormularios)) ? "null" :
-                    implode($arrSeqFormularios, ",");
+                        implode($arrSeqFormularios, ",");
             } catch (Exception $objError) {
                 $arrErrores[] = "Se ha producido un error al consultar los datos";
             }
         }
     }
 
-    public function pasivosExigibles($fchDesde, $fchHasta)
-    {
+    public function pasivosExigibles($fchDesde, $fchHasta) {
         global $aptBd;
 
         // Validacion de la fecha de inicio
@@ -3110,8 +3070,7 @@ class Reportes
      * @return Integer valCierreFinanciero
      * @version 1.0 Ene 2011
      */
-    public function valorCierreFinanciero($seqModalidad, $seqSolucion)
-    {
+    public function valorCierreFinanciero($seqModalidad, $seqSolucion) {
         global $aptBd;
         global $arrConfiguracion;
 
@@ -3159,8 +3118,7 @@ class Reportes
         return $valCierreFinanciero;
     }
 
-    public function seguimientoDesembolsos($arrDocumentos)
-    {
+    public function seguimientoDesembolsos($arrDocumentos) {
         global $aptBd;
 
         if (!empty($arrDocumentos)) {
@@ -3203,14 +3161,12 @@ class Reportes
         }
     }
 
-    public function obtenerEscrituracion($arrDocumentos)
-    {
+    public function obtenerEscrituracion($arrDocumentos) {
 
         obtenerReporteEscrituracion($arrDocumentos);
     }
 
-    public function exportableCartasMovilizacion()
-    {
+    public function exportableCartasMovilizacion() {
         global $aptBd;
 
         $sql = "
@@ -3241,8 +3197,7 @@ class Reportes
 
       } */
 
-    public function exportableHogaresCalificados()
-    {
+    public function exportableHogaresCalificados() {
 
         global $aptBd;
 
@@ -3289,8 +3244,7 @@ class Reportes
         }
     }
 
-    public function exportableActosAdministrativosAsignacion()
-    {
+    public function exportableActosAdministrativosAsignacion() {
         global $aptBd;
 
         // Se ocultan los campos:
@@ -3355,8 +3309,7 @@ class Reportes
         $this->obtenerReportesGeneral($objRes, "reporteAsignadosAAD");
     }
 
-    public function exportableAsignacionUnidades()
-    {
+    public function exportableAsignacionUnidades() {
         global $aptBd;
 
         $sql = "(
@@ -3403,8 +3356,7 @@ class Reportes
         $this->obtenerReportesGeneral($objRes, "reporteAsignacionUnidades");
     }
 
-    public function exportableAsignacionUnidadesMejoramiento()
-    {
+    public function exportableAsignacionUnidadesMejoramiento() {
         global $aptBd;
 
         $sql = "SELECT
@@ -3436,8 +3388,7 @@ class Reportes
         $this->obtenerReportesGeneral($objRes, "reporteAsignacionUnidadesMejoramiento");
     }
 
-    public function exportableActosAdministrativosEpigrafe()
-    {
+    public function exportableActosAdministrativosEpigrafe() {
         global $aptBd;
 
         $sql = "
@@ -3462,8 +3413,7 @@ ORDER BY aad.fchActo DESC;
         $this->obtenerReportesGeneral($objRes, "reporteEpigrafeAAD");
     }
 
-    public function Caracterizacion()
-    {
+    public function Caracterizacion() {
 
 
         global $aptBd;
@@ -3677,8 +3627,7 @@ ORDER BY aad.fchActo DESC;
         }
     }
 
-    public function reporteBasedeDatosPoblacional()
-    {
+    public function reporteBasedeDatosPoblacional() {
 
         global $aptBd;
 
@@ -3846,8 +3795,7 @@ ORDER BY aad.fchActo DESC;
         $this->obtenerReportesGeneral($objRes, "reporteBasedeDatosPoblacional");
     }
 
-    public function InformacionSolucion()
-    {
+    public function InformacionSolucion() {
         global $aptBd;
 
         $arrErrores = &$this->arrErrores;
@@ -3922,18 +3870,15 @@ ORDER BY aad.fchActo DESC;
     }
 
     //Plantilla Estudio Titulos 
-    public function plantillaestudiotitulos()
-    {
+    public function plantillaestudiotitulos() {
         plantillaestudiotitulos($this->seqFormularios);
     }
 
-    public function informeProyectos()
-    {
+    public function informeProyectos() {
         informeProyectosActo();
     }
 
-    public function registrosCiudadano($arrDocumentos)
-    {
+    public function registrosCiudadano($arrDocumentos) {
 
         obtenerRegistroCiudadano($arrDocumentos);
     }
@@ -4169,8 +4114,7 @@ ORDER BY aad.fchActo DESC;
 //
 //    }
 
-    public function encuestasPiveCruces()
-    {
+    public function encuestasPiveCruces() {
         global $aptBd;
 
         $arrCalificados = array();
@@ -4233,13 +4177,13 @@ ORDER BY aad.fchActo DESC;
                             $numEtnias++;
                         }
                         if (intval($objCiudadano->seqCondicionEspecial) == 3 or
-                            intval($objCiudadano->seqCondicionEspecial2) == 3 or
-                            intval($objCiudadano->seqCondicionEspecial3) == 3
+                                intval($objCiudadano->seqCondicionEspecial2) == 3 or
+                                intval($objCiudadano->seqCondicionEspecial3) == 3
                         ) {
                             $numCondiciones++;
                         }
                         if (intval($objCiudadano->seqSalud) == 1 or
-                            intval($objCiudadano->seqSalud) == 2
+                                intval($objCiudadano->seqSalud) == 2
                         ) {
                             $numSalud++;
                         }
@@ -4447,8 +4391,7 @@ ORDER BY aad.fchActo DESC;
         }
     }
 
-    public function estudioTitulosLeasing()
-    {
+    public function estudioTitulosLeasing() {
         global $txtPrefijoRuta, $arrConfiguracion, $aptBd;
 
         // consulta de los datos
@@ -4576,55 +4519,55 @@ ORDER BY aad.fchActo DESC;
 
             // formato por defecto dela hoja
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . ($numFilas + 1))
-                ->applyFromArray($arrEstilos);
+                            PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . ($numFilas + 1))
+                    ->applyFromArray($arrEstilos);
 
             // colores en los titulos
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
-                ->getFont()
-                ->setBold(true);
+                            PHPExcel_Cell::stringFromColumnIndex(0) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
+                    ->getFont()
+                    ->setBold(true);
 
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
-                ->getFill()
-                ->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                            PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
+                    ->getFill()
+                    ->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
-                ->getFill()
-                ->getStartColor()
-                ->setARGB('A9A9A9');
+                            PHPExcel_Cell::stringFromColumnIndex(15) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")
+                    ->getFill()
+                    ->getStartColor()
+                    ->setARGB('A9A9A9');
 
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(23) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex(34) . "1")
-                ->getFill()
-                ->getStartColor()
-                ->setARGB('FF0000');
+                            PHPExcel_Cell::stringFromColumnIndex(23) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex(34) . "1")
+                    ->getFill()
+                    ->getStartColor()
+                    ->setARGB('FF0000');
 
             // formatos de fecha
             $objPHPExcel->getActiveSheet()->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(16) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex(16) . ($numFilas + 1))
-                ->getNumberFormat()
-                ->setFormatCode("yyyy-mm-dd");
+                            PHPExcel_Cell::stringFromColumnIndex(16) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex(16) . ($numFilas + 1))
+                    ->getNumberFormat()
+                    ->setFormatCode("yyyy-mm-dd");
 
             $objPHPExcel->getActiveSheet()->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(22) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex(22) . ($numFilas + 1))
-                ->getNumberFormat()
-                ->setFormatCode("yyyy-mm-dd");
+                            PHPExcel_Cell::stringFromColumnIndex(22) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex(22) . ($numFilas + 1))
+                    ->getNumberFormat()
+                    ->setFormatCode("yyyy-mm-dd");
 
             $objHoja->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(12) . "1:" .
-                PHPExcel_Cell::stringFromColumnIndex(12) . ($numFilas + 1))
-                ->getNumberFormat()
-                ->setFormatCode('#,##');
+                            PHPExcel_Cell::stringFromColumnIndex(12) . "1:" .
+                            PHPExcel_Cell::stringFromColumnIndex(12) . ($numFilas + 1))
+                    ->getNumberFormat()
+                    ->setFormatCode('#,##');
 
 
             // listas
@@ -4655,10 +4598,10 @@ ORDER BY aad.fchActo DESC;
 
             //desprotege las celdas editables
             $objPHPExcel->getActiveSheet()->getStyle(
-                PHPExcel_Cell::stringFromColumnIndex(15) . "2:" .
-                PHPExcel_Cell::stringFromColumnIndex($numColumnas) . ($numFilas + 1))
-                ->getProtection()
-                ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+                            PHPExcel_Cell::stringFromColumnIndex(15) . "2:" .
+                            PHPExcel_Cell::stringFromColumnIndex($numColumnas) . ($numFilas + 1))
+                    ->getProtection()
+                    ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
             header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             header("Content-Disposition: attachment;filename='Platilla_Estudio_Titulos_Leasing.xlsx");
@@ -4672,8 +4615,7 @@ ORDER BY aad.fchActo DESC;
         }
     }
 
-    public function soporteResVinculacion($arrDocumentos)
-    {
+    public function soporteResVinculacion($arrDocumentos) {
         global $aptBd;
 
         if (!empty($arrDocumentos)) {
@@ -4745,7 +4687,7 @@ WHERE
         }
     }
 
-    public function girosVIPA(){
+    public function girosVIPA() {
         global $aptBd;
 
         $sql = "
@@ -4779,7 +4721,7 @@ WHERE
         ";
         $objRes = $aptBd->execute($sql);
         $arrDatos = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $seqFormulario = $objRes->fields['seqFormulario'];
             $fchResolucion = date("Y", strtotime($objRes->fields['fchActo']));
@@ -4800,8 +4742,8 @@ WHERE
         }
 
         $arrReporte = array();
-        foreach($arrDatos as $seqFormulario => $arrInformacion){
-            foreach($arrInformacion['detalle'] as $txtResolucion => $valGiro){
+        foreach ($arrDatos as $seqFormulario => $arrInformacion) {
+            foreach ($arrInformacion['detalle'] as $txtResolucion => $valGiro) {
 
                 $numPosicion = count($arrReporte);
 
@@ -4814,18 +4756,16 @@ WHERE
                 $arrReporte[$numPosicion]['Resolucion'] = $txtResolucion;
                 $arrReporte[$numPosicion]['Registro Presupuestal 1'] = $arrInformacion['hogar'][$txtResolucion]['rp1'];
                 $arrReporte[$numPosicion]['Registro Presupuestal 2'] = $arrInformacion['hogar'][$txtResolucion]['rp2'];
-                $arrReporte[$numPosicion]['Subsidio'] =  number_format($arrInformacion['hogar']['subsidio'],0,',','.');
-                $arrReporte[$numPosicion]['Acumulado'] =  number_format($arrInformacion['acumulado'],0,',','.');
-                $arrReporte[$numPosicion]['Giro'] = number_format($valGiro,0,',','.');
-
+                $arrReporte[$numPosicion]['Subsidio'] = number_format($arrInformacion['hogar']['subsidio'], 0, ',', '.');
+                $arrReporte[$numPosicion]['Acumulado'] = number_format($arrInformacion['acumulado'], 0, ',', '.');
+                $arrReporte[$numPosicion]['Giro'] = number_format($valGiro, 0, ',', '.');
             }
         }
 
         $this->obtenerReportesGeneral($arrReporte, "GirosVIPA");
-
     }
 
-    public function crucesFnv($bolExepciones = false){
+    public function crucesFnv($bolExepciones = false) {
         global $aptBd;
 
         $sql = "
@@ -4854,9 +4794,9 @@ WHERE
         ";
         $objRes = $aptBd->execute($sql);
         $arrReporte = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
             $numDocumento = $objRes->fields['numDocumento'];
-            if(! isset($arrReporte[$numDocumento])) {
+            if (!isset($arrReporte[$numDocumento])) {
                 $arrReporte[$numDocumento] = $objRes->fields;
                 $arrReporte[$numDocumento]['txtEntidad'] = "SDHT";
                 $arrReporte[$numDocumento]['txtObservaciones'] = "";
@@ -4900,29 +4840,29 @@ WHERE
             ) fue on doc.numDocumento = fue.numDocumento    
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $numDocumento = $objRes->fields['numDocumento'];
-            if(! isset($arrReporte[$numDocumento])) {
+            if (!isset($arrReporte[$numDocumento])) {
                 $arrReporte[$numDocumento] = $objRes->fields;
-            }else{
-                if($objRes->fields['txtEntidad'] != "") {
+            } else {
+                if ($objRes->fields['txtEntidad'] != "") {
                     $arrReporte[$numDocumento]['txtEntidad'] .= "," . $objRes->fields['txtEntidad'];
                 }
-                if($objRes->fields['txtObservaciones'] != "") {
+                if ($objRes->fields['txtObservaciones'] != "") {
                     $arrReporte[$numDocumento]['txtObservaciones'] .= "," . $objRes->fields['txtObservaciones'];
                 }
             }
             $objRes->MoveNext();
         }
 
-        foreach($arrReporte as $numDocumento => $arrDatos){
-            if($bolExepciones == false){
-                if($arrDatos['txtEntidad'] == ""){
+        foreach ($arrReporte as $numDocumento => $arrDatos) {
+            if ($bolExepciones == false) {
+                if ($arrDatos['txtEntidad'] == "") {
                     unset($arrReporte[$numDocumento]);
                 }
                 unset($arrReporte[$numDocumento]['txtObservaciones']);
-            }else{
-                if($arrDatos['txtEntidad'] != ""){
+            } else {
+                if ($arrDatos['txtEntidad'] != "") {
                     unset($arrReporte[$numDocumento]);
                 }
                 unset($arrReporte[$numDocumento]['nitSDHT']);
@@ -4946,12 +4886,11 @@ WHERE
 //            ksort($arrReporte);
 //        }
 
-        $txtReporte = ($bolExepciones == false)? "ReporteCruces" : "ReporteExcepciones";
-        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null,"|");
-
+        $txtReporte = ($bolExepciones == false) ? "ReporteCruces" : "ReporteExcepciones";
+        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null, "|");
     }
 
-    public function excepcionesFnv(){
+    public function excepcionesFnv() {
         $this->crucesFnv(true);
     }
 

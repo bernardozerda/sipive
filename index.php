@@ -39,14 +39,14 @@ foreach ($_SESSION['arrPermisos'] as $seqProyecto => $arrPrivilegios) {
     $arrProyecto = Proyecto::cargarProyecto($seqProyecto);
     $arrProyectosA[$seqProyecto] = $arrProyecto[$seqProyecto];
 }
-
 // carga el codigo por defecto
 $seqMenuInicial = $arrProyectosA[$seqProyectoPost]->seqMenu;
 if ($seqMenuInicial != 0) {
     $arrMenuInicial = $claMenu->cargarMenu($seqProyectoPost, $seqMenuInicial);
     include( $txtPrefijoRuta . "contenidos/" . $arrMenuInicial[$seqMenuInicial]->txtCodigo . ".php" );
 } else {
-    $claSmarty->assign("txtArchivoInicio", "sinInicio.tpl");
+    include ( $txtPrefijoRuta . "contenidos/proyectos/crm/indicadores.php" );
+    //$claSmarty->assign("txtArchivoInicio", "sinInicio.tpl");
 }
 
 // Asignacion de variables a la plantilla

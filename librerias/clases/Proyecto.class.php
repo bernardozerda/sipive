@@ -2384,6 +2384,67 @@ class Proyecto {
         }
     }
 
+    public function obtenerDatosProyectosTableroPal() {
+
+        global $aptBd;
+        $sql = "select seqPryEstadoProceso, txtPryEstadoProceso, count(pry.seqProyecto) as cantidad, 
+            (select count(seqUnidadProyecto)  from t_pry_unidad_proyecto und 
+            left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
+            left join t_pry_tecnico tec using(seqUnidadProyecto)
+            LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
+            where  seqPryEstadoProceso = pry.seqPryEstadoProceso and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI') as unidades
+             from t_pry_proyecto pry
+            left join t_pry_estado_proceso using(seqPryEstadoProceso) 
+            LEFT JOIN
+            T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
+            #WHERE txtTipoFinanciacion LIKE '%SDVE%'
+            group by seqPryEstadoProceso order by seqPryEstadoProceso DESC ";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
+    public function obtenerDatosProyectosEstados($seqPryEstadoProceso) {
+
+        global $aptBd;
+        $sql = "SELECT  seqProyecto,txtNombreProyecto, seqPlanGobierno, case  when txtNombreConstructor IS  NULL  
+                then (SELECT group_concat(txtNombreOferente separator ', ')  FROM  t_pry_proyecto_oferente pOf
+                LEFT JOIN t_pry_entidad_oferente entO using(seqOferente) where pry.seqProyecto = pOf.seqProyecto) 
+                ELSE  txtNombreConstructor end AS constructor, txtLocalidad,
+                (select count(seqUnidadProyecto)  from t_pry_unidad_proyecto und 
+                left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
+                left join t_pry_tecnico tec using(seqUnidadProyecto)
+                where und.seqProyecto = pry.seqProyecto and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0
+                and tec.txtExistencia = 'SI') as unidades,
+                valNumeroSoluciones,
+                (select count(und.seqUnidadProyecto)  from t_pry_unidad_proyecto und 
+                left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
+                left join t_pry_tecnico tec using(seqUnidadProyecto)
+                LEFT JOIN t_frm_formulario frm USING(seqFormulario)
+                where und.seqProyecto = pry.seqProyecto
+                and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI'
+                and frm.seqEstadoProceso != 40) as undPorLegalizar, txtTipoFinanciacion  
+                FROM t_pry_proyecto pry
+                LEFT JOIN t_pry_estado_proceso USING(seqPryEstadoProceso) 
+                LEFT JOIN t_pry_constructor con USING (seqConstructor)
+                LEFT JOIN  t_frm_localidad loc USING (seqLocalidad)
+                LEFT JOIN t_pry_proyecto_grupo gru USING (seqProyectoGrupo)
+                LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
+                WHERE seqPryEstadoProceso = $seqPryEstadoProceso 
+                GROUP BY seqProyecto ORDER BY seqProyecto ASC ";
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
     // Fin clase 
 }
 

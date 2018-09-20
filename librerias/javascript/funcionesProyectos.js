@@ -32,6 +32,17 @@ function  tablas() {
             });
 
         }
+         if ($("#estadoExp").size() > 0) {
+            $(document).ready(function () {
+                $('#estadoExp').DataTable({
+                    "pagingType": "full_numbers",
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    "order": [[0, "asc"]],
+                    "scrollY": "480px",
+                    "scrollCollapse": true
+                });
+            });
+
     }
 }
 

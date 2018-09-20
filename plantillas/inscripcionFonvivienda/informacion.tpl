@@ -55,11 +55,18 @@
                             </td>
                             <td width="150px">
                                 <h5>
-                                    {if $arrHogar.seqEstadoHogar == 4}
-                                        <span class="text-success">{$arrHogar.txtEstadoHogar}</span>
+
+                                    {if $arrHogar.seqEstadoHogar == 1}
+                                        <span class="text-muted">
+                                    {elseif $arrHogar.seqEstadoHogar == 2}
+                                        <span class="text-primary">
+                                    {elseif $arrHogar.seqEstadoHogar == 3}
+                                            <span class="text-danger">
+                                    {elseif $arrHogar.seqEstadoHogar == 4}
+                                        <span class="text-success">
                                     {else}
-                                        {$arrHogar.txtEstadoHogar}
-                                    {/if}
+                                        <span>
+                                    {/if} {$arrHogar.txtEstadoHogar}</span>
                                 </h5>
                             </td>
                             <td width="100px">
@@ -81,7 +88,7 @@
     </div>
     <div class="panel-footer text-center">
         <div class="row text-center">
-            <div class="{if $claInscripcion->seqEstado != 2} col-sm-offset-3 {else} col-sm-offset-4 {/if} col-sm-4 text-center">
+            <div class="{if $claInscripcion->seqEstado != 2} col-sm-offset-3 {else} col-sm-offset-4 {/if} col-sm-3 text-center">
                 <button type="button"
                         class="btn btn-default btn-sm"
                         onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/inscripcionFonvivienda.php','',true);"
@@ -89,7 +96,18 @@
                     Volver
                 </button>
             </div>
-            <div class="col-sm-4 text-center">
+
+            <div class="col-sm-3 text-center">
+                <button type="button"
+                        class="btn btn-success btn-sm"
+                        onclick="location.href='./contenidos/inscripcionFonvivienda/exportable.php?seqCargue={$claInscripcion->seqCargue}';"
+                >
+                    Exportar
+                </button>
+            </div>
+
+
+            <div class="col-sm-3 text-center">
                 {if $claInscripcion->seqEstado != 2}
                     <button type="button"
                             class="btn btn-danger btn-sm {if $bolProcesar == false} disabled {/if}"

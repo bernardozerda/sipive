@@ -192,7 +192,7 @@
                                 <td style="display: none;">2</td>
                                 <td>
                                     {$arrCiudadano.txtTipoDocumento} <br>
-                                    {$arrCiudadano.numDocumento|number_format:0:'.':'.'}
+                                    {$arrCiudadano.numDocumento}
                                 </td>
                                 <td>
                                     {$arrCiudadano.txtNombre1|mb_strtoupper}

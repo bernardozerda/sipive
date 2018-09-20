@@ -16,6 +16,11 @@ $numDocumento = doubleval($_POST['numDocumento']);
 $txtNombre = trim($_POST['txtNombre']);
 
 $arrEstados = estadosProceso();
+$arrParentescos = obtenerDatosTabla(
+    "t_ciu_parentesco",
+    array("seqParentesco","txtParentesco"),
+    "seqParentesco"
+);
 
 $claInscripcion = new InscripcionFonvivienda();
 $claInscripcion->cargar($seqCargue,$numHogar);
@@ -44,6 +49,7 @@ foreach($claInscripcion->arrHogares[$numHogar]['ciudadanos'] as $idCiudadano => 
                 $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['coincidencias'][$numDistancia][$numDocumentoCoincidencia]['formulario'] = $seqFormulario;
                 $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['coincidencias'][$numDistancia][$numDocumentoCoincidencia]['idEstado'] = $claFormulario->seqEstadoProceso;
                 $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['coincidencias'][$numDistancia][$numDocumentoCoincidencia]['estado'] = $arrEstados[ $claFormulario->seqEstadoProceso ];
+                $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['coincidencias'][$numDistancia][$numDocumentoCoincidencia]['parentesco'] = $arrParentescos[ $objCiudadano->seqParentesco ];
 
             }
         }

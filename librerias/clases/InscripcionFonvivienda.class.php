@@ -219,11 +219,11 @@ class InscripcionFonvivienda
         $arrBarrios = obtenerDatosTabla("t_frm_barrio",array("seqBarrio","txtBarrio"),"seqBarrio","","txtBarrio");
         $this->arrPlantilla[2]['BARRIO'] = array();
         foreach($arrBarrios as $txtBarrio){
+            $txtBarrio = mb_strtoupper(trim($txtBarrio));
             if(! in_array($txtBarrio,$this->arrPlantilla[2]['BARRIO'])){
                 $this->arrPlantilla[2]['BARRIO'][] = $txtBarrio;
             }
         }
-        $this->arrPlantilla[2]['BARRIO'] = $arrBarrios;
         $this->arrPlantilla[2]['CIUDAD'] = obtenerDatosTabla("v_frm_ciudad",array("seqCiudad","txtCiudad"),"seqCiudad","","txtCiudad");
         $this->arrPlantilla[2]['TELEFONOS1'] = null;
         $this->arrPlantilla[2]['TELEFONO2'] = null;
@@ -919,6 +919,7 @@ class InscripcionFonvivienda
             $this->arrErrores[] = "Hubo un error al almacenar las novedades";
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollBackTrans();
+            $this->finalizarCargue($seqCargue,3);
         }
     }
 
@@ -2192,6 +2193,11 @@ class InscripcionFonvivienda
                 "txtBarrio",
                 "seqLocalidad = $seqLocalidad and lower(txtBarrio) = '" . mb_strtolower(trim($txtBarrio)) . "'"
             );
+
+            foreach($arrBarrio as $txtClave => $seqBarrio){
+                $txtClave = mb_strtoupper($txtClave);
+                $arrBarrio[$txtClave] = $seqBarrio;
+            }
 
             if (!empty($arrBarrio)) {
                 $seqBarrio = $arrBarrio[$txtBarrio];

@@ -19,7 +19,10 @@ $seqCiudadano     = intval($_POST['seqCiudadano']);
 $claInscripcion = new InscripcionFonvivienda();
 $claInscripcion->cargar($seqCargue,$numHogar);
 $claInscripcion->validarFormulario($_POST);
-$claInscripcion->procesarNovedades($_POST['seqFormulario'], $numHogar, $numDocumento);
+
+if($seqEstadoHogar != 3) {
+    $claInscripcion->procesarNovedades($_POST['seqFormulario'], $numHogar, $numDocumento);
+}
 
 if(! empty($claInscripcion->arrErrores)){
 

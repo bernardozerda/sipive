@@ -11225,7 +11225,7 @@ function verCoincidencias(seqCargue, numHogar, numDocumento, txtNombre){
 
     // divs visibles del popup
     var objModalOverlay     = $('<div class="modal-dialog" role="document"></div>');
-    var objModalContent     = $('<div class="modal-content" style="width: 850px;"></div>');
+    var objModalContent     = $('<div class="modal-content" style="width: 970px;"></div>');
     var objModalHeader      = $('<div class="modal-header" style="font-size: 20px;"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>Nombres coincidentes para <br><h6>(' + numDocumento + ') ' + txtNombre + '</h6></div>');
     var objModalBody        = $('<div class="modal-body"></div>');
     var objModalFooter      = $('<div class="modal-footer"></div>');

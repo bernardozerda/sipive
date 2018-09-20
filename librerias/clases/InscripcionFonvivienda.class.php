@@ -1321,12 +1321,12 @@ class InscripcionFonvivienda
         if(isset($this->arrHogares[$numHogar]['ciudadanos'])){
             foreach($this->arrHogares[$numHogar]['ciudadanos'] as $idCiudadano => $arrCiudadano){
                 $numDocumentoCoincidencia = $arrCiudadano['numDocumento'];
-                if($numDocumentoCoincidencia == $numDocumento){
+                if($numDocumentoCoincidencia == $numDocumento and $seqFormulario != 0){
                     $this->arrNovedades[$numDocumentoCoincidencia] = "Marcado para postulante principal";
                 }else{
                     if(isset($arrCiudadano['coincidencias']['N/A'])){
                         $claCiudadano = new Ciudadano();
-                        $seqFormularioCoincidencia = $claCiudadano->formularioVinculado($arrCiudadano['numDocumento']);
+                        $seqFormularioCoincidencia = $claCiudadano->formularioVinculado($arrCiudadano['numDocumento'], false, false);
                         if($seqFormularioCoincidencia != $seqFormulario){
                             $this->arrErrores['ciudadano'][$numDocumentoCoincidencia] = "No se puede fusionar, pertenece al hogar $seqFormularioCoincidencia";
                         }else{
@@ -1369,6 +1369,7 @@ class InscripcionFonvivienda
             select numHogar
             from t_fnv_hogar
             where seqFormulario = " . $arrPost['seqFormulario'] . "
+              and seqFormulario <> 0
               and numHogar <> " . $arrPost['numHogar'] . "
         ";
         $objRes = $aptBd->execute($sql);
@@ -1613,7 +1614,7 @@ class InscripcionFonvivienda
                             foreach($claFormularioOriginal->arrCiudadano as $seqCiudadano => $objCiudadano){
                                 if($arrCiudadano['seqCiudadanoCoincidencia'] == $seqCiudadano) {
 
-                                    $objCiudadano->seqParentesco = 1;
+                                    $objCiudadano->seqParentesco = ($this->seqTipo == 1)? 1 : $arrCiudadano['seqParentesco'];
                                     $objCiudadano->seqTipoDocumento = $arrCiudadano['seqTipoDocumento'];
                                     $objCiudadano->numDocumento     = $arrCiudadano['numDocumento'];
                                     $objCiudadano->txtNombre1       = $arrCiudadano['txtNombre1'];
@@ -1739,8 +1740,23 @@ class InscripcionFonvivienda
                     $claSeguimiento = new Seguimiento();
                     $txtCambios = $claSeguimiento->cambiosPostulacionActo($arrHogar['seqFormulario'],$claFormularioOriginal,$claFormularioModificado);
 
-                    $txtComentario  = "ACTUALIZACION DE INFORMACION EN LA CONFORMACION DE HOGAR. HOGAR PERTENECIENTE AL ";
-                    $txtComentario .= "GRUPO BENEFICIARIO SUBSIDIOS MI CASA YA SEGUN RESOLUCION DEL MINISTERIO DE ";
+                    switch ($this->seqTipo){
+                        case 1:
+                            $txtPrograma = "MI CASA YA";
+                            break;
+                        case 2:
+                            $txtPrograma = "VIPA";
+                            break;
+                        case 3:
+                            $txtPrograma = "";
+                            break;
+                        default:
+                            $txtPrograma = "";
+                            break;
+                    }
+
+                    $txtComentario  = "ACTUALIZACIÓN DE INFORMACIÓN EN LA CONFORMACIÓN DE HOGAR. HOGAR PERTENECIENTE AL ";
+                    $txtComentario .= "GRUPO BENEFICIARIO SUBSIDIOS $txtPrograma SEGÚN RESOLUCIÓN DEL MINISTERIO DE ";
                     $txtComentario .= "VIVIENDA Y APORTE COMPLEMENTARIO PROGRAMA PIVE";
 
                     $sql = "
@@ -2583,6 +2599,71 @@ class InscripcionFonvivienda
 
     public function obtenerTitulos($seqTipo){
         return $this->arrFormato[$seqTipo];
+    }
+
+    public function exportable(){
+
+        $arrExportable = array();
+
+        foreach($this->arrHogares as $numHogar => $arrHogar){
+            foreach($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano){
+
+                $arrExportable[$numHogar]['ID HOGAR'] = $numHogar;
+                $arrExportable[$numHogar]['NO. DOCUMENTO'] = $arrCiudadano['numDocumento'];
+                $arrExportable[$numHogar]['TIPO DOCUMENTO'] = $arrCiudadano['txtTipoDocumento'];
+                $arrExportable[$numHogar]['NOMBRE 1'] = $arrCiudadano['txtNombre1'];
+                $arrExportable[$numHogar]['NOMBRE 2'] = $arrCiudadano['txtNombre2'];
+                $arrExportable[$numHogar]['APELLIDO 1'] = $arrCiudadano['txtApellido1'];
+                $arrExportable[$numHogar]['APELLIDO 2'] = $arrCiudadano['txtApellido2'];
+                $arrExportable[$numHogar]['SEXO'] = $arrCiudadano['txtSexo'];
+                $arrExportable[$numHogar]['ESTADO CIVIL'] = $arrCiudadano['txtEstadoCivil'];
+                $arrExportable[$numHogar]['FECHA NACIMIENTO'] = $arrCiudadano['fchNacimiento'];
+                $arrExportable[$numHogar]['PARENTESCO'] = $arrCiudadano['txtParentesco'];
+                $arrExportable[$numHogar]['COND. ÉTNICA'] = $arrCiudadano['txtEtnia'];
+                $arrExportable[$numHogar]['DISCAPACIDAD'] = ($arrCiudadano['seqCondicionEspecial1'] == 3 or $arrCiudadano['seqCondicionEspecial2'] == 3 or $arrCiudadano['seqCondicionEspecial3'] == 3)? 1 : 0;
+                $arrExportable[$numHogar]['MAYOR A 65 AÑOS'] = ($arrCiudadano['seqCondicionEspecial1'] == 2 or $arrCiudadano['seqCondicionEspecial2'] == 2 or $arrCiudadano['seqCondicionEspecial3'] == 2)? 1 : 0;
+                $arrExportable[$numHogar]['CABEZA DE HOGAR'] = ($arrCiudadano['seqCondicionEspecial1'] == 1 or $arrCiudadano['seqCondicionEspecial2'] == 1 or $arrCiudadano['seqCondicionEspecial3'] == 1)? 1 : 0;
+                $arrExportable[$numHogar]['AFILIACIÓN SALUD'] = $arrCiudadano['txtSalud'];
+                $arrExportable[$numHogar]['NIVEL EDUCATIVO'] = $arrCiudadano['txtNivelEducativo'];
+                $arrExportable[$numHogar]['AÑOS APROBADOS'] = $arrCiudadano['numAnosAprobados'];
+                $arrExportable[$numHogar]['HECHO VICTIMIZANTE'] = $arrCiudadano['txtTipoVictima'];
+                $arrExportable[$numHogar]['LGTBI'] = $arrCiudadano['bolLgtb'];
+                $arrExportable[$numHogar]['GRUPO LGBTI'] = $arrCiudadano['txtGrupoLgtbi'];
+                $arrExportable[$numHogar]['OCUPACIÓN'] = $arrCiudadano['txtOcupacion'];
+                $arrExportable[$numHogar]['CORREO ELECTRÓNICO'] = $arrHogar['txtCorreo'];
+                $arrExportable[$numHogar]['DIRECCIÓN'] = $arrHogar['txtDireccion'];
+                $arrExportable[$numHogar]['LOCALIDAD'] = $arrHogar['txtLocalidad'];
+                $arrExportable[$numHogar]['BARRIO'] = $arrHogar['txtBarrio'];
+                $arrExportable[$numHogar]['CIUDAD'] = $arrHogar['txtCiudad'];
+                $arrExportable[$numHogar]['TELEFONOS1'] = $arrHogar['numTelefono1'];
+                $arrExportable[$numHogar]['TELEFONO2'] = $arrHogar['numTelefono2'];
+                $arrExportable[$numHogar]['CELULAR'] = $arrHogar['numCelular'];
+                $arrExportable[$numHogar]['VIVIENDA ACTUAL'] = $arrHogar['txtVivienda'];
+                $arrExportable[$numHogar]['VAL. ARRIENDO'] = $arrHogar['valArriendo'];
+                $arrExportable[$numHogar]['HOGARES EN VIVIENDA'] = $arrHogar['numHabitaciones'];
+                $arrExportable[$numHogar]['DORMITORIOS QUE EMPLEA EL HOGAR'] = $arrHogar['numHacinamiento'];
+                $arrExportable[$numHogar]['ENCUESTA SISBEN'] = $arrHogar['txtSisben'];
+                $arrExportable[$numHogar]['INGRESOS'] = $arrHogar['valIngresosHogar'];
+                $arrExportable[$numHogar]['VALOR AHORRO'] = $arrHogar['valSaldoCuentaAhorro'];
+                $arrExportable[$numHogar]['ENTIDAD AHORRO'] = $arrHogar['txtBancoCuentaAhorro'];
+                $arrExportable[$numHogar]['VALOR CREDITO'] = $arrHogar['valCredito'];
+                $arrExportable[$numHogar]['ENTIDAD CRÉDITO'] = $arrHogar['txtBancoCredito'];
+                $arrExportable[$numHogar]['VALOR SUBSIDIO NACIONAL'] = $arrHogar['valSubsidioNacional'];
+                $arrExportable[$numHogar]['SOPORTE DEL SFV'] = $arrHogar['txtSoporteSubsidioNacional'];
+                $arrExportable[$numHogar]['RANGO DE INGRESOS'] = $arrHogar['txtRangoIngresos'];
+                $arrExportable[$numHogar]['PROYECTO'] = $arrHogar['txtDireccionSolucion'];
+                $arrExportable[$numHogar]['VALOR DONACIÓN / RECONOCIMIENTO ECONÓMICO'] = $arrHogar['valDonacion'];
+                $arrExportable[$numHogar]['ENTIDAD DE DONACIÓN / RECONOCIMIENTO'] = $arrHogar['txtEmpresaDonante'];
+                $arrExportable[$numHogar]['SOPORTE DONACIÓN'] = $arrHogar['txtSoporteDonacion'];
+                $arrExportable[$numHogar]['LINEA VALIDADA'] = "SI";
+                $arrExportable[$numHogar]['ESTADO HOGAR'] = $arrHogar['txtEstadoHogar'];
+                $arrExportable[$numHogar]['OBSERVACIONES'] = $arrHogar['txtObservaciones'];
+
+            }
+        }
+
+
+        return $arrExportable;
     }
 
 }

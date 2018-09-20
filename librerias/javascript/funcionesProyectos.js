@@ -30,7 +30,6 @@ function  tablas() {
                     "scrollCollapse": true
                 });
             });
-
         }
          if ($("#estadoExp").size() > 0) {
             $(document).ready(function () {
@@ -44,6 +43,7 @@ function  tablas() {
             });
 
     }
+}
 }
 
 function validarCampos() {

@@ -98,12 +98,14 @@
             </div>
 
             <div class="col-sm-3 text-center">
-                <button type="button"
-                        class="btn btn-success btn-sm"
-                        onclick="location.href='./contenidos/inscripcionFonvivienda/exportable.php?seqCargue={$claInscripcion->seqCargue}';"
-                >
-                    Exportar
-                </button>
+                {if $claInscripcion->seqEstado != 2}
+                    <button type="button"
+                            class="btn btn-success btn-sm"
+                            onclick="location.href='./contenidos/inscripcionFonvivienda/exportable.php?seqCargue={$claInscripcion->seqCargue}';"
+                    >
+                        Exportar
+                    </button>
+                {/if}
             </div>
 
 

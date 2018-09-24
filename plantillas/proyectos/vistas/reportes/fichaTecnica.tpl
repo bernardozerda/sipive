@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="recursos/estilos/contentProyects.css" rel="stylesheet">
 <div id="wrapper" class="container tab-content">
     <div class="alert alert-danger">
         <h5> <strong>Atenci&oacute;n!!! </strong> <b>Esta informaci&oacute;n esta sujeta a verificaci&oacute;n y actualizacion.</b></h5>
@@ -8,9 +9,20 @@
     <fieldset>
         {foreach from=$arrProyectos key=key item=value} 
             <div class="form-group" >
-                <div class="col-md-12" style="background: #006779; width: 97%; color: #FFF; border-bottom: 3px solid #ffffff"> 
+                {if $seqPryEstadoProceso > 0}
+                    {assign var="val" value="10"}
+                {else}
+                    {assign var="val" value="12"}
+                {/if}
+                <div class="col-md-{$val}" style="background: #006779; color: #FFF; border-bottom: 3px solid #ffffff"> 
                     <h4 style="color: #FFF">{$value.txtNombreProyecto|upper}</h4>
                 </div>
+                {if $seqPryEstadoProceso > 0}
+                    <div bgcolor="#E4E4E4" class="col-md-2" style="z-index: 100; float: right; top: 10px">
+                        <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
+                               onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresEstado.php?seqPryEstadoProceso={$seqPryEstadoProceso}', '', true);" class="btn_volver"/> 
+                    </div>
+                {/if}
             </div>
             <div class="form-group" >
                 <div class="col-md-4" style="background: #006779; border-bottom: 3px solid #ffffff">                 

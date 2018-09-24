@@ -14,6 +14,7 @@ $seqPryEstadoProceso = $_REQUEST['seqPryEstadoProceso'];
 $arrProyTableroPal = Proyecto::obtenerDatosProyectosEstados($seqPryEstadoProceso);
 //var_dump($arrProyTableroPal);
 $claSmarty->assign("arrProyTableroPal", $arrProyTableroPal);
+$claSmarty->assign("seqPryEstadoProceso", $seqPryEstadoProceso);
 $claSmarty->display($txtPlantilla);
 
 

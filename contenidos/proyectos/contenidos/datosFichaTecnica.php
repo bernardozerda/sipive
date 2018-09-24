@@ -24,6 +24,7 @@ $claDatosProyecto = new DatosGeneralesProyectos();
 
 $txtPlantilla = "proyectos/vistas/reportes/fichaTecnica.tpl";
 $seqProyecto = $_GET['seqProyecto'];
+$seqPryEstadoProceso = 0;
 $arrProyectos = $claProyecto->obtenerDatosProyectosFicha($seqProyecto);
 $arrDatosVivienda = $claProyecto->obtenerDatosViviendaFicha($seqProyecto);
 $nombreOferente = $claProyecto->datosOferenteProyecto($seqProyecto);
@@ -32,6 +33,7 @@ $arraAvance = explode("**", $datosAvance);
 $avance = $arraAvance[0];
 $fechaAvance = $arraAvance[1];
 $valAvance = $arraAvance[2];
+$seqPryEstadoProceso = $_REQUEST['seqPryEstadoProceso'];
 
 $directorio = '../../../recursos/proyectos/proyecto-' . $seqProyecto . '/imagenes';
 
@@ -178,7 +180,6 @@ $arrFinanciera[$seqProyecto]['entidadFiducia'] = array_shift(obtenerDatosTabla(
                 "t_pry_datos_fiducia", array("seqProyecto", "txtRazonSocialFiducia", "numNitFiducia"), "seqProyecto", "seqProyecto = " . $seqProyecto
         ));
 
-
 $claSmarty->assign("arrProyectos", $arrProyectos);
 $claSmarty->assign("cantUnidades", $cantUnidades);
 $claSmarty->assign("cantUnidadesVinculadas", $cantUnidadesVinculadas);
@@ -203,6 +204,7 @@ $claSmarty->assign("nombreOferente", $nombreOferente);
 $claSmarty->assign("arrListadoGirosConstructor", $arrListadoGirosConstructor);
 $claSmarty->assign("arrListadoGirosFiducia", $arrListadoGirosFiducia);
 $claSmarty->assign("seqProyecto", $seqProyecto);
+$claSmarty->assign("seqPryEstadoProceso", $seqPryEstadoProceso);
 
 if ($txtPlantilla != "") {
     $claSmarty->display($txtPlantilla);

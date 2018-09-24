@@ -31,7 +31,7 @@ function  tablas() {
                 });
             });
         }
-         if ($("#estadoExp").size() > 0) {
+        if ($("#estadoExp").size() > 0) {
             $(document).ready(function () {
                 $('#estadoExp').DataTable({
                     "pagingType": "full_numbers",
@@ -42,8 +42,8 @@ function  tablas() {
                 });
             });
 
+        }
     }
-}
 }
 
 function validarCampos() {

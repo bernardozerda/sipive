@@ -2,7 +2,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 <div class="navbar navbar-default" role="navigation">
-    <div class="container" style="background-color: white; width: 900px;">
+    <div class="container" style="background-color: white; width: 930px;">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle pull-left" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only"></span>

@@ -20,7 +20,11 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Menu.clas
 
 // Proyecto en session
 if (!isset($_POST['proyecto'])) {
-    $seqProyectoPost = key($_SESSION['arrPermisos']);
+    if(! isset($_SESSION['seqProyecto'])) {
+        $seqProyectoPost = key($_SESSION['arrPermisos']);
+    }else{
+        $seqProyectoPost = $_SESSION['seqProyecto'];
+    }
 } else {
     $seqProyectoPost = $_POST['proyecto'];
 }
@@ -66,5 +70,7 @@ $claSmarty->assign("txtNombreUsuario", $_SESSION['txtNombre'] . " " . $_SESSION[
 $claSmarty->assign("arrGruposSesion", $_SESSION['arrGrupos']);
 
 $claSmarty->display("index.tpl");
+
+
 
 ?>

@@ -37,8 +37,9 @@
                                             <input type="text" id="{$arrDatos.formulario}" value="{$arrDatos.ciudadano}" readonly style="display: none">
                                         </td>
                                         <td>
-                                            Documento: {$numDocumentoCoincidencia}<br>
-                                            Nombre: {$arrDatos.nombre}
+                                            T.Doc: {$arrDatos.tipoDocumento}<br>
+                                            Doc: {$numDocumentoCoincidencia}<br>
+                                            Nom: {$arrDatos.nombre}
                                         </td>
                                         <td width="150px;">{$arrDatos.parentesco}</td>
                                         <td width="150px;">{$arrDatos.estado}</td>

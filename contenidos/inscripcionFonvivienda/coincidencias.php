@@ -21,6 +21,11 @@ $arrParentescos = obtenerDatosTabla(
     array("seqParentesco","txtParentesco"),
     "seqParentesco"
 );
+$arrTiposDocumento = obtenerDatosTabla(
+    "t_ciu_tipo_documento",
+    array("seqTipoDocumento","txtTipoDocumento"),
+    "seqTipoDocumento"
+);
 
 $claInscripcion = new InscripcionFonvivienda();
 $claInscripcion->cargar($seqCargue,$numHogar);
@@ -50,6 +55,7 @@ foreach($claInscripcion->arrHogares[$numHogar]['ciudadanos'] as $idCiudadano => 
                 $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['coincidencias'][$numDistancia][$numDocumentoCoincidencia]['idEstado'] = $claFormulario->seqEstadoProceso;
                 $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['coincidencias'][$numDistancia][$numDocumentoCoincidencia]['estado'] = $arrEstados[ $claFormulario->seqEstadoProceso ];
                 $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['coincidencias'][$numDistancia][$numDocumentoCoincidencia]['parentesco'] = $arrParentescos[ $objCiudadano->seqParentesco ];
+                $claInscripcion->arrHogares[$numHogar]['ciudadanos'][$idCiudadano]['coincidencias'][$numDistancia][$numDocumentoCoincidencia]['tipoDocumento'] = $arrTiposDocumento[ $objCiudadano->seqTipoDocumento ];
 
             }
         }

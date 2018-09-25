@@ -1,5 +1,7 @@
 <?php
 
+ini_set("max_execution_time","-1");
+
 $txtPrefijoRuta = "../../";
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
 include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );

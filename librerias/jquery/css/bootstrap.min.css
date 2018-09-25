@@ -2801,7 +2801,7 @@ select[multiple].input-group-sm>.form-control,select[multiple].input-group-sm>.i
     position:relative;display:block
 }
 .nav>li>a{
-    position:relative;display:block;padding:10px 15px
+    position:relative;display:block;padding:10px 12px
 }
 .nav>li>a:focus,.nav>li>a:hover{
     text-decoration:none;background-color:#eee

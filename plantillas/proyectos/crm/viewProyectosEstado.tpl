@@ -31,16 +31,16 @@
         <thead>
             <tr>
                 <th class="title1"><div class="title1">ID</div></th>
-                <th class="title1"> <div class="title1">PROYECTOS</div></th>
-                <th class="title1"><div class="title1">CONSTRUCTORA</div></th>
-                <th class="title1"><div class="title1">LOCALIDAD</div></th>
-                <th class="title1"><div class="title1">COMPOSICION</div></th>
-                <th class="title1"><div class="title1">UNIDADES</div></th>
-                <th class="title1"><div class="title1">X VINCULAR</div></th>
-                <th class="title1"><div class="title1">A LEGALIZAR</div></th>
-                <th class="title1"><div class="title1">X LEGALIZAR</div></th>
-            </tr>
-    </thead>
+    <th class="title1"> <div class="title1">PROYECTOS</div></th>
+<th class="title1"><div class="title1">CONSTRUCTORA</div></th>
+<th class="title1"><div class="title1">LOCALIDAD</div></th>
+<th class="title1"><div class="title1">COMPOSICION</div></th>
+<th class="title1"><div class="title1">UNIDADES</div></th>
+<th class="title1"><div class="title1">X VINCULAR</div></th>
+<th class="title1"><div class="title1">A LEGALIZAR</div></th>
+<th class="title1"><div class="title1">X LEGALIZAR</div></th>
+</tr>
+</thead>
 
 {assign var="totalSoluciones" value="0"}
 {assign var="totalXVincular" value="0"}
@@ -73,7 +73,7 @@
         <td>{$totalUnd}</td>
         <td>{$totalXLegalizar}</td>
     </tr>
-    <tr>
+ <!--   <tr>
         <th class="title1"><div class="title1">ID</div></th>
 <th class="title1"> <div class="title1">PROYECTOS</div></th>
 <th class="title1"><div class="title1">CONSTRUCTORA</div></th>
@@ -84,6 +84,6 @@
 <th class="title1"><div class="title1">A LEGALIZAR</div></th>
 <th class="title1"><div class="title1">X LEGALIZAR</div></th>
 </tr>
-</tfoot>
+</tfoot>-->
 </table>
 

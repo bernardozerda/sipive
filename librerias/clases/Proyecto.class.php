@@ -2387,7 +2387,7 @@ class Proyecto {
     public function obtenerDatosProyectosTableroPal() {
 
         global $aptBd;
-        $sql = "select seqPryEstadoProceso, txtPryEstadoProceso, count(pry.seqProyecto) as cantidad, 
+         $sql = "select seqPryEstadoProceso, txtPryEstadoProceso, count(pry.seqProyecto) as cantidad, 
             (select count(seqUnidadProyecto)  from t_pry_unidad_proyecto und 
             left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
             left join t_pry_tecnico tec using(seqUnidadProyecto)
@@ -2397,6 +2397,7 @@ class Proyecto {
             left join t_pry_estado_proceso using(seqPryEstadoProceso) 
             LEFT JOIN
             T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
+            WHERE pry.seqPryEstadoProceso IN(5,6) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)
             #WHERE txtTipoFinanciacion LIKE '%SDVE%'
             group by seqPryEstadoProceso order by seqPryEstadoProceso DESC ";
         $objRes = $aptBd->execute($sql);
@@ -2434,7 +2435,7 @@ class Proyecto {
                 LEFT JOIN  t_frm_localidad loc USING (seqLocalidad)
                 LEFT JOIN t_pry_proyecto_grupo gru USING (seqProyectoGrupo)
                 LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
-                WHERE seqPryEstadoProceso = $seqPryEstadoProceso 
+                WHERE seqPryEstadoProceso = $seqPryEstadoProceso and pry.seqPryEstadoProceso IN(5,6) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)
                 GROUP BY seqProyecto ORDER BY seqProyecto ASC ";
         $objRes = $aptBd->execute($sql);
         $datos = Array();

@@ -31,6 +31,7 @@
         $claCasaMano    = new CasaMano();
         $claSeguimiento = new Seguimiento();
         $arrErrores     = array();
+        $arrPermisosSubfases = array();
 
         // ciudadano para obtener el formulario vinculado
         $_POST['cedula'] = mb_ereg_replace("[^0-9]","", $_POST['cedula']);
@@ -81,6 +82,13 @@
             if ($bolPermiso == false) {
                 $arrErrores = $claCasaMano->arrErrores;
             }
+
+            // obtiene los permisos de las subfases para bloquear los accesos desde el panel
+            $arrPermisoPanel = array();
+            foreach($claCasaMano->arrFases['cem'] as $txtFase => $arrPermisos){
+                $arrPermisoPanel[$txtFase] = $claCasaMano->puedeIngresar(["flujo" => "cem","fase" => $txtFase]);
+            }
+
         }
 
         if( empty( $arrErrores ) ){
@@ -233,6 +241,7 @@
             $claSmarty->assign("valSumaSubsidios", $valSumaSubsidios);
             $claSmarty->assign("txtArchivo",$txtArchivo);
             $claSmarty->assign("arrRegistros", $arrSeguimiento);
+            $claSmarty->assign("arrPermisoPanel", $arrPermisoPanel);
 
             $claSmarty->display( $txtPlantilla );
 

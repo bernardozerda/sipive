@@ -53,11 +53,16 @@
                         <!-- REGISTRO DE VIVIENDA -->
                         <td width="{$numAncho}"
                             height="{$numAlto}"
-                            style="cursor: pointer;"
-                            onClick="cambioCEM(
-                                    './contenidos/casaMano/registroOferta.php',
-                                    'seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}&modificar={$smarty.foreach.fases.last}'
-                                    );"
+                            {if $arrPermisoPanel.registroOferta == 1}
+                                style="cursor: pointer;"
+                                onClick="cambioCEM(
+                                        './contenidos/casaMano/registroOferta.php',
+                                        'seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}&modificar={$smarty.foreach.fases.last}'
+                                        );"
+                            {else}
+                                style="cursor: not-allowed"
+                                onClick=""
+                            {/if}
                         >
                             {if esFechaValida( $objCasaMano->fchRegistroVivienda )}
                                 {$objCasaMano->fchRegistroVivienda|date_format|upper}
@@ -69,39 +74,48 @@
                         <!-- REVISION JURIDICA -->
                         <td width="{$numAncho}"
                             height="{$numAlto}"
-                            style="border-left: 1px dotted #666666;
-                            {if $objCasaMano->bolRevisionJuridica == 0}
-                                background-color: {$txtAmarillo}
-                            {elseif $objCasaMano->bolRevisionJuridica == 1}
-                                background-color: {$txtVerde}
-                            {else}
-                                background-color: {$txtRojo}
-                            {/if}
-                                    "
+                            style="
+                                border-left: 1px dotted #666666;
+                                {if $objCasaMano->bolRevisionJuridica == 0}
+                                    background-color: {$txtAmarillo}
+                                {elseif $objCasaMano->bolRevisionJuridica == 1}
+                                    background-color: {$txtVerde}
+                                {else}
+                                    background-color: {$txtRojo}
+                                {/if}
+                            "
+                            {if $arrPermisoPanel.revisionJuridica == 1}
                                 {if $objCasaMano->txtRevisionJuridica != ""}
                                     onMouseOver="mostrarTooltip( this , '<div align=left>{$objCasaMano->txtRevisionJuridica}</div>' );"
                                 {/if}
+                            {/if}
                         >
                             {if esFechaValida( $objCasaMano->fchRevisionJuridica )}
-                                <div style="padding-bottom:5px; cursor: pointer;"
-                                     onClick="cambioCEM('./contenidos/casaMano/revisionJuridica.php',
-                                             'seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}&modificar={$smarty.foreach.fases.last}'
-                                             );"
+                                <div
+                                    {if $arrPermisoPanel.revisionJuridica == 1}
+                                        style="padding-bottom:5px; cursor: pointer;"
+                                        onClick="
+                                            cambioCEM(
+                                                './contenidos/casaMano/revisionJuridica.php',
+                                                'seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}&modificar={$smarty.foreach.fases.last}'
+                                             );
+                                        "
+                                    {else}
+                                        style="padding-bottom:5px; cursor: not-allowed;"
+                                        onClick=""
+                                    {/if}
                                 >
                                     {$objCasaMano->fchRevisionJuridica|date_format|upper}
                                 </div>
-                                <div style="cursor: pointer;
-                                        background-color:
-                                {if $objCasaMano->numDiasRevisionJuridica >= $objCasaMano->numDiasLimiteRevsionJuridica}
-                                        red
-                                    {else}
-                                        green
-                                {/if};
+                                <div style="
+                                        cursor: {if $arrPermisoPanel.revisionJuridica == 1} pointer {else} not-allowed {/if};
+                                        background-color: {if $objCasaMano->numDiasRevisionJuridica >= $objCasaMano->numDiasLimiteRevsionJuridica} red {else} green {/if};
                                         font-size: 7px;
                                         color: white;
                                         font-weight: bold;
                                         width:30px;
-                                        height: 10px;"
+                                        height: 10px;
+                                     "
                                 >
                                     {$objCasaMano->numDiasRevisionJuridica}
                                 </div>
@@ -127,6 +141,7 @@
                                 background-color: {$txtRojo}
                             {/if}
                                     "
+                            {if $arrPermisoPanel.revisionTecnica == 1}
                                 {if $objCasaMano->txtRevisionTecnica != ""}
                                     {if $objCasaMano->bolRevisionTecnica eq 0}
                                         onMouseOver="mostrarTooltip(this, '<div align=left>Concepto Final: En Proceso</div>');"
@@ -136,34 +151,41 @@
                                         onMouseOver="mostrarTooltip(this, '<div align=left>Concepto Final: No viabilizado</div>');"
                                     {/if}
                                 {/if}
+                            {/if}
                         >
                             {if esFechaValida( $objCasaMano->fchRevisionTecnica )}
-                                <div style="padding-bottom:5px; cursor: pointer;"
-                                     onClick="cambioCEM('./contenidos/casaMano/revisionTecnica.php',
-                                             'seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}&modificar={$smarty.foreach.fases.last}'
-                                             );"
+                                <div style="padding-bottom:5px; cursor: {if $arrPermisoPanel.revisionTecnica == 1} pointer {else} not-allowed {/if};"
+                                     {if $arrPermisoPanel.revisionTecnica == 1}
+                                         onClick="
+                                             cambioCEM(
+                                                './contenidos/casaMano/revisionTecnica.php',
+                                                'seqFormulario={$objCasaMano->objPostulacion->seqFormulario}&cedula={$arrPost.cedula}&seqCasaMano={$seqCasaMano}&modificar={$smarty.foreach.fases.last}'
+                                             );
+                                         "
+                                     {else}
+                                         onClick=""
+                                     {/if}
                                 >
                                     {$objCasaMano->fchRevisionTecnica|date_format|upper}
                                 </div>
-                                <div style="cursor: pointer;
-                                        background-color:
-                                            {if $objCasaMano->numDiasRevisionTecnica >= $objCasaMano->numDiasLimiteRevsionTecnica}
-                                                red
-                                            {else}
-                                                green
-                                            {/if};
+                                <div style="cursor: {if $arrPermisoPanel.revisionTecnica == 1} pointer {else} not-allowed {/if};
+                                        background-color: {if $objCasaMano->numDiasRevisionTecnica >= $objCasaMano->numDiasLimiteRevsionTecnica} red {else} green {/if};
                                         font-size: 7px;
                                         color: white;
                                         font-weight: bold;
                                         width:30px;
                                         height: 10px;"
-                                     onClick="
-                                         {if $objCasaMano->bolRevisionTecnica == 1}
-                                            return false;
-                                         {else}
-                                            popUpPdfCasaMano( 'habitabilidadPdf.php' , 'exportar[]={$objCasaMano->objPostulacion->seqFormulario}' , '{$seqCasaMano}' )
-                                         {/if}
-                                     "
+                                        {if $arrPermisoPanel.revisionTecnica == 1}
+                                            onClick="
+                                                {if $objCasaMano->bolRevisionTecnica == 1}
+                                                    return false;
+                                                {else}
+                                                    popUpPdfCasaMano( 'habitabilidadPdf.php' , 'exportar[]={$objCasaMano->objPostulacion->seqFormulario}' , '{$seqCasaMano}' )
+                                                {/if}
+                                            "
+                                        {else}
+                                            onClick=""
+                                        {/if}
                                 >
                                     {$objCasaMano->numDiasRevisionTecnica}
                                 </div>
@@ -187,7 +209,7 @@
                                     </button>
                                 {/if}
                             {/if}
-                            <input type="checkbox" id="bolVisita" name="bolVisita">
+                            <input type="checkbox" id="bolVisita" name="bolVisita" {if $arrPermisoPanel.revisionTecnica != 1} disabled {/if}>
                             Con visita
                         </td>
 

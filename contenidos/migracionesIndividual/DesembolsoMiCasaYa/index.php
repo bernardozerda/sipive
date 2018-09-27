@@ -300,6 +300,8 @@ function sqlDesembolso($arrLinea){
     $arrPlantilla['Avalúo']['orden'] = 26;
     $arrPlantilla['Valor Comercial']['campo'] = 'numValorInmueble';
     $arrPlantilla['Valor Comercial']['orden'] = 27;
+    $arrPlantilla['Valor Comercial']['campo'] = 'valInmueble';
+    $arrPlantilla['Valor Comercial']['orden'] = 27;
     $arrPlantilla['Estrato']['campo'] = 'numEstrato';
     $arrPlantilla['Estrato']['orden'] = 28;
 
@@ -374,7 +376,6 @@ function sqlDesembolso($arrLinea){
     $arrCampos['txtUltimoReciboEnergia'] = null;
     $arrCampos['txtViabilizoJuridico'] = null;
     $arrCampos['txtViabilizoTecnico'] = null;
-    $arrCampos['valInmueble'] = null;
 
     $txtDireccion = $arrLinea[7] . " " . $arrLinea[18];
     $txtBarrio = array_shift(
@@ -453,10 +454,18 @@ function sqlEscrituracion($seqDesembolso , $arrLinea){
     $arrPlantilla['Avalúo']['orden'] = 26;
     $arrPlantilla['Valor Comercial']['campo'] = 'numValorInmueble';
     $arrPlantilla['Valor Comercial']['orden'] = 27;
+    $arrPlantilla['Valor Comercial']['campo'] = 'valInmueble';
+    $arrPlantilla['Valor Comercial']['orden'] = 27;
     $arrPlantilla['Estrato']['campo'] = 'numEstrato';
     $arrPlantilla['Estrato']['orden'] = 28;
-    $arrPlantilla['Estrato']['campo'] = 'numCartaAsignacion';
-    $arrPlantilla['Estrato']['orden'] = 29;
+    $arrPlantilla['Folio carta asignación']['campo'] = 'numCartaAsignacion';
+    $arrPlantilla['Folio carta asignación']['orden'] = 29;
+    $arrPlantilla['Folio Escritura publica']['campo'] = 'numEscrituraPublica';
+    $arrPlantilla['Folio Escritura publica']['orden'] = 32;
+    $arrPlantilla['Folio de certificado de tradición']['campo'] = 'numCertificadoTradicion';
+    $arrPlantilla['Folio de certificado de tradición']['orden'] = 33;
+    $arrPlantilla['Obs Certificado de Tradicion']['campo'] = 'txtCertificadoTradicion';
+    $arrPlantilla['Obs Certificado de Tradicion']['orden'] = 34;
 
     $arrCampos['seqDesembolso'] = $seqDesembolso;
     $arrCampos['bolPoseedor'] = 0;
@@ -469,20 +478,18 @@ function sqlEscrituracion($seqDesembolso , $arrLinea){
     $arrCampos['fchResolucion'] = null;
     $arrCampos['fchSentencia'] = null;
     $arrCampos['numActaEntrega'] = 1;
-    $arrCampos['numAltoRiesgo'] = 1;
+    $arrCampos['numAltoRiesgo'] = null;
     $arrCampos['numAperturaCAP'] = null;
     $arrCampos['numAutorizacionDesembolso'] = null;
     $arrCampos['numBoletinCatastral'] = null;
     $arrCampos['numCedulaArrendador'] = null;
     $arrCampos['numCertificacionVendedor'] = null;
-    $arrCampos['numCertificadoTradicion'] = null;
     $arrCampos['numContratoArrendamiento'] = null;
     $arrCampos['numCuentaArrendador'] = null;
-    $arrCampos['numEscrituraPublica'] = 1;
     $arrCampos['numFotocopiaVendedor'] = null;
-    $arrCampos['numHabitabilidad'] = 1;
+    $arrCampos['numHabitabilidad'] = null;
     $arrCampos['numJuzgado'] = null;
-    $arrCampos['numLicenciaConstruccion'] = 1;
+    $arrCampos['numLicenciaConstruccion'] = null;
     $arrCampos['numNit'] = null;
     $arrCampos['numOtros'] = null;
     $arrCampos['numResolucion'] = null;
@@ -504,7 +511,6 @@ function sqlEscrituracion($seqDesembolso , $arrLinea){
     $arrCampos['txtCedulaArrendador'] = null;
     $arrCampos['txtCedulaCatastral'] = null;
     $arrCampos['txtCertificacionVendedor'] = null;
-    $arrCampos['txtCertificadoTradicion'] = null;
     $arrCampos['txtChip'] = null;
     $arrCampos['txtCiudadResolucion'] = null;
     $arrCampos['txtCiudadSentencia'] = null;
@@ -518,19 +524,22 @@ function sqlEscrituracion($seqDesembolso , $arrLinea){
     $arrCampos['txtLicenciaConstruccion'] = "En la carpeta";
     $arrCampos['txtNit'] = null;
     $arrCampos['txtOtro'] = null;
-    $arrCampos['txtPropiedad'] = null;
+    $arrCampos['txtPropiedad'] = 'escritura';
     $arrCampos['txtRetiroRecursos'] = null;
     $arrCampos['txtRit'] = null;
     $arrCampos['txtRut'] = null;
     $arrCampos['txtServiciosPublicos'] = null;
-    $arrCampos['txtTipoDocumentos'] = null;
+    $arrCampos['txtTipoDocumentos'] = 'empresa';
     $arrCampos['txtTipoPredio'] = "urbano";
     $arrCampos['txtUltimoPredial'] = null;
     $arrCampos['txtUltimoReciboAgua'] = null;
     $arrCampos['txtUltimoReciboEnergia'] = null;
     $arrCampos['txtViabilizoJuridico'] = "En la carpeta";
     $arrCampos['txtViabilizoTecnico'] = "En la carpeta";
-    $arrCampos['valInmueble'] = null;
+    $arrCampos['numContratoLeasing'] = null;
+    $arrCampos['fchContratoLeasing'] = null;
+    $arrCampos['numFoliosContratoLeasing'] = null;
+    $arrCampos['txtFoliosContratoLeasing'] = null;
 
     $txtDireccion = $arrLinea[7] . " " . $arrLinea[18];
     $txtBarrio = array_shift(

@@ -234,6 +234,54 @@ echo "&nbsp;";
                 <input type="hidden" name="salvar" value="1">
             </p>
         </form>
+
+        <a href="#" onclick="mostrarOcultar('listado')">Columnas de la plantilla</a>
+        <div class="text-left" id="listado" style="display: none">
+            <ol>
+                <li>Formulario</li>
+                <li>Nombre Vendedor</li>
+                <li>Tipo Documento</li>
+                <li>Documento Vendedor</li>
+                <li>Teléfono Vendedor</li>
+                <li>Teléfono Vendedor 2</li>
+                <li>Correo Vendedor</li>
+                <li>Direccion del inmueble</li>
+                <li>Ciudad</li>
+                <li>Localidad</li>
+                <li>Barrio</li>
+                <li>Escritura Antecedente</li>
+                <li>Fecha Escritura Antecedente</li>
+                <li>Notaria Escritura Antecedente</li>
+                <li>CIUDAD NOTARIA</li>
+                <li>Matrícula Antecedente</li>
+                <li>Chip Antecedente</li>
+                <li>CC Catastral Antecedente</li>
+                <li>Denominación Unidad</li>
+                <li>Escritura</li>
+                <li>Fecha de la escritura</li>
+                <li>Notaria</li>
+                <li>Ciudad Escritura Antecedente</li>
+                <li>Matricula Inmobiliaria</li>
+                <li>Area(mts) Lote</li>
+                <li>Area(mts) Construida</li>
+                <li>Avaluo del inmueble</li>
+                <li>Valor inmueble</li>
+                <li>Estrato</li>
+                <li>Folio carta asignación</li>
+                <li>Proyecto</li>
+                <li>Nit del comprador</li>
+                <li>Folio Escritura publica</li>
+                <li>Folio de certificado de tradición</li>
+                <li>Obs Certificado de Tradicion</li>
+                <li>ZONA OFICINA REGISTRO</li>
+                <li>CIUDAD OFICINA REGISTRO</li>
+                <li>apto</li>
+                <li>torre</li>
+            </ol>
+        </div>
+
+
+
     </div>
 </div> <!-- /container -->
 

@@ -22,7 +22,7 @@
     </thead>
     <tfoot>
         <tr>
-            <th bgcolor="#E4E4E4" align="center" ><b>Id</b></th>
+            <th bgcolor="#E4E4E4" align="center" ><b>Id ----{$id}</b></th>
             <th bgcolor="#E4E4E4" ><b>Proyecto</b></th>           
             <th bgcolor="#E4E4E4" ><b>Oferente</b></th>
                 {if $id != 1}
@@ -62,7 +62,7 @@
                         <img src="recursos/imagenes/unity.png" width="24px"></a>
                 </td>
             {else}
-                <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=2&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosLiquidacion.php', '', true);">
+                <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=2&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosProyecto.php?tipo=2', '', true);">
                         <img src="recursos/imagenes/list.png" width="24px"></a>
                 </td>
             {/if}

@@ -1,5 +1,8 @@
 <?php
 
+ini_set("max_execution_time","-1");
+ini_set("memory_limit" , "-1");
+
 $txtPrefijoRuta = "../../";
 include($txtPrefijoRuta . "recursos/archivos/verificarSesion.php");
 include($txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php");
@@ -116,8 +119,29 @@ $arrParametros['entidad']["sdis.gov.co"]                = "SDIS";
 $arrParametros['entidad']["alcaldiabogota.gov.co"]      = "ACAV";
 $arrParametros['entidad']["cajaviviendapopular.gov.co"] = "CVP";
 
+$arrSexo[1] = "Masculino";
+$arrSexo[2] = "Femenino";
+
 // estados del proceso
 $arrParametros['estados'] = estadosProceso();
+
+// sexo mas probable por nombre
+$sql = "
+select 
+    seqCiudadano, 
+    upper(concat(ltrim(rtrim(txtNombre1)),if(ltrim(rtrim(txtNombre2)) <> '',concat(' ',ltrim(rtrim(txtNombre2))),''))) as txtNombre, 
+    seqSexo
+from t_ciu_ciudadano
+";
+$objRes = $aptBd->execute($sql);
+$arrSexoProbable = array();
+while($objRes->fields){
+    $seqCiudadano = $objRes->fields['seqCiudadano'];
+    $txtNombre = $objRes->fields['txtNombre'];
+    $seqSexo = $objRes->fields['seqSexo'];
+    $arrSexoProbable[$txtNombre][$seqSexo]++;
+    $objRes->MoveNext();
+}
 
 $seqProyecto = $_SESSION['seqProyecto'];
 
@@ -222,6 +246,25 @@ if( ! empty( $arrFormularios ) ) {
                 $arrReporte[$seqFormulario]['salud'][$seqCiudadano]['detalle'] = null;
                 $arrReporte[$seqFormulario]['salud'][$seqCiudadano]['valor'] = $arrParametros['salud'][$claCiudadano->seqSalud];
             }
+
+            // validacion del sexo probable segun el nombre
+            $txtNombre  = trim($claCiudadano->txtNombre1);
+            $txtNombre .= (trim($claCiudadano->txtNombre2) != "")? " " . trim($claCiudadano->txtNombre2) : "";
+            $txtNombre = mb_strtoupper($txtNombre);
+
+            $seqSexoProbable = (intval($arrSexoProbable[$txtNombre][1]) != 0 and intval($arrSexoProbable[$txtNombre][1]) > intval($arrSexoProbable[$txtNombre][2]))? 1 : 2;
+            if($claCiudadano->seqSexo != $seqSexoProbable){
+
+                echo "$seqFormulario ==> $seqCiudadano ==> $claCiudadano->seqSexo != $seqSexoProbable || $txtNombre<br>";
+                pr($arrSexoProbable[$txtNombre]);
+
+                $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['causa'] = "Sexo";
+                $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['detalle'] = null;
+                $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['valor'] =
+                    "[" . $claCiudadano->numDocumento . "] $txtNombre registra como " .
+                    $arrSexo[$claCiudadano->seqSexo] . " pero es posible que sea " . $arrSexo[$seqSexoProbable];
+            }
+
         }
 
         // cohabitacion
@@ -447,6 +490,8 @@ if( ! empty( $arrRegistros ) ) {
 }
 
 //pr($arrReporte);
+
+//die();
 
 /***********************************************************************************************************************
  * IMPRIMIENDO DEL REPORTE
@@ -878,6 +923,48 @@ if (!empty($arrReporte)) {
                         $numFila++;
 
                     }
+                    break;
+                case "sexo":
+
+                    foreach ($arrDatos as $seqCiudadano => $arrCausas) {
+
+                        $txtNombre = $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre1 . " " .
+                            $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtNombre2 . " " .
+                            $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido1 . " " .
+                            $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->txtApellido2;
+
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $numFila, $seqFormulario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $numFila, $arrParametros['estados'][$seqEstadoProceso], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $numFila, $txtModalidad, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $numFila, $txtDesplazado, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $numFila, $objCiudadanoPrincipal->numDocumento, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $numFila, strtoupper($txtNombrePrincipal), flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $numFila, $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano]->numDocumento, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $numFila, strtoupper($txtNombre), flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $numFila, "Sexo", flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $numFila, $arrCausas["causa"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $numFila, $arrCausas["detalle"], flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $numFila, $arrCausas["valor"], flase);
+
+                        $i = 0;
+                        $txtUltimoUsuario = "";
+                        $txtUsuarios      = "";
+                        foreach( $arrUsuarios[$seqFormulario] as $seqUsuario => $objUsuario ){
+                            if( $i == 0 ){
+                                $txtUltimoUsuario = "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido;
+                            }
+                            $txtUsuarios .= "[" . $objUsuario->seqUsuario . "] " . $objUsuario->txtNombre . " " . $objUsuario->txtApellido . "\n";
+                            $i++;
+
+                        }
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $numFila, $txtUltimoUsuario, flase);
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $numFila, $txtUsuarios, flase);
+
+                        $numFila++;
+
+                    }
+
+
                     break;
             }
         }

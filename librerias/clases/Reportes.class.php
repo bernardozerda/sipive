@@ -4970,7 +4970,7 @@ WHERE
         }
 
         $txtReporte = ($bolExepciones == false) ? "ReporteCruces" : "ReporteExcepciones";
-        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null, true, "|");
+        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null, false, "|");
     }
 
     public function excepcionesFnv() {

@@ -4854,22 +4854,28 @@ WHERE
     public function crucesFnv($bolExepciones = false) {
         global $aptBd;
 
+        $arrEstadosAAD[] = 15;
+        $arrEstadosAAD[] = 33;
+        $arrEstadosAAD[] = 40;
+        $arrEstadosAAD[] = 59;
+
         $sql = "
             select
-              '8999990619' as numSDHT,
+              '8999990619' as nitSDHT,
               'SECRETARÍA DISTRITAL DE HÁBITAT' as txtSDHT,
               if(cac.seqTipoDocumento = 7,1,cac.seqTipoDocumento) as seqTipoDocumento, 
               cac.numDocumento as numDocumento,
               upper(concat(cac.txtNombre1,' ',cac.txtNombre2,' ',cac.txtApellido1,' ',cac.txtApellido2)) as txtNombre,
               hvi.fchActo as fchAsignacion, 
-              0 as valAsignado
+              0 as valAsignado,
+              fac.seqEstadoProceso
             from t_aad_hogares_vinculados hvi
             inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
             inner join t_aad_hogar_acto hac on hac.seqFormularioActo = fac.seqFormularioActo
             inner join t_aad_ciudadano_acto cac on hac.seqCiudadanoActo = cac.seqCiudadanoActo
             inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
             where hvi.seqTipoActo = 1              
-              and fac.seqEstadoProceso in (15,33,40,59)
+              -- and fac.seqEstadoProceso in (15,33,40,59)
               and cac.seqTipoDocumento in (1,2)
               or (
                     cac.seqTipoDocumento = 7 
@@ -4884,7 +4890,8 @@ WHERE
             $numDocumento = $objRes->fields['numDocumento'];
             if (!isset($arrReporte[$numDocumento])) {
                 $arrReporte[$numDocumento] = $objRes->fields;
-                $arrReporte[$numDocumento]['txtEntidad'] = "SDHT";
+                $txtEntidad = (in_array($objRes->fields['seqEstadoProceso'],$arrEstadosAAD))? "SDHT" : "";
+                $arrReporte[$numDocumento]['txtEntidad'] = $txtEntidad;
                 $arrReporte[$numDocumento]['txtObservaciones'] = "";
             }
             $objRes->MoveNext();
@@ -4909,8 +4916,8 @@ WHERE
                 upper(res.txtNombre) as txtNombre,
                 group_concat(res.txtObservaciones) as txtObservaciones
               from t_cru_resultado res
-              where res.seqFormulario = 0
-                and res.seqTipoDocumento in (1,2)
+              where /* res.seqFormulario = 0 and */ 
+                res.seqTipoDocumento in (1,2)
               group by 
                 res.seqTipoDocumento,
                 res.numDocumento
@@ -4920,8 +4927,9 @@ WHERE
                 res.numDocumento,
                 group_concat(res.txtEntidad) as txtEntidad
               from t_cru_resultado res
-              where res.seqFormulario = 0
-                and res.bolInhabilitar = 1
+              where  /* res.seqFormulario = 0 and  */
+                res.bolInhabilitar = 1 and
+                res.seqTipoDocumento in (1,2)
               group by res.numDocumento
             ) fue on doc.numDocumento = fue.numDocumento    
         ";
@@ -4957,25 +4965,12 @@ WHERE
                 unset($arrReporte[$numDocumento]['fchAsignacion']);
                 unset($arrReporte[$numDocumento]['valAsignado']);
                 unset($arrReporte[$numDocumento]['txtEntidad']);
+                unset($arrReporte[$numDocumento]['seqEstadoProceso']);
             }
         }
 
-        // pone la fecha y la cantidad de archivos dentro de la primera linea
-        // en duda si este requerimiento se va a usar o no
-//        if($bolExepciones == false){
-//            $arrReporte[0]['numSDHT'] = date("Y/m/d");
-//            $arrReporte[0]['txtSDHT'] = count($arrReporte) - 1;
-//            $arrReporte[0]['seqTipoDocumento'] = null;
-//            $arrReporte[0]['numDocumento'] = null;
-//            $arrReporte[0]['txtNombre'] = null;
-//            $arrReporte[0]['fchAsignacion'] = null;
-//            $arrReporte[0]['valAsignado'] = null;
-//            $arrReporte[0]['txtEntidad'] = null;
-//            ksort($arrReporte);
-//        }
-
         $txtReporte = ($bolExepciones == false) ? "ReporteCruces" : "ReporteExcepciones";
-        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null, false, "|");
+        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null, true, "|");
     }
 
     public function excepcionesFnv() {

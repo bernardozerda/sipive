@@ -1,3 +1,31 @@
+/**********************************************************************************************************************
+ * INHABILITA LAS FUNCIONES
+ * - F12
+ * - CONTROL + U
+ * - CLICK DERECHO
+ **********************************************************************************************************************/
+
+var ventana = $(window);
+ventana.on('keydown',keyListener);
+ventana.on('contextmenu',contextMenu);
+
+function contextMenu(e){
+    e.preventDefault();
+    e.returnValue = false;
+}
+
+function keyListener(e) {
+    if (e.keyCode == 123) {
+        e.preventDefault();
+        e.returnValue = false;
+    }
+    if (e.ctrlKey && e.keyCode == 85) {
+        e.preventDefault();
+        e.returnValue = false;
+    }
+}
+
+/**********************************************************************************************************************/
 
 /**
  * ESTA FUNCION SE USA PARA RECARGAR 

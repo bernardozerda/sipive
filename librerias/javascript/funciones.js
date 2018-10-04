@@ -5,21 +5,57 @@
  * @version 1.0 Marzo 2009
  */
 
-/**
- * CARGA LA SALIDA DE txtArchivoPhp EN EL OBJETO DOM CON
- * IDENTIFICADOR txtDivDestino, SE LE PUEDEN PASAR LOS 
- * PARAMETROS EN FORMATO GET EN EL STING txtParametros
- * Y ESTAS VARIABLES SON ENVIADAS POST. EL PARAMETRO bolCargando
- * ES TRUE CUANDO QUIERA QUE SE BLOQUEE AL USUARIO MIENTRAS
- * SE PROCESA LA PETICION.
- * @author Bernardo Zerda
- * @param string txtDivDestino
- * @param string txtArchivoPhp
- * @param string txtParametros
- * @param boolean bolCargando
- * @return object callObj ==> el objeto que retorna la transaccion asyncRequest
- * @version 1,0 Marzo 2009
- */
+/**********************************************************************************************************************
+ * INHABILITA LAS FUNCIONES
+ * - F12
+ * - CONTROL + U
+ * - CLICK DERECHO
+ **********************************************************************************************************************/
+
+function activarInspecciones(){
+    var bolRespuesta = 0;
+    $.ajax({
+        url: "./activarInspecciones.php",
+        type: "POST",
+        async: false,
+        data: '',
+        success: function (respuesta) {
+            bolRespuesta = respuesta;
+        },
+        error: function (error) {
+            bolRespuesta = 0;
+        }
+    });
+    return bolRespuesta;
+}
+
+var ventana = $(window);
+ventana.on('keydown',keyListener);
+ventana.on('contextmenu',contextMenu);
+
+function contextMenu(e){
+    if(activarInspecciones() == 0) {
+        e.preventDefault();
+    }
+    e.returnValue = false;
+}
+
+function keyListener(e) {
+    if (e.keyCode == 123) {
+        if(activarInspecciones() == 0) {
+            e.preventDefault();
+        }
+        e.returnValue = false;
+    }
+    if (e.ctrlKey && e.keyCode == 85) {
+        if(activarInspecciones() == 0) {
+            e.preventDefault();
+        }
+        e.returnValue = false;
+    }
+}
+
+/**********************************************************************************************************************/
 
 var mychartMostrar;
 
@@ -32,6 +68,21 @@ function verificarSesion() {
     }
 }
 
+/**
+ * CARGA LA SALIDA DE txtArchivoPhp EN EL OBJETO DOM CON
+ * IDENTIFICADOR txtDivDestino, SE LE PUEDEN PASAR LOS
+ * PARAMETROS EN FORMATO GET EN EL STING txtParametros
+ * Y ESTAS VARIABLES SON ENVIADAS POST. EL PARAMETRO bolCargando
+ * ES TRUE CUANDO QUIERA QUE SE BLOQUEE AL USUARIO MIENTRAS
+ * SE PROCESA LA PETICION.
+ * @author Bernardo Zerda
+ * @param string txtDivDestino
+ * @param string txtArchivoPhp
+ * @param string txtParametros
+ * @param boolean bolCargando
+ * @return object callObj ==> el objeto que retorna la transaccion asyncRequest
+ * @version 1,0 Marzo 2009
+ */
 function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargando) {
 
     verificarSesion();

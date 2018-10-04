@@ -123,14 +123,15 @@
             <!-- tabla de ciudadanos y coincidencias -->
             <div class="col-sm-12">
 
-                <table id="listadoAadPry" class="table table-hover" data-order='[[ 0, "asc" ]]' width="830px">
+                <table id="listadoAadPry" class="table table-hover" data-order='[[ 0, "asc" ]]' width="100%">
                     <thead>
                     <tr>
                         <th style="display: none;"></th>
-                        <th width="120px">Documento</th>
-                        <th width="250px">Nombre</th>
+                        <th>Documento</th>
+                        <th>Nombre</th>
+                        <th>Parentesco</th>
                         <th>Acción</th>
-                        <th width="50px">Ver</th>
+                        <th>Ver</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -154,7 +155,10 @@
                                     {$arrCiudadano.txtApellido1|mb_strtoupper}
                                     {$arrCiudadano.txtApellido2|mb_strtoupper}
                                 </td>
-                                <td width="300px;">
+                                <td>
+                                    {$arrCiudadano.txtParentesco}
+                                </td>
+                                <td>
                                     {assign var=numDocumentoCoincidencia value=$arrCiudadano.numDocumento}
                                     {if isset($claInscripcion->arrErrores.ciudadano.$numDocumentoCoincidencia)}
                                         <span class="text-danger">{$claInscripcion->arrErrores.ciudadano.$numDocumentoCoincidencia}</span>
@@ -199,6 +203,9 @@
                                     {$arrCiudadano.txtNombre2|mb_strtoupper}
                                     {$arrCiudadano.txtApellido1|mb_strtoupper}
                                     {$arrCiudadano.txtApellido2|mb_strtoupper}
+                                </td>
+                                <td>
+                                    {$arrCiudadano.txtParentesco}
                                 </td>
                                 <td>
                                     {assign var=numDocumentoCoincidencia value=$arrCiudadano.numDocumento}

@@ -1705,7 +1705,7 @@ class InscripcionFonvivienda
                     }
 
                     // ajusta los datos del formulario
-                    $claFormularioModificado = $this->modificarFormulario($claFormularioModificado, $arrHogar);
+                    $claFormularioModificado = $this->modificarFormulario($claFormularioModificado, $arrHogar,$claFormularioOriginal);
 
                     // actualiza ingresos del hogar
                     $claFormularioModificado->valIngresoHogar = 0;
@@ -1912,7 +1912,7 @@ class InscripcionFonvivienda
             preg_match("/(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{2,4})/", $txtFecha, $arrDMY);
             preg_match("/(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})/"  , $txtFecha, $arrYMD);
             if(!empty($arrYMD)){
-                $fchFecha = new DateTime($arrDMY[1] . "-" . $arrDMY[2] . "-" . $arrDMY[3]);
+                $fchFecha = new DateTime($arrYMD[1] . "-" . $arrYMD[2] . "-" . $arrYMD[3]);
             }elseif(! empty($arrDMY)){
                 $arrMatch[3] = ($arrDMY[3] < 100) ? $arrDMY[3] + 2000 : $arrDMY[3];
                 $fchFecha = new DateTime($arrDMY[3] . "-" . $arrDMY[2] . "-" . $arrDMY[1]);
@@ -2154,6 +2154,7 @@ class InscripcionFonvivienda
     private function ocupacion($seqTipo,$txtOcupacion,$numLinea){
         $seqOcupacion = 0;
         if($seqTipo == 2 or $seqTipo == 3){
+            $txtOcupacion = mb_ereg_replace("-","/",$txtOcupacion);
             $arrOcupacion = obtenerDatosTabla(
                 "t_ciu_ocupacion",
                 array("seqOcupacion","txtOcupacion"),
@@ -2498,7 +2499,7 @@ class InscripcionFonvivienda
         return $objCiudadano;
     }
 
-    private function modificarFormulario($claFormularioModificado,$arrHogar){
+    private function modificarFormulario($claFormularioModificado,$arrHogar,$claFormularioOriginal){
 
         $claFormularioModificado->seqPlanGobierno = $arrHogar['seqPlanGobierno'];
         $claFormularioModificado->seqModalidad = $arrHogar['seqModalidad'];
@@ -2506,8 +2507,10 @@ class InscripcionFonvivienda
         $claFormularioModificado->seqSolucion = $arrHogar['seqSolucion'];
         $claFormularioModificado->txtDireccionSolucion = $arrHogar['txtDireccionSolucion'];
         $claFormularioModificado->fchUltimaActualizacion = date("Y-m-d H:i:s");
-        $claFormularioModificado->bolCerrado = 1;
-        $claFormularioModificado->seqEstadoProceso = 16;
+        $claFormularioModificado->bolCerrado = ( $arrHogar['seqFormulario'] == 0 )? 1 : $claFormularioOriginal->bolCerrado;
+        $claFormularioModificado->seqEstadoProceso = ( $arrHogar['seqFormulario'] == 0 )? 16 : $claFormularioOriginal->seqEstadoProceso;
+//        $claFormularioModificado->bolCerrado = 1;
+//        $claFormularioModificado->seqEstadoProceso = 16;
 
         if($arrHogar['seqLocalidad'] != 1){
             $claFormularioModificado->seqLocalidad = $arrHogar['seqLocalidad'];

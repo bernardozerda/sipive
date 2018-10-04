@@ -27,7 +27,7 @@
                                             <input type="radio"
                                                    name="seqFormulario"
                                                    value="{$arrDatos.formulario}"
-                                                   {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)} disabled {/if}
+                                                   {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)}  {/if}
                                             >
                                         </td>
                                         <td class="text-center" width="50px;">{$numDistancia}</td>

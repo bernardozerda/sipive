@@ -651,7 +651,7 @@ class Menu {
     public function depuracionPermisos($arrMenu){
         $seqProyecto = $_SESSION['seqProyecto'];
         foreach($arrMenu as $seqMenu => $arrSubmenu){
-            if(! empty($arrDatos['hijos'])){
+            if(! empty($arrSubmenu['hijos'])){
                 $arrMenu[$seqMenu]['hijos'] = $this->depuracionPermisos($arrSubmenu['hijos']);
             }else{
                 if (!in_array($seqMenu, $_SESSION['arrPermisos'][$seqProyecto])) {

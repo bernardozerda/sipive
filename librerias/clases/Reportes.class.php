@@ -1761,7 +1761,6 @@ class Reportes {
         return;
     }
 
-
     /**
      * FUNCION GENERICA PARA LA IMPRESION DE REPORTES POR ARCHIVO
      * @param $objRes ==> PUEDE SER UN RESULSET DE ADODB O ARRAY
@@ -1774,13 +1773,13 @@ class Reportes {
     public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array(), $bolTitulos = true, $txtSeparador = "\t") {
 
         // asegura que la variable de titulos quede boolean
-        $bolTitulos   = ($bolTitulos !== false)? true : false;
+        $bolTitulos = ($bolTitulos !== false) ? true : false;
 
         // separador por defecto tabulador
         $txtSeparador = ($txtSeparador == null) ? "\t" : $txtSeparador;
 
         // si no hay errores continual
-        if(empty($this->arrErrores)){
+        if (empty($this->arrErrores)) {
 
             // nombre del archivo
             $txtNombreArchivo = $nombreArchivo . date("Ymd_His") . ".xls";
@@ -1797,16 +1796,15 @@ class Reportes {
             if (is_object($objRes)) {
 
                 // debe ir con titulos
-                if($bolTitulos == true){
+                if ($bolTitulos == true) {
 
                     // si no hay arreglo de titulos
-                    if(empty($arrTitulosCampos)){
+                    if (empty($arrTitulosCampos)) {
                         $arrTitulosCampos = array_keys($objRes->fields);
                     }
 
                     // echo de titulos
                     echo utf8_decode(implode($txtSeparador, $arrTitulosCampos)) . "\r\n";
-
                 }
 
                 // echo contenidos
@@ -1820,15 +1818,14 @@ class Reportes {
                     echo $dato . "\r\n";
                     $objRes->MoveNext();
                 }
-
-            }else{
+            } else {
 
                 // debe ir con titulos
-                if($bolTitulos == true){
+                if ($bolTitulos == true) {
 
                     // si no hay arreglo de titulos
-                    if(empty($arrTitulosCampos)){
-                        foreach($objRes as $i => $arrPrimero) {
+                    if (empty($arrTitulosCampos)) {
+                        foreach ($objRes as $i => $arrPrimero) {
                             $arrTitulosCampos = array_keys($arrPrimero);
                             break;
                         }
@@ -1836,17 +1833,14 @@ class Reportes {
 
                     // echo de titulos
                     echo utf8_decode(implode($txtSeparador, $arrTitulosCampos)) . "\r\n";
-
                 }
 
                 // contenido del archivo
                 foreach ($objRes as $arrDatos) {
                     echo utf8_decode(implode($txtSeparador, $arrDatos)) . "\r\n";
                 }
-
             }
-
-        }else{
+        } else {
             imprimirMensajes($this->arrErrores);
         }
 
@@ -1912,7 +1906,6 @@ class Reportes {
 //        } else {
 //            imprimirMensajes($arrErrores, array());
 //        }
-
     }
 
     private function textoFormLinks($idForm, $txtNombreArchivo = "") {
@@ -4890,7 +4883,7 @@ WHERE
             $numDocumento = $objRes->fields['numDocumento'];
             if (!isset($arrReporte[$numDocumento])) {
                 $arrReporte[$numDocumento] = $objRes->fields;
-                $txtEntidad = (in_array($objRes->fields['seqEstadoProceso'],$arrEstadosAAD))? "SDHT" : "";
+                $txtEntidad = (in_array($objRes->fields['seqEstadoProceso'], $arrEstadosAAD)) ? "SDHT" : "";
                 $arrReporte[$numDocumento]['txtEntidad'] = $txtEntidad;
                 $arrReporte[$numDocumento]['txtObservaciones'] = "";
             }
@@ -4975,6 +4968,344 @@ WHERE
 
     public function excepcionesFnv() {
         $this->crucesFnv(true);
+    }
+
+    public function reporteGralHogar($arrDocumentos) {
+        global $aptBd;
+
+        // if (!empty($arrDocumentos)) {
+
+        $sql = "SELECT
+            frm.seqFormulario AS 'Id Hogar',
+                ppal.numDocumento AS 'Documento Ppal',
+                seqCiudadano AS 'id Ciudadano',
+                txtTipoDocumento AS 'Tipo Documento',
+                ciud.numDocumento AS 'Documento Ciudadano',
+                UPPER(txtNombre1) AS Nombre1,
+                UPPER(txtNombre2) AS Nombre2,
+                UPPER(txtApellido1) AS txtApellido1,
+                UPPER(txtApellido2) AS txtApellido2,
+                txtParentesco AS Parentesco,
+                txtSexo AS Genero,
+                txtEstadoCivil AS 'Estado Civil',
+                fchNacimiento AS 'Fecha de Nacimiento',
+                TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) AS Edad,
+                CASE
+               WHEN
+               TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) <= 5
+               THEN
+               '0 a 5'
+               WHEN
+               TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) > 5
+               AND TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) <= 13
+               THEN
+               '6 a 13'
+               WHEN
+               TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) > 13
+               AND TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) <= 17
+               THEN
+               '14 a 17'
+               WHEN
+               TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) > 17
+               AND TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) <= 26
+               THEN
+               '18 a 26'
+               WHEN
+               TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) > 26
+               AND TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) <= 59
+               THEN
+               '27 a 59' ELSE 'Mayor de 60'
+               END AS RangoEdad,
+                txtNivelEducativo AS 'Nivel Educativo',
+                numAnosAprobados AS 'Anos Aprobados',
+                txtEtnia AS Etnia,
+                valIngresos AS 'Ingresos del Ciudadano',
+                txtOcupacion AS Ocupacion,
+                IF(seqCondicionEspecial = 1
+               OR seqCondicionEspecial2 = 1
+               OR seqCondicionEspecial3 = 1,
+                'SI',
+                'NO') AS 'Cabeza de Familia',
+                IF(seqCondicionEspecial = 2
+               OR seqCondicionEspecial2 = 2
+               OR seqCondicionEspecial3 = 2,
+                'SI',
+                'NO') AS 'Mayor 65 Anos',
+                IF(seqCondicionEspecial = 3
+               OR seqCondicionEspecial2 = 3
+               OR seqCondicionEspecial3 = 3,
+                'SI',
+                'NO') AS Discapacitado,
+                IF(seqCondicionEspecial = 6
+               and seqCondicionEspecial2 = 6
+               and seqCondicionEspecial3 = 6,
+                'SI',
+                'NO') AS 'Ninguna Condicion Especial',
+                txtSalud AS Salud,
+                UPPER(txtTipoVictima) AS 'Tipo Victima',
+                IF(bolLgtb = 1, 'SI', 'NO') AS 'Lgtbi',
+                UPPER(txtGrupoLgtbi) AS 'Movimiento LGTBI',
+                IF(bolDesplazado = 1, 'SI', 'NO') AS Desplazado,
+                txtCiudad AS 'Ciudad',
+                txtLocalidad AS 'Localidad',
+                upz.txtUpz,
+                bar.txtBarrio AS Barrio,
+                seqTipoDireccion,
+                txtVivienda AS Vivienda,
+                valArriendo AS 'Valor Arriendo',
+                fchArriendoDesde AS 'Fecha Arriendo Desde',
+                numHabitaciones AS 'Numero Habitaciones',
+                numHacinamiento AS 'Hacinamiento',
+                frm.fchInscripcion AS 'Fecha Inscripcion',
+                fchPostulacion AS 'Fecha Postulacion',
+                txtEstadoProceso AS 'Estado Proceso',
+                IF(bolCerrado = 1, 'SI', 'NO') AS Cerrado,
+                txtCajaCompensacion AS 'Caja de Compensacion',
+                IF(bolIntegracionSocial = 1, 'SI', 'NO') AS IntegracionSocial,
+                IF(bolSecSalud = 1, 'SI', 'NO') AS 'Sec. Salud',
+                IF(bolSecEducacion = 1, 'SI', 'NO') AS 'Sec. Educacion',
+                IF(bolSecMujer = 1, 'SI', 'NO') AS 'Sec. Mujer',
+                IF(bolAltaCon = 1, 'SI', 'NO') AS 'Sec. Alta Consejeria',
+                IF(bolIpes = 1, 'SI', 'NO') AS 'secbolIpes',
+                txtOtro,
+                txtSisben AS 'Sisben',
+                valIngresoHogar AS 'Ingresos del Hogar',
+                (valSaldoCuentaAhorro+valSaldoCuentaAhorro2) AS 'Suma Ahorro',
+                valSaldoCuentaAhorro AS 'Saldo Cta de Ahorro 1',
+                ban.txtBanco AS 'Banco Cta Ahorro 1',
+                valSaldoCuentaAhorro2 AS 'Saldo Cta Ahorro 2',
+                ban2.txtBanco AS 'Banco Cta Ahorro 2',
+                valSubsidioNacional AS 'Subsidio Nacional',
+                txtEntidadSubsidio AS 'Entidad Subsidio',
+                txtSoporteSubsidioNacional AS 'Soporte Subsidio Nacional',
+                valAporteLote AS 'Aporte Lote',
+                valSaldoCesantias AS 'Valor Cesantias',
+                txtCesantias AS Cesantias,
+                valCredito AS 'Valor Credito',
+                cred.txtBanco AS 'Banco Credito',
+                valDonacion AS 'Valor Donacion',
+                txtEmpresaDonante AS 'Empresa Donante',
+                txtSoporteDonacion AS 'Soporte Donacion',
+                valPresupuesto AS 'Valor Presupuesto',
+                valAvaluo AS 'Valor Avaluo',
+                valTotal AS 'Valor Total',
+                txtModalidad AS 'Modalidad',
+                txtSolucion AS Solucion,
+                txtPlanGobierno AS 'Plan de Gobierno',
+                txtTipoEsquema AS 'Tipo Esquema',
+                valAspiraSubsidio AS 'Aspira Subsidio',
+                txtSoporteSubsidio AS 'Soporte Subsidio',
+                fchVigencia AS 'Fecha Vigencia',
+                valCartaLeasing AS 'Carta Leasing',
+                valComplementario AS 'Valor Complementario',
+                txtNombreProyecto AS 'Nombre Proyecto',
+                seqProyectoHijo,
+                IF(afro.seqFormulario IS NOT NULL,
+                'SI',
+                'NO') AS 'Hogar Afro ',
+                IF(ind.seqFormulario IS NOT NULL,
+                'SI',
+                'NO') AS 'Hogar Indigena',
+                IF(pal.seqFormulario IS NOT NULL,
+                'SI',
+                'NO') AS 'Hogar Palenquero',
+                IF(raiz.seqFormulario IS NOT NULL,
+                'SI',
+                'NO') AS 'Hogar Raizal',
+                IF(cabF.seqFormulario IS NOT NULL,
+                'SI',
+                'NO') AS 'Hogar Cabeza Fam',
+                IF(disc.seqFormulario IS NOT NULL,
+                'SI',
+                'NO') AS 'Hogar Discapacitado',
+                IF(lgtbi.seqFormulario IS NOT NULL,
+                'SI',
+                'NO') AS 'Hogar LGTBI ',
+                IF(rom.seqFormulario IS NOT NULL,
+                'SI',
+                'NO') AS 'Hogar Rom ',                
+                IF(mayor.seqFormulario IS NOT NULL,
+                'SI',
+                'NO') AS 'Mayor 65 Años'
+              FROM
+                  t_ciu_ciudadano ciud
+                      INNER JOIN
+                  t_frm_hogar hog USING (seqCiudadano)
+                      INNER JOIN
+                  t_frm_formulario frm USING (seqFormulario)
+                      LEFT JOIN
+                  t_ciu_tipo_documento USING (seqTipoDocumento)
+                      LEFT JOIN
+                  t_ciu_sexo USING (seqSexo)
+                      LEFT JOIN
+                  t_ciu_parentesco USING (seqParentesco)
+                      LEFT JOIN
+                  t_ciu_estado_civil USING (seqEstadoCivil)
+                      LEFT JOIN
+                  t_frm_tipoVictima USING (seqTipoVictima)
+                      LEFT JOIN
+                  t_frm_grupo_lgtbi USING (seqGrupoLgtbi)
+                      LEFT JOIN
+                  t_ciu_nivel_educativo USING (seqNivelEducativo)
+                      LEFT JOIN
+                  t_ciu_salud USING (seqSalud)
+                      LEFT JOIN
+                  t_ciu_etnia USING (seqEtnia)
+                      LEFT JOIN
+                  t_frm_estado_proceso USING (seqEstadoProceso)
+                      LEFT JOIN
+                  t_ciu_caja_compensacion USING (seqCajaCompensacion)
+                      LEFT JOIN
+                  t_ciu_ocupacion USING (seqOcupacion)
+                      LEFT JOIN
+                  t_frm_solucion USING (seqSolucion)
+                      LEFT JOIN
+                  t_frm_modalidad mo ON (mo.seqModalidad = frm.seqModalidad)
+                      LEFT JOIN
+                  t_frm_banco ban ON (ban.seqBanco = frm.seqBancoCuentaAhorro)
+                      LEFT JOIN
+                  t_frm_banco ban2 ON (ban2.seqBanco = frm.seqBancoCuentaAhorro2)
+                      LEFT JOIN
+                  t_frm_banco cred ON (cred.seqBanco = frm.seqBancoCredito)
+                      LEFT JOIN
+                  t_frm_localidad USING (seqLocalidad)
+                      LEFT JOIN
+                  t_pry_proyecto USING (seqProyecto)
+                      LEFT JOIN
+                  t_frm_ciudad USING (seqCiudad)
+                      LEFT JOIN
+                  t_frm_plan_gobierno pg ON (frm.seqPlanGobierno = pg.seqPlanGobierno)
+                      LEFT JOIN
+                  t_frm_barrio bar ON (frm.seqBarrio = bar.seqBarrio)
+                      LEFT JOIN
+                  t_pry_tipo_esquema esq ON (frm.seqTipoEsquema = esq.seqTipoEsquema)
+                      LEFT JOIN
+                  t_frm_empresa_donante USING (seqEmpresaDonante)
+                      LEFT JOIN
+                  t_frm_entidad_subsidio USING (seqEntidadSubsidio)
+                      LEFT JOIN
+                  t_frm_cesantia USING (seqCesantias)
+                      LEFT JOIN
+                  t_frm_vivienda USING (seqVivienda)
+                       LEFT JOIN
+                      t_frm_sisben USING(seqSisben)
+                              LEFT JOIN 
+                      t_frm_upz upz ON(upz.seqUpz = frm.seqUpz)
+                      LEFT JOIN
+                  (SELECT DISTINCT
+                      hoget.seqFormulario
+                  FROM
+                      t_ciu_ciudadano ciuet
+                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                  WHERE
+                      ciuet.seqEtnia = 6) afro ON frm.seqFormulario = afro.seqFormulario
+                      LEFT JOIN
+                  (SELECT DISTINCT
+                      hoget.seqFormulario
+                  FROM
+                      t_ciu_ciudadano ciuet
+                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                  WHERE
+                      ciuet.seqEtnia = 2) ind ON frm.seqFormulario = ind.seqFormulario
+                      LEFT JOIN
+                  (SELECT DISTINCT
+                      hoget.seqFormulario
+                  FROM
+                      t_ciu_ciudadano ciuet
+                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                  WHERE
+                      ciuet.seqEtnia = 3) rom ON frm.seqFormulario = rom.seqFormulario
+                      LEFT JOIN
+                  (SELECT DISTINCT
+                      hoget.seqFormulario
+                  FROM
+                      t_ciu_ciudadano ciuet
+                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                  WHERE
+                      ciuet.seqEtnia = 4) raiz ON frm.seqFormulario = raiz.seqFormulario
+                      LEFT JOIN
+                  (SELECT DISTINCT
+                      hoget.seqFormulario
+                  FROM
+                      t_ciu_ciudadano ciuet
+                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                  WHERE
+                      ciuet.seqEtnia = 5) pal ON frm.seqFormulario = pal.seqFormulario
+                      LEFT JOIN
+                  (SELECT DISTINCT
+                      ciuet.numDocumento, hoget.seqFormulario
+                  FROM
+                      t_ciu_ciudadano ciuet
+                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                  WHERE
+                      seqParentesco = 1) ppal ON frm.seqFormulario = ppal.seqFormulario        
+                      LEFT JOIN
+                  (SELECT DISTINCT
+                      (seqFormulario)
+                  FROM
+                      t_ciu_ciudadano
+                  LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                  WHERE
+                      seqCondicionEspecial = 1
+                          OR seqCondicionEspecial2 = 1
+                          OR seqCondicionEspecial3 = 1) cabF ON frm.seqFormulario = cabF.seqFormulario
+                      LEFT JOIN
+                  (SELECT DISTINCT
+                      (seqFormulario)
+                  FROM
+                      t_ciu_ciudadano
+                  LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                  WHERE
+                      seqCondicionEspecial = 3
+                          OR seqCondicionEspecial2 = 3
+                          OR seqCondicionEspecial3 = 3) disc ON frm.seqFormulario = disc.seqFormulario
+                      LEFT JOIN
+                  (SELECT DISTINCT
+                      (seqFormulario)
+                  FROM
+                      t_ciu_ciudadano
+                  LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                  WHERE
+                      seqCondicionEspecial = 2
+                          OR seqCondicionEspecial2 = 2
+                          OR seqCondicionEspecial3 = 2) mayor ON frm.seqFormulario = mayor.seqFormulario
+                LEFT JOIN
+              (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                    seqGrupoLgtbi > 0)
+                        lgtbi ON frm.seqFormulario = lgtbi.seqFormulario";
+        if (!empty($arrDocumentos)) {
+            $sql .= " WHERE numDocumento IN ( " . implode(",", $arrDocumentos) . " )";
+        }
+        $sql .= " ORDER BY frm.seqFormulario";
+//        echo $sql;
+//        die();
+        $objRes = $aptBd->execute($sql);
+        $this->obtenerReportesGeneral($objRes, "reporteGralHogar");
     }
 
 }

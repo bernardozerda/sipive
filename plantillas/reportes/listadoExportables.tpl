@@ -67,6 +67,7 @@
 {assign var=estudioTitulosLeasing   	    value=$arrExportables.estudioTitulosLeasing}
 {assign var=soporteResolucionVinculacion    value=$arrExportables.soporteResolucionVinculacion}
 {assign var=girosVIPA                       value=$arrExportables.girosVIPA}
+{assign var=reporteTotalCiudadano                       value=$arrExportables.reporteTotalCiudadano}
 
 
 <form id="listadoExportable" >
@@ -1145,6 +1146,16 @@
                                         './contenidos/reportes/ReportesExportables.php?reporte=girosVIPA',
                                         true,
                                         false)"
+                           href="#">Exportable</a>
+                    </td>
+                </tr>
+            {/if}
+            
+             {if $reporteTotalCiudadano == 1}
+                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                    <td class="tituloCampo" align="left" width="60%">Informe Gral de Hogares</td>
+                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                        <a onclick="descargarArchivo('./contenidos/reportes/ReportesExportables.php?reporte=reporteTotalCiudadano');"
                            href="#">Exportable</a>
                     </td>
                 </tr>

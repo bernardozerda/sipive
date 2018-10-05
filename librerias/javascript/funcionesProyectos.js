@@ -545,7 +545,7 @@ function addComite() {
     fType += "<div id='val_seqEntidadComite" + intId + "' class='divError'>Diligenciar Campo</div></div> ";
     fType += "<div class='col-md-12'> ";
     fType += "<label class='control-label' >Observaciones Acta</label>";
-    fType += "<textarea name='txtObservacionesComite[]' id='txtObservacionesComite" + intId + "' class='form-control required4'>prueba</textarea>";
+    fType += "<textarea name='txtObservacionesComite[]' id='txtObservacionesComite" + intId + "' class='form-control required4'></textarea>";
     fType += "<div id='val_txtObservacionesComite" + intId + "' class='divError'>Diligenciar Campo</div></div>";
     fType += "<div class='col-md-4'>";
     fType += "<label class='control-label' >Comite Aprobado Condicionado?</label>";
@@ -562,7 +562,7 @@ function addComite() {
     fType += "<textarea name='txtCondicionesComite[]' id='txtCondicionesComite" + intId + "' class='form-control'></textarea>";
     fType += "</div>";
     fType += "<p>&nbsp;</p></fieldset>";
-    fType += "</div>";
+    fType += "</div><div id='divCalendar' style='display:none'></div>";
     fieldWrapper.append(fType);
     $("#actasComite").append(fieldWrapper);
 }
@@ -836,4 +836,57 @@ function mostrarOpcionInforme(id) {
     }
 
 }
+
+function descargarArchivo(url) {
+    var bolCargando = true;
+    if (bolCargando == 1) {
+        var objCargando = obtenerObjetoCargando( );
+    }
+    objCargando.show();
+    someterFormulario(
+            'mensajes',
+            'listadoExportable',
+            url,
+            true,
+            false);
+    setTimeout(function () {
+        objCargando.hide();
+    }, 57000);
+
+}
+
+var  allDate = function() {
+    $.each($("#frmProyectos input"), function (index, value) {
+        var id = $(this).attr("id");
+        if (id != 'undefined' && id != null && id != '') {
+            if (id.split("fch") != null && id.split("fch") != 'undefined' && id.split("fch") != "" && id.split("fch")[1] != "") {
+                var fch = id.split("fch");
+                if (fch[1] != 'undefined' && fch[1] != null && fch[1] != '') {
+                    //console.log("attr id:" + id);
+                    $('#' + id).datetimepicker({
+                        language: 'es',
+                        format: 'yyyy-mm-dd',
+                        weekStart: 1,
+                        todayBtn: 1,
+                        autoclose: 1,
+                        todayHighlight: 1,
+                        startView: 2,
+                        minView: 2,
+                        forceParse: 0
+                    });
+                }
+
+            }
+        }
+    });
+     eliminarObjeto("divCalendar");
+    YAHOO.util.Event.onContentReady(
+            "divCalendar",
+            allDate
+            );
+}
+YAHOO.util.Event.onContentReady(
+        "divCalendar",
+        allDate
+        );
 

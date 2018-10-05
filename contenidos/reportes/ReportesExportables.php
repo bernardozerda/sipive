@@ -231,5 +231,22 @@ switch ($reporte) {
     case "girosVIPA":
         $claReporte->girosVIPA();
         break;
+    
+    case "reporteTotalCiudadano":
+        $arrDocumentos = Array();
+        if ($_FILES['fileSecuenciales']['error'] == 0) {
+            $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileSecuenciales']['tmp_name']));
+            foreach ($arrDocumentos as $numLinea => $numDocumento) {
+                if (intval($numDocumento) != 0) {
+                    $arrDocumentos[$numLinea] = intval($numDocumento);
+                } else {
+                    unset($arrDocumentos[$numLinea]);
+                }
+            }
+        }
+        $claReporte->reporteGralHogar($arrDocumentos);
+        break;
+
+    case "":
 }
 ?>

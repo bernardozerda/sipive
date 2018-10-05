@@ -27,98 +27,88 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         $fec = date("y-m-d");
         $fch = "fchRadicacion";
         if ($tipo == 3) {
-            $fechaFin = calculaFecha("days", -6, $fec);
+          
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))> 6 ";
         } else if ($tipo == 2) {
-            $fechaIni = calculaFecha("days", -5, $fec);
-            $fechaFin = calculaFecha("days", -6, $fec);
+
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 5 and 6 ";
         } else if ($tipo == 1) {
-            $fechaIni = calculaFecha("days", 0, $fec);
-            $fechaFin = calculaFecha("days", -4, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 0 and 4 ";
         }
     } else if ($seqEstado == 17) {
         $fec = date("y-m-d");
         $fch = "fchInformacionSolucion";
         if ($tipo == 3) {
-            $fechaFin = calculaFecha("days", -4, $fec);
+//      
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))> 3 ";
         } else if ($tipo == 2) {
-            $fechaIni = calculaFecha("days", -3, $fec);
-            $fechaFin = calculaFecha("days", -3, $fec);
+
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 3 and 3 ";
         } else if ($tipo == 1) {
-            $fechaIni = calculaFecha("days", 0, $fec);
-            $fechaFin = calculaFecha("days", -2, $fec);
+
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 0 and 2 ";
         }
     } else if ($seqEstado == 27 || $seqEstado == 22) {
         $fec = date("y-m-d");
         if ($seqEstado == 27) {
             $fch = "fchCreacionBusquedaOferta";
             if ($tipo == 3) {
-                $fechaFin = calculaFecha("days", -10, $fec);
+
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))> 9 ";
             } else if ($tipo == 2) {
-                $fechaIni = calculaFecha("days", -8, $fec);
-                $fechaFin = calculaFecha("days", -9, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 8 and 9 ";
             } else if ($tipo == 1) {
-                $fechaIni = calculaFecha("days", 0, $fec);
-                $fechaFin = calculaFecha("days", -7, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 0 and 7 ";
             }
         } else {
             $fch = "fchCreacionEscrituracion";
             if ($tipo == 3) {
-                $fechaFin = calculaFecha("days", -4, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) > 2 ";
             } else if ($tipo == 2) {
-                $fechaIni = calculaFecha("days", -3, $fec);
-                $fechaFin = calculaFecha("days", -3, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 2 and 2 ";
             } else if ($tipo == 1) {
-                $fechaIni = calculaFecha("days", 0, $fec);
-                $fechaFin = calculaFecha("days", -2, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 0 and 1 ";
             }
         }
     } else if ($seqEstado == 23) {
         $fec = date("y-m-d");
         $fch = "esc.fchCreacionEscrituracion";
         if ($tipo == 3) {
-            $fechaFin = calculaFecha("days", -4, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) > 3 ";
         } else if ($tipo == 2) {
-            $fechaIni = calculaFecha("days", -3, $fec);
-            $fechaFin = calculaFecha("days", -3, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 3 and 3 ";
         } else if ($tipo == 1) {
-            $fechaIni = calculaFecha("days", 0, $fec);
-            $fechaFin = calculaFecha("days", -2, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 0 and 2 ";
         }
     } else if ($seqEstado == 25 || $seqEstado == 26) {
         $fec = date("y-m-d");
         if ($seqEstado == 25) {
             $fch = "tec.fchCreacion";
             if ($tipo == 3) {
-                $fechaFin = calculaFecha("days", -4, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))> 3 ";
             } else if ($tipo == 2) {
-                $fechaIni = calculaFecha("days", -3, $fec);
-                $fechaFin = calculaFecha("days", -3, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 3 and 3";
             } else if ($tipo == 1) {
-                $fechaIni = calculaFecha("days", 0, $fec);
-                $fechaFin = calculaFecha("days", -2, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 0 and 2";
             }
         } else {
             $fch = " tec.fchActualizacion";
             if ($tipo == 3) {
-                $fechaFin = calculaFecha("days", -10, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))> 9 ";
             } else if ($tipo == 2) {
-                $fechaIni = calculaFecha("days", -8, $fec);
-                $fechaFin = calculaFecha("days", -9, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 8 and 9";
             } else if ($tipo == 1) {
-                $fechaIni = calculaFecha("days", 0, $fec);
-                $fechaFin = calculaFecha("days", -7, $fec);
+                $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 0 and 7";
             }
         }
     } else if ($seqEstado == 24) {
         $fch = "fchInformacionTitulos";
         if ($tipo == 3) {
-            $fechaFin = calculaFecha("days", -4, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))> 3 ";
         } else if ($tipo == 2) {
-            $fechaIni = calculaFecha("days", -3, $fec);
-            $fechaFin = calculaFecha("days", -3, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 3 and 3";
         } else if ($tipo == 1) {
-            $fechaIni = calculaFecha("days", 0, $fec);
-            $fechaFin = calculaFecha("days", -2, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 0 and 2 ";
         }
     } else if ($seqEstado == 31 || $seqEstado == 29) {
         $fch = " fchInformacionTitulos";
@@ -128,13 +118,11 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
             $fch = "tit.fchActualizacion";
         }
         if ($tipo == 3) {
-            $fechaFin = calculaFecha("days", -10, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))> 9 ";
         } else if ($tipo == 2) {
-            $fechaIni = calculaFecha("days", -8, $fec);
-            $fechaFin = calculaFecha("days", -9, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 8 and 9 ";
         } else if ($tipo == 1) {
-            $fechaIni = calculaFecha("days", 0, $fec);
-            $fechaFin = calculaFecha("days", -7, $fec);
+            $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 0 and 7 ";
         }
     }
 
@@ -166,11 +154,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
     } else if ($seqEstado == 47) {
         $sql .= " where seqEstadoProceso in (7, 47, 54, 16) and seqParentesco = 1 and frm.bolCerrado = 1 ";
     }
-    if ($tipo == 1 || $tipo == 2) {
-        $sql .= "  AND  " . $fch . "  BETWEEN '" . $fechaFin . " 00:00' AND '" . $fechaIni . " 23:59'";
-    } else if ($tipo == 3) {
-        $sql .= "  AND  (" . $fch . " <= '" . $fechaFin . " 23:59:59' OR " . $fch . " IS NULL)";
-    }
+    $sql .= " AND " . $fechaFin; 
     if ($proyecto != "") {
         $sql .= " AND und.seqProyecto =" . $proyecto;
     }

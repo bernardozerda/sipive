@@ -128,7 +128,7 @@ if (count($arrayLicencias) == 0) {
     $arrayLicencias[1] = 0;
 }
 
-if(count($arraConjuntoLicencias) == 0){
+if (count($arraConjuntoLicencias) == 0) {
     $arraConjuntoLicencias[0] = 0;
 }
 //print_r($arrProyectos);

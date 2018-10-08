@@ -28,8 +28,8 @@
             <td  align="center"><b>{$value.seqTutorProyecto}</b>&nbsp;</td>
             <td >{$value.txtNombreTutor|upper}</td>
 
-            <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosTutor.php?tipo=2&seqTutor={$value.seqTutorProyecto}&page=datosTutor.php', '', true);">
-                    <img src="recursos/imagenes/list.png" width="24px"></a>
+            <td width="5%" align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosTutor.php?tipo=2&seqTutor={$value.seqTutorProyecto}&page=datosTutor.php', '', true);">
+                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style="cursor: pointer"></span></a>
             </td>
 
         </tr>

@@ -454,6 +454,58 @@ td,th{
     src:url(../fonts/glyphicons-halflings-regular.eot);
     src:url(../fonts/glyphicons-halflings-regular.eot?#iefix) format('embedded-opentype'),url(../fonts/glyphicons-halflings-regular.woff2) format('woff2'),url(../fonts/glyphicons-halflings-regular.woff) format('woff'),url(../fonts/glyphicons-halflings-regular.ttf) format('truetype'),url(../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg')
 }
+@font-face{
+    font-family:'Glyphicons Halflings';src:url(../fonts/glyphicons-halflings-regular.eot);src:url(../fonts/glyphicons-halflings-regular.eot?#iefix) format('embedded-opentype'),url(../fonts/glyphicons-halflings-regular.woff2) format('woff2'),url(../fonts/glyphicons-halflings-regular.woff) format('woff'),url(../fonts/glyphicons-halflings-regular.ttf) format('truetype'),url(../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg')
+}
+.glyphicon-th-large:before{
+    content:"\e010"
+}
+.glyphicon-th:before{
+    content:"\e011"
+}
+.glyphicon-th-list:before{
+    content:"\e012"
+}
+.glyphicon-arrow-left:before{
+    content:"\e091"
+}
+.glyphicon-arrow-right:before{
+    content:"\e092"
+}
+.glyphicon-arrow-up:before{
+    content:"\e093"
+}
+.glyphicon-arrow-down:before{
+    content:"\e094"
+}
+.glyphicon-remove:before {
+    content: "\e014";
+}
+.glyphicon-calendar:before{
+    content:"\e109"
+}
+
+.inner-addon { 
+    position: relative; 
+}
+/* style icon */
+.inner-addon .glyphicon {
+    position: absolute;
+    padding: 6px;
+    pointer-events: none;
+}
+/* align icon */
+.left-addon .glyphicon  { left:  0px; z-index: 1}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  20px; }
+.right-addon input { padding-right: 20px; }
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
 
 *{
     -webkit-box-sizing:border-box;
@@ -4949,6 +5001,16 @@ button.close{
 }
 .carousel-caption .btn{
     text-shadow:none
+}
+.glyphicon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    -webkit-font-smoothing: antialiased;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
 }
 @media screen and (min-width:768px){
     .carousel-control .glyphicon-chevron-left,.carousel-control .glyphicon-chevron-right,.carousel-control .icon-next,.carousel-control .icon-prev{

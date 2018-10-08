@@ -2,10 +2,19 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link href="recursos/estilos/contentProyects.css" rel="stylesheet">
+{literal}
+    <style>
+        #wrapper{
+            padding: 0;
+            width: 107% !important;
+        }
+    </style>
+{/literal}
+<div class="alert alert-danger">
+    <h5> <strong>Atenci&oacute;n!!! </strong> <b>Esta informaci&oacute;n esta sujeta a verificaci&oacute;n y actualizacion.</b></h5>
+</div>
 <div id="wrapper" class="container tab-content">
-    <div class="alert alert-danger">
-        <h5> <strong>Atenci&oacute;n!!! </strong> <b>Esta informaci&oacute;n esta sujeta a verificaci&oacute;n y actualizacion.</b></h5>
-    </div>
+
     <fieldset>
         {foreach from=$arrProyectos key=key item=value} 
             <div class="form-group" >
@@ -14,7 +23,7 @@
                 {else}
                     {assign var="val" value="12"}
                 {/if}
-                <div class="col-md-{$val}" style="background: #006779; color: #FFF; border-bottom: 3px solid #ffffff"> 
+                <div class="col-md-{$val}" style="background: #006779; color: #FFF; border-bottom: 3px solid #ffffff;border-radius: 10px;"> 
                     <h4 style="color: #FFF">{$value.txtNombreProyecto|upper}</h4>
                 </div>
                 {if $seqPryEstadoProceso > 0}

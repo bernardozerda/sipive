@@ -32,7 +32,7 @@
             <td >{$value.txtNombreConstructor|upper}</td>
             <td >{$value.numDocumentoConstructor}</td>  
             <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosConstructor.php?tipo=2&seqConstructor={$value.seqConstructor}&page=datosConstructor.php', '', true);">
-                    <img src="recursos/imagenes/list.png" width="24px"></a>
+                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style="cursor: pointer"></span></a>
             </td>
 
         </tr>

@@ -27,8 +27,10 @@
         </div>  
         <div class="col-md-3"> 
             <label class="control-label" >Fecha de contrato</label> 
-            <input name="fchContratoFiducia" type="text" id="fchContratoFiducia" value="{$value.fchContratoFiducia}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
-            <a href="#" onclick="javascript: calendarioPopUp('fchContratoFiducia');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 11%; position: relative; float: right; right:15%"></a>
+            <div class='inner-addon left-addon'>
+                <i class='glyphicon glyphicon-calendar'></i>
+                <input name="fchContratoFiducia" type="text" id="fchContratoFiducia" value="{$value.fchContratoFiducia}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
+            </div>
             <div id="val_fchContratoFiducia" class="divError">Diligenciar Campo</div>
         </div> 
 
@@ -66,8 +68,10 @@
         </div>
         <div class="col-md-3"> 
             <label class="control-label" >Fecha Vigencia de contrato</label> 
-            <input name="fchVigenciaContratoFiducia" type="text" id="fchVigenciaContratoFiducia" value="{$value.fchVigenciaContratoFiducia}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
-            <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaContratoFiducia');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 11%; position: relative; float: right; right:15%"></a>
+            <div class='inner-addon left-addon'>
+                <i class='glyphicon glyphicon-calendar'></i>
+                <input name="fchVigenciaContratoFiducia" type="text" id="fchVigenciaContratoFiducia" value="{$value.fchVigenciaContratoFiducia}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
+            </div>
             <div id="val_fchVigenciaContratoFiducia" class="divError">Diligenciar Campo</div>
         </div> 
         <div class="col-md-3"> 

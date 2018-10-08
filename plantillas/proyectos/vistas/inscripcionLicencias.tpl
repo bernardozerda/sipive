@@ -1,4 +1,4 @@
-    <!-- FORMULARIO DE INSCRIPCION CON SEGUIMIENTO -->
+<!-- FORMULARIO DE INSCRIPCION CON SEGUIMIENTO -->
 <link href="./recursos/estilos/contentProyects.css" rel="stylesheet">
 {if $seqPryEstadoProceso > 1}
     <fieldset>
@@ -62,7 +62,7 @@
 
 {assign var=contador value=$arrayLicencias|@count}
 {foreach from=$arrayLicencias key=keyLic item=valueLic}
- 
+
     {if $valueLic.seqTipoLicencia == 1  ||  $keyLic ==0}
         <fieldset>
             <legend class="legend">
@@ -85,40 +85,50 @@
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha de Licencia</label> 
                     <input name="fchLicencia[]" type="text" id="fchLicencia_1" value="{$valueLic.fchLicencia}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicencia_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+
                     <div id="val_fchLicencia_1" class="divError">Este campo es requerido</div>
                 </div>
                 <div class="col-md-4">
                     <label class="control-label">Vigencia de Licencia</label> 
-                    <input name="fchVigenciaLicencia[]" type="text" id="fchVigenciaLicencia_1" value="{$valueLic.fchVigenciaLicencia}" size="12" readonly="" class="form-control required5"  style="width: 70%; position: relative; float: left">
-                    <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaLicencia_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchVigenciaLicencia[]" type="text" id="fchVigenciaLicencia_1" placeholder="yyyy/mm/dd"  value="{$valueLic.fchVigenciaLicencia}" size="12" readonly="" class="form-control required5"  style="width: 70%; position: relative; float: left">
+                    </div>
                     <div id="val_fchVigenciaLicencia_1" class="divError">Este campo es requerido</div>
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Ejecutoria</label> 
-                    <input name="fchEjecutoriaLicencia[]" type="text" id="fchEjecutoriaLicencia_1" value="{$valueLic.fchEjecutoriaLicencia}" onblur="sinCaracteresEspeciales(this);"  class="form-control required5"  style="width: 70%; position: relative; float: left">
-                    <a href="#" onclick="javascript: calendarioPopUp('fchEjecutoriaLicencia_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchEjecutoriaLicencia[]" type="text" id="fchEjecutoriaLicencia_1" value="{$valueLic.fchEjecutoriaLicencia}" placeholder="yyyy/mm/dd"  onblur="sinCaracteresEspeciales(this);"  readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
+                    </div>
                     <div id="val_fchEjecutoriaLicencia_1" class="divError">Este campo es requerido</div>
                 </div>
                 <div class="col-md-4">
                     <label class="control-label">Resoluci&oacute;n Ejecutoria</label>
-                    <input name="txtResEjecutoria[]" type="text" id="txtResEjecutoria_1" value="{$valueLic.txtResEjecutoria}" onblur="sinCaracteresEspeciales(this);"   style="width:200px;" class="form-control required5">
+                    <input name="txtResEjecutoria[]" type="text" id="txtResEjecutoria_1" value="{$valueLic.txtResEjecutoria}" onblur="sinCaracteresEspeciales(this);"  placeholder="yyyy/mm/dd"   style="width:200px;" class="form-control required5">
                     <div id="val_txtResEjecutoria_1" class="divError">Este campo es requerido</div>
                 </div>   
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga</label> 
-                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrroga" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control" placeholder="yyyy/mm/dd"  style="width: 70%; position: relative; float: left"> 
+                    </div>
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga1</label> 
-                    <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga_1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrroga_1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control"  placeholder="yyyy/mm/dd"  style="width: 70%; position: relative; float: left"> 
+                    </div>
                 </div>
                 <div class="col-md-4"> 
-                    <label class="control-label">Fecha Prórroga2</label> 
-                    <input name="fchLicenciaProrroga2[]" type="text" id="fchLicenciaProrroga2" value="{$valueLic.fchLicenciaProrroga2}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrroga2');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
+                    <label class="control-label">Fecha Prórroga2</label>
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchLicenciaProrroga2[]" type="text" id="fchLicenciaProrroga2" value="{$valueLic.fchLicenciaProrroga2}" size="12" readonly="" class="form-control"  placeholder="yyyy/mm/dd"  style="width: 70%; position: relative; float: left"> 
+                    </div>
                 </div>
             </div>
         </fieldset>
@@ -142,40 +152,56 @@
 
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha de Licencia</label> 
-                    <input name="fchLicencia[]" type="text" id="fchLicenciaC" value="{$valueLic.fchLicencia}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaC');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchLicencia[]" type="text" id="fchLicenciaC" value="{$valueLic.fchLicencia}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
+                    </div>
                     <div id="val_fchLicenciaC" class="divError">Este campo es requerido</div>
                 </div>
                 <div class="col-md-4">
                     <label class="control-label">Vigencia de Licencia</label> 
-                    <input name="fchVigenciaLicencia[]" type="text" id="fchVigenciaLicenciaC" value="{$valueLic.fchVigenciaLicencia}" size="12" readonly="" class="form-control required5"  style="width: 70%; position: relative; float: left">
-                    <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaLicenciaC');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchVigenciaLicencia[]" type="text" id="fchVigenciaLicenciaC" value="{$valueLic.fchVigenciaLicencia}" size="12" readonly="" class="form-control required5" placeholder="yyyy/mm/dd"  style="width: 70%; position: relative; float: left">
+                    </div>
                     <div id="val_fchVigenciaLicenciaC" class="divError">Este campo es requerido</div>
                 </div>
 
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Ejecutoria</label> 
-                    <input name="fchEjecutoriaLicencia[]" type="text" id="fchEjecutoriaLicenciaC" value="{$valueLic.fchEjecutoriaLicencia}" onblur="sinCaracteresEspeciales(this);"  class="form-control required5"  style="width: 70%; position: relative; float: left">
-                    <a href="#" onclick="javascript: calendarioPopUp('fchEjecutoriaLicenciaC');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchEjecutoriaLicencia[]" type="text" id="fchEjecutoriaLicenciaC" value="{$valueLic.fchEjecutoriaLicencia}"  readonly="" onblur="sinCaracteresEspeciales(this);"  placeholder="yyyy/mm/dd"  class="form-control required5"  style="width: 70%; position: relative; float: left">
+                    </div>
                 </div>
                 <div class="col-md-4"  style="display: none">
                     <label class="control-label">Resoluci&oacute;n Ejecutoria</label>
-                    <input name="txtResEjecutoria[]" type="text" id="txtResEjecutoria[]" value="{$valueLic.txtResEjecutoria}" onblur="sinCaracteresEspeciales(this);"   style="width:200px;" class="form-control">
-                </div>   
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="txtResEjecutoria[]" type="text" id="txtResEjecutoria[]" value="{$valueLic.txtResEjecutoria}" onblur="sinCaracteresEspeciales(this);"   style="width:200px;" class="form-control">
+                    </div>   
+                </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga</label> 
-                    <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrrogaC" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrrogaC');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchLicenciaProrroga[]" type="text" id="fchLicenciaProrrogaC" value="{$valueLic.fchLicenciaProrroga}" size="12" readonly="" class="form-control" placeholder="yyyy/mm/dd"   style="width: 70%; position: relative; float: left"> 
+                    </div>
                 </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha Prórroga1</label> 
-                    <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrrogaC1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrrogaC1');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchLicenciaProrroga1[]" type="text" id="fchLicenciaProrrogaC1" value="{$valueLic.fchLicenciaProrroga1}" size="12" readonly="" class="form-control" placeholder="yyyy/mm/dd"  style="width: 70%; position: relative; float: left"> 
+                    </div>
                 </div>
                 <div class="col-md-4"> 
-                    <label class="control-label">Fecha Prórroga2</label> 
-                    <input name="fchLicenciaProrroga2[]" type="text" id="fchLicenciaProrrogaC2" value="{$valueLic.fchLicenciaProrroga2}" size="12" readonly="" class="form-control"  style="width: 70%; position: relative; float: left"> 
-                    <a href="#" onclick="javascript: calendarioPopUp('fchLicenciaProrrogaC2');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>          
+                    <label class="control-label">Fecha Prórroga2</label>
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input name="fchLicenciaProrroga2[]" type="text" id="fchLicenciaProrrogaC2" value="{$valueLic.fchLicenciaProrroga2}" size="12" readonly="" class="form-control" placeholder="yyyy/mm/dd"   style="width: 70%; position: relative; float: left"> 
+
+                    </div>
                 </div>
             </div>
         </fieldset>

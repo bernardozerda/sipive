@@ -45,7 +45,8 @@
 
             <td width="3%">
                 {if $id != 4}
-                    <img src="recursos/imagenes/Show.png" width="24px" data-toggle="modal" data-target="#div{$value.seqProyecto}">
+                    
+                    <span class="glyphicon glyphicon-eye-close" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#div{$value.seqProyecto}"> </span>
                 {else}
                     <img src="recursos/imagenes/report.png" width="24px" data-toggle="modal" data-target="#div{$value.seqProyecto}">
                 {/if}
@@ -53,13 +54,13 @@
             <td> 
                 {if $id != 4}
                     <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=3&tipo=2', '', true);">
-                        <img src="recursos/imagenes/add.png" width="24px">
+                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#div{$value.seqProyecto}"> </span>
                     </a>
                 {else}
                     <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosInterventoria.php?seqProyecto={$value.seqProyecto}&id=4&tipo=1', '', true);
                             listenerFile('fileAction', 'nameArchivo');
                             removeFile('fileAction', 'nameArchivo')">
-                        <img src="recursos/imagenes/add.png" width="24px">
+                         <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#div{$value.seqProyecto}"> </span>
                     </a>
                 {/if}
             </td>
@@ -67,7 +68,7 @@
                 <td> <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosSeguimientoFicha.php?seqProyecto={$value.seqProyecto}&id=2&tipo=2', '', true);
                         listenerFile('fileAction', 'nameArchivo');
                         removeFile('fileAction', 'nameArchivo')">
-                        <img src="recursos/imagenes/imagesList.png" width="24px">
+                       <span class="glyphicon glyphicon-film" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#div{$value.seqProyecto}"> </span>
                     </a></td> 
                 {/if}
 

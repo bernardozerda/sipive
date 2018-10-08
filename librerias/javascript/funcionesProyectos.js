@@ -263,11 +263,11 @@ function addAmparos() {
     $("#seqTipoAmparo_1" + " option").each(function () {
         fType += "<option value=" + $(this).attr('value') + ">" + $(this).text() + "</option> ";
     });
-    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:</label><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaIni_" + intId + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
-    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaFin_" + intId + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:<div class='inner-addon left-addon'><i class='glyphicon glyphicon-calendar'></i></label><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 80%; position: relative; float: left\"></div></div>";
+    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><div class='inner-addon left-addon'><i class='glyphicon glyphicon-calendar'></i><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin_" + intId + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 80%; position: relative; float: left\"></div></div>";
     fType += "<div class=\"col-md-3\"><label class=\"control-label\" >Valor Asegurado</label><input name=\"valAsegurado[]\" type=\"text\" id=\"valAsegurado_" + intId + "\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control required5\"></div> ";
     fType += "<div class=\"col-md-2\"><br><br></div>";
-    fType += "<p>&nbsp;</p></fieldset><p>&nbsp;</p></div>";
+    fType += "<p>&nbsp;</p></fieldset><p>&nbsp;</p></div><div id='divCalendar' style='display:none'></div>";
     fieldWrapper.append(fType);
     $("#idAmparos").append(fieldWrapper);
 }
@@ -281,12 +281,12 @@ function addProrroga(idPadre, usuario) {
     var fieldWrapper = $("<div class=\"form-group\" id=\"ampHijo" + idPadre + "_" + intIdHijo + "\" />");
     var fType = "<div class=\"col-md-3\"><label class=\"control-label\" >Porroga " + intIdHijo + "</label><select id=\"seqTipoAmparo" + idPadre + "_" + intIdHijo + "\" name=\"seqTipoAmparo[]\" class=\"form-control required5\" style=\"width: 75%\">";
     fType += "<option value='6'>Prorroga</option>  <input name=\"seqAmparo[]\" type=\"hidden\" id=\"seqAmparo\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control\"><input name=\"seqAmparoPadre[]\" type=\"hidden\" id=\"seqAmparoPadre\" value=\"" + idPadre + "\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control required5\">";
-    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:</label><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaIni" + idPadre + "_" + intIdHijo + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
-    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"><a href=\"#\" onclick=\"javascript: calendarioPopUp('fchVigenciaFin" + idPadre + "_" + intIdHijo + "');\"><img src=\"recursos/imagenes/calendar.png\" style=\"cursor: hand;width: 18%; position: relative; float: right; right:10%\"></a></div>";
+    fType += "</select></div><div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Desde:</label><div class='inner-addon left-addon'><i class='glyphicon glyphicon-calendar'></i><input name=\"fchVigenciaIni[]\" type=\"text\" id=\"fchVigenciaIni" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"></div></div>";
+    fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Vigencia Hasta:</label><div class='inner-addon left-addon'><i class='glyphicon glyphicon-calendar'></i><input name=\"fchVigenciaFin[]\" type=\"text\" id=\"fchVigenciaFin" + idPadre + "_" + intIdHijo + "\" value=\"\" size=\"12\" readonly=\"\"  class=\"form-control required5\"  style=\"width: 70%; position: relative; float: left\"></div></div>";
     fType += "<div class=\"col-md-2\"><label class=\"control-label\" >Valor Asegurado</label><input name=\"valAsegurado[]\" type=\"text\" id=\"valAsegurado" + idPadre + "_" + intIdHijo + "\" value=\"\" onblur=\"sinCaracteresEspeciales(this);\"  class=\"form-control required5\"></div> ";
     fType += " <div class=\"col-md-2\" style=\"width: 5.5%\"><label class=\"control-label\" >Aprobo</label> <br><input name=\"bolAproboAmparo[]\" type=\"checkbox\" id=\"bolAprobo" + idPadre + "_" + intIdHijo + "\"  value=\"1\"  style=\"height: 15px; text-align: center\" onclick=\"selectUsuario(this.id, " + usuario + ")\">&nbsp;&nbsp;<input type=\"hidden\" name=\"seqUsuario[]\" id=\"seqUsuario" + idPadre + "_" + intIdHijo + "\" value=\"'0'\"></div>";
     fType += "<div class=\"col-md-2\"><br><br><input type=\"button\"  value=\"Prorroga\" class=\"btn_deleted\"  onclick='removerOferente(ampHijo" + idPadre + "_" + intIdHijo + ")'/></div>";
-    fType += "<p>&nbsp;</p></fieldset><p>&nbsp;</p></div>";
+    fType += "<p>&nbsp;</p></fieldset><p>&nbsp;</p></div><div id='divCalendar' style='display:none'></div>";
     fieldWrapper.append(fType);
     $("#demo" + idPadre).append(fieldWrapper);
 }
@@ -511,9 +511,8 @@ function addComite() {
     fType += "<input type='hidden' name='seqProyectoComite[]' id='seqProyectoComite" + intId + "' value=''>";
     fType += "<div id='val_numActaComite" + intId + "' class='divError'>Diligenciar Campo</div></div>";
     fType += "<div class='col-md-3'> ";
-    fType += "<label class='control-label' >Fecha Acta</label> ";
-    fType += "<input name='fchActaComite[]' type='text' id='fchActaComite" + intId + "' value='' size='12' readonly=''  class='form-control required4'  style='width: 70%; position: relative; float: left'>";
-    fType += "<a href='#' onclick='calendarioPopUp(\"fchActaComite" + intId + "\");'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 11%; position: relative; float: right; right:15%'></a>";
+    fType += "<label class='control-label' >Fecha Acta</label> <div class='inner-addon left-addon'><i class='glyphicon glyphicon-calendar'></i>";
+    fType += "<input name='fchActaComite[]' type='text' id='fchActaComite" + intId + "' value='' size='12' readonly=''  class='form-control required4'  style='width: 70%; position: relative; float: left'></div>";
     fType += "<div id='val_fchActaComite" + intId + "' class='divError'>Diligenciar Campo</div></div>";
     fType += "<div class='col-md-4' style='text-align: right'>";
     fType += "<div class='btn-group btn-group-toggle' data-toggle='buttons'>";
@@ -531,8 +530,7 @@ function addComite() {
     fType += "<div id='val_numResolucionComite" + intId + "' class='divError'>Diligenciar Campo</div></div>";
     fType += "<div class='col-md-3'> ";
     fType += "<label class='control-label' >Fecha Resoluci&oacute;n</label> ";
-    fType += "<input name='fchResolucionComite[]' type='text' id='fchResolucionComite" + intId + "' value='' size='12' readonly=''  class='form-control required4'  style='width: 70%; position: relative; float: left'>";
-    fType += "<a href='#' onclick='calendarioPopUp(\"fchResolucionComite" + intId + "\");'><img src='recursos/imagenes/calendar.png' style='cursor: hand;width: 11%; position: relative; float: right; right:15%'></a>";
+    fType += "<div class='inner-addon left-addon'><i class='glyphicon glyphicon-calendar'></i><input name='fchResolucionComite[]' type='text' id='fchResolucionComite" + intId + "' value='' size='12' readonly=''  class='form-control required4'  style='width: 70%; position: relative; float: left'></div>";
     fType += "<div id='val_fchResolucionComite" + intId + "' class='divError'>Diligenciar Campo</div></div> ";
     fType += "<div class='col-md-4'> ";
     fType += "<label class='control-label' >Entidad</label> ";
@@ -855,7 +853,7 @@ function descargarArchivo(url) {
 
 }
 
-var  allDate = function() {
+var allDate = function () {
     $.each($("#frmProyectos input"), function (index, value) {
         var id = $(this).attr("id");
         if (id != 'undefined' && id != null && id != '') {
@@ -879,7 +877,7 @@ var  allDate = function() {
             }
         }
     });
-     eliminarObjeto("divCalendar");
+    eliminarObjeto("divCalendar");
     YAHOO.util.Event.onContentReady(
             "divCalendar",
             allDate
@@ -889,4 +887,21 @@ YAHOO.util.Event.onContentReady(
         "divCalendar",
         allDate
         );
+
+function configDate(id) {
+    console.log("el id es:" + id)
+    $('#' + id).datetimepicker({
+        language: 'es',
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+
+
+}
 

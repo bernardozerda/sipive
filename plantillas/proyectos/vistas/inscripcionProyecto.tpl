@@ -1,6 +1,3 @@
-<!-- FORMULARIO DE INSCRIPCION CON SEGUIMIENTO -->
-
-
 <form name="frmProyectos" id="frmProyectos" onSubmit="return false;" method="$_POST" >
     <!-- CODIGO PARA EL POPUP DE SEGUIMIENTO -->
     {foreach from=$arrProyectos key=key item=value} 
@@ -29,13 +26,14 @@
                 {if $seqPryEstadoProceso == "" or $seqPryEstadoProceso >= 1}
 
                     <li class="nav-item active"  style="{$nav1}">
-                        <a class="nav-item" id="home-tab" data-toggle="tab" href="#datos" role="tab" aria-controls="home" aria-selected="true" >Datos Básicos</a>
+                        <a class="nav-item" id="home-tab" data-toggle="tab" href="#datos" role="tab" aria-controls="home" aria-selected="true" onclick="allDate();
+                                verificarSesion();" >Datos Básicos</a>
                     </li>
                     <li  class="nav-item"  style="{$nav1}">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Tipos Vivienda</em></a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick=" verificarSesion();"><em>Tipos Vivienda</em></a>
                     </li>
                     <li  class="nav-item"  style="{$nav1}">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Conjuntos Residenciales</em></a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick="verificarSesion();"><em>Conjuntos Residenciales</em></a>
                     </li>
                     <li class="nav-item" style="{$nav1}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick="activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', 1);">Licencias <br></a>
@@ -44,19 +42,20 @@
                 {if $seqPryEstadoProceso > 1}
 
                     <li class="nav-item" style="{$nav}">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos Financieros</a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick=" verificarSesion();">Datos Financieros</a>
                     </li>             
                     <li  class="nav-item" style="{$nav}">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosComite" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Comite </em></a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosComite" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick=" verificarSesion();"><em>Comite </em></a>
                     </li>
                     <li  class="nav-item" style="{$nav}">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Cronograma </em></a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick="verificarSesion();"><em>Cronograma </em></a>
                     </li>
                     <li  class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosPolizas" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" 
                            onclick="
                            {* {if isset($smarty.session.arrGrupos.5.13) or isset($smarty.session.arrGrupos.6.20)}*}
                                    activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentesAdd.php', {$arrayFideicomitente|@sizeof});
+                                   verificarSesion();
                            "><em>Polizas  y Fiducia</em></a>
                     </li>
 
@@ -420,10 +419,12 @@
                             </div>
                         </div>  
                         <div class="form-group" id="idLineaRegistroFechaEnajenacion">
-                            <div class="col-md-4"> 
+                            <div class="col-md-4 inner-addon left-addon"> 
                                 <label class="control-label" >Fecha Registro de Enajenaci&oacute;n  </label><br>
-                                <input name="fchRegistroEnajenacion" type="text" id="fchRegistroEnajenacion" class="form-control"  value="{$value.fchRegistroEnajenacion}" readonly  style="width:50%; position: relative; float: left "/>
-                                <a href="#" onclick="javascript: calendarioPopUp('fchRegistroEnajenacion');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:35%"></a>
+                                <div class="inner-addon left-addon">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                    <input class="form-control" id="fchRegistroEnajenacion" name="fchRegistroEnajenacion" placeholder="yyyy/mm/dd" type="text" value="{$value.fchRegistroEnajenacion}"  readonly="" style="width: 100px;"/>
+                                </div>
                                 <div id="val_fchRegistroEnajenacion" class="divError" style="position: relative; float: left; width: 100%">Este campo es requerido</div>    
                             </div>
                         </div>
@@ -477,10 +478,11 @@
                         </div>
                         <div class="col-md-4">
                             <label class="control-label">No. Escritura</label><br> 
-                            <input name="txtEscritura" type="text" id="txtEscritura" value="{$value.txtEscritura}" onblur="sinCaracteresEspeciales(this);" class="form-control required3"  style="width: 30%; position: relative; float: left"> <b style="width: 5%; position: relative; float: left; left: 2%;top: 5px">Del</b>
-
-                            <input name="fchEscritura" type="text" id="fchEscritura" value="{$value.fchEscritura}" size="10" readonly="" class="form-control required3"  style="width: 35%; position: relative; float: left;left: 5%;">
-                            <a href="#" onclick="javascript: calendarioPopUp('fchEscritura');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:10%; "></a><br />
+                            <input name="txtEscritura" type="text" id="txtEscritura" value="{$value.txtEscritura}" onblur="sinCaracteresEspeciales(this);" class="form-control required3"  style="width: 30%; position: relative; float: left"> <b style="width: 5%; position: relative; float: left; left: 2%;top: 5px">Del</b>&nbsp;&nbsp;
+                            <div class="inner-addon left-addon" style="position: relative;float: right;right: 20%; ">
+                                <i class="glyphicon glyphicon-calendar" style="z-index: 1; padding-left: 0; margin-left: -3px"></i>
+                                <input class="form-control" id="fchEscritura" name="fchEscritura" placeholder="yyyy/mm/dd" value="{$value.fchEscritura}" type="text"  readonly="" style="width: 100px; position: relative;float: right; right: 25%"/>
+                            </div>
                             <div id="val_fchEscritura" class="divError" style="width: 50%; position: relative;float: left;">Este campo es requerido</div>
                             <div id="val_txtEscritura" class="divError" style="width: 50%; position: relative;float: right;">Este campo es requerido</div>
                         </div>  
@@ -704,6 +706,7 @@
 </form>
 <div id="postulacionTabView"></div>
 <div id="objDireccionOculto" style="display:none"></div>
+<div id="divCalendar" style="display:none"></div>
 <div id="objDireccionOcultoSolucion" style="display:none"></div>
 <!-- ******************************************** INICIO DE MODALES INFORMATIVOS ********************************* -->
 

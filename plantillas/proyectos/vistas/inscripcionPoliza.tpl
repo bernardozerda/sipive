@@ -22,8 +22,10 @@
         </div>  
         <div class="col-md-3"> 
             <label class="control-label" >Fecha de Expedici&oacute;n</label> 
-            <input name="fchExpedicion" type="text" id="fchExpedicion" value="{$value.fchExpedicion}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
-            <a href="#" onclick="javascript: calendarioPopUp('fchExpedicion');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 8%; position: relative; float: right; right:20%"></a>
+            <div class='inner-addon left-addon'>
+                <i class='glyphicon glyphicon-calendar'></i>
+                <input name="fchExpedicion" type="text" id="fchExpedicion" value="{$value.fchExpedicion}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
+            </div>
             <div id="val_fchExpedicion" class="divError">Diligenciar Campo</div>
         </div> 
         {if isset($smarty.session.arrGrupos.6.13) or isset($smarty.session.arrGrupos.6.20)}
@@ -70,14 +72,18 @@
                         </div>              
                         <div class="col-md-2"> 
                             <label class="control-label" >Vigencia Desde:</label> 
-                            <input name="fchVigenciaIni[]" type="text" id="fchVigenciaIni_{$numPol}" value="{$valueAmparo.fchVigenciaIni}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
-                            <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaIni_{$numPol}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 18%; position: relative; float: right; right:10%"></a>
+                            <div class='inner-addon left-addon'>
+                                <i class='glyphicon glyphicon-calendar'></i>
+                                <input name="fchVigenciaIni[]" type="text" id="fchVigenciaIni_{$numPol}" value="{$valueAmparo.fchVigenciaIni}" size="12" readonly=""  class="form-control required5"  style="width: 90%; position: relative; float: left">
+                            </div>
                             <div id="val_fchVigenciaIni_{$numPol}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-2"> 
                             <label class="control-label" >Vigencia Hasta:</label> 
-                            <input name="fchVigenciaFin[]" type="text" id="fchVigenciaFin_{$numPol}" value="{$valueAmparo.fchVigenciaFin}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
-                            <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaFin_{$numPol}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 18%; position: relative; float: right; right:10%"></a>
+                            <div class='inner-addon left-addon'>
+                                <i class='glyphicon glyphicon-calendar'></i>
+                                <input name="fchVigenciaFin[]" type="text" id="fchVigenciaFin_{$numPol}" value="{$valueAmparo.fchVigenciaFin}" size="12" readonly=""  class="form-control required5"  style="width: 90%; position: relative; float: left">
+                            </div>
                             <div id="val_fchVigenciaFin_{$numPol}" class="divError">Diligenciar Campo</div>
                         </div> 
                         <div class="col-md-2"> 
@@ -114,14 +120,18 @@
                                         </div>     
                                         <div class="col-md-2"> 
                                             <label class="control-label" >Vigencia Desde:</label> 
-                                            <input name="fchVigenciaIni[]" type="text" id="fchVigenciaIni{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.fchVigenciaIni}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
-                                            <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaIni{$valueAmparo.seqAmparo}_{$numPolHijo}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 18%; position: relative; float: right; right:10%"></a>
+                                            <div class='inner-addon left-addon'>
+                                                <i class='glyphicon glyphicon-calendar'></i>
+                                                <input name="fchVigenciaIni[]" type="text" id="fchVigenciaIni{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.fchVigenciaIni}" size="12" readonly=""  class="form-control required5"  style="width: 90%; position: relative; float: left">
+                                            </div>
                                             <div id="val_fchVigenciaIni_{$numPol}" class="divError">Diligenciar Campo</div>
                                         </div> 
                                         <div class="col-md-2"> 
                                             <label class="control-label" >Vigencia Hasta:</label> 
-                                            <input name="fchVigenciaFin[]" type="text" id="fchVigenciaFin{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.fchVigenciaFin}" size="12" readonly=""  class="form-control required5"  style="width: 70%; position: relative; float: left">
-                                            <a href="#" onclick="javascript: calendarioPopUp('fchVigenciaFin{$valueAmparo.seqAmparo}_{$numPolHijo}');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 18%; position: relative; float: right; right:10%"></a>
+                                            <div class='inner-addon left-addon'>
+                                                <i class='glyphicon glyphicon-calendar'></i>
+                                                <input name="fchVigenciaFin[]" type="text" id="fchVigenciaFin{$valueAmparo.seqAmparo}_{$numPolHijo}" value="{$valueAmparoHijo.fchVigenciaFin}" size="12" readonly=""  class="form-control required5"  style="width: 90%; position: relative; float: left">
+                                            </div>
                                             <div id="val_fchVigenciaFin_{$numPol}" class="divError">Diligenciar Campo</div>
                                         </div> 
                                         <div class="col-md-2"> 

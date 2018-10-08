@@ -35,7 +35,7 @@
             <td >{$value.txtNombreContactoOferente|capitalize:true}</td>
             <td >{$value.txtCorreoOferente|lower}</td>
             <td width="5%"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosOferente.php?tipo=2&seqOferente={$value.seqOferente}&page=datosOferente.php', '', true);">
-                    <img src="recursos/imagenes/list.png" width="24px"></a>
+                   <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style="cursor: pointer"></span></a>
             </td>
         </tr>
     {/foreach}

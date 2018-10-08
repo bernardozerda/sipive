@@ -20,6 +20,8 @@ $claProyecto = new Proyecto();
 $claUnidades = new DatosUnidades();
 $txtPlantilla = "proyectos/vistas/liquidacionProyecto.tpl";
 $id = $_REQUEST['id'];
+$tipo = $_REQUEST['tipo'];
+$page = $_REQUEST['page'];
 $idProyecto = 0;
 $destino = "";
 $arraArchivos = Array();
@@ -92,6 +94,9 @@ $claSmarty->assign("cantUnidadesExistencia", $cantUnidadesExistencia);
 $claSmarty->assign("arraArchivos", $arraArchivos);
 $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
 $claSmarty->assign("arraTipoInformes", $arraTipoInformes);
+$claSmarty->assign("id", $id);
+$claSmarty->assign("tipo", $tipo);
+$claSmarty->assign("page", $page);
 $claSmarty->assign("validar", $validar);
 
 if ($txtPlantilla != "") {

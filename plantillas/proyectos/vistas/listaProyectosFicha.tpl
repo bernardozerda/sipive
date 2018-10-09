@@ -43,12 +43,13 @@
             <td width="40%">{$value.txtNombreProyecto|upper}</td>                       
             <td width="45%">{$value.oferente}</td>
 
-            <td width="3%">
+            <td width="3%" align="center" >
                 {if $id != 4}
                     
                     <span class="glyphicon glyphicon-eye-close" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#div{$value.seqProyecto}"> </span>
                 {else}
-                    <img src="recursos/imagenes/report.png" width="24px" data-toggle="modal" data-target="#div{$value.seqProyecto}">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#div{$value.seqProyecto}"> </span>
+                    <!--<img src="recursos/imagenes/report.png" width="24px" data-toggle="modal" data-target="#div{$value.seqProyecto}">-->
                 {/if}
             </td>
             <td> 
@@ -57,7 +58,7 @@
                         <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#div{$value.seqProyecto}"> </span>
                     </a>
                 {else}
-                    <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosInterventoria.php?seqProyecto={$value.seqProyecto}&id=4&tipo=1', '', true);
+                    <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosInterventoria.php?seqProyecto={$value.seqProyecto}&id=7&tipo=1', '', true);
                             listenerFile('fileAction', 'nameArchivo');
                             removeFile('fileAction', 'nameArchivo')">
                          <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="cursor: pointer" data-toggle="modal" data-target="#div{$value.seqProyecto}"> </span>
@@ -137,7 +138,8 @@
                                     <div class="col-md-3">  
                                         <label>
                                             <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosInterventoria.php?seqProyecto={$value.seqProyecto}&id=4&tipo=2&seqInformeInterventoria={$valueInt.seqInformeInterventoria}', '', true);" data-dismiss="modal">
-                                                <img src="recursos/imagenes/verArchivo.png" width="16px" data-dismiss="modal">
+                                               <!-- <img src="recursos/imagenes/verArchivo.png" width="16px" data-dismiss="modal">-->
+                                                <span class="	glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="modal" > </span>
                                             </a>
                                         </label>
                                     </div>

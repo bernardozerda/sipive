@@ -1757,7 +1757,7 @@ class InscripcionFonvivienda
 
                     $txtComentario  = "ACTUALIZACIÓN DE INFORMACIÓN EN LA CONFORMACIÓN DE HOGAR. HOGAR PERTENECIENTE AL ";
                     $txtComentario .= "GRUPO BENEFICIARIO SUBSIDIOS $txtPrograma SEGÚN RESOLUCIÓN DEL MINISTERIO DE ";
-                    $txtComentario .= "VIVIENDA Y APORTE COMPLEMENTARIO PROGRAMA PIVE";
+                    $txtComentario .= "VIVIENDA Y VINCULACION BENEFICIO SDHT";
 
                     $sql = "
                          INSERT INTO T_SEG_SEGUIMIENTO (

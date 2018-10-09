@@ -860,7 +860,7 @@ var allDate = function () {
             if (id.split("fch") != null && id.split("fch") != 'undefined' && id.split("fch") != "" && id.split("fch")[1] != "") {
                 var fch = id.split("fch");
                 if (fch[1] != 'undefined' && fch[1] != null && fch[1] != '') {
-                    //console.log("attr id:" + id);
+                    console.log("attr id:" + id);
                     $('#' + id).datetimepicker({
                         language: 'es',
                         format: 'yyyy-mm-dd',

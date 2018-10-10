@@ -64,9 +64,11 @@
                 <link rel="stylesheet" href="librerias/jquery/css/dataTables.bootstrap.min.css"/> 
                 <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
 
-                <link href="http://localhost/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>             
-                <script type="text/javascript" src="http://localhost/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-                <script type="text/javascript" src="http://localhost/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.es.js" charset="UTF-8"></script>
+                <link href="librerias/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
+
+                <script type="text/javascript" src="librerias/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+
+                <script type="text/javascript" src="librerias/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.es.js" charset="UTF-8"></script>
 
                 </head>
                 <body class="yui-skin-sam" id="bodyHtml" topMargin="0" style="background-color: white;">

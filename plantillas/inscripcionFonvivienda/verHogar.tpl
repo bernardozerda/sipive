@@ -1,4 +1,8 @@
 
+<div class="alert alert-warning text-center">
+    Conformación del hogar a la fecha en SiPIVE
+</div>
+
 <table class="table table-hover" data-order='[[ 0, "asc" ]]' id="listadoCdp" width="900px">
     <thead>
         <tr>

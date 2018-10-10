@@ -105,14 +105,17 @@
 
     </div>
     <div class="panel-footer text-center">
-        <button type="button"
-                class="btn btn-primary {if $claInscripcion->hayCarguesPendientes() == true} disabled {/if}"
-                onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/nuevoCargue.php','',true);"
-                {if $claInscripcion->hayCarguesPendientes() == true} disabled {/if}
-        >
-            Nuevo Cargue
-        </button>
-
+        {if isset($smarty.session.arrGrupos.3.20)}
+            <button type="button"
+                    class="btn btn-primary {if $claInscripcion->hayCarguesPendientes() == true} disabled {/if}"
+                    onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/nuevoCargue.php','',true);"
+                    {if $claInscripcion->hayCarguesPendientes() == true} disabled {/if}
+            >
+                Nuevo Cargue
+            </button>
+        {else}
+            <p>&nbsp;</p>
+        {/if}
     </div>
 </div>
 

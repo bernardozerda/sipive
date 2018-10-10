@@ -110,14 +110,16 @@
 
 
             <div class="col-sm-3 text-center">
-                {if $claInscripcion->seqEstado != 2}
-                    <button type="button"
-                            class="btn btn-danger btn-sm {if $bolProcesar == false} disabled {/if}"
-                            onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/procesarCargue.php','seqCargue={$claInscripcion->seqCargue}',true);"
-                            {if $bolProcesar == false} disabled {/if}
-                    >
-                        Procesar Cargue
-                    </button>
+                {if isset($smarty.session.arrGrupos.3.20)}
+                    {if $claInscripcion->seqEstado != 2}
+                        <button type="button"
+                                class="btn btn-danger btn-sm {if $bolProcesar == false} disabled {/if}"
+                                onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/procesarCargue.php','seqCargue={$claInscripcion->seqCargue}',true);"
+                                {if $bolProcesar == false} disabled {/if}
+                        >
+                            Procesar Cargue
+                        </button>
+                    {/if}
                 {/if}
             </div>
         </div>

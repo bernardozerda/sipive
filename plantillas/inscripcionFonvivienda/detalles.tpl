@@ -35,16 +35,19 @@
             <div class="form-group col-sm-12">
                 <label class="control-label col-sm-2 h5" for="seqEstadoHogar">Estado</label>
                 <div class="col-sm-4">
-                    <select class="form-control input-sm" id="seqEstadoHogar" name="seqEstadoHogar">
+                    <select class="form-control input-sm"
+                            id="seqEstadoHogar"
+                            name="seqEstadoHogar"
+                            {if ! isset($smarty.session.arrGrupos.3.20)} disabled {/if}
+                            {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}
+                    >
                         <option value="0">Seleccione</option>
                         {foreach from=$claInscripcion->estadosHogar() item=arrEstadoHogar}
                             <option value="{$arrEstadoHogar.seqEstadoHogar}"
                                     {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == $arrEstadoHogar.seqEstadoHogar}
                                         selected
                                     {/if}
-                                    {if $arrEstadoHogar.seqEstadoHogar == 4}
-                                        disabled
-                                    {/if}
+                                    {if $arrEstadoHogar.seqEstadoHogar == 4} disabled {/if}
                             >
                                 {$arrEstadoHogar.txtEstadoHogar}
                             </option>
@@ -57,7 +60,7 @@
             <div class="form-group col-sm-12">
                 <label class="control-label col-sm-2 h5" for="seqEstadoHogar">Observaciones</label>
                 <div class="col-sm-10">
-                    <textarea class="form-control input-sm" name="txtObservaciones">{$claInscripcion->arrHogares.$numHogar.txtObservaciones}</textarea>
+                    <textarea class="form-control input-sm" name="txtObservaciones" {if ! isset($smarty.session.arrGrupos.3.20)} disabled {/if}>{$claInscripcion->arrHogares.$numHogar.txtObservaciones}</textarea>
                 </div>
             </div>
 
@@ -91,9 +94,7 @@
                             Formulario Seleccionado:
                             <a href="#"
                                class="text-success"
-                               {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar != 4}
-                                    onclick="verHogar({$claInscripcion->arrHogares.$numHogar.seqFormulario})"
-                               {/if}
+                                onclick="verHogar({$claInscripcion->arrHogares.$numHogar.seqFormulario})"
                             >{$claInscripcion->arrHogares.$numHogar.seqFormulario}</a>
                             <br>
                             <a href="#"
@@ -257,14 +258,20 @@
                         Volver
                     </button>
                 </div>
+
                 <div class="col-sm-4 text-center">
-                    <button type="submit"
-                            class="btn btn-primary btn-sm {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}"
-                            {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}
-                    >
-                        Guardar Cambios
-                    </button>
+                    {if isset($smarty.session.arrGrupos.3.20)}
+                        {if $arrEstadoHogar.seqEstadoHogar != 4}
+                            <button type="submit"
+                                    class="btn btn-primary btn-sm {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}"
+                                    {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}
+                            >
+                                Guardar Cambios
+                            </button>
+                        {/if}
+                    {/if}
                 </div>
+
             </div>
         </div>
     </div>

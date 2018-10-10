@@ -88,7 +88,14 @@
                         {elseif intval($claInscripcion->arrHogares.$numHogar.seqFormulario) == 0}
                             Formulario Seleccionado: <br><span class="text-success">Nuevo Formulario</span>
                         {elseif intval($claInscripcion->arrHogares.$numHogar.seqFormulario) != 0}
-                            Formulario Seleccionado: <span class="text-success">{$claInscripcion->arrHogares.$numHogar.seqFormulario}</span><br>
+                            Formulario Seleccionado:
+                            <a href="#"
+                               class="text-success"
+                               {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar != 4}
+                                    onclick="verHogar({$claInscripcion->arrHogares.$numHogar.seqFormulario})"
+                               {/if}
+                            >{$claInscripcion->arrHogares.$numHogar.seqFormulario}</a>
+                            <br>
                             <a href="#"
                                     {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar != 4}
                                         onclick="
@@ -278,3 +285,4 @@
 
 <div id="listadoAadProyectos"></div>
 <div id="verCoindidencias"></div>
+<div id="verHogar"></div>

@@ -11342,3 +11342,47 @@ function someterCoincidenciasFNV(){
     }
 
 }
+
+function verHogar(seqFormulario){
+
+    // obtiene el id oculto
+    var objModal = $('#verHogar');
+
+    // inicializa el modal
+    objModal.addClass("modal fade");
+    objModal.attr("tabindex" , "-1");
+    objModal.attr("role" , "dialog");
+    objModal.attr("aria-labelledby" , "myModalLabel");
+    objModal.empty();
+
+    // divs visibles del popup
+    var objModalOverlay     = $('<div class="modal-dialog" role="document"></div>');
+    var objModalContent     = $('<div class="modal-content" style="width: 970px;"></div>');
+    var objModalHeader      = $('<div class="modal-header" style="font-size: 20px;"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>Conformación de hogar SiPIVE</div>');
+    var objModalBody        = $('<div class="modal-body"></div>');
+    var objModalFooter      = $('<div class="modal-footer"></div>');
+    var objBotonSeleccionar = $('<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>');
+
+    // contenido dinamico del body (form de direccion)
+    $.ajax({
+        url: './contenidos/inscripcionFonvivienda/verHogar.php',
+        type: 'post',
+        data: 'seqFormulario=' + seqFormulario,
+        success: function(res){
+            objModalBody.html(res);
+        },
+        fail: function () {
+            alert('Problemas al mostrar el popup de errores');
+        }
+    });
+
+    // anidando divs
+    objModalFooter.append(objBotonSeleccionar);
+    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
+    objModalOverlay.append(objModalContent);
+    objModal.append(objModalOverlay);
+
+    // muestra el popup
+    objModal.modal('show');
+
+}

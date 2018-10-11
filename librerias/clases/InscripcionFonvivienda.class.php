@@ -2512,20 +2512,28 @@ class InscripcionFonvivienda
 //        $claFormularioModificado->bolCerrado = 1;
 //        $claFormularioModificado->seqEstadoProceso = 16;
 
-        if($arrHogar['seqLocalidad'] != 1){
-            $claFormularioModificado->seqLocalidad = $arrHogar['seqLocalidad'];
-        }
-
-        if($arrHogar['seqBarrio'] != 1143){
-            $claFormularioModificado->seqBarrio = $arrHogar['seqBarrio'];
-        }
-
-        if($arrHogar['seqCiudad'] != 1100){
-            $claFormularioModificado->seqCiudad = $arrHogar['seqCiudad'];
-        }
 
         if($arrHogar['txtDireccion'] != ""){
-            $claFormularioModificado->txtDireccion = $arrHogar['txtDireccion'];
+            if($arrHogar['txtDireccion'] != $claFormularioOriginal->txtDireccion){
+                $claFormularioModificado->seqCiudad = $arrHogar['seqCiudad'];
+                $claFormularioModificado->seqLocalidad = $arrHogar['seqLocalidad'];
+                $claFormularioModificado->seqBarrio = $arrHogar['seqBarrio'];
+                $claFormularioModificado->txtDireccion = $arrHogar['txtDireccion'];
+            }
+        }else{
+
+            if($arrHogar['seqLocalidad'] != 1){
+                $claFormularioModificado->seqLocalidad = $arrHogar['seqLocalidad'];
+            }
+
+            if($arrHogar['seqBarrio'] != 1143){
+                $claFormularioModificado->seqBarrio = $arrHogar['seqBarrio'];
+            }
+
+            if($arrHogar['seqCiudad'] != 1100){
+                $claFormularioModificado->seqCiudad = $arrHogar['seqCiudad'];
+            }
+
         }
 
         if($arrHogar['numTelefono1'] != ""){

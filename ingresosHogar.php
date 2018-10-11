@@ -33,7 +33,7 @@ $sql = "
     from t_frm_formulario f
     inner join t_frm_hogar h on f.seqformulario = h.seqFormulario
     inner join t_ciu_ciudadano c on h.seqCiudadano = c.seqCiudadano
-    where f.seqPlanGobierno = 3
+    where f.bolCerrado = 0
 ";
 
 $objRes = $aptBd->execute($sql);

@@ -40,7 +40,7 @@
                                         <input type="radio"
                                                name="seqFormulario"
                                                value="{$arrDatos.formulario}"
-                                                {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)}  {/if}
+                                               {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)} disabled {/if}
                                         >
                                     </td>
                                 </tr>

@@ -2507,10 +2507,10 @@ class InscripcionFonvivienda
         $claFormularioModificado->seqSolucion = $arrHogar['seqSolucion'];
         $claFormularioModificado->txtDireccionSolucion = $arrHogar['txtDireccionSolucion'];
         $claFormularioModificado->fchUltimaActualizacion = date("Y-m-d H:i:s");
-        $claFormularioModificado->bolCerrado = ( $arrHogar['seqFormulario'] == 0 )? 1 : $claFormularioOriginal->bolCerrado;
-        $claFormularioModificado->seqEstadoProceso = ( $arrHogar['seqFormulario'] == 0 )? 16 : $claFormularioOriginal->seqEstadoProceso;
-//        $claFormularioModificado->bolCerrado = 1;
-//        $claFormularioModificado->seqEstadoProceso = 16;
+//        $claFormularioModificado->bolCerrado = ( $arrHogar['seqFormulario'] == 0 )? 1 : $claFormularioOriginal->bolCerrado;
+//        $claFormularioModificado->seqEstadoProceso = ( $arrHogar['seqFormulario'] == 0 )? 16 : $claFormularioOriginal->seqEstadoProceso;
+        $claFormularioModificado->bolCerrado = 1;
+        $claFormularioModificado->seqEstadoProceso = 56;
 
 
         if($arrHogar['txtDireccion'] != ""){

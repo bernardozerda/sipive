@@ -144,7 +144,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
                                                         if (isset($_POST['documento']) AND ( $_POST['documento'] != '')) {
                                                             $cedula = str_replace(",", "", str_replace(".", "", $_POST['documento']));
                                                             $tipoDocumento = $_POST['tipodoc'];
-                                                            $sqlForm = $aptBd->execute("SELECT DISTINCT(T_CRU_CRUCES.seqCruce),T_CRU_CRUCES.txtNombre,
+                                                            $sqlForm = $aptBd->execute("SELECT DISTINCT(T_CRU_CRUCES.seqCruce) as seqCruce,T_CRU_CRUCES.txtNombre,
                                                                                         fchCruce,
                                                                                         fchCreacionCruce,
                                                                                         numDocumento,
@@ -164,6 +164,28 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 
                                                         while ($sqlForm->fields) {
                                                             $rowCruces = $sqlForm->fields;
+
+                                                            $sql = "
+                                                                select 
+                                                                    aud.fchMovimiento,
+                                                                    upper(concat(usu.txtNombre,' ',usu.txtApellido)) as txtUsuario
+                                                                from t_cru_auditoria aud
+                                                                inner join t_cor_usuario usu on aud.seqUsuario = usu.seqUsuario
+                                                                where seqAuditoria = (
+                                                                    select max(seqAuditoria) as seqAuditoria
+                                                                    from t_cru_auditoria
+                                                                    where seqCruce = " . $rowCruces['seqCruce'] . "
+                                                                    and seqFormulario = " . $rowCruces['seqFormulario'] . "
+                                                                )
+                                                            ";
+                                                            $objRes = $aptBd->execute($sql);
+                                                            $fchUltimaModificacion = null;
+                                                            $txtUsuarioUltimaModificacion = null;
+                                                            if($objRes->fields){
+                                                                $fchUltimaModificacion = $objRes->fields['fchMovimiento'];
+                                                                $txtUsuarioUltimaModificacion = $objRes->fields['txtUsuario'];
+                                                            }
+
                                                             // MUESTRA DATOS BASICOS DEL CRUCE
                                                             if (isset($_POST['documento']) AND ( $_POST['documento'] != '')) {
                                                                 echo "<div class='well'><table width='100%' align='center'>";
@@ -171,8 +193,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
                                                                 echo "<tr><td><b>Fecha Cruce:</b></td><td class='textoCeldas'>" . $rowCruces['fchCreacionCruce'] . "</td>";
                                                                 echo "<td><b>Usuario:</b></td><td class='textoCeldas'>[" . $rowCruces['seqUsuario'] . "] " . $rowCruces['txtUsuario'] . "</td>";
                                                                 echo "<td><b>Archivo:</b></td><td class='textoCeldas'>" . $rowCruces['txtNombreArchivo'] . "</td></tr>";
-                                                                echo "<tr><td><b>Fecha Actualizaci&oacute;n:</b></td><td class='textoCeldas'>" . $rowCruces['fchCruce'] . "</td>";
-                                                                echo "<td><b>Usuario Actualiza:</b></td><td class='textoCeldas'>" . $rowCruces['txtUsuarioActualiza'] . "</td>";
+                                                                echo "<tr><td><b>Fecha Actualizaci&oacute;n:</b></td><td class='textoCeldas'>" . $fchUltimaModificacion . "</td>";
+                                                                echo "<td><b>Usuario Actualiza:</b></td><td class='textoCeldas'>" . $txtUsuarioUltimaModificacion . "</td>";
                                                                 echo "<td><b>Archivo Actualiza:</b></td><td class='textoCeldas'>" . $rowCruces['txtNombreArchivoActualiza'] . "</td></tr>";
                                                                 echo "<tr><td><b>Formulario:</b></td><td class='textoCeldas' colspan = '5'>" . $rowCruces['seqFormulario'] . "</td></tr>";
                                                             } elseif (isset($_POST['formulario']) AND ( $_POST['formulario'] != '')) {
@@ -205,12 +227,13 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
                                                             echo "<tr><th width='9%'>Documento</th><th width='20%'>Nombre</th><th width='10%'>Entidad</th><th width='10%'>T&iacute;tulo</th><th width='30%'>Detalle</th><th width='9%'>Inhabilitar</th><th width='12%'>Observaciones</th></tr>";
                                                             while ($sqlResultadosCruce->fields) {
                                                                 $rowResultado = $sqlResultadosCruce->fields;
+                                                                $txtInhabilitar = ($rowResultado['bolInhabilitar'] == 1)? "SI" : "NO";
                                                                 echo "<tr><td class='textoCeldas'>" . $rowResultado['numDocumento'] . "</td>";
                                                                 echo "<td class='textoCeldas'>" . $rowResultado['txtNombre'] . "</td>";
                                                                 echo "<td class='textoCeldas' align='center'>" . $rowResultado['txtEntidad'] . "</td>";
                                                                 echo "<td class='textoCeldas'>" . $rowResultado['txtTitulo'] . "</td>";
                                                                 echo "<td class='textoCeldas'>" . $rowResultado['txtDetalle'] . "</td>";
-                                                                echo "<td class='textoCeldas' align='center'>" . $rowResultado['bolInhabilitar'] . "</td>";
+                                                                echo "<td class='textoCeldas' align='center'>" . $txtInhabilitar . "</td>";
                                                                 echo "<td class='textoCeldas'>" . $rowResultado['txtObservaciones'] . "</td></tr>";
                                                                 $sqlResultadosCruce->MoveNext();
                                                             }

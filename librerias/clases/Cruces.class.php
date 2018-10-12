@@ -560,15 +560,17 @@ WHERE
             $arrCruces[$seqCruce]['fchCruce']              = new DateTime($objRes->fields['fchCruce']);
             $arrCruces[$seqCruce]['fchCreacionCruce']      = new DateTime($objRes->fields['fchCreacionCruce']);
             $arrCruces[$seqCruce]['fchActualizacionCruce'] = new DateTime($objRes->fields['fchActualizacionCruce']);
-
-            $sql = "
-                select sum(bolInhabilitar) as bolInhabilitar
-                from t_cru_resultado
-                where seqCruce = $seqCruce
-                  and seqFormulario = $seqFormulario
-            ";
-            $objResCruce = $aptBd->execute($sql);
-            $arrCruces[$seqCruce]['bolInhabilitar'] = (intval($objResCruce->fields['bolInhabilitar']) > 0 )? 1: 0;
+            $arrCruces[$seqCruce]['bolInhabilitar'] = 0;
+            if(intval($arrPost['documento']) != 0) {
+                $sql = "
+                    select sum(bolInhabilitar) as bolInhabilitar
+                    from t_cru_resultado
+                    where seqCruce = $seqCruce
+                      and seqFormulario = $seqFormulario
+                ";
+                $objResCruce = $aptBd->execute($sql);
+                $arrCruces[$seqCruce]['bolInhabilitar'] = (intval($objResCruce->fields['bolInhabilitar']) > 0) ? 1 : 0;
+            }
 
             $objRes->MoveNext();
         }
@@ -657,12 +659,12 @@ WHERE
             if( $_FILES['archivo']['type'] == "text/plain" ){
                 foreach( file( $_FILES['archivo']['tmp_name'] ) as $numLinea => $txtLinea ){
                     if( trim( $txtLinea ) != "" ) {
-                        $arrArchivo[$numLinea] = explode("\t", utf8_encode(trim($txtLinea)));
-                        foreach( $arrArchivo[$numLinea] as $numColumna => $txtCelda ){
-                            if( $numColumna < count( $this->arrFormatoArchivo ) ) {
-                                $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
+                        $arrArchivo[$numLinea] = explode("\t", utf8_encode($txtLinea));
+                        foreach($this->arrFormatoArchivo as $numColumna => $arrDato){
+                            if(! isset($arrArchivo[$numLinea][$numColumna])){
+                                $arrArchivo[$numLinea][$numColumna] = "";
                             }else{
-                                unset( $arrArchivo[$numLinea][$numColumna] );
+                                $arrArchivo[$numLinea][$numColumna] = trim($arrArchivo[$numLinea][$numColumna]);
                             }
                         }
                     }
@@ -721,14 +723,14 @@ WHERE
 
     public function validarArchivo($arrArchivo, $txtModo){
 
-        if($txtModo == "crear"){
-            unset($this->arrFormatoArchivo[0]);
-        }
+//        if($txtModo == "crear"){
+//            unset($this->arrFormatoArchivo[0]);
+//        }
 
         // valida titulos
         foreach($this->arrFormatoArchivo as $numColumna => $arrCelda){
-            $numColumnaArchivo = ($txtModo == "crear")? $numColumna - 1 : $numColumna;
-            if(mb_strtolower($arrCelda['nombre']) != mb_strtolower($arrArchivo[0][$numColumnaArchivo])){
+            //$numColumnaArchivo = ($txtModo == "crear")? $numColumna - 1 : $numColumna;
+            if(mb_strtolower($arrCelda['nombre']) != mb_strtolower($arrArchivo[0][$numColumna])){
                 $this->arrErrores[] = "Error Linea 1: La columna " . $arrCelda['nombre'] . " no está o no está en el lugar correcto";
             }
         }
@@ -736,16 +738,16 @@ WHERE
         // valida las lineas del archivo
         if(empty($this->arrErrores)) {
             foreach ($this->arrFormatoArchivo as $numColumna => $arrCelda) {
-                $numColumnaArchivo = ($txtModo == "crear")? $numColumna - 1 : $numColumna;
+//                $numColumnaArchivo = ($txtModo == "crear")? $numColumna - 1 : $numColumna;
                 for ($numFila = 1; $numFila < count($arrArchivo); $numFila++) {
-                    if ($arrArchivo[$numFila][$numColumnaArchivo] != "") {
+                    if ($arrArchivo[$numFila][$numColumna] != "") {
                         $bolError = false;
                         switch ($arrCelda['tipo']) {
                             case "numero":
-                                $bolError = (is_numeric($arrArchivo[$numFila][$numColumnaArchivo])) ? false : true;
+                                $bolError = (is_numeric($arrArchivo[$numFila][$numColumna])) ? false : true;
                                 break;
                             case "fecha":
-                                $bolError = (esFechaValida($arrArchivo[$numFila][$numColumnaArchivo])) ? false : true;
+                                $bolError = (esFechaValida($arrArchivo[$numFila][$numColumna])) ? false : true;
                                 break;
                         }
                         if ($bolError) {
@@ -753,8 +755,8 @@ WHERE
                         }
                         if (isset($arrCelda['rango'])) {
                             if(!is_array($arrCelda['rango'])) {
-                                if (!in_array(mb_strtoupper($arrArchivo[$numFila][$numColumnaArchivo]), $arrCelda['rango'])) {
-                                    $this->arrErrores[] = "Error Linea " . ($numFila + 1) . ": columna " . $arrCelda['nombre'] . " " . $arrArchivo[$numFila][$numColumnaArchivo] . " no es un valor válido";
+                                if (!in_array(mb_strtoupper($arrArchivo[$numFila][$numColumna]), $arrCelda['rango'])) {
+                                    $this->arrErrores[] = "Error Linea " . ($numFila + 1) . ": columna " . $arrCelda['nombre'] . " " . $arrArchivo[$numFila][$numColumna] . " no es un valor válido";
                                 }
                             }
                         }
@@ -772,6 +774,7 @@ WHERE
         $this->validarFormulario($_POST);
 
         // carga el archivo txt, xls o xlsx
+        array_shift($this->arrFormatoArchivo);
         $arrArchivo = $this->cargarArchivo();
 
         // valida que los datos sean coherentes con el formato del archivo
@@ -830,7 +833,7 @@ WHERE
                     if($seqFormulario != 0) {
                         if ((!isset($arrInhabilitar[$seqFormulario])) or $arrInhabilitar[$seqFormulario]['inhabilitar'] == 0) {
                             $arrInhabilitar[$seqFormulario]['inhabilitar'] = $bolInhabilitar;
-                            $arrInhabilitar[$seqFormulario]['estado'] = array_shift(array_keys($this->arrFormatoArchivo[4]['rango'], mb_strtoupper($arrLinea[3])));
+                            $arrInhabilitar[$seqFormulario]['estado'] = array_shift(array_keys($this->arrFormatoArchivo[3]['rango'], mb_strtoupper($arrLinea[3])));
                         }
                     }
 
@@ -852,12 +855,12 @@ WHERE
                         ) VALUES (
                             " . $seqCruce . ",
                             " . $arrLinea[0] . ",
-                            " . array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],mb_strtoupper($arrLinea[2]))) . ",
-                            " . array_shift(array_keys($this->arrFormatoArchivo[4]['rango'],mb_strtoupper($arrLinea[3]))) . ",
-                            " . array_shift(array_keys($this->arrFormatoArchivo[5]['rango'],mb_strtoupper($arrLinea[4]))) . ",
+                            " . array_shift(array_keys($this->arrFormatoArchivo[2]['rango'],mb_strtoupper($arrLinea[2]))) . ",
+                            " . array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],mb_strtoupper($arrLinea[3]))) . ",
+                            " . array_shift(array_keys($this->arrFormatoArchivo[4]['rango'],mb_strtoupper($arrLinea[4]))) . ",
                             " . $arrLinea[5] . ",
                             '" . strtoupper($arrLinea[6]) . "',
-                            " . array_shift(array_keys($this->arrFormatoArchivo[8]['rango'],mb_strtoupper($arrLinea[7]))) . ",
+                            " . array_shift(array_keys($this->arrFormatoArchivo[7]['rango'],mb_strtoupper($arrLinea[7]))) . ",
                             '" . mb_strtoupper($arrLinea[8]) . "',
                             '" . mb_strtoupper($arrLinea[9]) . "',
                             '" . mb_strtoupper($arrLinea[10]) . "',
@@ -889,12 +892,12 @@ WHERE
                             " . $_SESSION['seqUsuario'] . ",
                             " . $seqCruce . ",
                             " . $arrLinea[0] . ",
-                            " . array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],mb_strtoupper($arrLinea[2]))) . ",
-                            " . array_shift(array_keys($this->arrFormatoArchivo[4]['rango'],mb_strtoupper($arrLinea[3]))) . ",
-                            " . array_shift(array_keys($this->arrFormatoArchivo[5]['rango'],mb_strtoupper($arrLinea[4]))) . ",
+                            " . array_shift(array_keys($this->arrFormatoArchivo[2]['rango'],mb_strtoupper($arrLinea[2]))) . ",
+                            " . array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],mb_strtoupper($arrLinea[3]))) . ",
+                            " . array_shift(array_keys($this->arrFormatoArchivo[4]['rango'],mb_strtoupper($arrLinea[4]))) . ",
                             " . $arrLinea[5] . ",
                             '" . strtoupper($arrLinea[6]) . "',
-                            " . array_shift(array_keys($this->arrFormatoArchivo[8]['rango'],mb_strtoupper($arrLinea[7]))) . ",
+                            " . array_shift(array_keys($this->arrFormatoArchivo[7]['rango'],mb_strtoupper($arrLinea[7]))) . ",
                             '" . mb_strtoupper($arrLinea[8]) . "',
                             '" . mb_strtoupper($arrLinea[9]) . "',
                             '" . mb_strtoupper($arrLinea[10]) . "',
@@ -966,11 +969,11 @@ WHERE
 
                 // verifica que el estado del proceso sea el mismo de la base de datos
                 // y verifica que este en estado Inscrito - Calificado
-                if($claFormulario->seqEstadoProceso != array_shift(array_keys($this->arrFormatoArchivo[4]['rango'],mb_strtoupper($arrLinea[3])))){
+                if($claFormulario->seqEstadoProceso != array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],mb_strtoupper($arrLinea[3])))){
                     $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no corresponde el estado registrado en el sistema";
                 }else{
                     $txtValidacion = (intval($arrPost['numValidacion']) == 1)? 'Primera Verificacion' : 'Segunda Verificacion';
-                    if (!in_array(array_shift(array_keys($this->arrFormatoArchivo[4]['rango'], mb_strtoupper($arrLinea[3]))), $this->arrEstadosPermitidos['crear'][$txtValidacion])) {
+                    if (!in_array(array_shift(array_keys($this->arrFormatoArchivo[3]['rango'], mb_strtoupper($arrLinea[3]))), $this->arrEstadosPermitidos['crear'][$txtValidacion])) {
                         $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado " . $arrLinea[3] . " no es permitido para el cargue de cruces de " . $txtValidacion;
                     }
                     if(in_array($claFormulario->seqTipoEsquema , array( 5 , 10 , 11 , 13 , 15 )) and $claFormulario->seqEstadoProceso == 53){
@@ -1072,7 +1075,7 @@ WHERE
                 }
 
                 // verifica que la modalidad sea la misma de la base de datos
-                if($claFormulario->seqModalidad != array_shift(array_keys($this->arrFormatoArchivo[3]['rango'],mb_strtoupper($arrLinea[2])))){
+                if($claFormulario->seqModalidad != array_shift(array_keys($this->arrFormatoArchivo[2]['rango'],mb_strtoupper($arrLinea[2])))){
                     $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La modalidad " . $arrLinea[2] . " no corresponde con la registrada en el sistema";
                 }else{
                     $arrModalidadArchivo[$claFormulario->seqModalidad] = 1;
@@ -1088,14 +1091,14 @@ WHERE
                     $arrHogar[$seqFormulario][$objCiudadano->numDocumento] = $seqCiudadano;
                     if($arrLinea[5] == $objCiudadano->numDocumento) {
                         $bolCiudadanoEncontrado = true;
-                        $seqTipoDocumento = array_shift(array_keys($this->arrFormatoArchivo[5]['rango'], mb_strtoupper($arrLinea[4])));
+                        $seqTipoDocumento = array_shift(array_keys($this->arrFormatoArchivo[4]['rango'], mb_strtoupper($arrLinea[4])));
                         if ($objCiudadano->seqTipoDocumento != $seqTipoDocumento) {
                             $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El tipo de documento no concuerda con el registrado en el sistema";
                         }
                         if ($this->obtenerNombre($objCiudadano) != mb_strtolower(trim($arrLinea[6]))) {
                             $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El nombre no concuerda con el registrado en el sistema";
                         }
-                        $seqParentesco = array_shift(array_keys($this->arrFormatoArchivo[8]['rango'], mb_strtoupper($arrLinea[7])));
+                        $seqParentesco = array_shift(array_keys($this->arrFormatoArchivo[7]['rango'], mb_strtoupper($arrLinea[7])));
                         if($objCiudadano->seqParentesco != $seqParentesco){
                             $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El parentesco no concuerda con el registrado en el sistema";
                         }
@@ -1118,7 +1121,7 @@ WHERE
 
             // verifica que la fuente este en la base de datos
             if(trim($arrLinea[8]) != "") {
-                $seqFuente = array_shift(array_keys($this->arrFormatoArchivo[9]['rango'], mb_strtoupper($arrLinea[8])));
+                $seqFuente = array_shift(array_keys($this->arrFormatoArchivo[8]['rango'], mb_strtoupper($arrLinea[8])));
                 if (intval($seqFuente) == 0) {
                     $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": No tiene una fuente conocida";
                 }
@@ -1126,7 +1129,7 @@ WHERE
 
             // Verifica que la causa sea conocida en la base de datos
             if(trim($arrLinea[9]) != "") {
-                $seqCausa = array_shift(array_keys($this->arrFormatoArchivo[10]['rango'][$seqFuente], mb_strtoupper($arrLinea[9])));
+                $seqCausa = array_shift(array_keys($this->arrFormatoArchivo[9]['rango'][$seqFuente], mb_strtoupper($arrLinea[9])));
                 if (intval($seqCausa) == 0) {
                     $this->arrErrores[] = "Error Linea " . ($numLinea + 1) . ": No tiene una causa conocida o no tiene relación con la fuente";
                 }
@@ -1562,7 +1565,7 @@ WHERE
                                         update t_cru_resultado set
                                             txtEntidad = '" . mb_strtoupper($arrLinea[9]) . "',
                                             txtTitulo = '" . mb_strtoupper($arrLinea[10]) . "',
-                                            txtDetalle = '" . mb_strtoupper($arrLinea[11]) . "',
+                                            txtDetalle = '" . mb_strtoupper(mb_ereg_replace("\"","",$arrLinea[11])) . "',
                                             bolInhabilitar = " . $bolInhabilitar . ",
                                             txtObservaciones = '" . mb_strtoupper($arrLinea[13]) . "'
                                         where seqCruce = " . $_POST['seqCruce'] . "  

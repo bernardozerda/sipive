@@ -212,8 +212,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
                                                                 echo "<tr><td><b>Fecha Cruce:</b></td><td class='textoCeldas'>" . $rowFormulario['fchCreacionCruce'] . "</td>";
                                                                 echo "<td><b>Usuario:</b></td><td class='textoCeldas'>[" . $rowFormulario['seqUsuario'] . "] " . $rowFormulario['txtUsuario'] . "</td>";
                                                                 echo "<td><b>Archivo:</b></td><td class='textoCeldas'>" . $rowFormulario['txtNombreArchivo'] . "</td></tr>";
-                                                                echo "<tr><td><b>Fecha Actualizaci&oacute;n:</b></td><td class='textoCeldas'>" . $rowFormulario['fchCruce'] . "</td>";
-                                                                echo "<td><b>Usuario Actualiza:</b></td><td class='textoCeldas'>" . $rowFormulario['txtUsuarioActualiza'] . "</td>";
+                                                                echo "<tr><td><b>Fecha Actualizaci&oacute;n:</b></td><td class='textoCeldas'>" . $fchUltimaModificacion . "</td>";
+                                                                echo "<td><b>Usuario Actualiza:</b></td><td class='textoCeldas'>" . $txtUsuarioUltimaModificacion . "</td>";
                                                                 echo "<td><b>Archivo Actualiza:</b></td><td class='textoCeldas'>" . $rowFormulario['txtNombreArchivoActualiza'] . "</td></tr>";
                                                                 echo "<tr><td><b>Formulario:</b></td><td class='textoCeldas' colspan = '5'>" . $rowCruces['seqFormulario'] . "</td></tr>";
                                                             }

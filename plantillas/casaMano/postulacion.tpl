@@ -2445,7 +2445,7 @@
     <input type="hidden" id="txtFase"       name="txtFase"       value="{$arrFlujoHogar.fase}">
     <input type="hidden" id="txtFlujo"      name="txtFlujo"      value="{$arrFlujoHogar.flujo}">
     <input type="hidden"                    name="txtArchivo"    value="{$txtArchivo}">
-    <input type="hidden" name="numDocumento" id="documentoMiembro" value="">
+    {*<input type="hidden" name="numDocumento" id="documentoMiembro" value="">*}
 
 
 </form>

@@ -71,14 +71,14 @@
         </div>
         <p>&nbsp;</p>
         <p>            
-            {if isset($page) && $id == 4 || $id == 6 || $id == 5 || !isset($id)}
+            {if isset($page) && $id == 4 || $id == 6 || $id == 5 || !isset($id) && $page != ""}
                 <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
                        onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/{$page}', '', true);
                                cargarContenido('rutaMenu', './rutaMenu.php', 'menu=66', false);" class="btn_volver"/> 
                 {if $tipo != 3}
                     <input type="button" name="btn_enviar" id="btn_enviar" value="Salvar Inscripci&oacute;n" onclick="almacenarIncripcion()" class="btn_volver"/><br>
                 {/if}
-            {elseif isset($page)}
+            {elseif isset($page) }
                 <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
                        onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/{$page}', '', true);
                                cargarContenido('rutaMenu', './rutaMenu.php', 'menu=66', false);" class="btn_volver"/> 

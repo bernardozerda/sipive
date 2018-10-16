@@ -106,7 +106,8 @@ class DatosGeneralesProyectos {
         } else {
             // $sql .= " where pry.seqProyectoPadre is null";
             if ($id == 2) {
-                $sql .= "  where pry.seqPryEstadoProceso in(5,6)";
+               // $sql .= "  where pry.seqPryEstadoProceso in(5,6)";
+                $sql .= "  where pry.seqProyectoGrupo in (1,2)";
             } else {
                 $sql .= "  where pry.seqPryEstadoProceso != 7";
             }

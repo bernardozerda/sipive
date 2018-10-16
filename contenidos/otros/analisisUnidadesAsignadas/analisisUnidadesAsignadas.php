@@ -45,8 +45,10 @@ $sql = "
     LEFT  JOIN T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
     LEFT  JOIN T_PRY_TECNICO tec ON und.seqUnidadProyecto = tec.seqUnidadProyecto
     LEFT JOIN T_PRY_ESTADO_UNIDAD est ON est.seqEstadoUnidad = und.seqEstadoUnidad
-    WHERE pry.seqTipoEsquema in (1,2)
+    WHERE pry.seqProyectoGrupo in (1,2)
 ";
+
+//echo $sql."<br>"; die();
 $arrRegistros = $aptBd->GetAll($sql);
 foreach ($arrRegistros as $numLinea => $arrRegistro) {
     if (trim($arrRegistro['txtNombreProyectoPadre']) == "") {

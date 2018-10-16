@@ -461,6 +461,7 @@ class Proyecto {
                     fchRadicadoTecnico,
                     numRadicadoFinanciero,
                     fchRadicadoFinanciero,
+                    bolActivo,
                     seqUsuario)
                     VALUES (
                     $seqPryEstadoProceso,
@@ -536,11 +537,12 @@ class Proyecto {
                     '$fchRadicadoTecnico',
                     $numRadicadoFinanciero,
                     '$fchRadicadoFinanciero',
+                     1,
                     $seqUsuario
                     ) ";
         try {
-            // echo "<br>" . $sql;
-//            die();
+             echo "<br>" . $sql;
+           //die();
             $aptBd->execute($sql);
             $seqProyecto = $aptBd->Insert_ID();
             // 
@@ -2387,7 +2389,7 @@ class Proyecto {
     public function obtenerDatosProyectosTableroPal() {
 
         global $aptBd;
-         $sql = "select seqPryEstadoProceso, txtPryEstadoProceso, count(pry.seqProyecto) as cantidad, 
+        $sql = "select seqPryEstadoProceso, txtPryEstadoProceso, count(pry.seqProyecto) as cantidad, 
             (select count(seqUnidadProyecto)  from t_pry_unidad_proyecto und 
             left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
             left join t_pry_tecnico tec using(seqUnidadProyecto)

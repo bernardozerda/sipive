@@ -22,9 +22,9 @@ if(intval($_POST['levantar']) == 1){
 
     foreach($_POST['resultado'] as $seqResultado => $arrDatos){
 
-        if($claCruces->arrDatos['arrResultado'][$seqResultado]['bolInhabilitar'] == 0 and $arrDatos['bolInhabilitar'] == 1){
-            $arrErrores[] = "No puede generar inhabilidades por este medio, remitase a adicionar lineas del cruce";
-        }
+//        if($claCruces->arrDatos['arrResultado'][$seqResultado]['bolInhabilitar'] == 0 and $arrDatos['bolInhabilitar'] == 1){
+//            $arrErrores[] = "No puede generar inhabilidades por este medio, remitase a adicionar lineas del cruce";
+//        }
 
         if($claCruces->arrDatos['arrResultado'][$seqResultado]['bolInhabilitar'] == 1 and $arrDatos['bolInhabilitar'] == 0 and trim($arrDatos['txtObservaciones']) == ""){
             $arrErrores[] = "Para levantar la inhabilitar la linea debe digitar las observaciones";

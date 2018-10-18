@@ -912,6 +912,7 @@
                                                                     id="seqSalud"
                                                                     style="width:96%;"
                                                             >
+                                                                <option value="">Seleccione</option>
                                                                 <option value="0">NINGUNO</option>
                                                                 {foreach from=$arrSalud key=seqSalud item=txtSalud}
                                                                     <option value="{$seqSalud}">{$txtSalud}</option>

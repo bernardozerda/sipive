@@ -78,6 +78,14 @@
         $arrIgnorarCampos[] = "seqBarrio";
         $arrIgnorarCampos[] = "txtCorreo";
 
+        $arrIgnorarCamposCiudadano[] = "seqTipoDocumento";
+        $arrIgnorarCamposCiudadano[] = "numDocumento";
+        $arrIgnorarCamposCiudadano[] = "txtNombre1";
+        $arrIgnorarCamposCiudadano[] = "txtNombre2";
+        $arrIgnorarCamposCiudadano[] = "txtApellido1";
+        $arrIgnorarCamposCiudadano[] = "txtApellido2";
+
+        $arrPostHogar = $_POST['hogar'];
         unset($_POST['hogar']);
         if($_POST['txtFase'] == "postulacion") {
            foreach ($claCasaMano->objPostulacion as $txtClave => $txtValor) {
@@ -88,16 +96,41 @@
               } else {
                  foreach ($claCasaMano->objPostulacion->$txtClave as $seqCiudadano => $objCiudadano) {
                     $numDocumento = $objCiudadano->numDocumento;
-                    foreach ($objCiudadano as $txtCampo => $txtValue) {
-                       $_POST['hogar'][$numDocumento][$txtCampo] = $txtValue;
+                    if(isset($arrPostHogar[$numDocumento])){
+                        foreach ($objCiudadano as $txtCampo => $txtValue) {
+                            if (!in_array($txtCampo, $arrIgnorarCamposCiudadano)) {
+                                $_POST['hogar'][$numDocumento][$txtCampo] = $txtValue;
+                            }else{
+                                $_POST['hogar'][$numDocumento][$txtCampo] = $arrPostHogar[$numDocumento][$txtCampo];
+                            }
+                        }
+                        unset($arrPostHogar[$numDocumento]);
                     }
                  }
+
+                 if(! empty($arrPostHogar)){
+                     foreach($arrPostHogar as $numDocumento => $arrDatos){
+                         $_POST['hogar'][$numDocumento] = $arrDatos;
+                     }
+                 }
+
               }
            }
         }
 
 
-        $claCasaMano->salvar( $_POST );
+        try {
+            $aptBd->BeginTrans();
+            $claCasaMano->salvar($_POST);
+            if(empty($claCasaMano->arrErrores)){
+                $aptBd->CommitTrans();
+            }else{
+                $aptBd->RollbackTrans();
+            }
+        }catch(Exception $objErrores){
+            $aptBd->RollbackTrans();
+        }
+
         imprimirMensajes( $claCasaMano->arrErrores , $claCasaMano->arrMensajes );
     }
     

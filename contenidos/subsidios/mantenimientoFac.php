@@ -16,28 +16,56 @@ include( "../../librerias/phpExcel/Classes/PHPExcel/IOFactory.php" );
 
 $arrMensajes = array();
 
+// equivalencias entre los estados a reportar
+$arrEstados["DESEMBOLSADO"] = 33;
+$arrEstados["DESEMBOLSADO - PENDIENTE REINTEGRO"] = 59;
+$arrEstados["DESEMBOLSADO - REINTEGRADO"] = 60;
+$arrEstados["DESEMBOLSO - LEGALIZADO"] = 40;
+$arrEstados["DESVINCULACION"] = 57;
+$arrEstados["EXCLUIDO. VINCULACION"] = 57;
+$arrEstados["EXCLUIDO. VIVIENDA GRATUITA"] = 63;
+$arrEstados["PERDIDA"] = 21;
+$arrEstados["PROCESO DESEMBOLSO"] = 15;
+$arrEstados["PROCESO LEGALIZACION"] = 15;
+$arrEstados["RENUNCIA"] = 18;
+$arrEstados["REVOCADO"] = 58;
+$arrEstados["VENCIDO"] = 34;
+$arrEstados["VINCULACION"] = 15;
+$arrEstados["VINCULACION - LEGALIZADO"] = 40;
+
 if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
 
     $arrArchivo = cargarArchivo("archivo");
 
-    if(empty($arrArchivo['errores'])){
+    // validaciones de formato para el archivo
+    foreach($arrArchivo['archivo'] as $numLinea => $arrLinea){
+        if($numLinea > 0){
 
-        // equivalencias entre los estados a reportar
-        $arrEstados["DESEMBOLSADO"] = 33;
-        $arrEstados["DESEMBOLSADO - PENDIENTE REINTEGRO"] = 59;
-        $arrEstados["DESEMBOLSADO - REINTEGRADO"] = 60;
-        $arrEstados["DESEMBOLSO - LEGALIZADO"] = 40;
-        $arrEstados["DESVINCULACION"] = 57;
-        $arrEstados["EXCLUIDO. VINCULACION"] = 57;
-        $arrEstados["EXCLUIDO. VIVIENDA GRATUITA"] = 63;
-        $arrEstados["PERDIDA"] = 21;
-        $arrEstados["PROCESO DESEMBOLSO"] = 15;
-        $arrEstados["PROCESO LEGALIZACION"] = 15;
-        $arrEstados["RENUNCIA"] = 18;
-        $arrEstados["REVOCADO"] = 58;
-        $arrEstados["VENCIDO"] = 34;
-        $arrEstados["VINCULACION"] = 15;
-        $arrEstados["VINCULACION - LEGALIZADO"] = 40;
+            $seqFormulario = intval($arrLinea[2]);
+            $numResolucion = intval(mb_ereg_replace("[^0-9]","",$arrLinea[7]));
+            $fchResolucion = $arrLinea[9];
+            $txtEstado     = trim(mb_strtoupper($arrLinea[10]));
+
+            if($seqFormulario == 0){
+                $arrArchivo['errores'][] = "Error linea " . ($numLinea + 1) . ": ID Hogar no válido";
+            }
+
+            if($numResolucion == 0){
+                $arrArchivo['errores'][] = "Error linea " . ($numLinea + 1) . ": Número de resolución no válido";
+            }
+
+            if(! esFechaValida($fchResolucion)){
+                $arrArchivo['errores'][] = "Error linea " . ($numLinea + 1) . ": Fecha de resolución no válida (use yyyy-mm-dd)";
+            }
+
+            if(! isset($arrEstados[$txtEstado])){
+                $arrArchivo['errores'][] = "Error Linea " . ( $numLinea + 1 ) . ": No se encuentra la equivalencia del estado '$txtEstado'";
+            }
+
+        }
+    }
+
+    if(empty($arrArchivo['errores'])){
 
         // recoge la equivalencia entre formulario y formulario-acto
         $sql = "
@@ -67,37 +95,30 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
         }
 
         unset($arrArchivo['archivo'][0]);
-        foreach($arrArchivo['archivo'] as $numLinea => $arrLinea){
+        foreach($arrArchivo['archivo'] as $numLinea => $arrLinea) {
 
-            $seqFormulario = $arrLinea[2];
-            $numResolucion = mb_ereg_replace("[^0-9]","",$arrLinea[7]);
+            $seqFormulario = intval($arrLinea[2]);
+            $numResolucion = intval(mb_ereg_replace("[^0-9]", "", $arrLinea[7]));
             $fchResolucion = $arrLinea[9];
-            $txtEstado     = trim(mb_strtoupper($arrLinea[10]));
+            $txtEstado = trim(mb_strtoupper($arrLinea[10]));
 
             $seqFormularioActo = intval($arrFormularios[$numResolucion . "-" . $fchResolucion][$seqFormulario]);
-            if($seqFormularioActo == 0){
-                $arrArchivo['errores'][] = "Error Linea " . ( $numLinea + 1 ) . ": No existe formulario relacionado con el acto administrativo";
+            if ($seqFormularioActo == 0) {
+                $arrArchivo['errores'][] = "Error Linea " . ($numLinea + 1) . ": No existe formulario relacionado con el acto administrativo";
             }
 
-            $seqEstadoProceso = 0;
-            if(! isset($arrEstados[$txtEstado])){
-                $arrArchivo['errores'][] = "Error Linea " . ( $numLinea + 1 ) . ": No se encuentra la equivalencia del estado '$txtEstado'";
-            }else{
-                $seqEstadoProceso = $arrEstados[$txtEstado];
-            }
-
-            $arrSql[] = "update t_aad_formulario_acto set seqEstadoProceso = $seqEstadoProceso, fchUltimaActualizacion = now() where seqFormularioActo = $seqFormularioActo";
+            $arrSql[] = "update t_aad_formulario_acto set seqEstadoProceso = " . $arrEstados[$txtEstado] . ", fchUltimaActualizacion = now() where seqFormularioActo = $seqFormularioActo";
 
         }
 
-        if(empty($arrArchivo['errores'])) {
+        if(empty($arrArchivo['errores']) and (!empty($arrSql))) {
             try {
                 $aptBd->BeginTrans();
                 foreach($arrSql as $sql){
                     $aptBd->execute($sql);
                 }
                 $arrMensajes[] = "Estado de actos administrativos actualizados, procesadas " . count($arrSql) . " cambios";
-                $aptBd->CommitTrans();
+                $aptBd->RollBackTrans();
             } catch (Exception $objError) {
                 $aptBd->RollBackTrans();
                 $arrArchivo['errores'][] = $objError->getMessage();

@@ -4972,9 +4972,18 @@ WHERE
 
     public function reporteGralHogar($arrDocumentos) {
         global $aptBd;
-
+        $formularios = "";
+     
+        if (!empty($arrDocumentos)) {
+            $aptBd->execute("SET @@group_concat_max_len = 10000000;");
+             $sqlForm = "select distinct(group_concat(seqFormulario SEPARATOR ',') )as seqForm from t_ciu_ciudadano ciu2 inner join t_frm_hogar using(seqCiudadano) where ciu2.numDocumento in (" . implode(",", $arrDocumentos) . ") and seqTipoDocumento in(1,2,5)";
+            $objRes2 = $aptBd->execute($sqlForm);
+            $formularios = $objRes2->fields['seqForm'];
+            //echo "forms".  $formularios;
+//            die();
+        }
         // if (!empty($arrDocumentos)) {
-
+        
         $sql = "SELECT
             frm.seqFormulario AS 'Id Hogar',
                 ppal.numDocumento AS 'Documento Ppal',
@@ -5299,11 +5308,11 @@ WHERE
                     seqGrupoLgtbi > 0)
                         lgtbi ON frm.seqFormulario = lgtbi.seqFormulario";
         if (!empty($arrDocumentos)) {
-            $sql .= " WHERE numDocumento IN ( " . implode(",", $arrDocumentos) . " )";
+            $sql .= " WHERE frm.seqFormulario IN(".$formularios.")";
         }
         $sql .= " ORDER BY frm.seqFormulario";
-//        echo $sql;
-//        die();
+        //echo $sql;        die();
+       
         $objRes = $aptBd->execute($sql);
         $this->obtenerReportesGeneral($objRes, "reporteGralHogar");
     }

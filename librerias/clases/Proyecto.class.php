@@ -541,8 +541,8 @@ class Proyecto {
                     $seqUsuario
                     ) ";
         try {
-             echo "<br>" . $sql;
-           //die();
+            echo "<br>" . $sql;
+            //die();
             $aptBd->execute($sql);
             $seqProyecto = $aptBd->Insert_ID();
             // 
@@ -2394,14 +2394,16 @@ class Proyecto {
             left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
             left join t_pry_tecnico tec using(seqUnidadProyecto)
             LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
-            where  seqPryEstadoProceso = pry.seqPryEstadoProceso and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI') as unidades
+            where  pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND seqProyectoGrupo IN (1 , 2) ) as unidades
              from t_pry_proyecto pry
             left join t_pry_estado_proceso using(seqPryEstadoProceso) 
             LEFT JOIN
             T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
-            WHERE pry.seqPryEstadoProceso IN(5,6) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)
-            #WHERE txtTipoFinanciacion LIKE '%SDVE%'
+            WHERE pry.seqProyectoGrupo in (1,2) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)            
             group by seqPryEstadoProceso order by seqPryEstadoProceso DESC ";
+        
+        /*and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI'*/
+        echo $sql;
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -2414,37 +2416,88 @@ class Proyecto {
     public function obtenerDatosProyectosEstados($seqPryEstadoProceso) {
 
         global $aptBd;
-        $sql = "SELECT  seqProyecto,txtNombreProyecto, seqPlanGobierno, case  when txtNombreConstructor IS  NULL  
-                then (SELECT group_concat(txtNombreOferente separator ', ')  FROM  t_pry_proyecto_oferente pOf
-                LEFT JOIN t_pry_entidad_oferente entO using(seqOferente) where pry.seqProyecto = pOf.seqProyecto) 
-                ELSE  txtNombreConstructor end AS constructor, txtLocalidad,
-                (select count(seqUnidadProyecto)  from t_pry_unidad_proyecto und 
-                left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
-                left join t_pry_tecnico tec using(seqUnidadProyecto)
-                where und.seqProyecto = pry.seqProyecto and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0
-                and tec.txtExistencia = 'SI') as unidades,
-                valNumeroSoluciones,
-                (select count(und.seqUnidadProyecto)  from t_pry_unidad_proyecto und 
-                left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
-                left join t_pry_tecnico tec using(seqUnidadProyecto)
-                LEFT JOIN t_frm_formulario frm USING(seqFormulario)
-                where und.seqProyecto = pry.seqProyecto
-                and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI'
-                and frm.seqEstadoProceso != 40) as undPorLegalizar, txtTipoFinanciacion  
-                FROM t_pry_proyecto pry
-                LEFT JOIN t_pry_estado_proceso USING(seqPryEstadoProceso) 
-                LEFT JOIN t_pry_constructor con USING (seqConstructor)
-                LEFT JOIN  t_frm_localidad loc USING (seqLocalidad)
-                LEFT JOIN t_pry_proyecto_grupo gru USING (seqProyectoGrupo)
-                LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
-                WHERE seqPryEstadoProceso = $seqPryEstadoProceso and pry.seqPryEstadoProceso IN(5,6) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)
-                GROUP BY seqProyecto ORDER BY seqProyecto ASC ";
+        echo $sql = "SELECT 
+                        seqProyecto,
+                        txtNombreProyecto,
+                        seqPlanGobierno,
+                        CASE
+                            WHEN
+                                txtNombreConstructor IS NULL
+                            THEN
+                                (SELECT 
+                                        GROUP_CONCAT(txtNombreOferente
+                                                SEPARATOR ', ')
+                                    FROM
+                                        t_pry_proyecto_oferente pOf
+                                            LEFT JOIN
+                                        t_pry_entidad_oferente entO USING (seqOferente)
+                                    WHERE
+                                        pry.seqProyecto = pOf.seqProyecto)
+                            ELSE txtNombreConstructor
+                        END AS constructor,
+                        txtLocalidad,
+                        (SELECT 
+                                COUNT(*)
+                            FROM
+                                t_pry_unidad_proyecto und
+                                    LEFT JOIN
+                                t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
+                                    LEFT JOIN
+                                t_pry_tecnico tec USING (seqUnidadProyecto)
+                            WHERE
+                                #seqFormulario IS NOT NULL
+                                  #  AND seqFormulario > 0
+                                    #AND tec.txtExistencia = 'SI'
+                                    pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso 
+                                    #AND (und.seqProyecto = pry.seqProyecto OR und.seqProyecto = pry.seqProyectoPadre)
+                                    AND seqProyectoGrupo IN (1 , 2)) AS unidades,
+                        valNumeroSoluciones,
+                        (SELECT 
+                                COUNT(und.seqUnidadProyecto)
+                            FROM
+                                t_pry_unidad_proyecto und
+                                    LEFT JOIN
+                                t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto
+                                    OR und.seqProyecto = pry1.seqProyectoPadre)
+                                    LEFT JOIN
+                                t_pry_tecnico tec USING (seqUnidadProyecto)
+                                    LEFT JOIN
+                                t_frm_formulario frm USING (seqFormulario)
+                            WHERE
+                                seqFormulario IS NOT NULL
+                                    AND seqFormulario > 0
+                                    AND tec.txtExistencia = 'SI'
+                                    AND pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso 
+                                    AND (und.seqProyecto = pry.seqProyecto OR und.seqProyecto = pry.seqProyectoPadre)
+                                    AND seqProyectoGrupo IN (1 , 2)
+                                    AND frm.seqEstadoProceso != 40) AS undPorLegalizar,
+                        txtTipoFinanciacion
+                    FROM
+                        t_pry_proyecto pry
+                            LEFT JOIN
+                        t_pry_estado_proceso USING (seqPryEstadoProceso)
+                            LEFT JOIN
+                        t_pry_constructor con USING (seqConstructor)
+                            LEFT JOIN
+                        t_frm_localidad loc USING (seqLocalidad)
+                            LEFT JOIN
+                        t_pry_proyecto_grupo gru USING (seqProyectoGrupo)
+                            LEFT JOIN
+                        T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
+                    WHERE
+                        seqPryEstadoProceso = $seqPryEstadoProceso
+                            AND pry.seqProyectoGrupo IN (1 , 2)
+                            AND (seqProyectoPadre = 0
+                            OR seqProyectoPadre IS NULL)
+                    GROUP BY seqProyecto
+                    ORDER BY seqProyecto ASC ";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
             $datos[] = $objRes->fields;
             $objRes->MoveNext();
         }
+        //var_dump($datos);
         return $datos;
     }
 

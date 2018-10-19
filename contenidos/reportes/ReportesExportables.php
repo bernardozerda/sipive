@@ -15,7 +15,7 @@ include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Encuestas.
 $claReporte = new Reportes;
 $reporte = $_GET['reporte'];
 // pr($reporte); 
-
+//if($reporte != 'reporteTotalCiudadano')
 $claReporte->cargarSecuencialesFormulario();
 
 switch ($reporte) {
@@ -233,17 +233,18 @@ switch ($reporte) {
         break;
     
     case "reporteTotalCiudadano":
-        $arrDocumentos = Array();
+       $arrDocumentos = Array();
         if ($_FILES['fileSecuenciales']['error'] == 0) {
             $arrDocumentos = mb_split("\n", file_get_contents($_FILES['fileSecuenciales']['tmp_name']));
+        //   pr($arrDocumentos);           
             foreach ($arrDocumentos as $numLinea => $numDocumento) {
                 if (intval($numDocumento) != 0) {
-                    $arrDocumentos[$numLinea] = intval($numDocumento);
+                    $arrDocumentos[$numLinea] = (float)($numDocumento);                    
                 } else {
                     unset($arrDocumentos[$numLinea]);
                 }
             }
-        }
+        }          
         $claReporte->reporteGralHogar($arrDocumentos);
         break;
 

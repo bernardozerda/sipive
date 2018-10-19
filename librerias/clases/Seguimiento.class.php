@@ -4075,7 +4075,7 @@ class Seguimiento {
             }
 
             if (intval($_POST['bolSoloSeguimiento']) == 1) {
-                $txtCambios = "";
+//                $txtCambios = "";
             }
 
             $sql = "

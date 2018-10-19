@@ -1400,6 +1400,7 @@ class CasaMano
             if (empty($this->arrErrores)) {
 
                 foreach ($arrPost['hogar'] as $numDocumento => $arrDatos) {
+
                     $seqCiudadano = Ciudadano::ciudadanoExiste($arrDatos['seqTipoDocumento'], $arrDatos['numDocumento']);
                     $objCiudadano = new Ciudadano();
                     if ($seqCiudadano != 0) {
@@ -1423,6 +1424,8 @@ class CasaMano
                     } else {
                         $this->arrErrores += $objCiudadano->arrErrores;
                     }
+
+
                 }
 
                 //pr($claFormulario->arrCiudadano);

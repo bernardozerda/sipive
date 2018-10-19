@@ -1171,7 +1171,7 @@ class FormularioSubsidios {
             }
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se ha podido establecer la relación entre los ciudadanos y el formulario " . $this->seqFormulario;
-            $this->arrErrores[] = $objError->getMessage();
+//            $this->arrErrores[] = $objError->getMessage();
         }
         return true;
     }

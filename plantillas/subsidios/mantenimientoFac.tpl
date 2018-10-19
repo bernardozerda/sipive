@@ -103,13 +103,13 @@
                     <li>Documento</li>
                     <li>Nombre</li>
                     <li>ID Hogar</li>
-                    <li>Fecha de Inscripción</li>
+                    <li>Fecha de Inscripción (yyyy-mm-dd)</li>
                     <li>Carpeta postulación</li>
-                    <li>Fecha Postulación</li>
+                    <li>Fecha Postulación (yyyy-mm-dd)</li>
                     <li>Desplazado</li>
                     <li>Resolución Asignación</li>
                     <li>Año</li>
-                    <li>Fecha Resolución</li>
+                    <li>Fecha Resolución (yyyy-mm-dd)</li>
                     <li>Estado</li>
                 </ol>
                 <p>(*) La primera fila del archivo son titulos</p>

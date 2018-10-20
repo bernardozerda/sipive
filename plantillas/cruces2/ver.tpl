@@ -125,7 +125,7 @@
                 </form>
             </div>
             <div class="tab-pane" id="hogares" style="padding: 10px;">
-                <table data-order='[[ 0, "asc" ]]' id="listadoCrucesVer" class="table table-condensed table-hover" width="840px">
+                <table data-order='[[ 0, "asc" ]]' id="listadoCruces" class="table table-condensed table-hover" width="840px">
                     <thead>
                         <tr>
                             <th>Documento</th>
@@ -205,4 +205,4 @@
     </div>
 </div>
 
-<div id="listadoCrucesVerListener"></div>
+<div id="listadoCrucesListener"></div>

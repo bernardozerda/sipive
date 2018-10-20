@@ -965,7 +965,7 @@ WHERE
                 }
 
                 // validacion en otros cruces
-                $this->crucesPendientes($numLinea , $seqFormulario, $seqCruce);
+                //$this->crucesPendientes($numLinea , $seqFormulario, $seqCruce);
 
                 // verifica que el estado del proceso sea el mismo de la base de datos
                 // y verifica que este en estado Inscrito - Calificado
@@ -1745,7 +1745,7 @@ WHERE
         for($i = 1 ; $i <= count($arrArchivo) ; $i++ ){
             $seqResultado = intval($arrArchivo[$i][0]);
             $seqFormulario = $arrArchivo[$i][1];
-            $this->crucesPendientes($i , $seqFormulario , $_POST['seqCruce']);
+            //$this->crucesPendientes($i , $seqFormulario , $_POST['seqCruce']);
             if($seqResultado != 0) {
                 $arrResultado[$seqFormulario][$seqResultado] = $arrArchivo[$i];
                 $txtHashArchivo = "";
@@ -1986,32 +1986,32 @@ WHERE
 
     }
 
-    private function crucesPendientes($numLinea , $seqFormulario, $seqCruce){
-        global $aptBd;
-
-        $claFormulario = new FormularioSubsidios();
-        $claFormulario->cargarFormulario($seqFormulario);
-
-        $objCiudadano = $this->obtenerPrincipal($claFormulario);
-
-        $seqCruce = ($seqCruce == null)? "null" : $seqCruce;
-
-        $sql = "
-            select distinct
-              cru.txtNombre
-            from t_cru_cruces cru
-            inner join t_cru_resultado res on cru.seqCruce = res.seqCruce
-            where seqFormulario = $seqFormulario 
-              and res.bolInhabilitar = 1              
-              and cru.seqCruce <> $seqCruce
-        ";
-        $arrPendientes = $aptBd->GetAll($sql);
-
-        foreach ($arrPendientes as $arrCruce){
-            $this->arrErrores[] = "Error Linea " . ( $numLinea + 1 ) . ": El Hogar de " . $objCiudadano->numDocumento . " tiene cruces pendientes en el cruce " . $arrCruce['txtNombre'];
-        }
-
-    }
+//    private function crucesPendientes($numLinea , $seqFormulario, $seqCruce){
+//        global $aptBd;
+//
+//        $claFormulario = new FormularioSubsidios();
+//        $claFormulario->cargarFormulario($seqFormulario);
+//
+//        $objCiudadano = $this->obtenerPrincipal($claFormulario);
+//
+//        $seqCruce = ($seqCruce == null)? "null" : $seqCruce;
+//
+//        $sql = "
+//            select distinct
+//              cru.txtNombre
+//            from t_cru_cruces cru
+//            inner join t_cru_resultado res on cru.seqCruce = res.seqCruce
+//            where seqFormulario = $seqFormulario
+//              and res.bolInhabilitar = 1
+//              and cru.seqCruce <> $seqCruce
+//        ";
+//        $arrPendientes = $aptBd->GetAll($sql);
+//
+//        foreach ($arrPendientes as $arrCruce){
+//            $this->arrErrores[] = "Error Linea " . ( $numLinea + 1 ) . ": El Hogar de " . $objCiudadano->numDocumento . " tiene cruces pendientes en el cruce " . $arrCruce['txtNombre'];
+//        }
+//
+//    }
 
     public function adicionar($arrPost){
         global $aptBd;
@@ -2236,7 +2236,7 @@ WHERE
             $aptBd->BeginTrans();
 
             if($arrPost['seqFormulario'] != 0) {
-                $this->crucesPendientes(0, $arrPost['seqFormulario'], $arrPost['seqCruce']);
+                //$this->crucesPendientes(0, $arrPost['seqFormulario'], $arrPost['seqCruce']);
 
                 $claFormulario = new FormularioSubsidios();
                 $claFormulario->cargarFormulario($arrPost['seqFormulario']);

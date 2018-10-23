@@ -37,7 +37,7 @@
 <th class="title1"><div class="title1">COMPOSICION</div></th>
 <th class="title1"><div class="title1">UNIDADES</div></th>
 <th class="title1"><div class="title1">X VINCULAR</div></th>
-<th class="title1"><div class="title1">A LEGALIZAR</div></th>
+<th class="title1"><div class="title1">LEGALIZADAS</div></th>
 <th class="title1"><div class="title1">X LEGALIZAR</div></th>
 </tr>
 </thead>
@@ -46,12 +46,13 @@
 {assign var="totalXVincular" value="0"}
 {assign var="totalCant" value="0"}
 {assign var="totalUnd" value="0"}
+{assign var="totalXLegalizar" value="0"}
 {foreach from=$arrProyTableroPal key=seqEstadoProceso item=txtEstadoProceso}   
-    {assign var="totalSoluciones" value=$totalSoluciones+$txtEstadoProceso.valNumeroSoluciones}
-    {assign var="totalSuma" value=$txtEstadoProceso.valNumeroSoluciones-$txtEstadoProceso.unidades}
-    {assign var="totalXVincular" value=$totalXVincular+$totalSuma}  
-    {assign var="totalUnd" value=$totalUnd+$txtEstadoProceso.unidades}  
-    {assign var="totalXLegalizar" value=$totalXLegalizar+$txtEstadoProceso.undPorLegalizar}
+    {assign var="totalSoluciones" value=$totalSoluciones+$txtEstadoProceso.unidades}
+    {assign var="totalSuma" value=$txtEstadoProceso.vinculadas-$txtEstadoProceso.undLegalizadadas}
+    {assign var="totalXVincular" value=$totalXVincular+$txtEstadoProceso.pendientes}  
+    {assign var="totalLeg" value=$totalLeg+$txtEstadoProceso.undLegalizadadas}  
+    {assign var="totalXLegalizar" value=$totalXLegalizar+$totalSuma}
     <tr>
         <th >{$txtEstadoProceso.seqProyecto} </th>
         <td align="center"  style="font-size: 9px;cursor:pointer; cursor: hand" 
@@ -59,10 +60,10 @@
         <td align="center" style="font-size: 9px; ">{$txtEstadoProceso.constructor}</td>
         <td align="center">{$txtEstadoProceso.txtLocalidad}</td>
         <td align="center">{$txtEstadoProceso.txtTipoFinanciacion}</td>
-        <td align="center">{$txtEstadoProceso.valNumeroSoluciones}</td>
-        <td align="center">{$txtEstadoProceso.valNumeroSoluciones-$txtEstadoProceso.unidades}</td>
         <td align="center">{$txtEstadoProceso.unidades}</td>
-        <td align="center">{$txtEstadoProceso.undPorLegalizar}</td>
+        <td align="center">{$txtEstadoProceso.pendientes}</td>
+        <td align="center">{$txtEstadoProceso.undLegalizadadas} </td>
+        <td align="center">{$txtEstadoProceso.vinculadas-$txtEstadoProceso.undLegalizadadas}</td>
     </tr>
 {/foreach}
 <tfoot>
@@ -70,7 +71,7 @@
         <td colspan="5">TOTAL</td>
         <td>{$totalSoluciones}</td>
         <td>{$totalXVincular}</td>
-        <td>{$totalUnd}</td>
+        <td>{$totalLeg}</td>
         <td>{$totalXLegalizar}</td>
     </tr>
  <!--   <tr>

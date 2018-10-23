@@ -4,10 +4,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 $arrGrupoPermitidos[6][1] = 1;
 $arrGrupoPermitidos[6][20] = 47;
 $arrGrupoPermitidos[6][20] = 46;
-
+ 
 $bolGrupoPermitido = false;
 //pr($arrGrupoPermitidos);
 $txtPlantilla = "";

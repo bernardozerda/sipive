@@ -1771,7 +1771,7 @@ class Reportes {
      * @return bool
      */
     public function obtenerReportesGeneral($objRes, $nombreArchivo, $arrTitulosCampos = array(), $bolTitulos = true, $txtSeparador = "\t") {
-
+        ini_set('memory_limit', '-1');
         // asegura que la variable de titulos quede boolean
         $bolTitulos = ($bolTitulos !== false) ? true : false;
 
@@ -4973,17 +4973,17 @@ WHERE
     public function reporteGralHogar($arrDocumentos) {
         global $aptBd;
         $formularios = "";
-     
+
         if (!empty($arrDocumentos)) {
             $aptBd->execute("SET @@group_concat_max_len = 10000000;");
-             $sqlForm = "select distinct(group_concat(seqFormulario SEPARATOR ',') )as seqForm from t_ciu_ciudadano ciu2 inner join t_frm_hogar using(seqCiudadano) where ciu2.numDocumento in (" . implode(",", $arrDocumentos) . ") and seqTipoDocumento in(1,2,5)";
+            $sqlForm = "select distinct(group_concat(seqFormulario SEPARATOR ',') )as seqForm from t_ciu_ciudadano ciu2 inner join t_frm_hogar using(seqCiudadano) where ciu2.numDocumento in (" . implode(",", $arrDocumentos) . ") and seqTipoDocumento in(1,2,5)";
             $objRes2 = $aptBd->execute($sqlForm);
             $formularios = $objRes2->fields['seqForm'];
             //echo "forms".  $formularios;
 //            die();
         }
         // if (!empty($arrDocumentos)) {
-        
+
         $sql = "SELECT
             frm.seqFormulario AS 'Id Hogar',
                 ppal.numDocumento AS 'Documento Ppal',
@@ -5002,7 +5002,17 @@ WHERE
                 fchNacimiento,
                 CURDATE()) AS Edad,
                 CASE
+                WHEN
+               TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) < 0
+               THEN
+               'Ninguno'
                WHEN
+                TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) >= 0
+               AND 
                TIMESTAMPDIFF(YEAR,
                 fchNacimiento,
                 CURDATE()) <= 5
@@ -5043,7 +5053,14 @@ WHERE
                 fchNacimiento,
                 CURDATE()) <= 59
                THEN
-               '27 a 59' ELSE 'Mayor de 60'
+               '27 a 59' 
+                WHEN
+               TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) > 59               
+               THEN
+               'Mayor de 60' 
+               ELSE 'Ninguno'
                END AS RangoEdad,
                 txtNivelEducativo AS 'Nivel Educativo',
                 numAnosAprobados AS 'Anos Aprobados',
@@ -5308,11 +5325,12 @@ WHERE
                     seqGrupoLgtbi > 0)
                         lgtbi ON frm.seqFormulario = lgtbi.seqFormulario";
         if (!empty($arrDocumentos)) {
-            $sql .= " WHERE frm.seqFormulario IN(".$formularios.")";
+            $sql .= " WHERE frm.seqFormulario IN(" . $formularios . ")";
         }
         $sql .= " ORDER BY frm.seqFormulario";
-        //echo $sql;        die();
-       
+//        echo $sql;
+//        die();
+
         $objRes = $aptBd->execute($sql);
         $this->obtenerReportesGeneral($objRes, "reporteGralHogar");
     }

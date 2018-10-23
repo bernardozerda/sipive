@@ -2394,16 +2394,16 @@ class Proyecto {
             left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
             left join t_pry_tecnico tec using(seqUnidadProyecto)
             LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
-            where  pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND seqProyectoGrupo IN (1 , 2) ) as unidades
+            where  pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso  and und.bolActivo = 1 AND seqProyectoGrupo IN (1 , 2) ) as unidades
              from t_pry_proyecto pry
             left join t_pry_estado_proceso using(seqPryEstadoProceso) 
             LEFT JOIN
             T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
             WHERE pry.seqProyectoGrupo in (1,2) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)            
             group by seqPryEstadoProceso order by seqPryEstadoProceso DESC ";
-        
-        /*and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI'*/
-        echo $sql;
+
+        /* and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI' */
+        //echo $sql;
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -2416,7 +2416,7 @@ class Proyecto {
     public function obtenerDatosProyectosEstados($seqPryEstadoProceso) {
 
         global $aptBd;
-        echo $sql = "SELECT 
+         $sql = "SELECT 
                         seqProyecto,
                         txtNombreProyecto,
                         seqPlanGobierno,
@@ -2437,40 +2437,86 @@ class Proyecto {
                         END AS constructor,
                         txtLocalidad,
                         (SELECT 
-                                COUNT(*)
+                            COUNT(seqUnidadProyecto)
+                        FROM
+                            t_pry_unidad_proyecto und
+                                LEFT JOIN
+                            t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto
+                                OR und.seqProyecto = pry1.seqProyectoPadre)
+                                LEFT JOIN
+                            t_pry_tecnico tec USING (seqUnidadProyecto)
+                                LEFT JOIN
+                            T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
+                        WHERE
+                            pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
+                             and und.bolActivo = 1
+                                AND seqProyectoGrupo IN (1 , 2) and 
+                                (und.seqProyecto = pry.seqProyecto or und.seqProyecto = pry.seqProyectoPadre or pry1.seqProyectoPadre = pry.seqProyecto)) 
+                                AS unidades,
+                            (SELECT 
+                                COUNT(*) AS cant
                             FROM
-                                t_pry_unidad_proyecto und
-                                    LEFT JOIN
-                                t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
-                                    LEFT JOIN
-                                t_pry_tecnico tec USING (seqUnidadProyecto)
-                            WHERE
-                                #seqFormulario IS NOT NULL
-                                  #  AND seqFormulario > 0
-                                    #AND tec.txtExistencia = 'SI'
-                                    pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso 
-                                    #AND (und.seqProyecto = pry.seqProyecto OR und.seqProyecto = pry.seqProyectoPadre)
-                                    AND seqProyectoGrupo IN (1 , 2)) AS unidades,
-                        valNumeroSoluciones,
-                        (SELECT 
-                                COUNT(und.seqUnidadProyecto)
-                            FROM
-                                t_pry_unidad_proyecto und
-                                    LEFT JOIN
-                                t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto
-                                    OR und.seqProyecto = pry1.seqProyectoPadre)
-                                    LEFT JOIN
-                                t_pry_tecnico tec USING (seqUnidadProyecto)
+                                T_PRY_UNIDAD_PROYECTO und
                                     LEFT JOIN
                                 t_frm_formulario frm USING (seqFormulario)
+                                    LEFT JOIN
+                                t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                             WHERE
-                                seqFormulario IS NOT NULL
-                                    AND seqFormulario > 0
-                                    AND tec.txtExistencia = 'SI'
-                                    AND pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso 
-                                    AND (und.seqProyecto = pry.seqProyecto OR und.seqProyecto = pry.seqProyectoPadre)
-                                    AND seqProyectoGrupo IN (1 , 2)
-                                    AND frm.seqEstadoProceso != 40) AS undPorLegalizar,
+                             pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
+                             AND seqProyectoGrupo IN (1 , 2)
+                                    AND (und.seqProyecto = pry.seqProyecto
+                                    OR und.seqProyecto = pry.seqProyectoPadre
+                                    OR pry1.seqProyectoPadre = pry.seqProyecto) and
+                                (frm.bolCerrado = 0
+                                    OR (und.seqFormulario IS NULL
+                                    OR und.seqFormulario = 0)
+                                    AND und.bolActivo = 1) ) AS pendientes,
+                        (SELECT 
+                            COUNT(*) AS cant
+                        FROM
+                            t_pry_unidad_proyecto und
+                                INNER JOIN
+                            t_frm_formulario frm USING (seqFormulario)
+                                LEFT JOIN
+                            t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
+                        WHERE
+                         pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
+                                AND seqProyectoGrupo IN (1 , 2)
+                                AND (und.seqProyecto = pry.seqProyecto
+                                OR und.seqProyecto = pry.seqProyectoPadre
+                                OR pry1.seqProyectoPadre = pry.seqProyecto)
+                                AND seqEstadoProceso = 40 AND bolCerrado = 1) AS undLegalizadadas,                                
+                        (SELECT 
+                            COUNT(*) AS cant
+                        FROM
+                            T_PRY_UNIDAD_PROYECTO und
+                                LEFT JOIN
+                            t_frm_formulario frm USING (seqFormulario)
+                                LEFT JOIN
+                            t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
+                        WHERE
+                        pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
+                                AND seqProyectoGrupo IN (1 , 2)
+                                AND (und.seqProyecto = pry.seqProyecto
+                                OR und.seqProyecto = pry.seqProyectoPadre
+                                OR pry1.seqProyectoPadre = pry.seqProyecto)
+                                AND 
+                            frm.bolCerrado = 1
+                                AND und.seqFormulario IS NOT NULL
+                                AND (seqEstadoProceso = 15
+                                OR seqEstadoProceso = 62
+                                OR seqEstadoProceso = 17
+                                OR seqEstadoProceso = 19
+                                OR seqEstadoProceso = 22
+                                OR seqEstadoProceso = 23
+                                OR seqEstadoProceso = 25
+                                OR seqEstadoProceso = 26
+                                OR seqEstadoProceso = 27
+                                OR seqEstadoProceso = 28
+                                OR seqEstadoProceso = 31
+                                OR seqEstadoProceso = 29
+                                OR seqEstadoProceso = 40)
+                                AND und.bolActivo = 1) AS vinculadas,
                         txtTipoFinanciacion
                     FROM
                         t_pry_proyecto pry

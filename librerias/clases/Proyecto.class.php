@@ -541,7 +541,7 @@ class Proyecto {
                     $seqUsuario
                     ) ";
         try {
-            echo "<br>" . $sql;
+            //echo "<br>" . $sql;
             //die();
             $aptBd->execute($sql);
             $seqProyecto = $aptBd->Insert_ID();

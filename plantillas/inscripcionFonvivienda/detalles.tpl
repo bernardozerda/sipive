@@ -261,7 +261,7 @@
 
                 <div class="col-sm-4 text-center">
                     {if isset($smarty.session.arrGrupos.3.20)}
-                        {if $arrEstadoHogar.seqEstadoHogar != 4}
+                        {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar != 4}
                             <button type="submit"
                                     class="btn btn-primary btn-sm {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}"
                                     {if $claInscripcion->arrHogares.$numHogar.seqEstadoHogar == 4} disabled {/if}

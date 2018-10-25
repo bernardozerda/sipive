@@ -64,7 +64,7 @@
                 <link rel="stylesheet" href="librerias/jquery/css/dataTables.bootstrap.min.css"/> 
                 <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
 
-                <link href="librerias/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
+                <link href="librerias/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" rel="stylesheet" media="screen"/>
 
                 <script type="text/javascript" src="librerias/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 

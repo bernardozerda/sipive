@@ -6,7 +6,7 @@
     <style>
         #wrapper{
             padding: 0;
-            width: 107% !important;
+            width: 109% !important;
         }
     </style>
 {/literal}
@@ -23,15 +23,16 @@
                 {else}
                     {assign var="val" value="12"}
                 {/if}
-                <div class="col-md-{$val}" style="background: #006779; color: #FFF; border-bottom: 3px solid #ffffff;border-radius: 10px;"> 
-                    <h4 style="color: #FFF">{$value.txtNombreProyecto|upper}</h4>
-                </div>
-                {if $seqPryEstadoProceso > 0}
-                    <div bgcolor="#E4E4E4" class="col-md-2" style="z-index: 100; float: right; top: 10px">
+                <div class="col-md-{$val}" style="background: #006779; color: #FFF; border-bottom: 3px solid #ffffff;border-radius: 10px; width: 100%"> 
+                    <h4 style="color: #FFF">{$value.txtNombreProyecto|upper}
+                    {if $seqPryEstadoProceso > 0}
+                    <div bgcolor="#E4E4E4" class="col-md-2" style="z-index: 100; float: right; top: -4px; left: 7%">
                         <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
                                onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresEstado.php?seqPryEstadoProceso={$seqPryEstadoProceso}', '', true);" class="btn_volver"/> 
                     </div>
                 {/if}
+                </div>
+                </h4>
             </div>
             <div class="form-group" >
                 <div class="col-md-4" style="background: #006779; border-bottom: 3px solid #ffffff">                 
@@ -101,7 +102,7 @@
                                 <th><b>Composicion</b></th>
                                 <th><b>Unidades Vivienda</b></th>
                                 <th><b>Hogares Vinculados</b></th>
-                                <th><b>Pendientes por Vincular</b></th>
+                                <th><b>Unidades Sin Vincular</b></th>
                                 <th><b>Legalizados</b></th>
                                 <th><b>Pendientes Por Legalizar</b></th>
 
@@ -113,7 +114,7 @@
                             <td >{$value.txtTipoFinanciacion}</td>  
                             <td> {$cantUnidades}</td>
                             <td> {$cantUnidadesVinculadas}</td>
-                            <td >{$pendientesPorVincular}</td>
+                            <td >{$pendientesPorVincular+$postuladas}</td>
                             <td >{$legalizadas}</td>  
                             <td> {$pendientesPorLegalizar}</td>
                         </tr>

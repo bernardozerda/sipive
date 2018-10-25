@@ -2485,7 +2485,7 @@ class Proyecto {
                                 AND (und.seqProyecto = pry.seqProyecto
                                 OR und.seqProyecto = pry.seqProyectoPadre
                                 OR pry1.seqProyectoPadre = pry.seqProyecto)
-                                AND seqEstadoProceso = 40 AND bolCerrado = 1) AS undLegalizadadas,                                
+                                AND seqEstadoProceso = 40 AND bolCerrado = 1) AS undLegalizadadas,                                  
                         (SELECT 
                             COUNT(*) AS cant
                         FROM
@@ -2517,6 +2517,18 @@ class Proyecto {
                                 OR seqEstadoProceso = 29
                                 OR seqEstadoProceso = 40)
                                 AND und.bolActivo = 1) AS vinculadas,
+                                (SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
+                                LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
+                                 LEFT JOIN
+                            t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
+                                WHERE 
+                                pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
+                                 AND (und.seqProyecto = pry.seqProyecto
+                                 AND seqProyectoGrupo IN (1 , 2) AND
+                                frm.bolCerrado =1  and und.seqFormulario is not null
+                                and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR 
+                                seqEstadoProceso = 16 OR seqEstadoProceso = 47 OR seqEstadoProceso = 56) 
+                                and und.bolActivo =1)) as postuladas,
                         txtTipoFinanciacion
                     FROM
                         t_pry_proyecto pry

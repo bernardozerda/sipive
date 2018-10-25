@@ -45,6 +45,8 @@ if ($_POST['buscaCedulaConfirmacion'] == "") {
 if ($_POST['buscaCedulaConfirmacion'] != $_POST['buscaCedula']) {
     $arrErrores[] = "Por favor Confirme que el numero de cedula conincidad en el campo de confirmacion";
 }
+
+
 // construccion del arreglo a procesar
 $arrArchivo = array();
 
@@ -62,7 +64,7 @@ if (empty($arrErrores)) {
     $characters = array("[", "]", "<b>", "</b>");
     $arrayTexto = explode("<br>", $texto);
 
-    if ($texto != '') {
+    if ($texto != '' && $claFormularioActual->bolCerrado != 1) {
         $arrTextoForm = str_replace("Cambiosenelformulario", "", $arrayTexto[0]);
         //$seqFormulario = str_replace($characters, '', trim($arrTextoForm));
 
@@ -137,7 +139,7 @@ if (empty($arrErrores)) {
         }
     } else {
 
-        $arrErrores[] = "El Documento Consultado no fue objeto de aplicacion de la Resolucion 182 del 2018, por tanto no aplica regreso de estado a modalidades de PIVE";
+        $arrErrores[] = "El Documento Consultado no fue objeto de aplicacion de la Resolucion 182 del 2018, por tanto no aplica regreso de estado a modalidades de PIVE. O se encuentra Cerrado";
         //imprimirMensajes($arrErrores, $arrMensajes, $txtDivListener);
     }
 }

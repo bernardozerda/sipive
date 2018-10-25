@@ -132,16 +132,15 @@ class Reportes {
         $datosFila[] = $this->formArchivo("fileSecuenciales");
     }
 
-    
     public function exportableReporteFormsEliminados() {
-       global $aptBd;
-       
-       try {
-          
-          $txtCondiciones  = ( $_POST['fchInicio'] != "" )? "AND bor.fchBorrado >= '" . $_POST['fchInicio'] . " 00:00:00'" : "";
-          $txtCondiciones .= ( $_POST['fchFin']    != "" )? "AND bor.fchBorrado <= '" . $_POST['fchFin']    . " 23:59:59'" : "";
-          
-          $sql = "
+        global $aptBd;
+
+        try {
+
+            $txtCondiciones = ( $_POST['fchInicio'] != "" ) ? "AND bor.fchBorrado >= '" . $_POST['fchInicio'] . " 00:00:00'" : "";
+            $txtCondiciones .= ( $_POST['fchFin'] != "" ) ? "AND bor.fchBorrado <= '" . $_POST['fchFin'] . " 23:59:59'" : "";
+
+            $sql = "
             SELECT
               bor.seqFormulario as Formulario,
               tdo.txtTipoDocumento as TipoDocumento,
@@ -154,16 +153,14 @@ class Reportes {
             WHERE 1 = 1
             $txtCondiciones
           ";
-          $objRes = $aptBd->execute( $sql );
-          $this->obtenerReportesGeneral( $objRes , "ReporteFormsEliminados" );
-          
-       } catch( Exception $objError ){
-          $arrErrores[] = "No se pudo obtener el reporte de formularios eliminados";
-          imprimirMensajes( $arrErrores , array() );
-       }
-       
+            $objRes = $aptBd->execute($sql);
+            $this->obtenerReportesGeneral($objRes, "ReporteFormsEliminados");
+        } catch (Exception $objError) {
+            $arrErrores[] = "No se pudo obtener el reporte de formularios eliminados";
+            imprimirMensajes($arrErrores, array());
+        }
     }
-    
+
     public function exportableReporteDatosDeContacto() {
 
         global $aptBd;
@@ -322,7 +319,7 @@ class Reportes {
                 $arrTitulosCampos[] = 'seqFormulario';
                 $arrTitulosCampos[] = 'txtFormulario';
                 $arrTitulosCampos[] = 'Desplazado';
-				$arrTitulosCampos[] = 'Tipo Victima';
+                $arrTitulosCampos[] = 'Tipo Victima';
                 $arrTitulosCampos[] = 'Modalidad';
                 $arrTitulosCampos[] = 'Solucion';
                 $arrTitulosCampos[] = 'Localidad';
@@ -2932,7 +2929,7 @@ class Reportes {
 
 
 
-        if (empty($arrErrores) and $bolExisteFileSecuenciales and !empty($_FILES['fileSecuenciales'])) {
+        if (empty($arrErrores) and $bolExisteFileSecuenciales and ! empty($_FILES['fileSecuenciales'])) {
             $this->leerArchivoSecuenciales();
         }
 
@@ -3082,13 +3079,13 @@ class Reportes {
 
         return $valCierreFinanciero;
     }
-    
-   public function seguimientoDesembolsos( $arrDocumentos ){
-      global $aptBd;
-      
-      if( ! empty( $arrDocumentos ) ){
-      
-         $sql = "
+
+    public function seguimientoDesembolsos($arrDocumentos) {
+        global $aptBd;
+
+        if (!empty($arrDocumentos)) {
+
+            $sql = "
             SELECT 
                frm.seqFormulario as Formulario,
                CONCAT( eta.txtEtapa , ' - ' , pro.txtEstadoProceso ) as Estado, 
@@ -3114,18 +3111,17 @@ class Reportes {
             LEFT JOIN T_DES_DESEMBOLSO des ON frm.seqFormulario = des.seqFormulario
             LEFT JOIN T_DES_SOLICITUD sol ON des.seqDesembolso = sol.seqDesembolso
             WHERE hog.seqParentesco = 1
-            AND ciu.numDocumento IN ( " . implode( "," , $arrDocumentos ) . " )
+            AND ciu.numDocumento IN ( " . implode(",", $arrDocumentos) . " )
          ";
-         $objRes = $aptBd->execute( $sql );
-         $this->obtenerReportesGeneral($objRes, "seguimientoDesembolsos");
-      } else { 
-         $this->arrErrores[] = "No hay documentos en el archivo";
-         imprimirMensajes($this->arrErrores, array());
-      }
-      
-   }
+            $objRes = $aptBd->execute($sql);
+            $this->obtenerReportesGeneral($objRes, "seguimientoDesembolsos");
+        } else {
+            $this->arrErrores[] = "No hay documentos en el archivo";
+            imprimirMensajes($this->arrErrores, array());
+        }
+    }
 
-    public function reporteGeneral($bolRetornarDatos = false){
+    public function reporteGeneral($bolRetornarDatos = false) {
         global $aptBd;
 
         $arrReporte = array();
@@ -3154,7 +3150,7 @@ class Reportes {
               uac.seqTipoActoUnidad
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $seqProyecto = $objRes->fields['seqProyecto'];
 
@@ -3172,27 +3168,26 @@ class Reportes {
 //            );
 
             $arrReporte[$seqProyecto]['aprobado'] = doubleval(
-                ($objRes->fields['seqTipoActoUnidad'] == 1)?
-                    $arrReporte[$seqProyecto]['aprobado'] + $objRes->fields['valIndexado'] :
-                    $arrReporte[$seqProyecto]['aprobado']
+                    ($objRes->fields['seqTipoActoUnidad'] == 1) ?
+                            $arrReporte[$seqProyecto]['aprobado'] + $objRes->fields['valIndexado'] :
+                            $arrReporte[$seqProyecto]['aprobado']
             );
 
             $arrReporte[$seqProyecto]['indexado'] = doubleval(
-                ($objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] > 0)?
-                    $arrReporte[$seqProyecto]['indexado'] + $objRes->fields['valIndexado'] :
-                    $arrReporte[$seqProyecto]['indexado']
+                    ($objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] > 0) ?
+                            $arrReporte[$seqProyecto]['indexado'] + $objRes->fields['valIndexado'] :
+                            $arrReporte[$seqProyecto]['indexado']
             );
 
             $arrReporte[$seqProyecto]['menor'] = doubleval(
-                ($objRes->fields['seqTipoActoUnidad'] == 3 or ($objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] < 0))?
-                    $arrReporte[$seqProyecto]['menor'] + abs($objRes->fields['valIndexado']) :
-                    $arrReporte[$seqProyecto]['menor']
+                    ($objRes->fields['seqTipoActoUnidad'] == 3 or ( $objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] < 0)) ?
+                            $arrReporte[$seqProyecto]['menor'] + abs($objRes->fields['valIndexado']) :
+                            $arrReporte[$seqProyecto]['menor']
             );
 
-            $arrReporte[$seqProyecto]['actual'] =
-                $arrReporte[$seqProyecto]['aprobado'] +
-                $arrReporte[$seqProyecto]['indexado'] -
-                $arrReporte[$seqProyecto]['menor'];
+            $arrReporte[$seqProyecto]['actual'] = $arrReporte[$seqProyecto]['aprobado'] +
+                    $arrReporte[$seqProyecto]['indexado'] -
+                    $arrReporte[$seqProyecto]['menor'];
 
             $arrReporte[$seqProyecto]['fiducia'] = 0;
             $arrReporte[$seqProyecto]['reintegro'] = 0;
@@ -3220,7 +3215,7 @@ class Reportes {
                 if(pry.seqProyectoPadre is null, pry.seqProyecto, pry.seqProyectoPadre)        
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqProyecto = $objRes->fields['seqProyecto'];
             $arrReporte[$seqProyecto]['fiducia'] = doubleval($objRes->fields['valGiroFiducia']);
             $objRes->MoveNext();
@@ -3239,7 +3234,7 @@ class Reportes {
                 lower(red.txtTipo)     
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqProyecto = $objRes->fields['seqProyecto'];
             $txtTipo = $objRes->fields['txtTipo'];
             $arrReporte[$seqProyecto][$txtTipo] = doubleval($objRes->fields['valConsignacion']);
@@ -3258,42 +3253,41 @@ class Reportes {
               if(pry.seqProyectoPadre is null, pry.seqProyecto, pry.seqProyectoPadre)
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqProyecto = $objRes->fields['seqProyecto'];
             $arrReporte[$seqProyecto]['constructor'] = doubleval($objRes->fields['valGiroConstructor']);
             $objRes->MoveNext();
         }
 
         // porcentajes
-        foreach($arrReporte as $seqProyecto => $arrDatos){
+        foreach ($arrReporte as $seqProyecto => $arrDatos) {
 
             // valor total fiducia
             $arrReporte[$seqProyecto]['totalFiducia'] = doubleval($arrReporte[$seqProyecto]['fiducia']) - doubleval($arrReporte[$seqProyecto]['reintegro']);
 
             // fiducia
-            if($arrReporte[$seqProyecto]['totalFiducia'] == 0){
+            if ($arrReporte[$seqProyecto]['totalFiducia'] == 0) {
                 $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = 0;
-            }else {
-                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = round($arrReporte[$seqProyecto]['totalFiducia'] / $arrReporte[$seqProyecto]['actual'] ,4);
+            } else {
+                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = round($arrReporte[$seqProyecto]['totalFiducia'] / $arrReporte[$seqProyecto]['actual'], 4);
             }
 
             // constructor
-            if($arrReporte[$seqProyecto]['constructor'] == 0){
+            if ($arrReporte[$seqProyecto]['constructor'] == 0) {
                 $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = 0;
-            }else {
-                $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = round($arrReporte[$seqProyecto]['constructor'] / $arrReporte[$seqProyecto]['actual'] ,4);
+            } else {
+                $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = round($arrReporte[$seqProyecto]['constructor'] / $arrReporte[$seqProyecto]['actual'], 4);
             }
 
             // actual fiducia
             $arrReporte[$seqProyecto]['actualFiducia'] = doubleval($arrReporte[$seqProyecto]['totalFiducia']) - doubleval($arrReporte[$seqProyecto]['constructor']);
 
             // actual fiducia
-            if($arrReporte[$seqProyecto]['actualFiducia'] == 0){
+            if ($arrReporte[$seqProyecto]['actualFiducia'] == 0) {
                 $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = 0;
-            }else {
-                $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = round($arrReporte[$seqProyecto]['actualFiducia'] / $arrReporte[$seqProyecto]['actual'] ,4);
+            } else {
+                $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = round($arrReporte[$seqProyecto]['actualFiducia'] / $arrReporte[$seqProyecto]['actual'], 4);
             }
-
         }
 
         $arrTitulos[0]['nombre'] = "NOMBRE DEL PROYECTO";
@@ -3330,15 +3324,14 @@ class Reportes {
         $arrTitulos[14]['formato'] = "moneda";
         $arrTitulos[15]['formato'] = "texto";
 
-        if($bolRetornarDatos == false) {
+        if ($bolRetornarDatos == false) {
             $this->exportarArchivo("Reporte General", $arrTitulos, $arrReporte);
-        }else{
+        } else {
             return $arrReporte;
         }
-
     }
 
-    public function exportarArchivo($txtNombre, $arrTitulos, $arrReporte){
+    public function exportarArchivo($txtNombre, $arrTitulos, $arrReporte) {
 
 
         $objPHPExcel = new PHPExcel();
@@ -3356,47 +3349,47 @@ class Reportes {
         }
 
         $numFila = 2;
-        foreach ($arrReporte as $seqProyecto => $arrDatos){
+        foreach ($arrReporte as $seqProyecto => $arrDatos) {
             $numColumna = 0;
-            foreach($arrDatos as $txtValor) {
+            foreach ($arrDatos as $txtValor) {
 
                 $objHoja->setCellValueByColumnAndRow($numColumna, $numFila, $txtValor, false);
 
-                switch($arrTitulos[$numColumna]['formato']){
+                switch ($arrTitulos[$numColumna]['formato']) {
                     case "texto":
                         $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
-                            ->getNumberFormat()
-                            ->setFormatCode(
-                                PHPExcel_Style_NumberFormat::FORMAT_GENERAL
-                            );
+                                ->getNumberFormat()
+                                ->setFormatCode(
+                                        PHPExcel_Style_NumberFormat::FORMAT_GENERAL
+                        );
                         break;
                     case "moneda":
                         $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
-                            ->getNumberFormat()
-                            ->setFormatCode(
-                                PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD
-                            );
+                                ->getNumberFormat()
+                                ->setFormatCode(
+                                        PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD
+                        );
                         break;
                     case "porcentaje":
                         $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
-                            ->getNumberFormat()
-                            ->setFormatCode(
-                                PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00
-                            );
+                                ->getNumberFormat()
+                                ->setFormatCode(
+                                        PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00
+                        );
                         break;
                     case "numero":
                         $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
-                            ->getNumberFormat()
-                            ->setFormatCode(
-                                PHPExcel_Style_NumberFormat::FORMAT_NUMBER
-                            );
+                                ->getNumberFormat()
+                                ->setFormatCode(
+                                        PHPExcel_Style_NumberFormat::FORMAT_NUMBER
+                        );
                         break;
                     case "fecha":
                         $objHoja->getStyleByColumnAndRow($numColumna, $numFila)
-                            ->getNumberFormat()
-                            ->setFormatCode(
-                                PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2
-                            );
+                                ->getNumberFormat()
+                                ->setFormatCode(
+                                        PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2
+                        );
                         break;
                 }
 
@@ -3406,7 +3399,6 @@ class Reportes {
         }
 
         // *************************** ESTILOS POR DEFECTO DEL ARCHIVO DE EXCEL ********************************************* //
-
         // fuentes para el archivo
         $arrFuentes['default']['font']['name'] = "Calibri";
         $arrFuentes['default']['font']['size'] = 8;
@@ -3432,27 +3424,26 @@ class Reportes {
         // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
 
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        header("Content-Disposition: attachment;filename='" . mb_ereg_replace("[^0-9A-Za-z]","", $txtNombre) . "_" . date("YmdHis") . ".xlsx");
+        header("Content-Disposition: attachment;filename='" . mb_ereg_replace("[^0-9A-Za-z]", "", $txtNombre) . "_" . date("YmdHis") . ".xlsx");
         header('Cache-Control: max-age=0');
         ob_end_clean();
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
-
     }
 
-    public function reporteFichaTecnica(){
+    public function reporteFichaTecnica() {
         global $aptBd;
 
         $sql = "
             select pry.seqProyecto
             from t_pry_proyecto pry
-            where pry.seqPryEstadoProceso in(5,6)
+            where seqProyectoGrupo IN (1 , 2)
               and (pry.seqProyectoPadre =  0 or pry.seqProyectoPadre is null)
             order by pry.txtNombreProyecto
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $seqProyecto = $objRes->fields['seqProyecto'];
 
@@ -3489,21 +3480,35 @@ class Reportes {
                         and frm.bolCerrado = 1
                         and frm.seqEstadoProceso in (15,62,17,19,22,23,25,26,27,28,31,29,40)
                     ) as numHogaresVinculados,
-                    (
-                      select count(upr.seqUnidadProyecto) as numUnidadesPendientes
-                      from t_pry_unidad_proyecto upr
-                      left join t_frm_formulario frm on upr.seqFormulario = frm.seqFormulario
-                      where upr.seqProyecto in (
-                        select seqProyecto 
-                        from t_pry_proyecto 
-                        where seqProyecto = pry.seqProyecto
-                           or seqProyectoPadre = pry.seqProyecto
-                      ) and ( 
-                           upr.seqFormulario is null 
-                        or upr.seqFormulario = 0   
-                      ) and upr.bolActivo = 1
-                         or frm.bolCerrado = 0
-                    ) as numPendientesVincular,
+                    (SELECT 
+                                COUNT(*) AS cant
+                            FROM
+                                T_PRY_UNIDAD_PROYECTO und
+                                    LEFT JOIN
+                                t_frm_formulario frm USING (seqFormulario)
+                                    LEFT JOIN
+                                t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
+                            WHERE
+                             pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
+                             AND seqProyectoGrupo IN (1 , 2)
+                                    AND (und.seqProyecto = pry.seqProyecto
+                                    OR und.seqProyecto = pry.seqProyectoPadre
+                                    OR pry1.seqProyectoPadre = pry.seqProyecto) and
+                                (frm.bolCerrado = 0
+                                    OR (und.seqFormulario IS NULL
+                                    OR und.seqFormulario = 0)
+                                    AND und.bolActivo = 1))+(SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und
+                                LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
+                                 LEFT JOIN
+                            t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
+                                WHERE 
+                                pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
+                                 AND (und.seqProyecto = pry.seqProyecto
+                                 AND seqProyectoGrupo IN (1 , 2) AND
+                                frm.bolCerrado =1  and und.seqFormulario is not null
+                                and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR 
+                                seqEstadoProceso = 16 OR seqEstadoProceso = 47 OR seqEstadoProceso = 56) 
+                                and und.bolActivo =1)) as numPendientesVincular,
                     (
                       select count(upr.seqUnidadProyecto) 
                       from t_pry_unidad_proyecto upr
@@ -3766,7 +3771,7 @@ class Reportes {
         $arrTitulos[4]['nombre'] = 'Composición';
         $arrTitulos[5]['nombre'] = 'Unidades Vivienda';
         $arrTitulos[6]['nombre'] = 'Hogares Vinculados';
-        $arrTitulos[7]['nombre'] = 'Pendientes por Vincular';
+        $arrTitulos[7]['nombre'] = 'Unidades Sin Vincular';
         $arrTitulos[8]['nombre'] = 'Legalizados';
         $arrTitulos[9]['nombre'] = 'Pendientes Por Legalizar';
         $arrTitulos[10]['nombre'] = 'Avance Físico (%)';
@@ -3828,9 +3833,7 @@ class Reportes {
         $arrTitulos[32]['formato'] = 'Valor Desembolsado a constuctor';
 
         $this->exportarArchivo("Reporte Ficha Técnica", $arrTitulos, $arrReporte);
-
     }
-
 
 }
 

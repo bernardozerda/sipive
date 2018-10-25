@@ -20,7 +20,7 @@ $arrReporte['general']['descripcion'] = "Información general de proyectos en di
 $arrReporte['general']['url'] = null;
 
 $arrReporte['fichaTecnica']['funcion'] = "reporteFichaTecnica";
-$arrReporte['fichaTecnica']['titulo'] = "Exportable Ficha Técnica";
+$arrReporte['fichaTecnica']['titulo'] = "Exportable Informe Ejecutivo";
 $arrReporte['fichaTecnica']['descripcion'] = "Obtiene la información consignada en la ficha técnica de todos los proyectos";
 $arrReporte['fichaTecnica']['url'] = null;
 

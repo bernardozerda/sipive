@@ -152,9 +152,12 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
     } else if ($seqEstado == 26) {
         $sql .= " where seqParentesco = 1 AND (seqEstadoProceso = 28 or seqEstadoProceso = " . $seqEstado . ") ";
     } else if ($seqEstado == 47) {
-        $sql .= " where seqEstadoProceso in (7, 47, 54, 16) and seqParentesco = 1 and frm.bolCerrado = 1 ";
+        $sql .= " where seqEstadoProceso in (7, 47, 54, 16, 56) and seqParentesco = 1 and frm.bolCerrado = 1 ";
     }
-    $sql .= " AND " . $fechaFin; 
+    if(isset($fechaFin)){
+        $sql .= " AND " . $fechaFin; 
+    }
+    
     if ($proyecto != "") {
         $sql .= " AND und.seqProyecto =" . $proyecto;
     }

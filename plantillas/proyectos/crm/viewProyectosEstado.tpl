@@ -36,7 +36,7 @@
 <th class="title1"><div class="title1">LOCALIDAD</div></th>
 <th class="title1"><div class="title1">COMPOSICION</div></th>
 <th class="title1"><div class="title1">UNIDADES</div></th>
-<th class="title1"><div class="title1">X VINCULAR</div></th>
+<th class="title1"><div class="title1">NO VINCULADAS</div></th>
 <th class="title1"><div class="title1">LEGALIZADAS</div></th>
 <th class="title1"><div class="title1">X LEGALIZAR</div></th>
 </tr>
@@ -61,7 +61,7 @@
         <td align="center">{$txtEstadoProceso.txtLocalidad}</td>
         <td align="center">{$txtEstadoProceso.txtTipoFinanciacion}</td>
         <td align="center">{$txtEstadoProceso.unidades}</td>
-        <td align="center">{$txtEstadoProceso.pendientes}</td>
+        <td align="center">{$txtEstadoProceso.pendientes+$txtEstadoProceso.postuladas}</td>
         <td align="center">{$txtEstadoProceso.undLegalizadadas} </td>
         <td align="center">{$txtEstadoProceso.vinculadas-$txtEstadoProceso.undLegalizadadas}</td>
     </tr>

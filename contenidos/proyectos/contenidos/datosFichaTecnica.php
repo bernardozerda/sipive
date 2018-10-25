@@ -51,6 +51,7 @@ if ($dir) {
 $cantUnidades = $claDatosProyecto->totalUnidadesPorProyecto(1, $seqProyecto);
 $cantUnidadesVinculadas = $claDatosProyecto->totalUnidadesPorProyecto(4, $seqProyecto);
 $pendientesPorVincular = $claDatosProyecto->totalUnidadesPorProyecto(2, $seqProyecto);
+$postuladas =  $claDatosProyecto->totalUnidadesPorProyecto(3, $seqProyecto);
 $legalizadas = $claDatosProyecto->totalUnidadesPorProyecto(5, $seqProyecto);
 $pendientesPorLegalizar = $cantUnidadesVinculadas - $legalizadas;
 $cantOcupacion = $claProyecto->datosTecnicosOcupacion($seqProyecto);
@@ -185,6 +186,7 @@ $claSmarty->assign("cantUnidades", $cantUnidades);
 $claSmarty->assign("cantUnidadesVinculadas", $cantUnidadesVinculadas);
 $claSmarty->assign("pendientesPorVincular", $pendientesPorVincular);
 $claSmarty->assign("legalizadas", $legalizadas);
+$claSmarty->assign("postuladas", $postuladas);
 $claSmarty->assign("pendientesPorLegalizar", $pendientesPorLegalizar);
 $claSmarty->assign("arrDatosVivienda", $arrDatosVivienda);
 $claSmarty->assign("arrImagenes", $arraImagenes);

@@ -824,7 +824,8 @@ class DatosGeneralesProyectos {
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
                     LEFT JOIN t_pry_proyecto proy ON (und.seqProyecto = proy.seqProyecto)
                     WHERE frm.bolCerrado =1  and und.seqFormulario is not null
-                    and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16 OR seqEstadoProceso = 47) and und.bolActivo =1";
+                    and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16 OR seqEstadoProceso = 47 OR seqEstadoProceso = 56) and und.bolActivo =1";
+            
         } else if ($valor == 4) {
             $sql = "SELECT count(*) as cant, und.seqProyecto FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 

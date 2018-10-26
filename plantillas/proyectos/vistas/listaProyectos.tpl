@@ -23,6 +23,9 @@
         div.dataTables_scrollFoot table{
             width: 100% !important;
         }
+        .col-sm-1{
+            right: 10%;
+        }
     </style>
 
 {/literal}

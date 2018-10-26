@@ -1734,6 +1734,9 @@ class Proyecto {
             $value == "" ? $$key = '0' : $$key = $value;
             //echo "key = " . $key . " value -> " . $value;
         }
+         $seqBanco = ($seqBanco == 0) ? 1 : $seqBanco;
+         $seqFiducia = ($seqFiducia == 0) ? 'NULL' : $seqFiducia;
+         $seqCiudad = ($seqCiudad == 0) ? 'NULL' : $seqCiudad;
 
         $sql = "INSERT INTO t_pry_datos_fiducia
                 (
@@ -1779,7 +1782,7 @@ class Proyecto {
         try {
             $aptBd->execute($sql);
             $seqDatoFiducia = $aptBd->Insert_ID();
-            if (count($arrayFiducia['seqTipoFideicomitente']) > 0) {
+            if (count($arrayFiducia['seqTipoFideicomitente']) > 0 && $arrayFiducia['seqTipoFideicomitente'][0] != "") {
                 $insertSql = "INSERT INTO t_pry_fideicomitente (
                     txtNombreFideicomitente, seqTipoFideicomitente, seqDatoFiducia) VALUES";
                 foreach ($arrayFiducia['seqTipoFideicomitente'] as $keyFid => $valueFid) {

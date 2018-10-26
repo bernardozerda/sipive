@@ -646,3 +646,22 @@ h1 span {
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+.dataTables_scrollHeadInner{
+    width: 100% !important;
+}
+div.dataTables_scrollHead table.table-bordered{
+    width: 100% !important;
+}
+
+.dataTables_scrollFootInner{
+    width: 100% !important;
+}       
+div.dataTables_scrollFoot table{
+    width: 100% !important;
+}
+.col-sm-1{
+    right: 11% !important;
+}
+.row{
+    width: 100% !important;
+}

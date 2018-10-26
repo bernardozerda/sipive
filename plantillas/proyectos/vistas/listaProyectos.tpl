@@ -10,15 +10,30 @@
         {
             padding: 5px;
         }
+        .dataTables_scrollHeadInner{
+            width: 100% !important;
+        }
+        div.dataTables_scrollHead table.table-bordered{
+            width: 100% !important;
+        }
+       
+        .dataTables_scrollFootInner{
+             width: 100% !important;
+        }       
+        div.dataTables_scrollFoot table{
+            width: 100% !important;
+        }
     </style>
 
 {/literal}
 <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+    {if $id != 5}
     <div bgcolor="#E4E4E4" class="col-sm-1">
         <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=1', '', true);">
             <img src="recursos/imagenes/add.png" width="24px">
         </a>
     </div>
+    {/if}
     <thead>
         <tr align="center">
             <th bgcolor="#E4E4E4" align="center" ><b>Id</b></th>

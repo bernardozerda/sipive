@@ -101,6 +101,7 @@ foreach ($arrRegistros as $arrRegistro) {
     $txtArchivo .= implode($txtSeparador, $arrRegistro) . $txtSalto;
 }
 
+ini_set('memory_limit', '-1');
 header("Content-Type: application/vnd.ms-excel");
 header("content-disposition: attachment;filename=analisisUnidadesAsignadas.xls");
 

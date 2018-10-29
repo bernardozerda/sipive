@@ -66,7 +66,7 @@
         </div>
         <div class="panel-footer text-center">
             <div class="row">
-                <div class="col-sm-3"></div>
+                <div class="col-sm-4"></div>
                 <div class="col-sm-3">
                     <button type="button"
                             class="btn btn-default btn-sm"

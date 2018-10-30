@@ -2402,7 +2402,7 @@ class Proyecto {
             left join t_pry_estado_proceso using(seqPryEstadoProceso) 
             LEFT JOIN
             T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
-            WHERE pry.seqProyectoGrupo in (1,2) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)            
+            WHERE pry.seqProyectoGrupo in (1,2,3) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)            
             group by seqPryEstadoProceso order by seqPryEstadoProceso DESC ";
 
         /* and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI' */
@@ -2453,7 +2453,7 @@ class Proyecto {
                         WHERE
                             pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
                              and und.bolActivo = 1
-                                AND seqProyectoGrupo IN (1 , 2) and 
+                                AND seqProyectoGrupo IN (1 , 2, 3) and 
                                 (und.seqProyecto = pry.seqProyecto or und.seqProyecto = pry.seqProyectoPadre or pry1.seqProyectoPadre = pry.seqProyecto)) 
                                 AS unidades,
                             (SELECT 
@@ -2466,7 +2466,7 @@ class Proyecto {
                                 t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                             WHERE
                              pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                             AND seqProyectoGrupo IN (1 , 2)
+                             AND seqProyectoGrupo IN (1 , 2, 3)
                                     AND (und.seqProyecto = pry.seqProyecto
                                     OR und.seqProyecto = pry.seqProyectoPadre
                                     OR pry1.seqProyectoPadre = pry.seqProyecto) and
@@ -2484,7 +2484,7 @@ class Proyecto {
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                         WHERE
                          pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                                AND seqProyectoGrupo IN (1 , 2)
+                                AND seqProyectoGrupo IN (1 , 2, 3)
                                 AND (und.seqProyecto = pry.seqProyecto
                                 OR und.seqProyecto = pry.seqProyectoPadre
                                 OR pry1.seqProyectoPadre = pry.seqProyecto)
@@ -2499,7 +2499,7 @@ class Proyecto {
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                         WHERE
                         pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                                AND seqProyectoGrupo IN (1 , 2)
+                                AND seqProyectoGrupo IN (1 , 2, 3)
                                 AND (und.seqProyecto = pry.seqProyecto
                                 OR und.seqProyecto = pry.seqProyectoPadre
                                 OR pry1.seqProyectoPadre = pry.seqProyecto)
@@ -2527,7 +2527,7 @@ class Proyecto {
                                 WHERE 
                                 pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
                                  AND (und.seqProyecto = pry.seqProyecto
-                                 AND seqProyectoGrupo IN (1 , 2) AND
+                                 AND seqProyectoGrupo IN (1 , 2, 3) AND
                                 frm.bolCerrado =1  and und.seqFormulario is not null
                                 and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR 
                                 seqEstadoProceso = 16 OR seqEstadoProceso = 47 OR seqEstadoProceso = 56) 
@@ -2547,7 +2547,7 @@ class Proyecto {
                         T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
                     WHERE
                         seqPryEstadoProceso = $seqPryEstadoProceso
-                            AND pry.seqProyectoGrupo IN (1 , 2)
+                            AND pry.seqProyectoGrupo IN (1 , 2, 3)
                             AND (seqProyectoPadre = 0
                             OR seqProyectoPadre IS NULL)
                     GROUP BY seqProyecto

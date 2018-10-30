@@ -648,9 +648,11 @@ class Proyecto {
     public function obtenerDatosviviendaFicha($seqProyecto) {
 
         global $aptBd;
-        $sql = "SELECT sum(numCantParqDisc) as totalParqDisc, sum(numCantUdsDisc) as totalUdsDisc,
-                sum(numTotalParq) as totalParq, sum(numCantidad) as totalUnidades 
-                from t_pry_tipo_vivienda ptv";
+        $sql = "SELECT case  when sum(numCantParqDisc)  > 0 then sum(numCantParqDisc) else numParqueaderosDisc end as totalParqDisc, 
+		case  when sum(numCantUdsDisc)  > 0  then sum(numCantUdsDisc) else numCantSolDisc end as totalUdsDisc,
+		case  when sum(numTotalParq) > 0  then sum(numTotalParq) else numParqueaderos end as totalParq, sum(numCantidad) as totalUnidades 
+		from t_pry_tipo_vivienda ptv
+		left join t_pry_proyecto using(seqProyecto)";
         if ($seqProyecto > 0) {
             $sql .= " where  ptv.seqProyecto = " . $seqProyecto;
         }

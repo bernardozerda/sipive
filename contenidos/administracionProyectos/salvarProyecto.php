@@ -28,6 +28,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimien
  */
 $arrErrores = array();
 $arrayDatosProyNew = array();
+$arrayDatosProyOld = array();
+
 /**
  * Salvar o editar Proyectos si no hay errores
  */
@@ -166,19 +168,13 @@ if (empty($arrErrores)) {
             if ($_POST["bolAprobo"] == "") {
                 $_POST["bolAprobo"] = 0;
             }
-            if($_POST["seqUsuarioPol"] == ""){
-                $_POST["seqUsuarioPol"] = $_SESSION['seqUsuario'];
-            }
-            $claProyecto->almacenarPoliza($seqProyecto, $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
+            $claProyecto->almacenarPoliza($seqProyecto, $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_SESSION['seqUsuario'], $_POST["bolAprobo"], $arrayAmparos);
         } else if ($_POST["numPoliza"] != "" || $cantPoliza > 0) {
             if ($_POST["bolAprobo"] == "") {
                 $_POST["bolAprobo"] = 0;
             }
-            if($_POST["seqUsuarioPol"] == ""){
-                $_POST["seqUsuarioPol"] = $_SESSION['seqUsuario'];
+            $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_SESSION['seqUsuario'], $_POST["bolAprobo"], $arrayAmparos);
             }
-            $claProyecto->modificarPoliza($seqProyecto, $_POST["seqPoliza"], $_POST["seqAseguradora"], $_POST["numPoliza"], $_POST["fchExpedicion"], $_POST["seqUsuarioPol"], $_POST["bolAprobo"], $arrayAmparos);
-        }
 
         if ($_POST["numContratoFiducia"] != "" && $_POST["numContratoFiducia"] != 0 && $_POST["seqDatoFiducia"] == "") {
             $claProyecto->almacenarFiducia($seqProyecto, $arrayFiducia);

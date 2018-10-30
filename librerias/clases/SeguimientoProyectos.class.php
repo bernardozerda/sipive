@@ -647,7 +647,8 @@ class SeguimientoProyectos {
     }
 
     public function almacenarSeguimiento($seqProyecto, $txtComentarios, $seqGestion, $arrayDatosProyOld, $arrayDatosProyNew) {
-
+//pr($arrayDatosProyOld);
+//pr($arrayDatosProyNew);
         global $aptBd;
         $txtCambios = "";
         if ($arrayDatosProyOld != "") {

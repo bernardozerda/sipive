@@ -128,10 +128,10 @@ foreach ($_POST as $nombre_campo => $valor) {
                 $indCom++;
             }
         }
-        // var_dump($arrayFideicomitenteSeg);
+       // var_dump($arrayFideicomitenteSeg);
         foreach ($arrayFideicomitenteSeg as $keyFid => $valueFid) {
             if (isset($valueFid[$nombre_campo])) {
-                // echo "<p> @@@@" . $nombre_campo . " - " . $valueFid[$nombre_campo] . "keyFid = ".$keyFid."@@@@</p>";
+                 // echo "<p> @@@@" . $nombre_campo . " - " . $valueFid[$nombre_campo] . "keyFid = ".$keyFid."@@@@</p>";
                 $arrayDatosProyOld[$seqProyecto][$nombre_campo . "_" . $keyFid] = $valueFid[$nombre_campo];
                 $indCom++;
             }

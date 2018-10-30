@@ -126,7 +126,7 @@ class SeguimientoProyectos {
         // CAMPOS QUE NO SE MOSTRARAN POR AHROA
         $this->arrIgnorarCampos[] = "";
         $this->arrIgnorarCampos[] = "arrErrores";
-		$this->arrIgnorarCampos[] = "bolActivo";
+        $this->arrIgnorarCampos[] = "bolActivo";
         $this->arrIgnorarCampos[] = "bolAprobacion";
         $this->arrIgnorarCampos[] = "valTotalProyectosVIP";
         $this->arrIgnorarCampos[] = "bolDireccion";
@@ -149,9 +149,10 @@ class SeguimientoProyectos {
         $this->arrIgnorarCampos[] = "seqUsuario";
         $this->arrIgnorarCampos[] = "seqFideicomitente";
         $this->arrIgnorarCampos[] = "seqTipoFideicomitente";
+        $this->arrIgnorarCampos[] = "seqTipoFinaciacion";
         $this->arrIgnorarCampos[] = "radio";
 
-		$this->arrTipoDato['txtNombreProyecto'] = "texto";
+        $this->arrTipoDato['txtNombreProyecto'] = "texto";
         $this->arrTipoDato['txtNombrePlanParcial'] = "texto";
         $this->arrTipoDato['seqTipoEsquema'] = "numero";
         $this->arrTipoDato['seqPryTipoModalidad'] = "numero";
@@ -572,7 +573,7 @@ class SeguimientoProyectos {
         return $txtCambios;
     }
 
-	public function validarCampos($seqProyecto, $objAnterior, $objNuevo) {
+    public function validarCampos($seqProyecto, $objAnterior, $objNuevo) {
 //        echo "<p><b>************** Arreglo Anterior **************</b></p>";
 //        pr($objAnterior);
 //        echo "<p><b>************** Arreglo Nuevo **************</b></p>";
@@ -675,7 +676,7 @@ class SeguimientoProyectos {
                         1
                 )
 		";
-       // echo " <br>SEGUIMIENTO ACTUALIZACION: " . $sql;
+        // echo " <br>SEGUIMIENTO ACTUALIZACION: " . $sql;
 
         try {
             $aptBd->execute($sql);
@@ -684,7 +685,7 @@ class SeguimientoProyectos {
             $arrErrores[] = "El Proyecto se ha salvado pero no ha quedado registro de la actividad";
         }
     }
-	
+
     public function giroFiducia($seqProyecto, $seqUnidadActo, $seqRegistroPresupuestal, $numUnidades, $valTotalGiro) {
         global $aptBd;
 
@@ -693,25 +694,18 @@ class SeguimientoProyectos {
             $aptBd->BeginTrans();
 
             $arrActo = obtenerDatosTabla(
-                "t_pry_aad_unidad_acto",
-                array("seqUnidadActo","numActo","fchActo"),
-                "seqUnidadActo",
-                "seqUnidadActo = " . $seqUnidadActo
+                    "t_pry_aad_unidad_acto", array("seqUnidadActo", "numActo", "fchActo"), "seqUnidadActo", "seqUnidadActo = " . $seqUnidadActo
             );
 
             $arrCDP = obtenerDatosTabla(
-                "t_pry_aad_registro_presupuestal",
-                array("seqRegistroPresupuestal","numNumeroCDP","fchFechaCDP","numNumeroRP","fchFechaRP"),
-                "seqRegistroPresupuestal",
-                "seqRegistroPresupuestal = " . $seqRegistroPresupuestal
+                    "t_pry_aad_registro_presupuestal", array("seqRegistroPresupuestal", "numNumeroCDP", "fchFechaCDP", "numNumeroRP", "fchFechaRP"), "seqRegistroPresupuestal", "seqRegistroPresupuestal = " . $seqRegistroPresupuestal
             );
 
-            $txtComentario =
-                "Cargue giro a fiducia realizado para $numUnidades unidades, " .
-                "por un valor de $ " . number_format($valTotalGiro,0,".",",") .
-                ", del acto administrativo " . $arrActo[$seqUnidadActo]['numActo'] . " de " . $arrActo[$seqUnidadActo]['fchActo'] . " " .
-                "asociado al CDP " . $arrCDP[$seqRegistroPresupuestal]['numNumeroCDP'] . " de " . $arrCDP[$seqRegistroPresupuestal]['fchFechaCDP'] . " " .
-                "RP " . $arrCDP[$seqRegistroPresupuestal]['numNumeroRP'] . " de " . $arrCDP[$seqRegistroPresupuestal]['fchFechaRP'];
+            $txtComentario = "Cargue giro a fiducia realizado para $numUnidades unidades, " .
+                    "por un valor de $ " . number_format($valTotalGiro, 0, ".", ",") .
+                    ", del acto administrativo " . $arrActo[$seqUnidadActo]['numActo'] . " de " . $arrActo[$seqUnidadActo]['fchActo'] . " " .
+                    "asociado al CDP " . $arrCDP[$seqRegistroPresupuestal]['numNumeroCDP'] . " de " . $arrCDP[$seqRegistroPresupuestal]['fchFechaCDP'] . " " .
+                    "RP " . $arrCDP[$seqRegistroPresupuestal]['numNumeroRP'] . " de " . $arrCDP[$seqRegistroPresupuestal]['fchFechaRP'];
 
             $sql = "
                 insert into t_seg_seguimiento_proyectos (
@@ -742,10 +736,10 @@ class SeguimientoProyectos {
         }
     }
 
-    public function eliminarGiroFiducia($seqGiroFiducia){
+    public function eliminarGiroFiducia($seqGiroFiducia) {
         global $aptBd;
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
@@ -780,7 +774,7 @@ class SeguimientoProyectos {
                   " . $arrGiro['seqProyecto'] . ",
                   now(),
                   " . $_SESSION['seqUsuario'] . ",
-                  'ELiminado giro a fiducia de " . $arrGiro['numUnidades'] . " unidades por un valor de $ " . number_format($arrGiro['valGiro'],0,".",",") . "',
+                  'ELiminado giro a fiducia de " . $arrGiro['numUnidades'] . " unidades por un valor de $ " . number_format($arrGiro['valGiro'], 0, ".", ",") . "',
                   '',
                   3,
                   1
@@ -788,24 +782,21 @@ class SeguimientoProyectos {
             ";
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "Error al salvar el seguimiento de la eliminacion del giro a fiducia";
             $aptBd->RollbackTrans();
         }
-
     }
 
-    public function giroConstructor($seqProyecto, $numUnidades, $valTotalGiro){
+    public function giroConstructor($seqProyecto, $numUnidades, $valTotalGiro) {
         global $aptBd;
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
-            $txtComentario =
-                "Cargue el giro a constructor realizado para $numUnidades unidades, " .
-                "por un valor de $ " . number_format($valTotalGiro,0,".",",");
+            $txtComentario = "Cargue el giro a constructor realizado para $numUnidades unidades, " .
+                    "por un valor de $ " . number_format($valTotalGiro, 0, ".", ",");
 
             $sql = "
                 insert into t_seg_seguimiento_proyectos (
@@ -829,18 +820,17 @@ class SeguimientoProyectos {
 
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-
-        } catch( Exception $objError ){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "Error al salvar el movimiento de registro a constructor";
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollbackTrans();
         }
     }
 
-    public function eliminarGiroConstructor($seqGiroConstructor){
+    public function eliminarGiroConstructor($seqGiroConstructor) {
         global $aptBd;
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
@@ -875,7 +865,7 @@ class SeguimientoProyectos {
                   " . $arrGiro['seqProyecto'] . ",
                   now(),
                   " . $_SESSION['seqUsuario'] . ",
-                  'ELiminado giro a constructor de " . $arrGiro['numUnidades'] . " unidades por un valor de $ " . number_format($arrGiro['valGiro'],0,".",",") . "',
+                  'ELiminado giro a constructor de " . $arrGiro['numUnidades'] . " unidades por un valor de $ " . number_format($arrGiro['valGiro'], 0, ".", ",") . "',
                   '',
                   3,
                   1
@@ -883,40 +873,32 @@ class SeguimientoProyectos {
             ";
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "Error al salvar el seguimiento de la eliminacion del giro a fiducia";
             $aptBd->RollbackTrans();
         }
     }
 
-    public function salvarLiberacion($seqProyecto, $seqUnidadActo, $seqRegistroPresupuestal, $valLiberado){
+    public function salvarLiberacion($seqProyecto, $seqUnidadActo, $seqRegistroPresupuestal, $valLiberado) {
         global $aptBd;
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
             $arrActo = obtenerDatosTabla(
-                "t_pry_aad_unidad_acto",
-                array("seqUnidadActo","numActo","fchActo"),
-                "seqUnidadActo",
-                "seqUnidadActo = " . $seqUnidadActo
+                    "t_pry_aad_unidad_acto", array("seqUnidadActo", "numActo", "fchActo"), "seqUnidadActo", "seqUnidadActo = " . $seqUnidadActo
             );
 
             $arrCDP = obtenerDatosTabla(
-                "t_pry_aad_registro_presupuestal",
-                array("seqRegistroPresupuestal","numNumeroCDP","fchFechaCDP","numNumeroRP","fchFechaRP"),
-                "seqRegistroPresupuestal",
-                "seqRegistroPresupuestal = " . $seqRegistroPresupuestal
+                    "t_pry_aad_registro_presupuestal", array("seqRegistroPresupuestal", "numNumeroCDP", "fchFechaCDP", "numNumeroRP", "fchFechaRP"), "seqRegistroPresupuestal", "seqRegistroPresupuestal = " . $seqRegistroPresupuestal
             );
 
-            $txtComentario =
-                "Realizado la liberacion de recursos por un valor de $ " .
-                number_format($valLiberado,0,".",",") .
-                ", del acto administrativo " . $arrActo[$seqUnidadActo]['numActo'] . " de " . $arrActo[$seqUnidadActo]['fchActo'] . " " .
-                "asociado al CDP " . $arrCDP[$seqRegistroPresupuestal]['numNumeroCDP'] . " de " . $arrCDP[$seqRegistroPresupuestal]['fchFechaCDP'] . " " .
-                "RP " . $arrCDP[$seqRegistroPresupuestal]['numNumeroRP'] . " de " . $arrCDP[$seqRegistroPresupuestal]['fchFechaRP'];
+            $txtComentario = "Realizado la liberacion de recursos por un valor de $ " .
+                    number_format($valLiberado, 0, ".", ",") .
+                    ", del acto administrativo " . $arrActo[$seqUnidadActo]['numActo'] . " de " . $arrActo[$seqUnidadActo]['fchActo'] . " " .
+                    "asociado al CDP " . $arrCDP[$seqRegistroPresupuestal]['numNumeroCDP'] . " de " . $arrCDP[$seqRegistroPresupuestal]['fchFechaCDP'] . " " .
+                    "RP " . $arrCDP[$seqRegistroPresupuestal]['numNumeroRP'] . " de " . $arrCDP[$seqRegistroPresupuestal]['fchFechaRP'];
 
             $sql = "
                 insert into t_seg_seguimiento_proyectos (
@@ -940,30 +922,26 @@ class SeguimientoProyectos {
 
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-
-        } catch( Exception $objError ){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "Error al salvar el movimiento de registro a fiducia";
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollbackTrans();
         }
     }
 
-    public function eliminarLiberacion($seqProyecto, $seqLiberacion){
+    public function eliminarLiberacion($seqProyecto, $seqLiberacion) {
         global $aptBd;
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
             $valLiberado = abs(
-                array_shift(
-                    obtenerDatosTabla(
-                        "t_pry_aad_liberacion",
-                        array("seqLiberacion","valLiberado"),
-                        "seqLiberacion",
-                        "seqLiberacion = " . $seqLiberacion
+                    array_shift(
+                            obtenerDatosTabla(
+                                    "t_pry_aad_liberacion", array("seqLiberacion", "valLiberado"), "seqLiberacion", "seqLiberacion = " . $seqLiberacion
+                            )
                     )
-                )
             );
 
             $sql = "
@@ -979,7 +957,7 @@ class SeguimientoProyectos {
                   " . $seqProyecto . ",
                   now(),
                   " . $_SESSION['seqUsuario'] . ",
-                  'ELiminado liberacion de recursos por un valor de $ " . number_format($valLiberado,0,".",",") . "',
+                  'ELiminado liberacion de recursos por un valor de $ " . number_format($valLiberado, 0, ".", ",") . "',
                   '',
                   3,
                   1
@@ -987,22 +965,21 @@ class SeguimientoProyectos {
             ";
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "Error al salvar el seguimiento de la eliminacion del giro a fiducia";
             $aptBd->RollbackTrans();
         }
     }
 
-    public function salvarReintegros($arrPost, $arrTotalReintegros){
+    public function salvarReintegros($arrPost, $arrTotalReintegros) {
         global $aptBd;
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
-            $txtReintegros   = " con reintegros por $ " . number_format(intval($arrTotalReintegros['reintegro']),0,'.',',');
-            $txtRendimientos = " con rendimientos por $ " . number_format(intval($arrTotalReintegros['rendimiento']),0,'.',',');
+            $txtReintegros = " con reintegros por $ " . number_format(intval($arrTotalReintegros['reintegro']), 0, '.', ',');
+            $txtRendimientos = " con rendimientos por $ " . number_format(intval($arrTotalReintegros['rendimiento']), 0, '.', ',');
 
             $txtComentario = "Salvada acta " . $arrPost['numActa'] . " de " . $arrPost['fchActa'] . $txtReintegros . ", " . $txtRendimientos . ".";
 
@@ -1028,19 +1005,17 @@ class SeguimientoProyectos {
 
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-
-        } catch( Exception $objError ){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "Error al salvar el movimiento de registro a constructor";
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollbackTrans();
         }
-
     }
 
-    public function eliminarReintegro($seqReintegro){
+    public function eliminarReintegro($seqReintegro) {
         global $aptBd;
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
@@ -1057,7 +1032,7 @@ class SeguimientoProyectos {
                     red.txtTipo            
             ";
             $objRes = $aptBd->execute($sql);
-            while($objRes->fields){
+            while ($objRes->fields) {
                 $seqProyecto = $objRes->fields['seqProyecto'];
                 $txtTipo = $objRes->fields['txtTipo'];
                 $valReintegros = $objRes->fields['valConsignacion'];
@@ -1065,11 +1040,10 @@ class SeguimientoProyectos {
                 $objRes->MoveNext();
             }
 
-            $txtComentarios =
-                "ELiminado registro de reintegros por $ " .
-                number_format($arrValores['reintegro'],0,'.',',') .
-                " y rendimientos por un valor de $ " .
-                number_format($arrValores['rendimiento'],0,".",",");
+            $txtComentarios = "ELiminado registro de reintegros por $ " .
+                    number_format($arrValores['reintegro'], 0, '.', ',') .
+                    " y rendimientos por un valor de $ " .
+                    number_format($arrValores['rendimiento'], 0, ".", ",");
 
             $sql = "
                 insert into t_seg_seguimiento_proyectos(

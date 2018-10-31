@@ -20,24 +20,28 @@ $arrTitulos[] = "DOCUMENTO";
 $arrTitulos[] = "NOMBRE";
 $arrTitulos[] = "FECHA";
 $arrTitulos[] = "VALOR";
+$arrTitulos[] = "FUENTE";
 $arrTitulos[] = "JUSTIFICACION";
 $arrTitulos[] = "REPORTAR";
 $arrTitulos[] = "DETALLE";
 
 $sql = "
     select 
-        seqArchivoMcy,
-        numNIT,
-        txtEntidad,
-        seqTipoDocumento,
-        numDocumento,
-        txtNombre,
-        fchAsignacion,
-        valAsignado,
-        txtJustificacion,
-        bolReportarLinea,
-        txtExclusion
+        a.seqArchivoMcy,
+        a.numNIT,
+        a.txtEntidad,
+        a.seqTipoDocumento,
+        a.numDocumento,
+        a.txtNombre,
+        a.fchAsignacion,
+        a.valAsignado,
+        f.txtFuente,
+        a.txtJustificacion,
+        a.bolReportarLinea,
+        a.txtExclusion
     from t_fnv_archivo_mcy a
+    inner join t_fnv_archivo_mcy_fuente f on a.seqFuente = f.seqFuente
+    order by a.numDocumento
 ";
 $arrDatos = $aptBd->GetAll($sql);
 

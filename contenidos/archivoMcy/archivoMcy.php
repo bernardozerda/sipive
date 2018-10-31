@@ -19,7 +19,7 @@ $arrTipoDocumento = obtenerDatosTabla(
 $claArchivoMcy = new ArchivoMCY();
 
 $arrListado = array();
-if(doubleval($_POST['numDocumento']) != 0){
+if(doubleval($_POST['numDocumento']) != 0 or doubleval($_POST['seqTipoDocumento']) != 0){
     $arrListado = $claArchivoMcy->listado($_POST['seqTipoDocumento'],$_POST['numDocumento']);
 }
 

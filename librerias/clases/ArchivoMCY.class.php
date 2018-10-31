@@ -21,6 +21,7 @@ class ArchivoMCY
         $this->arrTitulos[]  = "NOMBRE";
         $this->arrTitulos[]  = "FECHA";
         $this->arrTitulos[]  = "VALOR";
+        $this->arrTitulos[]  = "FUENTE";
         $this->arrTitulos[]  = "JUSTIFICACION";
         $this->arrTitulos[]  = "REPORTAR";
         $this->arrTitulos[]  = "DETALLE";
@@ -101,9 +102,19 @@ class ArchivoMCY
                 $txtNombre = trim($arrLinea[5]);
                 $fchAsignacion = trim($arrLinea[6]);
                 $valAsignado = doubleval($arrLinea[7]);
-                $txtJustificacion = trim($arrLinea[8]);
-                $bolExclusion = intval($arrLinea[9]);
-                $txtExclusion = trim($arrLinea[10]);
+                $seqFuente = intval(
+                        array_shift(
+                        obtenerDatosTabla(
+                            "t_fnv_archivo_mcy_fuente",
+                            array("seqFuente","txtFuente"),
+                            "txtFuente",
+                            "txtFuente like '" . trim($arrLinea[8]) . "'"
+                        )
+                    )
+                );
+                $txtJustificacion = trim($arrLinea[9]);
+                $bolExclusion = intval($arrLinea[10]);
+                $txtExclusion = trim($arrLinea[11]);
 
                 if($seqArchivoMcy == 0){
                     $sql  = "
@@ -115,6 +126,7 @@ class ArchivoMCY
                             txtNombre,
                             fchAsignacion,
                             valAsignado,
+                            seqFuente,
                             txtJustificacion,
                             bolReportarLinea,
                             txtExclusion
@@ -126,6 +138,7 @@ class ArchivoMCY
                             '$txtNombre',
                             '$fchAsignacion',
                             $valAsignado,
+                            $seqFuente,
                             '$txtJustificacion',
                             $bolExclusion,
                             '$txtExclusion'
@@ -145,6 +158,7 @@ class ArchivoMCY
                           txtNombre = '$txtNombre',
                           fchAsignacion = '$fchAsignacion',
                           valAsignado = $valAsignado,
+                          seqFuente = $seqFuente,
                           txtJustificacion = '$txtJustificacion',
                           bolReportarLinea = $bolExclusion,
                           txtExclusion = '$txtExclusion'
@@ -223,11 +237,13 @@ class ArchivoMCY
                 a.txtNombre,
                 a.fchAsignacion,
                 a.valAsignado,
+                f.txtFuente,
                 a.txtJustificacion,
                 a.bolReportarLinea,
                 a.txtExclusion
             FROM t_fnv_archivo_mcy a
             INNER JOIN t_ciu_tipo_documento t on a.seqTipoDocumento = t.seqTipoDocumento
+            INNER JOIN t_fnv_archivo_mcy_fuente f on a.seqFuente = f.seqFuente
             WHERE a.seqTipoDocumento = $seqTipoDocumento
               AND a.numDocumento = $numDocumento
         ";

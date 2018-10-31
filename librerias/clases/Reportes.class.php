@@ -4844,130 +4844,171 @@ WHERE
         $this->obtenerReportesGeneral($arrReporte, "GirosVIPA");
     }
 
-    public function crucesFnv($bolExepciones = false) {
+    public function crucesFnv() {
         global $aptBd;
-
-        $arrEstadosAAD[] = 15;
-        $arrEstadosAAD[] = 33;
-        $arrEstadosAAD[] = 40;
-        $arrEstadosAAD[] = 59;
-
         $sql = "
-            select
-              '8999990619' as nitSDHT,
-              'SECRETARÍA DISTRITAL DE HÁBITAT' as txtSDHT,
-              if(cac.seqTipoDocumento = 7,1,cac.seqTipoDocumento) as seqTipoDocumento, 
-              cac.numDocumento as numDocumento,
-              upper(concat(cac.txtNombre1,' ',cac.txtNombre2,' ',cac.txtApellido1,' ',cac.txtApellido2)) as txtNombre,
-              hvi.fchActo as fchAsignacion, 
-              0 as valAsignado,
-              fac.seqEstadoProceso
-            from t_aad_hogares_vinculados hvi
-            inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
-            inner join t_aad_hogar_acto hac on hac.seqFormularioActo = fac.seqFormularioActo
-            inner join t_aad_ciudadano_acto cac on hac.seqCiudadanoActo = cac.seqCiudadanoActo
-            inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
-            where hvi.seqTipoActo = 1              
-              -- and fac.seqEstadoProceso in (15,33,40,59)
-              and cac.seqTipoDocumento in (1,2)
-              or (
-                    cac.seqTipoDocumento = 7 
-                and YEAR(CURDATE()) - YEAR(cac.fchNacimiento) + IF(DATE_FORMAT(CURDATE(),'%m-%d') >= DATE_FORMAT(cac.fchNacimiento,'%m-%d'), 0, -1) >= 18
-              )
-            order by
-              hvi.fchActo        
+            SELECT 
+                arc.numNIT,
+                arc.txtEntidad,
+                case 
+                  when arc.seqTipoDocumento = 7 then 1
+                  when arc.seqTipoDocumento = 5 then 2
+                  else arc.seqTipoDocumento
+                end as seqTipoDocumento,
+                arc.numDocumento,
+                arc.txtNombre,
+                arc.fchAsignacion,
+                arc.valAsignado,
+                group_concat(arc.txtJustificacion SEPARATOR ', ') as txtJustificacion
+            FROM t_fnv_archivo_mcy arc
+            GROUP BY arc.numDocumento
+            HAVING sum(arc.bolReportarLinea) > 0        
         ";
-        $objRes = $aptBd->execute($sql);
-        $arrReporte = array();
-        while ($objRes->fields) {
-            $numDocumento = $objRes->fields['numDocumento'];
-            if (!isset($arrReporte[$numDocumento])) {
-                $arrReporte[$numDocumento] = $objRes->fields;
-                $txtEntidad = (in_array($objRes->fields['seqEstadoProceso'], $arrEstadosAAD)) ? "SDHT" : "";
-                $arrReporte[$numDocumento]['txtEntidad'] = $txtEntidad;
-                $arrReporte[$numDocumento]['txtObservaciones'] = "";
-            }
-            $objRes->MoveNext();
-        }
-
-
-        $sql = "
-            select 
-                '8999990619' as nitSDHT,
-                'SECRETARÍA DISTRITAL DE HÁBITAT' as txtSDHT,
-                doc.seqTipoDocumento as seqTipoDocumento, 
-                doc.numDocumento as numDocumento,
-                doc.txtNombre as txtNombre,
-                null as fchAsignacion,
-                0 as valAsignado,
-                fue.txtEntidad,
-                if(fue.txtEntidad is null,doc.txtObservaciones,'') as txtObservaciones
-            from (
-              select
-                res.seqTipoDocumento,
-                res.numDocumento,
-                upper(res.txtNombre) as txtNombre,
-                group_concat(res.txtObservaciones) as txtObservaciones
-              from t_cru_resultado res
-              where /* res.seqFormulario = 0 and */ 
-                res.seqTipoDocumento in (1,2)
-              group by 
-                res.seqTipoDocumento,
-                res.numDocumento
-            ) doc
-            left join (
-              select
-                res.numDocumento,
-                group_concat(res.txtEntidad) as txtEntidad
-              from t_cru_resultado res
-              where  /* res.seqFormulario = 0 and  */
-                res.bolInhabilitar = 1 and
-                res.seqTipoDocumento in (1,2)
-              group by res.numDocumento
-            ) fue on doc.numDocumento = fue.numDocumento    
-        ";
-        $objRes = $aptBd->execute($sql);
-        while ($objRes->fields) {
-            $numDocumento = $objRes->fields['numDocumento'];
-            if (!isset($arrReporte[$numDocumento])) {
-                $arrReporte[$numDocumento] = $objRes->fields;
-            } else {
-                if ($objRes->fields['txtEntidad'] != "") {
-                    $arrReporte[$numDocumento]['txtEntidad'] .= "," . $objRes->fields['txtEntidad'];
-                }
-                if ($objRes->fields['txtObservaciones'] != "") {
-                    $arrReporte[$numDocumento]['txtObservaciones'] .= "," . $objRes->fields['txtObservaciones'];
-                }
-            }
-            $objRes->MoveNext();
-        }
-
-        foreach ($arrReporte as $numDocumento => $arrDatos) {
-            if ($bolExepciones == false) {
-                if ($arrDatos['txtEntidad'] == "") {
-                    unset($arrReporte[$numDocumento]);
-                }
-                unset($arrReporte[$numDocumento]['txtObservaciones']);
-            } else {
-                if ($arrDatos['txtEntidad'] != "") {
-                    unset($arrReporte[$numDocumento]);
-                }
-                unset($arrReporte[$numDocumento]['nitSDHT']);
-                unset($arrReporte[$numDocumento]['txtSDHT']);
-                unset($arrReporte[$numDocumento]['txtNombre']);
-                unset($arrReporte[$numDocumento]['fchAsignacion']);
-                unset($arrReporte[$numDocumento]['valAsignado']);
-                unset($arrReporte[$numDocumento]['txtEntidad']);
-                unset($arrReporte[$numDocumento]['seqEstadoProceso']);
-            }
-        }
-
-        $txtReporte = ($bolExepciones == false) ? "ReporteCruces" : "ReporteExcepciones";
-        $this->obtenerReportesGeneral($arrReporte, $txtReporte, null, false, "|");
+        $arrReporte = $aptBd->GetAll($sql);
+        $this->obtenerReportesGeneral($arrReporte, "Cruce_Secretaria_Distrital", null, false, "|");
     }
 
     public function excepcionesFnv() {
-        $this->crucesFnv(true);
+        global $aptBd;
+
+        $arrEstados = estadosProceso();
+
+        $arrEstadosNoExclusion[] = 8;
+        $arrEstadosNoExclusion[] = 13;
+        $arrEstadosNoExclusion[] = 15;
+        $arrEstadosNoExclusion[] = 16;
+        $arrEstadosNoExclusion[] = 17;
+        $arrEstadosNoExclusion[] = 19;
+        $arrEstadosNoExclusion[] = 20;
+        $arrEstadosNoExclusion[] = 21;
+        $arrEstadosNoExclusion[] = 22;
+        $arrEstadosNoExclusion[] = 23;
+        $arrEstadosNoExclusion[] = 24;
+        $arrEstadosNoExclusion[] = 25;
+        $arrEstadosNoExclusion[] = 26;
+        $arrEstadosNoExclusion[] = 27;
+        $arrEstadosNoExclusion[] = 28;
+        $arrEstadosNoExclusion[] = 29;
+        $arrEstadosNoExclusion[] = 30;
+        $arrEstadosNoExclusion[] = 31;
+        $arrEstadosNoExclusion[] = 32;
+        $arrEstadosNoExclusion[] = 33;
+        $arrEstadosNoExclusion[] = 40;
+        $arrEstadosNoExclusion[] = 47;
+        $arrEstadosNoExclusion[] = 52;
+        $arrEstadosNoExclusion[] = 54;
+        $arrEstadosNoExclusion[] = 56;
+        $arrEstadosNoExclusion[] = 58;
+        $arrEstadosNoExclusion[] = 59;
+        $arrEstadosNoExclusion[] = 61;
+        $arrEstadosNoExclusion[] = 62;
+        $arrEstadosNoExclusion[] = 63;
+
+        $sql = "
+            SELECT 
+                arc.seqArchivoMcy as 'ID',
+                arc.seqTipoDocumento as 'ID TIPO DOCUMENTO (*)' ,
+                tdo.txtTipoDocumento as 'TIPO DOCUMENTO',
+                arc.numDocumento AS 'DOCUMENTO (*)',
+                arc.txtNombre AS 'NOMBRE',
+                arc.seqFuente AS 'ID FUENTE',
+                fue.txtFuente as 'FUENTE',
+                arc.txtJustificacion  as 'JUSTIFICACION',
+                arc.txtExclusion as 'RAZON EXCLUSION (*)',
+                frm.seqFormulario AS 'ID FORMULARIO',
+                frm.seqEstadoProceso AS 'ID ESTADO FORMULARIO',
+                est.txtEstado AS 'ESTADO FORMULARIO',
+                fac.seqFormularioActo AS 'FORMULARIO ACTO', 
+                fac.seqEstadoProceso AS 'ID ESTADO FORMULARIO ACTO',
+                est1.txtEstado AS 'ESTADO FORMULARIO ACTO',
+                '' AS 'APLICA EXCLUSION',
+                '' AS 'OBSERVACIONES'
+            FROM t_fnv_archivo_mcy arc
+            INNER JOIN t_fnv_archivo_mcy_fuente fue on arc.seqFuente = fue.seqFuente
+            INNER JOIN t_ciu_tipo_documento tdo on arc.seqTipoDocumento = tdo.seqTipoDocumento
+            LEFT JOIN t_ciu_ciudadano ciu ON arc.seqTipoDocumento = ciu.seqTipoDocumento AND arc.numDocumento = ciu.numDocumento
+            LEFT JOIN t_frm_hogar hog ON ciu.seqCiudadano = hog.seqCiudadano
+            LEFT JOIN t_frm_formulario frm ON frm.seqFormulario = hog.seqFormulario
+            LEFT JOIN (
+                select 
+                    fac.seqFormulario,
+                    fac.seqFormularioActo, 
+                    fac.seqEstadoProceso
+                from t_aad_formulario_acto fac
+                inner join (
+                    select 
+                        fac.seqFormulario,
+                        max(fac.seqFormularioActo) as seqFormularioActo
+                    from t_aad_hogares_vinculados hvi
+                    inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
+                    where hvi.seqTipoActo = 1
+                    group by fac.seqFormulario
+                ) fac1 on fac.seqFormularioActo = fac1.seqFormularioActo
+            ) fac on frm.seqFormulario = fac.seqFormulario
+            left join (
+                select 
+                    seqTipoDocumento,
+                    numDocumento,
+                    sum(bolReportarLinea) as bolReportarLinea
+                from t_fnv_archivo_mcy
+                group by
+                    seqTipoDocumento,
+                    numDocumento
+            ) suma on arc.seqTipoDocumento = suma.seqTipoDocumento and arc.numDocumento = suma.numDocumento
+            LEFT JOIN v_frm_estado est on frm.seqEstadoProceso = est.seqEstadoProceso
+            left join v_frm_estado est1 on fac.seqEstadoProceso = est1.seqEstadoProceso
+            WHERE suma.bolReportarLinea = 0
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrExcepciones = array();
+        while($objRes->fields){
+            $seqArchivoMcy = $objRes->fields['ID'];
+            unset($objRes->fields['ID']);
+            $txtObservacion = "";
+            if(intval($objRes->fields['ID FORMULARIO'] != 0)){
+                switch ($objRes->fields['ID FUENTE']) {
+                    case 1: // Actos Administrativos
+                        $seqEstadoFormulario = $objRes->fields['ID ESTADO FORMULARIO'];
+                        $seqEstadoFormularioActo = $objRes->fields['ID ESTADO FORMULARIO ACTO'];
+                        if(in_array($seqEstadoFormulario,$arrEstadosNoExclusion)){
+                            $txtObservacion .= "Estado de FRM: " . $arrEstados[$seqEstadoFormulario] . ", ";
+                        }
+                        if(in_array($seqEstadoFormularioActo,$arrEstadosNoExclusion)){
+                            $txtObservacion .= "Estado de FAC: " . $arrEstados[$seqEstadoFormularioActo] . ", ";
+                        }
+                        if($seqEstadoFormulario != $seqEstadoFormularioActo){
+                            $txtObservacion .= "Estado FAC y FRM diferentes: FRM " .  $arrEstados[$seqEstadoFormulario] . " FAC " . $arrEstados[$seqEstadoFormularioActo] . ", ";
+                        }
+                        $objRes->fields['APLICA EXCLUSION'] = ($txtObservacion != "")? "NO" : "SI";
+                        $objRes->fields['OBSERVACIONES']    = $txtObservacion;
+                        break;
+                    case 2: // Archivo
+                        $objRes->fields['APLICA EXCLUSION'] = "SI";
+                        $objRes->fields['OBSERVACIONES']    = "";
+                        break;
+                    case 3: // formulario
+                        $seqEstadoFormulario = $objRes->fields['ID ESTADO FORMULARIO'];
+                        if(in_array($seqEstadoFormulario,$arrEstadosNoExclusion)){
+                            $txtObservacion .= "Estado de FRM: " . $arrEstados[$seqEstadoFormulario] . ", ";
+                        }
+                        $objRes->fields['APLICA EXCLUSION'] = ($txtObservacion != "")? "NO" : "SI";
+                        $objRes->fields['OBSERVACIONES']    = $txtObservacion;
+                        break;
+                    default:
+                        $objRes->fields['APLICA EXCLUSION'] = "SI";
+                        $objRes->fields['OBSERVACIONES']    = "";
+                        break;
+                }
+            }else{
+                $objRes->fields['APLICA EXCLUSION'] = "SI";
+                $objRes->fields['OBSERVACIONES']    = "No hay formulario relacionado";
+            }
+
+            $objRes->fields['OBSERVACIONES'] = rtrim($objRes->fields['OBSERVACIONES'],", ");
+            $arrExcepciones[$seqArchivoMcy] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        $this->obtenerReportesGeneral($arrExcepciones, "Excepciones_Secretaria_Distrital", null, true);
     }
 
     public function reporteGralHogar($arrDocumentos) {

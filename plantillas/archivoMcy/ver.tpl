@@ -44,6 +44,7 @@
                             <strong>Nombre:</strong> {$arrDatos.txtNombre} <br>
                             <strong>Fecha:</strong> {$arrDatos.fchAsignacion} <br>
                             <strong>Valor:</strong> {$arrDatos.valAsignado} <br>
+                            <strong>Fuente:</strong> {$arrDatos.txtFuente} <br>
                             <strong>Justificación:</strong> {$arrDatos.txtJustificacion}
                         </td>
                         <td>

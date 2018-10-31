@@ -30,7 +30,7 @@
 
 {/literal}
 <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%" >
-    {if $id != 5}
+    {if $id != 5 && $id != 2}
     <div bgcolor="#E4E4E4" class="col-sm-1">
         <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=1', '', true);">
             <img src="recursos/imagenes/add.png" width="24px">
@@ -54,7 +54,7 @@
             <th bgcolor="#E4E4E4" align="center" ><b>Id</b></th>
             <th bgcolor="#E4E4E4" ><b>Proyecto</b></th>           
             <th bgcolor="#E4E4E4" ><b>Oferente</b></th>
-                {if $id != 1}
+                {if $id != 1 }
                 <th bgcolor="#E4E4E4" >&nbsp;</th>
                 {else}
                 <th bgcolor="#E4E4E4" >&nbsp;</th>

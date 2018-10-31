@@ -25,12 +25,17 @@
                 {/if}
                 <div class="col-md-{$val}" style="background: #006779; color: #FFF; border-bottom: 3px solid #ffffff;border-radius: 10px; width: 100%"> 
                     <h4 style="color: #FFF">{$value.txtNombreProyecto|upper}
-                    {if $seqPryEstadoProceso > 0}
-                    <div bgcolor="#E4E4E4" class="col-md-2" style="z-index: 100; float: right; top: -4px; left: 7%">
-                        <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
-                               onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresEstado.php?seqPryEstadoProceso={$seqPryEstadoProceso}', '', true);" class="btn_volver"/> 
-                    </div>
-                {/if}
+                        {if $seqPryEstadoProceso > 0}
+                            <div bgcolor="#E4E4E4" class="col-md-2" style="z-index: 100; float: right; top: -4px; left: 7%">
+                                <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
+                                       onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresEstado.php?seqPryEstadoProceso={$seqPryEstadoProceso}', '', true);" class="btn_volver"/> 
+                            </div>
+                        {else}
+                            <div bgcolor="#E4E4E4" class="col-md-2" style="z-index: 100; float: right; top: -4px; left: 7%">
+                                <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
+                                       onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?id=2', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu=85', false);" class="btn_volver"/> 
+                            </div>
+                        {/if}
                 </div>
                 </h4>
             </div>

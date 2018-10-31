@@ -51,7 +51,7 @@ if ($dir) {
 $cantUnidades = $claDatosProyecto->totalUnidadesPorProyecto(1, $seqProyecto);
 $cantUnidadesVinculadas = $claDatosProyecto->totalUnidadesPorProyecto(4, $seqProyecto);
 $pendientesPorVincular = $claDatosProyecto->totalUnidadesPorProyecto(2, $seqProyecto);
-$postuladas =  $claDatosProyecto->totalUnidadesPorProyecto(3, $seqProyecto);
+$postuladas = $claDatosProyecto->totalUnidadesPorProyecto(3, $seqProyecto);
 $legalizadas = $claDatosProyecto->totalUnidadesPorProyecto(5, $seqProyecto);
 $pendientesPorLegalizar = $cantUnidadesVinculadas - $legalizadas;
 $cantOcupacion = $claProyecto->datosTecnicosOcupacion($seqProyecto);
@@ -69,7 +69,11 @@ $seqAnticipo;
 
 foreach ($arraPoliza as $key => $value) {
     $nombreAseguradora = $value['txtNombreAseguradora'];
+
     if ($value['seqTipoAmparo'] == 1) {
+        $vigEstabilidad = $value['vigencia'];
+        $seqEstabilidad = $value['seqAmparo'];
+    } else if ($vigEstabilidad == "" && $value['seqTipoAmparo'] == 5) {
         $vigEstabilidad = $value['vigencia'];
         $seqEstabilidad = $value['seqAmparo'];
     }

@@ -255,8 +255,8 @@ if( ! empty( $arrFormularios ) ) {
             $seqSexoProbable = (intval($arrSexoProbable[$txtNombre][1]) != 0 and intval($arrSexoProbable[$txtNombre][1]) > intval($arrSexoProbable[$txtNombre][2]))? 1 : 2;
             if($claCiudadano->seqSexo != $seqSexoProbable){
 
-                echo "$seqFormulario ==> $seqCiudadano ==> $claCiudadano->seqSexo != $seqSexoProbable || $txtNombre<br>";
-                pr($arrSexoProbable[$txtNombre]);
+//                echo "$seqFormulario ==> $seqCiudadano ==> $claCiudadano->seqSexo != $seqSexoProbable || $txtNombre<br>";
+//                pr($arrSexoProbable[$txtNombre]);
 
                 $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['causa'] = "Sexo";
                 $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['detalle'] = null;

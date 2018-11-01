@@ -174,7 +174,7 @@
                             <li><b>Apartamentos discapacitados:</b>  {$valueV.totalUdsDisc}</li>
                             <li><b>Apartamentos Residentes:</b>  {$valueV.totalUnidades}</li>
                             <li><b>parqueaderos Residentes:</b>  {$valueV.totalParq}</li>
-                            <li><b>Parqueos discapacitados: </b> {$valueV.totalParqDisc}</li>
+                            <li><b>Parqueaderos discapacitados: </b> {$valueV.totalParqDisc}</li>
                             <li><b>Total parqueaderos:</b>   {$valueV.totalParq+$valueV.totalParqDisc}</li>
                             {/foreach}
                         <p>&nbsp;</p>

@@ -5145,7 +5145,7 @@ WHERE
                 numHacinamiento AS 'Hacinamiento',
                 frm.fchInscripcion AS 'Fecha Inscripcion',
                 fchPostulacion AS 'Fecha Postulacion',
-                txtEstadoProceso AS 'Estado Proceso',
+                txtEstado AS 'Estado Proceso',
                 IF(bolCerrado = 1, 'SI', 'NO') AS Cerrado,
                 txtCajaCompensacion AS 'Caja de Compensacion',
                 IF(bolIntegracionSocial = 1, 'SI', 'NO') AS IntegracionSocial,
@@ -5239,7 +5239,7 @@ WHERE
                       LEFT JOIN
                   t_ciu_etnia USING (seqEtnia)
                       LEFT JOIN
-                  t_frm_estado_proceso USING (seqEstadoProceso)
+                  v_frm_estado USING (seqEstadoProceso)
                       LEFT JOIN
                   t_ciu_caja_compensacion USING (seqCajaCompensacion)
                       LEFT JOIN

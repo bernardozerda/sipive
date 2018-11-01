@@ -651,13 +651,13 @@ class Proyecto {
         $sql = "SELECT case  when sum(numCantParqDisc)  > 0 then sum(numCantParqDisc) else numParqueaderosDisc end as totalParqDisc, 
 		case  when sum(numCantUdsDisc)  > 0  then sum(numCantUdsDisc) else numCantSolDisc end as totalUdsDisc,
 		case  when sum(numTotalParq) > 0  then sum(numTotalParq) else numParqueaderos end as totalParq, sum(numCantidad) as totalUnidades 
-		from t_pry_tipo_vivienda ptv
-		left join t_pry_proyecto using(seqProyecto)";
+		FROM t_pry_proyecto pry 
+                left join t_pry_tipo_vivienda ptv using(seqProyecto)";
         if ($seqProyecto > 0) {
-            $sql .= " where  ptv.seqProyecto = " . $seqProyecto;
+            $sql .= " where  pry.seqProyecto = " . $seqProyecto;
         }
 
-        // echo "<p>".$sql."</p>";
+        // echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -1563,7 +1563,7 @@ class Proyecto {
                 VALUES
                 ('$numPoliza','$fchExpedicion', $seqUsuario, $bolAprobo, $seqAseguradora,$seqProyecto);";
         $query = "  INSERT INTO t_pry_amparo
-                    (fchVigenciaIni, fchVigenciaFin, valAsegurado, seqTipoAmparo,seqAmparoPadre, seqPoliza) VALUES";
+                    (fchVigenciaIni, fchVigenciaFin, valAsegurado, bolAproboAmparo, seqTipoAmparo,seqAmparoPadre, seqPoliza) VALUES";
         try {
             $aptBd->execute($sql);
             $seqPoliza = $aptBd->Insert_ID();
@@ -1585,6 +1585,7 @@ class Proyecto {
                       '$fchVigenciaIni ',
                       '$fchVigenciaFin',
                       $valAsegurado,
+                      $bolAproboAmparo,   
                       $seqTipoAmparo,
                       $seqAmparoPadre,
                       $seqPoliza),";
@@ -1736,9 +1737,9 @@ class Proyecto {
             $value == "" ? $$key = '0' : $$key = $value;
             //echo "key = " . $key . " value -> " . $value;
         }
-         $seqBanco = ($seqBanco == 0) ? 1 : $seqBanco;
-         $seqFiducia = ($seqFiducia == 0) ? 'NULL' : $seqFiducia;
-         $seqCiudad = ($seqCiudad == 0) ? 'NULL' : $seqCiudad;
+        $seqBanco = ($seqBanco == 0) ? 1 : $seqBanco;
+        $seqFiducia = ($seqFiducia == 0) ? 'NULL' : $seqFiducia;
+        $seqCiudad = ($seqCiudad == 0) ? 'NULL' : $seqCiudad;
 
         $sql = "INSERT INTO t_pry_datos_fiducia
                 (
@@ -2421,7 +2422,7 @@ class Proyecto {
     public function obtenerDatosProyectosEstados($seqPryEstadoProceso) {
 
         global $aptBd;
-         $sql = "SELECT 
+        $sql = "SELECT 
                         seqProyecto,
                         txtNombreProyecto,
                         seqPlanGobierno,

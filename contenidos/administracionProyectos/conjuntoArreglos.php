@@ -71,6 +71,7 @@ $arrayAmparos[$seqProyecto]['seqTipoAmparo'] = $_POST['seqTipoAmparo'];
 $arrayAmparos[$seqProyecto]['fchVigenciaIni'] = $_POST['fchVigenciaIni'];
 $arrayAmparos[$seqProyecto]['fchVigenciaFin'] = $_POST['fchVigenciaFin'];
 $arrayAmparos[$seqProyecto]['valAsegurado'] = $_POST['valAsegurado'];
+$arrayAmparos[$seqProyecto]['bolAproboAmparo'] = $_POST['bolAproboAmparo'];
 $arrayAmparos[$seqProyecto]['seqUsuario'] = $_POST['seqUsuario'];
 $arrayAmparos[$seqProyecto]['bolAprobo'] = $_POST['bolAprobo'];
 

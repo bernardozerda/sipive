@@ -82,7 +82,7 @@
                 <div class="col-sm-3">
                     <button type="submit"
                             class="btn btn-primary btn-sm"
-                    >Editar</button>
+                    >Salvar</button>
                 </div>
             </div>
         </div>

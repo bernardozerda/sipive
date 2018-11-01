@@ -176,8 +176,10 @@ $sql = "
       seg.txtComentario,
       seg.txtCambios
     FROM t_seg_seguimiento seg
+    INNER JOIN t_frm_formulario ON seg.seqFormulario = frm.seqFormulario
     WHERE seg.fchMovimiento >= '" . $fchInicial . " 00:00:00'
     AND seg.fchMovimiento <= '" . $fchFinal . " 23:59:59'
+    AND frm.seqTipoEsquema not in (12,16,17,18)
     AND seg.bolMostrar = 1
     ORDER BY seg.fchMovimiento DESC
 ";

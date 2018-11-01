@@ -103,14 +103,15 @@
                     <div id="fileSelect"></div>
                 </div>
             </div>
-            <div class="col-sm-2">
-                <button type="submit"
-                        class="btn btn-primary btn-sm"
-                >
-                    Cargar Datos
-                </button>
-            </div>
-
+            {if isset($smarty.session.arrGrupos.3.20)}
+                <div class="col-sm-2">
+                    <button type="submit"
+                            class="btn btn-primary btn-sm"
+                    >
+                        Cargar Datos
+                    </button>
+                </div>
+            {/if}
             <div class="col-sm-2">
                 <button type="button"
                         class="btn btn-success btn-sm"

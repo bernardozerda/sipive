@@ -5146,6 +5146,7 @@ WHERE
                 frm.fchInscripcion AS 'Fecha Inscripcion',
                 fchPostulacion AS 'Fecha Postulacion',
                 txtEstado AS 'Estado Proceso',
+                SUBSTRING_INDEX(txtEstado, '-', 1) AS Etapa,
                 IF(bolCerrado = 1, 'SI', 'NO') AS Cerrado,
                 txtCajaCompensacion AS 'Caja de Compensacion',
                 IF(bolIntegracionSocial = 1, 'SI', 'NO') AS IntegracionSocial,

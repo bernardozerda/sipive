@@ -22,6 +22,7 @@ class InscripcionFonvivienda
     public $seqUsuario;
     public $txtUsuario;
     public $arrEstadosCoincidencias;
+    public $arrLineasProcesadas;
     private $arrFormato;
     private $arrEstados;
     private $arrRangoIngresos;
@@ -39,44 +40,53 @@ class InscripcionFonvivienda
         $this->txtCarpeta = "inscripcionFonvivienda";
 
         // formato de archivo de MCY seqTipo = 1 en t_fnv_tipo
-        $this->arrFormato[1][] = 'ID_HOGAR';
-        $this->arrFormato[1][] = 'RANGO_INGRESOS';
-        $this->arrFormato[1][] = 'VALOR_SUBSIDIO';
-        $this->arrFormato[1][] = 'NOMBRE_DEPARTAMENTO';
-        $this->arrFormato[1][] = 'NOMBRE_MUNICIPIO';
-        $this->arrFormato[1][] = 'FEC_CONSULTA';
-        $this->arrFormato[1][] = 'FEC_MARCACION';
-        $this->arrFormato[1][] = 'FEC_ACT_ADMIN';
-        $this->arrFormato[1][] = 'NUM_ACT_ADMIN';
-        $this->arrFormato[1][] = 'SECUENCIA_DESEMBOLSO';
-        $this->arrFormato[1][] = 'ESTADO_HOGAR';
-        $this->arrFormato[1][] = 'NUM_CELULAR';
-        $this->arrFormato[1][] = 'NUM_FIJO';
-        $this->arrFormato[1][] = 'CORREO_ELECTRONICO';
-        $this->arrFormato[1][] = 'DIRECCION_CORRESPONDENCIA';
-        $this->arrFormato[1][] = 'NOMBRE_CORTO';
-        $this->arrFormato[1][] = 'NUMERO_IDENTIFICACION';
-        $this->arrFormato[1][] = 'NOMBRES';
-        $this->arrFormato[1][] = 'APELLIDOS';
-        $this->arrFormato[1][] = 'NOMBRE_ENTIDAD';
-        $this->arrFormato[1][] = 'ID VENDEDOR';
-        $this->arrFormato[1][] = 'VENDEDOR';
-        $this->arrFormato[1][] = 'ID PROYECTO';
-        $this->arrFormato[1][] = 'PROYECTO';
-        $this->arrFormato[1][] = 'TIPO_VIVIENDA';
-        $this->arrFormato[1][] = 'TIPO_CONTRATO';
-        $this->arrFormato[1][] = 'FEC_SOLICITUD_ASIGNACION';
-        $this->arrFormato[1][] = 'COD_DEPTO_VIVIENDA';
-        $this->arrFormato[1][] = 'DEPTO_VIVIENDA';
-        $this->arrFormato[1][] = 'COD_MPIO_VIVIENDDA';
-        $this->arrFormato[1][] = 'MPIO_VIVIENDDA';
-        $this->arrFormato[1][] = 'CELULAR';
-        $this->arrFormato[1][] = 'TELEFONO FIJO';
-        $this->arrFormato[1][] = 'DIRECCION CORRESPONDENCIA';
-        $this->arrFormato[1][] = 'ID_CONSTRUCTOR';
-        $this->arrFormato[1][] = 'CONSTRUCTOR';
-        $this->arrFormato[1][] = 'ID_PROYECTO';
-        $this->arrFormato[1][] = 'PROYECTO';
+        $this->arrFormato[1][] ='ID_HOGAR';
+        $this->arrFormato[1][] ='RANGO_INGRESOS';
+        $this->arrFormato[1][] ='VALOR_SUBSIDIO';
+        $this->arrFormato[1][] ='NOMBRE_DEPARTAMENTO';
+        $this->arrFormato[1][] ='NOMBRE_MUNICIPIO';
+        $this->arrFormato[1][] ='FEC_CONSULTA';
+        $this->arrFormato[1][] ='FEC_MARCACION';
+        $this->arrFormato[1][] ='FEC_ACT_ADMIN';
+        $this->arrFormato[1][] ='NUM_ACT_ADMIN';
+        $this->arrFormato[1][] ='SECUENCIA_DESEMBOLSO';
+        $this->arrFormato[1][] ='ESTADO_HOGAR';
+        $this->arrFormato[1][] ='NUM_CELULAR';
+        $this->arrFormato[1][] ='NUM_FIJO';
+        $this->arrFormato[1][] ='CORREO_ELECTRONICO';
+        $this->arrFormato[1][] ='DIRECCION_CORRESPONDENCIA';
+        $this->arrFormato[1][] ='NOMBRE_CORTO';
+        $this->arrFormato[1][] ='NUMERO_IDENTIFICACION';
+        $this->arrFormato[1][] ='NOMBRES';
+        $this->arrFormato[1][] ='APELLIDOS';
+        $this->arrFormato[1][] ='NOMBRE_ENTIDAD';
+        $this->arrFormato[1][] ='ID_VENDEDOR';
+        $this->arrFormato[1][] ='VENDEDOR';
+        $this->arrFormato[1][] ='ID_PROYECTO';
+        $this->arrFormato[1][] ='PROYECTO';
+        $this->arrFormato[1][] ='TIPO_VIVIENDA';
+        $this->arrFormato[1][] ='TIPO_CONTRATO';
+        $this->arrFormato[1][] ='FECHA_SOL_ASIGNACION';
+        $this->arrFormato[1][] ='MARCACION_HABITAT';
+        $this->arrFormato[1][] ='ESTADO_SUBSIDIO';
+        $this->arrFormato[1][] ='NUMERO_ACTO_ADMINISTRATIVO';
+        $this->arrFormato[1][] ='FECHA_ACTO_ADMINISTRATIVO';
+        $this->arrFormato[1][] ='FECHA_VENCIMIENTO';
+        $this->arrFormato[1][] ='DECISION_DESISTIMIENTO';
+        $this->arrFormato[1][] ='FECHA_DECISION';
+        $this->arrFormato[1][] ='FEC_TERM_8SMMLV';
+        $this->arrFormato[1][] ='FEC_TERM_10SMMLV';
+        $this->arrFormato[1][] ='COD_DEPTO_VIVIENDA';
+        $this->arrFormato[1][] ='DEPTO_VIVIENDA';
+        $this->arrFormato[1][] ='COD_MPIO_VIVIENDA';
+        $this->arrFormato[1][] ='MPIO_VIVIENDA';
+        $this->arrFormato[1][] ='CELULAR';
+        $this->arrFormato[1][] ='TELEFONO FIJO';
+        $this->arrFormato[1][] ='DIRECCION CORRESPONDENCIA';
+        $this->arrFormato[1][] ='ID_CONSTRUCTOR';
+        $this->arrFormato[1][] ='CONSTRUCTOR';
+        $this->arrFormato[1][] ='ID_PROYECTO';
+        $this->arrFormato[1][] ='PROYECTO';
 
         // formato de archivo de VIPA seqTipo = 1 en t_fnv_tipo
         $this->arrFormato[2][] = 'ID HOGAR';
@@ -131,7 +141,7 @@ class InscripcionFonvivienda
         // formato para EPI
         $this->arrFormato[3] = $this->arrFormato[2];
 
-
+        // estados que se tienen en cuenta poara el procesamiento
         $this->arrEstados[] = "por asignar";
 
         $this->arrEstadosCoincidencias = array(1,35,36,37,41,43,44,46,53);
@@ -519,26 +529,47 @@ class InscripcionFonvivienda
 
     public function limpiezaArchivo($seqTipo, $arrArchivo){
         unset($arrArchivo[0]);
+
+        $this->arrLineasProcesadas['procesadas'] = 0;
+        $this->arrLineasProcesadas['omitidas']['conteo'] = 0;
+        $this->arrLineasProcesadas['omitidas']['razon'] = array();
+
         foreach ($arrArchivo as $numLinea => $arrLinea) {
             $bolBorrar = false;
+
+            $txtMotivo = "";
 
             // para las lineas que no se deben tener en cuenta en MCY
             if($seqTipo == 1) {
 
-                // estados habilitados definidos
-                if (!in_array(trim(mb_strtolower($arrLinea[10])), $this->arrEstados)) {
+                // debe haber marcacion de habitat ( si y no )
+                if(trim(mb_strtolower($arrLinea[27])) == "no"){
+                    $txtMotivo = "Marcado habitat NO";
                     $bolBorrar = true;
+                }else {
+
+                    // estados habilitados definidos
+                    if (!in_array(trim(mb_strtolower($arrLinea[28])), $this->arrEstados)) {
+                        $txtMotivo = "Estado hogar " . $arrLinea[28];
+                        $bolBorrar = true;
+                    }
+
+                    // debe pertenecer a bogota por registro
+                    if (trim(mb_strtolower($arrLinea[4])) != "bogota" or strpos(trim(mb_strtolower($arrLinea[3])), "bogota") === false) {
+                        $txtMotivo = "Ciudad y municipio hogar " . $arrLinea[3] . " - " . $arrLinea[4];
+                        $bolBorrar = true;
+                    }
                 }
 
-                // debe pertenecer a bogota por registro
-                if (trim(mb_strtolower($arrLinea[4])) != "bogota" or strpos(trim(mb_strtolower($arrLinea[3])), "bogota") === false) {
-                    $bolBorrar = true;
-                }
             }
 
             // en caso de cumplirse la regla elimina el registro
             if ($bolBorrar == true) {
+                $this->arrLineasProcesadas['omitidas']['conteo']++;
+                $this->arrLineasProcesadas['omitidas']['razon'][($numLinea + 1)] = $txtMotivo;
                 unset($arrArchivo[$numLinea]);
+            }else{
+                $this->arrLineasProcesadas['procesadas']++;
             }
         }
         return $arrArchivo;
@@ -594,7 +625,7 @@ class InscripcionFonvivienda
                     $valCredito = null;
                     $seqBancoCredito = $this->banco($seqTipo,null,null,$numLinea,39);
                     $seqEntidadSubsidio = $this->subsidio($seqTipo,null,null,$seqTipoEsquema,$numLinea);
-                    $valSNal = $arrConfiguracion['constantes']['salarioMinimo'] * 30;
+                    $valSubsidioNacional = $this->subsidioNacional($seqTipo,$txtRangoIngresos,null);
                     $fchResolucion = $this->fechas($seqTipo,$arrLinea[7],$numLinea);
                     $txtSoporteSNal = ($fchResolucion != null)? "Res. " . $arrLinea[8] . " de " . $fchResolucion->format("Y") : null;
                     $seqEmpresaDonante = $this->donacion($seqTipo,null,null, null, $numLinea);
@@ -657,7 +688,7 @@ class InscripcionFonvivienda
                     $valCredito = trim($arrLinea[38]);
                     $seqBancoCredito = $this->banco($seqTipo,$arrLinea[39],$valCredito,$numLinea,39);
                     $seqEntidadSubsidio = $this->subsidio($seqTipo,trim($arrLinea[40]),trim($arrLinea[41]),$seqTipoEsquema,$numLinea);
-                    $valSNal = trim($arrLinea[40]);
+                    $valSubsidioNacional = $this->subsidioNacional($seqTipo,null,trim($arrLinea[40]));
                     $txtSoporteSNal = trim($arrLinea[41]);
                     $seqEmpresaDonante = $this->donacion($seqTipo,$arrLinea[45],trim($arrLinea[44]),trim($arrLinea[46]),$numLinea);
                     $valDonacion = trim($arrLinea[44]);
@@ -714,7 +745,7 @@ class InscripcionFonvivienda
                 $this->arrHogares[$numHogar]['valCredito'] = $valCredito;
                 $this->arrHogares[$numHogar]['seqBancoCredito'] = $seqBancoCredito;
                 $this->arrHogares[$numHogar]['seqEntidadSubsidio'] = $seqEntidadSubsidio;
-                $this->arrHogares[$numHogar]['valSubsidioNacional'] = $valSNal;
+                $this->arrHogares[$numHogar]['valSubsidioNacional'] = $valSubsidioNacional;
                 $this->arrHogares[$numHogar]['txtSoporteSubsidioNacional'] = $txtSoporteSNal;
                 $this->arrHogares[$numHogar]['seqEmpresaDonante'] = $seqEmpresaDonante;
                 $this->arrHogares[$numHogar]['valDonacion'] = $valDonacion;
@@ -835,7 +866,7 @@ class InscripcionFonvivienda
         try {
             $aptBd->BeginTrans();
 
-            $txtErrores = (empty($this->arrErrores))? "null" : "'" . json_encode($this->arrErrores, JSON_UNESCAPED_UNICODE) . "'";
+            $txtErrores = (empty($this->arrErrores))? "'" . json_encode($this->arrLineasProcesadas, JSON_UNESCAPED_UNICODE) . "'" : "'" . json_encode($this->arrErrores, JSON_UNESCAPED_UNICODE) . "'";
 
             $sql = "
               update t_fnv_cargue set 
@@ -1114,7 +1145,11 @@ class InscripcionFonvivienda
             $this->seqUsuario = $objRes->fields['seqUsuario'];
             $this->txtUsuario = $objRes->fields['txtUsuario'];
             if($objRes->fields['txtErrores'] != "") {
-                $this->arrErrores = json_decode($objRes->fields['txtErrores'], true);
+                if($objRes->fields['seqEstado'] != 4) {
+                    $this->arrErrores = json_decode($objRes->fields['txtErrores'], true);
+                }else{
+                    $this->arrLineasProcesadas = json_decode($objRes->fields['txtErrores'], true);
+                }
             }
 
             $objRes->MoveNext();
@@ -1580,7 +1615,7 @@ class InscripcionFonvivienda
     }
 
     public function procesarCargue($seqCargue){
-        global $aptBd, $arrConfiguracion;
+        global $aptBd;
 
         // obtiene la informacion del cargue
         $this->cargar($seqCargue);
@@ -2514,6 +2549,7 @@ class InscripcionFonvivienda
         $claFormularioModificado->bolCerrado = 1;
         if($this->seqTipo == 1) {
             $claFormularioModificado->seqEstadoProceso = 47;
+            $claFormularioModificado->valApiraSubsidio = $arrHogar['valAspiraSubsidio'];
         }else{
             $claFormularioModificado->seqEstadoProceso = 56;
         }
@@ -2685,5 +2721,32 @@ class InscripcionFonvivienda
 
         return $arrExportable;
     }
+
+    private function subsidioNacional($seqTipo,$txtRangoIngresos,$valSubsidioNacionalArchivo = 0){
+        global $arrConfiguracion;
+        $valSubsidioNacional = 0;
+        if($seqTipo == 1){
+            switch($txtRangoIngresos){
+                case "HASTA 2 SMMLV": // 10 SMMLV
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 10;
+                    break;
+                case "DE 2 SMMLV HASTA 3 SMMLV":  //  8 SMMLV
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+                    break;
+                case "DE 3 SMMLV HASTA 4 SMMLV": //  8 SMMLV
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+                    break;
+                case "SUPERIORES A 2 SMMLV Y HASTA 4 SMMLV": //  8 SMMLV
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+                    break;
+            }
+        }elseif($seqTipo == 2 or $seqTipo == 3){
+            $valSubsidioNacional = $valSubsidioNacionalArchivo;
+        }else{
+            $valSubsidioNacional = 0;
+        }
+        return $valSubsidioNacional;
+    }
+
 
 }

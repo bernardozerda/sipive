@@ -27,6 +27,29 @@
     </div>
     <div class="panel-body">
 
+        <div class="alert alert-info">
+            <div class="row">
+                {math equation="x + y" x=$claInscripcion->arrLineasProcesadas.procesadas y=$claInscripcion->arrLineasProcesadas.omitidas.conteo assign="numTotalLineas"}
+                <div class="col-sm-2 h5"><strong>Total lineas:</strong></div>
+                <div class="col-sm-1 h5">{$numTotalLineas}</div>
+
+                <div class="col-sm-3 h5"><strong>Procesadas:</strong></div>
+                <div class="col-sm-1 h5">{$claInscripcion->arrLineasProcesadas.procesadas}</div>
+
+                <div class="col-sm-4 h5"><strong>No Procesadas: <a href="#" onclick="mostrarOcultar('resumen')">Ver Detalle</a></strong></div>
+                <div class="col-sm-1 h5">{$claInscripcion->arrLineasProcesadas.omitidas.conteo}</div>
+            </div>
+            <div class="row" id="resumen" style="display: none;">
+                {foreach from=$claInscripcion->arrLineasProcesadas.omitidas.razon key=numLinea item=txtRazon}
+                    <ul>
+                        <li><strong>Linea del archivo {$numLinea}:</strong> {$txtRazon}</li>
+                    </ul>
+                {/foreach}
+                <a href="#" onclick="mostrarOcultar('resumen')">Ocultar Detalle</a>
+            </div>
+        </div>
+
+
         {if $claInscripcion->seqEstado == 2}
             <div id="progreso" style="height: 150px;">
                 {include file="inscripcionFonvivienda/barraProgreso.tpl"}

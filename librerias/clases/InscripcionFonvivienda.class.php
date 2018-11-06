@@ -2548,7 +2548,7 @@ class InscripcionFonvivienda
         $claFormularioModificado->fchUltimaActualizacion = date("Y-m-d H:i:s");
         $claFormularioModificado->bolCerrado = 1;
         if($this->seqTipo == 1) {
-            $claFormularioModificado->seqEstadoProceso = 47;
+            $claFormularioModificado->seqEstadoProceso = 16;
             $claFormularioModificado->valApiraSubsidio = $arrHogar['valAspiraSubsidio'];
         }else{
             $claFormularioModificado->seqEstadoProceso = 56;

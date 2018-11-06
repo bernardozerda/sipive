@@ -2658,9 +2658,12 @@ class InscripcionFonvivienda
         $arrExportable = array();
 
         foreach($this->arrHogares as $numHogar => $arrHogar){
+            $bolPrincipal = false;
             foreach($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano){
 
-                if($arrCiudadano['seqParentesco'] == 1) {
+                if($arrCiudadano['seqParentesco'] == 1 or $bolPrincipal == false) {
+
+                    $bolPrincipal = true;
 
                     $arrExportable[$numHogar]['ID HOGAR'] = $numHogar;
                     $arrExportable[$numHogar]['NO. DOCUMENTO'] = $arrCiudadano['numDocumento'];

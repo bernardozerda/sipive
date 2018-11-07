@@ -531,11 +531,11 @@ class Proyecto {
                     '$fchEscritura',
                     $numNotaria,
                     $seqProyectoGrupo,
-                    $numRadicadoJuridico,
+                    '$numRadicadoJuridico',
                     '$fchRadicadoJuridico',
-                    $numRadicadoTecnico,
+                    '$numRadicadoTecnico',
                     '$fchRadicadoTecnico',
-                    $numRadicadoFinanciero,
+                    '$numRadicadoFinanciero',
                     '$fchRadicadoFinanciero',
                      1,
                     $seqUsuario
@@ -650,14 +650,14 @@ class Proyecto {
         global $aptBd;
         $sql = "SELECT case  when sum(numCantParqDisc)  > 0 then sum(numCantParqDisc) else numParqueaderosDisc end as totalParqDisc, 
 		case  when sum(numCantUdsDisc)  > 0  then sum(numCantUdsDisc) else numCantSolDisc end as totalUdsDisc,
-		case  when sum(numTotalParq) > 0  then sum(numTotalParq) else numParqueaderos end as totalParq, sum(numCantidad) as totalUnidades 
+		case  when sum(numTotalParq) > 0  then sum(numTotalParq) else numParqueaderos end as totalParq, valNumeroSoluciones as totalUnidades 
 		FROM t_pry_proyecto pry 
                 left join t_pry_tipo_vivienda ptv using(seqProyecto)";
         if ($seqProyecto > 0) {
             $sql .= " where  pry.seqProyecto = " . $seqProyecto;
         }
 
-        // echo "<p>" . $sql . "</p>";
+        //echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -823,11 +823,11 @@ class Proyecto {
                         fchEscritura = '$fchEscritura',
                         numNotaria = $numNotaria,
                         seqProyectoGrupo = $seqProyectoGrupo,
-                        numRadicadoJuridico = $numRadicadoJuridico,
+                        numRadicadoJuridico = '$numRadicadoJuridico',
                         fchRadicadoJuridico = '$fchRadicadoJuridico',
-                        numRadicadoTecnico = $numRadicadoTecnico,
+                        numRadicadoTecnico = '$numRadicadoTecnico',
                         fchRadicadoTecnico = '$fchRadicadoTecnico',
-                        numRadicadoFinanciero = $numRadicadoFinanciero,
+                        numRadicadoFinanciero = '$numRadicadoFinanciero',
                         fchRadicadoFinanciero = '$fchRadicadoFinanciero'
                         WHERE seqProyecto = $seqProyecto
             ";

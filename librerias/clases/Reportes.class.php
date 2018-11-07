@@ -4770,78 +4770,200 @@ WHERE
         global $aptBd;
 
         $sql = "
-            select 
-                fac.seqFormulario, 
-                fac.seqFormularioActo,
-                tdo.txtTipoDocumento,    
-                cac.numDocumento,
-                upper(concat(cac.txtNombre1,' ',cac.txtNombre2,' ',cac.txtApellido1,' ',cac.txtApellido2)) as txtNombre,
-                est.txtEstado,
-                hvi.numActo, 
-                hvi.fchActo,
-                fac.valAspiraSubsidio,
-                if(gir.valSolicitado is null, 0, gir.valSolicitado) as valSolicitado,
-                if(concat(gir.numRegistroPresupuestal1, ' de ', year(gir.fchRegistroPresupuestal1)) is null, 'No aplica',concat(gir.numRegistroPresupuestal1, ' de ', year(gir.fchRegistroPresupuestal1)))  as rp1,
-                if(concat(gir.numRegistroPresupuestal2, ' de ', year(gir.numRegistroPresupuestal2)) is null, 'No aplica',concat(gir.numRegistroPresupuestal2, ' de ', year(gir.numRegistroPresupuestal2)))  as rp2
-            from t_aad_formulario_acto fac
-            inner join t_aad_hogar_acto hac on fac.seqFormularioActo = hac.seqFormularioActo and hac.seqParentesco = 1
-            inner join t_aad_ciudadano_acto cac on hac.seqCiudadanoActo = cac.seqCiudadanoActo
-            inner join t_ciu_tipo_documento tdo on cac.seqTipoDocumento = tdo.seqTipoDocumento
-            inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
-            inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
-            left join t_aad_giro gir on fac.seqFormularioActo = gir.seqFormularioActo
-            where fac.seqPlanGobierno = 3
-            and fac.seqModalidad = 12
-            and fac.seqTipoEsquema = 12
-            and hvi.seqTipoActo = 1     
-            order by 
-                fac.seqFormulario, 
-                fac.seqFormularioActo   
+            select
+                frm.seqFormulario,
+                pgo.txtPlanGobierno,
+                moa.txtModalidad,
+                tes.txtTipoEsquema,
+                tdo.txtTipoDocumento,
+                ciu.numDocumento,
+                upper(concat(ciu.txtNombre1,' ',ciu.txtNombre2,' ',ciu.txtApellido1,' ',ciu.txtApellido2)) as txtNombre,
+                fac.numActo, 
+                fac.fchActo,
+                frm.valAspiraSubsidio,
+                sol.numRegistroPresupuestal1, 
+                sol.fchRegistroPresupuestal1, 
+                sol.numRegistroPresupuestal2, 
+                sol.fchRegistroPresupuestal2, 
+                sol.valSolicitado,
+                sol.numOrden,
+                sol.fchOrden,
+                sol.valOrden
+            from t_frm_formulario frm
+            inner join t_frm_hogar hog on frm.seqFormulario = hog.seqFormulario and hog.seqParentesco = 1
+            inner join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
+            inner join t_frm_modalidad moa on frm.seqModalidad = moa.seqModalidad
+            inner join t_pry_tipo_esquema tes on frm.seqTipoEsquema = tes.seqTipoEsquema
+            inner join t_frm_plan_gobierno pgo on frm.seqPlanGobierno = pgo.seqPlanGobierno
+            inner join t_ciu_tipo_documento tdo on tdo.seqTipoDocumento = ciu.seqTipoDocumento
+            inner join t_des_desembolso des on frm.seqFormulario = des.seqFormulario
+            inner join t_des_solicitud sol on des.seqDesembolso = sol.seqDesembolso
+            inner join (
+              select 
+                  fac.seqFormulario,
+                  fac.seqFormularioActo,
+                  hvi.numActo,
+                  hvi.fchActo
+              from t_aad_hogares_vinculados hvi
+              inner join (
+                select 
+                    fac.seqFormulario,
+                    max(fac.seqFormularioActo) seqFormularioActo
+                from t_aad_hogares_vinculados hvi
+                inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
+                where hvi.seqTipoActo = 1
+                group by fac.seqFormulario
+              ) fac on hvi.seqFormularioActo = fac.seqFormularioActo
+            ) fac on frm.seqFormulario = fac.seqFormulario
+            where frm.seqPlanGobierno = 3
+            and frm.seqModalidad = 12
+            and frm.seqTipoEsquema in (12,18)       
+            
         ";
+        $arrReporte = array();
         $objRes = $aptBd->execute($sql);
-        $arrDatos = array();
-        while ($objRes->fields) {
-
+        while($objRes->fields){
+            
             $seqFormulario = $objRes->fields['seqFormulario'];
-            $fchResolucion = date("Y", strtotime($objRes->fields['fchActo']));
-            $txtResolucion = "Res. " . $objRes->fields['numActo'] . " de " . $fchResolucion;
+            
+            $arrReporte[$seqFormulario]['Formulario'] = $seqFormulario;
+            $arrReporte[$seqFormulario]['Plan Gobierno'] = $objRes->fields['txtPlanGobierno'];
+            $arrReporte[$seqFormulario]['Modalidad'] = $objRes->fields['txtModalidad'];
+            $arrReporte[$seqFormulario]['Esquema'] = $objRes->fields['txtTipoEsquema'];
+            $arrReporte[$seqFormulario]['Tipo Documento'] = $objRes->fields['txtTipoDocumento'];
+            $arrReporte[$seqFormulario]['Documento'] = $objRes->fields['numDocumento'];
+            $arrReporte[$seqFormulario]['Nombre'] = $objRes->fields['txtNombre'];
+            $arrReporte[$seqFormulario]['Acto Administrativo'] = $objRes->fields['numActo'];
+            $arrReporte[$seqFormulario]['Fecha Acto Administrativo'] = $objRes->fields['fchActo'];
+            $arrReporte[$seqFormulario]['Valor Subsidio'] = $objRes->fields['valAspiraSubsidio'];
 
-            $arrDatos[$seqFormulario]['hogar']['tipo'] = $objRes->fields['txtTipoDocumento'];
-            $arrDatos[$seqFormulario]['hogar']['documento'] = $objRes->fields['numDocumento'];
-            $arrDatos[$seqFormulario]['hogar']['nombre'] = $objRes->fields['txtNombre'];
-            $arrDatos[$seqFormulario]['hogar']['subsidio'] = $objRes->fields['valAspiraSubsidio'];
-            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['fac'] = $objRes->fields['seqFormularioActo'];
-            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['rp1'] = $objRes->fields['rp1'];
-            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['rp2'] = $objRes->fields['rp2'];
-            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['estado'] = $objRes->fields['txtEstado'];
-            $arrDatos[$seqFormulario]['detalle'][$txtResolucion] += $objRes->fields['valSolicitado'];
-            $arrDatos[$seqFormulario]['acumulado'] += $objRes->fields['valSolicitado'];
+            if(doubleval($objRes->fields['valSolicitado']) != 0){
+                $arrReporte[$seqFormulario]['RP1'] = $objRes->fields['numRegistroPresupuestal1'];
+                $arrReporte[$seqFormulario]['RP1 Fecha'] = $objRes->fields['fchRegistroPresupuestal1'];
+                $arrReporte[$seqFormulario]['RP2'] = $objRes->fields['numRegistroPresupuestal2'];
+                $arrReporte[$seqFormulario]['RP2 Fecha'] = $objRes->fields['fchRegistroPresupuestal2'];
+                $arrReporte[$seqFormulario]['Girado a Fiducia'] += $objRes->fields['valSolicitado'];
+
+                if(doubleval($arrReporte[$seqFormulario]['Valor Subsidio']) != 0) {
+                    $arrReporte[$seqFormulario]['% Girado Fiducia'] = round((floatval($arrReporte[$seqFormulario]['Girado a Fiducia']) * 100) / floatval($arrReporte[$seqFormulario]['Valor Subsidio']),3);
+                }else{
+                    $arrReporte[$seqFormulario]['% Girado Fiducia'] = 0;
+                }
+
+                $arrReporte[$seqFormulario]['Numero Orden'] = $objRes->fields['numOrden'];
+                $arrReporte[$seqFormulario]['Fecha Orden'] = $objRes->fields['fchOrden'];
+
+            }else{
+
+                $arrReporte[$seqFormulario]['Girado a Constructor'] += $objRes->fields['valOrden'];
+                if(doubleval($arrReporte[$seqFormulario]['Girado a Fiducia']) != 0) {
+                    $arrReporte[$seqFormulario]['% Girado Constructor'] = round((floatval($arrReporte[$seqFormulario]['Girado a Constructor']) * 100) / floatval($arrReporte[$seqFormulario]['Girado a Fiducia']),3);
+                }else{
+                    $arrReporte[$seqFormulario]['% Girado Constructor'] = 0;
+                }
+
+            }
 
             $objRes->MoveNext();
         }
 
-        $arrReporte = array();
-        foreach ($arrDatos as $seqFormulario => $arrInformacion) {
-            foreach ($arrInformacion['detalle'] as $txtResolucion => $valGiro) {
+        $arrTitulos[] = "Formulario";
+        $arrTitulos[] = "Plan Gobierno";
+        $arrTitulos[] = "Modalidad";
+        $arrTitulos[] = "Esquema";
+        $arrTitulos[] = "Tipo Documento";
+        $arrTitulos[] = "Documento";
+        $arrTitulos[] = "Nombre";
+        $arrTitulos[] = "Acto Administrativo";
+        $arrTitulos[] = "Fecha Acto Administrativo";
+        $arrTitulos[] = "Valor Subsidio";
+        $arrTitulos[] = "RP1";
+        $arrTitulos[] = "RP1 Fecha";
+        $arrTitulos[] = "RP2";
+        $arrTitulos[] = "RP2 Fecha";
+        $arrTitulos[] = "Girado a Fiducia";
+        $arrTitulos[] = "% Girado Fiducia";
+        $arrTitulos[] = "Numero Orden";
+        $arrTitulos[] = "Fecha Orden";
+        $arrTitulos[] = "Girado a Constructor";
+        $arrTitulos[] = "% Girado Constructor";
 
-                $numPosicion = count($arrReporte);
-
-                $arrReporte[$numPosicion]['Formulario'] = $seqFormulario;
-                $arrReporte[$numPosicion]['Formulario Acto'] = $arrInformacion['hogar'][$txtResolucion]['fac'];
-                $arrReporte[$numPosicion]['Tipo de documento'] = $arrInformacion['hogar']['tipo'];
-                $arrReporte[$numPosicion]['Documento'] = $arrInformacion['hogar']['documento'];
-                $arrReporte[$numPosicion]['Nombre'] = $arrInformacion['hogar']['nombre'];
-                $arrReporte[$numPosicion]['Estado'] = $arrInformacion['hogar'][$txtResolucion]['estado'];
-                $arrReporte[$numPosicion]['Resolucion'] = $txtResolucion;
-                $arrReporte[$numPosicion]['Registro Presupuestal 1'] = $arrInformacion['hogar'][$txtResolucion]['rp1'];
-                $arrReporte[$numPosicion]['Registro Presupuestal 2'] = $arrInformacion['hogar'][$txtResolucion]['rp2'];
-                $arrReporte[$numPosicion]['Subsidio'] = number_format($arrInformacion['hogar']['subsidio'], 0, ',', '.');
-                $arrReporte[$numPosicion]['Acumulado'] = number_format($arrInformacion['acumulado'], 0, ',', '.');
-                $arrReporte[$numPosicion]['Giro'] = number_format($valGiro, 0, ',', '.');
-            }
-        }
-
-        $this->obtenerReportesGeneral($arrReporte, "GirosVIPA");
+        $this->obtenerReportesGeneral($arrReporte, "GirosVIPA" , $arrTitulos , true);
+        
+//        $sql = "
+//            select 
+//                fac.seqFormulario, 
+//                fac.seqFormularioActo,
+//                tdo.txtTipoDocumento,    
+//                cac.numDocumento,
+//                upper(concat(cac.txtNombre1,' ',cac.txtNombre2,' ',cac.txtApellido1,' ',cac.txtApellido2)) as txtNombre,
+//                est.txtEstado,
+//                hvi.numActo, 
+//                hvi.fchActo,
+//                fac.valAspiraSubsidio,
+//                if(gir.valSolicitado is null, 0, gir.valSolicitado) as valSolicitado,
+//                if(concat(gir.numRegistroPresupuestal1, ' de ', year(gir.fchRegistroPresupuestal1)) is null, 'No aplica',concat(gir.numRegistroPresupuestal1, ' de ', year(gir.fchRegistroPresupuestal1)))  as rp1,
+//                if(concat(gir.numRegistroPresupuestal2, ' de ', year(gir.numRegistroPresupuestal2)) is null, 'No aplica',concat(gir.numRegistroPresupuestal2, ' de ', year(gir.numRegistroPresupuestal2)))  as rp2
+//            from t_aad_formulario_acto fac
+//            inner join t_aad_hogar_acto hac on fac.seqFormularioActo = hac.seqFormularioActo and hac.seqParentesco = 1
+//            inner join t_aad_ciudadano_acto cac on hac.seqCiudadanoActo = cac.seqCiudadanoActo
+//            inner join t_ciu_tipo_documento tdo on cac.seqTipoDocumento = tdo.seqTipoDocumento
+//            inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
+//            inner join v_frm_estado est on fac.seqEstadoProceso = est.seqEstadoProceso
+//            left join t_aad_giro gir on fac.seqFormularioActo = gir.seqFormularioActo
+//            where fac.seqPlanGobierno = 3
+//            and fac.seqModalidad = 12
+//            and fac.seqTipoEsquema in (12,18)
+//            and hvi.seqTipoActo = 1     
+//            order by 
+//                fac.seqFormulario, 
+//                fac.seqFormularioActo   
+//        ";
+//        $objRes = $aptBd->execute($sql);
+//        $arrDatos = array();
+//        while ($objRes->fields) {
+//
+//            $seqFormulario = $objRes->fields['seqFormulario'];
+//            $fchResolucion = date("Y", strtotime($objRes->fields['fchActo']));
+//            $txtResolucion = "Res. " . $objRes->fields['numActo'] . " de " . $fchResolucion;
+//
+//            $arrDatos[$seqFormulario]['hogar']['tipo'] = $objRes->fields['txtTipoDocumento'];
+//            $arrDatos[$seqFormulario]['hogar']['documento'] = $objRes->fields['numDocumento'];
+//            $arrDatos[$seqFormulario]['hogar']['nombre'] = $objRes->fields['txtNombre'];
+//            $arrDatos[$seqFormulario]['hogar']['subsidio'] = $objRes->fields['valAspiraSubsidio'];
+//            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['fac'] = $objRes->fields['seqFormularioActo'];
+//            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['rp1'] = $objRes->fields['rp1'];
+//            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['rp2'] = $objRes->fields['rp2'];
+//            $arrDatos[$seqFormulario]['hogar'][$txtResolucion]['estado'] = $objRes->fields['txtEstado'];
+//            $arrDatos[$seqFormulario]['detalle'][$txtResolucion] += $objRes->fields['valSolicitado'];
+//            $arrDatos[$seqFormulario]['acumulado'] += $objRes->fields['valSolicitado'];
+//
+//            $objRes->MoveNext();
+//        }
+//
+//        $arrReporte = array();
+//        foreach ($arrDatos as $seqFormulario => $arrInformacion) {
+//            foreach ($arrInformacion['detalle'] as $txtResolucion => $valGiro) {
+//
+//                $numPosicion = count($arrReporte);
+//
+//                $arrReporte[$numPosicion]['Formulario'] = $seqFormulario;
+//                $arrReporte[$numPosicion]['Formulario Acto'] = $arrInformacion['hogar'][$txtResolucion]['fac'];
+//                $arrReporte[$numPosicion]['Tipo de documento'] = $arrInformacion['hogar']['tipo'];
+//                $arrReporte[$numPosicion]['Documento'] = $arrInformacion['hogar']['documento'];
+//                $arrReporte[$numPosicion]['Nombre'] = $arrInformacion['hogar']['nombre'];
+//                $arrReporte[$numPosicion]['Estado'] = $arrInformacion['hogar'][$txtResolucion]['estado'];
+//                $arrReporte[$numPosicion]['Resolucion'] = $txtResolucion;
+//                $arrReporte[$numPosicion]['Registro Presupuestal 1'] = $arrInformacion['hogar'][$txtResolucion]['rp1'];
+//                $arrReporte[$numPosicion]['Registro Presupuestal 2'] = $arrInformacion['hogar'][$txtResolucion]['rp2'];
+//                $arrReporte[$numPosicion]['Subsidio'] = number_format($arrInformacion['hogar']['subsidio'], 0, ',', '.');
+//                $arrReporte[$numPosicion]['Acumulado'] = number_format($arrInformacion['acumulado'], 0, ',', '.');
+//                $arrReporte[$numPosicion]['Giro'] = number_format($valGiro, 0, ',', '.');
+//            }
+//        }
+//
+//        $this->obtenerReportesGeneral($arrReporte, "GirosVIPA");
+        
     }
 
     public function crucesFnv() {

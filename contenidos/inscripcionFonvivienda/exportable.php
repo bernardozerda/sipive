@@ -14,6 +14,7 @@ $seqCargue = $_GET['seqCargue'];
 
 $claInscripcion = new InscripcionFonvivienda();
 $claInscripcion->cargar($seqCargue);
+
 $arrExportable = $claInscripcion->exportable();
 
 // fuentes para el archivo
@@ -29,6 +30,8 @@ $objPHPExcel = new PHPExcel();
 $objPHPExcel->setActiveSheetIndex(0);
 $objPHPExcel->getDefaultStyle()->applyFromArray($arrFuentes['default']);
 $objPHPExcel->getActiveSheet()->setTitle("Estado Hogares"); // titulo de excel limitado a 30 caracteres
+
+//pr($arrExportable); die();
 
 // titulos y contenido
 $numFila = 1;
@@ -59,7 +62,7 @@ $numFilas    = count($arrExportable);
 $objPHPExcel->getActiveSheet()->getStyle(PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas) . ($numFilas + 1))->applyFromArray($arrFuentes['default']);
 
 // da formato al titulo
-$objPHPExcel->getActiveSheet()->getStyle(PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas - 1) . "1")->applyFromArray($arrFuentes['titulo']);
+$objPHPExcel->getActiveSheet()->getStyle(PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_Cell::stringFromColumnIndex($numColumnas) . "1")->applyFromArray($arrFuentes['titulo']);
 
 for ($i = 0; $i < $numColumnas; $i++) {
     $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);

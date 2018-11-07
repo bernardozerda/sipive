@@ -2466,10 +2466,10 @@ class InscripcionFonvivienda
     private function valorSubsidio($seqTipo,$seqTipoEsquema){
         global $arrConfiguracion;
         if($seqTipo == 1) {
-            if ($seqTipoEsquema == 16) { // MVY de 0 a 2 SMMLV
-                $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 10;
-            } else { // MCY de 2 a 4 SMMLV
+            if ($seqTipoEsquema == 16) { // MVY de 2 a 4 SMMLV
                 $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+            } else { // MCY de 0 a 2 SMMLV
+                $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 10;
             }
         }elseif($seqTipo == 2){
             if($seqTipoEsquema == 12){ // VIPA de 0 a 1.6 SMMLV
@@ -2546,10 +2546,13 @@ class InscripcionFonvivienda
         $claFormularioModificado->seqSolucion = $arrHogar['seqSolucion'];
         $claFormularioModificado->txtDireccionSolucion = $arrHogar['txtDireccionSolucion'];
         $claFormularioModificado->fchUltimaActualizacion = date("Y-m-d H:i:s");
+        $claFormularioModificado->seqProyecto = 37;
+        $claFormularioModificado->seqProyectoHijo = 0;
+        $claFormularioModificado->seqUnidadProyecto = 1;
         $claFormularioModificado->bolCerrado = 1;
         if($this->seqTipo == 1) {
-            $claFormularioModificado->seqEstadoProceso = 47;
-            $claFormularioModificado->valApiraSubsidio = $arrHogar['valAspiraSubsidio'];
+            $claFormularioModificado->seqEstadoProceso = 16;
+            $claFormularioModificado->valAspiraSubsidio = $arrHogar['valAspiraSubsidio'];
         }else{
             $claFormularioModificado->seqEstadoProceso = 56;
         }
@@ -2658,9 +2661,12 @@ class InscripcionFonvivienda
         $arrExportable = array();
 
         foreach($this->arrHogares as $numHogar => $arrHogar){
+            $bolPrincipal = false;
             foreach($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano){
 
-                if($arrCiudadano['seqParentesco'] == 1) {
+                if($arrCiudadano['seqParentesco'] == 1 or $bolPrincipal == false) {
+
+                    $bolPrincipal = true;
 
                     $arrExportable[$numHogar]['ID HOGAR'] = $numHogar;
                     $arrExportable[$numHogar]['NO. DOCUMENTO'] = $arrCiudadano['numDocumento'];
@@ -2728,16 +2734,16 @@ class InscripcionFonvivienda
         if($seqTipo == 1){
             switch($txtRangoIngresos){
                 case "HASTA 2 SMMLV": // 10 SMMLV
-                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 10;
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 30;
                     break;
                 case "DE 2 SMMLV HASTA 3 SMMLV":  //  8 SMMLV
-                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 20;
                     break;
                 case "DE 3 SMMLV HASTA 4 SMMLV": //  8 SMMLV
-                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 20;
                     break;
                 case "SUPERIORES A 2 SMMLV Y HASTA 4 SMMLV": //  8 SMMLV
-                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 20;
                     break;
             }
         }elseif($seqTipo == 2 or $seqTipo == 3){

@@ -29,15 +29,17 @@
 
         <div class="alert alert-info">
             <div class="row">
-                {math equation="x + y" x=$claInscripcion->arrLineasProcesadas.procesadas y=$claInscripcion->arrLineasProcesadas.omitidas.conteo assign="numTotalLineas"}
+                {assign var=numLineasProcesadas value=$claInscripcion->arrLineasProcesadas.procesadas|intval}
+                {assign var=numLineasOmitidas   value=$claInscripcion->arrLineasProcesadas.omitidas.conteo|intval}
+                {math equation="x + y" x=$numLineasProcesadas y=$numLineasOmitidas assign="numTotalLineas"}
                 <div class="col-sm-2 h5"><strong>Total lineas:</strong></div>
                 <div class="col-sm-1 h5">{$numTotalLineas}</div>
 
                 <div class="col-sm-3 h5"><strong>Procesadas:</strong></div>
-                <div class="col-sm-1 h5">{$claInscripcion->arrLineasProcesadas.procesadas}</div>
+                <div class="col-sm-1 h5">{$claInscripcion->arrLineasProcesadas.procesadas|intval}</div>
 
                 <div class="col-sm-4 h5"><strong>No Procesadas: <a href="#" onclick="mostrarOcultar('resumen')">Ver Detalle</a></strong></div>
-                <div class="col-sm-1 h5">{$claInscripcion->arrLineasProcesadas.omitidas.conteo}</div>
+                <div class="col-sm-1 h5">{$claInscripcion->arrLineasProcesadas.omitidas.conteo|intval}</div>
             </div>
             <div class="row" id="resumen" style="display: none;">
                 {foreach from=$claInscripcion->arrLineasProcesadas.omitidas.razon key=numLinea item=txtRazon}

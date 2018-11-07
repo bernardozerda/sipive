@@ -77,13 +77,18 @@
         $arrIgnorarCampos[] = "seqLocalidad";
         $arrIgnorarCampos[] = "seqBarrio";
         $arrIgnorarCampos[] = "txtCorreo";
+        $arrIgnorarCampos[] = "bolDesplazado";
+        $arrIgnorarCampos[] = "seqProyecto";
+        $arrIgnorarCampos[] = "seqProyectoHijo";
+        $arrIgnorarCampos[] = "seqUnidadProyecto";
 
-        $arrIgnorarCamposCiudadano[] = "seqTipoDocumento";
-        $arrIgnorarCamposCiudadano[] = "numDocumento";
+//        $arrIgnorarCamposCiudadano[] = "seqTipoDocumento";
+//        $arrIgnorarCamposCiudadano[] = "numDocumento";
         $arrIgnorarCamposCiudadano[] = "txtNombre1";
         $arrIgnorarCamposCiudadano[] = "txtNombre2";
         $arrIgnorarCamposCiudadano[] = "txtApellido1";
         $arrIgnorarCamposCiudadano[] = "txtApellido2";
+        $arrIgnorarCamposCiudadano[] = "seqTipoVictima";
 
         $arrPostHogar = $_POST['hogar'];
         unset($_POST['hogar']);

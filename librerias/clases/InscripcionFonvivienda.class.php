@@ -2731,16 +2731,16 @@ class InscripcionFonvivienda
         if($seqTipo == 1){
             switch($txtRangoIngresos){
                 case "HASTA 2 SMMLV": // 10 SMMLV
-                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 10;
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 30;
                     break;
                 case "DE 2 SMMLV HASTA 3 SMMLV":  //  8 SMMLV
-                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 20;
                     break;
                 case "DE 3 SMMLV HASTA 4 SMMLV": //  8 SMMLV
-                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 20;
                     break;
                 case "SUPERIORES A 2 SMMLV Y HASTA 4 SMMLV": //  8 SMMLV
-                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+                    $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 20;
                     break;
             }
         }elseif($seqTipo == 2 or $seqTipo == 3){

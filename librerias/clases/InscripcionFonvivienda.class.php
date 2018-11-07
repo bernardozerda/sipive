@@ -2466,10 +2466,10 @@ class InscripcionFonvivienda
     private function valorSubsidio($seqTipo,$seqTipoEsquema){
         global $arrConfiguracion;
         if($seqTipo == 1) {
-            if ($seqTipoEsquema == 16) { // MVY de 0 a 2 SMMLV
-                $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 10;
-            } else { // MCY de 2 a 4 SMMLV
+            if ($seqTipoEsquema == 16) { // MVY de 2 a 4 SMMLV
                 $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
+            } else { // MCY de 0 a 2 SMMLV
+                $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 10;
             }
         }elseif($seqTipo == 2){
             if($seqTipoEsquema == 12){ // VIPA de 0 a 1.6 SMMLV

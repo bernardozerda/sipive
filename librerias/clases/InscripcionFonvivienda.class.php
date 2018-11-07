@@ -2549,7 +2549,7 @@ class InscripcionFonvivienda
         $claFormularioModificado->bolCerrado = 1;
         if($this->seqTipo == 1) {
             $claFormularioModificado->seqEstadoProceso = 16;
-            $claFormularioModificado->valApiraSubsidio = $arrHogar['valAspiraSubsidio'];
+            $claFormularioModificado->valAspiraSubsidio = $arrHogar['valAspiraSubsidio'];
         }else{
             $claFormularioModificado->seqEstadoProceso = 56;
         }

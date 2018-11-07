@@ -78,9 +78,12 @@
         $arrIgnorarCampos[] = "seqBarrio";
         $arrIgnorarCampos[] = "txtCorreo";
         $arrIgnorarCampos[] = "bolDesplazado";
+        $arrIgnorarCampos[] = "seqProyecto";
+        $arrIgnorarCampos[] = "seqProyectoHijo";
+        $arrIgnorarCampos[] = "seqUnidadProyecto";
 
-        $arrIgnorarCamposCiudadano[] = "seqTipoDocumento";
-        $arrIgnorarCamposCiudadano[] = "numDocumento";
+//        $arrIgnorarCamposCiudadano[] = "seqTipoDocumento";
+//        $arrIgnorarCamposCiudadano[] = "numDocumento";
         $arrIgnorarCamposCiudadano[] = "txtNombre1";
         $arrIgnorarCamposCiudadano[] = "txtNombre2";
         $arrIgnorarCamposCiudadano[] = "txtApellido1";

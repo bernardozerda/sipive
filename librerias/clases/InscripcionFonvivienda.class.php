@@ -2546,6 +2546,9 @@ class InscripcionFonvivienda
         $claFormularioModificado->seqSolucion = $arrHogar['seqSolucion'];
         $claFormularioModificado->txtDireccionSolucion = $arrHogar['txtDireccionSolucion'];
         $claFormularioModificado->fchUltimaActualizacion = date("Y-m-d H:i:s");
+        $claFormularioModificado->seqProyecto = 37;
+        $claFormularioModificado->seqProyectoHijo = 0;
+        $claFormularioModificado->seqUnidadProyecto = 1;
         $claFormularioModificado->bolCerrado = 1;
         if($this->seqTipo == 1) {
             $claFormularioModificado->seqEstadoProceso = 16;

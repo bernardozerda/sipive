@@ -971,16 +971,15 @@
                                                 </td>
                                                 <td align="center" width="18px" height="22px">
                                                     <div	style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;"
-                                                            {if $objFormulario->seqEstadoProceso == 35
-                                                            and isset($smarty.session.arrGrupos.3.13)
-                                                            and isset($smarty.session.arrGrupos.3.20)
-                                                            and isset($smarty.session.arrGrupos.3.5)}
+
+                                                            {if isset($smarty.session.arrGrupos.3.13)
+                                                            or isset($smarty.session.arrGrupos.3.20)}
                                                                 onClick="quitarMiembroYSalvar('{$objCiudadano->numDocumento}');"
                                                             {else}
                                                                 onClick="quitarMiembroHogar('{$objCiudadano->numDocumento}');"
                                                             {/if}
                                                             onMouseOver="this.style.backgroundColor = '#FFA4A4';"
-                                                            onMouseOut="this.style.backgroundColor = '#F9F9F9'"
+                                                            onMouseOut="this.style.backgroundColor = '#FFFFFF'"
                                                     >X</div>
                                                 </td>
                                             {/if}

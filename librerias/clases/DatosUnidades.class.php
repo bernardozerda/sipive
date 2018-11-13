@@ -187,12 +187,13 @@ class DatosUnidades {
 
         global $aptBd;
         foreach ($array as $key => $value) {
-            if ($value[5] != "Seleccione") {
-                $estado = explode("-", $value[5])[0];
-                $activo = ($value[6] == "SI") ? 1 : 0;
+            if ($value[7] != "Seleccione") {
+                $estado = explode("-", $value[7])[0];
+                $activo = ($value[8] == "SI") ? 1 : 0;
                 if ($estado > 0) {
                     $sql = "UPDATE t_pry_unidad_proyecto
                 SET
+                txtNombreUnidadReal = '".$value[3]."',  txtNombreUnidadAux = '".$value[4]."',
                 seqEstadoUnidad = $estado, bolActivo =  $activo
                 WHERE seqUnidadProyecto = $value[0];";
                     try {
@@ -208,7 +209,7 @@ class DatosUnidades {
 
     function obtenerDatosUnidades($seqProyecto) {
         global $aptBd;
-        $sql = "SELECT txtNombreProyecto, txtNombreUnidad, txtNombreTipoVivienda, seqUnidadProyecto, concat(seqEstadoUnidad ,'-', txtEstadoUnidad) as estado, und.bolActivo
+        $sql = "SELECT txtNombreProyecto, txtNombreUnidad, txtNombreUnidadReal, txtNombreUnidadAux, txtNombreTipoVivienda, seqUnidadProyecto, concat(seqEstadoUnidad ,'-', txtEstadoUnidad) as estado, und.bolActivo
                 FROM t_pry_proyecto pry 
                 LEFT JOIN t_pry_unidad_proyecto und USING(seqProyecto) 
                 LEFT JOIN t_pry_tipo_vivienda tip using(seqProyecto)

@@ -57,7 +57,7 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                         } else {
                             $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Por favor verifique que  el campo de la <b>Fila " . ($numFilaArreglo + 1) . "</b> en la <b>Columna " . $letra . " </b> Sea de tipo numerico </h5></div>";
                         }
-                    } else if ($objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue() == "") {
+                    } else if ($objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue() == "" && $numFila == 7 && $numFila == 8) {
                         $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Por favor verifique que  el campo de la <b>Fila " . ($numFilaArreglo + 1) . "</b> en la <b>Columna " . $letra . " </b> se encuentra vacio </h5></div>";
                     } else {
                         $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
@@ -68,20 +68,20 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
         if (empty($arrErrores)) {
             $band = true;
             foreach ($arrArchivo as $key => $value) {
-                $arrayDatosProyOld[$seqProyecto][] = $value[4];
-                if ($value[5] != "Seleccione" && $value[4] != $value[5]) {
+                $arrayDatosProyOld[$seqProyecto][] = $value[6];
+                if ($value[7] != "Seleccione" && $value[6] != $value[7]) {
                     // echo "<br> ***** " . $value[4] . " != " . $value[5];
-                    $arrayDatosProyNew[$seqProyecto][] = $value[5];
+                    $arrayDatosProyNew[$seqProyecto][] = $value[7];
 
                     $bandUnidades = $claDatosUnidades->ValidarUnidadesProyecto($seqProyecto, $value[0]);
-                    if (!$bandUnidades) {                        
+                    if (!$bandUnidades) {
                         $band = false;
                     }
                 }
             }
 
-            if ($band) {              
-               
+            if ($band) {
+
                 $array = $claDatosUnidades->modificarEstadoUnidad($arrArchivo, $seqProyecto);
                 if (empty($array)) {
                     $cantOld = count($arrayDatosProyOld[$seqProyecto]);
@@ -105,6 +105,8 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                             <th>Id Unidad </th>
                             <th>Proyecto </th>
                             <th>Nombre de la unidad </th>
+                            <th>Nombre de la unidad Real </th>
+                            <th>Nombre de la unidad Auxiliar</th>
                             <th>Conjunto</th>
                             <th>Estado Anterior</th>
                             <th>Nuevo Estado </th>                        
@@ -121,6 +123,8 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                                 <td><?php echo $value[4] ?></td>
                                 <td><?php echo $value[5] ?></td>
                                 <td><?php echo $value[6] ?></td>
+                                <td><?php echo $value[7] ?></td>
+                                <td><?php echo $value[8] ?></td>
                             </tr>
                             <?php
                         }

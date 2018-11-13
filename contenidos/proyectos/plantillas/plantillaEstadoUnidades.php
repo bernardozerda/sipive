@@ -168,7 +168,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     $excel->getActiveSheet()->getStyle('H2:I' . $cols)->getProtection()
             ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
     
-     $excel->getActiveSheet()->getStyle('D2:E' . $cols)->getProtection()
+     $excel->getActiveSheet()->getStyle('C2:E' . $cols)->getProtection()
             ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

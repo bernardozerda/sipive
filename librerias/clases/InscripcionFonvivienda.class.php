@@ -1669,12 +1669,14 @@ class InscripcionFonvivienda
                                     break;
                                 }elseif($arrCiudadano['seqCiudadanoCoincidencia'] === null and $objCiudadano->numDocumento == $arrCiudadano['numDocumento']){
 
-                                    $objCiudadano->seqParentesco = $arrCiudadano['seqParentesco'];
-                                    $objCiudadano->txtNombre1    = $arrCiudadano['txtNombre1'];
-                                    $objCiudadano->txtNombre2    = $arrCiudadano['txtNombre2'];
-                                    $objCiudadano->txtApellido1  = $arrCiudadano['txtApellido1'];
-                                    $objCiudadano->txtApellido2  = $arrCiudadano['txtApellido2'];
-                                    $objCiudadano->valIngresos   = $arrCiudadano['valIngresos'];
+                                    $objCiudadano->seqParentesco    = $arrCiudadano['seqParentesco'];
+                                    $objCiudadano->seqTipoDocumento = $arrCiudadano['seqTipoDocumento'];
+                                    $objCiudadano->numDocumento     = $arrCiudadano['numDocumento'];
+                                    $objCiudadano->txtNombre1       = $arrCiudadano['txtNombre1'];
+                                    $objCiudadano->txtNombre2       = $arrCiudadano['txtNombre2'];
+                                    $objCiudadano->txtApellido1     = $arrCiudadano['txtApellido1'];
+                                    $objCiudadano->txtApellido2     = $arrCiudadano['txtApellido2'];
+                                    $objCiudadano->valIngresos      = $arrCiudadano['valIngresos'];
 
                                     $objCiudadano = $this->modificarCiudadano($objCiudadano, $arrCiudadano);
 

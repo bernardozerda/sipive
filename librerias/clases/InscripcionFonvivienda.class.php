@@ -1145,7 +1145,7 @@ class InscripcionFonvivienda
             $this->seqUsuario = $objRes->fields['seqUsuario'];
             $this->txtUsuario = $objRes->fields['txtUsuario'];
             if($objRes->fields['txtErrores'] != "") {
-                if($objRes->fields['seqEstado'] != 4) {
+                if($objRes->fields['seqEstado'] != 4 and $objRes->fields['seqEstado'] != 5 and $objRes->fields['seqEstado'] != 6) {
                     $this->arrErrores = json_decode($objRes->fields['txtErrores'], true);
                 }else{
                     $this->arrLineasProcesadas = json_decode($objRes->fields['txtErrores'], true);

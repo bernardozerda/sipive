@@ -34,7 +34,7 @@ if (!isset($_POST['cedula'])) {
 
    $claFormulario = new FormularioSubsidios();
    $claCiudadano = new Ciudadano();
-   $seqFormulario = $claCiudadano->formularioVinculado($_POST['cedula']);
+   $seqFormulario = $claCiudadano->formularioVinculado($_POST['cedula'], false, false);
    $claFormulario->cargarFormulario($seqFormulario);
    $seqEtapa = obtenerCampo("T_FRM_ESTADO_PROCESO", $claFormulario->seqEstadoProceso, "seqEtapa", "seqEstadoProceso");
    $seqPlanGobierno = ($seqFormulario == 0) ? 3 : $claFormulario->seqPlanGobierno;

@@ -35,7 +35,7 @@
 
         // ciudadano para obtener el formulario vinculado
         $_POST['cedula'] = mb_ereg_replace("[^0-9]","", $_POST['cedula']);
-        $seqFormulario = $claCiudadano->formularioVinculado( $_POST['cedula'] );
+        $seqFormulario = $claCiudadano->formularioVinculado( $_POST['cedula'] , false , false);
 
         // Si el ciudadano no esta relacionado con algun formulario
         if($seqFormulario == 0){

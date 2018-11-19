@@ -603,8 +603,7 @@ class Proyecto {
 
         global $aptBd;
         $sql = "SELECT pry.*, pol.*, fid.*, con.*, loc.*, gru.*, pry.seqProyecto as seqProyecto, txtTipoProyecto, txtTipoFinanciacion, "
-                . "(SELECT group_concat(txtNombreOferente separator ', ')  FROM  t_pry_proyecto_oferente pOf
-                LEFT JOIN t_pry_entidad_oferente entO using(seqOferente) where pry.seqProyecto = pOf.seqProyecto) as oferente "
+                 . " ofProy.nombreOferente AS oferente "               
                 . "FROM  t_pry_proyecto pry "
                 . "LEFT JOIN t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto) "
                 . "LEFT JOIN t_pry_datos_fiducia fid on(pry.seqProyecto = fid.seqProyecto) "
@@ -612,12 +611,21 @@ class Proyecto {
                 . "LEFT JOIN t_frm_localidad loc USING(seqLocalidad) "
                 . "LEFT JOIN t_pry_proyecto_grupo gru USING(seqProyectoGrupo) "
                 . "LEFT JOIN T_PRY_TIPO_PROYECTO USING(seqTipoProyecto)"
-                . "LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)";
+                . "LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)"
+                . " LEFT JOIN 
+     (SELECT 
+            GROUP_CONCAT(txtNombreOferente
+                    SEPARATOR ', ') as 'nombreOferente', pOf.seqProyecto
+        FROM
+            t_pry_proyecto_oferente pOf
+                LEFT JOIN
+            t_pry_entidad_oferente entO USING (seqOferente)
+        ) ofProy on(pry.seqProyecto = ofProy.seqProyecto)";
         if ($seqProyecto > 0) {
             $sql .= " where  pry.seqProyecto = " . $seqProyecto;
         }
         $sql . " ORDER BY  pry.seqProyecto";
-        //echo "<p>" . $sql . "</p>";
+       // echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -687,7 +695,7 @@ class Proyecto {
         return $datos;
     }
 
-    /**
+    /** 
      * MODIFICA LA INFORMACION DE LA Proyecto
      * SELECCIONADA Y GUARDA LOS NUEVOS DATOS
      * @author Bernardo Zerda

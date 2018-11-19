@@ -887,6 +887,28 @@
                                                             </select>
                                                         </td>
                                                     </tr>
+
+                                                    <!-- TIPO DE VINCULACION -->
+                                                    {if $claFormulario->seqPlanGobierno == 3}
+                                                        <tr>
+                                                            <td>Tipo de Vinculación</td>
+                                                            <td align="center">
+                                                                <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                                        id="tipoVinculacion"
+                                                                        style="width:90%;"
+                                                                >
+                                                                    <option value="">Seleccione Uno</option>
+                                                                    <option value="Sin Vinculación">SIN VINCULACION</option>
+                                                                    <option value="Formal">FORMAL</option>
+                                                                    <option value="Informal">INFORMAL</option>
+                                                                </select>
+                                                            </td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    {/if}
+
                                                     <tr>
                                                         <!-- OCUPACION -->
                                                         <td>Ocupación</td>
@@ -957,6 +979,10 @@
                                         <!-- SI HAY AL MENOS UN CIUDADANO CON HECHO VICTIMIZANTE "DESPLAZAMIENTO FORZADO" -->
                                         {if $objCiudadano->seqTipoVictima == 2}
                                             {assign var=numVictima  value=1}
+                                        {/if}
+
+                                        {if mb_strtolower($objCiudadano->txtTipoVinculacion) == 'informal'}
+                                            {assign var=numInformal value=1}
                                         {/if}
 
                                         {assign var=valIngresosCiudadano value=$objCiudadano->valIngresos|replace:'[^0-9]':''}
@@ -1063,6 +1089,7 @@
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-txtEntidadUnion" name="hogar[{$objCiudadano->numDocumento}][txtEntidadUnion]" value="{$objCiudadano->txtEntidadUnion}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaUnion" name="hogar[{$objCiudadano->numDocumento}][numNotariaUnion]" value="{$objCiudadano->numNotariaUnion}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadUnion" name="hogar[{$objCiudadano->numDocumento}][seqCiudadUnion]" value="{$objCiudadano->seqCiudadUnion}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-txtTipoVinculacion" name="hogar[{$objCiudadano->numDocumento}][txtTipoVinculacion]" value="{$objCiudadano->txtTipoVinculacion}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqOcupacion" name="hogar[{$objCiudadano->numDocumento}][seqOcupacion]" value="{$objCiudadano->seqOcupacion}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqSexo" name="hogar[{$objCiudadano->numDocumento}][seqSexo]" value="{$objCiudadano->seqSexo}">
                                             <input type="hidden" id="{$objCiudadano->numDocumento}-seqGrupoLgtbi" name="hogar[{$objCiudadano->numDocumento}][seqGrupoLgtbi]" value="{$objCiudadano->seqGrupoLgtbi}">
@@ -1109,6 +1136,15 @@
                                                         <tr>
                                                             <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if}</td>
                                                             <td><b>Años Aporbados:</b> {$objCiudadano->numAnosAprobados}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3"><b>Tipo de vinculacion:</b>
+                                                                {if $objCiudadano->txtTipoVinculacion != ""}
+                                                                    {$objCiudadano->txtTipoVinculacion|mb_strtoupper}
+                                                                {else}
+                                                                    SIN INFORMACIÓN
+                                                                {/if}
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3"><b>Ocupación:</b> {$arrOcupacion.$ocupacion}</td>
@@ -1413,6 +1449,25 @@
                                                 </select>
                                             </td>
                                         </tr>
+
+                                        <!-- HOGAR INDEPENDIENTE -->
+                                        <tr>
+                                            <td>Hogar Informal</td>
+                                            <td>
+                                                <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           name="bolInformal"
+                                                           id="bolInformal"
+                                                           style="width:260px;"
+                                                >
+                                                    <option value="0" {if $numInformal != 1} selected {/if} disabled>No</option>
+                                                    <option value="1" {if $numInformal == 1} selected {/if} disabled>Si</option>
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+
                                     </table>
                                 </p>
 

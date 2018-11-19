@@ -949,6 +949,7 @@ function agregarMiembroHogar() {
     var objCiudadUnion = document.getElementById("ciudadUnion");
     var objNotariaSoltero = document.getElementById("notariaSoltero");
     var objCiudadSoltero = document.getElementById("ciudadSoltero");
+    var objTipoVinculacion = document.getElementById("tipoVinculacion");
 
     var numDocumento = objNumDocumento.value.replace(/[^0-9]/g, "");
     var valIngresos = objIngresos.value.replace(/[^0-9]/g, "");
@@ -1097,6 +1098,24 @@ function agregarMiembroHogar() {
         alert("Debe registrar el ingreso mensual del ciudadano");
         objIngresos.focus();
         return false;
+    }
+
+    // tipo de vinculacion si es solo mayor de edad
+    if (bolValidacionSoporteDocumentos == true) {
+
+        var objFechaActual = new Date();
+        var objFechaNacimiento = new Date(objFchNacimiento.value);
+        var numEdad = Math.round( ( objFechaActual - objFechaNacimiento ) / (1000 * 60 * 60 * 24 * 365) , 0 );
+
+        if(
+            (objTpoDocumento.selectedIndex == 1 || objTpoDocumento.selectedIndex == 2) ||
+            (objTpoDocumento.selectedIndex == 3 && numEdad >= 18)
+        ){
+            if(objTipoVinculacion.selectedIndex == 0){
+                alert("Debe seleccionar el tipo de vinculación");
+            }
+        }
+
     }
 
     // Debe tener parentesco
@@ -1419,6 +1438,7 @@ function agregarMiembroHogar() {
         txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadUnion' name='hogar[" + numDocumento + "][seqCiudadUnion]' value='0'>";
     }
 
+    txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtTipoVinculacion' name='hogar[" + numDocumento + "][txtTipoVinculacion]' value='" + objTipoVinculacion.options[ objTipoVinculacion.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqOcupacion' name='hogar[" + numDocumento + "][seqOcupacion]' value='" + objOcupacion.options[ objOcupacion.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqSexo' name='hogar[" + numDocumento + "][seqSexo]' value='" + objSexo.options[ objSexo.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-bolLgtb' name='hogar[" + numDocumento + "][bolLgtb]' value='" + objLgtb.options[ objLgtb.selectedIndex ].value + "'>";
@@ -1465,9 +1485,16 @@ function agregarMiembroHogar() {
     txtInsertar += "<td><b>Nivel Educativo:</b> " + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].text + "</td>";
     txtInsertar += "<td><b>A&ntilde;os Aprobados:</b> " + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + "</td>";
     txtInsertar += "</tr> ";
+
+    txtInsertar += "<tr> ";
+    txtInsertar += "<td colspan='3'><b>Tipo de Vinculaci&oacute;n:</b> " + objTipoVinculacion.options[ objTipoVinculacion.selectedIndex ].value + "</td> ";
+    txtInsertar += "</tr> ";
+
     txtInsertar += "<tr> ";
     txtInsertar += "<td colspan='3'><b>Ocupaci&oacute;n:</b> " + txtOcupacion + "</td> ";
     txtInsertar += "</tr> ";
+
+
     txtInsertar += "</table> ";
     txtInsertar += "</td> ";
     txtInsertar += "</tr> ";
@@ -1502,6 +1529,9 @@ function agregarMiembroHogar() {
     objApellido2.value = "";
     objTpoDocumento.selectedIndex = 0;
     objNumDocumento.value = "";
+    if(objExpedicion == null){
+        objExpedicion = new Object();
+    }
     objExpedicion.value = "";
     objEntidadDocumento.selectedIndex = 0;
     objIndicativoSerial.value = "";
@@ -1552,6 +1582,23 @@ function agregarMiembroHogar() {
         }
     }
     $("#bolDesplazado").val(numDesplazado);
+
+
+    // Actualizar el valor de bolInformal
+    // Si hay un solo ciudadano con
+    // vinculacion informal, el select se marca como 1 = SI
+    // 0 = NO de lo contrario
+    var arrTablas = $("#datosHogar").find("table");
+    var numInformal = 0;
+    for (i = 0; i < arrTablas.length; i++) {
+        if (parseInt(arrTablas[i].id)) {
+            if ($("#" + arrTablas[i].id + "-txtTipoVinculacion").val() == 'Informal') {
+                numInformal = 1;
+            }
+        }
+    }
+    $("#bolInformal").val(numInformal);
+
 
     // numDesplazado (Vulnerable) = 0
     // numDesplazado (Desplazado) = 1
@@ -2216,6 +2263,12 @@ function modificarMiembroHogar(numDocumento) {
 
                 }
 
+            }
+
+            if (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtTipoVinculacion") {
+                for (j = 0; j < document.getElementById("tipoVinculacion").length; j++) {
+                    document.getElementById("tipoVinculacion").selectedIndex = (document.getElementById("tipoVinculacion").options[ j ].value == document.getElementById(numDocumentoSinPuntos + "-txtTipoVinculacion").value) ? j : document.getElementById("tipoVinculacion").selectedIndex;
+                }
             }
 
             if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqOcupacion") {

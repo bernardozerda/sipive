@@ -67,7 +67,7 @@ class Ciudadano {
     public $numConsecutivoPartida;
     public $txtParroquiaPartida;
     public $seqCiudadPartida;
-    public $txtTipoVinculacion;
+//    public $txtTipoVinculacion;
 
     /**
      * CONSTRUCTOR
@@ -130,7 +130,7 @@ class Ciudadano {
         $this->numConsecutivoPartida = 0;
         $this->txtParroquiaPartida = "";
         $this->seqCiudadPartida = 0;
-        $this->txtTipoVinculacion = "";
+//        $this->txtTipoVinculacion = "";
         
     }
 
@@ -186,8 +186,8 @@ class Ciudadano {
                 numConsecutivoPartida,
                 txtParroquiaPartida,
                 seqCiudadPartida,
-                txtTipoSoporte,
-                txtTipoVinculacion
+                txtTipoSoporte
+                -- txtTipoVinculacion
             FROM T_CIU_CIUDADANO
             WHERE seqCiudadano = $seqCiudadano		
 		";
@@ -245,7 +245,7 @@ class Ciudadano {
             $this->txtParroquiaPartida = trim($objRes->fields['txtParroquiaPartida']);
             $this->seqCiudadPartida = intval($objRes->fields['seqCiudadPartida']);
             $this->txtTipoSoporte = trim($objRes->fields['txtTipoSoporte']);
-            $this->txtTipoVinculacion = trim($objRes->fields['txtTipoVinculacion']);
+//            $this->txtTipoVinculacion = trim($objRes->fields['txtTipoVinculacion']);
 
         } else {
             $this->arrErrores[] = "Ciudadano [$seqCiudadano] no encontrado";
@@ -306,8 +306,7 @@ class Ciudadano {
                     numConsecutivoPartida,
                     txtParroquiaPartida,
                     seqCiudadPartida,
-                    txtTipoSoporte,
-                    txtTipoVinculacion
+                    txtTipoSoporte                    
                 ) VALUES (
                     " . intval($this->bolBeneficiario) . ",
                     " . intval($this->bolCertificadoElectoral) . ",
@@ -357,7 +356,6 @@ class Ciudadano {
                     '" . trim($this->txtParroquiaPartida) . "',
                     " . intval($this->seqCiudadPartida) . ",
                     '" . trim($this->txtTipoSoporte) . "'
-                    '" . trim($this->txtTipoVinculacion) . "'
                 )
              ";
             $aptBd->execute($sql);
@@ -425,8 +423,7 @@ class Ciudadano {
                     numConsecutivoPartida = " . doubleval($this->numConsecutivoPartida) . ",
                     txtParroquiaPartida = '" . trim($this->txtParroquiaPartida) . "',
                     seqCiudadPartida = " . intval($this->seqCiudadPartida) . ",
-                    txtTipoSoporte = '" . trim($this->txtTipoSoporte) . "',
-                    txtTipoVinculacion = '" . trim($this->txtTipoVinculacion) . "'
+                    txtTipoSoporte = '" . trim($this->txtTipoSoporte) . "'
                 where seqCiudadano = $seqCiudadano		
             ";
             $aptBd->execute($sql);

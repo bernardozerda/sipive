@@ -1455,22 +1455,22 @@
                                         </tr>
 
                                         <!-- HOGAR INDEPENDIENTE -->
-                                        {*<tr>*}
-                                            {*<td>Hogar Informal</td>*}
-                                            {*<td>*}
-                                                {*<select	onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                           {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                           {*name="bolInformal"*}
-                                                           {*id="bolInformal"*}
-                                                           {*style="width:260px;"*}
-                                                {*>*}
-                                                    {*<option value="0" {if $numInformal != 1} selected {/if} disabled>No</option>*}
-                                                    {*<option value="1" {if $numInformal == 1} selected {/if} disabled>Si</option>*}
-                                                {*</select>*}
-                                            {*</td>*}
-                                            {*<td></td>*}
-                                            {*<td></td>*}
-                                        {*</tr>*}
+                                        <tr>
+                                            <td>Hogar Informal</td>
+                                            <td>
+                                                <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           name="bolInformal"
+                                                           id="bolInformal"
+                                                           style="width:260px;"
+                                                >
+                                                    <option value="0" {if $numInformal != 1} selected {/if} disabled>No</option>
+                                                    <option value="1" {if $numInformal == 1} selected {/if} disabled>Si</option>
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
 
                                     </table>
                                 </p>

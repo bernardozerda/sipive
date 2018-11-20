@@ -10803,6 +10803,12 @@ function mostrarToolTip() {
     var objSelect = YAHOO.util.Dom.get("seqConvenio");
     var selectedIndex = objSelect.selectedIndex;
 
+    var objInformal = YAHOO.util.Dom.get("bolInformal");
+    var numInformal = -1;
+    if(objInformal != null) {
+        numInformal = objInformal.options[objInformal.selectedIndex].value;
+    }
+
     var fncSuccess = function (o) {
         try {
             var objRespuesta = jQuery.parseJSON(o.responseText);
@@ -10837,7 +10843,7 @@ function mostrarToolTip() {
             "POST",
             "./contenidos/casaMano/textoConvenio.php",
             callback,
-            "seqConvenio=" + objSelect.options[selectedIndex].value
+            "seqConvenio=" + objSelect.options[selectedIndex].value + "&numInformal=" + numInformal
             );
 
 }

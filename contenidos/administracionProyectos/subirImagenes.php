@@ -6,7 +6,7 @@ if (isset($_FILES["archivo"])) {
     $idProyecto = $_REQUEST['idProyecto'];
     $destino = '../../recursos/proyectos/proyecto-' . $idProyecto . '/imagenes/';
     $url = str_replace('index.php', '', $_SERVER['HTTP_REFERER']);
-    $tmax = 200000;
+    $tmax = 10000;
 
     if (!file_exists($destino)) {
         mkdir($destino, 0777, true);

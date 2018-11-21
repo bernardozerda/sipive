@@ -77,7 +77,7 @@ if (isset($_POST['numeroIdentificacion'])) {
 
 <?php if ($numIngresos > 3) {
     ?>
-    <div class="content"><?php echo 'Lo sentimos excedio la capacidad de intentos de exportació<n de cartas'; ?></div>
+    <div class="content"><?php echo 'Lo sentimos excedio la capacidad de intentos de exportación de cartas'; ?></div>
 
 <?php } else if (isset($msn1) && $msn1 != "" && $msn1 != NULL) { ?>
     <div class="content" id="content">

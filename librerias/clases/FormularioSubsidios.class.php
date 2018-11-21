@@ -112,6 +112,7 @@ class FormularioSubsidios {
     public $valSubsidioNacional;
     public $valTotal;
     public $valTotalRecursos;
+//    public $bolInformal;
 
     public function FormularioSubsidios() {
 
@@ -215,6 +216,7 @@ class FormularioSubsidios {
         $this->valSubsidioNacional = 0;
         $this->valTotal = 0;
         $this->valTotalRecursos = 0;
+//        $this->bolInformal = "";
     }
 
     // Fin Constructor

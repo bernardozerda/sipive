@@ -67,6 +67,7 @@ class Ciudadano {
     public $numConsecutivoPartida;
     public $txtParroquiaPartida;
     public $seqCiudadPartida;
+//    public $txtTipoVinculacion;
 
     /**
      * CONSTRUCTOR
@@ -129,6 +130,7 @@ class Ciudadano {
         $this->numConsecutivoPartida = 0;
         $this->txtParroquiaPartida = "";
         $this->seqCiudadPartida = 0;
+//        $this->txtTipoVinculacion = "";
         
     }
 
@@ -185,6 +187,7 @@ class Ciudadano {
                 txtParroquiaPartida,
                 seqCiudadPartida,
                 txtTipoSoporte
+                -- txtTipoVinculacion
             FROM T_CIU_CIUDADANO
             WHERE seqCiudadano = $seqCiudadano		
 		";
@@ -242,6 +245,7 @@ class Ciudadano {
             $this->txtParroquiaPartida = trim($objRes->fields['txtParroquiaPartida']);
             $this->seqCiudadPartida = intval($objRes->fields['seqCiudadPartida']);
             $this->txtTipoSoporte = trim($objRes->fields['txtTipoSoporte']);
+//            $this->txtTipoVinculacion = trim($objRes->fields['txtTipoVinculacion']);
 
         } else {
             $this->arrErrores[] = "Ciudadano [$seqCiudadano] no encontrado";
@@ -302,7 +306,7 @@ class Ciudadano {
                     numConsecutivoPartida,
                     txtParroquiaPartida,
                     seqCiudadPartida,
-                    txtTipoSoporte
+                    txtTipoSoporte                    
                 ) VALUES (
                     " . intval($this->bolBeneficiario) . ",
                     " . intval($this->bolCertificadoElectoral) . ",

@@ -920,35 +920,36 @@ function agregarMiembroHogar() {
     var objSeqCajaCompensacion = document.getElementById("cajaCompensacion");
 
     // si es plan de gobierno 3 se activarán las validaciones de soporte de documentos adicionales
-    var bolValidacionSoporteDocumentos = false;
-    if (objPlanGobierno.value == 3) {
-        bolValidacionSoporteDocumentos = true;
-    }
+    // var bolValidacionSoporteDocumentos = false;
+    // if (objPlanGobierno.value == 3) {
+    //     bolValidacionSoporteDocumentos = true;
+    // }
 
     // recoge los datos para soporte de documento y estado civil
-    var objExpedicion = document.getElementById("expedicion");
-    var objTipoSoporte = document.getElementById("tipoSoporte");
-    var objEntidadDocumento = document.getElementById("entidadDocumento");
-    var objIndicativoSerial = document.getElementById("indicativoSerial");
-    var objNotariaDocumento = document.getElementById("notariaDocumento");
-    var objCiudadDocumento = document.getElementById("ciudadDocumento");
-    var objConsecutivoPartida = document.getElementById("consecutivoPartida");
-    var objParroquiaPartida = document.getElementById("parroquiaPartida");
-    var objCiudadPartida = document.getElementById("ciudadPartida");
-    var objConsecutivoCasado = document.getElementById("consecutivoCasado");
-    var objNotariaCasado = document.getElementById("notariaCasado");
-    var objCiudadCasado = document.getElementById("ciudadCasado");
-    var objConsecutivoCSCDL = document.getElementById("consecutivoCSCDL");
-    var objEntidadCSCDL = document.getElementById("entidadCSCDL");
-    var objCiudadCSCDL = document.getElementById("ciudadCSCDL");
-    var objNotariaCSCDL = document.getElementById("notariaCSCDL");
-    var objCertificacionUnion = document.getElementById("certificacionUnion");
-    var objConsecutivoUnion = document.getElementById("consecutivoUnion");
-    var objEntidadUnion = document.getElementById("entidadUnion");
-    var objNotariaUnion = document.getElementById("notariaUnion");
-    var objCiudadUnion = document.getElementById("ciudadUnion");
-    var objNotariaSoltero = document.getElementById("notariaSoltero");
-    var objCiudadSoltero = document.getElementById("ciudadSoltero");
+    // var objExpedicion = document.getElementById("expedicion");
+    // var objTipoSoporte = document.getElementById("tipoSoporte");
+    // var objEntidadDocumento = document.getElementById("entidadDocumento");
+    // var objIndicativoSerial = document.getElementById("indicativoSerial");
+    // var objNotariaDocumento = document.getElementById("notariaDocumento");
+    // var objCiudadDocumento = document.getElementById("ciudadDocumento");
+    // var objConsecutivoPartida = document.getElementById("consecutivoPartida");
+    // var objParroquiaPartida = document.getElementById("parroquiaPartida");
+    // var objCiudadPartida = document.getElementById("ciudadPartida");
+    // var objConsecutivoCasado = document.getElementById("consecutivoCasado");
+    // var objNotariaCasado = document.getElementById("notariaCasado");
+    // var objCiudadCasado = document.getElementById("ciudadCasado");
+    // var objConsecutivoCSCDL = document.getElementById("consecutivoCSCDL");
+    // var objEntidadCSCDL = document.getElementById("entidadCSCDL");
+    // var objCiudadCSCDL = document.getElementById("ciudadCSCDL");
+    // var objNotariaCSCDL = document.getElementById("notariaCSCDL");
+    // var objCertificacionUnion = document.getElementById("certificacionUnion");
+    // var objConsecutivoUnion = document.getElementById("consecutivoUnion");
+    // var objEntidadUnion = document.getElementById("entidadUnion");
+    // var objNotariaUnion = document.getElementById("notariaUnion");
+    // var objCiudadUnion = document.getElementById("ciudadUnion");
+    // var objNotariaSoltero = document.getElementById("notariaSoltero");
+    // var objCiudadSoltero = document.getElementById("ciudadSoltero");
+    // var objTipoVinculacion = document.getElementById("tipoVinculacion");
 
     var numDocumento = objNumDocumento.value.replace(/[^0-9]/g, "");
     var valIngresos = objIngresos.value.replace(/[^0-9]/g, "");
@@ -987,83 +988,83 @@ function agregarMiembroHogar() {
         return false;
     }
 
-    if (bolValidacionSoporteDocumentos == true) {
-
-        // valida la fecha de expedicion de la cedula
-        if(objTpoDocumento.value == 1){
-            if (!esFechaValida(objExpedicion)) {
-                objExpedicion.focus()
-                return false;
-            }
-        }
-
-        // valida el tipo de soporte
-        if(objTipoSoporte.value == ""){
-            alert("Seleccione el tipo de soporte para el documento de identidad");
-            objTipoSoporte.focus()
-            return false;
-        }
-
-        // validaciones para el soporte del documento con registro civil
-        if (objTipoSoporte.value == "registroCivil") {
-
-            // entidad del soporte del tipo de documento
-            if (objEntidadDocumento.value == "") {
-                alert("Seleccione la entidad del soporte del tipo de documento");
-                objEntidadDocumento.focus();
-                return false;
-            }
-
-            // indicativo serial del soporte del tipo de documento
-            if (objIndicativoSerial.value == "") {
-                alert("Seleccione el indicativo serial del soporte del tipo de documento");
-                objIndicativoSerial.focus();
-                return false;
-            }
-
-            // Notaria documento del soporte del tipo de documento
-            if (objEntidadDocumento.value == "Notaria" && ( objNotariaDocumento.value == "" || objNotariaDocumento.value == 0) ) {
-                alert("Notaria del soporte del tipo de documento");
-                objNotariaDocumento.focus();
-                return false;
-            }
-
-            // Ciudad documento del soporte del tipo de documento
-            if (objCiudadDocumento.value == 0) {
-                alert("Digita la ciudad del soporte del tipo de documento");
-                objCiudadDocumento.focus();
-                return false;
-            }
-
-        }
-
-        // validaciones para el soporte del documento con registro civil
-        if (objTipoSoporte.value == "partidaBautismo") {
-
-            // consecutivo
-            if (objConsecutivoPartida.value == "") {
-                alert("Digita el consecutivo del soporte del tipo de documento");
-                objConsecutivoPartida.focus();
-                return false;
-            }
-
-            // Parroquia
-            if (objParroquiaPartida.value == "") {
-                alert("Digita la parroquia del soporte del tipo de documento");
-                objParroquiaPartida.focus();
-                return false;
-            }
-
-            // Ciudad
-            if (objCiudadPartida.value == 0) {
-                alert("Seleccione la ciudad del soporte del tipo de documento");
-                objCiudadPartida.focus();
-                return false;
-            }
-
-        }
-
-    }
+    // if (bolValidacionSoporteDocumentos == true) {
+    //
+    //     // valida la fecha de expedicion de la cedula
+    //     if(objTpoDocumento.value == 1){
+    //         if (!esFechaValida(objExpedicion)) {
+    //             objExpedicion.focus()
+    //             return false;
+    //         }
+    //     }
+    //
+    //     // valida el tipo de soporte
+    //     if(objTipoSoporte.value == ""){
+    //         alert("Seleccione el tipo de soporte para el documento de identidad");
+    //         objTipoSoporte.focus()
+    //         return false;
+    //     }
+    //
+    //     // validaciones para el soporte del documento con registro civil
+    //     if (objTipoSoporte.value == "registroCivil") {
+    //
+    //         // entidad del soporte del tipo de documento
+    //         if (objEntidadDocumento.value == "") {
+    //             alert("Seleccione la entidad del soporte del tipo de documento");
+    //             objEntidadDocumento.focus();
+    //             return false;
+    //         }
+    //
+    //         // indicativo serial del soporte del tipo de documento
+    //         if (objIndicativoSerial.value == "") {
+    //             alert("Seleccione el indicativo serial del soporte del tipo de documento");
+    //             objIndicativoSerial.focus();
+    //             return false;
+    //         }
+    //
+    //         // Notaria documento del soporte del tipo de documento
+    //         if (objEntidadDocumento.value == "Notaria" && ( objNotariaDocumento.value == "" || objNotariaDocumento.value == 0) ) {
+    //             alert("Notaria del soporte del tipo de documento");
+    //             objNotariaDocumento.focus();
+    //             return false;
+    //         }
+    //
+    //         // Ciudad documento del soporte del tipo de documento
+    //         if (objCiudadDocumento.value == 0) {
+    //             alert("Digita la ciudad del soporte del tipo de documento");
+    //             objCiudadDocumento.focus();
+    //             return false;
+    //         }
+    //
+    //     }
+    //
+    //     // validaciones para el soporte del documento con registro civil
+    //     if (objTipoSoporte.value == "partidaBautismo") {
+    //
+    //         // consecutivo
+    //         if (objConsecutivoPartida.value == "") {
+    //             alert("Digita el consecutivo del soporte del tipo de documento");
+    //             objConsecutivoPartida.focus();
+    //             return false;
+    //         }
+    //
+    //         // Parroquia
+    //         if (objParroquiaPartida.value == "") {
+    //             alert("Digita la parroquia del soporte del tipo de documento");
+    //             objParroquiaPartida.focus();
+    //             return false;
+    //         }
+    //
+    //         // Ciudad
+    //         if (objCiudadPartida.value == 0) {
+    //             alert("Seleccione la ciudad del soporte del tipo de documento");
+    //             objCiudadPartida.focus();
+    //             return false;
+    //         }
+    //
+    //     }
+    //
+    // }
 
     // Primer Apellido no puede estar vacio
     if (objApellido1.value == "") {
@@ -1099,6 +1100,24 @@ function agregarMiembroHogar() {
         return false;
     }
 
+    // tipo de vinculacion si es solo mayor de edad
+    // if (bolValidacionSoporteDocumentos == true) {
+    //
+    //     var objFechaActual = new Date();
+    //     var objFechaNacimiento = new Date(objFchNacimiento.value);
+    //     var numEdad = Math.round( ( objFechaActual - objFechaNacimiento ) / (1000 * 60 * 60 * 24 * 365) , 0 );
+    //
+    //     if(
+    //         (objTpoDocumento.selectedIndex == 1 || objTpoDocumento.selectedIndex == 2) ||
+    //         (objTpoDocumento.selectedIndex == 3 && numEdad >= 18)
+    //     ){
+    //         if(objTipoVinculacion.selectedIndex == 0){
+    //             alert("Debe seleccionar el tipo de vinculación");
+    //         }
+    //     }
+    //
+    // }
+
     // Debe tener parentesco
     if (objParentesco.selectedIndex == 0) {
         alert("Debe registrar el parentezco del ciudadano");
@@ -1114,109 +1133,109 @@ function agregarMiembroHogar() {
     }
 
     // validaciones para el soporte de documento del estado civil
-    if (bolValidacionSoporteDocumentos == true) {
-
-        if (objEstCivil.value == 6) {
-
-            if (objConsecutivoCasado.value == "") {
-                alert("Digite el consecutivo del soporte de estado civil");
-                objConsecutivoCasado.focus();
-                return false;
-            }
-
-            if (objNotariaCasado.value == "" || objNotariaCasado.value == 0) {
-                alert("Digite la notaria del soporte de estado civil");
-                objNotariaCasado.focus();
-                return false;
-            }
-
-            if (objCiudadCasado.value == 0) {
-                alert("Seleccione la ciudad del soporte de estado civil");
-                objCiudadCasado.focus();
-                return false;
-            }
-
-        }
-
-        if (objEstCivil.value == 8) {
-
-            if (objConsecutivoCSCDL.value == "") {
-                alert("Digite el consecutivo del soporte de estado civil");
-                objConsecutivoCSCDL.focus();
-                return false;
-            }
-
-            if (objEntidadCSCDL.value == "") {
-                alert("Digite la entidad del soporte de estado civil");
-                objEntidadCSCDL.focus();
-                return false;
-            }
-
-            if (objCiudadCSCDL.value == 0) {
-                alert("Seleccione la ciudad del soporte de estado civil");
-                objCiudadCSCDL.focus();
-                return false;
-            }
-
-            if (objEntidadCSCDL.value == "Notaria" && (objNotariaCSCDL.value == "" || objNotariaCSCDL.value == 0) ) {
-                alert("Digite la notaria del soporte de estado civil");
-                objNotariaCSCDL.focus();
-                return false;
-            }
-
-        }
-
-        if (objEstCivil.value == 2) {
-
-            if (objNotariaSoltero.value == "" || objNotariaSoltero.value == 0) {
-                alert("Digite la notaria del soporte de estado civil");
-                objNotariaSoltero.focus();
-                return false;
-            }
-
-            if (objCiudadSoltero.value == 0) {
-                alert("Seleccione la ciudad del soporte de estado civil");
-                objCiudadSoltero.focus();
-                return false;
-            }
-
-        }
-
-        if (objEstCivil.value == 7) {
-
-            if (objCertificacionUnion.value == 0) {
-                alert("Seleccione el tipo de certificación del soporte de estado civil");
-                objCertificacionUnion.focus();
-                return false;
-            }
-
-            if (objConsecutivoUnion.value == "") {
-                alert("Digite el consecutivo del soporte de estado civil");
-                objConsecutivoUnion.focus();
-                return false;
-            }
-
-            if (objEntidadUnion.value == 0) {
-                alert("Seleccione la entidad del soporte de estado civil");
-                objEntidadUnion.focus();
-                return false;
-            }
-
-            if (objEntidadUnion.value == "Notaria" && (objNotariaUnion.value == "" || objNotariaUnion.value == 0) ) {
-                alert("Digite la notaria del soporte de estado civil");
-                objNotariaUnion.focus();
-                return false;
-            }
-
-            if (objCiudadUnion.value == 0) {
-                alert("Seleccione la ciudad del soporte de estado civil");
-                objCiudadUnion.focus();
-                return false;
-            }
-
-        }
-
-    }
+    // if (bolValidacionSoporteDocumentos == true) {
+    //
+    //     if (objEstCivil.value == 6) {
+    //
+    //         if (objConsecutivoCasado.value == "") {
+    //             alert("Digite el consecutivo del soporte de estado civil");
+    //             objConsecutivoCasado.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objNotariaCasado.value == "" || objNotariaCasado.value == 0) {
+    //             alert("Digite la notaria del soporte de estado civil");
+    //             objNotariaCasado.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objCiudadCasado.value == 0) {
+    //             alert("Seleccione la ciudad del soporte de estado civil");
+    //             objCiudadCasado.focus();
+    //             return false;
+    //         }
+    //
+    //     }
+    //
+    //     if (objEstCivil.value == 8) {
+    //
+    //         if (objConsecutivoCSCDL.value == "") {
+    //             alert("Digite el consecutivo del soporte de estado civil");
+    //             objConsecutivoCSCDL.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objEntidadCSCDL.value == "") {
+    //             alert("Digite la entidad del soporte de estado civil");
+    //             objEntidadCSCDL.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objCiudadCSCDL.value == 0) {
+    //             alert("Seleccione la ciudad del soporte de estado civil");
+    //             objCiudadCSCDL.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objEntidadCSCDL.value == "Notaria" && (objNotariaCSCDL.value == "" || objNotariaCSCDL.value == 0) ) {
+    //             alert("Digite la notaria del soporte de estado civil");
+    //             objNotariaCSCDL.focus();
+    //             return false;
+    //         }
+    //
+    //     }
+    //
+    //     if (objEstCivil.value == 2) {
+    //
+    //         if (objNotariaSoltero.value == "" || objNotariaSoltero.value == 0) {
+    //             alert("Digite la notaria del soporte de estado civil");
+    //             objNotariaSoltero.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objCiudadSoltero.value == 0) {
+    //             alert("Seleccione la ciudad del soporte de estado civil");
+    //             objCiudadSoltero.focus();
+    //             return false;
+    //         }
+    //
+    //     }
+    //
+    //     if (objEstCivil.value == 7) {
+    //
+    //         if (objCertificacionUnion.value == 0) {
+    //             alert("Seleccione el tipo de certificación del soporte de estado civil");
+    //             objCertificacionUnion.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objConsecutivoUnion.value == "") {
+    //             alert("Digite el consecutivo del soporte de estado civil");
+    //             objConsecutivoUnion.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objEntidadUnion.value == 0) {
+    //             alert("Seleccione la entidad del soporte de estado civil");
+    //             objEntidadUnion.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objEntidadUnion.value == "Notaria" && (objNotariaUnion.value == "" || objNotariaUnion.value == 0) ) {
+    //             alert("Digite la notaria del soporte de estado civil");
+    //             objNotariaUnion.focus();
+    //             return false;
+    //         }
+    //
+    //         if (objCiudadUnion.value == 0) {
+    //             alert("Seleccione la ciudad del soporte de estado civil");
+    //             objCiudadUnion.focus();
+    //             return false;
+    //         }
+    //
+    //     }
+    //
+    // }
 
     // Si el nivel educativo es ninguno no valida los anios aprobados
     if ($("#nivelEducativo").val() == 0) {
@@ -1311,44 +1330,44 @@ function agregarMiembroHogar() {
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqTipoDocumento' name='hogar[" + numDocumento + "][seqTipoDocumento]' value='" + objTpoDocumento.options[objTpoDocumento.selectedIndex].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numDocumento' name='hogar[" + numDocumento + "][numDocumento]' value='" + numDocumento + "'>";
 
-    if(bolValidacionSoporteDocumentos == true) {
-
-        if(objTipoSoporte.selectedIndex == -1){
-            objTipoSoporte.selectedIndex = 0;
-        }
-
-        if(objEntidadDocumento.selectedIndex == -1){
-            objEntidadDocumento.selectedIndex = 0;
-        }
-
-        if(objCiudadDocumento.selectedIndex == -1){
-            objCiudadDocumento.selectedIndex = 0;
-        }
-
-        if(objCiudadPartida.selectedIndex == -1){
-            objCiudadPartida.selectedIndex = 0;
-        }
-
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchExpedicion' name='hogar[" + numDocumento + "][fchExpedicion]' value='" + objExpedicion.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtTipoSoporte' name='hogar[" + numDocumento + "][txtTipoSoporte]' value='" + objTipoSoporte.options[objTipoSoporte.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadDocumento' name='hogar[" + numDocumento + "][txtEntidadDocumento]' value='" + objEntidadDocumento.options[objEntidadDocumento.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numIndicativoSerial' name='hogar[" + numDocumento + "][numIndicativoSerial]' value='" + objIndicativoSerial.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaDocumento' name='hogar[" + numDocumento + "][numNotariaDocumento]' value='" + objNotariaDocumento.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadDocumento' name='hogar[" + numDocumento + "][seqCiudadDocumento]' value='" + objCiudadDocumento.options[objCiudadDocumento.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoPartida' name='hogar[" + numDocumento + "][numConsecutivoPartida]' value='" + objConsecutivoPartida.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtParroquiaPartida' name='hogar[" + numDocumento + "][txtParroquiaPartida]' value='" + objParroquiaPartida.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadPartida' name='hogar[" + numDocumento + "][seqCiudadPartida]' value='" + objCiudadPartida.options[objCiudadPartida.selectedIndex].value + "'>";
-    }else{
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchExpedicion' name='hogar[" + numDocumento + "][fchExpedicion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtTipoSoporte' name='hogar[" + numDocumento + "][txtTipoSoporte]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadDocumento' name='hogar[" + numDocumento + "][txtEntidadDocumento]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numIndicativoSerial' name='hogar[" + numDocumento + "][numIndicativoSerial]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaDocumento' name='hogar[" + numDocumento + "][numNotariaDocumento]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadDocumento' name='hogar[" + numDocumento + "][seqCiudadDocumento]' value='0'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoPartida' name='hogar[" + numDocumento + "][numConsecutivoPartida]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtParroquiaPartida' name='hogar[" + numDocumento + "][txtParroquiaPartida]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadPartida' name='hogar[" + numDocumento + "][seqCiudadPartida]' value='0'>";
-    }
+    // if(bolValidacionSoporteDocumentos == true) {
+    //
+    //     if(objTipoSoporte.selectedIndex == -1){
+    //         objTipoSoporte.selectedIndex = 0;
+    //     }
+    //
+    //     if(objEntidadDocumento.selectedIndex == -1){
+    //         objEntidadDocumento.selectedIndex = 0;
+    //     }
+    //
+    //     if(objCiudadDocumento.selectedIndex == -1){
+    //         objCiudadDocumento.selectedIndex = 0;
+    //     }
+    //
+    //     if(objCiudadPartida.selectedIndex == -1){
+    //         objCiudadPartida.selectedIndex = 0;
+    //     }
+    //
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchExpedicion' name='hogar[" + numDocumento + "][fchExpedicion]' value='" + objExpedicion.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtTipoSoporte' name='hogar[" + numDocumento + "][txtTipoSoporte]' value='" + objTipoSoporte.options[objTipoSoporte.selectedIndex].value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadDocumento' name='hogar[" + numDocumento + "][txtEntidadDocumento]' value='" + objEntidadDocumento.options[objEntidadDocumento.selectedIndex].value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numIndicativoSerial' name='hogar[" + numDocumento + "][numIndicativoSerial]' value='" + objIndicativoSerial.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaDocumento' name='hogar[" + numDocumento + "][numNotariaDocumento]' value='" + objNotariaDocumento.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadDocumento' name='hogar[" + numDocumento + "][seqCiudadDocumento]' value='" + objCiudadDocumento.options[objCiudadDocumento.selectedIndex].value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoPartida' name='hogar[" + numDocumento + "][numConsecutivoPartida]' value='" + objConsecutivoPartida.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtParroquiaPartida' name='hogar[" + numDocumento + "][txtParroquiaPartida]' value='" + objParroquiaPartida.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadPartida' name='hogar[" + numDocumento + "][seqCiudadPartida]' value='" + objCiudadPartida.options[objCiudadPartida.selectedIndex].value + "'>";
+    // }else{
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchExpedicion' name='hogar[" + numDocumento + "][fchExpedicion]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtTipoSoporte' name='hogar[" + numDocumento + "][txtTipoSoporte]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadDocumento' name='hogar[" + numDocumento + "][txtEntidadDocumento]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numIndicativoSerial' name='hogar[" + numDocumento + "][numIndicativoSerial]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaDocumento' name='hogar[" + numDocumento + "][numNotariaDocumento]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadDocumento' name='hogar[" + numDocumento + "][seqCiudadDocumento]' value='0'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoPartida' name='hogar[" + numDocumento + "][numConsecutivoPartida]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtParroquiaPartida' name='hogar[" + numDocumento + "][txtParroquiaPartida]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadPartida' name='hogar[" + numDocumento + "][seqCiudadPartida]' value='0'>";
+    // }
 
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqParentesco' name='hogar[" + numDocumento + "][seqParentesco]' value='" + objParentesco.options[objParentesco.selectedIndex].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-fchNacimiento' name='hogar[" + numDocumento + "][fchNacimiento]' value='" + objFchNacimiento.value + "'>";
@@ -1358,66 +1377,68 @@ function agregarMiembroHogar() {
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqEtnia' name='hogar[" + numDocumento + "][seqEtnia]' value='" + objCondEtnica.options[objCondEtnica.selectedIndex].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqEstadoCivil' name='hogar[" + numDocumento + "][seqEstadoCivil]' value='" + objEstCivil.options[objEstCivil.selectedIndex].value + "'>";
 
-    if(bolValidacionSoporteDocumentos == true){
+    // if(bolValidacionSoporteDocumentos == true){
+    //
+    //     if(objCiudadCasado.selectedIndex == -1){
+    //         objCiudadCasado.selectedIndex = 0;
+    //     }
+    //
+    //     if(objEntidadCSCDL.selectedIndex == -1){
+    //         objEntidadCSCDL.selectedIndex = 0;
+    //     }
+    //
+    //     if(objCiudadCSCDL.selectedIndex == -1){
+    //         objCiudadCSCDL.selectedIndex = 0;
+    //     }
+    //
+    //     if(objCiudadSoltero.selectedIndex == -1){
+    //         objCiudadSoltero.selectedIndex = 0;
+    //     }
+    //
+    //     if(objCertificacionUnion.selectedIndex == -1){
+    //         objCertificacionUnion.selectedIndex = 0;
+    //     }
+    //
+    //     if(objEntidadUnion.selectedIndex == -1){
+    //         objEntidadUnion.selectedIndex = 0;
+    //     }
+    //
+    //     if(objCiudadUnion.selectedIndex == -1){
+    //         objCiudadUnion.selectedIndex = 0;
+    //     }
+    //
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCasado' name='hogar[" + numDocumento + "][numConsecutivoCasado]' value='" + objConsecutivoCasado.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCasado' name='hogar[" + numDocumento + "][numNotariaCasado]' value='" + objNotariaCasado.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCasado' name='hogar[" + numDocumento + "][seqCiudadCasado]' value='" + objCiudadCasado.options[objCiudadCasado.selectedIndex].value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCSCDL' name='hogar[" + numDocumento + "][numConsecutivoCSCDL]' value='" + objConsecutivoCSCDL.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadCSCDL' name='hogar[" + numDocumento + "][txtEntidadCSCDL]' value='" + objEntidadCSCDL.options[objEntidadCSCDL.selectedIndex].value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCSCDL' name='hogar[" + numDocumento + "][seqCiudadCSCDL]' value='" + objCiudadCSCDL.options[objCiudadCSCDL.selectedIndex].value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCSCDL' name='hogar[" + numDocumento + "][numNotariaCSCDL]' value='" + objNotariaCSCDL.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaSoltero' name='hogar[" + numDocumento + "][numNotariaSoltero]' value='" + objNotariaSoltero.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadSoltero' name='hogar[" + numDocumento + "][seqCiudadSoltero]' value='" + objCiudadSoltero.options[objCiudadSoltero.selectedIndex].value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtCertificacionUnion' name='hogar[" + numDocumento + "][txtCertificacionUnion]' value='" + objCertificacionUnion.options[objCertificacionUnion.selectedIndex].value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoUnion' name='hogar[" + numDocumento + "][numConsecutivoUnion]' value='" + objConsecutivoUnion.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadUnion' name='hogar[" + numDocumento + "][txtEntidadUnion]' value='" + objEntidadUnion.options[objEntidadUnion.selectedIndex].value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaUnion' name='hogar[" + numDocumento + "][numNotariaUnion]' value='" + objNotariaUnion.value + "'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadUnion' name='hogar[" + numDocumento + "][seqCiudadUnion]' value='" + objCiudadUnion.options[objCiudadUnion.selectedIndex].value + "'>";
+    // }else{
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCasado' name='hogar[" + numDocumento + "][numConsecutivoCasado]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCasado' name='hogar[" + numDocumento + "][numNotariaCasado]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCasado' name='hogar[" + numDocumento + "][seqCiudadCasado]' value='0'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCSCDL' name='hogar[" + numDocumento + "][numConsecutivoCSCDL]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadCSCDL' name='hogar[" + numDocumento + "][txtEntidadCSCDL]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCSCDL' name='hogar[" + numDocumento + "][seqCiudadCSCDL]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCSCDL' name='hogar[" + numDocumento + "][numNotariaCSCDL]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaSoltero' name='hogar[" + numDocumento + "][numNotariaSoltero]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadSoltero' name='hogar[" + numDocumento + "][seqCiudadSoltero]' value='0'>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtCertificacionUnion' name='hogar[" + numDocumento + "][txtCertificacionUnion]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoUnion' name='hogar[" + numDocumento + "][numConsecutivoUnion]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadUnion' name='hogar[" + numDocumento + "][txtEntidadUnion]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaUnion' name='hogar[" + numDocumento + "][numNotariaUnion]' value=''>";
+    //     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadUnion' name='hogar[" + numDocumento + "][seqCiudadUnion]' value='0'>";
+    // }
 
-        if(objCiudadCasado.selectedIndex == -1){
-            objCiudadCasado.selectedIndex = 0;
-        }
-
-        if(objEntidadCSCDL.selectedIndex == -1){
-            objEntidadCSCDL.selectedIndex = 0;
-        }
-
-        if(objCiudadCSCDL.selectedIndex == -1){
-            objCiudadCSCDL.selectedIndex = 0;
-        }
-
-        if(objCiudadSoltero.selectedIndex == -1){
-            objCiudadSoltero.selectedIndex = 0;
-        }
-
-        if(objCertificacionUnion.selectedIndex == -1){
-            objCertificacionUnion.selectedIndex = 0;
-        }
-
-        if(objEntidadUnion.selectedIndex == -1){
-            objEntidadUnion.selectedIndex = 0;
-        }
-
-        if(objCiudadUnion.selectedIndex == -1){
-            objCiudadUnion.selectedIndex = 0;
-        }
-
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCasado' name='hogar[" + numDocumento + "][numConsecutivoCasado]' value='" + objConsecutivoCasado.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCasado' name='hogar[" + numDocumento + "][numNotariaCasado]' value='" + objNotariaCasado.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCasado' name='hogar[" + numDocumento + "][seqCiudadCasado]' value='" + objCiudadCasado.options[objCiudadCasado.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCSCDL' name='hogar[" + numDocumento + "][numConsecutivoCSCDL]' value='" + objConsecutivoCSCDL.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadCSCDL' name='hogar[" + numDocumento + "][txtEntidadCSCDL]' value='" + objEntidadCSCDL.options[objEntidadCSCDL.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCSCDL' name='hogar[" + numDocumento + "][seqCiudadCSCDL]' value='" + objCiudadCSCDL.options[objCiudadCSCDL.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCSCDL' name='hogar[" + numDocumento + "][numNotariaCSCDL]' value='" + objNotariaCSCDL.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaSoltero' name='hogar[" + numDocumento + "][numNotariaSoltero]' value='" + objNotariaSoltero.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadSoltero' name='hogar[" + numDocumento + "][seqCiudadSoltero]' value='" + objCiudadSoltero.options[objCiudadSoltero.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtCertificacionUnion' name='hogar[" + numDocumento + "][txtCertificacionUnion]' value='" + objCertificacionUnion.options[objCertificacionUnion.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoUnion' name='hogar[" + numDocumento + "][numConsecutivoUnion]' value='" + objConsecutivoUnion.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadUnion' name='hogar[" + numDocumento + "][txtEntidadUnion]' value='" + objEntidadUnion.options[objEntidadUnion.selectedIndex].value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaUnion' name='hogar[" + numDocumento + "][numNotariaUnion]' value='" + objNotariaUnion.value + "'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadUnion' name='hogar[" + numDocumento + "][seqCiudadUnion]' value='" + objCiudadUnion.options[objCiudadUnion.selectedIndex].value + "'>";
-    }else{
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCasado' name='hogar[" + numDocumento + "][numConsecutivoCasado]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCasado' name='hogar[" + numDocumento + "][numNotariaCasado]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCasado' name='hogar[" + numDocumento + "][seqCiudadCasado]' value='0'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoCSCDL' name='hogar[" + numDocumento + "][numConsecutivoCSCDL]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadCSCDL' name='hogar[" + numDocumento + "][txtEntidadCSCDL]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadCSCDL' name='hogar[" + numDocumento + "][seqCiudadCSCDL]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaCSCDL' name='hogar[" + numDocumento + "][numNotariaCSCDL]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaSoltero' name='hogar[" + numDocumento + "][numNotariaSoltero]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadSoltero' name='hogar[" + numDocumento + "][seqCiudadSoltero]' value='0'>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtCertificacionUnion' name='hogar[" + numDocumento + "][txtCertificacionUnion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numConsecutivoUnion' name='hogar[" + numDocumento + "][numConsecutivoUnion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtEntidadUnion' name='hogar[" + numDocumento + "][txtEntidadUnion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-numNotariaUnion' name='hogar[" + numDocumento + "][numNotariaUnion]' value=''>";
-        txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqCiudadUnion' name='hogar[" + numDocumento + "][seqCiudadUnion]' value='0'>";
-    }
+    // txtInsertar += "<input type='hidden' id='" + numDocumento + "-txtTipoVinculacion' name='hogar[" + numDocumento + "][txtTipoVinculacion]' value='" + objTipoVinculacion.options[ objTipoVinculacion.selectedIndex ].value + "'>";
 
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqOcupacion' name='hogar[" + numDocumento + "][seqOcupacion]' value='" + objOcupacion.options[ objOcupacion.selectedIndex ].value + "'>";
     txtInsertar += "<input type='hidden' id='" + numDocumento + "-seqSexo' name='hogar[" + numDocumento + "][seqSexo]' value='" + objSexo.options[ objSexo.selectedIndex ].value + "'>";
@@ -1465,9 +1486,16 @@ function agregarMiembroHogar() {
     txtInsertar += "<td><b>Nivel Educativo:</b> " + objNvlEducativo.options[ objNvlEducativo.selectedIndex ].text + "</td>";
     txtInsertar += "<td><b>A&ntilde;os Aprobados:</b> " + objAnosAprobados.options[ objAnosAprobados.selectedIndex ].value + "</td>";
     txtInsertar += "</tr> ";
+
+    // txtInsertar += "<tr> ";
+    // txtInsertar += "<td colspan='3'><b>Tipo de Vinculaci&oacute;n:</b> " + objTipoVinculacion.options[ objTipoVinculacion.selectedIndex ].value + "</td> ";
+    // txtInsertar += "</tr> ";
+
     txtInsertar += "<tr> ";
     txtInsertar += "<td colspan='3'><b>Ocupaci&oacute;n:</b> " + txtOcupacion + "</td> ";
     txtInsertar += "</tr> ";
+
+
     txtInsertar += "</table> ";
     txtInsertar += "</td> ";
     txtInsertar += "</tr> ";
@@ -1502,30 +1530,37 @@ function agregarMiembroHogar() {
     objApellido2.value = "";
     objTpoDocumento.selectedIndex = 0;
     objNumDocumento.value = "";
-    objExpedicion.value = "";
-    objEntidadDocumento.selectedIndex = 0;
-    objIndicativoSerial.value = "";
-    objNotariaDocumento.value = "";
+
+    // if(objExpedicion == null){
+    //     objExpedicion = new Object();
+    // }
+    // objExpedicion.value = "";
+    // objEntidadDocumento.selectedIndex = 0;
+    // objIndicativoSerial.value = "";
+    // objNotariaDocumento.value = "";
+
     objParentesco.selectedIndex = 0;
     objFchNacimiento.value = "";
     objCondEspecial.selectedIndex = 0;
     objCondEtnica.selectedIndex = 0;
     objEstCivil.selectedIndex = 0;
-    objConsecutivoCasado.value = "";
-    objCiudadDocumento.selectedIndex = 0;
-    objNotariaCasado.value = "";
-    objCiudadCasado.selectedIndex = 0;
-    objConsecutivoCSCDL.value = "";
-    objEntidadCSCDL.selectedIndex = 0;
-    objCiudadCSCDL.selectedIndex = 0;
-    objNotariaCSCDL.value = "";
-    objCertificacionUnion.value = "";
-    objConsecutivoUnion.value = "";
-    objEntidadUnion.selectedIndex = 0;
-    objNotariaUnion.value = "";
-    objCiudadUnion.selectedIndex = 0;
-    objNotariaSoltero.value = "";
-    objCiudadSoltero.selectedIndex = 0;
+
+    // objConsecutivoCasado.value = "";
+    // objCiudadDocumento.selectedIndex = 0;
+    // objNotariaCasado.value = "";
+    // objCiudadCasado.selectedIndex = 0;
+    // objConsecutivoCSCDL.value = "";
+    // objEntidadCSCDL.selectedIndex = 0;
+    // objCiudadCSCDL.selectedIndex = 0;
+    // objNotariaCSCDL.value = "";
+    // objCertificacionUnion.value = "";
+    // objConsecutivoUnion.value = "";
+    // objEntidadUnion.selectedIndex = 0;
+    // objNotariaUnion.value = "";
+    // objCiudadUnion.selectedIndex = 0;
+    // objNotariaSoltero.value = "";
+    // objCiudadSoltero.selectedIndex = 0;
+
     objOcupacion.selectedIndex = 0;
     objSexo.selectedIndex = 0;
     objLgtb.selectedIndex = 0;
@@ -1552,6 +1587,22 @@ function agregarMiembroHogar() {
         }
     }
     $("#bolDesplazado").val(numDesplazado);
+
+
+    // Actualizar el valor de bolInformal
+    // Si hay un solo ciudadano con
+    // vinculacion informal, el select se marca como 1 = SI
+    // 0 = NO de lo contrario
+    // var arrTablas = $("#datosHogar").find("table");
+    // var numInformal = 0;
+    // for (i = 0; i < arrTablas.length; i++) {
+    //     if (parseInt(arrTablas[i].id)) {
+    //         if ($("#" + arrTablas[i].id + "-txtTipoVinculacion").val() == 'Informal') {
+    //             numInformal = 1;
+    //         }
+    //     }
+    // }
+    // $("#bolInformal").val(numInformal);
 
     // numDesplazado (Vulnerable) = 0
     // numDesplazado (Desplazado) = 1
@@ -2216,6 +2267,12 @@ function modificarMiembroHogar(numDocumento) {
 
                 }
 
+            }
+
+            if (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtTipoVinculacion") {
+                for (j = 0; j < document.getElementById("tipoVinculacion").length; j++) {
+                    document.getElementById("tipoVinculacion").selectedIndex = (document.getElementById("tipoVinculacion").options[ j ].value == document.getElementById(numDocumentoSinPuntos + "-txtTipoVinculacion").value) ? j : document.getElementById("tipoVinculacion").selectedIndex;
+                }
             }
 
             if (arrVariables[ i ].id == numDocumentoSinPuntos + "-seqOcupacion") {
@@ -10746,6 +10803,12 @@ function mostrarToolTip() {
     var objSelect = YAHOO.util.Dom.get("seqConvenio");
     var selectedIndex = objSelect.selectedIndex;
 
+    var objInformal = YAHOO.util.Dom.get("bolInformal");
+    var numInformal = -1;
+    if(objInformal != null) {
+        numInformal = objInformal.options[objInformal.selectedIndex].value;
+    }
+
     var fncSuccess = function (o) {
         try {
             var objRespuesta = jQuery.parseJSON(o.responseText);
@@ -10780,7 +10843,7 @@ function mostrarToolTip() {
             "POST",
             "./contenidos/casaMano/textoConvenio.php",
             callback,
-            "seqConvenio=" + objSelect.options[selectedIndex].value
+            "seqConvenio=" + objSelect.options[selectedIndex].value + "&numInformal=" + numInformal
             );
 
 }

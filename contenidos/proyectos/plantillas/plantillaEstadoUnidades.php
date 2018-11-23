@@ -63,16 +63,15 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     $titulos = Array();
     $titulos[0] = "ID Unidad";
     $titulos[1] = "Proyecto";
-    $titulos[2] = "Nombre de la unidad";
-    $titulos[3] = "Nombre de la unidad Real";
-    $titulos[4] = "Nombre de la unidad Auxiliar";
-    $titulos[5] = "Conjunto";
+    $titulos[2] = "Conjunto";
+    $titulos[3] = "Nombre de la unidad";
+    $titulos[4] = "Nombre de la unidad Real";
+    $titulos[5] = "Nombre de la unidad Auxiliar";
     $titulos[6] = "Estado Actual";
     $titulos[7] = "Nuevo Estado";
     $titulos[8] = "Activo";
-//    $titulos[4] = "Plan de Gobierno";
-//    $titulos[5] = "Modalidad";
-//    $titulos[6] = "Esquema";
+
+    // plantila
 
 
     $letra = "";
@@ -80,12 +79,12 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
         $letra = chr(65 + ($key));
         $sheet->setCellValue($letra . '1', $value);
         $sheet->getColumnDimension($letra . '1')
-                ->setAutoSize(true);
+            ->setAutoSize(true);
     }
 
 
 
-//Damos formato o estilo a nuestras celdas 
+//Damos formato o estilo a nuestras celdas
     $sheet->getStyle('A1:' . $letra . '1')->applyFromArray($h1);
     $sheet->getStyle('A1:' . $letra . '1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
     $sheet->getStyle('A1:' . $letra . '1')->getFill()->getStartColor()->setARGB('243F62');
@@ -100,16 +99,16 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
         $int++;
     }
     $excel->addNamedRange(
-            new PHPExcel_NamedRange(
+        new PHPExcel_NamedRange(
             'seleccion', $excel->getSheet(1), 'H2:H' . $int
-            )
+        )
     );
     $excel->getSheet(1)->SetCellValue("I2", "SI");
     $excel->getSheet(1)->SetCellValue("I3", "NO");
     $excel->addNamedRange(
-            new PHPExcel_NamedRange(
+        new PHPExcel_NamedRange(
             'seleccion1', $excel->getSheet(1), 'I2:I3'
-            )
+        )
     );
 
     //for ($i = 0; $i < $unidadesReg; $i++) {
@@ -117,15 +116,15 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     foreach ($arrayDatos as $key => $value) {
         $estadoActual = ($value['estado'] == "") ? 'Ninguno' : $value['estado'];
         $estadoNuevo = ($value['estado'] == "") ? 'Seleccione' : $value['estado'];
-        $tipoVivienda = ($value['txtNombreTipoVivienda'] == "") ? 'Ninguno' : strtoupper($value['txtNombreTipoVivienda']);
+        $tipoVivienda = ($value['txtNombreConjunto'] == "") ? 'Ninguno' : strtoupper($value['txtNombreConjunto']);
         $validacion = ($value['bolActivo'] == 1) ? 'SI' : 'NO';
         //echo "<br>". $cols." ->".$value['txtNombreProyecto'];
         $sheet->setCellValue('A' . $cols, $value['seqUnidadProyecto']);
         $sheet->setCellValue('B' . $cols, $value['txtNombreProyecto']);
-        $sheet->setCellValue('C' . $cols, $value['txtNombreUnidad']);
-        $sheet->setCellValue('D' . $cols, $value['txtNombreUnidadReal']);
-        $sheet->setCellValue('E' . $cols, $value['txtNombreUnidadAux']);
-        $sheet->setCellValue('F' . $cols, $tipoVivienda);
+        $sheet->setCellValue('C' . $cols, $tipoVivienda);
+        $sheet->setCellValue('D' . $cols, $value['txtNombreUnidad']);
+        $sheet->setCellValue('E' . $cols, $value['txtNombreUnidadReal']);
+        $sheet->setCellValue('F' . $cols, $value['txtNombreUnidadAux']);
         $sheet->setCellValue('G' . $cols, $estadoActual);
         $sheet->setCellValue('H' . $cols, $estadoNuevo);
         $objValidation = $excel->getActiveSheet()->getCell('H' . $cols)->getDataValidation();
@@ -153,7 +152,6 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
         $objValidation->setPromptTitle('Seleccion');
         $objValidation->setPrompt('Seleccione un valor de la lista');
         $objValidation->setFormula1("=seleccion1");
-
         $cols++;
     }
 
@@ -166,10 +164,10 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     // $excel->getActiveSheet()->getProtection()->setPassword('SDHT');
 
     $excel->getActiveSheet()->getStyle('H2:I' . $cols)->getProtection()
-            ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-    
-     $excel->getActiveSheet()->getStyle('C2:E' . $cols)->getProtection()
-            ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+
+    $excel->getActiveSheet()->getStyle('D2:F' . $cols)->getProtection()
+        ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     header("Content-Disposition: attachment;filename='PlantillaEstadoUnidades.xlsx");

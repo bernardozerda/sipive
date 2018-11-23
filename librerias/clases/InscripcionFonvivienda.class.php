@@ -1448,8 +1448,17 @@ class InscripcionFonvivienda
 
             if($arrPost['numDocumento'] == 0){
                 $numHogar = $arrPost['numHogar'];
-                $arrCiudadano = array_shift($this->arrHogares[$numHogar]['ciudadanos']);
-                $arrPost['numDocumento'] = $arrCiudadano['numDocumento'];
+                if($this->seqTipo == 1) {
+                    $arrCiudadano = array_shift($this->arrHogares[$numHogar]['ciudadanos']);
+                    $arrPost['numDocumento'] = $arrCiudadano['numDocumento'];
+                }else{
+                    foreach($this->arrHogares[$numHogar]['ciudadanos'] as $arrMiembroHogar){
+                        if($arrMiembroHogar['seqParerentesco'] == 1){
+                            $arrCiudadano = $arrMiembroHogar;
+                            $arrPost['numDocumento'] = $arrCiudadano['numDocumento'];
+                        }
+                    }
+                }
             }
 
             $sql = "

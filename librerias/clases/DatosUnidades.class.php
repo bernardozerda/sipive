@@ -210,16 +210,28 @@ class DatosUnidades {
 
     function obtenerDatosUnidades($seqProyecto) {
         global $aptBd;
-        $sql = "SELECT txtNombreProyecto, txtNombreUnidad, txtNombreUnidadReal, txtNombreUnidadAux, txtNombreTipoVivienda, seqUnidadProyecto, concat(seqEstadoUnidad ,'-', txtEstadoUnidad) as estado, und.bolActivo
-                FROM t_pry_proyecto pry 
-                LEFT JOIN t_pry_unidad_proyecto und USING(seqProyecto) 
-                LEFT JOIN t_pry_tipo_vivienda tip using(seqProyecto)
-                LEFT JOIN t_pry_estado_unidad EST USING(seqEstadoUnidad)";
+        $sql = "select 
+                if(pry.seqProyecto is null,con.seqProyecto,pry.seqProyecto) as seqProyecto,
+                if(pry.seqProyecto is null,con.txtNombreProyecto,pry.txtNombreProyecto) as txtNombreProyecto,
+                if(pry.seqProyecto is null,null,con.seqProyecto) as seqConjunto,
+                if(pry.seqProyecto is null,null,con.txtNombreProyecto) as txtNombreConjunto,
+                upr.seqUnidadProyecto, 
+                upr.seqProyecto, 
+                upr.txtNombreUnidad,
+                txtNombreUnidadReal, 
+                txtNombreUnidadAux,
+                concat(seqEstadoUnidad ,'-', EST.txtEstadoUnidad) as estado, 
+                upr.bolActivo
+                from t_pry_unidad_proyecto upr
+                inner join t_pry_proyecto con on upr.seqProyecto = con.seqProyecto
+                left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
+                LEFT JOIN t_pry_estado_unidad EST USING(seqEstadoUnidad)
+          ";
         if ($seqProyecto > 0) {
-            $sql .= " where  und.seqProyecto = " . $seqProyecto;
+            $sql .= " where  upr.seqProyecto = " . $seqProyecto;
         }
         $sql .= " GROUP BY seqUnidadProyecto";
-        // echo "<p>" . $sql . "</p>"; die();
+      //   echo "<p>" . $sql . "</p>"; die();
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {

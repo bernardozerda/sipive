@@ -193,8 +193,8 @@ class DatosUnidades {
                 if ($estado > 0) {
                     $sql = "UPDATE t_pry_unidad_proyecto
                 SET
-                txtNombreUnidad = '".$value[2]."',
-                txtNombreUnidadReal = '".$value[3]."',  txtNombreUnidadAux = '".$value[4]."',
+                txtNombreUnidad = '".$value[3]."',
+                txtNombreUnidadReal = '".$value[4]."',  txtNombreUnidadAux = '".$value[5]."',
                 seqEstadoUnidad = $estado, bolActivo =  $activo
                 WHERE seqUnidadProyecto = $value[0];";
                     try {

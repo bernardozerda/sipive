@@ -104,10 +104,10 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                         <tr>
                             <th>Id Unidad </th>
                             <th>Proyecto </th>
+                            <th>Conjunto</th>
                             <th>Nombre de la unidad </th>
                             <th>Nombre de la unidad Real </th>
-                            <th>Nombre de la unidad Auxiliar</th>
-                            <th>Conjunto</th>
+                            <th>Nombre de la unidad Auxiliar</th>                            
                             <th>Estado Anterior</th>
                             <th>Nuevo Estado </th>                        
                             <th>Activo </th>

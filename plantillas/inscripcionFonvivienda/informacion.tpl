@@ -23,7 +23,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h6 class="panel-title">Información del cargue</h6>
+        <h6 class="panel-title">[{$claInscripcion->seqCargue}] Información del cargue</h6>
     </div>
     <div class="panel-body">
 

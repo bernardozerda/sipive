@@ -561,6 +561,13 @@ class InscripcionFonvivienda
                     }
                 }
 
+            }else{
+
+                if(trim(mb_strtolower($arrLinea[47])) == "no"){
+                    $txtMotivo = "La linea " . ($numLinea + 1) . " no ha sido validada";
+                    $bolBorrar = true;
+                }
+
             }
 
             // en caso de cumplirse la regla elimina el registro
@@ -1362,8 +1369,10 @@ class InscripcionFonvivienda
                     if(isset($arrCiudadano['coincidencias']['N/A'])){
                         $claCiudadano = new Ciudadano();
                         $seqFormularioCoincidencia = $claCiudadano->formularioVinculado($arrCiudadano['numDocumento'], false, false);
-                        if($seqFormularioCoincidencia != $seqFormulario){
+                        if(($seqFormularioCoincidencia != $seqFormulario) and ($seqFormularioCoincidencia != 0)) {
                             $this->arrErrores['ciudadano'][$numDocumentoCoincidencia] = "No se puede fusionar, pertenece al hogar <a href='#' class='text-danger' onclick='verHogar($seqFormularioCoincidencia)'>$seqFormularioCoincidencia</a>";
+                        }elseif($seqFormularioCoincidencia == 0){
+                            $this->arrNovedades[$numDocumentoCoincidencia] = "Se unirá al formulario seleccionado";
                         }else{
                             $this->arrNovedades[$numDocumentoCoincidencia] = "Ya pertenece al hogar seleccionado";
                         }

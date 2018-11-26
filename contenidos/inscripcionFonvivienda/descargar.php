@@ -25,7 +25,7 @@ if(file_exists($txtArchivo)){
     header("Pragma: no-cache");
     header("Expires: 0");
 
-    echo utf8_decode(file_get_contents($txtArchivo));
+    echo utf8_encode(file_get_contents($txtArchivo));
 
 }else{
     echo "No existe el archivo";

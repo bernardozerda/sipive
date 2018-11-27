@@ -76,6 +76,7 @@
             <input type="hidden" name="adicionar" value="1">
             <input type="hidden" name="seqCruce" value="{$arrPost.seqCruce}">
             <input type="hidden" name="seqFormulario" value="{$arrPost.seqFormulario}">
+            <input type="hidden" name="fchCruce" value="{$claCruces->arrDatos.fchCruce->format('Y-m-d')}">
         </form>
 
     </div>

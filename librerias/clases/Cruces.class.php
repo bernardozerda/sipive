@@ -2216,7 +2216,7 @@ WHERE
                 if($seqFormulario == 0){
                     $this->arrMensajes[] = "Ha adicionado un nuevo cruce satisfactoriamente";
                 }
-                $aptBd->Commit();
+                $aptBd->CommitTrans();
             }else{
                 $aptBd->RollbackTrans();
             }

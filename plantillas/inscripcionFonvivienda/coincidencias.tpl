@@ -22,7 +22,9 @@
                     {if $arrCiudadano.numDocumento == $numDocumento}
                         {foreach from=$arrCiudadano.coincidencias key=numDistancia item=arrCoincidencias}
                             {foreach from=$arrCoincidencias key=numDocumentoCoincidencia item=arrDatos}
-                                <tr {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)} style="background-color: #f5f5f5" {/if}>
+                                <tr style="cursor: pointer; {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)} background-color: #f5f5f5; {/if}"
+                                    onclick="document.getElementById('seqFormulario{$arrDatos.formulario}').checked = (document.getElementById('seqFormulario{$arrDatos.formulario}').checked)? false:true;"
+                                >
                                     <td class="text-center" width="50px;">{$numDistancia}</td>
                                     <td>
                                         CIU: {$arrDatos.ciudadano}<br>
@@ -39,6 +41,7 @@
                                     <td width="50px;" class="text-center">
                                         <input type="radio"
                                                name="seqFormulario"
+                                               id="seqFormulario{$arrDatos.formulario}"
                                                value="{$arrDatos.formulario}"
                                                {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)} disabled {/if}
                                         >

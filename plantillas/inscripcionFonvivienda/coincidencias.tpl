@@ -24,7 +24,11 @@
                         {foreach from=$arrCiudadano.coincidencias key=numDistancia item=arrCoincidencias}
                             {foreach from=$arrCoincidencias key=numDocumentoCoincidencia item=arrDatos}
                                 <tr style="cursor: pointer; {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)} background-color: #f5f5f5; {/if}"
-                                    onclick="document.getElementById('seqFormulario{$arrDatos.formulario}').checked = (document.getElementById('seqFormulario{$arrDatos.formulario}').checked)? false:true;"
+                                    {if in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias) and
+                                        (intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) == 1 or intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) == 0)
+                                    }
+                                        onclick="document.getElementById('seqFormulario{$arrDatos.formulario}').checked = (document.getElementById('seqFormulario{$arrDatos.formulario}').checked)? false:true;"
+                                    {/if}
                                 >
                                     <td class="text-center" width="50px;">{$numDistancia}</td>
                                     <td>

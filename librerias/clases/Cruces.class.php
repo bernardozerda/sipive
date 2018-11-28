@@ -2106,7 +2106,7 @@ WHERE
                     "t_cru_causa",
                     array("seqCausa","txtCausa"),
                     "seqCausa",
-                    "seqFuente = " . $arrPost['seqFuente'] . " and seqFuente <> 8"
+                    "seqFuente = " . $arrPost['seqFuente'] . " and seqFuente <> 8 and seqCausa = " . $arrPost['seqCausa']
                 )
             ));
 
@@ -2216,7 +2216,7 @@ WHERE
                 if($seqFormulario == 0){
                     $this->arrMensajes[] = "Ha adicionado un nuevo cruce satisfactoriamente";
                 }
-                $aptBd->CommitTrans();
+                $aptBd->RollbackTrans();
             }else{
                 $aptBd->RollbackTrans();
             }

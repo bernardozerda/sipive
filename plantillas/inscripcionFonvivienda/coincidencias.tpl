@@ -13,6 +13,7 @@
                     <th>Ciudadano</th>
                     <th>Partentesco</th>
                     <th>Estado</th>
+                    <th>Unidad</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -36,14 +37,26 @@
                                         Doc: {$numDocumentoCoincidencia}<br>
                                         Nom: {$arrDatos.nombre}
                                     </td>
-                                    <td width="150px;">{$arrDatos.parentesco}</td>
-                                    <td width="150px;">{$arrDatos.estado}</td>
+                                    <td width="100px;">{$arrDatos.parentesco}</td>
+                                    <td width="100px;">{$arrDatos.estado}</td>
+                                    <td>
+                                        {if intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) != 1 and intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) != 0}
+                                            SI
+                                        {else}
+                                            NO
+                                        {/if}
+                                    </td>
                                     <td width="50px;" class="text-center">
                                         <input type="radio"
                                                name="seqFormulario"
                                                id="seqFormulario{$arrDatos.formulario}"
                                                value="{$arrDatos.formulario}"
-                                               {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)} disabled {/if}
+                                               {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)}
+                                                   disabled
+                                               {/if}
+                                               {if intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) != 1 and intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) != 0}
+                                                   disabled
+                                               {/if}
                                         >
                                     </td>
                                 </tr>

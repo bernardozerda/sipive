@@ -176,7 +176,7 @@ $sql = "
       seg.txtComentario,
       seg.txtCambios
     FROM t_seg_seguimiento seg
-    INNER JOIN t_frm_formulario ON seg.seqFormulario = frm.seqFormulario
+    INNER JOIN t_frm_formulario frm ON seg.seqFormulario = frm.seqFormulario
     WHERE seg.fchMovimiento >= '" . $fchInicial . " 00:00:00'
     AND seg.fchMovimiento <= '" . $fchFinal . " 23:59:59'
     AND frm.seqTipoEsquema not in (12,16,17,18)
@@ -254,19 +254,27 @@ if( ! empty( $arrFormularios ) ) {
             $txtNombre .= (trim($claCiudadano->txtNombre2) != "")? " " . trim($claCiudadano->txtNombre2) : "";
             $txtNombre = mb_strtoupper($txtNombre);
 
-            $seqSexoProbable = (intval($arrSexoProbable[$txtNombre][1]) != 0 and intval($arrSexoProbable[$txtNombre][1]) > intval($arrSexoProbable[$txtNombre][2]))? 1 : 2;
-            if($claCiudadano->seqSexo != $seqSexoProbable){
+            $numMasculinos = intval($arrSexoProbable[$txtNombre][1]);
+            $numFemeninos  = intval($arrSexoProbable[$txtNombre][2]);
 
-//                echo "$seqFormulario ==> $seqCiudadano ==> $claCiudadano->seqSexo != $seqSexoProbable || $txtNombre<br>";
-//                pr($arrSexoProbable[$txtNombre]);
-
-                $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['causa'] = "Sexo";
-                $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['detalle'] = null;
-                $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['valor'] =
-                    "[" . $claCiudadano->numDocumento . "] $txtNombre registra como " .
-                    $arrSexo[$claCiudadano->seqSexo] . " pero es posible que sea " . $arrSexo[$seqSexoProbable];
+            switch(true){
+                case $numMasculinos > $numFemeninos: $seqSexoProbable = 1; break;
+                case $numMasculinos < $numFemeninos: $seqSexoProbable = 2; break;
             }
 
+            if($claCiudadano->seqSexo != $seqSexoProbable){
+
+//                echo "$seqFormulario ==> $seqCiudadano ==> $claCiudadano->seqSexo != $seqSexoProbable || #$txtNombre#<br>";
+//                pr($arrSexoProbable[$txtNombre]);
+
+                if($numMasculinos != $numFemeninos){
+                    $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['causa'] = "Sexo";
+                    $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['detalle'] = null;
+                    $arrReporte[$seqFormulario]['sexo'][$seqCiudadano]['valor'] =
+                        "[" . $claCiudadano->numDocumento . "] $txtNombre registra como " .
+                        $arrSexo[$claCiudadano->seqSexo] . " pero es posible que sea " . $arrSexo[$seqSexoProbable];
+                }
+            }
         }
 
         // cohabitacion

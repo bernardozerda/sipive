@@ -4979,7 +4979,7 @@ WHERE
                 end as seqTipoDocumento,
                 arc.numDocumento,
                 arc.txtNombre,
-                date_format(now(),\"%d-%m-%Y\") as fchAsignacion,
+                date_format(now(),'%d/%m/%Y') as fchAsignacion,
                 arc.valAsignado,
                 group_concat(arc.txtJustificacion SEPARATOR ', ') as txtJustificacion
             FROM t_fnv_archivo_mcy arc

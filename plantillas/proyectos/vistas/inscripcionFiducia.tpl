@@ -78,7 +78,7 @@
             <label class="control-label" >Entidad fiduciaria</label><br>    
             <select id="seqFiducia" name="seqFiducia" class="form-control required5" style="width: 78%">
                 <option value="">Ninguna</option>
-                {foreach from=$arrayEntFiduciaria key=seqFiducia item=txtFiducia}                    
+                {foreach from=$arrayBanco key=seqFiducia item=txtFiducia}                    
                     <option value="{$seqFiducia}" {if $value.seqFiducia == $seqFiducia} selected {/if}>{$txtFiducia}</option>                 
                 {/foreach}         
             </select>

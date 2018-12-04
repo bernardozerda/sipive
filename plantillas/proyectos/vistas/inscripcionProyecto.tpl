@@ -53,9 +53,9 @@
                     <li  class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosPolizas" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" 
                            onclick="
-                           {* {if isset($smarty.session.arrGrupos.5.13) or isset($smarty.session.arrGrupos.6.20)}*}
+                           {* {if isset($smarty.session.arrGrupos.5.13) or isset($smarty.session.arrGrupos.6.20)}
                                    activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentesAdd.php', {$arrayFideicomitente|@sizeof});
-                                   verificarSesion();
+                                   *}verificarSesion();
                            "><em>Polizas  y Fiducia</em></a>
                     </li>
 

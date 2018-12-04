@@ -354,7 +354,7 @@ function addFideicomitente() {
     fType += "<div class=\"col-md-3\"><p>&nbsp;</p></div>";
     fieldWrapper.append(fType);
     $("#fideicomiso").append(fieldWrapper);
-    activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentesAdd.php', intId);
+   // activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentesAdd.php', intId);
 }
 
 function activarAutocompletar(txtInput, contenedor, url, cant) {

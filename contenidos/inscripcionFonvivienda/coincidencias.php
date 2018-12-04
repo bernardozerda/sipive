@@ -42,6 +42,8 @@ foreach($claInscripcion->arrHogares[$numHogar]['ciudadanos'] as $idCiudadano => 
                 $claFormulario = new FormularioSubsidios();
                 $claFormulario->cargarFormulario($seqFormulario);
 
+                $claInscripcion->arrHogares[$numHogar]['seqUnidadProyecto'] = $claFormulario->seqUnidadProyecto;
+
                 foreach($claFormulario->arrCiudadano as $seqCiudadanoCoincidencia => $objCiudadano){
                     if($numDocumentoCoincidencia == $objCiudadano->numDocumento){
                         break;

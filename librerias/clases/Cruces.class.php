@@ -2106,7 +2106,7 @@ WHERE
                     "t_cru_causa",
                     array("seqCausa","txtCausa"),
                     "seqCausa",
-                    "seqFuente = " . $arrPost['seqFuente'] . " and seqFuente <> 8"
+                    "seqFuente = " . $arrPost['seqFuente'] . " and seqFuente <> 8 and seqCausa = " . $arrPost['seqCausa']
                 )
             ));
 

@@ -660,7 +660,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     // esquemas que deben tener proyectos seleccionados
     // si no deben tener direccion matricula y chip digitados
     if (in_array($_POST['seqTipoEsquema'], $arrProyectoEsquema)) {
-        if (intval($_POST['seqProyecto']) == 0 or intval($_POST['seqProyecto']) == 37) {
+        if (intval($_POST['seqProyecto']) == 0 and intval($_POST['seqProyecto']) != 37) {
             $arrErrores[] = "Debe seleccionar un proyecto de la lista";
         }
     } else {
@@ -675,9 +675,11 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         }
     }
 
-    if (in_array($_POST['seqTipoEsquema'], $arrEsquemaUnidades)) {
-        if (intval($_POST['seqUnidadProyecto']) == 0 or intval($_POST['seqUnidadProyecto']) == 1) {
-            $arrErrores[] = "Debe seleccionar una unidad habitacional de la lista";
+    if($_POST['seqEstadoProceso'] != 37) {
+        if (in_array($_POST['seqTipoEsquema'], $arrEsquemaUnidades)) {
+            if (intval($_POST['seqUnidadProyecto']) == 0 or intval($_POST['seqUnidadProyecto']) == 1) {
+                $arrErrores[] = "Debe seleccionar una unidad habitacional de la lista";
+            }
         }
     }
 

@@ -181,8 +181,8 @@
         </div>
         <div class="col-md-3"> 
             <label class="control-label" >Numero Cuenta</label><br>      
-            <input type="text" name="numCuentaFiducia" id="numCuentaFiducia" value="{$value.numCuentaFiducia}" onblur="sinCaracteresEspeciales(this);
-                    soloNumeros(this);" class="form-control required5">
+            <input type="text" name="numCuentaFiducia" id="numCuentaFiducia" value="{$value.numCuentaFiducia}" 
+                     class="form-control required5">
             <div id="val_numCuentaFiducia" class="divError">Diligenciar Campo</div>
         </div>
     </div>

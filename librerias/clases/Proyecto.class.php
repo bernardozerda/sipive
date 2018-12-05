@@ -1772,7 +1772,7 @@ class Proyecto {
                     seqProyecto)
                 VALUES (
                     $seqTipoContrato,
-                    $numContratoFiducia,
+                    '$numContratoFiducia',
                     '$fchContratoFiducia',
                     '$numCuentaFiducia',
                     $seqTipoCuentaFiducia,
@@ -1824,7 +1824,7 @@ class Proyecto {
         $sql = "UPDATE t_pry_datos_fiducia
                 SET               
                 seqTipoContrato = $seqTipoContrato,
-                numContratoFiducia = $numContratoFiducia,
+                numContratoFiducia = '$numContratoFiducia',
                 fchContratoFiducia = '$fchContratoFiducia',
                 numCuentaFiducia = '$numCuentaFiducia',
                 seqTipoCuentaFiducia = $seqTipoCuentaFiducia,

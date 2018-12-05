@@ -15,7 +15,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 
 $sql = "
-    select 
+    select
         f.seqFormulario,
         c.seqCiudadano,
         c.valIngresos,
@@ -33,7 +33,9 @@ $sql = "
     from t_frm_formulario f
     inner join t_frm_hogar h on f.seqformulario = h.seqFormulario
     inner join t_ciu_ciudadano c on h.seqCiudadano = c.seqCiudadano
-    where f.bolCerrado = 0
+    where f.seqPlanGobierno in (2,3)
+      and f.seqModalidad in (12,13,6)
+      and f.seqTipoEsquema in (1,12,16,17,18)
 ";
 
 $objRes = $aptBd->execute($sql);
@@ -68,39 +70,60 @@ while($objRes->fields){
 
 }
 
-$numTotalHogares = count($arrDatos);
-$numHogaresProcesados = 1;
-foreach($arrDatos as $seqFormulario => $arrInformacion){
+try {
 
-    if($arrInformacion['sumaIngresos'] != $arrInformacion['sumaBaseDatos']){
+    $aptBd->BeginTrans();
 
-        echo date("Y-m-d H:i:s") . "\t(" . $seqFormulario . ")\tIngresos Hogar\t";
-        echo "Suma: " . number_format($arrInformacion['sumaIngresos'] ) . "\t";
-        echo "Base Datos: " . number_format($arrInformacion['sumaBaseDatos'] );
-        echo "\r\n";
+    $numTotalHogares = count($arrDatos);
+    $numHogaresProcesados = 1;
+    $numModificados = 0;
+    $numModificadosIngresos = 0;
+    $numModificadosFinancieros = 0;
+    foreach ($arrDatos as $seqFormulario => $arrInformacion) {
 
-        $sql = "update t_frm_formulario set valIngresoHogar = " . $arrInformacion['sumaIngresos'] . " where seqFormulario = " . $seqFormulario;
-        $objRes = $aptBd->execute($sql);
+        $bolModificado = false;
+
+        echo date("Y-m-d H:i:s") . "\t$numHogaresProcesados de $numTotalHogares\tProcesando formulario $seqFormulario\r\n";
+
+        if ($arrInformacion['sumaIngresos'] != $arrInformacion['sumaBaseDatos']) {
+            $sql = "update t_frm_formulario set valIngresoHogar = " . $arrInformacion['sumaIngresos'] . " where seqFormulario = " . $seqFormulario;
+            $objRes = $aptBd->execute($sql);
+            $bolModificado = true;
+            $numModificadosIngresos++;
+        }
+
+        if ($arrInformacion['valTotalRecursos'] != $arrInformacion['sumaFinancieros']) {
+            $sql = "update t_frm_formulario set valTotalRecursos = " . $arrInformacion['sumaFinancieros'] . " where seqFormulario = " . $seqFormulario;
+            $objRes = $aptBd->execute($sql);
+            $bolModificado = true;
+            $numModificadosFinancieros++;
+        }
+
+        $numHogaresProcesados++;
+
+        if($bolModificado){
+            $numModificados++;
+        }
 
     }
 
-    if( $arrInformacion['valTotalRecursos'] != $arrInformacion['sumaFinancieros'] ){
+    echo "$numModificados hogares modificados de $numHogaresProcesados procesados\r\n";
+    echo "$numModificadosIngresos por ingresos\r\n";
+    echo "$numModificadosFinancieros por financieros\r\n";
 
-        echo date("Y-m-d H:i:s") . "\t(" . $seqFormulario . ")\tFinancieros\t";
-        echo "Suma: " . number_format($arrInformacion['sumaFinancieros'] ) . "\t";
-        echo "Base Datos: " . number_format($arrInformacion['valTotalRecursos'] );
-        echo "\r\n";
-
-        $sql = "update t_frm_formulario set valTotalRecursos = " . $arrInformacion['sumaFinancieros'] . " where seqFormulario = " . $seqFormulario;
-        $objRes = $aptBd->execute($sql);
+    if( isset($argv[1]) and trim(mb_strtolower($argv[1]))){
+        $aptBd->RollbackTrans();
+        echo "Los cambios no fueron aplicados\r\n";
+    }else{
+        $aptBd->CommitTrans();
     }
 
-    $numHogaresProcesados++;
+
+}catch(Exception $objError){
+    echo $objError->getMessage() . "\r\n";
+
+    $aptBd->RollbackTrans();
 
 }
-
-
-
-
 
 ?>

@@ -48,7 +48,8 @@
         </div>
         <div class="col-md-3"> 
             <label class="control-label" >id Entidad</label><br>     
-            <input type="number" name="numIdEntidad" id="numIdEntidad" value="{$value.numIdEntidad}" class="form-control required5">
+            <input type="number" name="numIdEntidad" id="numIdEntidad" value="{$value.numIdEntidad}" onblur="sinCaracteresEspeciales(this);
+                    soloNumeros(this);" class="form-control required5">
             <div id="val_numIdEntidad" class="divError">Diligenciar Campo</div>
         </div>
         <div class="col-md-3"> 
@@ -63,7 +64,8 @@
         </div>
         <div class="col-md-3"> 
             <label class="control-label" >Valor del Acto</label><br>     
-            <input type="text" name="valContratoFiducia" id="valContratoFiducia" value="{$value.valContratoFiducia}" class="form-control required5">
+            <input type="text" name="valContratoFiducia" id="valContratoFiducia" value="{$value.valContratoFiducia}" onblur="sinCaracteresEspeciales(this);
+                    soloNumeros(this);" class="form-control required5">
             <div id="val_valContratoFiducia" class="divError">Diligenciar Campo</div>
         </div>
         <div class="col-md-3"> 
@@ -136,7 +138,7 @@
                 <div class="col-md-4"> 
                     <label class="control-label" >Nombre Entidad o Raz&oacute;n Social</label>   
                     <input type="text" name="txtNombreFideicomitente[]" id="txtNombreFideicomitente{$numFid}" value="{$valueFideicomitente.txtNombreFideicomitente}" class="form-control required5">
-                    <input name="seqFideicomitente[]" type="hidden" id="seqFideicomitente{$numFid}" value="{$valueFideicomitente.seqFideicomitente}" onblur="sinCaracteresEspeciales(this);"  class="form-control">
+                    <input name="seqFideicomitente[]" type="hidden" id="seqFideicomitente{$numFid}" value="{$valueFideicomitente.seqFideicomitente}"  class="form-control">
                     <div id="val_txtNombreFideicomitente" class="divError">Diligenciar Campo</div>
                     <div class="col-sm-12">
                         <div id="txtNombreFideicomitenteContenedor{$numFid}"></div>

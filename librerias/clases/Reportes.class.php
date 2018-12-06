@@ -288,9 +288,9 @@ class Reportes {
 						ucwords( discapacitado( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtDiscapacitado,
 						ucwords( ningunaCondicionEspecial( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtNingunaCondicionEspecial,
 						par.txtParentesco AS Parentesco,
-						if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01',null,ciu.fchNacimiento) AS FechaNacimiento,
-						if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01',null,FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365.2))) AS Edad,
-						if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01','Sin Clasificar',rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365.2)))) AS RangoEdad,
+						if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01',null,date_format(ciu.fchNacimiento,'%Y-%m-%d')) AS FechaNacimiento,
+                        if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01',null,TIMESTAMPDIFF(YEAR,ciu.fchNacimiento,CURDATE())) AS Edad,
+                        if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01','Sin Clasificar',rangoEdad(TIMESTAMPDIFF(YEAR,ciu.fchNacimiento,CURDATE()))) AS RangoEdad,
 						etn.txtEtnia AS Etnia,
 						(
 							SELECT

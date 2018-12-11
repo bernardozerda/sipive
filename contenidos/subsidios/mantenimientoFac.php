@@ -41,10 +41,11 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
     foreach($arrArchivo['archivo'] as $numLinea => $arrLinea){
         if($numLinea > 0){
 
-            $seqFormulario = intval($arrLinea[2]);
-            $numResolucion = intval(mb_ereg_replace("[^0-9]","",$arrLinea[7]));
-            $fchResolucion = $arrLinea[9];
-            $txtEstado     = trim(mb_strtoupper($arrLinea[10]));
+            $seqFormulario   = intval($arrLinea[2]);
+            $numResolucion   = intval(mb_ereg_replace("[^0-9]","",$arrLinea[7]));
+            $fchResolucion   = $arrLinea[9];
+            $txtEstado       = trim(mb_strtoupper($arrLinea[10]));
+            $fchLegalizacion = $arrLinea[11];
 
             if($seqFormulario == 0){
                 $arrArchivo['errores'][] = "Error linea " . ($numLinea + 1) . ": ID Hogar no válido";
@@ -56,6 +57,12 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
 
             if(! esFechaValida($fchResolucion)){
                 $arrArchivo['errores'][] = "Error linea " . ($numLinea + 1) . ": Fecha de resolución no válida (use yyyy-mm-dd)";
+            }
+
+            if($fchLegalizacion != "") {
+                if (!esFechaValida($fchLegalizacion)) {
+                    $arrArchivo['errores'][] = "Error linea " . ($numLinea + 1) . ": Fecha de legalización no válida (use yyyy-mm-dd)";
+                }
             }
 
             if(! isset($arrEstados[$txtEstado])){
@@ -107,7 +114,14 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
                 $arrArchivo['errores'][] = "Error Linea " . ($numLinea + 1) . ": No existe formulario relacionado con el acto administrativo";
             }
 
-            $arrSql[] = "update t_aad_formulario_acto set seqEstadoProceso = " . $arrEstados[$txtEstado] . ", fchUltimaActualizacion = now() where seqFormularioActo = $seqFormularioActo";
+            $fchLegalizacion = ($fchLegalizacion != "")? "'" . $fchLegalizacion . "'" : "null";
+
+            $arrSql[] = "
+                update t_aad_formulario_acto set 
+                    seqEstadoProceso = " . $arrEstados[$txtEstado] . ",
+                    fchLegalizado = $fchLegalizacion, 
+                    fchUltimaActualizacion = now() 
+                where seqFormularioActo = $seqFormularioActo";
 
         }
 

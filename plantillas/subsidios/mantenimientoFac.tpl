@@ -111,6 +111,7 @@
                     <li>Año</li>
                     <li>Fecha Resolución (yyyy-mm-dd)</li>
                     <li>Estado</li>
+                    <li>Fecha Legalización (yyyy-mm-dd)</li>
                 </ol>
                 <p>(*) La primera fila del archivo son titulos</p>
             </div>

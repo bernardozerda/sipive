@@ -78,6 +78,7 @@ $arrExportables["estudioTitulosLeasing"] = 0; // Plantilla Estudio de Titulos Le
 $arrExportables["soporteResolucionVinculacion"] = 0;
 $arrExportables["girosVIPA"] = 0; // GIROS VIPA
 $arrExportables["reporteTotalCiudadano"] = 0; //Reporte Informacion hogar 
+$arrExportables["informeGralSubsidios"] = 0;
 
 foreach ($arrGruposPertenece as $seqGrupo) {
 
@@ -221,6 +222,7 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["soporteResolucionVinculacion"] = 1;
             $arrExportables["girosVIPA"] = 1;
             $arrExportables["reporteTotalCiudadano"] = 1;
+            $arrExportables["informeGralSubsidios"] = 1;
             break;
         case 34: // Cruce Información Cvp
             $arrExportables["reporteInformacionCvp"] = 1;

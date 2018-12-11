@@ -4,7 +4,7 @@ include "../../contenidos/desembolso/plantillaEstudioTitulos.php";
 include "../../contenidos/reportes/reporteEscrituracion.php";
 include "../../contenidos/reportes/informeProyectoActo.php";
 include "../../contenidos/reportes/reporteInformacionCvp.php";
-//include "../../contenidos/reportes/reporteGeneralSubsidios.php";
+include "../../contenidos/reportes/reporteGeneralSubsidios.php";
 ini_set('memory_limit', '1024M');
 
 class Reportes {
@@ -5506,6 +5506,7 @@ WHERE
         $array['inscritosAdq'] = $inscritosAdq['inscritos'];
         $array['victimasAdq'] = $inscritosAdq['victimas'];
 
+        $modAdq = '1,2,6,7,11';
         $asignadoAdq = $this->InfGralAsignadosSubsidios($modAdq, 0);
         $array['asignadosAdq'] = $asignadoAdq['asignados'];
         $array['valAsignadosAdq'] = $asignadoAdq['valAsignados'];
@@ -5527,9 +5528,10 @@ WHERE
         $array['inscritosPive'] = $inscritosPive['inscritos'];
         $array['victimasPive'] = $inscritosPive['victimas'];
 
+        $modPive = '12,13,14';
         $asignadoPive = $this->InfGralAsignadosSubsidios($modPive, 0);
-        $array['asignadosPive'] = $asignadoAdq['asignados'];
-        $array['valAsignadosPive'] = $asignadoAdq['valAsignados'];
+        $array['asignadosPive'] = $asignadoPive['asignados'];
+        $array['valAsignadosPive'] = $asignadoPive['valAsignados'];
 
         $asignadoPiveVic = $this->InfGralAsignadosSubsidios($modPive, 1);
         $array['asignadosPiveVic'] = $asignadoPiveVic['asignados'];
@@ -5538,7 +5540,6 @@ WHERE
         $legalizadoPive = $this->InfGrallegalizadosSubsidios($modPive, 0);
         $array['legalizadosPive'] = $legalizadoPive['cantidad'];
         $array['legalizadosPiveVal'] = $legalizadoPive['valor'];
-
 
         $legalizadoPiveVic = $this->InfGrallegalizadosSubsidios($modPive, 1);
         $array['legalizadosPiveVic'] = $legalizadoPiveVic['cantidad'];
@@ -5555,26 +5556,33 @@ WHERE
         global $aptBd;
         $array = Array();
         $sqlInscritosAdqVivienda = "SELECT 
-                                    COUNT(seqFormulario) as cantidad,
-                                    (SELECT 
-                                            COUNT(seqFormulario)
-                                        FROM
-                                            t_frm_formulario frm2
-                                                LEFT JOIN
-                                            t_frm_estado_proceso est2 USING (seqEstadoProceso)
-                                        WHERE                                                                                   
-                                                 frm2.seqModalidad = frm.seqModalidad                                                
-                                                AND frm2.seqEstadoProceso IN (frm.seqEstadoProceso) 
-                                                AND bolDesplazado = 1 AND bolCerrado = 0) AS victimas
-                                FROM
-                                    t_frm_formulario frm
-                                        LEFT JOIN
-                                    t_frm_estado_proceso est USING (seqEstadoProceso)
-                                WHERE
-                                    est.seqEtapa IN (1 , 2, 3)
-                                        AND frm.seqEstadoProceso NOT IN (1,5, 13, 35, 36, 39, 52)
-                                        and frm.seqModalidad in (" . $mod . ") 
-                                        AND frm.bolCerrado = 0;";
+                                COUNT(seqFormulario) AS cantidad,
+                                (SELECT 
+                                        COUNT(seqFormulario)
+                                    FROM
+                                        t_frm_formulario frm2
+                                            LEFT JOIN
+                                        t_frm_hogar hog2 USING (seqFormulario)
+                                            LEFT JOIN
+                                        t_frm_estado_proceso est2 USING (seqEstadoProceso)
+                                    WHERE
+                                                    hog2.seqParentesco =  hog.seqParentesco
+                                        AND frm2.seqModalidad = frm.seqModalidad
+                                            AND frm2.seqEstadoProceso IN (frm.seqEstadoProceso)
+                                            AND bolDesplazado = 1
+                                            AND bolCerrado = 0) AS victimas
+                            FROM
+                                t_frm_formulario frm
+                                    LEFT JOIN
+                                t_frm_hogar hog USING (seqFormulario)
+                                    LEFT JOIN
+                                t_frm_estado_proceso est USING (seqEstadoProceso)
+                            WHERE
+                                seqParentesco = 1
+                                    AND est.seqEtapa IN (1 , 2, 3)
+                                    AND frm.seqEstadoProceso NOT IN (1 , 5, 13, 35, 36, 39, 52, 8, 14)
+                                    AND frm.seqModalidad IN (" . $mod . ")
+                                    AND frm.bolCerrado = 0";
         $objRes = $aptBd->execute($sqlInscritosAdqVivienda);
         while ($objRes->fields) {
             $array['inscritos'] = $objRes->fields['cantidad'];
@@ -5588,29 +5596,34 @@ WHERE
     public function InfGralAsignadosSubsidios($mod, $victima) {
         global $aptBd;
         $array = Array();
-        $sqlAsignadoAdq = "SELECT 
-                                COUNT(*) AS cantidad, SUM(fac.valTotal) AS valor
+        $sqlAsignadoAdq = " SELECT 
+                            COUNT(*) AS cantidad, SUM(frm.valAspiraSubsidio) AS valor, sum(frm.valComplementario) as complementario, sum(frm.valCartaLeasing) as leasing
                             FROM
-                                t_aad_formulario_acto fac
+                                T_AAD_ACTO_ADMINISTRATIVO aad
                                     LEFT JOIN
-                                t_frm_formulario frm USING (seqformulario)
+                                T_AAD_HOGARES_VINCULADOS hvi ON aad.fchActo = hvi.fchActo
+                                    AND aad.numActo = hvi.numActo
                                     LEFT JOIN
-                                t_aad_giro USING (seqFormularioActo)
+                                T_AAD_FORMULARIO_ACTO fac ON hvi.seqFormularioActo = fac.seqFormularioActo
+                                 LEFT JOIN
+                                t_frm_formulario frm ON fac.seqFormulario = frm.seqFormulario
                                     LEFT JOIN
-                                t_aad_hogares_vinculados USING (seqFormularioActo)
-                                    LEFT JOIN
-                                t_frm_estado_proceso est ON (fac.seqEstadoProceso = est.seqEstadoProceso)
-                            WHERE                            
-                                fac.seqEstadoProceso IN (15 , 16)     
-                                    AND fac.seqModalidad in (" . $mod . ")
-                                    AND seqTipoActo = 1";
+                                T_AAD_HOGAR_ACTO hac ON fac.seqFormularioActo = hac.seqFormularioActo
+                            WHERE
+                            (hac.seqParentesco = 1
+                                OR hac.seqParentesco IS NULL)
+                                AND aad.seqCaracteristica = 1
+                                and  fac.seqModalidad in (" . $mod . ")
+                                and YEAR(aad.fchActo) >='2016'
+                        ";
         if ($victima == 1) {
             $sqlAsignadoAdq .= " AND (fac.bolDesplazado = 1 or frm.bolDesplazado = 1)";
         }
+        // echo "<br><br>".$sqlAsignadoAdq; 
         $objResAsigAdq = $aptBd->execute($sqlAsignadoAdq);
         while ($objResAsigAdq->fields) {
             $array['asignados'] = $objResAsigAdq->fields['cantidad'];
-            $array['valAsignados'] = $objResAsigAdq->fields['valor'];
+            $array['valAsignados'] = $objResAsigAdq->fields['valor']+$objResAsigAdq->fields['complementario']+$objResAsigAdq->fields['leasing'];
             $objResAsigAdq->MoveNext();
         }
         //   var_dump($array);        die();
@@ -5621,7 +5634,7 @@ WHERE
         global $aptBd;
         $array = Array();
         $sqlAsignadoAdq = "SELECT 
-                                 COUNT(*) AS cantidad, SUM(fac.valAspiraSubsidio) AS valor
+                                 COUNT(*) AS cantidad, SUM(frm.valAspiraSubsidio) AS valor
                              FROM
                                  t_aad_formulario_acto fac
                                      LEFT JOIN
@@ -5653,28 +5666,32 @@ WHERE
 
         $array = Array();
         $sqlInscritosAdqLegalizados = "SELECT 
-                                COUNT(*) AS cantidad, SUM(fac.valTotal) AS valor
+                            COUNT(*) AS cantidad, SUM(frm.valAspiraSubsidio) AS valor, sum(frm.valComplementario) as complementario, sum(frm.valCartaLeasing)
                             FROM
-                                t_aad_formulario_acto fac
+                                T_AAD_ACTO_ADMINISTRATIVO aad
                                     LEFT JOIN
-                                t_frm_formulario frm USING (seqformulario)
+                                T_AAD_HOGARES_VINCULADOS hvi ON aad.fchActo = hvi.fchActo
+                                    AND aad.numActo = hvi.numActo
                                     LEFT JOIN
-                                t_aad_giro USING (seqFormularioActo)
+                                T_AAD_FORMULARIO_ACTO fac ON hvi.seqFormularioActo = fac.seqFormularioActo
+                                 LEFT JOIN
+                                t_frm_formulario frm ON fac.seqFormulario = frm.seqFormulario
                                     LEFT JOIN
-                                t_aad_hogares_vinculados USING (seqFormularioActo)
-                                    LEFT JOIN
-                                t_frm_estado_proceso est ON (fac.seqEstadoProceso = est.seqEstadoProceso)
+                                T_AAD_HOGAR_ACTO hac ON fac.seqFormularioActo = hac.seqFormularioActo
                             WHERE
-                                fac.seqEstadoProceso IN (40)     
-                                    AND fac.seqModalidad in (" . $mod . ")                                 
-                                    AND seqTipoActo = 1";
+                            (hac.seqParentesco = 1
+                                OR hac.seqParentesco IS NULL)
+                                AND fac.seqEstadoProceso IN (33,40)    
+                                AND aad.seqCaracteristica = 1
+                                and  fac.seqModalidad in (" . $mod . ")
+                                and YEAR(fac.fchLegalizado) >='2016'";
         if ($victima == 1) {
             $sqlInscritosAdqLegalizados .= " AND (fac.bolDesplazado = 1 or frm.bolDesplazado = 1)";
         }
         $objResLegAdq = $aptBd->execute($sqlInscritosAdqLegalizados);
         while ($objResLegAdq->fields) {
             $array['cantidad'] = $objResLegAdq->fields['cantidad'];
-            $array['valor'] = $objResLegAdq->fields['valor'];
+            $array['valor'] = $objResLegAdq->fields['valor']+$objResLegAdq->fields['complementario']+$objResLegAdq->fields['leasing'];
             $objResLegAdq->MoveNext();
         }
         //   var_dump($array);        die();

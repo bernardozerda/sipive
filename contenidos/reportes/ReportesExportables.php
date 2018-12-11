@@ -248,6 +248,8 @@ switch ($reporte) {
         $claReporte->reporteGralHogar($arrDocumentos);
         break;
 
-    case "":
+   case "informeGralSubsidios":       
+        $claReporte->informeGralSubsidios();
+        break;
 }
 ?>

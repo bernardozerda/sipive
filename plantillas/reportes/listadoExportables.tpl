@@ -68,6 +68,7 @@
 {assign var=soporteResolucionVinculacion    value=$arrExportables.soporteResolucionVinculacion}
 {assign var=girosVIPA                       value=$arrExportables.girosVIPA}
 {assign var=reporteTotalCiudadano                       value=$arrExportables.reporteTotalCiudadano}
+{assign var=informeGralSubsidios                       value=$arrExportables.informeGralSubsidios}
 
 
 <form id="listadoExportable" >
@@ -1156,6 +1157,21 @@
                     <td class="tituloCampo" align="left" width="60%">Informe Gral de Hogares</td>
                     <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
                         <a onclick="descargarArchivo('./contenidos/reportes/ReportesExportables.php?reporte=reporteTotalCiudadano');"
+                           href="#">Exportable</a>
+                    </td>
+                </tr>
+            {/if}
+            
+            {if $informeGralSubsidios == 1}
+                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                    <td class="tituloCampo" align="left" width="60%">Informe Gral de Subsidios</td>
+                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                        <a onclick="someterFormulario(
+                                        'mensajes',
+                                        'listadoExportable',
+                                        './contenidos/reportes/ReportesExportables.php?reporte=informeGralSubsidios',
+                                        true,
+                                        false);"
                            href="#">Exportable</a>
                     </td>
                 </tr>

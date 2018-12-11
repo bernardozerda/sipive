@@ -4,6 +4,7 @@ include "../../contenidos/desembolso/plantillaEstudioTitulos.php";
 include "../../contenidos/reportes/reporteEscrituracion.php";
 include "../../contenidos/reportes/informeProyectoActo.php";
 include "../../contenidos/reportes/reporteInformacionCvp.php";
+//include "../../contenidos/reportes/reporteGeneralSubsidios.php";
 ini_set('memory_limit', '1024M');
 
 class Reportes {
@@ -4822,10 +4823,10 @@ WHERE
         ";
         $arrReporte = array();
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
-            
+        while ($objRes->fields) {
+
             $seqFormulario = $objRes->fields['seqFormulario'];
-            
+
             $arrReporte[$seqFormulario]['Formulario'] = $seqFormulario;
             $arrReporte[$seqFormulario]['Plan Gobierno'] = $objRes->fields['txtPlanGobierno'];
             $arrReporte[$seqFormulario]['Modalidad'] = $objRes->fields['txtModalidad'];
@@ -4837,31 +4838,29 @@ WHERE
             $arrReporte[$seqFormulario]['Fecha Acto Administrativo'] = $objRes->fields['fchActo'];
             $arrReporte[$seqFormulario]['Valor Subsidio'] = $objRes->fields['valAspiraSubsidio'];
 
-            if(doubleval($objRes->fields['valSolicitado']) != 0){
+            if (doubleval($objRes->fields['valSolicitado']) != 0) {
                 $arrReporte[$seqFormulario]['RP1'] = $objRes->fields['numRegistroPresupuestal1'];
                 $arrReporte[$seqFormulario]['RP1 Fecha'] = $objRes->fields['fchRegistroPresupuestal1'];
                 $arrReporte[$seqFormulario]['RP2'] = $objRes->fields['numRegistroPresupuestal2'];
                 $arrReporte[$seqFormulario]['RP2 Fecha'] = $objRes->fields['fchRegistroPresupuestal2'];
                 $arrReporte[$seqFormulario]['Girado a Fiducia'] += $objRes->fields['valSolicitado'];
 
-                if(doubleval($arrReporte[$seqFormulario]['Valor Subsidio']) != 0) {
-                    $arrReporte[$seqFormulario]['% Girado Fiducia'] = round((floatval($arrReporte[$seqFormulario]['Girado a Fiducia']) * 100) / floatval($arrReporte[$seqFormulario]['Valor Subsidio']),3);
-                }else{
+                if (doubleval($arrReporte[$seqFormulario]['Valor Subsidio']) != 0) {
+                    $arrReporte[$seqFormulario]['% Girado Fiducia'] = round((floatval($arrReporte[$seqFormulario]['Girado a Fiducia']) * 100) / floatval($arrReporte[$seqFormulario]['Valor Subsidio']), 3);
+                } else {
                     $arrReporte[$seqFormulario]['% Girado Fiducia'] = 0;
                 }
 
                 $arrReporte[$seqFormulario]['Numero Orden'] = $objRes->fields['numOrden'];
                 $arrReporte[$seqFormulario]['Fecha Orden'] = $objRes->fields['fchOrden'];
-
-            }else{
+            } else {
 
                 $arrReporte[$seqFormulario]['Girado a Constructor'] += $objRes->fields['valOrden'];
-                if(doubleval($arrReporte[$seqFormulario]['Girado a Fiducia']) != 0) {
-                    $arrReporte[$seqFormulario]['% Girado Constructor'] = round((floatval($arrReporte[$seqFormulario]['Girado a Constructor']) * 100) / floatval($arrReporte[$seqFormulario]['Girado a Fiducia']),3);
-                }else{
+                if (doubleval($arrReporte[$seqFormulario]['Girado a Fiducia']) != 0) {
+                    $arrReporte[$seqFormulario]['% Girado Constructor'] = round((floatval($arrReporte[$seqFormulario]['Girado a Constructor']) * 100) / floatval($arrReporte[$seqFormulario]['Girado a Fiducia']), 3);
+                } else {
                     $arrReporte[$seqFormulario]['% Girado Constructor'] = 0;
                 }
-
             }
 
             $objRes->MoveNext();
@@ -4888,8 +4887,8 @@ WHERE
         $arrTitulos[] = "Girado a Constructor";
         $arrTitulos[] = "% Girado Constructor";
 
-        $this->obtenerReportesGeneral($arrReporte, "GirosVIPA" , $arrTitulos , true);
-        
+        $this->obtenerReportesGeneral($arrReporte, "GirosVIPA", $arrTitulos, true);
+
 //        $sql = "
 //            select 
 //                fac.seqFormulario, 
@@ -4963,7 +4962,6 @@ WHERE
 //        }
 //
 //        $this->obtenerReportesGeneral($arrReporte, "GirosVIPA");
-        
     }
 
     public function crucesFnv() {
@@ -5083,50 +5081,50 @@ WHERE
         ";
         $objRes = $aptBd->execute($sql);
         $arrExcepciones = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqArchivoMcy = $objRes->fields['ID'];
             unset($objRes->fields['ID']);
             $txtObservacion = "";
-            if(intval($objRes->fields['ID FORMULARIO'] != 0)){
+            if (intval($objRes->fields['ID FORMULARIO'] != 0)) {
                 switch ($objRes->fields['ID FUENTE']) {
                     case 1: // Actos Administrativos
                         $seqEstadoFormulario = $objRes->fields['ID ESTADO FORMULARIO'];
                         $seqEstadoFormularioActo = $objRes->fields['ID ESTADO FORMULARIO ACTO'];
-                        if(in_array($seqEstadoFormulario,$arrEstadosNoExclusion)){
+                        if (in_array($seqEstadoFormulario, $arrEstadosNoExclusion)) {
                             $txtObservacion .= "Estado de FRM: " . $arrEstados[$seqEstadoFormulario] . ", ";
                         }
-                        if(in_array($seqEstadoFormularioActo,$arrEstadosNoExclusion)){
+                        if (in_array($seqEstadoFormularioActo, $arrEstadosNoExclusion)) {
                             $txtObservacion .= "Estado de FAC: " . $arrEstados[$seqEstadoFormularioActo] . ", ";
                         }
-                        if($seqEstadoFormulario != $seqEstadoFormularioActo){
-                            $txtObservacion .= "Estado FAC y FRM diferentes: FRM " .  $arrEstados[$seqEstadoFormulario] . " FAC " . $arrEstados[$seqEstadoFormularioActo] . ", ";
+                        if ($seqEstadoFormulario != $seqEstadoFormularioActo) {
+                            $txtObservacion .= "Estado FAC y FRM diferentes: FRM " . $arrEstados[$seqEstadoFormulario] . " FAC " . $arrEstados[$seqEstadoFormularioActo] . ", ";
                         }
-                        $objRes->fields['APLICA EXCLUSION'] = ($txtObservacion != "")? "NO" : "SI";
-                        $objRes->fields['OBSERVACIONES']    = $txtObservacion;
+                        $objRes->fields['APLICA EXCLUSION'] = ($txtObservacion != "") ? "NO" : "SI";
+                        $objRes->fields['OBSERVACIONES'] = $txtObservacion;
                         break;
                     case 2: // Archivo
                         $objRes->fields['APLICA EXCLUSION'] = "SI";
-                        $objRes->fields['OBSERVACIONES']    = "";
+                        $objRes->fields['OBSERVACIONES'] = "";
                         break;
                     case 3: // formulario
                         $seqEstadoFormulario = $objRes->fields['ID ESTADO FORMULARIO'];
-                        if(in_array($seqEstadoFormulario,$arrEstadosNoExclusion)){
+                        if (in_array($seqEstadoFormulario, $arrEstadosNoExclusion)) {
                             $txtObservacion .= "Estado de FRM: " . $arrEstados[$seqEstadoFormulario] . ", ";
                         }
-                        $objRes->fields['APLICA EXCLUSION'] = ($txtObservacion != "")? "NO" : "SI";
-                        $objRes->fields['OBSERVACIONES']    = $txtObservacion;
+                        $objRes->fields['APLICA EXCLUSION'] = ($txtObservacion != "") ? "NO" : "SI";
+                        $objRes->fields['OBSERVACIONES'] = $txtObservacion;
                         break;
                     default:
                         $objRes->fields['APLICA EXCLUSION'] = "SI";
-                        $objRes->fields['OBSERVACIONES']    = "";
+                        $objRes->fields['OBSERVACIONES'] = "";
                         break;
                 }
-            }else{
+            } else {
                 $objRes->fields['APLICA EXCLUSION'] = "SI";
-                $objRes->fields['OBSERVACIONES']    = "No hay formulario relacionado";
+                $objRes->fields['OBSERVACIONES'] = "No hay formulario relacionado";
             }
 
-            $objRes->fields['OBSERVACIONES'] = rtrim($objRes->fields['OBSERVACIONES'],", ");
+            $objRes->fields['OBSERVACIONES'] = rtrim($objRes->fields['OBSERVACIONES'], ", ");
             $arrExcepciones[$seqArchivoMcy] = $objRes->fields;
             $objRes->MoveNext();
         }
@@ -5336,7 +5334,7 @@ WHERE
                 'NO') AS 'Hogar Rom ',                
                 IF(mayor.seqFormulario IS NOT NULL,
                 'SI',
-                'NO') AS 'Mayor 65 Años'
+                'NO') AS 'Mayor 60 Años'
               FROM
                   t_ciu_ciudadano ciud
                       INNER JOIN
@@ -5476,9 +5474,9 @@ WHERE
                       t_ciu_ciudadano
                   LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
                   WHERE
-                      seqCondicionEspecial = 2
-                          OR seqCondicionEspecial2 = 2
-                          OR seqCondicionEspecial3 = 2) mayor ON frm.seqFormulario = mayor.seqFormulario
+                      TIMESTAMPDIFF(YEAR,
+                fchNacimiento,
+                CURDATE()) > 59) mayor ON frm.seqFormulario = mayor.seqFormulario
                 LEFT JOIN
               (SELECT DISTINCT
                     (seqFormulario)
@@ -5497,6 +5495,190 @@ WHERE
 
         $objRes = $aptBd->execute($sql);
         $this->obtenerReportesGeneral($objRes, "reporteGralHogar");
+    }
+
+    public function informeGralSubsidios() {
+
+        global $aptBd;
+        $array = Array();
+        $modAdq = '1,6,11';
+        $inscritosAdq = $this->InfGralIscritosSubsidios($modAdq);
+        $array['inscritosAdq'] = $inscritosAdq['inscritos'];
+        $array['victimasAdq'] = $inscritosAdq['victimas'];
+
+        $asignadoAdq = $this->InfGralAsignadosSubsidios($modAdq, 0);
+        $array['asignadosAdq'] = $asignadoAdq['asignados'];
+        $array['valAsignadosAdq'] = $asignadoAdq['valAsignados'];
+
+        $asignadoAdqVic = $this->InfGralAsignadosSubsidios($modAdq, 1);
+        $array['asignadosAdqVic'] = $asignadoAdqVic['asignados'];
+        $array['valAsignadosAdqVic'] = $asignadoAdqVic['valAsignados'];
+
+        $legalizadoAdq = $this->InfGrallegalizadosSubsidios($modAdq, 0);
+        $array['legalizadosAdq'] = $legalizadoAdq['cantidad'];
+        $array['legalizadosAdqVal'] = $legalizadoAdq['valor'];
+
+        $legalizadoAdqVic = $this->InfGrallegalizadosSubsidios($modAdq, 1);
+        $array['legalizadosAdqVic'] = $legalizadoAdqVic['cantidad'];
+        $array['legalizadosAdqValVic'] = $legalizadoAdqVic['valor'];
+
+        $modPive = '12,13';
+        $inscritosPive = $this->InfGralIscritosSubsidios($modPive);
+        $array['inscritosPive'] = $inscritosPive['inscritos'];
+        $array['victimasPive'] = $inscritosPive['victimas'];
+
+        $asignadoPive = $this->InfGralAsignadosSubsidios($modPive, 0);
+        $array['asignadosPive'] = $asignadoAdq['asignados'];
+        $array['valAsignadosPive'] = $asignadoAdq['valAsignados'];
+
+        $asignadoPiveVic = $this->InfGralAsignadosSubsidios($modPive, 1);
+        $array['asignadosPiveVic'] = $asignadoPiveVic['asignados'];
+        $array['valAsignadosPiveVic'] = $asignadoPiveVic['valAsignados'];
+
+        $legalizadoPive = $this->InfGrallegalizadosSubsidios($modPive, 0);
+        $array['legalizadosPive'] = $legalizadoPive['cantidad'];
+        $array['legalizadosPiveVal'] = $legalizadoPive['valor'];
+
+
+        $legalizadoPiveVic = $this->InfGrallegalizadosSubsidios($modPive, 1);
+        $array['legalizadosPiveVic'] = $legalizadoPiveVic['cantidad'];
+        $array['legalizadosPiveValVic'] = $legalizadoPiveVic['valor'];
+
+        $asignadoMiCasaYa = $this->InfGralAsignadosMiCasaYa(0);
+        $array['asignadosMiCasaYa'] = $asignadoMiCasaYa['asignados'];
+        $array['valAsignadosMiCasaYa'] = $asignadoMiCasaYa['valAsignados'];
+
+        reporteGeneralsubsidios($array);
+    }
+
+    public function InfGralIscritosSubsidios($mod) {
+        global $aptBd;
+        $array = Array();
+        $sqlInscritosAdqVivienda = "SELECT 
+                                    COUNT(seqFormulario) as cantidad,
+                                    (SELECT 
+                                            COUNT(seqFormulario)
+                                        FROM
+                                            t_frm_formulario frm2
+                                                LEFT JOIN
+                                            t_frm_estado_proceso est2 USING (seqEstadoProceso)
+                                        WHERE                                                                                   
+                                                 frm2.seqModalidad = frm.seqModalidad                                                
+                                                AND frm2.seqEstadoProceso IN (frm.seqEstadoProceso) 
+                                                AND bolDesplazado = 1 AND bolCerrado = 0) AS victimas
+                                FROM
+                                    t_frm_formulario frm
+                                        LEFT JOIN
+                                    t_frm_estado_proceso est USING (seqEstadoProceso)
+                                WHERE
+                                    est.seqEtapa IN (1 , 2, 3)
+                                        AND frm.seqEstadoProceso NOT IN (1,5, 13, 35, 36, 39, 52)
+                                        and frm.seqModalidad in (" . $mod . ") 
+                                        AND frm.bolCerrado = 0;";
+        $objRes = $aptBd->execute($sqlInscritosAdqVivienda);
+        while ($objRes->fields) {
+            $array['inscritos'] = $objRes->fields['cantidad'];
+            $array['victimas'] = $objRes->fields['victimas'];
+            $objRes->MoveNext();
+        }
+        //   var_dump($array);        die();
+        return $array;
+    }
+
+    public function InfGralAsignadosSubsidios($mod, $victima) {
+        global $aptBd;
+        $array = Array();
+        $sqlAsignadoAdq = "SELECT 
+                                COUNT(*) AS cantidad, SUM(fac.valTotal) AS valor
+                            FROM
+                                t_aad_formulario_acto fac
+                                    LEFT JOIN
+                                t_frm_formulario frm USING (seqformulario)
+                                    LEFT JOIN
+                                t_aad_giro USING (seqFormularioActo)
+                                    LEFT JOIN
+                                t_aad_hogares_vinculados USING (seqFormularioActo)
+                                    LEFT JOIN
+                                t_frm_estado_proceso est ON (fac.seqEstadoProceso = est.seqEstadoProceso)
+                            WHERE                            
+                                fac.seqEstadoProceso IN (15 , 16)     
+                                    AND fac.seqModalidad in (" . $mod . ")
+                                    AND seqTipoActo = 1";
+        if ($victima == 1) {
+            $sqlAsignadoAdq .= " AND (fac.bolDesplazado = 1 or frm.bolDesplazado = 1)";
+        }
+        $objResAsigAdq = $aptBd->execute($sqlAsignadoAdq);
+        while ($objResAsigAdq->fields) {
+            $array['asignados'] = $objResAsigAdq->fields['cantidad'];
+            $array['valAsignados'] = $objResAsigAdq->fields['valor'];
+            $objResAsigAdq->MoveNext();
+        }
+        //   var_dump($array);        die();
+        return $array;
+    }
+
+    public function InfGralAsignadosMiCasaYa($victima) {
+        global $aptBd;
+        $array = Array();
+        $sqlAsignadoAdq = "SELECT 
+                                 COUNT(*) AS cantidad, SUM(fac.valAspiraSubsidio) AS valor
+                             FROM
+                                 t_aad_formulario_acto fac
+                                     LEFT JOIN
+                                 t_frm_formulario frm USING (seqformulario)
+                                     LEFT JOIN
+                                 t_aad_giro USING (seqFormularioActo)
+                                     LEFT JOIN
+                                 t_aad_hogares_vinculados USING (seqFormularioActo)
+                                     LEFT JOIN
+                                 t_frm_estado_proceso est ON (fac.seqEstadoProceso = est.seqEstadoProceso)
+                             WHERE
+                                      frm.seqTipoEsquema IN ( 16, 17) 
+                                     AND seqTipoActo = 1";
+        if ($victima == 1) {
+            $sqlAsignadoAdq .= " AND (fac.bolDesplazado = 1 or frm.bolDesplazado = 1)";
+        }
+        $objResAsigAdq = $aptBd->execute($sqlAsignadoAdq);
+        while ($objResAsigAdq->fields) {
+            $array['asignados'] = $objResAsigAdq->fields['cantidad'];
+            $array['valAsignados'] = $objResAsigAdq->fields['valor'];
+            $objResAsigAdq->MoveNext();
+        }
+        //   var_dump($array);        die();
+        return $array;
+    }
+
+    public function InfGrallegalizadosSubsidios($mod, $victima) {
+        global $aptBd;
+
+        $array = Array();
+        $sqlInscritosAdqLegalizados = "SELECT 
+                                COUNT(*) AS cantidad, SUM(fac.valTotal) AS valor
+                            FROM
+                                t_aad_formulario_acto fac
+                                    LEFT JOIN
+                                t_frm_formulario frm USING (seqformulario)
+                                    LEFT JOIN
+                                t_aad_giro USING (seqFormularioActo)
+                                    LEFT JOIN
+                                t_aad_hogares_vinculados USING (seqFormularioActo)
+                                    LEFT JOIN
+                                t_frm_estado_proceso est ON (fac.seqEstadoProceso = est.seqEstadoProceso)
+                            WHERE
+                                fac.seqEstadoProceso IN (40)     
+                                    AND fac.seqModalidad in (" . $mod . ")                                 
+                                    AND seqTipoActo = 1";
+        if ($victima == 1) {
+            $sqlInscritosAdqLegalizados .= " AND (fac.bolDesplazado = 1 or frm.bolDesplazado = 1)";
+        }
+        $objResLegAdq = $aptBd->execute($sqlInscritosAdqLegalizados);
+        while ($objResLegAdq->fields) {
+            $array['cantidad'] = $objResLegAdq->fields['cantidad'];
+            $array['valor'] = $objResLegAdq->fields['valor'];
+            $objResLegAdq->MoveNext();
+        }
+        //   var_dump($array);        die();
+        return $array;
     }
 
 }

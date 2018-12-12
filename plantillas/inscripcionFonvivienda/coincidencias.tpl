@@ -19,12 +19,14 @@
                 </thead>
                 <tbody>
 
+
+                {assign var=seqTipo value=$claInscripcion->seqTipo}
                 {foreach from=$claInscripcion->arrHogares.$numHogar.ciudadanos key=idCiudadano item=arrCiudadano}
                     {if $arrCiudadano.numDocumento == $numDocumento}
                         {foreach from=$arrCiudadano.coincidencias key=numDistancia item=arrCoincidencias}
                             {foreach from=$arrCoincidencias key=numDocumentoCoincidencia item=arrDatos}
-                                <tr style="cursor: pointer; {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)} background-color: #f5f5f5; {/if}"
-                                    {if in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias) and
+                                <tr style="cursor: pointer; {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias.$seqTipo)} background-color: #f5f5f5; {/if}"
+                                    {if in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias.$seqTipo) and
                                         (intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) == 1 or intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) == 0)
                                     }
                                         onclick="document.getElementById('seqFormulario{$arrDatos.formulario}').checked = (document.getElementById('seqFormulario{$arrDatos.formulario}').checked)? false:true;"
@@ -55,7 +57,7 @@
                                                name="seqFormulario"
                                                id="seqFormulario{$arrDatos.formulario}"
                                                value="{$arrDatos.formulario}"
-                                               {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias)}
+                                               {if not in_array($arrDatos.idEstado, $claInscripcion->arrEstadosCoincidencias.$seqTipo)}
                                                    disabled
                                                {/if}
                                                {if intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) != 1 and intval($claInscripcion->arrHogares.$numHogar.seqUnidadProyecto) != 0}

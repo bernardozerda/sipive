@@ -144,7 +144,9 @@ class InscripcionFonvivienda
         // estados que se tienen en cuenta poara el procesamiento
         $this->arrEstados[] = "por asignar";
 
-        $this->arrEstadosCoincidencias = array(1,35,36,37,41,43,44,46,53);
+        $this->arrEstadosCoincidencias[1] = array(1,35,36,37,41,43,44,46,53,5,14,18);
+        $this->arrEstadosCoincidencias[2] = array(1,35,36,37,41,43,44,46,53);
+        $this->arrEstadosCoincidencias[3] = array(1,35,36,37,41,43,44,46,53);
 
         // MCY
         $this->arrRangoIngresos[1][] = "HASTA 2 SMMLV"; // 10 salarios

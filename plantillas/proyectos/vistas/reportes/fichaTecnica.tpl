@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link href="recursos/estilos/contentProyects.css" rel="stylesheet">
@@ -247,7 +248,7 @@
                             </td>
                             <td style="text-align: right">
 
-                                El total de recursos de SDHT es $ {$arrFinanciera.$seqProyecto.actual|number_format:0:',':'.'}
+                                El total de recursos de SDHT es $ {$arrFinanciera.$seqProyecto.fiducia|number_format:0:',':'.'}
 
                                 {if count($arrListadoGirosFiducia) > 0}
                                     de los cuales se
@@ -271,7 +272,7 @@
 
                             </td>
                             <td>
-                                El total de recursos de SDHT es $ {$arrFinanciera.$seqProyecto.actual|number_format:0:',':'.'}
+                                El total de recursos de SDHT es $ {$arrFinanciera.$seqProyecto.fiducia|number_format:0:',':'.'}
                                 {if count($arrListadoGirosConstructor) > 0}
                                     de los cuales se
                                     {if count($arrListadoGirosConstructor) == 1}

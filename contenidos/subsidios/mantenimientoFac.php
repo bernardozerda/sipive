@@ -108,21 +108,16 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
             $numResolucion = intval(mb_ereg_replace("[^0-9]", "", $arrLinea[7]));
             $fchResolucion = $arrLinea[9];
             $txtEstado = trim(mb_strtoupper($arrLinea[10]));
+            $fchLegalizacion = (esFechaValida($arrLinea[11]))? $arrLinea[11] : null;
 
             $seqFormularioActo = intval($arrFormularios[$numResolucion . "-" . $fchResolucion][$seqFormulario]);
             if ($seqFormularioActo == 0) {
                 $arrArchivo['errores'][] = "Error Linea " . ($numLinea + 1) . ": No existe formulario relacionado con el acto administrativo";
             }
 
-            $fchLegalizacion = ($fchLegalizacion != "")? "'" . $fchLegalizacion . "'" : "null";
+            $fchLegalizacion = ($fchLegalizacion != null)? "'" . $fchLegalizacion . "'" : "null";
 
-            $arrSql[] = "
-                update t_aad_formulario_acto set 
-                    seqEstadoProceso = " . $arrEstados[$txtEstado] . ",
-                    fchLegalizado = $fchLegalizacion, 
-                    fchUltimaActualizacion = now() 
-                where seqFormularioActo = $seqFormularioActo";
-
+            $arrSql[] = "update t_aad_formulario_acto set seqEstadoProceso = " . $arrEstados[$txtEstado] . ", fchLegalizado = $fchLegalizacion, fchUltimaActualizacion = now() where seqFormularioActo = $seqFormularioActo";
         }
 
         if(empty($arrArchivo['errores']) and (!empty($arrSql))) {
@@ -132,7 +127,7 @@ if( (! empty($_FILES)) and $_FILES['archivo']['error'] != 4 ) {
                     $aptBd->execute($sql);
                 }
                 $arrMensajes[] = "Estado de actos administrativos actualizados, procesadas " . count($arrSql) . " cambios";
-                $aptBd->RollBackTrans();
+                $aptBd->CommitTrans();
             } catch (Exception $objError) {
                 $aptBd->RollBackTrans();
                 $arrArchivo['errores'][] = $objError->getMessage();

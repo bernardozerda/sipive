@@ -65,6 +65,21 @@ if(! empty($claInscripcion->arrPlantilla[$seqTipo])) {
     }
 }
 
+// crea la hoja para las unidades
+if($seqTipo == 3 or $seqTipo == 2) {
+    if (!empty($claInscripcion->arrDatosUnidades)) {
+        $objHoja = $objPHPExcel->createSheet();
+        $objHoja->setTitle("Unidades");
+        $numFila = 2;
+        $objHoja->setCellValueByColumnAndRow(0, 1, "Nombre de la unidad", flase);
+        foreach ($claInscripcion->arrDatosUnidades as $seqUnidadProyecto => $arrDato) {
+            $objHoja->setCellValueByColumnAndRow(0, $numFila, $arrDato['nombre'], flase);
+            $numFila++;
+        }
+    }
+    $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn(0)->setAutoSize(true);
+}
+
 // titulos
 foreach ($arrTitulos as $i => $txtTitulo) {
     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($i, 1, $txtTitulo, flase);
@@ -72,7 +87,7 @@ foreach ($arrTitulos as $i => $txtTitulo) {
 
 
 // contenido
-$numFilas = 100;
+$numFilas = 10;
 if(! empty($claInscripcion->arrPlantilla[$seqTipo])) {
     for ($i = 2; $i < $numFilas; $i++) {
         $j = 0;

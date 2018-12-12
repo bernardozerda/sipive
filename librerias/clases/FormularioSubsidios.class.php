@@ -164,7 +164,7 @@ class FormularioSubsidios {
         $this->seqEstadoProceso = 1;
         $this->seqFormulario = 0;
         $this->seqLocalidad = 1;
-        $this->seqModalidad = 1;
+        $this->seqModalidad = 0;
         $this->seqPeriodo = 1;
         $this->seqPlanGobierno = 3;
         $this->seqProyecto = 37;
@@ -828,7 +828,7 @@ class FormularioSubsidios {
             try {
                 $sql = "
                     update t_pry_unidad_proyecto set
-                      seqFormulario = 0
+                      seqFormulario = null
                     where seqFormulario = " . $this->seqFormulario . "
                 ";
                 $aptBd->execute($sql);

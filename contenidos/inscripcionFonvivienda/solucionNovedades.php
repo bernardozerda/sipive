@@ -20,8 +20,6 @@ $claInscripcion = new InscripcionFonvivienda();
 $claInscripcion->cargar($seqCargue,$numHogar);
 $claInscripcion->validarFormulario($_POST);
 
-
-
 if($seqEstadoHogar != 3) {
     $claInscripcion->procesarNovedades($_POST['seqFormulario'], $numHogar, $numDocumento);
 }
@@ -49,8 +47,6 @@ if(! empty($claInscripcion->arrErrores)){
     $claSmarty->display("inscripcionFonvivienda/detalles.tpl");
 
 }else{
-
-
 
     $claInscripcion->salvarSolucionNovedades($_POST);
     $claInscripcion->cargar($_POST['seqCargue']);

@@ -88,7 +88,7 @@ class Ciudadano {
         $this->seqCondicionEspecial = 6;
         $this->seqCondicionEspecial2 = 6;
         $this->seqCondicionEspecial3 = 6;
-        $this->seqEstadoCivil = 0;
+        $this->seqEstadoCivil = 9;
         $this->seqEtnia = 1;
         $this->seqGrupoLgtbi = 0;
         $this->seqNivelEducativo = 1;

@@ -4874,6 +4874,112 @@ class Seguimiento {
         return $txtComentarios;
     }
 
+    public function inscripcionMasiva($seqTipo, $objAnterior,$objNuevo, $txtComentario = ""){
+        global $aptBd;
+
+        // ciudadanos eliminados
+        $txtCambiosHogar = "";
+        foreach($objAnterior->arrCiudadano as $seqCiudadano => $objCiudadano){
+            if(! isset($objNuevo->arrCiudadano[$seqCiudadano])){
+                $txtCambiosHogar .=
+                    $this->txtSeparador .
+                    $objCiudadano->obtenerNombre($objCiudadano->numDocumento) .
+                    " [" . $objCiudadano->numDocumento . "] " .
+                    "<span class='msgError'>Eliminado</span>" . $this->txtSalto;
+            }
+        }
+
+        // ciudadanos adicionados
+        $txtNombre = "";
+        $numDocumento = 0;
+        foreach($objNuevo->arrCiudadano as $seqCiudadano => $objCiudadano){
+            if(! isset($objAnterior->arrCiudadano[$seqCiudadano])){
+                $txtCambiosHogar .=
+                    $this->txtSeparador .
+                    $objCiudadano->obtenerNombre($objCiudadano->numDocumento) .
+                    " [" . $objCiudadano->numDocumento . "] " .
+                    "<span class='msgOk'>Adicionado</span>" . $this->txtSalto;
+            }
+            if($objCiudadano->seqParentesco == 1){
+                $txtNombre = $objCiudadano->obtenerNombre($objCiudadano->numDocumento);
+                $numDocumento = $objCiudadano->numDocumento;
+            }
+        }
+
+        $txtCambiosFormulario = "";
+        foreach($objNuevo as $txtCampo => $txtValor){
+            if(! is_array($txtValor)){
+                $objAnterior->$txtCampo = regularizarCampo($txtCampo, $objAnterior->$txtCampo);
+                $txtValor = regularizarCampo($txtCampo, $txtValor);
+                if($objAnterior->$txtCampo != $txtValor and $txtCampo != "seqFormulario") {
+                    $txtCambiosFormulario .=
+                        $this->txtSeparador .
+                        $txtCampo .
+                        ", Valor Anterior: " . $objAnterior->$txtCampo .
+                        ", Valor Nuevo: " . $txtValor . $this->txtSalto;
+                }
+            }
+        }
+
+        $txtCambios = "";
+        if($txtCambiosHogar != ""){
+            $txtCambios .= "<strong>[" . $objNuevo->seqFormulario . "] Cambios al hogar:</strong>" . $this->txtSalto;
+            $txtCambios .= $txtCambiosHogar;
+        }
+        if($txtCambiosFormulario != ""){
+            $txtCambios .= "<strong>[" . $objNuevo->seqFormulario . "] Cambios al formulario:</strong>" . $this->txtSalto;
+            $txtCambios .= $txtCambiosFormulario;
+        }
+
+        // seguimientos
+        switch ($seqTipo){
+            case 1:
+                $txtPrograma = "MI CASA YA";
+                break;
+            case 2:
+                $txtPrograma = "VIPA";
+                break;
+            case 3:
+                $txtPrograma = "";
+                break;
+            default:
+                $txtPrograma = "";
+                break;
+        }
+
+        if($txtComentario == "") {
+            $txtComentario = "ACTUALIZACIÓN DE INFORMACIÓN EN LA CONFORMACIÓN DE HOGAR. HOGAR PERTENECIENTE AL ";
+            $txtComentario .= "GRUPO BENEFICIARIO SUBSIDIOS $txtPrograma SEGÚN RESOLUCIÓN DEL MINISTERIO DE ";
+            $txtComentario .= "VIVIENDA Y VINCULACION BENEFICIO SDHT";
+        }
+
+        $sql = "
+            INSERT INTO T_SEG_SEGUIMIENTO (
+                seqFormulario,
+                fchMovimiento,
+                seqUsuario,
+                txtComentario,
+                txtCambios,
+                numDocumento,
+                txtNombre,
+                seqGestion
+            ) VALUES (
+                " . $objNuevo->seqFormulario . ",
+                '" . date("Y-m-d H:i:s") . "',
+                " . $_SESSION['seqUsuario'] . ",
+                '" . $txtComentario . "',
+                '" . mb_ereg_replace("'","\'",$txtCambios) . "',
+                " . $numDocumento . ",
+                '" . $txtNombre . "',
+                " . 46 . "
+            )
+        ";
+        $aptBd->execute($sql);
+
+    }
+
+
+
 }
 
 // fin clase seguimiento

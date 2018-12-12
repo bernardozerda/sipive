@@ -32,8 +32,14 @@
         {if $claInscripcion->seqEstado != 2}
             <div class="alert alert-info">
                 <div class="row">
-                    <div class="col-sm-3"><strong>Identificador del cargue</strong></div>
-                    <div class="col-sm-1">{$claInscripcion->seqCargue}</div>
+                    <div class="col-sm-3">
+                        <strong>Identificador del cargue</strong><br>
+                        <strong>Tipo del cargue</strong>
+                    </div>
+                    <div class="col-sm-1">
+                        {$claInscripcion->seqCargue}<br>
+                        {$claInscripcion->txtTipo}
+                    </div>
                     <div class="col-sm-3">
                         <strong>
                             Líneas procesadas<br>

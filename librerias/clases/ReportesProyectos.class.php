@@ -373,7 +373,7 @@ class Reportes {
             $sql = "SELECT
 						frm.seqFormulario,
 						frm.txtFormulario,
-                                                frm.fchVigencia as Vigencia_SDV,
+                        frm.fchVigencia as Vigencia_SDV,
 						CONCAT(eta.txtEtapa, ' ', epr.txtEstadoProceso) AS EstadoProceso,
 						if(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
 						moa.txtModalidad,
@@ -3190,13 +3190,13 @@ class Reportes {
                     $arrReporte[$seqProyecto]['menor'];
 
             $arrReporte[$seqProyecto]['fiducia'] = 0;
-            $arrReporte[$seqProyecto]['reintegro'] = 0;
             $arrReporte[$seqProyecto]['totalFiducia'] = 0;
             $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = 0;
             $arrReporte[$seqProyecto]['constructor'] = 0;
             $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = 0;
             $arrReporte[$seqProyecto]['actualFiducia'] = 0;
             $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = 0;
+            $arrReporte[$seqProyecto]['reintegro'] = 0;
             $arrReporte[$seqProyecto]['rendimiento'] = 0;
             $arrReporte[$seqProyecto]['observaciones'] = "";
 
@@ -3263,7 +3263,8 @@ class Reportes {
         foreach ($arrReporte as $seqProyecto => $arrDatos) {
 
             // valor total fiducia
-            $arrReporte[$seqProyecto]['totalFiducia'] = doubleval($arrReporte[$seqProyecto]['fiducia']) - doubleval($arrReporte[$seqProyecto]['reintegro']);
+//            $arrReporte[$seqProyecto]['totalFiducia'] = doubleval($arrReporte[$seqProyecto]['fiducia']) - doubleval($arrReporte[$seqProyecto]['reintegro']);
+            $arrReporte[$seqProyecto]['totalFiducia'] = doubleval($arrReporte[$seqProyecto]['fiducia']);
 
             // fiducia
             if ($arrReporte[$seqProyecto]['totalFiducia'] == 0) {
@@ -3297,13 +3298,13 @@ class Reportes {
         $arrTitulos[4]['nombre'] = "VALOR TOTAL MENOR VALOR DEL PROYECTO SDHT";
         $arrTitulos[5]['nombre'] = "ACTUAL VALOR TOTAL DEL PROYECTO";
         $arrTitulos[6]['nombre'] = "VALOR GIRADO A FIDUCIA";
-        $arrTitulos[7]['nombre'] = "VALOR TOTAL REINTEGROS";
-        $arrTitulos[8]['nombre'] = "VALOR TOTAL GIRADO A FIDUCIA";
-        $arrTitulos[9]['nombre'] = "% VALOR TOTAL GIRADO A FIDUCIA";
-        $arrTitulos[10]['nombre'] = "TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
-        $arrTitulos[11]['nombre'] = "% TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
-        $arrTitulos[12]['nombre'] = "ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
-        $arrTitulos[13]['nombre'] = "% ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
+        $arrTitulos[7]['nombre'] = "VALOR TOTAL GIRADO A FIDUCIA";
+        $arrTitulos[8]['nombre'] = "% VALOR TOTAL GIRADO A FIDUCIA";
+        $arrTitulos[9]['nombre'] = "TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
+        $arrTitulos[10]['nombre'] = "% TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
+        $arrTitulos[11]['nombre'] = "ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
+        $arrTitulos[12]['nombre'] = "% ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
+        $arrTitulos[13]['nombre'] = "VALOR TOTAL REINTEGROS";
         $arrTitulos[14]['nombre'] = "TOTAL RENDIMIENTOS REGISTRADOS";
         $arrTitulos[15]['nombre'] = "OBSERVACIONES";
 
@@ -3315,12 +3316,12 @@ class Reportes {
         $arrTitulos[5]['formato'] = "moneda";
         $arrTitulos[6]['formato'] = "moneda";
         $arrTitulos[7]['formato'] = "moneda";
-        $arrTitulos[8]['formato'] = "moneda";
-        $arrTitulos[9]['formato'] = "porcentaje";
-        $arrTitulos[10]['formato'] = "moneda";
-        $arrTitulos[11]['formato'] = "porcentaje";
-        $arrTitulos[12]['formato'] = "moneda";
-        $arrTitulos[13]['formato'] = "porcentaje";
+        $arrTitulos[8]['formato'] = "porcentaje";
+        $arrTitulos[9]['formato'] = "moneda";
+        $arrTitulos[10]['formato'] = "porcentaje";
+        $arrTitulos[11]['formato'] = "moneda";
+        $arrTitulos[12]['formato'] = "porcentaje";
+        $arrTitulos[13]['formato'] = "moneda";
         $arrTitulos[14]['formato'] = "moneda";
         $arrTitulos[15]['formato'] = "texto";
 

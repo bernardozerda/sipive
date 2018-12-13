@@ -8,7 +8,7 @@
 
 function reporteGeneralsubsidios($array) {
 
-    $txtNombreArchivo = "InformeGeneralSubsidios" . date("Ymd_His") . ".xls";
+    $txtNombreArchivo = "IndicadoresSubsidiosSSGF" . date("Ymd_His") . ".xls";
     header("Content-disposition: attachment; filename=$txtNombreArchivo");
     header("Content-Type: application/force-download");
     header("Content-Type: application/vnd.ms-excel; charset=utf-8;");
@@ -45,12 +45,12 @@ function reporteGeneralsubsidios($array) {
     $datos .= "<tr>";
     $datos .= "<td rowspan='3'>Victimas</td> "
             . "<th>Inscritos</th>"
-            . "<td>" . number_format($array['victimasAdq'], 0, '.', ',') . "</td>"
+            . "<td>" . $array['victimasAdq'] . "</td>"
             . "<th>&nbsp;</th>";
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Asignados</th>"
-            . "<td>" . number_format($array['asignadosAdqVic'], 0, '.', ',') . "</td>"
+            . "<td>" . $array['asignadosAdqVic'] . "</td>"
             . "<th>" . number_format($array['valAsignadosAdqVic'], 0, '.', ',') . "</th>";
     $datos .= "</tr>";
     $datos .= "<tr>"

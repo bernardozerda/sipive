@@ -1164,7 +1164,7 @@
             
             {if $informeGralSubsidios == 1}
                 <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                    <td class="tituloCampo" align="left" width="60%">Informe Gral de Subsidios</td>
+                    <td class="tituloCampo" align="left" width="60%">Indicadores Subsidios SSGF</td>
                     <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
                         <a onclick="someterFormulario(
                                         'mensajes',

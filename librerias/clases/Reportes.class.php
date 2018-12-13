@@ -5566,11 +5566,12 @@ WHERE
                                             LEFT JOIN
                                         t_frm_estado_proceso est2 USING (seqEstadoProceso)
                                     WHERE
-                                                    hog2.seqParentesco =  hog.seqParentesco
-                                        AND frm2.seqModalidad = frm.seqModalidad
-                                            AND frm2.seqEstadoProceso IN (frm.seqEstadoProceso)
-                                            AND bolDesplazado = 1
-                                            AND bolCerrado = 0) AS victimas
+                                         hog2.seqParentesco =  hog.seqParentesco
+                                        AND est2.seqEtapa IN (1 , 2, 3)
+                                        AND frm2.seqEstadoProceso NOT IN (1 , 5, 13, 35, 36, 39, 52, 8, 14)
+                                        AND frm2.seqModalidad IN (" . $mod . ")
+                                        AND bolDesplazado = 1
+                                        AND bolCerrado = 0) AS victimas
                             FROM
                                 t_frm_formulario frm
                                     LEFT JOIN
@@ -5683,6 +5684,7 @@ WHERE
                                 OR hac.seqParentesco IS NULL)
                                 AND fac.seqEstadoProceso IN (33,40)    
                                 AND aad.seqCaracteristica = 1
+                                 and hvi.seqTipoActo = 1
                                 and  fac.seqModalidad in (" . $mod . ")
                                 and YEAR(fac.fchLegalizado) >='2016'";
         if ($victima == 1) {

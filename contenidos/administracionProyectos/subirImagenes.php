@@ -6,7 +6,7 @@ if (isset($_FILES["archivo"])) {
     $idProyecto = $_REQUEST['idProyecto'];
     $destino = '../../recursos/proyectos/proyecto-' . $idProyecto . '/imagenes/';
     $url = str_replace('index.php', '', $_SERVER['HTTP_REFERER']);
-    $tmax = 10000;
+    $tmax = 200000;
 
     if (!file_exists($destino)) {
         mkdir($destino, 0777, true);
@@ -41,7 +41,7 @@ if (isset($_FILES["archivo"])) {
             $origen = $_FILES['archivo']['tmp_name'][$key];
             $tamano = $_FILES['archivo']['size'][$key];
             $tipo = explode("/", $_FILES['archivo']['type'][$key])[1];
-            // echo "<p>" . $tipo . "</p>";
+            // echo "<p>" . $tamano ." < ". $tmax . "</p>";
             if ($tipo == "jpg" || $tipo == "JPG" || $tipo == "jpeg" || $tipo == "JPEG") {
                 if ($tamano < $tmax) {
                     $target_path = $target_path . basename($_FILES['archivo']['name'][$key]);

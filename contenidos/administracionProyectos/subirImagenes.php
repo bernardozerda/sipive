@@ -24,9 +24,11 @@ if (isset($_FILES["archivo"])) {
     }
     $countNombre = count($arraImagenes) + 1;
     foreach ($arraImagenes as $key => $value) {
-        $nombreImg = explode("/", $value)[2];
+        $nombreImg = explode("/", $value);
         $retorna .=' <div class = "col-md-3">
-        <label ><h5><b>' . $nombreImg . '</b></h5></label><br>
+        <label ><h5><b>' . $nombreImg[2] . '</b>
+          <img src="recursos/imagenes/deleted.png" onclick="moverImagen("'.$value.'", 1,"' . $nombreImg[2] . '",' . $idProyecto . ' );">  
+        </h5></label><br>
             <img src = "' . $url . 'recursos/proyectos/' . $value . '" class = "img-circle" alt = "Card image cap" height = "100" width = "100" />
             </div>';
     }

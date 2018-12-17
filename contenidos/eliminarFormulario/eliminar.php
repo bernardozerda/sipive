@@ -88,9 +88,45 @@ if ($seqFormulario == 0) {
     $claFormulario = new FormularioSubsidios();
     $claFormulario->cargarFormulario($seqFormulario);
     $seqEstadoProceso = $claFormulario->seqEstadoProceso;
+
     if ($arrEtapa[$seqEstadoProceso] != 1) {
         $arrErrores[] = "El formulario no se puede eliminar porque no está en la etapa de Inscripción";
-    } else {
+    }
+
+    $numMayorEdad = 0;
+    foreach($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano){
+        switch($objCiudadano->seqTipoDocumento){
+            case 1: // CC
+                $numMayorEdad++;
+                break;
+            case 2: // CE
+                $numMayorEdad++;
+                break;
+            case 5: // PAS
+                $numMayorEdad++;
+                break;
+            case 7: //NUIP
+                if(! esFechaValida($objCiudadano->fchNacimiento)){
+                    $numMayorEdad++;
+                }else{
+                    $objFecha = new DateTime();
+                    $objFecha->modify("-18 years");
+                    $numTimeMayorEdad = strtotime($objFecha->format("Y-m-d"));
+                    $numTimeNacimiento = strtotime($objCiudadano->fchNacimiento);
+                    if($numTimeNacimiento <= $numTimeMayorEdad){
+                        $numMayorEdad++;
+                    }
+                }
+                break;
+
+        }
+    }
+
+    if($numMayorEdad > 1){
+        $arrErrores[] = "Hay mas de un mayor de edad en el formulario y no se puede eliminar";
+    }
+
+    if (empty($arrErrores)){
 
         try{
 
@@ -142,8 +178,6 @@ if ($seqFormulario == 0) {
         }
     }
 }
-
-//$arrErrores[] = "Error de prueba";
 
 if(empty($arrErrores)){
     $sql = "

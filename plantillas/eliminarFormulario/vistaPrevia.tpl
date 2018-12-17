@@ -88,6 +88,7 @@ crossorigin="anonymous"
                     <th>Tipo de Documento</th>
                     <th>Documento</th>
                     <th>Nombre</th>
+                    <th>Fecha de Nacimiento</th>
                     <th>Parentesco</th>
                 </tr>
                 </thead>
@@ -100,6 +101,7 @@ crossorigin="anonymous"
                             <td>{$arrTipoDocumento.$seqTipoDocumento}</td>
                             <td>{$objCiudadano->numDocumento|number_format:0:'.':','}</td>
                             <td>{$objCiudadano->obtenerNombre($objCiudadano->numDocumento)}</td>
+                            <td>{$objCiudadano->fchNacimiento}</td>
                             <td>{$arrParentesco.$seqParentesco}</td>
                         </tr>
                     {/foreach}

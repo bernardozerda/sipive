@@ -3130,7 +3130,6 @@ class Reportes {
             select
               if(con.seqProyectoPadre is null,con.seqProyecto,con.seqProyectoPadre) as seqProyecto,
               if(con.seqProyectoPadre is null,con.txtNombreProyecto,pry.txtNombreProyecto) as txtNombreProyecto,
-              -- if(con.seqProyectoPadre is null,con.seqDatoFiducia,pry.seqDatoFiducia) as seqDatoFiducia,
               uac.seqTipoActoUnidad,
               uac.numActo,
               uac.fchActo,
@@ -3155,17 +3154,7 @@ class Reportes {
             $seqProyecto = $objRes->fields['seqProyecto'];
 
             $arrReporte[$seqProyecto]['nombre'] = $objRes->fields['txtNombreProyecto'];
-
             $arrReporte[$seqProyecto]['entidad'] = "";
-
-//            $arrReporte[$seqProyecto]['entidad'] = array_shift(
-//                obtenerDatosTabla(
-//                    "t_pry_datos_fiducia",
-//                    array("seqDatoFiducia","txtEntidadFiducia"),
-//                    "seqDatoFiducia",
-//                    "seqDatoFiducia = " . $objRes->fields['seqDatoFiducia']
-//                )
-//            );
 
             $arrReporte[$seqProyecto]['aprobado'] = doubleval(
                     ($objRes->fields['seqTipoActoUnidad'] == 1) ?
@@ -3190,13 +3179,15 @@ class Reportes {
                     $arrReporte[$seqProyecto]['menor'];
 
             $arrReporte[$seqProyecto]['fiducia'] = 0;
-            $arrReporte[$seqProyecto]['totalFiducia'] = 0;
             $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = 0;
             $arrReporte[$seqProyecto]['constructor'] = 0;
             $arrReporte[$seqProyecto]['porcentajeTotalConstructor'] = 0;
             $arrReporte[$seqProyecto]['actualFiducia'] = 0;
             $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = 0;
+            $arrReporte[$seqProyecto]['balanceFiducia'] = 0;
+            $arrReporte[$seqProyecto]['balanceConstructor'] = 0;
             $arrReporte[$seqProyecto]['reintegro'] = 0;
+            $arrReporte[$seqProyecto]['pendienteReintegro'] = 0;
             $arrReporte[$seqProyecto]['rendimiento'] = 0;
             $arrReporte[$seqProyecto]['observaciones'] = "";
 
@@ -3221,7 +3212,7 @@ class Reportes {
             $objRes->MoveNext();
         }
 
-        // reintegros
+        // reintegros y rendimientos
         $sql = "
             select 
                 rei.seqProyecto,
@@ -3262,15 +3253,11 @@ class Reportes {
         // porcentajes
         foreach ($arrReporte as $seqProyecto => $arrDatos) {
 
-            // valor total fiducia
-//            $arrReporte[$seqProyecto]['totalFiducia'] = doubleval($arrReporte[$seqProyecto]['fiducia']) - doubleval($arrReporte[$seqProyecto]['reintegro']);
-            $arrReporte[$seqProyecto]['totalFiducia'] = doubleval($arrReporte[$seqProyecto]['fiducia']);
-
             // fiducia
-            if ($arrReporte[$seqProyecto]['totalFiducia'] == 0) {
+            if ($arrReporte[$seqProyecto]['fiducia'] == 0) {
                 $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = 0;
             } else {
-                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = round($arrReporte[$seqProyecto]['totalFiducia'] / $arrReporte[$seqProyecto]['actual'], 4);
+                $arrReporte[$seqProyecto]['porcentajeTotalFiducia'] = round($arrReporte[$seqProyecto]['fiducia'] / $arrReporte[$seqProyecto]['actual'], 4);
             }
 
             // constructor
@@ -3281,7 +3268,7 @@ class Reportes {
             }
 
             // actual fiducia
-            $arrReporte[$seqProyecto]['actualFiducia'] = doubleval($arrReporte[$seqProyecto]['totalFiducia']) - doubleval($arrReporte[$seqProyecto]['constructor']);
+            $arrReporte[$seqProyecto]['actualFiducia'] = doubleval($arrReporte[$seqProyecto]['fiducia']) - doubleval($arrReporte[$seqProyecto]['constructor']);
 
             // actual fiducia
             if ($arrReporte[$seqProyecto]['actualFiducia'] == 0) {
@@ -3289,6 +3276,28 @@ class Reportes {
             } else {
                 $arrReporte[$seqProyecto]['porcentajeActualFiducia'] = round($arrReporte[$seqProyecto]['actualFiducia'] / $arrReporte[$seqProyecto]['actual'], 4);
             }
+
+            // balance fiducia
+            $arrReporte[$seqProyecto]['balanceFiducia'] = doubleval(
+                $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['fiducia']
+            );
+
+            // balance constructor
+            $arrReporte[$seqProyecto]['balanceConstructor'] = doubleval(
+                $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['constructor']
+            );
+
+            // Pendiente reintegros
+            if(doubleval($arrReporte[$seqProyecto]['balanceFiducia']) <= doubleval($arrReporte[$seqProyecto]['balanceConstructor'])){
+                $arrReporte[$seqProyecto]['pendienteReintegro'] = doubleval(
+                    $arrReporte[$seqProyecto]['reintegro'] + $arrReporte[$seqProyecto]['balanceFiducia']
+                );
+            }else{
+                $arrReporte[$seqProyecto]['pendienteReintegro'] = doubleval(
+                    $arrReporte[$seqProyecto]['reintegro'] + $arrReporte[$seqProyecto]['balanceConstructor']
+                );
+            }
+
         }
 
         $arrTitulos[0]['nombre'] = "NOMBRE DEL PROYECTO";
@@ -3298,15 +3307,17 @@ class Reportes {
         $arrTitulos[4]['nombre'] = "VALOR TOTAL MENOR VALOR DEL PROYECTO SDHT";
         $arrTitulos[5]['nombre'] = "ACTUAL VALOR TOTAL DEL PROYECTO";
         $arrTitulos[6]['nombre'] = "VALOR GIRADO A FIDUCIA";
-        $arrTitulos[7]['nombre'] = "VALOR TOTAL GIRADO A FIDUCIA";
-        $arrTitulos[8]['nombre'] = "% VALOR TOTAL GIRADO A FIDUCIA";
-        $arrTitulos[9]['nombre'] = "TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
-        $arrTitulos[10]['nombre'] = "% TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
-        $arrTitulos[11]['nombre'] = "ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
-        $arrTitulos[12]['nombre'] = "% ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
-        $arrTitulos[13]['nombre'] = "VALOR TOTAL REINTEGROS";
-        $arrTitulos[14]['nombre'] = "TOTAL RENDIMIENTOS REGISTRADOS";
-        $arrTitulos[15]['nombre'] = "OBSERVACIONES";
+        $arrTitulos[7]['nombre'] = "% VALOR GIRADO A FIDUCIA";
+        $arrTitulos[8]['nombre'] = "TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
+        $arrTitulos[9]['nombre'] = "% TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
+        $arrTitulos[10]['nombre'] = "ACTUAL VALOR TOTAL DISPONIBLE EN FIDUCIA";
+        $arrTitulos[11]['nombre'] = "% ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
+        $arrTitulos[12]['nombre'] = "BALANCE VR PROYECTO VS GIRO FIDUCIA";
+        $arrTitulos[13]['nombre'] = "BALANCE VR PROYECTO VS GIRO CONSTRUCTOR";
+        $arrTitulos[14]['nombre'] = "VALOR TOTAL REINTEGROS";
+        $arrTitulos[15]['nombre'] = "PENDIENTE REINTEGROS";
+        $arrTitulos[16]['nombre'] = "TOTAL RENDIMIENTOS REGISTRADOS";
+        $arrTitulos[17]['nombre'] = "OBSERVACIONES";
 
         $arrTitulos[0]['formato'] = "texto";
         $arrTitulos[1]['formato'] = "texto";
@@ -3315,15 +3326,17 @@ class Reportes {
         $arrTitulos[4]['formato'] = "moneda";
         $arrTitulos[5]['formato'] = "moneda";
         $arrTitulos[6]['formato'] = "moneda";
-        $arrTitulos[7]['formato'] = "moneda";
-        $arrTitulos[8]['formato'] = "porcentaje";
-        $arrTitulos[9]['formato'] = "moneda";
-        $arrTitulos[10]['formato'] = "porcentaje";
-        $arrTitulos[11]['formato'] = "moneda";
-        $arrTitulos[12]['formato'] = "porcentaje";
+        $arrTitulos[7]['formato'] = "porcentaje";
+        $arrTitulos[8]['formato'] = "moneda";
+        $arrTitulos[9]['formato'] = "porcentaje";
+        $arrTitulos[10]['formato'] = "moneda";
+        $arrTitulos[11]['formato'] = "porcentaje";
+        $arrTitulos[12]['formato'] = "moneda";
         $arrTitulos[13]['formato'] = "moneda";
         $arrTitulos[14]['formato'] = "moneda";
-        $arrTitulos[15]['formato'] = "texto";
+        $arrTitulos[15]['formato'] = "moneda";
+        $arrTitulos[16]['formato'] = "moneda";
+        $arrTitulos[17]['formato'] = "texto";
 
         if ($bolRetornarDatos == false) {
             $this->exportarArchivo("Reporte General", $arrTitulos, $arrReporte);

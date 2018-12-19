@@ -3084,6 +3084,13 @@ class InscripcionFonvivienda
                                     if(! empty($objCiudadano->arrErrores)){
                                         throw new Exception(implode("<br>",$objCiudadano->arrErrores));
                                     }
+                                }else{
+                                    $objCiudadano->seqParentesco = 14;
+                                    $objCiudadano->editarCiudadano($seqCiudadano);
+                                    $claFormulario->arrCiudadano[$seqCiudadano] = $objCiudadano;
+                                    if(! empty($objCiudadano->arrErrores)){
+                                        throw new Exception(implode("<br>",$objCiudadano->arrErrores));
+                                    }
                                 }
                             }
 

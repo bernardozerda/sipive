@@ -4978,8 +4978,6 @@ class Seguimiento {
 
     }
 
-
-
 }
 
 // fin clase seguimiento

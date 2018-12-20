@@ -55,7 +55,7 @@ ksort($arrMiembros);
 
 $txtCondicion = "";
 if(isset($_SESSION['arrGrupos'][3][13]) and (! isset($_SESSION['arrGrupos'][3][20]))){
-    $arrFuentesJuridicas = array(9,14);
+    $arrFuentesJuridicas = array(9,14,15);
     $txtCondicion = "seqFuente in (" . implode("," , $arrFuentesJuridicas) . ")";
 }
 

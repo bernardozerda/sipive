@@ -11462,7 +11462,9 @@ var listadoAadProyectos = function () {
     objInput.className = "inputLogin";
 
     objPaginador = YAHOO.util.Dom.get("listadoAadPry_paginate");
-    objPaginador.style.textAlign = "center";
+    if(objPaginador != null) {
+        objPaginador.style.textAlign = "center";
+    }
 
     eliminarObjeto("listadoAadProyectos");
     YAHOO.util.Event.onContentReady("listadoAadProyectos", listadoAadProyectos);

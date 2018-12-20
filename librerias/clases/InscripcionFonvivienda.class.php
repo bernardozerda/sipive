@@ -2716,6 +2716,7 @@ class InscripcionFonvivienda
         $claFormulario->txtDireccionSolucion     = trim($arrHogar['txtDireccionSolucion']);
         $claFormulario->txtMatriculaInmobiliaria = trim($arrHogar['txtMatriculaInmobiliaria']);
         $claFormulario->valTotalRecursos         = doubleval($arrHogar['valTotalRecursos']);
+        $claFormulario->valIngresoHogar          = doubleval($arrHogar['valIngresosHogar']);
         $claFormulario->valAspiraSubsidio        = doubleval($arrHogar['valAspiraSubsidio']);
 
         if($this->seqTipo == 1) {

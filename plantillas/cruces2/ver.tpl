@@ -160,7 +160,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    {if isset($smarty.session.arrGrupos.3.20) or isset($smarty.session.arrGrupos.3.13)}
+                                    {if isset($smarty.session.arrGrupos.3.20) or isset($smarty.session.arrGrupos.3.13) or isset($smarty.session.arrGrupos.3.7)}
                                         <a href="#" onClick="cargarContenido('contenido','./contenidos/cruces2/adicionar.php','seqCruce={$claCruces->arrDatos.seqCruce}&seqFormulario={$seqFormulario}',true)">
                                             Adicionar
                                         </a>

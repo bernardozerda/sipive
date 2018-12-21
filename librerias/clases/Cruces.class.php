@@ -2188,10 +2188,11 @@ WHERE
 
             $arrInhabilitar = array();
             if($seqFormulario != 0) {
+
                 foreach ($this->arrDatos['arrResultado'] as $seqResultado => $arrDato) {
                     if ($arrDato['seqFormulario'] == $seqFormulario) {
-                        if ((!isset($arrInhabilitar[$seqFormulario])) or $arrInhabilitar[$seqFormulario]['inhabilitar'] == 0) {
-                            $arrInhabilitar[$seqFormulario]['inhabilitar'] = $bolInhabilitar;
+                        if ( ( ! isset( $arrInhabilitar[$seqFormulario] ) ) or $arrInhabilitar[$seqFormulario]['inhabilitar'] == 0) {
+                            $arrInhabilitar[$seqFormulario]['inhabilitar'] = $arrDato['bolInhabilitar'];
                         }
                     }
                 }

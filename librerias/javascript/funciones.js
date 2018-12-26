@@ -11964,3 +11964,6 @@ function verHogar(seqFormulario){
     objModal.modal('show');
 
 }
+
+
+// fusion

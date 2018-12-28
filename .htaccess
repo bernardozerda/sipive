@@ -9,6 +9,6 @@ Header always append X-Frame-Options SAMEORIGIN
 Header set X-Content-Type-Options nosniff
 Header set X-XSS-Protection "1; mode=block"
 Header set Strict-Transport-Security "max-age=10886400; includeSubDomains; preload"
-Header set Content-Security-Policy:   "script-src 'unsafe-inline' 'unsafe-eval' cloud.tinymce.com code.jquery.com cdn.datatables.net maxcdn.bootstrapcdn.com localhost"
-Header set X-Content-Security-Policy: "script-src 'unsafe-inline' 'unsafe-eval' cloud.tinymce.com code.jquery.com cdn.datatables.net maxcdn.bootstrapcdn.com localhost"
-Header set X-WebKit-CSP:              "script-src 'unsafe-inline' 'unsafe-eval' cloud.tinymce.com code.jquery.com cdn.datatables.net maxcdn.bootstrapcdn.com localhost"
+Header set Content-Security-Policy:   "script-src 'unsafe-inline' 'unsafe-eval' cloud.tinymce.com code.jquery.com cdn.datatables.net maxcdn.bootstrapcdn.com localhost 192.168.3.94 sdv.habitatbogota.gov.co"
+Header set X-Content-Security-Policy: "script-src 'unsafe-inline' 'unsafe-eval' cloud.tinymce.com code.jquery.com cdn.datatables.net maxcdn.bootstrapcdn.com localhost 192.168.3.94 sdv.habitatbogota.gov.co"
+Header set X-WebKit-CSP:              "script-src 'unsafe-inline' 'unsafe-eval' cloud.tinymce.com code.jquery.com cdn.datatables.net maxcdn.bootstrapcdn.com localhost 192.168.3.94 sdv.habitatbogota.gov.co"

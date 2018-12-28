@@ -502,7 +502,7 @@ function mostrarPagina(value) {
 
         }
     });
-    console.log(value);
+    //console.log(value);
 }
 
 function cartaMov2() {
@@ -510,12 +510,81 @@ function cartaMov2() {
         url: './pdfCartaMovilizacion.php?documento=111&cuenta=&tipo=1&banco=prueba&nombre=prueba2',
         type: 'post',
         success: function (response) {
-            console.log(response);
+            // console.log(response);
             return response;
         }
     });
+}
 
+function salvarFAC(divSig, divHere, divPrev, tipo, frm) {
+    var objCargando = obtenerObjetoCargando();
+    if ($("#" + frm + " #estados").is(":checked") || tipo == 2 || frm == 'frmFac6') {
+        objCargando.show();
+        var url = './contenidos/administracion/salvarFAC.php?volver=' + tipo;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#" + frm).serialize(), // Adjuntar los campos del formulario enviado.
+            success: function (data)
+            {
 
+                // console.log("pasoo" + frm);
+                if (data) {
+                    $('#' + divHere).hide();
+                    $('#' + divPrev).hide();
+                    $('#' + divSig).show();
+                    objCargando.hide();
+                    //console.log("divHere" + divHere + " divSig " + divSig + " divPrev" + divPrev);
+                }
+            },
+            fail: function () {
+                alert('Problemas al mostrar el popup de errores');
+            }
+        });
+    } else {
+        $("#mensajes").html("Por favor seleccione un estado ");
+    }
 
+}
+function salvarFACFiles(divSig, divHere, divPrev, tipo, frm) {
+    var objCargando = obtenerObjetoCargando();
+    if ($("#" + frm + " #archivo").val()) {
+        objCargando.show();
+        var url = './contenidos/administracion/salvarFAC.php?volver=' + tipo;
+        var formData = new FormData(document.getElementById(frm));
+        $.ajax({
+            url: url,
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+
+                .done(function (res) {
+                    if (res) {
+                        $('#' + divHere).hide();
+                        $('#' + divPrev).hide();
+                        $('#' + divSig).show();
+                        objCargando.hide();
+                        eliminarObjeto("fileSelect");
+                        YAHOO.util.Event.onContentReady(
+                                "fileSelect",
+                                fncFileSelect
+                                );
+
+                        //console.log("divHere" + divHere + " divSig " + divSig + " divPrev" + divPrev);
+                    }
+                });
+    } else {
+        $("#mensajes").html("Por favor seleccione un archivo ");
+    }
+
+}
+
+function limpiarCampFile() {
+    $('#fileupload').val('');
+    $('#archivo').val("");
 }
 

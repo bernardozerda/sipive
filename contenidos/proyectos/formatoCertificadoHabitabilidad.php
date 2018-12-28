@@ -53,7 +53,7 @@ $sql = "
         txtExpideLicencia,
         fchEjecutoriaLicencia
     from t_pry_proyecto_licencias lic
-    where lic.seqProyecto = " . $objTecnico->seqConjunto . "    
+    where lic.seqProyecto = " . $objTecnico->seqProyecto . "    
 ";
 $objRes = $aptBd->execute($sql);
 while($objRes->fields){

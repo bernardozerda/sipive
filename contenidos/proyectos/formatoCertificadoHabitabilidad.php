@@ -11,8 +11,8 @@ $objTecnico = new stdClass();
 
 $sql = "select * from t_pry_tecnico where seqUnidadProyecto = " . intval($_GET['seqUnidadProyecto']);
 $objRes = $aptBd->execute($sql);
-while ($objRes->fields) {
-    foreach ($objRes->fields as $txtTitulo => $txtValor) {
+while($objRes->fields){
+    foreach($objRes->fields as $txtTitulo => $txtValor){
         $objTecnico->$txtTitulo = $txtValor;
     }
     $objRes->MoveNext();
@@ -24,7 +24,7 @@ $sql = "
       if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto) as txtProyecto,
       con.seqProyecto as seqConjunto,
       if(pry.seqProyecto is null, null, con.txtNombreProyecto) as txtConjunto,
-      if(upr.txtNombreUnidadReal is not null, upr.txtNombreUnidadReal,  upr.txtNombreUnidad) as txtNombreUnidad,     
+      upr.txtNombreUnidad,
       con.txtDireccion,
       if(locc.seqLocalidad is null,locp.txtLocalidad,locc.txtLocalidad) as txtLocalidad,
       if(barc.seqBarrio is null,barp.txtBarrio,barc.txtBarrio) as txtBarrio
@@ -38,8 +38,8 @@ $sql = "
     where upr.seqUnidadProyecto = " . intval($_GET['seqUnidadProyecto']) . "
 ";
 $objRes = $aptBd->execute($sql);
-while ($objRes->fields) {
-    foreach ($objRes->fields as $txtTitulo => $txtValor) {
+while($objRes->fields){
+    foreach($objRes->fields as $txtTitulo => $txtValor){
         $objTecnico->$txtTitulo = mb_strtoupper($txtValor);
     }
     $objRes->MoveNext();
@@ -56,11 +56,11 @@ $sql = "
     where lic.seqProyecto = " . $objTecnico->seqConjunto . "    
 ";
 $objRes = $aptBd->execute($sql);
-while ($objRes->fields) {
-    if ($objRes->fields['seqTipoLicencia'] == 2) {
+while($objRes->fields){
+    if($objRes->fields['seqTipoLicencia'] == 2) {
         $objTecnico->txtLicenciaConstruccion = $objRes->fields['txtLicencia'];
         $objTecnico->fchEjecutaLicConstruccion = $objRes->fields['fchEjecutoriaLicencia'];
-    } elseif ($objRes->fields['seqTipoLicencia'] == 1) {
+    }elseif($objRes->fields['seqTipoLicencia'] == 1){
         $objTecnico->txtExpideLicenciaUrbanismo = $objRes->fields['txtExpideLicencia'];
     }
     $objRes->MoveNext();
@@ -93,15 +93,17 @@ $numDiaActual = date("d");
 $txtMesActual = ucwords(strftime("%B"));
 $numAnoActual = date("Y");
 
-$claSmarty->assign("objTecnico", $objTecnico);
-$claSmarty->assign("txtFuente12", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 12px;");
-$claSmarty->assign("txtFuente10", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;");
-$claSmarty->assign("txtFecha", $txtFecha);
+$claSmarty->assign("objTecnico"  , $objTecnico );
+$claSmarty->assign("txtFuente12" , "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 12px;");
+$claSmarty->assign("txtFuente10" , "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;");
+$claSmarty->assign("txtFecha"    , $txtFecha );
 $claSmarty->assign("numDiaActual", $numDiaActual);
 $claSmarty->assign("txtMesActual", $txtMesActual);
 $claSmarty->assign("numAnoActual", $numAnoActual);
-$claSmarty->assign("txtMatriculaProfesional", obtenerMatriculaProfesional());
+$claSmarty->assign("txtMatriculaProfesional", obtenerMatriculaProfesional() );
 $claSmarty->assign("txtUsuarioSesion", $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']);
-$claSmarty->assign("txtFechaVisita", $txtFechaVisita);
+$claSmarty->assign("txtFechaVisita"    , $txtFechaVisita );
 $claSmarty->display("proyectos/formatoCertificadoHabitabilidad.tpl");
+
+
 ?>

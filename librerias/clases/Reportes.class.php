@@ -5140,7 +5140,7 @@ WHERE
             $sqlForm = "select distinct(group_concat(seqFormulario SEPARATOR ',') )as seqForm from t_ciu_ciudadano ciu2 inner join t_frm_hogar using(seqCiudadano) where ciu2.numDocumento in (" . implode(",", $arrDocumentos) . ") and seqTipoDocumento in(1,2,5)";
             $objRes2 = $aptBd->execute($sqlForm);
             $formularios = $objRes2->fields['seqForm'];
-            //echo "forms".  $formularios;
+//            echo "forms".  $sqlForm . "<hr>";
 //            die();
         }
         // if (!empty($arrDocumentos)) {
@@ -5263,8 +5263,10 @@ WHERE
                 fchArriendoDesde AS 'Fecha Arriendo Desde',
                 numHabitaciones AS 'Numero Habitaciones',
                 numHacinamiento AS 'Hacinamiento',
-                frm.fchInscripcion AS 'Fecha Inscripcion',
-                fchPostulacion AS 'Fecha Postulacion',
+                DATE_FORMAT(frm.fchInscripcion,'%Y-%m-%d') AS 'Fecha Inscripcion',
+                DATE_FORMAT(frm.fchInscripcion,'%Y') AS 'Año Inscripcion',
+                DATE_FORMAT(frm.fchPostulacion,'%Y-%m-%d') AS 'Fecha Postulacion',   
+                DATE_FORMAT(frm.fchPostulacion,'%Y') AS 'Año Postulacion',   
                 txtEstado AS 'Estado Proceso',
                 SUBSTRING_INDEX(txtEstado, '-', 1) AS Etapa,
                 IF(bolCerrado = 1, 'SI', 'NO') AS Cerrado,

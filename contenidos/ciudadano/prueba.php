@@ -32,7 +32,7 @@ class MYPDF extends TCPDF {
 
         // Position at 15 mm from bottom
 
-        $this->SetY(-30);
+        $this->SetY(-40);
 
         // Set font
 //5.329.553
@@ -42,9 +42,9 @@ class MYPDF extends TCPDF {
         $image_file = $path[0] . 'recursos/imagenes/certificados.png';
         $image_file2 = $path[0] . 'recursos/imagenes/bta_positiva.jpg';
 
-        $this->Image($image_file, 60, 260, 80, 25); //, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($image_file, 60, 252, 80, 25); //, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
-        $this->Image($image_file2, 150, 260, 40, 25);
+        $this->Image($image_file2, 150, 252, 40, 25);
         $txt = 'Calle 52 No. 13-64, Conmutador: 358 1600,          www.habitatbogota.gov.co,   @habitatComunica,        Código Postal: 11231';
 
 
@@ -170,8 +170,8 @@ $path = K_PATH_IMAGES;
 $path = explode('librerias', $path);
 $image_file = $path[0] . 'recursos/imagenes/firma.jpg';
 ///$pdf->writeHTML("<b>Cordialmente,</b><p>&nbsp;</p>", true, false, true, false, '');
-$pdf->Image($image_file, 15, 180, 75, 30, 'jpg', '', '', false, 150, '', false, false, 0, false, false, false);
-$pdf->writeHTML("<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><b>GUILLERMO EDUARDO ALFARO YERMANOS</b>", true, false, true, false, '');
+$pdf->Image($image_file, 15, 176, 75, 30, 'jpg', '', '', false, 150, '', false, false, 0, false, false, false);
+$pdf->writeHTML("<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><b>RODOLFO ORLANDO BELTRÁN CUBILLOS</b>", true, false, true, false, '');
 $pdf->writeHTML("Subdirector Recursos Públicos ", true, false, true, false, '');
 
 /* 

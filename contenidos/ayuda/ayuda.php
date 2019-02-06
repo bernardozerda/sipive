@@ -14,11 +14,15 @@
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "Proyecto.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "Grupo.class.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "Menu.class.php" );
-    
+
+    $claProyecto = new Proyecto();
     $claMenu = new Menu();
-    
+
+    $seqProyecto = $_SESSION['seqProyecto'];
+
+    $arrProyectos = $claProyecto->cargarProyecto( $_SESSION['seqProyecto'] );
     $arrMenu = $claMenu->obtenerHijos( $_SESSION['seqProyecto'] , 0 );
-    
+
     unset( $arrMenu[39] );
     unset( $arrMenu[32] );
     
@@ -31,12 +35,14 @@
        $txtAyuda = mb_ereg_replace("ó", "o", $txtAyuda );
        $txtAyuda = mb_ereg_replace("ú", "u", $txtAyuda );
        $txtAyuda = mb_ereg_replace("[^0-9a-zA-Z]", "", $txtAyuda );
-       $txtAyuda = mb_strtolower( "ayuda/html/" . $txtAyuda . ".html" );
-       
+       $txtAyuda = mb_strtolower( "ayuda/" . $arrProyectos[$seqProyecto]->txtProyecto . "/" . $txtAyuda . ".html" );
+
        if( file_exists( $txtPrefijoRuta . "plantillas/" . $txtAyuda ) ){
           $objMenu->txtAyuda = $txtAyuda;
+       }else{
+           $objMenu->txtAyuda = "ayuda/noDisponible.html";
        }
-       
+
        $objMenu->arrHijos = $claMenu->obtenerHijos( $_SESSION['seqProyecto'], $seqMenu );
        foreach( $objMenu->arrHijos as $seqHijo => $objHijo ){
           
@@ -47,10 +53,12 @@
           $txtAyuda = mb_ereg_replace("ó", "o", $txtAyuda );
           $txtAyuda = mb_ereg_replace("ú", "u", $txtAyuda );
           $txtAyuda = mb_ereg_replace("[^0-9a-zA-Z]", "", $txtAyuda );
-          $txtAyuda = mb_strtolower( "ayuda/html/" . $txtAyuda . ".html" );
+          $txtAyuda = mb_strtolower( "ayuda/" . $arrProyectos[$seqProyecto]->txtProyecto . "/" . $txtAyuda . ".html" );
           
           if( file_exists( $txtPrefijoRuta . "plantillas/" . $txtAyuda ) ){
-             $objMenu->arrHijos[ $seqHijo ]->txtAyuda = $txtAyuda;
+              $objMenu->arrHijos[ $seqHijo ]->txtAyuda = $txtAyuda;
+          }else{
+              $objMenu->arrHijos[ $seqHijo ]->txtAyuda = "ayuda/noDisponible.html";
           }
           
        }
@@ -58,6 +66,7 @@
     }
 
     $claSmarty->assign( "numAlto" , ( $_POST['alto'] - 50 ) );
+    $claSmarty->assign( "seqProyecto" , $seqProyecto );
     $claSmarty->assign( "arrMenu" , $arrMenu );
     $claSmarty->display( "ayuda/ayuda.tpl" );
 

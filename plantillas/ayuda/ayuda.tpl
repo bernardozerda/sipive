@@ -24,38 +24,54 @@
       </tr>
    </table>
    
-   
-   {foreach from=$arrMenu key=seqMenu item=objMenu}
-      <ul>
-         <li style="cursor:hand;">
-            
-            <div onClick="mostrarOcultar('{$objMenu->txtEspanol|trim}')">
-               <strong>{$objMenu->txtEspanol|trim}</strong>
-            </div>
-            
-            {if not empty( $objMenu->arrHijos )}
-               <div id="{$objMenu->txtEspanol|trim}" style="display:none">
-                  {if trim($objMenu->txtAyuda) != ""}
-                     {include file=$objMenu->txtAyuda|trim}
-                  {/if}
-                  <ul>
-                     {foreach from=$objMenu->arrHijos item=objHijo}
-                        <li>
-                           <div onClick="mostrarOcultar('{$objHijo->txtEspanol|trim}')">
-                              <strong>{$objHijo->txtEspanol|trim}</strong><br>
-                           </div>
-                           {if trim($objHijo->txtAyuda) != ""}
-                              <div id="{$objHijo->txtEspanol|trim}" style="display:none">
-                                 {include file=$objHijo->txtAyuda|trim}
-                              </div>
-                           {/if}
-                        </li>
-                     {/foreach}
-                  </ul>
+
+   {if $seqProyecto != 6}
+
+      {foreach from=$arrMenu key=seqMenu item=objMenu}
+         <ul>
+            <li style="cursor:hand;">
+
+               <div onClick="mostrarOcultar('{$objMenu->txtEspanol|trim}')">
+                  <strong>{$objMenu->txtEspanol|trim}</strong>
                </div>
-            {/if}   
-         </li>
-      </ul>
-      
-   {/foreach}   
+
+               {if not empty( $objMenu->arrHijos )}
+                  <div id="{$objMenu->txtEspanol|trim}" style="display:none">
+                     {if trim($objMenu->txtAyuda) != ""}
+                        {include file=$objMenu->txtAyuda|trim}
+                     {/if}
+                     <ul>
+                        {foreach from=$objMenu->arrHijos item=objHijo}
+                           <li>
+                              <div onClick="mostrarOcultar('{$objHijo->txtEspanol|trim}')">
+                                 <strong>{$objHijo->txtEspanol|trim}</strong><br>
+                              </div>
+                              {if trim($objHijo->txtAyuda) != ""}
+                                 <div id="{$objHijo->txtEspanol|trim}" style="display:none">
+                                    {include file=$objHijo->txtAyuda|trim}
+                                 </div>
+                              {/if}
+                           </li>
+                        {/foreach}
+                     </ul>
+                  </div>
+               {else}
+                  <div id="{$objMenu->txtEspanol|trim}" style="display:none">
+                     {if trim($objMenu->txtAyuda) != ""}
+                        {include file=$objMenu->txtAyuda|trim}
+                     {/if}
+                  </div>
+               {/if}
+            </li>
+         </ul>
+
+      {/foreach}
+
+   {else}
+
+      {include file="ayuda/proyectos/proyectos.html"}
+
+   {/if}
+
+
 </div>

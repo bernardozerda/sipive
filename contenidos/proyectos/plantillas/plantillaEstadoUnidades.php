@@ -170,7 +170,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
         ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename='PlantillaEstadoUnidades.xlsx");
+    header("Content-Disposition: attachment;filename=PlantillaEstadoUnidades.xlsx");
     header('Cache-Control: max-age=0');
     ob_end_clean();
 

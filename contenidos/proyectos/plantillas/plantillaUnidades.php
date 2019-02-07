@@ -171,7 +171,7 @@ if ($_REQUEST['seqProyecto'] != "" && $_REQUEST['seqProyecto'] != null) {
     }
 
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename='PlantillaUnidades.xlsx");
+    header("Content-Disposition: attachment;filename=PlantillaUnidades.xlsx");
     header('Cache-Control: max-age=0');
     ob_end_clean();
 

@@ -2702,7 +2702,6 @@ class InscripcionFonvivienda
 
         $claFormulario->fchUltimaActualizacion   = date("Y-m-d H:i:s");
         $claFormulario->bolCerrado               = 1;
-        $claFormulario->bolDesplazado            = intval($arrHogar['bolDesplazado']);
         $claFormulario->bolIdentificada          = intval($arrHogar['bolIdentificada']);
         $claFormulario->bolViabilizada           = intval($arrHogar['bolViabilizada']);
         $claFormulario->seqModalidad             = intval($arrHogar['seqModalidad']);
@@ -2716,8 +2715,12 @@ class InscripcionFonvivienda
         $claFormulario->txtDireccionSolucion     = trim($arrHogar['txtDireccionSolucion']);
         $claFormulario->txtMatriculaInmobiliaria = trim($arrHogar['txtMatriculaInmobiliaria']);
         $claFormulario->valTotalRecursos         = doubleval($arrHogar['valTotalRecursos']);
-        $claFormulario->valIngresoHogar          = doubleval($arrHogar['valIngresosHogar']);
         $claFormulario->valAspiraSubsidio        = doubleval($arrHogar['valAspiraSubsidio']);
+
+        foreach($claFormulario->arrCiudadano as $objCiudadano){
+            $arrHogar['bolDesplazado'] = ($objCiudadano->seqTipoVictima == 2)? 1 : $arrHogar['bolDesplazado'];
+        }
+        $claFormulario->bolDesplazado = intval($arrHogar['bolDesplazado']);
 
         if($this->seqTipo == 1) {
             $claFormulario->seqEstadoProceso = 16;
@@ -3260,6 +3263,7 @@ class InscripcionFonvivienda
             $this->arrMensajes[] = "Los hogares marcados han sido procesados satisfactoriamente";
 
             $aptBd->CommitTrans();
+//            $aptBd->RollBackTrans();
 
         }catch (Exception $objError){
             $aptBd->RollBackTrans();

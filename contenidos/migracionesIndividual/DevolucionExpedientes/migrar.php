@@ -179,7 +179,7 @@ include '../../../recursos/archivos/verificarSesion.php';
 				" . $_SESSION['seqUsuario'] . ",
 				 '" . $arrDoc[1] . "',
 				" . $value->numDocumento . ",				
-				72,
+				81,
                                  1
 			 ),";
                                 }

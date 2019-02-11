@@ -394,7 +394,7 @@ function activarEditorTiny(id, cant) {
             plugins: [
                 'advlist autolink lists link image charmap print preview anchor textcolor',
                 'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table contextmenu paste code help wordcount'
+                'insertdatetime media table contextmenu paste code wordcount'
             ],
             toolbar: 'undo redo | styleselect fontselect fontsizeselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify |  bullist numlist outdent indent'
         });

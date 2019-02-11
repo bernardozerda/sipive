@@ -13,8 +13,11 @@ class Menu {
     public $txtIngles;      // Etigueta del menu en ingles
     public $txtCodigo;      // nombre del archivo php que atiende esta opcion de menu, no debe llevar la extension php ( nombre sin el .php )
     public $numOrden;       // Orden de aparicion en las opciones de menu
+    public $txtAyuda;       // texto de la ayuda en linea
     public $seqPadre;
     public $arrGrupo;       // grupos que estan autorizados para ver el menu [seqProyecto][seqGrupo] = seqProyectoGrupo
+    public $arrErrores;
+    public $arrMensajes;
 
     /**
      * CONSTRUCTOR DE LA CLASE
@@ -29,8 +32,11 @@ class Menu {
         $this->txtIngles = "";
         $this->txtCodigo = "";
         $this->numOrden = "";
+        $this->txtAyuda = "";
         $this->seqPadre = "";
         $this->arrGrupo = array();
+        $this->arrErrores = "";
+        $this->arrMensajes = "";
     }
 
     /**
@@ -190,7 +196,9 @@ class Menu {
 	                    ucwords(men.txtMenuEs) as txtMenuEs,
 	                    ucwords(men.txtMenuEn) as txtMenuEn,
 	                    men.txtCodigo,
-	                    men.numOrden
+	                    men.numOrden,
+	                    men.txtAyuda,
+	                    men.bolPublicar
 	                FROM 
 	                    T_COR_PERMISO per,
 	                    T_COR_PROYECTO_GRUPO egr,
@@ -214,19 +222,23 @@ class Menu {
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
 
-                $seqMenu = $objRes->fields['seqMenu'];
-                $seqPadre = $objRes->fields['seqMenuPadre'];
-                $txtEspanol = $objRes->fields['txtMenuEs'];
-                $txtIngles = $objRes->fields['txtMenuEn'];
-                $txtCodigo = $objRes->fields['txtCodigo'];
-                $numOrden = $objRes->fields['numOrden'];
+                $seqMenu     = $objRes->fields['seqMenu'];
+                $seqPadre    = $objRes->fields['seqMenuPadre'];
+                $txtEspanol  = $objRes->fields['txtMenuEs'];
+                $txtIngles   = $objRes->fields['txtMenuEn'];
+                $txtCodigo   = $objRes->fields['txtCodigo'];
+                $numOrden    = $objRes->fields['numOrden'];
+                $txtAyuda    = $objRes->fields['txtAyuda'];
+                $bolPublicar = $objRes->fields['bolPublicar'];
 
                 $objMenu = new Menu;
-                $objMenu->txtEspanol = $txtEspanol;
-                $objMenu->txtIngles = $txtIngles;
-                $objMenu->txtCodigo = $txtCodigo;
-                $objMenu->numOrden = $numOrden;
-                $objMenu->seqPadre = $seqPadre;   
+                $objMenu->txtEspanol  = $txtEspanol;
+                $objMenu->txtIngles   = $txtIngles;
+                $objMenu->txtCodigo   = $txtCodigo;
+                $objMenu->numOrden    = $numOrden;
+                $objMenu->seqPadre    = $seqPadre;
+                $objMenu->txtAyuda    = $txtAyuda;
+                $objMenu->bolPublicar = $bolPublicar;
 
                 $arrMenu[$seqMenu] = $objMenu;
 
@@ -561,6 +573,36 @@ class Menu {
         return trim($txtRuta, " / ");
     }
 
+    public function obtenerMigaDePan($seqProyecto, $seqMenu, $numNivel = 0, $txtRuta = ""){
+        global $aptBd;
+
+        if ($seqMenu != 0) {
+            $sql = "
+                SELECT seqMenuPadre, txtMenuES 
+                FROM T_COR_MENU
+                WHERE seqMenu = $seqMenu			
+			";
+            $objRes = $aptBd->execute($sql);
+            if ($objRes->fields) {
+                $txtRuta = "<li>" . $objRes->fields['txtMenuES'] . "</li>" . $txtRuta;
+                $txtRuta = $this->obtenerMigaDePan($seqProyecto, $objRes->fields['seqMenuPadre'], $numNivel + 1, $txtRuta);
+            }
+        }
+
+        if($numNivel == 0){
+            $sql = "select txtProyecto from t_cor_proyecto where seqProyecto = $seqProyecto";
+            $objRes = $aptBd->execute($sql);
+            if ($objRes->fields) {
+                $txtRuta = "<li><strong>" . $objRes->fields['txtProyecto'] . "</strong></li>". $txtRuta;
+            }
+        }
+
+        return $txtRuta;
+    }
+
+
+
+
     /**
      * OBTIENE EL ARBOL DE MENU COMPLETO
      * PARA UN PROYECTO EN GENERAL
@@ -699,6 +741,55 @@ class Menu {
 
         }
         return $txtMenu;
+    }
+
+    public function imprimirArbolMenuAyuda($arrMenu, $seqProyecto, $txtOrigen = "sipive", $numNivel = 0){
+
+        if($numNivel == 0){
+            echo "<ul id='arbol' class='h6'>";
+        }else{
+            echo "<ul>";
+        }
+
+        foreach($arrMenu as $seqMenu => $arrOpcion){
+            $txtPadding = (empty($arrOpcion['hijos']))? "style='padding-left: 30px;'" : "";
+            if( $txtOrigen == "sipive" ){
+                $txtAccion = "cargarContenido('formularioAyuda','./contenidos/ayuda/formulario.php','seqProyecto=$seqProyecto&seqMenu=$seqMenu','true')";
+            }else{
+                $txtAccion = "location.href='./verAyuda.php?menu=$seqMenu'";
+            }
+            echo "<li $txtPadding><a href='#' onclick=\"$txtAccion\">" . $arrOpcion['nombre'] . "</a>";
+            if(! empty($arrOpcion['hijos'])){
+                $this->imprimirArbolMenuAyuda($arrOpcion['hijos'], $seqProyecto, $txtOrigen, $numNivel + 1);
+            }
+            echo "</li>";
+        }
+
+        echo "</ul>";
+
+    }
+
+    public function salvarTextoAyuda($seqMenu,$txtAyuda,$bolPublicar){
+        global $aptBd;
+        try{
+            $aptBd->BeginTrans();
+            $txtVacio = "<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n\n</body>\n</html>";
+            $txtAyuda = (trim($txtAyuda) == "" or $txtAyuda == $txtVacio)? "null" : "'" . trim(htmlspecialchars(addslashes($txtAyuda))) . "'";
+            $bolPublicar = ($txtAyuda == "null")? 0 : $bolPublicar;
+            $sql = "
+                update t_cor_menu set
+                  txtAyuda = $txtAyuda,
+                  bolPublicar = " . intval($bolPublicar) . "
+                where seqMenu = $seqMenu
+            ";
+            $aptBd->execute($sql);
+            $aptBd->CommitTrans();
+            $this->arrMensajes[] = "Texto de ayuda salvado";
+        }catch (Exception $objError){
+            $aptBd->RollbackTrans();
+            $this->arrErrores[] = "Problemas al intentar salvar el registro de ayuda";
+            $this->arrErrores[] = $objError->getMessage();
+        }
     }
 
 }

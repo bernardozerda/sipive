@@ -8802,7 +8802,14 @@ function escondeDatosSegunTipoDesembolso() {
 
 ///////////////////////////////////////// FIN FUNCIONES MODULO DE PROYECTOS
 
-function popUpAyuda( ) {
+function abrirAyuda(){
+    window.open(
+        "./contenidos/ayuda/verAyuda.php?menu=" + $("#seqMenuMigaDePan").val(),
+        "_blank"
+    );
+}
+
+function popUpAyuda() {
 
 //      var numAlto  = YAHOO.util.Dom.getDocumentHeight() - 200;
 //      var numAncho = YAHOO.util.Dom.getDocumentWidth() - 100;
@@ -11966,4 +11973,93 @@ function verHogar(seqFormulario){
 }
 
 
-// fusion
+function treeview() {
+
+    $.fn.extend({
+        treed: function (o) {
+
+            var openedClass = 'glyphicon-menu-down';
+            var closedClass = 'glyphicon-menu-right';
+
+            if (typeof o != 'undefined'){
+                if (typeof o.openedClass != 'undefined'){
+                    openedClass = o.openedClass;
+                }
+                if (typeof o.closedClass != 'undefined'){
+                    closedClass = o.closedClass;
+                }
+            };
+
+            //initialize each of the top levels
+            var tree = $(this);
+            tree.addClass("tree");
+            tree.find('li').has("ul").each(function () {
+                var branch = $(this); //li with children ul
+                branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
+                branch.addClass('branch');
+                branch.on('click', function (e) {
+                    if (this == e.target) {
+                        var icon = $(this).children('i:first');
+                        icon.toggleClass(openedClass + " " + closedClass);
+                        $(this).children().children().toggle();
+                    }
+                })
+                branch.children().children().toggle();
+            });
+            //fire event from the dynamically added icon
+            tree.find('.branch .indicator').each(function(){
+                $(this).on('click', function () {
+                    $(this).closest('li').click();
+                });
+            });
+            //fire event to open branch if the li contains an anchor instead of text
+            tree.find('.branch>a').each(function () {
+                $(this).on('click', function (e) {
+                    $(this).closest('li').click();
+                    e.preventDefault();
+                });
+            });
+            //fire event to open branch if the li contains a button instead of text
+            tree.find('.branch>button').each(function () {
+                $(this).on('click', function (e) {
+                    $(this).closest('li').click();
+                    e.preventDefault();
+                });
+            });
+        }
+    });
+
+    //Initialization of treeviews
+    $('#arbol').treed();
+
+    eliminarObjeto("arbolAyuda");
+    YAHOO.util.Event.onContentReady("arbolAyuda",treeview);
+
+}
+YAHOO.util.Event.onContentReady("arbolAyuda",treeview);
+
+
+function editorAyuda(){
+    tinymce.remove();
+    tinymce.init({
+        selector: '#textoAyuda',
+        height: 300,
+        plugins: 'preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern ',
+        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+        image_advtab: true,
+        content_css: [
+            '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+            '//www.tinymce.com/css/codepen.min.css'
+        ],
+        menubar: 'edit insert view format table tools',
+        setup: function (editor) {
+            editor.on('change', function () {
+                tinymce.triggerSave();
+            });
+        },
+    });
+    eliminarObjeto("editorAyuda");
+    YAHOO.util.Event.onContentReady("editorAyuda",editorAyuda);
+}
+YAHOO.util.Event.onContentReady("editorAyuda",editorAyuda);
+

@@ -26,7 +26,7 @@
     </div>
     <div class="panel-body">
 
-        <table id="listadoAadPry" class="table table-hover" data-order='[[ 0, "desc" ]]' width="850px">
+        <table id="listadoAadPry" class="table table-hover" data-order='[[ 0, "desc" ]]' width="100%">
             <thead>
                 <tr>
                     <th>Id</th>

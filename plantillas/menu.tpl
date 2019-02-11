@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="recursos/estilos/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-<div class="navbar navbar-default" role="navigation">
-    <div class="container" style="background-color: white; width: 930px;">
+<div class="navbar navbar-default" role="navigation" style="padding: 0px; margin: 0px;">
+    <div class="container" style="background-color: white; width: 100%;">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle pull-left" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only"></span>
@@ -23,29 +23,37 @@
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        Opciones <b class="caret"></b>
+                        <span class="glyphicon glyphicon-cog"></span> Opciones <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
                             {foreach from=$arrProyectos key=seqProyecto item=objProyecto}
                                 <a href="#" onClick="cargarContenido('bodyHtml', './index.php', 'proyecto={$seqProyecto}', true);">
-                                    <img src="./recursos/imagenes/casa.png" width="10px"> {$objProyecto->txtProyecto}
+                                    <span class="glyphicon glyphicon-menu-right"></span> {$objProyecto->txtProyecto}
                                 </a>
                             {/foreach}
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="./consultaGeneralInterna.php" id="ayuda" target="_blank">
-                                <img src="./recursos/imagenes/iconoLupa.png" width="10px"> Consulta General
+                            <a href="./consultaGeneralInterna.php" target="_blank">
+                                <span class="glyphicon glyphicon-search"></span> Consulta general
                             </a>
                         </li>
+
+                        <li>
+                            <a href="#" onclick="abrirAyuda()">
+                                <span class="glyphicon glyphicon-globe"></span> Ayuda en línea
+                            </a>
+                        </li>
+
+
                     </ul>
                 </li>
-                <li>
-                    <a href="#" id="ayuda" onClick="popUpAyuda()">
-                        <img src="./recursos/imagenes/library.png" width="10px">
-                    </a>
-                </li>
+                {*<li>*}
+                    {*<a href="#" id="ayuda" onClick="popUpAyuda()">*}
+                        {*<img src="./recursos/imagenes/library.png" width="10px">*}
+                    {*</a>*}
+                {*</li>*}
             </ul>
 
         </div>

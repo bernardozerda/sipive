@@ -445,8 +445,8 @@ function obtenerDatos(seqProyecto) {
 
     }
 }
-function exportarExcel(estado, proyecto, tipo) {
-    location.href = './contenidos/crm/reportes/reporteTableroExcel.php?seqEstado=' + estado + '&seqProyecto=' + proyecto + '&tipo=' + tipo;
+function exportarExcel(estado, proyecto, tipo, nombre) {
+    location.href = './contenidos/crm/reportes/' + nombre + '.php?seqEstado=' + estado + '&seqProyecto=' + proyecto + '&tipo=' + tipo;
 }
 function validarCalificacion() {
     // var url = $("#txtArchivo").val();

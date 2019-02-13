@@ -11,17 +11,17 @@ if (!file_exists($txtPrefijoRuta . "recursos/archivos/verificarSesion.php")) {
     include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
     include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
-//include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CRMProyecto.class.php" );
+    include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CRMProyecto.class.php" );
 } else {
     $txtPrefijoRuta = "";
     include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
     include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
-
-    include 'librerias/clases/CRMProyecto.class.php';
+    //include( $txtPrefijoRuta . "recursos/archivos/inclusionSmarty.php" );
+    include $txtPrefijoRuta . 'librerias/clases/CRMProyecto.class.php';
 }
 
 $claCrm = new CRMProyecto;
-//var_dump($_SESSION);
+//var_dump($_GET);
 //$arrGrupoPermitido[ proyecto ][ grupo ] = grupoProyecto
 $arrGrupoPermitidos[3][9] = 10;
 $arrGrupoPermitidos[3][7] = 8;
@@ -35,10 +35,11 @@ foreach ($_SESSION["arrGrupos"][$seqProyecto] as $seqGrupo => $seqProyectoGrupo)
     }
 }
 if ($bolGrupoPermitido) {
+    
 
-    $txtPlantilla = "crm/panel/panel.tpl";
 
     $arrEstado = array();
+    $arraNoProyectos = array(); 
 
     $arrEstado[62] = "Revisión Documental";
     $arrEstado[17] = "Cargue Información Solución";
@@ -51,7 +52,21 @@ if ($bolGrupoPermitido) {
     $arrEstado[31] = "Consolidación Documental";
     $arrEstado[29] = "Cierre Legalizado";
 
-    $listEstados = "62,17,27,22,23,25,26,24,31,29";
+    $listEstados = "62,17,27,22,23,25,26,28,24,31,29";
+    
+    if ($_GET['ind'] == 1) {
+        $txtPlantilla = "crm/panel/panel.tpl";
+        
+    } else {
+        $txtPlantilla = "crm/panel/panelPrincipal.tpl";
+        if ($_GET['ind'] == 3) {
+            $txtPlantilla = "crm/panel/panelNoProyectos.tpl";
+        }
+        $listEstados = "62,17,19,27,22,23,25,26,28,24,31,29, 30, 32";
+        $listaProy = "32 , 37, 58, 94,  95, 96, 97, 98, 99, 101, 103, 105, 0, NULL,''";        
+        $arraNoProyectos = $claCrm->obtenerDatosNoProy($listEstados, $listaProy);
+        //var_dump($arraNoProyectos);
+    }
 //$arrProyectos = $claCrm->obtenerListaProyectos();
     $arrayGroupProyect = $claCrm->obtenerGroupProyectos($listEstados, $arrEstado);
     //var_dump($arrayGroupProyect);
@@ -66,7 +81,7 @@ if ($bolGrupoPermitido) {
     $totalVinculadasXProy = $claCrm->totalUnidadesPorProyecto(4);
     $totalLegalizadasXProy = $claCrm->totalUnidadesPorProyecto(5);
     $totalProcesoLeg = $claCrm->totalUnidadesPorProyecto(6);
- 
+
     $totalDevExpedientes = $claCrm->totalUnidadesPorProyecto(7);
     $totalDevExpedientesXProy = $claCrm->totalUnidadesPorProyecto(8);
     $totalLegalizadas = $claCrm->totalLegalizadas(0);
@@ -83,7 +98,7 @@ if ($bolGrupoPermitido) {
     foreach ($totalProcesoLeg as $key => $value) {
         $totalProcesoLeg = $value['cant'];
     }
-   // echo "<br>".$totalProcesoLeg;
+    // echo "<br>".$totalProcesoLeg;
     foreach ($totalDevExpedientes as $key => $value) {
         $totalDevExpedientes = $value['cant'];
     }
@@ -108,9 +123,15 @@ if ($bolGrupoPermitido) {
     $claSmarty->assign("totalProcesoLeg", $totalProcesoLeg);
     $claSmarty->assign("totalDevExpedientes", $totalDevExpedientes);
     $claSmarty->assign("totalDevExpedientesXProy", $totalDevExpedientesXProy);
+    $claSmarty->assign("arraNoProyectos", $arraNoProyectos);
 } else {
     $txtPlantilla = "sinInicio.tpl";
 }
-$claSmarty->assign("txtArchivoInicio", $txtPlantilla);
+//echo "****************" . $txtPlantilla;
+if ($_GET['ind'] == 1 || $_GET['ind'] == 3) {
+    $claSmarty->display($txtPlantilla);
+} else {
+    $claSmarty->assign("txtArchivoInicio", $txtPlantilla);
+}
 ?>
 

@@ -231,4 +231,33 @@ class CRMProyecto {
         return $datos;
     }
 
+    public function obtenerDatosNoProy($listEstados, $listaProy) {
+
+        global $aptBd;
+
+        $sql = "SELECT 
+    COUNT(*) as cantSin, txtEstado, frm.seqEstadoProceso
+    FROM
+    t_frm_formulario frm
+        LEFT JOIN
+    t_aad_formulario_acto fac USING (seqFormulario)
+        LEFT JOIN
+    v_frm_estado v ON (frm.seqEstadoProceso = v.seqEstadoProceso)
+    WHERE
+    frm.seqProyecto IN (" . $listaProy . ")
+        AND frm.seqEstadoProceso IN (" . $listEstados . ")
+        AND fac.seqEstadoProceso IN (15)
+        GROUP BY frm.seqEstadoProceso";
+        $objRes = $aptBd->Execute($sql);
+
+        $datos = Array();
+        $int = 0;
+        while ($objRes->fields) {
+            $datos[$objRes->fields['seqEstadoProceso']] = $objRes->fields;
+            $int++;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
 }

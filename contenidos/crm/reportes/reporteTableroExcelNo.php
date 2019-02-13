@@ -16,8 +16,8 @@ informeProyectosActo();
 function informeProyectosActo() {
     global $arrConfiguracion;
     $seqEstado = $_GET['seqEstado'];
-    $seqProyecto = $_GET['seqProyecto'];
-    $tipo = $_GET['tipo'];
+    // $seqProyecto = $_GET['seqProyecto'];
+    //$tipo = $_GET['tipo'];
     $conexion = mysql_connect($arrConfiguracion['baseDatos']['servidor'], $arrConfiguracion['baseDatos']['usuario'], $arrConfiguracion['baseDatos']['clave']);
     mysql_set_charset('utf8', $conexion);
     mysql_select_db($arrConfiguracion['baseDatos']['nombre'], $conexion);
@@ -60,8 +60,7 @@ function informeProyectosActo() {
         ),
     );
 
-   
-    $sql = obtenerConsulta($seqEstado, $seqProyecto, $tipo);
+    $sql = obTenerDatosNoProyectos($seqEstado);
 
     $resultdl = mysql_query($sql, $conexion) or die(mysql_error());
     $columnas = mysql_num_fields($resultdl);
@@ -71,14 +70,17 @@ function informeProyectosActo() {
 
     $tituloReporte = Array();
     //$tituloReporte[0] = "ID del Proyecto";
-    $tituloReporte[0] = "Nombre del Proyecto";
-    $tituloReporte[1] = "Unidad";
-    $tituloReporte[2] = "seqFormulario";
-    $tituloReporte[3] = "CC Post ppal";
-    $tituloReporte[4] = "Nombre post ppal";
-    $tituloReporte[5] = "estado";
-    $tituloReporte[6] = "fecha radicacion";
-    $tituloReporte[7] = "Fecha indicador";
+    // $tituloReporte[0] = "Nombre del Proyecto";
+    //$tituloReporte[1] = "Unidad";
+    $tituloReporte[0] = "seqFormulario";
+    $tituloReporte[1] = "CC Post ppal";
+    $tituloReporte[2] = "Nombre post ppal";
+    $tituloReporte[3] = "estado";
+    $tituloReporte[4] = "Modalidad";
+    $tituloReporte[5] = "Resolucion";
+    $tituloReporte[6] = "Fecha Acto";
+    $tituloReporte[7] = "Fecha Vigencia";
+    $tituloReporte[8] = "Fecha Vencimiento";
 
 
 
@@ -116,7 +118,7 @@ function informeProyectosActo() {
         // echo $rowsTotal;
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
         header('Content-type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment; filename="ReporteTablero.xlsx"');
+        header('Content-Disposition: attachment; filename="ReporteTableroNoProyectos.xlsx"');
         $objWriter->save('php://output');
         exit;
     } catch (Exception $objError) {

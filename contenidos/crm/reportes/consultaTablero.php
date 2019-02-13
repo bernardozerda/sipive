@@ -177,8 +177,8 @@ function obTenerDatosNoProyectos($estado) {
         $estado = '29,30,32';
     }
     $sql = "SELECT 
-            frm.seqFormulario, numDocumento, concat(txtNombre1, ' ', txtNombre1, ' ', txtApellido1, ' ', txtApellido2 ) AS postulante,
-            txtEstado, txtModalidad, concat(numActo, ' - ', year(fchActo)) as Acto, fchActo, fac.fchVigencia, fac.fchVencimiento
+            frm.seqFormulario, numDocumento, upper(concat(txtNombre1, ' ', txtNombre2, ' ', txtApellido1, ' ', txtApellido2 )) AS postulante,
+            txtEstado, txtModalidad, txtTipoEsquema, concat(numActo, ' - ', year(fchActo)) as Acto, fchActo, frm.fchVigencia
             FROM
                 t_frm_formulario frm
                     LEFT JOIN
@@ -187,6 +187,7 @@ function obTenerDatosNoProyectos($estado) {
                 v_frm_estado v ON (frm.seqEstadoProceso = v.seqEstadoProceso)
                 LEFT JOIN 
                 t_frm_modalidad mo ON (frm.seqModalidad = mo.seqModalidad)
+                LEFT JOIN  t_pry_tipo_esquema esq on(frm.seqTipoEsquema = esq.seqTipoEsquema)
                 LEFT JOIN t_frm_hogar hog USING(seqFormulario)
                 LEFT JOIN t_ciu_ciudadano USING(seqCiudadano)
                 LEFT JOIN 

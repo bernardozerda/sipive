@@ -77,10 +77,11 @@ function informeProyectosActo() {
     $tituloReporte[2] = "Nombre post ppal";
     $tituloReporte[3] = "estado";
     $tituloReporte[4] = "Modalidad";
-    $tituloReporte[5] = "Resolucion";
-    $tituloReporte[6] = "Fecha Acto";
-    $tituloReporte[7] = "Fecha Vigencia";
-    $tituloReporte[8] = "Fecha Vencimiento";
+    $tituloReporte[5] = "Esquema";
+    $tituloReporte[6] = "Resolucion";
+    $tituloReporte[7] = "Fecha Acto";
+    $tituloReporte[8] = "Fecha Vigencia";
+    $tituloReporte[9] = "Fecha Vencimiento";
 
 
 

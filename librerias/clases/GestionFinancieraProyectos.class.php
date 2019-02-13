@@ -28,11 +28,16 @@ class GestionFinancieraProyectos
         $this->arrTitulos['giroFiducia'][] = "Nombre del Proyecto";
         $this->arrTitulos['giroFiducia'][] = "Identificador de la Unidad";
         $this->arrTitulos['giroFiducia'][] = "Descripcion de la Unidad";
+        $this->arrTitulos['giroFiducia'][] = "Documento";
+        $this->arrTitulos['giroFiducia'][] = "Nombre";
         $this->arrTitulos['giroFiducia'][] = "Valor a Girar";
+
         $this->arrTitulos['giroConstructor'][] = "Identificador del Proyecto";
         $this->arrTitulos['giroConstructor'][] = "Nombre del Proyecto";
         $this->arrTitulos['giroConstructor'][] = "Identificador de la Unidad";
         $this->arrTitulos['giroConstructor'][] = "Descripcion de la Unidad";
+        $this->arrTitulos['giroConstructor'][] = "Documento";
+        $this->arrTitulos['giroConstructor'][] = "Nombre";
         $this->arrTitulos['giroConstructor'][] = "Disponible";
         $this->arrTitulos['giroConstructor'][] = "Valor a Girar";
 
@@ -119,7 +124,9 @@ class GestionFinancieraProyectos
                 upr.txtNombreUnidad,
                 upr.valSDVEActual,
                 uvi.valIndexado,
-                if(upr.seqUnidadProyecto is null,if(pry.seqProyecto is null,con.bolActivo,pry.bolActivo),upr.bolActivo) as bolActivo
+                if(upr.seqUnidadProyecto is null,if(pry.seqProyecto is null,con.bolActivo,pry.bolActivo),upr.bolActivo) as bolActivo,
+                ciu.numDocumento,
+                upper(concat(ciu.txtNombre1,' ',ciu.txtNombre2,' ',ciu.txtApellido1,' ',ciu.txtApellido2)) as txtNombre
             from t_pry_aad_unidades_vinculadas uvi 
             left join t_pry_unidad_proyecto upr on upr.seqUnidadProyecto = uvi.seqUnidadProyecto
             left join t_pry_proyecto con on uvi.seqProyecto = con.seqProyecto
@@ -127,6 +134,8 @@ class GestionFinancieraProyectos
             inner join t_pry_aad_unidad_acto uac on uac.seqUnidadActo = uvi.seqUnidadActo
             inner join t_pry_aad_unidad_tipo_acto tac on uac.seqTipoActoUnidad = tac.seqTipoActoUnidad
             left join t_pry_aad_registro_presupuestal rpr on uvi.seqRegistroPresupuestal = rpr.seqRegistroPresupuestal
+            left join t_frm_hogar hog on upr.seqFormulario = hog.seqFormulario and hog.seqParentesco = 1
+            left join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
             where uvi.seqProyecto in (
                 select seqProyecto
                 from t_pry_proyecto
@@ -167,6 +176,8 @@ class GestionFinancieraProyectos
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['seqConjunto'] = $objRes->fields['seqConjunto'];
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['conjunto'] = $objRes->fields['txtNombreConjunto'];
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['unidad'] = $objRes->fields['txtNombreUnidad'];
+                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['documento'] = $objRes->fields['numDocumento'];
+                $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['nombre'] = $objRes->fields['txtNombre'];
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['valor'] = $objRes->fields['valIndexado'];
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['activo'] = $objRes->fields['bolActivo'];
             }
@@ -572,11 +583,11 @@ class GestionFinancieraProyectos
             $seqUnidadProyecto = intval($arrArchivo[$i][2]);
             $txtUnidadProyecto = trim(mb_strtolower($arrArchivo[$i][3]));
             if($txtFormato == "giroConstructor") {
-                $valDisponible = doubleval($arrArchivo[$i][4]);
-                $valGiro       = $arrArchivo[$i][5];
+                $valDisponible = doubleval($arrArchivo[$i][6]);
+                $valGiro       = $arrArchivo[$i][7];
             }else{
                 $valDisponible = null;
-                $valGiro       = $arrArchivo[$i][4];
+                $valGiro       = $arrArchivo[$i][6];
             }
 
             // valida el identificador del proyecto
@@ -1331,6 +1342,8 @@ class GestionFinancieraProyectos
                 con.txtNombreProyecto as 'Nombre del Proyecto',
                 upr.seqUnidadProyecto as 'Identificador de la Unidad',
                 upper(upr.txtNombreUnidad) as 'Descripcion de la Unidad',
+                ciu.numDocumento as 'Documento',
+                upper(concat(ciu.txtNombre1, ' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2)) as 'Nombre',
                 sum(gfd.valGiro) as 'Disponible',
                 0 as 'Valor a Girar'
             from t_pry_aad_giro_fiducia gfi
@@ -1338,13 +1351,15 @@ class GestionFinancieraProyectos
             inner join t_pry_proyecto con on gfd.seqProyecto = con.seqProyecto
             left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
             left join t_pry_unidad_proyecto upr on gfd.seqUnidadProyecto = upr.seqUnidadProyecto
+            left join t_frm_hogar hog on hog.seqFormulario = upr.seqFormulario and hog.seqParentesco = 1
+            left join t_ciu_ciudadano ciu on hog.seqCiudadano = ciu.seqCiudadano
             where (con.seqProyecto = $seqProyecto or pry.seqProyecto = $seqProyecto)
             group by 
                 if(pry.seqProyecto is null, con.seqProyecto, pry.seqProyecto), 
                 if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto), 
                 upr.seqUnidadProyecto, 
                 upper(upr.txtNombreUnidad)      
-        ";
+        "; echo $sql . "<hr>";
         $objRes = $aptBd->execute($sql);
         $arrRetorno = array();
         while($objRes->fields){

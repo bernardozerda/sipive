@@ -44,13 +44,12 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
         if($arrUnidad['activo'] == 1) {
             $seqProyecto = ($arrUnidad['conjunto'] == "") ? $arrUnidad['seqProyecto'] : $arrUnidad['seqConjunto'];
             $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $seqProyecto, false);
-
             $txtNombreProyecto = ($arrUnidad['conjunto'] == "") ? $arrUnidad['proyecto'] : $arrUnidad['conjunto'];
             $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $txtNombreProyecto, false);
-
             $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $seqUnidadProyecto, false);
             $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['unidad'], false);
-
+            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['documento'], false);
+            $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $arrUnidad['nombre'], false);
             $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, 0, false);
 
             $numFila++;

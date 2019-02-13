@@ -89,9 +89,11 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
     $arrTablaCDP['valorRP'] = $claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP'];
     $arrTablaCDP['giros'] = doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros']);
     $arrTablaCDP['liberaciones'] = doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['liberaciones']);
-    $arrTablaCDP['saldo'] = (doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']) == 0)?
-        $arrTablaCDP['valorRP'] :
-        doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']);
+    $arrTablaCDP['saldo'] = doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']);
+
+//    $arrTablaCDP['saldo'] = (doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']) == 0)?
+//        $arrTablaCDP['valorRP'] :
+//        doubleval($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']);
 
     if(intval($_POST['seqGiroFiducia']) != 0) {
         if($arrTablaCDP['giros'] != 0) {

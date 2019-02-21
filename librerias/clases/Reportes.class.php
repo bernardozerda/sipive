@@ -232,92 +232,92 @@ class Reportes {
         $arrErrores = &$this->arrErrores;
         if (empty($arrErrores)) {
             $sql = "SELECT 
-						frm.seqFormulario,
-						frm.txtFormulario,
-						if(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
-						tpv.txtTipoVictima AS TipoVictima,
-						moa.txtModalidad AS Modalidad,
-						CONCAT(sol.txtDescripcion, ' (',  sol.txtSolucion, ')') AS Solucion,
-						locfrm.txtLocalidad AS Localidad,
-						if(trim(frm.txtBarrio) = '', 'Desconocido', frm.txtBarrio) AS Barrio,
-						locdes.txtLocalidad AS LocalidadDesembolso,
-						if(trim(des.txtBarrio) = '', 'Desconocido', des.txtBarrio) AS BarrioDesembolso,
-						if((trim(des.txtCompraVivienda) = '' or des.txtCompraVivienda is null), 'Ninguna', des.txtCompraVivienda) as TipoViviendaComprar,
-						(
-						  SELECT 
-						  tdo1.txtTipoDocumento
-						  FROM 
-						  T_FRM_HOGAR hog1
-						  INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
-						  INNER JOIN T_CIU_TIPO_DOCUMENTO tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
-						  WHERE hog1.seqFormulario = hog.seqFormulario
-						  AND hog1.seqParentesco = 1
-						) AS TipoDocumentoPPAL,
-						(
-						  SELECT 
-						  ciu1.numDocumento
-						  FROM 
-						  T_FRM_HOGAR hog1
-						  INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
-						  WHERE hog1.seqFormulario = hog.seqFormulario
-						  AND hog1.seqParentesco = 1
-						) AS NumeroDocumentoPPAL,
-						(
-						  SELECT 
-						  UPPER(CONCAT(ciu1.txtNombre1, ' ', ciu1.txtNombre2, ' ', ciu1.txtApellido1, ' ', ciu1.txtApellido2))
-						  FROM 
-						  T_FRM_HOGAR hog1
-						  INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
-						  WHERE hog1.seqFormulario = hog.seqFormulario
-						  AND hog1.seqParentesco = 1
-						) AS NombrePPAL,
-						(
-						  SELECT 
-						  tdo1.txtTipoDocumento
-						  FROM  T_CIU_TIPO_DOCUMENTO tdo1
-						  WHERE ciu.seqTipoDocumento = tdo1.seqTipoDocumento
-						)AS TipoDocumento,
-						ciu.numDocumento AS Documento,
-						UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS Nombre,
-						sex.txtSexo AS Sexo,
-						if(ciu.bolLgtb = 1, 'Si', 'No') AS LGBT,
-						ces1.txtCondicionEspecial as CondicionEspecial1,
-						ces2.txtCondicionEspecial as CondicionEspecial2,
-						ces3.txtCondicionEspecial as CondicionEspecial3,
-						ucwords( cabezaFamilia( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtCabezaFamilia,
-						ucwords( mayor65anos( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtMayor65Anos,
-						ucwords( discapacitado( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtDiscapacitado,
-						ucwords( ningunaCondicionEspecial( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtNingunaCondicionEspecial,
-						par.txtParentesco AS Parentesco,
-						if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01',null,date_format(ciu.fchNacimiento,'%Y-%m-%d')) AS FechaNacimiento,
-                        if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01',null,TIMESTAMPDIFF(YEAR,ciu.fchNacimiento,CURDATE())) AS Edad,
-                        if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01','Sin Clasificar',rangoEdad(TIMESTAMPDIFF(YEAR,ciu.fchNacimiento,CURDATE()))) AS RangoEdad,
-						etn.txtEtnia AS Etnia,
-						(
-							SELECT
-								sum(dsol.valSolicitado)
-							FROM T_DES_SOLICITUD dsol 
-							WHERE
-								frm.seqFormulario = des.seqFormulario AND 
-								dsol.seqDesembolso = des.seqDesembolso
-						) as ValorSolicitado
-						FROM T_FRM_FORMULARIO frm
-						INNER JOIN T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
-						INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
-						LEFT JOIN T_CIU_PARENTESCO par ON hog.seqParentesco = par.seqParentesco
-						LEFT JOIN T_CIU_SEXO sex ON ciu.seqSexo = sex.seqSexo
-						LEFT JOIN T_FRM_TIPOVICTIMA tpv ON ciu.seqTipoVictima = tpv.seqTipoVictima
-						LEFT JOIN T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
-						LEFT JOIN T_FRM_SOLUCION sol ON frm.seqSolucion = sol.seqSolucion
-						LEFT JOIN T_CIU_ETNIA etn ON ciu.seqEtnia = etn.seqEtnia
-						LEFT JOIN T_CIU_CONDICION_ESPECIAL ces1 ON ciu.seqCondicionEspecial = ces1.seqCondicionEspecial
-						LEFT JOIN T_CIU_CONDICION_ESPECIAL ces2 ON ciu.seqCondicionEspecial2 = ces2.seqCondicionEspecial
-						LEFT JOIN T_CIU_CONDICION_ESPECIAL ces3 ON ciu.seqCondicionEspecial3 = ces3.seqCondicionEspecial
-						LEFT JOIN T_FRM_LOCALIDAD locfrm ON frm.seqLocalidad = locfrm.seqLocalidad
-						LEFT JOIN T_DES_DESEMBOLSO des ON des.seqFormulario = frm.seqFormulario
-						LEFT JOIN T_FRM_LOCALIDAD locdes ON des.seqLocalidad = locdes.seqLocalidad
-						WHERE  frm.seqFormulario in (" . $this->seqFormularios . ")
-					";
+                        frm.seqFormulario,
+                        frm.txtFormulario,
+                        if(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
+                        tpv.txtTipoVictima AS TipoVictima,
+                        moa.txtModalidad AS Modalidad,
+                        CONCAT(sol.txtDescripcion, ' (',  sol.txtSolucion, ')') AS Solucion,
+                        locfrm.txtLocalidad AS Localidad,
+                        if(trim(frm.txtBarrio) = '', 'Desconocido', frm.txtBarrio) AS Barrio,
+                        locdes.txtLocalidad AS LocalidadDesembolso,
+                        if(trim(des.txtBarrio) = '', 'Desconocido', des.txtBarrio) AS BarrioDesembolso,
+                        if((trim(des.txtCompraVivienda) = '' or des.txtCompraVivienda is null), 'Ninguna', des.txtCompraVivienda) as TipoViviendaComprar,
+                        (
+                          SELECT 
+                          tdo1.txtTipoDocumento
+                          FROM 
+                          T_FRM_HOGAR hog1
+                          INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
+                          INNER JOIN T_CIU_TIPO_DOCUMENTO tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
+                          WHERE hog1.seqFormulario = hog.seqFormulario
+                          AND hog1.seqParentesco = 1
+                        ) AS TipoDocumentoPPAL,
+                        (
+                          SELECT 
+                          ciu1.numDocumento
+                          FROM 
+                          T_FRM_HOGAR hog1
+                          INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
+                          WHERE hog1.seqFormulario = hog.seqFormulario
+                          AND hog1.seqParentesco = 1
+                        ) AS NumeroDocumentoPPAL,
+                        (
+                          SELECT 
+                          UPPER(CONCAT(ciu1.txtNombre1, ' ', ciu1.txtNombre2, ' ', ciu1.txtApellido1, ' ', ciu1.txtApellido2))
+                          FROM 
+                          T_FRM_HOGAR hog1
+                          INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
+                          WHERE hog1.seqFormulario = hog.seqFormulario
+                          AND hog1.seqParentesco = 1
+                        ) AS NombrePPAL,
+                        (
+                          SELECT 
+                          tdo1.txtTipoDocumento
+                          FROM  T_CIU_TIPO_DOCUMENTO tdo1
+                          WHERE ciu.seqTipoDocumento = tdo1.seqTipoDocumento
+                        )AS TipoDocumento,
+                        ciu.numDocumento AS Documento,
+                        UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS Nombre,
+                        sex.txtSexo AS Sexo,
+                        if(ciu.bolLgtb = 1, 'Si', 'No') AS LGBT,
+                        ces1.txtCondicionEspecial as CondicionEspecial1,
+                        ces2.txtCondicionEspecial as CondicionEspecial2,
+                        ces3.txtCondicionEspecial as CondicionEspecial3,
+                        ucwords( cabezaFamilia( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtCabezaFamilia,
+                        ucwords( mayor65anos( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtMayor65Anos,
+                        ucwords( discapacitado( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtDiscapacitado,
+                        ucwords( ningunaCondicionEspecial( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtNingunaCondicionEspecial,
+                        par.txtParentesco AS Parentesco,
+                        if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01',null,date_format(ciu.fchNacimiento,'%Y-%m-%d')) AS FechaNacimiento,
+if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01',null,TIMESTAMPDIFF(YEAR,ciu.fchNacimiento,CURDATE())) AS Edad,
+if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01','Sin Clasificar',rangoEdad(TIMESTAMPDIFF(YEAR,ciu.fchNacimiento,CURDATE()))) AS RangoEdad,
+                        etn.txtEtnia AS Etnia,
+                        (
+                                SELECT
+                                        sum(dsol.valSolicitado)
+                                FROM T_DES_SOLICITUD dsol 
+                                WHERE
+                                        frm.seqFormulario = des.seqFormulario AND 
+                                        dsol.seqDesembolso = des.seqDesembolso
+                        ) as ValorSolicitado
+                        FROM T_FRM_FORMULARIO frm
+                        INNER JOIN T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
+                        INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
+                        LEFT JOIN T_CIU_PARENTESCO par ON hog.seqParentesco = par.seqParentesco
+                        LEFT JOIN T_CIU_SEXO sex ON ciu.seqSexo = sex.seqSexo
+                        LEFT JOIN T_FRM_TIPOVICTIMA tpv ON ciu.seqTipoVictima = tpv.seqTipoVictima
+                        LEFT JOIN T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
+                        LEFT JOIN T_FRM_SOLUCION sol ON frm.seqSolucion = sol.seqSolucion
+                        LEFT JOIN T_CIU_ETNIA etn ON ciu.seqEtnia = etn.seqEtnia
+                        LEFT JOIN T_CIU_CONDICION_ESPECIAL ces1 ON ciu.seqCondicionEspecial = ces1.seqCondicionEspecial
+                        LEFT JOIN T_CIU_CONDICION_ESPECIAL ces2 ON ciu.seqCondicionEspecial2 = ces2.seqCondicionEspecial
+                        LEFT JOIN T_CIU_CONDICION_ESPECIAL ces3 ON ciu.seqCondicionEspecial3 = ces3.seqCondicionEspecial
+                        LEFT JOIN T_FRM_LOCALIDAD locfrm ON frm.seqLocalidad = locfrm.seqLocalidad
+                        LEFT JOIN T_DES_DESEMBOLSO des ON des.seqFormulario = frm.seqFormulario
+                        LEFT JOIN T_FRM_LOCALIDAD locdes ON des.seqLocalidad = locdes.seqLocalidad
+                        WHERE  frm.seqFormulario in (" . $this->seqFormularios . ")
+                ";
             try {
                 //pr( $sql ); die( );
                 $objRes = $aptBd->execute($sql);
@@ -617,26 +617,26 @@ class Reportes {
         if (empty($arrErrores)) {
 
             $sql = "SELECT 
-						frm.seqFormulario,
-						frm.txtFormulario,
-						(
-						 SELECT 
-						   tdo1.txtTipoDocumento
-						 FROM T_CIU_TIPO_DOCUMENTO tdo1
-						 WHERE tdo1.seqTipoDocumento = ciu.seqTipoDocumento
-						) AS tipoDocumento,
-						ciu.numDocumento AS Documento,
-						UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS Nombre,
-						CONCAT(eta.txtEtapa, ' ', epr.txtEstadoProceso) AS EstadoProceso,
-						if(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
-						if(frm.bolCerrado = 1, 'Si', 'No') AS Cerrado
-						FROM T_FRM_FORMULARIO frm
-						INNER JOIN T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
-						INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
-						INNER JOIN T_FRM_ESTADO_PROCESO epr ON frm.seqEstadoProceso = epr.seqEstadoProceso
-						INNER JOIN T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
-						WHERE  frm.seqFormulario in (" . $this->seqFormularios . ")
-				";
+                        frm.seqFormulario,
+                        frm.txtFormulario,
+                        (
+                         SELECT 
+                           tdo1.txtTipoDocumento
+                         FROM T_CIU_TIPO_DOCUMENTO tdo1
+                         WHERE tdo1.seqTipoDocumento = ciu.seqTipoDocumento
+                        ) AS tipoDocumento,
+                        ciu.numDocumento AS Documento,
+                        UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS Nombre,
+                        CONCAT(eta.txtEtapa, ' ', epr.txtEstadoProceso) AS EstadoProceso,
+                        if(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
+                        if(frm.bolCerrado = 1, 'Si', 'No') AS Cerrado
+                        FROM T_FRM_FORMULARIO frm
+                        INNER JOIN T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
+                        INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
+                        INNER JOIN T_FRM_ESTADO_PROCESO epr ON frm.seqEstadoProceso = epr.seqEstadoProceso
+                        INNER JOIN T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
+                        WHERE  frm.seqFormulario in (" . $this->seqFormularios . ")
+        ";
 
             try {
                 $objRes = $aptBd->execute($sql);
@@ -5145,8 +5145,8 @@ WHERE
         }
         // if (!empty($arrDocumentos)) {
 
-        $sql = "SELECT
-            frm.seqFormulario AS 'Id Hogar',
+        $sql = "SELECT 
+                frm.seqFormulario AS 'Id Hogar',
                 ppal.numDocumento AS 'Documento Ppal',
                 seqCiudadano AS 'id Ciudadano',
                 txtTipoDocumento AS 'Tipo Documento',
@@ -5160,99 +5160,100 @@ WHERE
                 txtEstadoCivil AS 'Estado Civil',
                 fchNacimiento AS 'Fecha de Nacimiento',
                 TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) AS Edad,
+                    fchNacimiento,
+                    CURDATE()) AS Edad,
                 CASE
-                WHEN
-               TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) < 0
-               THEN
-               'Ninguno'
-               WHEN
-                TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) >= 0
-               AND 
-               TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) <= 5
-               THEN
-               '0 a 5'
-               WHEN
-               TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) > 5
-               AND TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) <= 13
-               THEN
-               '6 a 13'
-               WHEN
-               TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) > 13
-               AND TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) <= 17
-               THEN
-               '14 a 17'
-               WHEN
-               TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) > 17
-               AND TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) <= 26
-               THEN
-               '18 a 26'
-               WHEN
-               TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) > 26
-               AND TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) <= 59
-               THEN
-               '27 a 59' 
-                WHEN
-               TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) > 59               
-               THEN
-               'Mayor de 60' 
-               ELSE 'Ninguno'
-               END AS RangoEdad,
+                    WHEN
+                        TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) < 0
+                    THEN
+                        'Ninguno'
+                    WHEN
+                        TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) >= 0
+                            AND TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) <= 5
+                    THEN
+                        '0 a 5'
+                    WHEN
+                        TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) > 5
+                            AND TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) <= 13
+                    THEN
+                        '6 a 13'
+                    WHEN
+                        TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) > 13
+                            AND TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) <= 17
+                    THEN
+                        '14 a 17'
+                    WHEN
+                        TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) > 17
+                            AND TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) <= 26
+                    THEN
+                        '18 a 26'
+                    WHEN
+                        TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) > 26
+                            AND TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) <= 59
+                    THEN
+                        '27 a 59'
+                    WHEN
+                        TIMESTAMPDIFF(YEAR,
+                            fchNacimiento,
+                            CURDATE()) > 59
+                    THEN
+                        'Mayor de 60'
+                    ELSE 'Ninguno'
+                END AS RangoEdad,
                 txtNivelEducativo AS 'Nivel Educativo',
                 numAnosAprobados AS 'Anos Aprobados',
                 txtEtnia AS Etnia,
                 valIngresos AS 'Ingresos del Ciudadano',
                 txtOcupacion AS Ocupacion,
                 IF(seqCondicionEspecial = 1
-               OR seqCondicionEspecial2 = 1
-               OR seqCondicionEspecial3 = 1,
-                'SI',
-                'NO') AS 'Cabeza de Familia',
+                        OR seqCondicionEspecial2 = 1
+                        OR seqCondicionEspecial3 = 1,
+                    'SI',
+                    'NO') AS 'Cabeza de Familia',
                 IF(seqCondicionEspecial = 2
-               OR seqCondicionEspecial2 = 2
-               OR seqCondicionEspecial3 = 2,
-                'SI',
-                'NO') AS 'Mayor 65 Anos',
+                        OR seqCondicionEspecial2 = 2
+                        OR seqCondicionEspecial3 = 2,
+                    'SI',
+                    'NO') AS 'Mayor 65 Anos',
                 IF(seqCondicionEspecial = 3
-               OR seqCondicionEspecial2 = 3
-               OR seqCondicionEspecial3 = 3,
-                'SI',
-                'NO') AS Discapacitado,
+                        OR seqCondicionEspecial2 = 3
+                        OR seqCondicionEspecial3 = 3,
+                    'SI',
+                    'NO') AS Discapacitado,
                 IF(seqCondicionEspecial = 6
-               and seqCondicionEspecial2 = 6
-               and seqCondicionEspecial3 = 6,
-                'SI',
-                'NO') AS 'Ninguna Condicion Especial',
+                        AND seqCondicionEspecial2 = 6
+                        AND seqCondicionEspecial3 = 6,
+                    'SI',
+                    'NO') AS 'Ninguna Condicion Especial',
                 txtSalud AS Salud,
                 UPPER(txtTipoVictima) AS 'Tipo Victima',
                 IF(bolLgtb = 1, 'SI', 'NO') AS 'Lgtbi',
                 UPPER(txtGrupoLgtbi) AS 'Grupo LGTBI',
-                IF(bolDesplazado = 1, 'Víctimas', 'Vulnerables') AS Desplazado,
+                IF(bolDesplazado = 1,
+                    'Víctimas',
+                    'Vulnerables') AS Desplazado,
                 txtCiudad AS 'Ciudad',
                 txtLocalidad AS 'Localidad',
                 upz.txtUpz,
@@ -5263,10 +5264,10 @@ WHERE
                 fchArriendoDesde AS 'Fecha Arriendo Desde',
                 numHabitaciones AS 'Numero Habitaciones',
                 numHacinamiento AS 'Hacinamiento',
-                DATE_FORMAT(frm.fchInscripcion,'%Y-%m-%d') AS 'Fecha Inscripcion',
-                DATE_FORMAT(frm.fchInscripcion,'%Y') AS 'Año Inscripcion',
-                DATE_FORMAT(frm.fchPostulacion,'%Y-%m-%d') AS 'Fecha Postulacion',   
-                DATE_FORMAT(frm.fchPostulacion,'%Y') AS 'Año Postulacion',   
+                DATE_FORMAT(frm.fchInscripcion, '%Y-%m-%d') AS 'Fecha Inscripcion',
+                DATE_FORMAT(frm.fchInscripcion, '%Y') AS 'Año Inscripcion',
+                DATE_FORMAT(frm.fchPostulacion, '%Y-%m-%d') AS 'Fecha Postulacion',
+                DATE_FORMAT(frm.fchPostulacion, '%Y') AS 'Año Postulacion',
                 txtEstado AS 'Estado Proceso',
                 SUBSTRING_INDEX(txtEstado, '-', 1) AS Etapa,
                 IF(bolCerrado = 1, 'SI', 'NO') AS Cerrado,
@@ -5280,7 +5281,7 @@ WHERE
                 txtOtro,
                 txtSisben AS 'Sisben',
                 valIngresoHogar AS 'Ingresos del Hogar',
-                (valSaldoCuentaAhorro+valSaldoCuentaAhorro2) AS 'Suma Ahorro',
+                (valSaldoCuentaAhorro + valSaldoCuentaAhorro2) AS 'Suma Ahorro',
                 valSaldoCuentaAhorro AS 'Saldo Cta de Ahorro 1',
                 ban.txtBanco AS 'Banco Cta Ahorro 1',
                 valSaldoCuentaAhorro2 AS 'Saldo Cta Ahorro 2',
@@ -5311,190 +5312,242 @@ WHERE
                 txtNombreProyecto AS 'Nombre Proyecto',
                 seqProyectoHijo,
                 IF(afro.seqFormulario IS NOT NULL,
-                'SI',
-                'NO') AS 'Hogar Afro ',
+                    'SI',
+                    'NO') AS 'Hogar Afro ',
                 IF(ind.seqFormulario IS NOT NULL,
-                'SI',
-                'NO') AS 'Hogar Indigena',
+                    'SI',
+                    'NO') AS 'Hogar Indigena',
                 IF(pal.seqFormulario IS NOT NULL,
-                'SI',
-                'NO') AS 'Hogar Palenquero',
+                    'SI',
+                    'NO') AS 'Hogar Palenquero',
                 IF(raiz.seqFormulario IS NOT NULL,
-                'SI',
-                'NO') AS 'Hogar Raizal',
+                    'SI',
+                    'NO') AS 'Hogar Raizal',
                 IF(cabF.seqFormulario IS NOT NULL,
-                'SI',
-                'NO') AS 'Hogar Cabeza Fam',
+                    'SI',
+                    'NO') AS 'Hogar Cabeza Fam',
                 IF(disc.seqFormulario IS NOT NULL,
-                'SI',
-                'NO') AS 'Hogar Discapacitado',
+                    'SI',
+                    'NO') AS 'Hogar Discapacitado',
                 IF(lgtbi.seqFormulario IS NOT NULL,
-                'SI',
-                'NO') AS 'Hogar LGTBI ',
+                    'SI',
+                    'NO') AS 'Hogar LGTBI ',
                 IF(rom.seqFormulario IS NOT NULL,
-                'SI',
-                'NO') AS 'Hogar Rom ',                
+                    'SI',
+                    'NO') AS 'Hogar Rom ',
                 IF(mayor.seqFormulario IS NOT NULL,
-                'SI',
-                'NO') AS 'Mayor 60 Años'
-              FROM
-                  t_ciu_ciudadano ciud
-                      INNER JOIN
-                  t_frm_hogar hog USING (seqCiudadano)
-                      INNER JOIN
-                  t_frm_formulario frm USING (seqFormulario)
-                      LEFT JOIN
-                  t_ciu_tipo_documento USING (seqTipoDocumento)
-                      LEFT JOIN
-                  t_ciu_sexo USING (seqSexo)
-                      LEFT JOIN
-                  t_ciu_parentesco USING (seqParentesco)
-                      LEFT JOIN
-                  t_ciu_estado_civil USING (seqEstadoCivil)
-                      LEFT JOIN
-                  t_frm_tipoVictima USING (seqTipoVictima)
-                      LEFT JOIN
-                  t_frm_grupo_lgtbi USING (seqGrupoLgtbi)
-                      LEFT JOIN
-                  t_ciu_nivel_educativo USING (seqNivelEducativo)
-                      LEFT JOIN
-                  t_ciu_salud USING (seqSalud)
-                      LEFT JOIN
-                  t_ciu_etnia USING (seqEtnia)
-                      LEFT JOIN
-                  v_frm_estado USING (seqEstadoProceso)
-                      LEFT JOIN
-                  t_ciu_caja_compensacion USING (seqCajaCompensacion)
-                      LEFT JOIN
-                  t_ciu_ocupacion USING (seqOcupacion)
-                      LEFT JOIN
-                  t_frm_solucion USING (seqSolucion)
-                      LEFT JOIN
-                  t_frm_modalidad mo ON (mo.seqModalidad = frm.seqModalidad)
-                      LEFT JOIN
-                  t_frm_banco ban ON (ban.seqBanco = frm.seqBancoCuentaAhorro)
-                      LEFT JOIN
-                  t_frm_banco ban2 ON (ban2.seqBanco = frm.seqBancoCuentaAhorro2)
-                      LEFT JOIN
-                  t_frm_banco cred ON (cred.seqBanco = frm.seqBancoCredito)
-                      LEFT JOIN
-                  t_frm_localidad USING (seqLocalidad)
-                      LEFT JOIN
-                  t_pry_proyecto USING (seqProyecto)
-                      LEFT JOIN
-                  t_frm_ciudad USING (seqCiudad)
-                      LEFT JOIN
-                  t_frm_plan_gobierno pg ON (frm.seqPlanGobierno = pg.seqPlanGobierno)
-                      LEFT JOIN
-                  t_frm_barrio bar ON (frm.seqBarrio = bar.seqBarrio)
-                      LEFT JOIN
-                  t_pry_tipo_esquema esq ON (frm.seqTipoEsquema = esq.seqTipoEsquema)
-                      LEFT JOIN
-                  t_frm_empresa_donante USING (seqEmpresaDonante)
-                      LEFT JOIN
-                  t_frm_entidad_subsidio USING (seqEntidadSubsidio)
-                      LEFT JOIN
-                  t_frm_cesantia USING (seqCesantias)
-                      LEFT JOIN
-                  t_frm_vivienda USING (seqVivienda)
-                       LEFT JOIN
-                      t_frm_sisben USING(seqSisben)
-                              LEFT JOIN 
-                      t_frm_upz upz ON(upz.seqUpz = frm.seqUpz)
-                      LEFT JOIN
-                  (SELECT DISTINCT
-                      hoget.seqFormulario
-                  FROM
-                      t_ciu_ciudadano ciuet
-                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
-                  WHERE
-                      ciuet.seqEtnia = 6) afro ON frm.seqFormulario = afro.seqFormulario
-                      LEFT JOIN
-                  (SELECT DISTINCT
-                      hoget.seqFormulario
-                  FROM
-                      t_ciu_ciudadano ciuet
-                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
-                  WHERE
-                      ciuet.seqEtnia = 2) ind ON frm.seqFormulario = ind.seqFormulario
-                      LEFT JOIN
-                  (SELECT DISTINCT
-                      hoget.seqFormulario
-                  FROM
-                      t_ciu_ciudadano ciuet
-                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
-                  WHERE
-                      ciuet.seqEtnia = 3) rom ON frm.seqFormulario = rom.seqFormulario
-                      LEFT JOIN
-                  (SELECT DISTINCT
-                      hoget.seqFormulario
-                  FROM
-                      t_ciu_ciudadano ciuet
-                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
-                  WHERE
-                      ciuet.seqEtnia = 4) raiz ON frm.seqFormulario = raiz.seqFormulario
-                      LEFT JOIN
-                  (SELECT DISTINCT
-                      hoget.seqFormulario
-                  FROM
-                      t_ciu_ciudadano ciuet
-                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
-                  WHERE
-                      ciuet.seqEtnia = 5) pal ON frm.seqFormulario = pal.seqFormulario
-                      LEFT JOIN
-                  (SELECT DISTINCT
-                      ciuet.numDocumento, hoget.seqFormulario
-                  FROM
-                      t_ciu_ciudadano ciuet
-                  INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
-                  WHERE
-                      seqParentesco = 1) ppal ON frm.seqFormulario = ppal.seqFormulario        
-                      LEFT JOIN
-                  (SELECT DISTINCT
-                      (seqFormulario)
-                  FROM
-                      t_ciu_ciudadano
-                  LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
-                  WHERE
-                      seqCondicionEspecial = 1
-                          OR seqCondicionEspecial2 = 1
-                          OR seqCondicionEspecial3 = 1) cabF ON frm.seqFormulario = cabF.seqFormulario
-                      LEFT JOIN
-                  (SELECT DISTINCT
-                      (seqFormulario)
-                  FROM
-                      t_ciu_ciudadano
-                  LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
-                  WHERE
-                      seqCondicionEspecial = 3
-                          OR seqCondicionEspecial2 = 3
-                          OR seqCondicionEspecial3 = 3) disc ON frm.seqFormulario = disc.seqFormulario
-                      LEFT JOIN
-                  (SELECT DISTINCT
-                      (seqFormulario)
-                  FROM
-                      t_ciu_ciudadano
-                  LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
-                  WHERE
-                      TIMESTAMPDIFF(YEAR,
-                fchNacimiento,
-                CURDATE()) > 59) mayor ON frm.seqFormulario = mayor.seqFormulario
-                LEFT JOIN
-              (SELECT DISTINCT
+                    'SI',
+                    'NO') AS 'Mayor 60 Años',
+                    IF(edad0.seqFormulario IS NOT NULL,
+                    'SI',
+                    'NO') AS '0 - 17', 
+                 IF(edad27.seqFormulario IS NOT NULL,
+                    'SI',
+                    'NO') AS '27 - 59',
+                    IF(edad14.seqFormulario IS NOT NULL,
+                    'SI',
+                    'NO') AS '14 - 28',
+                IF(edad13.seqFormulario IS NOT NULL,
+                    'SI',
+                    'NO') AS '0 - 13',
+                IF(adol.seqFormulario IS NOT NULL,
+                    'SI',
+                    'NO') AS '14 - 17'
+
+            FROM
+                t_ciu_ciudadano ciud
+                    INNER JOIN
+                t_frm_hogar hog USING (seqCiudadano)
+                    INNER JOIN
+                t_frm_formulario frm USING (seqFormulario)
+                    LEFT JOIN
+                t_ciu_tipo_documento USING (seqTipoDocumento)
+                    LEFT JOIN
+                t_ciu_sexo USING (seqSexo)
+                    LEFT JOIN
+                t_ciu_parentesco USING (seqParentesco)
+                    LEFT JOIN
+                t_ciu_estado_civil USING (seqEstadoCivil)
+                    LEFT JOIN
+                t_frm_tipoVictima USING (seqTipoVictima)
+                    LEFT JOIN
+                t_frm_grupo_lgtbi USING (seqGrupoLgtbi)
+                    LEFT JOIN
+                t_ciu_nivel_educativo USING (seqNivelEducativo)
+                    LEFT JOIN
+                t_ciu_salud USING (seqSalud)
+                    LEFT JOIN
+                t_ciu_etnia USING (seqEtnia)
+                    LEFT JOIN
+                v_frm_estado USING (seqEstadoProceso)
+                    LEFT JOIN
+                t_ciu_caja_compensacion USING (seqCajaCompensacion)
+                    LEFT JOIN
+                t_ciu_ocupacion USING (seqOcupacion)
+                    LEFT JOIN
+                t_frm_solucion USING (seqSolucion)
+                    LEFT JOIN
+                t_frm_modalidad mo ON (mo.seqModalidad = frm.seqModalidad)
+                    LEFT JOIN
+                t_frm_banco ban ON (ban.seqBanco = frm.seqBancoCuentaAhorro)
+                    LEFT JOIN
+                t_frm_banco ban2 ON (ban2.seqBanco = frm.seqBancoCuentaAhorro2)
+                    LEFT JOIN
+                t_frm_banco cred ON (cred.seqBanco = frm.seqBancoCredito)
+                    LEFT JOIN
+                t_frm_localidad USING (seqLocalidad)
+                    LEFT JOIN
+                t_pry_proyecto USING (seqProyecto)
+                    LEFT JOIN
+                t_frm_ciudad USING (seqCiudad)
+                    LEFT JOIN
+                t_frm_plan_gobierno pg ON (frm.seqPlanGobierno = pg.seqPlanGobierno)
+                    LEFT JOIN
+                t_frm_barrio bar ON (frm.seqBarrio = bar.seqBarrio)
+                    LEFT JOIN
+                t_pry_tipo_esquema esq ON (frm.seqTipoEsquema = esq.seqTipoEsquema)
+                    LEFT JOIN
+                t_frm_empresa_donante USING (seqEmpresaDonante)
+                    LEFT JOIN
+                t_frm_entidad_subsidio USING (seqEntidadSubsidio)
+                    LEFT JOIN
+                t_frm_cesantia USING (seqCesantias)
+                    LEFT JOIN
+                t_frm_vivienda USING (seqVivienda)
+                    LEFT JOIN
+                t_frm_sisben USING (seqSisben)
+                    LEFT JOIN
+                t_frm_upz upz ON (upz.seqUpz = frm.seqUpz)
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    hoget.seqFormulario
+                FROM
+                    t_ciu_ciudadano ciuet
+                INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                WHERE
+                    ciuet.seqEtnia = 6) afro ON frm.seqFormulario = afro.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    hoget.seqFormulario
+                FROM
+                    t_ciu_ciudadano ciuet
+                INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                WHERE
+                    ciuet.seqEtnia = 2) ind ON frm.seqFormulario = ind.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    hoget.seqFormulario
+                FROM
+                    t_ciu_ciudadano ciuet
+                INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                WHERE
+                    ciuet.seqEtnia = 3) rom ON frm.seqFormulario = rom.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    hoget.seqFormulario
+                FROM
+                    t_ciu_ciudadano ciuet
+                INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                WHERE
+                    ciuet.seqEtnia = 4) raiz ON frm.seqFormulario = raiz.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    hoget.seqFormulario
+                FROM
+                    t_ciu_ciudadano ciuet
+                INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                WHERE
+                    ciuet.seqEtnia = 5) pal ON frm.seqFormulario = pal.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    ciuet.numDocumento, hoget.seqFormulario
+                FROM
+                    t_ciu_ciudadano ciuet
+                INNER JOIN t_frm_hogar hoget ON hoget.seqCiudadano = ciuet.seqCiudadano
+                WHERE
+                    seqParentesco = 1) ppal ON frm.seqFormulario = ppal.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
                     (seqFormulario)
                 FROM
                     t_ciu_ciudadano
                 LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
                 WHERE
-                    seqGrupoLgtbi > 0)
-                        lgtbi ON frm.seqFormulario = lgtbi.seqFormulario";
+                    seqCondicionEspecial = 1
+                        OR seqCondicionEspecial2 = 1
+                        OR seqCondicionEspecial3 = 1) cabF ON frm.seqFormulario = cabF.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                    seqCondicionEspecial = 3
+                        OR seqCondicionEspecial2 = 3
+                        OR seqCondicionEspecial3 = 3) disc ON frm.seqFormulario = disc.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                    TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) > 59) mayor ON frm.seqFormulario = mayor.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                    seqGrupoLgtbi > 0) lgtbi ON frm.seqFormulario = lgtbi.seqFormulario
+                     LEFT JOIN
+                (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                    TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) < 18) edad0 ON frm.seqFormulario = edad0.seqFormulario
+                    LEFT JOIN
+                (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                    TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) > 26 && TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) < 60) edad27 ON frm.seqFormulario = edad27.seqFormulario       
+                     LEFT JOIN
+                (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                    TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) > 13 && TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) < 29) edad14 ON frm.seqFormulario = edad14.seqFormulario
+                LEFT JOIN
+                (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                     TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) < 14) edad13 ON frm.seqFormulario = edad13.seqFormulario
+                LEFT JOIN
+                (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+         TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) > 13 && TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) < 18) adol ON frm.seqFormulario = adol.seqFormulario ";
         if (!empty($arrDocumentos)) {
             $sql .= " WHERE frm.seqFormulario IN(" . $formularios . ")";
         }
         $sql .= " ORDER BY frm.seqFormulario";
 //        echo $sql;
 //        die();
-
         $objRes = $aptBd->execute($sql);
         $this->obtenerReportesGeneral($objRes, "reporteGralHogar");
     }
@@ -5626,7 +5679,7 @@ WHERE
         $objResAsigAdq = $aptBd->execute($sqlAsignadoAdq);
         while ($objResAsigAdq->fields) {
             $array['asignados'] = $objResAsigAdq->fields['cantidad'];
-            $array['valAsignados'] = $objResAsigAdq->fields['valor']+$objResAsigAdq->fields['complementario']+$objResAsigAdq->fields['leasing'];
+            $array['valAsignados'] = $objResAsigAdq->fields['valor'] + $objResAsigAdq->fields['complementario'] + $objResAsigAdq->fields['leasing'];
             $objResAsigAdq->MoveNext();
         }
         //   var_dump($array);        die();
@@ -5695,7 +5748,7 @@ WHERE
         $objResLegAdq = $aptBd->execute($sqlInscritosAdqLegalizados);
         while ($objResLegAdq->fields) {
             $array['cantidad'] = $objResLegAdq->fields['cantidad'];
-            $array['valor'] = $objResLegAdq->fields['valor']+$objResLegAdq->fields['complementario']+$objResLegAdq->fields['leasing'];
+            $array['valor'] = $objResLegAdq->fields['valor'] + $objResLegAdq->fields['complementario'] + $objResLegAdq->fields['leasing'];
             $objResLegAdq->MoveNext();
         }
         //   var_dump($array);        die();
@@ -5706,3 +5759,4 @@ WHERE
 
 // fin clase reportes
 ?>
+ 

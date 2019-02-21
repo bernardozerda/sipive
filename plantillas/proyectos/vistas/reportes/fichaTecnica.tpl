@@ -214,7 +214,7 @@
                             <tr>
                                 <th width="20%"><b>Asignación de Aportes</b></th>
                                 <th width="20%"><b>Indexación del Valor del SFV</b></th>
-                                <th width="20%"><b>Disminución de Aportes</b></th>
+                                <th width="20%"><b>Modificación de Aportes</b></th>
                                 <th width="20%"><b>Giro a Encargo Fiduciario</b></th>
                                 <th width="20%"><b>Giros Del Encargo Fiduciario Al Oferente</b></th>
 

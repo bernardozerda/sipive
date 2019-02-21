@@ -3814,7 +3814,7 @@ class Reportes {
         $arrTitulos[27]['nombre'] = 'Fecha de Resolución';
         $arrTitulos[28]['nombre'] = 'Asignacion de aportes';
         $arrTitulos[29]['nombre'] = 'Indexacion del valor del SFV';
-        $arrTitulos[30]['nombre'] = 'Disminución de aportes';
+        $arrTitulos[30]['nombre'] = 'Modificación de aportes';
         $arrTitulos[31]['nombre'] = 'Giro a encargo fiduciario';
         $arrTitulos[32]['nombre'] = 'Valor Desembolsado a constuctor';
 
@@ -3848,7 +3848,7 @@ class Reportes {
         $arrTitulos[27]['formato'] = 'Fecha de Resolución';
         $arrTitulos[28]['formato'] = 'Asignacion de aportes';
         $arrTitulos[29]['formato'] = 'Indexacion del valor del SFV';
-        $arrTitulos[30]['formato'] = 'Disminución de aportes';
+        $arrTitulos[30]['formato'] = 'Modificación de aportes';
         $arrTitulos[31]['formato'] = 'Giro a encargo fiduciario';
         $arrTitulos[32]['formato'] = 'Valor Desembolsado a constuctor';
 

@@ -3278,14 +3278,20 @@ class Reportes {
             }
 
             // balance fiducia
-            $arrReporte[$seqProyecto]['balanceFiducia'] = doubleval(
-                $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['fiducia']
-            );
+            $arrReporte[$seqProyecto]['balanceFiducia'] = 0;
+            if(doubleval($arrReporte[$seqProyecto]['fiducia']) != 0){
+                $arrReporte[$seqProyecto]['balanceFiducia'] = doubleval(
+                    $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['fiducia']
+                );
+            }
 
             // balance constructor
-            $arrReporte[$seqProyecto]['balanceConstructor'] = doubleval(
-                $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['constructor']
-            );
+            $arrReporte[$seqProyecto]['balanceConstructor'] = 0;
+            if(doubleval($arrReporte[$seqProyecto]['constructor']) != 0) {
+                $arrReporte[$seqProyecto]['balanceConstructor'] = doubleval(
+                    $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['constructor']
+                );
+            }
 
             // Pendiente reintegros
             if(doubleval($arrReporte[$seqProyecto]['balanceFiducia']) <= doubleval($arrReporte[$seqProyecto]['balanceConstructor'])){

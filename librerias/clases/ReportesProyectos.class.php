@@ -3170,12 +3170,12 @@ class Reportes {
 
             $arrReporte[$seqProyecto]['menor'] = doubleval(
                     ($objRes->fields['seqTipoActoUnidad'] == 3 or ( $objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] < 0)) ?
-                            $arrReporte[$seqProyecto]['menor'] + abs($objRes->fields['valIndexado']) :
+                            $arrReporte[$seqProyecto]['menor'] + $objRes->fields['valIndexado'] :
                             $arrReporte[$seqProyecto]['menor']
             );
 
             $arrReporte[$seqProyecto]['actual'] = $arrReporte[$seqProyecto]['aprobado'] +
-                    $arrReporte[$seqProyecto]['indexado'] -
+                    $arrReporte[$seqProyecto]['indexado'] +
                     $arrReporte[$seqProyecto]['menor'];
 
             $arrReporte[$seqProyecto]['fiducia'] = 0;
@@ -3304,7 +3304,7 @@ class Reportes {
         $arrTitulos[1]['nombre'] = "ENTIDAD FINANCIERA";
         $arrTitulos[2]['nombre'] = "VALOR PROYECTO APROBADO";
         $arrTitulos[3]['nombre'] = "VALOR INDEXACIONES APROBADAOS";
-        $arrTitulos[4]['nombre'] = "VALOR TOTAL MENOR VALOR DEL PROYECTO SDHT";
+        $arrTitulos[4]['nombre'] = "VALOR TOTAL VALOR MODIFICADO DEL PROYECTO SDHT";
         $arrTitulos[5]['nombre'] = "ACTUAL VALOR TOTAL DEL PROYECTO";
         $arrTitulos[6]['nombre'] = "VALOR GIRADO A FIDUCIA";
         $arrTitulos[7]['nombre'] = "% VALOR GIRADO A FIDUCIA";
@@ -3438,7 +3438,7 @@ class Reportes {
         // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
 
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        header("Content-Disposition: attachment;filename='" . mb_ereg_replace("[^0-9A-Za-z]", "", $txtNombre) . "_" . date("YmdHis") . ".xlsx");
+        header("Content-Disposition: attachment;filename=" . mb_ereg_replace("[^0-9A-Za-z]", "", $txtNombre) . "_" . date("YmdHis") . ".xlsx");
         header('Cache-Control: max-age=0');
         ob_end_clean();
 

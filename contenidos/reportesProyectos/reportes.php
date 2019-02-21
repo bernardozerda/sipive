@@ -15,7 +15,7 @@ include("../../librerias/phpExcel/Classes/PHPExcel/IOFactory.php");
 $arrReporte = array();
 
 $arrReporte['general']['funcion'] = "reporteGeneral";
-$arrReporte['general']['titulo'] = "Exportable General";
+$arrReporte['general']['titulo'] = "Exportable Informe Financiero";
 $arrReporte['general']['descripcion'] = "Información general de proyectos en dinero";
 $arrReporte['general']['url'] = null;
 

@@ -41,7 +41,7 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
     foreach($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'] as $seqUnidadProyecto => $arrUnidad){
 
         $numColumna = 0;
-        if($arrUnidad['activo'] == 1) {
+//        if($arrUnidad['activo'] == 1) {
             $seqProyecto = ($arrUnidad['conjunto'] == "") ? $arrUnidad['seqProyecto'] : $arrUnidad['seqConjunto'];
             $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, $seqProyecto, false);
             $txtNombreProyecto = ($arrUnidad['conjunto'] == "") ? $arrUnidad['proyecto'] : $arrUnidad['conjunto'];
@@ -53,7 +53,7 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
             $objHoja->setCellValueByColumnAndRow($numColumna++, $numFila, 0, false);
 
             $numFila++;
-        }
+//        }
     }
 
     // *************************** ESTILOS POR DEFECTO DEL ARCHIVO DE EXCEL ********************************************* //
@@ -84,7 +84,7 @@ if(isset($claGestion->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupu
     // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
 
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename='UnidadesGiroFiducia_" . date("YmdHis") . ".xlsx");
+    header("Content-Disposition: attachment;filename=UnidadesGiroFiducia_" . date("YmdHis") . ".xlsx");
     header('Cache-Control: max-age=0');
     ob_end_clean();
 

@@ -13,12 +13,12 @@
             {assign var=style value = "border-radius: 0 15px 0 0;"}
             {assign var=styleLic value = "border-radius: 0 0 0 0;"}
             {assign var=nav value = "width: 19%"}
-            {assign var=nav1 value = "width: 20%"}
+            {assign var=nav1 value = "width: 19%"}
         {else}
             {assign var=style value = "border-radius: 0 0 0 0;"}
             {assign var=styleLic value = "border-radius: 0 15px 0 0;"}
             {assign var=nav value = "width: 20%"}
-            {assign var=nav1 value = "width: 25%"}
+            {assign var=nav1 value = "width: 20%"}
         {/if}
 
         <div id="wrapper" class="container tab-content">
@@ -38,6 +38,7 @@
                     <li class="nav-item" style="{$nav1}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick="activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', 1);">Licencias <br></a>
                     </li>
+
                 {/if}
                 {if $seqPryEstadoProceso > 1}
 
@@ -54,14 +55,16 @@
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosPolizas" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" 
                            onclick="
                            {* {if isset($smarty.session.arrGrupos.5.13) or isset($smarty.session.arrGrupos.6.20)}
-                                   activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentesAdd.php', {$arrayFideicomitente|@sizeof});
-                                   *}verificarSesion();
+                           activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentesAdd.php', {$arrayFideicomitente|@sizeof});
+                           *}verificarSesion();
                            "><em>Polizas  y Fiducia</em></a>
                     </li>
-
                 {/if}
                 <li class="nav-item"  style="{$nav}">   
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="{$style}">Seguimientos <br></a>
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Seguimientos <br></a>
+                </li>
+                <li class="nav-item" style="{$nav1}">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$style}">Actos<br></a>
                 </li>
             </ul>
             <div class="tab-pane active" id="datos" role="tabpanel" aria-labelledby="home-tab">
@@ -521,7 +524,12 @@
                                 <input name="txtNombreVendedor" type="text" id="txtNombreVendedor" value="{$value.txtNombreVendedor}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required5">
                                 <div id="val_txtNombreVendedor" class="divError">Este campo es requerido</div>
                             </div>
-                            <div class="col-md-4"> 
+                            <div class="col-md-2"> 
+                                <label class="control-label">Telefono del vendedor</label> 
+                                <input name="numTelVendedor" type="text" id="numTelVendedor" value="{$value.numTelVendedor}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required5">
+                                <div id="val_numTelVendedor" class="divError">Este campo es requerido</div>
+                            </div>
+                            <div class="col-md-3"> 
                                 <label class="control-label">Nit</label>                         
                                 <input name="numNitVendedor" type="text" id="numNitVendedor" value="{$value.numNitVendedor}" onblur=" sinCaracteresEspeciales(this);
                                         soloNumeros(this);" style="width:200px;" class="form-control required5">

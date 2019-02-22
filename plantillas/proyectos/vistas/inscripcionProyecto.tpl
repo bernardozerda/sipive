@@ -13,13 +13,15 @@
             {assign var=style value = "border-radius: 0 15px 0 0;"}
             {assign var=styleLic value = "border-radius: 0 0 0 0;"}
             {assign var=nav value = "width: 19%"}
-            {assign var=nav1 value = "width: 19%"}
+            {assign var=nav1 value = "width: 20.6%"}
         {else}
             {assign var=style value = "border-radius: 0 0 0 0;"}
             {assign var=styleLic value = "border-radius: 0 15px 0 0;"}
             {assign var=nav value = "width: 20%"}
             {assign var=nav1 value = "width: 20%"}
         {/if}
+
+        {assign var=seqProyecto value=$value.seqProyecto}
 
         <div id="wrapper" class="container tab-content">
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%">
@@ -32,18 +34,18 @@
                     <li  class="nav-item"  style="{$nav1}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick=" verificarSesion();"><em>Tipos Vivienda</em></a>
                     </li>
-                    <li  class="nav-item"  style="{$nav1}">
+                    <li  class="nav-item"  style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick="verificarSesion();"><em>Conjuntos Residenciales</em></a>
                     </li>
-                    <li class="nav-item" style="{$nav1}">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick="activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', 1);">Licencias <br></a>
+                    <li class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick="activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', 1);">Licencias <br></a>
                     </li>
 
                 {/if}
                 {if $seqPryEstadoProceso > 1}
 
-                    <li class="nav-item" style="{$nav}">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick=" verificarSesion();">Datos Financieros</a>
+                    <li class="nav-item" style="{$nav1}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick=" verificarSesion();">Datos Financieros</a>
                     </li>             
                     <li  class="nav-item" style="{$nav}">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosComite" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick=" verificarSesion();"><em>Comite </em></a>
@@ -59,13 +61,14 @@
                            *}verificarSesion();
                            "><em>Polizas  y Fiducia</em></a>
                     </li>
+                    <li class="nav-item" style="{$nav1}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#actosAdmon" role="tab" aria-controls="profile" aria-selected="false" style="{$style}">Actos<br></a>
+                    </li>
                 {/if}
-                <li class="nav-item"  style="{$nav}">   
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Seguimientos <br></a>
+                <li class="nav-item"  style="{$nav1}">   
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="{$style}">Seguimientos <br></a>
                 </li>
-                <li class="nav-item" style="{$nav1}">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="{$style}">Actos<br></a>
-                </li>
+
             </ul>
             <div class="tab-pane active" id="datos" role="tabpanel" aria-labelledby="home-tab">
                 <fieldset>
@@ -678,6 +681,39 @@
             <div id="datosComite" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
                 {include file="proyectos/vistas/inscripcionComite.tpl"}
             </div>
+            <div id="actosAdmon" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll; text-align: left;">
+                <fieldset>
+                    <legend class="legend">
+                        <h4 style="position: relative; float: left; width: 100%; margin: 0; padding-top: 3%">
+                            Datos de Actos Administrativos                             
+                        </h4>
+                    </legend>
+                    <div class="form-group" style="padding: 5%">
+                        <div class="col-md-4"> 
+                            <b>Resolución de asignación </b> {$arrFinanciera.$seqProyecto.aprobado.numero} de {$arrFinanciera.$seqProyecto.aprobado.fecha}<br>
+                            <b>cantidad de unidades </b>{$arrFinanciera.$seqProyecto.aprobado.unidades|@count} SFV por <br>
+                            <b>Valor de los giros realizados:</b> $ {$arrFinanciera.$seqProyecto.aprobado.valor|number_format:0:',':'.'}
+                        </div>
+                        <div class="col-md-4"> 
+                            {foreach from=$arrFinanciera.$seqProyecto.indexado.detalle key=seqUnidadActo item=arrResolucion}
+                                <b>Resolución de indexacion </b> {$arrResolucion.numero} de {$arrResolucion.fecha}<br>
+                                <b>cantidad de unidades </b> {$arrResolucion.unidades|@count} SFV por<br>
+                                <b>Valor de los giros realizados:</b>  $ {$arrResolucion.valor|number_format:0:',':'.'}
+                                <br>
+                            {/foreach} 
+                        </div>
+                        <div class="col-md-4"> 
+                            {foreach from=$arrFinanciera.$seqProyecto.menor.detalle key=seqUnidadActo item=arrResolucion}
+                                <b>Resolución de dism </b> {$arrResolucion.numero} de {$arrResolucion.fecha}<br>
+                                <b>cantidad de unidades </b> {$arrResolucion.unidades} SFV por<br>
+                                <b>Valor de los giros realizados:</b>  $ {$arrResolucion.valor|number_format:0:',':'.'}
+                                <br>
+                            {/foreach}
+                            <b>Total de disminuciones por</b> $ {$arrFinanciera.$seqProyecto.menor.total|number_format:0:',':'.'}
+                        </div>
+                    </div><br><br>
+                </fieldset>
+            </div> 
         {/foreach}
         {*    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

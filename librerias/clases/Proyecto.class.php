@@ -448,6 +448,7 @@ class Proyecto {
                     valDevolucionIVA,
                     valTotalRecursos,                   
                     txtNombreVendedor,
+                    numTelVendedor,
                     numNitVendedor,
                     txtCorreoVendedor,
                     txtCedulaCatastral,
@@ -524,6 +525,7 @@ class Proyecto {
                     $valDevolucionIVA,
                     $valTotalRecursos,                    
                     '$txtNombreVendedor',
+                    $numTelVendedor,
                     '$numNitVendedor',
                     '$txtCorreoVendedor',
                     '$txtCedulaCatastral',
@@ -824,6 +826,7 @@ class Proyecto {
                         valDevolucionIVA = " . $valDevolucionIVA . ",
                         valTotalRecursos = " . $valTotalRecursos . ",                      
                         txtNombreVendedor = '$txtNombreVendedor',
+                        numTelVendedor = $numTelVendedor,
                         numNitVendedor = '$numNitVendedor',
                         txtCorreoVendedor = '$txtCorreoVendedor',
                         txtCedulaCatastral = '$txtCedulaCatastral',
@@ -985,7 +988,7 @@ class Proyecto {
                 } else {
                     $$key = $value[($index)];
                 }
-            }            //if ($txtNombreProyectoHijo != "") {
+            }            
             $sql .= "(
                         '$txtLicencia', 
                         '$txtExpideLicencia',

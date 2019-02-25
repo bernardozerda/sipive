@@ -545,12 +545,9 @@
                             </div>
                         </div>
                     </fieldset>
-
                 </div>
-
                 <p>&nbsp;</p>
                 <div>
-
                     <fieldset>
                         <legend class="legend">
                             <h4 style="position: relative; float: left; width: 100%; margin: 0; padding: 5px;">
@@ -691,35 +688,36 @@
                 <fieldset style="border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;">
 
                     <div class="form-group" style="padding: 2%">
-                        <div class="col-md-4"><b>Resolución de asignación N°: </b> </div>
-                        <div class="col-md-4"><b>Cantidad de unidades </b></div>
-                        <div class="col-md-4"><b>Valor Total de Asignación:</b> </div>
-                    </div>  
-                    <div class="form-group" style="padding-left: 2%">
-                        <div class="col-md-4"> {$arrFinanciera.$seqProyecto.aprobado.numero} de {$arrFinanciera.$seqProyecto.aprobado.fecha}</div>
-                        <div class="col-md-4">{$arrFinanciera.$seqProyecto.aprobado.unidades|@count} SFV por </div>
-                        <div class="col-md-4">$ {$arrFinanciera.$seqProyecto.aprobado.valor|number_format:0:',':'.'}</div>
+                        <div class="col-md-4"><label class="control-label">Resolución de asignación N°:</label></div>
+                        <div class="col-md-4"><label class="control-label">Cantidad de unidades:</label></div>
+                        <div class="col-md-4"><label class="control-label">Valor Total de Asignación:</label></div>
                     </div>
+                    <div class="form-group" style="padding-left: 2%; color: #204d74;margin-top: 5px; margin-bottom: 0;">
+                        <div class="col-md-4">{$arrFinanciera.$seqProyecto.aprobado.numero} de {$arrFinanciera.$seqProyecto.aprobado.fecha}  </div>
+                        <div class="col-md-4">{$arrFinanciera.$seqProyecto.aprobado.unidades|@count} SFV por </div>
+                        <div class="col-md-4">$ {$arrFinanciera.$seqProyecto.aprobado.valor|number_format:0:',':'.'} </div>
+                    </div>  
+                    <br><br>
                     <div class="form-group" style="padding: 2%">
-                        <div class="col-md-4"><b>Resolución de indexación N°:</b>   </div>
-                        <div class="col-md-4"><b>Cantidad de unidades </b></div>
-                        <div class="col-md-4"><b>Valor Total de Indexación:</b> </div>
+                        <div class="col-md-4"><label class="control-label">Resolución de indexación N°:</label></div>
+                        <div class="col-md-4"><label class="control-label">Cantidad de unidades </label></div>
+                        <div class="col-md-4"><label class="control-label">Valor Total de Indexación: </label></div>
                     </div>  
                     {foreach from=$arrFinanciera.$seqProyecto.indexado.detalle key=seqUnidadActo item=arrResolucion}
-                        <div class="form-group" style="padding-left: 2%">
+                        <div class="form-group" style="padding-left: 2%; color: #204d74;margin-top: 5px; margin-bottom: 0;">
                             <div class="col-md-4">{$arrResolucion.numero} de {$arrResolucion.fecha}<br></div>
                             <div class="col-md-4">{$arrResolucion.unidades|@count} SFV por<br></div>
                             <div class="col-md-4"> $ {$arrResolucion.valor|number_format:0:',':'.'}<br></div>
-                        </div><br>
+                        </div>
                     {/foreach} 
-
+                    <br><br>
                     <div class="form-group" style="padding: 2%">
-                        <div class="col-md-4"><b>Resolución de Modificación N°:</b>  </div>
-                        <div class="col-md-4"><b>Cantidad de unidades </b></div>
-                        <div class="col-md-4"><b>Valor Total de Modificación:</b> </div>
+                        <div class="col-md-4"><label class="control-label">Resolución de Modificación N°:</label></div>
+                        <div class="col-md-4"><label class="control-label">Cantidad de unidades </label></div>
+                        <div class="col-md-4"><label class="control-label">Valor Total de Modificación:</label></div>
                     </div> 
                     {foreach from=$arrFinanciera.$seqProyecto.menor.detalle key=seqUnidadActo item=arrResolucion} 
-                        <div class="form-group" style="padding-left: 2%">
+                        <div class="form-group" style="padding-left: 2%; color: #204d74;margin-top: 5px; margin-bottom: 0;">
                             <div class="col-md-4">{$arrResolucion.numero} de {$arrResolucion.fecha}</div>
                             <div class="col-md-4">{$arrResolucion.unidades} SFV por</div>  
                             <div class="col-md-4"> $ {$arrFinanciera.$seqProyecto.menor.total|number_format:0:',':'.'}</div>

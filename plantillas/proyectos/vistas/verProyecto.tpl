@@ -10,31 +10,65 @@
             {assign var=seqPryEstadoProceso value=$value.seqPryEstadoProceso}
         {else}
             {assign var=seqPryEstadoProceso value = 1}
+        {/if}       
+
+        {if $seqPryEstadoProceso == 1}
+            {assign var=style value = "border-radius: 0 15px 0 0;"}
+            {assign var=styleLic value = "border-radius: 0 0 0 0;"}
+            {assign var=nav value = "width: 19%"}
+            {assign var=nav1 value = "width: 20.6%"}
+        {else}
+            {assign var=style value = "border-radius: 0 0 0 0;"}
+            {assign var=styleLic value = "border-radius: 0 15px 0 0;"}
+            {assign var=nav value = "width: 20%"}
+            {assign var=nav1 value = "width: 25%"}
         {/if}
 
+        {assign var=seqProyecto value=$value.seqProyecto}
+
         <div id="wrapper" class="container tab-content">
-            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
-                <li class="nav-item" >
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#datos" role="tab" aria-controls="home" aria-selected="true" >Datos Básicos</a>
+
+            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%">
+                {if $seqPryEstadoProceso == "" or $seqPryEstadoProceso >= 1}
+
+                    <li class="nav-item active"  style="{$nav1}">
+                        <a class="nav-item" id="home-tab" data-toggle="tab" href="#datos" role="tab" aria-controls="home" aria-selected="true" onclick="allDate();
+                                verificarSesion();" >Datos Básicos</a>
+                    </li>
+                    <li  class="nav-item"  style="{$nav1}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick=" verificarSesion();"><em>Tipos Vivienda</em></a>
+                    </li>
+                    <li  class="nav-item"  style="{$nav1}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick="verificarSesion();"><em>Conjuntos Residenciales</em></a>
+                    </li>
+                  <!--  <li class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick="activarAutocompletar('txtNombreInformador', 'txtNombreInformadorContenedor', './contenidos/cruces2/nombres.php', 1);">Licencias <br></a>
+                    </li>-->
+
+                {/if}
+                {if $seqPryEstadoProceso > 1}
+
+                    <li class="nav-item" style="{$nav1}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" onclick=" verificarSesion();">Datos Financieros</a>
+                    </li>             
+                    <li  class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosComite" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick=" verificarSesion();"><em>Comite </em></a>
+                    </li>
+                    <li  class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;" onclick="verificarSesion();"><em>Cronograma </em></a>
+                    </li>
+                    <li  class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosPolizas" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"  onclick=" verificarSesion();"><em>Polizas  y Fiducia</em></a>
+                    </li>
+                    <li  class="nav-item" style="{$nav}">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#actosAdmon" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"  onclick=" verificarSesion();"><em>Actos Administreativos</em></a>
+                    </li>
+
+                {/if}
+                <li class="nav-item"  style="{$nav}">   
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="{$style}">Seguimientos <br></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Oferentes <br></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#financiero" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;">Datos <br>Financieros</a>
-                </li>
-                <li  class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tiposVivienda" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Tipos<br> Vivienda</em></a>
-                </li>
-                <li  class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#conjuntosResidenciales" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Conjuntos Residenciales</em></a>
-                </li>
-                <li  class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#datosCronograma" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 0 0 0;"><em>Cronograma <br></em></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seg" role="tab" aria-controls="profile" aria-selected="false" style="border-radius: 0 15px 0 0;">Seguimientos <br></a>
-                </li>
+
             </ul>
             <div class="tab-pane active" id="datos" role="tabpanel" aria-labelledby="home-tab">
                 <fieldset>
@@ -420,6 +454,59 @@
             <div id="datosCronograma" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
                 {include file="proyectos/secCronogramaFechas.tpl"}
             </div>
+
+            <div id="actosAdmon" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll; text-align: left; font-size: 13px">
+                <legend class="legend">
+                    <h4 style="position: relative; float: left; width: 100%; margin: 0; padding-top: 3%">
+                        Datos de Actos Administrativos                             
+                    </h4>
+                </legend><p>&nbsp;</p>
+
+                <fieldset style="border: 1px dotted #024457; width: 95%;margin-left: 10px; padding: 5px;">
+                    <div class="form-group" style="padding: 2%">
+                        <div class="col-md-4"><label class="control-label">Resolución de asignación N°:</label></div>
+                        <div class="col-md-4"><label class="control-label">Cantidad de unidades:</label></div>
+                        <div class="col-md-4"><label class="control-label">Valor Total de Asignación:</label></div>
+                    </div>
+                    <div class="form-group" style="padding-left: 2%; color: #204d74;margin-top: 5px; margin-bottom: 0;">
+                        <div class="col-md-4">{$arrFinanciera.$seqProyecto.aprobado.numero} de {$arrFinanciera.$seqProyecto.aprobado.fecha}  </div>
+                        <div class="col-md-4">{$arrFinanciera.$seqProyecto.aprobado.unidades|@count} SFV por </div>
+                        <div class="col-md-4">$ {$arrFinanciera.$seqProyecto.aprobado.valor|number_format:0:',':'.'} </div>
+                    </div>  
+                    <br /><br />
+                    <div class="form-group" style="padding: 2%">
+                        <div class="col-md-4"><label class="control-label">Resolución de indexación N°:</label></div>
+                        <div class="col-md-4"><label class="control-label">Cantidad de unidades </label></div>
+                        <div class="col-md-4"><label class="control-label">Valor Total de Indexación: </label></div>
+                    </div>  
+                    {foreach from=$arrFinanciera.$seqProyecto.indexado.detalle key=seqUnidadActo item=arrResolucion}
+                        <div class="form-group" style="padding-left: 2%; color: #204d74;margin-top: 5px; margin-bottom: 0;">
+                            <div class="col-md-4">{$arrResolucion.numero} de {$arrResolucion.fecha}<br /></div>
+                            <div class="col-md-4">{$arrResolucion.unidades|@count} SFV por<br /></div>
+                            <div class="col-md-4"> $ {$arrResolucion.valor|number_format:0:',':'.'}<br /></div>
+                        </div>
+                    {/foreach} 
+                    <br /><br />
+                    <div class="form-group" style="padding: 2%">
+                        <div class="col-md-4"><label class="control-label">Resolución de Modificación N°:</label></div>
+                        <div class="col-md-4"><label class="control-label">Cantidad de unidades </label></div>
+                        <div class="col-md-4"><label class="control-label">Valor Total de Modificación:</label></div>
+                    </div> 
+                    {foreach from=$arrFinanciera.$seqProyecto.menor.detalle key=seqUnidadActo item=arrResolucion} 
+                        <div class="form-group" style="padding-left: 2%; color: #204d74;margin-top: 5px; margin-bottom: 0;">
+                            <div class="col-md-4">{$arrResolucion.numero} de {$arrResolucion.fecha}</div>
+                            <div class="col-md-4">{$arrResolucion.unidades} SFV por</div>  
+                            <div class="col-md-4"> $ {$arrFinanciera.$seqProyecto.menor.total|number_format:0:',':'.'}</div>
+                        </div>
+                    {/foreach}
+                    <br /><br/>
+                </fieldset>
+                <br/><br/>
+            </div>
+            <div id="datosPolizas" class="tab-pane"  role="tabpanel" aria-labelledby="profile-tab" style="max-height: 550px; overflow-y: scroll">
+
+                {include file="proyectos/vistas/verPoliza.tpl"}                
+            </div> 
         {/foreach}
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

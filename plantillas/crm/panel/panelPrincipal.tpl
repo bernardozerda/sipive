@@ -34,6 +34,9 @@
                 .col-sm-1{
                     right: 10%;
                 }
+                .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+                    border-top: 0px;
+                }
             </style>
 
         {/literal}
@@ -42,14 +45,14 @@
     <body onload="tablas()">
 
         <div id="accordion" style="width: 85%">
-            <h3>Información General de Proyectos </h3>
+            <h3>Información General Legalización / Desembolso </h3>
             <div>
                 <p>
                     {foreach from=$arrGroupProyecto key=seqProyectos item=datos}
-                    <table class="table table-striped table-bordered" cellspacing="0" width="100%" >
+                    <table class="tablero " cellspacing="0" width="100%" >
 
                         <tr>
-                            <th bgcolor="#008FA6" style="font-weight: bold; color: #fff"><b>Procesos</b> </th>                            
+                            <th bgcolor="#008FA6" style="font-weight: bold; color: #fff">&nbsp;&nbsp;&nbsp;Procesos</th>                            
                             <th bgcolor="#E4E4E4" style="text-align: center; font-weight: bold"><b><a href="#" onclick="cargarContenido('contenido', './contenidos/crm/indicadores.php?ind=1', '', true);">Proyectos</a></b></th>
                             <th bgcolor="#E4E4E4" style="text-align: center; font-weight: bold"><b><a href="#" onclick="cargarContenido('contenido', './contenidos/crm/indicadores.php?ind=3', '', true);">No Proyectos</a></b></th>
                             <th bgcolor="#E4E4E4" style="text-align: center; font-weight: bold"><b>TOTAL</b></th>

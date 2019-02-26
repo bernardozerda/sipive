@@ -47,9 +47,9 @@
         <div>
             <p>
                 {foreach from=$arrGroupProyecto key=seqProyectos item=datos}
-                <table class="tablero table-striped table-bordered"  width="100%">
+                <table class="tablero"  width="100%">
                     <tr>
-                        <th style="background: #008FA6; color: #FFF;">Todos los Proyectos</th>
+                        <th style="background: #008FA6; color: #FFF; ">&nbsp;&nbsp;&nbsp;Procesos</th>
                         <th style="width: 10%; padding-left:3%; padding-right:3%"><img src="recursos/imagenes/Green.png" width="30px"></th>
                         <th style="width: 10%; padding-left: 3%; padding-right:3%"><img src="recursos/imagenes/Yellow.png" width="30px"></th>
                         <th style="width: 10%; padding-left: 3%; padding-right:3%"><img src="recursos/imagenes/Red.png" width="30px"></th>

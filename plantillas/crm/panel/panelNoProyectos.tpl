@@ -46,7 +46,7 @@
             <div>
                 <p>
                     {foreach from=$arrGroupProyecto key=seqProyectos item=datos}
-                    <table class="table table-striped table-bordered" cellspacing="0" width="85%" >
+                    <table class="tablero" cellspacing="0" width="85%" >
 
                         <tr>
                             <th bgcolor="#008FA6" style="font-weight: bold; color: #fff"><b>Procesos</b> </th>                

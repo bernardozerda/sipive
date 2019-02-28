@@ -1359,7 +1359,7 @@ class GestionFinancieraProyectos
                 if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto), 
                 upr.seqUnidadProyecto, 
                 upper(upr.txtNombreUnidad)      
-        "; echo $sql . "<hr>";
+        ";
         $objRes = $aptBd->execute($sql);
         $arrRetorno = array();
         while($objRes->fields){
@@ -1426,7 +1426,7 @@ class GestionFinancieraProyectos
                 if(pry.seqProyecto is null,null,con.txtNombreProyecto) as txtNombreConjunto,
                 if(upr.seqUnidadProyecto is null, 0,upr.seqUnidadProyecto) as seqUnidadProyecto,
                 upper(upr.txtNombreUnidad) as txtNombreUnidad,
-                sum(gfd.valGiro) as valGiro
+                sum(ceil(gfd.valGiro)) as valGiro
             from t_pry_aad_giro_fiducia gfi
             inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
             inner join t_pry_proyecto con on gfd.seqProyecto = con.seqProyecto
@@ -1459,7 +1459,7 @@ class GestionFinancieraProyectos
             select
                 if(upr.seqUnidadProyecto is null, 0,upr.seqUnidadProyecto) seqUnidadProyecto,
                 upper(upr.txtNombreUnidad) as txtNombreUnidad,
-                sum(gcd.valGiro) as valGiro
+                sum(ceil(gcd.valGiro)) as valGiro
             from t_pry_aad_giro_constructor gco
             inner join t_pry_aad_giro_constructor_detalle gcd on gco.seqGiroConstructor = gcd.seqGiroConstructor
             inner join t_pry_proyecto con on gcd.seqProyecto = con.seqProyecto

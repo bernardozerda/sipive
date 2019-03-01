@@ -976,6 +976,10 @@ if (empty($arrErrores)) {
                     $_POST['txtFormulario'] = "";
                     $_POST['seqUnidadProyecto'] = 1;
                     $_POST['seqEstadoProceso'] = 37;
+                }else{
+                    if(esFechaValida($claCasaMano->objPostulacion->fchPostulacion)){
+                        $_POST['fchPostulacion'] = $claCasaMano->objPostulacion->fchPostulacion;
+                    }
                 }
             }else{
                 $arrErrores[] = "No tiene permisos para cambiar información de un formulario cerrado";

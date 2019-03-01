@@ -20,10 +20,10 @@ while($objRes->fields){
 
 $sql = "
     select 
-      pry.seqProyecto,
-      if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto) as txtProyecto,
-      con.seqProyecto as seqConjunto,
-      if(pry.seqProyecto is null, null, con.txtNombreProyecto) as txtConjunto,
+      if(pry.seqProyecto is null, con.seqProyecto, pry.seqProyecto) as seqProyecto, 
+      if(pry.seqProyecto is null, con.txtNombreProyecto, pry.txtNombreProyecto) as txtProyecto, 
+      if(pry.seqProyecto is null, null, con.seqProyecto) as txtConjunto, 
+      if(pry.seqProyecto is null, null, con.txtNombreProyecto) as txtConjunto, 
       upr.txtNombreUnidad,
       con.txtDireccion,
       if(locc.seqLocalidad is null,locp.txtLocalidad,locc.txtLocalidad) as txtLocalidad,

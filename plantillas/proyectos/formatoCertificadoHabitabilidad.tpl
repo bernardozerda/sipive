@@ -534,8 +534,8 @@
                     <!-- TEXTO DE PIE DE PAGINA PAGINA 2 -->
                     <tr>
                         <td align="justify" style="padding-right: 20px;">
-                            El presente certificado se expide con base en una visita ocular adelantada por parte del equipo técnico
-                            de la Subdirección de Recursos Públicos de la Subsecretaría de Gestión Financiera; en esta no se observa
+                            El presente certificado se expide con base en una visita adelantada por parte del equipo técnico
+                            de la Subdirección de Recursos Públicos y/o Privados de la Subsecretaría de Gestión Financiera; en esta no se observa
                             que la vivienda presente afectaciones o fallas estructurales que pongan en riesgo a sus habitantes
                             o afecten la habitabilidad del inmueble. La vivienda dispone de los servicios públicos básicos
                             y cumple con lo establecido en la normatividad vigente.<br>

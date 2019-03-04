@@ -89,6 +89,7 @@ while ($objRes->fields) {
 
 $txtFecha = ucwords(strftime("%A %#d de %B del %Y")) . " " . date("H:i:s");
 $txtFechaVisita = ucwords(strftime("%A %#d de %B del %Y", strtotime($objTecnico->fchVisita)));
+$txtFechaExpedicion = ucwords(strftime("%A %#d de %B del %Y", strtotime($objTecnico->fchExpedicion)));
 $numDiaActual = date("d");
 $txtMesActual = ucwords(strftime("%B"));
 $numAnoActual = date("Y");
@@ -103,6 +104,7 @@ $claSmarty->assign("numAnoActual", $numAnoActual);
 $claSmarty->assign("txtMatriculaProfesional", obtenerMatriculaProfesional() );
 $claSmarty->assign("txtUsuarioSesion", $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']);
 $claSmarty->assign("txtFechaVisita"    , $txtFechaVisita );
+$claSmarty->assign("txtFechaExpedicion", $txtFechaExpedicion);
 $claSmarty->display("proyectos/formatoCertificadoHabitabilidad.tpl");
 
 

@@ -28,20 +28,20 @@ function generarLinksImpresion($arraydocs) {
        prytec.seqUnidadProyecto seqUnidadProyecto,
        und.txtNombreUnidad txtNombreUnidad,
        pry.txtNombreProyecto AS txtNombreProyecto
-  FROM ((((((sdht_subsidios.t_pry_unidad_proyecto und
-             INNER JOIN sdht_subsidios.t_frm_formulario frm
+  FROM ((((((t_pry_unidad_proyecto und
+             INNER JOIN t_frm_formulario frm
                 ON (und.seqFormulario = frm.seqFormulario))
-            INNER JOIN sdht_subsidios.t_frm_hogar hog
+            INNER JOIN t_frm_hogar hog
                ON (hog.seqFormulario = frm.seqFormulario))
-           INNER JOIN sdht_subsidios.t_ciu_ciudadano ciu
+           INNER JOIN t_ciu_ciudadano ciu
               ON (hog.seqCiudadano = ciu.seqCiudadano))
-          LEFT OUTER JOIN sdht_subsidios.t_des_desembolso des
+          LEFT OUTER JOIN t_des_desembolso des
              ON (des.seqFormulario = frm.seqFormulario))
-         LEFT OUTER JOIN sdht_subsidios.t_des_tecnico destec
+         LEFT OUTER JOIN t_des_tecnico destec
             ON (destec.seqDesembolso = des.seqDesembolso))
-        INNER JOIN sdht_subsidios.t_pry_proyecto pry
+        INNER JOIN t_pry_proyecto pry
            ON (und.seqProyecto = pry.seqProyecto))
-       INNER JOIN sdht_subsidios.t_pry_tecnico prytec
+       INNER JOIN t_pry_tecnico prytec
           ON (prytec.seqUnidadProyecto = und.seqUnidadProyecto)
  WHERE (ciu.numDocumento IN ($arraydocs));";
     ?>
@@ -72,4 +72,4 @@ function generarLinksImpresion($arraydocs) {
         }
 
         ob_end_flush();
-        ?>
+    ?>

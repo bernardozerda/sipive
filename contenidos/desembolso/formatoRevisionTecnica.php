@@ -52,7 +52,7 @@ if ($seqCasaMano != 0) {
 }
 
 $txtFechaVisita = utf8_encode(ucwords(strftime("%A %#d de %B del %Y", strtotime($claDesembolso->arrTecnico['fchVisita']))));
-
+$txtFechaExpedicion = utf8_encode(ucwords(strftime("%A %#d de %B del %Y", strtotime($claDesembolso->arrTecnico['fchExpedicion']))));
 foreach ($claFormulario->arrCiudadano as $objCiudadano) {
     if ($objCiudadano->seqParentesco == 1) {
         break;
@@ -94,6 +94,7 @@ $claSmarty->assign("claDesembolso", $claDesembolso);
 $claSmarty->assign("claFormulario", $claFormulario);
 $claSmarty->assign("txtUsuarioSesion", $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']);
 $claSmarty->assign("txtFechaVisita", $txtFechaVisita);
+$claSmarty->assign("txtFechaExpedicion", $txtFechaExpedicion);
 $claSmarty->assign("numDiaActual", $numDiaActual);
 $claSmarty->assign("txtMesActual", $txtMesActual);
 $claSmarty->assign("numAnoActual", $numAnoActual);

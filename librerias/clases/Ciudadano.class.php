@@ -498,8 +498,7 @@ class Ciudadano {
 								ciu.numDocumento 
 						
 					FROM  T_CIU_CIUDADANO ciu 
-					WHERE  ciu.seqTipoDocumento in ( 1 , 2 ) AND  
-					lower( CONCAT( ciu.txtNombre1 , ' ' , ciu.txtNombre2 , ' ' , ciu.txtApellido1 , ' ' , ciu.txtApellido2 ) ) LIKE '%$txtParametro%' 
+					WHERE lower( CONCAT( ciu.txtNombre1 , ' ' , ciu.txtNombre2 , ' ' , ciu.txtApellido1 , ' ' , ciu.txtApellido2 ) ) LIKE '%$txtParametro%' 
 					LIMIT $numLimiteRegistros
 				";
 

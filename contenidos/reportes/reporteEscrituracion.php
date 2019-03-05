@@ -301,14 +301,28 @@ function obtenerReporteEscrituracion($arrDocumentos) {
             $rowcount++;
         }
 
-        //crea archivo Excel para descarga
-        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-        //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        header('Content-type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment; filename="Plantilla escrituracion.xls"');
-        //echo $objPHPExcel;
+
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=Plantilla_escrituracion.xls");
+        header('Cache-Control: max-age=0');
+        ob_end_clean();
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
-        exit;
+
+        //crea archivo Excel para descarga
+//        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+//        //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+//        header('Content-type: application/vnd.ms-excel');
+//        header('Content-Disposition: attachment; filename="Plantilla escrituracion.xls"');
+//        //echo $objPHPExcel;
+//        $objWriter->save('php://output');
+//        exit;
+
+
+
+
     } else {
         echo '<span style="color:#c10;text-align:center;"><b>No hay registros!</b></span>';
     }

@@ -178,8 +178,8 @@ $path = explode('librerias', $path);
 $image_file = $path[0] . 'recursos/imagenes/firma.jpg';
 ///$pdf->writeHTML("<b>Cordialmente,</b><p>&nbsp;</p>", true, false, true, false, '');
 $pdf->Image($image_file, 15, 176, 75, 30, 'jpg', '', '', false, 150, '', false, false, 0, false, false, false);
-$pdf->writeHTML("<p>&nbsp;</p><p>&nbsp;</p><b>OSIRIS VIÑAS MANRIQUE</b>", true, false, true, false, '');
-$pdf->writeHTML("Subdirectora Recursos Públicos ", true, false, true, false, '');
+$pdf->writeHTML("<p>&nbsp;</p><p>&nbsp;</p><b>RODOLFO ORLANDO BELTRÁN CUBILLOS</b>", true, false, true, false, '');
+$pdf->writeHTML("Subdirector Recursos Públicos ", true, false, true, false, '');
 
 
 /*$pdf->WriteHTML('<p align="center" style="font-size:10px;"><br>El presente documento público expedido electrónicamente con firma mecánica, garantiza su plena validez jurídica y probatoria.

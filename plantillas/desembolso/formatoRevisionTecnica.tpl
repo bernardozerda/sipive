@@ -69,7 +69,7 @@
                                     SECRETARIA DEL HABITAT<br />
                                     PROGRAMA INTEGRAL DE VIVIENDA EFECTIVA (PIVE)<br />
                                     <b>Certificado de Existencia y Habitabilidad</b><br />
-                                    <span style="{$txtFuente10}">Fecha de Eisita: {$txtFechaVisita}</span><br />
+                                    <span style="{$txtFuente10}">Fecha de Visita: {$txtFechaVisita}</span><br />
                                     <span style="{$txtFuente10}">Fecha de Expedición: {$txtFechaExpedicion}</span><br />
                                     <span style="{$txtFuente10}">Fecha de impresión: {$txtFecha}</span><br />
                                     <span style="{$txtFuente10}">No. Registro: {$numRegistro|number_format:0:'.':','}</span>
@@ -496,7 +496,7 @@
                                     </td>
                                     <td align="center" valign="middle" style="padding:20px; {$txtFuente12}">
                                         <b>Certificado de Existencia y Habitabilidad</b><br />
-                                        <span style="{$txtFuente10}">Fecha de Eisita: {$txtFechaVisita}</span><br />
+                                        <span style="{$txtFuente10}">Fecha de Visita: {$txtFechaVisita}</span><br />
                                         <span style="{$txtFuente10}">Fecha de Expedición: {$txtFechaExpedicion}</span><br />
                                         <span style="{$txtFuente10}">Fecha de impresión: {$txtFecha}</span><br />
                                     </td>

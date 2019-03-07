@@ -177,8 +177,8 @@ $path = K_PATH_IMAGES;
 $path = explode('librerias', $path);
 $image_file = $path[0] . 'recursos/imagenes/firma.jpg';
 ///$pdf->writeHTML("<b>Cordialmente,</b><p>&nbsp;</p>", true, false, true, false, '');
-$pdf->Image($image_file, 15, 176, 75, 30, 'jpg', '', '', false, 150, '', false, false, 0, false, false, false);
-$pdf->writeHTML("<p>&nbsp;</p><p>&nbsp;</p><b>OSIRIS VIÑAS MANRIQUE</b>", true, false, true, false, '');
+$pdf->Image($image_file, 15, 180, 55, 20, 'jpg', '', '', false, 150, '', false, false, 0, false, false, false);
+$pdf->writeHTML("<p>&nbsp;</p><b>OSIRIS VIÑAS MANRIQUE</b>", true, false, true, false, '');
 $pdf->writeHTML("Subdirectora Recursos Públicos ", true, false, true, false, '');
 
 

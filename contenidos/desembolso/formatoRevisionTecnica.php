@@ -38,21 +38,19 @@ if ($seqCasaMano != 0) {
 
 //    $claDesembolso = $objCasaMano->objRegistroOferta;
 //    $claDesembolso->arrTecnico = $objCasaMano->objRevisionTecnica;
-
-   // simulacion de la clase de desembolso para la plantilla
-   $claDesembolso = new Desembolso();
-   $claDesembolso->arrTecnico = $objCasaMano->objRevisionTecnica;
-   foreach( $objCasaMano->objRegistroOferta as $txtClave => $txtValor ) {
-      $claDesembolso->$txtClave = $txtValor;
-   }
-
-
+    // simulacion de la clase de desembolso para la plantilla
+    $claDesembolso = new Desembolso();
+    $claDesembolso->arrTecnico = $objCasaMano->objRevisionTecnica;
+    foreach ($objCasaMano->objRegistroOferta as $txtClave => $txtValor) {
+        $claDesembolso->$txtClave = $txtValor;
+    }
 } else {
     $claDesembolso->cargarDesembolso($seqFormulario);
 }
 
 $txtFechaVisita = utf8_encode(ucwords(strftime("%A %#d de %B del %Y", strtotime($claDesembolso->arrTecnico['fchVisita']))));
 $txtFechaExpedicion = utf8_encode(ucwords(strftime("%A %#d de %B del %Y", strtotime($claDesembolso->arrTecnico['fchExpedicion']))));
+$txtAprobo = utf8_encode(ucwords(strftime($claDesembolso->arrTecnico['txtAprobo'])));
 foreach ($claFormulario->arrCiudadano as $objCiudadano) {
     if ($objCiudadano->seqParentesco == 1) {
         break;
@@ -75,11 +73,11 @@ $sql = "SELECT T_PRY_PROYECTO.seqProyecto, txtNombreComercial
 		FROM T_PRY_PROYECTO 
 		LEFT JOIN T_PRY_UNIDAD_PROYECTO ON (T_PRY_PROYECTO.seqProyecto = T_PRY_UNIDAD_PROYECTO.seqProyecto)
 		WHERE seqFormulario = " . $formularioActual;
-$objRes = $aptBd->execute( $sql );
-while( $objRes->fields ){
-	$idProyecto  = $objRes->fields['seqProyecto'];
-	$nombreComercial  = $objRes->fields['txtNombreComercial'];
-	$objRes->MoveNext();
+$objRes = $aptBd->execute($sql);
+while ($objRes->fields) {
+    $idProyecto = $objRes->fields['seqProyecto'];
+    $nombreComercial = $objRes->fields['txtNombreComercial'];
+    $objRes->MoveNext();
 }
 // hasta aquí
 
@@ -100,7 +98,8 @@ $claSmarty->assign("txtMesActual", $txtMesActual);
 $claSmarty->assign("numAnoActual", $numAnoActual);
 $claSmarty->assign("numRegistro", $numRegistros);
 $claSmarty->assign("nombreComercial", $nombreComercial);
-$claSmarty->assign("txtMatriculaProfesional", obtenerMatriculaProfesional() );
+$claSmarty->assign("txtAprobo", $txtAprobo);
+$claSmarty->assign("txtMatriculaProfesional", obtenerMatriculaProfesional());
 
 $claSmarty->display("desembolso/formatoRevisionTecnica.tpl");
 

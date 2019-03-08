@@ -1730,6 +1730,7 @@ class Desembolso {
 				txtDescripcionRequisitos,
 				txtDescripcionExistencia,
 				fchVisita,
+                                fchExpedicion,
 				txtAprobo,
 				fchCreacion,
 				fchActualizacion

@@ -65,13 +65,13 @@
                                     <img src="../../recursos/imagenes/escudo.png" />
                                 </td>
                                 <td align="center" valign="middle" style="padding:20px; {$txtFuente12}">
-                                    <b>ALCALDIA MAYOR DE BOGOTA</b><br />
+                                    <b>ALCALDIA MAYOR DE BOGOTA</b><br/>
                                     SECRETARIA DEL HABITAT<br />
-                                    PROGRAMA INTEGRAL DE VIVIENDA EFECTIVA (PIVE)<br />
-                                    <b>Certificado de Existencia y Habitabilidad</b><br />
-                                    <span style="{$txtFuente10}">Fecha de Visita: {$txtFechaVisita}</span><br />
-                                    <span style="{$txtFuente10}">Fecha de Expedición: {$txtFechaExpedicion}</span><br />
-                                    <span style="{$txtFuente10}">Fecha de impresión: {$txtFecha}</span><br />
+                                    PROGRAMA INTEGRAL DE VIVIENDA EFECTIVA (PIVE)<br/>
+                                    <b>Certificado de Existencia y Habitabilidad</b><br/>
+                                    <span style="{$txtFuente10}">Fecha de Visita: {$txtFechaVisita}</span><br/>
+                                    <span style="{$txtFuente10}">Fecha de Expedición: {$txtFechaExpedicion}</span><br/>
+                                    <span style="{$txtFuente10}">Fecha de impresión: {$txtFecha}</span><br/>
                                     <span style="{$txtFuente10}">No. Registro: {$numRegistro|number_format:0:'.':','}</span>
                                 </td>
                                 <td width="150px" align="center" valign="middle">
@@ -673,7 +673,9 @@
 
                                 <!-- CRITERIOS DE EXISTENCIA Y HABITABILIDAD -->	
                                 <tr><td>
-                                        <b>Cumple la vivienda con los requisitos de existencia y habitabilidad:</b> {$claDesembolso->arrTecnico.txtExistencia|ucwords}<br />
+                                        <b>Cumple la vivienda con los requisitos de existencia y habitabilidad:</b> {$claDesembolso->arrTecnico.txtExistencia|ucwords}  &nbsp;
+                                        {if $claDesembolso->arrTecnico.txtExistencia|ucwords == 'SI' } <b> Viabilizó: </b>  {$txtAprobo} {/if}
+                                        <br />
                                         <u>Recomendaciones:</u><br />
                                         {$claDesembolso->arrTecnico.txtDescripcionExistencia}&nbsp;
                                     </td></tr>

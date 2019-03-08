@@ -41,7 +41,7 @@ $sql = "
         a.txtExclusion
     from t_fnv_archivo_mcy a
     inner join t_fnv_archivo_mcy_fuente f on a.seqFuente = f.seqFuente
-    order by a.numDocumento
+    order by a.seqArchivoMcy
 ";
 $arrDatos = $aptBd->GetAll($sql);
 

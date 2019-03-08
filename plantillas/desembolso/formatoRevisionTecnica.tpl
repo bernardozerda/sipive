@@ -676,7 +676,7 @@
                                         <b>Cumple la vivienda con los requisitos de existencia y habitabilidad:</b> {$claDesembolso->arrTecnico.txtExistencia|ucwords}  &nbsp;
                                         {if $claDesembolso->arrTecnico.txtExistencia|ucwords == 'SI' } <b> Viabilizó: </b>  {$txtAprobo} {/if}
                                         <br />
-                                        <u>Recomendaciones:</u><br />
+                                        <u>Recomendaciones:</u><br /><br />
                                         {$claDesembolso->arrTecnico.txtDescripcionExistencia}&nbsp;
                                     </td></tr>
                                 <tr><td>&nbsp;</td></tr>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-
+ <meta charset="utf-8">
         <!-- Estilos CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
               integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -527,7 +527,7 @@
                         <td>
                             <b>Cumple la vivienda con los requisitos de existencia y habitabilidad:</b> {$objTecnico->txtExistencia|ucwords}&nbsp;
                             {if $objTecnico->txtExistencia|ucwords == 'SI' } <b> Viabilizó: </b> &nbsp;{$objTecnico->txtAprobo} {/if}
-                            <br>
+                            <br/><br/><br/>
                     <u>Recomendaciones:</u><br>
                     {$objTecnico->txtDescripcionExistencia}&nbsp;
                     </td>

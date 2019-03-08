@@ -50,7 +50,7 @@ if ($seqCasaMano != 0) {
 
 $txtFechaVisita = utf8_encode(ucwords(strftime("%A %#d de %B del %Y", strtotime($claDesembolso->arrTecnico['fchVisita']))));
 $txtFechaExpedicion = utf8_encode(ucwords(strftime("%A %#d de %B del %Y", strtotime($claDesembolso->arrTecnico['fchExpedicion']))));
-$txtAprobo = utf8_encode(ucwords(strftime($claDesembolso->arrTecnico['txtAprobo'])));
+$txtAprobo = ucwords($claDesembolso->arrTecnico['txtAprobo']);
 foreach ($claFormulario->arrCiudadano as $objCiudadano) {
     if ($objCiudadano->seqParentesco == 1) {
         break;

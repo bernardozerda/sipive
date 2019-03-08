@@ -527,7 +527,7 @@
                         <td>
                             <b>Cumple la vivienda con los requisitos de existencia y habitabilidad:</b> {$objTecnico->txtExistencia|ucwords}&nbsp;
                             {if $objTecnico->txtExistencia|ucwords == 'SI' } <b> Viabilizó: </b> &nbsp;{$objTecnico->txtAprobo} {/if}
-                            <br/><br/><br/>
+                            <br/><br/>
                     <u>Recomendaciones:</u><br>
                     {$objTecnico->txtDescripcionExistencia}&nbsp;
                     </td>

@@ -1174,7 +1174,7 @@ class GestionFinancieraProyectos
                 if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) as seqProyecto,
                 if(pry1.seqProyecto is null,pry.txtNombreProyecto,pry1.txtNombreProyecto) as txtNombreProyecto,
                 gcon.seqGiroConstructor,
-                gcon.fchCreacion,
+                gcon.fchGiro,
                 count(gcd.seqProyecto) numUnidades,
                 sum(gcd.valGiro) valGiro
             from t_pry_aad_giro_constructor gcon
@@ -1195,7 +1195,7 @@ class GestionFinancieraProyectos
             $arrListado[$seqGiroConstructor]['proyecto']   = $objRes->fields['txtNombreProyecto'];
             $arrListado[$seqGiroConstructor]['unidades']   = $objRes->fields['numUnidades'];
             $arrListado[$seqGiroConstructor]['giro']       = $objRes->fields['valGiro'];
-            $arrListado[$seqGiroConstructor]['fecha']      = new DateTime($objRes->fields['fchCreacion']);
+            $arrListado[$seqGiroConstructor]['fecha']      = new DateTime($objRes->fields['fchGiro']);
             $objRes->MoveNext();
         }
 

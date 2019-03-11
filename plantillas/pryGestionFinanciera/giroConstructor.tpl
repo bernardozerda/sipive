@@ -19,7 +19,7 @@
 {/if}
 
 <!-- formulario para el giro -->
-<form id="frmGirosProyectos" class="form-horizontal" onsubmit="return false;">
+<form id="frmProyectos" class="form-horizontal" onsubmit="return false;">
 
     <!-- proyecto para el giro -->
     <div class="form-group">
@@ -80,16 +80,7 @@
                             </span>
                         </label>
                         <input type="text" class="form-control input-sm" value="{$numTotalUnidades}" readonly>
-
-
                         <input type="hidden" name="unidades" value='{$arrUnidades|@json_encode}'>
-
-                        {*{foreach from=$arrUnidades key=seqProyecto item=arrDatos}*}
-                            {*{foreach from=$arrDatos key=seqUnidadProyecto item=valGiro}*}
-                                {*<input type="hidden" name="unidades[{$seqProyecto}][{$seqUnidadProyecto}]" value="{$valGiro}">*}
-                            {*{/foreach}*}
-                        {*{/foreach}*}
-
                     </div>
                 </div>
 
@@ -133,10 +124,29 @@
                 </div>
             </div>
 
-            <!-- comentario -->
+            <!-- comentario y fecha -->
             <div class="form-group">
-                <label for="txtComentario" class="col-sm-1 control-label">Comentario</label>
-                <div class="col-sm-11">
+                <label for="fchGiro" class="control-label col-sm-2">Fecha del giro</label>
+                <div class="col-sm-2">
+                    <div class="input-group input-group-sm" onclick="$('#fchGiro').trigger('focus')">
+                        <label class="input-group-btn">
+                            <span class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </span>
+                        </label>
+                        <input type="text"
+                            id="fchGiro"
+                            name="fchGiro"
+                            class="form-control"
+                            value="{$arrPost.fchGiro->format("Y-m-d")}"
+                            readonly
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="txtComentario" class="col-sm-2 control-label">Comentario</label>
+                <div class="col-sm-10">
                     <textarea class="form-control" id="txtComentario" name="txtComentario" rows="3"
                               {if $bolImprimir == true} disabled {/if}>{$arrPost.txtComentario}</textarea>
                 </div>
@@ -197,3 +207,5 @@
         </div>
     </div>
 </div>
+
+<div id="divCalendar"></div>

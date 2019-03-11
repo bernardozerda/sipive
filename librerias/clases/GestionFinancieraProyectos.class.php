@@ -1500,6 +1500,10 @@ class GestionFinancieraProyectos
             $this->arrErrores[] = "Seleccione el proyecto para el que desea hacer el giro";
         }
 
+        if(! esFechaValida($arrPost['fchGiro'])){
+            $this->arrErrores[] = "Seleccione la fecha del giro";
+        }
+
         if((! isset($arrPost['unidades'])) or empty($arrPost['unidades'])){
             $this->arrErrores[] = "No ha seleccionado las unidades para el giro";
         }else{
@@ -1529,11 +1533,13 @@ class GestionFinancieraProyectos
                     insert into t_pry_aad_giro_constructor (
                       fchCreacion, 
                       seqUsuario, 
-                      txtComentario
+                      txtComentario,
+                      fchGiro
                   ) values (                      
                       now(),
                       " . $_SESSION['seqUsuario'] . ",
-                      '" . trim($arrPost['txtComentario']) . "'
+                      '" . trim($arrPost['txtComentario']) . "',
+                      '" . $arrPost['fchGiro'] . "'
                   )
                 ";
                 $aptBd->execute($sql);
@@ -1637,7 +1643,8 @@ class GestionFinancieraProyectos
                 if(pry.seqProyectoPadre is null,gcd.seqProyecto,pry.seqProyectoPadre) as seqProyecto,
                 gcd.seqUnidadProyecto,
                 gcd.valGiro,
-                gcon.txtComentario
+                gcon.txtComentario,
+                gcon.fchGiro
             from t_pry_aad_giro_constructor gcon
             inner join t_pry_aad_giro_constructor_detalle gcd on gcon.seqGiroConstructor = gcd.seqGiroConstructor
             inner join t_pry_proyecto pry on gcd.seqProyecto = pry.seqProyecto
@@ -1651,6 +1658,7 @@ class GestionFinancieraProyectos
             $arrRetorno['unidades'][$seqProyecto][$seqUnidadProyecto] = $objRes->fields['valGiro'];
             $arrRetorno['txtComentario'] = $objRes->fields['txtComentario'];
             $arrRetorno['fchCreacion'] = new DateTime($objRes->fields['fchCreacion']);
+            $arrRetorno['fchGiro'] = new DateTime($objRes->fields['fchGiro']);
             $objRes->MoveNext();
         }
 

@@ -138,7 +138,7 @@
                             id="fchGiro"
                             name="fchGiro"
                             class="form-control"
-                            value="{$arrPost.fchGiro->format("Y-m-d")}"
+                            value="{if is_object($arrPost.fchGiro)}{$arrPost.fchGiro->format("Y-m-d")}{/if}"
                             readonly
                         >
                     </div>

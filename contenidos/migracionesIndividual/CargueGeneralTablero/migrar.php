@@ -264,7 +264,7 @@ if (isset($code)) {
                                     AND numDocumento IN(" . $separado_por_comas . ")";
 
                         $datos[1] = "UPDATE t_des_tecnico tec LEFT JOIN t_des_desembolso des USING (seqDesembolso) SET tec.fchActualizacion = CASE seqFormulario";
-                        $datos[2] = 69;
+                        $datos[2] = 68;
                         $datos[3] = "CERTIFICADOS DE EXISTENCIA Y HABITABILIDAD GENERADO";
                     }
                     if ($code == 24) {

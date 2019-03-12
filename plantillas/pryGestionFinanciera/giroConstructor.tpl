@@ -126,7 +126,7 @@
 
             <!-- comentario y fecha -->
             <div class="form-group">
-                <label for="fchGiro" class="control-label col-sm-2">Fecha del giro {$arrPost.fchGiro}</label>
+                <label for="fchGiro" class="control-label col-sm-2">Fecha del giro</label>
                 <div class="col-sm-2">
                     <div class="input-group input-group-sm" onclick="$('#fchGiro').trigger('focus')">
                         <label class="input-group-btn">

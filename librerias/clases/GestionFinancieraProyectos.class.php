@@ -1174,7 +1174,7 @@ class GestionFinancieraProyectos
                 if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) as seqProyecto,
                 if(pry1.seqProyecto is null,pry.txtNombreProyecto,pry1.txtNombreProyecto) as txtNombreProyecto,
                 gcon.seqGiroConstructor,
-                gcon.fchCreacion,
+                gcon.fchGiro,
                 count(gcd.seqProyecto) numUnidades,
                 sum(gcd.valGiro) valGiro
             from t_pry_aad_giro_constructor gcon
@@ -1195,7 +1195,7 @@ class GestionFinancieraProyectos
             $arrListado[$seqGiroConstructor]['proyecto']   = $objRes->fields['txtNombreProyecto'];
             $arrListado[$seqGiroConstructor]['unidades']   = $objRes->fields['numUnidades'];
             $arrListado[$seqGiroConstructor]['giro']       = $objRes->fields['valGiro'];
-            $arrListado[$seqGiroConstructor]['fecha']      = new DateTime($objRes->fields['fchCreacion']);
+            $arrListado[$seqGiroConstructor]['fecha']      = new DateTime($objRes->fields['fchGiro']);
             $objRes->MoveNext();
         }
 
@@ -1459,7 +1459,8 @@ class GestionFinancieraProyectos
             select
                 if(upr.seqUnidadProyecto is null, 0,upr.seqUnidadProyecto) seqUnidadProyecto,
                 upper(upr.txtNombreUnidad) as txtNombreUnidad,
-                sum(gcd.valGiro) as valGiro
+                sum(round(gcd.valGiro,5)) as valGiro
+                -- sum(gcd.valGiro) as valGiro
             from t_pry_aad_giro_constructor gco
             inner join t_pry_aad_giro_constructor_detalle gcd on gco.seqGiroConstructor = gcd.seqGiroConstructor
             inner join t_pry_proyecto con on gcd.seqProyecto = con.seqProyecto
@@ -1480,9 +1481,11 @@ class GestionFinancieraProyectos
 
         $this->arrGiroConstructor['saldo'] = $this->arrGiroConstructor['total'] - $this->arrGiroConstructor['giro'];
         foreach($this->arrGiroConstructor['detalle'] as $seqUnidadProyecto => $arrGiro){
+
             $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo'] =
                 $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['total'] -
                 $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['giro'];
+
         }
 
 
@@ -1500,12 +1503,22 @@ class GestionFinancieraProyectos
             $this->arrErrores[] = "Seleccione el proyecto para el que desea hacer el giro";
         }
 
+        if(! esFechaValida($arrPost['fchGiro'])){
+            $this->arrErrores[] = "Seleccione la fecha del giro";
+        }
+
         if((! isset($arrPost['unidades'])) or empty($arrPost['unidades'])){
             $this->arrErrores[] = "No ha seleccionado las unidades para el giro";
         }else{
             foreach ($arrPost['unidades'] as $seqProyecto => $arrUnidades){
                 foreach($arrUnidades as $seqUnidadProyecto => $valGiro) {
+
+
                     if($valGiro > $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo']){
+
+                        echo "ENTRA ==> $valGiro > " . doubleval($this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo']) . "<br>";
+
+
                         $txtTexto = ($seqUnidadProyecto != 0)?
                             "a la uidad " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreUnidad'] :
                             "al proyecto " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreProyecto'];
@@ -1529,11 +1542,13 @@ class GestionFinancieraProyectos
                     insert into t_pry_aad_giro_constructor (
                       fchCreacion, 
                       seqUsuario, 
-                      txtComentario
+                      txtComentario,
+                      fchGiro
                   ) values (                      
                       now(),
                       " . $_SESSION['seqUsuario'] . ",
-                      '" . trim($arrPost['txtComentario']) . "'
+                      '" . trim($arrPost['txtComentario']) . "',
+                      '" . $arrPost['fchGiro'] . "'
                   )
                 ";
                 $aptBd->execute($sql);
@@ -1637,7 +1652,8 @@ class GestionFinancieraProyectos
                 if(pry.seqProyectoPadre is null,gcd.seqProyecto,pry.seqProyectoPadre) as seqProyecto,
                 gcd.seqUnidadProyecto,
                 gcd.valGiro,
-                gcon.txtComentario
+                gcon.txtComentario,
+                gcon.fchGiro
             from t_pry_aad_giro_constructor gcon
             inner join t_pry_aad_giro_constructor_detalle gcd on gcon.seqGiroConstructor = gcd.seqGiroConstructor
             inner join t_pry_proyecto pry on gcd.seqProyecto = pry.seqProyecto
@@ -1651,6 +1667,7 @@ class GestionFinancieraProyectos
             $arrRetorno['unidades'][$seqProyecto][$seqUnidadProyecto] = $objRes->fields['valGiro'];
             $arrRetorno['txtComentario'] = $objRes->fields['txtComentario'];
             $arrRetorno['fchCreacion'] = new DateTime($objRes->fields['fchCreacion']);
+            $arrRetorno['fchGiro'] = new DateTime($objRes->fields['fchGiro']);
             $objRes->MoveNext();
         }
 

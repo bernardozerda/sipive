@@ -209,11 +209,21 @@ WHERE T_FRM_HOGAR.seqParentesco = 1 AND T_DES_ESCRITURACION.seqFormulario IN (" 
         }
 
         //crea archivo Excel para descarga
-        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-        header('Content-type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment; filename="Plantilla estudio titulos.xlsx"');
+//        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+//        header('Content-type: application/vnd.ms-excel');
+//        header('Content-Disposition: attachment; filename="Plantilla estudio titulos.xlsx"');
+//        $objWriter->save('php://output');
+//        exit;
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=Plantilla estudio titulos.xlsx");
+        header('Cache-Control: max-age=0');
+        ob_end_clean();
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
-        exit;
+
+
     } else {
         echo '<span style="color:#c10;text-align:center;"><b>No hay registros!</b></span>';
     }

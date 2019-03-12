@@ -1459,7 +1459,8 @@ class GestionFinancieraProyectos
             select
                 if(upr.seqUnidadProyecto is null, 0,upr.seqUnidadProyecto) seqUnidadProyecto,
                 upper(upr.txtNombreUnidad) as txtNombreUnidad,
-                sum(gcd.valGiro) as valGiro
+                sum(round(gcd.valGiro,5)) as valGiro
+                -- sum(gcd.valGiro) as valGiro
             from t_pry_aad_giro_constructor gco
             inner join t_pry_aad_giro_constructor_detalle gcd on gco.seqGiroConstructor = gcd.seqGiroConstructor
             inner join t_pry_proyecto con on gcd.seqProyecto = con.seqProyecto
@@ -1480,9 +1481,11 @@ class GestionFinancieraProyectos
 
         $this->arrGiroConstructor['saldo'] = $this->arrGiroConstructor['total'] - $this->arrGiroConstructor['giro'];
         foreach($this->arrGiroConstructor['detalle'] as $seqUnidadProyecto => $arrGiro){
+
             $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo'] =
                 $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['total'] -
                 $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['giro'];
+
         }
 
 
@@ -1509,7 +1512,13 @@ class GestionFinancieraProyectos
         }else{
             foreach ($arrPost['unidades'] as $seqProyecto => $arrUnidades){
                 foreach($arrUnidades as $seqUnidadProyecto => $valGiro) {
+
+
                     if($valGiro > $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo']){
+
+                        echo "ENTRA ==> $valGiro > " . doubleval($this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo']) . "<br>";
+
+
                         $txtTexto = ($seqUnidadProyecto != 0)?
                             "a la uidad " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreUnidad'] :
                             "al proyecto " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreProyecto'];

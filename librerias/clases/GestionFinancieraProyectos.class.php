@@ -592,7 +592,7 @@ class GestionFinancieraProyectos
 
             // valida el identificador del proyecto
             if($seqProyecto == 0){
-                $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos[0] . " no es válido";
+                $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos['giroConstructor'][0] . " no es válido";
             }else{
 
                 // debe coincidir el identificador del proyecto con el identificador en el archivo
@@ -637,10 +637,10 @@ class GestionFinancieraProyectos
 
                 // validacion del dato de la unidad
                 if($seqUnidadProyecto == 0){
-                    $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos[2] . " no es válido";
+                    $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos['giroConstructor'][2] . " no es válido";
                 }
                 if($txtUnidadProyecto == ""){
-                    $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos[3] . " no es válido";
+                    $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos['giroConstructor'][3] . " no es válido";
                 }
 
                 // datos de la unidad
@@ -666,7 +666,7 @@ class GestionFinancieraProyectos
 
             // validacion del monto agirar
             if(! is_numeric($valGiro)){
-                $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos[5] . " no es válido";
+                $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos['giroConstructor'][5] . " no es válido";
             }
 
             if(empty($this->arrErrores)){
@@ -1513,15 +1513,20 @@ class GestionFinancieraProyectos
             foreach ($arrPost['unidades'] as $seqProyecto => $arrUnidades){
                 foreach($arrUnidades as $seqUnidadProyecto => $valGiro) {
 
+                    $txtTexto = ($seqUnidadProyecto != 0)?
+                        "a la uidad " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreUnidad'] :
+                        "al proyecto " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreProyecto'];
 
+                    if(strpos($valGiro,".") !== false){
+                        $this->arrErrores[] = "No use decimales para cargar el giro " . $txtTexto;
+                    }
+
+                    if(strpos($valGiro,",") !== false){
+                        $this->arrErrores[] = "No use decimales para cargar el giro " . $txtTexto;
+                    }
+
+                    $valGiro = round($valGiro,0);
                     if($valGiro > $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo']){
-
-                        echo "ENTRA ==> $valGiro > " . doubleval($this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo']) . "<br>";
-
-
-                        $txtTexto = ($seqUnidadProyecto != 0)?
-                            "a la uidad " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreUnidad'] :
-                            "al proyecto " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreProyecto'];
                         $this->arrErrores[] = "No tiene saldo suficiente para girar " . $txtTexto;
                     }
 
@@ -1599,7 +1604,7 @@ class GestionFinancieraProyectos
                 $this->arrErrores = $claSeguimiento->arrErrores;
 
 
-                $aptBd->CommitTrans();
+                $aptBd->RollbackTrans();
 
                 return $seqGiroConstructor;
 

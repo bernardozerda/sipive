@@ -198,7 +198,7 @@
 
                 <!-- CONDICIONES FISICAS Y ESTRUCTURALES -->
                 <table cellspacing="0" cellpadding="1" border="0" width="100%" style="{$txtFuente10}">
-                    <tr><td colspan="5" style="padding:5px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Condiciones Físicas y Estructurales de la Vivienda</b></td></tr>
+                    <tr><td colspan="5" style="padding:3px; {$txtFuente12}" bgcolor="#E4E4E4"><b>Condiciones Físicas y Estructurales de la Vivienda</b></td></tr>
 
                     <tr>
                         <td style="border-bottom: 1px solid #999999" height="20px" width="150px"><b>Descripción</b></td>
@@ -532,7 +532,6 @@
                     {$objTecnico->txtDescripcionExistencia}&nbsp;
                     </td>
                     </tr>
-
                     <!-- TEXTO DE PIE DE PAGINA PAGINA 2 -->
                     <tr>
                         <td align="justify" style="padding-right: 20px;">
@@ -553,7 +552,7 @@
                             <table valign="bottom"  cellspacing="0" cellpadding="1" border="0" width="100%" style="{$txtFuente10}" >
                                 <tr>
                                     <td height="120px" valign="bottom" align="right" style="padding: 20px">
-                                        _____________________________________________<br><br>
+                                        _____________________________________________<br>
                                         M.P. {$txtMatriculaProfesional}<br>
                                         {$txtUsuarioSesion}
                                     </td>
@@ -561,12 +560,11 @@
                             </table>
                         </td>
                     </tr>
-
                 </table>
 
                 <!-- FIN PAGINA 2 -->
 
-                <p class="salto">&nbsp;</p>
+                <b class="salto">&nbsp;</b>
 
                 <!-- INICIO PAGINAS DINAMICAS DE ACUERDO AL NUMERO DE FOTOS CARGADAS -->
 
@@ -678,13 +676,12 @@
 
                         {/section}
                     </table>
-
                     <p class="salto">&nbsp;</p>
-
                 {/section}
 
             </div>
         </div>
 
     </body>
+   
 </html>

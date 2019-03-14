@@ -35,8 +35,8 @@
                             <b>ALCALDIA MAYOR DE BOGOTA</b><br>
                             SECRETARIA DEL HABITAT<br>
                             <b>Certificado de Existencia y Habitabilidad</b><br>
-                            <span style="{$txtFuente10}">Fecha de Visita: {$txtFechaVisita}</span>
-                            <span style="{$txtFuente10}">Fecha de Expedición: {$txtFechaExpedicion}</span>
+                            <span style="{$txtFuente10}">Fecha de Visita: {$txtFechaVisita}</span><br>
+                            <span style="{$txtFuente10}">Fecha de Expedición: {$txtFechaExpedicion}</span><br>
                             <span style="{$txtFuente10}">Fecha de Impresion: {$txtFecha}</span><br>
                         </td>
                         <td width="150px" align="center" valign="middle" style="padding-top: 20px;">

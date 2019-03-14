@@ -45,8 +45,9 @@ for( $i = 0 ; $i < count($arrTitulos) ; $i++ ) {
 // contenido
 foreach($arrExportable as $numFila => $arrLinea ){
    foreach($arrTitulos as $numColumna => $txtTitulo){
-      $objHoja->setCellValueByColumnAndRow($numColumna, ($numFila + 2), $arrLinea[$txtTitulo], false);
-      $objHoja->getRowDimension(($numFila + 2))->setRowHeight(12);
+       $txtValor = (is_object($arrLinea[$txtTitulo]))? $arrLinea[$txtTitulo]->format("Y-m-d") : $arrLinea[$txtTitulo];
+       $objHoja->setCellValueByColumnAndRow($numColumna, ($numFila + 2), $arrLinea[$txtTitulo], false);
+       $objHoja->getRowDimension(($numFila + 2))->setRowHeight(12);
    }
 }
 
@@ -75,7 +76,7 @@ $objHoja->getStyle(  PHPExcel_Cell::stringFromColumnIndex(0) . "1:" . PHPExcel_C
 // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
 
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment;filename='Detalles_" . $_GET['numActo'] . "_" . $_GET['fchActo'] . "_" . strtoupper($_GET['exportar']) . ".xlsx");
+header("Content-Disposition: attachment;filename=Detalles_" . $_GET['numActo'] . "_" . $_GET['fchActo'] . "_" . strtoupper($_GET['exportar']) . ".xlsx");
 header('Cache-Control: max-age=0');
 ob_end_clean();
 

@@ -11,13 +11,26 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "Registr
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "aadTipo.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "aad.class.php" );
 
-$claActosAdministrativos = new aad();
-$claActosAdministrativos->eliminar( $_POST['numActo'] , $_POST['fchActo'] , $_POST['txtMotivo'] );
+// clases necesarias
+$claActo     = new aad();
+$claTipoActo = new aadTipo();
 
-if( empty( $claActosAdministrativos->arrErrores ) ){
-   $arrMensajes[] = "Se ha eliminado el acto administrativo " . $_POST['numActo'] . " de " . $_POST['fchActo'];
+// carga los tipos de actos a salvar
+$arrTipoActo = $claTipoActo->cargarTipoActo();
+
+// elimia el acto administrativo
+$claActo->eliminar( $_POST['seqTipoActo'] , $_POST['numActo'] , $_POST['fchActo'] );
+
+// si no hay errores manda el mensaje
+if( empty( $claActo->arrErrores ) ){
+    $arrMensajes[] = "Se ha eliminado el acto administrativo " . $_POST['numActo'] . " de " . $_POST['fchActo'];
 }
 
-imprimirMensajes($claActosAdministrativos->arrErrores,$arrMensajes);
+$claSmarty->assign( "arrTipoActo" , $arrTipoActo            );
+$claSmarty->assign( "arrMensajes" , $arrMensajes            );
+$claSmarty->assign( "arrErrores"  , $claActo->arrErrores    );
+$claSmarty->assign( "arrActos"    , $claActo->listarActos() );
+
+$claSmarty->display( "aad/aad.tpl" );
 
 ?>

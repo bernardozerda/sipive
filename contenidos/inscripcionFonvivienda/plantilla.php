@@ -139,7 +139,7 @@ for ($i = 0; $i < $numColumnas; $i++) {
 // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
 
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment;filename='Plantilla_" . $txtNombreHoja . "_" . date("YmdHis") . ".xlsx");
+header("Content-Disposition: attachment;filename=Plantilla_" . $txtNombreHoja . "_" . date("YmdHis") . ".xlsx");
 header('Cache-Control: max-age=0');
 ob_end_clean();
 

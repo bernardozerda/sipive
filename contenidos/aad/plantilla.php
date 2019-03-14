@@ -12,7 +12,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExce
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 
 // numero de filas vacias a formatear
-$numFilasFormatear = 1000;
+$numFilasFormatear = 100;
 
 // obtiene los datos
 $claTipoActo = new aadTipo();
@@ -88,9 +88,10 @@ for ($i = 2; $i <= $numFilasFormatear; $i++) {
             $objValidacion->setErrorTitle("Error de datos");
             $objValidacion->setError("El valor digitado no es válido");
             $objValidacion->setPromptTitle("Los valores válidos son:");
-            $objValidacion->setPrompt(" - " . implode("\n - ", $arrTitulo['rango']));
             $objValidacion->setFormula1('"' . implode(",", $arrTitulo['rango']) . '"');
         }
+
+        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($numColumna)->setAutoSize(true);
 
     }
 }
@@ -98,7 +99,7 @@ for ($i = 2; $i <= $numFilasFormatear; $i++) {
 // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
 
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment;filename='Plantilla_" . mb_ereg_replace( " " , "_" , $claTipoActo->txtTipoActo ) . ".xlsx");
+header("Content-Disposition: attachment;filename=Plantilla_" . mb_ereg_replace( " " , "_" , $claTipoActo->txtTipoActo ) . ".xlsx");
 header('Cache-Control: max-age=0');
 ob_end_clean();
 

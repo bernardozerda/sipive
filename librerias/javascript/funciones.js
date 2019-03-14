@@ -11227,7 +11227,7 @@ function eliminarAAD(numActo, fchActo) {
 
 var detallesAAD = function () {
     $('#detallesAAD').DataTable({
-        "lengthMenu": [[5, 10], [5, 10]],
+        "lengthMenu": [[5, 10, -1], [5, 10, 'Todos']],
         "scrollX": true,
         "dom": 'lftp'
     });
@@ -11477,6 +11477,46 @@ var listadoAadProyectos = function () {
     YAHOO.util.Event.onContentReady("listadoAadProyectos", listadoAadProyectos);
 }
 YAHOO.util.Event.onContentReady("listadoAadProyectos", listadoAadProyectos);
+
+
+var listadoAadProyectos2 = function () {
+
+    $('#listadoAadPry2').DataTable({
+        "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, 'Todos']],
+        "order": [[0, "desc"]],
+        "scrollX": true,
+        "dom": 'lftipr'
+    });
+
+    objSelect = YAHOO.util.Dom.getElementBy(
+        function () {
+            return true;
+        },
+        "select",
+        "listadoAadPry2_wrapper"
+    );
+
+    objInput = YAHOO.util.Dom.getElementBy(
+        function () {
+            return true;
+        },
+        "input",
+        "listadoAadPry2_wrapper"
+    );
+
+    objSelect.className = "inputLogin";
+    objInput.className = "inputLogin";
+
+    objPaginador = YAHOO.util.Dom.get("listadoAadPry2_paginate");
+    if(objPaginador != null) {
+        objPaginador.style.textAlign = "center";
+    }
+
+    eliminarObjeto("listadoAadProyectos2");
+    YAHOO.util.Event.onContentReady("listadoAadProyectos2", listadoAadProyectos2);
+}
+YAHOO.util.Event.onContentReady("listadoAadProyectos2", listadoAadProyectos2);
+
 
 function plantillaAADProyectos() {
     var objTipoActo = YAHOO.util.Dom.get("seqTipoActoUnidad");

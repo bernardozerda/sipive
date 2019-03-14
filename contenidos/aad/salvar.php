@@ -19,6 +19,11 @@ include( "../../librerias/phpExcel/Classes/PHPExcel/IOFactory.php" );
 
 // para los mensajes de exito al final
 $arrMensajes = array();
+$claActo     = new aad();
+$claTipoActo = new aadTipo();
+
+// carga los tipos de actos a salvar
+$arrTipoActo = $claTipoActo->cargarTipoActo();
 
 if( $_SESSION['privilegios']['crear'] != 1 ){
     $arrErrores[] = "No tiene privilegios para crear actos administrativos";
@@ -32,17 +37,17 @@ if( empty($arrErrores) ) {
     }
 
     // carga el tipo de acto a salvar
-    $claTipoActo = new aadTipo();
-    $claTipoActo = array_shift($claTipoActo->cargarTipoActo($_POST['seqTipoActo']));
+    $seqTipoActo = $_POST['seqTipoActo'];
+    $claTipoActo = array_shift($claTipoActo->cargarTipoActo($arrTipoActo[$seqTipoActo]->seqTipoActo));
 
+    // valida los datos del formulario
+    $claActo->validarFormulario($_POST);
 
-
-    if(empty($arrErrores)) {
+    if(empty($claActo->arrErrores)){
 
         // carga el acto administrativo para
         // saber si existe y proceder si no
-        $claActoAdministrativo = new aad();
-        $arrActos = $claActoAdministrativo->listarActos($_POST['seqTipoActo'], $_POST['numActo'], $_POST['fchActo']);
+        $arrActos = $claActo->listarActos($_POST['seqTipoActo'], $_POST['numActo'], $_POST['fchActo']);
 
         if (empty($arrActos)) {
 
@@ -60,14 +65,12 @@ if( empty($arrErrores) ) {
 
                     if (empty($claTipoActo->arrErrores)) {
 
-                        $claActoAdministrativo = null;
-                        $claActoAdministrativo = new aad();
-                        $claActoAdministrativo->salvar($_POST, $arrArchivo);
+                        $claActo->salvar($_POST, $arrArchivo);
 
-                        if (empty($claActoAdministrativo->arrErrores)) {
-                            $arrMensajes = $claActoAdministrativo->arrMensajes;
+                        if (empty($claActo->arrErrores)) {
+                            $arrMensajes = $claActo->arrMensajes;
                         } else {
-                            $arrErrores = $claActoAdministrativo->arrErrores;
+                            $arrErrores = $claActo->arrErrores;
                         }
                     } else {
                         $arrErrores = $claTipoActo->arrErrores;
@@ -81,9 +84,31 @@ if( empty($arrErrores) ) {
         } else {
             $arrErrores[] = "Ya existe un acto administrativo con ese numero y fecha";
         }
+
+    }else{
+        $arrErrores = $claActo->arrErrores;
     }
+
 }
 
-imprimirMensajes( $arrErrores , $arrMensajes );
+// si hay errores muestra el formulario con los errores
+// de lo contrario muestra el mensaje de ok en el listado de aad
+if(! empty($arrErrores)){
+
+    $claSmarty->assign( "arrPost"     , $_POST       );
+    $claSmarty->assign( "claActo"     , $claActo     );
+    $claSmarty->assign( "arrTipoActo" , $arrTipoActo );
+    $claSmarty->assign( "arrErrores"  , $arrErrores  );
+    $claSmarty->display( "aad/informacion.tpl" );
+
+}else{
+
+    $claSmarty->assign( "arrTipoActo" , $arrTipoActo            );
+    $claSmarty->assign( "arrMensajes" , $arrMensajes            );
+    $claSmarty->assign( "arrActos"    , $claActo->listarActos() );
+
+    $claSmarty->display( "aad/aad.tpl" );
+
+}
 
 ?>

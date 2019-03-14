@@ -4823,9 +4823,15 @@ class Seguimiento {
 
             $txtNombre = array_shift(
                     obtenerDatosTabla(
-                            "T_CIU_CIUDADANO", array("numDocumento", "upper(concat(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) as txtNombre"), "numDocumento", "numDocumento" . $arrDatos['documento'] . " and seqTipoDocumento in (1,2)"
+                            "T_CIU_CIUDADANO",
+                            array("numDocumento", "upper(concat(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2)) as txtNombre"),
+                            "numDocumento",
+                            "numDocumento = " . $arrDatos['documento'] . " and seqTipoDocumento in (1,2)"
                     )
             );
+
+            $txtComentario = "Vinculado a la " . $arrTipoActo[$seqTipoActo]->txtTipoActo . " " . $numActo . " del " . $fchActo . ". ";
+            $txtComentario = (isset($arrDatos['comentario']) and trim($arrDatos['comentario']) != "")? $txtComentario . $arrDatos['comentario'] : $txtComentario;
 
             $sql = "
                 insert into t_seg_seguimiento (
@@ -4841,7 +4847,7 @@ class Seguimiento {
                     " . $seqFormulario . ",
                     now(),
                     " . $_SESSION['seqUsuario'] . ",
-                    'Vinculado a la " . $arrTipoActo[$seqTipoActo]->txtTipoActo . " " . $numActo . " del " . $fchActo . "',
+                    '" . $txtComentario . "',
                     '" . $txtCambios . "',
                     " . $arrDatos['documento'] . ",
                     '" . $txtNombre . "',

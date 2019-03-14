@@ -1,49 +1,37 @@
-<table cellspacing="0" cellpadding="3" border="0" width="100%">
-    <tr>
-        <td class="tituloTabla" width="150px">
-            Hogares relacionados
-        </td>
-        <td>
-            <input type="file" name="archivo" id="archivo">
-        </td>
-    </tr>
-</table>
-<table cellspacing="0" cellpadding="3" border="0" width="100%">
-    <tr>
-        <td class="tituloTabla" width="150px">
-            Resolución modificada
-        </td>
-        <td>
-            Numero
-            <input type="number"
-                   name="numActoRelacionado"
-                   id="numActoRelacionado"
-                   onFocus="this.style.backgroundColor = '#ADD8E6';"
-                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                   value="{$claActoAdministrativo->arrCaracteristicas.numActoRelacionado}"
-                   style="width: 50px;"
-            >
-            &nbsp;
-            Fecha
-            <input type="text"
-                   name="fchActoRelacionado"
-                   id="fchActoRelacionado"
-                   onFocus="this.style.backgroundColor = '#ADD8E6';"
-                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                   value="{$claActoAdministrativo->arrCaracteristicas.fchActoRelacionado}"
-                   style="width: 80px;"
-                   readonly
-            >
-            <a href="#" onClick="calendarioPopUp('fchActoRelacionado')">Calendario</a>
-        </td>
-    </tr>
-</table>
-<table cellspacing="0" cellpadding="10" border="0" width="100%">
-    <tr>
-        <td align="center">
-            <button style="width:100px; height:40px;" type="button" onclick="plantillaProyectos();">
-                <span style="font-size: 10px; font-weight: bold;">Guia de proyectos<br>y unidades</span>
-            </button>
-        </td>
-    </tr>
-</table>
+
+<div class="form-group">
+    <div class="col-sm-12 text-center">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#guiaUnidades">
+            Guia de proyectos y unidades
+        </button>
+    </div>
+</div>
+
+<div class="modal fade" id="guiaUnidades" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 900px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Consulta de proyecto y unidad habitacional</h4>
+            </div>
+            <div class="modal-body" style="height: 580px;">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="seqProyecto">Proyecto</label>
+                    <div class="col-sm-6">
+                        <select class="form-control input-sm"
+                                id="seqProyecto"
+                                name="seqProyecto"
+                                onchange="cargarContenido('listaUnidades','./contenidos/aad/guiaProyectos.php','seqProyecto='+$(this).val(),false)"
+                        >
+                            <option value="0">Seleccione</option>
+                            {foreach from=$claActo->proyectos() item=arrProyecto}
+                                <option value="{$arrProyecto.seqProyecto}">{$arrProyecto.txtNombreProyecto}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12" id="listaUnidades" ></div>
+            </div>
+        </div>
+    </div>
+</div>

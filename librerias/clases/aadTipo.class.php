@@ -58,7 +58,7 @@ class aadTipo
                 FROM T_AAD_TIPO_ACTO tac
                 INNER JOIN T_AAD_CARACTERISTICA_ACTO cac ON cac.seqTipoActo = tac.seqTipoActo
                 $txtCondicion
-                ORDER BY tac.seqTipoActo
+                -- ORDER BY tac.txtNombreTipoActo
             ";
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
@@ -82,14 +82,17 @@ class aadTipo
                     switch ($seqTipoActo) {
                         case 1: // Resolucion de asignacion
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento";
-                            $objTipoActo->arrFormatoArchivo[0]['tipo'] = "numero";
-                            $objTipoActo->arrFormatoArchivo[0]['ayuda'] = "Documento del postulante principal";
-                            $objTipoActo->arrFormatoArchivo[1]['nombre'] = "Resolución";
-                            $objTipoActo->arrFormatoArchivo[1]['tipo'] = "numero";
-                            $objTipoActo->arrFormatoArchivo[1]['ayuda'] = "Número de la resolución asociada";
-                            $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Fecha";
-                            $objTipoActo->arrFormatoArchivo[2]['tipo'] = "fecha";
-                            $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "Fecha de la resolución asociada.\nFormato aaaa-mm-dd";
+                            $objTipoActo->arrFormatoArchivo[0]['tipo']   = "numero";
+                            $objTipoActo->arrFormatoArchivo[0]['ayuda']  = "Documento del postulante principal";
+                            $objTipoActo->arrFormatoArchivo[1]['nombre'] = "Fecha de Vigencia";
+                            $objTipoActo->arrFormatoArchivo[1]['tipo']   = "fecha";
+                            $objTipoActo->arrFormatoArchivo[1]['ayuda']  = "Fecha en la cual vencerá el subsidio de no ser aplicado (aaaa/mm/dd)";
+                            $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Resolución Relacionada";
+                            $objTipoActo->arrFormatoArchivo[2]['tipo']   = "numero";
+                            $objTipoActo->arrFormatoArchivo[2]['ayuda']  = "Número de la resolución de referencia\nSi la resolución es de vinculación, use este campo para colocar la resolución de asignacion a la que se refiere";
+                            $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Fecha de Resolución Relacionada";
+                            $objTipoActo->arrFormatoArchivo[3]['tipo']   = "fecha";
+                            $objTipoActo->arrFormatoArchivo[3]['ayuda']  = "Fecha de la resolución asociada.\nFormato aaaa-mm-dd\nSi la resolución es de vinculación, use este campo para colocar la resolución de asignacion a la que se refiere";
                             break;
                         case 2: // Resolucion Modificatoria
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento";
@@ -108,8 +111,10 @@ class aadTipo
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Proyecto";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Unidad Habitacional";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor Donacion";
+                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor Complementario";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Soporte Donacion";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Entidad Donacion";
+                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "CHIP";
                             $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Incorrecto";
                             $objTipoActo->arrFormatoArchivo[2]['tipo'] = "texto";
                             $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "Éste es el valor actual de la base de datos, es el valor que se quiere corregir";
@@ -117,7 +122,7 @@ class aadTipo
                             $objTipoActo->arrFormatoArchivo[3]['tipo'] = "texto";
                             $objTipoActo->arrFormatoArchivo[3]['ayuda'] = "Éste es el valor que quiere que quede en la base de datos";
                             $objTipoActo->arrFormatoArchivo[4]['nombre'] = "Resolución";
-                            $objTipoActo->arrFormatoArchivo[4]['tipo'] = "texto";
+                            $objTipoActo->arrFormatoArchivo[4]['tipo'] = "numero";
                             $objTipoActo->arrFormatoArchivo[4]['ayuda'] = "El numero de la resolución que va a ser modificada con éste acto adminsitrativo";
                             $objTipoActo->arrFormatoArchivo[5]['nombre'] = "Fecha";
                             $objTipoActo->arrFormatoArchivo[5]['tipo'] = "fecha";
@@ -180,12 +185,15 @@ class aadTipo
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento";
                             $objTipoActo->arrFormatoArchivo[0]['tipo'] = "numero";
                             $objTipoActo->arrFormatoArchivo[0]['ayuda'] = "Documento del postulante principal";
-                            $objTipoActo->arrFormatoArchivo[1]['nombre'] = "Resolución";
-                            $objTipoActo->arrFormatoArchivo[1]['tipo'] = "numero";
-                            $objTipoActo->arrFormatoArchivo[1]['ayuda'] = "El número de la resolución que esta notificando";
-                            $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Fecha";
-                            $objTipoActo->arrFormatoArchivo[2]['tipo'] = "fecha";
-                            $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "La fecha de la resolución que esta notificando.\nFormato aaaa-mm-dd";
+                            $objTipoActo->arrFormatoArchivo[1]['nombre'] = "Fecha de notificacion";
+                            $objTipoActo->arrFormatoArchivo[1]['tipo'] = "fecha";
+                            $objTipoActo->arrFormatoArchivo[1]['ayuda'] = "Fecha en la que se notificó el hogar.\nFormato aaaa-mm-dd";
+                            $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Resolución";
+                            $objTipoActo->arrFormatoArchivo[2]['tipo'] = "numero";
+                            $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "El número de la resolución que esta notificando";
+                            $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Fecha";
+                            $objTipoActo->arrFormatoArchivo[3]['tipo'] = "fecha";
+                            $objTipoActo->arrFormatoArchivo[3]['ayuda'] = "La fecha de la resolución que esta notificando.\nFormato aaaa-mm-dd";
                             break;
                         case 8: // Resolucion de Indexacion
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento";
@@ -199,7 +207,7 @@ class aadTipo
                             $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "La fecha de la resolución que tiene el valor original";
                             $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Indexacion";
                             $objTipoActo->arrFormatoArchivo[3]['tipo'] = "numero";
-                            $objTipoActo->arrFormatoArchivo[3]['ayuda'] = "Valor de la indexación";
+                            $objTipoActo->arrFormatoArchivo[3]['ayuda'] = "Valor de la indexación sin decimales";
                             break;
                         case 9: // Resolucion de Perdida
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento";
@@ -234,14 +242,13 @@ class aadTipo
                             $objTipoActo->arrFormatoArchivo[2]['tipo'] = "fecha";
                             $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "El fecha de la resolución de asignación que otorgó el beneficio.\nFormato aaaa-mm-dd";
                             $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Estado";
-                            $objTipoActo->arrFormatoArchivo[3]['tipo'] = "numero";
+                            $objTipoActo->arrFormatoArchivo[3]['tipo'] = "texto";
                             $arrEstados = array( 63 );
                             foreach($arrEstados as $seqEstadoProceso){
                                 $objTipoActo->arrFormatoArchivo[3]['rango'][] = array_shift(estadosProceso($seqEstadoProceso));
                             }
                             $objTipoActo->arrFormatoArchivo[4]['nombre'] = "Comentario";
                             $objTipoActo->arrFormatoArchivo[4]['tipo'] = "texto";
-
                             break;
                         default: // Otros tipos de actos
                             $this->arrErrores[] = "Tipo de acto administrativo inexistente " . $seqTipoActo;
@@ -311,7 +318,7 @@ class aadTipo
                         $arrArchivo[$numLinea] = explode("\t", trim($txtLinea));
                         foreach( $arrArchivo[$numLinea] as $numColumna => $txtCelda ){
                             if( $numColumna < count( $this->arrFormatoArchivo ) ) {
-                                $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
+                                $arrArchivo[$numLinea][$numColumna] = trim(utf8_encode($txtCelda));
                             }else{
                                 unset( $arrArchivo[$numLinea][$numColumna] );
                             }
@@ -329,7 +336,7 @@ class aadTipo
                     $objHoja = $objPHPExcel->getSheet(0);
 
                     // obtiene las dimensiones del archivo para la obtencion del contenido por rangos
-                    $numFilas = $objHoja->getHighestRow();
+                    $numFilas = $objHoja->getHighestRow() + 1;
                     $numColumnas = PHPExcel_Cell::columnIndexFromString( $objHoja->getHighestColumn() ) - 1;
 
                     // obtiene los datos del rango obtenido
@@ -392,7 +399,7 @@ class aadTipo
      */
     public function validarTitulos( $arrTitulos ){
         foreach( $this->arrFormatoArchivo as $numColumna => $arrCelda ){
-            if( mb_strtolower(mb_ereg_replace( "[^0-9A-Za-záéíóúüñÑ\ \-\/]","", $arrTitulos[$numColumna])) != mb_strtolower($arrCelda['nombre']) ){
+            if( mb_strtolower($arrTitulos[$numColumna]) != mb_strtolower($arrCelda['nombre']) ){
                 $this->arrErrores[] = "La columna " . $arrCelda['nombre'] . " no se encuentra o no esta en el lugar correcto";
             }
         }
@@ -435,19 +442,3 @@ class aadTipo
 }
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

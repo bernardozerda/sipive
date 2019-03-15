@@ -30,6 +30,7 @@
             <tr>
                 <th align="center">Identificador</th>
                 <th align="center">Proyecto</th>
+                <th align="center">Fecha</th>
                 <th align="center">Unidades</th>
                 <th align="center">Valor</th>
                 <th align="center"></th>
@@ -41,6 +42,7 @@
                 <tr>
                     <td class="text-center">{$seqGiroConstructor}</td>
                     <td class="text-left">{$arrItemGiro.proyecto}</td>
+                    <td class="text-left">{if is_object($arrItemGiro.fecha)}{$arrItemGiro.fecha->format("Y-m-d")}{/if}</td>
                     <td class="text-right">{$arrItemGiro.unidades|number_format:0:',':'.'}</td>
                     <td class="text-right">$ {$arrItemGiro.giro|number_format:0:',':'.'}</td>
                     <td class="text-center">

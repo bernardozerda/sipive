@@ -1,4 +1,5 @@
 <?php
+
 //echo "paso"; exit();
 /* * *********************************
  * PLANTILLA INFORMACIÓN CVP
@@ -7,51 +8,50 @@
  * ********************************** */
 
 function obtenerRegistroCiudadano($arrDocumentos) {
-	 
+
     if (count($arrDocumentos) > 250) {
         echo '<span style="color:#c10;text-align:center;"><b>La cantidad de registros no puede ser superior a 250!</b></span>';
         die();
     }
-	
+
     require_once '../../librerias/phpExcel/Classes/PHPExcel.php';
     require_once '../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php';
+
     //PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
     $objPHPExcel = new PHPExcel();
 
-    $conexion = mysql_connect("localhost", "sdht_usuario", "Ochochar*1");
-    mysql_set_charset('utf8', $conexion);
-    mysql_select_db("sipive", $conexion);
+
+    global $aptBd;
     $arrayForm = Array();
     $docConsult = Array();
     $cont = 0;
     $sqlForm = "SELECT  seqFormulario, numDocumento FROM t_ciu_ciudadano ciu LEFT JOIN t_frm_hogar USING(seqCiudadano)WHERE numDocumento IN ( " . implode(",", $arrDocumentos) . " )";
-    $resultForm = mysql_query($sqlForm, $conexion) or die(mysql_error());
-    while ($row = mysql_fetch_array($resultForm)) {
-        $arrayForm[$cont] = intval($row['seqFormulario']);
-        $docConsult[$cont] = intval($row['numDocumento']);
+    $objRes = $aptBd->execute($sqlForm);
+    
+    while ($objRes->fields) {
+        $arrayForm[$cont] = intval($objRes->fields['seqFormulario']);
+        $docConsult[$cont] = intval($objRes->fields['numDocumento']);
+        $objRes->MoveNext();
         $cont++;
     }
     $noEncontrado = "<b> Los documentos que no se encontron son: ";
     $int = 0;
     $band = false;
     foreach ($arrDocumentos as $key => $value) {
-		
+
         if (!in_array($value, $docConsult)) {
             //$noEncontrado[$int] = $value;
-			$noEncontrado .= $value .", ";
+            $noEncontrado .= $value . ", ";
             $band = true;
             $int++;
         }
-		
     }
     $noEncontrado = substr_replace($noEncontrado, '.', -2, 1);
-    if($band){
-       echo $noEncontrado."</b>";
+    if ($band) {
+        echo $noEncontrado . "</b>";
         die();
     }
-    /* #(SELECT txtCondicionEspecial from t_ciu_condicion_especial where seqCondicionEspecial = ciu.seqCondicionEspecial ) as txtCondicionEspecial,
-      #(SELECT txtCondicionEspecial from t_ciu_condicion_especial where seqCondicionEspecial = ciu.seqCondicionEspecial2 ) as txtCondicionEspecial2,
-      #(SELECT txtCondicionEspecial from t_ciu_condicion_especial where seqCondicionEspecial = ciu.seqCondicionEspecial3 ) as txtCondicionEspecial3, */
+    
     $sql = "SELECT  seqFormulario, UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, '  ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS Nombre,
             CASE WHEN bolDesplazado =0 THEN 'NO' ELSE 'SI' END AS hogarVictima,  ciu.numDocumento, txtTipoDocumento, txtParentesco, txtSexo, txtEstadoCivil,
             
@@ -59,7 +59,7 @@ function obtenerRegistroCiudadano($arrDocumentos) {
             ucwords( mayor65anos( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtMayor65Anos,
             ucwords( discapacitado( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtDiscapacitado,
             CONCAT(txtEtapa, ' - ', txtEstadoProceso ) AS estado, CASE WHEN bolCerrado = 0 THEN 'NO' ELSE 'SI' END AS cierre, 
-            UPPER(TRIM(t_frm_formulario.txtDireccion)), txtLocalidad, t_frm_barrio.txtBarrio, txtModalidad, valIngresoHogar,                           
+            UPPER(TRIM(t_frm_formulario.txtDireccion)) As direccion, txtLocalidad, t_frm_barrio.txtBarrio, txtModalidad, valIngresoHogar,                           
             txtSoporteDonacion as SoporteDonacion, txtEmpresaDonante as entidadDonacion, 
             CASE WHEN txtNombreProyecto = 'null' THEN 'Ninguno' WHEN txtNombreProyecto = 'NULL' THEN 'Ninguno' WHEN txtNombreProyecto = '0' THEN 'Ninguno' 
             WHEN t_frm_formulario.seqProyecto = 37 THEN 'Ninguno' WHEN t_frm_formulario.seqProyecto = 'NULL' THEN 'Ninguno' 
@@ -88,10 +88,9 @@ function obtenerRegistroCiudadano($arrDocumentos) {
             LEFT JOIN t_frm_empresa_donante USING(seqEmpresaDonante)
             WHERE t_frm_formulario.seqFormulario IN ( " . implode(",", $arrayForm) . " ) "
             . " ORDER BY t_frm_formulario.seqFormulario, seqParentesco";
-    //echo "<br><br>".$sql;
-  //die();
-    $resultdl = mysql_query($sql, $conexion) or die(mysql_error());
-    $registros = mysql_num_rows($resultdl);
+
+    $objRes1 = $aptBd->execute($sql);
+    $registros = $objRes1->numRows();
 
 
     $tituloReporte = Array();
@@ -120,6 +119,34 @@ function obtenerRegistroCiudadano($arrDocumentos) {
     $tituloReporte[22] = "Chip predio mejoramiento";
     $tituloReporte[23] = "Avaluo predio mejoramiento";
     $tituloReporte[24] = "Resolución Asignación / Vinculación";
+
+
+    $title = Array();
+    $title[0] = "seqFormulario";
+    $title[1] = "Nombre";
+    $title[2] = "hogarVictima";
+    $title[3] = "numDocumento";
+    $title[4] = "txtTipoDocumento";
+    $title[5] = "txtParentesco";
+    $title[6] = "txtSexo";
+    $title[7] = "txtEstadoCivil";
+    $title[8] = "txtCabezaFamilia";
+    $title[9] = "txtDiscapacitado";
+    $title[10] = "txtMayor65Anos";
+    $title[11] = "estado";
+    $title[12] = "cierre";
+    $title[13] = "direccion";
+    $title[14] = "txtLocalidad";
+    $title[15] = "txtBarrio";
+    $title[16] = "txtModalidad";
+    $title[17] = "valIngresoHogar";
+    $title[18] = "SoporteDonacion";
+    $title[19] = "entidadDonacion";
+    $title[20] = "Proyecto";
+    $title[21] = "txtMatriculaInmobiliaria";
+    $title[22] = "txtChip";
+    $title[23] = "avaluo";
+    $title[24] = "resolucionAsignacion";
     //$tituloReporte[22] = "Año Resolución Asignación / Vinculación";
     //$tituloReporte[25] = "Cedula Catastral predio mejoramiento";
 
@@ -177,6 +204,7 @@ function obtenerRegistroCiudadano($arrDocumentos) {
     );
 
     if ($registros > 0) {
+        // echo "<br> paso - 1";
         //var_dump($arrDocumentos);
         $docConsult = Array();
 
@@ -184,6 +212,7 @@ function obtenerRegistroCiudadano($arrDocumentos) {
         $titulos = 25;
         $field = 0;
         while ($field !== $titulos) {
+            //  echo $arrNomCol[$field] . "1", $tituloReporte[$tiltle] ."<br>";
             $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[$field] . "1", $tituloReporte[$tiltle])->getRowDimension('1')->setRowHeight(80);
             $objPHPExcel->getActiveSheet()->getColumnDimension($arrNomCol[$field])->setAutoSize(true);
             $objPHPExcel->getProperties()->setCreator("HOO")->setLastModifiedBy("HOO");
@@ -191,20 +220,27 @@ function obtenerRegistroCiudadano($arrDocumentos) {
             $field++;
             $tiltle++;
         }
+
         $int = 0;
 
 
         $rowcount = 2;
-        while ($row = mysql_fetch_array($resultdl)) {
+        //  echo "<br> paso - 2";
+        while ($objRes1->fields) {
             $field = 0;
+            //   echo "<br>";
             while ($field !== $titulos) {
-               // $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[$field] . $rowcount, utf8_encode($row[$field]));
-                $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[$field] . $rowcount, str_replace('  ', '', $row[$field]));
+             
+                // $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[$field] . $rowcount, utf8_encode($row[$field]));
+                $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[$field] . $rowcount, str_replace('  ', '', $objRes1->fields[$title[$field]]));
                 $objPHPExcel->getActiveSheet()->getStyle('A' . $rowcount . ':Y' . $rowcount)->applyFromArray($styleArrayBody);
                 $field++;
             }
             $rowcount++;
+            $objRes1->MoveNext();
         }
+        //die();
+
         $rowcount = $rowcount + 1;
         if ($band) {
             $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[0] . $rowcount, 'LOS SIGUIENTES SON LOS NUMEROS DE IDENTIFICACIÓN NO INSCRITOS EN EL SIFSV');
@@ -215,13 +251,14 @@ function obtenerRegistroCiudadano($arrDocumentos) {
                 //$objPHPExcel->getActiveSheet()->getStyle($arrNomCol[0] . $rowcount)->applyFromArray($style_header);
             }
         }
-        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-        header('Content-type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment; filename="InformacionCVP.xlsx"');
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=InformacionCVP" . date("YmdHis") . ".xlsx");
+        header('Cache-Control: max-age=0');
+        ob_end_clean();
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
-        exit;
     } else {
         echo '<span style="color:#c10;text-align:center;"><b>No hay registros!</b></span>';
     }
-    mysql_close();
 }

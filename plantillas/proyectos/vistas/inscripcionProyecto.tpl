@@ -719,8 +719,8 @@
                     {foreach from=$arrFinanciera.$seqProyecto.menor.detalle key=seqUnidadActo item=arrResolucion} 
                         <div class="form-group" style="padding-left: 2%; color: #204d74;margin-top: 5px; margin-bottom: 0;">
                             <div class="col-md-4">{$arrResolucion.numero} de {$arrResolucion.fecha}</div>
-                            <div class="col-md-4">{$arrResolucion.unidades} SFV por</div>  
-                            <div class="col-md-4"> $ {$arrFinanciera.$seqProyecto.menor.total|number_format:0:',':'.'}</div>
+                            <div class="col-md-4">{$arrResolucion.unidades} SFV por {$seqProyecto}</div>  
+                            <div class="col-md-4">  $ {$arrResolucion.valor|number_format:0:',':'.'}</div>
                         </div>
                     {/foreach}
                     <br><br>

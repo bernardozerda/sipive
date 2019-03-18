@@ -32,7 +32,7 @@ $arrayComiteActa = Array();
 
 $claDatosProy = new DatosGeneralesProyectos();
 $claProyecto = new Proyecto();
- $claGestion = new GestionFinancieraProyectos();
+$claGestion = new GestionFinancieraProyectos();
 $txtPlantilla = "proyectos/vistas/listaProyectos.tpl";
 $idProyecto = 0;
 $arrGrupoGestion = $claDatosProy->obtenerDatosGestion();
@@ -128,12 +128,13 @@ if (isset($_REQUEST['seqProyecto'])) {
             }
         } elseif ($arrResolucion['idTipo'] == 3 or ( $arrResolucion['idTipo'] == 2 and $arrResolucion['total'] < 0)) {
 
-            $arrFinanciera[$idProyecto]['menor']['total'] += abs($arrResolucion['total']);
+            $arrFinanciera[$idProyecto]['menor']['total'] += ($arrResolucion['total']);
             $arrFinanciera[$idProyecto]['menor']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
             $arrFinanciera[$idProyecto]['menor']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
-            $arrFinanciera[$idProyecto]['menor']['detalle'][$seqUnidadActo]['valor'] = abs($arrResolucion['total']);
+            $arrFinanciera[$idProyecto]['menor']['detalle'][$seqUnidadActo]['valor'] = ($arrResolucion['total']);
             $sql = "select count(seqUnidadVinculado) as cuenta from t_pry_aad_unidades_vinculadas where seqUnidadActo = $seqUnidadActo";
             $arrCantidad = $aptBd->GetAll($sql);
+
             $arrFinanciera[$idProyecto]['menor']['detalle'][$seqUnidadActo]['unidades'] = $arrCantidad[0]['cuenta'];
         }
     }

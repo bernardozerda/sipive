@@ -169,6 +169,7 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["legalizacionGerencial"] = 1;
             $arrExportables["reporteEscrituracion"] = 1;
             $arrExportables["girosVIPA"] = 1;
+            $arrExportables["todosEstado"] = 1;
             break;
 
         case 13: // juridica

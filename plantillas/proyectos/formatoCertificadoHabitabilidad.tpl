@@ -564,7 +564,7 @@
 
                 <!-- FIN PAGINA 2 -->
 
-                <b class="salto">&nbsp;</b>
+                <p class="salto">&nbsp;</p>
 
                 <!-- INICIO PAGINAS DINAMICAS DE ACUERDO AL NUMERO DE FOTOS CARGADAS -->
 

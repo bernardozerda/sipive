@@ -16,6 +16,8 @@ class aad
     private $arrEstadosPermitidos;
     private $arrExtensiones;
     private $txtCreador;
+    private $minmDatesDiff;
+    private $secInDay;
 
     public function __construct()
     {
@@ -36,6 +38,10 @@ class aad
         $this->arrCambiosAplicados = array();
         $this->arrExtensiones = array("txt");
         $this->txtCreador = "SiPIVE - SDHT";
+
+        $this->minmDatesDiff = 25569;
+        $this->secInDay = 86400;
+
     }
 
     /**
@@ -1595,6 +1601,28 @@ class aad
                         $bolError = true;
                     }
                     break;
+                case "Fecha de Vigencia":
+                    if($arrRegistro[2] != "" and (! esFechaValida($arrRegistro[2]))){
+                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor incorrecto '" . $arrRegistro[1] . "' no es válido use el formato aaaa-mm-dd";
+                    }else{
+
+                        $claFormulario->fchVigencia = (esFechaValida($claFormulario->fchVigencia))? $claFormulario->fchVigencia : null;
+                        $arrRegistro[2]             = (esFechaValida($arrRegistro[2])            )? $arrRegistro[2]             : null;
+
+                        if($arrRegistro[2] != $claFormulario->fchVigencia){
+                            $bolError = true;
+                        }
+                        $seqEtapa = array_shift(obtenerDatosTabla(
+                            "t_frm_estado_proceso",
+                            array("seqEstadoProceso","seqEtapa"),
+                            "seqEstadoProceso",
+                            "seqEstadoProceso = " . $claFormulario->seqEstadoProceso
+                        ));
+                        if($seqEtapa != 4 and $seqEtapa != 5){
+                            $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor incorrecto '" . $arrRegistro[1] . "' el hogar no se encuentra en la etapa de asignación o desembolso";
+                        }
+                    }
+                    break;
                 default:
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[1] . " No es un valor válido para el Campo";
                     break;
@@ -1748,6 +1776,16 @@ class aad
                     } else {
                         // la validacion para este campo se hace combinada con el valor, la entidad y el soporte mas adelante
                         $arrValidacionCombinada[$seqFormulario]->seqEmpresaDonante = intval($seqEmpresaDonante);
+                    }
+                    break;
+                case "Fecha de Vigencia":
+                    $fchCorrecta = null;
+                    $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
+                    if($numTimeStamp > 0){
+                        $fchCorrecta = date("Y-m-d",$numTimeStamp);
+                    }
+                    if($fchCorrecta == null){
+                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor correcto '" . $arrRegistro[1] . "' no es válido use el formato aaaa-mm-dd";
                     }
                     break;
             }
@@ -2890,6 +2928,15 @@ class aad
                     ));
                     $txtCampo = "seqEmpresaDonante";
                     $claFormulario->seqEmpresaDonante = $seqEmpresaDonante;
+                    break;
+                case "Fecha de Vigencia":
+                    $txtCampo = "fchVigencia";
+                    $fchCorrecta = null;
+                    $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
+                    if($numTimeStamp > 0){
+                        $fchCorrecta = date("Y-m-d",$numTimeStamp);
+                    }
+                    $claFormulario->fchVigencia = $fchCorrecta;
                     break;
             }
 

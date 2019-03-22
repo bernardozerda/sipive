@@ -96,16 +96,16 @@ foreach ($array as $key => $value) {
                                     Postulación Individual / Proyectos gestionados por SDHT
                                 </a>
                             </li>
-                            <li>
-                                <a href="javascript:void(0)"
-                                   onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/EstudiosTecnicosMiCasaYa/index.php'
-                                   );"
-                                >
-                                    Mi Casa Ya
-                                </a>
-                            </li>
+<!--                            <li>-->
+<!--                                <a href="javascript:void(0)"-->
+<!--                                   onClick="cambiarOpcionLegalizacion(-->
+<!--                                       'contenidoLegalizacion',-->
+<!--                                       'contenidos/migracionesIndividual/EstudiosTecnicosMiCasaYa/index.php'-->
+<!--                                   );"-->
+<!--                                >-->
+<!--                                    Mi Casa Ya-->
+<!--                                </a>-->
+<!--                            </li>-->
                         </ul>
                     </li>
 
@@ -138,7 +138,7 @@ foreach ($array as $key => $value) {
                                        'contenidos/migracionesIndividual/CargaMasivosEstudioTitulos/index.php'
                                    );"
                                 >
-                                    Postulación Individual / Mi Casa Ya
+                                    Postulación Individual / Complementariedad VIPA
                                 </a>
                             </li>
                             <li>

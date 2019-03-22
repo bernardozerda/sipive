@@ -108,13 +108,14 @@ class aadTipo
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Tipo de Solucion";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor del Subsidio";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Matricula Inmobiliaria";
+                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "CHIP";
+                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Fecha de Vigencia";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Proyecto";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Unidad Habitacional";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor Donacion";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor Complementario";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Soporte Donacion";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Entidad Donacion";
-                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "CHIP";
                             $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Incorrecto";
                             $objTipoActo->arrFormatoArchivo[2]['tipo'] = "texto";
                             $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "Éste es el valor actual de la base de datos, es el valor que se quiere corregir";

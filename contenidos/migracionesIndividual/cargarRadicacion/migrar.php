@@ -183,7 +183,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                             $fecha = "NULL";
                         }
 
-                        $updateRad = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = " . $fecha . ", txtRadicadoForest = '" . $numRadicado . "' WHERE seqFormulario IN (" . $seqFormularios . ")";
+                        $updateRad = "UPDATE t_pry_unidad_proyecto SET fchRadicacion = " . $fecha . ", txtRadicadoForest = '" . $numRadicado . "', fchDevolucionExpediente='NULL' WHERE seqFormulario IN (" . $seqFormularios . ")";
 
                         if ($db->query($update)) {
                             $documentos = str_replace(",", "<br>", $documentos);

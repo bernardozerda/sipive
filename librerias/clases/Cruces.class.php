@@ -90,7 +90,7 @@ class Cruces
          *      - [47] Postulado EPI / CEM
          */
         $this->arrEstadosPermitidos['crear']['Primera Verificacion'] = array(53,44);
-        $this->arrEstadosPermitidos['crear']['Segunda Verificacion'] = array(47,56);
+        $this->arrEstadosPermitidos['crear']['Segunda Verificacion'] = array(47,54,56);
 
         /**
          * Estados en los que se puede levantar cruces
@@ -1216,7 +1216,7 @@ WHERE
                 if($seqEstadoProceso == 53 || $seqEstadoProceso == 45 || $seqEstadoProceso == 46) {
                     $seqEstadoProceso = ($bolInhabilitar == 1) ? 45 : 46;
                     $arrSeguimiento['txtComentario'] = "Primera verificación realizada";
-                }elseif($seqEstadoProceso == 47 || $seqEstadoProceso == 56 || $seqEstadoProceso == 16){
+                }elseif($seqEstadoProceso == 47 || $seqEstadoProceso == 56 || $seqEstadoProceso == 54 || $seqEstadoProceso == 16){
                     $seqEstadoProceso = ($bolInhabilitar == 1) ? 56 : 16;
                     $arrSeguimiento['txtComentario'] = "Segunda verificación realizada";
                 }
@@ -1252,7 +1252,7 @@ WHERE
                 if($seqEstadoProceso == 44 || $seqEstadoProceso == 45) {
                     $arrSeguimiento['txtComentario'] = "Primera verificación realizada";
                     $arrCasaMano['txtFase'] = "primeraVerificacion";
-                }elseif($seqEstadoProceso == 47 || $seqEstadoProceso == 56 ){
+                }elseif($seqEstadoProceso == 47 || $seqEstadoProceso == 56 || $seqEstadoProceso == 54 ){
                     $arrSeguimiento['txtComentario'] = "Segunda verificación realizada";
                     $arrCasaMano['txtFase'] = "segundaVerificacion";
                 }

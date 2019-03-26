@@ -4443,6 +4443,186 @@ class aad
         return $seqFormularioActo;
     }
 
+    public function obtenerProcesos($seqFormulario){
+        global $aptBd;
+        $sql = "
+            select
+                fac.seqFormulario,
+                hvi.seqTipoActo,
+                hvi.numActo,
+                hvi.fchActo,
+                hvi.seqFormularioActo,
+                hvi.numActoReferencia,
+                hvi.fchActoReferencia
+            from t_aad_hogares_vinculados hvi
+            inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
+            where fac.seqFormulario in ($seqFormulario)
+            order by fac.seqFormulario, hvi.fchActo
+        ";
+        $objRes = $aptBd->execute($sql);
+        $arrProcesos = array();
+        $seqFormularioAnterior = 0;
+        while($objRes->fields){
+
+            $seqFormulario     = $objRes->fields['seqFormulario'];
+            $seqFormularioActo = $objRes->fields['seqFormularioActo'];
+
+            if( in_array( $objRes->fields['seqTipoActo'] , array(1,3,5) ) or $seqFormularioAnterior != $seqFormulario ){
+                $seqFormularioAnterior = $seqFormulario;
+                $txtActoProceso = $objRes->fields['numActo'] . "/" . $objRes->fields['fchActo'];
+                $arrProcesos[$txtActoProceso]['cabeza'] = $seqFormularioActo;
+            }else{
+                $txtActoRelacionado = $objRes->fields['numActo'] . "/" . $objRes->fields['fchActo'];
+                $arrProcesos[$txtActoProceso]['relacionado'][$txtActoRelacionado]['seqFormularioActo'] = $seqFormularioActo;
+                $arrProcesos[$txtActoProceso]['relacionado'][$txtActoRelacionado]['seqTipoActo'] = $objRes->fields['seqTipoActo'];
+            }
+
+            $objRes->MoveNext();
+        }
+
+
+        return $arrProcesos;
+    }
+
+    /**
+     * ACTUALIZACION DESDE EL FORMULARIO DE POSTULACION
+     * @param $seqFormularioActo
+     * @param $arrPost
+     */
+    public function actualizarFac($seqFormularioActo, $arrPost){
+        global $aptBd;
+
+        $arrErrores = array();
+        $arrHogarPost = $arrPost['hogar'];
+
+        // variables del formulario que no aplican para actualizacion
+        unset($arrPost['hogar']);
+        unset($arrPost['arrErrores']);
+        unset($arrPost['seqGrupoGestion']);
+        unset($arrPost['seqGestion']);
+        unset($arrPost['txtComentario']);
+        unset($arrPost['bolInformal']);
+        unset($arrPost['seqCasaMano']);
+        unset($arrPost['cedula']);
+        unset($arrPost['txtFase']);
+        unset($arrPost['txtFlujo']);
+        unset($arrPost['txtArchivo']);
+        unset($arrPost['nombre']);
+        unset($arrPost['bolBorrar']);
+
+        try{
+
+            $aptBd->BeginTrans();
+
+            $sql = "update t_aad_formulario_acto set ";
+            foreach($arrPost as $txtCampo => $txtValor){
+                $txtValor = regularizarCampo($txtCampo,$txtValor);
+                if($txtValor === null){
+                    $txtValor = "null";
+                }else{
+                    $txtValor = "'$txtValor'";
+                }
+                $sql .= "$txtCampo = $txtValor,";
+            }
+            $sql = rtrim($sql,",");
+            $sql .= " where seqFormularioActo = $seqFormularioActo";
+            $aptBd->execute($sql);
+
+            $sql = "
+                select cac.seqCiudadanoActo, cac.numDocumento
+                from t_aad_ciudadano_acto cac
+                inner join t_aad_hogar_acto hac on cac.seqCiudadanoActo = hac.seqCiudadanoActo
+                where hac.seqFormularioActo = $seqFormularioActo
+            ";
+            $arrHogarActo = $aptBd->GetAll($sql);
+            foreach($arrHogarActo as $i => $arrCiudadanoActo){
+                $numDocumentoActo = $arrCiudadanoActo['numDocumento'];
+                if(isset($arrHogarPost[$numDocumentoActo])){
+                    $seqParentesco = $arrHogarPost[$numDocumentoActo]['seqParentesco'];
+                    unset($arrHogarPost[$numDocumentoActo]['seqParentesco']);
+                    $sql = "update t_aad_ciudadano_acto set ";
+                    foreach($arrHogarPost[$numDocumentoActo] as $txtCampo => $txtValor){
+                        $txtValor = regularizarCampo($txtCampo,$txtValor);
+                        if($txtValor === null){
+                            $txtValor = "null";
+                        }else{
+                            $txtValor = "'$txtValor'";
+                        }
+                        $sql .= "$txtCampo = $txtValor,";
+                    }
+                    $sql = rtrim($sql,",");
+                    $sql .= " where seqCiudadanoActo = " . $arrCiudadanoActo['seqCiudadanoActo'];
+                    $aptBd->execute($sql);
+
+                    $sql = "update t_aad_hogar_acto set ";
+                    $sql.= "seqParentesco = $seqParentesco ";
+                    $sql.= "where seqFormularioActo = $seqFormularioActo and seqCiudadanoActo = " . $arrCiudadanoActo['seqCiudadanoActo'];
+                    $aptBd->execute($sql);
+
+                    unset($arrHogarPost[$numDocumentoActo]);
+                    unset($arrHogarActo[$i]);
+                }
+            }
+
+            // ciudadanos adicionados
+            foreach($arrHogarPost as $arrCiudadanoAdicion){
+
+                $seqParentesco = $arrCiudadanoAdicion['seqParentesco'];
+                unset($arrCiudadanoAdicion['seqParentesco']);
+
+                $seqCiudadano = Ciudadano::ciudadanoExiste($arrCiudadanoAdicion['seqTipoDocumento'], $arrCiudadanoAdicion['numDocumento']);
+
+                $txtCampos = "";
+                foreach($arrCiudadanoAdicion as $txtCampo => $txtValor){
+                    $txtValor = regularizarCampo($txtCampo,$txtValor);
+                    if($txtValor === null){
+                        $txtValor = "null";
+                    }else{
+                        $txtValor = "'$txtValor'";
+                    }
+                    $txtValores .= "$txtValor,";
+                    $txtCampos .= "$txtCampo,";
+                }
+                $txtCampos = rtrim($txtCampos,",");
+                $txtValores = rtrim($txtValores,",");
+
+                $sql = "insert into t_aad_ciudadano_acto (seqCiudadano, $txtCampos) values ($seqCiudadano, $txtValores)";
+                $aptBd->execute($sql);
+
+                $seqCiudadanoActo = $aptBd->Insert_ID();
+
+                $sql = "insert into t_aad_hogar_acto (seqFormularioActo, seqCiudadanoActo, seqParentesco) values ($seqFormularioActo,$seqCiudadanoActo,$seqParentesco)";
+                $aptBd->execute($sql);
+
+            }
+
+            // ciudadanos eliminados
+            foreach($arrHogarActo as $arrCiudadanoActo){
+                $sql = "delete from t_aad_detalles where seqCiudadanoActo = " . $arrCiudadanoActo['seqCiudadanoActo'];
+                $aptBd->execute($sql);
+                $sql = "delete from t_aad_hogar_acto where seqCiudadanoActo = " . $arrCiudadanoActo['seqCiudadanoActo'];
+                $aptBd->execute($sql);
+                $sql = "delete from t_aad_ciudadano_acto where seqCiudadanoActo = " . $arrCiudadanoActo['seqCiudadanoActo'];
+                $aptBd->execute($sql);
+            }
+
+
+            $aptBd->CommitTrans();
+
+        } catch (Exception $objError){
+
+            $aptBd->Rollbacktrans();
+
+            $arrErrores[] = "Hubo problemas al sincronizar el acto administrativo";
+            $arrErrores[] = $objError->getMessage();
+
+        }
+
+        return $arrErrores;
+    }
+
+
+
 }
 
 

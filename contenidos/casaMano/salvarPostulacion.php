@@ -21,6 +21,7 @@ include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.
 include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php");
 include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php");
 include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "CasaMano.class.php");
+include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "aad.class.php");
 
 $arrErrores = array(); // Todos los errores van aqui
 
@@ -855,6 +856,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     }
 
 }
+
 /**********************************************************************************************************************
  * VALIDACIONES ESPECIALES
  **********************************************************************************************************************/
@@ -1023,6 +1025,31 @@ if (empty($arrErrores)) {
     $arrErrores = $claCasaMano->arrErrores;
     foreach($claCasaMano->arrMensajes as $txtMensaje){
         $arrMensajes[] = $txtMensaje;
+    }
+}
+
+
+/**********************************************************************************************************************
+ * SINCRONIZANDO FORMULARIO Y ACTO ADMINISTRATIVO
+ **********************************************************************************************************************/
+if(empty($arrErrores)) {
+    if ($seqEtapa == 4 or $seqEtapa == 5) {
+
+        $claActoAdministrativo = new aad();
+
+        $arrProcesos = $claActoAdministrativo->obtenerProcesos($_POST['seqFormulario']);
+
+        if(! empty($arrProcesos)){
+
+            $seqFormularioActo = null;
+            foreach($arrProcesos as $txtResolucion => $arrProceso){
+                $seqFormularioActo = $arrProceso['cabeza'];
+            }
+
+            $arrErrores = $claActoAdministrativo->actualizarFac($seqFormularioActo,$_POST);
+
+        }
+
     }
 }
 

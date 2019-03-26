@@ -10,6 +10,7 @@ include($txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/
 include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano.class.php");
 include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php");
 include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php");
+include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "aad.class.php");
 
 $claSeguimiento = new Seguimiento();
 
@@ -62,6 +63,54 @@ try {
     $aptBd->execute($sql);
     $sql = "update t_frm_formulario set fchUltimaActualizacion = now() where seqFormulario = " . $_POST['seqFormulario'];
     $aptBd->execute($sql);
+
+    /**********************************************************************************************************************
+     * SINCRONIZANDO FORMULARIO Y ACTO ADMINISTRATIVO
+     **********************************************************************************************************************/
+
+    $seqEstadoProceso = $claFormulario->seqEstadoProceso;
+    $arrEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array("seqEstadoProceso","seqEtapa"),"seqEstadoProceso","seqEstadoProceso = " . $seqEstadoProceso);
+    $seqEtapa = $arrEtapa[$seqEstadoProceso];
+
+    if ($seqEtapa == 4 or $seqEtapa == 5) {
+
+        $claActoAdministrativo = new aad();
+
+        $arrProcesos = $claActoAdministrativo->obtenerProcesos($_POST['seqFormulario']);
+
+        if(! empty($arrProcesos)){
+
+            $seqFormularioActo = null;
+            foreach($arrProcesos as $txtResolucion => $arrProceso){
+                $seqFormularioActo = $arrProceso['cabeza'];
+            }
+
+            $sql = "
+                select cac.seqCiudadanoActo
+                from t_aad_ciudadano_acto cac
+                inner join t_aad_hogar_acto hac on cac.seqCiudadanoActo = hac.seqCiudadanoActo
+                where hac.seqFormularioActo = $seqFormularioActo
+                  and cac.seqCiudadano = $seqCiudadanoEliminar
+            ";
+            $objRes = $aptBd->execute($sql);
+            $seqCiudadanoActo = $objRes->fields['seqCiudadanoActo'];
+
+            $sql = "delete from t_aad_detalles where seqFormularioActo = $seqFormularioActo and seqCiudadanoActo = $seqCiudadanoActo";
+            $aptBd->execute($sql);
+
+            $sql = "delete from t_aad_hogar_acto where seqFormularioActo = $seqFormularioActo and seqCiudadanoActo = $seqCiudadanoActo";
+            $aptBd->execute($sql);
+
+            $sql = "delete from t_aad_ciudadano_acto where seqCiudadanoActo = $seqCiudadanoActo";
+            $aptBd->execute($sql);
+
+        }
+
+    }
+
+
+
+
 
     if(empty($claSeguimiento->arrErrores)) {
         $arrMensajes = $claSeguimiento->arrMensajes;

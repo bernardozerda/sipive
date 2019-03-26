@@ -90,7 +90,7 @@ class Cruces
          *      - [47] Postulado EPI / CEM
          */
         $this->arrEstadosPermitidos['crear']['Primera Verificacion'] = array(53,44);
-        $this->arrEstadosPermitidos['crear']['Segunda Verificacion'] = array(47,56);
+        $this->arrEstadosPermitidos['crear']['Segunda Verificacion'] = array(47,54,56);
 
         /**
          * Estados en los que se puede levantar cruces

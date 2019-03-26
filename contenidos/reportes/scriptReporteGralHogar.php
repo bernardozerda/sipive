@@ -2,7 +2,7 @@
 <?php
 
 ini_set("memory_limit", -1);
-
+chdir(dirname(__DIR__) . "/reportes/");
 $txtPrefijoRuta = "../../";
 include($txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php");
 include($txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php");
@@ -12,13 +12,16 @@ reporteGralHogar();
 function reporteGralHogar() {
 
     global $aptBd;
+    $name = 'reporteGralHogar_' . date("Ymd_His");
     $formularios = "";
-    $sql = "SELECT 
-                frm.seqFormulario AS 'Id Hogar',
-                ppal.numDocumento AS 'Documento Ppal',
-                seqCiudadano AS 'id Ciudadano',
-                txtTipoDocumento AS 'Tipo Documento',
-                ciud.numDocumento AS 'Documento Ciudadano',
+    //$sql = "CREATE TABLE T_FRM_REPORTE_GRAL";
+    $sql = "INSERT INTO T_FRM_REPORTE_GRAL ";
+    $sql .= "(SELECT 
+                '', frm.seqFormulario AS 'Id Hogar',
+                ppal.numDocumento AS 'DocumentoPpal',
+                seqCiudadano AS 'idCiudadano',
+                txtTipoDocumento AS 'TipoDocumento',
+                ciud.numDocumento AS 'DocumentoCiudadano',
                 UPPER(txtNombre1) AS Nombre1,
                 UPPER(txtNombre2) AS Nombre2,
                 UPPER(txtApellido1) AS txtApellido1,
@@ -26,7 +29,7 @@ function reporteGralHogar() {
                 txtParentesco AS Parentesco,
                 txtSexo AS Sexo,
                 txtEstadoCivil AS 'Estado Civil',
-                fchNacimiento AS 'Fecha de Nacimiento',
+                fchNacimiento AS 'FechadeNacimiento',
                 TIMESTAMPDIFF(YEAR,
                     fchNacimiento,
                     CURDATE()) AS Edad,
@@ -45,7 +48,7 @@ function reporteGralHogar() {
                             fchNacimiento,
                             CURDATE()) <= 5
                     THEN
-                        '0 a 5'
+                        '0a5'
                     WHEN
                         TIMESTAMPDIFF(YEAR,
                             fchNacimiento,
@@ -54,7 +57,7 @@ function reporteGralHogar() {
                             fchNacimiento,
                             CURDATE()) <= 13
                     THEN
-                        '6 a 13'
+                        '6a13'
                     WHEN
                         TIMESTAMPDIFF(YEAR,
                             fchNacimiento,
@@ -63,7 +66,7 @@ function reporteGralHogar() {
                             fchNacimiento,
                             CURDATE()) <= 17
                     THEN
-                        '14 a 17'
+                        '14a17'
                     WHEN
                         TIMESTAMPDIFF(YEAR,
                             fchNacimiento,
@@ -72,7 +75,7 @@ function reporteGralHogar() {
                             fchNacimiento,
                             CURDATE()) <= 26
                     THEN
-                        '18 a 26'
+                        '18a26'
                     WHEN
                         TIMESTAMPDIFF(YEAR,
                             fchNacimiento,
@@ -81,30 +84,30 @@ function reporteGralHogar() {
                             fchNacimiento,
                             CURDATE()) <= 59
                     THEN
-                        '27 a 59'
+                        '27a59'
                     WHEN
                         TIMESTAMPDIFF(YEAR,
                             fchNacimiento,
                             CURDATE()) > 59
                     THEN
-                        'Mayor de 60'
+                        'Mayorde60'
                     ELSE 'Ninguno'
                 END AS RangoEdad,
-                txtNivelEducativo AS 'Nivel Educativo',
-                numAnosAprobados AS 'Anos Aprobados',
+                txtNivelEducativo AS 'NivelEducativo',
+                numAnosAprobados AS 'AnosAprobados',
                 txtEtnia AS Etnia,
-                valIngresos AS 'Ingresos del Ciudadano',
+                valIngresos AS 'IngresosdelCiudadano',
                 txtOcupacion AS Ocupacion,
                 IF(seqCondicionEspecial = 1
                         OR seqCondicionEspecial2 = 1
                         OR seqCondicionEspecial3 = 1,
                     'SI',
-                    'NO') AS 'Cabeza de Familia',
+                    'NO') AS 'CabezadeFamilia',
                 IF(seqCondicionEspecial = 2
                         OR seqCondicionEspecial2 = 2
                         OR seqCondicionEspecial3 = 2,
                     'SI',
-                    'NO') AS 'Mayor 65 Anos',
+                    'NO') AS 'Mayor65Anos',
                 IF(seqCondicionEspecial = 3
                         OR seqCondicionEspecial2 = 3
                         OR seqCondicionEspecial3 = 3,
@@ -114,11 +117,11 @@ function reporteGralHogar() {
                         AND seqCondicionEspecial2 = 6
                         AND seqCondicionEspecial3 = 6,
                     'SI',
-                    'NO') AS 'Ninguna Condicion Especial',
+                    'NO') AS 'NingunaCondicionEspecial',
                 txtSalud AS Salud,
-                UPPER(txtTipoVictima) AS 'Tipo Victima',
+                UPPER(txtTipoVictima) AS 'TipoVictima',
                 IF(bolLgtb = 1, 'SI', 'NO') AS 'Lgtbi',
-                UPPER(txtGrupoLgtbi) AS 'Grupo LGTBI',
+                UPPER(txtGrupoLgtbi) AS 'GrupoLGTBI',
                 IF(bolDesplazado = 1,
                     'Víctimas',
                     'Vulnerables') AS Desplazado,
@@ -128,100 +131,101 @@ function reporteGralHogar() {
                 bar.txtBarrio AS Barrio,
                 seqTipoDireccion,
                 txtVivienda AS Vivienda,
-                valArriendo AS 'Valor Arriendo',
-                fchArriendoDesde AS 'Fecha Arriendo Desde',
-                numHabitaciones AS 'Numero Habitaciones',
+                valArriendo AS 'ValorArriendo',
+                fchArriendoDesde AS 'FechaArriendoDesde',
+                numHabitaciones AS 'NumeroHabitaciones',
                 numHacinamiento AS 'Hacinamiento',
-                DATE_FORMAT(frm.fchInscripcion, '%Y-%m-%d') AS 'Fecha Inscripcion',
-                DATE_FORMAT(frm.fchInscripcion, '%Y') AS 'Año Inscripcion',
-                DATE_FORMAT(frm.fchPostulacion, '%Y-%m-%d') AS 'Fecha Postulacion',
-                DATE_FORMAT(frm.fchPostulacion, '%Y') AS 'Año Postulacion',
-                txtEstado AS 'Estado Proceso',
+                DATE_FORMAT(frm.fchInscripcion, '%Y-%m-%d') AS 'FechaInscripcion',
+                DATE_FORMAT(frm.fchInscripcion, '%Y') AS 'AñoInscripcion',
+                DATE_FORMAT(frm.fchPostulacion, '%Y-%m-%d') AS 'FechaPostulacion',
+                DATE_FORMAT(frm.fchPostulacion, '%Y') AS 'AñoPostulacion',
+                txtEstado AS 'EstadoProceso',
                 SUBSTRING_INDEX(txtEstado, '-', 1) AS Etapa,
                 IF(bolCerrado = 1, 'SI', 'NO') AS Cerrado,
                 txtCajaCompensacion AS 'Caja de Compensacion',
                 IF(bolIntegracionSocial = 1, 'SI', 'NO') AS IntegracionSocial,
                 IF(bolSecSalud = 1, 'SI', 'NO') AS 'Sec. Salud',
-                IF(bolSecEducacion = 1, 'SI', 'NO') AS 'Sec. Educacion',
-                IF(bolSecMujer = 1, 'SI', 'NO') AS 'Sec. Mujer',
-                IF(bolAltaCon = 1, 'SI', 'NO') AS 'Sec. Alta Consejeria',
+                IF(bolSecEducacion = 1, 'SI', 'NO') AS 'Sec.Educacion',
+                IF(bolSecMujer = 1, 'SI', 'NO') AS 'Sec.Mujer',
+                IF(bolAltaCon = 1, 'SI', 'NO') AS 'Sec.AltaConsejeria',
                 IF(bolIpes = 1, 'SI', 'NO') AS 'secbolIpes',
                 txtOtro,
                 txtSisben AS 'Sisben',
-                valIngresoHogar AS 'Ingresos del Hogar',
-                (valSaldoCuentaAhorro + valSaldoCuentaAhorro2) AS 'Suma Ahorro',
-                valSaldoCuentaAhorro AS 'Saldo Cta de Ahorro 1',
+                valIngresoHogar AS 'IngresosdelHogar',
+                (valSaldoCuentaAhorro + valSaldoCuentaAhorro2) AS 'SumaAhorro',
+                valSaldoCuentaAhorro AS 'SaldoCtadeAhorro1',
                 ban.txtBanco AS 'Banco Cta Ahorro 1',
-                valSaldoCuentaAhorro2 AS 'Saldo Cta Ahorro 2',
-                ban2.txtBanco AS 'Banco Cta Ahorro 2',
-                valSubsidioNacional AS 'Subsidio Nacional',
-                txtEntidadSubsidio AS 'Entidad Subsidio',
-                txtSoporteSubsidioNacional AS 'Soporte Subsidio Nacional',
-                valAporteLote AS 'Aporte Lote',
-                valSaldoCesantias AS 'Valor Cesantias',
+                valSaldoCuentaAhorro2 AS 'SaldoCtaAhorro2',
+                ban2.txtBanco AS 'BancoCtaAhorro2',
+                valSubsidioNacional AS 'SubsidioNacional',
+                txtEntidadSubsidio AS 'EntidadSubsidio',
+                txtSoporteSubsidioNacional AS 'SoporteSubsidioNacional',
+                valAporteLote AS 'AporteLote',
+                valSaldoCesantias AS 'ValorCesantias',
                 txtCesantias AS Cesantias,
-                valCredito AS 'Valor Credito',
-                cred.txtBanco AS 'Banco Credito',
-                valDonacion AS 'Valor Donacion',
-                txtEmpresaDonante AS 'Empresa Donante',
-                txtSoporteDonacion AS 'Soporte Donacion',
-                valPresupuesto AS 'Valor Presupuesto',
-                valAvaluo AS 'Valor Avaluo',
-                valTotal AS 'Valor Total',
+                valCredito AS 'ValorCredito',
+                cred.txtBanco AS 'BancoCredito',
+                valDonacion AS 'ValorDonacion',
+                txtEmpresaDonante AS 'EmpresaDonante',
+                txtSoporteDonacion AS 'SoporteDonacion',
+                valPresupuesto AS 'ValorPresupuesto',
+                valAvaluo AS 'ValorAvaluo',
+                valTotal AS 'ValorTotal',
                 txtModalidad AS 'Modalidad',
                 txtSolucion AS Solucion,
-                txtPlanGobierno AS 'Plan de Gobierno',
-                txtTipoEsquema AS 'Tipo Esquema',
-                valAspiraSubsidio AS 'Aspira Subsidio',
-                txtSoporteSubsidio AS 'Soporte Subsidio',
-                fchVigencia AS 'Fecha Vigencia',
-                valCartaLeasing AS 'Carta Leasing',
-                valComplementario AS 'Valor Complementario',
-                txtNombreProyecto AS 'Nombre Proyecto',
+                txtPlanGobierno AS 'PlandeGobierno',
+                txtTipoEsquema AS 'TipoEsquema',
+                valAspiraSubsidio AS 'AspiraSubsidio',
+                txtSoporteSubsidio AS 'SoporteSubsidio',
+                fchVigencia AS 'FechaVigencia',
+                valCartaLeasing AS 'CartaLeasing',
+                valComplementario AS 'ValorComplementario',
+                txtNombreProyecto AS 'NombreProyecto',
                 seqProyectoHijo,
                 IF(afro.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS 'Hogar Afro ',
+                    'NO') AS 'HogarAfro ',
                 IF(ind.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS 'Hogar Indigena',
+                    'NO') AS 'HogarIndigena',
                 IF(pal.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS 'Hogar Palenquero',
+                    'NO') AS 'HogarPalenquero',
                 IF(raiz.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS 'Hogar Raizal',
+                    'NO') AS 'HogarRaizal',
                 IF(cabF.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS 'Hogar Cabeza Fam',
+                    'NO') AS 'HogarCabezaFam',
                 IF(disc.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS 'Hogar Discapacitado',
+                    'NO') AS 'HogarDiscapacitado',
                 IF(lgtbi.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS 'Hogar LGTBI ',
+                    'NO') AS 'HogarLGTBI ',
                 IF(rom.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS 'Hogar Rom ',
+                    'NO') AS 'HogarRom ',
                 IF(mayor.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS 'Mayor 60 Años',
+                    'NO') AS 'Mayor60Años',
                     IF(edad0.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS '0 - 17', 
+                    'NO') AS '0-17', 
                  IF(edad27.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS '27 - 59',
+                    'NO') AS '27-59',
                     IF(edad14.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS '14 - 28',
+                    'NO') AS '14-28',
                 IF(edad13.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS '0 - 13',
+                    'NO') AS '0-13',
                 IF(adol.seqFormulario IS NOT NULL,
                     'SI',
-                    'NO') AS '14 - 17'
-
+                    'NO') AS '14-17', 
+                    now() As 'fechaejecucion',
+                    '$name'
             FROM
                 t_ciu_ciudadano ciud
                     INNER JOIN
@@ -411,30 +415,37 @@ function reporteGralHogar() {
                 WHERE
          TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) > 13 && TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) < 18) adol ON frm.seqFormulario = adol.seqFormulario ";
 
-    $sql .= " ORDER BY frm.seqFormulario";
-    //echo $sql;
-    // die();
-    $sql1 = "select * from t_frm_estado_proceso";
+    $sql .= " ORDER BY frm.seqFormulario)";
+//    echo $sql;
+//     die();
+
     try {
-        echo "\n\n antes de";
-        $objRes = $aptBd->execute($sql);
-        echo "\n\n despues de";
+        $aptBd->execute($sql);
+        echo "\n\n antes de select";
+        $sql1 = "select * from T_FRM_REPORTE_GRAL where txtNombreReporte = '$name'";
+        try {
+            $objRes = $aptBd->execute($sql1);
+        } catch (Exception $ex1) {
+            echo "\n" . $ex1->getMessage() . "\n \n";
+        }
+        echo "\n\n despues de select";
     } catch (Exception $ex) {
         echo "\n" . $ex->getMessage() . "\n \n";
     }
+
     echo "\n\n antes de funcion ";
-    generarArchivo($objRes, "reporteGralHogar_");
-    echo "\n\n dspues de funcion ";
+    generarArchivo($objRes, $name);
+    echo "\n\n despues de funcion ";
 }
 
-function generarArchivo($objRes, $nombre) {
-    
-    $rutaDestino = "../../recursos/reportes/ciudadano" ;   
+function generarArchivo($objRes, $name) {
+
+    $rutaDestino = "../../recursos/reportes/ciudadano";
 
     if (!file_exists($rutaDestino)) {
         mkdir($rutaDestino, 0777, true);
     }
-    $archivo = fopen($rutaDestino."/".$nombre . date("Ymd_His") . ".xls", "w");
+    $archivo = fopen($rutaDestino . "/" . $name . ".xls", "w");
     echo "\n prueba";
     $txtSeparador = "\t";
     $arrTitulosCampos = array_keys($objRes->fields);
@@ -452,6 +463,7 @@ function generarArchivo($objRes, $nombre) {
         $objRes->MoveNext();
     }
     fclose($archivo);
+    //copy($rutaDestino . "/" . $name . ".xls", "//SDHT-0596-P9/Users/liliana.basto/Documents/compartida");
     //copy($rutaDestino."/".$archivo,"http://192.168.3.16/d:");
     // var_dump($objRes);
 }

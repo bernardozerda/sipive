@@ -588,3 +588,29 @@ function limpiarCampFile() {
     $('#archivo').val("");
 }
 
+function archivo() {
+    $(document).ready(function (e) {
+        e(document).on("change", '.file-field input[type="file"]', function (t) {
+            var n = e(t.target),
+                    i = n.closest(".file-field").find("input.file-path"),
+                    r = n[0].files,
+                    o = [];
+            Array.isArray(r) ? r.forEach(function (e) {
+                return o.push(e.name)
+            }) : Object.keys(r).forEach(function (e) {
+                o.push(r[e].name)
+            }), i.val(o.join(", ")), i.trigger("change")
+        })
+    })
+
+}
+function limpiar() {
+    $('#archivo').attr({value: ''});
+    var fileupload = $('#archivo');
+    fileupload.replaceWith(fileupload.clone(true));
+    //  archivo();
+    $('#archivo').val('');
+    $("#prueba").val('');
+    $("#name").val('');
+
+}

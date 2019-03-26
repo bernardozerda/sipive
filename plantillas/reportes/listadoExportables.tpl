@@ -69,7 +69,7 @@
 {assign var=girosVIPA                       value=$arrExportables.girosVIPA}
 {assign var=reporteTotalCiudadano                       value=$arrExportables.reporteTotalCiudadano}
 {assign var=informeGralSubsidios                       value=$arrExportables.informeGralSubsidios}
-
+{assign var=nameReport                       value=$nameReport}
 
 <form id="listadoExportable" >
     <center>
@@ -940,8 +940,8 @@
                         </td>
                     </tr>
                 {/if}
-                
-                 {if $migracionCEMaDES == 1}
+
+                {if $migracionCEMaDES == 1}
                     <tr {if $x is not even} style="background:#{$backColor};" {/if}>
                         <td class="tituloCampo" align="left" width="60%">Migraci&oacute;n Escrituración a Primera Escrituración</td>
                         <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
@@ -1041,17 +1041,17 @@
                         <td class="tituloCampo" align="left">Plantilla Estudio Titulos Leasing</td>
                         <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
                             <a onclick="someterFormulario(
-                                                'mensajes',
-                                                'listadoExportable',
-                                                './contenidos/reportes/ReportesExportables.php?reporte=estudioTitulosLeasing',
-                                                true,
-                                                false)"
+                                            'mensajes',
+                                            'listadoExportable',
+                                            './contenidos/reportes/ReportesExportables.php?reporte=estudioTitulosLeasing',
+                                            true,
+                                            false)"
                                href="#">Exportable</a>
                         </td>
                     </tr>
                 {/if}
 
-                
+
                 {if $plantillaEscrituracion == 1}
                     <tr {if $x is not even} style="background:#{$backColor};" {/if}>
                         <td class="tituloCampo" align="left">Plantilla Escrituración</td>
@@ -1080,102 +1080,109 @@
                         </td>
                     </tr>
                 {/if}
-                
+
                 {if $reporteInformacionCvp == 1}
-                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                    <td class="tituloCampo" align="left" width="60%">Cruce Verificación CVP</td>
-                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
-                        <a onclick="someterFormulario(
-                                        'mensajes',
-                                        'listadoExportable',
-                                        './contenidos/reportes/ReportesExportables.php?reporte=reporteInformacionCvp',
-                                        true,
-                                        false)"
-                           href="#">Exportable</a>
-                    </td>
-                </tr>
-            {/if}
+                    <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                        <td class="tituloCampo" align="left" width="60%">Cruce Verificación CVP</td>
+                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                            <a onclick="someterFormulario(
+                                            'mensajes',
+                                            'listadoExportable',
+                                            './contenidos/reportes/ReportesExportables.php?reporte=reporteInformacionCvp',
+                                            true,
+                                            false)"
+                               href="#">Exportable</a>
+                        </td>
+                    </tr>
+                {/if}
 
-            {if $encuestasPive == 1}
-                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                    <td class="tituloCampo" align="left" width="60%">Encuestas PIVE (para cruces)</td>
-                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
-                        <a onclick="someterFormulario(
-                                        'mensajes',
-                                        'listadoExportable',
-                                        './contenidos/reportes/ReportesExportables.php?reporte=encuestasPive',
-                                        true,
-                                        false)"
-                           href="#">Exportable</a>
-                    </td>
-                </tr>
-            {/if}
+                {if $encuestasPive == 1}
+                    <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                        <td class="tituloCampo" align="left" width="60%">Encuestas PIVE (para cruces)</td>
+                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                            <a onclick="someterFormulario(
+                                            'mensajes',
+                                            'listadoExportable',
+                                            './contenidos/reportes/ReportesExportables.php?reporte=encuestasPive',
+                                            true,
+                                            false)"
+                               href="#">Exportable</a>
+                        </td>
+                    </tr>
+                {/if}
 
-            {if $inconsistenciasInscripcion == 1}
-                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                    <td class="tituloCampo" align="left" width="60%">Inconsistencias de inscripción</td>
-                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
-                        <a onclick="location.href = './contenidos/reportes/inconsistenciasInscripcion.php?inicio=' + document.getElementById('fchInicio').value + '&final=' + document.getElementById('fchFin').value"
-                           href="#">Exportable</a>
-                    </td>
-                </tr>
-            {/if}
-            
-            {if $soporteResolucionVinculacion == 1}
-                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                    <td class="tituloCampo" align="left" width="60%">Soporte Resoluci&oacute;n Vinculaci&oacute;n</td>
-                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
-                        <a onclick="someterFormulario(
-                                        'mensajes',
-                                        'listadoExportable',
-                                        './contenidos/reportes/ReportesExportables.php?reporte=soporteResolucionVinculacion',
-                                        true,
-                                        false)"
-                           href="#">Exportable</a>
-                    </td>
-                </tr>
-            {/if}
+                {if $inconsistenciasInscripcion == 1}
+                    <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                        <td class="tituloCampo" align="left" width="60%">Inconsistencias de inscripción</td>
+                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                            <a onclick="location.href = './contenidos/reportes/inconsistenciasInscripcion.php?inicio=' + document.getElementById('fchInicio').value + '&final=' + document.getElementById('fchFin').value"
+                               href="#">Exportable</a>
+                        </td>
+                    </tr>
+                {/if}
+
+                {if $soporteResolucionVinculacion == 1}
+                    <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                        <td class="tituloCampo" align="left" width="60%">Soporte Resoluci&oacute;n Vinculaci&oacute;n</td>
+                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                            <a onclick="someterFormulario(
+                                            'mensajes',
+                                            'listadoExportable',
+                                            './contenidos/reportes/ReportesExportables.php?reporte=soporteResolucionVinculacion',
+                                            true,
+                                            false)"
+                               href="#">Exportable</a>
+                        </td>
+                    </tr>
+                {/if}
 
 
-            {if $girosVIPA == 1}
-                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                    <td class="tituloCampo" align="left" width="60%">Hogares VIPA con Giros</td>
-                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
-                        <a onclick="someterFormulario(
-                                        'mensajes',
-                                        'listadoExportable',
-                                        './contenidos/reportes/ReportesExportables.php?reporte=girosVIPA',
-                                        true,
-                                        false)"
-                           href="#">Exportable</a>
-                    </td>
-                </tr>
-            {/if}
-            
-             {if $reporteTotalCiudadano == 1}
-                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                    <td class="tituloCampo" align="left" width="60%">Informe Gral de Hogares</td>
-                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
-                        <a onclick="descargarArchivo('./contenidos/reportes/ReportesExportables.php?reporte=reporteTotalCiudadano');"
-                           href="#">Exportable</a>
-                    </td>
-                </tr>
-            {/if}
-            
-            {if $informeGralSubsidios == 1}
-                <tr {if $x is not even} style="background:#{$backColor};" {/if}>
-                    <td class="tituloCampo" align="left" width="60%">Indicadores Subsidios SSGF</td>
-                    <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
-                        <a onclick="someterFormulario(
-                                        'mensajes',
-                                        'listadoExportable',
-                                        './contenidos/reportes/ReportesExportables.php?reporte=informeGralSubsidios',
-                                        true,
-                                        false);"
-                           href="#">Exportable</a>
-                    </td>
-                </tr>
-            {/if}
+                {if $girosVIPA == 1}
+                    <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                        <td class="tituloCampo" align="left" width="60%">Hogares VIPA con Giros</td>
+                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                            <a onclick="someterFormulario(
+                                            'mensajes',
+                                            'listadoExportable',
+                                            './contenidos/reportes/ReportesExportables.php?reporte=girosVIPA',
+                                            true,
+                                            false)"
+                               href="#">Exportable</a>
+                        </td>
+                    </tr>
+                {/if}
+                {if $reporteTotalCiudadano == 1}
+                    <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                        <td class="tituloCampo" align="left" width="60%">Informe Gral de Hogares</td>
+                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                           <!-- <a href="./contenidos/reportes/listadoReportesGral.php" target="_blank">Ir </a>
+                             <a onclick="descargarArchivo('./contenidos/reportes/ReportesExportables.php?reporte=reporteTotalCiudadano');"
+                                href="#">Exportable</a>-->
+                            <a onclick="someterFormulario(
+                                            'mensajes',
+                                            'listadoExportable',
+                                            './contenidos/reportes/exportarRepGral.php?nombre={$nameReport}',
+                                            true,
+                                            false);"
+                               href="#">Exportable</a>
+                        </td>
+                    </tr>
+                {/if}
+
+                {if $informeGralSubsidios == 1}
+                    <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                        <td class="tituloCampo" align="left" width="60%">Indicadores Subsidios SSGF</td>
+                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                            <a onclick="someterFormulario(
+                                            'mensajes',
+                                            'listadoExportable',
+                                            './contenidos/reportes/ReportesExportables.php?reporte=informeGralSubsidios',
+                                            true,
+                                            false);"
+                               href="#">Exportable</a>
+                        </td>
+                    </tr>
+                {/if}
 
 
         </center>

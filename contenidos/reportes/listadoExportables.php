@@ -245,7 +245,7 @@ $arrGrupoGestionAdministrador[] = 15;
 $arrGrupoGestionAdministrador[] = 5;
 $arrGrupoGestionAdministrador[] = 10;
 $arrGrupoGestionAdministrador[] = 12;
-
+$claReporte = new Reportes;
 // Grupos de gestion
 $sql = "
 		SELECT 
@@ -264,7 +264,10 @@ while ($objRes->fields) {
     $objRes->MoveNext();
 }
 
+ $nameReport = $claReporte->nombreUltimoReporte();
+
 $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
 $claSmarty->assign("arrExportables", $arrExportables);
+$claSmarty->assign("nameReport", $nameReport);
 $claSmarty->display("reportes/listadoExportables.tpl");
 ?>

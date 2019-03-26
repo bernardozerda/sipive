@@ -1,11 +1,13 @@
 <?php
 
+ini_set('memory_limit', '-1');
 include "../../contenidos/desembolso/plantillaEstudioTitulos.php";
 include "../../contenidos/reportes/reporteEscrituracion.php";
 include "../../contenidos/reportes/informeProyectoActo.php";
 include "../../contenidos/reportes/reporteInformacionCvp.php";
 include "../../contenidos/reportes/reporteGeneralSubsidios.php";
-ini_set('memory_limit', '1024M');
+
+//ini_set('memory_limit', '1024M');
 
 class Reportes {
 
@@ -5753,6 +5755,60 @@ WHERE
         }
         //   var_dump($array);        die();
         return $array;
+    }
+
+    function obtenerlistaReportesGral($name) {
+
+        global $aptBd;
+        $sql = "select * from T_FRM_REPORTE_GRAL ";
+        if ($name != "") {
+            $sql .= " WHERE txtNombreReporte = '" . $name . "'";
+        } else {
+            $sql = "select  fechaEjecucion, txtNombreReporte  from T_FRM_REPORTE_GRAL ";
+            $sql .= " GROUP BY txtNombreReporte  ";
+        }
+        $sql .= " ORDER BY txtNombreReporte desc";
+        //echo "<p>" . $sql . "</p>";
+        //   die();
+        $objRes = $aptBd->execute($sql);
+        if ($name == '') {
+            $datos = Array();
+            while ($objRes->fields) {
+                $datos[] = $objRes->fields;
+                $objRes->MoveNext();
+            }
+            return $datos;
+        } else {
+            return $objRes;
+        }
+    }
+
+    function obtenerReportesGral($sql) {
+        global $aptBd;
+        try {
+            //  echo "<p>".$sql."</p>";
+            //  echo "<p>&nbsp;</p>";
+            $objRes = $aptBd->execute($sql);
+            //  echo "<br><br>*****" . $aptBd->ErrorMsg() . " rows " . $objRes->numRows() . " affected" . $aptBd->Affected_Rows();
+            if ($aptBd->ErrorMsg() == "" && $aptBd->Affected_Rows() > 0) {//              
+                return true;
+            } else {
+                // echo "<p> No se termino el proceso debido al error " . $aptBd->ErrorMsg() . "</p>";
+                return false;
+            }
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+            return false;
+        }
+    }
+
+    function nombreUltimoReporte() {
+        global $aptBd;
+
+        $sql = "select txtNombreReporte from t_frm_reporte_gral where fechaEjecucion = (select max(fechaEjecucion) from t_frm_reporte_gral) group by txtNombreReporte";
+        $objRes = $aptBd->execute($sql);
+        $name = $objRes->fields['txtNombreReporte'];
+        return $name;
     }
 
 }

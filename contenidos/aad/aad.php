@@ -46,4 +46,6 @@ $claSmarty->assign( "arrTipoActo" , $arrTipoActo );
 $claSmarty->assign( "arrActos"    , $arrActos    );
 $claSmarty->display( "aad/aad.tpl" );
 
+echo "Prueba aad 1";
+
 ?>

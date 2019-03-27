@@ -265,6 +265,8 @@ class aadTipo
             $this->arrErrores[] = "No se pudo cargar los tipos de actos administrativos";
         }
 
+        echo "Prueba aad 3";
+
         return $arrTipoActo;
     }
 

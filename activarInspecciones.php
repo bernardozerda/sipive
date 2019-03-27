@@ -3,7 +3,7 @@
 include("./recursos/archivos/verificarSesion.php");
 include("./recursos/archivos/lecturaConfiguracion.php");
 include("./recursos/archivos/coneccionBaseDatos.php");
-
+//prueba liliana
 $sql = "
     select count(*) as cuenta
     from t_cor_usuario usu

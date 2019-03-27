@@ -9,7 +9,7 @@
  */
 // Esta variable de usa para ubicar los archivos a incluir
 $txtPrefijoRuta = "./";
-
+// comentario con conflicto
 include( "./recursos/archivos/verificarSesion.php" ); // Verifica si hay sesion    
 include( "./recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );

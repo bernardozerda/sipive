@@ -1603,14 +1603,17 @@ class aad
                     break;
                 case "Fecha de Vigencia":
 
-                    $fchCorrecta = null;
-                    $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
-                    if($numTimeStamp > 0 and $arrRegistro[2] != ""){
-                        $fchCorrecta = date("Y-m-d",$numTimeStamp);
+                    if(! esFechaValida($arrRegistro[2])) {
+                        $fchCorrecta = null;
+                        $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
+                        if ($numTimeStamp > 0 and $arrRegistro[2] != "") {
+                            $fchCorrecta = date("Y-m-d", $numTimeStamp);
+                        }
+                        $arrRegistro[2] = $fchCorrecta;
                     }
 
                     $claFormulario->fchVigencia = (esFechaValida($claFormulario->fchVigencia))? $claFormulario->fchVigencia : null;
-                    if($fchCorrecta != $claFormulario->fchVigencia){
+                    if($arrRegistro[2] != $claFormulario->fchVigencia){
                         $bolError = true;
                     }
 
@@ -1781,14 +1784,19 @@ class aad
                     }
                     break;
                 case "Fecha de Vigencia":
-                    $fchCorrecta = null;
-                    $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
-                    if($numTimeStamp > 0){
-                        $fchCorrecta = date("Y-m-d",$numTimeStamp);
+                    if(! esFechaValida($arrRegistro[2])) {
+                        $fchCorrecta = null;
+                        $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
+                        if ($numTimeStamp > 0) {
+                            $fchCorrecta = date("Y-m-d", $numTimeStamp);
+                        }
+                        $arrRegistro[3] = $fchCorrecta;
                     }
-                    if($fchCorrecta == null){
+
+                    if($arrRegistro[3] == null){
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor correcto '" . $arrRegistro[1] . "' no es válido use el formato aaaa-mm-dd";
                     }
+
                     break;
             }
 

@@ -1507,7 +1507,7 @@ class aad
                         $bolError = true;
                     }
                     // si esta relacionado con una unidad no se puede modificar el valor del subsidio
-                    if (intval($claFormulario->seqUnidadProyecto) > 0) {
+                    if (intval($claFormulario->seqUnidadProyecto) > 1) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor correcto '" . $arrRegistro[1] . "' no puede cambiar el valor del subsidio si el hogar esta relacionado con unidades";
                     }
                     break;
@@ -1602,26 +1602,28 @@ class aad
                     }
                     break;
                 case "Fecha de Vigencia":
-                    if($arrRegistro[2] != "" and (! esFechaValida($arrRegistro[2]))){
-                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor incorrecto '" . $arrRegistro[1] . "' no es válido use el formato aaaa-mm-dd";
-                    }else{
 
-                        $claFormulario->fchVigencia = (esFechaValida($claFormulario->fchVigencia))? $claFormulario->fchVigencia : null;
-                        $arrRegistro[2]             = (esFechaValida($arrRegistro[2])            )? $arrRegistro[2]             : null;
-
-                        if($arrRegistro[2] != $claFormulario->fchVigencia){
-                            $bolError = true;
-                        }
-                        $seqEtapa = array_shift(obtenerDatosTabla(
-                            "t_frm_estado_proceso",
-                            array("seqEstadoProceso","seqEtapa"),
-                            "seqEstadoProceso",
-                            "seqEstadoProceso = " . $claFormulario->seqEstadoProceso
-                        ));
-                        if($seqEtapa != 4 and $seqEtapa != 5){
-                            $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor incorrecto '" . $arrRegistro[1] . "' el hogar no se encuentra en la etapa de asignación o desembolso";
-                        }
+                    $fchCorrecta = null;
+                    $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
+                    if($numTimeStamp > 0 and $arrRegistro[2] == ""){
+                        $fchCorrecta = date("Y-m-d",$numTimeStamp);
                     }
+
+                    $claFormulario->fchVigencia = (esFechaValida($claFormulario->fchVigencia))? $claFormulario->fchVigencia : null;
+                    if($fchCorrecta != $claFormulario->fchVigencia){
+                        $bolError = true;
+                    }
+
+                    $seqEtapa = array_shift(obtenerDatosTabla(
+                        "t_frm_estado_proceso",
+                        array("seqEstadoProceso","seqEtapa"),
+                        "seqEstadoProceso",
+                        "seqEstadoProceso = " . $claFormulario->seqEstadoProceso
+                    ));
+                    if($seqEtapa != 4 and $seqEtapa != 5){
+                        $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor incorrecto '" . $arrRegistro[1] . "' el hogar no se encuentra en la etapa de asignación o desembolso";
+                    }
+
                     break;
                 default:
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[1] . " No es un valor válido para el Campo";

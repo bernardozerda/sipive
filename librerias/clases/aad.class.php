@@ -2768,7 +2768,7 @@ class aad
         foreach ($arrArchivo as $arrRegistro) {
 
             // si es resolucion de vinculacion no aplica cambios
-            if ($arrRegistro[2] != "" and $arrRegistro[3] != "") {
+            if ($arrRegistro[2] == "" and $arrRegistro[3] == "") {
 
                 // obtiene el formulario que corresponde a la cedula
                 $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
@@ -2781,11 +2781,13 @@ class aad
                     "seqFormulario = " . $seqFormulario
                 ));
 
+                $arrRegistro[1] = ($arrRegistro[1] != "")? "'" . $arrRegistro[1] . "'" : "NULL";
+
                 // realiza la modificacion del estado (nuevo)
                 $sql = "
                     update t_frm_formulario set
                         seqEstadoProceso = 15,
-                        fchVigencia = '" . $arrRegistro[1] . "',
+                        fchVigencia = " . $arrRegistro[1] . ",
                         fchUltimaActualizacion = NOW()
                     where seqFormulario = " . $seqFormulario . "
                 ";

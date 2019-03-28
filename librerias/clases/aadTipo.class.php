@@ -343,7 +343,8 @@ class aadTipo
                     $objHoja = $objPHPExcel->getSheet(0);
 
                     // obtiene las dimensiones del archivo para la obtencion del contenido por rangos
-                    $numFilas = $objHoja->getHighestRow() + 1;
+//                    $numFilas = $objHoja->getHighestRow() + 1;
+                    $numFilas = count($this->arrFormatoArchivo);
                     $numColumnas = PHPExcel_Cell::columnIndexFromString( $objHoja->getHighestColumn() ) - 1;
 
                     // obtiene los datos del rango obtenido

@@ -1605,7 +1605,7 @@ class aad
 
                     $fchCorrecta = null;
                     $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
-                    if($numTimeStamp > 0 and $arrRegistro[2] == ""){
+                    if($numTimeStamp > 0 and $arrRegistro[2] != ""){
                         $fchCorrecta = date("Y-m-d",$numTimeStamp);
                     }
 

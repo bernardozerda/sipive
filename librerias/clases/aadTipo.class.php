@@ -161,7 +161,12 @@ class aadTipo
                             $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "La fecha de la resolución sobre la cual se ha puesto un recurso de reposición.\nFormato aaaa-mm-dd";
                             $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Estado";
                             $objTipoActo->arrFormatoArchivo[3]['tipo'] = "texto";
+
                             $arrEstados = array( 52 , 41 , 46 , 8 , 54 , 7 , 21 );
+                            foreach(array_keys(estadosProceso(0,5)) as $seqEstadoProceso){
+                                $arrEstados[] = $seqEstadoProceso;
+                            }
+
                             foreach($arrEstados as $seqEstadoProceso){
                                 $objTipoActo->arrFormatoArchivo[3]['rango'][] = array_shift(estadosProceso($seqEstadoProceso));
                             }

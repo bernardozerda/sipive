@@ -65,6 +65,7 @@ foreach ($claTipoActo->arrFormatoArchivo as $numColumna => $arrTitulo) {
 // si la celda tiene un rango de valores coloca una lista desplegable
 // para limitar los valores
 for ($i = 2; $i <= $numFilasFormatear; $i++) {
+    $bolImprimirRango = true;
     foreach ($claTipoActo->arrFormatoArchivo as $numColumna => $arrTitulo) {
         switch ($arrTitulo['tipo']) {
             case "numero":
@@ -77,6 +78,14 @@ for ($i = 2; $i <= $numFilasFormatear; $i++) {
 
         if (isset($arrTitulo['rango'])) {
 
+            if($bolImprimirRango) {
+                foreach ($arrTitulo['rango'] as $numItemTitulo => $txtEstado) {
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(25, $numItemTitulo, $txtEstado, flase);
+                }
+                $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setVisible(false);
+                $bolImprimirRango = false;
+            }
+
             // pone un combo en la celda con los valores válidos y restringe la inclusion de valores difrentes
             $objValidacion = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($numColumna, $i)->getDataValidation();
             $objValidacion->setType(PHPExcel_Cell_DataValidation::TYPE_LIST);
@@ -88,7 +97,7 @@ for ($i = 2; $i <= $numFilasFormatear; $i++) {
             $objValidacion->setErrorTitle("Error de datos");
             $objValidacion->setError("El valor digitado no es válido");
             $objValidacion->setPromptTitle("Los valores válidos son:");
-            $objValidacion->setFormula1('"' . implode(",", $arrTitulo['rango']) . '"');
+            $objValidacion->setFormula1('$Z$1:$Z$' . $numItemTitulo );
         }
 
         $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($numColumna)->setAutoSize(true);

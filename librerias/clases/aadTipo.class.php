@@ -170,6 +170,7 @@ class aadTipo
                             foreach($arrEstados as $seqEstadoProceso){
                                 $objTipoActo->arrFormatoArchivo[3]['rango'][] = array_shift(estadosProceso($seqEstadoProceso));
                             }
+
                             break;
                         case 5: // Resolucion de No Asignado
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento";

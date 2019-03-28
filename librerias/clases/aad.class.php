@@ -1383,7 +1383,7 @@ class aad
             // el formato esta peviamente validado en $claTipoActo->validarDatos
             if ($arrRegistro[2] == "" and $arrRegistro[3] == "") {
                 if ($arrRegistro[1] == "") {
-                    $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": Debe indicar la fecha de vigencia del subsidio";
+//                    $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": Debe indicar la fecha de vigencia del subsidio";
                 }
             } else {
                 if ($arrRegistro[1] != "") {

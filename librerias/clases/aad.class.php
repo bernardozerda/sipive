@@ -2134,6 +2134,8 @@ class aad
 
         foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
+            pr($arrRegistro);
+
             $seqFormulario = $claCiudadano->formularioVinculado($arrRegistro[0]);
             $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[1],$arrRegistro[2]);
 

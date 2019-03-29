@@ -2134,8 +2134,6 @@ class aad
 
         foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
-            pr($arrRegistro);
-
             $seqFormulario = $claCiudadano->formularioVinculado($arrRegistro[0]);
             $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[1],$arrRegistro[2]);
 
@@ -2945,12 +2943,22 @@ class aad
                     break;
                 case "Fecha de Vigencia":
                     $txtCampo = "fchVigencia";
+
                     $fchCorrecta = null;
                     $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
                     if($numTimeStamp > 0){
                         $fchCorrecta = date("Y-m-d",$numTimeStamp);
                     }
+                    $arrRegistro[3] = $fchCorrecta;
                     $claFormulario->fchVigencia = $fchCorrecta;
+
+                    $fchCorrecta = null;
+                    $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
+                    if($numTimeStamp > 0){
+                        $fchCorrecta = date("Y-m-d",$numTimeStamp);
+                    }
+                    $arrRegistro[2] = $fchCorrecta;
+
                     break;
             }
 
@@ -3061,7 +3069,7 @@ class aad
      * @param $arrArchivo
      */
     private function aplicarEfectosReposicion($arrArchivo){
-
+        global $aptBd;
         $arrHogares = array();
         foreach($arrArchivo as $arrRegistro){
 
@@ -3079,13 +3087,54 @@ class aad
                 )
             );
 
+            $seqEtapa = array_shift(
+                obtenerDatosTabla(
+                    "t_frm_estado_proceso",
+                    array("seqEstadoProceso","seqEtapa"),
+                    "seqEstadoProceso",
+                    "seqEstadoProceso = $seqEstadoProceso"
+                )
+            );
+
+            // Solo si es etapa desembolso significa reversar cambios
+            if($seqEtapa == 5){
+
+                $sql = "
+                    select txtCambios
+                    from t_seg_seguimiento
+                    where seqFormulario = $seqFormulario
+                    and txtComentario like 'vinculado a la%" . $arrRegistro[1] . " del " . $arrRegistro[2] . "%'                
+                ";
+                $objRes = $aptBd->execute($sql);
+                $arrCambios = mb_split("<br>",$objRes->fields['txtCambios']);
+                foreach($arrCambios as $txtCambio){
+                    $arrLinea = mb_split(",",trim($txtCambio));
+                    if(isset($arrLinea[1])) {
+                        $txtCampo = trim(mb_ereg_replace("&nbsp;","",$arrLinea[0]));
+                        if($txtCampo != "seqEstadoProceso") {
+                            $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
+                            $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
+                            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = $txtCampo;
+                            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = trim(mb_ereg_replace(" Valor Nuevo:", "", $arrLinea[2]));
+                            $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = trim(mb_ereg_replace("Valor Anterior:", "", $arrLinea[1]));
+                        }
+                    }
+
+                }
+
+            }
+
             $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
             $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqEstadoProceso";
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrHogares[$seqFormulario]->seqEstadoProceso;
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = $seqEstadoProceso;
 
-            $arrHogares[$seqFormulario]->seqEstadoProceso = $seqEstadoProceso;
+            foreach($this->arrCambiosAplicados[$seqFormulario]['cambios'] as $numPosicion => $arrCambios){
+                $txtCampo = $arrCambios['campo'];
+                $txtValor = $arrCambios['nuevo'];
+                $arrHogares[$seqFormulario]->$txtCampo = $txtValor;
+            }
 
         }
 
@@ -3753,6 +3802,24 @@ class aad
         $claCiudadano = new Ciudadano();
         $arrHogares = array();
         foreach ($arrArchivo as $numLinea => $arrRegistro) {
+
+            if($arrRegistro[1] == "Fecha de Vigencia"){
+
+                $fchCorrecta = null;
+                $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
+                if ($numTimeStamp > 0 and $arrRegistro[2] != "") {
+                    $fchCorrecta = date("Y-m-d", $numTimeStamp);
+                }
+                $arrRegistro[2] = $fchCorrecta;
+
+                $fchCorrecta = null;
+                $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
+                if ($numTimeStamp > 0 and $arrRegistro[3] != "") {
+                    $fchCorrecta = date("Y-m-d", $numTimeStamp);
+                }
+                $arrRegistro[3] = $fchCorrecta;
+
+            }
 
             $arrRegistro[0] = (mb_strtolower(trim($arrRegistro[1])) == "documento") ? $arrRegistro[3] : $arrRegistro[0];
 

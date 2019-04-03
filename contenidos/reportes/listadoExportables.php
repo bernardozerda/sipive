@@ -226,6 +226,9 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["reporteTotalCiudadano"] = 1;
             $arrExportables["informeGralSubsidios"] = 1;
             break;
+        case 21: // Planeación y Politica
+             $arrExportables["informeGralSubsidios"] = 1;
+            break;
         case 34: // Cruce Información Cvp
             $arrExportables["reporteInformacionCvp"] = 1;
             break;

@@ -3892,7 +3892,7 @@ class Reportes {
             $arrReporte[] = $objRes->fields;
             $objRes->MoveNext();
         }
-        $this->exportarArchivo("Reporte Ficha Técnica", $arrTitulos, $arrReporte);
+        $this->exportarArchivo("Reporte Giro Constructor", $arrTitulos, $arrReporte);
         //$this->exportarArchivo("Reporte Ficha Técnica", $arrTitulos, $arrReporte);
     }
 

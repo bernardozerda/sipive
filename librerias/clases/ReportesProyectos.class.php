@@ -123,6 +123,10 @@ class Reportes {
         $datosFila[] = "Analisis programa SDV Marzo 2009-2010";
         $datosFila[] = $this->textoFormLinks("ReporteAnalisisPrograma", "./descargas/Resumen SUBSIDIOS DE SDV.xlsx");
 
+        $datosFila = &$datos[];
+        $datosFila[] = "Reporte General";
+        $datosFila[] = $this->textoFormLinks("reporteGiroAconstructor");
+
         $arrFiltros = &$this->arrFiltros;
 
         $arrFiltros = array();
@@ -3279,31 +3283,30 @@ class Reportes {
 
             // balance fiducia
             $arrReporte[$seqProyecto]['balanceFiducia'] = 0;
-            if(doubleval($arrReporte[$seqProyecto]['fiducia']) != 0){
+            if (doubleval($arrReporte[$seqProyecto]['fiducia']) != 0) {
                 $arrReporte[$seqProyecto]['balanceFiducia'] = doubleval(
-                    $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['fiducia']
+                        $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['fiducia']
                 );
             }
 
             // balance constructor
             $arrReporte[$seqProyecto]['balanceConstructor'] = 0;
-            if(doubleval($arrReporte[$seqProyecto]['constructor']) != 0) {
+            if (doubleval($arrReporte[$seqProyecto]['constructor']) != 0) {
                 $arrReporte[$seqProyecto]['balanceConstructor'] = doubleval(
-                    $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['constructor']
+                        $arrReporte[$seqProyecto]['actual'] - $arrReporte[$seqProyecto]['constructor']
                 );
             }
 
             // Pendiente reintegros
-            if(doubleval($arrReporte[$seqProyecto]['balanceFiducia']) <= doubleval($arrReporte[$seqProyecto]['balanceConstructor'])){
+            if (doubleval($arrReporte[$seqProyecto]['balanceFiducia']) <= doubleval($arrReporte[$seqProyecto]['balanceConstructor'])) {
                 $arrReporte[$seqProyecto]['pendienteReintegro'] = doubleval(
-                    $arrReporte[$seqProyecto]['reintegro'] + $arrReporte[$seqProyecto]['balanceFiducia']
+                        $arrReporte[$seqProyecto]['reintegro'] + $arrReporte[$seqProyecto]['balanceFiducia']
                 );
-            }else{
+            } else {
                 $arrReporte[$seqProyecto]['pendienteReintegro'] = doubleval(
-                    $arrReporte[$seqProyecto]['reintegro'] + $arrReporte[$seqProyecto]['balanceConstructor']
+                        $arrReporte[$seqProyecto]['reintegro'] + $arrReporte[$seqProyecto]['balanceConstructor']
                 );
             }
-
         }
 
         $arrTitulos[0]['nombre'] = "NOMBRE DEL PROYECTO";
@@ -3417,6 +3420,7 @@ class Reportes {
             }
             $numFila++;
         }
+
 
         // *************************** ESTILOS POR DEFECTO DEL ARCHIVO DE EXCEL ********************************************* //
         // fuentes para el archivo
@@ -3853,6 +3857,43 @@ class Reportes {
         $arrTitulos[32]['formato'] = 'Valor Desembolsado a constuctor';
 
         $this->exportarArchivo("Reporte Ficha Técnica", $arrTitulos, $arrReporte);
+    }
+
+    public function reporteGiroAconstructor() {
+        global $aptBd;
+
+        $sql = "
+                SELECT seqGiroConstructor, fchGiro,  
+                case when seqProyectoPadre is not null then seqProyectoPadre else seqProyecto end as 'Cod. Proyecto',
+                case when seqProyectoPadre is not null then(select txtNombreProyecto from t_pry_proyecto pry2  where seqProyecto = pry.seqProyectoPadre) 
+                else pry.txtNombreProyecto end as Proyecto,
+                sum(valGiro) 
+                FROM  t_pry_aad_giro_constructor cons
+                left join t_pry_aad_giro_constructor_detalle using(seqGiroConstructor)
+                left join t_pry_proyecto pry using(seqProyecto)
+                group by seqGiroConstructor
+                order by pry.seqProyecto, fchGiro;
+            ";
+        $objRes = $aptBd->execute($sql);
+        $arrTitulos[0]['nombre'] = 'Identificador Giro';
+        $arrTitulos[1]['nombre'] = 'Fecha Giro';
+        $arrTitulos[2]['nombre'] = 'Cod. Proyecto';
+        $arrTitulos[3]['nombre'] = 'Proyecto';
+        $arrTitulos[4]['nombre'] = 'Valor';
+
+        $arrTitulos[0]['formato'] = 'numero';
+        $arrTitulos[1]['formato'] = 'fecha';
+        $arrTitulos[2]['formato'] = 'numero';
+        $arrTitulos[3]['formato'] = 'texto';
+        $arrTitulos[4]['formato'] = 'moneda';
+
+        while ($objRes->fields) {
+            //  $arrReporte[] = $objRes->fields;
+            $arrReporte[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        $this->exportarArchivo("Reporte Ficha Técnica", $arrTitulos, $arrReporte);
+        //$this->exportarArchivo("Reporte Ficha Técnica", $arrTitulos, $arrReporte);
     }
 
 }

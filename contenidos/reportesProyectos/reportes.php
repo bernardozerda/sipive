@@ -29,6 +29,11 @@ $arrReporte['unidadesAsignadas']['titulo'] = "Unidades Asignadas";
 $arrReporte['unidadesAsignadas']['descripcion'] = "Información de las unidades por cada proyecto asignadas a los hogares";
 $arrReporte['unidadesAsignadas']['url'] = "./contenidos/otros/analisisUnidadesAsignadas/analisisUnidadesAsignadas.php";
 
+$arrReporte['giroConstructor']['funcion'] = "reporteGiroAconstructor";
+$arrReporte['giroConstructor']['titulo'] = "Exportable Informe Giro a Constructor";
+$arrReporte['giroConstructor']['descripcion'] = "Obtiene la información consignada en los giros asignados a constructor";
+$arrReporte['giroConstructor']['url'] = null;
+
 if($_GET['reporte'] != "") {
     $txtClave = $_GET['reporte'];
     $txtReporte = $arrReporte[$txtClave]['funcion'];

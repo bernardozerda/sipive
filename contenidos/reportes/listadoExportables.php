@@ -50,7 +50,7 @@ $arrExportables["reporteInscritosSinActualizar"] = 0; // Reporte de Inscritos si
 $arrExportables["reporteDesembolsos"] = 0; // Reporte Desembolsos. Tramites Administrativos
 $arrExportables["reporteTecnico"] = 0; // Reporte Tecnico
 $arrExportables["pasivosExigibles"] = 0; // Reporte de pasivos exigibles
-$arrExportables["actaVisita"] = 1; // Reporte para generar constancia de visitas
+$arrExportables["actaVisita"] = 0; // Reporte para generar constancia de visitas
 $arrExportables["casaMano"] = 0; // Registros de casa en mano
 $arrExportables["permisos"] = 0; // Registros de casa en mano
 $arrExportables["seguimientoDesembolsos"] = 0; // Registros que tienen giros realizados en desembolso
@@ -224,10 +224,10 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["soporteResolucionVinculacion"] = 1;
             $arrExportables["girosVIPA"] = 1;
             $arrExportables["reporteTotalCiudadano"] = 1;
-            $arrExportables["informeGralSubsidios"] = 1;
+            //$arrExportables["informeGralSubsidios"] = 1;
             break;
-        case 21: // Planeación y Politica
-             $arrExportables["informeGralSubsidios"] = 1;
+		 case 21: // Planeación y Politica
+		 $arrExportables["reporteTotalCiudadano"] = 1;
             break;
         case 34: // Cruce Información Cvp
             $arrExportables["reporteInformacionCvp"] = 1;

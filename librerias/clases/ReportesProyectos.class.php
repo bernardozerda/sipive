@@ -3893,7 +3893,7 @@ class Reportes {
             $objRes->MoveNext();
         }
         $this->exportarArchivo("Reporte Giro Constructor", $arrTitulos, $arrReporte);
-        //$this->exportarArchivo("Reporte Ficha Técnica", $arrTitulos, $arrReporte);
+       
     }
 
 }

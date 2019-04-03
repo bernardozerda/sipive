@@ -470,7 +470,7 @@
                     <!-- SERVICIO DE GAS -->
                     <tr bgcolor="{cycle name=c3 values="#EAEAEA,#FFFFFF"}">
                         <td><b>Servicio de Gas</b></td>
-                        <td align="right">{$objTecnico->numContadorGas|number_format:0:',':'.'}</td>
+                        <td align="right">{$objTecnico->numContadorGas}</td>
                         <td style="padding-left:10px;">{$objTecnico->txtEstadoConexionGas|ucwords}</td>
                         <td style="padding-left:10px;">{$objTecnico->txtDescripcionGas}</td>
                     </tr>

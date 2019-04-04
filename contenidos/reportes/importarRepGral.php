@@ -13,12 +13,11 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Reportes.class.php" );
 $claReporte = new Reportes();
-///var_dump($_FILES['archivo']); die();
-//echo  "***** ".  var_dump($_FILES);die();
+
 $tipo = $_FILES['archivo']['type'];
 $tamanio = $_FILES['archivo']['size'];
 $archivotmp = $_FILES['archivo']['tmp_name'];
-//cargamos el archivo
+//Se Carga el archivo
 $lineas = file($archivotmp);
 
 $i = 0;
@@ -33,12 +32,6 @@ $valDoc = "";
 ?>
 <body>
     <div id="contenidos" class="container">
-        <!-- <div class="well well-large">
-             <img src="../../recursos/imagenes/cabezote_ws.png" />
-         </div>
-        <div class="hero-unit-header" style="background-color: #289bae; color: white; text-align: center">
-            <strong>SISTEMA DE INFORMACI&Oacute;N DEL SUBSIDIO DISTRITAL DE VIVIENDA</strong>
-        </div>-->
         <center>
             <div id="mensajes">
             </div>
@@ -73,19 +66,26 @@ $valDoc = "";
                                     $sql .= " and DocumentoCiudadano = " . $value . " and  txtNombreReporte = '" . $_POST['name'] . "'";
                                 }
                                 // echo "<br> ".$key." -> ".$value."<br>";
-                                if (count(explode("/", $value)) == 3) {//
-                                    $value = str_replace('/', '-', $value);
-                                    $value = date('Y-m-d', strtotime($value));
-                                    //$insert .= "'" . $value . "',";
+
+                                if ($key == 13 || $key == 37 || $key == 40 || $key == 42 || $key == 82 || $key == 101) {//
+                                    if (count(explode("/", $value)) == 3) {//
+                                        $value = str_replace('/', '-', $value);
+                                        $value = date('Y-m-d', strtotime($value));
+                                    }
+                                    $insert .= "'" . $value . "',";
+                                    // echo "<br> " . $key . " -> " . $value . "<br>";
+                                } else {
+                                    //   echo "<br> " . $key . " -> " . $value . "<br>";
+                                    $insert .= is_numeric($value) ? $value . "," : "'" . utf8_encode(trim($value)) . "',";
                                 }
-                                $insert .= is_numeric($value) ? $value . "," : "'" . utf8_encode(trim($value)) . "',";
+                                // $insert .= is_numeric($value) ? $value . "," : "'" . utf8_encode(trim($value)) . "',";
                                 if ($key == 102) {
                                     $insert = substr_replace($insert, '', -1, 1);
                                     $insert .= "),";
                                 }
                             }
                             $sqlInsert .= $insert;
-                            // echo $sql."<br><br>";
+                            //  echo  $sqlInsert."<br><br>";
                             $validar = $claReporte->obtenerReportesGral($sql);
                             // echo "<br>Validar - > " . $validar . "<br>";
                             if (!$validar) {

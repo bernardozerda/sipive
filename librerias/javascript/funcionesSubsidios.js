@@ -605,12 +605,19 @@ function archivo() {
 
 }
 function limpiar() {
+
     $('#archivo').attr({value: ''});
     var fileupload = $('#archivo');
     fileupload.replaceWith(fileupload.clone(true));
+    $('#archivo2').attr({value: ''});
+    var fileupload2 = $('#archivo2');
+    fileupload2.replaceWith(fileupload2.clone(true));
     //  archivo();
     $('#archivo').val('');
+    $('#archivo2').val('');
     $("#prueba").val('');
-    $("#name").val('');
+    $("#prueba2").val('');
+    // $("#name").val('');
+    //$("#nombre").val('');
 
 }

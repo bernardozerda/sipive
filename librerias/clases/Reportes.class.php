@@ -5757,18 +5757,22 @@ WHERE
         return $array;
     }
 
-    function obtenerlistaReportesGral($name) {
+    function obtenerlistaReportesGral($name, $arrFormularios) {
 
         global $aptBd;
         $sql = "select * from T_FRM_REPORTE_GRAL ";
         if ($name != "") {
             $sql .= " WHERE txtNombreReporte = '" . $name . "'";
+            
+            if($arrFormularios != NULL && count($arrFormularios) > 0 && $arrFormularios != ''){
+                $sql .= " AND IdHogar in (" . implode(",", $arrFormularios) . ")";
+            }
         } else {
             $sql = "select  fechaEjecucion, txtNombreReporte  from T_FRM_REPORTE_GRAL ";
             $sql .= " GROUP BY txtNombreReporte  ";
         }
         $sql .= " ORDER BY txtNombreReporte desc";
-        //echo "<p>" . $sql . "</p>";
+       // echo "<p>" . $sql . "</p>";
         //   die();
         $objRes = $aptBd->execute($sql);
         if ($name == '') {
@@ -5809,6 +5813,28 @@ WHERE
         $objRes = $aptBd->execute($sql);
         $name = $objRes->fields['txtNombreReporte'];
         return $name;
+    }
+
+    public function validarFormRepGral($arrformularios, $reporte) {
+        global $aptBd;
+        $formularios = "";
+        $sql = "select IdHogar from t_frm_reporte_gral where IdHogar in (" . implode(",", $arrformularios) . ") and  txtNombreReporte = '" . $reporte . "' group by IdHogar" ;
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields['IdHogar'];
+            $objRes->MoveNext();
+        }
+        $resultado = Array();
+        if(count($datos) != count($arrformularios)){
+            if(count($datos) > count($arrformularios)){
+                $resultado = array_diff($datos, $arrformularios);
+            }else{
+                 $resultado = array_diff($arrformularios, $datos );
+            }
+        }
+        //pr($resultado);
+        return $resultado;
     }
 
 }

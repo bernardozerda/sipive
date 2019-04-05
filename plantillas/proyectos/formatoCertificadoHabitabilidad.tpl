@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
- <meta charset="utf-8">
+        <meta charset="utf-8">
         <!-- Estilos CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
               integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -384,8 +384,9 @@
                             <b>ALCALDIA MAYOR DE BOGOTA</b><br>
                             SECRETARIA DEL HABITAT<br>
                             <b>Certificado de Existencia y Habitabilidad</b><br>
-                            <span style="{$txtFuente10}">Fecha de Emisión: {$txtFecha}</span><br>
-                            <span style="{$txtFuente10}">Fecha de visita: {$txtFechaVisita}</span>
+                            <span style="{$txtFuente10}">Fecha de Visita: {$txtFechaVisita}</span><br>
+                            <span style="{$txtFuente10}">Fecha de Expedición: {$txtFechaExpedicion}</span><br>
+                            <span style="{$txtFuente10}">Fecha de Impresion: {$txtFecha}</span><br>
                         </td>
                         <td width="150px" align="center" valign="middle" style="padding-top: 20px;">
                             <img src="../../recursos/imagenes/bta_positiva_carta.jpg">
@@ -683,5 +684,5 @@
         </div>
 
     </body>
-   
+
 </html>

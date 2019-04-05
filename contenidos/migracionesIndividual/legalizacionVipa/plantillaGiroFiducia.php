@@ -15,7 +15,7 @@ include( $txtPrefijoRuta . "contenidos/migracionesIndividual/legalizacionVipa/co
 
 // consulta de hogares en el esquema complementariedad VIPA
 if($_GET['proyecto'] != "") {
-
+   
     $sql = "
         select 
             frm.seqFormulario as Identificador, 

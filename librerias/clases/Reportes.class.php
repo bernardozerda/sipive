@@ -4806,22 +4806,24 @@ WHERE
                   fac.seqFormulario,
                   fac.seqFormularioActo,
                   hvi.numActo,
-                  hvi.fchActo
+                  hvi.fchActo,
+                  hvi.seqTipoActo
               from t_aad_hogares_vinculados hvi
               inner join (
                 select 
                     fac.seqFormulario,
+                    hvi.seqTipoActo,
                     max(fac.seqFormularioActo) seqFormularioActo
                 from t_aad_hogares_vinculados hvi
                 inner join t_aad_formulario_acto fac on hvi.seqFormularioActo = fac.seqFormularioActo
-                where hvi.seqTipoActo = 1
+                where hvi.seqTipoActo = 1 and seqEstadoProceso in(15,62,17,19,27,22,23,25,26,27,30,32,33,28,24,31,29,40)
                 group by fac.seqFormulario
               ) fac on hvi.seqFormularioActo = fac.seqFormularioActo
             ) fac on frm.seqFormulario = fac.seqFormulario
             where frm.seqPlanGobierno = 3
             and frm.seqModalidad = 12
-            and frm.seqTipoEsquema in (12,18)       
-            
+            and frm.seqTipoEsquema in (12,18)   
+            and fac.seqTipoActo= 1         
         ";
         $arrReporte = array();
         $objRes = $aptBd->execute($sql);
@@ -4839,13 +4841,14 @@ WHERE
             $arrReporte[$seqFormulario]['Acto Administrativo'] = $objRes->fields['numActo'];
             $arrReporte[$seqFormulario]['Fecha Acto Administrativo'] = $objRes->fields['fchActo'];
             $arrReporte[$seqFormulario]['Valor Subsidio'] = $objRes->fields['valAspiraSubsidio'];
-
+          
             if (doubleval($objRes->fields['valSolicitado']) != 0) {
                 $arrReporte[$seqFormulario]['RP1'] = $objRes->fields['numRegistroPresupuestal1'];
                 $arrReporte[$seqFormulario]['RP1 Fecha'] = $objRes->fields['fchRegistroPresupuestal1'];
                 $arrReporte[$seqFormulario]['RP2'] = $objRes->fields['numRegistroPresupuestal2'];
                 $arrReporte[$seqFormulario]['RP2 Fecha'] = $objRes->fields['fchRegistroPresupuestal2'];
                 $arrReporte[$seqFormulario]['Girado a Fiducia'] += $objRes->fields['valSolicitado'];
+                 // echo "<br> ******".$arrReporte[$seqFormulario]['Girado a Fiducia'];
 
                 if (doubleval($arrReporte[$seqFormulario]['Valor Subsidio']) != 0) {
                     $arrReporte[$seqFormulario]['% Girado Fiducia'] = round((floatval($arrReporte[$seqFormulario]['Girado a Fiducia']) * 100) / floatval($arrReporte[$seqFormulario]['Valor Subsidio']), 3);
@@ -4889,8 +4892,7 @@ WHERE
         $arrTitulos[] = "Girado a Constructor";
         $arrTitulos[] = "% Girado Constructor";
 
-        $this->obtenerReportesGeneral($arrReporte, "GirosVIPA", $arrTitulos, true);
-
+         $this->obtenerReportesGeneral($arrReporte, "GirosVIPA", $arrTitulos, true);
 //        $sql = "
 //            select 
 //                fac.seqFormulario, 
@@ -5763,8 +5765,8 @@ WHERE
         $sql = "select * from T_FRM_REPORTE_GRAL ";
         if ($name != "") {
             $sql .= " WHERE txtNombreReporte = '" . $name . "'";
-            
-            if($arrFormularios != NULL && count($arrFormularios) > 0 && $arrFormularios != ''){
+
+            if ($arrFormularios != NULL && count($arrFormularios) > 0 && $arrFormularios != '') {
                 $sql .= " AND IdHogar in (" . implode(",", $arrFormularios) . ")";
             }
         } else {
@@ -5772,7 +5774,7 @@ WHERE
             $sql .= " GROUP BY txtNombreReporte  ";
         }
         $sql .= " ORDER BY txtNombreReporte desc";
-       // echo "<p>" . $sql . "</p>";
+        // echo "<p>" . $sql . "</p>";
         //   die();
         $objRes = $aptBd->execute($sql);
         if ($name == '') {
@@ -5818,7 +5820,7 @@ WHERE
     public function validarFormRepGral($arrformularios, $reporte) {
         global $aptBd;
         $formularios = "";
-        $sql = "select IdHogar from t_frm_reporte_gral where IdHogar in (" . implode(",", $arrformularios) . ") and  txtNombreReporte = '" . $reporte . "' group by IdHogar" ;
+        $sql = "select IdHogar from t_frm_reporte_gral where IdHogar in (" . implode(",", $arrformularios) . ") and  txtNombreReporte = '" . $reporte . "' group by IdHogar";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -5826,11 +5828,11 @@ WHERE
             $objRes->MoveNext();
         }
         $resultado = Array();
-        if(count($datos) != count($arrformularios)){
-            if(count($datos) > count($arrformularios)){
+        if (count($datos) != count($arrformularios)) {
+            if (count($datos) > count($arrformularios)) {
                 $resultado = array_diff($datos, $arrformularios);
-            }else{
-                 $resultado = array_diff($arrformularios, $datos );
+            } else {
+                $resultado = array_diff($arrformularios, $datos);
             }
         }
         //pr($resultado);

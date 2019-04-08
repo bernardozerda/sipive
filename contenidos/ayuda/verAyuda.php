@@ -21,6 +21,13 @@ $claMenu     = new Menu();
 $objProyecto = array_shift($claProyecto->cargarProyecto($_SESSION['seqProyecto']));
 $arrArbolMenu = $claMenu->arbolMenu($_SESSION['seqProyecto']);
 $objMenu = array_shift($claMenu->cargarMenu($_SESSION['seqProyecto'],$_GET['menu']));
+$objMenu->txtAyuda=str_replace('src="http://sdv.habitatbogota.gov.co/', 'src=""', $objMenu->txtAyuda);	
+$objMenu->txtAyuda=str_replace('src="http://sdv.habitatbogota.gov.co/sipive/', '../../recursos/', $objMenu->txtAyuda);
+$objMenu->txtAyuda=str_replace('recursos/', '../../recursos/', $objMenu->txtAyuda);
+$objMenu->txtAyuda=str_replace('src="recursos/', 'src="../../recursos/', $objMenu->txtAyuda);
+//pr($objMenu->txtAyuda);
+
+	
 
 $claSmarty->assign("arrArbolMenu", $arrArbolMenu);
 $claSmarty->assign("claMenu", $claMenu);

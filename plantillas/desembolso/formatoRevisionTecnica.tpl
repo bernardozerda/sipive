@@ -61,7 +61,7 @@
                         <!-- TITULO DE LA CARTA DE IMPRESION -->
                         <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border: 1px solid #999999;">
                             <tr>
-                                <td width="150px" height="80px" align="center" valign="middle">
+                                <td width="150px" height="70px" align="center" valign="middle">
                                     <img src="../../recursos/imagenes/escudo.png" />
                                 </td>
                                 <td align="center" valign="middle" style="padding:20px; {$txtFuente12}">
@@ -306,7 +306,7 @@
                                     <td>&nbsp;</td>
                                 </tr>
 
-                            </table><br />
+                            </table>
 
                             <!-- CONDICIONES FISICAS Y ESTRUCTURALES -->
                             <table cellspacing="0" cellpadding="1" border="0" width="100%" style="{$txtFuente10}">
@@ -480,9 +480,9 @@
                                 </tr>
                             </table>
 
-                            <!-- FIN PAGINA 1 -->
+                            <!-- FIN PAGINA 1 <p class="salto">&nbsp;</p>-->
 
-                            <p class="salto">&nbsp;</p>
+                            <p style="break-after: auto">&nbsp;</p>
 
                             <!-- INICIO PAGINA 2 -->
 
@@ -734,8 +734,9 @@
                                         </td>
                                         <td align="center" valign="middle" style="padding:20px; {$txtFuente12}">
                                             <b>Certificado de Existencia y Habitabilidad</b><br />
-                                            <span style="{$txtFuente10}">Fecha de Emisión: {$txtFecha}</span><br />
-                                            <span style="{$txtFuente10}">Fecha de visita: {$txtFechaVisita}</span>
+                                            <span style="{$txtFuente10}">Fecha de Visita: {$txtFechaVisita}</span><br/>
+                                            <span style="{$txtFuente10}">Fecha de Expedición: {$txtFechaExpedicion}</span><br/>
+                                            <span style="{$txtFuente10}">Fecha de impresión: {$txtFecha}</span><br/>
                                         </td>
                                         <td width="150px" align="center" valign="middle">
                                             <img src="../../recursos/imagenes/bta_positiva_carta.jpg" />

@@ -3932,11 +3932,22 @@ ORDER BY aad.fchActo DESC;
                 WHERE ( tdo.seqTipoDocumento = 1 OR tdo.seqTipoDocumento = 2 OR tdo.seqTipoDocumento = 5 ) 
                   AND hog.seqParentesco = 1  
                   AND frm.seqFormulario IN (" . $this->seqFormularios . ")
-                GROUP BY frm.seqFormulario 
+                  AND hvi.fchActo = (SELECT 
+                                            fchActo
+                                        FROM
+                                            t_aad_hogares_vinculados
+                                        WHERE
+                                            seqFormularioActo = (SELECT 
+                                                    MAX(seqFormularioActo)
+                                                FROM
+                                                    t_aad_formulario_acto
+                                                WHERE
+                                                    seqFormulario = frm.seqFormulario)) 
+                                                    GROUP BY frm.seqFormulario 
                 ORDER BY frm.seqFormulario
             ";
             try {
-//                echo $sql; die();
+                //echo $sql; die();
                 $objRes = $aptBd->execute($sql);
                 $this->obtenerReportesGeneral($objRes, "InformacionSolucion");
             } catch (Exception $objError) {
@@ -4841,14 +4852,14 @@ WHERE
             $arrReporte[$seqFormulario]['Acto Administrativo'] = $objRes->fields['numActo'];
             $arrReporte[$seqFormulario]['Fecha Acto Administrativo'] = $objRes->fields['fchActo'];
             $arrReporte[$seqFormulario]['Valor Subsidio'] = $objRes->fields['valAspiraSubsidio'];
-          
+
             if (doubleval($objRes->fields['valSolicitado']) != 0) {
                 $arrReporte[$seqFormulario]['RP1'] = $objRes->fields['numRegistroPresupuestal1'];
                 $arrReporte[$seqFormulario]['RP1 Fecha'] = $objRes->fields['fchRegistroPresupuestal1'];
                 $arrReporte[$seqFormulario]['RP2'] = $objRes->fields['numRegistroPresupuestal2'];
                 $arrReporte[$seqFormulario]['RP2 Fecha'] = $objRes->fields['fchRegistroPresupuestal2'];
                 $arrReporte[$seqFormulario]['Girado a Fiducia'] += $objRes->fields['valSolicitado'];
-                 // echo "<br> ******".$arrReporte[$seqFormulario]['Girado a Fiducia'];
+                // echo "<br> ******".$arrReporte[$seqFormulario]['Girado a Fiducia'];
 
                 if (doubleval($arrReporte[$seqFormulario]['Valor Subsidio']) != 0) {
                     $arrReporte[$seqFormulario]['% Girado Fiducia'] = round((floatval($arrReporte[$seqFormulario]['Girado a Fiducia']) * 100) / floatval($arrReporte[$seqFormulario]['Valor Subsidio']), 3);
@@ -4892,7 +4903,7 @@ WHERE
         $arrTitulos[] = "Girado a Constructor";
         $arrTitulos[] = "% Girado Constructor";
 
-         $this->obtenerReportesGeneral($arrReporte, "GirosVIPA", $arrTitulos, true);
+        $this->obtenerReportesGeneral($arrReporte, "GirosVIPA", $arrTitulos, true);
 //        $sql = "
 //            select 
 //                fac.seqFormulario, 

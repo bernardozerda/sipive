@@ -12,7 +12,7 @@
  * - CLICK DERECHO
  **********************************************************************************************************************/
 
-function activarInspecciones(){
+function activarInspecciones() {
     var bolRespuesta = 0;
     $.ajax({
         url: "./activarInspecciones.php",
@@ -30,11 +30,11 @@ function activarInspecciones(){
 }
 
 var ventana = $(window);
-ventana.on('keydown',keyListener);
-ventana.on('contextmenu',contextMenu);
+ventana.on('keydown', keyListener);
+ventana.on('contextmenu', contextMenu);
 
-function contextMenu(e){
-    if(activarInspecciones() == 0) {
+function contextMenu(e) {
+    if (activarInspecciones() == 0) {
         e.preventDefault();
     }
     e.returnValue = false;
@@ -42,13 +42,13 @@ function contextMenu(e){
 
 function keyListener(e) {
     if (e.keyCode == 123) {
-        if(activarInspecciones() == 0) {
+        if (activarInspecciones() == 0) {
             e.preventDefault();
         }
         e.returnValue = false;
     }
     if (e.ctrlKey && e.keyCode == 85) {
-        if(activarInspecciones() == 0) {
+        if (activarInspecciones() == 0) {
             e.preventDefault();
         }
         e.returnValue = false;
@@ -87,7 +87,7 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
 
     verificarSesion();
 
-    if(document.getElementById(txtDivDestino) == null){
+    if (document.getElementById(txtDivDestino) == null) {
         return false;
     }
 
@@ -110,7 +110,7 @@ function cargarContenido(txtDivDestino, txtArchivoPhp, txtParametros, bolCargand
                     // si hubo pantalla de bloque al usuario, se oculta
                     if (bolCargando == 1) {
                         objCargando.hide();
-                        if( typeof tablas != "undefined"){
+                        if (typeof tablas != "undefined") {
                             tablas();
                         }
                     }
@@ -881,6 +881,7 @@ function buscarCedula(txtNombreArchivo) {
 
 function agregarMiembroHogar() {
 
+
     var objPlanGobierno = document.getElementById("seqPlanGobierno");
 
     var arrAbreviacionesTipoDocumento = new Array();
@@ -1088,10 +1089,13 @@ function agregarMiembroHogar() {
     }
 
     // Valida que la fecha sea correcta
-    if (!esFechaValida(objFchNacimiento)) {
-        objFchNacimiento.focus()
-        return false;
+    if (!$('input[name=bolSoloSeguimiento]').prop('checked')) {
+        if (!esFechaValida(objFchNacimiento)) {
+            objFchNacimiento.focus()
+            return false;
+        }
     }
+
 
     // Debe tener ingresos mensuales
     if (objIngresos.value == "") {
@@ -1272,10 +1276,10 @@ function agregarMiembroHogar() {
 
     // Ciudadano
     var txtNombreCiudadano =
-        ucwords(objNombre1.value.toString().toLowerCase() + " " +
-            objNombre2.value.toString().toLowerCase() + " " +
-            objApellido1.value.toString().toLowerCase() + " " +
-            objApellido2.value.toString().toLowerCase());
+            ucwords(objNombre1.value.toString().toLowerCase() + " " +
+                    objNombre2.value.toString().toLowerCase() + " " +
+                    objApellido1.value.toString().toLowerCase() + " " +
+                    objApellido2.value.toString().toLowerCase());
 
     // Abreviacion del tipo de documento
     var seqTipoDocumento = objTpoDocumento.options[objTpoDocumento.selectedIndex].value;
@@ -1621,12 +1625,12 @@ function agregarMiembroHogar() {
             bolDesactivarModalidad = false;
         }
         $("#seqTipoEsquema").append(
-            $('<option>', {
-                value: 11,
-                text: "Opción Retorno / Reubicación",
-                disabled: bolDesactivarModalidad
-            })
-        );
+                $('<option>', {
+                    value: 11,
+                    text: "Opción Retorno / Reubicación",
+                    disabled: bolDesactivarModalidad
+                })
+                );
     }
 
     $("#soporteCedula").hide();
@@ -2063,9 +2067,9 @@ function modificarMiembroHogar(numDocumento) {
 
         if (arrVariables[ i ].name != "") {
 
-            if(seqPlanGobierno == 3) {
+            if (seqPlanGobierno == 3) {
 
-                if(arrVariables[ i ].id == numDocumentoSinPuntos + "-txtTipoSoporte"){
+                if (arrVariables[ i ].id == numDocumentoSinPuntos + "-txtTipoSoporte") {
 
                     $("#soporteCedula").hide();
                     $("#soportePartida").hide();
@@ -2077,38 +2081,38 @@ function modificarMiembroHogar(numDocumento) {
                     $("#consecutivoPartida").val("");
                     $("#parroquiaPartida").val("");
                     $("#ciudadPartida").val(0);
-                    $("#tipoSoporte").val( $( "#" + numDocumentoSinPuntos + "-txtTipoSoporte").val() );
+                    $("#tipoSoporte").val($("#" + numDocumentoSinPuntos + "-txtTipoSoporte").val());
 
-                    if(arrVariables[ i ].value == "registroCivil"){
+                    if (arrVariables[ i ].value == "registroCivil") {
                         $("#soporteCedula").show();
-                        $("#entidadDocumento").val( $( "#" + numDocumentoSinPuntos + "-txtEntidadDocumento").val() );
-                        $("#indicativoSerial").val( $( "#" + numDocumentoSinPuntos + "-numIndicativoSerial").val() );
-                        $("#ciudadDocumento").val( $( "#" + numDocumentoSinPuntos + "-seqCiudadDocumento").val() );
+                        $("#entidadDocumento").val($("#" + numDocumentoSinPuntos + "-txtEntidadDocumento").val());
+                        $("#indicativoSerial").val($("#" + numDocumentoSinPuntos + "-numIndicativoSerial").val());
+                        $("#ciudadDocumento").val($("#" + numDocumentoSinPuntos + "-seqCiudadDocumento").val());
                         $("#documentoNotaria").hide();
-                        if($( "#" + numDocumentoSinPuntos + "-txtEntidadDocumento").val() == "Notaria"){
+                        if ($("#" + numDocumentoSinPuntos + "-txtEntidadDocumento").val() == "Notaria") {
                             $("#documentoNotaria").show();
 
                         }
-                        $("#notariaDocumento").val( $( "#" + numDocumentoSinPuntos + "-numNotariaDocumento").val() );
+                        $("#notariaDocumento").val($("#" + numDocumentoSinPuntos + "-numNotariaDocumento").val());
                         $("#consecutivoPartida").val("");
                         $("#parroquiaPartida").val("");
                         $("#ciudadPartida").val(0);
                     }
 
-                    if(arrVariables[ i ].value == "partidaBautismo"){
+                    if (arrVariables[ i ].value == "partidaBautismo") {
                         $("#soportePartida").show();
                         $("#entidadDocumento").val("");
                         $("#indicativoSerial").val("");
                         $("#notariaDocumento").val("");
                         $("#ciudadDocumento").val(0);
-                        $("#consecutivoPartida").val($( "#" + numDocumentoSinPuntos + "-numConsecutivoPartida").val());
-                        $("#parroquiaPartida").val($( "#" + numDocumentoSinPuntos + "-txtParroquiaPartida").val());
-                        $("#ciudadPartida").val($( "#" + numDocumentoSinPuntos + "-seqCiudadPartida").val());
+                        $("#consecutivoPartida").val($("#" + numDocumentoSinPuntos + "-numConsecutivoPartida").val());
+                        $("#parroquiaPartida").val($("#" + numDocumentoSinPuntos + "-txtParroquiaPartida").val());
+                        $("#ciudadPartida").val($("#" + numDocumentoSinPuntos + "-seqCiudadPartida").val());
                     }
 
                 }
 
-            }else{
+            } else {
                 $("#soporteCedula").hide();
                 $("#soprotePartida").hide();
                 $("#expedicion").val("");
@@ -2129,8 +2133,8 @@ function modificarMiembroHogar(numDocumento) {
                 }
 
                 $("#expedicion").val("");
-                if(arrVariables[ i ].value == 1){
-                    $("#expedicion").val( $( "#" + numDocumentoSinPuntos + "-fchExpedicion").val() );
+                if (arrVariables[ i ].value == 1) {
+                    $("#expedicion").val($("#" + numDocumentoSinPuntos + "-fchExpedicion").val());
                 }
 
             }
@@ -2223,7 +2227,7 @@ function modificarMiembroHogar(numDocumento) {
                 $("#notariaUnion").val("");
                 $("#ciudadUnion").val(0);
 
-                if(seqPlanGobierno == 3) {
+                if (seqPlanGobierno == 3) {
 
                     if (arrVariables[i].value == 6) {
                         $("#soporteEstadoCivilCasado").show();
@@ -2235,7 +2239,7 @@ function modificarMiembroHogar(numDocumento) {
                     if (arrVariables[i].value == 8) {
                         $("#soporteEstadoCivilCSCDL").show();
 
-                        if($("#" + numDocumentoSinPuntos + "-txtEntidadCSCDL").val() == "Notaria"){
+                        if ($("#" + numDocumentoSinPuntos + "-txtEntidadCSCDL").val() == "Notaria") {
                             $("#notaria-CSCDL").show();
                         }
 
@@ -2257,7 +2261,7 @@ function modificarMiembroHogar(numDocumento) {
                         $("#certificacionUnion").val($("#" + numDocumentoSinPuntos + "-txtCertificacionUnion").val());
                         $("#consecutivoUnion").val($("#" + numDocumentoSinPuntos + "-numConsecutivoUnion").val());
 
-                        if($("#" + numDocumentoSinPuntos + "-txtEntidadUnion").val() == "Notaria"){
+                        if ($("#" + numDocumentoSinPuntos + "-txtEntidadUnion").val() == "Notaria") {
                             $("#notaria-Union").show();
                         }
 
@@ -2420,11 +2424,11 @@ function asignarValorSubsidioUnidadProyecto(objUnidadProyecto) {
     var objValSubsidio = document.getElementById("tdValSubsidio");
     if (objValSubsidio != null) {
         cargarContenido(
-            "tdValSubsidio",
-            "./contenidos/subsidios/valorSubsidioUnidadProyecto.php",
-            "unidadProyecto=" + seqUnidadProyecto,
-            false
-        );
+                "tdValSubsidio",
+                "./contenidos/subsidios/valorSubsidioUnidadProyecto.php",
+                "unidadProyecto=" + seqUnidadProyecto,
+                false
+                );
     }
 }
 
@@ -2434,11 +2438,11 @@ function asignarSoporteCambioSubsidioUnidadProyecto(objUnidadProyecto) {
     var objTxtSoporteCambio = document.getElementById("tdTxtSoporteCambio");
     if (objTxtSoporteCambio != null) {
         cargarContenido(
-            "tdTxtSoporteCambio",
-            "./contenidos/subsidios/valorSoporteCambioSubsidio.php",
-            "unidadProyecto=" + seqUnidadProyecto,
-            false
-        );
+                "tdTxtSoporteCambio",
+                "./contenidos/subsidios/valorSoporteCambioSubsidio.php",
+                "unidadProyecto=" + seqUnidadProyecto,
+                false
+                );
     }
 }
 
@@ -4868,32 +4872,32 @@ function imprimir() {
 //     setTimeout("mostrarObjDireccionOculto( '" + txtInputDireccion + "', '" + txtDivDireccionOculto + "')", 100);
 // }
 
-function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
+function recogerDireccion(txtInputDireccion, txtDivDireccionOculto) {
 
     // obtiene el id oculto
     var objModal = $('#' + txtDivDireccionOculto);
 
     // inicializa el modal
     objModal.addClass("modal fade");
-    objModal.attr("tabindex" , "-1");
-    objModal.attr("role" , "dialog");
-    objModal.attr("aria-labelledby" , "myModalLabel");
+    objModal.attr("tabindex", "-1");
+    objModal.attr("role", "dialog");
+    objModal.attr("aria-labelledby", "myModalLabel");
     objModal.empty();
 
     // divs visibles del popup
     var objModalOverlay = $('<div class="modal-dialog" role="document"></div>');
     var objModalContent = $('<div class="modal-content" style="width: 850px;"></div>');
-    var objModalHeader  = $('<div class="modal-header" style="font-size: 20px;">Introduzca la Dirección</div>');
-    var objModalBody    = $('<div class="modal-body"></div>');
-    var objModalFooter  = $('<div class="modal-footer"></div>');
-    var objBotonSalvar  = $('<button type="button" class="btn btn-primary btn-sm" onclick="validacionDireccion(' + txtInputDireccion + ', ' + txtDivDireccionOculto + ')">Aceptar</button>');
+    var objModalHeader = $('<div class="modal-header" style="font-size: 20px;">Introduzca la Dirección</div>');
+    var objModalBody = $('<div class="modal-body"></div>');
+    var objModalFooter = $('<div class="modal-footer"></div>');
+    var objBotonSalvar = $('<button type="button" class="btn btn-primary btn-sm" onclick="validacionDireccion(' + txtInputDireccion + ', ' + txtDivDireccionOculto + ')">Aceptar</button>');
 
     // contenido dinamico del body (form de direccion)
     $.ajax({
         url: './contenidos/subsidios/obtenerDireccionPlano.php',
         type: 'post',
         data: 'txtDireccion=' + $("#" + txtInputDireccion).val() + '&txtExtraDiv=' + txtInputDireccion,
-        success: function(res){
+        success: function (res) {
             objModalBody.html(res);
         },
         fail: function () {
@@ -4903,7 +4907,7 @@ function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
 
     // anidando divs
     objModalFooter.append(objBotonSalvar);
-    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
+    objModalContent.append(objModalHeader, objModalBody, objModalFooter);
     objModalOverlay.append(objModalContent);
     objModal.append(objModalOverlay);
 
@@ -4912,7 +4916,7 @@ function recogerDireccion(txtInputDireccion, txtDivDireccionOculto){
 
 }
 
-function validacionDireccion(txtInputDireccion, txtDivDireccionOculto){
+function validacionDireccion(txtInputDireccion, txtDivDireccionOculto) {
 
     // obtiene el id oculto
     var objModal = $(txtDivDireccionOculto);
@@ -4921,17 +4925,17 @@ function validacionDireccion(txtInputDireccion, txtDivDireccionOculto){
     var bolAlerta = false;
 
     // validacion de la direccion
-    if($("#radTipoDireccion").is(":checked")){
-        if($("#divDireccionGenerada_" + txtInputDireccion.id ).html().substring(0,1) == "-"){
+    if ($("#radTipoDireccion").is(":checked")) {
+        if ($("#divDireccionGenerada_" + txtInputDireccion.id).html().substring(0, 1) == "-") {
             alert("Si no dispone de la información de la dirección urbana completa, seleccione la opción 'Dirección Rural'");
             bolAlerta = true;
-        }else{
+        } else {
             if (
-                $('#txtDireccionTipoVia').val()   == "---" ||
-                $('#txtNumeroVia').val()          == ""    ||
-                $('#txtDireccionNumeroVia').val() == ""    ||
-                $('#txtNumeroAdicional').val()    == ""
-            ) {
+                    $('#txtDireccionTipoVia').val() == "---" ||
+                    $('#txtNumeroVia').val() == "" ||
+                    $('#txtDireccionNumeroVia').val() == "" ||
+                    $('#txtNumeroAdicional').val() == ""
+                    ) {
                 alert("Complete la dirección");
                 bolAlerta = true;
             }
@@ -4939,8 +4943,8 @@ function validacionDireccion(txtInputDireccion, txtDivDireccionOculto){
     }
 
     // oculta el popup
-    if(bolAlerta == false) {
-        $(txtInputDireccion).val( $("#divDireccionGenerada_" + txtInputDireccion.id ).html() );
+    if (bolAlerta == false) {
+        $(txtInputDireccion).val($("#divDireccionGenerada_" + txtInputDireccion.id).html());
         objModal.modal('hide');
     }
 
@@ -8802,11 +8806,11 @@ function escondeDatosSegunTipoDesembolso() {
 
 ///////////////////////////////////////// FIN FUNCIONES MODULO DE PROYECTOS
 
-function abrirAyuda(){
+function abrirAyuda() {
     window.open(
-        "./contenidos/ayuda/verAyuda.php?menu=" + $("#seqMenuMigaDePan").val(),
-        "_blank"
-    );
+            "./contenidos/ayuda/verAyuda.php?menu=" + $("#seqMenuMigaDePan").val(),
+            "_blank"
+            );
 }
 
 function popUpAyuda() {
@@ -10812,7 +10816,7 @@ function mostrarToolTip() {
 
     var objInformal = YAHOO.util.Dom.get("bolInformal");
     var numInformal = -1;
-    if(objInformal != null) {
+    if (objInformal != null) {
         numInformal = objInformal.options[objInformal.selectedIndex].value;
     }
 
@@ -11281,11 +11285,11 @@ function enrutarAAD(objSelect) {
         //         );
 
         cargarContenido(
-            'informacion',
-            './contenidos/actosAdministrativos/informacionActo.php',
-            'seqTipoActo=' + objSelect.options[ objSelect.selectedIndex ].value,
-            true
-        );
+                'informacion',
+                './contenidos/actosAdministrativos/informacionActo.php',
+                'seqTipoActo=' + objSelect.options[ objSelect.selectedIndex ].value,
+                true
+                );
 
     } else {
         // usa el modulo actual
@@ -11469,7 +11473,7 @@ var listadoAadProyectos = function () {
     objInput.className = "inputLogin";
 
     objPaginador = YAHOO.util.Dom.get("listadoAadPry_paginate");
-    if(objPaginador != null) {
+    if (objPaginador != null) {
         objPaginador.style.textAlign = "center";
     }
 
@@ -11489,26 +11493,26 @@ var listadoAadProyectos2 = function () {
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "select",
-        "listadoAadPry2_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "listadoAadPry2_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "input",
-        "listadoAadPry2_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "listadoAadPry2_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
 
     objPaginador = YAHOO.util.Dom.get("listadoAadPry2_paginate");
-    if(objPaginador != null) {
+    if (objPaginador != null) {
         objPaginador.style.textAlign = "center";
     }
 
@@ -11759,7 +11763,7 @@ var fileAction = function (name) {
 }
 
 
-function listenerFile(div, name) {    
+function listenerFile(div, name) {
     YAHOO.util.Event.onContentReady(
             div,
             fileAction,
@@ -11784,32 +11788,32 @@ YAHOO.util.Event.onContentReady(
         'nameEstado'
         );
 
-function verErroresFNV(seqCargue){
+function verErroresFNV(seqCargue) {
 
     // obtiene el id oculto
     var objModal = $('#verErroresFNV');
 
     // inicializa el modal
     objModal.addClass("modal fade");
-    objModal.attr("tabindex" , "-1");
-    objModal.attr("role" , "dialog");
-    objModal.attr("aria-labelledby" , "myModalLabel");
+    objModal.attr("tabindex", "-1");
+    objModal.attr("role", "dialog");
+    objModal.attr("aria-labelledby", "myModalLabel");
     objModal.empty();
 
     // divs visibles del popup
     var objModalOverlay = $('<div class="modal-dialog" role="document"></div>');
     var objModalContent = $('<div class="modal-content" style="width: 850px;"></div>');
-    var objModalHeader  = $('<div class="modal-header" style="font-size: 20px;">Visor de errores</div>');
-    var objModalBody    = $('<div class="modal-body"></div>');
-    var objModalFooter  = $('<div class="modal-footer"></div>');
-    var objBotonSalvar  = $('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#verErroresFNV">Cerrar</button>');
+    var objModalHeader = $('<div class="modal-header" style="font-size: 20px;">Visor de errores</div>');
+    var objModalBody = $('<div class="modal-body"></div>');
+    var objModalFooter = $('<div class="modal-footer"></div>');
+    var objBotonSalvar = $('<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#verErroresFNV">Cerrar</button>');
 
     // contenido dinamico del body (form de direccion)
     $.ajax({
         url: './contenidos/inscripcionFonvivienda/verErrores.php',
         type: 'post',
         data: 'seqCargue=' + seqCargue,
-        success: function(res){
+        success: function (res) {
             objModalBody.html(res);
         },
         fail: function () {
@@ -11819,7 +11823,7 @@ function verErroresFNV(seqCargue){
 
     // anidando divs
     objModalFooter.append(objBotonSalvar);
-    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
+    objModalContent.append(objModalHeader, objModalBody, objModalFooter);
     objModalOverlay.append(objModalContent);
     objModal.append(objModalOverlay);
 
@@ -11838,20 +11842,20 @@ var listadoErroresFNV = function () {
     });
 
     objSelect = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "select",
-        "listadoAadPry_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "select",
+            "listadoAadPry_wrapper"
+            );
 
     objInput = YAHOO.util.Dom.getElementBy(
-        function () {
-            return true;
-        },
-        "input",
-        "listadoAadPry_wrapper"
-    );
+            function () {
+                return true;
+            },
+            "input",
+            "listadoAadPry_wrapper"
+            );
 
     objSelect.className = "inputLogin";
     objInput.className = "inputLogin";
@@ -11865,12 +11869,12 @@ var listadoErroresFNV = function () {
 YAHOO.util.Event.onContentReady("listadoErroresFNV", listadoErroresFNV);
 
 
-function varProgresoFNV(seqCargue){
+function varProgresoFNV(seqCargue) {
     $.ajax({
         url: './contenidos/inscripcionFonvivienda/barraProgreso.php',
         type: 'post',
         data: 'seqCargue=' + seqCargue,
-        success: function(res){
+        success: function (res) {
             $("#progreso").html(res);
         },
         fail: function () {
@@ -11879,7 +11883,7 @@ function varProgresoFNV(seqCargue){
     });
 }
 
-var fncProgresoFNV = function(){
+var fncProgresoFNV = function () {
     seqCargue = $("#progresoFNV").html();
     setTimeout("varProgresoFNV(" + seqCargue + ")", 2000);
     eliminarObjeto("progresoFNV");
@@ -11887,24 +11891,24 @@ var fncProgresoFNV = function(){
 }
 YAHOO.util.Event.onContentReady("progresoFNV", fncProgresoFNV);
 
-function verCoincidencias(seqCargue, numHogar, numDocumento, txtNombre){
+function verCoincidencias(seqCargue, numHogar, numDocumento, txtNombre) {
 
     // obtiene el id oculto
     var objModal = $('#verCoindidencias');
 
     // inicializa el modal
     objModal.addClass("modal fade");
-    objModal.attr("tabindex" , "-1");
-    objModal.attr("role" , "dialog");
-    objModal.attr("aria-labelledby" , "myModalLabel");
+    objModal.attr("tabindex", "-1");
+    objModal.attr("role", "dialog");
+    objModal.attr("aria-labelledby", "myModalLabel");
     objModal.empty();
 
     // divs visibles del popup
-    var objModalOverlay     = $('<div class="modal-dialog" role="document"></div>');
-    var objModalContent     = $('<div class="modal-content" style="width: 970px;"></div>');
-    var objModalHeader      = $('<div class="modal-header" style="font-size: 20px;"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>Nombres coincidentes para <br><h6>(' + numDocumento + ') ' + txtNombre + '</h6></div>');
-    var objModalBody        = $('<div class="modal-body"></div>');
-    var objModalFooter      = $('<div class="modal-footer"></div>');
+    var objModalOverlay = $('<div class="modal-dialog" role="document"></div>');
+    var objModalContent = $('<div class="modal-content" style="width: 970px;"></div>');
+    var objModalHeader = $('<div class="modal-header" style="font-size: 20px;"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>Nombres coincidentes para <br><h6>(' + numDocumento + ') ' + txtNombre + '</h6></div>');
+    var objModalBody = $('<div class="modal-body"></div>');
+    var objModalFooter = $('<div class="modal-footer"></div>');
     var objBotonSeleccionar = $('<button type="button" class="btn btn-primary btn-sm" onclick="someterCoincidenciasFNV()">Seleccionar</button>');
 
     // contenido dinamico del body (form de direccion)
@@ -11912,7 +11916,7 @@ function verCoincidencias(seqCargue, numHogar, numDocumento, txtNombre){
         url: './contenidos/inscripcionFonvivienda/coincidencias.php',
         type: 'post',
         data: 'seqCargue=' + seqCargue + '&numHogar=' + numHogar + '&numDocumento=' + numDocumento,
-        success: function(res){
+        success: function (res) {
             objModalBody.html(res);
         },
         fail: function () {
@@ -11922,7 +11926,7 @@ function verCoincidencias(seqCargue, numHogar, numDocumento, txtNombre){
 
     // anidando divs
     objModalFooter.append(objBotonSeleccionar);
-    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
+    objModalContent.append(objModalHeader, objModalBody, objModalFooter);
     objModalOverlay.append(objModalContent);
     objModal.append(objModalOverlay);
 
@@ -11931,7 +11935,7 @@ function verCoincidencias(seqCargue, numHogar, numDocumento, txtNombre){
 
 }
 
-function someterCoincidenciasFNV(){
+function someterCoincidenciasFNV() {
 
     var bolRadioSelected = false;
     var seqFormulario = $("#seqFormulario").val();
@@ -11940,52 +11944,52 @@ function someterCoincidenciasFNV(){
 
     var objInputs = $("#fnvCoincidencias :input");
 
-    objInputs.each(function() {
-        if( $(this).is(":checked") ){
+    objInputs.each(function () {
+        if ($(this).is(":checked")) {
             bolRadioSelected = true;
             seqFormulario = $(this).val();
             seqCiudadano = $("#" + seqFormulario).val();
         }
     })
 
-    if(bolRadioSelected == true){
+    if (bolRadioSelected == true) {
         var objModal = $('#verCoindidencias');
         $("#seqFormulario").val(seqFormulario);
         $("#numDocumento").val(numDocumento);
         $("#seqCiudadano").val(seqCiudadano);
         someterFormulario(
-            'contenido',
-            document.getElementById("insFNV"),
-            './contenidos/inscripcionFonvivienda/detalles.php',
-            false,
-            false
-        );
+                'contenido',
+                document.getElementById("insFNV"),
+                './contenidos/inscripcionFonvivienda/detalles.php',
+                false,
+                false
+                );
         objModal.modal("hide");
-    }else{
+    } else {
         $("#coincidenciasError").addClass("alert alert-danger alert-dismissible");
         $("#coincidenciasError").html("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button> Seleccione una opción");
     }
 
 }
 
-function verHogar(seqFormulario){
+function verHogar(seqFormulario) {
 
     // obtiene el id oculto
     var objModal = $('#verHogar');
 
     // inicializa el modal
     objModal.addClass("modal fade");
-    objModal.attr("tabindex" , "-1");
-    objModal.attr("role" , "dialog");
-    objModal.attr("aria-labelledby" , "myModalLabel");
+    objModal.attr("tabindex", "-1");
+    objModal.attr("role", "dialog");
+    objModal.attr("aria-labelledby", "myModalLabel");
     objModal.empty();
 
     // divs visibles del popup
-    var objModalOverlay     = $('<div class="modal-dialog" role="document"></div>');
-    var objModalContent     = $('<div class="modal-content" style="width: 970px;"></div>');
-    var objModalHeader      = $('<div class="modal-header" style="font-size: 20px;"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>Conformación de hogar SiPIVE</div>');
-    var objModalBody        = $('<div class="modal-body"></div>');
-    var objModalFooter      = $('<div class="modal-footer"></div>');
+    var objModalOverlay = $('<div class="modal-dialog" role="document"></div>');
+    var objModalContent = $('<div class="modal-content" style="width: 970px;"></div>');
+    var objModalHeader = $('<div class="modal-header" style="font-size: 20px;"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>Conformación de hogar SiPIVE</div>');
+    var objModalBody = $('<div class="modal-body"></div>');
+    var objModalFooter = $('<div class="modal-footer"></div>');
     var objBotonSeleccionar = $('<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>');
 
     // contenido dinamico del body (form de direccion)
@@ -11993,7 +11997,7 @@ function verHogar(seqFormulario){
         url: './contenidos/inscripcionFonvivienda/verHogar.php',
         type: 'post',
         data: 'seqFormulario=' + seqFormulario,
-        success: function(res){
+        success: function (res) {
             objModalBody.html(res);
         },
         fail: function () {
@@ -12003,7 +12007,7 @@ function verHogar(seqFormulario){
 
     // anidando divs
     objModalFooter.append(objBotonSeleccionar);
-    objModalContent.append(objModalHeader,objModalBody,objModalFooter);
+    objModalContent.append(objModalHeader, objModalBody, objModalFooter);
     objModalOverlay.append(objModalContent);
     objModal.append(objModalOverlay);
 
@@ -12021,14 +12025,15 @@ function treeview() {
             var openedClass = 'glyphicon-menu-down';
             var closedClass = 'glyphicon-menu-right';
 
-            if (typeof o != 'undefined'){
-                if (typeof o.openedClass != 'undefined'){
+            if (typeof o != 'undefined') {
+                if (typeof o.openedClass != 'undefined') {
                     openedClass = o.openedClass;
                 }
-                if (typeof o.closedClass != 'undefined'){
+                if (typeof o.closedClass != 'undefined') {
                     closedClass = o.closedClass;
                 }
-            };
+            }
+            ;
 
             //initialize each of the top levels
             var tree = $(this);
@@ -12047,7 +12052,7 @@ function treeview() {
                 branch.children().children().toggle();
             });
             //fire event from the dynamically added icon
-            tree.find('.branch .indicator').each(function(){
+            tree.find('.branch .indicator').each(function () {
                 $(this).on('click', function () {
                     $(this).closest('li').click();
                 });
@@ -12073,13 +12078,13 @@ function treeview() {
     $('#arbol').treed();
 
     eliminarObjeto("arbolAyuda");
-    YAHOO.util.Event.onContentReady("arbolAyuda",treeview);
+    YAHOO.util.Event.onContentReady("arbolAyuda", treeview);
 
 }
-YAHOO.util.Event.onContentReady("arbolAyuda",treeview);
+YAHOO.util.Event.onContentReady("arbolAyuda", treeview);
 
 
-function editorAyuda(){
+function editorAyuda() {
     tinymce.remove();
     tinymce.init({
         selector: '#textoAyuda',
@@ -12099,7 +12104,7 @@ function editorAyuda(){
         },
     });
     eliminarObjeto("editorAyuda");
-    YAHOO.util.Event.onContentReady("editorAyuda",editorAyuda);
+    YAHOO.util.Event.onContentReady("editorAyuda", editorAyuda);
 }
-YAHOO.util.Event.onContentReady("editorAyuda",editorAyuda);
+YAHOO.util.Event.onContentReady("editorAyuda", editorAyuda);
 

@@ -81,7 +81,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $txtCiudadIdentificacion = 'Bogota';
             $txtCiudadMatricula = 'Bogota';
             $txtElaboro = trim($datos [39]);
-            $txtConcepto = trim(str_replace('"', '', $datos [41]));
+            $txtConcepto = trim(str_replace('"', '', $datos [42]));
             $viabilizado = (trim($datos [41]) == 'SI') ? true : false;
             $numDocumento = trim($datos [1]);
 
@@ -130,7 +130,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             if ($datos[18] == "" || $datos[14] == "") {
                 $casilla .= (trim($datos[18]) == '') ? "18," : '';
                 $casilla .= (trim($datos[14]) == '') ? "14," : '';
-//                $casilla .= (trim($datos[42]) == '') ? "42," : '';
+//               $casilla .= (trim($datos[42]) == '') ? "42," : '';
                 $band = 1;
             }
 

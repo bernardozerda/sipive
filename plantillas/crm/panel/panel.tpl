@@ -9,8 +9,6 @@
         <script src="librerias/javascript/jquery-ui.js"></script>
         <link rel="stylesheet" href="recursos/estilos/jquery-ui.css"/> 
         <link rel="stylesheet" href="librerias/jquery/css/bootstrap.min.css"/> 
-
-
     </head>
     <body onload="tablas()">
         <div>

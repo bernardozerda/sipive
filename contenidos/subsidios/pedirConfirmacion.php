@@ -22,33 +22,33 @@ $arrErrores = array();
 $arrMensajes = array();
 
 // regularizando campos
-foreach( $_POST as $txtCampo => $txtValor ){
-    $_POST[$txtCampo] = regularizarCampo($txtCampo,$txtValor);
+foreach ($_POST as $txtCampo => $txtValor) {
+    $_POST[$txtCampo] = regularizarCampo($txtCampo, $txtValor);
 }
 
 // Nombre y cedula de quien fue atendido
 $txtNombreAtendido = Ciudadano::obtenerNombre($_POST['numDocumento']);
-if( $txtNombreAtendido == "" ){
-    $txtNombreAtendido  = trim($_POST['txtNombre1']) . " ";
-    $txtNombreAtendido .= ( trim( $_POST['txtNombre2'] == "" ) )? "" : trim( $_POST['txtNombre2'] ) . " ";
+if ($txtNombreAtendido == "") {
+    $txtNombreAtendido = trim($_POST['txtNombre1']) . " ";
+    $txtNombreAtendido .= ( trim($_POST['txtNombre2'] == "") ) ? "" : trim($_POST['txtNombre2']) . " ";
     $txtNombreAtendido .= trim($_POST['txtApellido1']) . " ";
-    $txtNombreAtendido .= ( trim( $_POST['txtApellido2'] == "" ) )? "" : trim( $_POST['txtApellido2'] ) . " ";
+    $txtNombreAtendido .= ( trim($_POST['txtApellido2'] == "") ) ? "" : trim($_POST['txtApellido2']) . " ";
 }
 $numDocumentoAtendido = $_POST['numDocumento'];
 
-/************************************************************************************************************
+/* * **********************************************************************************************************
  * NO HAY VERIFICACION DE CAMBIOS SOBRE EL FORMULARIO DE INSCRIPCION
  * POR DEFINICION ESTE FORMULARIO SE USA CUANDO EL HOGAR SE INSCRIBE POR PRIMERA VEZ
  * NO EXITE REGISTRO EN LA BASE DE DATOS CONTRA QUE SE PUEDA COMPARAR
- ************************************************************************************************************/
+ * ********************************************************************************************************** */
 
 if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarInscripcion.php") {
     $bolConfirmacion = true;
 }
 
-/************************************************************************************************************
+/* * **********************************************************************************************************
  * VERIFICACION DE CAMBIOS AL FORMULARIO DE ACTUALIZACION
- ************************************************************************************************************/
+ * ********************************************************************************************************** */
 
 if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.php") {
 
@@ -66,8 +66,8 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
     $claSeguimiento->arrIgnorarCampos[] = "seqBarrio";
     $claSeguimiento->arrIgnorarCampos[] = "txtCorreo";
 
-    $txtCambios = $claSeguimiento->cambiosPostulacion( $_POST );
-    $bolConfirmacion = ( trim($txtCambios) == "" )? false : true;
+    $txtCambios = $claSeguimiento->cambiosPostulacion($_POST);
+    $bolConfirmacion = ( trim($txtCambios) == "" ) ? false : true;
 
     // LAS ORIENTACIONES REALIZADAS POR EL INFORMADOR
     // A LOS HOGARES QUE SE REGISTREN CON LA GESTIÓN
@@ -75,17 +75,15 @@ if (trim($_POST['txtArchivo']) == "./contenidos/subsidios/salvarActualizacion.ph
     // NO SERAN OBJETO DE VALIDACION DEL FORMULARIO
     // PERO SI GUARDARAN LOS DATOS DE CONTACTO
     // SI REALIZAN CAMBIOS AL RESTO DE DATOS SERAN IGNORADOS
-    if( $_POST['seqGestion'] == 107 ){
+    if ($_POST['seqGestion'] == 107) {
         $bolConfirmacion = false;
     }
-
-
 }
 
 // EXISTE LA OPCION PARA EL GRUPO JURIDICO Y ADMINISTRADOR DEL SISTEMA
 // FORZAR LA OPCION DE SALVAR EL SOLO SEGUIMIENTO A PESAR DE QUE
 // HAYA CAMBIOS EN EL SISTEMA -- ESTO ESTA IMPLEMENTADO EN INSCRIPCION Y POSTULACION
-if( intval( $_POST['bolSoloSeguimiento'] ) == 1){
+if (intval($_POST['bolSoloSeguimiento']) == 1) {
     $bolConfirmacion = false;
 }
 
@@ -100,31 +98,28 @@ if ($bolConfirmacion == true) {
 
     // Mensaje cuando hay cambios
     $txtMensaje = "<h2>Confirme que desea salvar <br>los datos para el hogar de:</h2>";
-    $txtMensaje.= "<h3>" . ucwords($txtNombreAtendido ) . " [ " . number_format($numDocumentoAtendido,0,'.','.') . " ]</h3>";
+    $txtMensaje.= "<h3>" . ucwords($txtNombreAtendido) . " [ " . number_format($numDocumentoAtendido, 0, '.', '.') . " ]</h3>";
 
-    $claSmarty->assign( "txtMensaje" , $txtMensaje );
-    $claSmarty->assign( "bolMostrarConfirmacion" , $bolConfirmacion );
-    $claSmarty->assign( "txtArchivo" , $_POST['txtArchivo'] );
-    $claSmarty->assign( "arrPost" , $_POST );
+    $claSmarty->assign("txtMensaje", $txtMensaje);
+    $claSmarty->assign("bolMostrarConfirmacion", $bolConfirmacion);
+    $claSmarty->assign("txtArchivo", $_POST['txtArchivo']);
+    $claSmarty->assign("arrPost", $_POST);
     $claSmarty->display("subsidios/pedirConfirmacion.tpl");
-
 } else {
 
     $claFormulario = new FormularioSubsidios();
-    $claFormulario->cargarFormulario( $_POST['seqFormulario'] );
+    $claFormulario->cargarFormulario($_POST['seqFormulario']);
 
     $claFormulario->txtBarrio = array_shift(
-        obtenerDatosTabla(
-            "T_FRM_BARRIO",
-            array("seqBarrio","txtBarrio"),
-            "seqBarrio",
-            "seqBarrio = " . $_POST['seqBarrio']
-        )
+            obtenerDatosTabla(
+                    "T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqBarrio = " . $_POST['seqBarrio']
+            )
     );
 
     foreach ($claFormulario as $txtClave => $txtValor) {
         if ($txtClave != "arrCiudadano") {
-            if( array_key_exists( $txtClave , $_POST ) and in_array( $txtClave , $claSeguimiento->arrIgnorarCampos )  ) {
+            if (array_key_exists($txtClave, $_POST) and in_array($txtClave, $claSeguimiento->arrIgnorarCampos)) {
+                $_POST['anterior'][$txtClave] = $claFormulario->$txtClave;
                 $claFormulario->$txtClave = regularizarCampo($txtClave, $_POST[$txtClave]);
             }
         }
@@ -132,20 +127,19 @@ if ($bolConfirmacion == true) {
 
     $claFormulario->fchUltimaActualizacion = date("Y-m-d H:i:s");
     $claFormulario->editarFormulario($_POST['seqFormulario']);
-    if( ! empty( $claFormulario->arrErrores ) ) {
+    if (!empty($claFormulario->arrErrores)) {
         $arrErrores = $claFormulario->arrErrores;
-    }else{
+    } else {
         $_POST['nombre'] = $txtNombreAtendido;
         $_POST['cedula'] = $numDocumentoAtendido;
         $claSeguimiento->salvarSeguimiento($_POST, "cambiosPostulacion");
-        if( empty( $claSeguimiento->arrErrores ) ){
+        if (empty($claSeguimiento->arrErrores)) {
             $arrMensajes = $claSeguimiento->arrMensajes;
-        }else{
+        } else {
             $arrErrores = $claSeguimiento->arrErrores;
         }
     }
 
-    imprimirMensajes( $arrErrores , $arrMensajes );
-
+    imprimirMensajes($arrErrores, $arrMensajes);
 }
 ?>

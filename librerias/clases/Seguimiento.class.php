@@ -879,7 +879,7 @@ class Seguimiento {
     }
 
     public function cambiosCambioEstados($seqFormulario, $objAnterior, $objNuevo) {
-
+        global $aptBd;
         $txtSeparador = $this->txtSeparador;
         $txtSalto = $this->txtSalto;
 
@@ -912,12 +912,11 @@ class Seguimiento {
                 }
             }
         }
-
         // Para detectar ciudadanos eliminados
         $sqlEstado = "SELECT seqEstadoProceso FROM T_FRM_FORMULARIO WHERE seqFormulario = " . $seqFormulario;
-        $exeEstado = mysql_query($sqlEstado);
-        $rowEstado = mysql_fetch_array($exeEstado);
-        if ($rowEstado['seqEstadoProceso'] == 35 || $rowEstado['seqEstadoProceso'] == 36) {
+        $objRes = $aptBd->execute($sqlEstado);
+        $rowEstado = $objRes->fields['seqEstadoProceso'];
+        if ($rowEstado == 35 || $rowEstado == 36) {
             $a = "no haga nada";
         } else {
             if (is_object($objAnterior)) {
@@ -949,7 +948,6 @@ class Seguimiento {
                 }
             }
         }
-
         return $txtCambios;
     }
 
@@ -4075,7 +4073,10 @@ class Seguimiento {
             }
 
             if (intval($_POST['bolSoloSeguimiento']) == 1) {
-//                $txtCambios = "";
+                $txtCambios = "";
+                foreach ($arrPost['anterior'] as $txtClave => $value) {
+                    $txtCambios .= $this->compararValores($txtClave, $arrPost['anterior'][$txtClave], $arrPost[$txtClave]);
+                }
             }
 
             $sql = "
@@ -4823,15 +4824,12 @@ class Seguimiento {
 
             $txtNombre = array_shift(
                     obtenerDatosTabla(
-                            "T_CIU_CIUDADANO",
-                            array("numDocumento", "upper(concat(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2)) as txtNombre"),
-                            "numDocumento",
-                            "numDocumento = " . $arrDatos['documento'] . " and seqTipoDocumento in (1,2)"
+                            "T_CIU_CIUDADANO", array("numDocumento", "upper(concat(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2)) as txtNombre"), "numDocumento", "numDocumento = " . $arrDatos['documento'] . " and seqTipoDocumento in (1,2)"
                     )
             );
 
             $txtComentario = "Vinculado a la " . $arrTipoActo[$seqTipoActo]->txtTipoActo . " " . $numActo . " del " . $fchActo . ". ";
-            $txtComentario = (isset($arrDatos['comentario']) and trim($arrDatos['comentario']) != "")? $txtComentario . $arrDatos['comentario'] : $txtComentario;
+            $txtComentario = (isset($arrDatos['comentario']) and trim($arrDatos['comentario']) != "") ? $txtComentario . $arrDatos['comentario'] : $txtComentario;
 
             $sql = "
                 insert into t_seg_seguimiento (
@@ -4880,65 +4878,65 @@ class Seguimiento {
         return $txtComentarios;
     }
 
-    public function inscripcionMasiva($seqTipo, $objAnterior,$objNuevo, $txtComentario = ""){
+    public function inscripcionMasiva($seqTipo, $objAnterior, $objNuevo, $txtComentario = "") {
         global $aptBd;
 
         // ciudadanos eliminados
         $txtCambiosHogar = "";
-        foreach($objAnterior->arrCiudadano as $seqCiudadano => $objCiudadano){
-            if(! isset($objNuevo->arrCiudadano[$seqCiudadano])){
+        foreach ($objAnterior->arrCiudadano as $seqCiudadano => $objCiudadano) {
+            if (!isset($objNuevo->arrCiudadano[$seqCiudadano])) {
                 $txtCambiosHogar .=
-                    $this->txtSeparador .
-                    $objCiudadano->obtenerNombre($objCiudadano->numDocumento) .
-                    " [" . $objCiudadano->numDocumento . "] " .
-                    "<span class='msgError'>Eliminado</span>" . $this->txtSalto;
+                        $this->txtSeparador .
+                        $objCiudadano->obtenerNombre($objCiudadano->numDocumento) .
+                        " [" . $objCiudadano->numDocumento . "] " .
+                        "<span class='msgError'>Eliminado</span>" . $this->txtSalto;
             }
         }
 
         // ciudadanos adicionados
         $txtNombre = "";
         $numDocumento = 0;
-        foreach($objNuevo->arrCiudadano as $seqCiudadano => $objCiudadano){
-            if(! isset($objAnterior->arrCiudadano[$seqCiudadano])){
+        foreach ($objNuevo->arrCiudadano as $seqCiudadano => $objCiudadano) {
+            if (!isset($objAnterior->arrCiudadano[$seqCiudadano])) {
                 $txtCambiosHogar .=
-                    $this->txtSeparador .
-                    $objCiudadano->obtenerNombre($objCiudadano->numDocumento) .
-                    " [" . $objCiudadano->numDocumento . "] " .
-                    "<span class='msgOk'>Adicionado</span>" . $this->txtSalto;
+                        $this->txtSeparador .
+                        $objCiudadano->obtenerNombre($objCiudadano->numDocumento) .
+                        " [" . $objCiudadano->numDocumento . "] " .
+                        "<span class='msgOk'>Adicionado</span>" . $this->txtSalto;
             }
-            if($objCiudadano->seqParentesco == 1){
+            if ($objCiudadano->seqParentesco == 1) {
                 $txtNombre = $objCiudadano->obtenerNombre($objCiudadano->numDocumento);
                 $numDocumento = $objCiudadano->numDocumento;
             }
         }
 
         $txtCambiosFormulario = "";
-        foreach($objNuevo as $txtCampo => $txtValor){
-            if(! is_array($txtValor)){
+        foreach ($objNuevo as $txtCampo => $txtValor) {
+            if (!is_array($txtValor)) {
                 $objAnterior->$txtCampo = regularizarCampo($txtCampo, $objAnterior->$txtCampo);
                 $txtValor = regularizarCampo($txtCampo, $txtValor);
-                if($objAnterior->$txtCampo != $txtValor and $txtCampo != "seqFormulario") {
+                if ($objAnterior->$txtCampo != $txtValor and $txtCampo != "seqFormulario") {
                     $txtCambiosFormulario .=
-                        $this->txtSeparador .
-                        $txtCampo .
-                        ", Valor Anterior: " . $objAnterior->$txtCampo .
-                        ", Valor Nuevo: " . $txtValor . $this->txtSalto;
+                            $this->txtSeparador .
+                            $txtCampo .
+                            ", Valor Anterior: " . $objAnterior->$txtCampo .
+                            ", Valor Nuevo: " . $txtValor . $this->txtSalto;
                 }
             }
         }
 
         $txtCambios = "";
-        if($txtCambiosHogar != ""){
+        if ($txtCambiosHogar != "") {
             $txtCambios .= "<strong>[" . $objNuevo->seqFormulario . "] Cambios al hogar:</strong>" . $this->txtSalto;
             $txtCambios .= $txtCambiosHogar;
         }
-        if($txtCambiosFormulario != ""){
+        if ($txtCambiosFormulario != "") {
             $txtCambios .= "<strong>[" . $objNuevo->seqFormulario . "] Cambios al formulario:</strong>" . $this->txtSalto;
             $txtCambios .= $txtCambiosFormulario;
         }
 
         // seguimientos
-        switch ($seqTipo){
+        switch ($seqTipo) {
             case 1:
                 $txtPrograma = "MI CASA YA";
                 break;
@@ -4953,7 +4951,7 @@ class Seguimiento {
                 break;
         }
 
-        if($txtComentario == "") {
+        if ($txtComentario == "") {
             $txtComentario = "ACTUALIZACIÓN DE INFORMACIÓN EN LA CONFORMACIÓN DE HOGAR. HOGAR PERTENECIENTE AL ";
             $txtComentario .= "GRUPO BENEFICIARIO SUBSIDIOS $txtPrograma SEGÚN RESOLUCIÓN DEL MINISTERIO DE ";
             $txtComentario .= "VIVIENDA Y VINCULACION BENEFICIO SDHT";
@@ -4974,14 +4972,13 @@ class Seguimiento {
                 '" . date("Y-m-d H:i:s") . "',
                 " . $_SESSION['seqUsuario'] . ",
                 '" . $txtComentario . "',
-                '" . mb_ereg_replace("'","\'",$txtCambios) . "',
+                '" . mb_ereg_replace("'", "\'", $txtCambios) . "',
                 " . $numDocumento . ",
                 '" . $txtNombre . "',
                 " . 46 . "
             )
         ";
         $aptBd->execute($sql);
-
     }
 
 }

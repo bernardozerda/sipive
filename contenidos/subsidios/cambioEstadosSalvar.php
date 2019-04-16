@@ -205,7 +205,7 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
             $claFormulario->fchInscripcion = "";
             $claFormulario->fchPostulacion = "";
             $claFormulario->fchVigencia = "";
-            $claFormulario->fchUltimaActualizacion = date( "Y-m-d H:i:s" );
+            $claFormulario->fchUltimaActualizacion = date("Y-m-d H:i:s");
             $claFormulario->seqPlanGobierno = 3; // Bogota Mejor Para Todos
             $claFormulario->seqTipoEsquema = 1; // Individual
             $claFormulario->seqModalidad = 6; // Adquisición de Vivienda Nueva
@@ -238,11 +238,10 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
             $claFormulario->seqTipoEsquema = 1;
             $claFormulario->txtDireccionSolucion = "";
             $claFormulario->seqSolucion = 1; // 1 -Ninguno
-            $claFormulario->seqProyecto = 37; // 37 - Ninguno
-            $claFormulario->fchVigencia = "";
+            $claFormulario->seqProyecto = 37; // 37 - Ninguno           
             $claFormulario->seqProyectoHijo = 0;
             $claFormulario->seqUnidadProyecto = 1;
-            
+
             $claFormulario->valSaldoCuentaAhorro = 0;
             $claFormulario->seqBancoCuentaAhorro = 1;
             $claFormulario->txtSoporteCuentaAhorro = "";
@@ -367,27 +366,27 @@ if (empty($arrErrores)) {
                         $claCiudadano->txtApellido1 . " " . $claCiudadano->txtApellido2;
             }
         }
-        
-        
+
+
         // Para cambios especiales de Mejoramiento y Adquisicion
-        if(isset($_POST['especial']) and $_POST['especial'] == "mejoramiento"){
-        	$claFormulario->seqModalidad    = 9;  // Mejoramiento Habitacional
-        	$claFormulario->seqSolucion     = 16; // 70 SMMLV
-        	$claFormulario->seqTipoEsquema  = 4;  // Territorial Dirigido
-        	$claFormulario->seqPlanGobierno = 2;  // Bogotá Humana
-        	$claFormulario->seqProyecto     = 98; // TERRITORIAL DIRIGIDA - HABITACIONAL URBANO
-        }elseif(isset($_POST['especial']) and $_POST['especial'] == "adquisicion"){
-        	$claFormulario->seqModalidad    = 6;  // Adquisición de Vivienda Nueva
-        	$claFormulario->seqSolucion     = 13; // 70 SMMLV
-        	$claFormulario->seqTipoEsquema  = 1;  // Individual
-        	$claFormulario->seqPlanGobierno = 2;  // Bogotá Humana
-        	//$claFormulario->seqProyecto     = 32; // INDIVIDUAL PROYECTO SDVE
-        }else{
+        if (isset($_POST['especial']) and $_POST['especial'] == "mejoramiento") {
+            $claFormulario->seqModalidad = 9;  // Mejoramiento Habitacional
+            $claFormulario->seqSolucion = 16; // 70 SMMLV
+            $claFormulario->seqTipoEsquema = 4;  // Territorial Dirigido
+            $claFormulario->seqPlanGobierno = 2;  // Bogotá Humana
+            $claFormulario->seqProyecto = 98; // TERRITORIAL DIRIGIDA - HABITACIONAL URBANO
+        } elseif (isset($_POST['especial']) and $_POST['especial'] == "adquisicion") {
+            $claFormulario->seqModalidad = 6;  // Adquisición de Vivienda Nueva
+            $claFormulario->seqSolucion = 13; // 70 SMMLV
+            $claFormulario->seqTipoEsquema = 1;  // Individual
+            $claFormulario->seqPlanGobierno = 2;  // Bogotá Humana
+            //$claFormulario->seqProyecto     = 32; // INDIVIDUAL PROYECTO SDVE
+        } else {
             $claFormulario->seqPlanGobierno = 3;
         }
 
-        $claFormulario->seqCesantias = ($claFormulario->seqCesantias == 0)? 1: $claFormulario->seqCesantias;
-        $claFormulario->seqPeriodo   = ($claFormulario->seqPeriodo == 0)? 1: $claFormulario->seqPeriodo;
+        $claFormulario->seqCesantias = ($claFormulario->seqCesantias == 0) ? 1 : $claFormulario->seqCesantias;
+        $claFormulario->seqPeriodo = ($claFormulario->seqPeriodo == 0) ? 1 : $claFormulario->seqPeriodo;
 
         $claFormulario->editarFormulario($seqFormulario);
         if (empty($claFormulario->arrErrores)) {
@@ -396,34 +395,32 @@ if (empty($arrErrores)) {
             $txtCambios = $claSeguimiento->cambiosCambioEstados($seqFormulario, $claFormularioActual, $claFormulario);
 
             $sql = "
-					INSERT INTO T_SEG_SEGUIMIENTO (
-						seqFormulario, 
-						fchMovimiento, 
-						seqUsuario, 
-						txtComentario, 
-						txtCambios, 
-						numDocumento, 
-						txtNombre, 
-						seqGestion
-					) VALUES (
-						$seqFormulario,
-						'" . date("Y-m-d H:i:s") . "',
-						" . $_SESSION['seqUsuario'] . ",
-						\"Cambio desde el menu Formulario -> Cambio Estados:<br>" . $claFormulario->txtComentario . "\",
-						\"" . ereg_replace("\"", "", $txtCambios) . "\",
-						" . intval($buscaCedulaFormat) . ",
-						\"$txtNombre\",
-						" . $_POST['seqGestion'] . "
-					)					
-				";
+                                INSERT INTO T_SEG_SEGUIMIENTO (
+                                        seqFormulario, 
+                                        fchMovimiento, 
+                                        seqUsuario, 
+                                        txtComentario, 
+                                        txtCambios, 
+                                        numDocumento, 
+                                        txtNombre, 
+                                        seqGestion
+                                ) VALUES (
+                                        $seqFormulario,
+                                        '" . date("Y-m-d H:i:s") . "',
+                                        " . $_SESSION['seqUsuario'] . ",
+                                        \"Cambio desde el menu Formulario -> Cambio Estados:<br>" . $claFormulario->txtComentario . "\",
+                                        \"" . ereg_replace("\"", "", $txtCambios) . "\",
+                                        " . intval($buscaCedulaFormat) . ",
+                                        \"$txtNombre\",
+                                        " . $_POST['seqGestion'] . "
+                                )					
+                        ";
 
             try {
                 $aptBd->execute($sql);
             } catch (Exception $objError) {
                 $arrErrores[] = "No se ha podido registrar el seguimiento del formulario";
             }
-
-     
         } else {
             $numErrores++;
             $arrErrores[] = "No se pudo actualizar la informacion del formulario $seqFormulario ( " . $claFormulario->numDocumento . " )";

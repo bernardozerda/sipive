@@ -242,6 +242,17 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
             $claFormulario->fchVigencia = "";
             $claFormulario->seqProyectoHijo = 0;
             $claFormulario->seqUnidadProyecto = 1;
+            
+            $claFormulario->valSaldoCuentaAhorro = 0;
+            $claFormulario->seqBancoCuentaAhorro = 1;
+            $claFormulario->txtSoporteCuentaAhorro = "";
+            $claFormulario->bolInmovilizadoCuentaAhorro = 0;
+            $claFormulario->fchAperturaCuentaAhorro = "0000-00-00";
+            $claFormulario->valSaldoCuentaAhorro2 = 0;
+            $claFormulario->seqBancoCuentaAhorro2 = 1;
+            $claFormulario->txtSoporteCuentaAhorro2 = "";
+            $claFormulario->bolInmovilizadoCuentaAhorro2 = 0;
+            $claFormulario->fchAperturaCuentaAhorro2 = "0000-00-00";
             //$claFormulario->fchInscripcion = date( "Y-m-d H:i:s" );
             $claFormulario->bolCerrado = 0;
             // Libera Unidad Habitacional

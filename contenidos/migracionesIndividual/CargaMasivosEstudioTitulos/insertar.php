@@ -37,6 +37,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
     $band = 0;
     $cant = count($lineas);
     $valid = "";
+    $casilla = "";
     foreach ($lineas as $linea_num => $linea) {
         $valid = "";
         if ($linea_num != 0 && $linea_num != "") {
@@ -45,16 +46,8 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $datos[$i] = mb_ereg_replace("[^a-zA-Z0-9\-\_\/\\\ \,\.\;\:áéíóúñüÁÉÍÓÚÜÑ\#]", "", utf8_encode(trim($txtValor)));
             }
 
-//            echo "<pre>";
-//            print_r( $datos );
-//            echo "</pre>";
-//
-//            echo "****" . strtotime($datos[11]) . "<br>";
-//            die();
+            $seqFormulario = trim($datos[0]);
 
-            $casilla = "";
-
-            $seqFormulario = trim($datos [0]);
             if ($registros < $cant - 2) {
                 $idHogar .= $seqFormulario . ",";
             } else
@@ -86,7 +79,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $numDocumento = trim($datos [1]);
 
             if ($seqFormulario == "" || $numEscrituraIdentificacion == "" || $numNotariaIdentificacion == "" || $numEscrituraTitulo == "" || trim($datos [41]) == "") {
-
+                //echo "band 1";
                 $casilla .= ($seqFormulario == '') ? "1," : '';
                 $casilla .= ($numEscrituraIdentificacion == '') ? "11," : '';
                 $casilla .= ($numNotariaIdentificacion == '') ? "13," : '';
@@ -101,6 +94,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $casilla .= ($txtAprobo == '') ? "41," : '';
                 $casilla .= ($txtElaboro == '') ? "40," : '';
                 $txtConcepto = ($txtElaboro == '') ? "43," : '';
+                //   echo "band 2";
                 $band = 1;
             }
 
@@ -118,6 +112,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $fchMatricula = $CfchMatricula[2] . "-" . $CfchMatricula[1] . "-" . $CfchMatricula[0];
             }
             if ($datos[27] == "" || $datos[32] == "" || $datos[29] == "" || $datos[31] == "" || $datos[36] == "" || $datos[28] == "") {
+                // echo "band 3";
                 $casilla .= (trim($datos[27]) == '') ? "27," : '';
                 $casilla .= (trim($datos[32]) == '') ? "32," : '';
                 $casilla .= (trim($datos[29]) == '') ? "29," : '';
@@ -131,6 +126,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $casilla .= (trim($datos[18]) == '') ? "18," : '';
                 $casilla .= (trim($datos[14]) == '') ? "14," : '';
 //               $casilla .= (trim($datos[42]) == '') ? "42," : '';
+                //   echo "band 4";
                 $band = 1;
             }
 
@@ -144,6 +140,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                 $casilla .= (strtotime($fchEscrituraIdentificacion) == '') ? "12" : '';
                 $casilla .= (strtotime($fchMatricula) == '') ? "26" : '';
                 $band = 1;
+                // echo "band 5";
             }
 
             $arrTitulos['numEscritura'] = $numEscrituraTitulo;
@@ -151,19 +148,22 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $arrTitulos['numNotaria'] = $numNotariaTitulo;
             $arrTitulos['txtCiudad'] = $txtCiudadTitulo;
             $arrEscrituracion = obtenerEscrituracion($seqFormulario);
-            if (
-                $arrTitulos['numEscritura']                   != $arrEscrituracion['numEscritura'] or
-                strtotime($arrTitulos['fchEscritura'])        != strtotime($arrEscrituracion['fchEscritura']) or
-                $arrTitulos['numNotaria']                     != $arrEscrituracion['numNotaria'] or
-                mb_strtolower(trim($arrTitulos['txtCiudad'])) != mb_strtolower(trim($arrEscrituracion['txtCiudad']))
-            ) {
-                /*echo "<br>" . $arrTitulos['numEscritura'] . " != " . $arrEscrituracion['numEscritura'] . "<br>";
-                echo $arrTitulos['fchEscritura'] . " != " . $arrEscrituracion['fchEscritura'] . "<br>";
-                echo $arrTitulos['numNotaria'] . " != " . $arrEscrituracion['numNotaria'] . "<br>";
-                echo mb_strtolower(trim($arrTitulos['txtCiudad'])) . " != " . mb_strtolower(trim($arrEscrituracion['txtCiudad'])) . "<br>";*/
+            if ($arrTitulos['numEscritura'] != $arrEscrituracion['numEscritura'] || strtotime($arrTitulos['fchEscritura']) != strtotime($arrEscrituracion['fchEscritura']) ||
+                    $arrTitulos['numNotaria'] != $arrEscrituracion['numNotaria'] || mb_strtolower(trim($arrTitulos['txtCiudad'])) != mb_strtolower(trim($arrEscrituracion['txtCiudad']))) {
                 $casilla .= "18,19,20,21";
                 $band = 2;
+                echo "Por favor verifique los datos de titulos del registro # " . ($linea_num + 1) . " en el hogar " . $seqFormulario . " en la(s) casilla(s) # " . $casilla . " no corresponden con los datos de escrituración en la base de datos";
+                if ($arrTitulos['numEscritura'] != $arrEscrituracion['numEscritura'])
+                    echo "<br> <b>numEscritura: </b>" . $arrTitulos['numEscritura'] . " != " . $arrEscrituracion['numEscritura'] . "<br>";
+                if (strtotime($arrTitulos['fchEscritura']) != strtotime($arrEscrituracion['fchEscritura']))
+                    echo "<b>fchEscritura: </b>" . $arrTitulos['fchEscritura'] . " != " . $arrEscrituracion['fchEscritura'] . "<br>";
+                if ($arrTitulos['numNotaria'] != $arrEscrituracion['numNotaria'])
+                    echo "<b>numNotaria: </b>" . $arrTitulos['numNotaria'] . " != " . $arrEscrituracion['numNotaria'] . "<br>";
+                if (mb_strtolower(trim($arrTitulos['txtCiudad'])) != mb_strtolower(trim($arrEscrituracion['txtCiudad'])))
+                    echo "<b>txtCiudad: </b>" . mb_strtolower(trim($arrTitulos['txtCiudad'])) . " != " . mb_strtolower(trim($arrEscrituracion['txtCiudad'])) . "<br>";
+                exit();
             }
+
 
             if ($viabilizado && $band == 0) {
                 if ($seqFormulario != "") {
@@ -247,10 +247,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                     $intNV++;
                 }
             } else if ($band == 1) {
-                echo "Por favor verifique el registro # " . ($registros) . " todos los campos en el hogar " . $seqFormulario . " en la(s) casilla(s) # " . $casilla . " con valor vacio o el formato de fecha no es el indicado";
-                exit();
-            } else if ($band == 2) {
-                echo "Por favor verifique los datos de titulos del registro # " . ($registros + 1) . " en el hogar " . $seqFormulario . " en la(s) casilla(s) # " . $casilla . " no corresponden con los datos de escrituración en la base de datos";
+                echo "Por favor verifique el registro # " . ($linea_num + 1) . " todos los campos en el hogar " . $seqFormulario . " en la(s) casilla(s) # " . $casilla . " con valor vacio o el formato de fecha no es el indicado";
                 exit();
             }
             $registros++;

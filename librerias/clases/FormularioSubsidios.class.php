@@ -112,7 +112,6 @@ class FormularioSubsidios {
     public $valSubsidioNacional;
     public $valTotal;
     public $valTotalRecursos;
-//    public $bolInformal;
 
     public function FormularioSubsidios() {
 
@@ -164,7 +163,7 @@ class FormularioSubsidios {
         $this->seqEstadoProceso = 1;
         $this->seqFormulario = 0;
         $this->seqLocalidad = 1;
-        $this->seqModalidad = 0;
+        $this->seqModalidad = 1;
         $this->seqPeriodo = 1;
         $this->seqPlanGobierno = 3;
         $this->seqProyecto = 37;
@@ -216,7 +215,6 @@ class FormularioSubsidios {
         $this->valSubsidioNacional = 0;
         $this->valTotal = 0;
         $this->valTotalRecursos = 0;
-//        $this->bolInformal = "";
     }
 
     // Fin Constructor
@@ -828,7 +826,7 @@ class FormularioSubsidios {
             try {
                 $sql = "
                     update t_pry_unidad_proyecto set
-                      seqFormulario = null
+                      seqFormulario = 0
                     where seqFormulario = " . $this->seqFormulario . "
                 ";
                 $aptBd->execute($sql);

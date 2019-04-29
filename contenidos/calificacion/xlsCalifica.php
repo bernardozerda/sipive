@@ -16,7 +16,6 @@ header("Content-Transfer-Encoding: binary");
 header("Pragma: no-cache");
 header("Expires: 1");
 
-
 $txtPrefijoRuta = "../../";
 include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
@@ -75,15 +74,14 @@ $resCal = mysql_query($queCal) or die(mysql_error());
 // PREPARANDO ARREGLO CON LOS VALORES
 $consecutivo = 0;
 
-
 echo utf8_decode("No.") . "\t";
 echo ("Formulario") . "\t";
 echo utf8_decode("Cédula PPal") . "\t";
-echo"Nombre Completo" . "\t";
+echo "Nombre Completo" . "\t";
 echo "Telefono Fijo 1" . "\t";
-echo"Telefono Fijo 2" . "\t";
-echo"Celular" . "\t";
-echo("Valor IH") . "\t";
+echo "Telefono Fijo 2" . "\t";
+echo "Celular" . "\t";
+echo ("Valor IH") . "\t";
 echo ("Ingresos Hogar") . "\t";
 echo ("Valor TDE") . "\t";
 echo ("Tasa Dependencia Económica") . "\t";
@@ -103,15 +101,15 @@ echo utf8_decode("Minoría Etnica") . "\t";
 echo ("Puntaje Hogar") . "\t";
 echo ("Puntaje Transformado") . "\t";
 echo "\r\n";
+
 while ($rowCalifica = mysql_fetch_assoc($resCal)) {
-    $consecutivo = $consecutivo + 1;
-    $telefonos = explode("-", $rowCalifica['telefonos']);
 
     foreach($rowCalifica as $txtClave => $txtValor){
-        if(is_numeric($rowCalifica[$txtClave])){
-            $rowCalifica[$txtClave] = number_format($txtValor,10, ",","");
-        }
+        $rowCalifica[$txtClave] = utf8_encode($txtValor);
     }
+
+    $consecutivo = $consecutivo + 1;
+    $telefonos = explode("-", $rowCalifica['telefonos']);
 
     echo ($consecutivo) . "\t";
     echo ($rowCalifica['seqFormulario']) . "\t";
@@ -120,26 +118,26 @@ while ($rowCalifica = mysql_fetch_assoc($resCal)) {
     echo ($telefonos[0]) . "\t";
     echo ($telefonos[1]) . "\t";
     echo ($telefonos[2]) . "\t";
-    echo (round($rowCalifica['divB1'], 2)) . "\t";
-    echo (round($rowCalifica['valB1'], 2)) . "\t";
-    echo (round($rowCalifica['divB2'], 2)) . "\t";
-    echo (round($rowCalifica['valB2'], 2)) . "\t";
-    echo (round($rowCalifica['divB3'], 2)) . "\t";
-    echo (round($rowCalifica['valB3'], 2)) . "\t";
-    echo (round($rowCalifica['valB4'], 2)) . "\t";
-    echo (round($rowCalifica['divB5'], 2)) . "\t";
-    echo (round($rowCalifica['valB5'], 2)) . "\t";
-    echo (round($rowCalifica['divB6'], 2)) . "\t";
-    echo (round($rowCalifica['valB6'], 2)) . "\t";
-    echo (round($rowCalifica['divB7'], 2)) . "\t";
-    echo (round($rowCalifica['valB7'], 2)) . "\t";
-    echo (round($rowCalifica['divB8'], 2)) . "\t";
-    echo (round($rowCalifica['valB8'], 2)) . "\t";
-    echo (round($rowCalifica['divB9'], 2)) . "\t";
-    echo (round($rowCalifica['valB9'], 2)) . "\t";
-    echo (round($rowCalifica['valTotalCalificacion'], 3)) . "\t";
-    echo number_format($rowCalifica['valTransformado'], 2, '.', ',') . "\t";
-    // echo(str_replace (",",".",$rowCalifica['valTransformado'])) . "\t";
+    echo number_format($rowCalifica['divB1']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valB1']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['divB2']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valB2']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['divB3']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valB3']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valB4']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['divB5']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valB5']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['divB6']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valB6']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['divB7']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valB7']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['divB8']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valB8']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['divB9']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valB9']               ,4,",",".") . "\t";
+    echo number_format($rowCalifica['valTotalCalificacion'],4,",",".") . "\t";
+    echo number_format($rowCalifica['valTransformado']     ,4,",",".") . "\t";
     echo "\r\n";
+
 }
 ?>

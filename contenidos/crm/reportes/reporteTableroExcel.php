@@ -60,7 +60,15 @@ function informeProyectosActo() {
         ),
     );
 
-   
+    /* $sql = "SELECT pry.txtNombreProyecto, txtNombreUnidad, frm.seqFormulario, numDocumento, concat(txtNombre1, ' ', txtNombre1, ' ', txtApellido1, ' ', txtApellido2 ) AS postulante,
+      txtEstadoProceso, fchRadicacion
+      from t_pry_unidad_proyecto und
+      INNER JOIN t_pry_proyecto pry ON(und.seqProyecto=pry.seqProyecto)
+      INNER JOIN t_frm_formulario frm USING (seqFormulario)
+      INNER JOIN t_frm_hogar hog USING(seqFormulario)
+      INNER JOIN t_ciu_ciudadano USING(seqCiudadano)
+      INNER JOIN t_frm_estado_proceso USING(seqEstadoProceso)
+      where und.seqProyecto = 2  and seqEstadoProceso = 17 and seqParentesco = 1 "; */
     $sql = obtenerConsulta($seqEstado, $seqProyecto, $tipo);
 
     $resultdl = mysql_query($sql, $conexion) or die(mysql_error());

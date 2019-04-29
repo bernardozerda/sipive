@@ -23,8 +23,7 @@ $claReportes = new Reportes();
 $tipo = $_REQUEST['tipo'];
 if ($_REQUEST['volver'] == 1) {
     if ($tipo == 1) {
-        $estados = implode(",", $_POST['estados']);
-        //echo $estados;
+        $estados = implode(",", $_POST['estados']);       
         $response = $claFac->crearTablaFacAsig($estados, $tipo);
         if ($response)
             echo true;
@@ -121,6 +120,7 @@ if ($_REQUEST['volver'] == 1) {
           echo true; */
     }
 } else {
+    
     $tipo = $tipo - 1;
     $response = $claFac->eliminarTablaFac($tipo);
     if ($response)

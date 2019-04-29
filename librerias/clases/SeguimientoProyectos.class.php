@@ -258,16 +258,19 @@ class SeguimientoProyectos {
                     seg.txtComentario as txtComentario,
                     seg.txtCambios
             FROM 
-                    T_SEG_SEGUIMIENTO_PROYECTOS seg
-                    LEFT JOIN T_SEG_GESTION_PROYECTOS ges USING(seqGestion)
-                    INNER JOIN T_SEG_GRUPO_GESTION_PROYECTOS gge USING(seqGrupoGestion)
-                    INNER JOIN T_COR_USUARIO usu USING(seqUsuario)	
-            WHERE seg.bolMostrar = 1
+                    T_SEG_SEGUIMIENTO_PROYECTOS seg,
+                    T_SEG_GESTION_PROYECTOS ges,
+                    T_SEG_GRUPO_GESTION_PROYECTOS gge,
+                    T_COR_USUARIO usu
+            WHERE seg.seqGestion = ges.seqGestion
+            AND ges.seqGrupoGestion = gge.seqGrupoGestion
+            AND seg.seqUsuario = usu.seqUsuario
+            AND seg.bolMostrar = 1
             $txtCondicion
             ORDER BY seg.seqSeguimiento DESC
             $txtLimite
     ";
-      //  echo $sql;
+
         try {
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {

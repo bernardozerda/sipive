@@ -52,6 +52,8 @@ librerias/smarty/templates_c
 recursos/descargas
 recursos/archivos/lecturaConfiguracion.php
 recursos/imagenes/desembolsos
+autenticacion.php
+redireccionamiento.php
 *.xml
 *.iml
 *.idea*

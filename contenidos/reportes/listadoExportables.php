@@ -151,7 +151,8 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["reporteTotalCiudadano"] = 1;
             break;
 
-        case 8: // tutores desembolso            //$arrExportables["reporteSeguimiento"] = 1;
+        case 8: // tutores desembolso
+            //$arrExportables["reporteSeguimiento"] = 1;
             $arrExportables["seguimientoDesembolsos"] = 1;
             $arrExportables["reporteEscrituracion"] = 1;
             $arrExportables["InformacionSolucion"] = 1;

@@ -18,6 +18,9 @@ class OptimizacionFac {
         global $aptBd;
         $array = Array();
 
+        $sqlEstados = "SELECT group_concat(seqEstadoProceso) as estados FROM t_frm_estado_proceso where seqEstadoProcesoActo in(" . $estados . ")";
+        $objResEstados = $aptBd->execute($sqlEstados);
+
         $sql = "INSERT INTO t_fnv_optimizacion_fac
                 (
                 seqFormulario,
@@ -54,7 +57,7 @@ class OptimizacionFac {
                             hvi.fchActo,
                             hvi.numActo,
                             (fac.valAspiraSubsidio + fac.valComplementario + fac.valCartaLeasing) AS valAspira,
-                            vEst.txtEstado,
+                           CONCAT(txtEtapa, ' ',vEst.txtEstadoProceso) as txtEstado,
                             1 AS tipoForm,
                             cac.seqCiudadano
                     FROM
@@ -63,10 +66,11 @@ class OptimizacionFac {
                     INNER JOIN t_aad_ciudadano_acto cac ON hac.seqCiudadanoActo = cac.seqCiudadanoActo
                     INNER JOIN t_ciu_ciudadano ciu ON cac.seqCiudadano = ciu.seqCiudadano
                     INNER JOIN t_aad_hogares_vinculados hvi ON fac.seqFormularioActo = hvi.seqFormularioActo
-                    LEFT JOIN v_frm_estado vEst ON fac.seqEstadoProceso = vEst.seqEstadoProceso
+                    LEFT JOIN t_frm_estado_Proceso vEst ON fac.seqEstadoProceso = vEst.seqEstadoProceso
+                    LEFT JOIN t_frm_etapa USING(seqEtapa)
                     LEFT JOIN t_ciu_tipo_documento tdoc ON cac.seqTipoDocumento = tdoc.seqTipoDocumento
                     WHERE
-                        hvi.seqTipoActo = 1
+                        hvi.seqTipoActo in(1,3,5)
                             AND (cac.seqTipoDocumento IN (1 , 2)
                             OR (cac.seqTipoDocumento = 7
                             AND YEAR(CURDATE()) - YEAR(cac.fchNacimiento) + IF(DATE_FORMAT(CURDATE(), '%m-%d') >= DATE_FORMAT(cac.fchNacimiento, '%m-%d'), 0, - 1) >= 18)
@@ -74,15 +78,15 @@ class OptimizacionFac {
                             AND YEAR(CURDATE()) - YEAR(cac.fchNacimiento) + IF(DATE_FORMAT(CURDATE(), '%m-%d') >= DATE_FORMAT(cac.fchNacimiento, '%m-%d'), 0, - 1) >= 18))
                             AND fac.seqEstadoProceso IN (" . $estados . ")) 
                  UNION (SELECT 
-                        frm.seqFormulario,
+                            frm.seqFormulario,
                             txtTipoDocumento,
                             UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS txtNombre,
                             ciu.numDocumento,
                             hvi.fchActo,
                             hvi.numActo,
                             (frm.valAspiraSubsidio + frm.valComplementario + frm.valCartaLeasing) AS valAspira,
-                            vEst.txtEstado,
-                            2 AS tipoForm,
+                            CONCAT(txtEtapa, ' ',vEst.txtEstadoProceso) as txtEstado,
+                            1 AS tipoForm,
                             ciu.seqCiudadano
                     FROM
                         t_frm_formulario frm
@@ -90,18 +94,19 @@ class OptimizacionFac {
                     INNER JOIN t_ciu_ciudadano ciu ON hog.seqCiudadano = ciu.seqCiudadano
                     INNER JOIN t_aad_formulario_acto fac ON frm.seqFormulario = fac.seqFormulario
                     INNER JOIN t_aad_hogares_vinculados hvi ON fac.seqFormularioActo = hvi.seqFormularioActo
-                    LEFT JOIN v_frm_estado vEst ON frm.seqEstadoProceso = vEst.seqEstadoProceso
+                    LEFT JOIN t_frm_estado_Proceso vEst ON fac.seqEstadoProceso = vEst.seqEstadoProceso
+                    LEFT JOIN t_frm_etapa USING(seqEtapa)
                     LEFT JOIN t_ciu_tipo_documento tdoc ON ciu.seqTipoDocumento = tdoc.seqTipoDocumento
                     WHERE
-                        hvi.seqTipoActo = 1
+                        hvi.seqTipoActo in(1,3,5) 
                             AND (ciu.seqTipoDocumento IN (1 , 2)
                             OR (ciu.seqTipoDocumento = 7
                             AND YEAR(CURDATE()) - YEAR(ciu.fchNacimiento) + IF(DATE_FORMAT(CURDATE(), '%m-%d') >= DATE_FORMAT(ciu.fchNacimiento, '%m-%d'), 0, - 1) >= 18)
                             OR (ciu.seqTipoDocumento = 8
                             AND YEAR(CURDATE()) - YEAR(ciu.fchNacimiento) + IF(DATE_FORMAT(CURDATE(), '%m-%d') >= DATE_FORMAT(ciu.fchNacimiento, '%m-%d'), 0, - 1) >= 18))
-                            AND frm.seqEstadoProceso IN (" . $estados . ")) ORDER BY numDocumento) frm
+                            AND frm.seqEstadoProceso IN (" . $objResEstados->fields['estados'] . ")) ORDER BY numDocumento) frm
                 GROUP BY seqFormulario , seqCiudadano , txtTipoDocumento , numDocumento , numActo , fchActo";
-
+        //  echo "<br>" . $sql;        
         try {
             $objRes = $aptBd->execute($sql);
             return true;
@@ -109,11 +114,6 @@ class OptimizacionFac {
             echo $ex->getMessage();
             return false;
         }
-
-//        while ($objRes->fields) {
-//            $objRes->MoveNext();
-//        }
-        // return $array;
     }
 
     public function eliminarTablaFac($tipo) {
@@ -154,7 +154,7 @@ class OptimizacionFac {
                   frm.seqFormulario,
                     '8999990619' AS numNit,
                     'SECRETARÍA DISTRITAL DE HÁBITAT' AS txtEntidad,
-                    'txtTipoDocumento',
+                    txtTipoDocumento,
                     numDocumento,
                     UPPER(CONCAT(ciu.txtNombre1,
                                     ' ',
@@ -179,6 +179,8 @@ class OptimizacionFac {
                         T_CIU_PARENTESCO par ON hog.seqParentesco = par.seqParentesco
                             LEFT JOIN
                         v_frm_estado vEst ON frm.seqEstadoProceso = vEst.seqEstadoProceso
+                         LEFT JOIN 
+                         t_ciu_tipo_documento tdoc ON ciu.seqTipoDocumento = tdoc.seqTipoDocumento
                         where 
                         frm.seqEstadoProceso in (" . $estados . ")";
         try {
@@ -244,7 +246,7 @@ class OptimizacionFac {
                   frm.seqFormulario,
                     '8999990619' AS numNit,
                     'SECRETARÍA DISTRITAL DE HÁBITAT' AS txtEntidad,
-                    'txtTipoDocumento',
+                    txtTipoDocumento,
                     numDocumento,
                     UPPER(CONCAT(ciu.txtNombre1,
                                     ' ',
@@ -269,6 +271,8 @@ class OptimizacionFac {
                         T_CIU_PARENTESCO par ON hog.seqParentesco = par.seqParentesco
                             LEFT JOIN
                         v_frm_estado vEst ON frm.seqEstadoProceso = vEst.seqEstadoProceso
+                         LEFT JOIN 
+                         t_ciu_tipo_documento tdoc ON ciu.seqTipoDocumento = tdoc.seqTipoDocumento
                         where 
                         frm.seqEstadoProceso in (" . $estados . ") and bolCerrado = 1";
         try {

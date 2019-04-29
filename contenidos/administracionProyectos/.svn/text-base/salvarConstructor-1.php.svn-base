@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> master
 <?php
 /**
 * SALVA O EDITA LOS CONSTRUCTORES DE LA BASE DE DATOS
@@ -127,4 +131,138 @@ if( empty( $arrErrores ) ){
 
 	// Desconecta la base de datos
 	$aptBd->close();
+<<<<<<< HEAD
+=======
+=======
+<?php
+/**
+* SALVA O EDITA LOS CONSTRUCTORES DE LA BASE DE DATOS
+* @author Jaison Ospina
+* @version 0.1 Noviembre 2013
+*/
+
+// Posicion relativa de los archivos a incluir
+$txtPrefijoRuta = "../../";
+
+// Autenticacion (si esta logueado no no)
+include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
+
+// Inclusiones necesarias
+include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos']   . "archivos/inclusionSmarty.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos']   . "archivos/coneccionBaseDatos.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "Constructor.class.php" );
+//include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "Proyecto.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']    . "RegistroActividades.class.php" );
+
+/**
+* Validacion del formulario de Constructores
+*/ 
+
+$arrErrores = array();
+
+//////////////////////////////////////////////// VALIDACION DATOS CONSTRUCTOR ////////////////////////////////////////////////////
+
+// Validacion del nombre
+if( ( ! isset( $_POST['nombre'] ) ) or trim( $_POST['nombre'] ) == "" ){
+   	$arrErrores[] = "Debe diligenciar el nombre del Constructor";
+}
+
+// Validacion del Tipo de Documento del Constructor
+if( ( ! isset( $_POST['seqTipoDocumentoConstructor'] ) ) or trim( $_POST['seqTipoDocumentoConstructor'] ) == 0 ){
+	$arrErrores[] = "Debe seleccionar el Tipo de Documento del Constructor";
+}
+
+// Validacion del Numero de Documento del Constructor
+if( ( ! isset( $_POST['numDocumentoConstructor'] ) ) or trim( $_POST['numDocumentoConstructor'] ) == "" ){
+	$arrErrores[] = "Debe diligenciar el N&uacute;mero de Documento del Constructor";
+} else {
+	if( $_POST['numDocumentoConstructor'] <= 0 ){
+		$arrErrores[] = "El campo N&uacute;mero de Documento del Constructor debe ser mayor que cero";
+	}
+}
+
+$exregfijo = "/^[0-9]{7}$/";
+$exregcel = "/^[3]{1}[0-9]{9}$/";
+if ($_POST['numTelefono1Constructor'] == "" and $_POST['numTelefono2Constructor'] == "") {
+	echo $_POST['numTelefono1Constructor'];
+	$arrErrores[] = "El constructor debe tener un telefono de contacto";
+} else {
+	if ($_POST['numTelefono1Constructor'] != "" && $_POST['numTelefono1Constructor'] != 0) {
+		if (!preg_match($exregfijo, $_POST['numTelefono1Constructor'])) {
+			$arrErrores[] = "El Numero Telefonico no puede ser menor ni mayor a 7 digitos";
+		}
+	}
+	if ($_POST['numTelefono2Constructor'] != "" && $_POST['numTelefono2Constructor'] != 0) {
+		if (!preg_match($exregcel, $_POST['numTelefono2Constructor'])) {
+			$arrErrores[] = "El Numero celular no puede ser menor ni mayor a 10 digitos y debe empezar por 3";
+		}
+	}
+}
+
+// Validacion del correo electronico del constructor
+if( ( ! isset( $_POST['txtCorreoElectronicoConstructor'] ) ) or trim( $_POST['txtCorreoElectronicoConstructor'] ) == "" ){
+   	$arrErrores[] = "Debe diligenciar el correo electr&oacute;nico del constructor";
+} else {
+	if( ! ereg( "^[0-9a-zA-Z._\-]+\@[a-zA-Z0-9._\-]+\.([a-zA-z]{2,4})(([\.]{1})([a-zA-Z]{2}))?$" , trim( $_POST['txtCorreoElectronicoConstructor'] ) ) ){
+		$arrErrores[] = "El correo electr&oacute;nico del constructor no es v&aacute;lido";
+	}
+}
+
+////////////////////////////////////////// VALIDACION DATOS REPRESENTANTE LEGAL //////////////////////////////////////////////////
+
+// Validacion del nombre del representante legal
+if( ( ! isset( $_POST['txtNombreRepresentanteLegal'] ) ) or trim( $_POST['txtNombreRepresentanteLegal'] ) == "" ){
+   	$arrErrores[] = "Debe diligenciar el nombre del representante legal";
+}
+
+// Validacion del nombre del representante legal
+if( ( ! isset( $_POST['numDocumentoRepresentanteLegal'] ) ) or trim( $_POST['numDocumentoRepresentanteLegal'] ) == "" ){
+   	$arrErrores[] = "Debe diligenciar el n&uacute;mero de documento del representante legal";
+}
+
+// Validacion del correo electronico del representante legal
+if( ( ! isset( $_POST['txtCorreoElectronicoRepresentanteLegal'] ) ) or trim( $_POST['txtCorreoElectronicoRepresentanteLegal'] ) == "" ){
+   	$arrErrores[] = "Debe diligenciar el correo electr&oacute;nico del representante legal";
+} else {
+	if( ! ereg( "^[0-9a-zA-Z._\-]+\@[a-zA-Z0-9._\-]+\.([a-zA-z]{2,4})(([\.]{1})([a-zA-Z]{2}))?$" , trim( $_POST['txtCorreoElectronicoRepresentanteLegal'] ) ) ){
+		$arrErrores[] = "El correo electr&oacute;nico del representante legal no es v&aacute;lido";
+	}
+}
+
+/**
+* Salvar o editar Constructores si no hay errores
+*/
+
+if( empty( $arrErrores ) ){
+	$claConstructor = new Constructor;
+	$claRegistro = new RegistroActividades;
+
+	// Verifica si es para crear o editar la Constructor
+	if( isset( $_POST['seqEditar'] ) and is_numeric( $_POST['seqEditar'] ) and $_POST['seqEditar'] > 0 ){
+		$arrErrores = $claConstructor->editarConstructor( $_POST['seqEditar'] , trim( $_POST['nombre'] ) , $_POST['seqTipoDocumentoConstructor'] , trim( $_POST['numDocumentoConstructor'] ) , $_POST['txtDireccionConstructor'] , $_POST['numTelefono1Constructor'] , $_POST['numTelefono2Constructor'] , $_POST['txtCorreoElectronicoConstructor'] , $_POST['txtNombreRepresentanteLegal'] , $_POST['numDocumentoRepresentanteLegal'] , $_POST['txtCorreoElectronicoRepresentanteLegal'] , $_POST['bolActivo'] , $_POST['seqMenu'] );
+		$claRegistro->registrarActividad( "Edicion" , 0 , $_SESSION['seqUsuario'] , "Edicion del Constructor: [" . $_POST['seqEditar'] . "] " . trim( $_POST['nombre'] ) . " Mensaje: " . implode( "," , $arrErrores ) );
+	} else {
+		$arrErrores = $claConstructor->guardarConstructor( $_POST['seqConstructor'], trim( $_POST['nombre'] ) , $_POST['seqTipoDocumentoConstructor'] , trim( $_POST['numDocumentoConstructor'] ) , $_POST['txtDireccionConstructor'] , $_POST['numTelefono1Constructor'] , $_POST['numTelefono2Constructor'] , $_POST['txtCorreoElectronicoConstructor'] , $_POST['txtNombreRepresentanteLegal'] , $_POST['numDocumentoRepresentanteLegal'] , $_POST['txtCorreoElectronicoRepresentanteLegal'] , $_POST['bolActivo'], $_POST['seqMenu'] );
+		$claRegistro->registrarActividad( "Creacion" , 0 , $_SESSION['seqUsuario'] , "Creacion del Constructor: " . trim( $_POST['nombre'] ) . " Mensaje: " . implode( "," , $arrErrores ) );	
+	}
+}
+
+/**
+* Impresion de resultados
+*/
+
+if( empty( $arrErrores ) ){
+	//pr ($arrErrores);
+	$arrMensajes[] = "El Constructor <b>" . $_POST['nombre'] . "</b> se ha guardado";
+	imprimirMensajes( array() , $arrMensajes , "salvarConstructor" );
+} else {
+	imprimirMensajes( $arrErrores , array() );
+}
+
+	// Desconecta la base de datos
+	$aptBd->close();
+>>>>>>> 7614481... Merge branch 'pruebas' of http://www.github.com/bernardozerda/sipive into pruebas
+>>>>>>> master
 ?>

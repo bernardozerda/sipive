@@ -631,7 +631,7 @@ class Ciudadano {
             FROM 
                     T_FRM_FORMULARIO
                     INNER JOIN T_FRM_ESTADO_PROCESO ON(T_FRM_ESTADO_PROCESO.seqEstadoProceso =  T_FRM_FORMULARIO.seqEstadoProceso )
-            WHERE T_FRM_FORMULARIO.seqFormulario = " . $seqFormulario . " and T_FRM_ESTADO_PROCESO.seqEstadoProceso in(1,5,8,10,11,12,13,14,18,21,35,36,39,52) and bolCerrado = 0  ";
+            WHERE T_FRM_FORMULARIO.seqFormulario = " . $seqFormulario . " and T_FRM_ESTADO_PROCESO.seqEstadoProceso in(1,5,8,10,11,12,13,14,18,21,35,36,39,52) ";
         try {
             $objRes = $aptBd->execute($sql);
             if ($objRes->fields) {

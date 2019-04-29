@@ -22,34 +22,36 @@
     
     // reemplaza todos los caracteres que son de presentacion 
     // y que no deben ir a la base de datos
-    foreach( $_POST as $txtClave => $txtValor ){
-        if( ! is_array( $_POST[ $txtClave ] ) ){
-            $txtPatron = "";
-            switch( substr( $txtClave , 0 , 3 ) ){
-                case "num":
+foreach( $_POST as $txtClave => $txtValor ){
+    if( ! is_array( $_POST[ $txtClave ] ) ){
+        $txtPatron = "";
+        switch( substr( $txtClave , 0 , 3 ) ){
+            case "num":
+                $txtPatron = "[^0-9A-Za-z\ ]";
+                break;
+            case "seq":
+                $txtPatron = "[^0-9]";
+                break;
+            case "fch":
+                $txtPatron = "[^0-9A-Za-z\ \-\/]";
+                break;
+            case "txt":
+                $txtPatron = "[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,\+\&]";
+                break;
+            default:
+                if( ! in_array( $txtClave , array("valor","registro1","registro2","numeroRadicado","numeroOrden","monto") ) ) {
+                    $txtPatron = "[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,]";
+                }else{
                     $txtPatron = "[^0-9A-Za-z\ ]";
+                }
                 break;
-                case "seq":
-                    $txtPatron = "[^0-9]";
-                break;
-                case "fch":
-                    $txtPatron = "[^0-9A-Za-z\ \-\/]";
-                break;
-                case "txt":
-                    $txtPatron = "[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,\+\&]";
-                break;
-                default:
-                    if( ! in_array( $txtClave , array("valor","registro1","registro2","numeroRadicado","numeroOrden","monto") ) ) {
-                        $txtPatron = "[^áéíóúÁÉÍÓÚñÑA-Za-z0-9\ \.\-\/@\,]";
-                    }else{
-                        $txtPatron = "[^0-9A-Za-z\ ]";
-                    }
-                break;
-            }
         }
-        $_POST[$txtClave] = mb_ereg_replace($txtPatron,"",$txtValor);
     }
-
+    $_POST[$txtClave] = mb_ereg_replace($txtPatron,"",$txtValor);
+}
+    
+    //pr( $_POST );
+    
     if( $claFormulario->seqTipoEsquema != 1 ){
     
         /**

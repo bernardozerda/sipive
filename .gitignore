@@ -50,10 +50,12 @@ Temporary Items
 # custom ignores
 librerias/smarty/templates_c
 recursos/descargas
+recursos/reportes
 recursos/archivos/lecturaConfiguracion.php
 recursos/imagenes/desembolsos
 autenticacion.php
 redireccionamiento.php
+.htaccess
 *.xml
 *.iml
 *.idea*

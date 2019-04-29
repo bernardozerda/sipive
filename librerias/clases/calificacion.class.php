@@ -496,7 +496,9 @@ group by seqCalificacion;";
     }
 
     public function obtenerResumenCalificacion($fecha) {
-
+        
+        global $aptBd;
+        
         $sql = "SELECT seqFormulario,
        numDocumento,
        concat(txtNombre1,
@@ -752,7 +754,7 @@ group by seqCalificacion;";
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 15)
           AS totalPrograma,
-       sum(op.total)
+       sum(op.total) AS total
 FROM t_frm_calificacion_plan3    cal
      LEFT JOIN t_frm_calificacion_operaciones op USING (seqCalificacion)
      LEFT JOIN t_frm_formulario frm USING (seqFormulario)
@@ -763,9 +765,20 @@ FROM t_frm_calificacion_plan3    cal
 where fchCalificacion like '" . $fecha . "'
 and seqParentesco = 1
 group by seqFormulario";
-//        echo $sql;
-//        die();
-        return $sql;
+       
+       try {
+            $objRes = $aptBd->execute($sql);
+            $datos = array();
+            while ($objRes->fields) {
+                $datos[] = $objRes->fields;
+                $objRes->MoveNext();
+            }
+            return $datos;
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
+        return $datos;
+        
     }
 
     public function datosUltimaCalificacion($formularios) {

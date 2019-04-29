@@ -206,8 +206,7 @@ class InscripcionFonvivienda
         $this->arrRangoIngresos[1][] = "SUPERIORES A 2 SMMLV Y HASTA 4 SMMLV"; // 8 salarios
 
         $this->arrModalidad[12] = "CRÉDITO"; // modalidad de cierre financiero
-        $this->arrModalidad[12] = "LEASING"; // modalidad de leasing habitacional
-        //$this->arrModalidad[13] = "LEASING"; // modalidad de leasing habitacional
+        $this->arrModalidad[13] = "LEASING"; // modalidad de leasing habitacional
 
         $this->arrSoluciones[12][19] = "VIP";
         $this->arrSoluciones[12][23] = "VIS";
@@ -538,9 +537,8 @@ class InscripcionFonvivienda
      */
 
     public function carguePorProcesar(){
-      
         global $aptBd;
-       echo $sql = "
+        $sql = "
             select seqCargue, seqTipo
             from t_fnv_cargue
             where seqEstado = 1
@@ -560,7 +558,7 @@ class InscripcionFonvivienda
         global $aptBd;
         try {
             $aptBd->BeginTrans();
-            echo $sql = "
+            $sql = "
               update t_fnv_cargue set 
                   seqEstado = $seqEstado,
                   numProgreso = 0,

@@ -1,5 +1,7 @@
 <?php
 
+chdir(__DIR__);
+
 // si se intenta acceder por navegador redirecciona al index
 if(isset($_SERVER['HTTP_HOST'])){
     header("Location: " . $txtPrefijoRuta . "index.php");

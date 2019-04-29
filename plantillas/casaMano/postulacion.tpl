@@ -2362,7 +2362,7 @@
                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                  style="padding-right: 5px; width:100px;text-align:right;"
-                                                 readonly
+
                                         />
                                     </td>
 
@@ -2402,14 +2402,15 @@
                                                    $claFormulario->seqModalidad == 9  ||
                                                    $claFormulario->seqModalidad == 10 ||
                                                    ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
-                                                   ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
+                                                   ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 ) ||
+                                                   ( $claFormulario->seqModalidad == 13 && $claFormulario->seqTipoEsquema == 9 )
                                                  ) }
                                                      readonly
                                                  {/if}
                                         />
                                     </td>
 
-                                    {if $claFormulario->seqPlanGobierno == 2}
+                                    {if $claFormulario->seqPlanGobierno == 2 || (( $claFormulario->seqModalidad == 13 && $claFormulario->seqTipoEsquema == 9 ))}
                                         <td bgcolor="#E4E4E4" class="tituloTabla" height="25px" align="top">
                                             Soporte Cambio
                                         </td>

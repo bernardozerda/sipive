@@ -27,8 +27,8 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         $fec = date("y-m-d");
         $fch = "fchRadicacion";
         if ($tipo == 3) {
-
-            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 6 OR " . $fch . " = '0000-00-00 00:00:00')";
+          
+            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 6 OR ".$fch." = '0000-00-00 00:00:00')";
         } else if ($tipo == 2) {
 
             $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 5 and 6 ";
@@ -40,7 +40,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         $fch = "fchInformacionSolucion";
         if ($tipo == 3) {
 //      
-            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 3 OR " . $fch . " = '0000-00-00 00:00:00')";
+            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 3 OR ".$fch." = '0000-00-00 00:00:00')";
         } else if ($tipo == 2) {
 
             $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 3 and 3 ";
@@ -54,7 +54,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
             $fch = "fchCreacionBusquedaOferta";
             if ($tipo == 3) {
 
-                $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 9 OR " . $fch . " = '0000-00-00 00:00:00')";
+                $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 9 OR ".$fch." = '0000-00-00 00:00:00')";
             } else if ($tipo == 2) {
                 $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 8 and 9 ";
             } else if ($tipo == 1) {
@@ -63,7 +63,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         } else {
             $fch = "fchCreacionEscrituracion";
             if ($tipo == 3) {
-                $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . ")) > 2 OR " . $fch . " = '0000-00-00 00:00:00')";
+                $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . ")) > 2 OR ".$fch." = '0000-00-00 00:00:00')";
             } else if ($tipo == 2) {
                 $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 2 and 2 ";
             } else if ($tipo == 1) {
@@ -74,7 +74,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         $fec = date("y-m-d");
         $fch = "esc.fchCreacionEscrituracion";
         if ($tipo == 3) {
-            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . ")) > 3 OR " . $fch . " = '0000-00-00 00:00:00')";
+            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . ")) > 3 OR ".$fch." = '0000-00-00 00:00:00')";
         } else if ($tipo == 2) {
             $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . ")) between 3 and 3 ";
         } else if ($tipo == 1) {
@@ -85,7 +85,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         if ($seqEstado == 25) {
             $fch = "tec.fchCreacion";
             if ($tipo == 3) {
-                $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 3 OR " . $fch . " = '0000-00-00 00:00:00')";
+                $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 3 OR ".$fch." = '0000-00-00 00:00:00')";
             } else if ($tipo == 2) {
                 $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 3 and 3";
             } else if ($tipo == 1) {
@@ -94,7 +94,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         } else {
             $fch = " tec.fchActualizacion";
             if ($tipo == 3) {
-                $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 9 OR " . $fch . " = '0000-00-00 00:00:00')";
+                $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 9 OR ".$fch." = '0000-00-00 00:00:00')";
             } else if ($tipo == 2) {
                 $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 8 and 9";
             } else if ($tipo == 1) {
@@ -104,7 +104,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
     } else if ($seqEstado == 24) {
         $fch = "fchInformacionTitulos";
         if ($tipo == 3) {
-            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 3 OR " . $fch . " = '0000-00-00 00:00:00')";
+            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 3 OR ".$fch." = '0000-00-00 00:00:00')";
         } else if ($tipo == 2) {
             $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 3 and 3";
         } else if ($tipo == 1) {
@@ -118,7 +118,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
             $fch = "tit.fchActualizacion";
         }
         if ($tipo == 3) {
-            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 9 OR " . $fch . " = '0000-00-00 00:00:00')";
+            $fechaFin = "((workdaydiff(DATE(NOW()), " . $fch . "))> 9 OR ".$fch." = '0000-00-00 00:00:00')";
         } else if ($tipo == 2) {
             $fechaFin = "(workdaydiff(DATE(NOW()), " . $fch . "))between 8 and 9 ";
         } else if ($tipo == 1) {
@@ -154,50 +154,15 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
     } else if ($seqEstado == 47) {
         $sql .= " where seqEstadoProceso in (7, 47, 54, 16, 56) and seqParentesco = 1 and frm.bolCerrado = 1 ";
     }
-    if (isset($fechaFin)) {
-        $sql .= " AND " . $fechaFin;
+    if(isset($fechaFin)){
+        $sql .= " AND " . $fechaFin; 
     }
-
+    
     if ($proyecto != "") {
         $sql .= " AND und.seqProyecto =" . $proyecto;
     }
 
 //    echo $sql;
 //    die();
-    return $sql;
-}
-
-function obTenerDatosNoProyectos($estado) {
-
-    if ($estado == 62) {
-        $estado = '19,62';
-    } else if ($estado == 26) {
-        $estado = '26,28';
-    } else if ($estado == 29) {
-        $estado = '29,30,32';
-    }
-    $sql = "SELECT 
-            frm.seqFormulario, numDocumento, upper(concat(txtNombre1, ' ', txtNombre2, ' ', txtApellido1, ' ', txtApellido2 )) AS postulante,
-            txtEstado, txtModalidad, txtTipoEsquema, concat(numActo, ' - ', year(fchActo)) as Acto, fchActo, frm.fchVigencia
-            FROM
-                t_frm_formulario frm
-                    LEFT JOIN
-                t_aad_formulario_acto fac USING (seqFormulario)
-                    LEFT JOIN
-                v_frm_estado v ON (frm.seqEstadoProceso = v.seqEstadoProceso)
-                LEFT JOIN 
-                t_frm_modalidad mo ON (frm.seqModalidad = mo.seqModalidad)
-                LEFT JOIN  t_pry_tipo_esquema esq on(frm.seqTipoEsquema = esq.seqTipoEsquema)
-                LEFT JOIN t_frm_hogar hog USING(seqFormulario)
-                LEFT JOIN t_ciu_ciudadano USING(seqCiudadano)
-                LEFT JOIN 
-                t_aad_hogares_vinculados hv using(seqFormularioActo)
-            WHERE
-                frm.seqProyecto IN (32 , 37, 58, 94,  95, 96, 97, 98, 99, 101, 103, 105, 0, NULL,'')
-                    AND frm.seqEstadoProceso IN (" . $estado . ")
-                    AND fac.seqEstadoProceso IN (15)
-                    GROUP BY frm.seqFormulario";
-
-
     return $sql;
 }

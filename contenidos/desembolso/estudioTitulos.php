@@ -107,7 +107,6 @@ foreach ($arrActos as $txtClave => $arrInformacion) {
         }
     }
 }
-
 $claSmarty->assign("arrActos", $arrActos);
 $claSmarty->assign("txtHoy", $txtHoy);
 $claSmarty->assign("objCiudadano", $objCiudadano); // Postulante principal

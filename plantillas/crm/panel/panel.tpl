@@ -31,7 +31,7 @@
                     <td><h4 style="font-weight: bolder">{$totalUnidades}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalUnidades-$totalPostuladas-$totalVinculadas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalPostuladas}
-                      <img src="recursos/imagenes/excel-48.png" style="cursor: pointer; cursor: hand; "width="18" onclick="exportarExcel(47, '', 0)"/></h4></td>
+                      <img src="recursos/imagenes/excel-48.png" style="cursor: pointer; cursor: hand; "width="18" onclick="exportarExcel(47, '', 0, 'reporteTableroExcel')"/></h4></td>
                     <td><h4 style="font-weight: bolder">{$totalVinculadas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalLegalizadas}</h4></td>
                     <td><h4 style="font-weight: bolder">{$totalProcesoLeg}</h4></td>

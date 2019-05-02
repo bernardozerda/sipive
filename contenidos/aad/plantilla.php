@@ -80,7 +80,7 @@ for ($i = 2; $i <= $numFilasFormatear; $i++) {
 
             if($bolImprimirRango) {
                 foreach ($arrTitulo['rango'] as $numItemTitulo => $txtEstado) {
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(25, $numItemTitulo, $txtEstado, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(25, $numItemTitulo+1, $txtEstado, flase);
                 }
                 $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setVisible(false);
                 $bolImprimirRango = false;

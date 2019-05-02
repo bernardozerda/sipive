@@ -7,8 +7,8 @@ include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "aadTipo.class.php" );
-include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases']   . "PHPExcel.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "aadTipo.class.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "PHPExcel.php" );
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 
 // numero de filas vacias a formatear
@@ -28,7 +28,7 @@ $arrFuentes['titulo']['font']['color'] = array('rgb' => '000000');
 
 // Creacion del libro de excel
 $objPHPExcel = new PHPExcel();
-$objPHPExcel->getProperties()->setCreator( $claTipoActo->txtCreador );
+$objPHPExcel->getProperties()->setCreator($claTipoActo->txtCreador);
 $objPHPExcel->setActiveSheetIndex(0);
 $objPHPExcel->getActiveSheet()->setTitle(mb_substr(mb_ereg_replace("[^0-9A-Za-z\ ]", "", $claTipoActo->txtTipoActo), 0, 30)); // titulo de excel limitado a 30 caracteres
 $objPHPExcel->getDefaultStyle()->applyFromArray($arrFuentes['default']);
@@ -39,7 +39,7 @@ $objPHPExcel->getSecurity()->setLockStructure(false);
 $objPHPExcel->getSheet(0)->getProtection()->setSheet(true);
 $objPHPExcel->getActiveSheet()->getProtection()->setPassword($arrConfiguracion['baseDatos']['clave']);
 $objPHPExcel->getActiveSheet()->getStyle("A2:" . PHPExcel_Cell::stringFromColumnIndex(count($claTipoActo->arrFormatoArchivo) - 1) . $numFilasFormatear)
-    ->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        ->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
 // coloca los titulos
 foreach ($claTipoActo->arrFormatoArchivo as $numColumna => $arrTitulo) {
@@ -78,9 +78,9 @@ for ($i = 2; $i <= $numFilasFormatear; $i++) {
 
         if (isset($arrTitulo['rango'])) {
 
-            if($bolImprimirRango) {
+            if ($bolImprimirRango) {
                 foreach ($arrTitulo['rango'] as $numItemTitulo => $txtEstado) {
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(25, $numItemTitulo+1, $txtEstado, flase);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(25, $numItemTitulo + 1, $txtEstado, flase);
                 }
                 $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setVisible(false);
                 $bolImprimirRango = false;
@@ -97,22 +97,20 @@ for ($i = 2; $i <= $numFilasFormatear; $i++) {
             $objValidacion->setErrorTitle("Error de datos");
             $objValidacion->setError("El valor digitado no es válido");
             $objValidacion->setPromptTitle("Los valores válidos son:");
-            $objValidacion->setFormula1('$Z$1:$Z$' . $numItemTitulo );
+            $objValidacion->setFormula1('$Z$1:$Z$' . $numItemTitulo);
         }
 
         $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($numColumna)->setAutoSize(true);
-
     }
 }
 
 // *************************** EXPORTA LOS RESULTADOS *************************************************************** //
 
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment;filename=Plantilla_" . mb_ereg_replace( " " , "_" , $claTipoActo->txtTipoActo ) . ".xlsx");
+header("Content-Disposition: attachment;filename=Plantilla_" . mb_ereg_replace(" ", "_", $claTipoActo->txtTipoActo) . ".xlsx");
 header('Cache-Control: max-age=0');
 ob_end_clean();
 
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save('php://output');
-
 ?>

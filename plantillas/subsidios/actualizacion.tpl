@@ -4,8 +4,9 @@
 
 <form name="frmActualizacion"
       id="frmActualizacion"
-      onSubmit="pedirConfirmacion('mensajes',this,'./contenidos/subsidios/pedirConfirmacion.php'); return false;"
->
+      onSubmit="pedirConfirmacion('mensajes', this, './contenidos/subsidios/pedirConfirmacion.php');
+              return false;"
+      >
 
     <!-- CODGIO PARA EL SEGUIMIENTO Y BOTON SUBMIT DEL FORMULARIO -->
     {include file='subsidios/pedirSeguimiento.tpl'}
@@ -21,7 +22,7 @@
         {/if}
         <tr>
             <td width="150px" align="left" style="padding-left: 10px;">
-                <a href="#" onClick="imprimirPostulacionCEM( document.frmActualizacion , './contenidos/subsidios/pedirConfirmacion.php' );">
+                <a href="#" onClick="imprimirPostulacionCEM(document.frmActualizacion, './contenidos/subsidios/pedirConfirmacion.php');">
                     Imprimir Formulario
                 </a>
             </td>
@@ -62,7 +63,7 @@
                                    name="seqEstadoProceso"
                                    id="seqEstadoProceso"
                                    value="{$seqEstadoProceso}"
-                            >
+                                   >
                         </td>
                         <td style="width:100px;">
                             <strong>Plan de Gobierno</strong>
@@ -74,7 +75,7 @@
                                    name="seqPlanGobierno"
                                    id="seqPlanGobierno"
                                    value="{$objFormulario->seqPlanGobierno}"
-                            >
+                                   >
                         </td>
                     </tr>
                 </table>
@@ -139,7 +140,7 @@
                                             <a href="#"
                                                onClick="mostrarOcultar('agregarMiembro');
                                                        document.getElementById('tipoDocumento').focus();"
-                                            > Agregar Miembro al Hogar </a>
+                                               > Agregar Miembro al Hogar </a>
                                         {/if}
                                     </td>
                                 </tr>
@@ -154,7 +155,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="tipoDocumento"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="0">Seleccione</option>
                                                         {foreach from=$arrTipoDocumento key=seqTipoDocumento item=txtTipoDocumento}
                                                             {if $seqTipoDocumento != 6}
@@ -174,158 +175,158 @@
                                                                    this.style.backgroundColor = '#FFFFFF';"
                                                            onKeyUp="formatoSeparadores(this)"
                                                            style="width:90%;"
-                                                    >
+                                                           >
                                                 </td>
                                             </tr>
 
                                             <!-- FECHA DE EXPEDICION DEL DOCUMENTO Y TIPO DE SOPORTE -->
                                             {*{if $objFormulario->seqPlanGobierno == 3}*}
-                                                {*<tr>*}
-                                                    {*<td width="15%">Fecha de Expedición</td>*}
-                                                    {*<td width="35%" style="padding-left: 15px;">*}
-                                                        {*<input type="text"*}
-                                                               {*id="expedicion"*}
-                                                               {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                               {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                               {*value=""*}
-                                                               {*style="width:100px"*}
-                                                               {*readonly*}
-                                                        {*/> <a onClick="calendarioPopUp('expedicion')" href="#">Calendario</a> &nbsp;&nbsp;*}
-                                                        {*<a onClick="document.getElementById('expedicion').value = '';" href="#">Limpiar</a>*}
-                                                    {*</td>*}
-                                                    {*<td width="15%">Tipo de soporte</td>*}
-                                                    {*<td width="35%" style="padding-left: 15px;">*}
-                                                        {*<select id="tipoSoporte"*}
-                                                                {*style="width:90%;"*}
-                                                                {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                {*onchange="soporteDocumento('tipoSoporte',$('#tipoSoporte').val())"*}
-                                                                {*style="width:90%;"*}
-                                                        {*>*}
-                                                            {*<option value="">Seleccione</option>*}
-                                                            {*<option value="registroCivil">Registro Civil</option>*}
-                                                            {*<option value="partidaBautismo">Partida de Bautismo</option>*}
-                                                        {*</select>*}
-                                                    {*</td>*}
-                                                {*</tr>*}
+                                            {*<tr>*}
+                                            {*<td width="15%">Fecha de Expedición</td>*}
+                                            {*<td width="35%" style="padding-left: 15px;">*}
+                                            {*<input type="text"*}
+                                            {*id="expedicion"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*value=""*}
+                                            {*style="width:100px"*}
+                                            {*readonly*}
+                                            {*/> <a onClick="calendarioPopUp('expedicion')" href="#">Calendario</a> &nbsp;&nbsp;*}
+                                            {*<a onClick="document.getElementById('expedicion').value = '';" href="#">Limpiar</a>*}
+                                            {*</td>*}
+                                            {*<td width="15%">Tipo de soporte</td>*}
+                                            {*<td width="35%" style="padding-left: 15px;">*}
+                                            {*<select id="tipoSoporte"*}
+                                            {*style="width:90%;"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*onchange="soporteDocumento('tipoSoporte',$('#tipoSoporte').val())"*}
+                                            {*style="width:90%;"*}
+                                            {*>*}
+                                            {*<option value="">Seleccione</option>*}
+                                            {*<option value="registroCivil">Registro Civil</option>*}
+                                            {*<option value="partidaBautismo">Partida de Bautismo</option>*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*</tr>*}
                                             {*{/if}*}
 
                                             {*<!-- SOPORTE PARA EL DOCUMENTO DE IDENTIDAD -->*}
                                             {*<tr id="soporteCedula" style="display: none">*}
-                                                {*<td colspan="4" style="padding-left: 0px; background-color: #FFFFFF;">*}
-                                                    {*<table cellspacing="0" cellpadding="2" border="0" width="100%">*}
-                                                        {*<tr>*}
-                                                            {*<td width="17%">Entidad del registro civil</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<select id="entidadDocumento"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*onchange="soporteDocumento('documentoNotaria', $('#entidadDocumento').val())"*}
-                                                                        {*style="width:90%;"*}
-                                                                {*>*}
-                                                                    {*<option value="">Seleccione</option>*}
-                                                                    {*<option value="Registraduría">Registraduría</option>*}
-                                                                    {*<option value="Notaria">Notaria</option>*}
-                                                                    {*<option value="Consulado">Consulado</option>*}
-                                                                    {*<option value="Corregimiento">Corregimiento</option>*}
-                                                                    {*<option value="Inspección de Policía">Inspección de Policía</option>*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                            {*<td width="17%">Indicativo Serial</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<input type="text"*}
-                                                                       {*id="indicativoSerial"*}
-                                                                       {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                       {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                       {*value=""*}
-                                                                       {*style="width:90%;"*}
-                                                                {*/>*}
-                                                            {*</td>*}
-                                                        {*</tr>*}
-                                                        {*<tr>*}
-                                                            {*<td colspan="2">*}
-                                                                {*<table cellpadding="0" cellspacing="0" border="0" width="100%" id="documentoNotaria" style="display: none">*}
-                                                                    {*<tr>*}
-                                                                        {*<td width="17%">Notaría</td>*}
-                                                                        {*<td width="33%">*}
-                                                                            {*<input type="text"*}
-                                                                                   {*id="notariaDocumento"*}
-                                                                                   {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                                   {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                                   {*style="width:90%;"*}
-                                                                                   {*value=""*}
-                                                                            {*/>*}
-                                                                        {*</td>*}
-                                                                    {*</tr>*}
-                                                                {*</table>*}
-                                                            {*</td>*}
-                                                            {*<td>Ciudad</td>*}
-                                                            {*<td>*}
-                                                                {*<select id="ciudadDocumento"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*style="width:90%;"*}
-                                                                {*>*}
-                                                                    {*<option value="0">Seleccione</option>*}
-                                                                    {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
-                                                                        {*<option value="{$seqCiudad}">*}
-                                                                            {*{$txtCiudad}*}
-                                                                        {*</option>*}
-                                                                    {*{/foreach}*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                        {*</tr>*}
-                                                    {*</table>*}
-                                                {*</td>*}
+                                            {*<td colspan="4" style="padding-left: 0px; background-color: #FFFFFF;">*}
+                                            {*<table cellspacing="0" cellpadding="2" border="0" width="100%">*}
+                                            {*<tr>*}
+                                            {*<td width="17%">Entidad del registro civil</td>*}
+                                            {*<td width="33%">*}
+                                            {*<select id="entidadDocumento"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*onchange="soporteDocumento('documentoNotaria', $('#entidadDocumento').val())"*}
+                                            {*style="width:90%;"*}
+                                            {*>*}
+                                            {*<option value="">Seleccione</option>*}
+                                            {*<option value="Registraduría">Registraduría</option>*}
+                                            {*<option value="Notaria">Notaria</option>*}
+                                            {*<option value="Consulado">Consulado</option>*}
+                                            {*<option value="Corregimiento">Corregimiento</option>*}
+                                            {*<option value="Inspección de Policía">Inspección de Policía</option>*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*<td width="17%">Indicativo Serial</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*id="indicativoSerial"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*value=""*}
+                                            {*style="width:90%;"*}
+                                            {*/>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*<tr>*}
+                                            {*<td colspan="2">*}
+                                            {*<table cellpadding="0" cellspacing="0" border="0" width="100%" id="documentoNotaria" style="display: none">*}
+                                            {*<tr>*}
+                                            {*<td width="17%">Notaría</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*id="notariaDocumento"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*style="width:90%;"*}
+                                            {*value=""*}
+                                            {*/>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*</table>*}
+                                            {*</td>*}
+                                            {*<td>Ciudad</td>*}
+                                            {*<td>*}
+                                            {*<select id="ciudadDocumento"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*style="width:90%;"*}
+                                            {*>*}
+                                            {*<option value="0">Seleccione</option>*}
+                                            {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
+                                            {*<option value="{$seqCiudad}">*}
+                                            {*{$txtCiudad}*}
+                                            {*</option>*}
+                                            {*{/foreach}*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*</table>*}
+                                            {*</td>*}
                                             {*</tr>*}
 
                                             {*<!-- SOPORTE PARA EL PARTIDA DE BAUTISMO -->*}
                                             {*<tr id="soportePartida" style="display: none">*}
-                                                {*<td colspan="4" style="padding-left: 0px; background-color: #FFFFFF;">*}
-                                                    {*<table cellspacing="0" cellpadding="2" border="0" width="100%">*}
-                                                        {*<tr>*}
-                                                            {*<td width="17%">Consecutivo</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<input type="text"*}
-                                                                       {*id="consecutivoPartida"*}
-                                                                       {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                       {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                       {*value=""*}
-                                                                       {*style="width:90%;"*}
-                                                                {*/>*}
-                                                            {*</td>*}
-                                                            {*<td width="17%">Parroquia</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<input type="text"*}
-                                                                       {*id="parroquiaPartida"*}
-                                                                       {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                       {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                       {*value=""*}
-                                                                       {*style="width:90%;"*}
-                                                                {*/>*}
-                                                            {*</td>*}
-                                                        {*</tr>*}
-                                                        {*<tr>*}
-                                                            {*<td>Ciudad</td>*}
-                                                            {*<td>*}
-                                                                {*<select id="ciudadPartida"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*style="width:90%;"*}
-                                                                {*>*}
-                                                                    {*<option value="0">Seleccione</option>*}
-                                                                    {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
-                                                                        {*<option value="{$seqCiudad}">*}
-                                                                            {*{$txtCiudad}*}
-                                                                        {*</option>*}
-                                                                    {*{/foreach}*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                            {*<td></td>*}
-                                                            {*<td></td>*}
-                                                        {*</tr>*}
-                                                    {*</table>*}
-                                                {*</td>*}
+                                            {*<td colspan="4" style="padding-left: 0px; background-color: #FFFFFF;">*}
+                                            {*<table cellspacing="0" cellpadding="2" border="0" width="100%">*}
+                                            {*<tr>*}
+                                            {*<td width="17%">Consecutivo</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*id="consecutivoPartida"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*value=""*}
+                                            {*style="width:90%;"*}
+                                            {*/>*}
+                                            {*</td>*}
+                                            {*<td width="17%">Parroquia</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*id="parroquiaPartida"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*value=""*}
+                                            {*style="width:90%;"*}
+                                            {*/>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*<tr>*}
+                                            {*<td>Ciudad</td>*}
+                                            {*<td>*}
+                                            {*<select id="ciudadPartida"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*style="width:90%;"*}
+                                            {*>*}
+                                            {*<option value="0">Seleccione</option>*}
+                                            {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
+                                            {*<option value="{$seqCiudad}">*}
+                                            {*{$txtCiudad}*}
+                                            {*</option>*}
+                                            {*{/foreach}*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*<td></td>*}
+                                            {*<td></td>*}
+                                            {*</tr>*}
+                                            {*</table>*}
+                                            {*</td>*}
                                             {*</tr>*}
 
                                             <tr>
@@ -339,7 +340,7 @@
                                                            onBlur="soloLetras(this);
                                                                    this.style.backgroundColor = '#FFFFFF';"
                                                            style="width:90%;"
-                                                    >
+                                                           >
                                                 </td>
                                                 <!-- SEGUNDO APELLIDO -->
                                                 <td>Segundo Apellido</td>
@@ -351,7 +352,7 @@
                                                            onBlur="soloLetras(this);
                                                                    this.style.backgroundColor = '#FFFFFF';"
                                                            style="width:90%;"
-                                                    >
+                                                           >
                                                 </td>
                                             </tr>
                                             <tr>
@@ -365,7 +366,7 @@
                                                            onBlur="soloLetrasEspacio(this);
                                                                    this.style.backgroundColor = '#FFFFFF';"
                                                            style="width:90%;"
-                                                    />
+                                                           />
                                                 </td>
                                                 <!-- SEGUNDO NOMBRE -->
                                                 <td>Segundo Nombre</td>
@@ -377,7 +378,7 @@
                                                            onBlur="soloLetras(this);
                                                                    this.style.backgroundColor = '#FFFFFF';"
                                                            style="width:90%;"
-                                                    />
+                                                           />
                                                 </td>
                                             </tr>
                                             <tr>
@@ -388,7 +389,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="parentesco"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="0">Ninguno</option>
                                                         {foreach from=$arrParentesco key=seqParentesco item=arrRegistro}
                                                             <option value="{$seqParentesco}"
@@ -396,7 +397,7 @@
                                                                         style="color:#666666"
                                                                         disabled
                                                                     {/if}
-                                                            >
+                                                                    >
                                                                 {$arrRegistro.txtParentesco}
                                                             </option>
                                                         {/foreach}
@@ -407,10 +408,10 @@
                                                 <td align="center">
                                                     <select onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                            onchange="soporteDocumento('estadoCivil',$('#estadoCivil').val())"
+                                                            onchange="soporteDocumento('estadoCivil', $('#estadoCivil').val())"
                                                             id="estadoCivil"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="0">Ninguno</option>
                                                         {foreach from=$arrEstadoCivil key=seqEstadoCivil item=arrRegistro}
                                                             <option value="{$seqEstadoCivil}"
@@ -418,7 +419,7 @@
                                                                         style="color:#666666"
                                                                         disabled
                                                                     {/if}
-                                                            >
+                                                                    >
                                                                 {$arrRegistro.txtEstadoCivil}
                                                             </option>
                                                         {/foreach}
@@ -428,234 +429,234 @@
 
                                             <!-- SOPORTE PARA EL ESTADO CIVIL - CASADO - -->
                                             {*<tr id="soporteEstadoCivilCasado" style="display: none">*}
-                                                {*<td colspan="4" style="padding-left:0px; background-color: #FFFFFF">*}
-                                                    {*<table cellspacing="0" cellpadding="2" border="0" width="100%">*}
-                                                        {*<tr>*}
-                                                            {*<td width="17%">Consecutivo</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<input type="text"*}
-                                                                       {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                       {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                       {*id="consecutivoCasado"*}
-                                                                       {*value=""*}
-                                                                       {*style="width: 90%"*}
-                                                                {*>*}
-                                                            {*</td>*}
-                                                            {*<td width="17%">Notaria</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<input type="text"*}
-                                                                       {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                       {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                       {*id="notariaCasado"*}
-                                                                       {*value=""*}
-                                                                       {*style="width: 90%"*}
-                                                                {*>*}
-                                                            {*</td>*}
-                                                        {*</tr>*}
-                                                        {*<tr>*}
-                                                            {*<td>Ciudad</td>*}
-                                                            {*<td>*}
-                                                                {*<select id="ciudadCasado"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*style="width: 90%;"*}
-                                                                {*>*}
-                                                                    {*<option value="0">Seleccione</option>*}
-                                                                    {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
-                                                                        {*<option value="{$seqCiudad}">*}
-                                                                            {*{$txtCiudad}*}
-                                                                        {*</option>*}
-                                                                    {*{/foreach}*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                            {*<td></td>*}
-                                                            {*<td></td>*}
-                                                        {*</tr>*}
-                                                    {*</table>*}
-                                                {*</td>*}
+                                            {*<td colspan="4" style="padding-left:0px; background-color: #FFFFFF">*}
+                                            {*<table cellspacing="0" cellpadding="2" border="0" width="100%">*}
+                                            {*<tr>*}
+                                            {*<td width="17%">Consecutivo</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*id="consecutivoCasado"*}
+                                            {*value=""*}
+                                            {*style="width: 90%"*}
+                                            {*>*}
+                                            {*</td>*}
+                                            {*<td width="17%">Notaria</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*id="notariaCasado"*}
+                                            {*value=""*}
+                                            {*style="width: 90%"*}
+                                            {*>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*<tr>*}
+                                            {*<td>Ciudad</td>*}
+                                            {*<td>*}
+                                            {*<select id="ciudadCasado"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*style="width: 90%;"*}
+                                            {*>*}
+                                            {*<option value="0">Seleccione</option>*}
+                                            {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
+                                            {*<option value="{$seqCiudad}">*}
+                                            {*{$txtCiudad}*}
+                                            {*</option>*}
+                                            {*{/foreach}*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*<td></td>*}
+                                            {*<td></td>*}
+                                            {*</tr>*}
+                                            {*</table>*}
+                                            {*</td>*}
                                             {*</tr>*}
 
                                             <!-- SOPORTE PARA EL ESTADO CIVIL - CASADO CON SOCIEDAD CONYUGAL DISUELTA Y LIQUIDADA - -->
                                             {*<tr id="soporteEstadoCivilCSCDL" style="display: none">*}
-                                                {*<td colspan="4" style="padding-left:0px; background-color: #FFFFFF">*}
-                                                    {*<table cellpadding="2" cellspacing="0" border="0" width="100%">*}
-                                                        {*<tr>*}
-                                                            {*<td width="17%">Consecutivo</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<input type="text"*}
-                                                                       {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                       {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                       {*id="consecutivoCSCDL"*}
-                                                                       {*value=""*}
-                                                                       {*style="width: 90%;"*}
-                                                                {*>*}
-                                                            {*</td>*}
-                                                            {*<td width="17%">Entidad</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<select id="entidadCSCDL"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*onchange="soporteDocumento('notaria-CSCDL', $('#entidadCSCDL').val())"*}
-                                                                        {*style="width: 260px;"*}
-                                                                {*>*}
-                                                                    {*<option value="">Seleccione</option>*}
-                                                                    {*<option value="Personeria">Personeria</option>*}
-                                                                    {*<option value="Notaria">Notaria</option>*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                        {*</tr>*}
-                                                        {*<tr>*}
-                                                            {*<td>Ciudad</td>*}
-                                                            {*<td>*}
-                                                                {*<select id="ciudadCSCDL"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*style="width: 90%;"*}
-                                                                {*>*}
-                                                                    {*<option value="0">Seleccione</option>*}
-                                                                    {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
-                                                                        {*<option value="{$seqCiudad}">*}
-                                                                            {*{$txtCiudad}*}
-                                                                        {*</option>*}
-                                                                    {*{/foreach}*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                            {*<td colspan="2">*}
-                                                                {*<table cellpadding="0" cellspacing="0" border="0" width="100%" id="notaria-CSCDL" style="display: none">*}
-                                                                    {*<tr>*}
-                                                                        {*<td width="17%">Notaría</td>*}
-                                                                        {*<td width="33%">*}
-                                                                            {*<input type="text"*}
-                                                                                   {*id="notariaCSCDL"*}
-                                                                                   {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                                   {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                                   {*style="width: 90%;"*}
-                                                                                   {*value=""*}
-                                                                            {*/>*}
-                                                                        {*</td>*}
-                                                                    {*</tr>*}
-                                                                {*</table>*}
-                                                            {*</td>*}
-                                                        {*</tr>*}
-                                                    {*</table>*}
-                                                {*</td>*}
+                                            {*<td colspan="4" style="padding-left:0px; background-color: #FFFFFF">*}
+                                            {*<table cellpadding="2" cellspacing="0" border="0" width="100%">*}
+                                            {*<tr>*}
+                                            {*<td width="17%">Consecutivo</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*id="consecutivoCSCDL"*}
+                                            {*value=""*}
+                                            {*style="width: 90%;"*}
+                                            {*>*}
+                                            {*</td>*}
+                                            {*<td width="17%">Entidad</td>*}
+                                            {*<td width="33%">*}
+                                            {*<select id="entidadCSCDL"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*onchange="soporteDocumento('notaria-CSCDL', $('#entidadCSCDL').val())"*}
+                                            {*style="width: 260px;"*}
+                                            {*>*}
+                                            {*<option value="">Seleccione</option>*}
+                                            {*<option value="Personeria">Personeria</option>*}
+                                            {*<option value="Notaria">Notaria</option>*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*<tr>*}
+                                            {*<td>Ciudad</td>*}
+                                            {*<td>*}
+                                            {*<select id="ciudadCSCDL"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*style="width: 90%;"*}
+                                            {*>*}
+                                            {*<option value="0">Seleccione</option>*}
+                                            {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
+                                            {*<option value="{$seqCiudad}">*}
+                                            {*{$txtCiudad}*}
+                                            {*</option>*}
+                                            {*{/foreach}*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*<td colspan="2">*}
+                                            {*<table cellpadding="0" cellspacing="0" border="0" width="100%" id="notaria-CSCDL" style="display: none">*}
+                                            {*<tr>*}
+                                            {*<td width="17%">Notaría</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*id="notariaCSCDL"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*style="width: 90%;"*}
+                                            {*value=""*}
+                                            {*/>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*</table>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*</table>*}
+                                            {*</td>*}
                                             {*</tr>*}
 
                                             <!-- SOPORTE PARA EL ESTADO CIVIL - SOLTERO CON UNION MARITAL DE HECHO - -->
                                             {*<tr id="soporteEstadoCivilUnion" style="display: none">*}
-                                                {*<td colspan="4" style="padding-left:0px; background-color: #FFFFFF">*}
-                                                    {*<table cellpadding="2" cellspacing="0" border="0" width="100%">*}
-                                                        {*<tr>*}
-                                                            {*<td width="17%">Tipo Certificación</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<select id="certificacionUnion"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*style="width: 90%;"*}
-                                                                {*>*}
-                                                                    {*<option value="">Seleccione</option>*}
-                                                                    {*<option value="Acta de Conciliación">Acta de Conciliación</option>*}
-                                                                    {*<option value="Declaración">Declaración</option>*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                            {*<td width="17%">Consecutivo</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<input type="text"*}
-                                                                       {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                       {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                       {*id="consecutivoUnion"*}
-                                                                       {*value=""*}
-                                                                       {*style="width: 90%;"*}
-                                                                {*>*}
-                                                            {*</td>*}
-                                                        {*</tr>*}
-                                                        {*<tr>*}
-                                                            {*<td>Entidad</td>*}
-                                                            {*<td>*}
-                                                                {*<select id="entidadUnion"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*onchange="soporteDocumento('notaria-Union', $('#entidadUnion').val())"*}
-                                                                        {*style="width: 90%;"*}
-                                                                {*>*}
-                                                                    {*<option value="">Seleccione</option>*}
-                                                                    {*<option value="Personeria">Personeria</option>*}
-                                                                    {*<option value="Notaria">Notaria</option>*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                            {*<td colspan="2" id="notaria-Union" style="display: none">*}
-                                                                {*<table cellspacing="0" cellpadding="0" border="0" width="100%">*}
-                                                                    {*<tr>*}
-                                                                        {*<td width="17%">Notaria</td>*}
-                                                                        {*<td width="33%">*}
-                                                                            {*<input type="text"*}
-                                                                                   {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                                   {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                                   {*id="notariaUnion"*}
-                                                                                   {*value=""*}
-                                                                                   {*style="width: 90%"*}
-                                                                            {*>*}
-                                                                        {*</td>*}
-                                                                    {*</tr>*}
-                                                                {*</table>*}
-                                                            {*</td>*}
-                                                        {*</tr>*}
-                                                        {*<tr>*}
-                                                            {*<td>Ciudad</td>*}
-                                                            {*<td>*}
-                                                                {*<select id="ciudadUnion"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*style="width: 90%"*}
-                                                                {*>*}
-                                                                    {*<option value="0">Seleccione</option>*}
-                                                                    {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
-                                                                        {*<option value="{$seqCiudad}">*}
-                                                                            {*{$txtCiudad}*}
-                                                                        {*</option>*}
-                                                                    {*{/foreach}*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                            {*<td></td>*}
-                                                            {*<td></td>*}
-                                                        {*</tr>*}
-                                                    {*</table>*}
-                                                {*</td>*}
+                                            {*<td colspan="4" style="padding-left:0px; background-color: #FFFFFF">*}
+                                            {*<table cellpadding="2" cellspacing="0" border="0" width="100%">*}
+                                            {*<tr>*}
+                                            {*<td width="17%">Tipo Certificación</td>*}
+                                            {*<td width="33%">*}
+                                            {*<select id="certificacionUnion"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*style="width: 90%;"*}
+                                            {*>*}
+                                            {*<option value="">Seleccione</option>*}
+                                            {*<option value="Acta de Conciliación">Acta de Conciliación</option>*}
+                                            {*<option value="Declaración">Declaración</option>*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*<td width="17%">Consecutivo</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*id="consecutivoUnion"*}
+                                            {*value=""*}
+                                            {*style="width: 90%;"*}
+                                            {*>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*<tr>*}
+                                            {*<td>Entidad</td>*}
+                                            {*<td>*}
+                                            {*<select id="entidadUnion"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*onchange="soporteDocumento('notaria-Union', $('#entidadUnion').val())"*}
+                                            {*style="width: 90%;"*}
+                                            {*>*}
+                                            {*<option value="">Seleccione</option>*}
+                                            {*<option value="Personeria">Personeria</option>*}
+                                            {*<option value="Notaria">Notaria</option>*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*<td colspan="2" id="notaria-Union" style="display: none">*}
+                                            {*<table cellspacing="0" cellpadding="0" border="0" width="100%">*}
+                                            {*<tr>*}
+                                            {*<td width="17%">Notaria</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*id="notariaUnion"*}
+                                            {*value=""*}
+                                            {*style="width: 90%"*}
+                                            {*>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*</table>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*<tr>*}
+                                            {*<td>Ciudad</td>*}
+                                            {*<td>*}
+                                            {*<select id="ciudadUnion"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*style="width: 90%"*}
+                                            {*>*}
+                                            {*<option value="0">Seleccione</option>*}
+                                            {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
+                                            {*<option value="{$seqCiudad}">*}
+                                            {*{$txtCiudad}*}
+                                            {*</option>*}
+                                            {*{/foreach}*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*<td></td>*}
+                                            {*<td></td>*}
+                                            {*</tr>*}
+                                            {*</table>*}
+                                            {*</td>*}
                                             {*</tr>*}
 
                                             <!-- SOPORTE PARA EL ESTADO CIVIL - SOLTERO - -->
                                             {*<tr id="soporteEstadoCivilSoltero" style="display: none">*}
-                                                {*<td colspan="4" style="padding-left:0px; background-color: #FFFFFF">*}
-                                                    {*<table cellpadding="2" cellspacing="0" border="0" width="100%">*}
-                                                        {*<tr>*}
-                                                            {*<td width="17%">Notaria</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<input type="text"*}
-                                                                       {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                       {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                       {*id="notariaSoltero"*}
-                                                                       {*value=""*}
-                                                                       {*style="width: 90%"*}
-                                                                {*>*}
-                                                            {*</td>*}
-                                                            {*<td width="17%">Ciudad</td>*}
-                                                            {*<td width="33%">*}
-                                                                {*<select id="ciudadSoltero"*}
-                                                                        {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                        {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                        {*style="width: 90%"*}
-                                                                {*>*}
-                                                                    {*<option value="0">Seleccione</option>*}
-                                                                    {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
-                                                                        {*<option value="{$seqCiudad}">*}
-                                                                            {*{$txtCiudad}*}
-                                                                        {*</option>*}
-                                                                    {*{/foreach}*}
-                                                                {*</select>*}
-                                                            {*</td>*}
-                                                        {*</tr>*}
-                                                    {*</table>*}
-                                                {*</td>*}
+                                            {*<td colspan="4" style="padding-left:0px; background-color: #FFFFFF">*}
+                                            {*<table cellpadding="2" cellspacing="0" border="0" width="100%">*}
+                                            {*<tr>*}
+                                            {*<td width="17%">Notaria</td>*}
+                                            {*<td width="33%">*}
+                                            {*<input type="text"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*id="notariaSoltero"*}
+                                            {*value=""*}
+                                            {*style="width: 90%"*}
+                                            {*>*}
+                                            {*</td>*}
+                                            {*<td width="17%">Ciudad</td>*}
+                                            {*<td width="33%">*}
+                                            {*<select id="ciudadSoltero"*}
+                                            {*onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*style="width: 90%"*}
+                                            {*>*}
+                                            {*<option value="0">Seleccione</option>*}
+                                            {*{foreach from=$arrCiudad key=seqCiudad item=txtCiudad}*}
+                                            {*<option value="{$seqCiudad}">*}
+                                            {*{$txtCiudad}*}
+                                            {*</option>*}
+                                            {*{/foreach}*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*</tr>*}
+                                            {*</table>*}
+                                            {*</td>*}
                                             {*</tr>*}
 
                                             <tr>
@@ -663,13 +664,13 @@
                                                 <td>Fecha Nacimiento</td>
                                                 <td style="padding-left:16px">
                                                     <input	type="text"
-                                                              id="fechaNac"
-                                                              onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                              onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                              style="width:80px"
-                                                              value=""
-                                                              readonly
-                                                    /> <a onClick="calendarioPopUp('fechaNac')" href="#">Calendario</a>
+                                                           id="fechaNac"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:80px"
+                                                           value=""
+                                                           readonly
+                                                           /> <a onClick="calendarioPopUp('fechaNac')" href="#">Calendario</a>
                                                     <a onClick="document.getElementById('fechaNac').value = '';" href="#">Limpiar</a>
                                                 </td>
 
@@ -680,7 +681,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="condicionEspecial"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="6">Ninguno</option>
                                                         {foreach from=$arrCondicionEspecial key=seqCondicionEspecial item=txtCondicionEspecial}
                                                             <option value="{$seqCondicionEspecial}">{$txtCondicionEspecial}</option>
@@ -696,7 +697,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="condicionEtnica"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="1">NINGUNA </option>
                                                         {foreach from=$arrCondicionEtnica key=seqEtnia item=txtEtnia}
                                                             <option value="{$seqEtnia}">{$txtEtnia}</option>
@@ -711,7 +712,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="condicionEspecial2"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="6">Ninguno</option>
                                                         {foreach from=$arrCondicionEspecial key=seqCondicionEspecial item=txtCondicionEspecial}
                                                             <option value="{$seqCondicionEspecial}">{$txtCondicionEspecial}</option>
@@ -727,7 +728,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="sexo"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         {foreach from=$arrSexo key=seqSexo item=txtSexo}
                                                             <option value="{$seqSexo}">{$txtSexo}</option>
                                                         {/foreach}
@@ -738,10 +739,10 @@
                                                 <td>Condición Especial 3</td>
                                                 <td align="center">
                                                     <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                               id="condicionEspecial3"
-                                                               style="width:90%;"
-                                                    >
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            id="condicionEspecial3"
+                                                            style="width:90%;"
+                                                            >
                                                         <option value="6">Ninguno</option>
                                                         {foreach from=$arrCondicionEspecial key=seqCondicionEspecial item=txtCondicionEspecial}
                                                             <option value="{$seqCondicionEspecial}">{$txtCondicionEspecial}</option>
@@ -758,7 +759,7 @@
                                                             id="seqGrupoLgtbi"
                                                             onChange="cambiaLgtbi()"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="0">Ninguno</option>
                                                         {foreach from=$arrGrupoLgtbi key=seqGrupoLgtbi item=txtGrupoLgtbi}
                                                             <option value="{$seqGrupoLgtbi}">
@@ -773,7 +774,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="seqTipoVictima"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="0">Ninguno</option>
                                                         {foreach from=$arrTipoVictima key=seqTipoVictima item=txtTipoVictima}
                                                             <option value="{$seqTipoVictima}">
@@ -791,7 +792,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="bolLgtb"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="0" disabled>No</option>
                                                         <option value="1" disabled>Si</option>
                                                     </select>
@@ -803,7 +804,7 @@
                                                             onchange="selectAnidados('{$objCiudadano->numDocumento}', 0);"
                                                             id="nivelEducativo"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="0" selected>Seleccione Uno</option>
                                                         <option value="1">Ninguno</option>
                                                         {foreach from=$arrNivelEducativo key=seqNivelEducativo item=txtNivelEducativo}
@@ -822,9 +823,9 @@
                                                            onFocus="this.style.backgroundColor = '#ADD8E6';"
                                                            onBlur="soloNumeros(this);
                                                                    this.style.backgroundColor = '#FFFFFF';
-                                                                    alertaDigitacionCampo('ingresos',0);"
+                                                                   alertaDigitacionCampo('ingresos', 0);"
                                                            style="width:90%; text-align: right;"
-                                                    />
+                                                           />
                                                 </td>
                                                 <td>Años Aprobados</td>
                                                 <td align="center">
@@ -832,7 +833,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="numAnosAprobados"
                                                             style="width:90%;"
-                                                    >
+                                                            >
                                                         <option value="0">Ninguno</option>
                                                     </select>
                                                 </td>
@@ -840,23 +841,23 @@
 
                                             <!-- TIPO DE VINCULACION -->
                                             {*{if $objFormulario->seqPlanGobierno == 3}*}
-                                                {*<tr>*}
-                                                    {*<td>Tipo de Vinculación</td>*}
-                                                    {*<td align="center">*}
-                                                        {*<select onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                                {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                                {*id="tipoVinculacion"*}
-                                                                {*style="width:90%;"*}
-                                                        {*>*}
-                                                            {*<option value="">Seleccione Uno</option>*}
-                                                            {*<option value="Sin Vinculación">SIN VINCULACION</option>*}
-                                                            {*<option value="Formal">FORMAL</option>*}
-                                                            {*<option value="Informal">INFORMAL</option>*}
-                                                        {*</select>*}
-                                                    {*</td>*}
-                                                    {*<td></td>*}
-                                                    {*<td></td>*}
-                                                {*</tr>*}
+                                            {*<tr>*}
+                                            {*<td>Tipo de Vinculación</td>*}
+                                            {*<td align="center">*}
+                                            {*<select onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*id="tipoVinculacion"*}
+                                            {*style="width:90%;"*}
+                                            {*>*}
+                                            {*<option value="">Seleccione Uno</option>*}
+                                            {*<option value="Sin Vinculación">SIN VINCULACION</option>*}
+                                            {*<option value="Formal">FORMAL</option>*}
+                                            {*<option value="Informal">INFORMAL</option>*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*<td></td>*}
+                                            {*<td></td>*}
+                                            {*</tr>*}
                                             {*{/if}*}
 
                                             <tr>
@@ -867,7 +868,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="ocupacion"
                                                             style="width:96%;"
-                                                    >
+                                                            >
                                                         <option value="20">NINGUNA</option>
                                                         {foreach from=$arrOcupacion key=seqOcupacion item=txtOcupacion}
                                                             <option value="{$seqOcupacion}">{$txtOcupacion}</option>
@@ -883,7 +884,7 @@
                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
                                                             id="seqSalud"
                                                             style="width:96%;"
-                                                    >
+                                                            >
                                                         <option value="0">NINGUNO</option>
                                                         {foreach from=$arrSalud key=seqSalud item=txtSalud}
                                                             <option value="{$seqSalud}">{$txtSalud}</option>
@@ -898,7 +899,7 @@
                                                          border="0"
                                                          style="cursor:pointer"
                                                          onClick="agregarMiembroHogar();"
-                                                    />&nbsp;
+                                                         />&nbsp;
                                                     <a href="#" onClick="agregarMiembroHogar();">Agregar</a>
                                                     <input type="hidden" id="cajaCompensacion" value="1">
                                                 </td>
@@ -942,7 +943,7 @@
                                     {/if}
 
                                     {*{if mb_strtolower($objCiudadano->txtTipoVinculacion) == 'informal'}*}
-                                        {*{assign var=numInformal value=1}*}
+                                    {*{assign var=numInformal value=1}*}
                                     {*{/if}*}
 
                                     {if $objCiudadano->seqTipoVictima > 0}
@@ -956,14 +957,14 @@
                                         <tr onMouseOver="this.style.background = '#E4E4E4';"
                                             onMouseOut="this.style.background = '#F9F9F9';"
                                             style="cursor:pointer"
-                                        >
+                                            >
                                             <td align="center" width="18px" height="22px">
                                                 <div style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;"
                                                      onClick="desplegarDetallesMiembroHogar('{$objCiudadano->numDocumento}')"
                                                      onMouseOver="this.style.backgroundColor = '#ADD8E6';"
                                                      onMouseOut="this.style.backgroundColor = '#F9F9F9';"
                                                      id="masDetalles{$objCiudadano->numDocumento}"
-                                                >+</div>
+                                                     >+</div>
                                             </td>
                                             <td width="282px" style="padding-left:5px;">
                                                 {$objCiudadano->txtNombre1|ucwords} {$objCiudadano->txtNombre2|ucwords}
@@ -992,1209 +993,1222 @@
                                             {if $objFormulario->bolSancion != 1}
                                                 <td align="center" width="18px" height="22px">
                                                     <div	style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;"
-                                                            onClick="modificarMiembroHogar('{$objCiudadano->numDocumento}')"
-                                                            onMouseOver="this.style.backgroundColor = '#ADD8E6';"
-                                                            onMouseOut="this.style.backgroundColor = '#F9F9F9';"
-                                                    >E</div>
+                                                         onClick="modificarMiembroHogar('{$objCiudadano->numDocumento}')"
+                                                         onMouseOver="this.style.backgroundColor = '#ADD8E6';"
+                                                         onMouseOut="this.style.backgroundColor = '#F9F9F9';"
+                                                         >E</div>
                                                 </td>
                                                 <td align="center" width="18px" height="22px">
                                                     <div	style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;"
 
-                                                            {if isset($smarty.session.arrGrupos.3.13)
+                                                         {if isset($smarty.session.arrGrupos.3.13)
                                                             or isset($smarty.session.arrGrupos.3.20)}
-                                                                onClick="quitarMiembroYSalvar('{$objCiudadano->numDocumento}');"
-                                                            {else}
-                                                                onClick="quitarMiembroHogar('{$objCiudadano->numDocumento}');"
-                                                            {/if}
-                                                            onMouseOver="this.style.backgroundColor = '#FFA4A4';"
-                                                            onMouseOut="this.style.backgroundColor = '#FFFFFF'"
+                                                         onClick="quitarMiembroYSalvar('{$objCiudadano->numDocumento}');"
+                                                    {else}
+                                                        onClick="quitarMiembroHogar('{$objCiudadano->numDocumento}');"
+                                                    {/if}
+                                                    onMouseOver="this.style.backgroundColor = '#FFA4A4';"
+                                                    onMouseOut="this.style.backgroundColor = '#FFFFFF'"
                                                     >X</div>
-                                                </td>
-                                            {/if}
-                                        </tr>
-
-                                        <!-- TODAS ESTAS VARIABLES DEBEN ESTAR DENTRO DE ESTA TABLA -->
-                                        <input type="hidden" id="parentesco-{$objCiudadano->numDocumento}" value="{$objCiudadano->seqParentesco}">
-                                        <input type="hidden" id="ingreso-{$objCiudadano->numDocumento}" value="{$objCiudadano->valIngresos}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-txtNombre1" name="hogar[{$objCiudadano->numDocumento}][txtNombre1]" value="{$objCiudadano->txtNombre1}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-txtNombre2" name="hogar[{$objCiudadano->numDocumento}][txtNombre2]" value="{$objCiudadano->txtNombre2}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-txtApellido1" name="hogar[{$objCiudadano->numDocumento}][txtApellido1]" value="{$objCiudadano->txtApellido1}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-txtApellido2" name="hogar[{$objCiudadano->numDocumento}][txtApellido2]" value="{$objCiudadano->txtApellido2}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqTipoDocumento" name="hogar[{$objCiudadano->numDocumento}][seqTipoDocumento]" value="{$objCiudadano->seqTipoDocumento}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-numDocumento" name="hogar[{$objCiudadano->numDocumento}][numDocumento]" value="{$objCiudadano->numDocumento}">
-
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-fchExpedicion" name="hogar[{$objCiudadano->numDocumento}][fchExpedicion]" value="{$objCiudadano->fchExpedicion}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtTipoSoporte" name="hogar[{$objCiudadano->numDocumento}][txtTipoSoporte]" value="{$objCiudadano->txtTipoSoporte}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtEntidadDocumento" name="hogar[{$objCiudadano->numDocumento}][txtEntidadDocumento]" value="{$objCiudadano->txtEntidadDocumento}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numIndicativoSerial" name="hogar[{$objCiudadano->numDocumento}][numIndicativoSerial]" value="{$objCiudadano->numIndicativoSerial}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaDocumento" name="hogar[{$objCiudadano->numDocumento}][numNotariaDocumento]" value="{$objCiudadano->numNotariaDocumento}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadDocumento" name="hogar[{$objCiudadano->numDocumento}][seqCiudadDocumento]" value="{$objCiudadano->seqCiudadDocumento}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numConsecutivoPartida" name="hogar[{$objCiudadano->numDocumento}][numConsecutivoPartida]" value="{$objCiudadano->numConsecutivoPartida}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtParroquiaPartida" name="hogar[{$objCiudadano->numDocumento}][txtParroquiaPartida]" value="{$objCiudadano->txtParroquiaPartida}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadPartida" name="hogar[{$objCiudadano->numDocumento}][seqCiudadPartida]" value="{$objCiudadano->seqCiudadPartida}">*}
-
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqParentesco" name="hogar[{$objCiudadano->numDocumento}][seqParentesco]" value="{$objCiudadano->seqParentesco}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-valIngresos" name="hogar[{$objCiudadano->numDocumento}][valIngresos]" value="{$objCiudadano->valIngresos}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-fchNacimiento" name="hogar[{$objCiudadano->numDocumento}][fchNacimiento]" value="{$objCiudadano->fchNacimiento}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqCondicionEspecial" name="hogar[{$objCiudadano->numDocumento}][seqCondicionEspecial]" value="{$objCiudadano->seqCondicionEspecial}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqCondicionEspecial2" name="hogar[{$objCiudadano->numDocumento}][seqCondicionEspecial2]" value="{$objCiudadano->seqCondicionEspecial2}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqCondicionEspecial3" name="hogar[{$objCiudadano->numDocumento}][seqCondicionEspecial3]" value="{$objCiudadano->seqCondicionEspecial3}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqEtnia" name="hogar[{$objCiudadano->numDocumento}][seqEtnia]" value="{$objCiudadano->seqEtnia}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqEstadoCivil" name="hogar[{$objCiudadano->numDocumento}][seqEstadoCivil]" value="{$objCiudadano->seqEstadoCivil}">
-
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numConsecutivoCasado" name="hogar[{$objCiudadano->numDocumento}][numConsecutivoCasado]" value="{$objCiudadano->numConsecutivoCasado}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaCasado" name="hogar[{$objCiudadano->numDocumento}][numNotariaCasado]" value="{$objCiudadano->numNotariaCasado}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadCasado" name="hogar[{$objCiudadano->numDocumento}][seqCiudadCasado]" value="{$objCiudadano->seqCiudadCasado}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numConsecutivoCSCDL" name="hogar[{$objCiudadano->numDocumento}][numConsecutivoCSCDL]" value="{$objCiudadano->numConsecutivoCSCDL}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtEntidadCSCDL" name="hogar[{$objCiudadano->numDocumento}][txtEntidadCSCDL]" value="{$objCiudadano->txtEntidadCSCDL}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadCSCDL" name="hogar[{$objCiudadano->numDocumento}][seqCiudadCSCDL]" value="{$objCiudadano->seqCiudadCSCDL}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaCSCDL" name="hogar[{$objCiudadano->numDocumento}][numNotariaCSCDL]" value="{$objCiudadano->numNotariaCSCDL}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaSoltero" name="hogar[{$objCiudadano->numDocumento}][numNotariaSoltero]" value="{$objCiudadano->numNotariaSoltero}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadSoltero" name="hogar[{$objCiudadano->numDocumento}][seqCiudadSoltero]" value="{$objCiudadano->seqCiudadSoltero}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtCertificacionUnion" name="hogar[{$objCiudadano->numDocumento}][txtCertificacionUnion]" value="{$objCiudadano->txtCertificacionUnion}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numConsecutivoUnion" name="hogar[{$objCiudadano->numDocumento}][numConsecutivoUnion]" value="{$objCiudadano->numConsecutivoUnion}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtEntidadUnion" name="hogar[{$objCiudadano->numDocumento}][txtEntidadUnion]" value="{$objCiudadano->txtEntidadUnion}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaUnion" name="hogar[{$objCiudadano->numDocumento}][numNotariaUnion]" value="{$objCiudadano->numNotariaUnion}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadUnion" name="hogar[{$objCiudadano->numDocumento}][seqCiudadUnion]" value="{$objCiudadano->seqCiudadUnion}">*}
-                                        {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtTipoVinculacion" name="hogar[{$objCiudadano->numDocumento}][txtTipoVinculacion]" value="{$objCiudadano->txtTipoVinculacion}">*}
-
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqOcupacion" name="hogar[{$objCiudadano->numDocumento}][seqOcupacion]" value="{$objCiudadano->seqOcupacion}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqSexo" name="hogar[{$objCiudadano->numDocumento}][seqSexo]" value="{$objCiudadano->seqSexo}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqGrupoLgtbi" name="hogar[{$objCiudadano->numDocumento}][seqGrupoLgtbi]" value="{$objCiudadano->seqGrupoLgtbi}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-bolLgtb" name="hogar[{$objCiudadano->numDocumento}][bolLgtb]" value="{$objCiudadano->bolLgtb}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqTipoVictima" name="hogar[{$objCiudadano->numDocumento}][seqTipoVictima]" value="{$objCiudadano->seqTipoVictima}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqNivelEducativo" name="hogar[{$objCiudadano->numDocumento}][seqNivelEducativo]" value="{$objCiudadano->seqNivelEducativo}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-numAnosAprobados" name="hogar[{$objCiudadano->numDocumento}][numAnosAprobados]" value="{$objCiudadano->numAnosAprobados}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqSalud" name="hogar[{$objCiudadano->numDocumento}][seqSalud]" value="{$objCiudadano->seqSalud}">
-                                        <input type="hidden" id="{$objCiudadano->numDocumento}-seqCajaCompensacion" name="hogar[{$objCiudadano->numDocumento}][seqCajaCompensacion]" value="{$objCiudadano->seqCajaCompensacion}">
-                                    </table>
-
-                                    <!-- TABLA DE DETALLES DEL CIUDADANO -->
-                                    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="display:none;" id="detalles{$objCiudadano->numDocumento}">
-                                        <tr>
-                                            <td colspan="6">
-                                                <table cellpadding="2" cellspacing="0" border="0" width="100%" style="border: 1px solid #999999;">
-                                                    <tr>
-                                                        <td><b>Estado Civil:</b> {$arrEstadoCivil.$estadoCivil.txtEstadoCivil}</td>
-                                                        <td><b>Condición Étnica:</b>{if isset($arrCondicionEtnica.$codicionEtnica)} {$arrCondicionEtnica.$codicionEtnica} {else} Ninguna {/if}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td width="50%"><b>Sexo:</b> {$arrSexo.$sexo}</td>
-                                                        <td><b>Condición Especial 1:</b>{if isset($arrCondicionEspecial.$condicionEspecial)} {$arrCondicionEspecial.$condicionEspecial}{else}Ninguna{/if}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>Fecha de Nacimiento:</b> {$objCiudadano->fchNacimiento}</td>
-                                                        <td><b>Condición Especial 2:</b>{if isset($arrCondicionEspecial.$condicionEspecial2)} {$arrCondicionEspecial.$condicionEspecial2}{else}Ninguna{/if}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <b>LGTBI:</b>
-                                                            {if $objCiudadano->bolLgtb == 1}
-                                                                {$arrGrupoLgtbi.$grupoLgtbi}
-                                                            {else}
-                                                                No
-                                                            {/if}
-                                                        </td>
-
-                                                        <td><b>Condición Especial 3:</b> {if isset($arrCondicionEspecial.$condicionEspecial3)} {$arrCondicionEspecial.$condicionEspecial3}{else}Ninguna{/if}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>Tipo de Victima:</b> {if isset($arrTipoVictima.$tipoVictima)}{$arrTipoVictima.$tipoVictima}{else}Ninguno{/if}</td>
-                                                        <td><b>Afiliación Salud:</b>
-                                                            {foreach from=$arrSalud key=seqSalud item=txtSalud}
-                                                                {if $seqSalud == $objCiudadano->seqSalud}
-                                                                    {$txtSalud}
-                                                                {/if}
-                                                            {/foreach}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if}</td>
-                                                        <td><b>Años Aporbados:</b> {$objCiudadano->numAnosAprobados}</td>
-                                                    </tr>
-                                                    {*<tr>*}
-                                                        {*<td colspan="3"><b>Tipo de vinculacion:</b>*}
-                                                            {*{if $objCiudadano->txtTipoVinculacion != ""}*}
-                                                                {*{$objCiudadano->txtTipoVinculacion|mb_strtoupper}*}
-                                                            {*{else}*}
-                                                                {*SIN INFORMACIÓN*}
-                                                            {*{/if}*}
-                                                        {*</td>*}
-                                                    {*</tr>*}
-                                                    <tr>
-                                                        <td colspan="3"><b>Ocupación:</b> {$arrOcupacion.$ocupacion}</td>
-                                                    </tr>
-                                                </table>
                                             </td>
-                                        </tr>
-                                    </table>
-                                {/foreach}
-                            </div>
+                                            {/if}
+                                            </tr>
 
-                            <!-- MUESTRA EL TOTAL DE LOS INGRESOS DEL HOGAR -->
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                                <tr bgcolor="#CCCCCC">
-                                    <td align="center" height="20px" width="584px">
-                                        <b>Total Ingresos Hogar</b>
-                                    </td>
-                                    <td style="padding-right:7px" align="right" id="valTotalMostrar">
-                                        $ {$valTotal|number_format:0:',':'.'}
-                                    </td>
-                                    <td width="18px">&nbsp;</td>
-                                    <td width="18px">&nbsp;</td>
-                                    {if intval( $objFormulario->valIngresoHogar ) == 0}
-                                        <input type="hidden" name="valIngresoHogar" id="valIngresoHogar" value="{$valTotal}">
-                                    {else}
-                                        <input type="hidden" name="valIngresoHogar" id="valIngresoHogar" value="{$objFormulario->valIngresoHogar}">
-                                    {/if}
+                                            <!-- TODAS ESTAS VARIABLES DEBEN ESTAR DENTRO DE ESTA TABLA -->
+                                            <input type="hidden" id="parentesco-{$objCiudadano->numDocumento}" value="{$objCiudadano->seqParentesco}">
+                                            <input type="hidden" id="ingreso-{$objCiudadano->numDocumento}" value="{$objCiudadano->valIngresos}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-txtNombre1" name="hogar[{$objCiudadano->numDocumento}][txtNombre1]" value="{$objCiudadano->txtNombre1}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-txtNombre2" name="hogar[{$objCiudadano->numDocumento}][txtNombre2]" value="{$objCiudadano->txtNombre2}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-txtApellido1" name="hogar[{$objCiudadano->numDocumento}][txtApellido1]" value="{$objCiudadano->txtApellido1}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-txtApellido2" name="hogar[{$objCiudadano->numDocumento}][txtApellido2]" value="{$objCiudadano->txtApellido2}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqTipoDocumento" name="hogar[{$objCiudadano->numDocumento}][seqTipoDocumento]" value="{$objCiudadano->seqTipoDocumento}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-numDocumento" name="hogar[{$objCiudadano->numDocumento}][numDocumento]" value="{$objCiudadano->numDocumento}">
 
-                                </tr>
-                            </table>
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-fchExpedicion" name="hogar[{$objCiudadano->numDocumento}][fchExpedicion]" value="{$objCiudadano->fchExpedicion}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtTipoSoporte" name="hogar[{$objCiudadano->numDocumento}][txtTipoSoporte]" value="{$objCiudadano->txtTipoSoporte}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtEntidadDocumento" name="hogar[{$objCiudadano->numDocumento}][txtEntidadDocumento]" value="{$objCiudadano->txtEntidadDocumento}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numIndicativoSerial" name="hogar[{$objCiudadano->numDocumento}][numIndicativoSerial]" value="{$objCiudadano->numIndicativoSerial}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaDocumento" name="hogar[{$objCiudadano->numDocumento}][numNotariaDocumento]" value="{$objCiudadano->numNotariaDocumento}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadDocumento" name="hogar[{$objCiudadano->numDocumento}][seqCiudadDocumento]" value="{$objCiudadano->seqCiudadDocumento}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numConsecutivoPartida" name="hogar[{$objCiudadano->numDocumento}][numConsecutivoPartida]" value="{$objCiudadano->numConsecutivoPartida}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtParroquiaPartida" name="hogar[{$objCiudadano->numDocumento}][txtParroquiaPartida]" value="{$objCiudadano->txtParroquiaPartida}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadPartida" name="hogar[{$objCiudadano->numDocumento}][seqCiudadPartida]" value="{$objCiudadano->seqCiudadPartida}">*}
 
-                            <!-- SI TIENE RANGO DE INGRESOS LO MUESTRA - MI CASA YA -->
-                            {if $objFormulario->txtRangoIngresosHogar != ""}
-                                <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                                    <tr bgcolor="#CCCCCC">
-                                        <td align="center" height="20px" width="584px">
-                                            <b>Rango de ingresos MCY</b>
-                                        </td>
-                                        <td style="padding-right:7px" align="right" id="valTotalMostrar">
-                                            {$objFormulario->txtRangoIngresosHogar}
-                                        </td>
-                                        <td width="18px">&nbsp;</td>
-                                        <td width="18px">&nbsp;</td>
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqParentesco" name="hogar[{$objCiudadano->numDocumento}][seqParentesco]" value="{$objCiudadano->seqParentesco}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-valIngresos" name="hogar[{$objCiudadano->numDocumento}][valIngresos]" value="{$objCiudadano->valIngresos}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-fchNacimiento" name="hogar[{$objCiudadano->numDocumento}][fchNacimiento]" value="{$objCiudadano->fchNacimiento}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqCondicionEspecial" name="hogar[{$objCiudadano->numDocumento}][seqCondicionEspecial]" value="{$objCiudadano->seqCondicionEspecial}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqCondicionEspecial2" name="hogar[{$objCiudadano->numDocumento}][seqCondicionEspecial2]" value="{$objCiudadano->seqCondicionEspecial2}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqCondicionEspecial3" name="hogar[{$objCiudadano->numDocumento}][seqCondicionEspecial3]" value="{$objCiudadano->seqCondicionEspecial3}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqEtnia" name="hogar[{$objCiudadano->numDocumento}][seqEtnia]" value="{$objCiudadano->seqEtnia}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqEstadoCivil" name="hogar[{$objCiudadano->numDocumento}][seqEstadoCivil]" value="{$objCiudadano->seqEstadoCivil}">
 
-                                        <input type="hidden"
-                                               name="txtRangoIngresos"
-                                               id="txtRangoIngresos"
-                                               value="{$objFormulario->txtRangoIngresosHogar}"
-                                        >
-                                    </tr>
-                                </table>
-                            {/if}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numConsecutivoCasado" name="hogar[{$objCiudadano->numDocumento}][numConsecutivoCasado]" value="{$objCiudadano->numConsecutivoCasado}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaCasado" name="hogar[{$objCiudadano->numDocumento}][numNotariaCasado]" value="{$objCiudadano->numNotariaCasado}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadCasado" name="hogar[{$objCiudadano->numDocumento}][seqCiudadCasado]" value="{$objCiudadano->seqCiudadCasado}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numConsecutivoCSCDL" name="hogar[{$objCiudadano->numDocumento}][numConsecutivoCSCDL]" value="{$objCiudadano->numConsecutivoCSCDL}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtEntidadCSCDL" name="hogar[{$objCiudadano->numDocumento}][txtEntidadCSCDL]" value="{$objCiudadano->txtEntidadCSCDL}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadCSCDL" name="hogar[{$objCiudadano->numDocumento}][seqCiudadCSCDL]" value="{$objCiudadano->seqCiudadCSCDL}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaCSCDL" name="hogar[{$objCiudadano->numDocumento}][numNotariaCSCDL]" value="{$objCiudadano->numNotariaCSCDL}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaSoltero" name="hogar[{$objCiudadano->numDocumento}][numNotariaSoltero]" value="{$objCiudadano->numNotariaSoltero}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadSoltero" name="hogar[{$objCiudadano->numDocumento}][seqCiudadSoltero]" value="{$objCiudadano->seqCiudadSoltero}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtCertificacionUnion" name="hogar[{$objCiudadano->numDocumento}][txtCertificacionUnion]" value="{$objCiudadano->txtCertificacionUnion}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numConsecutivoUnion" name="hogar[{$objCiudadano->numDocumento}][numConsecutivoUnion]" value="{$objCiudadano->numConsecutivoUnion}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtEntidadUnion" name="hogar[{$objCiudadano->numDocumento}][txtEntidadUnion]" value="{$objCiudadano->txtEntidadUnion}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-numNotariaUnion" name="hogar[{$objCiudadano->numDocumento}][numNotariaUnion]" value="{$objCiudadano->numNotariaUnion}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-seqCiudadUnion" name="hogar[{$objCiudadano->numDocumento}][seqCiudadUnion]" value="{$objCiudadano->seqCiudadUnion}">*}
+                                            {*<input type="hidden" id="{$objCiudadano->numDocumento}-txtTipoVinculacion" name="hogar[{$objCiudadano->numDocumento}][txtTipoVinculacion]" value="{$objCiudadano->txtTipoVinculacion}">*}
 
-                            </p></div>
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqOcupacion" name="hogar[{$objCiudadano->numDocumento}][seqOcupacion]" value="{$objCiudadano->seqOcupacion}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqSexo" name="hogar[{$objCiudadano->numDocumento}][seqSexo]" value="{$objCiudadano->seqSexo}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqGrupoLgtbi" name="hogar[{$objCiudadano->numDocumento}][seqGrupoLgtbi]" value="{$objCiudadano->seqGrupoLgtbi}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-bolLgtb" name="hogar[{$objCiudadano->numDocumento}][bolLgtb]" value="{$objCiudadano->bolLgtb}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqTipoVictima" name="hogar[{$objCiudadano->numDocumento}][seqTipoVictima]" value="{$objCiudadano->seqTipoVictima}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqNivelEducativo" name="hogar[{$objCiudadano->numDocumento}][seqNivelEducativo]" value="{$objCiudadano->seqNivelEducativo}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-numAnosAprobados" name="hogar[{$objCiudadano->numDocumento}][numAnosAprobados]" value="{$objCiudadano->numAnosAprobados}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqSalud" name="hogar[{$objCiudadano->numDocumento}][seqSalud]" value="{$objCiudadano->seqSalud}">
+                                            <input type="hidden" id="{$objCiudadano->numDocumento}-seqCajaCompensacion" name="hogar[{$objCiudadano->numDocumento}][seqCajaCompensacion]" value="{$objCiudadano->seqCajaCompensacion}">
+                                        </table>
 
-                        <!-- DATOS DEL HOGAR -->
-                        <div id="hogar" style="height:480px;">
-                            <p>
-                            <p><table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF"  style="border: 1px dotted #999999; padding:5px">
-                                <tr>
-                                    <!-- VIVIENDA ACTUAL -->
-                                    <td width="130px">Vivienda Actual </td>
-                                    <td width="210px">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqVivienda"
-                                                id="seqVivienda"
-                                                style="width:260px;"
-                                        >
-                                            {foreach from=$arrVivienda key=seqVivienda item=txtVivienda}
-                                                <option value="{$seqVivienda}"
-                                                        {if $objFormulario->seqVivienda == $seqVivienda} selected {/if}
-                                                >{$txtVivienda}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
+                                        <!-- TABLA DE DETALLES DEL CIUDADANO -->
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="display:none;" id="detalles{$objCiudadano->numDocumento}">
+                                            <tr>
+                                                <td colspan="6">
+                                                    <table cellpadding="2" cellspacing="0" border="0" width="100%" style="border: 1px solid #999999;">
+                                                        <tr>
+                                                            <td><b>Estado Civil:</b> {$arrEstadoCivil.$estadoCivil.txtEstadoCivil}</td>
+                                                            <td><b>Condición Étnica:</b>{if isset($arrCondicionEtnica.$codicionEtnica)} {$arrCondicionEtnica.$codicionEtnica} {else} Ninguna {/if}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="50%"><b>Sexo:</b> {$arrSexo.$sexo}</td>
+                                                            <td><b>Condición Especial 1:</b>{if isset($arrCondicionEspecial.$condicionEspecial)} {$arrCondicionEspecial.$condicionEspecial}{else}Ninguna{/if}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Fecha de Nacimiento:</b> {$objCiudadano->fchNacimiento}</td>
+                                                            <td><b>Condición Especial 2:</b>{if isset($arrCondicionEspecial.$condicionEspecial2)} {$arrCondicionEspecial.$condicionEspecial2}{else}Ninguna{/if}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>LGTBI:</b>
+                                                                {if $objCiudadano->bolLgtb == 1}
+                                                                    {$arrGrupoLgtbi.$grupoLgtbi}
+                                                                {else}
+                                                                    No
+                                                                {/if}
+                                                            </td>
 
-                                    <!-- SI PAGA ARRIENDO, CUANTO PAGA -->
-                                    <td>Valor del Arriendo</td>
-                                    <td width="210px">
-                                        $ <input type="text"
-                                                 name="valArriendo"
-                                                 id="valArriendo"
-                                                 value="{$objFormulario->valArriendo|number_format:0:'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 onKeyUp="formatoSeparadores(this)"
-                                                 style="width:249px;" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- FECHA DESDE LA QUE PAGA ARRIENDO -->
-                                    <td>
-                                        Paga Arriendo Desde
-                                    </td>
-                                    <td>
-                                        <input type="text"
-                                               name="fchArriendoDesde"
-                                               id="fchArriendoDesde"
-                                               value="{if esFechaValida($objFormulario->fchArriendoDesde)}{$objFormulario->fchArriendoDesde}{/if}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:80px;"
-                                               readonly
-                                        />
-                                        <a onClick="calendarioPopUp('fchArriendoDesde')" href="#">Calendario</a>&nbsp;
-                                        <a onClick="document.getElementById('fchArriendoDesde').value = '';" href="#">Limpiar</a>
-                                    </td>
-                                    <td>
-                                        Comprobante Arriendo
-                                    </td>
-                                    <td>
-                                        <select name="txtComprobanteArriendo"
-                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                style="width:260px;"
-                                        >
-                                            <option value="">SELECCIONE</option>
-                                            <option value="no" {if $objFormulario->txtComprobanteArriendo == "no"} selected {/if}>No</option>
-                                            <option value="si" {if $objFormulario->txtComprobanteArriendo == "si"} selected {/if}>Si</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- DIRECCION DE RESIDENCIA -->
-                                    <td>
-                                        <a href="#" id="Direccion" onClick="recogerDireccion('txtDireccion', 'objDireccionOculto')">Dirección</a>
-                                    </td>
-                                    <td >
-                                        <input	type="text"
-                                                  name="txtDireccion"
-                                                  id="txtDireccion"
-                                                  value="{$objFormulario->txtDireccion}"
-                                                  style="width:260px;"
-                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                  readonly
-                                        />
-                                    </td>
-
-                                    <!-- CIUDAD -->
-                                    <td>Ciudad</td>
-                                    <td>
-                                        <select
-                                                name="seqCiudad"
-                                                id="seqCiudad"
-                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                style="width:260px;"
-                                                onChange="cambiarCiudad(this);"
-                                        ><option value="">Seleccione</option>
-                                            {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
-                                                <option value="{$seqCiudad}"
-                                                        {if $objFormulario->seqCiudad == $seqCiudad} selected {/if}
-                                                > {$txtCiudad}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- LOCALIDAD -->
-                                    <td>Localidad </td>
-                                    <td id="tdlocalidad">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                   onChange="obtenerBarrio(this);"
-                                                   name="seqLocalidad"
-                                                   id="seqLocalidad"
-                                                   style="width:260px;"
-                                        >
-                                            <option value="1" selected>Seleccione</option>
-                                            {if intval( $objFormulario->seqCiudad ) != 0}
-                                                {if intval( $objFormulario->seqCiudad ) == 149} <!-- BOGOTA -->
-                                                    {foreach from=$arrLocalidad key=seqLocalidad item=txtLocalidad}
-                                                        {if intval( $seqLocalidad ) != 22}
-                                                            <option value="{$seqLocalidad}"
-                                                                    {if $objFormulario->seqLocalidad == $seqLocalidad}
-                                                                        selected
+                                                            <td><b>Condición Especial 3:</b> {if isset($arrCondicionEspecial.$condicionEspecial3)} {$arrCondicionEspecial.$condicionEspecial3}{else}Ninguna{/if}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Tipo de Victima:</b> {if isset($arrTipoVictima.$tipoVictima)}{$arrTipoVictima.$tipoVictima}{else}Ninguno{/if}</td>
+                                                            <td><b>Afiliación Salud:</b>
+                                                                {foreach from=$arrSalud key=seqSalud item=txtSalud}
+                                                                    {if $seqSalud == $objCiudadano->seqSalud}
+                                                                        {$txtSalud}
                                                                     {/if}
+                                                                {/foreach}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Nivel Educativo:</b> {if isset($arrNivelEducativo.$nivelEducativo)}{$arrNivelEducativo.$nivelEducativo}{else}Ninguno{/if}</td>
+                                                            <td><b>Años Aporbados:</b> {$objCiudadano->numAnosAprobados}</td>
+                                                        </tr>
+                                                        {*<tr>*}
+                                                        {*<td colspan="3"><b>Tipo de vinculacion:</b>*}
+                                                        {*{if $objCiudadano->txtTipoVinculacion != ""}*}
+                                                        {*{$objCiudadano->txtTipoVinculacion|mb_strtoupper}*}
+                                                        {*{else}*}
+                                                        {*SIN INFORMACIÓN*}
+                                                        {*{/if}*}
+                                                        {*</td>*}
+                                                        {*</tr>*}
+                                                        <tr>
+                                                            <td colspan="3"><b>Ocupación:</b> {$arrOcupacion.$ocupacion}</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        {/foreach}
+                                        </div>
+
+                                        <!-- MUESTRA EL TOTAL DE LOS INGRESOS DEL HOGAR -->
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr bgcolor="#CCCCCC">
+                                                <td align="center" height="20px" width="584px">
+                                                    <b>Total Ingresos Hogar</b>
+                                                </td>
+                                                <td style="padding-right:7px" align="right" id="valTotalMostrar">
+                                                    $ {$valTotal|number_format:0:',':'.'}
+                                                </td>
+                                                <td width="18px">&nbsp;</td>
+                                                <td width="18px">&nbsp;</td>
+                                                {if intval( $objFormulario->valIngresoHogar ) == 0}
+                                                <input type="hidden" name="valIngresoHogar" id="valIngresoHogar" value="{$valTotal}">
+                                            {else}
+                                                <input type="hidden" name="valIngresoHogar" id="valIngresoHogar" value="{$objFormulario->valIngresoHogar}">
+                                            {/if}
+
+                                            </tr>
+                                        </table>
+
+                                        <!-- SI TIENE RANGO DE INGRESOS LO MUESTRA - MI CASA YA -->
+                                        {if $objFormulario->txtRangoIngresosHogar != ""}
+                                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                <tr bgcolor="#CCCCCC">
+                                                    <td align="center" height="20px" width="584px">
+                                                        <b>Rango de ingresos MCY</b>
+                                                    </td>
+                                                    <td style="padding-right:7px" align="right" id="valTotalMostrar">
+                                                        {$objFormulario->txtRangoIngresosHogar}
+                                                    </td>
+                                                    <td width="18px">&nbsp;</td>
+                                                    <td width="18px">&nbsp;</td>
+
+                                                <input type="hidden"
+                                                       name="txtRangoIngresos"
+                                                       id="txtRangoIngresos"
+                                                       value="{$objFormulario->txtRangoIngresosHogar}"
+                                                       >
+                                                </tr>
+                                            </table>
+                                        {/if}
+
+                                        </p></div>
+
+                                    <!-- DATOS DEL HOGAR -->
+                                    <div id="hogar" style="height:480px;">
+                                        <p>
+                                        <p><table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF"  style="border: 1px dotted #999999; padding:5px">
+                                            <tr>
+                                                <!-- VIVIENDA ACTUAL -->
+                                                <td width="130px">Vivienda Actual </td>
+                                                <td width="210px">
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqVivienda"
+                                                            id="seqVivienda"
+                                                            style="width:260px;"
                                                             >
-                                                                {$txtLocalidad}
-                                                            </option>
-                                                        {/if}
-                                                    {/foreach}
-                                                {else} <!-- FUERA DE BOGOTA -->
-                                                    <option value="22"
-                                                            {if $objFormulario->seqLocalidad == 22}
-                                                                selected
+                                                        {foreach from=$arrVivienda key=seqVivienda item=txtVivienda}
+                                                            <option value="{$seqVivienda}"
+                                                                    {if $objFormulario->seqVivienda == $seqVivienda} selected {/if}
+                                                                    >{$txtVivienda}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+
+                                                <!-- SI PAGA ARRIENDO, CUANTO PAGA -->
+                                                <td>Valor del Arriendo</td>
+                                                <td width="210px">
+                                                    $ <input type="text"
+                                                             name="valArriendo"
+                                                             id="valArriendo"
+                                                             value="{$objFormulario->valArriendo|number_format:0:'.':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             onKeyUp="formatoSeparadores(this)"
+                                                             style="width:249px;" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- FECHA DESDE LA QUE PAGA ARRIENDO -->
+                                                <td>
+                                                    Paga Arriendo Desde
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           name="fchArriendoDesde"
+                                                           id="fchArriendoDesde"
+                                                           value="{if esFechaValida($objFormulario->fchArriendoDesde)}{$objFormulario->fchArriendoDesde}{/if}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:80px;"
+                                                           readonly
+                                                           />
+                                                    <a onClick="calendarioPopUp('fchArriendoDesde')" href="#">Calendario</a>&nbsp;
+                                                    <a onClick="document.getElementById('fchArriendoDesde').value = '';" href="#">Limpiar</a>
+                                                </td>
+                                                <td>
+                                                    Comprobante Arriendo
+                                                </td>
+                                                <td>
+                                                    <select name="txtComprobanteArriendo"
+                                                            onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            style="width:260px;"
+                                                            >
+                                                        <option value="">SELECCIONE</option>
+                                                        <option value="no" {if $objFormulario->txtComprobanteArriendo == "no"} selected {/if}>No</option>
+                                                        <option value="si" {if $objFormulario->txtComprobanteArriendo == "si"} selected {/if}>Si</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- DIRECCION DE RESIDENCIA -->
+                                                <td>
+                                                    <a href="#" id="Direccion" onClick="recogerDireccion('txtDireccion', 'objDireccionOculto')">Dirección</a>
+                                                </td>
+                                                <td >
+                                                    <input	type="text"
+                                                           name="txtDireccion"
+                                                           id="txtDireccion"
+                                                           value="{$objFormulario->txtDireccion}"
+                                                           style="width:260px;"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           readonly
+                                                           />
+                                                </td>
+
+                                                <!-- CIUDAD -->
+                                                <td>Ciudad</td>
+                                                <td>
+                                                    <select
+                                                        name="seqCiudad"
+                                                        id="seqCiudad"
+                                                        onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                        onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                        style="width:260px;"
+                                                        onChange="cambiarCiudad(this);"
+                                                        ><option value="">Seleccione</option>
+                                                        {foreach from=$arrCiudad key=seqCiudad item=txtCiudad}
+                                                            <option value="{$seqCiudad}"
+                                                                    {if $objFormulario->seqCiudad == $seqCiudad} selected {/if}
+                                                                    > {$txtCiudad}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- LOCALIDAD -->
+                                                <td>Localidad </td>
+                                                <td id="tdlocalidad">
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            onChange="obtenerBarrio(this);"
+                                                            name="seqLocalidad"
+                                                            id="seqLocalidad"
+                                                            style="width:260px;"
+                                                            >
+                                                        <option value="1" selected>Seleccione</option>
+                                                        {if intval( $objFormulario->seqCiudad ) != 0}
+                                                            {if intval( $objFormulario->seqCiudad ) == 149} <!-- BOGOTA -->
+                                                                {foreach from=$arrLocalidad key=seqLocalidad item=txtLocalidad}
+                                                                    {if intval( $seqLocalidad ) != 22}
+                                                                        <option value="{$seqLocalidad}"
+                                                                                {if $objFormulario->seqLocalidad == $seqLocalidad}
+                                                                                    selected
+                                                                                {/if}
+                                                                                >
+                                                                            {$txtLocalidad}
+                                                                        </option>
+                                                                    {/if}
+                                                                {/foreach}
+                                                            {else} <!-- FUERA DE BOGOTA -->
+                                                                <option value="22"
+                                                                        {if $objFormulario->seqLocalidad == 22}
+                                                                            selected
+                                                                        {/if}
+                                                                        >
+                                                                    Fuera de Bogotá
+                                                                </option>
                                                             {/if}
-                                                    >
-                                                        Fuera de Bogotá
-                                                    </option>
-                                                {/if}
-                                            {/if}
-                                        </select>
-                                    </td>
-
-                                    <!-- BARRIO -->
-                                    <td valign="top" height="22px">Barrio</td>
-                                    <td valign="top" align="left" id="tdBarrio">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onChange="obtenerUpz(this);"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqBarrio"
-                                                id="seqBarrio"
-                                                style="width:260px;"
-                                        >
-                                            <option value="0">Seleccione</option>
-                                            {if intval( $objFormulario->seqLocalidad ) != 0}
-                                                {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
-                                                    <option value="{$seqBarrio}"
-                                                            {if $objFormulario->seqBarrio == $seqBarrio}
-                                                                selected
-                                                            {/if}
-                                                    >
-                                                        {$txtBarrio}
-                                                    </option>
-                                                {/foreach}
-                                            {/if}
-                                        </select>
-                                    </td>
-
-                                    <td id="tdupz">
-                                        &nbsp;<input type='hidden' readonly id='seqUpz' name='seqUpz' value="{$objFormulario->seqUpz}">
-                                    </td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>N° Hogares en la vivienda</td>
-                                    <td><input type="number" id="numHabitaciones" name="numHabitaciones" autofocus="" size="4" maxlength="2"
-                                               onChange="alertaDigitacionCampo('numHabitaciones',{$objFormulario->numHabitaciones})"
-                                               min="0" step="1" style="width: 40px"
-                                               value="{$objFormulario->numHabitaciones}"></td>
-                                    <td>Número Dormitorios</td>
-                                    <td><input type="number" id="numHacinamiento" name="numHacinamiento" autofocus="" size="4" maxlength="2"
-                                               onChange="alertaDigitacionCampo('numHacinamiento',{$objFormulario->numHacinamiento})"
-                                               min="0" step="1" style="width: 40px"
-                                               value="{$objFormulario->numHacinamiento}"></td>
-                                </tr>
-
-                                <!-- TELEFONO 1 TELEFONO 2 Y CELULAR -->
-                                <tr>
-                                    <td>Teléfonos</td>
-                                    <td>
-                                        <input type="text"
-                                               name="numTelefono1"
-                                               id="numTelefono1"
-                                               value="{$objFormulario->numTelefono1}"
-                                               maxlength="7"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:122px;"
-                                        /> ó
-                                        <input  type="text"
-                                                name="numTelefono2"
-                                                id="numTelefono2"
-                                                value="{$objFormulario->numTelefono2}"
-                                                maxlength="10"
-                                                onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                                style="width:122px;"
-                                        />
-                                    </td>
-                                    <td>Teléfono Celular</td>
-                                    <td>
-                                        <input type="text"
-                                               name="numCelular"
-                                               id="numCelular"
-                                               value="{$objFormulario->numCelular}"
-                                               maxlength="10"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:260px;"
-                                        />
-                                    </td>
-                                </tr>
-
-                                <!-- CORREO ELECTRONICO -->
-                                <tr>
-                                    <td>Correo Electr&oacute;nico</td>
-                                    <td colspan="3">
-                                        <input type="text"
-                                               name="txtCorreo"
-                                               id="txtCorreo"
-                                               value="{$objFormulario->txtCorreo}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:680px;"
-                                               class="inputLogin"
-                                        />
-                                    </td>
-                                </tr>
-
-                                <!-- SISBEN y DESPLAZAMIENTO FORZADO -->
-                                <tr>
-                                    <td>Tiene Sisben</td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqSisben"
-                                                id="seqSisben"
-                                                style="width:260px;"
-                                        ><option value="0" selected>SELECCIONE</option>
-                                            {foreach from=$arrSisben key=seqSisben item=arrRegistro}
-                                                <option value="{$seqSisben}"
-                                                        {if $objFormulario->seqSisben == $seqSisben} selected {/if}
-                                                        {if $arrRegistro.bolActivo == 0 and $objFormulario->seqSisben == 3}
-                                                            style="color:#666666"
-                                                            disabled
                                                         {/if}
-                                                >{$arrRegistro.txtSisben}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                    <td>Desplazamiento forzado </td>
-                                    <td>
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                   name="bolDesplazado"
-                                                   id="bolDesplazado"
-                                                   style="width:260px;"
-                                        >
-                                            <option value="0" {if $numVictima != 1} selected {/if} disabled>No</option>
-                                            <option value="1" {if $numVictima == 1} selected {/if} disabled>Si</option>
-                                        </select>
-                                    </td>
-                                </tr>
+                                                    </select>
+                                                </td>
 
-                                <!-- HOGAR INDEPENDIENTE -->
-                                {*<tr>*}
-                                    {*<td>Hogar Informal</td>*}
-                                    {*<td>*}
-                                        {*<select	onFocus="this.style.backgroundColor = '#ADD8E6';"*}
-                                                   {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
-                                                   {*name="bolInformal"*}
-                                                   {*id="bolInformal"*}
-                                                   {*style="width:260px;"*}
-                                        {*>*}
+                                                <!-- BARRIO -->
+                                                <td valign="top" height="22px">Barrio</td>
+                                                <td valign="top" align="left" id="tdBarrio">
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onChange="obtenerUpz(this);"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqBarrio"
+                                                            id="seqBarrio"
+                                                            style="width:260px;"
+                                                            >
+                                                        <option value="0">Seleccione</option>
+                                                        {if intval( $objFormulario->seqLocalidad ) != 0}
+                                                            {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
+                                                                <option value="{$seqBarrio}"
+                                                                        {if $objFormulario->seqBarrio == $seqBarrio}
+                                                                            selected
+                                                                        {/if}
+                                                                        >
+                                                                    {$txtBarrio}
+                                                                </option>
+                                                            {/foreach}
+                                                        {/if}
+                                                    </select>
+                                                </td>
+
+                                                <td id="tdupz">
+                                                    &nbsp;<input type='hidden' readonly id='seqUpz' name='seqUpz' value="{$objFormulario->seqUpz}">
+                                                </td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td>N° Hogares en la vivienda</td>
+                                                <td><input type="number" id="numHabitaciones" name="numHabitaciones" autofocus="" size="4" maxlength="2"
+                                                           onChange="alertaDigitacionCampo('numHabitaciones',{$objFormulario->numHabitaciones})"
+                                                           min="0" step="1" style="width: 40px"
+                                                           value="{$objFormulario->numHabitaciones}"></td>
+                                                <td>Número Dormitorios</td>
+                                                <td><input type="number" id="numHacinamiento" name="numHacinamiento" autofocus="" size="4" maxlength="2"
+                                                           onChange="alertaDigitacionCampo('numHacinamiento',{$objFormulario->numHacinamiento})"
+                                                           min="0" step="1" style="width: 40px"
+                                                           value="{$objFormulario->numHacinamiento}"></td>
+                                            </tr>
+
+                                            <!-- TELEFONO 1 TELEFONO 2 Y CELULAR -->
+                                            <tr>
+                                                <td>Teléfonos</td>
+                                                <td>
+                                                    <input type="text"
+                                                           name="numTelefono1"
+                                                           id="numTelefono1"
+                                                           value="{$objFormulario->numTelefono1}"
+                                                           maxlength="7"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="soloNumeros(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:122px;"
+                                                           /> ó
+                                                    <input  type="text"
+                                                            name="numTelefono2"
+                                                            id="numTelefono2"
+                                                            value="{$objFormulario->numTelefono2}"
+                                                            maxlength="10"
+                                                            onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="soloNumeros(this);
+                                                                    this.style.backgroundColor = '#FFFFFF';"
+                                                            style="width:122px;"
+                                                            />
+                                                </td>
+                                                <td>Teléfono Celular</td>
+                                                <td>
+                                                    <input type="text"
+                                                           name="numCelular"
+                                                           id="numCelular"
+                                                           value="{$objFormulario->numCelular}"
+                                                           maxlength="10"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="soloNumeros(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:260px;"
+                                                           />
+                                                </td>
+                                            </tr>
+
+                                            <!-- CORREO ELECTRONICO -->
+                                            <tr>
+                                                <td>Correo Electr&oacute;nico</td>
+                                                <td colspan="3">
+                                                    <input type="text"
+                                                           name="txtCorreo"
+                                                           id="txtCorreo"
+                                                           value="{$objFormulario->txtCorreo}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:680px;"
+                                                           class="inputLogin"
+                                                           />
+                                                </td>
+                                            </tr>
+
+                                            <!-- SISBEN y DESPLAZAMIENTO FORZADO -->
+                                            <tr>
+                                                <td>Tiene Sisben</td>
+                                                <td>
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqSisben"
+                                                            id="seqSisben"
+                                                            style="width:260px;"
+                                                            ><option value="0" selected>SELECCIONE</option>
+                                                        {foreach from=$arrSisben key=seqSisben item=arrRegistro}
+                                                            <option value="{$seqSisben}"
+                                                                    {if $objFormulario->seqSisben == $seqSisben} selected {/if}
+                                                                    {if $arrRegistro.bolActivo == 0 and $objFormulario->seqSisben == 3}
+                                                                        style="color:#666666"
+                                                                        disabled
+                                                                    {/if}
+                                                                    >{$arrRegistro.txtSisben}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                                <td>Desplazamiento forzado </td>
+                                                <td>
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="bolDesplazado"
+                                                            id="bolDesplazado"
+                                                            style="width:260px;"
+                                                            >
+                                                        <option value="0" {if $numVictima != 1} selected {/if} disabled>No</option>
+                                                        <option value="1" {if $numVictima == 1} selected {/if} disabled>Si</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+
+                                            <!-- HOGAR INDEPENDIENTE -->
+                                            {*<tr>*}
+                                            {*<td>Hogar Informal</td>*}
+                                            {*<td>*}
+                                            {*<select	onFocus="this.style.backgroundColor = '#ADD8E6';"*}
+                                            {*onBlur="this.style.backgroundColor = '#FFFFFF';"*}
+                                            {*name="bolInformal"*}
+                                            {*id="bolInformal"*}
+                                            {*style="width:260px;"*}
+                                            {*>*}
                                             {*<option value="0" {if $numInformal != 1} selected {/if} disabled>No</option>*}
                                             {*<option value="1" {if $numInformal == 1} selected {/if} disabled>Si</option>*}
-                                        {*</select>*}
-                                    {*</td>*}
-                                    {*<td></td>*}
-                                    {*<td></td>*}
-                                {*</tr>*}
+                                            {*</select>*}
+                                            {*</td>*}
+                                            {*<td></td>*}
+                                            {*<td></td>*}
+                                            {*</tr>*}
 
-                            </table></p>
+                                        </table></p>
 
-                            <!-- TABLA RED DE SERVICIOS -->
-                            <p><table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" style="border: 1px dotted #999999; padding:5px">
-                                <tr>
-                                    <!-- INTEGRACION SOCIAL -->
-                                    <td width="110px">Integraci&oacute;n Social</td>
-                                    <td style="padding-left:10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                   name="bolIntegracionSocial"
-                                                   id="bolIntegracionSocial"
-                                                   style="width:100%;"
-                                        >
-                                            <option value="0" {if $objFormulario->bolIntegracionSocial != 1} selected {/if} >No</option>
-                                            <option value="1" {if $objFormulario->bolIntegracionSocial == 1} selected {/if} >Si</option>
-                                        </select>
-                                    </td>
-                                    <td width="110px" align="center">Sec. de la Mujer</td>
-                                    <td style="padding-left:10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                   name="bolSecMujer"
-                                                   id="bolSecMujer"
-                                                   style="width:100%;"
-                                        >
-                                            <option value="0" {if $objFormulario->bolSecMujer != 1} selected {/if} >No</option>
-                                            <option value="1" {if $objFormulario->bolSecMujer == 1} selected {/if} >Si</option>
-                                        </select>
-                                    </td>
+                                        <!-- TABLA RED DE SERVICIOS -->
+                                        <p> 
+                                        <table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" style="border: 1px dotted #999999; padding:5px">
+                                            <tr>
+                                                <!-- INTEGRACION SOCIAL -->
+                                                <td width="100px">Integraci&oacute;n Social&nbsp;&nbsp;
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="bolIntegracionSocial"
+                                                            id="bolIntegracionSocial"
+                                                            style="width:40%;"
+                                                            >
+                                                        <option value="0" {if $objFormulario->bolIntegracionSocial != 1} selected {/if} >No</option>
+                                                        <option value="1" {if $objFormulario->bolIntegracionSocial == 1} selected {/if} >Si</option>
+                                                    </select>
+                                                </td>
+                                                <td width="110px" align="center">Sec. de la Mujer&nbsp;&nbsp;
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="bolSecMujer"
+                                                            id="bolSecMujer"
+                                                            style="width:40%;"
+                                                            >
+                                                        <option value="0" {if $objFormulario->bolSecMujer != 1} selected {/if} >No</option>
+                                                        <option value="1" {if $objFormulario->bolSecMujer == 1} selected {/if} >Si</option>
+                                                    </select>
+                                                </td>
 
-                                    <!-- IPES -->
-                                    <td width="110px" align="right">IPES</td>
-                                    <td style="padding-left:10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                   name="bolIpes"
-                                                   id="bolIpes"
-                                                   style="width:100%;"
-                                        >
-                                            <option value="0" {if $objFormulario->bolIpes != 1} selected {/if} >No</option>
-                                            <option value="1" {if $objFormulario->bolIpes == 1} selected {/if} >Si</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table></p>
-                            </p></div>
+                                                <!-- IPES -->
+                                                <td width="110px" align="center">IPES &nbsp;&nbsp;
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="bolIpes"
+                                                            id="bolIpes"
+                                                            style="width:40%;"
+                                                            >
+                                                        <option value="0" {if $objFormulario->bolIpes != 1} selected {/if} >No</option>
+                                                        <option value="1" {if $objFormulario->bolIpes == 1} selected {/if} >Si</option>
+                                                    </select>
+                                                </td>
+                                                <td width="200px" align="center">Reconocimiento Fuerza Pública&nbsp;&nbsp;
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="bolReconocimientoFP"
+                                                            id="bolReconocimientoFP"
+                                                            style="width:40%;"
+                                                            >
+                                                        <option value="0" {if $objFormulario->bolReconocimientoFP != 1} selected {/if} >No</option>
+                                                        <option value="1" {if $objFormulario->bolReconocimientoFP == 1} selected {/if} >Si</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        </p>
+                                        </p></div>
 
-                        <!-- INFORMACION FINANCIERA -->
-                        <div id="financiera" style="height:480px;">
-                            <p>
-                            <table cellpadding="1" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF">
-                                <tr>
-                                    <!-- TIENE AHORRO -->
-                                    <td>Ahorro 1</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input type="text"
-                                                 name="valSaldoCuentaAhorro"
-                                                 id="valSaldoCuentaAhorro"
-                                                 value="{$objFormulario->valSaldoCuentaAhorro|number_format:'0':'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 onKeyUp="sumarTotalRecursos();"
-                                                 style="width:100px; text-align:right;"
-                                        />
-                                    </td>
+                                    <!-- INFORMACION FINANCIERA -->
+                                    <div id="financiera" style="height:480px;">
+                                        <p>
+                                        <table cellpadding="1" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF">
+                                            <tr>
+                                                <!-- TIENE AHORRO -->
+                                                <td>Ahorro 1</td>
+                                                <td align="right" style="padding-right: 5px;">
+                                                    $ <input type="text"
+                                                             name="valSaldoCuentaAhorro"
+                                                             id="valSaldoCuentaAhorro"
+                                                             value="{$objFormulario->valSaldoCuentaAhorro|number_format:'0':'.':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             onKeyUp="sumarTotalRecursos();"
+                                                             style="width:100px; text-align:right;"
+                                                             />
+                                                </td>
 
-                                    <!-- BANCO DONDE TIENE EL AHORRO -->
-                                    <td>Entidad</td>
-                                    <td align="center" width="320px">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                   name="seqBancoCuentaAhorro"
-                                                   id="seqBancoCuentaAhorro"
-                                                   style="width:300px;"
-                                        >
-                                            <option value="1">Ninguno</option>
-                                            {foreach from=$arrBanco key=seqBanco item=txtBanco}
-                                                <option value="{$seqBanco}"
-                                                        {if $objFormulario->seqBancoCuentaAhorro == $seqBanco} selected {/if}
-                                                >{$txtBanco}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- SOPORTE CUENTA AHORRO E INMOVILIZADA -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Soporte</td>
-                                    <td style="padding-left:11px;">
-                                        <input	type="text"
-                                                  name="txtSoporteCuentaAhorro"
-                                                  id="txtSoporteCuentaAhorro"
-                                                  value="{$objFormulario->txtSoporteCuentaAhorro}"
-                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                  onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                                  style="width:195px;"
-                                        /> Inmovilizado
-                                        <input	type="checkbox"
-                                                  name="bolInmovilizadoCuentaAhorro"
-                                                  id="bolInmovilizadoCuentaAhorro"
-                                                  value="1"
-                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                {if $objFormulario->bolInmovilizadoCuentaAhorro == 1} checked {/if}
-                                        />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- FECHA APERTURA CUENTA AHORRO -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Fecha Apertura</td>
-                                    <td style="padding-left:11px;">
-                                        <input type="text"
-                                               name="fchAperturaCuentaAhorro"
-                                               id="fchAperturaCuentaAhorro"
-                                               value="{$objFormulario->fchAperturaCuentaAhorro}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:100px;"
-                                               maxlength="10"
-                                               readonly
-                                        />
-                                        <a href="#" onClick="javascript: calendarioPopUp('fchAperturaCuentaAhorro');">Calendario</a>&nbsp;&nbsp;
-                                        <a onClick="document.getElementById('fchAperturaCuentaAhorro').value = '';" href="#">Limpiar</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- TIENE OTRO AHORRO -->
-                                    <td>Ahorro 2</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input type="text"
-                                                 name="valSaldoCuentaAhorro2"
-                                                 id="valSaldoCuentaAhorro2"
-                                                 value="{$objFormulario->valSaldoCuentaAhorro2|number_format:'0':'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 onKeyUp="sumarTotalRecursos();"
-                                                 style="width:100px; text-align:right;"
-                                        />
-                                    </td>
+                                                <!-- BANCO DONDE TIENE EL AHORRO -->
+                                                <td>Entidad</td>
+                                                <td align="center" width="320px">
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqBancoCuentaAhorro"
+                                                            id="seqBancoCuentaAhorro"
+                                                            style="width:300px;"
+                                                            >
+                                                        <option value="1">Ninguno</option>
+                                                        {foreach from=$arrBanco key=seqBanco item=txtBanco}
+                                                            <option value="{$seqBanco}"
+                                                                    {if $objFormulario->seqBancoCuentaAhorro == $seqBanco} selected {/if}
+                                                                    >{$txtBanco}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- SOPORTE CUENTA AHORRO E INMOVILIZADA -->
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>Soporte</td>
+                                                <td style="padding-left:11px;">
+                                                    <input	type="text"
+                                                           name="txtSoporteCuentaAhorro"
+                                                           id="txtSoporteCuentaAhorro"
+                                                           value="{$objFormulario->txtSoporteCuentaAhorro}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:195px;"
+                                                           /> Inmovilizado
+                                                    <input	type="checkbox"
+                                                           name="bolInmovilizadoCuentaAhorro"
+                                                           id="bolInmovilizadoCuentaAhorro"
+                                                           value="1"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           {if $objFormulario->bolInmovilizadoCuentaAhorro == 1} checked {/if}
+                                                           />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- FECHA APERTURA CUENTA AHORRO -->
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>Fecha Apertura</td>
+                                                <td style="padding-left:11px;">
+                                                    <input type="text"
+                                                           name="fchAperturaCuentaAhorro"
+                                                           id="fchAperturaCuentaAhorro"
+                                                           value="{$objFormulario->fchAperturaCuentaAhorro}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:100px;"
+                                                           maxlength="10"
+                                                           readonly
+                                                           />
+                                                    <a href="#" onClick="javascript: calendarioPopUp('fchAperturaCuentaAhorro');">Calendario</a>&nbsp;&nbsp;
+                                                    <a onClick="document.getElementById('fchAperturaCuentaAhorro').value = '';" href="#">Limpiar</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- TIENE OTRO AHORRO -->
+                                                <td>Ahorro 2</td>
+                                                <td align="right" style="padding-right: 5px;">
+                                                    $ <input type="text"
+                                                             name="valSaldoCuentaAhorro2"
+                                                             id="valSaldoCuentaAhorro2"
+                                                             value="{$objFormulario->valSaldoCuentaAhorro2|number_format:'0':'.':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             onKeyUp="sumarTotalRecursos();"
+                                                             style="width:100px; text-align:right;"
+                                                             />
+                                                </td>
 
-                                    <!-- BANCO DONDE TIENE EL AHORRO -->
-                                    <td>Entidad</td>
-                                    <td align="center" width="320px">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqBancoCuentaAhorro2"
-                                                id="seqBancoCuentaAhorro2"
-                                                style="width:300px;"
-                                        >
-                                            <option value="1">Ninguno</option>
-                                            {foreach from=$arrBanco key=seqBanco item=txtBanco}
-                                                <option value="{$seqBanco}"
-                                                        {if $objFormulario->seqBancoCuentaAhorro2 == $seqBanco} selected {/if}
-                                                >{$txtBanco}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- SOPORTE CUENTA AHORRO E INMOVILIZADA -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Soporte</td>
-                                    <td style="padding-left:11px;">
-                                        <input	type="text"
-                                                  name="txtSoporteCuentaAhorro2"
-                                                  id="txtSoporteCuentaAhorro2"
-                                                  value="{$objFormulario->txtSoporteCuentaAhorro2}"
-                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                  onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                                  style="width:195px;"
-                                        /> Inmovilizado
-                                        <input	type="checkbox"
-                                                  name="bolInmovilizadoCuentaAhorro2"
-                                                  id="bolInmovilizadoCuentaAhorro2"
-                                                  value="1"
-                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                {if $objFormulario->bolInmovilizadoCuentaAhorro2 == 1} checked {/if}
-                                        />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- FECHA APERTURA CUENTA AHORRO -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Fecha Apertura</td>
-                                    <td style="padding-left:11px;">
-                                        <input	type="text"
-                                                  name="fchAperturaCuentaAhorro2"
-                                                  id="fchAperturaCuentaAhorro2"
-                                                  value="{$objFormulario->fchAperturaCuentaAhorro2}"
-                                                  onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                  onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                                  style="width:100px;"
-                                                  maxlength="10"
-                                                  readonly
-                                        />
-                                        <a href="#" onClick="javascript: calendarioPopUp('fchAperturaCuentaAhorro2');">Calendario</a>&nbsp;&nbsp;
-                                        <a onClick="document.getElementById('fchAperturaCuentaAhorro2').value = '';" href="#">Limpiar</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- CESANTIAS -->
-                                    <td>Cesant&iacute;as</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input	type="text"
-                                                    name="valSaldoCesantias"
-                                                    id="valSaldoCesantias"
-                                                    value="{$objFormulario->valSaldoCesantias|number_format:'0':'.':'.'}"
-                                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                    onKeyUp="sumarTotalRecursos();"
-                                                    style="width:100px;text-align:right;"
-                                        />
-                                    </td>
+                                                <!-- BANCO DONDE TIENE EL AHORRO -->
+                                                <td>Entidad</td>
+                                                <td align="center" width="320px">
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqBancoCuentaAhorro2"
+                                                            id="seqBancoCuentaAhorro2"
+                                                            style="width:300px;"
+                                                            >
+                                                        <option value="1">Ninguno</option>
+                                                        {foreach from=$arrBanco key=seqBanco item=txtBanco}
+                                                            <option value="{$seqBanco}"
+                                                                    {if $objFormulario->seqBancoCuentaAhorro2 == $seqBanco} selected {/if}
+                                                                    >{$txtBanco}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- SOPORTE CUENTA AHORRO E INMOVILIZADA -->
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>Soporte</td>
+                                                <td style="padding-left:11px;">
+                                                    <input	type="text"
+                                                           name="txtSoporteCuentaAhorro2"
+                                                           id="txtSoporteCuentaAhorro2"
+                                                           value="{$objFormulario->txtSoporteCuentaAhorro2}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:195px;"
+                                                           /> Inmovilizado
+                                                    <input	type="checkbox"
+                                                           name="bolInmovilizadoCuentaAhorro2"
+                                                           id="bolInmovilizadoCuentaAhorro2"
+                                                           value="1"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                           {if $objFormulario->bolInmovilizadoCuentaAhorro2 == 1} checked {/if}
+                                                           />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- FECHA APERTURA CUENTA AHORRO -->
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>Fecha Apertura</td>
+                                                <td style="padding-left:11px;">
+                                                    <input	type="text"
+                                                           name="fchAperturaCuentaAhorro2"
+                                                           id="fchAperturaCuentaAhorro2"
+                                                           value="{$objFormulario->fchAperturaCuentaAhorro2}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:100px;"
+                                                           maxlength="10"
+                                                           readonly
+                                                           />
+                                                    <a href="#" onClick="javascript: calendarioPopUp('fchAperturaCuentaAhorro2');">Calendario</a>&nbsp;&nbsp;
+                                                    <a onClick="document.getElementById('fchAperturaCuentaAhorro2').value = '';" href="#">Limpiar</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- CESANTIAS -->
+                                                <td>Cesant&iacute;as</td>
+                                                <td align="right" style="padding-right: 5px;">
+                                                    $ <input	type="text"
+                                                             name="valSaldoCesantias"
+                                                             id="valSaldoCesantias"
+                                                             value="{$objFormulario->valSaldoCesantias|number_format:'0':'.':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             onKeyUp="sumarTotalRecursos();"
+                                                             style="width:100px;text-align:right;"
+                                                             />
+                                                </td>
 
-                                    <!-- SOPORTE CESANTIAS -->
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text"
-                                               name="txtSoporteCesantias"
-                                               id="txtSoporteCesantias"
-                                               value="{$objFormulario->txtSoporteCesantias}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:300px;"
-                                        />
-                                    </td>
-                                </tr>
+                                                <!-- SOPORTE CESANTIAS -->
+                                                <td>Soporte</td>
+                                                <td align="center">
+                                                    <input type="text"
+                                                           name="txtSoporteCesantias"
+                                                           id="txtSoporteCesantias"
+                                                           value="{$objFormulario->txtSoporteCesantias}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:300px;"
+                                                           />
+                                                </td>
+                                            </tr>
 
-                                <tr>
-                                    <!-- TIENE CREDITO -->
-                                    <td>Cr&eacute;dito</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input type="text"
-                                                 name="valCredito"
-                                                 id="valCredito"
-                                                 value="{$objFormulario->valCredito|number_format:'0':'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 onKeyUp="sumarTotalRecursos();"
-                                                 style="width:100px;text-align:right;"
-                                        />
-                                    </td>
+                                            <tr>
+                                                <!-- TIENE CREDITO -->
+                                                <td>Cr&eacute;dito</td>
+                                                <td align="right" style="padding-right: 5px;">
+                                                    $ <input type="text"
+                                                             name="valCredito"
+                                                             id="valCredito"
+                                                             value="{$objFormulario->valCredito|number_format:'0':'.':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             onKeyUp="sumarTotalRecursos();"
+                                                             style="width:100px;text-align:right;"
+                                                             />
+                                                </td>
 
-                                    <!-- BANCO DONDE TIENE EL CREDITO -->
-                                    <td>Entidad</td>
-                                    <td align="center">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqBancoCredito"
-                                                id="seqBancoCredito"
-                                                style="width:300px;"
-                                        >
-                                            <option value="1">Sin Credito</option>
-                                            {foreach from=$arrBanco key=seqBanco item=txtBanco}
-                                                <option value="{$seqBanco}"
-                                                        {if $objFormulario->seqBancoCredito == $seqBanco} selected {/if}
-                                                >{$txtBanco}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- SOPORTE CREDITO -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text"
-                                               name="txtSoporteCredito"
-                                               id="txtSoporteCredito"
-                                               value="{$objFormulario->txtSoporteCredito}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:300px;"
-                                        />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- FECHA APROBACION CREDITO -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Fecha Vencimiento</td>
-                                    <td style="padding-left:11px;">
-                                        <input type="text"
-                                               name="fchAprobacionCredito"
-                                               id="fchAprobacionCredito"
-                                               value="{$objFormulario->fchAprobacionCredito}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:100px;"
-                                               maxlength="10"
-                                               readonly
-                                        />
-                                        <a onClick="calendarioPopUp('fchAprobacionCredito')" href="#">Calendario</a>&nbsp;&nbsp;
-                                        <a onClick="document.getElementById('fchAprobacionCredito').value = '';" href="#">Limpiar</a>
-                                    </td>
-                                </tr>
-                                <tr><!-- ACUERDO DE PAGO -->
-                                    <td>Acuerdo Pago / Lote / Terreno</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input type="text"
-                                                 name="valAporteLote"
-                                                 id="valAporteLote"
-                                                 value="{$objFormulario->valAporteLote|number_format:'0':'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 onKeyUp="sumarTotalRecursos();"
-                                                 style="width:100px;text-align:right;"
-                                        />
-                                    </td>
-                                    <!-- SOPORTE APORTE LOTE -->
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text"
-                                               name="txtSoporteAporteLote"
-                                               id="txtSoporteAporteLote"
-                                               value="{$objFormulario->txtSoporteAporteLote}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:300px;" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- SUBSIDIO NACIONAL -->
-                                    <td>Valor Subsidio: AVC / FOVIS / SFV</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input type="text"
-                                                 name="valSubsidioNacional"
-                                                 id="valSubsidioNacional"
-                                                 value="{$objFormulario->valSubsidioNacional|number_format:'0':'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 onKeyUp="sumarTotalRecursos();"
-                                                 style="width:100px;text-align:right;"
-                                        />
-                                    </td>
-                                    <td>Entidad</td>
-                                    <td align="center" width="320px">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqEntidadSubsidio"
-                                                id="seqEntidadSubsidio"
-                                                style="width:300px;"
-                                        >
-                                            {foreach from=$arrEntidadSubsidio key=seqEntidadSubsidio item=txtEntidadSubsidio}
-                                                <option value="{$seqEntidadSubsidio}"
-                                                        {if $objFormulario->seqEntidadSubsidio == $seqEntidadSubsidio} selected {/if}
-                                                >{$txtEntidadSubsidio}</option>
-                                            {/foreach}
-                                        </select>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"></td>
-                                    <td>Soporte (No.Carta)</td>
-                                    <td align="center">
-                                        <input type="text"
-                                               name="txtSoporteSubsidioNacional"
-                                               id="txtSoporteSubsidioNacional"
-                                               value="{$objFormulario->txtSoporteSubsidioNacional}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:300px;"
-                                        />
-                                    </td>
-                                </tr>
+                                                <!-- BANCO DONDE TIENE EL CREDITO -->
+                                                <td>Entidad</td>
+                                                <td align="center">
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqBancoCredito"
+                                                            id="seqBancoCredito"
+                                                            style="width:300px;"
+                                                            >
+                                                        <option value="1">Sin Credito</option>
+                                                        {foreach from=$arrBanco key=seqBanco item=txtBanco}
+                                                            <option value="{$seqBanco}"
+                                                                    {if $objFormulario->seqBancoCredito == $seqBanco} selected {/if}
+                                                                    >{$txtBanco}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- SOPORTE CREDITO -->
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>Soporte</td>
+                                                <td align="center">
+                                                    <input type="text"
+                                                           name="txtSoporteCredito"
+                                                           id="txtSoporteCredito"
+                                                           value="{$objFormulario->txtSoporteCredito}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:300px;"
+                                                           />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- FECHA APROBACION CREDITO -->
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>Fecha Vencimiento</td>
+                                                <td style="padding-left:11px;">
+                                                    <input type="text"
+                                                           name="fchAprobacionCredito"
+                                                           id="fchAprobacionCredito"
+                                                           value="{$objFormulario->fchAprobacionCredito}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:100px;"
+                                                           maxlength="10"
+                                                           readonly
+                                                           />
+                                                    <a onClick="calendarioPopUp('fchAprobacionCredito')" href="#">Calendario</a>&nbsp;&nbsp;
+                                                    <a onClick="document.getElementById('fchAprobacionCredito').value = '';" href="#">Limpiar</a>
+                                                </td>
+                                            </tr>
+                                            <tr><!-- ACUERDO DE PAGO -->
+                                                <td>Acuerdo Pago / Lote / Terreno</td>
+                                                <td align="right" style="padding-right: 5px;">
+                                                    $ <input type="text"
+                                                             name="valAporteLote"
+                                                             id="valAporteLote"
+                                                             value="{$objFormulario->valAporteLote|number_format:'0':'.':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             onKeyUp="sumarTotalRecursos();"
+                                                             style="width:100px;text-align:right;"
+                                                             />
+                                                </td>
+                                                <!-- SOPORTE APORTE LOTE -->
+                                                <td>Soporte</td>
+                                                <td align="center">
+                                                    <input type="text"
+                                                           name="txtSoporteAporteLote"
+                                                           id="txtSoporteAporteLote"
+                                                           value="{$objFormulario->txtSoporteAporteLote}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:300px;" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- SUBSIDIO NACIONAL -->
+                                                <td>Valor Subsidio: AVC / FOVIS / SFV</td>
+                                                <td align="right" style="padding-right: 5px;">
+                                                    $ <input type="text"
+                                                             name="valSubsidioNacional"
+                                                             id="valSubsidioNacional"
+                                                             value="{$objFormulario->valSubsidioNacional|number_format:'0':'.':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             onKeyUp="sumarTotalRecursos();"
+                                                             style="width:100px;text-align:right;"
+                                                             />
+                                                </td>
+                                                <td>Entidad</td>
+                                                <td align="center" width="320px">
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqEntidadSubsidio"
+                                                            id="seqEntidadSubsidio"
+                                                            style="width:300px;"
+                                                            >
+                                                        {foreach from=$arrEntidadSubsidio key=seqEntidadSubsidio item=txtEntidadSubsidio}
+                                                            <option value="{$seqEntidadSubsidio}"
+                                                                    {if $objFormulario->seqEntidadSubsidio == $seqEntidadSubsidio} selected {/if}
+                                                                    >{$txtEntidadSubsidio}</option>
+                                                        {/foreach}
+                                                    </select>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                                <td>Soporte (No.Carta)</td>
+                                                <td align="center">
+                                                    <input type="text"
+                                                           name="txtSoporteSubsidioNacional"
+                                                           id="txtSoporteSubsidioNacional"
+                                                           value="{$objFormulario->txtSoporteSubsidioNacional}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:300px;"
+                                                           />
+                                                </td>
+                                            </tr>
 
-                                <tr>
-                                    <!-- TIENE DONACIONES -->
-                                    <td>Donaci&oacute;n / Rec. Económico / VUR</td>
-                                    <td align="right" style="padding-right: 5px;">
-                                        $ <input type="text"
-                                                 name="valDonacion"
-                                                 id="valDonacion"
-                                                 value="{$objFormulario->valDonacion|number_format:'0':'.':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 onKeyUp="sumarTotalRecursos();"
-                                                 style="width:100px;text-align:right;"
-                                        />
-                                    </td>
+                                            <tr>
+                                                <!-- TIENE DONACIONES -->
+                                                <td>Donaci&oacute;n / Rec. Económico / VUR</td>
+                                                <td align="right" style="padding-right: 5px;">
+                                                    $ <input type="text"
+                                                             name="valDonacion"
+                                                             id="valDonacion"
+                                                             value="{$objFormulario->valDonacion|number_format:'0':'.':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             onKeyUp="sumarTotalRecursos();"
+                                                             style="width:100px;text-align:right;"
+                                                             />
+                                                </td>
 
-                                    <!-- DE DONDE PROVIENE LA DONACION -->
-                                    <td>Entidad Donante</td>
-                                    <td style="padding-left: 10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                   onBlur="soloNumeros(this);
-                                                        this.style.backgroundColor = '#FFFFFF';"
-                                                   name="seqEmpresaDonante"
-                                                   id="seqEmpresaDonante"
-                                                   style="width:300px;"
-                                        >
-                                            <option value="1">Ninguna</option>
-                                            {foreach from=$arrDonantes key=seqEmpresaDonante item=txtEmpresaDonante}
-                                                <option value="{$seqEmpresaDonante}"
-                                                        {if $objFormulario->seqEmpresaDonante == $seqEmpresaDonante} selected {/if}
-                                                >{$txtEmpresaDonante}</option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!-- SOPORTE DONACION -->
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>Soporte</td>
-                                    <td align="center">
-                                        <input type="text"
-                                               name="txtSoporteDonacion"
-                                               id="txtSoporteDonacion"
-                                               value="{$objFormulario->txtSoporteDonacion}"
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
-                                               style="width:300px;"
-                                        />
-                                    </td>
-                                </tr>
-                                <tr id="trNoLeasing1" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
-                                    <!-- SUMA DE RECURSOS PROPIOS -->
-                                    <td class="tituloTabla" style="padding-top:5px;">Recursos propios</td>
-                                    <td align="right" style="padding-top:5px; padding-right:5px">
-                                        $ <input type="text"
-                                                 id="valSumaRecursosPropios"
-                                                 value="{$valSumaRecursosPropios|number_format:'0':',':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 style="padding-right: 5px; width:100px;text-align:right;"
-                                                 readonly
-                                        >
-                                    </td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr id="trNoLeasing2" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
-                                    <!-- SUMA DE SUBSIDIOS -->
-                                    <td class="tituloTabla" style="padding-top:5px;">Valor Subsidios + (Donacion y/o VUR)</td>
-                                    <td align="right" style="padding-top:5px; padding-right:5px">
-                                        $ <input type="text"
-                                                 id="valSumaSubsidios"
-                                                 value="{$valSumaSubsidios|number_format:'0':',':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 style="padding-right: 5px; width:100px;text-align:right;"
-                                                 readonly
-                                        >
-                                    </td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                                <!-- DE DONDE PROVIENE LA DONACION -->
+                                                <td>Entidad Donante</td>
+                                                <td style="padding-left: 10px;">
+                                                    <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="soloNumeros(this);
+                                                                    this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqEmpresaDonante"
+                                                            id="seqEmpresaDonante"
+                                                            style="width:300px;"
+                                                            >
+                                                        <option value="1">Ninguna</option>
+                                                        {foreach from=$arrDonantes key=seqEmpresaDonante item=txtEmpresaDonante}
+                                                            <option value="{$seqEmpresaDonante}"
+                                                                    {if $objFormulario->seqEmpresaDonante == $seqEmpresaDonante} selected {/if}
+                                                                    >{$txtEmpresaDonante}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!-- SOPORTE DONACION -->
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>Soporte</td>
+                                                <td align="center">
+                                                    <input type="text"
+                                                           name="txtSoporteDonacion"
+                                                           id="txtSoporteDonacion"
+                                                           value="{$objFormulario->txtSoporteDonacion}"
+                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                           style="width:300px;"
+                                                           />
+                                                </td>
+                                            </tr>
+                                            <tr id="trNoLeasing1" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                                <!-- SUMA DE RECURSOS PROPIOS -->
+                                                <td class="tituloTabla" style="padding-top:5px;">Recursos propios</td>
+                                                <td align="right" style="padding-top:5px; padding-right:5px">
+                                                    $ <input type="text"
+                                                             id="valSumaRecursosPropios"
+                                                             value="{$valSumaRecursosPropios|number_format:'0':',':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             style="padding-right: 5px; width:100px;text-align:right;"
+                                                             readonly
+                                                             >
+                                                </td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr id="trNoLeasing2" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                                <!-- SUMA DE SUBSIDIOS -->
+                                                <td class="tituloTabla" style="padding-top:5px;">Valor Subsidios + (Donacion y/o VUR)</td>
+                                                <td align="right" style="padding-top:5px; padding-right:5px">
+                                                    $ <input type="text"
+                                                             id="valSumaSubsidios"
+                                                             value="{$valSumaSubsidios|number_format:'0':',':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             style="padding-right: 5px; width:100px;text-align:right;"
+                                                             readonly
+                                                             >
+                                                </td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
 
-                                </tr>
-                                <tr id="trNoLeasing3" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
-                                    <!-- TOTAL RECURSOS ECONOMICOS -->
-                                    <td class="tituloTabla" style="padding-top:5px;">Total recursos del hogar</td>
-                                    <td align="right" style="padding-top:5px; padding-right:5px">
-                                        $ <input type="text"
-                                                 name="valTotalRecursos"
-                                                 id="valTotalRecursos"
-                                                 value="{$objFormulario->valTotalRecursos|number_format:'0':',':'.'}"
-                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                 style="padding-right: 5px; width:100px;text-align:right;"
-                                                 readonly
-                                        >
-                                    </td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" align="right">
-                                        <a href="#popup" class="popup-link"><img src="recursos/imagenes/simulador.png"  height="28px" /></a>
-                                    </td>
-                                </tr>
-                            </table>
-                            </p></div>
+                                            </tr>
+                                            <tr id="trNoLeasing3" bgcolor="#E0E0E0" style="display:{$bolCamposNoLeasing}">
+                                                <!-- TOTAL RECURSOS ECONOMICOS -->
+                                                <td class="tituloTabla" style="padding-top:5px;">Total recursos del hogar</td>
+                                                <td align="right" style="padding-top:5px; padding-right:5px">
+                                                    $ <input type="text"
+                                                             name="valTotalRecursos"
+                                                             id="valTotalRecursos"
+                                                             value="{$objFormulario->valTotalRecursos|number_format:'0':',':'.'}"
+                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                             style="padding-right: 5px; width:100px;text-align:right;"
+                                                             readonly
+                                                             >
+                                                </td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" align="right">
+                                                    <a href="#popup" class="popup-link"><img src="recursos/imagenes/simulador.png"  height="28px" /></a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        </p></div>
 
-                        <!-- MODALIDAD Y VIVIENDA -->
-                        <div id="modalidad" style="height:480px;">
-                            <p>
-                            <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666;">
+                                    <!-- MODALIDAD Y VIVIENDA -->
+                                    <div id="modalidad" style="height:480px;">
+                                        <p>
+                                        <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666;">
 
-                                <!-- MODALIDAD DEL SUBSIDIO y TIPO DE SOLUCION -->
-                                <tr>
-                                    <td width="150px">Modalidad Solución</td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqModalidad"
-                                                id="seqModalidad"
-                                                style="width:100%;"
-                                                onChange="datosPestanaPostulacion('actualizacion');"
-                                        >
-                                            <option value="0">Seleccione</option>
-                                            {foreach from=$arrModalidad key=seqModalidad item=txtModalidad}
-                                                <option value="{$seqModalidad}"
-                                                        {if $objFormulario->seqModalidad == $seqModalidad} selected {/if}
-                                                >
-                                                    {$txtModalidad}
-                                                </option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                    <td width="100px">Tipo Solución</td>
-                                    <td id="tdTipoSolucion" align="left">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqSolucion"
-                                                id="seqSolucion"
-                                                style="width:100%;"
-                                        >
-                                            <option value="1">NINGUNA</option>
-                                            {if intval( $objFormulario->seqModalidad ) != 0}
-                                                {foreach from=$arrSolucion key=seqSolucion item=arrDatos}
-                                                    {if $objFormulario->seqModalidad == $arrDatos.seqModalidad}
-                                                        <option value="{$seqSolucion}"
-                                                                {if $objFormulario->seqSolucion == $seqSolucion}
-                                                                    selected
+                                            <!-- MODALIDAD DEL SUBSIDIO y TIPO DE SOLUCION -->
+                                            <tr>
+                                                <td width="150px">Modalidad Solución</td>
+                                                <td>
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqModalidad"
+                                                            id="seqModalidad"
+                                                            style="width:100%;"
+                                                            onChange="datosPestanaPostulacion('actualizacion');"
+                                                            >
+                                                        <option value="0">Seleccione</option>
+                                                        {foreach from=$arrModalidad key=seqModalidad item=txtModalidad}
+                                                            <option value="{$seqModalidad}"
+                                                                    {if $objFormulario->seqModalidad == $seqModalidad} selected {/if}
+                                                                    >
+                                                                {$txtModalidad}
+                                                            </option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                                <td width="100px">Tipo Solución</td>
+                                                <td id="tdTipoSolucion" align="left">
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqSolucion"
+                                                            id="seqSolucion"
+                                                            style="width:100%;"
+                                                            >
+                                                        <option value="1">NINGUNA</option>
+                                                        {if intval( $objFormulario->seqModalidad ) != 0}
+                                                            {foreach from=$arrSolucion key=seqSolucion item=arrDatos}
+                                                                {if $objFormulario->seqModalidad == $arrDatos.seqModalidad}
+                                                                    <option value="{$seqSolucion}"
+                                                                            {if $objFormulario->seqSolucion == $seqSolucion}
+                                                                                selected
+                                                                            {/if}
+                                                                            >
+                                                                        {$arrDatos.txtSolucion}
+                                                                    </option>
                                                                 {/if}
-                                                        >
-                                                            {$arrDatos.txtSolucion}
-                                                        </option>
-                                                    {/if}
-                                                {/foreach}
-                                            {/if}
-                                        </select>
-                                    </td>
-                                </tr>
-
-                                <!-- TIPO ESQUEMA -->
-                                <tr>
-                                    <td>Tipo Esquema</td>
-                                    <td colspan="3" align="left">
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="seqTipoEsquema"
-                                                id="seqTipoEsquema"
-                                                style="width:100%"
-                                        >
-                                            <option value="0" selected {if ! isset( $smarty.session.arrGrupos.3.6 ) } disabled {/if}>NINGUNO</option>
-                                            {foreach from=$arrTipoEsquemas key=seqTipoEsquema item=txtTipoEsquema}
-                                                <option value="{$seqTipoEsquema}"
-                                                        {if $objFormulario->seqTipoEsquema == $seqTipoEsquema} selected {/if}
-                                                        {if ! isset( $smarty.session.arrGrupos.3.6 ) }
-                                                            disabled
+                                                            {/foreach}
                                                         {/if}
-                                                >
-                                                    {$txtTipoEsquema}
-                                                </option>
-                                            {/foreach}
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                            <br>
-                            <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666">
+                                                    </select>
+                                                </td>
+                                            </tr>
 
-                                <!-- TIENE PROMESA DE COMPRA VENTA FIRMADA -->
-                                <tr>
-                                    <td width="350px">¿ Tiene una promesa de compra - venta firmada ?</td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="bolPromesaFirmada"
-                                                id="bolPromesaFirmada"
-                                                style="width:100px;"
-                                        >
-                                            <option value="0" {if $objFormulario->bolPromesaFirmada != 1} selected {/if}>No</option>
-                                            <option value="1" {if $objFormulario->bolPromesaFirmada == 1} selected {/if}>Si</option>
-                                        </select>
-                                    </td>
-                                    <td>&nbsp;</td>
-                                </tr>
+                                            <!-- TIPO ESQUEMA -->
+                                            <tr>
+                                                <td>Tipo Esquema</td>
+                                                <td colspan="3" align="left">
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="seqTipoEsquema"
+                                                            id="seqTipoEsquema"
+                                                            style="width:100%"
+                                                            >
+                                                        <option value="0" selected {if ! isset( $smarty.session.arrGrupos.3.6 ) } disabled {/if}>NINGUNO</option>
+                                                        {foreach from=$arrTipoEsquemas key=seqTipoEsquema item=txtTipoEsquema}
+                                                            <option value="{$seqTipoEsquema}"
+                                                                    {if $objFormulario->seqTipoEsquema == $seqTipoEsquema} selected {/if}
+                                                                    {if ! isset( $smarty.session.arrGrupos.3.6 ) }
+                                                                        disabled
+                                                                    {/if}
+                                                                    >
+                                                                {$txtTipoEsquema}
+                                                            </option>
+                                                        {/foreach}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <br>
+                                        <table cellpadding="3" cellspacing="0" border="0" width="100%" style="border: 1px dotted #666666">
 
-                                <!-- TIENE IDENTIFICADA UNA SOLUCION DE VIVIENDA VIABILIZADA POR LA SDHT -->
-                                <tr>
-                                    <td>¿ Tiene Idetificada una solución Viabilizada por la SDHT ?</td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="bolIdentificada"
-                                                id="bolIdentificada"
-                                                style="width:100px;"
-                                        >
-                                            <option value="0" {if $objFormulario->bolIdentificada != 1} selected {/if}>No</option>
-                                            <option value="1" {if $objFormulario->bolIdentificada == 1} selected {/if}>Si</option>
-                                        </select>
-                                    </td>
-                                    <td>&nbsp;</td>
-                                </tr>
+                                            <!-- TIENE PROMESA DE COMPRA VENTA FIRMADA -->
+                                            <tr>
+                                                <td width="350px">¿ Tiene una promesa de compra - venta firmada ?</td>
+                                                <td>
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="bolPromesaFirmada"
+                                                            id="bolPromesaFirmada"
+                                                            style="width:100px;"
+                                                            >
+                                                        <option value="0" {if $objFormulario->bolPromesaFirmada != 1} selected {/if}>No</option>
+                                                        <option value="1" {if $objFormulario->bolPromesaFirmada == 1} selected {/if}>Si</option>
+                                                    </select>
+                                                </td>
+                                                <td>&nbsp;</td>
+                                            </tr>
 
-                                <!-- PERTENECE A UN PLAN DE VIVIENDA VIABILIZADA POR LA SDHT -->
-                                <tr>
-                                    <td>Pertenece a un Plan de Vivienda Viabilizada por la SDHT</td>
-                                    <td>
-                                        <select onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="bolViabilizada"
-                                                id="bolViabilizada"
-                                                style="width:100px;"
-                                        >
-                                            <option value="0" {if $objFormulario->bolViabilizada != 1} selected {/if}>No</option>
-                                            <option value="1" {if $objFormulario->bolViabilizada == 1} selected {/if}>Si</option>
-                                        </select>
-                                    </td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                            </table>
+                                            <!-- TIENE IDENTIFICADA UNA SOLUCION DE VIVIENDA VIABILIZADA POR LA SDHT -->
+                                            <tr>
+                                                <td>¿ Tiene Idetificada una solución Viabilizada por la SDHT ?</td>
+                                                <td>
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="bolIdentificada"
+                                                            id="bolIdentificada"
+                                                            style="width:100px;"
+                                                            >
+                                                        <option value="0" {if $objFormulario->bolIdentificada != 1} selected {/if}>No</option>
+                                                        <option value="1" {if $objFormulario->bolIdentificada == 1} selected {/if}>Si</option>
+                                                    </select>
+                                                </td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+
+                                            <!-- PERTENECE A UN PLAN DE VIVIENDA VIABILIZADA POR LA SDHT -->
+                                            <tr>
+                                                <td>Pertenece a un Plan de Vivienda Viabilizada por la SDHT</td>
+                                                <td>
+                                                    <select onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            name="bolViabilizada"
+                                                            id="bolViabilizada"
+                                                            style="width:100px;"
+                                                            >
+                                                        <option value="0" {if $objFormulario->bolViabilizada != 1} selected {/if}>No</option>
+                                                        <option value="1" {if $objFormulario->bolViabilizada == 1} selected {/if}>Si</option>
+                                                    </select>
+                                                </td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                        </table>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SEGUIMIENTO AL HOGAR -->
+                        <div id="seg" style="height:550px; overflow:auto;">
+                            {include file="seguimiento/seguimientoFormulario.tpl"}
+                            <div id="contenidoBusqueda" >
+                                {include file="seguimiento/buscarSeguimiento.tpl"}
+                            </div>
+                        </div>
+
+                        <!-- ACTOS ADMINISTRATIVOS -->
+                        <div id="aad" style="height:550px;">
+                            <p>
+                                {include file="subsidios/actosAdministrativos.tpl"}
                             </p>
                         </div>
 
                     </div>
                 </div>
-            </div>
 
-            <!-- SEGUIMIENTO AL HOGAR -->
-            <div id="seg" style="height:550px; overflow:auto;">
-                {include file="seguimiento/seguimientoFormulario.tpl"}
-                <div id="contenidoBusqueda" >
-                    {include file="seguimiento/buscarSeguimiento.tpl"}
+                <input type="hidden" id="seqFormulario" name="seqFormulario" value="{$seqFormulario}">
+                <input type="hidden" name="txtArchivo" value="./contenidos/subsidios/salvarActualizacion.php">
+                <input type="hidden" name="numDocumento" value="{$arrPost.cedula}">
+                <input type="hidden" id="valAspiraSubsidio" value="{$objFormulario->valAspiraSubsidio}">
+
+                <input type="hidden" id="valAporteAvanceObra"        name="valAporteAvanceObra"        value="0">
+                <input type="hidden" id="txtSoporteAvanceObra"       name="txtSoporteAvanceObra"       value="">
+                <input type="hidden" id="valAporteMateriales"        name="valAporteMateriales"        value="0">
+                <input type="hidden" id="txtSoporteAporteMateriales" name="txtSoporteAporteMateriales" value="">
+
+                <!-- valor que se usa para la advertencia de ingresos del hogar -->
+                <input type="hidden" id="valSMMLV" value="{$valSMMLV}">
+                {if isset( $smarty.session.arrGrupos.3.6 ) }
+                    <input type="hidden" id="bolActivarModalidad" value="1">
+                {else}
+                    <input type="hidden" id="bolActivarModalidad" value="0">
+                {/if}
+
+            </form>
+
+            <div id="postulacionTabView"></div>
+            <div id="objDireccionOculto" style="display:none"></div>
+            <div id="objDireccionOcultoSolucion" style="display:none"></div>
+
+
+            <div id="qmys" class="yui-pe-content" style="visibility: hidden">
+                <div class="hd">Ingrese los datos datos requeridos</div>
+                <div class="bd" style="padding: 10px">
+                    <form method="POST" action="./contenidos/subsidios/quitarMiembroHogar.php">
+                        <input type="hidden" name="numDocumento" id="documentoMiembro" value="">
+                        <input type="hidden" name="seqFormulario" id="formularioMiembro" value="">
+                        <table cellspacing="0" cellpadding="5" border="0" width="100%">
+                            <tr>
+                                <td width="120px">Grupo de Gestión</td>
+                                <td width="300px">
+                                    <select name="seqGrupoGestion1"
+                                            id="seqGrupoGestion1"
+                                            style="width:98%"
+                                            onFocus="this.style.backgroundColor = '#ADD8E6';
+                                                    document.getElementById('seqGrupoGestionError').innerHTML = '';"
+                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                            onChange="obtenerGestion(this, 'tdGestion1', 'seqGestion1');">
+                                        >
+                                        <option value="0">Seleccione Grupo</option>
+                                        {foreach from=$arrGrupoGestion key=seqGrupoGestion item=txtGrupoGestion}
+                                            <option value="{$seqGrupoGestion}">{$txtGrupoGestion}</option>
+                                        {/foreach}
+                                    </select>
+                                    <div id="seqGrupoGestionError" class="msgError"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Gestión</td>
+                                <td id="tdGestion1">
+                                    <select name="seqGestion1"
+                                            id="seqGestion1"
+                                            style="width:98%"
+                                            onFocus="this.style.backgroundColor = '#ADD8E6';
+                                                    document.getElementById('seqGestionError').innerHTML = '';"
+                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                            >
+                                        <option value="0">Seleccione Gesti&oacute;n</select>
+                                    </select>
+                                    <div id="seqGestionError" class="msgError"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" colspan="2">
+                                    <textarea id="txtComentario1"
+                                              name="txtComentario1"
+                                              style="width:100%; height: 70px"
+                                              onFocus="this.style.backgroundColor = '#ADD8E6';
+                                                      document.getElementById('txtComentarioError').innerHTML = '';"
+                                              onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                              ></textarea>
+                                    <div id="txtComentarioError" class="msgError"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
             </div>
 
-            <!-- ACTOS ADMINISTRATIVOS -->
-            <div id="aad" style="height:550px;">
-                <p>
-                    {include file="subsidios/actosAdministrativos.tpl"}
-                </p>
-            </div>
-
-        </div>
-    </div>
-
-    <input type="hidden" id="seqFormulario" name="seqFormulario" value="{$seqFormulario}">
-    <input type="hidden" name="txtArchivo" value="./contenidos/subsidios/salvarActualizacion.php">
-    <input type="hidden" name="numDocumento" value="{$arrPost.cedula}">
-    <input type="hidden" id="valAspiraSubsidio" value="{$objFormulario->valAspiraSubsidio}">
-
-    <input type="hidden" id="valAporteAvanceObra"        name="valAporteAvanceObra"        value="0">
-    <input type="hidden" id="txtSoporteAvanceObra"       name="txtSoporteAvanceObra"       value="">
-    <input type="hidden" id="valAporteMateriales"        name="valAporteMateriales"        value="0">
-    <input type="hidden" id="txtSoporteAporteMateriales" name="txtSoporteAporteMateriales" value="">
-
-    <!-- valor que se usa para la advertencia de ingresos del hogar -->
-    <input type="hidden" id="valSMMLV" value="{$valSMMLV}">
-    {if isset( $smarty.session.arrGrupos.3.6 ) }
-        <input type="hidden" id="bolActivarModalidad" value="1">
-    {else}
-        <input type="hidden" id="bolActivarModalidad" value="0">
-    {/if}
-
-</form>
-
-<div id="postulacionTabView"></div>
-<div id="objDireccionOculto" style="display:none"></div>
-<div id="objDireccionOcultoSolucion" style="display:none"></div>
-
-
-<div id="qmys" class="yui-pe-content" style="visibility: hidden">
-    <div class="hd">Ingrese los datos datos requeridos</div>
-    <div class="bd" style="padding: 10px">
-        <form method="POST" action="./contenidos/subsidios/quitarMiembroHogar.php">
-            <input type="hidden" name="numDocumento" id="documentoMiembro" value="">
-            <input type="hidden" name="seqFormulario" id="formularioMiembro" value="">
-            <table cellspacing="0" cellpadding="5" border="0" width="100%">
-                <tr>
-                    <td width="120px">Grupo de Gestión</td>
-                    <td width="300px">
-                        <select name="seqGrupoGestion1"
-                                id="seqGrupoGestion1"
-                                style="width:98%"
-                                onFocus="this.style.backgroundColor = '#ADD8E6'; document.getElementById('seqGrupoGestionError').innerHTML='';"
-                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                onChange="obtenerGestion( this , 'tdGestion1' , 'seqGestion1' );">
-                            >
-                            <option value="0">Seleccione Grupo</option>
-                            {foreach from=$arrGrupoGestion key=seqGrupoGestion item=txtGrupoGestion}
-                                <option value="{$seqGrupoGestion}">{$txtGrupoGestion}</option>
-                            {/foreach}
-                        </select>
-                        <div id="seqGrupoGestionError" class="msgError"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Gestión</td>
-                    <td id="tdGestion1">
-                        <select name="seqGestion1"
-                                id="seqGestion1"
-                                style="width:98%"
-                                onFocus="this.style.backgroundColor = '#ADD8E6'; document.getElementById('seqGestionError').innerHTML='';"
-                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                        >
-                            <option value="0">Seleccione Gesti&oacute;n</select>
-                        </select>
-                        <div id="seqGestionError" class="msgError"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center" colspan="2">
-                        <textarea id="txtComentario1"
-                                  name="txtComentario1"
-                                  style="width:100%; height: 70px"
-                                  onFocus="this.style.backgroundColor = '#ADD8E6'; document.getElementById('txtComentarioError').innerHTML='';"
-                                  onBlur="this.style.backgroundColor = '#FFFFFF';"
-                        ></textarea>
-                        <div id="txtComentarioError" class="msgError"></div>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
-</div>
-
-{include file="subsidios/simulador.tpl"}
+            {include file="subsidios/simulador.tpl"}

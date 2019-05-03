@@ -79,6 +79,7 @@ $arrCamposCalificacion["formulario"]["numHacinamiento"] = "N° Dormitorios";
 $arrCamposCalificacion["formulario"]["bolIntegracionSocial"] = "Integración Social";
 $arrCamposCalificacion["formulario"]["bolSecMujer"] = "Secretaría de la Mujer";
 $arrCamposCalificacion["formulario"]["bolIpes"] = "IPES";
+$arrCamposCalificacion["formulario"]["bolReconocimientoFP"] = "Reconocimiento Fuerza Pública";
 $arrCamposCalificacion["ciudadano"]["seqEtnia"] = "Condición Étnica";
 $arrCamposCalificacion["ciudadano"]["seqParentesco"] = "Parentesco";
 $arrCamposCalificacion["ciudadano"]["seqCondicionEspecial"] = "Condicion Especial";

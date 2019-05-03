@@ -14,6 +14,7 @@ $fecha = $_GET['fecha'];
 $datos = $claCalificacion->listarCalificacion($fecha);
 
 $claSmarty->assign("datos", $datos);
+$claSmarty->assign("fecha", $fecha);
 $claSmarty->display("calificacion/listaCalificacion.tpl");
 ?>
 

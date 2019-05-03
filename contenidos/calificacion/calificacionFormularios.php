@@ -99,7 +99,7 @@ while ($objRes->fields) {
     $objRes->MoveNext();
 }
 
-$txtArchivo = $txtPrefijoRuta . "recursos/descargas/formulariosAbiertos" . date("Ymd") . ".xls";
+$txtArchivo = $txtPrefijoRuta . "descargas/formulariosAbiertos" . date("Ymd") . ".xls";
 $aptArchivo = fopen($txtArchivo, "w");
 if ($aptArchivo) {
     foreach ($arrArchivo as $numLinea => $arrLinea) {

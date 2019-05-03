@@ -95,6 +95,7 @@ $tituloReporte[] = "Calculo\nLGTBI";
 $tituloReporte[] = "Total\nLGTBI";
 $tituloReporte[] = "Dicotomia\nPrograma";
 $tituloReporte[] = "Total\nPrograma";
+$tituloReporte[] = "Total\nReconocimientoFP";
 $tituloReporte[] = "Total";
 
 
@@ -161,11 +162,12 @@ $seqReporte[] = "calculoLGTBI";
 $seqReporte[] = "totalLGTBI";
 $seqReporte[] = "dicotomiaPrograma";
 $seqReporte[] = "totalPrograma";
+$seqReporte[] = "totalReconocimientoFP";
 $seqReporte[] = "total";
 
 $arrNomCol = array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC",
     "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP", "AQ", "AR", "AS", "AT", "AU", "AV", "AW", "AX", "AY", "AZ", "BA", "BB", "BC",
-    "BD", "BE", "BF", "BG", "BH", "BI", "BJ");
+    "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BK");
 
 $style_header = array(
     'fill' => array(
@@ -221,7 +223,7 @@ if ($registros > 0) {
     $docConsult = Array();
 
     $tiltle = 0;
-    $titulos = 61;
+    $titulos = 62;
     $field = 0;
     while ($field !== $titulos) {
         $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[$field] . "1", $tituloReporte[$tiltle])->getRowDimension('1')->setRowHeight(80);

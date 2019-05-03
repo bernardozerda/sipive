@@ -1,0 +1,199 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 29/04/2019, 04:29:49 PM
+    Author     : liliana.basto
+*/
+
+.tablePrincipal {
+    width: 100% !important ;
+}
+.md-form {
+    position: relative;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+
+}
+.file-field {
+    position: relative;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
+    color: inherit;
+    text-decoration: none;
+}
+a:not([href]):not([tabindex]) {
+    color: inherit;
+    text-decoration: none;
+}
+a.waves-effect, a.waves-light {
+    display: inline-block;
+}
+.btn-floating {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+    box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+    width: 47px;
+    height: 47px;
+    position: relative;
+    z-index: 1;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    margin: 10px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+}
+.btn-floating i {
+    display: inline-block;    
+    text-align: center;
+    color: #fff;        
+    font-size: 1.25rem;
+    line-height: 46px;
+}
+.waves-effect {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.purple-gradient {
+    background: -webkit-linear-gradient(50deg,#ff6ec4,#7873f5)!important;
+    background: -o-linear-gradient(50deg,#ff6ec4,#7873f5)!important;
+    background: linear-gradient(40deg,#ff6ec4,#7873f5)!important;
+}
+
+.mt-0, .my-0 {
+    margin-top: 0!important;
+}
+.float-left {
+    float: left!important;
+}
+a {
+    cursor: pointer;
+    text-decoration: none;
+    color: #007bff;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+a {
+    color: #004080;
+    text-decoration: none;
+    background-color: transparent;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+.file-field input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+}
+.file-field .file-path-wrapper {
+    overflow: hidden;
+    padding-left: 10px;
+    /* height: 2.5rem;*/
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+.file-field input.file-path {
+    width: 100%;
+    height: 36px;
+    border-bottom: 1px solid #ced4da;
+}
+.md-form input[type=date], .md-form input[type=datetime-local], .md-form input[type=email], .md-form input[type=number], .md-form input[type=password], .md-form input[type=search-md], .md-form input[type=search], .md-form input[type=tel], .md-form input[type=text], .md-form input[type=time], .md-form input[type=url], .md-form textarea.md-textarea {
+    -webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    -o-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid #ced4da;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    background-color: transparent;
+}
+.fa-cloud-upload-alt:before {
+    font-family: "Font Awesome 5 Free"  !important;    
+    position:absolute;
+    top:0;
+    color: #fff;          
+
+}        
+a:not([href]):not([tabindex]) {
+    text-decoration: none;   
+    color: #fff;
+    top: 5px;
+    padding-right: 5%;
+}
+.svg-inline--fa {
+    font-size: 2em;
+}
+.modal-body{
+    height: 100%;
+}
+.modal-sm {
+    width: 100%;
+    height: 70%;
+    margin: 0;
+}
+.mask{
+    z-index: 1042;
+}
+#wait_c{
+    z-index: 1043;
+}
+.pressed {
+    display: inline-block;
+    padding: 5px 7px;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #B01600;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    font-weight: bold;
+}
+h6{
+    color: #004080 !important;
+    font-weight: bold;
+    text-align: left;
+}
+.panel-heading {
+    padding: 10px 15px;
+    min-height: 60px
+}
+#popup:target{
+    overflow-y: scroll;
+}

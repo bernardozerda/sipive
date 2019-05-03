@@ -22,6 +22,7 @@ class FormularioSubsidios {
     public $bolIntegracionSocial;
     public $bolIpes;
     public $bolPromesaFirmada;
+    public $bolReconocimientoFP;
     public $bolSancion;
     public $bolSecEducacion;
     public $bolSecMujer;
@@ -124,6 +125,7 @@ class FormularioSubsidios {
         $this->bolInmovilizadoCuentaAhorro2 = 0;
         $this->bolIntegracionSocial = 0;
         $this->bolIpes = 0;
+        $this->bolReconocimientoFP =0;
         $this->bolPromesaFirmada = 0;
         $this->bolSancion = 0;
         $this->bolSecEducacion = 0;
@@ -243,6 +245,7 @@ class FormularioSubsidios {
                 bolInmovilizadoCuentaAhorro2,
                 bolIntegracionSocial,
                 bolIpes,
+                bolReconocimientoFP,
                 bolPromesaFirmada,
                 bolSancion,
                 bolSecEducacion,
@@ -343,6 +346,7 @@ class FormularioSubsidios {
                 " . $this->bolInmovilizadoCuentaAhorro2 . ",
                 " . $this->bolIntegracionSocial . ",
                 " . $this->bolIpes . ",
+                " . $this->bolReconocimientoFP . ", 
                 " . $this->bolPromesaFirmada . ",
                 " . $this->bolSancion . ",
                 " . $this->bolSecEducacion . ",
@@ -493,6 +497,7 @@ class FormularioSubsidios {
                     bolInmovilizadoCuentaAhorro2,
                     bolIntegracionSocial,
                     bolIpes,
+                    bolReconocimientoFP,
                     bolPromesaFirmada,
                     bolSancion,
                     bolSecEducacion,
@@ -601,6 +606,7 @@ class FormularioSubsidios {
                 $this->bolInmovilizadoCuentaAhorro2 = doubleval($objRes->fields['bolInmovilizadoCuentaAhorro2']);
                 $this->bolIntegracionSocial = doubleval($objRes->fields['bolIntegracionSocial']);
                 $this->bolIpes = doubleval($objRes->fields['bolIpes']);
+                $this->bolReconocimientoFP = doubleval($objRes->fields['bolReconocimientoFP']);
                 $this->bolPromesaFirmada = doubleval($objRes->fields['bolPromesaFirmada']);
                 $this->bolSancion = doubleval($objRes->fields['bolSancion']);
                 $this->bolSecEducacion = doubleval($objRes->fields['bolSecEducacion']);
@@ -723,6 +729,7 @@ class FormularioSubsidios {
                     bolInmovilizadoCuentaAhorro2 = " . doubleval($this->bolInmovilizadoCuentaAhorro2) . ",
                     bolIntegracionSocial = " . doubleval($this->bolIntegracionSocial) . ",
                     bolIpes = " . doubleval($this->bolIpes) . ",
+                    bolReconocimientoFP = " . doubleval($this->bolReconocimientoFP) . ",     
                     bolPromesaFirmada = " . doubleval($this->bolPromesaFirmada) . ",
                     bolSancion = " . doubleval($this->bolSancion) . ",
                     bolSecEducacion = " . doubleval($this->bolSecEducacion) . ",

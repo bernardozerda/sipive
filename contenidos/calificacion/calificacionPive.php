@@ -68,7 +68,7 @@ and open the template in the editor.
             $claCalificacion->obtenerValorIndicadores();
             $valSeg = "";
             // $fecha = '2017-05-10 19:26:25';
-            $fecha = date('2017-10-09 H:i:s');
+            $fecha = date('Y-m-d H:i:s');
             // echo $formularios;        exit();
             foreach ($arrayCalificacion as $key => $value) {
                 $sqlIndicadores = "";
@@ -121,8 +121,8 @@ and open the template in the editor.
                     //$arrConfiguracion['constantes']['salarioMinimo'] . "/" . ($ingresos + 1000);
                     $totalIngresos = $ingresos / $arrConfiguracion['constantes']['salarioMinimo'];
                     $invIngresos = 1 / $totalIngresos;
-                    
-                            // echo "<br>".$invIngresos;
+
+                    // echo "<br>".$invIngresos;
                     $formIngApli = 1 - exp(-$invIngresos / $promedioING);
                     $claCalificacion->IPC * (100 * $formIngApli);
 
@@ -200,6 +200,7 @@ and open the template in the editor.
                     $sqlIndicadores .= "(" . $value['grupoLgtbi'] . ", 0, 0, 0, 0, null, " . $grupoLGTBI . ", " . ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) . ", " . $idCalificacion . ",14),";
                     /*                     * ************************************ Participa en programas del Gobierno Distrital ********************************************* */
                     $programa = 0;
+                    $bolRFP = 0;
 
                     if ($value['bolIntegracionSocial'] > 0 || $value['bolSecMujer'] > 0 || $value['bolIpes'] > 0) {
                         $programa = 1;
@@ -207,10 +208,17 @@ and open the template in the editor.
                     if ($value['bolSecMujer'] == "") {
                         $value['bolSecMujer'] = 0;
                     }
-                    $sqlIndicadores .= "(" . $value['bolIntegracionSocial'] . ", " . $value['bolSecMujer'] . ", 0, " . $value['bolIpes'] . ", 0, null, " . $programa . ", " . ($claCalificacion->PPGD * ($programa * 100)) . ", " . $idCalificacion . ",15);";
+
+                    $sqlIndicadores .= "(" . $value['bolIntegracionSocial'] . ", " . $value['bolSecMujer'] . ", 0, " . $value['bolIpes'] . ", 0, null, " . $programa . ", " . ($claCalificacion->PPGD * ($programa * 100)) . ", " . $idCalificacion . ",15),";
+
+                    if ($value['bolReconocimientoFP'] > 0) {
+                        $bolRFP = 1;
+                    }
+                    $sqlIndicadores .= "(" . $value['bolReconocimientoFP'] . ", 0, 0, 0, 0, null, " . $bolRFP . ", " . ($claCalificacion->RFPB * ($bolRFP * 100)) . ", " . $idCalificacion . ",16);";
+
                     $insertInd = $claCalificacion->insertarIndicadores($sqlIndicadores);
                     if ($insertInd) {
-                        $formula = (($formEduApli * $claCalificacion->BLE) * 100 ) + ($claCalificacion->RSA * ($saludSubsidiados * 100)) + ($claCalificacion->COH * ($cohabitacion * 100)) + ($claCalificacion->HACN * ($hacinamiento * 100)) + $claCalificacion->IPC * (100 * $formIngApli) + ($claCalificacion->TDE * ($dependenciaEcon * 100)) + ($claCalificacion->HN12 * ($menores * 100)) + ($claCalificacion->MCF * ($monoparentalFem * 100)) + ($claCalificacion->HAMY * ($cantAdultoMayor * 100)) + ($claCalificacion->CDISC * ($discapacidad * 100)) + ($claCalificacion->HPGE * ($grupoEtnico * 100)) + ($claCalificacion->HN18 * ($cantAdolecentes * 100)) + ($claCalificacion->HCF * ($monoparentalMasc * 100)) + ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) + ($claCalificacion->PPGD * ($programa * 100));
+                        $formula = (($formEduApli * $claCalificacion->BLE) * 100 ) + ($claCalificacion->RSA * ($saludSubsidiados * 100)) + ($claCalificacion->COH * ($cohabitacion * 100)) + ($claCalificacion->HACN * ($hacinamiento * 100)) + $claCalificacion->IPC * (100 * $formIngApli) + ($claCalificacion->TDE * ($dependenciaEcon * 100)) + ($claCalificacion->HN12 * ($menores * 100)) + ($claCalificacion->MCF * ($monoparentalFem * 100)) + ($claCalificacion->HAMY * ($cantAdultoMayor * 100)) + ($claCalificacion->CDISC * ($discapacidad * 100)) + ($claCalificacion->HPGE * ($grupoEtnico * 100)) + ($claCalificacion->HN18 * ($cantAdolecentes * 100)) + ($claCalificacion->HCF * ($monoparentalMasc * 100)) + ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) + ($claCalificacion->PPGD * ($programa * 100)) + ($claCalificacion->RFPB * ($bolRFP * 100));
                         //echo "<br>".$formula;
                         $valSeg .= "(
                             " . $value['seqFormulario'] . ", 

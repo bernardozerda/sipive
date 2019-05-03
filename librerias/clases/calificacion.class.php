@@ -376,7 +376,8 @@ class calificacion {
                 bolSecMujer,
                 bolSecSalud,
                 bolAltaCon,
-                bolIpes
+                bolIpes,
+                bolReconocimientoFP
          FROM t_frm_formulario    frm
               LEFT JOIN t_frm_hogar hog USING (seqFormulario)
               LEFT JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
@@ -437,10 +438,14 @@ class calificacion {
 
         $sql = "INSERT INTO t_frm_calificacion_operaciones(cantidadMiembros,cantJefeHogar,tipo, cantConyugue,cantAnos,calculo,resultado,total, seqCalificacion,seqIndicador) VALUES";
         $sql .= $indicadores;
-
+        echo "<p>" . $sql . "</p>";
         try {
             $aptBd->execute($sql);
-            return true;
+            if ($aptBd->ErrorMsg() == "" && $aptBd->Affected_Rows() > 0) {//              
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception $objError) {
             return $objError->msg;
         }
@@ -476,10 +481,11 @@ class calificacion {
 
         global $aptBd;
 
-        $sql = "SELECT  t_frm_calificacion_plan3.*, sum(total) as total FROM t_frm_calificacion_plan3
-left join t_frm_calificacion_operaciones using(seqCalificacion)
-where fchCalificacion = '" . trim($fecha) . "'
-group by seqCalificacion;";
+        $sql = "SELECT  seqFormulario, ucwords(infHogar) as infHogar,  cantMiembrosHogar, totalIngresos, sum(total) as total 
+            FROM t_frm_calificacion_plan3
+            left join t_frm_calificacion_operaciones using(seqCalificacion)
+            where fchCalificacion = '" . trim($fecha) . "'
+            group by seqCalificacion;";
 
         try {
             $objRes = $aptBd->execute($sql);
@@ -496,9 +502,9 @@ group by seqCalificacion;";
     }
 
     public function obtenerResumenCalificacion($fecha) {
-        
+
         global $aptBd;
-        
+
         $sql = "SELECT seqFormulario,
        numDocumento,
        concat(txtNombre1,
@@ -754,6 +760,11 @@ group by seqCalificacion;";
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 15)
           AS totalPrograma,
+           (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 16)
+          AS totalReconocimientoFP,
        sum(op.total) AS total
 FROM t_frm_calificacion_plan3    cal
      LEFT JOIN t_frm_calificacion_operaciones op USING (seqCalificacion)
@@ -765,8 +776,8 @@ FROM t_frm_calificacion_plan3    cal
 where fchCalificacion like '" . $fecha . "'
 and seqParentesco = 1
 group by seqFormulario";
-       
-       try {
+
+        try {
             $objRes = $aptBd->execute($sql);
             $datos = array();
             while ($objRes->fields) {
@@ -778,7 +789,6 @@ group by seqFormulario";
             return $objError->msg;
         }
         return $datos;
-        
     }
 
     public function datosUltimaCalificacion($formularios) {

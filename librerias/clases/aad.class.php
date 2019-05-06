@@ -3910,12 +3910,13 @@ class aad
                     $sql = "update t_aad_ciudadano_acto set ";
                     foreach ($claCiudadano as $txtCampo => $txtValor) {
                         if ($txtCampo != "arrErrores") {
-                            $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "NULL";
+                            $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "''";
                             $sql .= "$txtCampo = $txtValor,";
                         }
                     }
                     $sql = rtrim($sql, ",");
                     $sql .= " where seqCiudadanoActo = " . $arrDato['seqCiudadanoActo'];
+                  //  echo $sql; die();
                     $aptBd->execute($sql);
                 }
             }

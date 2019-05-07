@@ -99,20 +99,20 @@
                     <tr>
                         <td nowrap>
                             <b>Estado </b>
-                            
+
                             <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                     onBlur="this.style.backgroundColor = '#FFFFFF';" 
                                     id="seqEstadoProceso2"
                                     name="seqEstadoProceso2"
                                     style="width:350px;"
-                                    onchange="document.getElementById('seqEstadoProceso').value=this.value"
+                                    onchange="document.getElementById('seqEstadoProceso').value = this.value"
                                     >
-                                 <option value="0">Ninguno</option>
+                                <option value="0">Ninguno</option>
                                 {foreach from=$arrEstado key=seqEstado item=txtEstado}
                                     <option value="{$seqEstado}"{if ($seqEstado == $objFormulario->seqEstadoProceso)} selected {/if}>{$txtEstado}</option>
                                 {/foreach}
                             </select>
-                             
+
                         </td>
                         <td style="width:350px;" align="left">
                             {if $objFormulario->seqEstadoProceso == 36}
@@ -167,7 +167,7 @@
                                     </optgroup>
                                 </select>
                             {else}
-                                
+
                                 <input type="hidden" 
                                        name="seqEstadoProceso" 
                                        id="seqEstadoProceso" 
@@ -186,22 +186,22 @@
                     <tr>
                         <td nowrap>
                             <b>Esquema </b>
-                            
+
                             <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                     onBlur="this.style.backgroundColor = '#FFFFFF';" 
                                     id="seqEsquema2"
                                     name="seqEsquema2"
                                     style="width:350px;"
-                                    onchange="document.getElementById('seqTipoEsquema').value=this.value"
+                                    onchange="document.getElementById('seqTipoEsquema').value = this.value"
                                     >
-                                 <option value="0">Ninguno</option>
+                                <option value="0">Ninguno</option>
                                 {foreach from=$arrEsquema key=seqEsquema item=txtEsquema}
                                     <option value="{$seqEsquema}"{if ($seqEsquema == $objFormulario->seqTipoEsquema)} selected {/if}>{$txtEsquema}</option>
                                 {/foreach}
                             </select>
-                             
+
                         </td>
-                        
+
                     </tr>
                     <tr>
                         <!-- NUMERO DEL FORMULARIO -->
@@ -1037,7 +1037,7 @@
                                                 onBlur="this.style.backgroundColor = '#FFFFFF';" 
                                                 name="bolIntegracionSocial" 
                                                 id="bolIntegracionSocial" 
-                                                style="width:100%;"
+                                                style="width:40%;"
                                                 >
                                             <option value="0" {if $objFormulario->bolIntegracionSocial != 1} selected {/if} >No</option>
                                             <option value="1" {if $objFormulario->bolIntegracionSocial == 1} selected {/if} >Si</option>
@@ -1051,7 +1051,7 @@
                                                 onBlur="this.style.backgroundColor = '#FFFFFF';" 
                                                 name="bolSecSalud" 
                                                 id="bolSecSalud" 
-                                                style="width:100%;"
+                                                style="width:40%;"
                                                 >
                                             <option value="0" {if $objFormulario->bolSecSalud != 1} selected {/if} >No</option>
                                             <option value="1" {if $objFormulario->bolSecSalud == 1} selected {/if} >Si</option>
@@ -1065,7 +1065,7 @@
                                                 onBlur="this.style.backgroundColor = '#FFFFFF';" 
                                                 name="bolSecEducacion" 
                                                 id="bolSecEducacion" 
-                                                style="width:100%;"
+                                                style="width:40%;"
                                                 >
                                             <option value="0" {if $objFormulario->bolSecEducacion != 1} selected {/if} >No</option>
                                             <option value="1" {if $objFormulario->bolSecEducacion == 1} selected {/if} >Si</option>
@@ -1079,11 +1079,22 @@
                                                 onBlur="this.style.backgroundColor = '#FFFFFF';" 
                                                 name="bolIpes" 
                                                 id="bolIpes" 
-                                                style="width:100%;"
+                                                style="width:40%;"
                                                 >
                                             <option value="0" {if $objFormulario->bolIpes != 1} selected {/if} >No</option>
                                             <option value="1" {if $objFormulario->bolIpes == 1} selected {/if} >Si</option>
                                         </select>
+                                    <td width="200px" align="center">Reconocimiento Fuerza Pública&nbsp;&nbsp;
+                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="bolReconocimientoFP"
+                                                id="bolReconocimientoFP"
+                                                style="width:40%;"
+                                                >
+                                            <option value="0" {if $objFormulario->bolReconocimientoFP != 1} selected {/if} >No</option>
+                                            <option value="1" {if $objFormulario->bolReconocimientoFP == 1} selected {/if} >Si</option>
+                                        </select>
+                                    </td>
                                     </td>
                                 </tr>
                                 <tr>

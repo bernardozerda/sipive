@@ -149,6 +149,7 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["archivoDesembolso"] = 1;
             $arrExportables["soporteResolucionVinculacion"] = 1;
             $arrExportables["reporteTotalCiudadano"] = 1;
+            $arrExportables["informeGralSubsidios"] = 1;
             break;
 
         case 8: // tutores desembolso
@@ -226,18 +227,23 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["reporteTotalCiudadano"] = 1;
             //$arrExportables["informeGralSubsidios"] = 1;
             break;
-		 case 21: // Planeación y Politica
-		 $arrExportables["reporteTotalCiudadano"] = 1;
+        case 21: // Planeación y Politica
+            $arrExportables["reporteTotalCiudadano"] = 1;
             break;
+
+        case 23: // Control Documental
+            $arrExportables["reporteSeguimiento"] = 1;
+            break;
+
         case 34: // Cruce Información Cvp
             $arrExportables["reporteInformacionCvp"] = 1;
-            break;
-        case 34: // Reportes
             $arrExportables["inconsistenciasInscripcion"] = 1;
             break;
+
         case 37: // Carga Encuestas
             $arrExportables["encuestasPive"] = 1;
             break;
+
         case 38: // Consulta encuestas
             $arrExportables["encuestasPive"] = 1;
             break;
@@ -267,7 +273,7 @@ while ($objRes->fields) {
     $objRes->MoveNext();
 }
 
- $nameReport = $claReporte->nombreUltimoReporte();
+$nameReport = $claReporte->nombreUltimoReporte();
 
 $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
 $claSmarty->assign("arrExportables", $arrExportables);

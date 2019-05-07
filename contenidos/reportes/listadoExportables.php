@@ -149,7 +149,7 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["archivoDesembolso"] = 1;
             $arrExportables["soporteResolucionVinculacion"] = 1;
             $arrExportables["reporteTotalCiudadano"] = 1;
-            //$arrExportables["informeGralSubsidios"] = 1;
+            $arrExportables["informeGralSubsidios"] = 1;
             break;
 
         case 8: // tutores desembolso
@@ -225,7 +225,7 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["soporteResolucionVinculacion"] = 1;
             $arrExportables["girosVIPA"] = 1;
             $arrExportables["reporteTotalCiudadano"] = 1;
-            $arrExportables["informeGralSubsidios"] = 1;
+            //$arrExportables["informeGralSubsidios"] = 1;
             break;
         case 21: // Planeación y Politica
             $arrExportables["reporteTotalCiudadano"] = 1;

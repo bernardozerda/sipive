@@ -4,7 +4,6 @@ ServerSignature Off
 #20160701 Forbid Directory Listing
 Options -Indexes
 
-# Cabecera para evitar el clickjacking, MIT, XSC
 Header always append X-Frame-Options SAMEORIGIN
 Header set X-Content-Type-Options nosniff
 Header set X-XSS-Protection "1; mode=block"

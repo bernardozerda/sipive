@@ -118,7 +118,7 @@ and open the template in the editor.
                     if ($ingresos < 121196) {
                         $ingresos = 121196;
                     }
-                    $ingresos = intval($ingresos);
+                    $ingresos = ($ingresos);
                     //echo "<br>->".$ingresos;
                     //$arrConfiguracion['constantes']['salarioMinimo'] . "/" . ($ingresos + 1000);
                     $totalIngresos = $ingresos / $arrConfiguracion['constantes']['salarioMinimo'];

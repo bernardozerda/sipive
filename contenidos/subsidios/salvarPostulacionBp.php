@@ -498,6 +498,7 @@ if (empty($arrErrores)) {
         $claFormulario->bolInmovilizadoCuentaAhorro2 = ( $_POST['bolInmovilizadoCuentaAhorro2'] != 1 ) ? 0 : 1;
         $claFormulario->bolIntegracionSocial = $_POST['bolIntegracionSocial'];
         $claFormulario->bolIpes = $_POST['bolIpes'];
+        $claFormulario->bolReconocimientoFP = $_POST['bolReconocimientoFP'];
         $claFormulario->bolPromesaFirmada = $_POST['bolPromesaFirmada'];
         $claFormulario->bolSecEducacion = $_POST['bolSecEducacion'];
         $claFormulario->bolSecSalud = $_POST['bolSecSalud'];

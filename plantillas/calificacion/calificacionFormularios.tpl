@@ -11,7 +11,7 @@
             <h6 class="panel-title">Generar Calificación &nbsp;&nbsp;</h6>
         </div>
         <div class="panel-body">
-            <form class="md-form" onsubmit="someterFormulario('contenido', this, './contenidos/reportes/exportarRepGral.php', true, false);
+            <form class="md-form" onsubmit="someterFormulario('contenido', this, './contenidos/calificacion/calificacionPive.php', true, false);
                     return false;
                     limpiar();"  enctype="multipart/form-data" method="post">
                 <div class="col-lg-6 col-md-6">
@@ -39,9 +39,6 @@
                                             true
                                             );">
                         <span class="glyphicon glyphicon-play-circle" aria-hidden="true" style="cursor: pointer; text-align: left; font-weight: bold;" ></span>&nbsp; Proceder A Calificar</button>
-                    <!-- <button type="submit" class="btn btn-primary" name="enviar"  onclick="$('.modal-backdrop').hide();
-                             $('#myModal2').hide();"><span class="glyphicon glyphicon-paperclip" aria-hidden="true" style="cursor: pointer; text-align: left; font-weight: bold;" ></span>  Descargar</button>
-                    <!--<input  class="btn btn-primary glyphicon glyphicon-paperclip" name="enviar" type="submit" value="Subir" /><span class="glyphicon glyphicon-paperclip" aria-hidden="true" style="cursor: pointer; text-align: left; font-weight: bold;"></span>-->
                 </div>
                 <div class="col-lg-3 col-md-3" style="text-align: right; width: 105px">
                     <button onclick="cargarContenido('contenido', './contenidos/calificacion/reporte/archivo.php', '', true);" class="pressed" style="background-color: #004080 ">

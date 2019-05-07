@@ -438,7 +438,7 @@ class calificacion {
 
         $sql = "INSERT INTO t_frm_calificacion_operaciones(cantidadMiembros,cantJefeHogar,tipo, cantConyugue,cantAnos,calculo,resultado,total, seqCalificacion,seqIndicador) VALUES";
         $sql .= $indicadores;
-        echo "<p>" . $sql . "</p>";
+        // echo "<p>" . $sql . "</p>";
         try {
             $aptBd->execute($sql);
             if ($aptBd->ErrorMsg() == "" && $aptBd->Affected_Rows() > 0) {//              
@@ -760,6 +760,11 @@ class calificacion {
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 15)
           AS totalPrograma,
+          (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 16)
+          AS dicotomiaReconocimientoFP,
            (SELECT total
         FROM t_frm_calificacion_operaciones op2
         WHERE     op2.seqCalificacion = cal.seqCalificacion

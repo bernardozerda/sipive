@@ -149,6 +149,7 @@ function reporteGralHogar() {
                 IF(bolSecMujer = 1, 'SI', 'NO') AS 'Sec.Mujer',
                 IF(bolAltaCon = 1, 'SI', 'NO') AS 'Sec.AltaConsejeria',
                 IF(bolIpes = 1, 'SI', 'NO') AS 'secbolIpes',
+                IF(bolReconocimientoFP = 1, 'SI', 'NO') AS 'bolReconocimientoFP',
                 txtOtro,
                 txtSisben AS 'Sisben',
                 valIngresoHogar AS 'IngresosdelHogar',

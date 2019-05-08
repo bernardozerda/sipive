@@ -890,7 +890,7 @@ group by seqIndicador;";
 
     function obtenerPromedioING($formularios, $smlv) {
         global $aptBd;
-
+        echo "<br> ***************** CALCULO PROMEDIO INGRESOS  **************************";
         $sql = "SELECT 
                  sum(valIngresos) AS ingresos, COUNT(seqCiudadano) AS cant
                 FROM
@@ -903,25 +903,28 @@ group by seqIndicador;";
         try {
             $objRes = $aptBd->execute($sql);
             $cont = $objRes->_numOfRows;
-
+            echo "<br> cont => " . $cont;
             $datos = Array();
             $calcING = 0;
             $inversa = 0;
             $sumador = 0;
             $total = 0;
             while ($objRes->fields) {
-
+                echo "<br> calcING = objRes->fields['ingresos'] / objRes->fields['cant'] => " . $calcING;
+                echo "<br> si calcING < 121196 => calcING=121196 SINO calcING = calcING ";
                 $calcING = $objRes->fields['ingresos'] / $objRes->fields['cant'];
                 if ($calcING < 121196) {
                     $calcING = 121196;
                 }
                 $inversa = 1 / ($calcING / $smlv);
+                echo "<br> inversa = (1 / (calcING / smlv))" . $inversa;
                 $sumador += $inversa;
+                echo "<br> sumador = += inversa => " . $sumador;
                 $objRes->MoveNext();
             }
 
             $total = ($sumador / $cont);
-
+            echo "<br> totalPromedioING = (sumador / cont) => " . $total;
             return $total;
         } catch (Exception $objError) {
             return $objError->msg;

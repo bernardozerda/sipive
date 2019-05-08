@@ -113,7 +113,7 @@ and open the template in the editor.
                         $hacinamiento = 1;
                     $sqlIndicadores .= "(" . $dormitorios . ", 0, 0, 0, 0," . $calchacinamiento . ", " . $hacinamiento . ", " . ($claCalificacion->HACN * ($hacinamiento * 100)) . ", " . $idCalificacion . ",4),";
 
-                   echo " <br>                     * ************************************* Formula Ingresos********************************************* */";
+                   echo " <br><br>  * ************************************* Formula Ingresos -> ".$value['seqFormulario']."********************************************* */";
                     $ingresos = $value['ingresos'] / $value['cant'];
                     if ($ingresos < 121196) {
                         $ingresos = 121196;
@@ -128,12 +128,16 @@ and open the template in the editor.
 
 
                     $formIngApli = 1 - exp(-$invIngresos / $promedioING);
-                    echo "<br> formIngApli(1 - exp(-invIngresos / promedioING)) = " . $formIngApli;
+                    echo "<br> formIngApli  = (1 - exp(-invIngresos / promedioING)) = " . $formIngApli;
                     $claCalificacion->IPC * (100 * $formIngApli);
+                    
+                    echo "<br><br> ***  <b>TotalCalIngresos</b> =  claCalificacion->IPC * (100 * formIngApli) =>". $claCalificacion->IPC * (100 * $formIngApli);
 
                     //$sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0," . $totalIngresos . ", null, " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
 
-                    $sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0, null, " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
+                    $sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0, ".$formIngApli.", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
+                    echo "<br>(" . $ingresos . ", 0, 0, 0, 0, ".$formIngApli.", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
+                    
                     /*                     * *************************************Dependencia Economica********************************************* */
 
                     $dependenciaEcon = 0;
@@ -241,7 +245,7 @@ and open the template in the editor.
                 }
             }
 
-            die();
+          //  die();
             $formularios = substr_replace($formularios, '', -1, 1);
             $cambioEstado = $claCalificacion->cambiarEstado($formularios);
             $seg = false;

@@ -577,6 +577,11 @@ group by seqCalificacion;";
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 5)
           AS calculoIngresos,
+          (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 5)
+          AS reultadoIngresos,
        (SELECT total
         FROM t_frm_calificacion_operaciones op2
         WHERE     op2.seqCalificacion = cal.seqCalificacion

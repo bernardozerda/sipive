@@ -60,6 +60,7 @@ $tituloReporte[] = "Calculo\nHacinamiento";
 $tituloReporte[] = "Total\nHacinamiento";
 $tituloReporte[] = "Ingresos\nHogar";
 $tituloReporte[] = "Calculo\nIngresos";
+$tituloReporte[] = "Resultado\nIngresos";
 $tituloReporte[] = "Total\nIngresos";
 $tituloReporte[] = "Miembros\nOcupados";
 $tituloReporte[] = "Calculo\nDependencia\nEconomica";
@@ -128,6 +129,7 @@ $seqReporte[] = "calculoHacinamiento";
 $seqReporte[] = "totalHacinamiento";
 $seqReporte[] = "ingresosHogar";
 $seqReporte[] = "calculoIngresos";
+$seqReporte[] = "reultadoIngresos";
 $seqReporte[] = "totalIngresos";
 $seqReporte[] = "miembroOcupados";
 $seqReporte[] = "calculosDependencia";
@@ -225,7 +227,7 @@ if ($registros > 0) {
     $docConsult = Array();
 
     $tiltle = 0;
-    $titulos = 63;
+    $titulos = 64;
     $field = 0;
     while ($field !== $titulos) {
         $objPHPExcel->setActiveSheetIndex(0)->SetCellValue($arrNomCol[$field] . "1", $tituloReporte[$tiltle])->getRowDimension('1')->setRowHeight(80);

@@ -30,14 +30,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4" style="top: 15px; text-align: left">
-                    <button type="submit" class="pressed" style="width: 65%" name="enviar"   
-                            onClick="someterFormulario(
-                                            'mensajes',
-                                            this.form,
-                                            './contenidos/calificacion/calificacionPive.php',
-                                            true,
-                                            true
-                                            );">
+                    <button type="submit" class="pressed" style="width: 65%" name="enviar" >
                         <span class="glyphicon glyphicon-play-circle" aria-hidden="true" style="cursor: pointer; text-align: left; font-weight: bold;" ></span>&nbsp; Proceder A Calificar</button>
                 </div>
                 <div class="col-lg-3 col-md-3" style="text-align: right; width: 105px">

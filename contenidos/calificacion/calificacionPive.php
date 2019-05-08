@@ -32,7 +32,7 @@ and open the template in the editor.
 //            $ejecutaConsultaPersonalizada = true;
 //            //  echo count($arrDocumentos);
 //        }
-        
+
 
         if (isset($_FILES["fileDocumentos"]) && is_uploaded_file($_FILES['fileDocumentos']['tmp_name'])) {
 
@@ -113,19 +113,22 @@ and open the template in the editor.
                         $hacinamiento = 1;
                     $sqlIndicadores .= "(" . $dormitorios . ", 0, 0, 0, 0," . $calchacinamiento . ", " . $hacinamiento . ", " . ($claCalificacion->HACN * ($hacinamiento * 100)) . ", " . $idCalificacion . ",4),";
 
-                    /*                     * *************************************Ingresos********************************************* */
+                   echo " <br>                     * ************************************* Formula Ingresos********************************************* */";
                     $ingresos = $value['ingresos'] / $value['cant'];
                     if ($ingresos < 121196) {
                         $ingresos = 121196;
                     }
-                    $ingresos = ($ingresos);
-                    //echo "<br>->".$ingresos;
+                    $ingresos = intval($ingresos);
+                    echo "<br> Ingresos = " . $ingresos;
                     //$arrConfiguracion['constantes']['salarioMinimo'] . "/" . ($ingresos + 1000);
                     $totalIngresos = $ingresos / $arrConfiguracion['constantes']['salarioMinimo'];
+                    echo "<br> totalIngresos = (ingresos / arrConfiguracion['constantes']['salarioMinimo']) => " . $totalIngresos;
                     $invIngresos = 1 / $totalIngresos;
+                    echo "<br> invIngresos = (1 / totalIngresos) => " . $invIngresos;
 
-                    // echo "<br>".$invIngresos;
+
                     $formIngApli = 1 - exp(-$invIngresos / $promedioING);
+                    echo "<br> formIngApli(1 - exp(-invIngresos / promedioING)) = " . $formIngApli;
                     $claCalificacion->IPC * (100 * $formIngApli);
 
                     //$sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0," . $totalIngresos . ", null, " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
@@ -238,7 +241,7 @@ and open the template in the editor.
                 }
             }
 
-
+            die();
             $formularios = substr_replace($formularios, '', -1, 1);
             $cambioEstado = $claCalificacion->cambiarEstado($formularios);
             $seg = false;

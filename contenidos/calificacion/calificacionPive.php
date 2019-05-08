@@ -135,7 +135,7 @@ and open the template in the editor.
 
                     //$sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0," . $totalIngresos . ", null, " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
 
-                    $sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0, ".$formIngApli.", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
+                    $sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0, ". $formIngApli .", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
                     echo "<br>(" . $ingresos . ", 0, 0, 0, 0, ".$formIngApli.", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
                     
                     /*                     * *************************************Dependencia Economica********************************************* */

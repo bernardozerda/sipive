@@ -496,9 +496,9 @@ group by seqCalificacion;";
     }
 
     public function obtenerResumenCalificacion($fecha) {
-        
+
         global $aptBd;
-        
+
         $sql = "SELECT seqFormulario,
        numDocumento,
        concat(txtNombre1,
@@ -765,8 +765,8 @@ FROM t_frm_calificacion_plan3    cal
 where fchCalificacion like '" . $fecha . "'
 and seqParentesco = 1
 group by seqFormulario";
-       
-       try {
+
+        try {
             $objRes = $aptBd->execute($sql);
             $datos = array();
             while ($objRes->fields) {
@@ -778,7 +778,6 @@ group by seqFormulario";
             return $objError->msg;
         }
         return $datos;
-        
     }
 
     public function datosUltimaCalificacion($formularios) {
@@ -875,7 +874,7 @@ group by seqIndicador;";
 
     function obtenerPromedioING($formularios, $smlv) {
         global $aptBd;
-
+        echo "<br> ***************** CALCULO PROMEDIO INGRESOS  **************************";
         $sql = "SELECT 
                  sum(valIngresos) AS ingresos, COUNT(seqCiudadano) AS cant
                 FROM
@@ -888,25 +887,30 @@ group by seqIndicador;";
         try {
             $objRes = $aptBd->execute($sql);
             $cont = $objRes->_numOfRows;
-
+            echo "<br> cont => " . $cont;
             $datos = Array();
             $calcING = 0;
             $inversa = 0;
             $sumador = 0;
             $total = 0;
+
             while ($objRes->fields) {
 
                 $calcING = $objRes->fields['ingresos'] / $objRes->fields['cant'];
+
+                echo "<br> calcING = objRes->fields['ingresos'] / objRes->fields['cant'] => " . $calcING;
+                echo "<br> si calcING < 121196 => calcING=121196 SINO calcING = calcING ";
                 if ($calcING < 121196) {
                     $calcING = 121196;
                 }
                 $inversa = 1 / ($calcING / $smlv);
+                echo "<br> inversa 1 / (calcING / smlv)" . $inversa;
                 $sumador += $inversa;
+                echo "<br> sumador = += inversa => " . $sumador;
                 $objRes->MoveNext();
             }
-
             $total = ($sumador / $cont);
-
+            echo "<br> totalPromedioING = (sumador / cont) => " . $total;
             return $total;
         } catch (Exception $objError) {
             return $objError->msg;

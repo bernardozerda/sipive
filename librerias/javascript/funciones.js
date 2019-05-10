@@ -7816,19 +7816,29 @@ function obtenerBarrio(objLocalidad) {
     );
 }
 
-function obtenerBarrioProyecto(objLocalidad) {
-    document.getElementById("tdBarrio").innerHTML = "";
+function obtenerBarrioProyecto(objLocalidad, tdBarrio) {
+    var barrio = tdBarrio;
+    var seqBarrio = 'seqBarrio';
+
+    if (tdBarrio != 'tdBarrio') {
+        barrio = 'tdBarrioHijo_' + tdBarrio.split("_")[1];
+        seqBarrio = 'seqBarrioHijo_' + tdBarrio.split("_")[1];
+        // console.log("tdBarrio = " + tdBarrio + "  split ->" + tdBarrio.split("_")[1]);
+    }
+    console.log("barrio sale => " + seqBarrio);
+    //console.log("barrio  => " + barrio + " seqBarrio =  " + seqBarrio);
+    document.getElementById(barrio).innerHTML = "";
     cargarContenido(
-            'tdBarrio',
-            './contenidos/proyectos/localidadBarrio.php',
-            'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value,
+            barrio,
+            './contenidos/proyectos/localidadBarrio.php?&idbarrio =' + seqBarrio,
+            'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value+'**'+seqBarrio,
             true
             );
 
     YAHOO.util.Event.onContentReady(
-            "seqBarrio",
+            seqBarrio,
             function () {
-                document.getElementById("seqBarrio").focus();
+                document.getElementById(seqBarrio).focus();
             }
     );
 }
@@ -9397,6 +9407,9 @@ function addConjuntoResidencial() {
     var addDiv = "";
     addDiv += "<td><div class='form-group'><div class='col-md-6'><label class='control-label' >Nombre </label><br /><input type='text' name='txtNombreProyectoHijo[]' id='txtNombreProyecto_" + indiceFilaFormulario + "' onBlur='sinCaracteresEspeciales( this );' size='80' class=\"form-control required4\"><div id=\"val_txtNombreProyectoHijo_" + indiceFilaFormulario + "\" class=\"divError\">Diligenciar Campo</div></div>";
     addDiv += "<div class='col-md-6'><label class='control-label' >Nombre Comercial </label><br /><input type='text' name='txtNombreComercialHijo[]' id='txtNombreComercialHijo_" + indiceFilaFormulario + "' onBlur='sinCaracteresEspeciales( this );' size='80' class=\"form-control required4\"><div id=\"val_txtNombreProyectoHijo_" + indiceFilaFormulario + "\" class=\"divError\">Diligenciar Campo</div></div>";
+    addDiv += "<div class='col-md-6'><label class='control-label' >Localidad (*)</label><select name='seqLocalidadHijo[]' id='seqlocalidadHijo_" + indiceFilaFormulario + "' onChange='obtenerBarrioProyecto(this, 'tdBarrioHijo_" + indiceFilaFormulario + "');'  style='width:250px'  class='form-control '><option value='0'>Seleccione una opci&oacute;n</option></select><div id='val_seqlocalidad_" + indiceFilaFormulario + "' class='divError'>Debe seleccionar la Localidad</div></div>";
+    addDiv += "";
+    
     addDiv += "<div class='col-md-3'><label class='control-label' >Direcci&oacute;n&nbsp;del&nbsp;Conjunto </label><br /><input type='text' name='txtDireccionHijo[]' id='txtDireccionHijo_" + indiceFilaFormulario + "' size='20' style='background-color:#E4E4E4; width: 90%;position: relative; float: left' readonly class=\"form-control required4\"/>&nbsp;<a href='#' onClick='recogerDireccion( \"txtDireccionHijo_" + indiceFilaFormulario + "\", \"objDireccionOculto\" )'><img src='recursos/imagenes/gps.png'></a><div id=\"val_txtDireccionHijo__" + indiceFilaFormulario + "\" class=\"divError\">Diligenciar Campo</div></div>";
     addDiv += "<div class='col-md-3'><label class='control-label' >Unidades </label><br /><input type='text' name='valNumeroSolucionesHijo[]' id='valNumeroSoluciones_" + indiceFilaFormulario + "' onBlur='sinCaracteresEspeciales( this );' size='6' class=\"form-control required4\"><div id=\"val_valNumeroSolucionesHijo_" + indiceFilaFormulario + "\" class=\"divError\">Diligenciar Campo</div></div>";
     addDiv += "<div class='col-md-3'><label class='control-label' >Chip </label><br /><input type='text' name='txtChipLoteHijo[]' id='txtChipLoteHijo_" + indiceFilaFormulario + "' onBlur='sinCaracteresEspeciales( this );' size='13' class=\"form-control required4\"><div id=\"val_txtChipLoteHijo_" + indiceFilaFormulario + "\" class=\"divError\">Diligenciar Campo</div></div>";

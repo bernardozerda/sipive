@@ -370,9 +370,9 @@ class Proyecto {
 
         foreach ($post as $nombre_campo => $valor) {
 
-            if ($valor == "" || $valor == " " || $valor == null) {
+            if ($valor == "" || $valor == " " || $valor == null || $valor == '0000-00-00') {
                 $valor = (count(explode('txt', $nombre_campo)) > 1) ? NULL : 'NULL';
-                //$valor = (count(explode('seq', $nombre_campo)) > 1) ? 0 : 'NULL'              
+                $valor = (count(explode('fch', $nombre_campo)) > 1) ? NULL : 'NULL';
                 if (count(explode('seq', $nombre_campo)) > 1) {
                     $valor = 0;
                 }
@@ -605,7 +605,7 @@ class Proyecto {
 
         global $aptBd;
         $sql = "SELECT pry.*, pol.*, fid.*, con.*, loc.*, gru.*, pry.seqProyecto as seqProyecto, txtTipoProyecto, txtTipoFinanciacion, "
-                 . " ofProy.nombreOferente AS oferente "               
+                . " ofProy.nombreOferente AS oferente "
                 . "FROM  t_pry_proyecto pry "
                 . "LEFT JOIN t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto) "
                 . "LEFT JOIN t_pry_datos_fiducia fid on(pry.seqProyecto = fid.seqProyecto) "
@@ -627,7 +627,7 @@ class Proyecto {
             $sql .= " where  pry.seqProyecto = " . $seqProyecto;
         }
         $sql . " ORDER BY  pry.seqProyecto";
-       // echo "<p>" . $sql . "</p>";
+        // echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -697,7 +697,7 @@ class Proyecto {
         return $datos;
     }
 
-    /** 
+    /**
      * MODIFICA LA INFORMACION DE LA Proyecto
      * SELECCIONADA Y GUARDA LOS NUEVOS DATOS
      * @author Bernardo Zerda
@@ -740,8 +740,8 @@ class Proyecto {
         $txtDireccionInterventor = '';
         $txtCorreoInterventor = '';
         $bolTipoPersonaInterventor = 0;
-        $numCedulaInterventor = 'NULL';
-        $numTProfesionalInterventor = 'NULL';
+        $numCedulaInterventor = 0;
+        $numTProfesionalInterventor = '';
         $numNitInterventor = 'NULL';
         $txtNombreRepLegalInterventor = '';
         $numTelefonoRepLegalInterventor = 'NULL';
@@ -749,16 +749,20 @@ class Proyecto {
         $txtCorreoRepLegalInterventor = '';
 
         foreach ($post as $nombre_campo => $valor) {
-            //echo $asignacion = "\$" . $nombre_campo . "='" . $valor . "';<br>";
-            if ($valor == "" || $valor == " " || $valor == null) {
+
+            if ($valor == "" || $valor == " " || $valor == null || $valor == '0000-00-00') {
                 $valor = (count(explode('txt', $nombre_campo)) > 1) ? NULL : 'NULL';
-                if (count(explode('seq', $nombre_campo)) > 1) {
+                $valor = (count(explode('fch', $nombre_campo)) > 1) ? NULL : NULL;
+
+                if (count(explode('seq', $nombre_campo)) > 1 || count(explode('num', $nombre_campo)) > 1) {
+                    echo "<br> $" . $nombre_campo . "=> " . $valor;
                     $valor = 0;
                 }
             }
             if ($valor == 'NaN') {
                 $valor = 0;
             }
+
             $$nombre_campo = $valor;
         }
         $arrErrores = array();
@@ -985,10 +989,11 @@ class Proyecto {
             foreach ($array[$seqProyecto] as $key => $value) {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
                     $$key = 0;
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }
-            }            
+            }
             $sql .= "(
                         '$txtLicencia', 
                         '$txtExpideLicencia',
@@ -1058,6 +1063,7 @@ class Proyecto {
             foreach ($array[$seqProyecto] as $key => $value) {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
                     $$key = 0;
+                    $$key = (count(explode('fch', $value[($index)])) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }
@@ -1113,13 +1119,18 @@ class Proyecto {
         $query = "INSERT INTO T_PRY_PROYECTO (
                 txtNombreProyecto,
                 txtNombreComercial,
+                seqLocalidad,
+                seqBarrio,
                 seqProyectoPadre,
                 txtDireccion,
                 valNumeroSoluciones,
                 txtMatriculaInmobiliariaLote,
                 txtChipLote,               
                 txtNombreVendedor,
+                seqTipoDocumentoVendedor,
                 numNitVendedor,
+                numTelVendedor,
+                txtCorreoVendedor,
                 txtCedulaCatastral,
                 txtEscritura,
                 fchEscritura,
@@ -1128,6 +1139,8 @@ class Proyecto {
                 seqPryEstadoProceso,
                 fchInscripcion,
                 fchUltimaActualizacion,
+                valAreaLote,
+                valTorres,
                 seqUsuario) 
             VALUES";
         for ($index = 0; $index < $cant; $index++) {
@@ -1136,6 +1149,7 @@ class Proyecto {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
                     //$$key = 0;
                     $$key = (count(explode('txt', $key)) > 1) ? NULL : 'NULL';
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }
@@ -1144,13 +1158,18 @@ class Proyecto {
             $query .= "(
                         '$txtNombreProyectoHijo', 
                         '$txtNombreComercialHijo',
+                        '$seqLocalidadHijo',
+                        '$seqBarrioHijo',
                         '$seqProyecto',
                         '$txtDireccionHijo',
                         '$valNumeroSolucionesHijo',
                         '$txtMatriculaInmobiliariaLoteHijo',
                         '$txtChipLoteHijo',                         
                         '$txtNombreVendedorHijo',
+                         $seqTipoDocumentoVendedordHijo,
                         '$numNitVendedorHijo',
+                        '$numTelVendedorHijo',
+                        '$txtCorreoVendedorHijo',
                         '$txtCedulaCatastralHijo',
                         '$txtEscrituraHijo',
                         '$fchEscrituraHijo',
@@ -1159,6 +1178,8 @@ class Proyecto {
                         '2',
                         '$fchGestion',
                         '$fchGestion',
+                        '$valAreaLoteHijo',
+                        '$valTorresHijo',
                         " . $_SESSION['seqUsuario'] . ");";
             try {
                 $aptBd->execute($query);
@@ -1200,10 +1221,14 @@ class Proyecto {
         for ($index = 0; $index < $cant; $index++) {
             $txtNombreProyectoHijo = '';
             foreach ($arrayConjuntos[$seqProyecto] as $key => $value) {
-                if ($value[($index)] == NULL && $value[($index)] == "") {
-                    // $$key = 0;
+                if ($value[($index)] == NULL || $value[($index)] == "" || $value[($index)] == "0000-00-00") {
+                    $$key = 0;
                     $$key = (count(explode('txt', $key)) > 1) ? NULL : 'NULL';
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
+                    //  echo "<br> ** key = " . $key . " =>" . $$key;
                 } else {
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
+                    //echo "<br> ** key = " . $key . " =>" . $$key;
                     $$key = $value[($index)];
                 }
             }
@@ -1213,19 +1238,26 @@ class Proyecto {
                 $query = "UPDATE T_PRY_PROYECTO 
                     SET txtNombreProyecto = '$txtNombreProyectoHijo',
                         txtNombreComercial = '$txtNombreComercialHijo',
+                        seqLocalidad = '$seqLocalidadHijo',
+                        seqBarrio = '$seqBarrioHijo',
                         seqProyectoPadre = '$seqProyecto',
                         txtDireccion = '$txtDireccionHijo',
                         valNumeroSoluciones = '$valNumeroSolucionesHijo',
                         txtChipLote = '$txtChipLoteHijo',
                         txtMatriculaInmobiliariaLote = '$txtMatriculaInmobiliariaLoteHijo',                        
                         txtNombreVendedor = '$txtNombreVendedorHijo',
+                        seqTipoDocumentoVendedor = '$seqTipoDocumentoVendedorHijo',
                         numNitVendedor = '$numNitVendedorHijo',
+                        numTelVendedor = '$numTelVendedorHijo',
+                        txtCorreoVendedor = '$txtCorreoVendedorHijo',
                         txtCedulaCatastral = '$txtCedulaCatastralHijo',
                         txtEscritura = '$txtEscrituraHijo',
                         fchEscritura = '$fchEscrituraHijo',
                         numNotaria = '$numNotariaHijo',
                         seqTutorProyecto = '$seqTutorProyecto', 
                         fchUltimaActualizacion = '$fchGestion', 
+                        valAreaLote = '$valAreaLoteHijo',
+                        valTorres = '$valTorresHijo',
                         seqUsuario = " . $_SESSION['seqUsuario'] . " 
                     WHERE seqProyecto = $seqProyectoHijo;";
                 $arrayInsLicencias = Array();
@@ -1247,6 +1279,8 @@ class Proyecto {
                 $arrayconjuntos[$seqProyecto]['seqProyectoHijo'][] = $seqProyectoHijo;
                 $arrayconjuntos[$seqProyecto]['txtNombreProyectoHijo'][] = $txtNombreProyectoHijo;
                 $arrayconjuntos[$seqProyecto]['txtNombreComercialHijo'][] = $txtNombreComercialHijo;
+                $arrayconjuntos[$seqProyecto]['seqLocalidadHijo'][] = $seqLocalidadHijo;
+                $arrayconjuntos[$seqProyecto]['seqBarrioHijo'][] = $seqBarrioHijo;
                 $arrayconjuntos[$seqProyecto]['txtDireccionHijo'][] = $txtDireccionHijo;
                 $arrayconjuntos[$seqProyecto]['valNumeroSolucionesHijo'][] = $valNumeroSolucionesHijo;
                 $arrayconjuntos[$seqProyecto]['txtChipLoteHijo'][] = $txtChipLoteHijo;
@@ -1259,7 +1293,9 @@ class Proyecto {
                 $arrayconjuntos[$seqProyecto]['fchLicenciaConstruccion1Hijo'][] = $fchLicenciaConstruccion1Hijo;
                 $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaConstruccionHijo'][] = $fchVigenciaLicenciaConstruccionHijo;
                 $arrayconjuntos[$seqProyecto]['txtNombreVendedorHijo'][] = $txtNombreVendedorHijo;
+                $arrayconjuntos[$seqProyecto]['seqTipoDocumentoVendedorHijo'][] = $seqTipoDocumentoVendedorHijo;
                 $arrayconjuntos[$seqProyecto]['numNitVendedorHijo'][] = $numNitVendedorHijo;
+                $arrayconjuntos[$seqProyecto]['numTelVendedorHijo'][] = $numTelVendedorHijo;
                 $arrayconjuntos[$seqProyecto]['txtCedulaCatastralHijo'][] = $txtCedulaCatastralHijo;
                 $arrayconjuntos[$seqProyecto]['txtEscrituraHijo'][] = $txtEscrituraHijo;
                 $arrayconjuntos[$seqProyecto]['fchEscrituraHijo'][] = $fchEscrituraHijo;
@@ -1370,6 +1406,7 @@ class Proyecto {
             foreach ($array[$seqProyecto] as $key => $value) {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
                     $$key = 0;
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }

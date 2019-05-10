@@ -106,7 +106,7 @@ class DatosGeneralesProyectos {
         } else {
             // $sql .= " where pry.seqProyectoPadre is null";
             if ($id == 2) {
-               // $sql .= "  where pry.seqPryEstadoProceso in(5,6)";
+                // $sql .= "  where pry.seqPryEstadoProceso in(5,6)";
                 $sql .= "  where pry.seqProyectoGrupo in (1,2,3)";
             } else {
                 $sql .= "  where pry.seqPryEstadoProceso != 7";
@@ -667,12 +667,19 @@ class DatosGeneralesProyectos {
                 seqProyectoPadre,
                 txtNombreProyecto,
                 txtNombreComercial,
+                seqLocalidad,
+                seqBarrio,
                 txtDireccion,
                 valNumeroSoluciones,
                 txtChipLote,
                 txtMatriculaInmobiliariaLote,                
                 txtNombreVendedor,
+                seqTipoDocumentoVendedor,
                 numNitVendedor,
+                numTelVendedor,
+                txtCorreoVendedor,
+                valAreaLote,
+                valTorres,
                 txtCedulaCatastral,
                 txtEscritura,
                 fchEscritura,
@@ -692,12 +699,19 @@ class DatosGeneralesProyectos {
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['seqProyectoPadre'] = $objRes->fields['seqProyectoPadre'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtNombreProyecto'] = $objRes->fields['txtNombreProyecto'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtNombreComercial'] = $objRes->fields['txtNombreComercial'];
+            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['seqLocalidad'] = $objRes->fields['seqLocalidad'];
+            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['seqBarrio'] = $objRes->fields['seqBarrio'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtDireccion'] = $objRes->fields['txtDireccion'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['valNumeroSoluciones'] = $objRes->fields['valNumeroSoluciones'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtChipLote'] = $objRes->fields['txtChipLote'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtMatriculaInmobiliariaLote'] = $objRes->fields['txtMatriculaInmobiliariaLote'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtNombreVendedor'] = $objRes->fields['txtNombreVendedor'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['numNitVendedor'] = $objRes->fields['numNitVendedor'];
+            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['seqTipoDocumentoVendedor'] = $objRes->fields['seqTipoDocumentoVendedor'];
+            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['numTelVendedor'] = $objRes->fields['numTelVendedor'];
+            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtCorreoVendedor'] = $objRes->fields['txtCorreoVendedor'];
+            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['valAreaLote'] = $objRes->fields['valAreaLote'];
+            $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['valTorres'] = $objRes->fields['valTorres'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtCedulaCatastral'] = $objRes->fields['txtCedulaCatastral'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['txtEscritura'] = $objRes->fields['txtEscritura'];
             $arrConjuntoResidencial[$objRes->fields['seqProyecto']]['fchEscritura'] = $objRes->fields['fchEscritura'];
@@ -825,7 +839,6 @@ class DatosGeneralesProyectos {
                     LEFT JOIN t_pry_proyecto proy ON (und.seqProyecto = proy.seqProyecto)
                     WHERE frm.bolCerrado =1  and und.seqFormulario is not null
                     and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16 OR seqEstadoProceso = 47 OR seqEstadoProceso = 56) and und.bolActivo =1";
-            
         } else if ($valor == 4) {
             $sql = "SELECT count(*) as cant, und.seqProyecto FROM T_PRY_UNIDAD_PROYECTO und
                     LEFT JOIN t_frm_formulario frm USING(seqFormulario) 
@@ -992,15 +1005,16 @@ class DatosGeneralesProyectos {
         global $aptBd;
 
         $sql = "SELECT txtNombreArchivo FROM t_pry_informe_interventoria where txtNombreArchivo = '$name' AND seqProyecto = $idProyecto";
-         $objRes = $aptBd->execute($sql);
-        
-        if ($objRes->numRows() > 0){
+        $objRes = $aptBd->execute($sql);
+
+        if ($objRes->numRows() > 0) {
             return false;
-        }else{
-             return true;
+        } else {
+            return true;
         }
         return $datos;
     }
+
     function obtenerlistaTextosInterventoria($seqInformeInterventoria) {
         global $aptBd;
 

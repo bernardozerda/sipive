@@ -2,7 +2,7 @@
 
 /*
  * Creado por Liliana Basto
- * Archivo para cargar la información para la inscripsión de los proyectos
+ * Archivo para cargar la información para la inscripción de los proyectos
  * 20-06-2017.
  */
 $txtPrefijoRuta = "../../../";
@@ -149,7 +149,6 @@ if (isset($_REQUEST['seqProyecto'])) {
         $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
     }
 }
-//var_dump($arrPlanGobierno);
 //$arrTipoEsquema = $claDatosProy->obtenerlistaEsquema();
 //$arrPryTipoModalidad = $claDatosProy->obtenerlistamodalidad();
 
@@ -195,6 +194,8 @@ if (count($arrayLicencias) == 0) {
 if (count($arraConjuntoLicencias) == 0) {
     $arraConjuntoLicencias[0] = 0;
 }
+
+//var_dump($arrConjuntoResidencial);
 //print_r($arrProyectos);
 //var_dump($arrProyectos);
 $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);

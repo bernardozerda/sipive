@@ -21,8 +21,6 @@
                 <tr class="fila_1">
                 {/if}   
 
-
-
                 {assign var="actual" value="r_$cont"}               
                 <td>
                     <div class="form-group" >
@@ -38,6 +36,76 @@
                             <input type="text" name="txtNombreComercialHijo[]" id="txtNombreComercialHijo_{$cont}" value="{$arrConjunto.txtNombreComercial}" size='80' onblur="sinCaracteresEspeciales(this);">
                             <div id="val_txtNombreComercialHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
+                        <div class="col-md-6"> 
+                            <label class="control-label" >Localidad (*)</label>  
+                            <select name="seqLocalidadHijo[]"
+                                    id="seqlocalidadHijo_{$cont}"
+                                    onChange="obtenerBarrioProyecto(this, 'tdBarrioHijo_{$cont}');"
+                                    style="width:250px" 
+                                    class="form-control ">
+                                <option value="0">Seleccione una opci&oacute;n</option>
+                                {foreach from=$arrLocalidad key=seqLocalidad item=txtLocalidad}
+                                    <option value="{$seqLocalidad}" {if $arrConjunto.seqLocalidad == $seqLocalidad} selected {/if}>{$txtLocalidad}</option>
+                                {/foreach}
+                            </select>
+                            <div id="val_seqlocalidad_{$cont}" class="divError">Debe seleccionar la Localidad</div>
+                        </div>
+                        <div class="col-md-6" > 
+                            <label class="control-label" >Barrio (*)</label> 
+                            <span  id="tdBarrioHijo_{$cont}">
+                                <select onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                                        onBlur="this.style.backgroundColor = '#FFFFFF';" 
+                                        name="seqBarrioHijo[]" 
+                                        id="seqBarrioHijo_{$cont}" 
+                                        style="width:250px;" 
+                                        class="form-control ">
+                                    <option value="0">Seleccione</option>
+                                    {if intval( $arrConjunto.seqLocalidad ) != 0}
+                                        {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
+                                            <option value="{$seqBarrio}" 
+                                                    {if $arrConjunto.seqBarrio == $seqBarrio} 
+                                                        selected 
+                                                    {/if}
+                                                    >{$txtBarrio}</option>            
+                                        {/foreach}
+                                    {/if}
+                                </select>
+                                <div id="val_seqBarrio" class="divError">Debe seleccionar el Barrio</div>
+                            </span>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" >Nombre de Vendedor</label><br />                            
+                            <input type="text" name='txtNombreVendedorHijo[]' id="txtNombreVendedorHijo_{$cont}" value="{$arrConjunto.txtNombreVendedor}" size="20"  class="form-control"/>
+                            <div id="val_txtNombreVendedorHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" >Tipo documento</label><br />                            
+                            <select name="seqTipoDocumentoVendedorHijo[]"
+                                    id="seqTipoDocumentoVendedorHijo_{$cont}"
+                                    style="width:200px"
+                                    class="form-control">
+                                <option value="0">Seleccione una opción</option>
+                                {foreach from=$arrTipoDocumento key=seqTipoDocumento item=txtTipoDocumento}
+                                    <option value="{$seqTipoDocumento}" {if $arrConjunto.seqTipoDocumentoVendedor == $seqTipoDocumento} selected {/if}>{$txtTipoDocumento}</option>
+                                {/foreach}
+                            </select>
+                            <div id="val_seqTipoDocumentoVendedorHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" >Nit</label><br />                            
+                            <input type="text" name='numNitVendedorHijo[]' id="numNitVendedorHijo_{$cont}" value="{$arrConjunto.numNitVendedor}" size="20"   class="form-control "/>
+                            <div id="val_numNitVendedorHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" >Tel. Vendedor</label><br />                            
+                            <input type="text" name='numTelVendedorHijo[]' id="numTelVendedorHijo_{$cont}" value="{$arrConjunto.numTelVendedor}" size="20"    class="form-control "/>
+                            <div id="val_numTelVendedorHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" >Correo Vendedor</label><br />                            
+                            <input type="text" name='txtCorreoVendedorHijo[]' id="txtCorreoVendedorHijo_{$cont}" value="{$arrConjunto.txtCorreoVendedor}" size="20"    class="form-control "/>
+                            <div id="val_txtCorreoVendedorHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                        </div>
                         <div class="col-md-3">
                             <label class="control-label" >Direcci&oacute;n&nbsp;del&nbsp;Conjunto</label><br />                            
                             <input type="text" name='txtDireccionHijo[]' id="txtDireccionHijo_{$cont}" value="{$arrConjunto.txtDireccion}" size="20" style="background-color:#E4E4E4; width: 90%;position: relative; float: left" readonly  class="form-control required4"/>
@@ -48,6 +116,16 @@
                             <label class="control-label" >Unidades</label><br />
                             <input type='text' name='valNumeroSolucionesHijo[]' id='valNumeroSolucionesHijo_{$cont}' value="{$arrConjunto.valNumeroSoluciones}" onBlur='sinCaracteresEspeciales(this);' size='6' class="form-control required4">
                             <div id="val_valNumeroSolucionesHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" >Torres</label><br />
+                            <input type='text' name='valTorresHijo[]' id='valTorresHijo_{$cont}' value="{$arrConjunto.valTorres}" onBlur='sinCaracteresEspeciales(this);' size='6' class="form-control">
+                            <div id="val_valTorresHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label" >Area Lote</label><br />
+                            <input type='text' name='valAreaLoteHijo[]' id='valAreaLoteHijo_{$cont}' value="{$arrConjunto.valAreaLote}" onBlur='sinCaracteresEspeciales(this);' size='6' class="form-control">
+                            <div id="val_valAreaLoteHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >Chip</label><br />

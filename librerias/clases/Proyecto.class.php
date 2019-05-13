@@ -754,8 +754,8 @@ class Proyecto {
                 $valor = (count(explode('txt', $nombre_campo)) > 1) ? NULL : 'NULL';
                 $valor = (count(explode('fch', $nombre_campo)) > 1) ? NULL : NULL;
 
-                if (count(explode('seq', $nombre_campo)) > 1 || count(explode('num', $nombre_campo)) > 1) {
-                    echo "<br> $" . $nombre_campo . "=> " . $valor;
+            if (count(explode('seq', $nombre_campo)) > 1 || count(explode('num', $nombre_campo)) > 1 || count(explode('val', $nombre_campo)) > 1) {
+                   // echo "<br> $" . $nombre_campo . "=> " . $valor;
                     $valor = 0;
                 }
             }
@@ -1154,6 +1154,7 @@ class Proyecto {
                     $$key = $value[($index)];
                 }
             }
+          //  echo "<br> $".$key ." => ".$value[($index)];
             //if ($txtNombreProyectoHijo != "") {
             $query .= "(
                         '$txtNombreProyectoHijo', 
@@ -1166,7 +1167,7 @@ class Proyecto {
                         '$txtMatriculaInmobiliariaLoteHijo',
                         '$txtChipLoteHijo',                         
                         '$txtNombreVendedorHijo',
-                         $seqTipoDocumentoVendedordHijo,
+                         $seqTipoDocumentoVendedorHijo,
                         '$numNitVendedorHijo',
                         '$numTelVendedorHijo',
                         '$txtCorreoVendedorHijo',

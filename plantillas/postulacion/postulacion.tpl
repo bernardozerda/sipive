@@ -1028,17 +1028,7 @@
                                             <option value="1" {if $objFormulario->bolSecMujer == 1} selected {/if} >Si</option>
                                         </select>
                                     </td>
-                                    <td width="200px" align="left">Reconocimiento Fuerza Pública&nbsp;&nbsp;
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                name="bolReconocimientoFP"
-                                                id="bolReconocimientoFP"
-                                                style="width:40%;"
-                                                >
-                                            <option value="0" {if $objFormulario->bolReconocimientoFP != 1} selected {/if} >No</option>
-                                            <option value="1" {if $objFormulario->bolReconocimientoFP == 1} selected {/if} >Si</option>
-                                        </select>
-                                    </td>
+
                                     <input type="hidden" name="bolSecSalud" value="{$objFormulario->bolSecSalud|@intval}">
                                     <input type="hidden" name="bolSecEducacion" value="{$objFormulario->bolSecEducacion|@intval}">
                                 {/if}
@@ -1055,6 +1045,19 @@
                                         <option value="1" {if $objFormulario->bolIpes == 1} selected {/if} >Si</option>
                                     </select>
                                 </td>
+                                {if $claFormulario->seqPlanGobierno == 3}
+                                    <td width="200px" align="left">Reconocimiento Fuerza Pública&nbsp;&nbsp;
+                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="bolReconocimientoFP"
+                                                id="bolReconocimientoFP"
+                                                style="width:40%;"
+                                                >
+                                            <option value="0" {if $claFormulario->bolReconocimientoFP != 1} selected {/if} >No</option>
+                                            <option value="1" {if $claFormulario->bolReconocimientoFP == 1} selected {/if} >Si</option>
+                                        </select>
+                                    </td>
+                                {/if} 
                                 </tr>
                                 <input type="hidden" name="txtOtro" value="{$objFormulario->txtOtro}">
                             </table>       

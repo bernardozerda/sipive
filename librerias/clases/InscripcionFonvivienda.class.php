@@ -1783,7 +1783,8 @@ class InscripcionFonvivienda
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][25] . " es desconocido";
             }else{
                 $arrModalidad = array_keys($this->arrModalidad,$txtModalidad);
-                $seqModalidad = $arrModalidad[0];
+               // $seqModalidad = $arrModalidad[0];
+                $seqModalidad = 12;
             }
         }elseif($seqTipo == 2){
             $seqModalidad = 12;

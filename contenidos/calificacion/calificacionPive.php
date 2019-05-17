@@ -113,30 +113,30 @@ and open the template in the editor.
                         $hacinamiento = 1;
                     $sqlIndicadores .= "(" . $dormitorios . ", 0, 0, 0, 0," . $calchacinamiento . ", " . $hacinamiento . ", " . ($claCalificacion->HACN * ($hacinamiento * 100)) . ", " . $idCalificacion . ",4),";
 
-                   echo " <br><br>  * ************************************* Formula Ingresos -> ".$value['seqFormulario']."********************************************* */";
+                  // echo " <br><br>  * ************************************* Formula Ingresos -> ".$value['seqFormulario']."********************************************* */";
                     $ingresos = $value['ingresos'] / $value['cant'];
                     if ($ingresos < 121196) {
                         $ingresos = 121196;
                     }
                     $ingresos = intval($ingresos);
-                    echo "<br> Ingresos = " . $ingresos;
+                  //  echo "<br> Ingresos = " . $ingresos;
                     //$arrConfiguracion['constantes']['salarioMinimo'] . "/" . ($ingresos + 1000);
                     $totalIngresos = $ingresos / $arrConfiguracion['constantes']['salarioMinimo'];
-                    echo "<br> totalIngresos = (ingresos / arrConfiguracion['constantes']['salarioMinimo']) => " . $totalIngresos;
+                   // echo "<br> totalIngresos = (ingresos / arrConfiguracion['constantes']['salarioMinimo']) => " . $totalIngresos;
                     $invIngresos = 1 / $totalIngresos;
-                    echo "<br> invIngresos = (1 / totalIngresos) => " . $invIngresos;
+                   // echo "<br> invIngresos = (1 / totalIngresos) => " . $invIngresos;
 
 
                     $formIngApli = 1 - exp(-$invIngresos / $promedioING);
-                    echo "<br> formIngApli  = (1 - exp(-invIngresos / promedioING)) = " . $formIngApli;
+                    //echo "<br> formIngApli  = (1 - exp(-invIngresos / promedioING)) = " . $formIngApli;
                     $claCalificacion->IPC * (100 * $formIngApli);
                     
-                    echo "<br><br> ***  <b>TotalCalIngresos</b> =  claCalificacion->IPC * (100 * formIngApli) =>". $claCalificacion->IPC * (100 * $formIngApli);
+                 //   echo "<br><br> ***  <b>TotalCalIngresos</b> =  claCalificacion->IPC * (100 * formIngApli) =>". $claCalificacion->IPC * (100 * $formIngApli);
 
                     //$sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0," . $totalIngresos . ", null, " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
 
                     $sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0, ". $formIngApli .", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
-                    echo "<br>(" . $ingresos . ", 0, 0, 0, 0, ".$formIngApli.", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
+                   // echo "<br>(" . $ingresos . ", 0, 0, 0, 0, ".$formIngApli.", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
                     
                     /*                     * *************************************Dependencia Economica********************************************* */
 

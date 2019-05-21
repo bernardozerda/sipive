@@ -324,13 +324,21 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
             mysql_query($sqlLibera);
         }
 
-        // Para paso a Inscrito Inactivo
+        // Para paso a Inscrito Inhabilitado
         if ($arrDatos['estado'] == 39) {
             $claFormulario->bolCerrado = 1;
         }
 
         // para paso a hogar calificado (53) o postulado (54)
-        if ($arrDatos['estado'] == 53 || $arrDatos['estado'] == 54) {
+        if ($arrDatos['estado'] == 53 && $arrDatos['estado'] == 1) {
+            $claFormulario->txtDireccionSolucion = "";
+            $claFormulario->seqUnidadProyecto = 1;
+            $claFormulario->txtMatriculaInmobiliaria = "";
+            $claFormulario->txtChip = "";
+            $claFormulario->valAvaluo = 0;
+            $claFormulario->valTotal = 0;
+            @$sqlLibera = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = null WHERE seqFormulario = $seqFormulario";
+            mysql_query($sqlLibera);
 //            $claFormulario->seqTipoEsquema = "1";
         }
 

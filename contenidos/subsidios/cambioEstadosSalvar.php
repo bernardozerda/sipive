@@ -330,7 +330,7 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
         }
 
         // para paso a hogar calificado (53) o postulado (54)
-        if ($arrDatos['estado'] == 53 && $arrDatos['estado'] == 1) {
+        if ($arrDatos['estado'] == 53 || $arrDatos['estado'] == 1) {
             $claFormulario->txtDireccionSolucion = "";
             $claFormulario->seqUnidadProyecto = 1;
             $claFormulario->txtMatriculaInmobiliaria = "";

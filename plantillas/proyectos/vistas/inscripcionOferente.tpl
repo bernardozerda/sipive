@@ -17,7 +17,7 @@
                 <div class="form-group" >
                     <div class="col-md-4"> 
                         <label class="control-label" for="surname">Nombre Oferente (*)</label>   
-                        <input name="txtNombreOferente" type="text" id="txtNombreOferente" value="{$value.txtNombreOferente}"  style="width:200px;" class="form-control required" />
+                        <input name="txtNombreOferente" type="text" id="txtNombreOferente" value="{$value.txtNombreOferente}"   class="form-control required" />
                         <input type="hidden" id="seqOferente" name="seqOferente" value="{if $value.seqOferente != ""}{$value.seqOferente}{else}0{/if}" > 
                         <div id="val_txtNombreOferente" class="divError">Este campo es requerido</div>
                     </div>
@@ -42,22 +42,21 @@
                 <div class="form-group" >
                     <div class="col-md-4"> 
                         <label class="control-label" for="surname">Nombre de Contacto (*)</label> 
-                        <input name="txtNombreContactoOferente" type="text" id="txtNombreContactoOferente" value="{$value.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required" />
+                        <input name="txtNombreContactoOferente" type="text" id="txtNombreContactoOferente" value="{$value.txtNombreContactoOferente}" onBlur="sinCaracteresEspeciales(this);"  class="form-control required" />
                         <div id="val_txtNombreContactoOferente"class="divError">Este campo es requerido</div>
                     </div>
                 </div>
                 <div class="form-group" >
                     <div class="col-md-4"> 
-                        <label class="control-label" >Tel&eacute;fono Fijo de Contacto(*)</label>
-                        <input name="numTelefonoOferente" type="text" id="numTelefono1Oferente" value="{$value.numTelefonoOferente}" onBlur="sinCaracteresEspeciales(this);
-                                soloNumeros(this);"  class="form-control required" /> 
-                    </div>
-                    <div class="col-md-4"> 
-                        <label class="control-label" for="surname">Ext</label>
-                        <input name="numExtensionOferente" type="text" id="numExtensionOferente" value="{$value.numExtensionOferente}" onBlur="sinCaracteresEspeciales(this);
+                        <label class="control-label" >Tel&eacute;fono Fijo de Contacto(*)&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Ext</label><br>
+                        <input name="numTelefonoOferente" type="text" id="numTelefono1Oferente" style="width:55%; float: left" value="{$value.numTelefonoOferente}" onBlur="sinCaracteresEspeciales(this);
+                                soloNumeros(this);"  class="form-control required" /> &nbsp;
+                        <input name="numExtensionOferente" type="text" id="numExtensionOferente" value="{$value.numExtensionOferente}" style="width:30%; position: relative; float: left;left: 5px" onBlur="sinCaracteresEspeciales(this);
                                 soloNumeros(this);"  class="form-control" size="10"/>
-                        <div id="val_numTelefono1Oferente"class="divError">Este campo es requerido</div>    
+                        <div id="val_numTelefono1Oferente"class="divError">Este campo es requerido</div>  
                     </div>
+
+
                 </div>
                 <div class="form-group" >
                     <div class="col-md-4"> 
@@ -74,8 +73,13 @@
                         <div id="val_txtCorreoOferente"class="divError">Este campo es requerido</div>    
                     </div>
                 </div><br>
-                <div><p>&nbsp;</p></div>
-                <legend>
+                <p>&nbsp;</p>
+
+            </fieldset>
+            <p>&nbsp;</p>
+            <fieldset>
+                <p>&nbsp;</p>
+                <legend style="text-align: left" class="legend">
 
                     <h4 style="position: relative; float: left; width: 100%; margin: 0; padding: 4px;">
                         Datos del Representante Legal 
@@ -84,7 +88,7 @@
                 <div class="form-group" >
                     <div class="col-md-4"> 
                         <label class="control-label" for="surname">Representante Legal</label>   
-                        <input name="txtRepresentanteLegalOferente" type="text" id="txtRepresentanteLegalOferente"  value="{$value.txtRepresentanteLegalOferente}" class="form-control required" onBlur="sinCaracteresEspeciales(this);" style="width:200px;"/>
+                        <input name="txtRepresentanteLegalOferente" type="text" id="txtRepresentanteLegalOferente"  value="{$value.txtRepresentanteLegalOferente}" class="form-control required" onBlur="sinCaracteresEspeciales(this);" />
                         <div id="val_txtRepresentanteLegalOferente"class="divError">Este campo es requerido</div>
                     </div>
                 </div>  
@@ -106,16 +110,14 @@
                 </div>
                 <div class="form-group" >
                     <div class="col-md-4"> 
-                        <label class="control-label" for="surname">Tel&eacute;fono Fijo de Representante (*)</label>
-                        <input name="numTelefonoRepresentanteLegalOferente" type="text" id="numTelefonoRepresentanteLegalOferente" value="{$value.numTelefonoRepresentanteLegalOferente}" onBlur="sinCaracteresEspeciales(this);
+                        <label class="control-label" for="surname">Tel&eacute;fono Fijo Representante (*) &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Ext</label>
+                        <input name="numTelefonoRepresentanteLegalOferente" type="text" style="width:55%; float: left" id="numTelefonoRepresentanteLegalOferente" value="{$value.numTelefonoRepresentanteLegalOferente}" onBlur="sinCaracteresEspeciales(this);
                                 soloNumeros(this);"  class="form-control required"/> 
-                    </div>
-                    <div class="col-md-4">
-                        <label class="control-label" for="surname">Ext</label>
-                        <input name="numExtensionRepresentanteLegalOferente" type="text" id="numExtensionRepresentanteLegalOferente" value="{$value.numExtensionRepresentanteLegalOferente}" onBlur="sinCaracteresEspeciales(this);
+                        <input name="numExtensionRepresentanteLegalOferente" type="text" id="numExtensionRepresentanteLegalOferente" style="width:30%; position: relative; float: left;left: 5px" value="{$value.numExtensionRepresentanteLegalOferente}" onBlur="sinCaracteresEspeciales(this);
                                 soloNumeros(this);"  class="form-control"/>
                         <div id="val_numTelefonoRepresentanteLegalOferente"class="divError">Este campo es requerido</div>    
-                    </div> 
+                    </div>
+                    
                 </div>
                 <div class="form-group" >
                     <div class="col-md-4"> 
@@ -135,6 +137,7 @@
                 <br>
                 <div><p>&nbsp;</p></div>
             {/foreach}
+            <p>&nbsp;</p>
         </fieldset>
     </div>   
 </form>

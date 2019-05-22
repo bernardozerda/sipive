@@ -56,7 +56,8 @@
                         <label class="control-label" for="surname">Número de Documento</label> 
 
                         <input type="text" name="numDocumentoConstructor" id="numDocumentoConstructor" value="{$value.numDocumentoConstructor}" onBlur="sinCaracteresEspeciales(this);
-                                soloNit(this); soloNumeros(this);" style="width:200px;"  class="form-control required"/>
+                                soloNit(this);
+                                soloNumeros(this);" style="width:200px;"  class="form-control required"/>
                         <div id="val_numDocumentoConstructor" class="divError">Este campo es requerido</div>
                     </div>
                 </div>  
@@ -91,37 +92,41 @@
                     </div>
                     <div><p>&nbsp;</p></div>
                 </div><br>-->
-                <div><p>&nbsp;</p>
-                    <legend>
+            </fieldset>
+            <div class="col-md-12"><p>&nbsp;</p>
+                <fieldset>
+                    <legend style="text-align: left" class="legend">
                         <div><p>&nbsp;</p>
                             <h4 style="position: relative; float: left; width: 100%; margin: 0; padding: 4px;">
                                 Datos del Representante Legal 
                             </h4><br><br><br>
-                            </legend>
-                            <div class="form-group" >
-                                <div class="col-md-4"> 
-                                    <label class="control-label" for="surname">Representante Legal</label>   
-                                    <input name="txtNombreRepresentanteLegal" type="text" id="txtRepresentanteLegalOferente" class="required" value="{$value.txtNombreRepresentanteLegal}" class="form-control required" onBlur="sinCaracteresEspeciales(this);" style="width:200px;"/>
-                                    <div id="val_txtNombreRepresentanteLegal"class="divError">Este campo es requerido</div>
-                                </div>
-                            </div>  
+                        </div>
+                    </legend>
+                    <div class="form-group" >
+                        <div class="col-md-4"> 
+                            <label class="control-label" for="surname">Representante Legal</label>   
+                            <input name="txtNombreRepresentanteLegal" type="text" id="txtRepresentanteLegalOferente" class="required" value="{$value.txtNombreRepresentanteLegal}" class="form-control required" onBlur="sinCaracteresEspeciales(this);" style="width:200px;"/>
+                            <div id="val_txtNombreRepresentanteLegal"class="divError">Este campo es requerido</div>
+                        </div>
+                    </div>  
 
-                            <div class="form-group" >
-                                <div class="col-md-4"> 
-                                    <label class="control-label" for="surname">C&eacute;dula</label>  
-                                    <input name="numDocumentoRepresentanteLegal" type="text" id="numDocumentoRepresentanteLegal" class="form-control required" value="{$value.numDocumentoRepresentanteLegal}" onBlur="sinCaracteresEspeciales(this);
-                                            soloNumeros(this);" style="width:200px;"/>
-                                    <div id="val_numDocumentoRepresentanteLegal"class="divError">Este campo es requerido</div>
-                                </div>
-                            </div>
-                            <div class="form-group" >
-                                <div class="col-md-4"> 
-                                    <label class="control-label" for="surname">Correo de Contacto</label>  
-                                    <input name="txtCorreoElectronicoRepresentanteLegal" type="email" id="txtCorreoElectronicoRepresentanteLegal" value="{$value.txtCorreoElectronicoRepresentanteLegal}" style="width:200px;"/>
-                                    <div id="val_txtCorreoElectronicoRepresentanteLegal" class="divError">Este campo es requerido</div>
-                                </div>
-                            </div>  
-                        {/foreach}
-                        </fieldset>
-                    </div>   
-                    </form>
+                    <div class="form-group" >
+                        <div class="col-md-4"> 
+                            <label class="control-label" for="surname">C&eacute;dula</label>  
+                            <input name="numDocumentoRepresentanteLegal" type="text" id="numDocumentoRepresentanteLegal" class="form-control required" value="{$value.numDocumentoRepresentanteLegal}" onBlur="sinCaracteresEspeciales(this);
+                                    soloNumeros(this);" style="width:200px;"/>
+                            <div id="val_numDocumentoRepresentanteLegal"class="divError">Este campo es requerido</div>
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <div class="col-md-4"> 
+                            <label class="control-label" for="surname">Correo de Contacto</label>  
+                            <input name="txtCorreoElectronicoRepresentanteLegal" type="email" id="txtCorreoElectronicoRepresentanteLegal" value="{$value.txtCorreoElectronicoRepresentanteLegal}" style="width:200px;"/>
+                            <div id="val_txtCorreoElectronicoRepresentanteLegal" class="divError">Este campo es requerido</div>
+                        </div>
+                    </div>  
+                {/foreach}
+                <p>&nbsp;</p>
+            </fieldset>
+        </div>   
+</form>

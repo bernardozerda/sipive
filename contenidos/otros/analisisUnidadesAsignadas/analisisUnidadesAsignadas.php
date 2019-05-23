@@ -45,8 +45,11 @@ $sql = "
     LEFT  JOIN T_FRM_ETAPA eta ON epr.seqEtapa = eta.seqEtapa
     LEFT  JOIN T_PRY_TECNICO tec ON und.seqUnidadProyecto = tec.seqUnidadProyecto
     LEFT JOIN T_PRY_ESTADO_UNIDAD est ON est.seqEstadoUnidad = und.seqEstadoUnidad
-    WHERE pry.seqProyectoGrupo in (1,2,3)
+    WHERE pry.seqProyectoGrupo in (1,2)
 ";
+if (isset($_REQUEST['seqProyecto'])) {
+    $sql .= " And (CASE WHEN pry.seqProyectoPadre > 0  then pry.seqProyectoPadre = " . $_REQUEST['seqProyecto'] . " else pry.seqProyecto =" . $_REQUEST['seqProyecto'] . " end)";
+}
 
 //echo $sql."<br>"; die();
 $arrRegistros = $aptBd->GetAll($sql);

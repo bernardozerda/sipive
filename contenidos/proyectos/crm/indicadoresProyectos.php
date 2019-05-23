@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 $txtPrefijoRuta = "../../../";
 
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
@@ -8,22 +14,19 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Proyecto.class.php" );
-$txtPlantilla = "proyectos/crm/viewProyectosEstado.tpl";
-$seqPryEstadoProceso = '';
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "DatosGeneralesProyectos.class.php" );
+$txtPlantilla = "proyectos/crm/tableroProyDetalle.tpl";
+
+$seqProyecto = $_REQUEST['seqProyecto'];
+$nombrePadre = $_REQUEST['nombre'];
 $seqProyectoGrupo = $_REQUEST['seqProyGrupo'];
-$cantHijos =0;
+$seqPryEstadoProceso = $_REQUEST['seqPryEstadoProceso'];
+$arrDatosProy = Proyecto::obtenerDatosProyectosIndividual($seqProyecto);
 
-if (isset($_REQUEST['seqPryEstadoProceso'])) {
-    $seqPryEstadoProceso = $_REQUEST['seqPryEstadoProceso'];
-    $arrProyTableroPal = Proyecto::obtenerDatosProyectosEstados($seqPryEstadoProceso, $seqProyectoGrupo);
-} else {
-    $arrProyTableroPal = Proyecto::obtenerDatosProyectosTableroPal($seqProyectoGrupo);
-    $txtPlantilla = "proyectos/crm/tablero.tpl";
-}
-
+//var_dump($arrDatosProy);
 $claSmarty->assign("seqProyectoGrupo", $seqProyectoGrupo);
-$claSmarty->assign("arrProyTableroPal", $arrProyTableroPal);
+$claSmarty->assign("nombrePadre", $nombrePadre);
 $claSmarty->assign("seqPryEstadoProceso", $seqPryEstadoProceso);
+$claSmarty->assign("arrDatosProy", $arrDatosProy);
 $claSmarty->display($txtPlantilla);
-
 

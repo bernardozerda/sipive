@@ -481,7 +481,7 @@ class calificacion {
 
         global $aptBd;
 
-        $sql = "SELECT  seqFormulario, ucwords(infHogar) as infHogar,  cantMiembrosHogar, totalIngresos, sum(total) as total 
+        $sql = "SELECT  seqFormulario, upper(infHogar) as infHogar,  cantMiembrosHogar, totalIngresos, sum(total) as total 
             FROM t_frm_calificacion_plan3
             left join t_frm_calificacion_operaciones using(seqCalificacion)
             where fchCalificacion = '" . trim($fecha) . "'

@@ -51,10 +51,21 @@
                         <td width="80%"> 
                             <table style="width: 80%">
                                 {foreach from=$parts key=keyParts item=valueParts} 
+
                                     {assign var="valExpInfHog" value="-"|explode:$valueParts}
+                                    {assign var="valor" value=$valExpInfHog|@count}
+                                    {if $valExpInfHog|@count > 1}
+                                        {assign var="width" value="10%"}
+                                        {assign var="width2" value="70%"}
+                                    {else}
+                                        {assign var="width" value="70%"}
+                                        {assign var="width2" value="10%"}
+                                    {/if}          
+
                                     <tr>
-                                        <td style="margin: 0; padding: 0;border: 0; width: 10%">{$valExpInfHog[0]}</td>
-                                        <td style="margin: 0; padding: 0; border: 0; padding-left: 1%; width: 50%">{$valExpInfHog[1]|substr:0:-2} </td>
+
+                                        <td style="margin: 0; padding: 0;border: 0; width: {$width}">{$valExpInfHog[0]|strip}</td>
+                                        <td style="margin: 0; padding: 0; border: 0; padding-left: 1%; width: {$width2}" nowrap>{$valExpInfHog[1]|substr:0:-2} </td>
                                         <td style="margin: 0; padding: 0; border: 0; padding-left: 1%; width: 10%">{$valExpInfHog[1]|substr:-2}</td>
                                     </tr>
                                 {/foreach}

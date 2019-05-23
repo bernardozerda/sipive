@@ -34,17 +34,17 @@
     <div class="panel panel-default" style="padding: 1%">
         <div class="panel-heading">
             <div class="col-lg-9 col-md-9" style="top: 10px">
-                <h6 class="panel-title">PROYECTOS  
+                <h6 class="panel-title">  
                     {if $seqProyectoGrupo > 1}
-                        SUBDIRECCIÓN DE RECURSOS PRIVADOS
+                        SUBDIRECCIÓN DE RECURSOS PRIVADOS <b style="color: #800000">"{$nombrePadre|upper}"</b>
                     {else}
-                        SUBDIRECCIÓN DE RECURSOS PÚBLICOS
+                        SUBDIRECCIÓN DE RECURSOS PÚBLICOS <b style="color: #800000">"{$nombrePadre|upper}"</b>
                     {/if}
                     &nbsp;&nbsp;</h6>
             </div>
             <div class="col-lg-3 col-md-3" style="text-align: right;">
                 <button type="submit" class="pressed" style="width: 50%; background-color: #004080" name="enviar"   
-                        onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresEstado.php?&seqProyGrupo={$seqProyectoGrupo}', '', true);" >
+                        onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresEstado.php?seqPryEstadoProceso={$seqPryEstadoProceso}&seqProyGrupo={$seqProyectoGrupo}', '', true);" onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresEstado.php?&seqProyGrupo={$seqProyectoGrupo}', '', true);" >
                     <span class ="glyphicon glyphicon-arrow-left" aria-hidden="true" style="cursor: pointer; text-align: left; font-weight: bold;" ></span>&nbsp; Volver</button>
             </div>
         </div>
@@ -62,9 +62,8 @@
                 <th class="title1"><div class="title1">NO VINCULADAS</div></th>
                 <th class="title1"><div class="title1">LEGALIZADAS</div></th>
                 <th class="title1"><div class="title1">X LEGALIZAR</div></th>
-                <td class="title1"><div class="title1">DETALLE</div></td>
-                <td class="title1"><div class="title1">HIJOS</div></td>
-                <td class="title1"><div class="title1">&nbsp;</div></td>
+                {*<td class="title1"><div class="title1">DETALLE</div></td>
+                <td class="title1"><div class="title1">&nbsp;</div></td>*}
                 </tr>
                 </thead>
 
@@ -73,41 +72,36 @@
                 {assign var="totalCant" value="0"}
                 {assign var="totalUnd" value="0"}
                 {assign var="totalXLegalizar" value="0"}
-                {foreach from=$arrProyTableroPal key=seqEstadoProceso item=txtEstadoProceso}   
-                    {assign var="totalSoluciones" value=$totalSoluciones+$txtEstadoProceso.unidades}
-                    {assign var="totalSuma" value=$txtEstadoProceso.vinculadas-$txtEstadoProceso.undLegalizadadas}
-                    {assign var="totalXVincular" value=$totalXVincular+$txtEstadoProceso.pendientes}  
-                    {assign var="totalLeg" value=$totalLeg+$txtEstadoProceso.undLegalizadadas}  
+                {foreach from=$arrDatosProy key=seqProyecto item=datoProy}   
+                    {assign var="totalSoluciones" value=$totalSoluciones+$datoProy.unidades}
+                    {assign var="totalSuma" value=$datoProy.vinculadas-$datoProy.legalizadas}
+                    {assign var="totalXVincular" value=$totalXVincular+$datoProy.pendientes+$datoProy.postuladas}  
+                    {assign var="totalLeg" value=$totalLeg+$datoProy.legalizadas}  
                     {assign var="totalXLegalizar" value=$totalXLegalizar+$totalSuma}
                     <tr>
-                        <th >{$txtEstadoProceso.seqProyecto} </th>
-                        <td align="left"  nowrap><b>{$txtEstadoProceso.txtNombreProyecto|upper}</b></td>
-                        <td align="left" style="font-size: 9px; ">{$txtEstadoProceso.constructor|upper}</td>
-                        <td align="left" >{$txtEstadoProceso.txtLocalidad}</td>
-                        <td align="center">{$txtEstadoProceso.txtTipoFinanciacion}</td>
-                        <td align="center">{$txtEstadoProceso.unidades}</td>
-                        <td align="center">{$txtEstadoProceso.pendientes+$txtEstadoProceso.postuladas}</td>
-                        <td align="center">{$txtEstadoProceso.undLegalizadadas} </td>
-                        <td align="center">{$txtEstadoProceso.vinculadas-$txtEstadoProceso.undLegalizadadas}</td>
+                        <th >{$datoProy.seqProyecto} </th>
+                        <td align="left"  ><b>{$datoProy.txtNombreProyecto|upper}</b></td>
+                        <td align="left" style="font-size: 9px; ">{$datoProy.txtNombreConstructor|upper}</td>
+                        <td align="left" >{$datoProy.txtLocalidad}</td>
+                        <td align="center">{$datoProy.txtTipoFinanciacion}</td>
+                        <td align="center">{$datoProy.unidades}</td>
+                        <td align="center">{$datoProy.pendientes+$datoProy.postuladas}</td>
+                        <td align="center">{$datoProy.legalizadas} </td>
+                        <td align="center">{$datoProy.vinculadas-$datoProy.legalizadas}</td>
+                        {*  <td align="center">
+                        <a href="#"
+                        onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosFichaTecnica.php?tipo=2&seqProyecto={$txtEstadoProceso.seqProyecto}&seqPlanGobierno={$txtEstadoProceso.seqPlanGobierno}&seqPryEstadoProceso={$seqPryEstadoProceso}', '', true);" >
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                        </a></td>
                         <td align="center">
-                            <a href="#"
-                               onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosFichaTecnica.php?tipo=2&seqProyecto={$txtEstadoProceso.seqProyecto}&seqPlanGobierno={$txtEstadoProceso.seqPlanGobierno}&seqPryEstadoProceso={$seqPryEstadoProceso}', '', true);" >
-                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                            </a>
-                        </td>
-                        <td align="center">
-                            {if $txtEstadoProceso.cantHijos > 0}
-                                <a href="#"
-                                   onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresProyectos.php?seqProyGrupo={$seqProyectoGrupo}&seqProyecto={$txtEstadoProceso.seqProyecto}&seqPlanGobierno={$txtEstadoProceso.seqPlanGobierno}&seqPryEstadoProceso={$seqPryEstadoProceso}&nombre={$txtEstadoProceso.txtNombreProyecto}', '', true);" >
-                                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                                </a>
-                            {/if}
-                        </td>
-                        <td align="center">
-                            <a href="#"
-                               onclick="location.href='./contenidos/otros/analisisUnidadesAsignadas/analisisUnidadesAsignadas.php?&seqProyecto={$txtEstadoProceso.seqProyecto}'" >
-                                <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
-                            </a></td>
+                        {if $txtEstadoProceso.cantHijos > 0}
+                        <a href="#"
+                        onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresProyectos.php?tipo=2&seqProyecto={$txtEstadoProceso.seqProyecto}&seqPlanGobierno={$txtEstadoProceso.seqPlanGobierno}&seqPryEstadoProceso={$seqPryEstadoProceso}', '', true);" >
+                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                        </a>
+                        {/if}
+                        </td>*}
+
                     </tr>
                 {/foreach}
                 <tfoot>
@@ -117,12 +111,11 @@
                         <td>{$totalXVincular}</td>
                         <td>{$totalLeg}</td>
                         <td>{$totalXLegalizar}</td>
+                        {*  <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
-
-                </tfoot>
+                        </tr>
+    
+                        </tfoot>*}
             </table>
         </div>
     </div>

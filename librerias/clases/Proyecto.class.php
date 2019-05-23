@@ -754,8 +754,8 @@ class Proyecto {
                 $valor = (count(explode('txt', $nombre_campo)) > 1) ? NULL : 'NULL';
                 $valor = (count(explode('fch', $nombre_campo)) > 1) ? NULL : NULL;
 
-            if (count(explode('seq', $nombre_campo)) > 1 || count(explode('num', $nombre_campo)) > 1 || count(explode('val', $nombre_campo)) > 1) {
-                   // echo "<br> $" . $nombre_campo . "=> " . $valor;
+                if (count(explode('seq', $nombre_campo)) > 1 || count(explode('num', $nombre_campo)) > 1 || count(explode('val', $nombre_campo)) > 1) {
+                    // echo "<br> $" . $nombre_campo . "=> " . $valor;
                     $valor = 0;
                 }
             }
@@ -1154,7 +1154,7 @@ class Proyecto {
                     $$key = $value[($index)];
                 }
             }
-          //  echo "<br> $".$key ." => ".$value[($index)];
+            //  echo "<br> $".$key ." => ".$value[($index)];
             //if ($txtNombreProyectoHijo != "") {
             $query .= "(
                         '$txtNombreProyectoHijo', 
@@ -2441,21 +2441,22 @@ class Proyecto {
         }
     }
 
-    public function obtenerDatosProyectosTableroPal() {
+    public function obtenerDatosProyectosDependencia() {
 
         global $aptBd;
-        $sql = "select seqPryEstadoProceso, txtPryEstadoProceso, count(pry.seqProyecto) as cantidad, 
-            (select count(seqUnidadProyecto)  from t_pry_unidad_proyecto und 
-            left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
-            left join t_pry_tecnico tec using(seqUnidadProyecto)
-            LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
-            where  pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso  and und.bolActivo = 1 AND seqProyectoGrupo IN (1 , 2) ) as unidades
-             from t_pry_proyecto pry
-            left join t_pry_estado_proceso using(seqPryEstadoProceso) 
-            LEFT JOIN
-            T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
-            WHERE pry.seqProyectoGrupo in (1,2,3) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)            
-            group by seqPryEstadoProceso order by seqPryEstadoProceso DESC ";
+        $sql = "select (select count(*)  from t_pry_proyecto where seqProyectoGrupo = 1 and bolActivo = 1  AND (seqProyectoPadre = 0
+        OR seqProyectoPadre IS NULL)) as canProySdht,
+        (select count(*)  from t_pry_proyecto where seqProyectoGrupo in(2)  and bolActivo = 1 AND (seqProyectoPadre = 0
+        OR seqProyectoPadre IS NULL)) as canProyPublicos,
+        (select count(*)  from t_pry_proyecto 
+        left join t_pry_unidad_proyecto und using(seqProyecto)
+        where seqProyectoGrupo = 1 ) as undProySdht,
+        (select count(*)  from t_pry_proyecto 
+        left join t_pry_unidad_proyecto und using(seqProyecto)
+        where seqProyectoGrupo in(2) ) as undProyPublicos
+         from t_pry_proyecto pry
+         left join t_pry_proyecto_grupo using(seqProyectoGrupo)
+         limit 1";
 
         /* and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI' */
         //echo $sql;
@@ -2468,7 +2469,37 @@ class Proyecto {
         return $datos;
     }
 
-    public function obtenerDatosProyectosEstados($seqPryEstadoProceso) {
+    public function obtenerDatosProyectosTableroPal($seqProyectoGrupo) {
+
+        global $aptBd;
+        $sql = "select seqPryEstadoProceso, txtPryEstadoProceso, count(pry.seqProyecto) as cantidad, 
+            (select count(seqUnidadProyecto)  from t_pry_unidad_proyecto und 
+            left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
+            left join t_pry_tecnico tec using(seqUnidadProyecto)
+            LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
+            where  pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso  and und.bolActivo = 1 AND seqProyectoGrupo IN (" . $seqProyectoGrupo . ") ) as unidades
+             from t_pry_proyecto pry
+            left join t_pry_estado_proceso using(seqPryEstadoProceso) 
+            LEFT JOIN
+            T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
+            WHERE pry.seqProyectoGrupo in (" . $seqProyectoGrupo . ")";
+//          if ($seqProyectoGrupo == 1) {
+        $sql .= " AND (seqProyectoPadre =  0 or seqProyectoPadre is null) and pry.bolActivo = 1 ";
+//          }
+        $sql .= " group by seqPryEstadoProceso order by seqPryEstadoProceso DESC ";
+
+        /* and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI' */
+        //echo $sql;
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
+    public function obtenerDatosProyectosEstados($seqPryEstadoProceso, $seqProyectoGrupo) {
 
         global $aptBd;
         $sql = "SELECT 
@@ -2497,15 +2528,11 @@ class Proyecto {
                             t_pry_unidad_proyecto und
                                 LEFT JOIN
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto
-                                OR und.seqProyecto = pry1.seqProyectoPadre)
-                                LEFT JOIN
-                            t_pry_tecnico tec USING (seqUnidadProyecto)
-                                LEFT JOIN
-                            T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
+                                OR und.seqProyecto = pry1.seqProyectoPadre)                                
                         WHERE
-                            pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                             and und.bolActivo = 1
-                                AND seqProyectoGrupo IN (1 , 2, 3) and 
+                            #pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso and
+                             und.bolActivo = 1
+                                AND seqProyectoGrupo IN (" . $seqProyectoGrupo . ") and 
                                 (und.seqProyecto = pry.seqProyecto or und.seqProyecto = pry.seqProyectoPadre or pry1.seqProyectoPadre = pry.seqProyecto)) 
                                 AS unidades,
                             (SELECT 
@@ -2517,8 +2544,8 @@ class Proyecto {
                                     LEFT JOIN
                                 t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                             WHERE
-                             pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                             AND seqProyectoGrupo IN (1 , 2, 3)
+                             #pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND
+                              seqProyectoGrupo IN (" . $seqProyectoGrupo . ")
                                     AND (und.seqProyecto = pry.seqProyecto
                                     OR und.seqProyecto = pry.seqProyectoPadre
                                     OR pry1.seqProyectoPadre = pry.seqProyecto) and
@@ -2535,8 +2562,8 @@ class Proyecto {
                                 LEFT JOIN
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                         WHERE
-                         pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                                AND seqProyectoGrupo IN (1 , 2, 3)
+                         #pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND
+                                 seqProyectoGrupo IN (" . $seqProyectoGrupo . ")
                                 AND (und.seqProyecto = pry.seqProyecto
                                 OR und.seqProyecto = pry.seqProyectoPadre
                                 OR pry1.seqProyectoPadre = pry.seqProyecto)
@@ -2550,8 +2577,8 @@ class Proyecto {
                                 LEFT JOIN
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                         WHERE
-                        pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                                AND seqProyectoGrupo IN (1 , 2, 3)
+                        #pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND
+                                 seqProyectoGrupo IN (" . $seqProyectoGrupo . ")
                                 AND (und.seqProyecto = pry.seqProyecto
                                 OR und.seqProyecto = pry.seqProyectoPadre
                                 OR pry1.seqProyectoPadre = pry.seqProyecto)
@@ -2564,8 +2591,8 @@ class Proyecto {
                                 OR seqEstadoProceso = 19
                                 OR seqEstadoProceso = 22
                                 OR seqEstadoProceso = 23
-                                OR seqEstadoProceso = 25
-                                OR seqEstadoProceso = 26
+                                    OR seqEstadoProceso = 25
+                                    OR seqEstadoProceso = 26
                                 OR seqEstadoProceso = 27
                                 OR seqEstadoProceso = 28
                                 OR seqEstadoProceso = 31
@@ -2577,14 +2604,15 @@ class Proyecto {
                                  LEFT JOIN
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                                 WHERE 
-                                pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                                 AND (und.seqProyecto = pry.seqProyecto
-                                 AND seqProyectoGrupo IN (1 , 2, 3) AND
+                               # pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND  
+                                (und.seqProyecto = pry.seqProyecto
+                                 AND seqProyectoGrupo IN (" . $seqProyectoGrupo . ") AND
                                 frm.bolCerrado =1  and und.seqFormulario is not null
                                 and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR 
                                 seqEstadoProceso = 16 OR seqEstadoProceso = 47 OR seqEstadoProceso = 56) 
                                 and und.bolActivo =1)) as postuladas,
-                        txtTipoFinanciacion
+                        txtTipoFinanciacion,
+                        (select count(*) AS cantHijos from t_pry_proyecto where seqProyectoPadre = pry.seqProyecto)as cantHijos
                     FROM
                         t_pry_proyecto pry
                             LEFT JOIN
@@ -2599,12 +2627,66 @@ class Proyecto {
                         T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
                     WHERE
                         seqPryEstadoProceso = $seqPryEstadoProceso
-                            AND pry.seqProyectoGrupo IN (1 , 2, 3)
-                            AND (seqProyectoPadre = 0
-                            OR seqProyectoPadre IS NULL)
-                    GROUP BY seqProyecto
+                            AND pry.seqProyectoGrupo IN (" . $seqProyectoGrupo . ")";
+        //  if ($seqProyectoGrupo == 1) {
+        $sql .= " AND (seqProyectoPadre = 0
+                            OR seqProyectoPadre IS NULL)";
+        //    }
+        $sql .= " GROUP BY seqProyecto
                     ORDER BY seqProyecto ASC ";
+        //echo "<p>".$sql."</p>";
         $objRes = $aptBd->execute($sql);
+
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        //var_dump($datos);
+        return $datos;
+    }
+
+    public function determinarSiEsPadre($seqProyecto) {
+        global $aptBd;
+        $sql = "select count(*) AS cantHijos from t_pry_proyecto where seqProyectoPadre =  " . $seqProyecto;
+        $objRes = $aptBd->execute($sql);
+        return $objRes->fields['cantHijos'];
+    }
+
+    public function obtenerDatosProyectosIndividual($seqProyecto) {
+
+        global $aptBd;
+        $sql = "select pry.seqProyecto, pry.txtNombreProyecto, 
+            case when txtNombreConstructor is null 
+            then (select txtNombreConstructor from t_pry_proyecto pry1
+            LEFT JOIN t_pry_constructor USING (seqConstructor) where pry1.seqProyecto = pry.seqProyectoPadre) 
+             else txtNombreConstructor end as txtNombreConstructor , txtLocalidad, txtTipoFinanciacion, "
+                ."(select count(*) as cant from t_pry_unidad_proyecto und1 where und1.seqProyecto = pry.seqProyecto and und1.bolActivo =1) as unidades,"
+                . "(SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und1
+                    LEFT JOIN t_frm_formulario frm USING(seqFormulario)                    
+                    WHERE (frm.bolCerrado =0  OR (und1.seqFormulario IS NULL OR  und1.seqFormulario = 0) and und1.bolActivo =1) and und1.seqProyecto = pry.seqProyecto)  as pendientes, "
+                . "(SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und1
+                    LEFT JOIN t_frm_formulario frm USING(seqFormulario)                     
+                    WHERE frm.bolCerrado =1  and und1.seqFormulario is not null and und1.seqProyecto = pry.seqProyecto
+                    and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16 OR seqEstadoProceso = 47 OR seqEstadoProceso = 56) and und1.bolActivo =1) As postuladas, "
+                . "(SELECT count(*) as cant FROM t_pry_unidad_proyecto und1
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)                    
+                     WHERE seqEstadoProceso = 40 AND bolCerrado = 1 and und1.seqProyecto = pry.seqProyecto) AS legalizadas, "
+                . "(SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und1
+                    LEFT JOIN t_frm_formulario frm USING(seqFormulario)                     
+                    WHERE frm.bolCerrado =1  and und1.seqFormulario is not null
+                    and (seqEstadoProceso = 15 OR seqEstadoProceso = 62 OR seqEstadoProceso = 17
+                    OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
+                    OR seqEstadoProceso = 26 OR seqEstadoProceso = 27 OR seqEstadoProceso = 28 OR seqEstadoProceso = 31
+                    OR seqEstadoProceso = 29 OR seqEstadoProceso = 40) and und1.bolActivo =1 and und1.seqProyecto = pry.seqProyecto) as vinculadas "                
+                . "from t_pry_proyecto pry"
+                . " left join t_pry_constructor using(seqConstructor) "
+                . " LEFT  JOIN t_frm_localidad  USING(seqLocalidad)"               
+                . " LEFT JOIN T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion) "
+                . " where pry.seqProyectoPadre = " . $seqProyecto;
+        //echo "<p>".$sql."</p>";
+        $objRes = $aptBd->execute($sql);
+
         $datos = Array();
         while ($objRes->fields) {
             $datos[] = $objRes->fields;

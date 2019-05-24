@@ -8,6 +8,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 $array = $_SESSION['arrGrupos'];
 $grupos = array();
 $int = 0;
+
 foreach ($array as $key => $value) {
     foreach ($value as $values) {
         $grupos[$int] = $values;
@@ -110,7 +111,7 @@ foreach ($array as $key => $value) {
                     </li>
 
                 <?php } ?>
-                <?php if (in_array("8", $grupos)) { ?>
+                <?php if (in_array("8", $grupos) || in_array("15", $grupos)){ ?>
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=26');">Generaci&oacute;n Certificado Habitabilidad</a></li>
                     <li>
                         <a href="javascript:void(0)"

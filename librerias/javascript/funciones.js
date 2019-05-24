@@ -883,7 +883,8 @@ function agregarMiembroHogar() {
 
 
     var objPlanGobierno = document.getElementById("seqPlanGobierno");
-
+    var tipoEsquema = $("#seqTipoEsquema").val();
+    //alert(tipoEsquema);
     var arrAbreviacionesTipoDocumento = new Array();
     arrAbreviacionesTipoDocumento[1] = "C.C.";
     arrAbreviacionesTipoDocumento[2] = "C.E.";
@@ -921,350 +922,129 @@ function agregarMiembroHogar() {
     var objSeqCajaCompensacion = document.getElementById("cajaCompensacion");
 
     // si es plan de gobierno 3 se activarán las validaciones de soporte de documentos adicionales
-    // var bolValidacionSoporteDocumentos = false;
-    // if (objPlanGobierno.value == 3) {
-    //     bolValidacionSoporteDocumentos = true;
-    // }
-
-    // recoge los datos para soporte de documento y estado civil
-    // var objExpedicion = document.getElementById("expedicion");
-    // var objTipoSoporte = document.getElementById("tipoSoporte");
-    // var objEntidadDocumento = document.getElementById("entidadDocumento");
-    // var objIndicativoSerial = document.getElementById("indicativoSerial");
-    // var objNotariaDocumento = document.getElementById("notariaDocumento");
-    // var objCiudadDocumento = document.getElementById("ciudadDocumento");
-    // var objConsecutivoPartida = document.getElementById("consecutivoPartida");
-    // var objParroquiaPartida = document.getElementById("parroquiaPartida");
-    // var objCiudadPartida = document.getElementById("ciudadPartida");
-    // var objConsecutivoCasado = document.getElementById("consecutivoCasado");
-    // var objNotariaCasado = document.getElementById("notariaCasado");
-    // var objCiudadCasado = document.getElementById("ciudadCasado");
-    // var objConsecutivoCSCDL = document.getElementById("consecutivoCSCDL");
-    // var objEntidadCSCDL = document.getElementById("entidadCSCDL");
-    // var objCiudadCSCDL = document.getElementById("ciudadCSCDL");
-    // var objNotariaCSCDL = document.getElementById("notariaCSCDL");
-    // var objCertificacionUnion = document.getElementById("certificacionUnion");
-    // var objConsecutivoUnion = document.getElementById("consecutivoUnion");
-    // var objEntidadUnion = document.getElementById("entidadUnion");
-    // var objNotariaUnion = document.getElementById("notariaUnion");
-    // var objCiudadUnion = document.getElementById("ciudadUnion");
-    // var objNotariaSoltero = document.getElementById("notariaSoltero");
-    // var objCiudadSoltero = document.getElementById("ciudadSoltero");
-    // var objTipoVinculacion = document.getElementById("tipoVinculacion");
+    // var bolValidacionSoporteDocumentos = false;   
 
     var numDocumento = objNumDocumento.value.replace(/[^0-9]/g, "");
     var valIngresos = objIngresos.value.replace(/[^0-9]/g, "");
 
-    // Si el nivel educativo es ninguno no valida los anios aprobados
-    if ($("#nivelEducativo").val() == 0) {
-        alert("Seleccione el nivel educativo");
-        objNvlEducativo.focus();
-        return false;
-    } else {
-        if ($("#nivelEducativo").val() != 1) {
-            if (objAnosAprobados != null) {
-                if ($("#numAnosAprobados").val() == "" || $("#numAnosAprobados").val() == 0) {
-                    alert("Seleccione los a" + String.fromCharCode(241) + "os aprobados");
-                    objAnosAprobados.focus();
-                    return false;
+    if (tipoEsquema != 16 && tipoEsquema != 17) {
+        // Si el nivel educativo es ninguno no valida los anios aprobados
+        if ($("#nivelEducativo").val() == 0) {
+            alert("Seleccione el nivel educativo");
+            objNvlEducativo.focus();
+            return false;
+        } else {
+            if ($("#nivelEducativo").val() != 1) {
+                if (objAnosAprobados != null) {
+                    if ($("#numAnosAprobados").val() == "" || $("#numAnosAprobados").val() == 0) {
+                        alert("Seleccione los a" + String.fromCharCode(241) + "os aprobados");
+                        objAnosAprobados.focus();
+                        return false;
+                    }
                 }
             }
         }
     }
-
     // Celda que contiene los miembros del hogar
     var objHogar = document.getElementById("datosHogar");
 
-    // Validacion del tipo de documento
-    if (objTpoDocumento.value == 0) {
-        alert("Debe seleccionar el tipo de documento");
-        objTpoDocumento.focus();
-        return false;
-    }
-
-    // Tiene que tener numero de documento
-    if (objNumDocumento.value == "") {
-        alert("No puede registrar una persona sin el numero de docuemnto");
-        objNumDocumento.focus();
-        return false;
-    }
-
-    // if (bolValidacionSoporteDocumentos == true) {
-    //
-    //     // valida la fecha de expedicion de la cedula
-    //     if(objTpoDocumento.value == 1){
-    //         if (!esFechaValida(objExpedicion)) {
-    //             objExpedicion.focus()
-    //             return false;
-    //         }
-    //     }
-    //
-    //     // valida el tipo de soporte
-    //     if(objTipoSoporte.value == ""){
-    //         alert("Seleccione el tipo de soporte para el documento de identidad");
-    //         objTipoSoporte.focus()
-    //         return false;
-    //     }
-    //
-    //     // validaciones para el soporte del documento con registro civil
-    //     if (objTipoSoporte.value == "registroCivil") {
-    //
-    //         // entidad del soporte del tipo de documento
-    //         if (objEntidadDocumento.value == "") {
-    //             alert("Seleccione la entidad del soporte del tipo de documento");
-    //             objEntidadDocumento.focus();
-    //             return false;
-    //         }
-    //
-    //         // indicativo serial del soporte del tipo de documento
-    //         if (objIndicativoSerial.value == "") {
-    //             alert("Seleccione el indicativo serial del soporte del tipo de documento");
-    //             objIndicativoSerial.focus();
-    //             return false;
-    //         }
-    //
-    //         // Notaria documento del soporte del tipo de documento
-    //         if (objEntidadDocumento.value == "Notaria" && ( objNotariaDocumento.value == "" || objNotariaDocumento.value == 0) ) {
-    //             alert("Notaria del soporte del tipo de documento");
-    //             objNotariaDocumento.focus();
-    //             return false;
-    //         }
-    //
-    //         // Ciudad documento del soporte del tipo de documento
-    //         if (objCiudadDocumento.value == 0) {
-    //             alert("Digita la ciudad del soporte del tipo de documento");
-    //             objCiudadDocumento.focus();
-    //             return false;
-    //         }
-    //
-    //     }
-    //
-    //     // validaciones para el soporte del documento con registro civil
-    //     if (objTipoSoporte.value == "partidaBautismo") {
-    //
-    //         // consecutivo
-    //         if (objConsecutivoPartida.value == "") {
-    //             alert("Digita el consecutivo del soporte del tipo de documento");
-    //             objConsecutivoPartida.focus();
-    //             return false;
-    //         }
-    //
-    //         // Parroquia
-    //         if (objParroquiaPartida.value == "") {
-    //             alert("Digita la parroquia del soporte del tipo de documento");
-    //             objParroquiaPartida.focus();
-    //             return false;
-    //         }
-    //
-    //         // Ciudad
-    //         if (objCiudadPartida.value == 0) {
-    //             alert("Seleccione la ciudad del soporte del tipo de documento");
-    //             objCiudadPartida.focus();
-    //             return false;
-    //         }
-    //
-    //     }
-    //
-    // }
-
-    // Primer Apellido no puede estar vacio
-    if (objApellido1.value == "") {
-        alert("El primer apellido no puede estar vac" + String.fromCharCode(237) + "o");
-        objApellido1.focus();
-        return false;
-    }
-
-    // Primer Nombre no puede estar vacio
-    if (objNombre1.value == "") {
-        alert("El primer nombre no puede estar vac" + String.fromCharCode(237) + "o");
-        objNombre1.focus();
-        return false;
-    }
-
-    // Tiene que tener numero de documento
-    if (objNumDocumento.value == "") {
-        alert("No puede registrar una persona sin el numero de docuemnto");
-        objNumDocumento.focus();
-        return false;
-    }
-
-    // Valida que la fecha sea correcta
-    if (!$('input[name=bolSoloSeguimiento]').prop('checked')) {
-        if (!esFechaValida(objFchNacimiento)) {
-            objFchNacimiento.focus()
+    if (tipoEsquema != 16 && tipoEsquema != 17) {
+        // Validacion del tipo de documento
+        if (objTpoDocumento.value == 0) {
+            alert("Debe seleccionar el tipo de documento");
+            objTpoDocumento.focus();
             return false;
         }
-    }
+
+        // Tiene que tener numero de documento
+        if (objNumDocumento.value == "") {
+            alert("No puede registrar una persona sin el numero de docuemnto");
+            objNumDocumento.focus();
+            return false;
+        }
 
 
-    // Debe tener ingresos mensuales
-    if (objIngresos.value == "") {
-        alert("Debe registrar el ingreso mensual del ciudadano");
-        objIngresos.focus();
-        return false;
-    }
 
-    // tipo de vinculacion si es solo mayor de edad
-    // if (bolValidacionSoporteDocumentos == true) {
-    //
-    //     var objFechaActual = new Date();
-    //     var objFechaNacimiento = new Date(objFchNacimiento.value);
-    //     var numEdad = Math.round( ( objFechaActual - objFechaNacimiento ) / (1000 * 60 * 60 * 24 * 365) , 0 );
-    //
-    //     if(
-    //         (objTpoDocumento.selectedIndex == 1 || objTpoDocumento.selectedIndex == 2) ||
-    //         (objTpoDocumento.selectedIndex == 3 && numEdad >= 18)
-    //     ){
-    //         if(objTipoVinculacion.selectedIndex == 0){
-    //             alert("Debe seleccionar el tipo de vinculación");
-    //         }
-    //     }
-    //
-    // }
+        // Primer Apellido no puede estar vacio
 
-    // Debe tener parentesco
-    if (objParentesco.selectedIndex == 0) {
-        alert("Debe registrar el parentezco del ciudadano");
-        objParentesco.focus();
-        return false;
-    }
+        if (objApellido1.value == "") {
+            alert("El primer apellido no puede estar vac" + String.fromCharCode(237) + "o");
+            objApellido1.focus();
+            return false;
+        }
 
-    // Debe tener estado civil
-    if (objEstCivil.selectedIndex == 0) {
-        alert("Debe registrar el estado civil del ciudadano");
-        objEstCivil.focus();
-        return false;
-    }
+        // Primer Nombre no puede estar vacio
+        if (objNombre1.value == "") {
+            alert("El primer nombre no puede estar vac" + String.fromCharCode(237) + "o");
+            objNombre1.focus();
+            return false;
+        }
 
-    // validaciones para el soporte de documento del estado civil
-    // if (bolValidacionSoporteDocumentos == true) {
-    //
-    //     if (objEstCivil.value == 6) {
-    //
-    //         if (objConsecutivoCasado.value == "") {
-    //             alert("Digite el consecutivo del soporte de estado civil");
-    //             objConsecutivoCasado.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objNotariaCasado.value == "" || objNotariaCasado.value == 0) {
-    //             alert("Digite la notaria del soporte de estado civil");
-    //             objNotariaCasado.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objCiudadCasado.value == 0) {
-    //             alert("Seleccione la ciudad del soporte de estado civil");
-    //             objCiudadCasado.focus();
-    //             return false;
-    //         }
-    //
-    //     }
-    //
-    //     if (objEstCivil.value == 8) {
-    //
-    //         if (objConsecutivoCSCDL.value == "") {
-    //             alert("Digite el consecutivo del soporte de estado civil");
-    //             objConsecutivoCSCDL.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objEntidadCSCDL.value == "") {
-    //             alert("Digite la entidad del soporte de estado civil");
-    //             objEntidadCSCDL.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objCiudadCSCDL.value == 0) {
-    //             alert("Seleccione la ciudad del soporte de estado civil");
-    //             objCiudadCSCDL.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objEntidadCSCDL.value == "Notaria" && (objNotariaCSCDL.value == "" || objNotariaCSCDL.value == 0) ) {
-    //             alert("Digite la notaria del soporte de estado civil");
-    //             objNotariaCSCDL.focus();
-    //             return false;
-    //         }
-    //
-    //     }
-    //
-    //     if (objEstCivil.value == 2) {
-    //
-    //         if (objNotariaSoltero.value == "" || objNotariaSoltero.value == 0) {
-    //             alert("Digite la notaria del soporte de estado civil");
-    //             objNotariaSoltero.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objCiudadSoltero.value == 0) {
-    //             alert("Seleccione la ciudad del soporte de estado civil");
-    //             objCiudadSoltero.focus();
-    //             return false;
-    //         }
-    //
-    //     }
-    //
-    //     if (objEstCivil.value == 7) {
-    //
-    //         if (objCertificacionUnion.value == 0) {
-    //             alert("Seleccione el tipo de certificación del soporte de estado civil");
-    //             objCertificacionUnion.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objConsecutivoUnion.value == "") {
-    //             alert("Digite el consecutivo del soporte de estado civil");
-    //             objConsecutivoUnion.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objEntidadUnion.value == 0) {
-    //             alert("Seleccione la entidad del soporte de estado civil");
-    //             objEntidadUnion.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objEntidadUnion.value == "Notaria" && (objNotariaUnion.value == "" || objNotariaUnion.value == 0) ) {
-    //             alert("Digite la notaria del soporte de estado civil");
-    //             objNotariaUnion.focus();
-    //             return false;
-    //         }
-    //
-    //         if (objCiudadUnion.value == 0) {
-    //             alert("Seleccione la ciudad del soporte de estado civil");
-    //             objCiudadUnion.focus();
-    //             return false;
-    //         }
-    //
-    //     }
-    //
-    // }
+        // Tiene que tener numero de documento
+        if (objNumDocumento.value == "") {
+            alert("No puede registrar una persona sin el numero de docuemnto");
+            objNumDocumento.focus();
+            return false;
+        }
 
-    // Si el nivel educativo es ninguno no valida los anios aprobados
-    if ($("#nivelEducativo").val() == 0) {
-        alert("Seleccione el nivel educativo");
-        objNvlEducativo.focus();
-        return false;
-    } else {
-        if ($("#nivelEducativo").val() != 1) {
-            if (objAnosAprobados != null) {
-                if ($("#numAnosAprobados").val() == "" || $("#numAnosAprobados").val() == 0) {
-                    alert("Seleccione los a" + String.fromCharCode(241) + "os aprobados");
-                    objAnosAprobados.focus();
-                    return false;
+        // Valida que la fecha sea correcta
+        if (!$('input[name=bolSoloSeguimiento]').prop('checked')) {
+            if (!esFechaValida(objFchNacimiento)) {
+                objFchNacimiento.focus()
+                return false;
+            }
+        }
+
+
+        // Debe tener ingresos mensuales
+        if (objIngresos.value == "") {
+            alert("Debe registrar el ingreso mensual del ciudadano");
+            objIngresos.focus();
+            return false;
+        }
+
+
+
+        // Debe tener parentesco
+        if (objParentesco.selectedIndex == 0) {
+            alert("Debe registrar el parentezco del ciudadano");
+            objParentesco.focus();
+            return false;
+        }
+
+        // Debe tener estado civil
+        if (objEstCivil.selectedIndex == 0) {
+            alert("Debe registrar el estado civil del ciudadano");
+            objEstCivil.focus();
+            return false;
+        }
+
+
+
+        // Si el nivel educativo es ninguno no valida los anios aprobados
+        if ($("#nivelEducativo").val() == 0) {
+            alert("Seleccione el nivel educativo");
+            objNvlEducativo.focus();
+            return false;
+        } else {
+            if ($("#nivelEducativo").val() != 1) {
+                if (objAnosAprobados != null) {
+                    if ($("#numAnosAprobados").val() == "" || $("#numAnosAprobados").val() == 0) {
+                        alert("Seleccione los a" + String.fromCharCode(241) + "os aprobados");
+                        objAnosAprobados.focus();
+                        return false;
+                    }
                 }
             }
         }
-    }
 
-    // Afiliacion a salud
-    if (objSeqSalud.selectedIndex == 0) {
-        alert("Debe seleccionar la afiliacion a salud");
-        objSeqSalud.focus();
-        return false;
+        // Afiliacion a salud
+        if (objSeqSalud.selectedIndex == 0) {
+            alert("Debe seleccionar la afiliacion a salud");
+            objSeqSalud.focus();
+            return false;
+        }
     }
-
     // Validacion de cedula -- Si ya esta incluido
     var arrMiembros = objHogar.getElementsByTagName("table");
     for (i = 0; i < arrMiembros.length; i++) {

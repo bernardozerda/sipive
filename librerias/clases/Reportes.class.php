@@ -3363,7 +3363,8 @@ if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01','Sin Clasific
                 bcr.txtBanco AS Banco_Credito,
                 ets.txtEntidadSubsidio AS Entidad_Subsidio,
                 edn.txtEmpresaDonante AS Entidad_Donante,
-                fac.fchUltimaActualizacion AS Fecha_Actualizacion
+                fac.fchUltimaActualizacion AS Fecha_Actualizacion,
+                fac.fchLegalizado As 'fecha Legalizacion'
             FROM T_AAD_ACTO_ADMINISTRATIVO aad
             LEFT JOIN T_AAD_HOGARES_VINCULADOS hvi ON aad.fchActo = hvi.fchActo AND aad.numActo = hvi.numActo
             LEFT JOIN T_AAD_FORMULARIO_ACTO fac ON hvi.seqFormularioActo = fac.seqFormularioActo

@@ -50,7 +50,7 @@ $sql = "
 if (isset($_REQUEST['seqProyecto'])) {
     $sql .= " And (CASE WHEN pry.seqProyectoPadre > 0  then pry.seqProyectoPadre = " . $_REQUEST['seqProyecto'] . " else pry.seqProyecto =" . $_REQUEST['seqProyecto'] . " end)";
 }
-
+ $sql .= " ORDER BY pryP.txtNombreProyecto, und.seqUnidadProyecto ASC ";
 //echo $sql."<br>"; die();
 $arrRegistros = $aptBd->GetAll($sql);
 foreach ($arrRegistros as $numLinea => $arrRegistro) {

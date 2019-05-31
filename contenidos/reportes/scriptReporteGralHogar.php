@@ -451,7 +451,7 @@ function generarArchivo($objRes, $name) {
     $txtSeparador = "\t";
     $arrTitulosCampos = array_keys($objRes->fields);
     fwrite($archivo, utf8_decode(implode($txtSeparador, $arrTitulosCampos)) . "\r\n");
-    echo utf8_decode(implode($txtSeparador, $arrTitulosCampos)) . "\r\n";
+     utf8_decode(implode($txtSeparador, $arrTitulosCampos)) . "\r\n";
     while ($objRes->fields) {
         $dato = (utf8_decode(implode($txtSeparador, preg_replace("/\s+/", " ", $objRes->fields))));
         $dato = str_replace('&nbsp;', ' ', $dato); // Reemplaza caracter por espacios
@@ -463,6 +463,7 @@ function generarArchivo($objRes, $name) {
         fwrite($archivo, $dato . "\r\n");
         $objRes->MoveNext();
     }
+    echo " \n fin";
     fclose($archivo);
     //copy($rutaDestino . "/" . $name . ".xls", "//SDHT-0596-P9/Users/liliana.basto/Documents/compartida");
     //copy($rutaDestino."/".$archivo,"http://192.168.3.16/d:");

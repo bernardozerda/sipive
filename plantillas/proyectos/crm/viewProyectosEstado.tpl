@@ -61,9 +61,9 @@
                 <th class="title1"><div class="title1">UNIDADES</div></th>
                 <th class="title1"><div class="title1">NO VINCULADAS</div></th>
                 <th class="title1"><div class="title1">LEGALIZADAS</div></th>
-                <th class="title1"><div class="title1">X LEGALIZAR</div></th>
+                <th class="title1"><div class="title1">POR LEGALIZAR</div></th>
                 <td class="title1"><div class="title1">DETALLE</div></td>
-                <td class="title1"><div class="title1">HIJOS</div></td>
+                <td class="title1"><div class="title1">SUB - PROY</div></td>
                 <td class="title1"><div class="title1">&nbsp;</div></td>
                 </tr>
                 </thead>
@@ -105,14 +105,18 @@
                         </td>
                         <td align="center">
                             <a href="#"
-                               onclick="location.href='./contenidos/otros/analisisUnidadesAsignadas/analisisUnidadesAsignadas.php?&seqProyecto={$txtEstadoProceso.seqProyecto}'" >
+                               onclick="location.href = './contenidos/otros/analisisUnidadesAsignadas/analisisUnidadesAsignadas.php?&seqProyecto={$txtEstadoProceso.seqProyecto}'" >
                                 <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                             </a></td>
                     </tr>
                 {/foreach}
                 <tfoot>
                     <tr style="text-align: center; font-weight: bold; font-size: 12px">
-                        <td colspan="5">TOTAL</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>TOTAL</td>
                         <td>{$totalSoluciones}</td>
                         <td>{$totalXVincular}</td>
                         <td>{$totalLeg}</td>

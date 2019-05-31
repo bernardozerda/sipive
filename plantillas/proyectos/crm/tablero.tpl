@@ -70,9 +70,11 @@
                 {/foreach}
                 <tfoot>
                     <tr style="text-align: center; font-weight: bold; font-size: 12px">
-                        <td colspan="2">TOTAL</td>
+                        <td >&nbsp;</td>
+                        <td>TOTAL</td>
                         <td>{$totalCant}</td>
                         <td>{$totalUnd}</td>
+                        <td >&nbsp;</td>
                     </tr>
                 </tfoot>
             </table>

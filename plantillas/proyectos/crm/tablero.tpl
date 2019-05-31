@@ -21,6 +21,9 @@
         </style>
     {/literal}
     <br><br>
+    <div class="alert alert-danger">
+        <h5> <strong>Atención!!! </strong> <b>Esta información esta sujeta a verificación y actualizacion.</b></h5>
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="col-lg-9 col-md-9" style="top: 10px">

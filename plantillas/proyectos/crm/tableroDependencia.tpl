@@ -18,6 +18,9 @@
     {/literal}
     <body>
         <br><br>
+        <div class="alert alert-danger">
+            <h5> <strong>Atención!!! </strong> <b>Esta información esta sujeta a verificación y actualizacion.</b></h5>
+        </div>
         <table  class="table table-striped table-bordered" cellspacing="0" width="100%" >
             <thead>
                 <tr>

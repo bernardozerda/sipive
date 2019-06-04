@@ -24,6 +24,8 @@ $claDatosProyecto = new DatosGeneralesProyectos();
 
 $txtPlantilla = "proyectos/vistas/reportes/fichaTecnica.tpl";
 $seqProyecto = $_GET['seqProyecto'];
+$id =  $_GET['id'];
+$tipo =  $_GET['tipo'];
 $seqPryEstadoProceso = 0;
 $arrProyectos = $claProyecto->obtenerDatosProyectosFicha($seqProyecto);
 $arrDatosVivienda = $claProyecto->obtenerDatosViviendaFicha($seqProyecto);
@@ -186,6 +188,8 @@ $arrFinanciera[$seqProyecto]['entidadFiducia'] = array_shift(obtenerDatosTabla(
         ));
 
 $claSmarty->assign("arrProyectos", $arrProyectos);
+$claSmarty->assign("id", $id);
+$claSmarty->assign("tipo", $tipo);
 $claSmarty->assign("cantUnidades", $cantUnidades);
 $claSmarty->assign("cantUnidadesVinculadas", $cantUnidadesVinculadas);
 $claSmarty->assign("pendientesPorVincular", $pendientesPorVincular);

@@ -37,11 +37,14 @@
                                         <input type="hidden" id="txtArchivo" name="txtArchivo" value="./contenidos/administracionProyectos/salvarSeguimientoFicha.php" />
                                         <div id="val_numSeguimientoFicha" class="divError">Debe diligenciar el consecutivo del seguimiento</div>
                                     </div>
-                                    <div class="col-md-4"> 
+                                    <div class="col-md-2"> 
                                         <label class="control-label" >Fecha De Reporte</label>
-                                        <input name="fchSeguimientoFicha" type="text" id="fchSeguimientoFicha" value="{$value.fchSeguimientoFicha}" size="12" readonly=""  class="form-control required"  style="width: 60%; position: relative; float: left">
-                                        {if $value.bolCerrar!= 1}  <a href="#" onclick="javascript: calendarioPopUp('fchSeguimientoFicha');"><img src="recursos/imagenes/calendar.png" style="cursor: hand;width: 9%; position: relative; float: left; left: 2%"></a>{/if}
-                                        <div id="val_fchSeguimientoFicha" class="divError">Debe diligenciar la fecha del seguimiento</div>                                  
+                                        <input name="fchSeguimientoFicha" type="text" id="fchSeguimientoFicha" value="{$value.fchSeguimientoFicha}" style="max-width: 100% " readonly=""  class="form-control required" >
+                                       <div id="val_fchSeguimientoFicha" class="divError">Debe diligenciar la fecha del seguimiento</div>                              
+                                    </div> 
+                                    <div class="col-md-2"> 
+                                        <label class="control-label" >&nbsp;</label><br>
+                                        {if $value.bolCerrar!= 1}<a href="#" onclick="javascript: calendarioPopUp('fchSeguimientoFicha');"><img src="recursos/imagenes/calendar.png" style="width: 20% "></a>{/if}                       
                                     </div>  
                                     <div class="col-md-4"> 
                                         <label class="control-label" >Cerrar</label> <br>

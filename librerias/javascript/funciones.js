@@ -11915,3 +11915,59 @@ function editorAyuda() {
 }
 YAHOO.util.Event.onContentReady("editorAyuda", editorAyuda);
 
+function eliminarInformeVeedurias(seqCorte) {
+
+    var txtMensaje = "<div style='text-align:left'>";
+    txtMensaje += "<span class='msgOK'>Esta Seguro que Desea Borrar los Reportes?</span>";
+    txtMensaje += "</div>";
+
+
+    // COMPORTAMIENTO SI SE PRESIONA -- SI -- EN EL CUADRO
+    var handleYes = function () {
+        cargarContenido(
+                'mensajes',
+                './contenidos/reportes/informesVeeduria/eliminarInformeVeeduria.php',
+                'seqCorte=' + seqCorte,
+                true
+                );
+        this.cancel();
+    }
+
+    // COMPORTAMIENTO SI SE PRESIONA -- NO -- EN EL CUADRO
+    var handleNo = function () {
+        document.getElementById("mensajes").innerHTML = "";
+        this.cancel();
+    }
+    var objAtributos = {
+        width: "300px",
+        effect: {
+            effect: YAHOO.widget.ContainerEffect.FADE,
+            duration: 0.75
+        },
+        fixedcenter: true,
+        visible: false,
+        modal: true,
+        draggable: true,
+        close: false,
+        text: txtMensaje,
+        buttons: [
+            {
+                text: "Si",
+                handler: handleYes
+            },
+            {
+                text: "No",
+                handler: handleNo,
+                isDefault: true
+            }
+        ]
+    }
+
+    // INSTANCIA EL OBJETO DIALOGO
+    var objDialogo = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
+
+    // Muestra el cuadro de dialogo
+    objDialogo.render(document.body);
+    objDialogo.show();
+
+}

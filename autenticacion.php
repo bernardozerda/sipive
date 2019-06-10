@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * ESTE ES EL INICIO DEL APLICATIVO, SI NO HAY SESION
  * ACTIVA, EL INDEX REDIRECCIONA AQUI.
@@ -10,11 +9,10 @@
  * @version 1.0 Abril 2009
  * @version 1.1 Noviembre 2017
  */
-
 session_start();
 
 // solo funciona bajo https
-define("HTTPS_ONLY", true);
+define("HTTPS_ONLY", false);
 
 // Tiempo de validez de la sesion en segundos
 define("TIMEOUT", 1800);
@@ -23,20 +21,14 @@ define("TIMEOUT", 1800);
 if (isset($_SESSION["sdhtsdv"]) or isset($_COOKIE['sdhtsdv'])) {
     unset($_SESSION["sdhtsdv"]);
     setcookie(
-        "sdhtsdv",
-        time() - TIMEOUT,
-        time() - TIMEOUT,
-        "/",
-        null,
-        HTTPS_ONLY,
-        false
+            "sdhtsdv", time() - TIMEOUT, time() - TIMEOUT, "/", null, HTTPS_ONLY, false
     );
     session_destroy();
     unset($_POST);
 }
 
 // verifica que este en https
-if(HTTPS_ONLY == true) {
+if (HTTPS_ONLY == true) {
     if (strtolower(trim($_SERVER['HTTPS'])) != "on") {
         header("Location: ./redireccionamiento.php");
     }
@@ -194,13 +186,7 @@ if (isset($_POST['btnSalvar']) and intval($_POST['btnSalvar']) == 1) {
 
         // Registra la cookie
         $bolCookie = setcookie(
-            "sdhtsdv",
-            time() + TIMEOUT,
-            time() + TIMEOUT,
-            "/",
-            null,
-            HTTPS_ONLY,
-            false
+                "sdhtsdv", time() + TIMEOUT, time() + TIMEOUT, "/", null, HTTPS_ONLY, false
         );
 
         if ($bolCookie) {
@@ -212,18 +198,10 @@ if (isset($_POST['btnSalvar']) and intval($_POST['btnSalvar']) == 1) {
             } else {
                 header("Location:./panelControl.php");
             }
-
         } else { // Error registrando la cookie
-
             $arrErrores['otros'][] = "No se ha podido registrar la sesion";
             setcookie(
-                "sdhtsdv",
-                time() - TIMEOUT,
-                time() - TIMEOUT,
-                "/",
-                null,
-                HTTPS_ONLY,
-                false
+                    "sdhtsdv", time() - TIMEOUT, time() - TIMEOUT, "/", null, HTTPS_ONLY, false
             );
             session_destroy();
         }
@@ -233,11 +211,7 @@ if (isset($_POST['btnSalvar']) and intval($_POST['btnSalvar']) == 1) {
 // Recogiendo los posibles sitios
 $arrPuntos[1] = "Ninguno";
 $arrPuntos = obtenerDatosTabla(
-    "T_FRM_PUNTO_ATENCION",
-    array("seqPuntoAtencion","txtPuntoAtencion"),
-    "seqPuntoAtencion",
-    "seqPuntoAtencion > 1 and bolMostrar = 1",
-    "txtPuntoAtencion ASC"
+        "T_FRM_PUNTO_ATENCION", array("seqPuntoAtencion", "txtPuntoAtencion"), "seqPuntoAtencion", "seqPuntoAtencion > 1 and bolMostrar = 1", "txtPuntoAtencion ASC"
 );
 $arrPuntos = array(1 => "NINGUNO") + $arrPuntos;
 

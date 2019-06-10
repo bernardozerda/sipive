@@ -22,10 +22,16 @@ $claProyecto = new Proyecto();
 
 
 $id = $_REQUEST['id'];
+$tipo = $_REQUEST['tipo'];
+
 if ($id == 4) {
     $txtPlantilla = "proyectos/vistas/inscripcionUnidades.tpl";
 } else {
     $txtPlantilla = "proyectos/vistas/cambioEstadoUnidades.tpl";
+    if ($tipo == 2) {
+        
+        $txtPlantilla = "proyectos/vistas/cambioDatosUnidades.tpl";
+    }
 }
 
 $idProyecto = $_REQUEST['seqProyecto'];
@@ -47,7 +53,7 @@ $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);
 $claSmarty->assign("arrayProyectos", $arrayProyectos);
 $claSmarty->assign("idProyecto", $idProyecto);
 $claSmarty->assign("id", $id);
-$claSmarty->assign("tipo", 3);
+$claSmarty->assign("tipo", $tipo);
 $claSmarty->assign("onload", "listenerFile('fileAction', 'nameArchivo')");
 $claSmarty->assign("page", "datosProyecto.php?id=" . $id);
 if ($txtPlantilla != "") {

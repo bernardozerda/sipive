@@ -38,6 +38,7 @@ if( empty($arrErrores) ) {
 
     // carga el tipo de acto a salvar
     $seqTipoActo = $_POST['seqTipoActo'];
+    echo "paso => ".$seqTipoActo;
     $claTipoActo = array_shift($claTipoActo->cargarTipoActo($arrTipoActo[$seqTipoActo]->seqTipoActo));
 
     // valida los datos del formulario
@@ -52,19 +53,22 @@ if( empty($arrErrores) ) {
         if (empty($arrActos)) {
 
             // abre el archivo y lo carga en un arreglo
+            if($seqTipoActo != 12 )
             $arrArchivo = $claTipoActo->cargarArchivo();
 
             // si hay errores
             if (empty($claTipoActo->arrErrores)) {
 
+                if($seqTipoActo != 12 )
                 $claTipoActo->validarTitulos($arrArchivo[0]);
 
                 if (empty($claTipoActo->arrErrores)) {
 
+                    if($seqTipoActo != 12 )
                     $claTipoActo->validarDatos($arrArchivo);
 
                     if (empty($claTipoActo->arrErrores)) {
-
+                        
                         $claActo->salvar($_POST, $arrArchivo);
 
                         if (empty($claActo->arrErrores)) {

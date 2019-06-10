@@ -882,7 +882,7 @@ class aadProyectos {
                 $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'], true);
                 $seqUnidadProyecto = 0;
                 foreach ($arrFormato[1]['rango'] as $seqUnidad => $arrUnidad) {
-                    if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower($arrUnidad['txtNombreUnidad']) == mb_strtolower($arrLinea[1])) {
+                    if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower(trim($arrUnidad['txtNombreUnidad'])) == mb_strtolower(trim($arrLinea[1]))) {
                         $seqUnidadProyecto = $seqUnidad;
                         break;
                     }

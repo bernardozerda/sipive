@@ -447,7 +447,7 @@ function generarArchivo($objRes, $name) {
         mkdir($rutaDestino, 0777, true);
     }
     $archivo = fopen($rutaDestino . "/" . $name . ".xls", "w");
-    echo "\n prueba";
+    //echo "\n prueba";
     $txtSeparador = "\t";
     $arrTitulosCampos = array_keys($objRes->fields);
     fwrite($archivo, utf8_decode(implode($txtSeparador, $arrTitulosCampos)) . "\r\n");

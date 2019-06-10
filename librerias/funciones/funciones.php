@@ -174,6 +174,7 @@ function obtenerNombres($txtTabla, $txtCampo, $txtValor) {
     $arrConversiones["txtUnidadProyecto"] = "txtNombreUnidad";
     $arrConversiones["seqProyectoHijo"] = "seqProyecto";
     $arrConversiones["txtProyectoHijo"] = "txtNombreProyecto";
+    $arrConversiones["seqPlanGobierno"] = "seqPlanGobierno";
 
     switch (true) {
         case $txtTabla == "":

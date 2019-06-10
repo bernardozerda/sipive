@@ -48,8 +48,12 @@ class SeguimientoProyectos {
         $this->arrConversionCampos['txtNombrePlanParcial']['tabla'] = "";
         $this->arrConversionCampos['seqTipoEsquema']['nombre'] = "Tipo de Esquema";
         $this->arrConversionCampos['seqTipoEsquema']['tabla'] = "T_PRY_TIPO_ESQUEMA";
+        $this->arrConversionCampos['seqPlanGobierno']['nombre'] = "Plan de Gobierno";
+        $this->arrConversionCampos['seqPlanGobierno']['tabla'] = "t_frm_plan_gobierno";
         $this->arrConversionCampos['seqPryTipoModalidad']['nombre'] = "Tipo de Modalidad";
         $this->arrConversionCampos['seqPryTipoModalidad']['tabla'] = "T_PRY_TIPO_MODALIDAD";
+        $this->arrConversionCampos['seqModalidad']['nombre'] = "Tipo de Modalidad";
+        $this->arrConversionCampos['seqModalidad']['tabla'] = "t_frm_modalidad";
         $this->arrConversionCampos['seqOpv']['nombre'] = "OPV";
         $this->arrConversionCampos['seqOpv']['tabla'] = "T_PRY_OPV";
         $this->arrConversionCampos['seqTipoProyecto']['nombre'] = "Tipo de Proyecto";
@@ -85,7 +89,7 @@ class SeguimientoProyectos {
         $this->arrConversionCampos['seqConstructor']['nombre'] = "Constructor";
         $this->arrConversionCampos['seqConstructor']['tabla'] = "T_PRY_CONSTRUCTOR";
 
-        // CONVERSION DE LOS CAMPOS DEL OFERENTE
+        // CONVERSION DE LOS CAMPOS DE LA UNIDAD
         $this->arrConversionCampos['seqEstadoUnidad']['unidad'] = "Unidad";
 
 
@@ -123,6 +127,7 @@ class SeguimientoProyectos {
         $this->arrConversionCampos['numTProfesionalInterventor']['nombre'] = "Tarjeta Profesional del Interventor";
         $this->arrConversionCampos['numTProfesionalInterventor']['tabla'] = "";
 
+        
         // CAMPOS QUE NO SE MOSTRARAN POR AHROA
         $this->arrIgnorarCampos[] = "";
         $this->arrIgnorarCampos[] = "arrErrores";
@@ -134,7 +139,7 @@ class SeguimientoProyectos {
         $this->arrIgnorarCampos[] = "seqProfesionalResponsable";
         $this->arrIgnorarCampos[] = "valMaximoSubsidio";
         $this->arrIgnorarCampos[] = "valCierreFinanciero";
-        $this->arrIgnorarCampos[] = "seqTipoEsquema";
+        # $this->arrIgnorarCampos[] = "seqTipoEsquema";
         $this->arrIgnorarCampos[] = "bolEquipamientoComunal";
         $this->arrIgnorarCampos[] = "txtArchivo";
         $this->arrIgnorarCampos[] = "txtComentario";
@@ -287,7 +292,7 @@ class SeguimientoProyectos {
     }
 
     function parserTextoCambios($txtTextoCambio) {
-
+        //pr($txtTextoCambio);
         // se reemplaza el tabulador por los espacios
         $txtTabulador = str_repeat("&nbsp;", 5);
 
@@ -304,11 +309,13 @@ class SeguimientoProyectos {
             if (count($arrLinea) == 1) {
                 $arrLineas[$numLinea][0] = "<b>" . ereg_replace("\t", $txtTabulador, $txtLinea) . "</b>";
             } else {
+                //pr($arrLinea);
                 foreach ($arrLinea as $numOtraLinea => $txtValor) {
                     if ($numOtraLinea == 0) {
                         $txtCampo = trim($txtValor);
                         $txtCampo = ereg_replace($txtTabulador, "", $txtCampo);
                         if (!in_array($txtCampo, $this->arrIgnorarCampos)) {
+                            //echo "<br>".$txtCampo ." => ".$this->arrConversionCampos[$txtCampo]['nombre'];
                             if (isset($this->arrConversionCampos[$txtCampo])) {
                                 $txtTexto = $this->arrConversionCampos[$txtCampo]['nombre'];
                             } else {

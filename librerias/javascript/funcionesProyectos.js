@@ -354,7 +354,7 @@ function addFideicomitente() {
     fType += "<div class=\"col-md-3\"><p>&nbsp;</p></div>";
     fieldWrapper.append(fType);
     $("#fideicomiso").append(fieldWrapper);
-   // activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentesAdd.php', intId);
+    // activarAutocompletar('txtNombreFideicomitente', 'txtNombreFideicomitenteContenedor', './contenidos/cruces2/fideicomitentesAdd.php', intId);
 }
 
 function activarAutocompletar(txtInput, contenedor, url, cant) {
@@ -474,22 +474,35 @@ function dataForm_Archivos(formulario) {
 function obtenerPlantillaUnidades(tipo) {
 
     var valid = true;
-    //console.log("proyecto " + $('select[name=seqProyecto]').val());
+    // console.log("proyecto " + $('#customFile').val());
     if (($('select[name=seqProyecto]').val() == "" || $('select[name=seqProyecto]').val() == null) && tipo == 1) {
         $("#mensajes").html("<div class='alert alert-danger'><h5>Alerta!!! seleccione un proyecto </h5></div>");
         $("#seqProyecto").css("border", "1px solid #ccc");
         $("#val_seqProyecto").css("display", "inline");
         valid = false;
     }
-    if (($('select[name=seqProyectoPadre]').val() == "" || $('select[name=seqProyectoPadre]').val() == null) && tipo == 2) {
-        $("#mensajes").html("<div class='alert alert-danger'><h5>Alerta!!! seleccione un proyecto </h5></div>");
-        $("#seqProyectoPadre").css("border", "1px solid #ccc");
-        $("#val_seqProyectoPadre").css("display", "inline");
+    if (tipo == 2 || tipo == 3) {
+        if (($('select[name=seqProyectoPadre]').val() == "" || $('select[name=seqProyectoPadre]').val() == null)) {
+            $("#mensajes").html("<div class='alert alert-danger'><h5>Alerta!!! seleccione un proyecto </h5></div>");
+            $("#seqProyectoPadre").css("border", "1px solid #ccc");
+            $("#val_seqProyectoPadre").css("display", "inline");
+            valid = false;
+        }
+    }
+
+    if (($('#customFile').val() == "" || $('#customFile').val() == null) && tipo == 3) {
+        $("#mensajes").html("<div class='alert alert-danger'><h5>Alerta!!! seleccione un archivo </h5></div>");
+        $("#customFile").css("border", "1px solid #ccc");
+        $("#val_customFile").css("display", "inline");
         valid = false;
     }
+    console.log("valid **  " + valid);
     if (valid) {
         if (tipo == 1) {
             location.href = './contenidos/proyectos/plantillas/plantillaUnidades.php?seqProyecto=' + $('select[name=seqProyecto]').val();
+        }
+        else if (tipo == 3) {
+            return valid;
         } else {
             location.href = './contenidos/proyectos/plantillas/plantillaEstadoUnidades.php?seqProyecto=' + $('select[name=seqProyectoPadre]').val();
         }
@@ -860,7 +873,7 @@ var allDate = function () {
             if (id.split("fch") != null && id.split("fch") != 'undefined' && id.split("fch") != "" && id.split("fch")[1] != "") {
                 var fch = id.split("fch");
                 if (fch[1] != 'undefined' && fch[1] != null && fch[1] != '') {
-                   // console.log("attr id:" + id);
+                    // console.log("attr id:" + id);
                     $('#' + id).datetimepicker({
                         language: 'es',
                         format: 'yyyy-mm-dd',

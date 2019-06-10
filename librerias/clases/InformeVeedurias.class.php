@@ -6,8 +6,7 @@
  * Date: 15/08/2017
  * Time: 05:57 PM
  */
-class InformeVeedurias
-{
+class InformeVeedurias {
 
     public $arrErrores;
     public $seqCorte;
@@ -18,22 +17,20 @@ class InformeVeedurias
     private $arrEstadosLegalizado;
     private $arrFuentesExcel;
 
-    function __construct()
-    {
+    function __construct() {
         $this->arrErrores = array();
         $this->seqCorte = 0;
         $this->txtCorte = "";
         $this->fchCorte = null;
         $this->txtNombre = "";
-        $this->arrEstadosVinculado = array( 15, 62, 17, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 40 );
-        $this->arrEstadosLegalizado = array( 40 );
+        $this->arrEstadosVinculado = array(15, 62, 17, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 40);
+        $this->arrEstadosLegalizado = array(40);
         $this->arrFuentesExcel = array();
     }
 
-    public function obtenerCortes($seqCorte = 0)
-    {
+    public function obtenerCortes($seqCorte = 0) {
         global $aptBd;
-        $txtCondicion = ( $seqCorte == 0 )? "" : "WHERE seqCorte = " . $seqCorte;
+        $txtCondicion = ( $seqCorte == 0 ) ? "" : "WHERE seqCorte = " . $seqCorte;
         $sql = "
             SELECT 
               seqCorte,
@@ -47,8 +44,7 @@ class InformeVeedurias
         return $aptBd->GetAll($sql);
     }
 
-    public function reporteProyectos($seqCorte)
-    {
+    public function reporteProyectos($seqCorte) {
         global $aptBd;
 
 
@@ -190,9 +186,9 @@ class InformeVeedurias
         $arrFormularios = array();
         while ($objRes->fields) {
 
-            /***************************************************************************
+            /*             * *************************************************************************
              * PROCESAMIENTO DE LA HOJA DE REPORTE
-             ***************************************************************************/
+             * ************************************************************************* */
 
             $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
             $bolDesplazado = $objRes->fields['bolDesplazado'];
@@ -201,55 +197,51 @@ class InformeVeedurias
             unset($objRes->fields['seqFormularioVeeduria']);
 
             // debe acumular sobre proyecto padre cuando aplique
-            $txtProyecto = ( trim( $objRes->fields['txtNombreProyectoPadre'] ) != "" )? $objRes->fields['txtNombreProyectoPadre'] : $objRes->fields['txtNombreProyectoHijo'];
+            $txtProyecto = ( trim($objRes->fields['txtNombreProyectoPadre']) != "" ) ? $objRes->fields['txtNombreProyectoPadre'] : $objRes->fields['txtNombreProyectoHijo'];
 
             // Determina el año menor y mayor para imprimir el numero de columnas correcto en el excel (XML)
             $numAnioResolucionProyecto = date("Y", strtotime($objRes->fields['fchActoProyecto']));
 
             $arrReporte['Conteo Consolidado']['limites']['generados']['minimo'] = (
-                ($arrReporte['Conteo Consolidado']['limites']['generados']['minimo'] == 0) or
-                ($arrReporte['Conteo Consolidado']['limites']['generados']['minimo'] >= $numAnioResolucionProyecto)
-            ) ?
-                $numAnioResolucionProyecto :
-                $arrReporte['Conteo Consolidado']['limites']['generados']['minimo'];
+                    ($arrReporte['Conteo Consolidado']['limites']['generados']['minimo'] == 0) or ( $arrReporte['Conteo Consolidado']['limites']['generados']['minimo'] >= $numAnioResolucionProyecto)
+                    ) ?
+                    $numAnioResolucionProyecto :
+                    $arrReporte['Conteo Consolidado']['limites']['generados']['minimo'];
 
             $arrReporte['Conteo Consolidado']['limites']['generados']['maximo'] = (
-                ($arrReporte['Conteo Consolidado']['limites']['generados']['maximo'] == 0) or
-                ($arrReporte['Conteo Consolidado']['limites']['generados']['maximo'] <= $numAnioResolucionProyecto)
-            ) ?
-                $numAnioResolucionProyecto :
-                $arrReporte['Conteo Consolidado']['limites']['generados']['maximo'];
+                    ($arrReporte['Conteo Consolidado']['limites']['generados']['maximo'] == 0) or ( $arrReporte['Conteo Consolidado']['limites']['generados']['maximo'] <= $numAnioResolucionProyecto)
+                    ) ?
+                    $numAnioResolucionProyecto :
+                    $arrReporte['Conteo Consolidado']['limites']['generados']['maximo'];
 
             $arrReporte['Dinero Consolidado']['limites']['generados']['minimo'] = (
-                ($arrReporte['Dinero Consolidado']['limites']['generados']['minimo'] == 0) or
-                ($arrReporte['Dinero Consolidado']['limites']['generados']['minimo'] >= $numAnioResolucionProyecto)
-            ) ?
-                $numAnioResolucionProyecto :
-                $arrReporte['Dinero Consolidado']['limites']['generados']['minimo'];
+                    ($arrReporte['Dinero Consolidado']['limites']['generados']['minimo'] == 0) or ( $arrReporte['Dinero Consolidado']['limites']['generados']['minimo'] >= $numAnioResolucionProyecto)
+                    ) ?
+                    $numAnioResolucionProyecto :
+                    $arrReporte['Dinero Consolidado']['limites']['generados']['minimo'];
 
             $arrReporte['Dinero Consolidado']['limites']['generados']['maximo'] = (
-                ($arrReporte['Dinero Consolidado']['limites']['generados']['maximo'] == 0) or
-                ($arrReporte['Dinero Consolidado']['limites']['generados']['maximo'] <= $numAnioResolucionProyecto)
-            ) ?
-                $numAnioResolucionProyecto :
-                $arrReporte['Dinero Consolidado']['limites']['generados']['maximo'];
+                    ($arrReporte['Dinero Consolidado']['limites']['generados']['maximo'] == 0) or ( $arrReporte['Dinero Consolidado']['limites']['generados']['maximo'] <= $numAnioResolucionProyecto)
+                    ) ?
+                    $numAnioResolucionProyecto :
+                    $arrReporte['Dinero Consolidado']['limites']['generados']['maximo'];
 
-            if( $objRes->fields['seqTipoActoUnidad'] == 1 ){
+            if ($objRes->fields['seqTipoActoUnidad'] == 1) {
                 $txtNombreResolucion = $objRes->fields['numActoProyecto'] . " de " . date("Y", strtotime($objRes->fields['fchActoProyecto']));
             }
 
             // de acuerdo al tipo de aad de proyecto suma o resta
             // para las indexaciones va calculando el valor de la unidad
-            switch( $objRes->fields['seqTipoActoUnidad'] ){
+            switch ($objRes->fields['seqTipoActoUnidad']) {
                 case 1: // Asignacion de unidades
 
-                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto]++;
-                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total']++;
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] ++;
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total'] ++;
 
                     $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] += $objRes->fields['valIndexado'];
                     $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total'] += $objRes->fields['valIndexado'];
 
-                    $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
+                    $arrReporte['Proyectos'][$seqUnidadProyecto]['valIndexado'] += $objRes->fields['valIndexado'];
 
                     break;
                 case 2: // Indexacion de unidades
@@ -258,104 +250,94 @@ class InformeVeedurias
                     $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total'] += $objRes->fields['valIndexado'];
 
                     // calcular el valor definitivo de la unidad
-                    $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
+                    $arrReporte['Proyectos'][$seqUnidadProyecto]['valIndexado'] += $objRes->fields['valIndexado'];
 
                     break;
                 case 3: // modificatoria (valor positivo incluye unidades // valor negativo excluye unidades)
 
-                    if( $objRes->fields['valIndexado'] > 0 ){
-                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto]++;
-                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total']++;
-                    }else{
-                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] =
-                            intval($arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto]) -
-                            1;
+                    if ($objRes->fields['valIndexado'] > 0) {
+                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] ++;
+                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total'] ++;
+                    } else {
+                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] = intval($arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto]) -
+                                1;
 
-                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total']--;
+                        $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total'] --;
                     }
 
                     $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados'][$numAnioResolucionProyecto] += $objRes->fields['valIndexado'];
                     $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['generados']['total'] += $objRes->fields['valIndexado'];
 
-                    $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] += $objRes->fields['valIndexado'];
+                    $arrReporte['Proyectos'][$seqUnidadProyecto]['valIndexado'] += $objRes->fields['valIndexado'];
 
                     break;
             }
 
             // conteo para las columnas de vinculados segun el estado del proceso
-            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosVinculado ) ) {
+            if ($objRes->fields['bolCerrado'] == 1 and in_array($objRes->fields['seqEstadoProceso'], $this->arrEstadosVinculado)) {
 
                 $numAnioResolucionHogar = date("Y", strtotime($objRes->fields['fchActoHogar']));
 
                 // limites para vinculados
                 $arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'] = (
-                    ($arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'] == 0) or
-                    ($arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
-                )?
-                    $numAnioResolucionHogar :
-                    $arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'];
+                        ($arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'] == 0) or ( $arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
+                        ) ?
+                        $numAnioResolucionHogar :
+                        $arrReporte['Conteo Consolidado']['limites']['vinculados']['minimo'];
 
                 $arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'] = (
-                    ($arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'] == 0) or
-                    ($arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
-                )?
-                    $numAnioResolucionHogar :
-                    $arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'];
+                        ($arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'] == 0) or ( $arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
+                        ) ?
+                        $numAnioResolucionHogar :
+                        $arrReporte['Conteo Consolidado']['limites']['vinculados']['maximo'];
 
                 // limites para vidulados desplazados y vulnerables
                 $arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'] = (
-                    ($arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'] == 0) or
-                    ($arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
-                )?
-                    $numAnioResolucionHogar :
-                    $arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'];
+                        ($arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'] == 0) or ( $arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
+                        ) ?
+                        $numAnioResolucionHogar :
+                        $arrReporte[$bolDesplazado]['limites']['vinculados']['minimo'];
 
                 $arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'] = (
-                    ($arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'] == 0) or
-                    ($arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
-                )?
-                    $numAnioResolucionHogar :
-                    $arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'];
+                        ($arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'] == 0) or ( $arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
+                        ) ?
+                        $numAnioResolucionHogar :
+                        $arrReporte[$bolDesplazado]['limites']['vinculados']['maximo'];
 
                 // limites para los vinculados en dinero
                 $arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'] = (
-                    ($arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'] == 0) or
-                    ($arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
-                )?
-                    $numAnioResolucionHogar :
-                    $arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'];
+                        ($arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'] == 0) or ( $arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
+                        ) ?
+                        $numAnioResolucionHogar :
+                        $arrReporte['Dinero Consolidado']['limites']['vinculados']['minimo'];
 
                 $arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'] = (
-                    ($arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'] == 0) or
-                    ($arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
-                )?
-                    $numAnioResolucionHogar :
-                    $arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'];
+                        ($arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'] == 0) or ( $arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
+                        ) ?
+                        $numAnioResolucionHogar :
+                        $arrReporte['Dinero Consolidado']['limites']['vinculados']['maximo'];
 
                 // limites para desplazados o vulnerables dinero
                 $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'] = (
-                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'] == 0) or
-                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
-                )?
-                    $numAnioResolucionHogar :
-                    $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'];
+                        ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'] == 0) or ( $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'] >= $numAnioResolucionHogar)
+                        ) ?
+                        $numAnioResolucionHogar :
+                        $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['minimo'];
 
                 $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'] = (
-                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'] == 0) or
-                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
-                )?
-                    $numAnioResolucionHogar :
-                    $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'];
+                        ($arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'] == 0) or ( $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'] <= $numAnioResolucionHogar)
+                        ) ?
+                        $numAnioResolucionHogar :
+                        $arrReporte['Dinero ' . $bolDesplazado]['limites']['vinculados']['maximo'];
 
                 // conteos
-                if( ! isset( $arrFormularios[$seqFormulario] ) ) {
+                if (!isset($arrFormularios[$seqFormulario])) {
 
-                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar]++;
-                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total']++;
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar] ++;
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total'] ++;
 
-                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar]++;
-                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total']++;
-
+                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar] ++;
+                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total'] ++;
                 }
 
                 $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar] += $objRes->fields['valIndexado'];
@@ -363,81 +345,72 @@ class InformeVeedurias
 
                 $arrReporte['Dinero ' . $bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados'][$numAnioResolucionHogar] += $objRes->fields['valIndexado'];
                 $arrReporte['Dinero ' . $bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['vinculados']['total'] += $objRes->fields['valIndexado'];
-
             }
 
             // conteo para las columnas de legalizados segun el estado del proceso
-            if( $objRes->fields['bolCerrado'] == 1 and in_array( $objRes->fields['seqEstadoProceso'] , $this->arrEstadosLegalizado ) ){
+            if ($objRes->fields['bolCerrado'] == 1 and in_array($objRes->fields['seqEstadoProceso'], $this->arrEstadosLegalizado)) {
 
                 $numAnioLegalizado = date("Y", strtotime($objRes->fields['fchLegalizado']));
 
                 // limites para legalizados
                 $arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'] = (
-                    ($arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'] == 0) or
-                    ($arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
-                )?
-                    $numAnioLegalizado :
-                    $arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'];
+                        ($arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'] == 0) or ( $arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
+                        ) ?
+                        $numAnioLegalizado :
+                        $arrReporte['Conteo Consolidado']['limites']['legalizados']['minimo'];
 
                 $arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'] = (
-                    ($arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'] == 0) or
-                    ($arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
-                )?
-                    $numAnioLegalizado :
-                    $arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'];
+                        ($arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'] == 0) or ( $arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
+                        ) ?
+                        $numAnioLegalizado :
+                        $arrReporte['Conteo Consolidado']['limites']['legalizados']['maximo'];
 
                 // limites para desplazados y vulnerables legalizados
                 $arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'] = (
-                    ($arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'] == 0) or
-                    ($arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
-                )?
-                    $numAnioLegalizado :
-                    $arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'];
+                        ($arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'] == 0) or ( $arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
+                        ) ?
+                        $numAnioLegalizado :
+                        $arrReporte[$bolDesplazado]['limites']['legalizados']['minimo'];
 
                 $arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'] = (
-                    ($arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'] == 0) or
-                    ($arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
-                )?
-                    $numAnioLegalizado :
-                    $arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'];
+                        ($arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'] == 0) or ( $arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
+                        ) ?
+                        $numAnioLegalizado :
+                        $arrReporte[$bolDesplazado]['limites']['legalizados']['maximo'];
 
                 // limites para dinero legalizados
                 $arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'] = (
-                    ($arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'] == 0) or
-                    ($arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
-                )?
-                    $numAnioLegalizado :
-                    $arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'];
+                        ($arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'] == 0) or ( $arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
+                        ) ?
+                        $numAnioLegalizado :
+                        $arrReporte['Dinero Consolidado']['limites']['legalizados']['minimo'];
 
                 $arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'] = (
-                    ($arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'] == 0) or
-                    ($arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
-                )?
-                    $numAnioLegalizado :
-                    $arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'];
+                        ($arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'] == 0) or ( $arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
+                        ) ?
+                        $numAnioLegalizado :
+                        $arrReporte['Dinero Consolidado']['limites']['legalizados']['maximo'];
 
                 // limites para dinero legalizados
                 $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'] = (
-                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'] == 0) or
-                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
-                )?
-                    $numAnioLegalizado :
-                    $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'];
+                        ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'] == 0) or ( $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'] >= $numAnioLegalizado)
+                        ) ?
+                        $numAnioLegalizado :
+                        $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['minimo'];
 
                 $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'] = (
-                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'] == 0) or
-                    ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
-                )?
-                    $numAnioLegalizado :
-                    $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'];
+                        ($arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'] == 0) or ( $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'] <= $numAnioLegalizado)
+                        ) ?
+                        $numAnioLegalizado :
+                        $arrReporte['Dinero ' . $bolDesplazado]['limites']['legalizados']['maximo'];
 
                 // conteos
-                if( ! isset( $arrFormularios[$seqFormulario] ) ) {
-                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado]++;
-                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total']++;
+                if (!isset($arrFormularios[$seqFormulario])) {
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado] ++;
+                    $arrReporte['Conteo Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total'] ++;
 
-                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado]++;
-                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total']++;
+                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado] ++;
+                    $arrReporte[$bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total'] ++;
                 }
 
                 $arrReporte['Dinero Consolidado']['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado] += $objRes->fields['valIndexado'];
@@ -445,110 +418,109 @@ class InformeVeedurias
 
                 $arrReporte['Dinero ' . $bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados'][$numAnioLegalizado] += $objRes->fields['valIndexado'];
                 $arrReporte['Dinero ' . $bolDesplazado]['datos'][$txtProyecto][$txtNombreResolucion]['legalizados']['total'] += $objRes->fields['valIndexado'];
-
             }
 
             // se usa mas adelante para completar la informacion de la hoja de hogares
-            if( intval( $seqFormulario ) != 0 ) {
+            if (intval($seqFormulario) != 0) {
                 $arrFormularios[$seqFormulario]['numResolucion'] = $objRes->fields['numActoHogar'];
                 $arrFormularios[$seqFormulario]['fchResolucion'] = $objRes->fields['fchActoHogar'];
             }
 
             // Prepara los datos para la hoja de proyectos
-            $txtNombreProyectoPadre = (trim($objRes->fields['txtNombreProyectoPadre']) != "")? trim($objRes->fields['txtNombreProyectoPadre']) : trim($objRes->fields['txtNombreProyectoHijo']);
-            $txtNombreProyectoHijo  = (trim($objRes->fields['txtNombreProyectoHijo']) != "")? trim($objRes->fields['txtNombreProyectoHijo']) : "No Aplica";
-            $txtNitProyecto         = (trim($objRes->fields['txtNitProyectoPadre']) != "")? trim( $objRes->fields['txtNitProyectoPadre'] ) : trim( $objRes->fields['txtNitProyectoHijo'] );
-            $txtLocalidad           = (trim($objRes->fields['txtLocalidadPadre']) != "")?  trim($objRes->fields['txtLocalidadPadre']) : trim($objRes->fields['txtLocalidadHijo']);
-            $txtBarrio              = (trim($objRes->fields['txtBarrioPadre']) != "")? trim($objRes->fields['txtBarrioPadre']) : trim($objRes->fields['txtBarrioHijo']);
-            $txtNombreOferente1     = (trim($objRes->fields['txtNombreOferentePadre1']) != "")? trim($objRes->fields['txtNombreOferentePadre1']) : trim($objRes->fields['txtNombreOferenteHijo1']);
-            $numNitOferente1        = (trim($objRes->fields['numNitOferentePadre1']) != "")? trim($objRes->fields['numNitOferentePadre1']) : trim($objRes->fields['numNitOferenteHijo1']);
-            $txtNombreOferente2     = (trim($objRes->fields['txtNombreOferentePadre2']) != "")? trim($objRes->fields['txtNombreOferentePadre2']) : trim($objRes->fields['txtNombreOferenteHijo2']);
-            $numNitOferente2        = (trim($objRes->fields['numNitOferentePadre2']) != "")? trim($objRes->fields['numNitOferentePadre2']) : trim($objRes->fields['numNitOferenteHijo2']);
-            $txtNombreOferente3     = (trim($objRes->fields['txtNombreOferentePadre3']) != "")? trim($objRes->fields['txtNombreOferentePadre3']) : trim($objRes->fields['txtNombreOferenteHijo3']);
-            $numNitOferente3        = (trim($objRes->fields['numNitOferentePadre3']) != "")? trim($objRes->fields['numNitOferentePadre3']) : trim($objRes->fields['numNitOferenteHijo3']);
-            $txtNombreConstructor   = (trim($objRes->fields['txtNombreConstructorPadre']) != "")? trim($objRes->fields['txtNombreConstructorPadre']) : trim($objRes->fields['txtNombreConstructorHijo']);
-            $txtNombreVendedor      = (trim($objRes->fields['txtNombreVendedorPadre']) != "")? trim($objRes->fields['txtNombreVendedorPadre']) : trim($objRes->fields['txtNombreVendedorHijo']);
-            $numNitVendedor         = (trim($objRes->fields['txtNitVendedorPadre']) != "")? trim($objRes->fields['txtNitVendedorPadre']) : trim($objRes->fields['txtNitVendedorHijo']);
+            $txtNombreProyectoPadre = (trim($objRes->fields['txtNombreProyectoPadre']) != "") ? trim($objRes->fields['txtNombreProyectoPadre']) : trim($objRes->fields['txtNombreProyectoHijo']);
+            $txtNombreProyectoHijo = (trim($objRes->fields['txtNombreProyectoHijo']) != "") ? trim($objRes->fields['txtNombreProyectoHijo']) : "No Aplica";
+            $txtNitProyecto = (trim($objRes->fields['txtNitProyectoPadre']) != "") ? trim($objRes->fields['txtNitProyectoPadre']) : trim($objRes->fields['txtNitProyectoHijo']);
+            $txtLocalidad = (trim($objRes->fields['txtLocalidadPadre']) != "") ? trim($objRes->fields['txtLocalidadPadre']) : trim($objRes->fields['txtLocalidadHijo']);
+            $txtBarrio = (trim($objRes->fields['txtBarrioPadre']) != "") ? trim($objRes->fields['txtBarrioPadre']) : trim($objRes->fields['txtBarrioHijo']);
+            $txtNombreOferente1 = (trim($objRes->fields['txtNombreOferentePadre1']) != "") ? trim($objRes->fields['txtNombreOferentePadre1']) : trim($objRes->fields['txtNombreOferenteHijo1']);
+            $numNitOferente1 = (trim($objRes->fields['numNitOferentePadre1']) != "") ? trim($objRes->fields['numNitOferentePadre1']) : trim($objRes->fields['numNitOferenteHijo1']);
+            $txtNombreOferente2 = (trim($objRes->fields['txtNombreOferentePadre2']) != "") ? trim($objRes->fields['txtNombreOferentePadre2']) : trim($objRes->fields['txtNombreOferenteHijo2']);
+            $numNitOferente2 = (trim($objRes->fields['numNitOferentePadre2']) != "") ? trim($objRes->fields['numNitOferentePadre2']) : trim($objRes->fields['numNitOferenteHijo2']);
+            $txtNombreOferente3 = (trim($objRes->fields['txtNombreOferentePadre3']) != "") ? trim($objRes->fields['txtNombreOferentePadre3']) : trim($objRes->fields['txtNombreOferenteHijo3']);
+            $numNitOferente3 = (trim($objRes->fields['numNitOferentePadre3']) != "") ? trim($objRes->fields['numNitOferentePadre3']) : trim($objRes->fields['numNitOferenteHijo3']);
+            $txtNombreConstructor = (trim($objRes->fields['txtNombreConstructorPadre']) != "") ? trim($objRes->fields['txtNombreConstructorPadre']) : trim($objRes->fields['txtNombreConstructorHijo']);
+            $txtNombreVendedor = (trim($objRes->fields['txtNombreVendedorPadre']) != "") ? trim($objRes->fields['txtNombreVendedorPadre']) : trim($objRes->fields['txtNombreVendedorHijo']);
+            $numNitVendedor = (trim($objRes->fields['txtNitVendedorPadre']) != "") ? trim($objRes->fields['txtNitVendedorPadre']) : trim($objRes->fields['txtNitVendedorHijo']);
 
-            /***************************************************************************
+            /*             * *************************************************************************
              * PROCESAMIENTO DE LA HOJA DE PROYECTOS
-             ***************************************************************************/
+             * ************************************************************************* */
 
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'seqUnidadProyecto' ]  = $seqUnidadProyecto;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'seqFormulario' ]      = $objRes->fields['seqFormularioUnidad'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Proyecto Padre' ]     = $txtNombreProyectoPadre;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Proyecto Hijo' ]      = $txtNombreProyectoHijo;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Nit Proyecto' ]       = $txtNitProyecto;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Localidad Proyecto' ] = $txtLocalidad;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Barrio Proyecto' ]    = $txtBarrio;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Oferente 1' ]         = $txtNombreOferente1;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 1' ]     = $numNitOferente1;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Oferente 2' ]         = $txtNombreOferente2;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 2' ]     = $numNitOferente2;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Oferente 3' ]         = $txtNombreOferente3;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Nit Oferente 3' ]     = $numNitOferente3;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Constructor' ]        = $txtNombreConstructor;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Vendedor' ]           = $txtNombreVendedor;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Nit Vendedor' ]       = $numNitVendedor;
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Unidad' ]                 = $objRes->fields['txtNombreUnidad'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmobiliaria' ] = $objRes->fields['txtMatriculaInmobiliaria'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'CHIP' ]                   = $objRes->fields['txtChipLote'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'SDVE Aprobado' ]          = $objRes->fields['valSDVEAprobado'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'SDVE Actual' ]            = $objRes->fields['valSDVEActual'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'SDVE Complementario' ]    = $objRes->fields['valSDVEComplementario'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Valor Indexado' ]         = $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Legalizado' ]             = $objRes->fields['bolLegalizado'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Fecha de Legalización' ]  = $objRes->fields['fchLegalizado'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Plan de Gobierno' ]       = $objRes->fields['txtPlanGobierno'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Modalidad' ]              = $objRes->fields['txtModalidad'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Unidad Activa' ]          = $objRes->fields['bolActivo'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Vendedor Escriturado' ]               = $objRes->fields['numDocumentoVendedor'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Tipo de Vivienda' ]                   = $objRes->fields['txtCompraVivienda'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Dirección Escriturada' ]              = $objRes->fields['txtDireccionInmueble'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Ciudad Escriturada' ]                 = $objRes->fields['txtCiudad'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Localidad Escriturada' ]              = $objRes->fields['txtLocalidad'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Barrio Escriturado' ]                 = $objRes->fields['txtBarrio'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Propiedad' ]                          = $objRes->fields['txtPropiedad'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Escritura' ]                          = $objRes->fields['txtEscritura'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Fecha Escritura' ]                    = $objRes->fields['fchEscritura'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Notaria Escritura' ]                  = $objRes->fields['numNotaria'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Ciudad Escritura' ]                   = $objRes->fields['txtCiudadEscritura'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Fecha de Sentencia' ]                 = $objRes->fields['fchSentencia'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Juzgado Sentencia' ]                  = $objRes->fields['numJuzgado'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Ciudad Sentencia' ]                   = $objRes->fields['txtCiudadSentencia'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Resolución' ]                         = $objRes->fields['numResolucion'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Fecha de Resolución' ]                = $objRes->fields['fchResolucion'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Entidad de Reslolución' ]             = $objRes->fields['txtEntidad'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Ciudad Resolución' ]                  = $objRes->fields['txtCiudadResolucion'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Matricula Inmoviliaria Escriturada' ] = $objRes->fields['txtMatriculaInmobiliariaEscriturada'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'CHIP Escriturado' ]                   = $objRes->fields['txtChip'];
-            $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'Tipo de Predio' ]                     = $objRes->fields['txtTipoPredio'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['seqUnidadProyecto'] = $seqUnidadProyecto;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['seqFormulario'] = $objRes->fields['seqFormularioUnidad'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Proyecto Padre'] = $txtNombreProyectoPadre;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Proyecto Hijo'] = $txtNombreProyectoHijo;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Nit Proyecto'] = $txtNitProyecto;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Localidad Proyecto'] = $txtLocalidad;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Barrio Proyecto'] = $txtBarrio;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Oferente 1'] = $txtNombreOferente1;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Nit Oferente 1'] = $numNitOferente1;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Oferente 2'] = $txtNombreOferente2;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Nit Oferente 2'] = $numNitOferente2;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Oferente 3'] = $txtNombreOferente3;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Nit Oferente 3'] = $numNitOferente3;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Constructor'] = $txtNombreConstructor;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Vendedor'] = $txtNombreVendedor;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Nit Vendedor'] = $numNitVendedor;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Unidad'] = $objRes->fields['txtNombreUnidad'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Matricula Inmobiliaria'] = $objRes->fields['txtMatriculaInmobiliaria'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['CHIP'] = $objRes->fields['txtChipLote'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['SDVE Aprobado'] = $objRes->fields['valSDVEAprobado'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['SDVE Actual'] = $objRes->fields['valSDVEActual'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['SDVE Complementario'] = $objRes->fields['valSDVEComplementario'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Valor Indexado'] = $arrReporte['Proyectos'][$seqUnidadProyecto]['valIndexado'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Legalizado'] = $objRes->fields['bolLegalizado'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Fecha de Legalización'] = $objRes->fields['fchLegalizado'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Plan de Gobierno'] = $objRes->fields['txtPlanGobierno'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Modalidad'] = $objRes->fields['txtModalidad'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Unidad Activa'] = $objRes->fields['bolActivo'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Vendedor Escriturado'] = $objRes->fields['numDocumentoVendedor'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Tipo de Vivienda'] = $objRes->fields['txtCompraVivienda'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Dirección Escriturada'] = $objRes->fields['txtDireccionInmueble'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Ciudad Escriturada'] = $objRes->fields['txtCiudad'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Localidad Escriturada'] = $objRes->fields['txtLocalidad'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Barrio Escriturado'] = $objRes->fields['txtBarrio'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Propiedad'] = $objRes->fields['txtPropiedad'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Escritura'] = $objRes->fields['txtEscritura'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Fecha Escritura'] = $objRes->fields['fchEscritura'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Notaria Escritura'] = $objRes->fields['numNotaria'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Ciudad Escritura'] = $objRes->fields['txtCiudadEscritura'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Fecha de Sentencia'] = $objRes->fields['fchSentencia'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Juzgado Sentencia'] = $objRes->fields['numJuzgado'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Ciudad Sentencia'] = $objRes->fields['txtCiudadSentencia'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Resolución'] = $objRes->fields['numResolucion'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Fecha de Resolución'] = $objRes->fields['fchResolucion'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Entidad de Reslolución'] = $objRes->fields['txtEntidad'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Ciudad Resolución'] = $objRes->fields['txtCiudadResolucion'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Matricula Inmoviliaria Escriturada'] = $objRes->fields['txtMatriculaInmobiliariaEscriturada'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['CHIP Escriturado'] = $objRes->fields['txtChip'];
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Tipo de Predio'] = $objRes->fields['txtTipoPredio'];
 
-            /***************************************************************************
+            /*             * *************************************************************************
              * PROCESAMIENTO DE LA HOJA DE RESOLUCIONES
-             ***************************************************************************/
+             * ************************************************************************* */
 
-            $numPosicion = count( $arrReporte['resoluciones'] );
-            $arrReporte['resoluciones'][ $numPosicion ]['seqUnidadProyecto'] = $seqUnidadProyecto;
-            $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Padre'] = $txtNombreProyectoPadre;
-            $arrReporte['resoluciones'][ $numPosicion ]['Proyecto Hijo'] = $txtNombreProyectoHijo;
-            $arrReporte['resoluciones'][ $numPosicion ]['Nombre Unidad'] = $objRes->fields['txtNombreUnidad'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Tipo Resolución'] = $objRes->fields['txtTipoActoUnidad'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Numero Resolución'] = $objRes->fields['numActoProyecto'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Fecha Resolución'] = $objRes->fields['fchActoProyecto'];
-            $arrReporte['resoluciones'][ $numPosicion ]['Año Resolución'] = (esFechaValida($objRes->fields['fchActoProyecto']))?
-                date("Y" , strtotime($objRes->fields['fchActoProyecto'])) :
-                "";
+            $numPosicion = count($arrReporte['resoluciones']);
+            $arrReporte['resoluciones'][$numPosicion]['seqUnidadProyecto'] = $seqUnidadProyecto;
+            $arrReporte['resoluciones'][$numPosicion]['Proyecto Padre'] = $txtNombreProyectoPadre;
+            $arrReporte['resoluciones'][$numPosicion]['Proyecto Hijo'] = $txtNombreProyectoHijo;
+            $arrReporte['resoluciones'][$numPosicion]['Nombre Unidad'] = $objRes->fields['txtNombreUnidad'];
+            $arrReporte['resoluciones'][$numPosicion]['Tipo Resolución'] = $objRes->fields['txtTipoActoUnidad'];
+            $arrReporte['resoluciones'][$numPosicion]['Numero Resolución'] = $objRes->fields['numActoProyecto'];
+            $arrReporte['resoluciones'][$numPosicion]['Fecha Resolución'] = $objRes->fields['fchActoProyecto'];
+            $arrReporte['resoluciones'][$numPosicion]['Año Resolución'] = (esFechaValida($objRes->fields['fchActoProyecto'])) ?
+                    date("Y", strtotime($objRes->fields['fchActoProyecto'])) :
+                    "";
             $arrReporte['resoluciones'][$numPosicion]['Valor Indexación'] = $objRes->fields['valIndexado'];
-            switch($objRes->fields['seqTipoActoUnidad']){
+            switch ($objRes->fields['seqTipoActoUnidad']) {
                 case 1:
                     $arrReporte['resoluciones'][$numPosicion]['Observación'] = "Generacion";
                     break;
                 case 2:
-                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Indexación Positiva" : "Indexación Negativa";
+                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0) ? "Indexación Positiva" : "Indexación Negativa";
                     break;
                 case 3:
-                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0)? "Adiciona Unidad" : "Retira Unidades";
+                    $arrReporte['resoluciones'][$numPosicion]['Observación'] = ($objRes->fields['valIndexado'] > 0) ? "Adiciona Unidad" : "Retira Unidades";
                     break;
             }
 
@@ -563,31 +535,30 @@ class InformeVeedurias
         ksort($arrReporte['Dinero Vulnerable']['datos']);
 
         // obtiene los datos del hogar
-        $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
+        $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios, $seqCorte);
 
         // adiciona el dato del aad del hogar
-        foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
+        foreach ($arrReporte['hogares'] as $numLinea => $arrDatos) {
             $seqFormulario = $arrDatos['seqFormularioVeeduria'];
             unset($arrReporte['hogares'][$numLinea]['seqFormularioVeeduria']);
-            if( isset( $arrFormularios[$seqFormulario] ) ){
+            if (isset($arrFormularios[$seqFormulario])) {
                 $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['numResolucion'];
                 $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['fchResolucion'];
-                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['fchResolucion']))?
-                    date( "Y" , strtotime( $arrFormularios[$seqFormulario]['fchResolucion'] )) :
-                    "";
+                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['fchResolucion'])) ?
+                        date("Y", strtotime($arrFormularios[$seqFormulario]['fchResolucion'])) :
+                        "";
             }
         }
 
         // quita la variable de paso de calculo del valor indexado de proyectos
-        foreach( $arrReporte['Proyectos'] as $seqUnidadProyecto => $arrDatos ){
-            unset( $arrReporte['Proyectos'][ $seqUnidadProyecto ][ 'valIndexado' ] );
+        foreach ($arrReporte['Proyectos'] as $seqUnidadProyecto => $arrDatos) {
+            unset($arrReporte['Proyectos'][$seqUnidadProyecto]['valIndexado']);
         }
 
         return $arrReporte;
     }
 
-    public function reporteNoProyectos($seqCorte)
-    {
+    public function reporteNoProyectos($seqCorte) {
         global $aptBd, $arrConfiguracion;
 
         $sql = "
@@ -679,7 +650,7 @@ class InformeVeedurias
         $objRes = $aptBd->execute($sql);
         $arrFormularios = array();
 
-        while ($objRes->fields){
+        while ($objRes->fields) {
             $seqFormularioVeeduria = $objRes->fields['seqFormularioVeeduria'];
             unset($objRes->fields['seqFormularioVeeduria']);
             $arrReporte['asignados'][] = $objRes->fields;
@@ -699,36 +670,36 @@ class InformeVeedurias
             from t_vee_formulario frm
             inner join t_vee_desembolso des on frm.seqFormularioVeeduria = des.seqFormularioVeeduria
             inner join t_vee_solicitud sol on des.seqDesembolsoVeeduria = sol.seqDesembolsoVeeduria
-            where frm.seqFormularioVeeduria in ( " . implode("," , array_keys( $arrFormularios ) ) . " )
+            where frm.seqFormularioVeeduria in ( " . implode(",", array_keys($arrFormularios)) . " )
               and frm.seqCorte = $seqCorte
               and (sol.numOrden <> 0)
         ";
         $objRes = $aptBd->execute($sql);
         $numMaximo = 1;
         $arrSolicitudes = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqFormulario = $objRes->fields['seqFormulario'];
             $seqSolicitud = $objRes->fields['seqSolicitud'];
             $arrSolicitudes[$seqFormulario][$seqSolicitud]['numOrden'] = $objRes->fields['numOrden'];
             $arrSolicitudes[$seqFormulario][$seqSolicitud]['fchOrden'] = $objRes->fields['fchOrden'];
             $arrSolicitudes[$seqFormulario][$seqSolicitud]['valOrden'] = $objRes->fields['valOrden'];
-            if(count($arrSolicitudes[$seqFormulario]) > $numMaximo){
+            if (count($arrSolicitudes[$seqFormulario]) > $numMaximo) {
                 $numMaximo = count($arrSolicitudes[$seqFormulario]);
             }
             $objRes->MoveNext();
         }
 
         // ordena las solicitudes dentro del arreglo
-        foreach($arrReporte['asignados'] as $numLinea => $arrRegistro ){
+        foreach ($arrReporte['asignados'] as $numLinea => $arrRegistro) {
             $seqFormulario = $arrRegistro['Formulario'];
             $i = 1;
-            foreach($arrSolicitudes[$seqFormulario] as $seqSolicitud => $arrDatos){
+            foreach ($arrSolicitudes[$seqFormulario] as $seqSolicitud => $arrDatos) {
                 $arrRegistro['Orden ' . $i] = $arrDatos['numOrden'];
                 $arrRegistro['Fecha ' . $i] = $arrDatos['fchOrden'];
                 $arrRegistro['Valor ' . $i] = $arrDatos['valOrden'];
                 $i++;
             }
-            for($i = $i; $i <= $numMaximo; $i++){
+            for ($i = $i; $i <= $numMaximo; $i++) {
                 $arrRegistro['Orden ' . $i] = "";
                 $arrRegistro['Fecha ' . $i] = "";
                 $arrRegistro['Valor ' . $i] = "";
@@ -736,31 +707,30 @@ class InformeVeedurias
             $arrReporte['asignados'][$numLinea] = $arrRegistro;
         }
 
-        $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios,$seqCorte);
+        $arrReporte['hogares'] = $this->obtenerHogares($arrFormularios, $seqCorte);
 
         // adiciona el dato del aad del hogar
-        foreach( $arrReporte['hogares'] as $numLinea => $arrDatos ){
+        foreach ($arrReporte['hogares'] as $numLinea => $arrDatos) {
             $seqFormulario = $arrDatos['seqFormularioVeeduria'];
             unset($arrReporte['hogares'][$numLinea]['seqFormularioVeeduria']);
-            if( isset( $arrFormularios[$seqFormulario] ) ){
+            if (isset($arrFormularios[$seqFormulario])) {
                 $arrReporte['hogares'][$numLinea]['Resolución'] = $arrFormularios[$seqFormulario]['Resolución'];
                 $arrReporte['hogares'][$numLinea]['Fecha'] = $arrFormularios[$seqFormulario]['Fecha'];
-                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['Fecha']))?
-                    date( "Y" , strtotime( $arrFormularios[$seqFormulario]['Fecha'] )) :
-                    "";
+                $arrReporte['hogares'][$numLinea]['Año'] = (esFechaValida($arrFormularios[$seqFormulario]['Fecha'])) ?
+                        date("Y", strtotime($arrFormularios[$seqFormulario]['Fecha'])) :
+                        "";
             }
         }
 
         return $arrReporte;
     }
 
-    private function obtenerHogares($arrFormularios , $seqCorte)
-    {
+    private function obtenerHogares($arrFormularios, $seqCorte) {
         global $aptBd;
 
         $arrHogares = array();
         $arrEstado = estadosProceso();
-        $arrPlanGobierno = obtenerDatosTabla( "T_FRM_PLAN_GOBIERNO" , array( "seqPlanGobierno" , "txtPlanGobierno" ) , "seqPlanGobierno" , "" , "txtPlanGobierno" );
+        $arrPlanGobierno = obtenerDatosTabla("T_FRM_PLAN_GOBIERNO", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "txtPlanGobierno");
         $arrModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad");
         $arrTipoEsquema = obtenerDatosTabla("T_PRY_TIPO_ESQUEMA", array("seqTipoEsquema", "txtTipoEsquema"), "seqTipoEsquema");
         $arrSolucion = obtenerDatosTabla("T_FRM_SOLUCION", array("seqSolucion", "txtSolucion", "txtDescripcion"), "seqSolucion");
@@ -791,11 +761,11 @@ class InformeVeedurias
             INNER JOIN t_vee_ciudadano ciu1 ON hog1.seqCiudadanoVeeduria = ciu1.seqCiudadanoVeeduria and ciu1.seqCorte = $seqCorte
             INNER JOIN t_ciu_tipo_documento tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
             WHERE frm1.seqCorte = $seqCorte     
-              AND frm1.seqFormularioVeeduria IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )  
+              AND frm1.seqFormularioVeeduria IN ( " . implode(",", array_keys($arrFormularios)) . " )  
         ";
         $objRes = $aptBd->execute($sql);
         $arrPostulantePrincipal = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqFormularioVeeduria = $objRes->fields['seqFormularioVeeduria'];
             $arrPostulantePrincipal[$seqFormularioVeeduria]['txtNombre'] = $objRes->fields['txtNombre'];
             $arrPostulantePrincipal[$seqFormularioVeeduria]['txtTipoDocumento'] = $objRes->fields['txtTipoDocumento'];
@@ -853,13 +823,13 @@ class InformeVeedurias
             inner join t_vee_ciudadano ciu on hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria and ciu.seqCorte = $seqCorte
             inner join t_vee_corte cor on cor.seqCorte = frm.seqCorte
               and frm.seqCorte = $seqCorte
-              and frm.seqFormularioVeeduria IN ( " . implode("," , array_keys( $arrFormularios ) ) . " )     
+              and frm.seqFormularioVeeduria IN ( " . implode(",", array_keys($arrFormularios)) . " )     
         ";
         $objRes = $aptBd->execute($sql);
 
-        while($objRes->fields){
+        while ($objRes->fields) {
 
-            foreach($objRes->fields as $txtCampo => $txtValor){
+            foreach ($objRes->fields as $txtCampo => $txtValor) {
                 $$txtCampo = $txtValor;
             }
 
@@ -867,45 +837,45 @@ class InformeVeedurias
 
             $arrHogares[$numPosicion]['seqFormularioVeeduria'] = $objRes->fields['seqFormularioVeeduria'];
             $arrHogares[$numPosicion]['Formulario'] = $objRes->fields['seqFormulario'];
-            $arrHogares[$numPosicion]['Estado'] = ($seqEstadoProceso != null)? $arrEstado[$seqEstadoProceso] : "No Disponible";
-            $arrHogares[$numPosicion]['Plan de Gobierno'] = ($seqPlanGobierno != null)? $arrPlanGobierno[$seqPlanGobierno] : "No Disponible";
+            $arrHogares[$numPosicion]['Estado'] = ($seqEstadoProceso != null) ? $arrEstado[$seqEstadoProceso] : "No Disponible";
+            $arrHogares[$numPosicion]['Plan de Gobierno'] = ($seqPlanGobierno != null) ? $arrPlanGobierno[$seqPlanGobierno] : "No Disponible";
             $arrHogares[$numPosicion]['Modalidad'] = $arrModalidad[$seqModalidad];
-            $arrHogares[$numPosicion]['Esquema'] = ($seqTipoEsquema != null)? $arrTipoEsquema[$seqTipoEsquema] : "No Disponible";
-            $arrHogares[$numPosicion]['Solución'] = ($seqSolucion != null)? $arrSolucion[$seqSolucion]['txtSolucion'] : "No Disponible";
-            $arrHogares[$numPosicion]['Descripción'] = ($seqSolucion != null)? $arrSolucion[$seqSolucion]['txtDescripcion'] : "No Disponible";
-            $arrHogares[$numPosicion]['Inscripción'] = (esFechaValida($objRes->fields['fchInscripcion']))? $objRes->fields['fchInscripcion'] : "No Disponible";
-            $arrHogares[$numPosicion]['Postulación'] = (esFechaValida($objRes->fields['fchPostulacion']))? $objRes->fields['fchPostulacion'] : "No Disponible";
-            $arrHogares[$numPosicion]['Actualización'] = (esFechaValida($objRes->fields['fchUltimaActualizacion']))? $objRes->fields['fchUltimaActualizacion'] : "No Disponible";
-            $arrHogares[$numPosicion]['Vencimiento'] = (esFechaValida($objRes->fields['fchVencimiento']))? $objRes->fields['fchVencimiento'] : "No Disponible";
-            $arrHogares[$numPosicion]['Vigencia'] = (esFechaValida($objRes->fields['fchVigencia']))? $objRes->fields['fchVigencia'] : "No Disponible";
-            $arrHogares[$numPosicion]['Cerrado'] = ($objRes->fields['bolCerrado'] == 1)? "Si" : "No";
-            $arrHogares[$numPosicion]['# Formulario'] = ($objRes->fields['txtFormulario'] != "")? $objRes->fields['txtFormulario'] : "No Disponible";
-            $arrHogares[$numPosicion]['Sanción'] = ($objRes->fields['bolSancion'] == 1)? "Si" : "No";
-            $arrHogares[$numPosicion]['Sisben'] = ($seqSisben != null)? $arrSisben[$seqSisben] : "No Disponible";
-            $arrHogares[$numPosicion]['Proyecto'] = ($seqProyecto != null and $seqProyecto != 0)? $arrProyecto[$seqProyecto] : "No Disponible";
-            $arrHogares[$numPosicion]['Conjunto'] = ($seqProyectoHijo != null and $seqProyectoHijo != 0)? $arrProyecto[$seqProyectoHijo] : "No Disponible";
-            $arrHogares[$numPosicion]['# Unidad'] = ($seqUnidadProyecto != null)? $seqUnidadProyecto : "No Disponible";
-            $arrHogares[$numPosicion]['Unidad'] = ($seqUnidadProyecto != null)? $arrUnidad[$seqUnidadProyecto] : "No Disponible";
-            $arrHogares[$numPosicion]['Localidad'] = ($seqLocalidad != null)? $arrLocalidad[$seqLocalidad] : "No Disponible";
-            $arrHogares[$numPosicion]['Barrio'] = ($seqBarrio != null)? $arrBarrio[$seqBarrio] : "No Disponible";
+            $arrHogares[$numPosicion]['Esquema'] = ($seqTipoEsquema != null) ? $arrTipoEsquema[$seqTipoEsquema] : "No Disponible";
+            $arrHogares[$numPosicion]['Solución'] = ($seqSolucion != null) ? $arrSolucion[$seqSolucion]['txtSolucion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Descripción'] = ($seqSolucion != null) ? $arrSolucion[$seqSolucion]['txtDescripcion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Inscripción'] = (esFechaValida($objRes->fields['fchInscripcion'])) ? $objRes->fields['fchInscripcion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Postulación'] = (esFechaValida($objRes->fields['fchPostulacion'])) ? $objRes->fields['fchPostulacion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Actualización'] = (esFechaValida($objRes->fields['fchUltimaActualizacion'])) ? $objRes->fields['fchUltimaActualizacion'] : "No Disponible";
+            $arrHogares[$numPosicion]['Vencimiento'] = (esFechaValida($objRes->fields['fchVencimiento'])) ? $objRes->fields['fchVencimiento'] : "No Disponible";
+            $arrHogares[$numPosicion]['Vigencia'] = (esFechaValida($objRes->fields['fchVigencia'])) ? $objRes->fields['fchVigencia'] : "No Disponible";
+            $arrHogares[$numPosicion]['Cerrado'] = ($objRes->fields['bolCerrado'] == 1) ? "Si" : "No";
+            $arrHogares[$numPosicion]['# Formulario'] = ($objRes->fields['txtFormulario'] != "") ? $objRes->fields['txtFormulario'] : "No Disponible";
+            $arrHogares[$numPosicion]['Sanción'] = ($objRes->fields['bolSancion'] == 1) ? "Si" : "No";
+            $arrHogares[$numPosicion]['Sisben'] = ($seqSisben != null) ? $arrSisben[$seqSisben] : "No Disponible";
+            $arrHogares[$numPosicion]['Proyecto'] = ($seqProyecto != null and $seqProyecto != 0) ? $arrProyecto[$seqProyecto] : "No Disponible";
+            $arrHogares[$numPosicion]['Conjunto'] = ($seqProyectoHijo != null and $seqProyectoHijo != 0) ? $arrProyecto[$seqProyectoHijo] : "No Disponible";
+            $arrHogares[$numPosicion]['# Unidad'] = ($seqUnidadProyecto != null) ? $seqUnidadProyecto : "No Disponible";
+            $arrHogares[$numPosicion]['Unidad'] = ($seqUnidadProyecto != null) ? $arrUnidad[$seqUnidadProyecto] : "No Disponible";
+            $arrHogares[$numPosicion]['Localidad'] = ($seqLocalidad != null) ? $arrLocalidad[$seqLocalidad] : "No Disponible";
+            $arrHogares[$numPosicion]['Barrio'] = ($seqBarrio != null) ? $arrBarrio[$seqBarrio] : "No Disponible";
             $arrHogares[$numPosicion]['Dormitorios'] = intval($objRes->fields['numHabitaciones']);
             $arrHogares[$numPosicion]['Hacinamiento'] = intval($objRes->fields['numHacinamiento']);
             $arrHogares[$numPosicion]['Postulante Principal'] = $arrPostulantePrincipal[$seqFormularioVeeduria]['txtNombre'];
             $arrHogares[$numPosicion]['Tipo de Documento Principal'] = $arrPostulantePrincipal[$seqFormularioVeeduria]['txtTipoDocumento'];
             $arrHogares[$numPosicion]['Documento Principal'] = $arrPostulantePrincipal[$seqFormularioVeeduria]['numDocumento'];
             $arrHogares[$numPosicion]['Nombre'] = $objRes->fields['txtNombre'];
-            $arrHogares[$numPosicion]['Tipo de Documento'] = ($seqTipoDocumento != null)? $arrTipoDocumento[$seqTipoDocumento] : "No Disponible";
+            $arrHogares[$numPosicion]['Tipo de Documento'] = ($seqTipoDocumento != null) ? $arrTipoDocumento[$seqTipoDocumento] : "No Disponible";
             $arrHogares[$numPosicion]['Documento'] = $objRes->fields['numDocumento'];
-            $arrHogares[$numPosicion]['Parentesco'] = ($seqParentesco != null)? $arrParentesco[$seqParentesco] : "No Disponible";
-            $arrHogares[$numPosicion]['Ocupación'] = ($seqOcupacion != null)? $arrOcupacion[$seqOcupacion] : "No Disponible";
-            $arrHogares[$numPosicion]['Estado Civil'] = ($seqEstadoCivil != null)? $arrEstadoCivil[$seqEstadoCivil] : "No Disponible";
-            $arrHogares[$numPosicion]['Sexo'] = ($seqSexo != null)? $arrSexo[$seqSexo] : "No Disponible";
+            $arrHogares[$numPosicion]['Parentesco'] = ($seqParentesco != null) ? $arrParentesco[$seqParentesco] : "No Disponible";
+            $arrHogares[$numPosicion]['Ocupación'] = ($seqOcupacion != null) ? $arrOcupacion[$seqOcupacion] : "No Disponible";
+            $arrHogares[$numPosicion]['Estado Civil'] = ($seqEstadoCivil != null) ? $arrEstadoCivil[$seqEstadoCivil] : "No Disponible";
+            $arrHogares[$numPosicion]['Sexo'] = ($seqSexo != null) ? $arrSexo[$seqSexo] : "No Disponible";
             $arrHogares[$numPosicion]['Edad'] = $objRes->fields['Edad'];
             $arrHogares[$numPosicion]['Rango Edad'] = $objRes->fields['Rango Edad'];
-            $arrHogares[$numPosicion]['Nivel Educativo'] = ($seqNivelEducativo != null)? $arrNivelEducativo[$seqNivelEducativo] : "No Disponible";
+            $arrHogares[$numPosicion]['Nivel Educativo'] = ($seqNivelEducativo != null) ? $arrNivelEducativo[$seqNivelEducativo] : "No Disponible";
             $arrHogares[$numPosicion]['Años Aprobados'] = $objRes->fields['numAnosAprobados'];
-            $arrHogares[$numPosicion]['Etnia'] = ($seqEtnia != null)? $arrCondicionEtnica[$seqEtnia] : "No Disponible";
-            $arrHogares[$numPosicion]['Salud'] = ($seqSalud != null)? $arrSalud[$seqSalud] : "No Disponible";
+            $arrHogares[$numPosicion]['Etnia'] = ($seqEtnia != null) ? $arrCondicionEtnica[$seqEtnia] : "No Disponible";
+            $arrHogares[$numPosicion]['Salud'] = ($seqSalud != null) ? $arrSalud[$seqSalud] : "No Disponible";
 
             $seqCondicionEspecial1 = $objRes->fields['seqCondicionEspecial'];
             $seqCondicionEspecial2 = $objRes->fields['seqCondicionEspecial2'];
@@ -915,24 +885,24 @@ class InformeVeedurias
             unset($objRes->fields['seqCondicionEspecial2']);
             unset($objRes->fields['seqCondicionEspecial3']);
 
-            $txtCabezaFamilia    = "No";
-            $txtMayor65          = "No";
-            $txtDiscapacitado    = "No";
+            $txtCabezaFamilia = "No";
+            $txtMayor65 = "No";
+            $txtDiscapacitado = "No";
             $txtNingunaCondicion = "No";
 
-            if($seqCondicionEspecial1 == 1 or $seqCondicionEspecial2 == 1 or $seqCondicionEspecial3 == 1) {
+            if ($seqCondicionEspecial1 == 1 or $seqCondicionEspecial2 == 1 or $seqCondicionEspecial3 == 1) {
                 $txtCabezaFamilia = "Si";
             }
 
-            if($seqCondicionEspecial1 == 2 or $seqCondicionEspecial2 == 2 or $seqCondicionEspecial3 == 2){
+            if ($seqCondicionEspecial1 == 2 or $seqCondicionEspecial2 == 2 or $seqCondicionEspecial3 == 2) {
                 $txtMayor65 = "Si";
             }
 
-            if($seqCondicionEspecial1 == 3 or $seqCondicionEspecial2 == 3 or $seqCondicionEspecial3 == 3){
+            if ($seqCondicionEspecial1 == 3 or $seqCondicionEspecial2 == 3 or $seqCondicionEspecial3 == 3) {
                 $txtDiscapacitado = "Si";
             }
 
-            if($seqCondicionEspecial1 == 6 and $seqCondicionEspecial2 == 6 and $seqCondicionEspecial3 == 6){
+            if ($seqCondicionEspecial1 == 6 and $seqCondicionEspecial2 == 6 and $seqCondicionEspecial3 == 6) {
                 $txtNingunaCondicion = "Si";
             }
 
@@ -941,11 +911,11 @@ class InformeVeedurias
             $arrHogares[$numPosicion]['Discapacitado'] = $txtDiscapacitado;
             $arrHogares[$numPosicion]['Ninguna Condición'] = $txtNingunaCondicion;
 
-            $arrHogares[$numPosicion]['LGTBI'] = ($objRes->fields['bolLgtb'] == 1)? "SI" : "NO";
-            $arrHogares[$numPosicion]['Grupo LGTBI'] = ($seqGrupoLgtbi != null)? $arrGrupoLgtbi[$seqGrupoLgtbi] : "No Disponible";
+            $arrHogares[$numPosicion]['LGTBI'] = ($objRes->fields['bolLgtb'] == 1) ? "SI" : "NO";
+            $arrHogares[$numPosicion]['Grupo LGTBI'] = ($seqGrupoLgtbi != null) ? $arrGrupoLgtbi[$seqGrupoLgtbi] : "No Disponible";
 
-            $arrHogares[$numPosicion]['Desplazado'] = ($objRes->fields['bolDesplazado'] == 1)? "SI" : "NO";
-            $arrHogares[$numPosicion]['Victima'] = ($seqTipoVictima != null)? $arrTipoVictima[$seqTipoVictima] : "No Disponible";
+            $arrHogares[$numPosicion]['Desplazado'] = ($objRes->fields['bolDesplazado'] == 1) ? "SI" : "NO";
+            $arrHogares[$numPosicion]['Victima'] = ($seqTipoVictima != null) ? $arrTipoVictima[$seqTipoVictima] : "No Disponible";
 
             $objRes->MoveNext();
         }
@@ -953,7 +923,7 @@ class InformeVeedurias
         return $arrHogares;
     }
 
-    private function fuentesXML(){
+    private function fuentesXML() {
 
         $xmlEstilos = "<Styles>";
 
@@ -1036,12 +1006,11 @@ class InformeVeedurias
         $xmlEstilos .= "</Styles>";
 
         return $xmlEstilos;
-
     }
 
-    private function tipoDato($txtValor){
-        switch(true){
-            case (esFechaValida($txtValor)) and (strlen($txtValor) <= 10) and (strtotime( $txtValor ) !== false):
+    private function tipoDato($txtValor) {
+        switch (true) {
+            case (esFechaValida($txtValor)) and ( strlen($txtValor) <= 10) and ( strtotime($txtValor) !== false):
                 $txtTipo = "DateTime";
                 break;
             case is_numeric($txtValor):
@@ -1054,8 +1023,8 @@ class InformeVeedurias
         return $txtTipo;
     }
 
-    private function obtenerXMLEncabezado(){
-        $xmlArchivo  = "<?xml version='1.0'?> ";
+    private function obtenerXMLEncabezado() {
+        $xmlArchivo = "<?xml version='1.0'?> ";
         $xmlArchivo .= "<?mso-application progid='Excel.Sheet'?> ";
         $xmlArchivo .= "<Workbook xmlns='urn:schemas-microsoft-com:office:spreadsheet' ";
         $xmlArchivo .= "xmlns:o='urn:schemas-microsoft-com:office:office' ";
@@ -1065,19 +1034,18 @@ class InformeVeedurias
         return $xmlArchivo;
     }
 
-    private function obtenerXMLPie(){
+    private function obtenerXMLPie() {
         $xmlArchivo = "</ss:Workbook>";
         return $xmlArchivo;
     }
 
-    private function obtenerXMLHojaPlana( $arrReporte , $txtNombreHoja, $arrColores = array() )
-    {
-        $xmlArchivo  = "<ss:Worksheet ss:Name='$txtNombreHoja'>";
+    private function obtenerXMLHojaPlana($arrReporte, $txtNombreHoja, $arrColores = array()) {
+        $xmlArchivo = "<ss:Worksheet ss:Name='$txtNombreHoja'>";
         $xmlArchivo .= "<ss:Table>";
 
         // Para los colores de las columnas, de sobreescriben las celdas
-        if( ! empty( $arrColores ) ){
-            foreach ( $arrColores as $txtTitulo => $txtEstilo ){
+        if (!empty($arrColores)) {
+            foreach ($arrColores as $txtTitulo => $txtEstilo) {
                 $xmlArchivo .= "<Column ss:AutoFitWidth='1' ss:StyleID='$txtEstilo'/>";
             }
         }
@@ -1086,20 +1054,20 @@ class InformeVeedurias
         $xmlArchivo .= "<ss:Row>";
         $arrTitulos = reset($arrReporte);
 
-        foreach ($arrTitulos as $txtTitulo => $txtValor){
+        foreach ($arrTitulos as $txtTitulo => $txtValor) {
             $xmlArchivo .= "<ss:Cell ss:StyleID='s1'><ss:Data ss:Type='String'>$txtTitulo</ss:Data></ss:Cell>";
         }
         $xmlArchivo .= "</ss:Row>";
 
         // datos
-        foreach ($arrReporte as $numLinea => $arrDatos){
+        foreach ($arrReporte as $numLinea => $arrDatos) {
             $xmlArchivo .= "<ss:Row>";
-            foreach($arrDatos as $txtTitulo => $txtValor) {
-                $txtTipo = $this->tipoDato( $txtValor );
+            foreach ($arrDatos as $txtTitulo => $txtValor) {
+                $txtTipo = $this->tipoDato($txtValor);
                 $txtEstilo = "";
-                switch($txtTipo){
+                switch ($txtTipo) {
                     case "DateTime":
-                        $txtValor = date( "Y-m-d" , strtotime( $txtValor ) );
+                        $txtValor = date("Y-m-d", strtotime($txtValor));
                         $txtEstilo = "ss:StyleID='s5'";
                         break;
                     case "Number":
@@ -1119,147 +1087,140 @@ class InformeVeedurias
         return $xmlArchivo;
     }
 
-    private function exportarResultadosXML( $xmlArchivo , $txtNombreArchivo )
-    {
-        $txtNombre = mb_ereg_replace("[^0-9a-zA-Z_]","", $txtNombreArchivo) . "_" . date("YmdHis") . ".xls";
+    private function exportarResultadosXML($xmlArchivo, $txtNombreArchivo) {
+        $txtNombre = mb_ereg_replace("[^0-9a-zA-Z_]", "", $txtNombreArchivo) . "_" . date("YmdHis") . ".xls";
         header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
         header("Content-Disposition: inline; filename=\"" . $txtNombre . "\"");
         echo $xmlArchivo;
     }
 
-    public function imprimirReporteProyectos($arrReporte, $seqCorte)
-    {
+    public function imprimirReporteProyectos($arrReporte, $seqCorte) {
 
-        /***********************************************
+        /*         * *********************************************
          * ENCABEZADO
-         ***********************************************/
+         * ********************************************* */
 
         $xmlArchivo = $this->obtenerXMLEncabezado();
 
-        /***********************************************
+        /*         * *********************************************
          * ESTILOS DE FUENTES
-         ***********************************************/
+         * ********************************************* */
 
         $xmlArchivo .= $this->fuentesXML();
 
-        /***********************************************
+        /*         * *********************************************
          * HOJA REPORTE CONTEOS Y DINERO
-         ***********************************************/
+         * ********************************************* */
 
         // conteos
-        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Conteo Consolidado'],'Conteo Consolidado');
-        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Desplazado'],'Desplazado');
-        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Vulnerable'],'Vulnerable');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Conteo Consolidado'], 'Conteo Consolidado');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Desplazado'], 'Desplazado');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Vulnerable'], 'Vulnerable');
 
         // dinero
-        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Dinero Consolidado'],'Dinero Consolidado');
-        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Dinero Desplazado'],'Dinero Desplazado');
-        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Dinero Vulnerable'],'Dinero Vulnerable');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Dinero Consolidado'], 'Dinero Consolidado');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Dinero Desplazado'], 'Dinero Desplazado');
+        $xmlArchivo .= $this->obtenerXMLHojaConteo($arrReporte['Dinero Vulnerable'], 'Dinero Vulnerable');
 
-        /***********************************************
+        /*         * *********************************************
          * HOJA REPORTE DE HOGARES
-         ***********************************************/
+         * ********************************************* */
 
-        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['hogares'] , "Hogares" );
+        $xmlArchivo .= $this->obtenerXMLHojaPlana($arrReporte['hogares'], "Hogares");
 
-        /***********************************************
+        /*         * *********************************************
          * HOJA PROYECTOS
-         ***********************************************/
+         * ********************************************* */
 
-        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['Proyectos'] , "Proyectos" );
+        $xmlArchivo .= $this->obtenerXMLHojaPlana($arrReporte['Proyectos'], "Proyectos");
 
-        /***********************************************
+        /*         * *********************************************
          * HOJA RESOLUCIONES
-         ***********************************************/
+         * ********************************************* */
 
-        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['resoluciones'] , "Resoluciones" );
+        $xmlArchivo .= $this->obtenerXMLHojaPlana($arrReporte['resoluciones'], "Resoluciones");
 
         $xmlArchivo .= $this->obtenerXMLPie();
 
         $arrCorte = array_shift($this->obtenerCortes($seqCorte));
 
-        $this->exportarResultadosXML( $xmlArchivo , "IP_" . $arrCorte['txtCorte'] );
-
-
+        $this->exportarResultadosXML($xmlArchivo, "IP_" . $arrCorte['txtCorte']);
     }
 
-    public function imprimirReporteNoProyectos($arrReporte,$seqCorte)
-    {
+    public function imprimirReporteNoProyectos($arrReporte, $seqCorte) {
 
-        /***********************************************
+        /*         * *********************************************
          * ENCABEZADO
-         ***********************************************/
+         * ********************************************* */
 
         $xmlArchivo = $this->obtenerXMLEncabezado();
 
-        /***********************************************
+        /*         * *********************************************
          * ESTILOS DE FUENTES
-         ***********************************************/
+         * ********************************************* */
 
         $xmlArchivo .= $this->fuentesXML();
 
-        /***********************************************
+        /*         * *********************************************
          * HOJA REPORTE
-         ***********************************************/
+         * ********************************************* */
 
-        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['asignados'] , "Asignados");
+        $xmlArchivo .= $this->obtenerXMLHojaPlana($arrReporte['asignados'], "Asignados");
 
-        /***********************************************
+        /*         * *********************************************
          * HOJA REPORTE DE HOGARES
-         ***********************************************/
+         * ********************************************* */
 
-        $xmlArchivo .= $this->obtenerXMLHojaPlana( $arrReporte['hogares'] , "Hogares" );
+        $xmlArchivo .= $this->obtenerXMLHojaPlana($arrReporte['hogares'], "Hogares");
 
         $xmlArchivo .= $this->obtenerXMLPie();
 
         $arrCorte = array_shift($this->obtenerCortes($seqCorte));
 
-        $this->exportarResultadosXML( $xmlArchivo , "INP_" . $arrCorte['txtCorte']  );
-
+        $this->exportarResultadosXML($xmlArchivo, "INP_" . $arrCorte['txtCorte']);
     }
 
-    private function obtenerXMLHojaConteo($arrReporte,$txtNombre)
-    {
-        $numAcrossGenerados   = intval($arrReporte['limites']['generados']['maximo'])   - intval($arrReporte['limites']['generados']['minimo']);
-        $numAcrossVinculados  = intval($arrReporte['limites']['vinculados']['maximo'])  - intval($arrReporte['limites']['vinculados']['minimo']);
+    private function obtenerXMLHojaConteo($arrReporte, $txtNombre) {
+        $numAcrossGenerados = intval($arrReporte['limites']['generados']['maximo']) - intval($arrReporte['limites']['generados']['minimo']);
+        $numAcrossVinculados = intval($arrReporte['limites']['vinculados']['maximo']) - intval($arrReporte['limites']['vinculados']['minimo']);
         $numAcrossLegalizados = intval($arrReporte['limites']['legalizados']['maximo']) - intval($arrReporte['limites']['legalizados']['minimo']);
 
-        $xmlArchivo  = "<ss:Worksheet ss:Name='$txtNombre'>";
+        $xmlArchivo = "<ss:Worksheet ss:Name='$txtNombre'>";
         $xmlArchivo .= "<ss:Table>";
         $xmlArchivo .= "<Column ss:AutoFitWidth='0' ss:Width='180'/>";
 
-        /***********************************************
+        /*         * *********************************************
          * TITULOS 1 (CABECERA)
-         ***********************************************/
+         * ********************************************* */
 
         $xmlArchivo .= "<ss:Row>";
         $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeDown='1'><ss:Data ss:Type='String'>Proyecto</ss:Data></ss:Cell>";
         $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeDown='1'><ss:Data ss:Type='String'>Resoluciones</ss:Data></ss:Cell>";
-        if($numAcrossGenerados > 0) {
+        if ($numAcrossGenerados > 0) {
             $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='" . ($numAcrossGenerados + 1) . "'><ss:Data ss:Type='String'>Subsidios Generados</ss:Data></ss:Cell>";
         }
-        if($numAcrossVinculados > 0) {
+        if ($numAcrossVinculados > 0) {
             $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='" . ($numAcrossVinculados + 1) . "'><ss:Data ss:Type='String'>Vinculados</ss:Data></ss:Cell>";
         }
-        if($numAcrossLegalizados > 0) {
-            $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='" . ($numAcrossLegalizados + 1). "'><ss:Data ss:Type='String'>Legalizados</ss:Data></ss:Cell>";
+        if ($numAcrossLegalizados > 0) {
+            $xmlArchivo .= "<ss:Cell ss:StyleID='s1' ss:MergeAcross='" . ($numAcrossLegalizados + 1) . "'><ss:Data ss:Type='String'>Legalizados</ss:Data></ss:Cell>";
         }
         $xmlArchivo .= "</ss:Row>";
 
-        /***********************************************
+        /*         * *********************************************
          * TITULOS 2 (AÑOS)
-         ***********************************************/
+         * ********************************************* */
 
         $xmlArchivo .= "<ss:Row>";
 
         // titulos de anios para generados
         $bolIndex = false;
-        if(intval($arrReporte['limites']['generados']['minimo']) > 0) {
+        if (intval($arrReporte['limites']['generados']['minimo']) > 0) {
             for ($numAnio = $arrReporte['limites']['generados']['minimo']; $numAnio <= $arrReporte['limites']['generados']['maximo']; $numAnio++) {
                 if ($bolIndex == false and $numAnio == $arrReporte['limites']['generados']['minimo']) {
                     $bolIndex = true;
                     $xmlArchivo .= "<ss:Cell ss:StyleID='s2' ss:Index='3'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-                }else{
+                } else {
                     $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
                 }
             }
@@ -1267,38 +1228,36 @@ class InformeVeedurias
         }
 
         // titulos - anios para vinculados
-        if(intval($arrReporte['limites']['vinculados']['minimo']) > 0) {
+        if (intval($arrReporte['limites']['vinculados']['minimo']) > 0) {
             for ($numAnio = $arrReporte['limites']['vinculados']['minimo']; $numAnio <= $arrReporte['limites']['vinculados']['maximo']; $numAnio++) {
                 if ($bolIndex == false and $numAnio == $arrReporte['limites']['vinculados']['minimo']) {
                     $bolIndex = true;
                     $xmlArchivo .= "<ss:Cell ss:StyleID='s2' ss:Index='3'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-                }else{
+                } else {
                     $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
                 }
-
             }
             $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
         }
 
         // titulos - anios para legalizados
-        if(intval($arrReporte['limites']['legalizados']['minimo'])) {
+        if (intval($arrReporte['limites']['legalizados']['minimo'])) {
             for ($numAnio = $arrReporte['limites']['legalizados']['minimo']; $numAnio <= $arrReporte['limites']['legalizados']['maximo']; $numAnio++) {
                 if ($bolIndex == false and $numAnio == $arrReporte['limites']['legalizados']['minimo']) {
                     $bolIndex = true;
                     $xmlArchivo .= "<ss:Cell ss:StyleID='s2' ss:Index='3'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
-                }else{
+                } else {
                     $xmlArchivo .= "<ss:Cell ss:StyleID='s2'><ss:Data ss:Type='Number'>$numAnio</ss:Data></ss:Cell>";
                 }
-
             }
             $xmlArchivo .= "<ss:Cell ss:StyleID='s3'><ss:Data ss:Type='String'>Total</ss:Data></ss:Cell>";
         }
 
         $xmlArchivo .= "</ss:Row>";
 
-        /***********************************************
+        /*         * *********************************************
          * LINEAS
-         ***********************************************/
+         * ********************************************* */
 
         // datos del reporte
         foreach ($arrReporte['datos'] as $txtProyecto => $arrResoluciones) {
@@ -1309,11 +1268,11 @@ class InformeVeedurias
                 $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>$txtProyecto</ss:Data></ss:Cell>";
                 $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='String'>$txtNombreResolucion</ss:Data></ss:Cell>";
 
-                if(isset($arrDatos['generados'])) {
+                if (isset($arrDatos['generados'])) {
                     for ($numAnio = $arrReporte['limites']['generados']['minimo']; $numAnio <= $arrReporte['limites']['generados']['maximo']; $numAnio++) {
                         if (isset($arrDatos['generados'][$numAnio])) {
                             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['generados'][$numAnio] . "</ss:Data></ss:Cell>";
-                        }else{
+                        } else {
                             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
                         }
                     }
@@ -1321,16 +1280,16 @@ class InformeVeedurias
                 }
 
                 // VINCULADOS
-                if(isset($arrDatos['vinculados'])) {
+                if (isset($arrDatos['vinculados'])) {
                     for ($numAnio = $arrReporte['limites']['vinculados']['minimo']; $numAnio <= $arrReporte['limites']['vinculados']['maximo']; $numAnio++) {
                         if (isset($arrDatos['vinculados'][$numAnio])) {
                             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['vinculados'][$numAnio] . "</ss:Data></ss:Cell>";
-                        }else{
+                        } else {
                             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
                         }
                     }
                     $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrDatos['vinculados']['total'] . "</ss:Data></ss:Cell>";
-                }else{
+                } else {
                     for ($numAnio = $arrReporte['limites']['vinculados']['minimo']; $numAnio <= $arrReporte['limites']['vinculados']['maximo']; $numAnio++) {
                         $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
                     }
@@ -1338,16 +1297,16 @@ class InformeVeedurias
                 }
 
                 // LEGALIZADOS
-                if(isset($arrDatos['legalizados'])) {
+                if (isset($arrDatos['legalizados'])) {
                     for ($numAnio = $arrReporte['limites']['legalizados']['minimo']; $numAnio <= $arrReporte['limites']['legalizados']['maximo']; $numAnio++) {
                         if (isset($arrDatos['legalizados'][$numAnio])) {
                             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>" . $arrDatos['legalizados'][$numAnio] . "</ss:Data></ss:Cell>";
-                        }else{
+                        } else {
                             $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
                         }
                     }
                     $xmlArchivo .= "<ss:Cell ss:StyleID='s4'><ss:Data ss:Type='Number'>" . $arrDatos['legalizados']['total'] . "</ss:Data></ss:Cell>";
-                }else{
+                } else {
                     for ($numAnio = $arrReporte['limites']['legalizados']['minimo']; $numAnio <= $arrReporte['limites']['legalizados']['maximo']; $numAnio++) {
                         $xmlArchivo .= "<ss:Cell><ss:Data ss:Type='Number'>0</ss:Data></ss:Cell>";
                     }
@@ -1362,6 +1321,155 @@ class InformeVeedurias
         $xmlArchivo .= "</ss:Worksheet>";
 
         return $xmlArchivo;
+    }
+
+    public function eliminarReportesVeeduria($seqCorte) {
+
+        global $aptBd;
+        $msn = "";
+        $total = 0;
+        $aptBd->execute("SET SQL_SAFE_UPDATES=0;");
+        $sql = "delete pry, upr from t_vee_proyecto pry
+                    left join t_vee_unidad_proyecto upr on upr.seqProyectoVeeduria = pry.seqProyectoVeeduria
+                    where pry.seqCorte = " . $seqCorte;
+        $ejecuto = $this->eliminarReporteVeeduria($sql);
+        if ($ejecuto) {
+            $ejecuto = false;
+            $sql = "delete uac,uvi from t_vee_unidad_acto uac
+          left join t_vee_unidades_vinculadas uvi on uvi.seqUnidadActoVeeduria = uac.seqUnidadActoVeeduria
+          where uac.seqCorte = " . $seqCorte;
+            $ejecuto = $this->eliminarReporteVeeduria($sql);
+            if ($ejecuto) {
+                $sql = "delete  sol from t_vee_desembolso des left join t_vee_solicitud sol on sol.seqDesembolsoVeeduria = des.seqDesembolsoVeeduria where des.seqCorte = " . $seqCorte;
+                $ejecuto = $this->eliminarReporteVeeduria($sql);
+                if ($ejecuto) {
+                    $sql = "delete esc from t_vee_desembolso des left join t_vee_escrituracion esc on esc.seqDesembolsoVeeduria = des.seqDesembolsoVeeduria where des.seqCorte = " . $seqCorte;
+                    $ejecuto = $this->eliminarReporteVeeduria($sql);
+                    if ($ejecuto) {
+                        $sql = "delete tit, adjt from t_vee_desembolso des          
+                            left join t_vee_estudio_titulos tit on tit.seqDesembolsoVeeduria = des.seqDesembolsoVeeduria
+                            left join t_vee_adjuntos_titulos adjt on adjt.seqEstudioTitulosVeeduria = tit.seqEstudioTitulosVeeduria          
+                            where des.seqCorte = " . $seqCorte;
+                        $ejecuto = $this->eliminarReporteVeeduria($sql);
+                        if ($ejecuto) {
+                            $sql = "DELETE FROM t_vee_desembolso  where seqCorte = " . $seqCorte;
+                            $ejecuto = $this->eliminarReporteVeeduria($sql);
+                            if ($ejecuto) {
+                                $sql = "DELETE hog FROM t_vee_hogar hog
+                                LEFT JOIN
+                                t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria
+                                WHERE
+                                ciu.seqCorte =" . $seqCorte;
+                                $ejecuto = $this->eliminarReporteVeeduria($sql);
+                                if ($ejecuto) {
+                                    $sql = "DELETE from t_vee_formulario where seqCorte =" . $seqCorte;
+                                    $ejecuto = $this->eliminarReporteVeeduria($sql);
+                                    if ($ejecuto) {
+                                        $sql = "DELETE from t_vee_ciudadano where seqCorte =" . $seqCorte;
+                                        $ejecuto = $this->eliminarReporteVeeduria($sql);
+                                        if ($ejecuto) {
+                                            $sql = "DELETE from t_vee_corte where seqCorte =" . $seqCorte;
+                                            $ejecuto = $this->eliminarReporteVeeduria($sql);
+                                            if ($ejecuto) {
+                                                echo "<br> paso -> t_vee_corte" . $ejecuto;
+                                            } else {
+                                                echo "<br> NO paso -> t_vee_corte" . $ejecuto;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /* $aptBd->execute($sql);
+
+          if ($aptBd->ErrorMsg() == "") {//
+          echo "<br> 1. " . $total = $total + $aptBd->Affected_Rows();
+
+
+
+          $aptBd->execute($sql);
+          if ($aptBd->ErrorMsg() == "") {//
+          echo "<br> 2. " . $total = $total + $aptBd->Affected_Rows();
+          $sql1 = " " . $seqCorte;
+
+          $aptBd->execute($sql1);
+          if ($aptBd->ErrorMsg() == "") {//
+          echo "<br> 3. " . $total = $total + $aptBd->Affected_Rows();
+          $sql = " " . $seqCorte;
+
+          $aptBd->execute($sql);
+          if ($aptBd->ErrorMsg() == "") {//
+          echo "<br> 4. " . $total = $total + $aptBd->Affected_Rows();
+
+          $sql = " " . $seqCorte;
+
+          $aptBd->execute($sql);
+          if ($aptBd->ErrorMsg() == "") {//
+          echo "<br>  5. " . $total = $total + $aptBd->Affected_Rows();
+          $sql = "  " . $seqCorte;
+
+          $aptBd->execute($sql);
+          if ($aptBd->ErrorMsg() == "") {//
+          echo "<br> 6. " . $total = $total + $aptBd->Affected_Rows();
+
+
+
+          if ($aptBd->ErrorMsg() == "") {//
+          echo "<br> 8. " . $total = $total + $aptBd->Affected_Rows();
+
+          if ($aptBd->ErrorMsg() == "") {//
+          echo "<br> 9. " . $total = $total + $aptBd->Affected_Rows();
+
+          $sql = " " . $seqCorte;
+
+          $aptBd->execute($sql);
+          if ($aptBd->ErrorMsg() == "") {//
+          echo "<br> 7. " . $total = $total + $aptBd->Affected_Rows();
+          }
+          }
+          }
+          }
+          }
+          }
+          }
+          }
+          }
+          $aptBd->execute("SET SQL_SAFE_UPDATES=1;");
+          echo $msn .=" Se eliminaron " . $total . " registros"; */
+    }
+
+    public function eliminarReporteVeeduria($sql) {
+        global $aptBd;
+        $msn = "";
+        $total = 0;
+        $band = 1;
+        echo "<br> band 1 =>" . $band;
+        while (1) {
+            $sql = $sql;
+            $aptBd->execute($sql);
+            echo "<br> Total " . $total = $total + $aptBd->Affected_Rows();
+            if ($aptBd->Affected_Rows() == 0) {
+                // finalizado el borrado
+                $band = 0;
+                echo "<br> band 2 =>" . $band;
+                break;
+            } else {
+                echo "<br>  " . $total = $total + $aptBd->Affected_Rows();
+                echo "<br> band  **=>" . $band;
+            }
+            // incluso viene bien parar un poco
+            usleep(500000);
+            echo "<br> band  3=>" . $band;
+        }
+        echo "<br> band 4 =>" . $band;
+        $valido = ($band == 0) ? true : false;
+        return $valido;
     }
 
 }

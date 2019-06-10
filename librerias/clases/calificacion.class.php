@@ -915,21 +915,21 @@ group by seqIndicador;";
             $sumador = 0;
             $total = 0;
             while ($objRes->fields) {
-                echo "<br> calcING = objRes->fields['ingresos'] / objRes->fields['cant'] => " . $calcING;
-                echo "<br> si calcING < 121196 => calcING=121196 SINO calcING = calcING ";
+             //   echo "<br> calcING = objRes->fields['ingresos'] / objRes->fields['cant'] => " . $calcING;
+             //   echo "<br> si calcING < 121196 => calcING=121196 SINO calcING = calcING ";
                 $calcING = $objRes->fields['ingresos'] / $objRes->fields['cant'];
                 if ($calcING < 121196) {
                     $calcING = 121196;
                 }
                 $inversa = 1 / ($calcING / $smlv);
-                echo "<br> inversa = (1 / (calcING / smlv))" . $inversa;
+              //  echo "<br> inversa = (1 / (calcING / smlv))" . $inversa;
                 $sumador += $inversa;
-                echo "<br> sumador = += inversa => " . $sumador;
+              //  echo "<br> sumador = += inversa => " . $sumador;
                 $objRes->MoveNext();
             }
 
             $total = ($sumador / $cont);
-            echo "<br> totalPromedioING = (sumador / cont) => " . $total;
+           // echo "<br> totalPromedioING = (sumador / cont) => " . $total;
             return $total;
         } catch (Exception $objError) {
             return $objError->msg;

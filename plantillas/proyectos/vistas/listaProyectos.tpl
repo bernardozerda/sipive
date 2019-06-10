@@ -16,9 +16,9 @@
         div.dataTables_scrollHead table.table-bordered{
             width: 100% !important;
         }
-       
+
         .dataTables_scrollFootInner{
-             width: 100% !important;
+            width: 100% !important;
         }       
         div.dataTables_scrollFoot table{
             width: 100% !important;
@@ -31,11 +31,11 @@
 {/literal}
 <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%" >
     {if $id != 5 && $id != 2}
-    <div bgcolor="#E4E4E4" class="col-sm-1">
-        <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=1', '', true);">
-            <img src="recursos/imagenes/add.png" width="24px">
-        </a>
-    </div>
+        <div bgcolor="#E4E4E4" class="col-sm-1">
+            <a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=1', '', true);">
+                <img src="recursos/imagenes/add.png" width="24px">
+            </a>
+        </div>
     {/if}
     <thead>
         <tr align="center">
@@ -46,6 +46,9 @@
                 <th bgcolor="#E4E4E4" >Editar</th>
                 {else}
                 <th bgcolor="#E4E4E4" >&nbsp;</th>
+                {/if}
+                {if $id == 6}
+                <th bgcolor="#E4E4E4" >Datos</th>
                 {/if}
         </tr>
     </thead>
@@ -58,6 +61,9 @@
                 <th bgcolor="#E4E4E4" >&nbsp;</th>
                 {else}
                 <th bgcolor="#E4E4E4" >&nbsp;</th>
+                {/if}
+                {if $id == 6}
+                <th bgcolor="#E4E4E4" >Datos</th>
                 {/if}
         </tr>
     </tfoot>
@@ -89,6 +95,9 @@
             {elseif $id == 6}
                 <td width="5%" align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosUnidades.php?&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosUnidades.php?tipo=3&id=6', '', true);">
                         <span class="glyphicon glyphicon-edit" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a>
+                </td>
+                <td width="5%" align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosUnidades.php?&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosUnidades.php&tipo=2&id=6', '', true);">
+                        <span class="glyphicon glyphicon-pencil glyphicon glyphicon-list-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a>
                 </td>
             {else}
                 <td width="5%" align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=2&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosProyecto.php?tipo=2', '', true);">

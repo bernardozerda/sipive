@@ -1328,52 +1328,52 @@ class InformeVeedurias {
         global $aptBd;
         $msn = "";
         $total = 0;
-        $aptBd->execute("SET SQL_SAFE_UPDATES=0;");
+
         $sql = "delete pry, upr from t_vee_proyecto pry
                     left join t_vee_unidad_proyecto upr on upr.seqProyectoVeeduria = pry.seqProyectoVeeduria
                     where pry.seqCorte = " . $seqCorte;
-        $ejecuto = $this->eliminarReporteVeeduria($sql);
+        $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
         if ($ejecuto[0]) {
             // $ejecuto = false;
             $sql = "delete uac,uvi from t_vee_unidad_acto uac
           left join t_vee_unidades_vinculadas uvi on uvi.seqUnidadActoVeeduria = uac.seqUnidadActoVeeduria
           where uac.seqCorte = " . $seqCorte;
-            $ejecuto = $this->eliminarReporteVeeduria($sql);
+            $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
             if ($ejecuto[0]) {
                 $sql = "delete  sol from t_vee_desembolso des left join t_vee_solicitud sol on sol.seqDesembolsoVeeduria = des.seqDesembolsoVeeduria where des.seqCorte = " . $seqCorte;
-                $ejecuto = $this->eliminarReporteVeeduria($sql);
+                $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                 if ($ejecuto[0]) {
                     $sql = "delete esc from t_vee_desembolso des left join t_vee_escrituracion esc on esc.seqDesembolsoVeeduria = des.seqDesembolsoVeeduria where des.seqCorte = " . $seqCorte;
-                    $ejecuto = $this->eliminarReporteVeeduria($sql);
+                    $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                     if ($ejecuto[0]) {
                         $sql = "delete tit, adjt from t_vee_desembolso des          
                             left join t_vee_estudio_titulos tit on tit.seqDesembolsoVeeduria = des.seqDesembolsoVeeduria
                             left join t_vee_adjuntos_titulos adjt on adjt.seqEstudioTitulosVeeduria = tit.seqEstudioTitulosVeeduria          
                             where des.seqCorte = " . $seqCorte;
-                        $ejecuto = $this->eliminarReporteVeeduria($sql);
+                        $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                         if ($ejecuto[0]) {
                             $sql = "DELETE FROM t_vee_desembolso  where seqCorte = " . $seqCorte;
-                            $ejecuto = $this->eliminarReporteVeeduria($sql);
+                            $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                             if ($ejecuto[0]) {
                                 $sql = "DELETE hog FROM t_vee_hogar hog
                                 LEFT JOIN
                                 t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria
                                 WHERE
                                 ciu.seqCorte =" . $seqCorte;
-                                $ejecuto = $this->eliminarReporteVeeduria($sql);
+                                $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                                 if ($ejecuto[0]) {
                                     $sql = "DELETE from t_vee_formulario where seqCorte =" . $seqCorte;
-                                    $ejecuto = $this->eliminarReporteVeeduria($sql);
+                                    $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                                     if ($ejecuto[0]) {
                                         $sql = "DELETE from t_vee_ciudadano where seqCorte =" . $seqCorte;
-                                        $ejecuto = $this->eliminarReporteVeeduria($sql);
+                                        $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                                         if ($ejecuto[0]) {
                                             $sql = "DELETE from t_vee_corte where seqCorte =" . $seqCorte;
-                                            $ejecuto = $this->eliminarReporteVeeduria($sql);
+                                            $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                                             if ($ejecuto[0]) {
-                                                echo '<div class="alert alert-success"><h5><strong>Éxito!!! </strong> <b>El Informe Fue elimininado por completo con un total de: ' . $ejecuto[1] . ' Registros.</b></h5></div>';
+                                                echo '<div class="alert alert-success"><strong>Éxito!!! </strong> <b>El Informe Fue elimininado por completo con un total de: ' . $ejecuto[1] . ' Registros.</b></div>';
                                             } else {
-                                                echo '<div class="alert alert-danger"><h5><strong>Alerta!!! </strong> <b>Aun Falta tablas por eliminar solo fueron eliminados: ' . $ejecuto[1] . ' Registros. Intente Eliminando Nuevamente</b></h5></div>' . $ejecuto[1];
+                                                echo '<div class="alert alert-danger"><strong>Alerta!!! </strong> <b>Aun Falta tablas por eliminar solo fueron eliminados: ' . $ejecuto[1] . ' Registros. Intente Eliminando Nuevamente</b></div>';
                                             }
                                         }
                                     }
@@ -1386,7 +1386,7 @@ class InformeVeedurias {
         }
     }
 
-    public function eliminarReporteVeeduria($sql) {
+    public function eliminarReporteVeeduria($sql, $seqCorte) {
         global $aptBd;
         $msn = "";
         $total = 0;
@@ -1414,6 +1414,12 @@ class InformeVeedurias {
         $valido = ($band == 0) ? true : false;
         $ejecuto[0] = $valido;
         $ejecuto[1] = $total;
+        $sql = "select * from t_vee_corte where seqCorte =" . $seqCorte;
+        $rs = $aptBd->execute($sql);
+        $rows = $rs->RecordCount();
+        if ($rows > 0) {
+            echo '<div class="alert alert-danger"><strong>Alerta!!! </strong> <b>Aun Falta tablas por eliminar solo fueron eliminados: ' . $ejecuto[1] . ' Registros. Intente Eliminando Nuevamente</b></div>';
+        }
         return $ejecuto;
     }
 

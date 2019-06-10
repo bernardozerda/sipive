@@ -1328,7 +1328,7 @@ class InformeVeedurias {
         global $aptBd;
         $msn = "";
         $total = 0;
-
+        $aptBd->execute("SET SQL_SAFE_UPDATES=0;");
         $sql = "delete pry, upr from t_vee_proyecto pry
                     left join t_vee_unidad_proyecto upr on upr.seqProyectoVeeduria = pry.seqProyectoVeeduria
                     where pry.seqCorte = " . $seqCorte;
@@ -1372,6 +1372,7 @@ class InformeVeedurias {
                                             $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                                             if ($ejecuto[0]) {
                                                 echo '<div class="alert alert-success"><strong>Éxito!!! </strong> <b>El Informe Fue elimininado por completo con un total de: ' . $ejecuto[1] . ' Registros.</b></div>';
+                                                $aptBd->execute("SET SQL_SAFE_UPDATES=1;");
                                             } else {
                                                 echo '<div class="alert alert-danger"><strong>Alerta!!! </strong> <b>Aun Falta tablas por eliminar solo fueron eliminados: ' . $ejecuto[1] . ' Registros. Intente Eliminando Nuevamente</b></div>';
                                             }

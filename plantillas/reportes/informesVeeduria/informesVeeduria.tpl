@@ -50,7 +50,7 @@
                                  width="16px"
                                  height="20px"
                                  style="cursor: hand"
-                                 >{$arrDato.seqCorte}
+                                 >
                         </button>
                     </td>
                 </tr>

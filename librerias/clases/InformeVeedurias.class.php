@@ -1333,47 +1333,47 @@ class InformeVeedurias {
                     left join t_vee_unidad_proyecto upr on upr.seqProyectoVeeduria = pry.seqProyectoVeeduria
                     where pry.seqCorte = " . $seqCorte;
         $ejecuto = $this->eliminarReporteVeeduria($sql);
-        if ($ejecuto) {
-            $ejecuto = false;
+        if ($ejecuto[0]) {
+            // $ejecuto = false;
             $sql = "delete uac,uvi from t_vee_unidad_acto uac
           left join t_vee_unidades_vinculadas uvi on uvi.seqUnidadActoVeeduria = uac.seqUnidadActoVeeduria
           where uac.seqCorte = " . $seqCorte;
             $ejecuto = $this->eliminarReporteVeeduria($sql);
-            if ($ejecuto) {
+            if ($ejecuto[0]) {
                 $sql = "delete  sol from t_vee_desembolso des left join t_vee_solicitud sol on sol.seqDesembolsoVeeduria = des.seqDesembolsoVeeduria where des.seqCorte = " . $seqCorte;
                 $ejecuto = $this->eliminarReporteVeeduria($sql);
-                if ($ejecuto) {
+                if ($ejecuto[0]) {
                     $sql = "delete esc from t_vee_desembolso des left join t_vee_escrituracion esc on esc.seqDesembolsoVeeduria = des.seqDesembolsoVeeduria where des.seqCorte = " . $seqCorte;
                     $ejecuto = $this->eliminarReporteVeeduria($sql);
-                    if ($ejecuto) {
+                    if ($ejecuto[0]) {
                         $sql = "delete tit, adjt from t_vee_desembolso des          
                             left join t_vee_estudio_titulos tit on tit.seqDesembolsoVeeduria = des.seqDesembolsoVeeduria
                             left join t_vee_adjuntos_titulos adjt on adjt.seqEstudioTitulosVeeduria = tit.seqEstudioTitulosVeeduria          
                             where des.seqCorte = " . $seqCorte;
                         $ejecuto = $this->eliminarReporteVeeduria($sql);
-                        if ($ejecuto) {
+                        if ($ejecuto[0]) {
                             $sql = "DELETE FROM t_vee_desembolso  where seqCorte = " . $seqCorte;
                             $ejecuto = $this->eliminarReporteVeeduria($sql);
-                            if ($ejecuto) {
+                            if ($ejecuto[0]) {
                                 $sql = "DELETE hog FROM t_vee_hogar hog
                                 LEFT JOIN
                                 t_vee_ciudadano ciu ON hog.seqCiudadanoVeeduria = ciu.seqCiudadanoVeeduria
                                 WHERE
                                 ciu.seqCorte =" . $seqCorte;
                                 $ejecuto = $this->eliminarReporteVeeduria($sql);
-                                if ($ejecuto) {
+                                if ($ejecuto[0]) {
                                     $sql = "DELETE from t_vee_formulario where seqCorte =" . $seqCorte;
                                     $ejecuto = $this->eliminarReporteVeeduria($sql);
-                                    if ($ejecuto) {
+                                    if ($ejecuto[0]) {
                                         $sql = "DELETE from t_vee_ciudadano where seqCorte =" . $seqCorte;
                                         $ejecuto = $this->eliminarReporteVeeduria($sql);
-                                        if ($ejecuto) {
+                                        if ($ejecuto[0]) {
                                             $sql = "DELETE from t_vee_corte where seqCorte =" . $seqCorte;
                                             $ejecuto = $this->eliminarReporteVeeduria($sql);
-                                            if ($ejecuto) {
-                                                echo "<br> paso -> t_vee_corte" . $ejecuto;
+                                            if ($ejecuto[0]) {
+                                                echo '<div class="alert alert-success"><h5><strong>Éxito!!! </strong> <b>El Informe Fue elimininado por completo con un total de: ' . $ejecuto[1] . ' Registros.</b></h5></div>';
                                             } else {
-                                                echo "<br> NO paso -> t_vee_corte" . $ejecuto;
+                                                echo '<div class="alert alert-danger"><h5><strong>Alerta!!! </strong> <b>Aun Falta tablas por eliminar solo fueron eliminados: ' . $ejecuto[1] . ' Registros. Intente Eliminando Nuevamente</b></h5></div>' . $ejecuto[1];
                                             }
                                         }
                                     }
@@ -1384,64 +1384,6 @@ class InformeVeedurias {
                 }
             }
         }
-
-
-        /* $aptBd->execute($sql);
-
-          if ($aptBd->ErrorMsg() == "") {//
-          echo "<br> 1. " . $total = $total + $aptBd->Affected_Rows();
-
-
-
-          $aptBd->execute($sql);
-          if ($aptBd->ErrorMsg() == "") {//
-          echo "<br> 2. " . $total = $total + $aptBd->Affected_Rows();
-          $sql1 = " " . $seqCorte;
-
-          $aptBd->execute($sql1);
-          if ($aptBd->ErrorMsg() == "") {//
-          echo "<br> 3. " . $total = $total + $aptBd->Affected_Rows();
-          $sql = " " . $seqCorte;
-
-          $aptBd->execute($sql);
-          if ($aptBd->ErrorMsg() == "") {//
-          echo "<br> 4. " . $total = $total + $aptBd->Affected_Rows();
-
-          $sql = " " . $seqCorte;
-
-          $aptBd->execute($sql);
-          if ($aptBd->ErrorMsg() == "") {//
-          echo "<br>  5. " . $total = $total + $aptBd->Affected_Rows();
-          $sql = "  " . $seqCorte;
-
-          $aptBd->execute($sql);
-          if ($aptBd->ErrorMsg() == "") {//
-          echo "<br> 6. " . $total = $total + $aptBd->Affected_Rows();
-
-
-
-          if ($aptBd->ErrorMsg() == "") {//
-          echo "<br> 8. " . $total = $total + $aptBd->Affected_Rows();
-
-          if ($aptBd->ErrorMsg() == "") {//
-          echo "<br> 9. " . $total = $total + $aptBd->Affected_Rows();
-
-          $sql = " " . $seqCorte;
-
-          $aptBd->execute($sql);
-          if ($aptBd->ErrorMsg() == "") {//
-          echo "<br> 7. " . $total = $total + $aptBd->Affected_Rows();
-          }
-          }
-          }
-          }
-          }
-          }
-          }
-          }
-          }
-          $aptBd->execute("SET SQL_SAFE_UPDATES=1;");
-          echo $msn .=" Se eliminaron " . $total . " registros"; */
     }
 
     public function eliminarReporteVeeduria($sql) {
@@ -1449,27 +1391,30 @@ class InformeVeedurias {
         $msn = "";
         $total = 0;
         $band = 1;
-        echo "<br> band 1 =>" . $band;
+        $ejecuto = Array();
+        //  echo "<br> band 1 =>" . $band;
         while (1) {
             $sql = $sql;
             $aptBd->execute($sql);
-            echo "<br> Total " . $total = $total + $aptBd->Affected_Rows();
+            $total = $total + $aptBd->Affected_Rows();
             if ($aptBd->Affected_Rows() == 0) {
                 // finalizado el borrado
                 $band = 0;
-                echo "<br> band 2 =>" . $band;
+                //   echo "<br> band 2 =>" . $band;
                 break;
             } else {
-                echo "<br>  " . $total = $total + $aptBd->Affected_Rows();
-                echo "<br> band  **=>" . $band;
+                $total = $total + $aptBd->Affected_Rows();
+                //  echo "<br> band  **=>" . $band;
             }
             // incluso viene bien parar un poco
             usleep(500000);
-            echo "<br> band  3=>" . $band;
+            //  echo "<br> band  3=>" . $band;
         }
-        echo "<br> band 4 =>" . $band;
+        // echo "<br> band 4 =>" . $band;
         $valido = ($band == 0) ? true : false;
-        return $valido;
+        $ejecuto[0] = $valido;
+        $ejecuto[1] = $total;
+        return $ejecuto;
     }
 
 }

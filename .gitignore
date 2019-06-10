@@ -60,3 +60,4 @@ redireccionamiento.php
 *.iml
 *.idea*
 *.svn*
+/recursos/proyectos/

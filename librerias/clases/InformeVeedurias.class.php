@@ -1372,7 +1372,7 @@ class InformeVeedurias {
                                             $ejecuto = $this->eliminarReporteVeeduria($sql, $seqCorte);
                                             if ($ejecuto[0]) {
                                                 echo '<div class="alert alert-success"><strong>Éxito!!! </strong> <b>El Informe Fue elimininado por completo con un total de: ' . $ejecuto[1] . ' Registros.</b></div>';
-                                                $aptBd->execute("SET SQL_SAFE_UPDATES=1;");
+                                                $aptBd->execute("SET FOREIGN_KEY_CHECKS=1;");
                                             } else {
                                                 echo '<div class="alert alert-danger"><strong>Alerta!!! </strong> <b>Aun Falta tablas por eliminar solo fueron eliminados: ' . $ejecuto[1] . ' Registros. Intente Eliminando Nuevamente</b></div>';
                                             }
@@ -1396,7 +1396,7 @@ class InformeVeedurias {
         //  echo "<br> band 1 =>" . $band;
         while (1) {
             $sql = $sql;
-             $aptBd->execute("SET SQL_SAFE_UPDATES=0;");
+             $aptBd->execute("SET FOREIGN_KEY_CHECKS=0;");
             $aptBd->execute($sql);
             $total = $total + $aptBd->Affected_Rows();
             if ($aptBd->Affected_Rows() == 0) {

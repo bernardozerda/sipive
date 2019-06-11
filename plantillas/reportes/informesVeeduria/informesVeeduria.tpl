@@ -10,7 +10,9 @@
         <th>Usuario</th>
         <th nowrap>Informe Vinculación a Proyectos</th>
         <th nowrap>Informe de Hogares con Asignación</th>
-        <th nowrap>Eliminar Informe</th>
+            {if $smarty.session.seqUsuario == 414 or  $smarty.session.seqUsuario == 5}
+            <th nowrap>Eliminar Informe</th>
+            {/if}
         </thead>
         <tfoot align="left">
         <th>Periodo</th>
@@ -18,7 +20,9 @@
         <th>Usuario</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
-        <th>&nbsp;</th>
+            {if $smarty.session.seqUsuario == 414 or  $smarty.session.seqUsuario == 5}
+            <th>&nbsp;</th>
+            {/if}
         </tfoot>
         <tbody>
             {foreach name=cortes from=$arrCortes item=arrDato}
@@ -44,15 +48,17 @@
                                  >
                         </button>
                     </td>
-                    <td align="center">
-                        <button onClick="eliminarInformeVeedurias({$arrDato.seqCorte})" style="width: 35px; height: 30px">
-                            <img src="./recursos/imagenes/basura.png"
-                                 width="16px"
-                                 height="20px"
-                                 style="cursor: hand"
-                                 >
-                        </button>
-                    </td>
+                    {if $smarty.session.seqUsuario == 414 or $smarty.session.seqUsuario == 5}
+                        <td align="center">
+                            <button onClick="eliminarInformeVeedurias({$arrDato.seqCorte})" style="width: 35px; height: 30px">
+                                <img src="./recursos/imagenes/basura.png"
+                                     width="16px"
+                                     height="20px"
+                                     style="cursor: hand"
+                                     >
+                            </button>
+                        </td>
+                    {/if}
                 </tr>
             {/foreach}
         </tbody>

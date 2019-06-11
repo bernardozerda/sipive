@@ -7,8 +7,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 
 //$ruta = 'D:\modificacionesPorvenir\mz22AB';
-$ruta = 'D:\ImagenesBosa601';
-listar($ruta);
+//$ruta = 'D:\modificacionesPorvenir\mz6527marzo';
+//listar($ruta);
 //crearCarpetas();
 
 function listar($directorio) {
@@ -30,12 +30,12 @@ function listar($directorio) {
                         // echo"<br>" . $file;
                         // echo "<br>   * " . $one;
                         // echo "<b> ***".$file."(".$int.").".$var[1]."</b>";
-                         echo "<br>" . ($directorio . '/' . $file . "/" . $one . " ====> " . $directorio . '/' . $file . "/" . $file . "(" . $int . ")." . $var[1]);
+                        //  echo "<br>" . ($directorio . '/' . $file . "/" . $one . " ====> " . $directorio . '/' . $file . "/" . $file . "(" . $int . ")." . $var[1]);
 
                         try {
                             $one2 = str_replace(" ", "", $one);
                             //rename($directorio . '/' . $file . "/" . $one, $directorio . '/' . $file . "/".date('y-m-d_his').'-' .$one2);
-                             rename($directorio . '/' . $file . "/" . $one, $directorio . '/' . $file . "/" . $file . "(" . $int . ")." . $var[1]);
+                            // rename($directorio . '/' . $file . "/" . $one, $directorio . '/' . $file . "/" . $file . "(" . $int . ")." . $var[1]);
                         } catch (Exception $ex) {
                             echo $ex->getMessage();
                         }

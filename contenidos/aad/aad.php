@@ -5,7 +5,7 @@
  * @author Bernardo Zerda
  * @version 4.0 Junio de 2018
  */
-
+echo "prueba";
 $txtPrefijoRuta = "../../";
 
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );

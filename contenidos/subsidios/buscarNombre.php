@@ -8,10 +8,11 @@
     include( $txtPrefijoRuta . $arrConfiguracion["carpetas"]["recursos"] . "archivos/inclusionSmarty.php" );
     include( $txtPrefijoRuta . $arrConfiguracion["carpetas"]["recursos"] . "archivos/coneccionBaseDatos.php" );
 	include( $txtPrefijoRuta . $arrConfiguracion["librerias"]["clases"] . "Ciudadano.class.php" );
-
-	$txtParametro = mb_ereg_replace( " " , "%" , trim( $_GET["query"] ) );
+	
+	
+	$txtParametro = ereg_replace( " " , "%" , trim( $_GET["query"] ) );
 	while( strpos( $txtParametro , "%%" ) !== false ){
-		$txtParametro = mb_ereg_replace( "%%" , "%" , $txtParametro );
+		$txtParametro = ereg_replace( "%%" , "%" , $txtParametro );
 	}
 	
 	$claCiudadano = new Ciudadano();
@@ -22,7 +23,7 @@
 			echo implode( "\t" , $arrInformacion ) . "\n";
 		}
 	}else{
-		echo "No se encontraron resultados para \"". mb_ereg_replace( "%" , " " , $txtParametro ) ."\"\t\n";
+		echo "No se encontraron resultados para \"". ereg_replace( "%" , " " , $txtParametro ) ."\"\t\n";
 	}
 
 ?>

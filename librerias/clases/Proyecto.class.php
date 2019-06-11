@@ -370,9 +370,9 @@ class Proyecto {
 
         foreach ($post as $nombre_campo => $valor) {
 
-            if ($valor == "" || $valor == " " || $valor == null) {
+            if ($valor == "" || $valor == " " || $valor == null || $valor == '0000-00-00') {
                 $valor = (count(explode('txt', $nombre_campo)) > 1) ? NULL : 'NULL';
-                //$valor = (count(explode('seq', $nombre_campo)) > 1) ? 0 : 'NULL'              
+                $valor = (count(explode('fch', $nombre_campo)) > 1) ? NULL : 'NULL';
                 if (count(explode('seq', $nombre_campo)) > 1) {
                     $valor = 0;
                 }
@@ -605,7 +605,7 @@ class Proyecto {
 
         global $aptBd;
         $sql = "SELECT pry.*, pol.*, fid.*, con.*, loc.*, gru.*, pry.seqProyecto as seqProyecto, txtTipoProyecto, txtTipoFinanciacion, "
-                 . " ofProy.nombreOferente AS oferente "               
+                . " ofProy.nombreOferente AS oferente "
                 . "FROM  t_pry_proyecto pry "
                 . "LEFT JOIN t_pry_poliza pol on(pry.seqProyecto = pol.seqProyecto) "
                 . "LEFT JOIN t_pry_datos_fiducia fid on(pry.seqProyecto = fid.seqProyecto) "
@@ -627,7 +627,7 @@ class Proyecto {
             $sql .= " where  pry.seqProyecto = " . $seqProyecto;
         }
         $sql . " ORDER BY  pry.seqProyecto";
-       // echo "<p>" . $sql . "</p>";
+        // echo "<p>" . $sql . "</p>";
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -697,7 +697,7 @@ class Proyecto {
         return $datos;
     }
 
-    /** 
+    /**
      * MODIFICA LA INFORMACION DE LA Proyecto
      * SELECCIONADA Y GUARDA LOS NUEVOS DATOS
      * @author Bernardo Zerda
@@ -740,8 +740,8 @@ class Proyecto {
         $txtDireccionInterventor = '';
         $txtCorreoInterventor = '';
         $bolTipoPersonaInterventor = 0;
-        $numCedulaInterventor = 'NULL';
-        $numTProfesionalInterventor = 'NULL';
+        $numCedulaInterventor = 0;
+        $numTProfesionalInterventor = '';
         $numNitInterventor = 'NULL';
         $txtNombreRepLegalInterventor = '';
         $numTelefonoRepLegalInterventor = 'NULL';
@@ -749,16 +749,20 @@ class Proyecto {
         $txtCorreoRepLegalInterventor = '';
 
         foreach ($post as $nombre_campo => $valor) {
-            //echo $asignacion = "\$" . $nombre_campo . "='" . $valor . "';<br>";
-            if ($valor == "" || $valor == " " || $valor == null) {
+
+            if ($valor == "" || $valor == " " || $valor == null || $valor == '0000-00-00') {
                 $valor = (count(explode('txt', $nombre_campo)) > 1) ? NULL : 'NULL';
-                if (count(explode('seq', $nombre_campo)) > 1) {
+                $valor = (count(explode('fch', $nombre_campo)) > 1) ? NULL : NULL;
+
+                if (count(explode('seq', $nombre_campo)) > 1 || count(explode('num', $nombre_campo)) > 1 || count(explode('val', $nombre_campo)) > 1) {
+                    // echo "<br> $" . $nombre_campo . "=> " . $valor;
                     $valor = 0;
                 }
             }
             if ($valor == 'NaN') {
                 $valor = 0;
             }
+
             $$nombre_campo = $valor;
         }
         $arrErrores = array();
@@ -985,10 +989,11 @@ class Proyecto {
             foreach ($array[$seqProyecto] as $key => $value) {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
                     $$key = 0;
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }
-            }            
+            }
             $sql .= "(
                         '$txtLicencia', 
                         '$txtExpideLicencia',
@@ -1058,6 +1063,7 @@ class Proyecto {
             foreach ($array[$seqProyecto] as $key => $value) {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
                     $$key = 0;
+                    $$key = (count(explode('fch', $value[($index)])) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }
@@ -1113,13 +1119,18 @@ class Proyecto {
         $query = "INSERT INTO T_PRY_PROYECTO (
                 txtNombreProyecto,
                 txtNombreComercial,
+                seqLocalidad,
+                seqBarrio,
                 seqProyectoPadre,
                 txtDireccion,
                 valNumeroSoluciones,
                 txtMatriculaInmobiliariaLote,
                 txtChipLote,               
                 txtNombreVendedor,
+                seqTipoDocumentoVendedor,
                 numNitVendedor,
+                numTelVendedor,
+                txtCorreoVendedor,
                 txtCedulaCatastral,
                 txtEscritura,
                 fchEscritura,
@@ -1128,6 +1139,8 @@ class Proyecto {
                 seqPryEstadoProceso,
                 fchInscripcion,
                 fchUltimaActualizacion,
+                valAreaLote,
+                valTorres,
                 seqUsuario) 
             VALUES";
         for ($index = 0; $index < $cant; $index++) {
@@ -1136,21 +1149,28 @@ class Proyecto {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
                     //$$key = 0;
                     $$key = (count(explode('txt', $key)) > 1) ? NULL : 'NULL';
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }
             }
+            //  echo "<br> $".$key ." => ".$value[($index)];
             //if ($txtNombreProyectoHijo != "") {
             $query .= "(
                         '$txtNombreProyectoHijo', 
                         '$txtNombreComercialHijo',
+                        '$seqLocalidadHijo',
+                        '$seqBarrioHijo',
                         '$seqProyecto',
                         '$txtDireccionHijo',
                         '$valNumeroSolucionesHijo',
                         '$txtMatriculaInmobiliariaLoteHijo',
                         '$txtChipLoteHijo',                         
                         '$txtNombreVendedorHijo',
+                         $seqTipoDocumentoVendedorHijo,
                         '$numNitVendedorHijo',
+                        '$numTelVendedorHijo',
+                        '$txtCorreoVendedorHijo',
                         '$txtCedulaCatastralHijo',
                         '$txtEscrituraHijo',
                         '$fchEscrituraHijo',
@@ -1159,6 +1179,8 @@ class Proyecto {
                         '2',
                         '$fchGestion',
                         '$fchGestion',
+                        '$valAreaLoteHijo',
+                        '$valTorresHijo',
                         " . $_SESSION['seqUsuario'] . ");";
             try {
                 $aptBd->execute($query);
@@ -1200,10 +1222,14 @@ class Proyecto {
         for ($index = 0; $index < $cant; $index++) {
             $txtNombreProyectoHijo = '';
             foreach ($arrayConjuntos[$seqProyecto] as $key => $value) {
-                if ($value[($index)] == NULL && $value[($index)] == "") {
-                    // $$key = 0;
+                if ($value[($index)] == NULL || $value[($index)] == "" || $value[($index)] == "0000-00-00") {
+                    $$key = 0;
                     $$key = (count(explode('txt', $key)) > 1) ? NULL : 'NULL';
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
+                    //  echo "<br> ** key = " . $key . " =>" . $$key;
                 } else {
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
+                    //echo "<br> ** key = " . $key . " =>" . $$key;
                     $$key = $value[($index)];
                 }
             }
@@ -1213,19 +1239,26 @@ class Proyecto {
                 $query = "UPDATE T_PRY_PROYECTO 
                     SET txtNombreProyecto = '$txtNombreProyectoHijo',
                         txtNombreComercial = '$txtNombreComercialHijo',
+                        seqLocalidad = '$seqLocalidadHijo',
+                        seqBarrio = '$seqBarrioHijo',
                         seqProyectoPadre = '$seqProyecto',
                         txtDireccion = '$txtDireccionHijo',
                         valNumeroSoluciones = '$valNumeroSolucionesHijo',
                         txtChipLote = '$txtChipLoteHijo',
                         txtMatriculaInmobiliariaLote = '$txtMatriculaInmobiliariaLoteHijo',                        
                         txtNombreVendedor = '$txtNombreVendedorHijo',
+                        seqTipoDocumentoVendedor = '$seqTipoDocumentoVendedorHijo',
                         numNitVendedor = '$numNitVendedorHijo',
+                        numTelVendedor = '$numTelVendedorHijo',
+                        txtCorreoVendedor = '$txtCorreoVendedorHijo',
                         txtCedulaCatastral = '$txtCedulaCatastralHijo',
                         txtEscritura = '$txtEscrituraHijo',
                         fchEscritura = '$fchEscrituraHijo',
                         numNotaria = '$numNotariaHijo',
                         seqTutorProyecto = '$seqTutorProyecto', 
                         fchUltimaActualizacion = '$fchGestion', 
+                        valAreaLote = '$valAreaLoteHijo',
+                        valTorres = '$valTorresHijo',
                         seqUsuario = " . $_SESSION['seqUsuario'] . " 
                     WHERE seqProyecto = $seqProyectoHijo;";
                 $arrayInsLicencias = Array();
@@ -1247,6 +1280,8 @@ class Proyecto {
                 $arrayconjuntos[$seqProyecto]['seqProyectoHijo'][] = $seqProyectoHijo;
                 $arrayconjuntos[$seqProyecto]['txtNombreProyectoHijo'][] = $txtNombreProyectoHijo;
                 $arrayconjuntos[$seqProyecto]['txtNombreComercialHijo'][] = $txtNombreComercialHijo;
+                $arrayconjuntos[$seqProyecto]['seqLocalidadHijo'][] = $seqLocalidadHijo;
+                $arrayconjuntos[$seqProyecto]['seqBarrioHijo'][] = $seqBarrioHijo;
                 $arrayconjuntos[$seqProyecto]['txtDireccionHijo'][] = $txtDireccionHijo;
                 $arrayconjuntos[$seqProyecto]['valNumeroSolucionesHijo'][] = $valNumeroSolucionesHijo;
                 $arrayconjuntos[$seqProyecto]['txtChipLoteHijo'][] = $txtChipLoteHijo;
@@ -1259,7 +1294,9 @@ class Proyecto {
                 $arrayconjuntos[$seqProyecto]['fchLicenciaConstruccion1Hijo'][] = $fchLicenciaConstruccion1Hijo;
                 $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaConstruccionHijo'][] = $fchVigenciaLicenciaConstruccionHijo;
                 $arrayconjuntos[$seqProyecto]['txtNombreVendedorHijo'][] = $txtNombreVendedorHijo;
+                $arrayconjuntos[$seqProyecto]['seqTipoDocumentoVendedorHijo'][] = $seqTipoDocumentoVendedorHijo;
                 $arrayconjuntos[$seqProyecto]['numNitVendedorHijo'][] = $numNitVendedorHijo;
+                $arrayconjuntos[$seqProyecto]['numTelVendedorHijo'][] = $numTelVendedorHijo;
                 $arrayconjuntos[$seqProyecto]['txtCedulaCatastralHijo'][] = $txtCedulaCatastralHijo;
                 $arrayconjuntos[$seqProyecto]['txtEscrituraHijo'][] = $txtEscrituraHijo;
                 $arrayconjuntos[$seqProyecto]['fchEscrituraHijo'][] = $fchEscrituraHijo;
@@ -1370,6 +1407,7 @@ class Proyecto {
             foreach ($array[$seqProyecto] as $key => $value) {
                 if ($value[($index)] == NULL && $value[($index)] == "") {
                     $$key = 0;
+                    $$key = (count(explode('fch', $key)) > 1) ? NULL : 'NULL';
                 } else {
                     $$key = $value[($index)];
                 }
@@ -2403,21 +2441,22 @@ class Proyecto {
         }
     }
 
-    public function obtenerDatosProyectosTableroPal() {
+    public function obtenerDatosProyectosDependencia() {
 
         global $aptBd;
-        $sql = "select seqPryEstadoProceso, txtPryEstadoProceso, count(pry.seqProyecto) as cantidad, 
-            (select count(seqUnidadProyecto)  from t_pry_unidad_proyecto und 
-            left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
-            left join t_pry_tecnico tec using(seqUnidadProyecto)
-            LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
-            where  pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso  and und.bolActivo = 1 AND seqProyectoGrupo IN (1 , 2) ) as unidades
-             from t_pry_proyecto pry
-            left join t_pry_estado_proceso using(seqPryEstadoProceso) 
-            LEFT JOIN
-            T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
-            WHERE pry.seqProyectoGrupo in (1,2,3) AND (seqProyectoPadre =  0 or seqProyectoPadre is null)            
-            group by seqPryEstadoProceso order by seqPryEstadoProceso DESC ";
+        $sql = "select (select count(*)  from t_pry_proyecto where seqProyectoGrupo = 1 and bolActivo = 1  AND (seqProyectoPadre = 0
+        OR seqProyectoPadre IS NULL)) as canProySdht,
+        (select count(*)  from t_pry_proyecto where seqProyectoGrupo in(2)  and bolActivo = 1 AND (seqProyectoPadre = 0
+        OR seqProyectoPadre IS NULL)) as canProyPublicos,
+        (select count(*)  from t_pry_proyecto 
+        left join t_pry_unidad_proyecto und using(seqProyecto)
+        where seqProyectoGrupo = 1 ) as undProySdht,
+        (select count(*)  from t_pry_proyecto 
+        left join t_pry_unidad_proyecto und using(seqProyecto)
+        where seqProyectoGrupo in(2) ) as undProyPublicos
+         from t_pry_proyecto pry
+         left join t_pry_proyecto_grupo using(seqProyectoGrupo)
+         limit 1";
 
         /* and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI' */
         //echo $sql;
@@ -2430,7 +2469,37 @@ class Proyecto {
         return $datos;
     }
 
-    public function obtenerDatosProyectosEstados($seqPryEstadoProceso) {
+    public function obtenerDatosProyectosTableroPal($seqProyectoGrupo) {
+
+        global $aptBd;
+        $sql = "select seqPryEstadoProceso, txtPryEstadoProceso, count(pry.seqProyecto) as cantidad, 
+            (select count(seqUnidadProyecto)  from t_pry_unidad_proyecto und 
+            left join t_pry_proyecto pry1 on (und.seqProyecto = pry1.seqProyecto or und.seqProyecto = pry1.seqProyectoPadre)
+            left join t_pry_tecnico tec using(seqUnidadProyecto)
+            LEFT JOIN T_FRM_TIPO_FINANCIACION USING(seqTipoFinanciacion)
+            where  pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso  and und.bolActivo = 1 AND seqProyectoGrupo IN (" . $seqProyectoGrupo . ") ) as unidades
+             from t_pry_proyecto pry
+            left join t_pry_estado_proceso using(seqPryEstadoProceso) 
+            LEFT JOIN
+            T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
+            WHERE pry.seqProyectoGrupo in (" . $seqProyectoGrupo . ")";
+//          if ($seqProyectoGrupo == 1) {
+        $sql .= " AND (seqProyectoPadre =  0 or seqProyectoPadre is null) and pry.bolActivo = 1 ";
+//          }
+        $sql .= " group by seqPryEstadoProceso order by seqPryEstadoProceso DESC ";
+
+        /* and und.seqFormulario is not NULL AND und.seqFormulario != '' and und.seqFormulario > 0 and tec.txtExistencia = 'SI' */
+        //echo $sql;
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        return $datos;
+    }
+
+    public function obtenerDatosProyectosEstados($seqPryEstadoProceso, $seqProyectoGrupo) {
 
         global $aptBd;
         $sql = "SELECT 
@@ -2459,15 +2528,11 @@ class Proyecto {
                             t_pry_unidad_proyecto und
                                 LEFT JOIN
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto
-                                OR und.seqProyecto = pry1.seqProyectoPadre)
-                                LEFT JOIN
-                            t_pry_tecnico tec USING (seqUnidadProyecto)
-                                LEFT JOIN
-                            T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
+                                OR und.seqProyecto = pry1.seqProyectoPadre)                                
                         WHERE
-                            pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                             and und.bolActivo = 1
-                                AND seqProyectoGrupo IN (1 , 2, 3) and 
+                            #pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso and
+                             und.bolActivo = 1
+                                AND seqProyectoGrupo IN (" . $seqProyectoGrupo . ") and 
                                 (und.seqProyecto = pry.seqProyecto or und.seqProyecto = pry.seqProyectoPadre or pry1.seqProyectoPadre = pry.seqProyecto)) 
                                 AS unidades,
                             (SELECT 
@@ -2479,8 +2544,8 @@ class Proyecto {
                                     LEFT JOIN
                                 t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                             WHERE
-                             pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                             AND seqProyectoGrupo IN (1 , 2, 3)
+                             #pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND
+                              seqProyectoGrupo IN (" . $seqProyectoGrupo . ")
                                     AND (und.seqProyecto = pry.seqProyecto
                                     OR und.seqProyecto = pry.seqProyectoPadre
                                     OR pry1.seqProyectoPadre = pry.seqProyecto) and
@@ -2497,8 +2562,8 @@ class Proyecto {
                                 LEFT JOIN
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                         WHERE
-                         pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                                AND seqProyectoGrupo IN (1 , 2, 3)
+                         #pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND
+                                 seqProyectoGrupo IN (" . $seqProyectoGrupo . ")
                                 AND (und.seqProyecto = pry.seqProyecto
                                 OR und.seqProyecto = pry.seqProyectoPadre
                                 OR pry1.seqProyectoPadre = pry.seqProyecto)
@@ -2512,8 +2577,8 @@ class Proyecto {
                                 LEFT JOIN
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                         WHERE
-                        pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                                AND seqProyectoGrupo IN (1 , 2, 3)
+                        #pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND
+                                 seqProyectoGrupo IN (" . $seqProyectoGrupo . ")
                                 AND (und.seqProyecto = pry.seqProyecto
                                 OR und.seqProyecto = pry.seqProyectoPadre
                                 OR pry1.seqProyectoPadre = pry.seqProyecto)
@@ -2526,8 +2591,8 @@ class Proyecto {
                                 OR seqEstadoProceso = 19
                                 OR seqEstadoProceso = 22
                                 OR seqEstadoProceso = 23
-                                OR seqEstadoProceso = 25
-                                OR seqEstadoProceso = 26
+                                    OR seqEstadoProceso = 25
+                                    OR seqEstadoProceso = 26
                                 OR seqEstadoProceso = 27
                                 OR seqEstadoProceso = 28
                                 OR seqEstadoProceso = 31
@@ -2539,14 +2604,15 @@ class Proyecto {
                                  LEFT JOIN
                             t_pry_proyecto pry1 ON (und.seqProyecto = pry1.seqProyecto)
                                 WHERE 
-                                pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso
-                                 AND (und.seqProyecto = pry.seqProyecto
-                                 AND seqProyectoGrupo IN (1 , 2, 3) AND
+                               # pry1.seqPryEstadoProceso = pry.seqPryEstadoProceso AND  
+                                (und.seqProyecto = pry.seqProyecto
+                                 AND seqProyectoGrupo IN (" . $seqProyectoGrupo . ") AND
                                 frm.bolCerrado =1  and und.seqFormulario is not null
                                 and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR 
                                 seqEstadoProceso = 16 OR seqEstadoProceso = 47 OR seqEstadoProceso = 56) 
                                 and und.bolActivo =1)) as postuladas,
-                        txtTipoFinanciacion
+                        txtTipoFinanciacion,
+                        (select count(*) AS cantHijos from t_pry_proyecto where seqProyectoPadre = pry.seqProyecto)as cantHijos
                     FROM
                         t_pry_proyecto pry
                             LEFT JOIN
@@ -2561,12 +2627,66 @@ class Proyecto {
                         T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion)
                     WHERE
                         seqPryEstadoProceso = $seqPryEstadoProceso
-                            AND pry.seqProyectoGrupo IN (1 , 2, 3)
-                            AND (seqProyectoPadre = 0
-                            OR seqProyectoPadre IS NULL)
-                    GROUP BY seqProyecto
+                            AND pry.seqProyectoGrupo IN (" . $seqProyectoGrupo . ")";
+        //  if ($seqProyectoGrupo == 1) {
+        $sql .= " AND (seqProyectoPadre = 0
+                            OR seqProyectoPadre IS NULL)";
+        //    }
+        $sql .= " GROUP BY seqProyecto
                     ORDER BY seqProyecto ASC ";
+        //echo "<p>".$sql."</p>";
         $objRes = $aptBd->execute($sql);
+
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            $objRes->MoveNext();
+        }
+        //var_dump($datos);
+        return $datos;
+    }
+
+    public function determinarSiEsPadre($seqProyecto) {
+        global $aptBd;
+        $sql = "select count(*) AS cantHijos from t_pry_proyecto where seqProyectoPadre =  " . $seqProyecto;
+        $objRes = $aptBd->execute($sql);
+        return $objRes->fields['cantHijos'];
+    }
+
+    public function obtenerDatosProyectosIndividual($seqProyecto) {
+
+        global $aptBd;
+        $sql = "select pry.seqProyecto, pry.txtNombreProyecto, 
+            case when txtNombreConstructor is null 
+            then (select txtNombreConstructor from t_pry_proyecto pry1
+            LEFT JOIN t_pry_constructor USING (seqConstructor) where pry1.seqProyecto = pry.seqProyectoPadre) 
+             else txtNombreConstructor end as txtNombreConstructor , txtLocalidad, txtTipoFinanciacion, "
+                ."(select count(*) as cant from t_pry_unidad_proyecto und1 where und1.seqProyecto = pry.seqProyecto and und1.bolActivo =1) as unidades,"
+                . "(SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und1
+                    LEFT JOIN t_frm_formulario frm USING(seqFormulario)                    
+                    WHERE (frm.bolCerrado =0  OR (und1.seqFormulario IS NULL OR  und1.seqFormulario = 0) and und1.bolActivo =1) and und1.seqProyecto = pry.seqProyecto)  as pendientes, "
+                . "(SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und1
+                    LEFT JOIN t_frm_formulario frm USING(seqFormulario)                     
+                    WHERE frm.bolCerrado =1  and und1.seqFormulario is not null and und1.seqProyecto = pry.seqProyecto
+                    and (seqEstadoProceso = 7 OR seqEstadoProceso = 54 OR seqEstadoProceso = 16 OR seqEstadoProceso = 47 OR seqEstadoProceso = 56) and und1.bolActivo =1) As postuladas, "
+                . "(SELECT count(*) as cant FROM t_pry_unidad_proyecto und1
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)                    
+                     WHERE seqEstadoProceso = 40 AND bolCerrado = 1 and und1.seqProyecto = pry.seqProyecto) AS legalizadas, "
+                . "(SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und1
+                    LEFT JOIN t_frm_formulario frm USING(seqFormulario)                     
+                    WHERE frm.bolCerrado =1  and und1.seqFormulario is not null
+                    and (seqEstadoProceso = 15 OR seqEstadoProceso = 62 OR seqEstadoProceso = 17
+                    OR seqEstadoProceso = 19 OR seqEstadoProceso = 22 OR seqEstadoProceso = 23 OR seqEstadoProceso = 25
+                    OR seqEstadoProceso = 26 OR seqEstadoProceso = 27 OR seqEstadoProceso = 28 OR seqEstadoProceso = 31
+                    OR seqEstadoProceso = 29 OR seqEstadoProceso = 40) and und1.bolActivo =1 and und1.seqProyecto = pry.seqProyecto) as vinculadas "                
+                . "from t_pry_proyecto pry"
+                . " left join t_pry_constructor using(seqConstructor) "
+                . " LEFT  JOIN t_frm_localidad  USING(seqLocalidad)"               
+                . " LEFT JOIN T_FRM_TIPO_FINANCIACION USING (seqTipoFinanciacion) "
+                . " where pry.seqProyectoPadre = " . $seqProyecto;
+        //echo "<p>".$sql."</p>";
+        $objRes = $aptBd->execute($sql);
+
         $datos = Array();
         while ($objRes->fields) {
             $datos[] = $objRes->fields;

@@ -13,7 +13,7 @@
 
     <!-- TABLA PARA IMPRIMIR EL FORMULARIO DE POSTULACION -->
     <table cellspacing="0" cellpadding="5" border="0" width="100%">
-        {if isset( $smarty.session.arrGrupos.3.13 ) || isset( $smarty.session.arrGrupos.3.20 )}
+        {if isset( $smarty.session.arrGrupos.3.13 ) || isset( $smarty.session.arrGrupos.3.20 ) || isset( $smarty.session.arrGrupos.3.7 )}
             <tr>
                 <td>
                     <input type="checkbox" name="bolSoloSeguimiento" value="1"> Salvar solo el seguimiento
@@ -1474,7 +1474,8 @@
                                         </table></p>
 
                                         <!-- TABLA RED DE SERVICIOS -->
-                                        <p><table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" style="border: 1px dotted #999999; padding:5px">
+                                        <p> 
+                                        <table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" style="border: 1px dotted #999999; padding:5px">
                                             <tr>
                                                 <!-- INTEGRACION SOCIAL -->
                                                 <td width="100px">Integraci&oacute;n Social&nbsp;&nbsp;
@@ -1524,7 +1525,8 @@
                                                     </select>
                                                 </td>
                                             </tr>
-                                        </table></p>
+                                        </table>
+                                        </p>
                                         </p></div>
 
                                     <!-- INFORMACION FINANCIERA -->
@@ -2208,4 +2210,5 @@
                     </form>
                 </div>
             </div>
- {include file="subsidios/simulador.tpl"}
+
+            {include file="subsidios/simulador.tpl"}

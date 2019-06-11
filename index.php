@@ -9,7 +9,7 @@
  */
 // Esta variable de usa para ubicar los archivos a incluir
 $txtPrefijoRuta = "./";
-// comentario con conflicto
+
 include( "./recursos/archivos/verificarSesion.php" ); // Verifica si hay sesion    
 include( "./recursos/archivos/lecturaConfiguracion.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
@@ -43,18 +43,12 @@ foreach ($_SESSION['arrPermisos'] as $seqProyecto => $arrPrivilegios) {
     $arrProyecto = Proyecto::cargarProyecto($seqProyecto);
     $arrProyectosA[$seqProyecto] = $arrProyecto[$seqProyecto];
 }
+
 // carga el codigo por defecto
 $seqMenuInicial = $arrProyectosA[$seqProyectoPost]->seqMenu;
 if ($seqMenuInicial != 0) {
     $arrMenuInicial = $claMenu->cargarMenu($seqProyectoPost, $seqMenuInicial);
-
-    $txtMenuInicial = $txtPrefijoRuta . "contenidos/" . $arrMenuInicial[$seqMenuInicial]->txtCodigo;
-    if(strpos($txtMenuInicial,".php") !== false){
-        $txtMenuInicial = str_replace(".php","",$txtMenuInicial);
-    }
-
-    include( $txtMenuInicial . ".php" );
-
+    include( $txtPrefijoRuta . "contenidos/" . $arrMenuInicial[$seqMenuInicial]->txtCodigo . ".php" );
 } else {
     $claSmarty->assign("txtArchivoInicio", "sinInicio.tpl");
 }
@@ -70,7 +64,5 @@ $claSmarty->assign("txtNombreUsuario", $_SESSION['txtNombre'] . " " . $_SESSION[
 $claSmarty->assign("arrGruposSesion", $_SESSION['arrGrupos']);
 
 $claSmarty->display("index.tpl");
-
-
 
 ?>

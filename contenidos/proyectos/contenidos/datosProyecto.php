@@ -2,7 +2,7 @@
 
 /*
  * Creado por Liliana Basto
- * Archivo para cargar la información para la inscripsión de los proyectos
+ * Archivo para cargar la información para la inscripción de los proyectos
  * 20-06-2017.
  */
 $txtPrefijoRuta = "../../../";
@@ -41,7 +41,7 @@ $arrayDocumentos = array();
 $arrFinanciera = array();
 $id = $_REQUEST['id'];
 $seqPlanGobierno = $_REQUEST['seqPlanGobierno'];
-$arrPryTipoModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $seqPlanGobierno, "seqPlanGobierno DESC, txtModalidad");
+//$arrPryTipoModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $seqPlanGobierno, "seqPlanGobierno DESC, txtModalidad");
 $arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno DESC, txtPlanGobierno");
 $arrAseguradoras = obtenerDatosTabla("t_pry_aseguradoras", array("seqAseguradora", "txtNombreAseguradora"), "seqAseguradora", "", "seqAseguradora DESC, txtNombreAseguradora");
 $arrAmparos = obtenerDatosTabla("t_pry_tipo_amparo", array("seqTipoAmparo", "txtTipoAmparo"), "seqTipoAmparo", "", "seqTipoAmparo DESC, txtTipoAmparo");
@@ -49,7 +49,7 @@ $arrayBanco = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "s
 $arrayCity = obtenerDatosTabla("v_frm_ciudad", array("seqCiudad", "txtCiudad"), "seqCiudad", "", "seqCiudad DESC, txtCiudad");
 $arrayEntComite = obtenerDatosTabla("t_pry_entidad_comite", array("seqEntidadComite", "txtEntidadComite"), "seqEntidadComite", "", "seqEntidadComite DESC, txtEntidadComite");
 $arrayEntFiduciaria = obtenerDatosTabla("T_PRY_FIDUCIARIA", array("seqFiduciaria", "txtNombreFiduciaria"), "seqFiduciaria", "", "txtNombreFiduciaria ASC, txtNombreFiduciaria");
-
+$arrPryTipoModalidad = $claDatosProy->obtenerlistamodalidad();
 
 //var_dump($arrPryTipoModalidad);
 
@@ -149,7 +149,6 @@ if (isset($_REQUEST['seqProyecto'])) {
         $txtPlantilla = "proyectos/vistas/inscripcionProyecto.tpl";
     }
 }
-//var_dump($arrPlanGobierno);
 //$arrTipoEsquema = $claDatosProy->obtenerlistaEsquema();
 //$arrPryTipoModalidad = $claDatosProy->obtenerlistamodalidad();
 
@@ -195,6 +194,8 @@ if (count($arrayLicencias) == 0) {
 if (count($arraConjuntoLicencias) == 0) {
     $arraConjuntoLicencias[0] = 0;
 }
+
+//var_dump($arrConjuntoResidencial);
 //print_r($arrProyectos);
 //var_dump($arrProyectos);
 $claSmarty->assign("valSalarioMinimo", $arrConfiguracion['constantes']['salarioMinimo']);

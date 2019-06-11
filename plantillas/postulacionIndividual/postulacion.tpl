@@ -946,80 +946,135 @@
                             </table></p>
 
                             <!-- TABLA RED DE SERVICIOS -->
-                            <p><table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" style="border: 1px dotted #999999; padding:5px">
+                            <p>
+                            <table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" style="border: 1px dotted #999999; padding:5px">
                                 <tr>
                                     <!-- INTEGRACION SOCIAL -->
-                                    <td width="110px">Integraci&oacute;n Social</td>
-                                    <td style="padding-left:10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                name="bolIntegracionSocial" 
-                                                id="bolIntegracionSocial" 
-                                                style="width:100%;"
+                                    <td width="100px">Integraci&oacute;n Social&nbsp;&nbsp;
+                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="bolIntegracionSocial"
+                                                id="bolIntegracionSocial"
+                                                style="width:40%;"
                                                 >
                                             <option value="0" {if $objFormulario->bolIntegracionSocial != 1} selected {/if} >No</option>
                                             <option value="1" {if $objFormulario->bolIntegracionSocial == 1} selected {/if} >Si</option>
                                         </select>
                                     </td>
-
-                                    <!-- SEC SALUD -->
-                                    <td width="110px" align="right">Sec. Salud</td>
-                                    <td style="padding-left:10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                name="bolSecSalud" 
-                                                id="bolSecSalud" 
-                                                style="width:100%;"
+                                    <td width="110px" align="center">Sec. de la Mujer&nbsp;&nbsp;
+                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="bolSecMujer"
+                                                id="bolSecMujer"
+                                                style="width:40%;"
                                                 >
-                                            <option value="0" {if $objFormulario->bolSecSalud != 1} selected {/if} >No</option>
-                                            <option value="1" {if $objFormulario->bolSecSalud == 1} selected {/if} >Si</option>
-                                        </select>
-                                    </td>
-
-                                    <!-- SEC EDUCACION -->
-                                    <td width="110px" align="right">Sec. Educacion</td>
-                                    <td style="padding-left:10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                name="bolSecEducacion" 
-                                                id="bolSecEducacion" 
-                                                style="width:100%;"
-                                                >
-                                            <option value="0" {if $objFormulario->bolSecEducacion != 1} selected {/if} >No</option>
-                                            <option value="1" {if $objFormulario->bolSecEducacion == 1} selected {/if} >Si</option>
+                                            <option value="0" {if $objFormulario->bolSecMujer != 1} selected {/if} >No</option>
+                                            <option value="1" {if $objFormulario->bolSecMujer == 1} selected {/if} >Si</option>
                                         </select>
                                     </td>
 
                                     <!-- IPES -->
-                                    <td width="110px" align="right">IPES</td>
-                                    <td style="padding-left:10px;">
-                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                                onBlur="this.style.backgroundColor = '#FFFFFF';" 
-                                                name="bolIpes" 
-                                                id="bolIpes" 
-                                                style="width:100%;"
+                                    <td width="110px" align="center">IPES &nbsp;&nbsp;
+                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="bolIpes"
+                                                id="bolIpes"
+                                                style="width:40%;"
                                                 >
                                             <option value="0" {if $objFormulario->bolIpes != 1} selected {/if} >No</option>
                                             <option value="1" {if $objFormulario->bolIpes == 1} selected {/if} >Si</option>
                                         </select>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <!-- OTRO -->
-                                    <td align="right">Otro</td>
-                                    <td colspan="8" style="padding-left:10px">
-                                        <input	type="text" 
-                                               name="txtOtro" 
-                                               id="txtOtro" 
-                                               value="{$objFormulario->txtOtro}" 
-                                               onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                               onBlur="sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';" 
-                                               style="width:100%;" 
-                                               />
+                                    <td width="200px" align="center">Reconocimiento Fuerza Pública&nbsp;&nbsp;
+                                        <select	onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                name="bolReconocimientoFP"
+                                                id="bolReconocimientoFP"
+                                                style="width:40%;"
+                                                >
+                                            <option value="0" {if $objFormulario->bolReconocimientoFP != 1} selected {/if} >No</option>
+                                            <option value="1" {if $objFormulario->bolReconocimientoFP == 1} selected {/if} >Si</option>
+                                        </select>
                                     </td>
                                 </tr>
-                            </table></p>
+                            </table>
+                            {*<table cellpadding="2" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" style="border: 1px dotted #999999; padding:5px">
+                            <tr>
+                            <!-- INTEGRACION SOCIAL -->
+                            <td width="110px">Integraci&oacute;n Social</td>
+                            <td style="padding-left:10px;">
+                            <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                            onBlur="this.style.backgroundColor = '#FFFFFF';" 
+                            name="bolIntegracionSocial" 
+                            id="bolIntegracionSocial" 
+                            style="width:100%;"
+                            >
+                            <option value="0" {if $objFormulario->bolIntegracionSocial != 1} selected {/if} >No</option>
+                            <option value="1" {if $objFormulario->bolIntegracionSocial == 1} selected {/if} >Si</option>
+                            </select>
+                            </td>
+
+                            <!-- SEC SALUD -->
+                            <td width="110px" align="right">Sec. Salud</td>
+                            <td style="padding-left:10px;">
+                            <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                            onBlur="this.style.backgroundColor = '#FFFFFF';" 
+                            name="bolSecSalud" 
+                            id="bolSecSalud" 
+                            style="width:100%;"
+                            >
+                            <option value="0" {if $objFormulario->bolSecSalud != 1} selected {/if} >No</option>
+                            <option value="1" {if $objFormulario->bolSecSalud == 1} selected {/if} >Si</option>
+                            </select>
+                            </td>
+
+                            <!-- SEC EDUCACION -->
+                            <td width="110px" align="right">Sec. Educacion</td>
+                            <td style="padding-left:10px;">
+                            <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                            onBlur="this.style.backgroundColor = '#FFFFFF';" 
+                            name="bolSecEducacion" 
+                            id="bolSecEducacion" 
+                            style="width:100%;"
+                            >
+                            <option value="0" {if $objFormulario->bolSecEducacion != 1} selected {/if} >No</option>
+                            <option value="1" {if $objFormulario->bolSecEducacion == 1} selected {/if} >Si</option>
+                            </select>
+                            </td>
+
+                            <!-- IPES -->
+                            <td width="110px" align="right">IPES</td>
+                            <td style="padding-left:10px;">
+                            <select	onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                            onBlur="this.style.backgroundColor = '#FFFFFF';" 
+                            name="bolIpes" 
+                            id="bolIpes" 
+                            style="width:100%;"
+                            >
+                            <option value="0" {if $objFormulario->bolIpes != 1} selected {/if} >No</option>
+                            <option value="1" {if $objFormulario->bolIpes == 1} selected {/if} >Si</option>
+                            </select>
+                            </td>
+                            </tr>
+                            <tr>
+                            <!-- OTRO -->
+                            <td align="right">Otro</td>
+                            <td colspan="8" style="padding-left:10px">
+                            <input	type="text" 
+                            name="txtOtro" 
+                            id="txtOtro" 
+                            value="{$objFormulario->txtOtro}" 
+                            onFocus="this.style.backgroundColor = '#ADD8E6';" 
+                            onBlur="sinCaracteresEspeciales(this);
+                            this.style.backgroundColor = '#FFFFFF';" 
+                            style="width:100%;" 
+                            />
+                            </td>
+                            </tr>
+                            </table>*}
+
+
+                            </p>
                             </p></div>
 
                         <!-- MODALIDAD Y VIVIENDA -->				        

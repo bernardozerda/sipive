@@ -126,7 +126,7 @@ function obtenerConsulta($seqEstado, $proyecto, $tipo) {
         }
     }
 
-    $sql = "SELECT pry.txtNombreProyecto, txtNombreUnidad, frm.seqFormulario, numDocumento, concat(txtNombre1, ' ', txtNombre1, ' ', txtApellido1, ' ', txtApellido2 ) AS postulante,
+    $sql = "SELECT pry.txtNombreProyecto, txtNombreUnidad, frm.seqFormulario, numDocumento, concat(txtNombre1, ' ', txtNombre2, ' ', txtApellido1, ' ', txtApellido2 ) AS postulante,
         txtEstadoProceso, fchRadicacion, " . $fch . "  
                from t_pry_unidad_proyecto und   
                INNER JOIN t_pry_proyecto pry ON(und.seqProyecto=pry.seqProyecto)

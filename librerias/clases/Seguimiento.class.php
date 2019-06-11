@@ -284,6 +284,7 @@ class Seguimiento {
         $this->arrTipoDato['bolInmovilizadoCuentaAhorro2'] = 'booleano';
         $this->arrTipoDato['bolIntegracionSocial'] = 'booleano';
         $this->arrTipoDato['bolIpes'] = 'booleano';
+        $this->arrTipoDato['bolReconocimientoFP'] = 'booleano';
         $this->arrTipoDato['bolLgtb'] = 'booleano';
         $this->arrTipoDato['bolPromesaFirmada'] = 'booleano';
         $this->arrTipoDato['bolSancion'] = 'booleano';

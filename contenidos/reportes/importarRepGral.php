@@ -49,7 +49,7 @@ $valDoc = "";
                         //abrimos bucle
                         /* si es diferente a 0 significa que no se encuentra en la primera línea 
                           (con los títulos de las columnas) y por lo tanto puede leerla */
-                        if ($i == 0 && count($datos) != 103) {
+                        if ($i == 0 && count($datos) != 104) {
                             echo "El archivo no cumple con las columnas requeridas!! " . count($datos);
                             die();
                         } else if ($i > 0) {
@@ -67,7 +67,7 @@ $valDoc = "";
                                 }
                                 // echo "<br> ".$key." -> ".$value."<br>";
 
-                                if ($key == 13 || $key == 37 || $key == 40 || $key == 42 || $key == 82 || $key == 101) {//
+                                if ($key == 13 || $key == 37 || $key == 40 || $key == 42 || $key == 83 || $key == 102) {//
                                     if (count(explode("/", $value)) == 3) {//
                                         $value = str_replace('/', '-', $value);
                                         $value = date('Y-m-d', strtotime($value));
@@ -79,7 +79,7 @@ $valDoc = "";
                                     $insert .= is_numeric($value) ? $value . "," : "'" . utf8_encode(trim($value)) . "',";
                                 }
                                 // $insert .= is_numeric($value) ? $value . "," : "'" . utf8_encode(trim($value)) . "',";
-                                if ($key == 102) {
+                                if ($key == 103) {
                                     $insert = substr_replace($insert, '', -1, 1);
                                     $insert .= "),";
                                 }

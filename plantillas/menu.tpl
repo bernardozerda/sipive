@@ -49,11 +49,11 @@
 
                     </ul>
                 </li>
-                {*<li>*}
-                    {*<a href="#" id="ayuda" onClick="popUpAyuda()">*}
-                        {*<img src="./recursos/imagenes/library.png" width="10px">*}
-                    {*</a>*}
-                {*</li>*}
+                <li>
+                    <a href="#" id="ayuda" onClick="popUpAyuda()">
+                        <img src="./recursos/imagenes/library.png" width="10px">
+                    </a>
+                </li>
             </ul>
 
         </div>

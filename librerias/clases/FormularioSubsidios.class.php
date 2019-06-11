@@ -22,6 +22,7 @@ class FormularioSubsidios {
     public $bolIntegracionSocial;
     public $bolIpes;
     public $bolPromesaFirmada;
+    public $bolReconocimientoFP;
     public $bolSancion;
     public $bolSecEducacion;
     public $bolSecMujer;
@@ -112,7 +113,6 @@ class FormularioSubsidios {
     public $valSubsidioNacional;
     public $valTotal;
     public $valTotalRecursos;
-//    public $bolInformal;
 
     public function FormularioSubsidios() {
 
@@ -125,6 +125,7 @@ class FormularioSubsidios {
         $this->bolInmovilizadoCuentaAhorro2 = 0;
         $this->bolIntegracionSocial = 0;
         $this->bolIpes = 0;
+        $this->bolReconocimientoFP =0;
         $this->bolPromesaFirmada = 0;
         $this->bolSancion = 0;
         $this->bolSecEducacion = 0;
@@ -164,7 +165,7 @@ class FormularioSubsidios {
         $this->seqEstadoProceso = 1;
         $this->seqFormulario = 0;
         $this->seqLocalidad = 1;
-        $this->seqModalidad = 0;
+        $this->seqModalidad = 1;
         $this->seqPeriodo = 1;
         $this->seqPlanGobierno = 3;
         $this->seqProyecto = 37;
@@ -216,7 +217,6 @@ class FormularioSubsidios {
         $this->valSubsidioNacional = 0;
         $this->valTotal = 0;
         $this->valTotalRecursos = 0;
-//        $this->bolInformal = "";
     }
 
     // Fin Constructor
@@ -245,6 +245,7 @@ class FormularioSubsidios {
                 bolInmovilizadoCuentaAhorro2,
                 bolIntegracionSocial,
                 bolIpes,
+                bolReconocimientoFP,
                 bolPromesaFirmada,
                 bolSancion,
                 bolSecEducacion,
@@ -345,6 +346,7 @@ class FormularioSubsidios {
                 " . $this->bolInmovilizadoCuentaAhorro2 . ",
                 " . $this->bolIntegracionSocial . ",
                 " . $this->bolIpes . ",
+                " . $this->bolReconocimientoFP . ", 
                 " . $this->bolPromesaFirmada . ",
                 " . $this->bolSancion . ",
                 " . $this->bolSecEducacion . ",
@@ -495,6 +497,7 @@ class FormularioSubsidios {
                     bolInmovilizadoCuentaAhorro2,
                     bolIntegracionSocial,
                     bolIpes,
+                    bolReconocimientoFP,
                     bolPromesaFirmada,
                     bolSancion,
                     bolSecEducacion,
@@ -603,6 +606,7 @@ class FormularioSubsidios {
                 $this->bolInmovilizadoCuentaAhorro2 = doubleval($objRes->fields['bolInmovilizadoCuentaAhorro2']);
                 $this->bolIntegracionSocial = doubleval($objRes->fields['bolIntegracionSocial']);
                 $this->bolIpes = doubleval($objRes->fields['bolIpes']);
+                $this->bolReconocimientoFP = doubleval($objRes->fields['bolReconocimientoFP']);
                 $this->bolPromesaFirmada = doubleval($objRes->fields['bolPromesaFirmada']);
                 $this->bolSancion = doubleval($objRes->fields['bolSancion']);
                 $this->bolSecEducacion = doubleval($objRes->fields['bolSecEducacion']);
@@ -725,6 +729,7 @@ class FormularioSubsidios {
                     bolInmovilizadoCuentaAhorro2 = " . doubleval($this->bolInmovilizadoCuentaAhorro2) . ",
                     bolIntegracionSocial = " . doubleval($this->bolIntegracionSocial) . ",
                     bolIpes = " . doubleval($this->bolIpes) . ",
+                    bolReconocimientoFP = " . doubleval($this->bolReconocimientoFP) . ",     
                     bolPromesaFirmada = " . doubleval($this->bolPromesaFirmada) . ",
                     bolSancion = " . doubleval($this->bolSancion) . ",
                     bolSecEducacion = " . doubleval($this->bolSecEducacion) . ",
@@ -828,7 +833,7 @@ class FormularioSubsidios {
             try {
                 $sql = "
                     update t_pry_unidad_proyecto set
-                      seqFormulario = null
+                      seqFormulario = 0
                     where seqFormulario = " . $this->seqFormulario . "
                 ";
                 $aptBd->execute($sql);

@@ -20,7 +20,6 @@ if ($_REQUEST['seqProyecto']) {
     $boolMostrar = 0;
 }
 
-var_dump($listaEntidades);
 $claSmarty->assign("arrListaProyectos", $listaProyectos);
 $claSmarty->assign("boolMostrar", $boolMostrar);
 $claSmarty->assign("arrListaEntidades", $listaEntidades);

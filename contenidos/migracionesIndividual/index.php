@@ -8,6 +8,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos
 $array = $_SESSION['arrGrupos'];
 $grupos = array();
 $int = 0;
+
 foreach ($array as $key => $value) {
     foreach ($value as $values) {
         $grupos[$int] = $values;
@@ -40,8 +41,8 @@ foreach ($array as $key => $value) {
                 <?php if (in_array("1", $grupos) || in_array("8", $grupos)) { ?>
 
                     <!------------------------------------------------------------------------------------------------------
-                        CARGUE DATOS ESCRITURACION
-                     ------------------------------------------------------------------------------------------------------>
+                    CARGUE DATOS ESCRITURACION
+                 ------------------------------------------------------------------------------------------------------>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Escrituración<span class="caret"></span></a>
@@ -49,30 +50,30 @@ foreach ($array as $key => $value) {
                             <li>
                                 <a href="javascript:void(0)"
                                    onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/masivoPlantillaEscrituracion/index.php'
-                                   );"
-                                >
+                                                       'contenidoLegalizacion',
+                                                       'contenidos/migracionesIndividual/masivoPlantillaEscrituracion/index.php'
+                                                       );"
+                                   >
                                     Postulación Individual
                                 </a>
                             </li>
                             <li>
                                 <a href="javascript:void(0)"
                                    onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/DesembolsoMiCasaYa/index.php'
-                                   );"
-                                >
+                                                       'contenidoLegalizacion',
+                                                       'contenidos/migracionesIndividual/DesembolsoMiCasaYa/index.php'
+                                                       );"
+                                   >
                                     Complementariedad VIPA
                                 </a>
                             </li>
                             <li>
                                 <a href="javascript:void(0)"
                                    onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/leasing/escrituracion.php'
-                                   );"
-                                >
+                                                       'contenidoLegalizacion',
+                                                       'contenidos/migracionesIndividual/leasing/escrituracion.php'
+                                                       );"
+                                   >
                                     Leasing Habitacional
                                 </a>
                             </li>
@@ -80,8 +81,8 @@ foreach ($array as $key => $value) {
                     </li>
 
                     <!------------------------------------------------------------------------------------------------------
-                        CARGUE DATOS ESTUDIOS TÉCNICOS
-                     ------------------------------------------------------------------------------------------------------>
+                    CARGUE DATOS ESTUDIOS TÉCNICOS
+                 ------------------------------------------------------------------------------------------------------>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Estudios Técnicos<span class="caret"></span></a>
@@ -89,35 +90,35 @@ foreach ($array as $key => $value) {
                             <li>
                                 <a href="javascript:void(0)"
                                    onClick=" cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/migracionEstudiosTecnicosPryDes/index.php'
-                                   );"
-                                >
+                                                       'contenidoLegalizacion',
+                                                       'contenidos/migracionesIndividual/migracionEstudiosTecnicosPryDes/index.php'
+                                                       );"
+                                   >
                                     Postulación Individual / Proyectos gestionados por SDHT
                                 </a>
                             </li>
-<!--                            <li>-->
-<!--                                <a href="javascript:void(0)"-->
-<!--                                   onClick="cambiarOpcionLegalizacion(-->
-<!--                                       'contenidoLegalizacion',-->
-<!--                                       'contenidos/migracionesIndividual/EstudiosTecnicosMiCasaYa/index.php'-->
-<!--                                   );"-->
-<!--                                >-->
-<!--                                    Mi Casa Ya-->
-<!--                                </a>-->
-<!--                            </li>-->
+                            <!--                            <li>-->
+                            <!--                                <a href="javascript:void(0)"-->
+                            <!--                                   onClick="cambiarOpcionLegalizacion(-->
+                            <!--                                       'contenidoLegalizacion',-->
+                            <!--                                       'contenidos/migracionesIndividual/EstudiosTecnicosMiCasaYa/index.php'-->
+                            <!--                                   );"-->
+                            <!--                                >-->
+                            <!--                                    Mi Casa Ya-->
+                            <!--                                </a>-->
+                            <!--                            </li>-->
                         </ul>
                     </li>
 
                 <?php } ?>
-                <?php if (in_array("8", $grupos)) { ?>
+                <?php if (in_array("8", $grupos) || in_array("15", $grupos)) { ?>
                     <li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=26');">Generaci&oacute;n Certificado Habitabilidad</a></li>
                     <li>
                         <a href="javascript:void(0)"
                            onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=24');"
-                        >
+                                               'contenidoLegalizacion',
+                                               'contenidos/migracionesIndividual/CargueGeneralTablero/indexDS.php?code=24');"
+                           >
                             Remisi&oacute;n Estudio de Titulos
                         </a>
                     </li>
@@ -125,8 +126,8 @@ foreach ($array as $key => $value) {
                 <?php if (in_array("1", $grupos) || in_array("8", $grupos)) { ?>
 
                     <!------------------------------------------------------------------------------------------------------
-                        CARGUE DATOS ESTUDIO DE TITULOS
-                     ------------------------------------------------------------------------------------------------------>
+                    CARGUE DATOS ESTUDIO DE TITULOS
+                 ------------------------------------------------------------------------------------------------------>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Estudio de Títulos<span class="caret"></span></a>
@@ -134,20 +135,20 @@ foreach ($array as $key => $value) {
                             <li>
                                 <a href="javascript:void(0)"
                                    onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/CargaMasivosEstudioTitulos/index.php'
-                                   );"
-                                >
+                                                       'contenidoLegalizacion',
+                                                       'contenidos/migracionesIndividual/CargaMasivosEstudioTitulos/index.php'
+                                                       );"
+                                   >
                                     Postulación Individual / Complementariedad VIPA
                                 </a>
                             </li>
                             <li>
                                 <a href="javascript:void(0)"
                                    onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/leasing/estudioTitulos.php'
-                                   );"
-                                >
+                                                       'contenidoLegalizacion',
+                                                       'contenidos/migracionesIndividual/leasing/estudioTitulos.php'
+                                                       );"
+                                   >
                                     Leasing Habitacional
                                 </a>
                             </li>
@@ -159,52 +160,67 @@ foreach ($array as $key => $value) {
 
 
                 <!------------------------------------------------------------------------------------------------------
-                    CARGUE DATOS LEGALIZACION
-                 ------------------------------------------------------------------------------------------------------>
+                CARGUE DATOS LEGALIZACION
+             ------------------------------------------------------------------------------------------------------>
 
                 <?php if (in_array("10", $grupos)) { ?>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Legalización<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu multi-level">
                             <li>
                                 <a href="javascript:void(0)"
                                    onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/CargaMasivosLegalizacion/index.php'
-                                       );"
-                                >
+                                                       'contenidoLegalizacion',
+                                                       'contenidos/migracionesIndividual/CargaMasivosLegalizacion/index.php'
+                                                       );"
+                                   >
                                     Cargue Unidades Legalizadas
                                 </a>
                             </li>
-                            <li>
-                                <a href="javascript:void(0)"
-                                   onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/legalizacionVipa/giroFiducia.php'
-                                   );"
-                                >
-                                    Giro a Fiducia Complementariedad VIPA
+                            <li class="dropdown-submenu">
+                                <a href="javascript:void(0)">
+                                    Giro a Fiducia 
                                 </a>
+                                <ul class="dropdown-menu ">
+                                    <li>
+                                        <a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion(
+                                                            'contenidoLegalizacion',
+                                                            'contenidos/migracionesIndividual/legalizacionVipa/giroFiducia.php'
+                                                            );">Complementariedad VIPA</a></li>
+                                    <li>
+                                        <a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion(
+                                                            'contenidoLegalizacion',
+                                                            'contenidos/migracionesIndividual/legalizacionMiCasaYa/giroFiducia.php'
+                                                            );">Mi Casa YA!</a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="javascript:void(0)"
-                                   onClick="cambiarOpcionLegalizacion(
-                                       'contenidoLegalizacion',
-                                       'contenidos/migracionesIndividual/legalizacionVipa/giroConstructor.php'
-                                   );"
-                                >
-                                    Giro a Constructor Complementariedad VIPA
+
+                            <li class="dropdown-submenu">
+                                <a href="javascript:void(0)">
+                                    Giro a Constructor 
                                 </a>
+                                <ul class="dropdown-menu ">
+                                    <li>
+                                        <a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion(
+                                                            'contenidoLegalizacion',
+                                                            'contenidos/migracionesIndividual/legalizacionVipa/giroConstructor.php'
+                                                            );">Complementariedad VIPA</a></li>
+                                    <li>
+                                        <a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion(
+                                                            'contenidoLegalizacion',
+                                                            'contenidos/migracionesIndividual/legalizacionMiCasaYa/giroConstructor.php'
+                                                            );">Mi Casa YA!</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
-
-                <?php } ?>
-
+                <?php } ?>                
                 <!------------------------------------------------------------------------------------------------------
-                    DEVOLUCION DE EXPEDIENTES
-                 ------------------------------------------------------------------------------------------------------>
+                DEVOLUCION DE EXPEDIENTES
+             ------------------------------------------------------------------------------------------------------>
 
                 <!--<li><a href="javascript:void(0)" onClick="cambiarOpcionLegalizacion('contenidoLegalizacion', 'contenidos/migracionesIndividual/CargaCopiaDesembolso/index.php');">Migraci&oacute;n Masiva de desembolso a Primer desembolso</a></li>-->
                 <?php if (in_array("8", $grupos) || in_array("1", $grupos)) { ?>

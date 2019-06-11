@@ -174,6 +174,7 @@ function obtenerNombres($txtTabla, $txtCampo, $txtValor) {
     $arrConversiones["txtUnidadProyecto"] = "txtNombreUnidad";
     $arrConversiones["seqProyectoHijo"] = "seqProyecto";
     $arrConversiones["txtProyectoHijo"] = "txtNombreProyecto";
+    $arrConversiones["seqPlanGobierno"] = "seqPlanGobierno";
 
     switch (true) {
         case $txtTabla == "":
@@ -948,18 +949,10 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     return $arrTipoEsquemas;
 }
 
-function obtenerTextoConvenio($seqConvenio,$numInformal){
-    global $arrConfiguracion;
-
-    $arrRespuesta = array();
-
+function obtenerTextoConvenio($seqConvenio){
     $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtConvenio","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio");
-
-    $txtConvenio = "Seleccione el convenio";
-
+    $txtConvenio = "Sin Convenio Seleccionado";
     if( intval( $seqConvenio ) > 1 ){
-
-        // Texto para el tooltio del convenio
         $txtConvenio =
             "<strong>Nombre:</strong> " . $arrConvenio[$seqConvenio]['txtConvenio'] . "<br>" .
             "<strong>Banco:</strong> " . $arrConvenio[$seqConvenio]['txtBanco'] . "<br>" .
@@ -967,24 +960,8 @@ function obtenerTextoConvenio($seqConvenio,$numInformal){
             "<strong>Ocupados:</strong> " . number_format($arrConvenio[$seqConvenio]['numOcupados'],0,".",".") . "<br>" .
             "<strong>Disponibles:</strong> " . number_format($arrConvenio[$seqConvenio]['numDisponibles'],0,".",".") . "<br>" .
             "<strong>Valor unitario:</strong> $ " . number_format($arrConvenio[$seqConvenio]['valCupos'],0,".",".") . "<br>";
-        $arrRespuesta['convenio'] = $txtConvenio;
-
-        // calculo del valor para hogares informales
-        if($numInformal == 1){
-            $arrRespuesta['valor'] = $arrConfiguracion['constantes']['salarioMinimo'] * 18; // 44 SMMLV - 26 SMMLV
-        }elseif($numInformal == 0){
-            $arrRespuesta['valor'] = $arrConfiguracion['constantes']['salarioMinimo'] * 9; // 35 SMMLV - 26 SMMLV
-        }else{
-            $arrRespuesta['valor'] = $arrConvenio[$seqConvenio]['valCupos'];
-        }
-
-    }else{
-        $arrRespuesta['convenio'] = $txtConvenio;
-        $arrRespuesta['valor'] = 0;
     }
-
-
-    return json_encode($arrRespuesta);
+    return "{\"convenio\":\"" . $txtConvenio . "\",\"valor\":\"" . $arrConvenio[$seqConvenio]['valCupos'] . "\"}";
 }
 
 function regularizarCampo($txtClave, $txtValor){

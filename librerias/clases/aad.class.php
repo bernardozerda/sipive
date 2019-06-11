@@ -1,7 +1,6 @@
 <?php
 
-class aad
-{
+class aad {
 
     public $seqTipoActo;
     public $numActo;
@@ -19,8 +18,7 @@ class aad
     private $minmDatesDiff;
     private $secInDay;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->seqTipoActo = 0;
         $this->numActo = 0;
         $this->fchActo = null;
@@ -41,7 +39,6 @@ class aad
 
         $this->minmDatesDiff = 25569;
         $this->secInDay = 86400;
-
     }
 
     /**
@@ -53,8 +50,7 @@ class aad
      * @param array $arrDocumentos
      * @return array
      */
-    public function listarActos($seqTipoActo = 0, $numActo = 0, $fchInicial = null, $fchFinal = null, $arrDocumentos = array())
-    {
+    public function listarActos($seqTipoActo = 0, $numActo = 0, $fchInicial = null, $fchFinal = null, $arrDocumentos = array()) {
         global $aptBd;
         $arrListado = array();
         $txtCondicion = ($seqTipoActo == 0) ? "" : " AND hvi.seqTipoActo = " . $seqTipoActo;
@@ -63,20 +59,31 @@ class aad
         $txtCondicion .= ($fchFinal == null) ? "" : " AND hvi.fchActo <= '" . $fchFinal . "'";
         $txtCondicion .= (empty($arrDocumentos)) ? "" : " AND cac.numDocumento IN (" . implode(",", $arrDocumentos) . ")";
         try {
-            $sql = "
-             select distinct
+            /* $sql = "
+              select distinct
+              hvi.seqTipoActo,
+              hvi.numActo,
+              hvi.fchActo
+              from t_aad_ciudadano_acto cac
+              inner join t_aad_hogar_acto hac on cac.seqCiudadanoActo = hac.seqCiudadanoActo
+              inner join t_aad_formulario_acto fac on hac.seqFormularioActo = fac.seqFormularioActo
+              inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
+              WHERE 1 = 1
+              $txtCondicion
+              ORDER BY
+              hvi.fchActo desc
+              "; */
+            $sql = "SELECT distinct
                 hvi.seqTipoActo, 
                 hvi.numActo, 
                 hvi.fchActo
-             from t_aad_ciudadano_acto cac
-             inner join t_aad_hogar_acto hac on cac.seqCiudadanoActo = hac.seqCiudadanoActo
-             inner join t_aad_formulario_acto fac on hac.seqFormularioActo = fac.seqFormularioActo
-             inner join t_aad_hogares_vinculados hvi on fac.seqFormularioActo = hvi.seqFormularioActo
-             WHERE 1 = 1 
-             $txtCondicion
-             ORDER BY 
-               hvi.fchActo desc
-            ";
+                FROM
+                    t_aad_acto_administrativo hvi
+                    WHERE 1 = 1
+              $txtCondicion
+              ORDER BY
+              hvi.fchActo desc";
+
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
                 $seqTipoActo = $objRes->fields['seqTipoActo'];
@@ -94,11 +101,11 @@ class aad
                 }
 
                 $arrListado[$seqTipoActo]['listado'][$txtClave]['fecha'] = $fchActo;
-                $arrListado[$seqTipoActo]['conteo']++;
+                $arrListado[$seqTipoActo]['conteo'] ++;
 
                 $objRes->MoveNext();
             }
-        } catch (Exception  $objError) {
+        } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo consultar el acto administrativo";
         }
         return $arrListado;
@@ -111,8 +118,7 @@ class aad
      * @param $numActo
      * @param $fchActo
      */
-    public function eliminar($seqTipoActo, $numActo, $fchActo)
-    {
+    public function eliminar($seqTipoActo, $numActo, $fchActo) {
         global $aptBd;
 
         // determina si el acto administrativo esta siendo
@@ -218,7 +224,6 @@ class aad
                             where seqFormularioActo  = $seqFormularioActo
                         ";
                         $aptBd->execute($sql);
-
                     }
 
                     // elimina los detalles
@@ -228,7 +233,6 @@ class aad
                         where seqFormularioActo = $seqFormularioActo
                     ";
                     $aptBd->execute($sql);
-
                 }
 
                 // elimina el acto administrativo
@@ -244,22 +248,16 @@ class aad
                 // Registro de las actividades
                 $claRegistroActividades = new RegistroActividades();
                 $claRegistroActividades->registrarActividad(
-                    "Borrado",
-                    145,
-                    $_SESSION['seqUsuario'],
-                    "AAD " . $numActo . " del " . $fchActo
+                        "Borrado", 145, $_SESSION['seqUsuario'], "AAD " . $numActo . " del " . $fchActo
                 );
 
                 $aptBd->CommitTrans();
-
             } catch (Exception $objError) {
                 $this->arrErrores[] = "Problemas al eliminar el acto adminsitrativo, no se borró ningpun registro";
                 $this->arrErrores[] = $objError->getMessage();
                 $aptBd->RollbackTrans();
             }
-
         }
-
     }
 
     /**
@@ -268,8 +266,7 @@ class aad
      * @param $numActo
      * @param $fchActo
      */
-    public function cargarActo($seqTipoActo, $numActo, $fchActo)
-    {
+    public function cargarActo($seqTipoActo, $numActo, $fchActo) {
         global $aptBd;
         $sql = "
             SELECT 
@@ -309,8 +306,7 @@ class aad
      * HACIA LA PLANTILLA HTML
      * @param $arrCaracteristicas
      */
-    private function mapeoCaracteristicas($arrCaracteristicas)
-    {
+    private function mapeoCaracteristicas($arrCaracteristicas) {
         switch ($this->seqTipoActo) {
             case 1: // asignacion
                 $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[1];
@@ -492,8 +488,7 @@ class aad
      * OBTIENE LA INFORMACION DEL EXPORTABLE
      * DEL ACTO ADMINISTRATIVO CARGADO PREVIAMENTE
      */
-    private function cargarExportable()
-    {
+    private function cargarExportable() {
         global $aptBd;
         $sql = "";
         switch ($this->seqTipoActo) {
@@ -916,8 +911,7 @@ class aad
      * SE DEBE CARGAR EL ACTO ADMINISTRATIVO
      * PREVIAMENTE
      */
-    private function cargarDetalles()
-    {
+    private function cargarDetalles() {
         if (!empty($this->arrExportable)) {
             switch ($this->seqTipoActo) {
                 case 1: // asignacion
@@ -934,12 +928,12 @@ class aad
                         $this->arrDetalles['resumen']['Total Hogares'] = count($this->arrDetalles['detalle']);
                         $this->arrDetalles['resumen']['Cantidad Solicitudes'] = (isset($this->arrDetalles['resumen']['Cantidad Solicitudes'])) ? $this->arrDetalles['resumen']['Cantidad Solicitudes'] : 0;
                         if (doubleval($arrLinea['Valor Solicitado']) != 0) {
-                            $this->arrDetalles['resumen']['Cantidad Solicitudes']++;
+                            $this->arrDetalles['resumen']['Cantidad Solicitudes'] ++;
                         }
                         $this->arrDetalles['resumen']['Valor Solicitudes'] += doubleval($arrLinea['Valor Solicitado']);
                         $this->arrDetalles['resumen']['Cantidad Ordenes'] = (isset($this->arrDetalles['resumen']['Cantidad Ordenes'])) ? $this->arrDetalles['resumen']['Cantidad Ordenes'] : 0;
                         if (doubleval($arrLinea['Valor Orden']) != 0) {
-                            $this->arrDetalles['resumen']['Cantidad Ordenes']++;
+                            $this->arrDetalles['resumen']['Cantidad Ordenes'] ++;
                         }
                         $this->arrDetalles['resumen']['Valor Ordenes'] += doubleval($arrLinea['Valor Orden']);
                         $this->arrDetalles['detalle'][$seqFormularioActo]['numResolucionReferencia'] = $arrLinea['Acto Referencia'];
@@ -1100,8 +1094,6 @@ class aad
                     $this->arrErrores[] = "No se conoce el tipo de acto administrativo " . $this->seqTipoActo;
                     break;
             }
-
-
         } else {
             $this->arrErrores[] = "No se puede procesar la tabla de detalles";
         }
@@ -1113,8 +1105,7 @@ class aad
      * ACTO ADMINISTRATIVO CARGADO PREVIAMENTE
      * @param int $numDocumento
      */
-    public function obtenerHogares($numDocumento = 0)
-    {
+    public function obtenerHogares($numDocumento = 0) {
         global $aptBd;
         try {
             if (intval($numDocumento) != 0) {
@@ -1179,8 +1170,7 @@ class aad
      * @param $seqFormulario
      * @return int
      */
-    private function obtenerSecuencial($numActo, $fchActo, $seqFormulario)
-    {
+    private function obtenerSecuencial($numActo, $fchActo, $seqFormulario) {
         global $aptBd;
         try {
             $sql = "
@@ -1211,15 +1201,16 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    public function salvar($arrPost, $arrArchivo)
-    {
+    public function salvar($arrPost, $arrArchivo) {
         global $aptBd;
 
+        $seqTipoActo = $arrPost['seqTipoActo'];
         // quita la fila de titulos
         unset($arrArchivo[0]);
 
         // validacion de reglas de negocio
-        $this->validarReglas($arrPost, $arrArchivo);
+        if ($seqTipoActo != 12)
+            $this->validarReglas($arrPost, $arrArchivo);
 
         // si no hay errores
         if (empty($this->arrErrores)) {
@@ -1236,10 +1227,12 @@ class aad
 
                 // aplica los efectos del acto adminsitrativo
                 // como cambios de estado, indexacion de subsidios, etc
-                $this->aplicarEfectos($arrPost, $arrArchivo);
+                if ($seqTipoActo != 12)
+                    $this->aplicarEfectos($arrPost, $arrArchivo);
 
                 // copiar el hogar
-                $this->vincularHogres($arrPost, $arrArchivo);
+                if ($seqTipoActo != 12)
+                    $this->vincularHogres($arrPost, $arrArchivo);
 
                 // Inserta el seguimiento
                 $claSeguimiento = new Seguimiento();
@@ -1248,19 +1241,15 @@ class aad
                 // Inserta el registro de actividades
                 $claRegistroActividades = new RegistroActividades();
                 $this->arrErrores = $claRegistroActividades->registrarActividad(
-                    "Creacion",
-                    145,
-                    $_SESSION['seqUsuario'],
-                    "AAD " . $arrPost['numActo'] . " del " . $arrPost['fchActo']
+                        "Creacion", 145, $_SESSION['seqUsuario'], "AAD " . $arrPost['numActo'] . " del " . $arrPost['fchActo']
                 );
 
                 // mensaje de satisfaccion
                 $arrTipoActo = aadTipo::cargarTipoActo($arrPost['seqTipoActo']);
                 $seqTipoActo = $arrPost['seqTipoActo'];
-                $this->arrMensajes[] =
-                    "Salvado el acto administrativo de " . $arrTipoActo[$seqTipoActo]->txtTipoActo .
-                    " número " . $arrPost['numActo'] .
-                    " del " . $arrPost['fchActo'];
+                $this->arrMensajes[] = "Salvado el acto administrativo de " . $arrTipoActo[$seqTipoActo]->txtTipoActo .
+                        " número " . $arrPost['numActo'] .
+                        " del " . $arrPost['fchActo'];
 
                 if (!empty($this->arrErrores)) {
                     throw new Exception($this->arrErrores[0]);
@@ -1268,15 +1257,12 @@ class aad
 
                 $aptBd->CommitTrans();
 //                $aptBd->RollbackTrans();
-
             } catch (Exception $objError) {
                 $aptBd->RollbackTrans();
                 $this->arrErrores[] = "No se han podido salvar los datos del acto administrativo";
                 $this->arrErrores[] = $objError->getMessage();
             }
-
         }
-
     }
 
     /**
@@ -1286,8 +1272,7 @@ class aad
      * @param $seqTipoActo
      * @param $arrArchivo
      */
-    private function validarReglas($arrPost, $arrArchivo)
-    {
+    private function validarReglas($arrPost, $arrArchivo) {
 
         switch ($arrPost['seqTipoActo']) {
             case 1: // asignacion
@@ -1327,7 +1312,6 @@ class aad
                 $this->arrErrores[] = "No se conoce el tipo de acto administrativo " . $this->seqTipoActo;
                 break;
         }
-
     }
 
     /**
@@ -1336,8 +1320,7 @@ class aad
      * @param $seqTipoActo
      * @param $arrArchivo
      */
-    private function validarReglasAsignacion($arrPost, $arrArchivo)
-    {
+    private function validarReglasAsignacion($arrPost, $arrArchivo) {
 
         $seqTipoActo = $arrPost['seqTipoActo'];
         $arrEstados = estadosProceso();
@@ -1366,17 +1349,13 @@ class aad
 
             // si el estado del proceso corresponde
             $seqEstadoProceso = array_shift(
-                obtenerDatosTabla(
-                    "T_FRM_FORMULARIO",
-                    array("seqFormulario", "seqEstadoProceso"),
-                    "seqFormulario",
-                    "seqFormulario = " . $seqFormulario
-                )
+                    obtenerDatosTabla(
+                            "T_FRM_FORMULARIO", array("seqFormulario", "seqEstadoProceso"), "seqFormulario", "seqFormulario = " . $seqFormulario
+                    )
             );
             if (!in_array($seqEstadoProceso, $this->arrEstadosPermitidos[$seqTipoActo])) {
-                $this->arrErrores[] =
-                    "Error linea " . ($numLinea + 1) . ": El hogar del ciudadano " . $arrRegistro[0] . " esta en estado " .
-                    $arrEstados[$seqEstadoProceso] . " y no es permitido para asociar a una resolución de asignación";
+                $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El hogar del ciudadano " . $arrRegistro[0] . " esta en estado " .
+                        $arrEstados[$seqEstadoProceso] . " y no es permitido para asociar a una resolución de asignación";
             }
 
             // fecha de vigencia del subsidio
@@ -1408,9 +1387,7 @@ class aad
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El registro tiene número pero no fecha de resolución";
                     break;
             }
-
         }
-
     }
 
     /**
@@ -1419,9 +1396,7 @@ class aad
      * @param $seqTipoActo
      * @param $arrArchivo
      */
-
-    private function validarReglasModificatoria($arrPost, $arrArchivo)
-    {
+    private function validarReglasModificatoria($arrPost, $arrArchivo) {
         global $arrConfiguracion;
 
         $claCiudadano = new Ciudadano(); // se usa para la validacion de la existencia del documento
@@ -1431,9 +1406,9 @@ class aad
         foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
             $seqFormulario = $claCiudadano->formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[4],$arrRegistro[5]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[4], $arrRegistro[5]);
 
-            if($seqFormularioActo == 0){
+            if ($seqFormularioActo == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No está relacionado con el acto administrativo " . $arrRegistro[4] . " de " . $arrRegistro[5];
             }
 
@@ -1493,10 +1468,7 @@ class aad
                     break;
                 case "Tipo de Solucion":
                     $arrSolucion = obtenerDatosTabla(
-                        "t_frm_solucion",
-                        array("seqSolucion", "txtSolucion"),
-                        "seqSolucion",
-                        "seqModalidad = " . $claFormulario->seqModalidad . " and lower(ltrim(rtrim(txtSolucion))) like '" . $arrRegistro[2] . "'"
+                            "t_frm_solucion", array("seqSolucion", "txtSolucion"), "seqSolucion", "seqModalidad = " . $claFormulario->seqModalidad . " and lower(ltrim(rtrim(txtSolucion))) like '" . $arrRegistro[2] . "'"
                     );
                     if (empty($arrSolucion)) {
                         $bolError = true;
@@ -1513,10 +1485,10 @@ class aad
                     break;
                 case "Valor Complementario":
                     if (
-                        ($claFormulario->seqModalidad == 6 && $claFormulario->seqTipoEsquema == 7) ||
-                        ($claFormulario->seqModalidad == 6 && $claFormulario->seqTipoEsquema == 13) ||
-                        ($claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14) ||
-                        ($claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15)
+                            ($claFormulario->seqModalidad == 6 && $claFormulario->seqTipoEsquema == 7) ||
+                            ($claFormulario->seqModalidad == 6 && $claFormulario->seqTipoEsquema == 13) ||
+                            ($claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14) ||
+                            ($claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15)
                     ) {
                         if (doubleval($arrRegistro[2]) != doubleval($claFormulario->valComplementario)) {
                             $bolError = true;
@@ -1544,12 +1516,9 @@ class aad
                     }
                     break;
                 case "Proyecto":
-                    if (intval($claFormulario->seqProyecto) != 0 and (intval($claFormulario->seqUnidadProyecto) == 0 or intval($claFormulario->seqUnidadProyecto) == 1)) {
+                    if (intval($claFormulario->seqProyecto) != 0 and ( intval($claFormulario->seqUnidadProyecto) == 0 or intval($claFormulario->seqUnidadProyecto) == 1)) {
                         $seqProyecto = array_shift(obtenerDatosTabla(
-                            "t_pry_proyecto",
-                            array("seqProyecto", "txtNombreProyecto"),
-                            "txtNombreProyecto",
-                            "lower(rtrim(ltrim(txtNombreProyecto))) like '" . mb_strtolower(trim($arrRegistro[2])) . "'"
+                                        "t_pry_proyecto", array("seqProyecto", "txtNombreProyecto"), "txtNombreProyecto", "lower(rtrim(ltrim(txtNombreProyecto))) like '" . mb_strtolower(trim($arrRegistro[2])) . "'"
                         ));
                         if (intval($seqProyecto) != intval($claFormulario->seqProyecto)) {
                             $bolError = true;
@@ -1562,16 +1531,10 @@ class aad
                     if (intval($claFormulario->seqModalidad) == 12 or intval($claFormulario->seqModalidad) == 13 or intval($claFormulario->seqModalidad) == 6) {
                         list($txtNombreProyecto, $txtNombreUnidad) = mb_split("/", $arrRegistro[2]);
                         $seqProyecto = array_shift(obtenerDatosTabla(
-                            "t_pry_proyecto",
-                            array("seqProyecto", "txtNombreProyecto"),
-                            "txtNombreProyecto",
-                            "lower(rtrim(ltrim(txtNombreProyecto))) like '" . mb_strtolower(trim($txtNombreProyecto)) . "'"
+                                        "t_pry_proyecto", array("seqProyecto", "txtNombreProyecto"), "txtNombreProyecto", "lower(rtrim(ltrim(txtNombreProyecto))) like '" . mb_strtolower(trim($txtNombreProyecto)) . "'"
                         ));
                         $seqUnidad = array_shift(obtenerDatosTabla(
-                            "t_pry_unidad_proyecto",
-                            array("seqUnidadProyecto", "txtNombreUnidad"),
-                            "txtNombreUnidad",
-                            "lower(rtrim(ltrim(txtNombreUnidad))) like '" . mb_strtolower(trim($txtNombreUnidad)) . "' and seqProyecto = " . intval($seqProyecto)
+                                        "t_pry_unidad_proyecto", array("seqUnidadProyecto", "txtNombreUnidad"), "txtNombreUnidad", "lower(rtrim(ltrim(txtNombreUnidad))) like '" . mb_strtolower(trim($txtNombreUnidad)) . "' and seqProyecto = " . intval($seqProyecto)
                         ));
                         if (intval($seqUnidad) != intval($claFormulario->seqUnidadProyecto)) {
                             $bolError = true;
@@ -1592,10 +1555,7 @@ class aad
                     break;
                 case "Entidad Donacion":
                     $seqEmpresaDonante = array_shift(obtenerDatosTabla(
-                        "t_frm_empresa_donante",
-                        array("seqEmpresaDonante", "txtEmpresaDonante"),
-                        "txtEmpresaDonante",
-                        "lower(ltrim(rtrim(txtEmpresaDonante))) like '" . mb_strtolower(trim($arrRegistro[2])) . "'"
+                                    "t_frm_empresa_donante", array("seqEmpresaDonante", "txtEmpresaDonante"), "txtEmpresaDonante", "lower(ltrim(rtrim(txtEmpresaDonante))) like '" . mb_strtolower(trim($arrRegistro[2])) . "'"
                     ));
                     if (intval($seqEmpresaDonante) != intval($claFormulario->seqEmpresaDonante)) {
                         $bolError = true;
@@ -1603,7 +1563,7 @@ class aad
                     break;
                 case "Fecha de Vigencia":
 
-                    if(! esFechaValida($arrRegistro[2])) {
+                    if (!esFechaValida($arrRegistro[2])) {
                         $fchCorrecta = null;
                         $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
                         if ($numTimeStamp > 0 and $arrRegistro[2] != "") {
@@ -1612,18 +1572,15 @@ class aad
                         $arrRegistro[2] = $fchCorrecta;
                     }
 
-                    $claFormulario->fchVigencia = (esFechaValida($claFormulario->fchVigencia))? $claFormulario->fchVigencia : null;
-                    if($arrRegistro[2] != $claFormulario->fchVigencia){
+                    $claFormulario->fchVigencia = (esFechaValida($claFormulario->fchVigencia)) ? $claFormulario->fchVigencia : null;
+                    if ($arrRegistro[2] != $claFormulario->fchVigencia) {
                         $bolError = true;
                     }
 
                     $seqEtapa = array_shift(obtenerDatosTabla(
-                        "t_frm_estado_proceso",
-                        array("seqEstadoProceso","seqEtapa"),
-                        "seqEstadoProceso",
-                        "seqEstadoProceso = " . $claFormulario->seqEstadoProceso
+                                    "t_frm_estado_proceso", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = " . $claFormulario->seqEstadoProceso
                     ));
-                    if($seqEtapa != 4 and $seqEtapa != 5){
+                    if ($seqEtapa != 4 and $seqEtapa != 5) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor incorrecto '" . $arrRegistro[1] . "' el hogar no se encuentra en la etapa de asignación o desembolso";
                     }
 
@@ -1663,10 +1620,7 @@ class aad
                     } else {
                         $numDocumento = $arrRegistro[3];
                         $arrCiudadano = obtenerDatosTabla(
-                            "t_ciu_ciudadano",
-                            array("numDocumento", "upper(concat(t_ciu_ciudadano.txtNombre1,' ',t_ciu_ciudadano.txtNombre2,' ',t_ciu_ciudadano.txtApellido1,' ',t_ciu_ciudadano.txtApellido2)) as txtNombre"),
-                            "numDocumento",
-                            "numDocumento = " . $arrRegistro[3] . " and seqTipoDocumento = " . $objCiudadano->seqTipoDocumento
+                                "t_ciu_ciudadano", array("numDocumento", "upper(concat(t_ciu_ciudadano.txtNombre1,' ',t_ciu_ciudadano.txtNombre2,' ',t_ciu_ciudadano.txtApellido1,' ',t_ciu_ciudadano.txtApellido2)) as txtNombre"), "numDocumento", "numDocumento = " . $arrRegistro[3] . " and seqTipoDocumento = " . $objCiudadano->seqTipoDocumento
                         );
                         if (isset($arrCiudadano[$numDocumento])) {
                             $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor correcto '" . $arrRegistro[1] . "' el documento " . $arrRegistro[3] . " pertenece a " . $arrCiudadano[$numDocumento] . " asociado a otro hogar";
@@ -1675,10 +1629,7 @@ class aad
                     break;
                 case "Tipo de Solucion":
                     $arrSolucion = obtenerDatosTabla(
-                        "t_frm_solucion",
-                        array("seqSolucion", "txtSolucion"),
-                        "txtSolucion",
-                        "seqModalidad = " . $claFormulario->seqModalidad
+                            "t_frm_solucion", array("seqSolucion", "txtSolucion"), "txtSolucion", "seqModalidad = " . $claFormulario->seqModalidad
                     );
                     $txtSolucion = trim($arrRegistro[3]);
                     if (!isset($arrSolucion[$txtSolucion])) {
@@ -1715,17 +1666,11 @@ class aad
                 case "Proyecto":
                     $txtNombreProyecto = $arrRegistro[3];
                     $arrProyecto = obtenerDatosTabla(
-                        "t_pry_proyecto",
-                        array("seqProyecto", "txtNombreProyecto"),
-                        "txtNombreProyecto",
-                        "lower(ltrim(rtrim(txtNombreProyecto))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
+                            "t_pry_proyecto", array("seqProyecto", "txtNombreProyecto"), "txtNombreProyecto", "lower(ltrim(rtrim(txtNombreProyecto))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
                     );
                     if (!empty($arrProyecto)) {
                         $arrUnidades = obtenerDatosTabla(
-                            "t_pry_unidad_proyecto",
-                            array("seqUnidadProyecto", "txtNombreUnidad"),
-                            "txtNombreUnidad",
-                            "seqProyecto = " . $arrProyecto[$txtNombreProyecto]
+                                "t_pry_unidad_proyecto", array("seqUnidadProyecto", "txtNombreUnidad"), "txtNombreUnidad", "seqProyecto = " . $arrProyecto[$txtNombreProyecto]
                         );
 
                         if (!empty($arrUnidades)) {
@@ -1738,16 +1683,10 @@ class aad
                 case "Unidad Habitacional":
                     list($txtNombreProyecto, $txtNombreUnidad) = mb_split("/", $arrRegistro[3]);
                     $seqProyecto = array_shift(obtenerDatosTabla(
-                        "t_pry_proyecto",
-                        array("seqProyecto", "txtNombreProyecto"),
-                        "txtNombreProyecto",
-                        "lower(rtrim(ltrim(txtNombreProyecto))) like '" . mb_strtolower(trim($txtNombreProyecto)) . "'"
+                                    "t_pry_proyecto", array("seqProyecto", "txtNombreProyecto"), "txtNombreProyecto", "lower(rtrim(ltrim(txtNombreProyecto))) like '" . mb_strtolower(trim($txtNombreProyecto)) . "'"
                     ));
                     $arrUnidad = array_shift(obtenerDatosTabla(
-                        "t_pry_unidad_proyecto",
-                        array("seqUnidadProyecto", "txtNombreUnidad", "seqFormulario", "seqModalidad", "seqTipoEsquema"),
-                        "txtNombreUnidad",
-                        "lower(rtrim(ltrim(txtNombreUnidad))) like '" . mb_strtolower(trim($txtNombreUnidad)) . "' and seqProyecto = " . intval($seqProyecto)
+                                    "t_pry_unidad_proyecto", array("seqUnidadProyecto", "txtNombreUnidad", "seqFormulario", "seqModalidad", "seqTipoEsquema"), "txtNombreUnidad", "lower(rtrim(ltrim(txtNombreUnidad))) like '" . mb_strtolower(trim($txtNombreUnidad)) . "' and seqProyecto = " . intval($seqProyecto)
                     ));
 
                     if (empty($arrUnidad)) {
@@ -1771,10 +1710,7 @@ class aad
                     break;
                 case "Entidad Donacion":
                     $seqEmpresaDonante = array_shift(obtenerDatosTabla(
-                        "t_frm_empresa_donante",
-                        array("seqEmpresaDonante", "txtEmpresaDonante"),
-                        "txtEmpresaDonante",
-                        "lower(ltrim(rtrim(txtEmpresaDonante))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
+                                    "t_frm_empresa_donante", array("seqEmpresaDonante", "txtEmpresaDonante"), "txtEmpresaDonante", "lower(ltrim(rtrim(txtEmpresaDonante))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
                     ));
                     if (intval($seqEmpresaDonante) == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor correcto '" . $arrRegistro[1] . "' la empresa donante no es un valor válido";
@@ -1784,7 +1720,7 @@ class aad
                     }
                     break;
                 case "Fecha de Vigencia":
-                    if(! esFechaValida($arrRegistro[2])) {
+                    if (!esFechaValida($arrRegistro[2])) {
                         $fchCorrecta = null;
                         $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
                         if ($numTimeStamp > 0) {
@@ -1793,13 +1729,12 @@ class aad
                         $arrRegistro[3] = $fchCorrecta;
                     }
 
-                    if($arrRegistro[3] == null){
+                    if ($arrRegistro[3] == null) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " valor correcto '" . $arrRegistro[1] . "' no es válido use el formato aaaa-mm-dd";
                     }
 
                     break;
             }
-
         }
 
         // validaciones combinadas, valdonacion !0 con entidad, despues de todas las modificaciones
@@ -1815,7 +1750,6 @@ class aad
                 }
             }
         }
-
     }
 
     /**
@@ -1824,9 +1758,7 @@ class aad
      * @param $seqTipoActo
      * @param $arrArchivo
      */
-
-    private function validarReglasInhabilitados($arrPost, $arrArchivo)
-    {
+    private function validarReglasInhabilitados($arrPost, $arrArchivo) {
 
         $seqTipoActo = $arrPost['seqTipoActo'];
 
@@ -1855,7 +1787,6 @@ class aad
                     }
                 }
             }
-
         }
 
         // mira los errores
@@ -1864,7 +1795,6 @@ class aad
                 $this->arrErrores[] = "Error formularo $seqFormulario: Faltan miembros de hogar dentro del archivo, sin importar que tengan o no inhabilidades, deben estar incluidos";
             }
         }
-
     }
 
     /**
@@ -1873,16 +1803,15 @@ class aad
      * @param $seqTipoActo
      * @param $arrArchivo
      */
-
-    private function validarReglasReposicion($arrPost, $arrArchivo){
+    private function validarReglasReposicion($arrPost, $arrArchivo) {
 
         $claCiudadano = new Ciudadano();
-        foreach($arrArchivo as $numLinea => $arrRegistro){
+        foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
             $seqFormulario = $claCiudadano->formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[1],$arrRegistro[2]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[1], $arrRegistro[2]);
 
-            if($seqFormularioActo == 0){
+            if ($seqFormularioActo == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No esta relacionado con el acto administrativo " . $arrRegistro[1] . " de " . $arrRegistro[2];
             }
 
@@ -1903,9 +1832,7 @@ class aad
             if ($bolPrincipal == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No es el postulante principal del hogar";
             }
-
         }
-
     }
 
     /**
@@ -1914,8 +1841,7 @@ class aad
      * @param $seqTipoActo
      * @param $arrArchivo
      */
-
-    private function validarReglasNoAsignados($arrPost, $arrArchivo){
+    private function validarReglasNoAsignados($arrPost, $arrArchivo) {
 
         $claCiudadano = new Ciudadano();
         $seqTipoActo = $arrPost['seqTipoActo'];
@@ -1943,12 +1869,10 @@ class aad
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No es el postulante principal del hogar";
             }
 
-            if(! in_array($claFormulario->seqEstadoProceso,$this->arrEstadosPermitidos[$seqTipoActo])){
+            if (!in_array($claFormulario->seqEstadoProceso, $this->arrEstadosPermitidos[$seqTipoActo])) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " El hogar no esta en el estado del proceso permitido";
             }
-
         }
-
     }
 
     /**
@@ -1957,8 +1881,7 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function validarReglasRenuncia($arrArchivo)
-    {
+    private function validarReglasRenuncia($arrArchivo) {
 
         $arrEstados = estadosProceso();
         $claCiudadano = new Ciudadano();
@@ -1971,28 +1894,20 @@ class aad
             }
 
             $seqEstadoProceso = array_shift(
-                obtenerDatosTabla(
-                    "T_FRM_FORMULARIO",
-                    array("seqFormulario", "seqEstadoProceso"),
-                    "seqFormulario",
-                    "seqFormulario = " . $seqFormulario
-                )
+                    obtenerDatosTabla(
+                            "T_FRM_FORMULARIO", array("seqFormulario", "seqEstadoProceso"), "seqFormulario", "seqFormulario = " . $seqFormulario
+                    )
             );
 
             $seqEtapa = array_shift(
-                obtenerDatosTabla(
-                    "T_FRM_ESTADO_PROCESO",
-                    array("seqEstadoProceso", "seqEtapa"),
-                    "seqEstadoProceso",
-                    "seqEstadoProceso = " . $seqEstadoProceso
-                )
+                    obtenerDatosTabla(
+                            "T_FRM_ESTADO_PROCESO", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = " . $seqEstadoProceso
+                    )
             );
 
             if ($seqEtapa != 4 and $seqEtapa != 5) {
-                $this->arrErrores[] =
-                    "Error linea " . ($numLinea + 1) . ": El hogar del ciudadano " . $arrLinea[0] . " esta en estado \"" .
-                    $arrEstados[$seqEstadoProceso] . "\" y no es permitido para asociar a una renuncia";
-
+                $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El hogar del ciudadano " . $arrLinea[0] . " esta en estado \"" .
+                        $arrEstados[$seqEstadoProceso] . "\" y no es permitido para asociar a una renuncia";
             }
 
             // Si tiene fecha de resolucion y numero mira si existe
@@ -2015,9 +1930,7 @@ class aad
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El registro debe tener fecha de resolución";
                     break;
             }
-
         }
-
     }
 
     /**
@@ -2026,19 +1939,19 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function validarReglasNotificacion($arrPost, $arrArchivo){
+    private function validarReglasNotificacion($arrPost, $arrArchivo) {
 
         $claCiudadano = new Ciudadano();
-        foreach($arrArchivo as $numLinea => $arrRegistro){
+        foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
             $seqFormulario = $claCiudadano->formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[2],$arrRegistro[3]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[2], $arrRegistro[3]);
 
-            if(! esFechaValida($arrRegistro[1])){
+            if (!esFechaValida($arrRegistro[1])) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " Indique una fecha de notificación válida";
             }
 
-            if($seqFormularioActo == 0){
+            if ($seqFormularioActo == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No esta relacionado con el acto administrativo " . $arrRegistro[1] . " de " . $arrRegistro[2];
             }
 
@@ -2059,11 +1972,7 @@ class aad
             if ($bolPrincipal == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No es el postulante principal del hogar";
             }
-
         }
-
-
-
     }
 
     /**
@@ -2072,16 +1981,16 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function validarReglasIndexacion($arrPost, $arrArchivo){
+    private function validarReglasIndexacion($arrPost, $arrArchivo) {
 
         $claCiudadano = new Ciudadano();
 
         foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
             $seqFormulario = $claCiudadano->formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[1],$arrRegistro[2]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[1], $arrRegistro[2]);
 
-            if($seqFormularioActo == 0){
+            if ($seqFormularioActo == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No está relacionado con el acto administrativo " . $arrRegistro[1] . " de " . $arrRegistro[2];
             }
 
@@ -2104,21 +2013,18 @@ class aad
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No es el postulante principal del hogar";
             }
 
-            if($claFormulario->seqUnidadProyecto > 1){
+            if ($claFormulario->seqUnidadProyecto > 1) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No se puede indexar hogares vinculados a unidades, debe indexar la unidad";
             }
 
-            if(strpos($arrRegistro[3],".")){
+            if (strpos($arrRegistro[3], ".")) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No use valores decimales para la indexación";
             }
 
-            if(strpos($arrRegistro[3],",")){
+            if (strpos($arrRegistro[3], ",")) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No use valores decimales para la indexación";
             }
-
         }
-
-
     }
 
     /**
@@ -2127,7 +2033,7 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function validarReglasPerdida($arrPost, $arrArchivo){
+    private function validarReglasPerdida($arrPost, $arrArchivo) {
 
         $arrEstados = estadosProceso();
         $claCiudadano = new Ciudadano();
@@ -2135,9 +2041,9 @@ class aad
         foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
             $seqFormulario = $claCiudadano->formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[1],$arrRegistro[2]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[1], $arrRegistro[2]);
 
-            if($seqFormularioActo == 0){
+            if ($seqFormularioActo == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No está relacionado con el acto administrativo " . $arrRegistro[1] . " de " . $arrRegistro[2];
             }
 
@@ -2163,26 +2069,19 @@ class aad
             $seqEstadoProceso = $claFormulario->seqEstadoProceso;
 
             $seqEtapa = array_shift(
-                obtenerDatosTabla(
-                    "T_FRM_ESTADO_PROCESO",
-                    array("seqEstadoProceso", "seqEtapa"),
-                    "seqEstadoProceso",
-                    "seqEstadoProceso = " . $seqEstadoProceso
-                )
+                    obtenerDatosTabla(
+                            "T_FRM_ESTADO_PROCESO", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = " . $seqEstadoProceso
+                    )
             );
 
             if ($seqEtapa != 4 and $seqEtapa != 5) {
-                $this->arrErrores[] =
-                    "Error linea " . ($numLinea + 1) . ": El hogar del ciudadano " . $arrRegistro[0] . " esta en estado \"" .
-                    $arrEstados[$seqEstadoProceso] . "\" y no es permitido para asociar a una perdida";
-
+                $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El hogar del ciudadano " . $arrRegistro[0] . " esta en estado \"" .
+                        $arrEstados[$seqEstadoProceso] . "\" y no es permitido para asociar a una perdida";
             }
-
         }
-
     }
 
-    private function validarReglasExclusion($arrPost, $arrArchivo){
+    private function validarReglasExclusion($arrPost, $arrArchivo) {
 
         $arrEstados = estadosProceso();
         $claCiudadano = new Ciudadano();
@@ -2192,9 +2091,9 @@ class aad
         foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
             $seqFormulario = $claCiudadano->formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[1],$arrRegistro[2]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[1], $arrRegistro[2]);
 
-            if($seqFormularioActo == 0){
+            if ($seqFormularioActo == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No está relacionado con el acto administrativo " . $arrRegistro[1] . " de " . $arrRegistro[2];
             }
 
@@ -2217,11 +2116,11 @@ class aad
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " No es el postulante principal del hogar";
             }
 
-            if($claFormulario->seqTipoEsquema != 8){
+            if ($claFormulario->seqTipoEsquema != 8) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " El hogar no pertenece al esquema de vivienda gratuita";
             }
 
-            if($claFormulario->bolCerrado != 1){
+            if ($claFormulario->bolCerrado != 1) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " El formulario no está cerrado";
             }
 
@@ -2229,31 +2128,24 @@ class aad
             $seqEstadoProceso = $claFormulario->seqEstadoProceso;
 
             $seqEtapa = array_shift(
-                obtenerDatosTabla(
-                    "T_FRM_ESTADO_PROCESO",
-                    array("seqEstadoProceso", "seqEtapa"),
-                    "seqEstadoProceso",
-                    "seqEstadoProceso = " . $seqEstadoProceso
-                )
+                    obtenerDatosTabla(
+                            "T_FRM_ESTADO_PROCESO", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = " . $seqEstadoProceso
+                    )
             );
 
             if ($seqEtapa != 4 and $seqEtapa != 5) {
-                $this->arrErrores[] =
-                    "Error linea " . ($numLinea + 1) . ": El hogar del ciudadano " . $arrRegistro[0] . " esta en estado \"" .
-                    $arrEstados[$seqEstadoProceso] . "\" y no es permitido para asociar a una perdida";
-
+                $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El hogar del ciudadano " . $arrRegistro[0] . " esta en estado \"" .
+                        $arrEstados[$seqEstadoProceso] . "\" y no es permitido para asociar a una perdida";
             }
 
-            if(! in_array($arrRegistro[3],$claTipoActo->arrFormatoArchivo[3]['rango'])){
+            if (!in_array($arrRegistro[3], $claTipoActo->arrFormatoArchivo[3]['rango'])) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " Columna estado tiene un valor no válido";
             }
 
-            if(trim($arrRegistro[4]) == ""){
+            if (trim($arrRegistro[4]) == "") {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": " . $arrRegistro[0] . " Columna comentario no puede estar vacia";
             }
-
         }
-
     }
 
     /**
@@ -2261,8 +2153,7 @@ class aad
      * LOS FORMULARIOS DE CARACTERISTICAS
      * @param $arrPost
      */
-    public function validarFormulario($arrPost)
-    {
+    public function validarFormulario($arrPost) {
 
         switch ($arrPost['seqTipoActo']) {
             case 1: // asignacion
@@ -2298,19 +2189,20 @@ class aad
             case 11: // exclusion
                 $this->validarFormularioBasico($arrPost);
                 break;
+            case 12: // Proyectos InterAdministrativos
+                $this->validarFormularioAsignacion($arrPost);
+                break;
             default:
                 $this->arrErrores[] = "No se conoce el tipo de acto administrativo " . $this->seqTipoActo;
                 break;
         }
-
     }
 
     /**
      * VALIDACIONES DEL FORMULARIO BASICO
      * @param arrPost
      */
-    private function validarFormularioBasico($arrPost)
-    {
+    private function validarFormularioBasico($arrPost) {
 
         // numero - expresion regular para el forest
         if (isset($arrPost['bolRadicado']) and intval($arrPost['bolRadicado']) == 1) {
@@ -2333,17 +2225,14 @@ class aad
         if (trim($arrPost['txtResolucion']) == "") {
             $this->arrErrores[] = "El texto de la resolución no puede estar vacío";
         }
-
     }
-
 
     /**
      * VALIDACIONES DEL FORMULARIO PARA
      * LAS RESOLUCIONES DE ASIGNACION
      * @param $arrPost
      */
-    private function validarFormularioAsignacion($arrPost)
-    {
+    private function validarFormularioAsignacion($arrPost) {
 
         $this->validarFormularioBasico($arrPost);
 
@@ -2352,15 +2241,15 @@ class aad
 
             // Si al menos un dato esta digitado
             if (
-                intval($arrPost['numPry' . $i]) != 0 or // proyecto de inversion
-                intval($arrPost['numCdp' . $i]) != 0 or // numero del cdp
-                doubleval($arrPost['valCdp' . $i]) != 0 or // valor del cdp
-                esFechaValida($arrPost['fchCdp' . $i]) != null or // fecha del cdp
-                intval($arrPost['numVigCdp' . $i]) != 0 or // vigencia del cdp
-                intval($arrPost['numRp' . $i]) != 0 or // numero del rp
-                doubleval($arrPost['valRp' . $i]) != 0 or // valor del rp
-                esFechaValida($arrPost['fchRp' . $i]) != null or // fecha del rp
-                intval($arrPost['numVigRp' . $i]) != 0       // vigencia del rp
+                    intval($arrPost['numPry' . $i]) != 0 or // proyecto de inversion
+                    intval($arrPost['numCdp' . $i]) != 0 or // numero del cdp
+                    doubleval($arrPost['valCdp' . $i]) != 0 or // valor del cdp
+                    esFechaValida($arrPost['fchCdp' . $i]) != null or // fecha del cdp
+                    intval($arrPost['numVigCdp' . $i]) != 0 or // vigencia del cdp
+                    intval($arrPost['numRp' . $i]) != 0 or // numero del rp
+                    doubleval($arrPost['valRp' . $i]) != 0 or // valor del rp
+                    esFechaValida($arrPost['fchRp' . $i]) != null or // fecha del rp
+                    intval($arrPost['numVigRp' . $i]) != 0       // vigencia del rp
             ) {
 
                 // CDP -------------------------------------------------------------------
@@ -2410,11 +2299,8 @@ class aad
                 } elseif (intval($arrPost['numVigRp' . $i]) < 2009 or intval($arrPost['numVigRp' . $i]) > date("Y")) {
                     $this->arrErrores[] = "La vigencia del RP " . $i . " debe ser posterior al 2009 y anterior o igual a " . date("Y");
                 }
-
             }
-
         }
-
     }
 
     /**
@@ -2422,7 +2308,7 @@ class aad
      * LAS RESOLUCIONES DE INDEXACION
      * @param $arrPost
      */
-    private function validarFormularioIndexacion($arrPost){
+    private function validarFormularioIndexacion($arrPost) {
 
         $this->validarFormularioBasico($arrPost);
 
@@ -2431,15 +2317,15 @@ class aad
 
             // Si al menos un dato esta digitado
             if (
-                intval($arrPost['numPry' . $i]) != 0 or // proyecto de inversion
-                intval($arrPost['numCdp' . $i]) != 0 or // numero del cdp
-                doubleval($arrPost['valCdp' . $i]) != 0 or // valor del cdp
-                esFechaValida($arrPost['fchCdp' . $i]) != null or // fecha del cdp
-                intval($arrPost['numVigCdp' . $i]) != 0 or // vigencia del cdp
-                intval($arrPost['numRp' . $i]) != 0 or // numero del rp
-                doubleval($arrPost['valRp' . $i]) != 0 or // valor del rp
-                esFechaValida($arrPost['fchRp' . $i]) != null or // fecha del rp
-                intval($arrPost['numVigRp' . $i]) != 0       // vigencia del rp
+                    intval($arrPost['numPry' . $i]) != 0 or // proyecto de inversion
+                    intval($arrPost['numCdp' . $i]) != 0 or // numero del cdp
+                    doubleval($arrPost['valCdp' . $i]) != 0 or // valor del cdp
+                    esFechaValida($arrPost['fchCdp' . $i]) != null or // fecha del cdp
+                    intval($arrPost['numVigCdp' . $i]) != 0 or // vigencia del cdp
+                    intval($arrPost['numRp' . $i]) != 0 or // numero del rp
+                    doubleval($arrPost['valRp' . $i]) != 0 or // valor del rp
+                    esFechaValida($arrPost['fchRp' . $i]) != null or // fecha del rp
+                    intval($arrPost['numVigRp' . $i]) != 0       // vigencia del rp
             ) {
 
                 // CDP -------------------------------------------------------------------
@@ -2489,9 +2375,7 @@ class aad
                 } elseif (intval($arrPost['numVigRp' . $i]) < 2009 or intval($arrPost['numVigRp' . $i]) > date("Y")) {
                     $this->arrErrores[] = "La vigencia del RP " . $i . " debe ser posterior al 2009 y anterior o igual a " . date("Y");
                 }
-
             }
-
         }
     }
 
@@ -2500,8 +2384,7 @@ class aad
      * SE MAPEAN CON LOS IDENTIFICADORES DE BASE DE DATOS
      * @param $arrCaracteristicas
      */
-    private function mapeoInversoCaracteristicas($seqTipoActo)
-    {
+    private function mapeoInversoCaracteristicas($seqTipoActo) {
         switch ($seqTipoActo) {
             case 1: // asignacion
                 $this->arrCaracteristicas['txtResolucion'] = 1;
@@ -2671,6 +2554,36 @@ class aad
             case 11: // exclusion
                 $this->arrCaracteristicas['txtResolucion'] = 161;
                 break;
+            case 12: // Proyectos InterAdministrativos
+                $this->arrCaracteristicas['txtResolucion'] = 162;
+                $this->arrCaracteristicas['numCdp1'] = 163;
+                $this->arrCaracteristicas['valCdp1'] = 164;
+                $this->arrCaracteristicas['fchCdp1'] = 165;
+                $this->arrCaracteristicas['numVigCdp1'] = 166;
+                $this->arrCaracteristicas['numRp1'] = 167;
+                $this->arrCaracteristicas['valRp1'] = 168;
+                $this->arrCaracteristicas['fchRp1'] = 169;
+                $this->arrCaracteristicas['numVigRp1'] = 170;
+                $this->arrCaracteristicas['numPry1'] = 171;
+                $this->arrCaracteristicas['numCdp2'] = 172;
+                $this->arrCaracteristicas['valCdp2'] = 173;
+                $this->arrCaracteristicas['fchCdp2'] = 174;
+                $this->arrCaracteristicas['numVigCdp2'] = 175;
+                $this->arrCaracteristicas['numRp2'] = 176;
+                $this->arrCaracteristicas['valRp2'] = 177;
+                $this->arrCaracteristicas['fchRp2'] = 178;
+                $this->arrCaracteristicas['numVigRp2'] = 179;
+                $this->arrCaracteristicas['numPry2'] = 180;
+                $this->arrCaracteristicas['numCdp3'] = 181;
+                $this->arrCaracteristicas['valCdp3'] = 182;
+                $this->arrCaracteristicas['fchCdp3'] = 183;
+                $this->arrCaracteristicas['numVigCdp3'] = 184;
+                $this->arrCaracteristicas['numRp3'] = 185;
+                $this->arrCaracteristicas['valRp3'] = 186;
+                $this->arrCaracteristicas['fchRp3'] = 187;
+                $this->arrCaracteristicas['numVigRp3'] = 188;
+                $this->arrCaracteristicas['numPry3'] = 189;
+                break;
             default:
                 $this->arrErrores[] = "No se conoce el tipo de acto administrativo " . $seqTipoActo;
                 break;
@@ -2683,13 +2596,12 @@ class aad
      * NO APLICA EFECTOS COLATERALES DEL ACTO
      * @param $arrPost
      */
-    private function salvarActoAdministrativo($arrPost)
-    {
+    private function salvarActoAdministrativo($arrPost) {
         global $aptBd;
 
         foreach ($this->arrCaracteristicas as $txtClave => $seqCaracteristica) {
             $txtValorCaracteristica = (isset($arrPost[$txtClave]) and $arrPost[$txtClave] != "") ? "'" . $arrPost[$txtClave] . "'" : "NULL";
-            $sql = "
+            echo $sql = "
                 insert into t_aad_acto_administrativo (
                     seqTipoActo, 
                     numActo, 
@@ -2713,8 +2625,7 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function aplicarEfectos($arrPost, $arrArchivo)
-    {
+    private function aplicarEfectos($arrPost, $arrArchivo) {
         switch ($arrPost['seqTipoActo']) {
             case 1: // asignacion
                 $this->aplicarEfectosAsignacion($arrArchivo);
@@ -2760,8 +2671,7 @@ class aad
      * APLICANDO LOS EFECTOS DE LAS RESOLUCIONES DE ASIGNACION
      * @param $arrArchivo
      */
-    private function aplicarEfectosAsignacion($arrArchivo)
-    {
+    private function aplicarEfectosAsignacion($arrArchivo) {
         global $aptBd;
         foreach ($arrArchivo as $arrRegistro) {
 
@@ -2773,13 +2683,10 @@ class aad
 
                 // obtiene el estado del proceso que corresponde al hogar (actual)
                 $arrDatosFormulario = array_shift(obtenerDatosTabla(
-                    "T_FRM_FORMULARIO",
-                    array("seqFormulario", "seqEstadoProceso", "fchVigencia"),
-                    "seqFormulario",
-                    "seqFormulario = " . $seqFormulario
+                                "T_FRM_FORMULARIO", array("seqFormulario", "seqEstadoProceso", "fchVigencia"), "seqFormulario", "seqFormulario = " . $seqFormulario
                 ));
 
-                $arrRegistro[1] = ($arrRegistro[1] != "")? "'" . $arrRegistro[1] . "'" : "NULL";
+                $arrRegistro[1] = ($arrRegistro[1] != "") ? "'" . $arrRegistro[1] . "'" : "NULL";
 
                 // realiza la modificacion del estado (nuevo)
                 $sql = "
@@ -2801,9 +2708,7 @@ class aad
                 $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "fchVigencia";
                 $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrDatosFormulario['fchVigencia'];
                 $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = $arrRegistro[1];
-
             }
-
         }
     }
 
@@ -2811,8 +2716,7 @@ class aad
      * APLICANDO LOS EFECTOS DE LAS RESOLUCIONES MODIFICATORIA
      * @param $arrArchivo
      */
-    private function aplicarEfectosModificatorias($arrArchivo)
-    {
+    private function aplicarEfectosModificatorias($arrArchivo) {
         global $aptBd;
         $arrFormularios = array();
         $claCiudadano = new Ciudadano();
@@ -2854,10 +2758,7 @@ class aad
                     break;
                 case "Tipo de Solucion":
                     $seqSolucion = array_shift(obtenerDatosTabla(
-                        "t_frm_solucion",
-                        array("seqSolucion", "txtSolucion"),
-                        "txtSolucion",
-                        "seqModalidad = " . $claFormulario->seqModalidad . " and lower(ltrim(rtrim(txtSolucion))) like '" . mb_strtoupper(trim($arrRegistro[3])) . "'"
+                                    "t_frm_solucion", array("seqSolucion", "txtSolucion"), "txtSolucion", "seqModalidad = " . $claFormulario->seqModalidad . " and lower(ltrim(rtrim(txtSolucion))) like '" . mb_strtoupper(trim($arrRegistro[3])) . "'"
                     ));
                     $txtCampo = "seqSolucion";
                     $claFormulario->seqSolucion = $seqSolucion;
@@ -2880,10 +2781,7 @@ class aad
                     break;
                 case "Proyecto":
                     $arrProyecto = array_shift(obtenerDatosTabla(
-                        "t_pry_proyecto",
-                        array("seqProyecto", "txtNombreProyecto", "txtMatriculaInmobiliariaLote", "txtChipLote", "txtDireccion"),
-                        "txtNombreProyecto",
-                        "lower(ltrim(rtrim(txtNombreProyecto))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
+                                    "t_pry_proyecto", array("seqProyecto", "txtNombreProyecto", "txtMatriculaInmobiliariaLote", "txtChipLote", "txtDireccion"), "txtNombreProyecto", "lower(ltrim(rtrim(txtNombreProyecto))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
                     ));
                     $txtCampo = "seqProyecto";
                     $claFormulario->seqProyecto = $arrProyecto['seqProyecto'];
@@ -2896,10 +2794,7 @@ class aad
                 case "Unidad Habitacional":
                     list($txtNombreProyecto, $txtNombreUnidad) = mb_split("/", $arrRegistro[3]);
                     $arrProyecto = array_shift(obtenerDatosTabla(
-                        "t_pry_proyecto",
-                        array("seqProyecto", "seqProyectoPadre", "txtNombreProyecto", "txtMatriculaInmobiliariaLote", "txtChipLote", "txtDireccion"),
-                        "txtNombreProyecto",
-                        "lower(rtrim(ltrim(txtNombreProyecto))) like '" . mb_strtolower(trim($txtNombreProyecto)) . "'"
+                                    "t_pry_proyecto", array("seqProyecto", "seqProyectoPadre", "txtNombreProyecto", "txtMatriculaInmobiliariaLote", "txtChipLote", "txtDireccion"), "txtNombreProyecto", "lower(rtrim(ltrim(txtNombreProyecto))) like '" . mb_strtolower(trim($txtNombreProyecto)) . "'"
                     ));
                     if (intval($arrProyecto['seqProyectoPadre']) != 0 and intval($arrProyecto['seqProyectoPadre']) != 37) {
                         $claFormulario->seqProyecto = intval($arrProyecto['seqProyectoPadre']);
@@ -2909,10 +2804,7 @@ class aad
                         $claFormulario->seqProyectoHijo = null;
                     }
                     $arrUnidad = array_shift(obtenerDatosTabla(
-                        "t_pry_unidad_proyecto",
-                        array("seqUnidadProyecto", "txtNombreUnidad", "valSDVEActual"),
-                        "txtNombreUnidad",
-                        "lower(rtrim(ltrim(txtNombreUnidad))) like '" . mb_strtolower(trim($txtNombreUnidad)) . "' and seqProyecto = " . intval(intval($arrProyecto['seqProyecto']))
+                                    "t_pry_unidad_proyecto", array("seqUnidadProyecto", "txtNombreUnidad", "valSDVEActual"), "txtNombreUnidad", "lower(rtrim(ltrim(txtNombreUnidad))) like '" . mb_strtolower(trim($txtNombreUnidad)) . "' and seqProyecto = " . intval(intval($arrProyecto['seqProyecto']))
                     ));
                     $claFormulario->seqUnidadProyecto = $arrUnidad['seqUnidadProyecto'];
                     $claFormulario->txtMatriculaInmobiliaria = $arrProyecto['txtMatriculaInmobiliariaLote'];
@@ -2933,10 +2825,7 @@ class aad
                     break;
                 case "Entidad Donacion":
                     $seqEmpresaDonante = array_shift(obtenerDatosTabla(
-                        "t_frm_empresa_donante",
-                        array("seqEmpresaDonante", "txtEmpresaDonante"),
-                        "txtEmpresaDonante",
-                        "lower(ltrim(rtrim(txtEmpresaDonante))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
+                                    "t_frm_empresa_donante", array("seqEmpresaDonante", "txtEmpresaDonante"), "txtEmpresaDonante", "lower(ltrim(rtrim(txtEmpresaDonante))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
                     ));
                     $txtCampo = "seqEmpresaDonante";
                     $claFormulario->seqEmpresaDonante = $seqEmpresaDonante;
@@ -2946,16 +2835,16 @@ class aad
 
                     $fchCorrecta = null;
                     $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
-                    if($numTimeStamp > 0){
-                        $fchCorrecta = date("Y-m-d",$numTimeStamp);
+                    if ($numTimeStamp > 0) {
+                        $fchCorrecta = date("Y-m-d", $numTimeStamp);
                     }
                     $arrRegistro[3] = $fchCorrecta;
                     $claFormulario->fchVigencia = $fchCorrecta;
 
                     $fchCorrecta = null;
                     $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
-                    if($numTimeStamp > 0){
-                        $fchCorrecta = date("Y-m-d",$numTimeStamp);
+                    if ($numTimeStamp > 0) {
+                        $fchCorrecta = date("Y-m-d", $numTimeStamp);
                     }
                     $arrRegistro[2] = $fchCorrecta;
 
@@ -2970,7 +2859,6 @@ class aad
 
             // asignando cambios del ciudadano
             $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano] = $claCiudadano;
-
         }
 
         foreach ($arrFormularios as $seqFormulario => $claFormulario) {
@@ -2979,15 +2867,13 @@ class aad
             }
             $claFormulario->editarFormulario($seqFormulario);
         }
-
     }
 
     /**
      * APLICANDO LOS EFECTOS DE LAS RESOLUCIONES DE INHABILTIADOS
      * @param $arrArchivo
      */
-    private function aplicarEfectosInhabilitados($arrArchivo)
-    {
+    private function aplicarEfectosInhabilitados($arrArchivo) {
         global $aptBd;
         $arrHogares = array();
         foreach ($arrArchivo as $arrRegistro) {
@@ -3022,7 +2908,6 @@ class aad
                     $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqUnidadProyecto";
                     $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrHogares[$seqFormulario]->seqUnidadProyecto;
                     $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = null;
-
                 }
                 if (intval($arrHogares[$seqFormulario]->seqUnidadProyecto) > 1) {
                     $sql = "
@@ -3059,7 +2944,6 @@ class aad
                 $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "fchVigencia";
                 $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrHogares[$seqFormulario]->fchVigencia;
                 $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = null;
-
             }
         }
     }
@@ -3068,10 +2952,10 @@ class aad
      * APLICANDO LOS EFECTOS DE LOS RECURSOS DE REPOSICION
      * @param $arrArchivo
      */
-    private function aplicarEfectosReposicion($arrArchivo){
+    private function aplicarEfectosReposicion($arrArchivo) {
         global $aptBd;
         $arrHogares = array();
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
 
@@ -3079,25 +2963,19 @@ class aad
             $arrHogares[$seqFormulario]->cargarFormulario($seqFormulario);
 
             $seqEstadoProceso = array_shift(
-                obtenerDatosTabla(
-                    "v_frm_estado",
-                    array("seqEstadoProceso","txtEstado"),
-                    "txtEstado",
-                    "ltrim(rtrim(txtEstado)) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
-                )
+                    obtenerDatosTabla(
+                            "v_frm_estado", array("seqEstadoProceso", "txtEstado"), "txtEstado", "ltrim(rtrim(txtEstado)) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
+                    )
             );
 
             $seqEtapa = array_shift(
-                obtenerDatosTabla(
-                    "t_frm_estado_proceso",
-                    array("seqEstadoProceso","seqEtapa"),
-                    "seqEstadoProceso",
-                    "seqEstadoProceso = $seqEstadoProceso"
-                )
+                    obtenerDatosTabla(
+                            "t_frm_estado_proceso", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = $seqEstadoProceso"
+                    )
             );
 
             // Solo si es etapa desembolso significa reversar cambios
-            if($seqEtapa == 5){
+            if ($seqEtapa == 5) {
 
                 $sql = "
                     select txtCambios
@@ -3106,12 +2984,12 @@ class aad
                     and txtComentario like 'vinculado a la%" . $arrRegistro[1] . " del " . $arrRegistro[2] . "%'                
                 ";
                 $objRes = $aptBd->execute($sql);
-                $arrCambios = mb_split("<br>",$objRes->fields['txtCambios']);
-                foreach($arrCambios as $txtCambio){
-                    $arrLinea = mb_split(",",trim($txtCambio));
-                    if(isset($arrLinea[1])) {
-                        $txtCampo = trim(mb_ereg_replace("&nbsp;","",$arrLinea[0]));
-                        if($txtCampo != "seqEstadoProceso") {
+                $arrCambios = mb_split("<br>", $objRes->fields['txtCambios']);
+                foreach ($arrCambios as $txtCambio) {
+                    $arrLinea = mb_split(",", trim($txtCambio));
+                    if (isset($arrLinea[1])) {
+                        $txtCampo = trim(mb_ereg_replace("&nbsp;", "", $arrLinea[0]));
+                        if ($txtCampo != "seqEstadoProceso") {
                             $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
                             $this->arrCambiosAplicados[$seqFormulario]['documento'] = $arrRegistro[0];
                             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = $txtCampo;
@@ -3119,9 +2997,7 @@ class aad
                             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = trim(mb_ereg_replace("Valor Anterior:", "", $arrLinea[1]));
                         }
                     }
-
                 }
-
             }
 
             $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
@@ -3130,25 +3006,23 @@ class aad
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrHogares[$seqFormulario]->seqEstadoProceso;
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = $seqEstadoProceso;
 
-            foreach($this->arrCambiosAplicados[$seqFormulario]['cambios'] as $numPosicion => $arrCambios){
+            foreach ($this->arrCambiosAplicados[$seqFormulario]['cambios'] as $numPosicion => $arrCambios) {
                 $txtCampo = $arrCambios['campo'];
                 $txtValor = $arrCambios['nuevo'];
                 $arrHogares[$seqFormulario]->$txtCampo = $txtValor;
             }
-
         }
 
         foreach ($arrHogares as $seqFormulario => $claFormulario) {
             $claFormulario->editarFormulario($seqFormulario);
         }
-
     }
 
     /**
      * APLICANDO LOS EFECTOS DE LOS RECURSOS DE REPOSICION
      * @param $arrArchivo
      */
-    private function aplicarEfectosNoAsignados($arrArchivo){
+    private function aplicarEfectosNoAsignados($arrArchivo) {
         global $aptBd;
 
         foreach ($arrArchivo as $arrRegistro) {
@@ -3156,7 +3030,7 @@ class aad
             // obtiene el formulario que corresponde a la cedula
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
 
-            if(! isset($arrHogares[$seqFormulario])){
+            if (!isset($arrHogares[$seqFormulario])) {
                 $arrHogares[$seqFormulario] = new FormularioSubsidios();
                 $arrHogares[$seqFormulario]->cargarFormulario($seqFormulario);
             }
@@ -3204,22 +3078,18 @@ class aad
                 ";
                 $aptBd->execute($sql);
             }
-
-
         }
 
         foreach ($arrHogares as $seqFormulario => $claFormulario) {
             $claFormulario->editarFormulario($seqFormulario);
         }
-
     }
 
     /**
      * APLICANDO LOS EFECTOS DE LAS RADICADOS / RESOLUCIONES DE RENUNCIA
      * @param $arrArchivo
      */
-    private function aplicarEfectosRenuncia($arrArchivo)
-    {
+    private function aplicarEfectosRenuncia($arrArchivo) {
         global $aptBd;
         foreach ($arrArchivo as $arrRegistro) {
 
@@ -3228,10 +3098,7 @@ class aad
 
             // obtiene el estado del proceso que corresponde al hogar (actual)
             $arrEstadoProceso = array_shift(obtenerDatosTabla(
-                "T_FRM_FORMULARIO",
-                array("seqFormulario", "seqEstadoProceso", "bolSancion", "fchVigencia", "seqProyecto", "seqProyectoHijo", "seqUnidadProyecto"),
-                "seqFormulario",
-                "seqFormulario = " . $seqFormulario
+                            "T_FRM_FORMULARIO", array("seqFormulario", "seqEstadoProceso", "bolSancion", "fchVigencia", "seqProyecto", "seqProyectoHijo", "seqUnidadProyecto"), "seqFormulario", "seqFormulario = " . $seqFormulario
             ));
 
             // realiza la modificacion del estado (nuevo) y libera la unidad
@@ -3299,7 +3166,6 @@ class aad
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['campo'] = "seqUnidadProyecto";
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['anterior'] = $arrEstadoProceso['seqUnidadProyecto'];
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 1;
-
         }
     }
 
@@ -3307,9 +3173,9 @@ class aad
      * APLICANDO LOS EFECTOS DE LAS NOTIFICACIONES
      * @param $arrArchivo
      */
-    private function aplicarEfectosNotificacion($arrArchivo){
+    private function aplicarEfectosNotificacion($arrArchivo) {
         $arrHogares = array();
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
 
@@ -3323,7 +3189,6 @@ class aad
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = 1;
 
             $arrHogares[$seqFormulario]->fchNotificacion = $arrRegistro[1];
-
         }
 
         foreach ($arrHogares as $seqFormulario => $claFormulario) {
@@ -3335,9 +3200,9 @@ class aad
      * APLICANDO LOS EFECTOS DE LAS INDEXACIONES
      * @param $arrArchivo
      */
-    private function aplicarEfectosIndexacion($arrArchivo){
+    private function aplicarEfectosIndexacion($arrArchivo) {
         $arrHogares = array();
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
 
@@ -3354,7 +3219,6 @@ class aad
 
             $arrHogares[$seqFormulario]->valAspiraSubsidio = $valAspiraSubsidio;
             $arrHogares[$seqFormulario]->fchUltimaActualizacion = date("Y-m-d H:i:s");
-
         }
 
         foreach ($arrHogares as $seqFormulario => $claFormulario) {
@@ -3366,11 +3230,11 @@ class aad
      * APLICANDO LOS EFECTOS DE LAS PERDIDAS
      * @param $arrArchivo
      */
-    private function aplicarEfectosPerdida($arrArchivo){
+    private function aplicarEfectosPerdida($arrArchivo) {
         global $aptBd;
 
         $arrHogares = array();
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
 
@@ -3458,24 +3322,22 @@ class aad
 
             $sql = "update t_pry_unidad_proyecto set seqFormulario = null where seqFormulario = " . $seqFormulario;
             $aptBd->execute($sql);
-
         }
 
         foreach ($arrHogares as $seqFormulario => $claFormulario) {
             $claFormulario->editarFormulario($seqFormulario);
         }
-
     }
 
     /**
      * APLICANDO LOS EFECTOS DE LAS REVOCATORIAS
      * @param $arrArchivo
      */
-    private function aplicarEfectosRevocatoria($arrArchivo){
+    private function aplicarEfectosRevocatoria($arrArchivo) {
         global $aptBd;
 
         $arrHogares = array();
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
 
@@ -3584,24 +3446,21 @@ class aad
 
             $sql = "update t_pry_unidad_proyecto set seqFormulario = null where seqFormulario = " . $seqFormulario;
             $aptBd->execute($sql);
-
         }
 
         foreach ($arrHogares as $seqFormulario => $claFormulario) {
             $claFormulario->editarFormulario($seqFormulario);
         }
-
     }
-
 
     /**
      * APLICANDO LOS EFECTOS DE LOS RECURSOS DE EXCLUSION
      * @param $arrArchivo
      */
-    private function aplicarEfectosExclusion($arrArchivo){
+    private function aplicarEfectosExclusion($arrArchivo) {
 
         $arrHogares = array();
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
 
@@ -3609,12 +3468,9 @@ class aad
             $arrHogares[$seqFormulario]->cargarFormulario($seqFormulario);
 
             $seqEstadoProceso = array_shift(
-                obtenerDatosTabla(
-                    "v_frm_estado",
-                    array("seqEstadoProceso","txtEstado"),
-                    "txtEstado",
-                    "ltrim(rtrim(txtEstado)) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
-                )
+                    obtenerDatosTabla(
+                            "v_frm_estado", array("seqEstadoProceso", "txtEstado"), "txtEstado", "ltrim(rtrim(txtEstado)) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
+                    )
             );
 
             $numPosicion = count($this->arrCambiosAplicados[$seqFormulario]['cambios']);
@@ -3625,13 +3481,11 @@ class aad
             $this->arrCambiosAplicados[$seqFormulario]['cambios'][$numPosicion]['nuevo'] = $seqEstadoProceso;
 
             $arrHogares[$seqFormulario]->seqEstadoProceso = $seqEstadoProceso;
-
         }
 
         foreach ($arrHogares as $seqFormulario => $claFormulario) {
             $claFormulario->editarFormulario($seqFormulario);
         }
-
     }
 
     /**
@@ -3639,8 +3493,7 @@ class aad
      * @param $seqTipoActo
      * @param $arrArchivo
      */
-    private function vincularHogres($arrPost, $arrArchivo)
-    {
+    private function vincularHogres($arrPost, $arrArchivo) {
         switch ($arrPost['seqTipoActo']) {
             case 1: // asignacion
                 $this->vincularHogresAsignacion($arrPost, $arrArchivo);
@@ -3658,10 +3511,10 @@ class aad
                 $this->vincularHogresAsignacion($arrPost, $arrArchivo); // usa la misma que asignacion
                 break;
             case 6: // renuncia
-                $this->vincularHogaresRenuncia($arrPost,$arrArchivo);
+                $this->vincularHogaresRenuncia($arrPost, $arrArchivo);
                 break;
             case 7: // notificaciones
-                $this->vincularHogaresNotificacion($arrPost,$arrArchivo);
+                $this->vincularHogaresNotificacion($arrPost, $arrArchivo);
                 break;
             case 8: // indexaciones
                 $this->vincularHogresIndexacion($arrPost, $arrArchivo);
@@ -3686,8 +3539,7 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function vincularHogresAsignacion($arrPost, $arrArchivo)
-    {
+    private function vincularHogresAsignacion($arrPost, $arrArchivo) {
         global $aptBd;
 
         foreach ($arrArchivo as $arrRegistro) {
@@ -3737,7 +3589,6 @@ class aad
                     $seqCiudadanoActo = $aptBd->Insert_ID();
 
                     $arrHogar[$seqFormularioActo][$seqCiudadanoActo] = $seqParentesco;
-
                 }
 
                 foreach ($arrHogar as $seqFormularioActo => $arrCiudadanos) {
@@ -3756,11 +3607,9 @@ class aad
                         $aptBd->execute($sql);
                     }
                 }
-
             } else {
 
                 $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[2], $arrRegistro[3]);
-
             }
 
             $arrRegistro[2] = (intval($arrRegistro[2]) != 0) ? intval($arrRegistro[2]) : "NULL";
@@ -3784,9 +3633,7 @@ class aad
                 )
             ";
             $aptBd->execute($sql);
-
         }
-
     }
 
     /**
@@ -3794,8 +3641,7 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function vincularHogresModificatoria($arrPost, $arrArchivo)
-    {
+    private function vincularHogresModificatoria($arrPost, $arrArchivo) {
 
         global $aptBd;
 
@@ -3803,7 +3649,7 @@ class aad
         $arrHogares = array();
         foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
-            if($arrRegistro[1] == "Fecha de Vigencia"){
+            if ($arrRegistro[1] == "Fecha de Vigencia") {
 
                 $fchCorrecta = null;
                 $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
@@ -3818,7 +3664,6 @@ class aad
                     $fchCorrecta = date("Y-m-d", $numTimeStamp);
                 }
                 $arrRegistro[3] = $fchCorrecta;
-
             }
 
             $arrRegistro[0] = (mb_strtolower(trim($arrRegistro[1])) == "documento") ? $arrRegistro[3] : $arrRegistro[0];
@@ -3866,7 +3711,6 @@ class aad
                 ) 
             ";
             $aptBd->execute($sql);
-
         }
 
         foreach ($arrHogares as $seqFormulario => $arrDato) {
@@ -3910,19 +3754,17 @@ class aad
                     $sql = "update t_aad_ciudadano_acto set ";
                     foreach ($claCiudadano as $txtCampo => $txtValor) {
                         if ($txtCampo != "arrErrores") {
-                            $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "NULL";
+                            $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "''";
                             $sql .= "$txtCampo = $txtValor,";
                         }
                     }
                     $sql = rtrim($sql, ",");
                     $sql .= " where seqCiudadanoActo = " . $arrDato['seqCiudadanoActo'];
+                    //  echo $sql; die();
                     $aptBd->execute($sql);
                 }
             }
-
-
         }
-
     }
 
     /**
@@ -3930,8 +3772,7 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function vincularHogresInhabilitados($arrPost, $arrArchivo)
-    {
+    private function vincularHogresInhabilitados($arrPost, $arrArchivo) {
         global $aptBd;
 
         $arrHogares = array();
@@ -3988,7 +3829,6 @@ class aad
 
                 $numDocumento = $claCiudadano->numDocumento;
                 $arrEquivalente[$seqFormulario]['cac'][$numDocumento] = $seqCiudadanoActo;
-
             }
 
             foreach ($arrHogaresAAD[$seqFormularioActo] as $seqCiudadanoActo => $seqParentesco) {
@@ -4024,7 +3864,6 @@ class aad
                 ) 
             ";
             $aptBd->execute($sql);
-
         }
 
         foreach ($arrArchivo as $arrRegistro) {
@@ -4061,8 +3900,6 @@ class aad
             ";
             $aptBd->execute($sql);
         }
-
-
     }
 
     /**
@@ -4070,13 +3907,13 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function vincularHogresReposicion($arrPost, $arrArchivo){
+    private function vincularHogresReposicion($arrPost, $arrArchivo) {
         global $aptBd;
 
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[1],$arrRegistro[2]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[1], $arrRegistro[2]);
 
             $sql = "
                   select seqCiudadanoActo 
@@ -4165,9 +4002,7 @@ class aad
                     $aptBd->execute($sql);
                 }
             }
-
         }
-
     }
 
     /**
@@ -4175,13 +4010,13 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function vincularHogaresRenuncia($arrPost, $arrArchivo){
+    private function vincularHogaresRenuncia($arrPost, $arrArchivo) {
         global $aptBd;
 
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[1],$arrRegistro[2]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[1], $arrRegistro[2]);
 
             $sql = "
                 insert into t_aad_hogares_vinculados (
@@ -4215,9 +4050,7 @@ class aad
             $sql = rtrim($sql, ",");
             $sql .= " where seqFormularioActo = " . $seqFormularioActo;
             $aptBd->execute($sql);
-
         }
-
     }
 
     /**
@@ -4225,13 +4058,13 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function vincularHogaresNotificacion($arrPost, $arrArchivo){
+    private function vincularHogaresNotificacion($arrPost, $arrArchivo) {
         global $aptBd;
 
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[2],$arrRegistro[3]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[2], $arrRegistro[3]);
 
             $sql = "
                 insert into t_aad_hogares_vinculados (
@@ -4265,9 +4098,7 @@ class aad
             $sql = rtrim($sql, ",");
             $sql .= " where seqFormularioActo = " . $seqFormularioActo;
             $aptBd->execute($sql);
-
         }
-
     }
 
     /**
@@ -4275,13 +4106,13 @@ class aad
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function vincularHogresIndexacion($arrPost, $arrArchivo){
+    private function vincularHogresIndexacion($arrPost, $arrArchivo) {
         global $aptBd;
 
-        foreach($arrArchivo as $arrRegistro){
+        foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
-            $seqFormularioActo = $this->obtenerFac($seqFormulario,$arrRegistro[1],$arrRegistro[2]);
+            $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[1], $arrRegistro[2]);
 
             $sql = "
                   select seqCiudadanoActo 
@@ -4354,9 +4185,7 @@ class aad
             $sql = rtrim($sql, ",");
             $sql .= " where seqFormularioActo = " . $seqFormularioActo;
             $aptBd->execute($sql);
-
         }
-
     }
 
     /**
@@ -4364,8 +4193,7 @@ class aad
      * @param $arrPost
      * @return array
      */
-    public function cargarArchivo($bolVerificarCreador = false)
-    {
+    public function cargarArchivo($bolVerificarCreador = false) {
         $arrArchivo = array();
 
         // valida si el archivo fue cargado y si corresponde a las extensiones válidas
@@ -4455,11 +4283,9 @@ class aad
                             }
                         }
                     }
-
                 } catch (Exception $objError) {
                     $this->arrErrores[] = $objError->getMessage();
                 }
-
             }
         }
 
@@ -4469,8 +4295,7 @@ class aad
     /**
      * Obtiene los proyectos que tengan unidades habitacionales
      */
-    public function proyectos()
-    {
+    public function proyectos() {
         global $aptBd;
 
         // Obtiene los proyectos que tengan unidades habitacionales
@@ -4496,7 +4321,6 @@ class aad
         } catch (Exception $objError) {
             return array();
         }
-
     }
 
     /**
@@ -4505,8 +4329,7 @@ class aad
      * @param $numResolucion
      * @param $fchResolucion
      */
-    private function obtenerFac($seqFormulario, $numResolucion, $fchResolucion)
-    {
+    private function obtenerFac($seqFormulario, $numResolucion, $fchResolucion) {
         global $aptBd;
         $seqFormularioActo = 0;
         $sql = "
@@ -4524,7 +4347,7 @@ class aad
         return $seqFormularioActo;
     }
 
-    public function obtenerProcesos($seqFormulario){
+    public function obtenerProcesos($seqFormulario) {
         global $aptBd;
         $sql = "
             select
@@ -4543,16 +4366,16 @@ class aad
         $objRes = $aptBd->execute($sql);
         $arrProcesos = array();
         $seqFormularioAnterior = 0;
-        while($objRes->fields){
+        while ($objRes->fields) {
 
-            $seqFormulario     = $objRes->fields['seqFormulario'];
+            $seqFormulario = $objRes->fields['seqFormulario'];
             $seqFormularioActo = $objRes->fields['seqFormularioActo'];
 
-            if( in_array( $objRes->fields['seqTipoActo'] , array(1,3,5) ) or $seqFormularioAnterior != $seqFormulario ){
+            if (in_array($objRes->fields['seqTipoActo'], array(1, 3, 5)) or $seqFormularioAnterior != $seqFormulario) {
                 $seqFormularioAnterior = $seqFormulario;
                 $txtActoProceso = $objRes->fields['numActo'] . "/" . $objRes->fields['fchActo'];
                 $arrProcesos[$txtActoProceso]['cabeza'] = $seqFormularioActo;
-            }else{
+            } else {
                 $txtActoRelacionado = $objRes->fields['numActo'] . "/" . $objRes->fields['fchActo'];
                 $arrProcesos[$txtActoProceso]['relacionado'][$txtActoRelacionado]['seqFormularioActo'] = $seqFormularioActo;
                 $arrProcesos[$txtActoProceso]['relacionado'][$txtActoRelacionado]['seqTipoActo'] = $objRes->fields['seqTipoActo'];
@@ -4570,7 +4393,7 @@ class aad
      * @param $seqFormularioActo
      * @param $arrPost
      */
-    public function actualizarFac($seqFormularioActo, $arrPost){
+    public function actualizarFac($seqFormularioActo, $arrPost) {
         global $aptBd;
 
         $arrErrores = array();
@@ -4591,21 +4414,21 @@ class aad
         unset($arrPost['nombre']);
         unset($arrPost['bolBorrar']);
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
             $sql = "update t_aad_formulario_acto set ";
-            foreach($arrPost as $txtCampo => $txtValor){
-                $txtValor = regularizarCampo($txtCampo,$txtValor);
-                if($txtValor === null){
+            foreach ($arrPost as $txtCampo => $txtValor) {
+                $txtValor = regularizarCampo($txtCampo, $txtValor);
+                if ($txtValor === null) {
                     $txtValor = "null";
-                }else{
+                } else {
                     $txtValor = "'$txtValor'";
                 }
                 $sql .= "$txtCampo = $txtValor,";
             }
-            $sql = rtrim($sql,",");
+            $sql = rtrim($sql, ",");
             $sql .= " where seqFormularioActo = $seqFormularioActo";
             $aptBd->execute($sql);
 
@@ -4616,22 +4439,22 @@ class aad
                 where hac.seqFormularioActo = $seqFormularioActo
             ";
             $arrHogarActo = $aptBd->GetAll($sql);
-            foreach($arrHogarActo as $i => $arrCiudadanoActo){
+            foreach ($arrHogarActo as $i => $arrCiudadanoActo) {
                 $numDocumentoActo = $arrCiudadanoActo['numDocumento'];
-                if(isset($arrHogarPost[$numDocumentoActo])){
+                if (isset($arrHogarPost[$numDocumentoActo])) {
                     $seqParentesco = $arrHogarPost[$numDocumentoActo]['seqParentesco'];
                     unset($arrHogarPost[$numDocumentoActo]['seqParentesco']);
                     $sql = "update t_aad_ciudadano_acto set ";
-                    foreach($arrHogarPost[$numDocumentoActo] as $txtCampo => $txtValor){
-                        $txtValor = regularizarCampo($txtCampo,$txtValor);
-                        if($txtValor === null){
+                    foreach ($arrHogarPost[$numDocumentoActo] as $txtCampo => $txtValor) {
+                        $txtValor = regularizarCampo($txtCampo, $txtValor);
+                        if ($txtValor === null) {
                             $txtValor = "null";
-                        }else{
+                        } else {
                             $txtValor = "'$txtValor'";
                         }
                         $sql .= "$txtCampo = $txtValor,";
                     }
-                    $sql = rtrim($sql,",");
+                    $sql = rtrim($sql, ",");
                     $sql .= " where seqCiudadanoActo = " . $arrCiudadanoActo['seqCiudadanoActo'];
                     $aptBd->execute($sql);
 
@@ -4646,7 +4469,7 @@ class aad
             }
 
             // ciudadanos adicionados
-            foreach($arrHogarPost as $arrCiudadanoAdicion){
+            foreach ($arrHogarPost as $arrCiudadanoAdicion) {
 
                 $seqParentesco = $arrCiudadanoAdicion['seqParentesco'];
                 unset($arrCiudadanoAdicion['seqParentesco']);
@@ -4654,18 +4477,18 @@ class aad
                 $seqCiudadano = Ciudadano::ciudadanoExiste($arrCiudadanoAdicion['seqTipoDocumento'], $arrCiudadanoAdicion['numDocumento']);
 
                 $txtCampos = "";
-                foreach($arrCiudadanoAdicion as $txtCampo => $txtValor){
-                    $txtValor = regularizarCampo($txtCampo,$txtValor);
-                    if($txtValor === null){
+                foreach ($arrCiudadanoAdicion as $txtCampo => $txtValor) {
+                    $txtValor = regularizarCampo($txtCampo, $txtValor);
+                    if ($txtValor === null) {
                         $txtValor = "null";
-                    }else{
+                    } else {
                         $txtValor = "'$txtValor'";
                     }
                     $txtValores .= "$txtValor,";
                     $txtCampos .= "$txtCampo,";
                 }
-                $txtCampos = rtrim($txtCampos,",");
-                $txtValores = rtrim($txtValores,",");
+                $txtCampos = rtrim($txtCampos, ",");
+                $txtValores = rtrim($txtValores, ",");
 
                 $sql = "insert into t_aad_ciudadano_acto (seqCiudadano, $txtCampos) values ($seqCiudadano, $txtValores)";
                 $aptBd->execute($sql);
@@ -4674,11 +4497,10 @@ class aad
 
                 $sql = "insert into t_aad_hogar_acto (seqFormularioActo, seqCiudadanoActo, seqParentesco) values ($seqFormularioActo,$seqCiudadanoActo,$seqParentesco)";
                 $aptBd->execute($sql);
-
             }
 
             // ciudadanos eliminados
-            foreach($arrHogarActo as $arrCiudadanoActo){
+            foreach ($arrHogarActo as $arrCiudadanoActo) {
                 $sql = "delete from t_aad_detalles where seqCiudadanoActo = " . $arrCiudadanoActo['seqCiudadanoActo'];
                 $aptBd->execute($sql);
                 $sql = "delete from t_aad_hogar_acto where seqCiudadanoActo = " . $arrCiudadanoActo['seqCiudadanoActo'];
@@ -4689,22 +4511,17 @@ class aad
 
 
             $aptBd->CommitTrans();
-
-        } catch (Exception $objError){
+        } catch (Exception $objError) {
 
             $aptBd->Rollbacktrans();
 
             $arrErrores[] = "Hubo problemas al sincronizar el acto administrativo";
             $arrErrores[] = $objError->getMessage();
-
         }
 
         return $arrErrores;
     }
 
-
-
 }
-
 
 ?>

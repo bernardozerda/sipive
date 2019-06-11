@@ -4,6 +4,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
+
 <html>
     <head>
         <meta charset="UTF-8">               
@@ -31,6 +32,7 @@ and open the template in the editor.
 //            $ejecutaConsultaPersonalizada = true;
 //            //  echo count($arrDocumentos);
 //        }
+
 
         if (isset($_FILES["fileDocumentos"]) && is_uploaded_file($_FILES['fileDocumentos']['tmp_name'])) {
 
@@ -68,7 +70,7 @@ and open the template in the editor.
             $claCalificacion->obtenerValorIndicadores();
             $valSeg = "";
             // $fecha = '2017-05-10 19:26:25';
-            $fecha = date('2017-10-09 H:i:s');
+            $fecha = date('Y-m-d H:i:s');
             // echo $formularios;        exit();
             foreach ($arrayCalificacion as $key => $value) {
                 $sqlIndicadores = "";
@@ -111,24 +113,31 @@ and open the template in the editor.
                         $hacinamiento = 1;
                     $sqlIndicadores .= "(" . $dormitorios . ", 0, 0, 0, 0," . $calchacinamiento . ", " . $hacinamiento . ", " . ($claCalificacion->HACN * ($hacinamiento * 100)) . ", " . $idCalificacion . ",4),";
 
-                    /*                     * *************************************Ingresos********************************************* */
+                  // echo " <br><br>  * ************************************* Formula Ingresos -> ".$value['seqFormulario']."********************************************* */";
                     $ingresos = $value['ingresos'] / $value['cant'];
                     if ($ingresos < 121196) {
                         $ingresos = 121196;
                     }
                     $ingresos = intval($ingresos);
-                    //echo "<br>->".$ingresos;
+                  //  echo "<br> Ingresos = " . $ingresos;
                     //$arrConfiguracion['constantes']['salarioMinimo'] . "/" . ($ingresos + 1000);
                     $totalIngresos = $ingresos / $arrConfiguracion['constantes']['salarioMinimo'];
+                   // echo "<br> totalIngresos = (ingresos / arrConfiguracion['constantes']['salarioMinimo']) => " . $totalIngresos;
                     $invIngresos = 1 / $totalIngresos;
-                    
-                            // echo "<br>".$invIngresos;
+                   // echo "<br> invIngresos = (1 / totalIngresos) => " . $invIngresos;
+
+
                     $formIngApli = 1 - exp(-$invIngresos / $promedioING);
+                    //echo "<br> formIngApli  = (1 - exp(-invIngresos / promedioING)) = " . $formIngApli;
                     $claCalificacion->IPC * (100 * $formIngApli);
+                    
+                 //   echo "<br><br> ***  <b>TotalCalIngresos</b> =  claCalificacion->IPC * (100 * formIngApli) =>". $claCalificacion->IPC * (100 * $formIngApli);
 
                     //$sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0," . $totalIngresos . ", null, " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
 
-                    $sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0, null, " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
+                    $sqlIndicadores .= "(" . $ingresos . ", 0, 0, 0, 0, ". $formIngApli .", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
+                   // echo "<br>(" . $ingresos . ", 0, 0, 0, 0, ".$formIngApli.", " . $totalIngresos . ", " . $claCalificacion->IPC * (100 * $formIngApli) . ", " . $idCalificacion . ",5),";
+                    
                     /*                     * *************************************Dependencia Economica********************************************* */
 
                     $dependenciaEcon = 0;
@@ -200,6 +209,7 @@ and open the template in the editor.
                     $sqlIndicadores .= "(" . $value['grupoLgtbi'] . ", 0, 0, 0, 0, null, " . $grupoLGTBI . ", " . ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) . ", " . $idCalificacion . ",14),";
                     /*                     * ************************************ Participa en programas del Gobierno Distrital ********************************************* */
                     $programa = 0;
+                    $bolRFP = 0;
 
                     if ($value['bolIntegracionSocial'] > 0 || $value['bolSecMujer'] > 0 || $value['bolIpes'] > 0) {
                         $programa = 1;
@@ -207,10 +217,17 @@ and open the template in the editor.
                     if ($value['bolSecMujer'] == "") {
                         $value['bolSecMujer'] = 0;
                     }
-                    $sqlIndicadores .= "(" . $value['bolIntegracionSocial'] . ", " . $value['bolSecMujer'] . ", 0, " . $value['bolIpes'] . ", 0, null, " . $programa . ", " . ($claCalificacion->PPGD * ($programa * 100)) . ", " . $idCalificacion . ",15);";
+
+                    $sqlIndicadores .= "(" . $value['bolIntegracionSocial'] . ", " . $value['bolSecMujer'] . ", 0, " . $value['bolIpes'] . ", 0, null, " . $programa . ", " . ($claCalificacion->PPGD * ($programa * 100)) . ", " . $idCalificacion . ",15),";
+
+                    if ($value['bolReconocimientoFP'] > 0) {
+                        $bolRFP = 1;
+                    }
+                    $sqlIndicadores .= "(" . $value['bolReconocimientoFP'] . ", 0, 0, 0, 0, null, " . $bolRFP . ", " . ($claCalificacion->RFPB * ($bolRFP * 100)) . ", " . $idCalificacion . ",16);";
+
                     $insertInd = $claCalificacion->insertarIndicadores($sqlIndicadores);
                     if ($insertInd) {
-                        $formula = (($formEduApli * $claCalificacion->BLE) * 100 ) + ($claCalificacion->RSA * ($saludSubsidiados * 100)) + ($claCalificacion->COH * ($cohabitacion * 100)) + ($claCalificacion->HACN * ($hacinamiento * 100)) + $claCalificacion->IPC * (100 * $formIngApli) + ($claCalificacion->TDE * ($dependenciaEcon * 100)) + ($claCalificacion->HN12 * ($menores * 100)) + ($claCalificacion->MCF * ($monoparentalFem * 100)) + ($claCalificacion->HAMY * ($cantAdultoMayor * 100)) + ($claCalificacion->CDISC * ($discapacidad * 100)) + ($claCalificacion->HPGE * ($grupoEtnico * 100)) + ($claCalificacion->HN18 * ($cantAdolecentes * 100)) + ($claCalificacion->HCF * ($monoparentalMasc * 100)) + ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) + ($claCalificacion->PPGD * ($programa * 100));
+                        $formula = (($formEduApli * $claCalificacion->BLE) * 100 ) + ($claCalificacion->RSA * ($saludSubsidiados * 100)) + ($claCalificacion->COH * ($cohabitacion * 100)) + ($claCalificacion->HACN * ($hacinamiento * 100)) + $claCalificacion->IPC * (100 * $formIngApli) + ($claCalificacion->TDE * ($dependenciaEcon * 100)) + ($claCalificacion->HN12 * ($menores * 100)) + ($claCalificacion->MCF * ($monoparentalFem * 100)) + ($claCalificacion->HAMY * ($cantAdultoMayor * 100)) + ($claCalificacion->CDISC * ($discapacidad * 100)) + ($claCalificacion->HPGE * ($grupoEtnico * 100)) + ($claCalificacion->HN18 * ($cantAdolecentes * 100)) + ($claCalificacion->HCF * ($monoparentalMasc * 100)) + ($claCalificacion->PLGTBI * ($grupoLGTBI * 100)) + ($claCalificacion->PPGD * ($programa * 100)) + ($claCalificacion->RFPB * ($bolRFP * 100));
                         //echo "<br>".$formula;
                         $valSeg .= "(
                             " . $value['seqFormulario'] . ", 
@@ -228,7 +245,7 @@ and open the template in the editor.
                 }
             }
 
-
+          //  die();
             $formularios = substr_replace($formularios, '', -1, 1);
             $cambioEstado = $claCalificacion->cambiarEstado($formularios);
             $seg = false;

@@ -1,7 +1,9 @@
 <?php
 
-class aadProyectos
-{
+ini_set("memory_limit", "-1");
+set_time_limit(800);
+
+class aadProyectos {
 
     public $arrErrores;
     public $arrMensajes;
@@ -18,30 +20,29 @@ class aadProyectos
     public $arrExtensiones;
     public $txtCreador;
 
-    public function __construct(){
-        $this->arrErrores        = array();
-        $this->arrMensajes       = array();
-        $this->seqUnidadActo     = null;
+    public function __construct() {
+        $this->arrErrores = array();
+        $this->arrMensajes = array();
+        $this->seqUnidadActo = null;
         $this->seqTipoActoUnidad = null;
         $this->txtTipoActoUnidad = null;
-        $this->numActo           = null;
-        $this->fchActo           = null;
-        $this->txtDescripcion    = null;
-        $this->fchCreacion       = null;
-        $this->seqUsuario        = null;
-        $this->txtNombre         = null;
-        $this->arrUnidades       = array();
-        $this->arrExtensiones = array("txt","xls","xlsx");
+        $this->numActo = null;
+        $this->fchActo = null;
+        $this->txtDescripcion = null;
+        $this->fchCreacion = null;
+        $this->seqUsuario = null;
+        $this->txtNombre = null;
+        $this->arrUnidades = array();
+        $this->arrExtensiones = array("txt", "xls", "xlsx");
         $this->txtCreador = "SiPIVE - SDHT";
     }
 
-    public function listar($seqTipoActo = 0, $numActo = 0, $fchActo = null)
-    {
+    public function listar($seqTipoActo = 0, $numActo = 0, $fchActo = null) {
         global $aptBd;
 
         try {
 
-            $txtCondicion  = (intval($seqTipoActo) != 0) ? "and uac.seqTipoActo = " . $seqTipoActo : "";
+            $txtCondicion = (intval($seqTipoActo) != 0) ? "and uac.seqTipoActo = " . $seqTipoActo : "";
             $txtCondicion .= (intval($numActo) != 0) ? "and uac.numActo = " . $numActo : "";
             $txtCondicion .= (esFechaValida($fchActo) != 0) ? "and uac.fchActo = " . $fchActo : "";
 
@@ -90,7 +91,7 @@ class aadProyectos
             ";
             $objRes = $aptBd->execute($sql);
             $arrListado = array();
-            while($objRes->fields){
+            while ($objRes->fields) {
 
                 $seqUnidadActo = $objRes->fields['seqUnidadActo'];
                 $seqProyecto = $objRes->fields['seqProyecto'];
@@ -107,17 +108,14 @@ class aadProyectos
             }
 
             return $arrListado;
-
-        } catch( Exception $objError ){
+        } catch (Exception $objError) {
 
             $this->arrErrores[] = $objError->getMessage();
             return array();
-
         }
-
     }
 
-    public function cargar($seqUnidadActo){
+    public function cargar($seqUnidadActo) {
         global $aptBd;
 
         try {
@@ -140,7 +138,7 @@ class aadProyectos
             ";
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
-                foreach($objRes->fields as $txtCampo => $txtValor){
+                foreach ($objRes->fields as $txtCampo => $txtValor) {
                     $this->$txtCampo = $txtValor;
                 }
                 $objRes->MoveNext();
@@ -208,16 +206,14 @@ class aadProyectos
 
                 $objRes->MoveNext();
             }
-
-        }catch(Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo cargar la información del acto administrativo";
         }
-
     }
 
-    public function tiposActos($seqTipoActoUnidad = 0){
+    public function tiposActos($seqTipoActoUnidad = 0) {
         global $aptBd;
-        $txtCondicion = ($seqTipoActoUnidad == 0)? "" : "where seqTipoActoUnidad = $seqTipoActoUnidad";
+        $txtCondicion = ($seqTipoActoUnidad == 0) ? "" : "where seqTipoActoUnidad = $seqTipoActoUnidad";
         $sql = "
             select 
                 seqTipoActoUnidad,
@@ -228,32 +224,26 @@ class aadProyectos
         return $aptBd->GetAll($sql);
     }
 
-    public function plantilla($seqTipoActoUnidad){
+    public function plantilla($seqTipoActoUnidad) {
 
         $arrTipo = $this->tiposActos($seqTipoActoUnidad);
 
         $arrFormato = array();
         $arrFormato[0]['nombreActo'] = $arrTipo[0]['txtTipoActoUnidad'];
 
-        switch ($seqTipoActoUnidad){
+        switch ($seqTipoActoUnidad) {
             case 1: // Aprobacion
 
                 $arrFormato[0]['nombre'] = "Proyecto o conjunto";
                 $arrFormato[0]['tipo'] = "texto";
                 $arrFormato[0]['rango'] = obtenerDatosTabla(
-                    "t_pry_proyecto",
-                    array("seqProyecto","lower(txtNombreProyecto) as txtNombreProyecto"),
-                    "seqProyecto",
-                    "",
-                    "txtNombreProyecto"
+                        "t_pry_proyecto", array("seqProyecto", "lower(txtNombreProyecto) as txtNombreProyecto"), "seqProyecto", "", "txtNombreProyecto"
                 );
 
                 $arrFormato[1]['nombre'] = "Descripción de la Unidad";
                 $arrFormato[1]['tipo'] = "texto";
                 $arrFormato[1]['rango'] = obtenerDatosTabla(
-                    "t_pry_unidad_proyecto",
-                    array("seqUnidadProyecto","seqProyecto","lower(txtNombreUnidad) as txtNombreUnidad"),
-                    "seqUnidadProyecto"
+                        "t_pry_unidad_proyecto", array("seqUnidadProyecto", "seqProyecto", "lower(txtNombreUnidad) as txtNombreUnidad"), "seqUnidadProyecto"
                 );
 
                 $arrFormato[2]['nombre'] = "Valor Unidad";
@@ -268,22 +258,17 @@ class aadProyectos
                 $arrFormato[5]['nombre'] = "Plan de Gobierno (opconal)";
                 $arrFormato[5]['tipo'] = "texto";
                 $arrFormato[5]['rango'] = obtenerDatosTabla(
-                    "t_frm_plan_gobierno",
-                    array("seqPlanGobierno","lower(txtPlanGobierno) as txtPlanGobierno"),
-                    "seqPlanGobierno"
+                        "t_frm_plan_gobierno", array("seqPlanGobierno", "lower(txtPlanGobierno) as txtPlanGobierno"), "seqPlanGobierno"
                 );
 
                 $arrFormato[6]['nombre'] = "Modalidad (opconal)";
                 $arrFormato[6]['tipo'] = "texto";
                 $arrFormato[6]['rango'] = obtenerDatosTabla(
-                    "t_frm_modalidad",
-                    array("seqModalidad","seqPlanGobierno","lower(txtModalidad) as txtModalidad"),
-                    "seqModalidad"
+                        "t_frm_modalidad", array("seqModalidad", "seqPlanGobierno", "lower(txtModalidad) as txtModalidad"), "seqModalidad"
                 );
 
-                foreach($arrFormato[6]['rango'] as $seqModalidad => $arrModalidad) {
+                foreach ($arrFormato[6]['rango'] as $seqModalidad => $arrModalidad) {
                     $arrEsquemas[$seqModalidad] = obtenerTipoEsquema($seqModalidad, $arrModalidad['seqPlanGobierno'], 1);
-
                 }
                 $arrFormato[7]['nombre'] = "Esquema (opconal)";
                 $arrFormato[7]['tipo'] = "texto";
@@ -297,19 +282,13 @@ class aadProyectos
                 $arrFormato[0]['nombre'] = "Proyecto o conjunto";
                 $arrFormato[0]['tipo'] = "texto";
                 $arrFormato[0]['rango'] = obtenerDatosTabla(
-                    "t_pry_proyecto",
-                    array("seqProyecto","lower(txtNombreProyecto) as txtNombreProyecto"),
-                    "seqProyecto",
-                    "",
-                    "txtNombreProyecto"
+                        "t_pry_proyecto", array("seqProyecto", "lower(txtNombreProyecto) as txtNombreProyecto"), "seqProyecto", "", "txtNombreProyecto"
                 );
 
                 $arrFormato[1]['nombre'] = "Descripción de la Unidad";
                 $arrFormato[1]['tipo'] = "texto";
                 $arrFormato[1]['rango'] = obtenerDatosTabla(
-                    "t_pry_unidad_proyecto",
-                    array("seqUnidadProyecto","seqProyecto","lower(txtNombreUnidad) as txtNombreUnidad"),
-                    "seqUnidadProyecto"
+                        "t_pry_unidad_proyecto", array("seqUnidadProyecto", "seqProyecto", "lower(txtNombreUnidad) as txtNombreUnidad"), "seqUnidadProyecto"
                 );
 
                 $arrFormato[2]['nombre'] = "Valor Indexacion";
@@ -330,19 +309,13 @@ class aadProyectos
                 $arrFormato[0]['nombre'] = "Proyecto o conjunto";
                 $arrFormato[0]['tipo'] = "texto";
                 $arrFormato[0]['rango'] = obtenerDatosTabla(
-                    "t_pry_proyecto",
-                    array("seqProyecto","lower(txtNombreProyecto) as txtNombreProyecto"),
-                    "seqProyecto",
-                    "",
-                    "txtNombreProyecto"
+                        "t_pry_proyecto", array("seqProyecto", "lower(txtNombreProyecto) as txtNombreProyecto"), "seqProyecto", "", "txtNombreProyecto"
                 );
 
                 $arrFormato[1]['nombre'] = "Descripción de la Unidad";
                 $arrFormato[1]['tipo'] = "texto";
                 $arrFormato[1]['rango'] = obtenerDatosTabla(
-                    "t_pry_unidad_proyecto",
-                    array("seqUnidadProyecto","seqProyecto","lower(txtNombreUnidad) as txtNombreUnidad"),
-                    "seqUnidadProyecto"
+                        "t_pry_unidad_proyecto", array("seqUnidadProyecto", "seqProyecto", "lower(txtNombreUnidad) as txtNombreUnidad"), "seqUnidadProyecto"
                 );
 
                 $arrFormato[2]['nombre'] = "Número Acto Referencia";
@@ -355,27 +328,25 @@ class aadProyectos
             default:
                 $this->arrErrores[] = "Tipo de acto desconocido";
                 break;
-
         }
 
         return $arrFormato;
-
     }
 
-    public function salvar($arrPost){
+    public function salvar($arrPost) {
         global $aptBd;
 
         $this->validarFormulario($arrPost);
 
-        if(empty($this->arrErrores)){
+        if (empty($this->arrErrores)) {
 
             $arrArchivo = $this->cargarArchivo($arrPost);
 
             $this->validarDatos($arrPost, $arrArchivo);
 
-            $this->validarReglas($arrPost,$arrArchivo);
+            $this->validarReglas($arrPost, $arrArchivo);
 
-            if(empty($this->arrErrores)) {
+            if (empty($this->arrErrores)) {
 
                 try {
 
@@ -390,19 +361,15 @@ class aadProyectos
                     }
 
                     $aptBd->CommitTrans();
-
                 } catch (Exception $objError) {
                     $this->arrErrores[] = $objError->getMessage();
                     $aptBd->RollbackTrans();
                 }
-
             }
-
         }
-
     }
 
-    private function cargarArchivo($arrPost){
+    private function cargarArchivo($arrPost) {
         $arrArchivo = array();
 
         // valida si el archivo fue cargado y si corresponde a las extensiones válidas
@@ -440,7 +407,7 @@ class aadProyectos
 
         $arrFormato = $this->plantilla($arrPost['seqTipoActoUnidad']);
 
-        if( empty( $this->arrErrores ) ) {
+        if (empty($this->arrErrores)) {
 
             // si es un archivo de texto obtiene los datos
             if ($_FILES['archivo']['type'] == "text/plain") {
@@ -498,50 +465,45 @@ class aadProyectos
                                 unset($arrArchivo[$numLinea]);
                             }
                         }
-
                     } else {
                         $this->arrErrores[] = "No se va a cargar el archivo porque no corresponde a la plantilla que se obtiene de la aplicación";
                     }
-
                 } catch (Exception $objError) {
                     $this->arrErrores[] = $objError->getMessage();
                 }
-
-
             }
         }
         return $arrArchivo;
     }
 
-    private function validarFormulario($arrPost){
+    private function validarFormulario($arrPost) {
         global $aptBd;
 
-        if($arrPost['seqTipoActoUnidad'] == 0){
+        if ($arrPost['seqTipoActoUnidad'] == 0) {
             $this->arrErrores[] = "Seleccione el tipo de acto";
         }
 
-        if($arrPost['numActo'] <= 0){
+        if ($arrPost['numActo'] <= 0) {
             $this->arrErrores[] = "El numero de acto no es válido";
         }
 
-        if(! esFechaValida($arrPost['fchActo'])){
+        if (!esFechaValida($arrPost['fchActo'])) {
             $this->arrErrores[] = "La fecha del acto no es válido";
         }
 
-        if($arrPost['txtDescripcion'] == ""){
+        if ($arrPost['txtDescripcion'] == "") {
             $this->arrErrores[] = "Digite la descripción del acto administrativo";
         }
-
     }
 
-    private function validarDatos($arrPost, $arrArchivo){
+    private function validarDatos($arrPost, $arrArchivo) {
 
         $arrFormato = $this->plantilla($arrPost['seqTipoActoUnidad']);
         unset($arrArchivo[0]);
-        foreach($arrArchivo as $numLinea => $arrLinea){
-            foreach($arrLinea as $numColumna => $txtValor){
+        foreach ($arrArchivo as $numLinea => $arrLinea) {
+            foreach ($arrLinea as $numColumna => $txtValor) {
                 $bolError = true;
-                if(trim($txtValor) != "") {
+                if (trim($txtValor) != "") {
                     switch ($arrFormato[$numColumna]['tipo']) {
                         case "numero":
                             $bolError = (is_numeric($txtValor)) ? false : true;
@@ -561,40 +523,40 @@ class aadProyectos
         }
     }
 
-    private function validarReglas($arrPost, $arrArchivo){
-        switch($arrPost['seqTipoActoUnidad']){
+    private function validarReglas($arrPost, $arrArchivo) {
+        switch ($arrPost['seqTipoActoUnidad']) {
             case 1:
-                $this->validarReglasAprobacion($arrPost,$arrArchivo);
+                $this->validarReglasAprobacion($arrPost, $arrArchivo);
                 break;
             case 2:
-                $this->validarReglasIndexacion($arrPost,$arrArchivo);
+                $this->validarReglasIndexacion($arrPost, $arrArchivo);
                 break;
             case 3:
-                $this->validarReglasModificacion($arrPost,$arrArchivo);
+                $this->validarReglasModificacion($arrPost, $arrArchivo);
                 break;
         }
     }
 
-    private function validarReglasModificacion($arrPost,$arrArchivo){
+    private function validarReglasModificacion($arrPost, $arrArchivo) {
         global $aptBd;
 
         // obtiene la plantilla
         $arrFormato = $this->plantilla($arrPost['seqTipoActoUnidad']);
 
         // valida si la resolucion ya existe
-        $this->resolucionExiste($arrPost['numActo'],$arrPost['fchActo']);
+        $this->resolucionExiste($arrPost['numActo'], $arrPost['fchActo']);
 
         $arrUnidades = array();
         $arrProyectos = array();
 
-        foreach($arrArchivo as $numLinea => $arrLinea) {
+        foreach ($arrArchivo as $numLinea => $arrLinea) {
 
             if ($numLinea == 0) {
                 $this->validarTitulos($arrFormato, $arrArchivo);
             } else {
 
                 // obtener los secuenciales de proyecto y unidad
-                $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'],true);
+                $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'], true);
                 $seqUnidadProyecto = 0;
                 foreach ($arrFormato[1]['rango'] as $seqUnidad => $arrUnidad) {
                     if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower($arrUnidad['txtNombreUnidad']) == mb_strtolower($arrLinea[1])) {
@@ -604,12 +566,12 @@ class aadProyectos
                 }
 
                 // proyecto desconocido
-                if($seqProyecto == 0){
+                if ($seqProyecto == 0) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " es desconocido";
-                }else{
+                } else {
 
                     // verificar proyecto duplicado cuando es de mejoramiento (o no tiene unidades)
-                    if(! isset($arrProyectos[$seqProyecto])){
+                    if (!isset($arrProyectos[$seqProyecto])) {
                         $sql = "
                          select count(seqUnidadProyecto) as cuenta
                          from t_pry_unidad_proyecto
@@ -617,51 +579,42 @@ class aadProyectos
                        ";
                         $objRes = $aptBd->execute($sql);
                         $arrProyectos[$seqProyecto] = intval($objRes->fields['cuenta']);
-                    }elseif ($arrProyectos[$seqProyecto] == 0){
+                    } elseif ($arrProyectos[$seqProyecto] == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " esta duplicado dentro del archivo";
                     }
 
                     // si el proyecto esta inactivo no puede cargar resoluciones
                     $bolActivo = array_shift(
-                        obtenerDatosTabla(
-                            "t_pry_proyecto",
-                            array("seqProyecto","bolActivo"),
-                            "seqProyecto",
-                            "seqProyecto = " . $seqProyecto
-                        )
+                            obtenerDatosTabla(
+                                    "t_pry_proyecto", array("seqProyecto", "bolActivo"), "seqProyecto", "seqProyecto = " . $seqProyecto
+                            )
                     );
 
-                    if($bolActivo == 0){
+                    if ($bolActivo == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " no está activo";
                     }
-
-
                 }
 
                 // unidad existe y corresponde al proyecto
                 // si el proyecto tiene unidades relacionadas
-                if($arrProyectos[$seqProyecto] == 0) {
+                if ($arrProyectos[$seqProyecto] == 0) {
 
-                    if(trim($arrLinea[1]) != ""){
+                    if (trim($arrLinea[1]) != "") {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " no debe tener unidades relacionadas";
                     }
-
-                }else{
+                } else {
 
                     if ($seqUnidadProyecto == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La descripcion de la unidad " . $arrLinea[1] . " es desconocida o no corresponde al proyecto " . $arrLinea[0];
-                    }else{
+                    } else {
                         // si el proyecto esta inactivo no puede cargar resoluciones
                         $bolActivo = array_shift(
-                            obtenerDatosTabla(
-                                "t_pry_unidad_proyecto",
-                                array("seqUnidadProyecto","bolActivo"),
-                                "seqUnidadProyecto",
-                                "seqUnidadProyecto = " . $seqUnidadProyecto
-                            )
+                                obtenerDatosTabla(
+                                        "t_pry_unidad_proyecto", array("seqUnidadProyecto", "bolActivo"), "seqUnidadProyecto", "seqUnidadProyecto = " . $seqUnidadProyecto
+                                )
                         );
 
-                        if($bolActivo == 0){
+                        if ($bolActivo == 0) {
                             $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La unidad " . $arrLinea[1] . " no está activa";
                         }
                     }
@@ -671,18 +624,17 @@ class aadProyectos
                     } else {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La unidad " . $arrLinea[1] . " está duplicada dentro del archivo";
                     }
-
                 }
 
                 // ver si la resolucion relacionada existe y si la unidad esta vinculada con esa resolucion
                 // debe ser una resolucion de aprobacion
                 $numResolucionReferencia = intval($arrLinea[2]);
-                $fchResolucionReferencia = (esFechaValida($arrLinea[3]))? $arrLinea[3] : null;
+                $fchResolucionReferencia = (esFechaValida($arrLinea[3])) ? $arrLinea[3] : null;
 
                 $txtCondicion = "";
-                if($seqUnidadProyecto == 0){
+                if ($seqUnidadProyecto == 0) {
                     $txtCondicion = "and uvi.seqProyecto = $seqProyecto and uvi.seqUnidadProyecto is null";
-                }else{
+                } else {
                     $txtCondicion = "and uvi.seqProyecto = $seqProyecto and uvi.seqUnidadProyecto = $seqUnidadProyecto";
                 }
 
@@ -704,36 +656,34 @@ class aadProyectos
                 $claActoRelacionado = new aadProyectos();
                 $claActoRelacionado->cargar($arrUltimaAprobacion['seqUnidadActo']);
 
-                if($claActoRelacionado->numActo != $numResolucionReferencia or $claActoRelacionado->fchActo != $fchResolucionReferencia){
+                if ($claActoRelacionado->numActo != $numResolucionReferencia or $claActoRelacionado->fchActo != $fchResolucionReferencia) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La resolución de referencia no es la última resolucion de aprobación de la unidad o proyecto";
                 }
-
             }
-
         }
     }
 
-    private function validarReglasIndexacion($arrPost,$arrArchivo){
+    private function validarReglasIndexacion($arrPost, $arrArchivo) {
         global $aptBd;
 
         // obtiene la plantilla
         $arrFormato = $this->plantilla($arrPost['seqTipoActoUnidad']);
 
         // valida si la resolucion ya existe
-        $this->resolucionExiste($arrPost['numActo'],$arrPost['fchActo']);
+        $this->resolucionExiste($arrPost['numActo'], $arrPost['fchActo']);
 
         $arrUnidades = array();
         $arrProyectos = array();
         $arrCDP = array();
 
-        foreach($arrArchivo as $numLinea => $arrLinea) {
+        foreach ($arrArchivo as $numLinea => $arrLinea) {
 
             if ($numLinea == 0) {
                 $this->validarTitulos($arrFormato, $arrArchivo);
-            }else{
+            } else {
 
                 // obtener los secuenciales de proyecto y unidad
-                $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'],true);
+                $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'], true);
                 $seqUnidadProyecto = 0;
                 foreach ($arrFormato[1]['rango'] as $seqUnidad => $arrUnidad) {
                     if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower($arrUnidad['txtNombreUnidad']) == mb_strtolower($arrLinea[1])) {
@@ -743,12 +693,12 @@ class aadProyectos
                 }
 
                 // proyecto desconocido
-                if($seqProyecto == 0){
+                if ($seqProyecto == 0) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " es desconocido";
-                }else{
+                } else {
 
                     // coloca las unidades relacionadas con el proyecto
-                    if(! isset($arrProyectos[$seqProyecto])){
+                    if (!isset($arrProyectos[$seqProyecto])) {
                         $sql = "
                          select count(seqUnidadProyecto) as cuenta
                          from t_pry_unidad_proyecto
@@ -756,66 +706,57 @@ class aadProyectos
                        ";
                         $objRes = $aptBd->execute($sql);
                         $arrProyectos[$seqProyecto] = intval($objRes->fields['cuenta']);
-                    }elseif ( isset($arrProyectos[$seqProyecto]) and $arrProyectos[$seqProyecto] == 0 and doubleval($arrLinea[2]) < 0 ){
+                    } elseif (isset($arrProyectos[$seqProyecto]) and $arrProyectos[$seqProyecto] == 0 and doubleval($arrLinea[2]) < 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": Para indexaciones negativas el proyecto " . $arrLinea[0] . " no puede estar duplicado";
                     }
 
                     // si el proyecto esta inactivo no puede cargar resoluciones
                     $bolActivo = array_shift(
-                        obtenerDatosTabla(
-                            "t_pry_proyecto",
-                            array("seqProyecto","bolActivo"),
-                            "seqProyecto",
-                            "seqProyecto = " . $seqProyecto
-                        )
+                            obtenerDatosTabla(
+                                    "t_pry_proyecto", array("seqProyecto", "bolActivo"), "seqProyecto", "seqProyecto = " . $seqProyecto
+                            )
                     );
 
-                    if($bolActivo == 0){
+                    if ($bolActivo == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " no está activo";
                     }
-
                 }
 
                 // unidad existe y corresponde al proyecto
                 // si el proyecto tiene unidades relacionadas
-                if($arrProyectos[$seqProyecto] == 0) {
+                if ($arrProyectos[$seqProyecto] == 0) {
 
-                    if(trim($arrLinea[1]) != ""){
+                    if (trim($arrLinea[1]) != "") {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " no debe tener unidades relacionadas";
                     }
-
-                }else{
+                } else {
 
                     if ($seqUnidadProyecto == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La descripcion de la unidad " . $arrLinea[1] . " es desconocida o no corresponde al proyecto " . $arrLinea[0];
-                    }else{
+                    } else {
 
                         // si el proyecto esta inactivo no puede cargar resoluciones
                         $bolActivo = array_shift(
-                            obtenerDatosTabla(
-                                "t_pry_unidad_proyecto",
-                                array("seqUnidadProyecto","bolActivo"),
-                                "seqUnidadProyecto",
-                                "seqUnidadProyecto = " . $seqUnidadProyecto
-                            )
+                                obtenerDatosTabla(
+                                        "t_pry_unidad_proyecto", array("seqUnidadProyecto", "bolActivo"), "seqUnidadProyecto", "seqUnidadProyecto = " . $seqUnidadProyecto
+                                )
                         );
 
-                        if($bolActivo == 0){
+                        if ($bolActivo == 0) {
                             $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La unidad " . $arrLinea[1] . " no está activa";
                         }
                     }
-
                 }
 
                 // validacion del valor de la indexacion
                 $seqRegistro = intval($arrLinea[3]);
-                if(doubleval($arrLinea[2]) >= 0){
+                if (doubleval($arrLinea[2]) >= 0) {
 
                     // validacion del registro presupuesto
-                    if($seqRegistro == 0){
+                    if ($seqRegistro == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": No tiene identificador del recurso SiPIVE";
-                    }else{
-                        if(! isset($arrCDP[$seqRegistro])){
+                    } else {
+                        if (!isset($arrCDP[$seqRegistro])) {
                             $sql = "
                             select 
                                 rpr.seqRegistroPresupuestal,
@@ -829,64 +770,55 @@ class aadProyectos
                                 rpr.valValorRP                        
                         ";
                             $objRes = $aptBd->execute($sql);
-                            while($objRes->fields){
-                                $arrCDP[$seqRegistro]['cantidad']  = $objRes->fields['cantidad'];
-                                $arrCDP[$seqRegistro]['valor']     = $objRes->fields['valValorRP'];
+                            while ($objRes->fields) {
+                                $arrCDP[$seqRegistro]['cantidad'] = $objRes->fields['cantidad'];
+                                $arrCDP[$seqRegistro]['valor'] = $objRes->fields['valValorRP'];
                                 $objRes->MoveNext();
                             }
                         }
                         $arrCDP[$seqRegistro]['acumulado'] += doubleval($arrLinea[2]);
                     }
-
-                }else{
+                } else {
 
                     // si es una indexacion negativa no debe llevar el registro presupuestal
-                    if($seqRegistro != 0){
+                    if ($seqRegistro != 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": Para indexaciones negativas el identificador del recurso SiPIVE debe estar vacío";
                     }
 
-                    if(! isset($arrUnidades[$seqUnidadProyecto])){
+                    if (!isset($arrUnidades[$seqUnidadProyecto])) {
                         $arrUnidades[$seqUnidadProyecto] = 1;
-                    }elseif( isset($arrUnidades[$seqUnidadProyecto]) and $arrProyectos[$seqProyecto] != 0 ){
+                    } elseif (isset($arrUnidades[$seqUnidadProyecto]) and $arrProyectos[$seqProyecto] != 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": Para indexaciones negativas no puede tener la unidad " . $arrLinea[1] . " duplicada";
                     }
-
-
                 }
 
-                if($seqUnidadProyecto == 0){
+                if ($seqUnidadProyecto == 0) {
                     $valIndexado = array_shift(
-                        obtenerDatosTabla(
-                            "t_pry_proyecto",
-                            array("seqProyecto","valMaximoSubsidio"),
-                            "seqProyecto",
-                            "seqProyecto = " . $seqProyecto
-                        )
+                            obtenerDatosTabla(
+                                    "t_pry_proyecto", array("seqProyecto", "valMaximoSubsidio"), "seqProyecto", "seqProyecto = " . $seqProyecto
+                            )
                     );
-                }else{
+                } else {
                     $valIndexado = array_shift(
-                        obtenerDatosTabla(
-                            "t_pry_unidad_proyecto",
-                            array("seqUnidadProyecto","valSDVEActual"),
-                            "seqUnidadProyecto",
-                            "seqUnidadProyecto = " . $seqUnidadProyecto
-                        )
+                            obtenerDatosTabla(
+                                    "t_pry_unidad_proyecto", array("seqUnidadProyecto", "valSDVEActual"), "seqUnidadProyecto", "seqUnidadProyecto = " . $seqUnidadProyecto
+                            )
                     );
                 }
 
-                if($valIndexado + doubleval($arrLinea[2]) <= 0){
+                if ($valIndexado + doubleval($arrLinea[2]) <= 0) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": Valor de indexacion incorrecto, no puede ser igual al valor de la unidad o proyecto";
                 }
 
                 // ver si la resolucion relacionada existe y si la unidad esta vinculada con esa resolucion
                 // debe ser una resolucion de aprobacion
                 $numResolucionReferencia = intval($arrLinea[4]);
-                $fchResolucionReferencia = (esFechaValida($arrLinea[5]))? $arrLinea[5] : null;
+                $fchResolucionReferencia = (esFechaValida($arrLinea[5])) ? $arrLinea[5] : null;
 
                 $txtCondicion = "";
-                if($seqUnidadProyecto == 0){
+                if ($seqUnidadProyecto == 0) {
                     $txtCondicion = "and uvi.seqProyecto = $seqProyecto and uvi.seqUnidadProyecto is null";
-                }else{
+                } else {
                     $txtCondicion = "and uvi.seqProyecto = $seqProyecto and uvi.seqUnidadProyecto = $seqUnidadProyecto";
                 }
 
@@ -908,29 +840,26 @@ class aadProyectos
                 $claActoRelacionado = new aadProyectos();
                 $claActoRelacionado->cargar($arrUltimaAprobacion['seqUnidadActo']);
 
-                if($claActoRelacionado->numActo != $numResolucionReferencia or $claActoRelacionado->fchActo != $fchResolucionReferencia){
+                if ($claActoRelacionado->numActo != $numResolucionReferencia or $claActoRelacionado->fchActo != $fchResolucionReferencia) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La resolución de referencia no es la última resolucion de aprobación de la unidad o proyecto";
                 }
-
             }
-
         }
 
         // verifica que la suma del valor del rp coincida con la suma de vaores de la unidades
         // y valida que el RP no este en uso
-        foreach($arrCDP as $seqRegistro => $arrDatos){
-            if($arrDatos['cantidad'] != 0){
+        foreach ($arrCDP as $seqRegistro => $arrDatos) {
+            if ($arrDatos['cantidad'] != 0) {
                 $this->arrErrores[] = "El identificado del recurso $seqRegistro ya esta en uso";
-            }else{
-                if($arrDatos['valor'] != $arrDatos['acumulado']){
+            } else {
+                if ($arrDatos['valor'] != $arrDatos['acumulado']) {
                     $this->arrErrores[] = "La suma de valores de unidad no coinciden con el valor del registro presupuestal $seqRegistro";
                 }
             }
         }
-
     }
 
-    private function validarReglasAprobacion($arrPost, $arrArchivo){
+    private function validarReglasAprobacion($arrPost, $arrArchivo) {
         global $arrConfiguracion, $aptBd;
 
         // obtiene la plantilla
@@ -941,31 +870,31 @@ class aadProyectos
         $arrCDP = array();
 
         // valida si la resolucion ya existe
-        $this->resolucionExiste($arrPost['numActo'],$arrPost['fchActo']);
+        $this->resolucionExiste($arrPost['numActo'], $arrPost['fchActo']);
 
-        foreach($arrArchivo as $numLinea => $arrLinea){
+        foreach ($arrArchivo as $numLinea => $arrLinea) {
 
-            if($numLinea == 0){
-                $this->validarTitulos($arrFormato,$arrArchivo);
-            }else{
+            if ($numLinea == 0) {
+                $this->validarTitulos($arrFormato, $arrArchivo);
+            } else {
 
                 // obtener los secuenciales de proyecto y unidad
-                $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'],true);
+                $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'], true);
                 $seqUnidadProyecto = 0;
                 foreach ($arrFormato[1]['rango'] as $seqUnidad => $arrUnidad) {
-                    if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower($arrUnidad['txtNombreUnidad']) == mb_strtolower($arrLinea[1])) {
+                    if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower(trim($arrUnidad['txtNombreUnidad'])) == mb_strtolower(trim($arrLinea[1]))) {
                         $seqUnidadProyecto = $seqUnidad;
                         break;
                     }
                 }
 
                 // proyecto desconocido
-                if($seqProyecto == 0){
+                if ($seqProyecto == 0) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " es desconocido";
-                }else{
+                } else {
 
                     // poner la cantidad de unidades asociadas al proyecto
-                    if(! isset($arrProyectos[$seqProyecto])){
+                    if (!isset($arrProyectos[$seqProyecto])) {
                         $sql = "
                          select count(seqUnidadProyecto) as cuenta
                          from t_pry_unidad_proyecto
@@ -974,43 +903,39 @@ class aadProyectos
                         $objRes = $aptBd->execute($sql);
                         $arrProyectos[$seqProyecto] = intval($objRes->fields['cuenta']);
                     }
-
                 }
 
                 // unidad existe y corresponde al proyecto
                 // si el proyecto tiene unidades relacionadas
-                if($arrProyectos[$seqProyecto] == 0) {
+                if ($arrProyectos[$seqProyecto] == 0) {
 
-                    if(trim($arrLinea[1]) != ""){
+                    if (trim($arrLinea[1]) != "") {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " no debe tener unidades relacionadas";
                     }
 
-                    if($this->valorProyecto($seqProyecto) != 0){
+                    if ($this->valorProyecto($seqProyecto) != 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El proyecto " . $arrLinea[0] . " está relacionado con uno o mas actos administrativos";
                     }
-
-
-                }else{
+                } else {
 
                     if ($seqUnidadProyecto == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La descripcion de la unidad " . $arrLinea[1] . " es desconocida o no corresponde al proyecto " . $arrLinea[0];
                     }
-
                 }
 
                 // validacion del valor de la unidad
-                if(doubleval($arrLinea[2]) < $arrConfiguracion['constantes']['salarioMinimo']){
+                if (doubleval($arrLinea[2]) < $arrConfiguracion['constantes']['salarioMinimo']) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor debe ser mayor a 1 SMMLV";
                 }
 
                 // validacion del valor complementario
-                if(doubleval($arrLinea[3]) != 0 and doubleval($arrLinea[3]) < $arrConfiguracion['constantes']['salarioMinimo']){
+                if (doubleval($arrLinea[3]) != 0 and doubleval($arrLinea[3]) < $arrConfiguracion['constantes']['salarioMinimo']) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor complementario debe ser mayor a 1 SMMLV";
                 }
 
                 // plan de gobierno
                 $seqPlanGobierno = 0;
-                if(mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
+                if (mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
                     $seqPlanGobierno = array_search(mb_strtolower($arrLinea[5]), $arrFormato[5]['rango'], true);
                     if (intval($seqPlanGobierno) == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El Plan de Gobierno es desconocido";
@@ -1019,43 +944,43 @@ class aadProyectos
 
                 // modalidad
                 $seqModalidadUnidad = 0;
-                if(mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
+                if (mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
                     foreach ($arrFormato[6]['rango'] as $seqModalidad => $arrModalidad) {
                         if ($seqPlanGobierno == $arrModalidad['seqPlanGobierno'] and mb_strtolower($arrLinea[6]) == mb_strtolower($arrModalidad['txtModalidad'])) {
                             $seqModalidadUnidad = $seqModalidad;
                             break;
                         }
                     }
-                    if($seqModalidadUnidad == 0) {
+                    if ($seqModalidadUnidad == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La modalidad " . $arrLinea[6] . " es desconocida o no corresponde al plan de gobierno";
                     }
                 }
 
                 // esquema
                 $seqEsquemaUnidad = 0;
-                if(mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
+                if (mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
                     foreach ($arrFormato[7]['rango'][$seqModalidad] as $seqTipoEsquema => $txtTipoEsquema) {
                         if (mb_strtolower($arrLinea[7]) == mb_strtolower($txtTipoEsquema)) {
                             $seqEsquemaUnidad = $seqTipoEsquema;
                             break;
                         }
                     }
-                    if($seqEsquemaUnidad == 0) {
+                    if ($seqEsquemaUnidad == 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El esquema " . $arrLinea[7] . " es desconocida o no corresponde a la modalidad";
                     }
                 }
 
                 // validar que la unidad no este con otra aprobacion o que el saldo este en cero
-                if($this->valorUnidad($seqUnidadProyecto) != 0){
+                if ($this->valorUnidad($seqUnidadProyecto) != 0) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La unidad " . $arrLinea[1] . " está relacionada con uno o mas actos administrativos";
                 }
 
                 // validacion del registro presupuesto
                 $seqRegistro = intval($arrLinea[4]);
-                if($seqRegistro == 0){
+                if ($seqRegistro == 0) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": No tiene identificador del recurso SiPIVE";
-                }else{
-                    if(! isset($arrCDP[$seqRegistro])){
+                } else {
+                    if (!isset($arrCDP[$seqRegistro])) {
                         $sql = "
                             select 
                                 rpr.seqRegistroPresupuestal,
@@ -1069,9 +994,9 @@ class aadProyectos
                                 rpr.valValorRP                        
                         ";
                         $objRes = $aptBd->execute($sql);
-                        while($objRes->fields){
-                            $arrCDP[$seqRegistro]['cantidad']  = $objRes->fields['cantidad'];
-                            $arrCDP[$seqRegistro]['valor']     = $objRes->fields['valValorRP'];
+                        while ($objRes->fields) {
+                            $arrCDP[$seqRegistro]['cantidad'] = $objRes->fields['cantidad'];
+                            $arrCDP[$seqRegistro]['valor'] = $objRes->fields['valValorRP'];
                             $objRes->MoveNext();
                         }
                     }
@@ -1082,19 +1007,18 @@ class aadProyectos
 
         // verifica que la suma del valor del rp coincida con la suma de vaores de la unidades
         // y valida que el RP no este en uso
-        foreach($arrCDP as $seqRegistro => $arrDatos){
-            if($arrDatos['cantidad'] != 0){
+        foreach ($arrCDP as $seqRegistro => $arrDatos) {
+            if ($arrDatos['cantidad'] != 0) {
                 $this->arrErrores[] = "El identificado del recurso $seqRegistro ya esta en uso";
-            }else{
-                if($arrDatos['valor'] != $arrDatos['acumulado']){
+            } else {
+                if ($arrDatos['valor'] != $arrDatos['acumulado']) {
                     $this->arrErrores[] = "La suma de valores de unidad no coinciden con el valor del registro presupuestal $seqRegistro";
                 }
             }
         }
-
     }
 
-    private function valorUnidad($seqUnidad){
+    private function valorUnidad($seqUnidad) {
         global $aptBd;
         $sql = "
             select 
@@ -1106,14 +1030,14 @@ class aadProyectos
         ";
         $objRes = $aptBd->execute($sql);
         $valIndexado = 0;
-        while($objRes->fields){
+        while ($objRes->fields) {
             $valIndexado = $objRes->fields['valIndexado'];
             $objRes->MoveNext();
         }
         return $valIndexado;
     }
 
-    private function valorProyecto($seqProyecto){
+    private function valorProyecto($seqProyecto) {
         global $aptBd;
         $sql = "
             select 
@@ -1124,14 +1048,14 @@ class aadProyectos
             group by uvi.seqProyecto        
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $valIndexado = $objRes->fields['valIndexado'];
             $objRes->MoveNext();
         }
         return $valIndexado;
     }
 
-    private function salvarActo($arrPost){
+    private function salvarActo($arrPost) {
         global $aptBd;
 
         $sql = "
@@ -1155,8 +1079,8 @@ class aadProyectos
         return $aptBd->Insert_ID();
     }
 
-    private function vincularUnidades($seqUnidadActo, $arrPost, $arrArchivo){
-        switch($arrPost['seqTipoActoUnidad']){
+    private function vincularUnidades($seqUnidadActo, $arrPost, $arrArchivo) {
+        switch ($arrPost['seqTipoActoUnidad']) {
             case 1:
                 $this->vincularUnidadesAprobacion($seqUnidadActo, $arrPost, $arrArchivo);
                 break;
@@ -1169,9 +1093,7 @@ class aadProyectos
         }
     }
 
-
-
-    private function vincularUnidadesAprobacion($seqUnidadActo, $arrPost, $arrArchivo){
+    private function vincularUnidadesAprobacion($seqUnidadActo, $arrPost, $arrArchivo) {
         global $aptBd;
 
         $arrFormato = $this->plantilla($arrPost['seqTipoActoUnidad']);
@@ -1180,12 +1102,12 @@ class aadProyectos
         $arrProyecto = array();
 
         unset($arrArchivo[0]);
-        foreach($arrArchivo as $numLinea => $arrLinea){
+        foreach ($arrArchivo as $numLinea => $arrLinea) {
 
-            $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'],true);
+            $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'], true);
             $seqUnidadProyecto = 'null';
             foreach ($arrFormato[1]['rango'] as $seqUnidad => $arrUnidad) {
-                if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower($arrUnidad['txtNombreUnidad']) == mb_strtolower($arrLinea[1])) {
+                if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower(trim($arrUnidad['txtNombreUnidad'])) == mb_strtolower(trim($arrLinea[1]))) {
                     $seqUnidadProyecto = $seqUnidad;
                     break;
                 }
@@ -1214,13 +1136,13 @@ class aadProyectos
 
             // plan de gobierno
             $seqPlanGobierno = 0;
-            if(mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
+            if (mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
                 $seqPlanGobierno = array_search(mb_strtolower($arrLinea[5]), $arrFormato[5]['rango'], true);
             }
 
             // modalidad
             $seqModalidadUnidad = 0;
-            if(mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
+            if (mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
                 foreach ($arrFormato[6]['rango'] as $seqModalidad => $arrModalidad) {
                     if ($seqPlanGobierno == $arrModalidad['seqPlanGobierno'] and mb_strtolower($arrLinea[6]) == mb_strtolower($arrModalidad['txtModalidad'])) {
                         $seqModalidadUnidad = $seqModalidad;
@@ -1231,7 +1153,7 @@ class aadProyectos
 
             // esquema
             $seqEsquemaUnidad = 0;
-            if(mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
+            if (mb_strtolower($arrLinea[5]) != "" or mb_strtolower($arrLinea[6]) != "" or mb_strtolower($arrLinea[7]) != "") {
                 foreach ($arrFormato[7]['rango'][$seqModalidad] as $seqTipoEsquema => $txtTipoEsquema) {
                     if (mb_strtolower($arrLinea[7]) == mb_strtolower($txtTipoEsquema)) {
                         $seqEsquemaUnidad = $seqTipoEsquema;
@@ -1240,11 +1162,11 @@ class aadProyectos
                 }
             }
 
-            if($seqUnidadProyecto != 'null'){
+            if ($seqUnidadProyecto != 'null') {
 
-                $txtPlanGobierno = ($seqPlanGobierno    != 0)? "seqPlanGobierno = $seqPlanGobierno," : "seqPlanGobierno = seqPlanGobierno,";
-                $txtModalidad    = ($seqModalidadUnidad != 0)? "seqModalidad = $seqModalidadUnidad," : "seqModalidad = seqModalidad,";
-                $txtTipoEsquema  = ($seqEsquemaUnidad   != 0)? "seqTipoEsquema = $seqEsquemaUnidad"  : "seqTipoEsquema = seqTipoEsquema";
+                $txtPlanGobierno = ($seqPlanGobierno != 0) ? "seqPlanGobierno = $seqPlanGobierno," : "seqPlanGobierno = seqPlanGobierno,";
+                $txtModalidad = ($seqModalidadUnidad != 0) ? "seqModalidad = $seqModalidadUnidad," : "seqModalidad = seqModalidad,";
+                $txtTipoEsquema = ($seqEsquemaUnidad != 0) ? "seqTipoEsquema = $seqEsquemaUnidad" : "seqTipoEsquema = seqTipoEsquema";
 
                 $arrUnidades[$seqUnidadProyecto] += doubleval($arrLinea[2]);
 
@@ -1259,10 +1181,9 @@ class aadProyectos
                     where seqUnidadProyecto = $seqUnidadProyecto
                 ";
                 $aptBd->execute($sql);
+            } else {
 
-            }else{
-
-                $txtPlanGobierno = ($seqPlanGobierno    != 0)? "seqPlanGobierno = $seqPlanGobierno" : "seqPlanGobierno = seqPlanGobierno";
+                $txtPlanGobierno = ($seqPlanGobierno != 0) ? "seqPlanGobierno = $seqPlanGobierno" : "seqPlanGobierno = seqPlanGobierno";
 
                 $arrProyecto[$seqProyecto] += doubleval($arrLinea[2]);
 
@@ -1274,22 +1195,19 @@ class aadProyectos
                     where seqProyecto = $seqProyecto
                 ";
                 $aptBd->execute($sql);
-
             }
-
         }
-
     }
 
-    private function vincularUnidadesIndexacion($seqUnidadActo, $arrPost, $arrArchivo){
+    private function vincularUnidadesIndexacion($seqUnidadActo, $arrPost, $arrArchivo) {
         global $aptBd;
 
         $arrFormato = $this->plantilla($arrPost['seqTipoActoUnidad']);
 
         unset($arrArchivo[0]);
-        foreach($arrArchivo as $numLinea => $arrLinea){
+        foreach ($arrArchivo as $numLinea => $arrLinea) {
 
-            $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'],true);
+            $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'], true);
             $seqUnidadProyecto = 'null';
             foreach ($arrFormato[1]['rango'] as $seqUnidad => $arrUnidad) {
                 if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower($arrUnidad['txtNombreUnidad']) == mb_strtolower($arrLinea[1])) {
@@ -1298,7 +1216,7 @@ class aadProyectos
                 }
             }
 
-            $seqRegistro = (intval($arrLinea[3]) != 0)? intval($arrLinea[3]) : 'null';
+            $seqRegistro = (intval($arrLinea[3]) != 0) ? intval($arrLinea[3]) : 'null';
 
             $sql = "
                 INSERT INTO t_pry_aad_unidades_vinculadas (
@@ -1321,15 +1239,12 @@ class aadProyectos
             ";
             $aptBd->execute($sql);
 
-            if($seqUnidadProyecto != 'null'){
+            if ($seqUnidadProyecto != 'null') {
 
                 $valSDVEActual = array_shift(
-                    obtenerDatosTabla(
-                        "t_pry_unidad_proyecto",
-                        array("seqUnidadProyecto","valSDVEActual"),
-                        "seqUnidadProyecto",
-                        "seqUnidadProyecto = " . $seqUnidadProyecto
-                    )
+                        obtenerDatosTabla(
+                                "t_pry_unidad_proyecto", array("seqUnidadProyecto", "valSDVEActual"), "seqUnidadProyecto", "seqUnidadProyecto = " . $seqUnidadProyecto
+                        )
                 );
 
                 $sql = "
@@ -1340,14 +1255,11 @@ class aadProyectos
                 $aptBd->execute($sql);
 
                 $seqFormulario = array_shift(
-                    obtenerDatosTabla(
-                        "t_pry_unidad_proyecto",
-                        array("seqUnidadProyecto","seqFormulario"),
-                        "seqUnidadProyecto",
-                        "seqUnidadProyecto = " . $seqUnidadProyecto
-                    )
+                        obtenerDatosTabla(
+                                "t_pry_unidad_proyecto", array("seqUnidadProyecto", "seqFormulario"), "seqUnidadProyecto", "seqUnidadProyecto = " . $seqUnidadProyecto
+                        )
                 );
-                if(intval($seqFormulario) != 0){
+                if (intval($seqFormulario) != 0) {
                     $sql = "
                         update t_frm_formulario set
                           valAspiraSubsidio = " . ($valSDVEActual + doubleval($arrLinea[2])) . "
@@ -1355,16 +1267,12 @@ class aadProyectos
                     ";
                     $aptBd->execute($sql);
                 }
-
-            }else{
+            } else {
 
                 $valMaximoSubsidio = array_shift(
-                    obtenerDatosTabla(
-                        "t_pry_proyecto",
-                        array("seqProyecto","valMaximoSubsidio"),
-                        "seqProyecto",
-                        "seqProyecto = " . $seqProyecto
-                    )
+                        obtenerDatosTabla(
+                                "t_pry_proyecto", array("seqProyecto", "valMaximoSubsidio"), "seqProyecto", "seqProyecto = " . $seqProyecto
+                        )
                 );
 
                 $sql = "
@@ -1373,21 +1281,19 @@ class aadProyectos
                     where seqProyecto = $seqProyecto
                 ";
                 $aptBd->execute($sql);
-
             }
-
         }
     }
 
-    private function vincularUnidadesModificacion($seqUnidadActo, $arrPost, $arrArchivo){
+    private function vincularUnidadesModificacion($seqUnidadActo, $arrPost, $arrArchivo) {
         global $aptBd;
 
         $arrFormato = $this->plantilla($arrPost['seqTipoActoUnidad']);
 
         unset($arrArchivo[0]);
-        foreach($arrArchivo as $numLinea => $arrLinea){
+        foreach ($arrArchivo as $numLinea => $arrLinea) {
 
-            $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'],true);
+            $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'], true);
             $seqUnidadProyecto = 'null';
             foreach ($arrFormato[1]['rango'] as $seqUnidad => $arrUnidad) {
                 if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower($arrUnidad['txtNombreUnidad']) == mb_strtolower($arrLinea[1])) {
@@ -1396,23 +1302,17 @@ class aadProyectos
                 }
             }
 
-            if($seqUnidadProyecto == 'null'){
+            if ($seqUnidadProyecto == 'null') {
                 $valIndexado = array_shift(
-                    obtenerDatosTabla(
-                        "t_pry_proyecto",
-                        array("seqProyecto","valMaximoSubsidio"),
-                        "seqProyecto",
-                        "seqProyecto = " . $seqProyecto
-                    )
+                        obtenerDatosTabla(
+                                "t_pry_proyecto", array("seqProyecto", "valMaximoSubsidio"), "seqProyecto", "seqProyecto = " . $seqProyecto
+                        )
                 );
-            }else{
+            } else {
                 $valIndexado = array_shift(
-                    obtenerDatosTabla(
-                        "t_pry_unidad_proyecto",
-                        array("seqUnidadProyecto","valSDVEActual"),
-                        "seqUnidadProyecto",
-                        "seqUnidadProyecto = " . $seqUnidadProyecto
-                    )
+                        obtenerDatosTabla(
+                                "t_pry_unidad_proyecto", array("seqUnidadProyecto", "valSDVEActual"), "seqUnidadProyecto", "seqUnidadProyecto = " . $seqUnidadProyecto
+                        )
                 );
             }
 
@@ -1429,7 +1329,7 @@ class aadProyectos
                     " . $seqUnidadActo . ",
                     " . $seqProyecto . ",
                     " . $seqUnidadProyecto . ",
-                    " . ($valIndexado * -1). ",
+                    " . ($valIndexado * -1) . ",
                     null,
                     " . intval($arrLinea[2]) . ",
                     '" . $arrLinea[3] . "'
@@ -1437,7 +1337,7 @@ class aadProyectos
             ";
             $aptBd->execute($sql);
 
-            if($seqUnidadProyecto != 'null'){
+            if ($seqUnidadProyecto != 'null') {
 
                 $sql = "
                     update t_pry_unidad_proyecto set
@@ -1446,8 +1346,7 @@ class aadProyectos
                     where seqUnidadProyecto = $seqUnidadProyecto
                 ";
                 $aptBd->execute($sql);
-
-            }else{
+            } else {
 
                 $sql = "
                     update t_pry_proyecto set
@@ -1456,25 +1355,23 @@ class aadProyectos
                     where seqProyecto = $seqProyecto
                 ";
                 $aptBd->execute($sql);
-
             }
-
         }
     }
 
-    public function listarCDP($seqRegistroPresupuestal = null,$numNumeroCDP = null,$fchFechaCDP = null,$valValorCDP = null,$numVigenciaCDP = null,$numProyectoInversionCDP = null,$numNumeroRP = null,$fchFechaRP = null,$valValorRP = null,$numVigenciaRP = null){
+    public function listarCDP($seqRegistroPresupuestal = null, $numNumeroCDP = null, $fchFechaCDP = null, $valValorCDP = null, $numVigenciaCDP = null, $numProyectoInversionCDP = null, $numNumeroRP = null, $fchFechaRP = null, $valValorRP = null, $numVigenciaRP = null) {
         global $aptBd;
 
-        $txtCondicion  = ($seqRegistroPresupuestal == null)? "" : "and seqRegistroPresupuestal = $seqRegistroPresupuestal ";
-        $txtCondicion .= ($numNumeroCDP == null           )? "" : "and numNumeroCDP = $numNumeroCDP ";
-        $txtCondicion .= ($fchFechaCDP == null            )? "" : "and fchFechaCDP = '$fchFechaCDP' ";
-        $txtCondicion .= ($valValorCDP == null            )? "" : "and valValorCDP = $valValorCDP ";
-        $txtCondicion .= ($numVigenciaCDP == null         )? "" : "and numVigenciaCDP = $numVigenciaCDP ";
-        $txtCondicion .= ($numProyectoInversionCDP == null)? "" : "and numProyectoInversionCDP = $numProyectoInversionCDP ";
-        $txtCondicion .= ($numNumeroRP == null            )? "" : "and numNumeroRP = $numNumeroRP ";
-        $txtCondicion .= ($fchFechaRP == null             )? "" : "and fchFechaRP = '$fchFechaRP' ";
-        $txtCondicion .= ($valValorRP == null             )? "" : "and valValorRP = $valValorRP ";
-        $txtCondicion .= ($numVigenciaRP == null          )? "" : "and numVigenciaRP = $numVigenciaRP ";
+        $txtCondicion = ($seqRegistroPresupuestal == null) ? "" : "and seqRegistroPresupuestal = $seqRegistroPresupuestal ";
+        $txtCondicion .= ($numNumeroCDP == null ) ? "" : "and numNumeroCDP = $numNumeroCDP ";
+        $txtCondicion .= ($fchFechaCDP == null ) ? "" : "and fchFechaCDP = '$fchFechaCDP' ";
+        $txtCondicion .= ($valValorCDP == null ) ? "" : "and valValorCDP = $valValorCDP ";
+        $txtCondicion .= ($numVigenciaCDP == null ) ? "" : "and numVigenciaCDP = $numVigenciaCDP ";
+        $txtCondicion .= ($numProyectoInversionCDP == null) ? "" : "and numProyectoInversionCDP = $numProyectoInversionCDP ";
+        $txtCondicion .= ($numNumeroRP == null ) ? "" : "and numNumeroRP = $numNumeroRP ";
+        $txtCondicion .= ($fchFechaRP == null ) ? "" : "and fchFechaRP = '$fchFechaRP' ";
+        $txtCondicion .= ($valValorRP == null ) ? "" : "and valValorRP = $valValorRP ";
+        $txtCondicion .= ($numVigenciaRP == null ) ? "" : "and numVigenciaRP = $numVigenciaRP ";
 
         $sql = "
             SELECT 
@@ -1495,9 +1392,9 @@ class aadProyectos
         return $aptBd->GetAll($sql);
     }
 
-    public function salvarCDP($arrPost){
+    public function salvarCDP($arrPost) {
         global $aptBd;
-        try{
+        try {
             $aptBd->BeginTrans();
             $sql = "
                 insert into t_pry_aad_registro_presupuestal (
@@ -1524,15 +1421,15 @@ class aadProyectos
             ";
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-        }catch(Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollBackTrans();
         }
     }
 
-    public function eliminarCDP($seqRegistroPresupuestal){
+    public function eliminarCDP($seqRegistroPresupuestal) {
         global $aptBd;
-        try{
+        try {
             $aptBd->BeginTrans();
             $sql = "
                 select count(*) as cuenta
@@ -1540,24 +1437,24 @@ class aadProyectos
                 where seqRegistroPresupuestal = $seqRegistroPresupuestal
             ";
             $objRes = $aptBd->execute($sql);
-            if($objRes->fields['cuenta'] == 0){
+            if ($objRes->fields['cuenta'] == 0) {
                 $sql = "
                     delete 
                     from t_pry_aad_registro_presupuestal 
                     where seqRegistroPresupuestal = $seqRegistroPresupuestal
                 ";
                 $aptBd->execute($sql);
-            }else{
+            } else {
                 throw new Exception("El registro presupuestal está asociado a por lo menos una unidad");
             }
             $aptBd->CommitTrans();
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollBackTrans();
         }
     }
 
-    private function resolucionExiste($numActo, $fchActo){
+    private function resolucionExiste($numActo, $fchActo) {
         global $aptBd;
         $sql = "
             select count(*) cuenta
@@ -1566,13 +1463,13 @@ class aadProyectos
               and fchActo = '" . $fchActo . "' 
         ";
         $arrExisteActo = $aptBd->GetAll($sql);
-        if($arrExisteActo[0]['cuenta']){
+        if ($arrExisteActo[0]['cuenta']) {
             $this->arrErrores[] = "La resolución " . $numActo . " del " . $fchActo . " ya existe";
         }
     }
 
-    private function validarTitulos($arrFormato,$arrArchivo){
-        foreach($arrFormato as $numColumna => $arrColumna) {
+    private function validarTitulos($arrFormato, $arrArchivo) {
+        foreach ($arrFormato as $numColumna => $arrColumna) {
             if (mb_strtolower($arrColumna['nombre']) != mb_strtolower($arrArchivo[0][$numColumna])) {
                 $this->arrErrores[] = "La columna " . $arrColumna['nombre'] . " no se encuentra o no esta en el lugar correcto";
             }
@@ -1580,6 +1477,5 @@ class aadProyectos
     }
 
 }
-
 
 ?>

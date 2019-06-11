@@ -1,4 +1,3 @@
-
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -9,6 +8,8 @@
         <script src="librerias/javascript/jquery-ui.js"></script>
         <link rel="stylesheet" href="recursos/estilos/jquery-ui.css"/> 
         <link rel="stylesheet" href="librerias/jquery/css/bootstrap.min.css"/> 
+
+
     </head>
     <body onload="tablas()">
         <div>
@@ -30,7 +31,7 @@
                 <td><h4 style="font-weight: bolder">{$totalUnidades}</h4></td>
                 <td><h4 style="font-weight: bolder">{$totalUnidades-$totalPostuladas-$totalVinculadas}</h4></td>
                 <td><h4 style="font-weight: bolder">{$totalPostuladas}
-                        <img src="recursos/imagenes/excel-48.png" style="cursor: pointer; cursor: hand; "width="18" onclick="exportarExcel(47, '', 0)"/></h4></td>
+                        <img src="recursos/imagenes/excel-48.png" style="cursor: pointer; cursor: hand; "width="18" onclick="exportarExcel(47, '', 0, 'reporteTableroExcel')"/></h4></td>
                 <td><h4 style="font-weight: bolder">{$totalVinculadas}</h4></td>
                 <td><h4 style="font-weight: bolder">{$totalLegalizadas}</h4></td>
                 <td><h4 style="font-weight: bolder">{$totalProcesoLeg}</h4></td>
@@ -47,14 +48,24 @@
                 {foreach from=$arrGroupProyecto key=seqProyectos item=datos}
                 <table class="tablero"  width="100%">
                     <tr>
-                        <th style="background: #008FA6; color: #FFF; ">&nbsp;&nbsp;&nbsp;Procesos</th>
-                        <th style="width: 10%; padding-left:3%; padding-right:3%"><img src="recursos/imagenes/Green.png" width="30px"></th>
-                        <th style="width: 10%; padding-left: 3%; padding-right:3%"><img src="recursos/imagenes/Yellow.png" width="30px"></th>
-                        <th style="width: 10%; padding-left: 3%; padding-right:3%"><img src="recursos/imagenes/Red.png" width="30px"></th>
-                        <th  style="width: 10%; padding-left: 3%; padding-right:3%"><h4><b>Total</b></h4></th>
+                        <th>
+                    <div style="background: #008FA6; color: #FFF; width: 100%; padding: 2%">Todos los Proyectos</div>
+                    </th>
+                    <th style="width: 10%; padding: 3%"><img src="recursos/imagenes/Green.png" width="30px"></th>
+                    <th style="width: 10%; padding: 3%"><img src="recursos/imagenes/Yellow.png" width="30px"></th>
+                    <th style="width: 10%; padding: 3%"><img src="recursos/imagenes/Red.png" width="30px"></th>
+                    <th><h4><b>Total</b></h4></th>
                     </tr>
                     {foreach from=$arrEstados key=seqEstado item=txtEstado}
-                        {assign var="nombreEstado" value=$txtEstado}
+                        {if $txtEstado == 'Cierre Legalizado'}
+                            {assign var="nombreEstado" value='Cierre Legalización'}
+
+                        {else}
+                            {assign var="nombreEstado" value=$txtEstado}
+                        {/if}
+
+                        {assign var="nombreEstado" value=$nombreEstado|replace:"Estudio de Titulos":"Estudio Juridico"}
+                        {assign var="nombreEstado" value=$nombreEstado|replace:"Estudio Títulos":"Estudio Juridico"}
                         {assign var="txtEstado" value=$txtEstado|replace:" ":""}
                         {assign var="txtEstado" value=$txtEstado|replace:"ó":"o"}
                         {assign var="txtEstado" value=$txtEstado|replace:"í":"i"}
@@ -94,7 +105,7 @@
                     {assign var="totalVal" value="0"}
                     <tr>
                         <td>
-                            <table class="tablero " width="100%">
+                            <table class="tablero" width="100%">
                                 <tr>
                                     <th>
                                 <div style="background: #008FA6; color: #FFF; width: 100%; padding: 2%">{$dato.seqProyecto} - {$dato.txtNombreProyecto} </div>
@@ -104,8 +115,17 @@
                                 <th><h4><b>Total</b></h4></th>
                     </tr>
                     {foreach from=$arrEstados key=seqEstado item=txtEstado}
+                         {if $txtEstado == 'Cierre Legalizado'}
+                            {assign var="nombreEstado" value='Cierre Legalización'}
+
+                        {else}
+                            {assign var="nombreEstado" value=$txtEstado}
+                        {/if}
+
+                        {assign var="nombreEstado" value=$nombreEstado|replace:"Estudio de Titulos":"Estudio Juridico"}
+                        {assign var="nombreEstado" value=$nombreEstado|replace:"Estudio Títulos":"Estudio Juridico"}
                         <tr>
-                            <th>{$txtEstado} </th>                              
+                            <th>{$nombreEstado} </th>                              
                                 {assign var="txtEstado" value=$txtEstado|replace:" ":""}
                                 {assign var="txtEstado" value=$txtEstado|replace:"ó":"o"}
                                 {assign var="txtEstado" value=$txtEstado|replace:"í":"i"}

@@ -326,6 +326,7 @@ if (empty($arrErrores)) {
                 $claFormulario->bolSecSalud = 0;
                 $claFormulario->bolSecEducacion = 0;
                 $claFormulario->bolIpes = 0;
+                $claFormulario->bolReconocimientoFP = 0;
                 $claFormulario->txtOtro = "";
                 $claFormulario->numAdultosNucleo = 1;
                 $claFormulario->numNinosNucleo = 0;

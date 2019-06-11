@@ -268,7 +268,7 @@
                                 <label class="control-label" >Localidad (*)</label>  
                                 <select name="seqLocalidad"
                                         id="seqlocalidad"
-                                        onChange="obtenerBarrioProyecto(this);"
+                                        onChange="obtenerBarrioProyecto(this, 'tdBarrio');"
                                         style="width:250px" 
                                         class="form-control required">
                                     <option value="0">Seleccione una opci&oacute;n</option>

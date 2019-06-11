@@ -10,10 +10,8 @@
  * @version 2.0 Mayo de 2016
  * @version 2.1 Desconocido
  * @version 2.2 Septiembre de 2017
- **/
-
-class aadTipo
-{
+ * */
+class aadTipo {
 
     public $seqTipoActo;
     public $txtTipoActo;
@@ -23,14 +21,13 @@ class aadTipo
     public $arrExtensiones;
     public $txtCreador;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->seqTipoActo = 0;
         $this->txtTipoActo = "";
         $this->arrCaracteristicas = array();
         $this->arrFormatoArchivo = array();
         $this->arrErrores = array();
-        $this->arrExtensiones = array("txt","xls","xlsx");
+        $this->arrExtensiones = array("txt", "xls", "xlsx");
         $this->txtCreador = "SiPIVE - SDHT";
     }
 
@@ -40,8 +37,7 @@ class aadTipo
      * @param type $seqTipoActo
      * @return \TipoActoAdministrativo
      */
-    public function cargarTipoActo($seqTipoActo = 0)
-    {
+    public function cargarTipoActo($seqTipoActo = 0) {
         global $aptBd;
         $arrTipoActo = array();
         try {
@@ -82,17 +78,17 @@ class aadTipo
                     switch ($seqTipoActo) {
                         case 1: // Resolucion de asignacion
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento";
-                            $objTipoActo->arrFormatoArchivo[0]['tipo']   = "numero";
-                            $objTipoActo->arrFormatoArchivo[0]['ayuda']  = "Documento del postulante principal";
+                            $objTipoActo->arrFormatoArchivo[0]['tipo'] = "numero";
+                            $objTipoActo->arrFormatoArchivo[0]['ayuda'] = "Documento del postulante principal";
                             $objTipoActo->arrFormatoArchivo[1]['nombre'] = "Fecha de Vigencia";
-                            $objTipoActo->arrFormatoArchivo[1]['tipo']   = "fecha";
-                            $objTipoActo->arrFormatoArchivo[1]['ayuda']  = "Fecha en la cual vencerá el subsidio de no ser aplicado (aaaa/mm/dd)";
+                            $objTipoActo->arrFormatoArchivo[1]['tipo'] = "fecha";
+                            $objTipoActo->arrFormatoArchivo[1]['ayuda'] = "Fecha en la cual vencerá el subsidio de no ser aplicado (aaaa/mm/dd)";
                             $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Resolución Relacionada";
-                            $objTipoActo->arrFormatoArchivo[2]['tipo']   = "numero";
-                            $objTipoActo->arrFormatoArchivo[2]['ayuda']  = "Número de la resolución de referencia\nSi la resolución es de vinculación, use este campo para colocar la resolución de asignacion a la que se refiere";
+                            $objTipoActo->arrFormatoArchivo[2]['tipo'] = "numero";
+                            $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "Número de la resolución de referencia\nSi la resolución es de vinculación, use este campo para colocar la resolución de asignacion a la que se refiere";
                             $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Fecha de Resolución Relacionada";
-                            $objTipoActo->arrFormatoArchivo[3]['tipo']   = "fecha";
-                            $objTipoActo->arrFormatoArchivo[3]['ayuda']  = "Fecha de la resolución asociada.\nFormato aaaa-mm-dd\nSi la resolución es de vinculación, use este campo para colocar la resolución de asignacion a la que se refiere";
+                            $objTipoActo->arrFormatoArchivo[3]['tipo'] = "fecha";
+                            $objTipoActo->arrFormatoArchivo[3]['ayuda'] = "Fecha de la resolución asociada.\nFormato aaaa-mm-dd\nSi la resolución es de vinculación, use este campo para colocar la resolución de asignacion a la que se refiere";
                             break;
                         case 2: // Resolucion Modificatoria
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento";
@@ -162,12 +158,12 @@ class aadTipo
                             $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Estado";
                             $objTipoActo->arrFormatoArchivo[3]['tipo'] = "texto";
 
-                            $arrEstados = array( 52 , 41 , 46 , 8 , 54 , 7 , 21 );
-                            foreach(array_keys(estadosProceso(0,5)) as $seqEstadoProceso){
+                            $arrEstados = array(52, 41, 46, 8, 54, 7, 21);
+                            foreach (array_keys(estadosProceso(0, 5)) as $seqEstadoProceso) {
                                 $arrEstados[] = $seqEstadoProceso;
                             }
 
-                            foreach($arrEstados as $seqEstadoProceso){
+                            foreach ($arrEstados as $seqEstadoProceso) {
                                 $objTipoActo->arrFormatoArchivo[3]['rango'][] = array_shift(estadosProceso($seqEstadoProceso));
                             }
 
@@ -250,12 +246,26 @@ class aadTipo
                             $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "El fecha de la resolución de asignación que otorgó el beneficio.\nFormato aaaa-mm-dd";
                             $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Estado";
                             $objTipoActo->arrFormatoArchivo[3]['tipo'] = "texto";
-                            $arrEstados = array( 63 );
-                            foreach($arrEstados as $seqEstadoProceso){
+                            $arrEstados = array(63);
+                            foreach ($arrEstados as $seqEstadoProceso) {
                                 $objTipoActo->arrFormatoArchivo[3]['rango'][] = array_shift(estadosProceso($seqEstadoProceso));
                             }
                             $objTipoActo->arrFormatoArchivo[4]['nombre'] = "Comentario";
                             $objTipoActo->arrFormatoArchivo[4]['tipo'] = "texto";
+                            break;
+                        case 12: // Resolucion de asignacion
+                            $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Documento";
+                            $objTipoActo->arrFormatoArchivo[0]['tipo'] = "numero";
+                            $objTipoActo->arrFormatoArchivo[0]['ayuda'] = "Documento del postulante principal";
+                            $objTipoActo->arrFormatoArchivo[1]['nombre'] = "Fecha de Vigencia";
+                            $objTipoActo->arrFormatoArchivo[1]['tipo'] = "fecha";
+                            $objTipoActo->arrFormatoArchivo[1]['ayuda'] = "Fecha en la cual vencerá el subsidio de no ser aplicado (aaaa/mm/dd)";
+                            $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Resolución Relacionada";
+                            $objTipoActo->arrFormatoArchivo[2]['tipo'] = "numero";
+                            $objTipoActo->arrFormatoArchivo[2]['ayuda'] = "Número de la resolución de referencia\nSi la resolución es de vinculación, use este campo para colocar la resolución de asignacion a la que se refiere";
+                            $objTipoActo->arrFormatoArchivo[3]['nombre'] = "Fecha de Resolución Relacionada";
+                            $objTipoActo->arrFormatoArchivo[3]['tipo'] = "fecha";
+                            $objTipoActo->arrFormatoArchivo[3]['ayuda'] = "Fecha de la resolución asociada.\nFormato aaaa-mm-dd\nSi la resolución es de vinculación, use este campo para colocar la resolución de asignacion a la que se refiere";
                             break;
                         default: // Otros tipos de actos
                             $this->arrErrores[] = "Tipo de acto administrativo inexistente " . $seqTipoActo;
@@ -279,7 +289,7 @@ class aadTipo
      * SEA UN EXCEL O UN ARCHIVO PLANO
      * @return array
      */
-    public function cargarArchivo(){
+    public function cargarArchivo() {
 
         $arrArchivo = array();
 
@@ -295,7 +305,7 @@ class aadTipo
                 $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" no fue completamente cargado, intente de nuevo, si el error persiste contacte al administrador";
                 break;
             case UPLOAD_ERR_NO_FILE:
-                $this->arrErrores[] = "Debe especificar un archivo para cargar";
+                $this->arrErrores[] = "Debe especificar un archivo para cargar ***";
                 break;
             case UPLOAD_ERR_NO_TMP_DIR:
                 $this->arrErrores[] = "El archivo \"" . $_FILES['archivo']['name'] . "\" no se pudo cargar por falta de carpeta temporal, contacte al administrador";
@@ -316,25 +326,25 @@ class aadTipo
                 break;
         }
 
-        if( empty( $this->arrErrores ) ){
+        if (empty($this->arrErrores)) {
 
             // si es un archivo de texto obtiene los datos
-            if( $_FILES['archivo']['type'] == "text/plain" ){
-                foreach( file( $_FILES['archivo']['tmp_name'] ) as $numLinea => $txtLinea ){
-                    if( trim( $txtLinea ) != "" ) {
+            if ($_FILES['archivo']['type'] == "text/plain") {
+                foreach (file($_FILES['archivo']['tmp_name']) as $numLinea => $txtLinea) {
+                    if (trim($txtLinea) != "") {
                         $arrArchivo[$numLinea] = explode("\t", trim($txtLinea));
-                        foreach( $arrArchivo[$numLinea] as $numColumna => $txtCelda ){
-                            if( $numColumna < count( $this->arrFormatoArchivo ) ) {
+                        foreach ($arrArchivo[$numLinea] as $numColumna => $txtCelda) {
+                            if ($numColumna < count($this->arrFormatoArchivo)) {
                                 $arrArchivo[$numLinea][$numColumna] = trim(utf8_encode($txtCelda));
-                            }else{
-                                unset( $arrArchivo[$numLinea][$numColumna] );
+                            } else {
+                                unset($arrArchivo[$numLinea][$numColumna]);
                             }
                         }
                     }
                 }
-            }else{
+            } else {
 
-                try{
+                try {
 
                     // crea las clases para la obtencion de los datos
                     $txtTipoArchivo = PHPExcel_IOFactory::identify($_FILES['archivo']['tmp_name']);
@@ -347,20 +357,19 @@ class aadTipo
                     $numColumnas = count($this->arrFormatoArchivo) - 1;
 
                     // obtiene los datos del rango obtenido
-                    for( $numFila = 1; $numFila < $numFilas; $numFila++ ){
-                        for( $numColumna = 0; $numColumna <= $numColumnas; $numColumna++ ){
+                    for ($numFila = 1; $numFila < $numFilas; $numFila++) {
+                        for ($numColumna = 0; $numColumna <= $numColumnas; $numColumna++) {
                             $numFilaArreglo = $numFila - 1;
-                            $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna,$numFila)->getValue();
-                            if( $this->arrFormatoArchivo[$numColumna]['tipo'] == "fecha" and is_numeric( $arrArchivo[$numFilaArreglo][$numColumna] ) ) {
+                            $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                            if ($this->arrFormatoArchivo[$numColumna]['tipo'] == "fecha" and is_numeric($arrArchivo[$numFilaArreglo][$numColumna])) {
                                 $claFecha = PHPExcel_Shared_Date::ExcelToPHPObject($arrArchivo[$numFilaArreglo][$numColumna]);
                                 $arrArchivo[$numFilaArreglo][$numColumna] = $claFecha->format("Y-m-d");
-
                             }
                         }
                     }
 
                     // si no tiene la celda de clave llena no carga
-                    if( $objPHPExcel->getProperties()->getCreator() == $this->txtCreador ) {
+                    if ($objPHPExcel->getProperties()->getCreator() == $this->txtCreador) {
 
                         // limpia las lineas vacias
                         foreach ($arrArchivo as $numLinea => $arrLinea) {
@@ -375,21 +384,16 @@ class aadTipo
                                 unset($arrArchivo[$numLinea]);
                             }
                         }
-
-                    }else{
+                    } else {
                         $this->arrErrores[] = "No se va a cargar el archivo porque no corresponde a la plantilla que se obtiene de la aplicación";
                     }
-
-                } catch ( Exception $objError ){
+                } catch (Exception $objError) {
                     $this->arrErrores[] = $objError->getMessage();
                 }
-
-
             }
-
         }
 
-        if(count($arrArchivo) == 1){
+        if (count($arrArchivo) == 1) {
             $this->arrErrores[] = "Un archivo que contiene solo los titulos se considera vacío";
         }
 
@@ -404,9 +408,9 @@ class aadTipo
      * @param $arrTitulos
      * @return void
      */
-    public function validarTitulos( $arrTitulos ){
-        foreach( $this->arrFormatoArchivo as $numColumna => $arrCelda ){
-            if( mb_strtolower($arrTitulos[$numColumna]) != mb_strtolower($arrCelda['nombre']) ){
+    public function validarTitulos($arrTitulos) {
+        foreach ($this->arrFormatoArchivo as $numColumna => $arrCelda) {
+            if (mb_strtolower($arrTitulos[$numColumna]) != mb_strtolower($arrCelda['nombre'])) {
                 $this->arrErrores[] = "La columna " . $arrCelda['nombre'] . " no se encuentra o no esta en el lugar correcto";
             }
         }
@@ -420,25 +424,25 @@ class aadTipo
      * @param $arrArchivo
      * @return void
      */
-    public function validarDatos( $arrArchivo ){
-        foreach( $this->arrFormatoArchivo as $numColumna => $arrCelda ){
-            for( $numFila = 1; $numFila < count($arrArchivo); $numFila++ ){
-                if( $arrArchivo[$numFila][$numColumna] != "" ) {
+    public function validarDatos($arrArchivo) {
+        foreach ($this->arrFormatoArchivo as $numColumna => $arrCelda) {
+            for ($numFila = 1; $numFila < count($arrArchivo); $numFila++) {
+                if ($arrArchivo[$numFila][$numColumna] != "") {
                     $bolError = false;
                     switch ($arrCelda['tipo']) {
                         case "numero":
-                            $bolError = ( is_numeric( $arrArchivo[$numFila][$numColumna] ) )? false : true;
+                            $bolError = ( is_numeric($arrArchivo[$numFila][$numColumna]) ) ? false : true;
                             break;
                         case "fecha":
-                            $bolError = ( esFechaValida( $arrArchivo[$numFila][$numColumna] ) )? false : true;
+                            $bolError = ( esFechaValida($arrArchivo[$numFila][$numColumna]) ) ? false : true;
                             break;
                     }
-                    if( $bolError ){
+                    if ($bolError) {
                         $this->arrErrores[] = "Error Linea " . ($numFila + 1) . " columna " . $arrCelda['nombre'] . " el valor debe ser " . $arrCelda['tipo'];
                     }
-                    if( isset( $arrCelda['rango'] ) ){
-                        if( ! in_array( $arrArchivo[$numFila][$numColumna] , $arrCelda['rango'] ) ){
-                            $this->arrErrores[] = "Error Linea " . ($numFila + 1) . " columna " . $arrCelda['nombre'] . " " . $arrArchivo[$numFila][$numColumna] . " no es un valor válido" ;
+                    if (isset($arrCelda['rango'])) {
+                        if (!in_array($arrArchivo[$numFila][$numColumna], $arrCelda['rango'])) {
+                            $this->arrErrores[] = "Error Linea " . ($numFila + 1) . " columna " . $arrCelda['nombre'] . " " . $arrArchivo[$numFila][$numColumna] . " no es un valor válido";
                         }
                     }
                 }

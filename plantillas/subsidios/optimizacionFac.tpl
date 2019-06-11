@@ -38,7 +38,7 @@
         <input type="hidden" name="tipo" id="tipo" value="2" />
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h6 class="panel-title">Lista de Estados de Hogares Inhabilitados</h6>
+                <h6 class="panel-title">Lista de Estados de Hogares Inhabilitados 444</h6>
             </div>
             <div class="panel-body">                
                 <div class="row form-group">

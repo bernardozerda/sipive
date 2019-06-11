@@ -59,7 +59,7 @@
                                         <label class="control-label" >Archivo del Informe</label>
                                         {if $value.txtNombreArchivo == ""}
                                             <div class="custom-file">
-                                                <input type="file" name="txtNombreArchivo" id="txtNombreArchivo"  value="{$value.txtNombreArchivo}" class="custom-file-input required" id="customFile" >
+                                                <input type="file" name="txtNombreArchivo" id="txtNombreArchivo"  value="{$value.txtNombreArchivo}" class="custom-file-input required" id="customFile" style="max-width: 100%" >
                                                 <label class="custom-file-label" for="customFile" id="nameArchivo" style="margin-top: 0">Seleccione Imagenes</label>
                                                 <div id="val_txtNombreArchivo" class="divError">Seleccione Archivo</div> 
                                             </div>

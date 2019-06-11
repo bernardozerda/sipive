@@ -376,7 +376,8 @@ class calificacion {
                 bolSecMujer,
                 bolSecSalud,
                 bolAltaCon,
-                bolIpes
+                bolIpes,
+                bolReconocimientoFP
          FROM t_frm_formulario    frm
               LEFT JOIN t_frm_hogar hog USING (seqFormulario)
               LEFT JOIN t_ciu_ciudadano ciu USING (seqCiudadano)
@@ -437,10 +438,14 @@ class calificacion {
 
         $sql = "INSERT INTO t_frm_calificacion_operaciones(cantidadMiembros,cantJefeHogar,tipo, cantConyugue,cantAnos,calculo,resultado,total, seqCalificacion,seqIndicador) VALUES";
         $sql .= $indicadores;
-
+        echo "<p>" . $sql . "</p>";
         try {
             $aptBd->execute($sql);
-            return true;
+            if ($aptBd->ErrorMsg() == "" && $aptBd->Affected_Rows() > 0) {//              
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception $objError) {
             return $objError->msg;
         }
@@ -476,10 +481,11 @@ class calificacion {
 
         global $aptBd;
 
-        $sql = "SELECT  t_frm_calificacion_plan3.*, sum(total) as total FROM t_frm_calificacion_plan3
-left join t_frm_calificacion_operaciones using(seqCalificacion)
-where fchCalificacion = '" . trim($fecha) . "'
-group by seqCalificacion;";
+        $sql = "SELECT  seqFormulario, upper(infHogar) as infHogar,  cantMiembrosHogar, totalIngresos, sum(total) as total 
+            FROM t_frm_calificacion_plan3
+            left join t_frm_calificacion_operaciones using(seqCalificacion)
+            where fchCalificacion = '" . trim($fecha) . "'
+            group by seqCalificacion;";
 
         try {
             $objRes = $aptBd->execute($sql);
@@ -496,6 +502,8 @@ group by seqCalificacion;";
     }
 
     public function obtenerResumenCalificacion($fecha) {
+
+        global $aptBd;
 
         $sql = "SELECT seqFormulario,
        numDocumento,
@@ -575,6 +583,11 @@ group by seqCalificacion;";
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 5)
           AS calculoIngresos,
+          (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 5)
+          AS reultadoIngresos,
        (SELECT total
         FROM t_frm_calificacion_operaciones op2
         WHERE     op2.seqCalificacion = cal.seqCalificacion
@@ -752,7 +765,17 @@ group by seqCalificacion;";
         WHERE     op2.seqCalificacion = cal.seqCalificacion
               AND op2.seqIndicador = 15)
           AS totalPrograma,
-       sum(op.total)
+          (SELECT resultado
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 16)
+          AS dicotomiaReconocimientoFP,
+           (SELECT total
+        FROM t_frm_calificacion_operaciones op2
+        WHERE     op2.seqCalificacion = cal.seqCalificacion
+              AND op2.seqIndicador = 16)
+          AS totalReconocimientoFP,
+       sum(op.total) AS total
 FROM t_frm_calificacion_plan3    cal
      LEFT JOIN t_frm_calificacion_operaciones op USING (seqCalificacion)
      LEFT JOIN t_frm_formulario frm USING (seqFormulario)
@@ -763,9 +786,19 @@ FROM t_frm_calificacion_plan3    cal
 where fchCalificacion like '" . $fecha . "'
 and seqParentesco = 1
 group by seqFormulario";
-//        echo $sql;
-//        die();
-        return $sql;
+
+        try {
+            $objRes = $aptBd->execute($sql);
+            $datos = array();
+            while ($objRes->fields) {
+                $datos[] = $objRes->fields;
+                $objRes->MoveNext();
+            }
+            return $datos;
+        } catch (Exception $objError) {
+            return $objError->msg;
+        }
+        return $datos;
     }
 
     public function datosUltimaCalificacion($formularios) {
@@ -862,7 +895,7 @@ group by seqIndicador;";
 
     function obtenerPromedioING($formularios, $smlv) {
         global $aptBd;
-
+        echo "<br> ***************** CALCULO PROMEDIO INGRESOS  **************************";
         $sql = "SELECT 
                  sum(valIngresos) AS ingresos, COUNT(seqCiudadano) AS cant
                 FROM
@@ -875,25 +908,28 @@ group by seqIndicador;";
         try {
             $objRes = $aptBd->execute($sql);
             $cont = $objRes->_numOfRows;
-
+            echo "<br> cont => " . $cont;
             $datos = Array();
             $calcING = 0;
             $inversa = 0;
             $sumador = 0;
             $total = 0;
             while ($objRes->fields) {
-
+             //   echo "<br> calcING = objRes->fields['ingresos'] / objRes->fields['cant'] => " . $calcING;
+             //   echo "<br> si calcING < 121196 => calcING=121196 SINO calcING = calcING ";
                 $calcING = $objRes->fields['ingresos'] / $objRes->fields['cant'];
                 if ($calcING < 121196) {
                     $calcING = 121196;
                 }
                 $inversa = 1 / ($calcING / $smlv);
+              //  echo "<br> inversa = (1 / (calcING / smlv))" . $inversa;
                 $sumador += $inversa;
+              //  echo "<br> sumador = += inversa => " . $sumador;
                 $objRes->MoveNext();
             }
 
             $total = ($sumador / $cont);
-
+           // echo "<br> totalPromedioING = (sumador / cont) => " . $total;
             return $total;
         } catch (Exception $objError) {
             return $objError->msg;

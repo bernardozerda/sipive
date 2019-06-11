@@ -16,7 +16,7 @@
             {assign var=style value = "border-radius: 0 15px 0 0;"}
             {assign var=styleLic value = "border-radius: 0 0 0 0;"}
             {assign var=nav value = "width: 19%"}
-            {assign var=nav1 value = "width: 20.6%"}
+            {assign var=nav1 value = "width: 27%"}
         {else}
             {assign var=style value = "border-radius: 0 0 0 0;"}
             {assign var=styleLic value = "border-radius: 0 15px 0 0;"}
@@ -119,24 +119,21 @@
                                 <p>{$value.txtNombreComercial|upper}&nbsp;</p>
                             </div>
                         </div>
-                        <div class="form-group"  id="idLineaTipoSolucionDescripcion">
-                            <div class="col-md-3"> 
-                                <label class="control-label" >Descripci&oacute;n del Proyecto</label>
-                                <p>{$value.txtDescripcionProyecto|upper}&nbsp;</p>
-                            </div>
-                        </div> 
-                        <!-- TIPO DE MODALIDAD -->
                         <div class="form-group" >
                             <div class="col-md-3" > 
                                 <label class="control-label" >Tipo de Modalidad </label>                              
-                                {foreach from=$arrPryTipoModalidad key=seqPryTipoModalidad item=txtPryTipoModalidad}
+                                {foreach from=$arrPryTipoModalidad key=seqPryTipoModalidad item=txtPryTipoModalidad}                                    
                                     {if $value.seqPryTipoModalidad == $seqPryTipoModalidad}
-                                        <p>{$txtPryTipoModalidad|upper}&nbsp;</p> 
+                                        <p>{$txtPryTipoModalidad|upper}&nbsp; </p> 
+
                                     {/if}
 
                                 {/foreach}                                   
                             </div>
                         </div>
+
+                        <!-- TIPO DE MODALIDAD -->
+
                         <!-- NOMBRE DE LA OPV -->
                         <div class="form-group" id="lineaOpv" style="display:none" >
                             <div class="col-md-3"> 
@@ -154,12 +151,7 @@
                                 <p>{$value.txtNombreOperador|upper}&nbsp;</p>
                             </div>
                         </div>             
-                        <div class="form-group"  id="lineaTDirigida" >
-                            <div class="col-md-3"> 
-                                <label class="control-label" >Objeto del Proyecto </label>   
-                                <p>{$value.txtObjetoProyecto|upper}&nbsp;</p>                             
-                            </div>
-                        </div>
+
                         <div class="form-group" id="idLineaProyectoUrbanizacion">
                             <div class="col-md-3"> 
                                 <label class="control-label" >Tipo de Proyecto </label>                                
@@ -210,12 +202,7 @@
                                 {/foreach}
                             </div>
                         </div>
-                        <div class="form-group" >
-                            <div class="col-md-3"> 
-                                <label class="control-label" >Otros Barrios</label> 
-                                <p>{$value.txtOtrosBarrios|upper}&nbsp;</p>
-                            </div>
-                        </div>                            
+
                         <div class="form-group"  id="lineaTituloDireccion" {if $value.bolDireccion == 0} style="display: none"{/if}>
                             <div class="col-md-3"> 
                                 <label class="control-label">Direcci&oacute;n</label>                         
@@ -297,13 +284,30 @@
                                 {/foreach}
                             </div>
                         </div>
-
+                        <div class="form-group" >
+                            <div class="col-md-3"> 
+                                <label class="control-label" >Otros Barrios</label> 
+                                <p>{$value.txtOtrosBarrios|upper}&nbsp;</p>
+                            </div>
+                        </div>     
                         <div class="form-group"  id="idTituloDescEquipamientoComunal" {if $value.bolEquipamientoComunal == 0} style="display: none" {/if}>
                             <div class="col-md-3"> 
                                 <label class="control-label" >Descripci&oacute;n Equipamiento Comunal</label> 
                                 <p>{$value.txtDescEquipamientoComunal|upper}&nbsp;</p>
                             </div>
                         </div>
+                        <div class="form-group"  id="lineaTDirigida" >
+                            <div class="col-md-3"> 
+                                <label class="control-label" >Objeto del Proyecto </label>   
+                                <p>{$value.txtObjetoProyecto|upper}&nbsp;</p>                             
+                            </div>
+                        </div>
+                        <div class="form-group"  id="idLineaTipoSolucionDescripcion">
+                            <div class="col-md-6"> 
+                                <label class="control-label" >Descripci&oacute;n del Proyecto</label>
+                                <p>{$value.txtDescripcionProyecto|upper}&nbsp;</p>
+                            </div>
+                        </div> 
                     </div>
                 </fieldset>
                 <p>&nbsp;</p>

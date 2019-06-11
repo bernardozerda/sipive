@@ -7,6 +7,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 
 // Barrio
+$seqLocalidad = explode("**", $_POST['seqLocalidad']);
+$nameBarrio = explode("_", $seqLocalidad[1]);
 $sql = "
 		SELECT 
 			seqBarrio,
@@ -14,7 +16,7 @@ $sql = "
 		FROM 
 			T_FRM_BARRIO
 		WHERE 
-			seqLocalidad = " . $_POST['seqLocalidad'] . "
+			seqLocalidad = " . $seqLocalidad[0] . "
 		";
 $objRes = $aptBd->execute($sql);
 while ($objRes->fields) {
@@ -22,12 +24,13 @@ while ($objRes->fields) {
     $objRes->MoveNext();
 }
 
+//echo"****". $idBarrio = $seqLocalidad[1]; die();
 echo "
         <select  
                 onChange=\"obtenerUpz(this);\" 
                 onBlur=\"this.style.backgroundColor = '#FFFFFF';\" 
-                name=\"seqBarrio\" 
-                id=\"seqBarrio\" 
+                name='$nameBarrio[0][]'
+                id=\"$seqLocalidad[1]\" 
                 style=\"width:200px;\" 
                 class=\"form-control required\"
         ><option value='0'>Desconocido</option>
@@ -35,5 +38,6 @@ echo "
 foreach ($arrBarrio as $seqBarrio => $txtBarrio) {
     echo "<option value='$seqBarrio'>$txtBarrio</option>";
 }
+
 echo "</select>";
 ?>

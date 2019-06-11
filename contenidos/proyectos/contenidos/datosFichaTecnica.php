@@ -24,6 +24,8 @@ $claDatosProyecto = new DatosGeneralesProyectos();
 
 $txtPlantilla = "proyectos/vistas/reportes/fichaTecnica.tpl";
 $seqProyecto = $_GET['seqProyecto'];
+$id =  $_GET['id'];
+$tipo =  $_GET['tipo'];
 $seqPryEstadoProceso = 0;
 $arrProyectos = $claProyecto->obtenerDatosProyectosFicha($seqProyecto);
 $arrDatosVivienda = $claProyecto->obtenerDatosViviendaFicha($seqProyecto);
@@ -161,10 +163,10 @@ foreach ($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion) {
         }
     } elseif ($arrResolucion['idTipo'] == 3 or ( $arrResolucion['idTipo'] == 2 and $arrResolucion['total'] < 0)) {
 
-        $arrFinanciera[$seqProyecto]['menor']['total'] += abs($arrResolucion['total']);
+        $arrFinanciera[$seqProyecto]['menor']['total'] += $arrResolucion['total'];
         $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
         $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
-        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['valor'] = abs($arrResolucion['total']);
+        $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['valor'] = $arrResolucion['total'];
         $sql = "select count(seqUnidadVinculado) as cuenta from t_pry_aad_unidades_vinculadas where seqUnidadActo = $seqUnidadActo";
         $arrCantidad = $aptBd->GetAll($sql);
         $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['unidades'] = $arrCantidad[0]['cuenta'];
@@ -186,6 +188,8 @@ $arrFinanciera[$seqProyecto]['entidadFiducia'] = array_shift(obtenerDatosTabla(
         ));
 
 $claSmarty->assign("arrProyectos", $arrProyectos);
+$claSmarty->assign("id", $id);
+$claSmarty->assign("tipo", $tipo);
 $claSmarty->assign("cantUnidades", $cantUnidades);
 $claSmarty->assign("cantUnidadesVinculadas", $cantUnidadesVinculadas);
 $claSmarty->assign("pendientesPorVincular", $pendientesPorVincular);

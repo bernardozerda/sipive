@@ -27,19 +27,19 @@ function reporteGeneralsubsidios($array) {
     $datos .= "</tr>";
     $datos .= "<td rowspan='3'>Total</td> "
             . "<th>Inscritos</th>"
-            . "<td>" . number_format($array['inscritosAdq'], 0, '.', ',') . "</td>"
+            . "<td>" . $array['inscritosAdq'] . "</td>"
             . "<th>&nbsp;</th>";
     $datos .= "</tr>";
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Asignados</th>"
-            . "<td>" . number_format($array['asignadosAdq'], 0, '.', ',') . "</td>"
-            . "<th>" . number_format($array['valAsignadosAdq'], 0, '.', ',') . "</th>";
+            . "<td>" . $array['asignadosAdq']. "</td>"
+            . "<th>" . $array['valAsignadosAdq'] . "</th>";
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Legalizados</th>"
-            . "<td>" . number_format($array['legalizadosAdq'], 0, '.', ',') . "</td>"
-            . "<th>" . number_format($array['legalizadosAdqVal'], 0, '.', ',') . "</th>";
+            . "<td>". $array['legalizadosAdq'] . "</td>"
+            . "<th>". $array['legalizadosAdqVal'] . "</th>";
     $datos .= "</tr>";
     /*     * *******************************************VICTIMAS ADQUISICION ********************************* */
     $datos .= "<tr>";
@@ -51,12 +51,12 @@ function reporteGeneralsubsidios($array) {
     $datos .= "<tr>"
             . " <th>Asignados</th>"
             . "<td>" . $array['asignadosAdqVic'] . "</td>"
-            . "<th>" . number_format($array['valAsignadosAdqVic'], 0, '.', ',') . "</th>";
+            . "<th>" . $array['valAsignadosAdqVic'] . "</th>";
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Legalizados</th>"
             . "<td>" . $array['legalizadosAdqVic'] . "</td>"
-            . "<th>" . number_format($array['legalizadosAdqValVic'], 0, '.', ',') . "</th>";
+            . "<th>" . $array['legalizadosAdqValVic'] . "</th>";
     $datos .= "</tr>";
 
     $datos .= "<tr>";
@@ -69,37 +69,37 @@ function reporteGeneralsubsidios($array) {
     $datos .= "</tr>";
     $datos .= "<td rowspan='3'>Total</td> "
             . "<th>Inscritos</th>"
-            . "<td>" . number_format($array['inscritosPive'], 0, '.', ',') . "</td>"
+            . "<td>" . $array['inscritosPive'] . "</td>"
             . "<th>&nbsp;</th>";
     $datos .= "</tr>";
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Asignados</th>"
-            . "<td>" . number_format($array['asignadosPive'], 0, '.', ',') . "</td>"
-            . "<th>" . number_format($array['valAsignadosPive'], 0, '.', ',') . "</th>";
+            . "<td>" . $array['asignadosPive'] . "</td>"
+            . "<th>" . $array['valAsignadosPive'] . "</th>";
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Legalizados</th>"
-            . "<td>" . number_format($array['legalizadosPive'], 0, '.', ',') . "</td>"
-            . "<th>" . number_format($array['legalizadosPiveVal'], 0, '.', ',') . "</th>";
+            . "<td>" .$array['legalizadosPive'] . "</td>"
+            . "<th>" . $array['legalizadosPiveVal'] . "</th>";
     $datos .= "</tr>";
 
     /*     * *******************************************VICTIMAS PIVE ********************************* */
     $datos .= "<tr>";
     $datos .= "<td rowspan='3'>Victimas</td> "
             . "<th>Inscritos</th>"
-            . "<td>" . number_format($array['victimasPive'], 0, '.', ',') . "</td>"
+            . "<td>" . $array['victimasPive'] . "</td>"
             . "<th>&nbsp;</th>";
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Asignados</th>"
-            . "<td>" . number_format($array['asignadosPiveVic'], 0, '.', ',') . "</td>"
-            . "<th>" . number_format($array['valAsignadosPiveVic'], 0, '.', ',') . "</th>";
+            . "<td>" . $array['asignadosPiveVic'] . "</td>"
+            . "<th>" . $array['valAsignadosPiveVic'] . "</th>";
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Legalizados</th>"
             . "<td>" . $array['legalizadosPiveVic'] . "</td>"
-            . "<th>" . number_format($array['legalizadosPiveValVic'], 0, '.', ',') . "</th>";
+            . "<th>" . $array['legalizadosPiveValVic'] . "</th>";
     $datos .= "</tr>";
 
     /*     * ************************** MI CASA YA! ************************************************ */
@@ -120,8 +120,8 @@ function reporteGeneralsubsidios($array) {
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Asignados</th>"
-            . "<td>" . number_format($array['asignadosMiCasaYa'], 0, '.', ',') . "</td>"
-            . "<th>" . number_format($array['valAsignadosMiCasaYa'], 0, '.', ',') . "</th>";
+            . "<td>" . $array['asignadosMiCasaYa'] . "</td>"
+            . "<th>" . $array['valAsignadosMiCasaYa'] . "</th>";
     $datos .= "</tr>";
     $datos .= "<tr>"
             . " <th>Legalizados</th>"

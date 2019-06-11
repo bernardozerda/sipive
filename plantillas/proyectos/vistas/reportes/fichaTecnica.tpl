@@ -29,7 +29,7 @@
                         {if $seqPryEstadoProceso > 0}
                             <div bgcolor="#E4E4E4" class="col-md-2" style="z-index: 100; float: right; top: -4px; left: 7%">
                                 <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
-                                       onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresEstado.php?seqPryEstadoProceso={$seqPryEstadoProceso}', '', true);" class="btn_volver"/> 
+                                       onclick="cargarContenido('contenido', './contenidos/proyectos/crm/indicadoresEstado.php?seqPryEstadoProceso={$seqPryEstadoProceso}&seqProyGrupo={$value.seqProyectoGrupo}', '', true);" class="btn_volver"/> 
                             </div>
                         {else}
                             <div bgcolor="#E4E4E4" class="col-md-2" style="z-index: 100; float: right; top: -4px; left: 7%">

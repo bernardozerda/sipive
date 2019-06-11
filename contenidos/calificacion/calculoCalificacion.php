@@ -1,10 +1,11 @@
 <?php
+
 function calcularCalificacion($arraDatosActuales) {
     $claCalificacion = new calificacion();
-     $arrayIndicadores = $claCalificacion->listarIndicadores();
+    $arrayIndicadores = $claCalificacion->listarIndicadores();
     $resIndicadores = Array();
     foreach ($arraDatosActuales as $keyAct => $valueAct) {
-       
+
 
         $calcEducacion = ($valueAct['aprobados'] / ($valueAct['cantMayor']));
         $educacion = 0;
@@ -114,6 +115,12 @@ function calcularCalificacion($arraDatosActuales) {
             $valueAct['bolSecMujer'] = 0;
         }
         $totalPPGD = ($claCalificacion->PPGD * ($programa * 100));
+
+        if ($valueAct['bolReconocimientoFP'] > 0) {
+            $bolRFP = 1;
+        }
+        $totalRFPB = $claCalificacion->RFPB * ($bolRFP * 100);
+        
         foreach ($arrayIndicadores as $keyIndicador => $valIndicador) {
             $indicador = $valIndicador['seqIndicador'];
             if ($indicador == 1) {
@@ -160,6 +167,9 @@ function calcularCalificacion($arraDatosActuales) {
             }
             if ($indicador == 15) {
                 $resIndicadores[$indicador] = $totalPPGD;
+            }
+            if ($indicador == 16) {
+                $resIndicadores[$indicador] = $totalRFPB;
             }
         }
         return $resIndicadores;

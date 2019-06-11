@@ -1328,7 +1328,7 @@ class InformeVeedurias {
         global $aptBd;
         $msn = "";
         $total = 0;
-        $aptBd->execute("SET SQL_SAFE_UPDATES=0;");
+       
         $sql = "delete pry, upr from t_vee_proyecto pry
                     left join t_vee_unidad_proyecto upr on upr.seqProyectoVeeduria = pry.seqProyectoVeeduria
                     where pry.seqCorte = " . $seqCorte;
@@ -1396,6 +1396,7 @@ class InformeVeedurias {
         //  echo "<br> band 1 =>" . $band;
         while (1) {
             $sql = $sql;
+             $aptBd->execute("SET SQL_SAFE_UPDATES=0;");
             $aptBd->execute($sql);
             $total = $total + $aptBd->Affected_Rows();
             if ($aptBd->Affected_Rows() == 0) {

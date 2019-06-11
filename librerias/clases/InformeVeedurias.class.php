@@ -1324,7 +1324,7 @@ class InformeVeedurias {
     }
 
      /*         * *********************************************
-         * FUNCION DE ELIMINACION DE INFORMES DE VEEDURIA
+         * FUNCION DE ELIMINACION DE INFORMES DE VEEDURIA  pruebass
          * ********************************************* */
     public function eliminarReportesVeeduria($seqCorte) {
 

@@ -1323,6 +1323,9 @@ class InformeVeedurias {
         return $xmlArchivo;
     }
 
+     /*         * *********************************************
+         * FUNCION DE ELIMINACION DE INFORMES DE VEEDURIA
+         * ********************************************* */
     public function eliminarReportesVeeduria($seqCorte) {
 
         global $aptBd;

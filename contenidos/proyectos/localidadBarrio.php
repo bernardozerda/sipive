@@ -24,17 +24,21 @@ while ($objRes->fields) {
     $objRes->MoveNext();
 }
 
-//echo"****". $idBarrio = $seqLocalidad[1]; die();
-echo "
+$name = ($_REQUEST['tipo'] == 2)?"$nameBarrio[0][]":$nameBarrio[0];
+
+    echo "
         <select  
                 onChange=\"obtenerUpz(this);\" 
                 onBlur=\"this.style.backgroundColor = '#FFFFFF';\" 
-                name='$nameBarrio[0][]'
+                name='$name'
                 id=\"$seqLocalidad[1]\" 
                 style=\"width:200px;\" 
                 class=\"form-control required\"
         ><option value='0'>Desconocido</option>
     ";
+
+
+
 foreach ($arrBarrio as $seqBarrio => $txtBarrio) {
     echo "<option value='$seqBarrio'>$txtBarrio</option>";
 }

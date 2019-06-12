@@ -7599,10 +7599,11 @@ function obtenerBarrio(objLocalidad) {
 function obtenerBarrioProyecto(objLocalidad, tdBarrio) {
     var barrio = tdBarrio;
     var seqBarrio = 'seqBarrio';
-
+    var tipo = 1;
     if (tdBarrio != 'tdBarrio') {
         barrio = 'tdBarrioHijo_' + tdBarrio.split("_")[1];
         seqBarrio = 'seqBarrioHijo_' + tdBarrio.split("_")[1];
+        tipo = 2;
         // console.log("tdBarrio = " + tdBarrio + "  split ->" + tdBarrio.split("_")[1]);
     }
     console.log("barrio sale => " + seqBarrio);
@@ -7610,7 +7611,7 @@ function obtenerBarrioProyecto(objLocalidad, tdBarrio) {
     document.getElementById(barrio).innerHTML = "";
     cargarContenido(
             barrio,
-            './contenidos/proyectos/localidadBarrio.php?&idbarrio =' + seqBarrio,
+            './contenidos/proyectos/localidadBarrio.php?&idbarrio =' + seqBarrio + '&tipo='+tipo,
             'seqLocalidad=' + objLocalidad.options[ objLocalidad.selectedIndex ].value + '**' + seqBarrio,
             true
             );

@@ -988,7 +988,8 @@ class aadProyectos {
                                 count(uvi.seqUnidadProyecto) as cantidad
                             from t_pry_aad_registro_presupuestal rpr
                             left join t_pry_aad_unidades_vinculadas uvi on rpr.seqRegistroPresupuestal = uvi.seqRegistroPresupuestal
-                            where rpr.seqRegistroPresupuestal = $seqRegistro
+                             left join t_pry_aad_unidad_acto uaa ON uvi.seqUnidadActo = uaa.seqUnidadActo
+                            where rpr.seqRegistroPresupuestal = $seqRegistro and uaa.seqTipoActoUnidad =" . $arrPost['seqTipoActoUnidad'] . "
                             group by 
                                 rpr.seqRegistroPresupuestal,
                                 rpr.valValorRP                        

@@ -61,7 +61,7 @@ $sql = "
         seqTipoLicencia,
         txtLicencia,
         txtExpideLicencia,
-        fchEjecutoriaLicencia
+        fchLicencia
     from t_pry_proyecto_licencias lic
     where lic.seqProyecto = " . $idHijo . "    
 ";
@@ -69,7 +69,7 @@ $objRes = $aptBd->execute($sql);
 while ($objRes->fields) {
     if ($objRes->fields['seqTipoLicencia'] == 2) {
         $objTecnico->txtLicenciaConstruccion = $objRes->fields['txtLicencia'];
-        $objTecnico->fchEjecutaLicConstruccion = $objRes->fields['fchEjecutoriaLicencia'];
+        $objTecnico->fchLicencia = $objRes->fields['fchLicencia'];
     } elseif ($objRes->fields['seqTipoLicencia'] == 1) {
         $objTecnico->txtExpideLicenciaUrbanismo = $objRes->fields['txtExpideLicencia'];
     }

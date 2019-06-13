@@ -5718,7 +5718,7 @@ WHERE
                                      LEFT JOIN
                                  t_frm_estado_proceso est ON (fac.seqEstadoProceso = est.seqEstadoProceso)
                              WHERE
-                                      frm.seqTipoEsquema IN ( 16, 17) 
+                                      fac.seqTipoEsquema IN ( 16, 17) 
                                      AND seqTipoActo = 1";
         if ($victima == 1) {
             $sqlAsignadoAdq .= " AND (fac.bolDesplazado = 1 or frm.bolDesplazado = 1)";

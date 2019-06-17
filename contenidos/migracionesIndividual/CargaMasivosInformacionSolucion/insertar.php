@@ -30,7 +30,8 @@ include '../../../recursos/archivos/verificarSesion.php';
                     }
                     return $nuevaFecha;
                 }
-               // var_dump($_FILES["archivo"]);                die();
+
+                // var_dump($_FILES["archivo"]);                die();
                 if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name'])) {
                     $arrFormularioArchivo = array();
                     $nombreArchivo = $_FILES['archivo']['tmp_name'];
@@ -42,7 +43,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                     $error = "";
                     $queryUpdate = array();
                     // GUIA CAMPOS -> (0) seqDesembolso (1) seqFormulario (2) txtNombreVendedor (3) numDocumentoVendedor (4) txtDireccionInmueble (5) txtBarrio (6) seqLocalidad (7) txtEscritura (8) numNotaria (9) fchEscritura (10) txtMatriculaInmobiliaria (11) bolViabilizoJuridico (12) bolviabilizoTecnico (13) txtChip (14) seqTipoDocumento (15) txtCompraVivienda (16) txtTipoPredio (17) numTelefonoVendedor (18) txtCedulaCatastral (19) txtTipoDocumentos (20) numEstrato (21) txtCiudad (22) fchCreacionBusquedaOferta (23) fchActualizacionBusquedaOferta (24) txtPropiedad (25) txtCorreoVendedor (26) seqCiudad (27) seqAplicacionSubsidio (28) seqProyectosSoluciones (29) Descripcion de la Unidad
-                    $encabezado = array('seqDesembolso', 'seqFormulario', 'txtNombreVendedor', 'numDocumentoVendedor', 'txtDireccionInmueble', 'txtBarrio', 'seqLocalidad', 'txtEscritura', 'numNotaria', 'fchEscritura', 'numResolucion', 'fchResolucion', 'txtEntidad','txtMatriculaInmobiliaria', 'bolViabilizoJuridico', 'bolviabilizoTecnico', 'txtChip', 'seqTipoDocumento', 'txtCompraVivienda', 'txtTipoPredio', 'numTelefonoVendedor', 'txtCedulaCatastral', 'txtTipoDocumentos', 'numEstrato', 'txtCiudad', 'fchCreacionBusquedaOferta', 'fchActualizacionBusquedaOferta', 'txtPropiedad', 'txtCorreoVendedor', 'seqCiudad', 'seqAplicacionSubsidio', 'seqProyectosSoluciones', 'Descripcion de la Unidad');
+                    $encabezado = array('seqDesembolso', 'seqFormulario', 'txtNombreVendedor', 'numDocumentoVendedor', 'txtDireccionInmueble', 'txtBarrio', 'seqLocalidad', 'txtEscritura', 'numNotaria', 'fchEscritura', 'numResolucion', 'fchResolucion', 'txtEntidad', 'txtCiudadResolucion', 'txtMatriculaInmobiliaria', 'bolViabilizoJuridico', 'bolviabilizoTecnico', 'txtChip', 'seqTipoDocumento', 'txtCompraVivienda', 'txtTipoPredio', 'numTelefonoVendedor', 'txtCedulaCatastral', 'txtTipoDocumentos', 'numEstrato', 'txtCiudad', 'fchCreacionBusquedaOferta', 'fchActualizacionBusquedaOferta', 'txtPropiedad', 'txtCorreoVendedor', 'seqCiudad', 'seqAplicacionSubsidio', 'seqProyectosSoluciones', 'Descripcion de la Unidad');
 
                     $queryInsert = "";
                     foreach ($lineas as $linea_num => $linea) { // RECORRE LAS LINEAS DEL ARCHIVO
@@ -66,26 +67,27 @@ include '../../../recursos/archivos/verificarSesion.php';
                             $numResolucion = trim($datos[10]);
                             $fchResolucion = fechaCorrecta($datos[11]);
                             $txtEntidad = trim($datos[12]);
-                            $txtMatriculaInmobiliaria = trim($datos[13]);
-                            $bolViabilizoJuridico = trim($datos[14]);
-                            $bolviabilizoTecnico = trim($datos[15]);
-                            $txtChip = trim($datos[16]);
-                            $seqTipoDocumento = trim($datos[17]);
-                            $txtCompraVivienda = trim($datos[18]);
-                            $txtTipoPredio = trim($datos[19]);
-                            $numTelefonoVendedor = trim($datos[20]);
-                            $txtCedulaCatastral = trim($datos[21]);
-                            $txtTipoDocumentos = trim($datos[22]);
-                            $numEstrato = trim($datos[23]);
-                            $txtCiudad = trim($datos[24]);
-                            $fchCreacionBusquedaOferta = fechaCorrecta($datos[25]);
-                            $fchActualizacionBusquedaOferta = fechaCorrecta($datos[26]);
-                            $txtPropiedad = trim($datos[27]);
-                            $txtCorreoVendedor = trim($datos[28]);
-                            $seqCiudad = trim($datos[29]);
-                            $seqAplicacionSubsidio = trim($datos[30]);
-                            $seqProyectosSoluciones = trim($datos[31]);
-                            $direccionUnidad = trim($datos[4]) . " " . trim($datos[32]); // Unifica los campos Dirección y unidad Residencial
+                            $txtCiudadResolucion = trim($datos[13]);
+                            $txtMatriculaInmobiliaria = trim($datos[14]);
+                            $bolViabilizoJuridico = trim($datos[15]);
+                            $bolviabilizoTecnico = trim($datos[16]);
+                            $txtChip = trim($datos[17]);
+                            $seqTipoDocumento = trim($datos[18]);
+                            $txtCompraVivienda = trim($datos[19]);
+                            $txtTipoPredio = trim($datos[20]);
+                            $numTelefonoVendedor = trim($datos[21]);
+                            $txtCedulaCatastral = trim($datos[22]);
+                            $txtTipoDocumentos = trim($datos[23]);
+                            $numEstrato = trim($datos[24]);
+                            $txtCiudad = trim($datos[25]);
+                            $fchCreacionBusquedaOferta = fechaCorrecta($datos[26]);
+                            $fchActualizacionBusquedaOferta = fechaCorrecta($datos[27]);
+                            $txtPropiedad = trim($datos[28]);
+                            $txtCorreoVendedor = trim($datos[29]);
+                            $seqCiudad = trim($datos[30]);
+                            $seqAplicacionSubsidio = trim($datos[31]);
+                            $seqProyectosSoluciones = trim($datos[32]);
+                            $direccionUnidad = trim($datos[4]) . " " . trim($datos[33]); // Unifica los campos Dirección y unidad Residencial
                             // Verificar si el formulario actual tiene registro en T_DES_DESEMBOLSO
                             $qryVerificaDesembolso = $db->get_row("SELECT seqDesembolso FROM T_DES_DESEMBOLSO WHERE seqFormulario = $seqFormulario");
                             if ($qryVerificaDesembolso->seqDesembolso > 0) {
@@ -101,6 +103,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                                                     numResolucion = '$numResolucion',                                                    
                                                     fchResolucion = '$fchResolucion',   
                                                     txtEntidad = '$txtEntidad',
+                                                    txtCiudadResolucion = '$txtCiudadResolucion',
                                                     txtMatriculaInmobiliaria = '$txtMatriculaInmobiliaria',
                                                     bolViabilizoJuridico = '$bolViabilizoJuridico',
                                                     bolviabilizoTecnico = '$bolviabilizoTecnico',
@@ -123,7 +126,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                                                     txtDireccionInmueble = '$direccionUnidad'
                                             WHERE seqDesembolso = " . $qryVerificaDesembolso->seqDesembolso . ";";
                             } else {
-                                $queryInsert .= "($seqFormulario, '$txtNombreVendedor', '$numDocumentoVendedor', '$txtBarrio', '$seqLocalidad', '$txtEscritura', '$numNotaria', '$fchEscritura', '$numResolucion', '$fchResolucion', '$txtEntidad','$txtMatriculaInmobiliaria', '$bolViabilizoJuridico', '$bolviabilizoTecnico', '$txtChip', '$seqTipoDocumento', '$txtCompraVivienda', '$txtTipoPredio', '$numTelefonoVendedor', '$txtCedulaCatastral', '$txtTipoDocumentos', '$numEstrato', '$txtCiudad', '$fchCreacionBusquedaOferta', '$fchActualizacionBusquedaOferta', '$txtPropiedad', '$txtCorreoVendedor', '$seqCiudad', '$seqAplicacionSubsidio', '$seqProyectosSoluciones', '$direccionUnidad'), ";
+                                $queryInsert .= "($seqFormulario, '$txtNombreVendedor', '$numDocumentoVendedor', '$txtBarrio', '$seqLocalidad', '$txtEscritura', '$numNotaria', '$fchEscritura', '$numResolucion', '$fchResolucion', '$txtEntidad', '$txtCiudadResolucion','$txtMatriculaInmobiliaria', '$bolViabilizoJuridico', '$bolviabilizoTecnico', '$txtChip', '$seqTipoDocumento', '$txtCompraVivienda', '$txtTipoPredio', '$numTelefonoVendedor', '$txtCedulaCatastral', '$txtTipoDocumentos', '$numEstrato', '$txtCiudad', '$fchCreacionBusquedaOferta', '$fchActualizacionBusquedaOferta', '$txtPropiedad', '$txtCorreoVendedor', '$seqCiudad', '$seqAplicacionSubsidio', '$seqProyectosSoluciones', '$direccionUnidad'), ";
                             }
                         }
                         $registros++;
@@ -135,12 +138,13 @@ include '../../../recursos/archivos/verificarSesion.php';
                         $separado_por_comas = implode(",", $arrFormularioArchivo);
                         $validar = validarDocumentos($separado_por_comas, $db, 27, 17, "Registro Información Solución");
                         if ($queryInsert != '' && $validar) {
-                            $segmentoInsert = "INSERT INTO T_DES_DESEMBOLSO (seqFormulario, txtNombreVendedor, numDocumentoVendedor, txtBarrio, seqLocalidad, txtEscritura, numNotaria, fchEscritura,numResolucion, fchResolucion, txtEntidad, txtMatriculaInmobiliaria, bolViabilizoJuridico, bolviabilizoTecnico, txtChip, seqTipoDocumento, txtCompraVivienda, txtTipoPredio, numTelefonoVendedor, txtCedulaCatastral, txtTipoDocumentos, numEstrato, txtCiudad, fchCreacionBusquedaOferta, fchActualizacionBusquedaOferta, txtPropiedad, txtCorreoVendedor, seqCiudad, seqAplicacionSubsidio, seqProyectosSoluciones, txtDireccionInmueble) VALUES ";
+                            $segmentoInsert = "INSERT INTO T_DES_DESEMBOLSO (seqFormulario, txtNombreVendedor, numDocumentoVendedor, txtBarrio, seqLocalidad, txtEscritura, numNotaria, fchEscritura,numResolucion, fchResolucion, txtEntidad,txtCiudadResolucion, txtMatriculaInmobiliaria, bolViabilizoJuridico, bolviabilizoTecnico, txtChip, seqTipoDocumento, txtCompraVivienda, txtTipoPredio, numTelefonoVendedor, txtCedulaCatastral, txtTipoDocumentos, numEstrato, txtCiudad, fchCreacionBusquedaOferta, fchActualizacionBusquedaOferta, txtPropiedad, txtCorreoVendedor, seqCiudad, seqAplicacionSubsidio, seqProyectosSoluciones, txtDireccionInmueble) VALUES ";
                             $queryInsert = $segmentoInsert . substr($queryInsert, 0, -2) . ";";
                             $db->query($queryInsert);
                         }
                         // UPDATES
                         foreach ($queryUpdate AS $consultaUpdate) {
+                           // echo "<br>".$consultaUpdate;
                             $db->query($consultaUpdate);
                         }
 

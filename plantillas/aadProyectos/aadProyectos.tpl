@@ -9,16 +9,16 @@
     <div class="panel-body">
         <table id="listadoAadPry" data-order='[[ 5, "desc" ]]' class="table table-striped table-condensed table-hover" width="100%">
             <thead>
-                <th align="center">Identificador</th>
-                <th align="center">Tipo de Acto</th>
-                <th align="center">Número</th>
-                <th align="center">Fecha</th>
-                <th align="center">Vinculados</th>
-                <th align="center">Creación</th>
-                <th align="center">Usuario</th>
-                <th align="center" style="display:none">Proyectos</th>
-                <th align="center"></th>
-                <th align="center"></th>
+            <th align="center">Identificador</th>
+            <th align="center">Tipo de Acto</th>
+            <th align="center">Número</th>
+            <th align="center">Fecha</th>
+            <th align="center">Vinculados</th>
+            <th align="center">Creación</th>
+            <th align="center">Usuario</th>
+            <th align="center" style="display:none">Proyectos</th>
+            <th align="center"></th>
+            <th align="center"></th>
             </thead>
             <tbody>
                 {foreach from=$arrActos key=seqUnidadActo item=arrActo}
@@ -32,13 +32,14 @@
                         <td>{$arrActo.usuario}</td>
                         <td style="display:none">{$arrActo.proyectos|@implode:','}</td>
                         <td>
-                            <a href="#" onClick="cargarContenido('contenido','./contenidos/aadProyectos/ver.php','seqUnidadActo={$seqUnidadActo}',true);">
+                            <a href="#" onClick="cargarContenido('contenido', './contenidos/aadProyectos/ver.php', 'seqUnidadActo={$seqUnidadActo}', true);">
                                 <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" style="cursor: pointer"></span>
                             </a>
                         </td>
                         <td>
                             {if isset($smarty.session.arrGrupos.6.20)}
-                                <a href="#" onclick="" class="text-danger">
+                                <a href="#" onclick="if (confirm('Esta seguro que desea eliminar el registro?'))
+                                            cargarContenido('contenido', './contenidos/aadProyectos/eliminar.php', 'seqUnidadActo={$seqUnidadActo}', true);" class="text-danger">
                                     <span class="glyphicon glyphicon-trash" aria-hidden="true" style="cursor: pointer"></span>
                                 </a>
                             {/if}
@@ -50,7 +51,7 @@
     </div>
     <div class="panel-footer" align="center">
         {if isset($smarty.session.arrGrupos.6.7) or isset($smarty.session.arrGrupos.6.20)}
-            <button class="btn btn-primary" onclick="cargarContenido('contenido','./contenidos/aadProyectos/crear.php','',true);">
+            <button class="btn btn-primary" onclick="cargarContenido('contenido', './contenidos/aadProyectos/crear.php', '', true);">
                 Nuevo Acto Administrativo
             </button>
         {/if}

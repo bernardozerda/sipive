@@ -211,6 +211,60 @@ class aadProyectos {
         }
     }
 
+    public function eliminar($seqUnidadActo) {
+        global $aptBd;
+        $sql = "select distinct(seqRegistroPresupuestal)as registro, seqProyecto FROM t_pry_aad_unidades_vinculadas where seqUnidadActo = $seqUnidadActo ";
+        $reg = $aptBd->execute($sql);
+        $seqRegistro = $reg->fields['registro'];
+        $seqProyecto = $reg->fields['seqProyecto'];
+        $sql = "DELETE FROM t_pry_aad_unidades_vinculadas where seqUnidadActo  = $seqUnidadActo ";
+        try {
+            $aptBd->execute($sql);
+             $sql = "INSERT INTO T_SEG_SEGUIMIENTO_PROYECTOS (
+                                seqProyecto,
+                                fchMovimiento,
+                                seqUsuario,
+                                txtComentario,                              
+                                seqGestion,
+                                bolMostrar
+                        ) VALUES (
+                                $seqProyecto,
+                                NOW(),
+                                " . $_SESSION['seqUsuario'] . ",
+                                'Se elimino el acto administrativo  con identificador de registro N°: $seqUnidadActo',                                
+                                1,
+                                1
+                        )
+                        ";
+            $aptBd->execute($sql);
+            $sql = "DELETE FROM t_pry_aad_unidad_acto where seqUnidadActo = $seqUnidadActo ";
+            try {
+                $aptBd->execute($sql);
+                if ($seqRegistro > 0) {
+                    $sql = "DELETE FROM t_pry_aad_registro_presupuestal where seqRegistroPresupuestal = $seqRegistro";
+                    try {
+                        $aptBd->execute($sql);
+                        RETURN TRUE;
+                    } catch (Exception $objError1) {
+                        $this->arrErrores[] = $objError1->getMessage();
+                        pr($objError1->getMessage());
+                        return FALSE;
+                    }
+                }
+
+                return TRUE;
+            } catch (Exception $objError) {
+                $this->arrErrores[] = $objError->getMessage();
+                pr($objError->getMessage());
+                return FALSE;
+            }
+        } catch (Exception $objErr) {
+            $this->arrErrores[] = $objErr->getMessage();
+            pr($objErr->getMessage());
+            return FALSE;
+        }
+    }
+
     public function tiposActos($seqTipoActoUnidad = 0) {
         global $aptBd;
         $txtCondicion = ($seqTipoActoUnidad == 0) ? "" : "where seqTipoActoUnidad = $seqTipoActoUnidad";

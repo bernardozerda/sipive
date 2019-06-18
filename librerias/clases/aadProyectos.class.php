@@ -240,7 +240,7 @@ class aadProyectos {
             $sql = "DELETE FROM t_pry_aad_unidad_acto where seqUnidadActo = $seqUnidadActo ";
             try {
                 $aptBd->execute($sql);
-                if ($seqRegistro > 0) {
+/*                if ($seqRegistro > 0) {
                     $sql = "DELETE FROM t_pry_aad_registro_presupuestal where seqRegistroPresupuestal = $seqRegistro";
                     try {
                         $aptBd->execute($sql);
@@ -250,7 +250,7 @@ class aadProyectos {
                         pr($objError1->getMessage());
                         return FALSE;
                     }
-                }
+                }*/
 
                 return TRUE;
             } catch (Exception $objError) {

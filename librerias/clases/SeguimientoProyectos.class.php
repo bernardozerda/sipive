@@ -240,7 +240,7 @@ class SeguimientoProyectos {
             }
         }
 
-        $txtCondicion .= "AND seg.seqProyecto = " . $this->seqProyecto . " ";
+        $txtCondicion .= "AND seg.seqProyecto IN (SELECT case when (pry.seqProyectoPadre > 0) then group_concat(seqProyecto) else ".$this->seqProyecto." end as seqProyecto  from t_pry_proyecto pry  where seqProyectoPadre = ".$this->seqProyecto."   ) ";
 
         $txtLimite = "";
         if ($numLimite != 0) {
@@ -275,7 +275,7 @@ class SeguimientoProyectos {
             ORDER BY seg.seqSeguimiento DESC
             $txtLimite
     ";
-
+//echo "<p>".$sql."</p>"; 
         try {
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
@@ -655,8 +655,8 @@ class SeguimientoProyectos {
     }
 
     public function almacenarSeguimiento($seqProyecto, $txtComentarios, $seqGestion, $arrayDatosProyOld, $arrayDatosProyNew) {
-//pr($arrayDatosProyOld);
-//pr($arrayDatosProyNew);
+pr($arrayDatosProyOld);
+pr($arrayDatosProyNew);
         global $aptBd;
         $txtCambios = "";
         if ($arrayDatosProyOld != "") {

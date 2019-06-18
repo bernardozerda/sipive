@@ -193,8 +193,8 @@ class DatosUnidades {
                 if ($estado > 0) {
                     $sql = "UPDATE t_pry_unidad_proyecto
                 SET
-                txtNombreUnidad = '".$value[3]."',
-                txtNombreUnidadReal = '".$value[4]."',  txtNombreUnidadAux = '".$value[5]."',
+                txtNombreUnidad = '" . $value[3] . "',
+                txtNombreUnidadReal = '" . $value[4] . "',  txtNombreUnidadAux = '" . $value[5] . "',
                 seqEstadoUnidad = $estado, bolActivo =  $activo
                 WHERE seqUnidadProyecto = $value[0];";
                     try {
@@ -208,7 +208,37 @@ class DatosUnidades {
         }
     }
 
-    function obtenerDatosUnidades($seqProyecto) {
+    function modificarDatosUnidad($array, $seqProyecto) {
+
+        global $aptBd;
+        // var_dump($array); die();
+        foreach ($array as $key => $value) {
+            if ($value[7] != "Seleccione") {
+                $estado = explode("-", $value[5])[0];
+                $activo = ($value[6] == "SI") ? 1 : 0;
+                $modalidad = explode("-", $value[7])[0];
+                $tipoEsquema = explode("-", $value[8])[0];
+                if ($estado > 0) {
+                    $sql = "UPDATE t_pry_unidad_proyecto
+                            SET
+                            seqTipoEsquema = $tipoEsquema,
+                            seqModalidad = $modalidad,
+                            seqEstadoUnidad = $estado, bolActivo =  $activo
+                            WHERE seqUnidadProyecto = $value[0];";
+                    try {
+                        $aptBd->execute($sql);
+                        return true;
+                    } catch (Exception $objError) {
+                        $arrErrores[] = "No se ha podido modificar los estado de las unidades<b></b>";
+                        pr($objError->getMessage());
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    function obtenerDatosUnidades($seqProyecto, $seqUnidades) {
         global $aptBd;
         $sql = "select 
                 if(pry.seqProyecto is null,con.seqProyecto,pry.seqProyecto) as seqProyecto,
@@ -221,7 +251,7 @@ class DatosUnidades {
                 txtNombreUnidadReal, 
                 txtNombreUnidadAux,
                 concat(seqEstadoUnidad ,'-', EST.txtEstadoUnidad) as estado, 
-                upr.bolActivo
+                upr.bolActivo, upr.seqPlanGobierno, upr.seqTipoEsquema, upr.seqPlanGobierno, upr.seqModalidad
                 from t_pry_unidad_proyecto upr
                 inner join t_pry_proyecto con on upr.seqProyecto = con.seqProyecto
                 left join t_pry_proyecto pry on con.seqProyectoPadre = pry.seqProyecto
@@ -230,8 +260,11 @@ class DatosUnidades {
         if ($seqProyecto > 0) {
             $sql .= " where  upr.seqProyecto = " . $seqProyecto;
         }
+        if ($seqUnidades != 0) {
+            $sql .= " and  upr.seqUnidadProyecto in (" . $seqUnidades . ")";
+        }
         $sql .= " GROUP BY seqUnidadProyecto";
-      //   echo "<p>" . $sql . "</p>"; die();
+        //   echo "<p>" . $sql . "</p>"; die();
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {
@@ -334,6 +367,23 @@ class DatosUnidades {
         $datos['Remision Oferente'] = 'Remision Oferente';
         $datos['Otro'] = 'Otro';
 
+        return $datos;
+    }
+
+    function obtenerDatosUnidadesPorProy($seqProyecto, $seqUnidades) {
+        global $aptBd;
+        $sql = "SELECT * 
+                FROM t_pry_proyecto  pry
+                LEFT JOIN t_pry_unidad_proyecto und USING(seqProyecto)
+                WHERE und.seqProyecto = $seqProyecto and seqUnidadProyecto in($seqUnidades)";
+
+        $objRes = $aptBd->execute($sql);
+        $datos = Array();
+        while ($objRes->fields) {
+            $datos[] = $objRes->fields;
+            //$datos['valNumeroSoluciones'] = $objRes->fields['valNumeroSoluciones'];
+            $objRes->MoveNext();
+        }
         return $datos;
     }
 

@@ -220,7 +220,7 @@ class aadProyectos {
         $sql = "DELETE FROM t_pry_aad_unidades_vinculadas where seqUnidadActo  = $seqUnidadActo ";
         try {
             $aptBd->execute($sql);
-             $sql = "INSERT INTO T_SEG_SEGUIMIENTO_PROYECTOS (
+            $sql = "INSERT INTO T_SEG_SEGUIMIENTO_PROYECTOS (
                                 seqProyecto,
                                 fchMovimiento,
                                 seqUsuario,
@@ -240,17 +240,17 @@ class aadProyectos {
             $sql = "DELETE FROM t_pry_aad_unidad_acto where seqUnidadActo = $seqUnidadActo ";
             try {
                 $aptBd->execute($sql);
-/*                if ($seqRegistro > 0) {
-                    $sql = "DELETE FROM t_pry_aad_registro_presupuestal where seqRegistroPresupuestal = $seqRegistro";
-                    try {
-                        $aptBd->execute($sql);
-                        RETURN TRUE;
-                    } catch (Exception $objError1) {
-                        $this->arrErrores[] = $objError1->getMessage();
-                        pr($objError1->getMessage());
-                        return FALSE;
-                    }
-                }*/
+                /*                if ($seqRegistro > 0) {
+                  $sql = "DELETE FROM t_pry_aad_registro_presupuestal where seqRegistroPresupuestal = $seqRegistro";
+                  try {
+                  $aptBd->execute($sql);
+                  RETURN TRUE;
+                  } catch (Exception $objError1) {
+                  $this->arrErrores[] = $objError1->getMessage();
+                  pr($objError1->getMessage());
+                  return FALSE;
+                  }
+                  } */
 
                 return TRUE;
             } catch (Exception $objError) {
@@ -405,7 +405,7 @@ class aadProyectos {
                 try {
 
                     $aptBd->BeginTrans();
-
+                    
                     $seqUnidadActo = $this->salvarActo($arrPost);
 
                     $this->vincularUnidades($seqUnidadActo, $arrPost, $arrArchivo);
@@ -936,7 +936,7 @@ class aadProyectos {
                 $seqProyecto = array_search(mb_strtolower($arrLinea[0]), $arrFormato[0]['rango'], true);
                 $seqUnidadProyecto = 0;
                 foreach ($arrFormato[1]['rango'] as $seqUnidad => $arrUnidad) {
-                    if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower(trim($arrUnidad['txtNombreUnidad'])) == mb_strtolower(trim($arrLinea[1]))) {
+                    if ($arrUnidad['seqProyecto'] == $seqProyecto and mb_strtolower($arrUnidad['txtNombreUnidad']) == mb_strtolower($arrLinea[1])) {
                         $seqUnidadProyecto = $seqUnidad;
                         break;
                     }
@@ -1033,7 +1033,7 @@ class aadProyectos {
                 $seqRegistro = intval($arrLinea[4]);
                 if ($seqRegistro == 0) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": No tiene identificador del recurso SiPIVE";
-                } else {
+                } else {                    
                     if (!isset($arrCDP[$seqRegistro])) {
                         $sql = "
                             select 
@@ -1042,12 +1042,16 @@ class aadProyectos {
                                 count(uvi.seqUnidadProyecto) as cantidad
                             from t_pry_aad_registro_presupuestal rpr
                             left join t_pry_aad_unidades_vinculadas uvi on rpr.seqRegistroPresupuestal = uvi.seqRegistroPresupuestal
-                             left join t_pry_aad_unidad_acto uaa ON uvi.seqUnidadActo = uaa.seqUnidadActo
-                            where rpr.seqRegistroPresupuestal = $seqRegistro and uaa.seqTipoActoUnidad =" . $arrPost['seqTipoActoUnidad'] . "
-                            group by 
+                            where rpr.seqRegistroPresupuestal = $seqRegistro";
+                        if ($arrPost['seqTipoActoUnidad'] != 1) {
+                            $sql .= " and uaa.seqTipoActoUnidad =" . $arrPost['seqTipoActoUnidad'];
+                        }
+
+                        $sql .= "  group by 
                                 rpr.seqRegistroPresupuestal,
                                 rpr.valValorRP                        
                         ";
+                       
                         $objRes = $aptBd->execute($sql);
                         while ($objRes->fields) {
                             $arrCDP[$seqRegistro]['cantidad'] = $objRes->fields['cantidad'];
@@ -1055,6 +1059,7 @@ class aadProyectos {
                             $objRes->MoveNext();
                         }
                     }
+                    //  echo "<br>acumulado =" .$arrLinea[2]; 
                     $arrCDP[$seqRegistro]['acumulado'] += doubleval($arrLinea[2]);
                 }
             }
@@ -1062,12 +1067,13 @@ class aadProyectos {
 
         // verifica que la suma del valor del rp coincida con la suma de vaores de la unidades
         // y valida que el RP no este en uso
+       
         foreach ($arrCDP as $seqRegistro => $arrDatos) {
             if ($arrDatos['cantidad'] != 0) {
                 $this->arrErrores[] = "El identificado del recurso $seqRegistro ya esta en uso";
             } else {
                 if ($arrDatos['valor'] != $arrDatos['acumulado']) {
-                    $this->arrErrores[] = "La suma de valores de unidad no coinciden con el valor del registro presupuestal $seqRegistro";
+                    $this->arrErrores[] = "La suma de valores de unidad no coinciden con el valor del registro presupuestal $seqRegistro ó el tipo de acto ya éxiste";
                 }
             }
         }

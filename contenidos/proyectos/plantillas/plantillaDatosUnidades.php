@@ -30,10 +30,10 @@ if ($_FILES['archivo']['error'] == 0) {
 }
 
 $claDatosUnidades = new DatosUnidades();
-//$arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno ASC, txtPlanGobierno");
+$arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno ASC, txtPlanGobierno");
 $arrPryTipoModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad", "seqPlanGobierno"), "seqModalidad", "", "seqPlanGobierno ASC, txtModalidad");
 $arrPryEsquema = obtenerDatosTabla("t_pry_tipo_esquema", array("seqTipoEsquema", "txtTipoEsquema", "seqPlanGobierno"), "seqTipoEsquema", "", "seqPlanGobierno ASC, txtTipoEsquema");
-$arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno ASC, txtPlanGobierno");
+//$arrPlanGobierno = obtenerDatosTabla("t_frm_plan_gobierno", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "seqPlanGobierno ASC, txtPlanGobierno");
 $arrPryTipoModalidad = obtenerDatosTabla("T_FRM_MODALIDAD", array("seqModalidad", "txtModalidad", "seqPlanGobierno"), "seqModalidad", "", "seqPlanGobierno ASC, txtModalidad");
 $arrEstadoUnidad = obtenerDatosTabla("t_pry_estado_unidad", array("seqEstadoUnidad", "txtEstadoUnidad", "seqEstadoUnidad"), "seqEstadoUnidad", "", "seqEstadoUnidad ASC, seqEstadoUnidad");
 
@@ -101,6 +101,7 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
     $titulos[6] = "Activo";
     $titulos[7] = "Modalidad";
     $titulos[8] = "Esquema";
+    $titulos[9] = "Plan de Gobierno";
 
     // plantila
 
@@ -139,10 +140,22 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
     }
 
     $intEsq = 2;
+   
     foreach ($arrPryEsquema as $keyEsq => $valueEsq) {
+       
         $excel->getSheet(1)->SetCellValue("I" . $intEsq, $keyEsq . '-' . $valueEsq['txtTipoEsquema'] . '- (PG = ' . $valueEsq['seqPlanGobierno'] . ')');
         $intEsq++;
     }
+    
+
+    $intPlan = 2;
+   // var_dump($arrPlanGobierno);    die();
+    foreach ($arrPlanGobierno as $keyPlan => $valuePlan) {
+       // echo "<br>". $keyPlan."-" .$valuePlan; 
+        $excel->getSheet(1)->SetCellValue("J" . $intPlan, $keyPlan . '-' . $valuePlan);
+       $intPlan++;
+    }
+//die();
     $excel->addNamedRange(
             new PHPExcel_NamedRange(
             'seleccion', $excel->getSheet(1), 'F2:F' . $int
@@ -167,6 +180,11 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
             'seleccionEsq', $excel->getSheet(1), 'I2:I' . $intEsq
             )
     );
+    $excel->addNamedRange(
+            new PHPExcel_NamedRange(
+            'seleccionPlan', $excel->getSheet(1), 'J2:J' . $intPlan
+            )
+    );
 
     //for ($i = 0; $i < $unidadesReg; $i++) {
     $cols = 2;
@@ -176,9 +194,12 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
         $datosModalidad = ($value['seqModalidad'] > 0) ? array_values($arrPryTipoModalidad[$value['seqModalidad']]) : 'Seleccione';
         $modActual = $value['seqModalidad'] . "-" . $datosModalidad[0];
         $datosEsquema = ($value['seqTipoEsquema'] > 0) ? array_values($arrPryEsquema[$value['seqTipoEsquema']]) : 'Seleccione';
-        $esqActual = $value['seqTipoEsquema'] . "-" . $datosEsquema[0];
+       
+        $esqActual = $datosEsquema[1] . "-" . $datosEsquema[0];
+      //  var_dump($esqActual) ; die();        
         $tipoVivienda = ($value['txtNombreConjunto'] == "") ? 'Ninguno' : strtoupper($value['txtNombreConjunto']);
         $validacion = ($value['bolActivo'] == 1) ? 'SI' : 'NO';
+        $seqPlanGobierno = ($value['seqPlanGobierno'] > 0) ? ($arrPlanGobierno[$value['seqPlanGobierno']]) : 'Seleccione';
         //echo "<br>". $cols." ->".$value['txtNombreProyecto'];
         $sheet->setCellValue('A' . $cols, $value['seqUnidadProyecto']);
         $sheet->setCellValue('B' . $cols, $value['txtNombreProyecto']);
@@ -239,23 +260,38 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
         $objValidation->setPromptTitle('Seleccion');
         $objValidation->setPrompt('Seleccione un valor de la lista');
         $objValidation->setFormula1("=seleccionEsq");
-
+        $sheet->setCellValue('J' . $cols, $seqPlanGobierno);
+        $objValidation = $excel->getActiveSheet()->getCell('J' . $cols)->getDataValidation();
+        $objValidation->setType(PHPExcel_Cell_DataValidation::TYPE_LIST);
+        $objValidation->setErrorStyle(PHPExcel_Cell_DataValidation::STYLE_STOP);
+        $objValidation->setAllowBlank(true);
+        $objValidation->setShowInputMessage(true);
+        $objValidation->setShowErrorMessage(true);
+        $objValidation->setShowDropDown(true);
+        $objValidation->setErrorTitle('Error');
+        $objValidation->setError('Valor no esta en la lista');
+        $objValidation->setPromptTitle('Seleccion');
+        $objValidation->setPrompt('Seleccione un valor de la lista');
+        $objValidation->setFormula1("=seleccionPlan");
         $cols++;
     }
 
     $excel->getSecurity()->setLockWindows(false);
     $excel->getSecurity()->setLockStructure(false);
     $excel->getSheet(0)->getProtection()->setSheet(true);
+    $excel->getActiveSheet()->getProtection()->setSheet(true);
+
     $excel->getActiveSheet()->getProtection()->setSort(true);
     $excel->getActiveSheet()->getProtection()->setInsertRows(true);
     $excel->getActiveSheet()->getProtection()->setFormatCells(true);
+
     // $excel->getActiveSheet()->getProtection()->setPassword('SDHT');
 
-    /*$excel->getActiveSheet()->getStyle('F2:I' . $cols)->getProtection()
-            ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);*/
-
-    $excel->getActiveSheet()->getStyle('F2:I' . $cols)->getProtection()
+    $excel->getActiveSheet()->getStyle('F2:K' . $cols)->getProtection()
             ->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+
+    $excel->getActiveSheet()->getStyle('A2:E' . $cols)->getProtection()
+            ->setLocked(PHPExcel_Style_Protection::PROTECTION_PROTECTED);
 
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     header("Content-Disposition: attachment;filename=PlantillaEstadoUnidades.xlsx");

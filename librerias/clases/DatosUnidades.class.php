@@ -211,31 +211,39 @@ class DatosUnidades {
     function modificarDatosUnidad($array, $seqProyecto) {
 
         global $aptBd;
-        // var_dump($array); die();
+        //var_dump($array); die();
         foreach ($array as $key => $value) {
-            if ($value[7] != "Seleccione") {
+            foreach ($value as $valueVal) {
+                echo "<br>" . $valueVal;
+                // if ($value[7] != "Seleccione") {
                 $estado = explode("-", $value[5])[0];
                 $activo = ($value[6] == "SI") ? 1 : 0;
                 $modalidad = explode("-", $value[7])[0];
                 $tipoEsquema = explode("-", $value[8])[0];
-                if ($estado > 0) {
-                    $sql = "UPDATE t_pry_unidad_proyecto
+                $planGobierno = explode("-", $value[9])[0];
+                // echo "<br> estadoooooo".$value[5];
+            }
+            if ($estado > 0) {
+                 $sql = "UPDATE t_pry_unidad_proyecto
                             SET
                             seqTipoEsquema = $tipoEsquema,
                             seqModalidad = $modalidad,
-                            seqEstadoUnidad = $estado, bolActivo =  $activo
+                            seqEstadoUnidad = $estado, 
+                            seqPlanGobierno = $planGobierno,  
+                            bolActivo =  $activo
                             WHERE seqUnidadProyecto = $value[0];";
-                    try {
-                        $aptBd->execute($sql);
-                        return true;
-                    } catch (Exception $objError) {
-                        $arrErrores[] = "No se ha podido modificar los estado de las unidades<b></b>";
-                        pr($objError->getMessage());
-                        return false;
-                    }
+                try {
+                    $aptBd->execute($sql);
+                    //return true;
+                } catch (Exception $objError) {
+                    $arrErrores[] = "No se ha podido modificar los estado de las unidades<b></b>";
+                    pr($objError->getMessage());
+                    return false;
                 }
+                //}
             }
         }
+        return true;
     }
 
     function obtenerDatosUnidades($seqProyecto, $seqUnidades) {

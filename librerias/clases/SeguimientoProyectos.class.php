@@ -90,8 +90,16 @@ class SeguimientoProyectos {
         $this->arrConversionCampos['seqConstructor']['tabla'] = "T_PRY_CONSTRUCTOR";
 
         // CONVERSION DE LOS CAMPOS DE LA UNIDAD
-        $this->arrConversionCampos['seqEstadoUnidad']['unidad'] = "Unidad";
-
+        $this->arrConversionCampos['seqEstadoUnidad']['nombre'] = "Estado Unidad";
+        $this->arrConversionCampos['seqEstadoUnidad']['tabla'] = "t_pry_estado_unidad";
+        $this->arrConversionCampos['seqTipoEsquema']['nombre'] = "Tipo de Esquema";
+        $this->arrConversionCampos['seqTipoEsquema']['tabla'] = "T_PRY_TIPO_ESQUEMA";
+        $this->arrConversionCampos['seqPlanGobierno']['nombre'] = "Plan de Gobierno";
+        $this->arrConversionCampos['seqPlanGobierno']['tabla'] = "t_frm_plan_gobierno";
+        $this->arrConversionCampos['seqModalidad']['nombre'] = "Tipo de Modalidad";
+        $this->arrConversionCampos['seqModalidad']['tabla'] = "t_frm_modalidad";
+        $this->arrConversionCampos['bolActivo']['nombre'] = "Activo";
+        $this->arrConversionCampos['bolActivo']['tabla'] = "t_pry_unidad_proyecto";
 
         // LICENCIA DE URBANISMO
         $this->arrConversionCampos['txtLicenciaUrbanismo']['nombre'] = "Licencia de Urbanismo";
@@ -127,11 +135,11 @@ class SeguimientoProyectos {
         $this->arrConversionCampos['numTProfesionalInterventor']['nombre'] = "Tarjeta Profesional del Interventor";
         $this->arrConversionCampos['numTProfesionalInterventor']['tabla'] = "";
 
-        
+
         // CAMPOS QUE NO SE MOSTRARAN POR AHROA
         $this->arrIgnorarCampos[] = "";
         $this->arrIgnorarCampos[] = "arrErrores";
-        $this->arrIgnorarCampos[] = "bolActivo";
+        //$this->arrIgnorarCampos[] = "bolActivo";
         $this->arrIgnorarCampos[] = "bolAprobacion";
         $this->arrIgnorarCampos[] = "valTotalProyectosVIP";
         $this->arrIgnorarCampos[] = "bolDireccion";
@@ -240,7 +248,7 @@ class SeguimientoProyectos {
             }
         }
 
-        $txtCondicion .= "AND seg.seqProyecto IN (SELECT case when (pry.seqProyectoPadre > 0) then group_concat(seqProyecto) else ".$this->seqProyecto." end as seqProyecto  from t_pry_proyecto pry  where seqProyectoPadre = ".$this->seqProyecto."   ) ";
+        $txtCondicion .= "AND seg.seqProyecto IN (SELECT case when (pry.seqProyectoPadre > 0) then group_concat(seqProyecto) else $this->seqProyecto end as seqProyecto  from t_pry_proyecto pry  where seqProyectoPadre = $this->seqProyecto ) ";
 
         $txtLimite = "";
         if ($numLimite != 0) {
@@ -251,7 +259,6 @@ class SeguimientoProyectos {
                 $txtLimite .= "$numLimite";
             }
         }
-
         $sql = "
             SELECT 
                     seg.seqSeguimiento,
@@ -275,7 +282,7 @@ class SeguimientoProyectos {
             ORDER BY seg.seqSeguimiento DESC
             $txtLimite
     ";
-//echo "<p>".$sql."</p>"; 
+
         try {
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
@@ -655,8 +662,8 @@ class SeguimientoProyectos {
     }
 
     public function almacenarSeguimiento($seqProyecto, $txtComentarios, $seqGestion, $arrayDatosProyOld, $arrayDatosProyNew) {
-pr($arrayDatosProyOld);
-pr($arrayDatosProyNew);
+//pr($arrayDatosProyOld);
+//pr($arrayDatosProyNew);
         global $aptBd;
         $txtCambios = "";
         if ($arrayDatosProyOld != "") {

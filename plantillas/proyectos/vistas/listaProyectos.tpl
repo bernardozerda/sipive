@@ -96,7 +96,7 @@
                 <td width="5%" align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosUnidades.php?&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosUnidades.php?tipo=3&id=6', '', true);">
                         <span class="glyphicon glyphicon-edit" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a>
                 </td>
-                <td width="5%" align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosUnidades.php?&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosUnidades.php&tipo=2&id=6', '', true);">
+                <td width="5%" align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosUnidades.php?&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosUnidades.php&tipo=3&id=6', '', true);">
                         <span class="glyphicon glyphicon-pencil glyphicon glyphicon-list-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a>
                 </td>
             {else}

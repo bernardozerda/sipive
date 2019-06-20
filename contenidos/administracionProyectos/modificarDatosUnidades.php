@@ -60,78 +60,118 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
         $arrayMod = Array();
         $arrayEsqu = Array();
         $arrayPlanGob = Array();
+        $arraSeqUnidades = Array();
+        $arrArchivo = Array();
+        $arrayTitle = Array();
+        $encabezado = array('ID Unidad', 'Proyecto', 'Conjunto', 'Nombre de la unidad', 'Estado Actual', 'Nuevo Estado', 'Activo', 'Modalidad', 'Esquema', 'Plan de Gobierno');
+
         for ($numFila = 1; $numFila <= $numFilas; $numFila++) {
-            if ($numFila != 1) {
-                for ($numColumna = 0; $numColumna <= $numColumnas; $numColumna++) {
-                    $numFilaArreglo = $numFila - 1;
-                    $letra = chr(65 + ($numColumna));
-                    if (in_array($numColumna, $arrayNum)) {
-                        if (is_numeric($objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue())) {
-                            $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+            for ($numColumna = 0; $numColumna <= $numColumnas; $numColumna++) {
+                if ($numFila != 1) {
+                    if ($objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue() != "") {
+                        $numFilaArreglo = $numFila - 1;
+                        $letra = chr(65 + ($numColumna));
+                        if (in_array($numColumna, $arrayNum)) {
+                            if (is_numeric($objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue())) {
+                                $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                                $arraSeqUnidades[] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                            } else {
+                                $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Por favor verifique que  el campo de la <b>Fila " . ($numFilaArreglo + 1) . "</b> en la <b>Columna " . $letra . " </b> Sea de tipo numerico </h5></div>";
+                            }
+                        } else if ($objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue() == "") {
+                            // echo "<p> numFila " . $numFila . " - <b>" . $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue() . "</b>  numColumna -> " . $numColumna . " letra -> " . $letra . "</p>";
+                            $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Por favor verifique que  el campo de la <b>Fila " . ($numFilaArreglo + 1) . "</b> en la <b>Columna " . $letra . " </b> se encuentra vacio </h5></div>";
                         } else {
-                            $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Por favor verifique que  el campo de la <b>Fila " . ($numFilaArreglo + 1) . "</b> en la <b>Columna " . $letra . " </b> Sea de tipo numerico </h5></div>";
+                            if (($numColumna == 5))
+                                $arrayEstado[] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                            if (($numColumna == 7))
+                                $arrayMod[] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                            if (($numColumna == 8))
+                                $arrayEsqu[] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                            if (($numColumna == 9))
+                                $arrayPlanGob[] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                            $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
                         }
-                    } else if ($objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue() == "") {
-                        echo "<p> numFila " . $numFila . " - <b>" . $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue() . "</b>  numColumna -> " . $numColumna . " letra -> " . $letra . "</p>";
-                        $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Por favor verifique que  el campo de la <b>Fila " . ($numFilaArreglo + 1) . "</b> en la <b>Columna " . $letra . " </b> se encuentra vacio </h5></div>";
-                    } else {
-                        if (($numColumna == 5))
-                            $arrayPlanGob[] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
-                        if (($numColumna == 7))
-                            $arrayMod[] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
-                        if (($numColumna == 8))
-                            $arrayEsqu[] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
-                        $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
                     }
+                }else {
+                    if ($numColumnas != 10) {
+                        $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Verifique la plantilla el numero de columnas no corresponde!</h5></div>";
+                    } else {
+                        if ($objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue() != null)
+                            $arrayTitle[] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                    }
+
+                    // echo "<br>" . 
                 }
             }
         }
+        $resultTitle = array_diff($encabezado, $arrayTitle);
+      
+        if (!empty($resultTitle)) {
+            $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Existe diferencias entre los titulos de la plantilla por favor verifica los titulos de las $numColumnas Columnas desde $resultTitle[1]!</h5></div>";
+            $arrErrores[] = "<div class='alert alert-danger'><h5> El orden de los titulos son: <br><br>$encabezado[0] - $encabezado[1] - $encabezado[2] - $encabezado[3] - $encabezado[4] - $encabezado[5] - $encabezado[6] - $encabezado[7] - $encabezado[8] - $encabezado[9] !</h5></div>";
+        }
 
-        $band = (isHomogenous($arrayPlanGob));
+
+
+        $band = (isHomogenous($arrayEstado));
         if (!$band)
-            $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Verifique que el <b>Plan de Gobierno</b> sea el mismo para todas las filas!</h5></div>";
+            $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Verifique que el <b>Estado de las unidades</b> sea el mismo para todas las filas!</h5></div>";
         $band = (isHomogenous($arrayMod));
         if (!$band)
             $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Verifique que la <b>Modalidad</b> sea la misma para todas las filas!</h5></div>";
         $band = (isHomogenous($arrayEsqu));
         if (!$band)
             $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Verifique que el <b>Tipo Esquema</b> sea el mismo para todas las filas!</h5></div>";
+        $band = (isHomogenous($arrayPlanGob));
+        if (!$band)
+            $arrErrores[] = "<div class='alert alert-danger'><h5>Alerta!! Verifique que el <b>Plan de Gobierno</b> sea el mismo para todas las filas!</h5></div>";
+
         // var_dump($arrErrores);
 
         if (empty($arrErrores)) {
+
             $band = true;
+            //var_dump($arrArchivo); exit();
             foreach ($arrArchivo as $key => $value) {
-                $arrayDatosProyOld[$seqProyecto][] = $value[6];
+                // $arrayDatosProyOld[$seqProyecto][] = $value[6];
+                $arrayDatosProyNew[$seqProyecto]['seqEstadoUnidad'] = explode("-", $value[5])[0];
+                $arrayDatosProyNew[$seqProyecto]['txtNombreUnidad'] .= "<br>" . $value[3];
+                $arrayDatosProyNew[$seqProyecto]['seqModalidad'] = explode("-", $value[7])[0];
+                $arrayDatosProyNew[$seqProyecto]['seqTipoEsquema'] = explode("-", $value[8])[0];
+                $arrayDatosProyNew[$seqProyecto]['seqPlanGobierno'] = explode("-", $value[9])[0];
+                $arrayDatosProyNew[$seqProyecto]['bolActivo'] = $value[6];
+
                 if ($value[7] != "Seleccione" && $value[6] != $value[7]) {
-                    // echo "<br> ***** " . $value[4] . " != " . $value[5];
-                    $arrayDatosProyNew[$seqProyecto][] = $value[7];
+
                     $bandUnidades = $claDatosUnidades->ValidarUnidadesProyecto($seqProyecto, $value[0]);
                     if (!$bandUnidades) {
                         $band = false;
                     }
                 }
             }
-
-
             if ($band) {
+                $seqUnidades = implode(",", $arraSeqUnidades);
+
+                $arrayDatosUnd = $claDatosUnidades->obtenerDatosUnidades($seqProyecto, $seqUnidades);
+                foreach ($arrayDatosUnd as $key => $value) {
+                    $arrayDatosProyOld[$seqProyecto]['seqEstadoUnidad'] = explode("-", $value['estado'])[0];
+                    $arrayDatosProyOld[$seqProyecto]['seqModalidad'] = $value['seqModalidad'];
+                    $arrayDatosProyOld[$seqProyecto]['seqTipoEsquema'] = $value['seqTipoEsquema'];
+                    $arrayDatosProyOld[$seqProyecto]['seqPlanGobierno'] = $value['seqPlanGobierno'];
+                    $arrayDatosProyOld[$seqProyecto]['bolActivo'] = $value[6];
+                }
+//                pr($arrayDatosProyOld);
+//                pr($arrayDatosProyNew);
 
                 $array = $claDatosUnidades->modificarDatosUnidad($arrArchivo, $seqProyecto);
-                echo "array => ".$array;
+
                 if ($array) {
-                    $cantOld = count($arrayDatosProyOld[$seqProyecto]);
-                    $cantNew = count($arrayDatosProyNew[$seqProyecto]);
-                pr($arrayDatosProyNew);
-                pr($arrayDatosProyOld);
-                die();
+//                 
+
                     $txtComentarios = $_POST['txtComentario'];
                     $seqGestion = $_POST['seqGestion'];
-                    $arrayDatosProyNew = Array();
-                    $arrayDatosProyOld = Array();
-                    $arrayDatosProyOld[$seqProyecto]['EstadoUnidad'] = "De un total de <b>" . $cantOld . "</b> Unidades";
-                    $arrayDatosProyOld[$seqProyecto]['nombreArchivo'] = "";
-                    $arrayDatosProyNew[$seqProyecto]['EstadoUnidad'] = " Se modifico estado a: <b>" . $cantNew . "</b> Unidades";
-                    $arrayDatosProyNew[$seqProyecto]['nombreArchivo'] = "Se realiz&oacute; cambios de estado bajo las especificaciones del archivo <b>" . $name . "</b>";
-                    // $txtComentarios = "Se realizó cambios de estado en ". count($arrayDatosProyNew[$seqProyecto])." unidades, bajo las especificaciones del archivo <b>".$name."</b>";
+
                     $claSeguimiento->almacenarSeguimiento($seqProyecto, $txtComentarios, $seqGestion, $arrayDatosProyOld, $arrayDatosProyNew);
                     ?>
                     <div class='alert alert-success'><h5><b>Exito!!!</b> Los datos que se almacenaron se listan a continuación: </h5></div>
@@ -140,12 +180,13 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                             <th>Id Unidad </th>
                             <th>Proyecto </th>
                             <th>Conjunto</th>
-                            <th>Nombre de la unidad </th>
-                            <th>Nombre de la unidad Real </th>
-                            <th>Nombre de la unidad Auxiliar</th>                            
+                            <th>Nombre de la unidad </th>                                                   
                             <th>Estado Anterior</th>
-                            <th>Nuevo Estado </th>                        
+                            <th>Nuevo Estado </th>                            
                             <th>Activo </th>
+                            <th>Modalidad</th>
+                            <th>Esquema</th>   
+                            <th>Plan de Gobierno</th>                            
                         </tr>
                         <?php
                         foreach ($arrArchivo as $key => $value) {
@@ -160,6 +201,7 @@ if ($_POST['seqProyectoPadre'] != "" && $_POST['seqProyectoPadre'] != null) {
                                 <td><?php echo $value[6] ?></td>
                                 <td><?php echo $value[7] ?></td>
                                 <td><?php echo $value[8] ?></td>
+                                <td><?php echo $value[9] ?></td>
                             </tr>
                             <?php
                         }

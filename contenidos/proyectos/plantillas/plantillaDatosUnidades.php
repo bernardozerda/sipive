@@ -1,7 +1,7 @@
 <?php
 
 /*
- *               Autora: LILIANA BASTO
+ *  Autora: LILIANA BASTO
  *  PLANTILLA PARA MODIFICACION DE DATOS DE LA UNIDADES
  * 
  */
@@ -19,6 +19,12 @@ include( "../../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 
 $arrUnidades = "";
 $cantUnidades = 0;
+//var_dump($_FILES['archivo']['type']);
+if ($_FILES['archivo']['type'] != 'text/plain') {
+    echo "<div class='alert alert-danger'><strong>Atención!!! El tipo de archivo no corresponde a texto por favor genere un archivo de texto tipo: .TXT</div>";
+    die();
+}
+
 if ($_FILES['archivo']['error'] == 0) {
     $arrayUnidades = mb_split("\n", file_get_contents($_FILES['archivo']['tmp_name']));
     $cantUnidades = count(mb_split("\n", file_get_contents($_FILES['archivo']['tmp_name'])));
@@ -50,9 +56,6 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
     foreach ($infUnidades as $key => $value) {
         $datosObtConsultaU[] = $value['seqUnidadProyecto'];
     }
-//      var_dump($arrModalidad);
-//        var_dump($arrPlanGob);
-//    var_dump($arrEsquema); die();
 
     if ($cantUnidadesConsultadas != $cantUnidades) {
         $resultado = array_diff($arrayUnidades, $datosObtConsultaU);
@@ -63,7 +66,6 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
         echo "</div>";
         die();
     }
-
 
     $excel = new PHPExcel();
 //Usamos el worsheet por defecto 
@@ -140,20 +142,20 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
     }
 
     $intEsq = 2;
-   
+
     foreach ($arrPryEsquema as $keyEsq => $valueEsq) {
-       
+
         $excel->getSheet(1)->SetCellValue("I" . $intEsq, $keyEsq . '-' . $valueEsq['txtTipoEsquema'] . '- (PG = ' . $valueEsq['seqPlanGobierno'] . ')');
         $intEsq++;
     }
-    
+
 
     $intPlan = 2;
-   // var_dump($arrPlanGobierno);    die();
+    // var_dump($arrPlanGobierno);    die();
     foreach ($arrPlanGobierno as $keyPlan => $valuePlan) {
-       // echo "<br>". $keyPlan."-" .$valuePlan; 
+        // echo "<br>". $keyPlan."-" .$valuePlan; 
         $excel->getSheet(1)->SetCellValue("J" . $intPlan, $keyPlan . '-' . $valuePlan);
-       $intPlan++;
+        $intPlan++;
     }
 //die();
     $excel->addNamedRange(
@@ -194,9 +196,9 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
         $datosModalidad = ($value['seqModalidad'] > 0) ? array_values($arrPryTipoModalidad[$value['seqModalidad']]) : 'Seleccione';
         $modActual = $value['seqModalidad'] . "-" . $datosModalidad[0];
         $datosEsquema = ($value['seqTipoEsquema'] > 0) ? array_values($arrPryEsquema[$value['seqTipoEsquema']]) : 'Seleccione';
-       
+
         $esqActual = $datosEsquema[1] . "-" . $datosEsquema[0];
-      //  var_dump($esqActual) ; die();        
+        //  var_dump($esqActual) ; die();        
         $tipoVivienda = ($value['txtNombreConjunto'] == "") ? 'Ninguno' : strtoupper($value['txtNombreConjunto']);
         $validacion = ($value['bolActivo'] == 1) ? 'SI' : 'NO';
         $seqPlanGobierno = ($value['seqPlanGobierno'] > 0) ? ($arrPlanGobierno[$value['seqPlanGobierno']]) : 'Seleccione';

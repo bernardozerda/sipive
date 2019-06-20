@@ -214,7 +214,7 @@ class DatosUnidades {
         //var_dump($array); die();
         foreach ($array as $key => $value) {
             foreach ($value as $valueVal) {
-                echo "<br>" . $valueVal;
+              //  echo "<br>" . $valueVal;
                 // if ($value[7] != "Seleccione") {
                 $estado = explode("-", $value[5])[0];
                 $activo = ($value[6] == "SI") ? 1 : 0;

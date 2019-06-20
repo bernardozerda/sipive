@@ -196,9 +196,9 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
         $datosModalidad = ($value['seqModalidad'] > 0) ? array_values($arrPryTipoModalidad[$value['seqModalidad']]) : 'Seleccione';
         $modActual = $value['seqModalidad'] . "-" . $datosModalidad[0];
         $datosEsquema = ($value['seqTipoEsquema'] > 0) ? array_values($arrPryEsquema[$value['seqTipoEsquema']]) : 'Seleccione';
-
-        $esqActual = $datosEsquema[1] . "-" . $datosEsquema[0];
-        //  var_dump($esqActual) ; die();        
+        $esqActual = ($datosEsquema != 'Seleccione')?$datosEsquema[1] . "-" . $datosEsquema[0]:$datosEsquema;
+       
+     
         $tipoVivienda = ($value['txtNombreConjunto'] == "") ? 'Ninguno' : strtoupper($value['txtNombreConjunto']);
         $validacion = ($value['bolActivo'] == 1) ? 'SI' : 'NO';
         $seqPlanGobierno = ($value['seqPlanGobierno'] > 0) ? ($arrPlanGobierno[$value['seqPlanGobierno']]) : 'Seleccione';

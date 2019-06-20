@@ -42,12 +42,12 @@
                     <div class="col-md-2">
                         <label class="control-label" >&nbsp;</label><br>
                         <input type="button" class="btn_volver" value="Importar&nbsp;" id="enviarDoc" onclick="if (validarCampos())
-                                    someterFormulario('divEstados', this.form, 'contenidos/administracionProyectos/modificarEstadoUnidades.php', true, true)"/>
+                                    someterFormulario('divEstados', this.form, 'contenidos/administracionProyectos/modificarDatosUnidades.php', true, true)"/>
                     </div>
                     <div class="col-md-2" style="text-align: center">
                         <label class="control-label" >&nbsp;</label><br>
                         <input type="button" class="btn_volver" value="Plantilla&nbsp;" id="plantillaUnidad" onclick="if (obtenerPlantillaUnidades(3))
-                                    someterFormulario('divEstados', this.form, 'contenidos/proyectos/plantillas/plantillaDatosUnidades.php', true, true)"/>
+                                    someterFormulario('divEstados', this.form, 'contenidos/proyectos/plantillas/plantillaDatosUnidades.php', true, false)"/>
                     </div>
                     <p>&nbsp;</p> 
                     <p>&nbsp;</p> 

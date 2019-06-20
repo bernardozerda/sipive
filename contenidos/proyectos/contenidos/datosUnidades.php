@@ -29,7 +29,7 @@ if ($id == 4) {
 } else {
     $txtPlantilla = "proyectos/vistas/cambioEstadoUnidades.tpl";
     if ($tipo == 2) {
-        
+
         $txtPlantilla = "proyectos/vistas/cambioDatosUnidades.tpl";
     }
 }

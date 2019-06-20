@@ -48,7 +48,7 @@
                 <th bgcolor="#E4E4E4" >&nbsp;</th>
                 {/if}
                 {if $id == 6}
-                <th bgcolor="#E4E4E4" >Datos</th>
+                <th bgcolor="#E4E4E4" >Seguimiento</th>
                 {/if}
         </tr>
     </thead>
@@ -63,7 +63,7 @@
                 <th bgcolor="#E4E4E4" >&nbsp;</th>
                 {/if}
                 {if $id == 6}
-                <th bgcolor="#E4E4E4" >Datos</th>
+                <th bgcolor="#E4E4E4" >Seguimiento</th>
                 {/if}
         </tr>
     </tfoot>
@@ -97,7 +97,7 @@
                         <span class="glyphicon glyphicon-edit" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a>
                 </td>
                 <td width="5%" align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosUnidades.php?&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosUnidades.php&tipo=2&id=6', '', true);">
-                        <span class="glyphicon glyphicon-pencil glyphicon glyphicon-list-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a>
+                        <span class="glyphicon glyphicon-open" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a>
                 </td>
             {else}
                 <td width="5%" align="center"><a href="#" onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?tipo=2&seqProyecto={$value.seqProyecto}&seqPlanGobierno={$value.seqPlanGobierno}&page=datosProyecto.php?tipo=2', '', true);">

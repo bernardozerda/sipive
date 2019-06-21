@@ -3698,7 +3698,7 @@ class Reportes {
                       from t_pry_aad_unidad_acto uac
                       left join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
                       where uac.seqTipoActoUnidad = 2
-                      and uvi.valIndexado > 0
+                      #and uvi.valIndexado > 0
                       and uvi.seqProyecto in (
                       select seqProyecto
                           from t_pry_proyecto
@@ -3711,8 +3711,8 @@ class Reportes {
                       (sum(uvi.valIndexado) * -1) as valDisminucion
                       from t_pry_aad_unidad_acto uac
                       left join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
-                      where uac.seqTipoActoUnidad = 2
-                      and uvi.valIndexado < 0
+                      where uac.seqTipoActoUnidad = 3
+                      #and uvi.valIndexado < 0
                       and uvi.seqProyecto in (
                       select seqProyecto
                           from t_pry_proyecto

@@ -24,8 +24,8 @@ $claDatosProyecto = new DatosGeneralesProyectos();
 
 $txtPlantilla = "proyectos/vistas/reportes/fichaTecnica.tpl";
 $seqProyecto = $_GET['seqProyecto'];
-$id =  $_GET['id'];
-$tipo =  $_GET['tipo'];
+$id = $_GET['id'];
+$tipo = $_GET['tipo'];
 $seqPryEstadoProceso = 0;
 $arrProyectos = $claProyecto->obtenerDatosProyectosFicha($seqProyecto);
 $arrDatosVivienda = $claProyecto->obtenerDatosViviendaFicha($seqProyecto);
@@ -123,9 +123,9 @@ if ($arrFinanciera[$seqProyecto]['actual'] > 0)
 
 // redefine la clave aprobado para ampliar informacion
 unset($arrFinanciera[$seqProyecto]['aprobado']);
-$arrFinanciera[$seqProyecto]['aprobado']['numero'] = 0;
-$arrFinanciera[$seqProyecto]['aprobado']['fecha'] = null;
-$arrFinanciera[$seqProyecto]['aprobado']['valor'] = 0;
+//$arrFinanciera[$seqProyecto]['aprobado']['numero'] = 0;
+//$arrFinanciera[$seqProyecto]['aprobado']['fecha'] = null;
+//$arrFinanciera[$seqProyecto]['aprobado']['valor'] = 0;
 $arrFinanciera[$seqProyecto]['aprobado']['unidades'] = array();
 
 // redefine la clave indexado para ampliar la informacion
@@ -137,19 +137,22 @@ unset($arrFinanciera[$seqProyecto]['menor']);
 $arrFinanciera[$seqProyecto]['menor'] = array();
 
 // procesando el resumen de proyecto para ordenar los datos
+
 foreach ($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion) {
+
     if ($arrResolucion['idTipo'] == 1) {
-        $arrFinanciera[$seqProyecto]['aprobado']['numero'] = $arrResolucion['numero'];
-        $arrFinanciera[$seqProyecto]['aprobado']['fecha'] = $arrResolucion['fecha']->format("Y");
-        $arrFinanciera[$seqProyecto]['aprobado']['valor'] = $arrResolucion['total'];
+        $arrFinanciera[$seqProyecto]['aprobado']['total'] += $arrResolucion['total'];
+        $arrFinanciera[$seqProyecto]['aprobado']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
+        $arrFinanciera[$seqProyecto]['aprobado']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
+        $arrFinanciera[$seqProyecto]['aprobado']['detalle'][$seqUnidadActo]['valor'] = $arrResolucion['total'];
         if (isset($arrResolucion['cdp'])) {
             foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
                 foreach ($arrCDP['unidades'] as $seqUnidadProyecto => $arrUnidad) {
-                    $arrFinanciera[$seqProyecto]['aprobado']['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
+                    $arrFinanciera[$seqProyecto]['aprobado']['detalle'][$seqUnidadActo]['unidades'][$seqUnidadProyecto] = $seqUnidadProyecto;
                 }
             }
         }
-    } elseif ($arrResolucion['idTipo'] == 2 and $arrResolucion['total'] > 0) {
+    } elseif ($arrResolucion['idTipo'] == 2) {
         $arrFinanciera[$seqProyecto]['indexado']['total'] += $arrResolucion['total'];
         $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
         $arrFinanciera[$seqProyecto]['indexado']['detalle'][$seqUnidadActo]['fecha'] = $arrResolucion['fecha']->format("Y");
@@ -161,7 +164,7 @@ foreach ($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion) {
                 }
             }
         }
-    } elseif ($arrResolucion['idTipo'] == 3 or ( $arrResolucion['idTipo'] == 2 and $arrResolucion['total'] < 0)) {
+    } elseif ($arrResolucion['idTipo'] == 3) {
 
         $arrFinanciera[$seqProyecto]['menor']['total'] += $arrResolucion['total'];
         $arrFinanciera[$seqProyecto]['menor']['detalle'][$seqUnidadActo]['numero'] = $arrResolucion['numero'];
@@ -173,6 +176,7 @@ foreach ($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion) {
     }
 }
 
+//die();
 $arrListadoGirosConstructor = $claGestion->listadoGirosConstructor($seqProyecto);
 foreach ($arrListadoGirosConstructor as $i => $arrGiro) {
     $arrListadoGirosConstructor[$i]['porcentajeGiro'] = ($arrListadoGirosConstructor[$i]['giro'] / $arrFinanciera[$seqProyecto]['actual']) * 100;
@@ -186,7 +190,7 @@ foreach ($arrListadoGirosFiducia as $i => $arrGiro) {
 $arrFinanciera[$seqProyecto]['entidadFiducia'] = array_shift(obtenerDatosTabla(
                 "t_pry_datos_fiducia", array("seqProyecto", "txtRazonSocialFiducia", "numNitFiducia"), "seqProyecto", "seqProyecto = " . $seqProyecto
         ));
-
+//var_dump($arrFinanciera[$seqProyecto]['aprobado']); 
 $claSmarty->assign("arrProyectos", $arrProyectos);
 $claSmarty->assign("id", $id);
 $claSmarty->assign("tipo", $tipo);

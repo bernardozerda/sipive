@@ -34,7 +34,8 @@
                         {else}
                             <div bgcolor="#E4E4E4" class="col-md-2" style="z-index: 100; float: right; top: -4px; left: 7%">
                                 <input type="button" name="btn_volver" id="btn_volver" value="Volver" 
-                                       onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?id=2', '', true); cargarContenido('rutaMenu', './rutaMenu.php', 'menu=85', false);" class="btn_volver"/> 
+                                       onclick="cargarContenido('contenido', './contenidos/proyectos/contenidos/datosProyecto.php?id=2', '', true);
+                                               cargarContenido('rutaMenu', './rutaMenu.php', 'menu=85', false);" class="btn_volver"/> 
                             </div>
                         {/if}
                 </div>
@@ -222,9 +223,14 @@
                         </thead>
                         <tr>
                             <td style="text-align: right">
-                                Res. {$arrFinanciera.$seqProyecto.aprobado.numero} de {$arrFinanciera.$seqProyecto.aprobado.fecha}<br>
-                                {$arrFinanciera.$seqProyecto.aprobado.unidades|@count} SFV por <br>
-                                $ {$arrFinanciera.$seqProyecto.aprobado.valor|number_format:0:',':'.'}
+                                {foreach from=$arrFinanciera.$seqProyecto.aprobado.detalle key=seqUnidadActo item=arrResolucion}
+                                    Res. {$arrResolucion.numero} de {$arrResolucion.fecha}<br>
+                                    {$arrResolucion.unidades|@count} SFV por<br>
+                                    $ {$arrResolucion.valor|number_format:0:',':'.'}
+                                    <br><br>
+                                {/foreach}
+                                Total de aprobaciones por <br>
+                                $ {$arrFinanciera.$seqProyecto.aprobado.total|number_format:0:',':'.'}
                             </td>
                             <td style="text-align: left">
                                 {foreach from=$arrFinanciera.$seqProyecto.indexado.detalle key=seqUnidadActo item=arrResolucion}

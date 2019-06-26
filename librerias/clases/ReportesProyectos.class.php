@@ -3667,8 +3667,8 @@ class Reportes {
                       )
                     ) as numActo,
                     (
-                      select distinct
-                      uac.fchActo
+                      select group_concat(DISTINCT
+                            uac.fchActo separator '/') 
                       from t_pry_aad_unidad_acto uac
                       left join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
                       where uac.seqTipoActoUnidad = 1
@@ -3708,10 +3708,10 @@ class Reportes {
                     ) as valIndexado,
                     (
                       select 
-                      (sum(uvi.valIndexado) * -1) as valDisminucion
+                      (sum(uvi.valIndexado)) as valDisminucion
                       from t_pry_aad_unidad_acto uac
                       left join t_pry_aad_unidades_vinculadas uvi on uac.seqUnidadActo = uvi.seqUnidadActo
-                      where uac.seqTipoActoUnidad = 3
+                      where uac.seqTipoActoUnidad = 3 
                       #and uvi.valIndexado < 0
                       and uvi.seqProyecto in (
                       select seqProyecto
@@ -3772,14 +3772,15 @@ class Reportes {
                   )
                 ) ava on ava.seqProyecto = pry.seqProyecto
                 left join (
-                  select 
-                    seqProyecto,
-                    sum(numCantParqDisc) as numParqueaderoDiscapacidad, 
-                    sum(numCantUdsDisc) as numUnidadesDiscapacidad,
-                    sum(numTotalParq) as numTotalParqueaderosResidentes, 
-                    sum(numCantidad) as numTotalUnidades 
-                  from t_pry_tipo_vivienda ptv
-                  where seqProyecto = $seqProyecto
+                  SELECT 
+                    case  when sum(numCantParqDisc)  > 0 then sum(numCantParqDisc) else numParqueaderosDisc end as numParqueaderoDiscapacidad,
+                    case  when sum(numCantUdsDisc)  > 0  then sum(numCantUdsDisc) else numCantSolDisc end as numUnidadesDiscapacidad,
+                    case  when sum(numTotalParq) > 0  then sum(numTotalParq) else numParqueaderos end as numTotalParqueaderosResidentes,
+                    valNumeroSoluciones as numTotalUnidades,     
+                     seqProyecto
+                FROM t_pry_proyecto pry 
+                left join t_pry_tipo_vivienda ptv using(seqProyecto)
+                WHERE seqProyecto = $seqProyecto
                 ) cun on pry.seqProyecto = cun.seqProyecto
                 where pry.seqProyecto = $seqProyecto
             ";
@@ -3893,7 +3894,6 @@ class Reportes {
             $objRes->MoveNext();
         }
         $this->exportarArchivo("Reporte Giro Constructor", $arrTitulos, $arrReporte);
-       
     }
 
 }

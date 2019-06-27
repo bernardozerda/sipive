@@ -3167,13 +3167,13 @@ class Reportes {
             );
 
             $arrReporte[$seqProyecto]['indexado'] = doubleval(
-                    ($objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] > 0) ?
+                    ($objRes->fields['seqTipoActoUnidad'] == 2 ) ?
                             $arrReporte[$seqProyecto]['indexado'] + $objRes->fields['valIndexado'] :
                             $arrReporte[$seqProyecto]['indexado']
             );
 
             $arrReporte[$seqProyecto]['menor'] = doubleval(
-                    ($objRes->fields['seqTipoActoUnidad'] == 3 or ( $objRes->fields['seqTipoActoUnidad'] == 2 and $objRes->fields['valIndexado'] < 0)) ?
+                    ($objRes->fields['seqTipoActoUnidad'] == 3 ) ?
                             $arrReporte[$seqProyecto]['menor'] + $objRes->fields['valIndexado'] :
                             $arrReporte[$seqProyecto]['menor']
             );

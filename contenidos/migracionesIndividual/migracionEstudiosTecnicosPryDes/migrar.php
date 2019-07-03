@@ -27,7 +27,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                 date_default_timezone_set('America/Bogota');
                 $arrDocumentosArchivo = array();
 
-                $camposTecnico = "numLargoMultiple, numAnchoMultiple, numAreaMultiple, txtMultiple, numLargoAlcoba1, numAnchoAlcoba1, numAreaAlcoba1, txtAlcoba1, numLargoAlcoba2, numAnchoAlcoba2, numAreaAlcoba2, txtAlcoba2, numLargoAlcoba3, numAnchoAlcoba3, numAreaAlcoba3, txtAlcoba3, numLargoCocina, numAnchoCocina, numAreaCocina, txtCocina, numLargoBano1, numAnchoBano1, numAreaBano1, txtBano1, numLargoBano2, numAnchoBano2, numAreaBano2, txtBano2, numLargoLavanderia, numAnchoLavanderia, numAreaLavanderia, txtLavanderia, numLargoCirculaciones, numAnchoCirculaciones, numAreaCirculaciones, txtCirculaciones, numLargoPatio, numAnchoPatio, numAreaPatio, txtPatio, numAreaTotal, txtEstadoCimentacion, txtCimentacion, txtEstadoPlacaEntrepiso, txtPlacaEntrepiso, txtEstadoMamposteria, txtMamposteria, txtEstadoCubierta, txtCubierta, txtEstadoVigas, txtVigas, txtEstadoColumnas, txtColumnas, txtEstadoPanetes, txtPanetes, txtEstadoEnchapes, txtEnchapes, txtEstadoAcabados, txtAcabados, txtEstadoHidraulicas, txtHidraulicas, txtEstadoElectricas, txtElectricas, txtEstadoSanitarias, txtSanitarias, txtEstadoGas, txtGas, txtEstadoMadera, txtMadera, txtEstadoMetalica, txtMetalica, numLavadero, txtLavadero, numLavaplatos, txtLavaplatos, numLavamanos, txtLavamanos, numSanitario, txtSanitario, numDucha, txtDucha, txtEstadoVidrios, txtVidrios, txtEstadoPintura, txtPintura, txtOtros, txtObservacionOtros, numContadorAgua, txtEstadoConexionAgua, txtDescripcionAgua, numContadorEnergia, txtEstadoConexionEnergia, txtDescripcionEnergia, numContadorAlcantarillado, txtEstadoConexionAlcantarillado, txtDescripcionAlcantarillado, numContadorGas, txtEstadoConexionGas, txtDescripcionGas, numContadorTelefono, txtEstadoConexionTelefono, txtDescripcionTelefono, txtEstadoAndenes, txtDescripcionAndenes, txtEstadoVias, txtDescripcionVias, txtEstadoServiciosComunales, txtDescripcionServiciosComunales, txtDescripcionVivienda, txtNormaNSR98, txtRequisitos, txtExistencia, txtDescipcionNormaNSR98, txtDescripcionRequisitos, txtDescripcionExistencia, fchVisita, txtAprobo, fchCreacion, fchActualizacion";
+                $camposTecnico = "numLargoMultiple, numAnchoMultiple, numAreaMultiple, txtMultiple, numLargoAlcoba1, numAnchoAlcoba1, numAreaAlcoba1, txtAlcoba1, numLargoAlcoba2, numAnchoAlcoba2, numAreaAlcoba2, txtAlcoba2, numLargoAlcoba3, numAnchoAlcoba3, numAreaAlcoba3, txtAlcoba3, numLargoCocina, numAnchoCocina, numAreaCocina, txtCocina, numLargoBano1, numAnchoBano1, numAreaBano1, txtBano1, numLargoBano2, numAnchoBano2, numAreaBano2, txtBano2, numLargoLavanderia, numAnchoLavanderia, numAreaLavanderia, txtLavanderia, numLargoCirculaciones, numAnchoCirculaciones, numAreaCirculaciones, txtCirculaciones, numLargoPatio, numAnchoPatio, numAreaPatio, txtPatio, numAreaTotal, txtEstadoCimentacion, txtCimentacion, txtEstadoPlacaEntrepiso, txtPlacaEntrepiso, txtEstadoMamposteria, txtMamposteria, txtEstadoCubierta, txtCubierta, txtEstadoVigas, txtVigas, txtEstadoColumnas, txtColumnas, txtEstadoPanetes, txtPanetes, txtEstadoEnchapes, txtEnchapes, txtEstadoAcabados, txtAcabados, txtEstadoHidraulicas, txtHidraulicas, txtEstadoElectricas, txtElectricas, txtEstadoSanitarias, txtSanitarias, txtEstadoGas, txtGas, txtEstadoMadera, txtMadera, txtEstadoMetalica, txtMetalica, numLavadero, txtLavadero, numLavaplatos, txtLavaplatos, numLavamanos, txtLavamanos, numSanitario, txtSanitario, numDucha, txtDucha, txtEstadoVidrios, txtVidrios, txtEstadoPintura, txtPintura, txtOtros, txtObservacionOtros, numContadorAgua, txtEstadoConexionAgua, txtDescripcionAgua, numContadorEnergia, txtEstadoConexionEnergia, txtDescripcionEnergia, numContadorAlcantarillado, txtEstadoConexionAlcantarillado, txtDescripcionAlcantarillado, numContadorGas, txtEstadoConexionGas, txtDescripcionGas, numContadorTelefono, txtEstadoConexionTelefono, txtDescripcionTelefono, txtEstadoAndenes, txtDescripcionAndenes, txtEstadoVias, txtDescripcionVias, txtEstadoServiciosComunales, txtDescripcionServiciosComunales, txtDescripcionVivienda, txtNormaNSR98, txtRequisitos, txtExistencia, txtDescipcionNormaNSR98, txtDescripcionRequisitos, txtDescripcionExistencia, fchVisita, fchExpedicion, txtAprobo, fchCreacion, fchActualizacion";
                 $camposAdjuntosTecnicos = "seqTipoAdjunto, txtNombreAdjunto, txtNombreArchivo";
 
                 if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name'])) {
@@ -52,7 +52,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                     $varRet = false;
                     $documentos = "";
 
-                     $sql = "SELECT T_DES_TECNICO.seqTecnico, numDocumento
+                    $sql = "SELECT T_DES_TECNICO.seqTecnico, numDocumento
 						FROM (((T_DES_TECNICO
 						INNER JOIN T_DES_DESEMBOLSO ON (T_DES_TECNICO.seqDesembolso = T_DES_DESEMBOLSO.seqDesembolso))
 						INNER JOIN T_FRM_FORMULARIO ON (T_DES_DESEMBOLSO.seqFormulario = T_FRM_FORMULARIO.seqFormulario))
@@ -137,6 +137,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                                     und.seqUnidadProyecto AS unidadseqUnidadProyecto,
                                     hog.seqParentesco AS seqParentesco,
                                     prytec.seqUnidadProyecto seqUnidadProyecto,
+                                    prytec.fchExpedicion,
                                     und.txtNombreUnidad txtNombreUnidad,
                                     pry.txtNombreProyecto AS txtNombreProyecto
                          FROM ((((((T_PRY_UNIDAD_PROYECTO und
@@ -205,14 +206,14 @@ include '../../../recursos/archivos/verificarSesion.php';
                     foreach ($arrDocumentosArchivo as $linea_doc => $documento) {
                         $seqDesembolso = obtenerValoresUtiles($documento, "seqDesembolso");
                         $seqUnidadProyecto = obtenerValoresUtiles($documento, "seqUnidadProyecto");
-
+                        $fchExpedicion = obtenerValoresUtiles($documento, "fchExpedicion");
                         $sqlTecnico = "INSERT INTO T_DES_TECNICO (seqDesembolso, $camposTecnico)
 									SELECT '$seqDesembolso', $camposTecnico
 									FROM T_PRY_TECNICO
 									WHERE seqTecnicoUnidad = $seqUnidadProyecto;";
                         if ($db->query($sqlTecnico)) {
                             $seqTecnico = $db->insert_id;
-                            $db->query("UPDATE T_DES_TECNICO SET fchCreacion = now(), fchActualizacion = now() WHERE seqTecnico = " . $seqTecnico);
+                            $db->query("UPDATE T_DES_TECNICO SET fchCreacion = now(), fchActualizacion = now(), fchExpedicion = '".$fchExpedicion."' WHERE seqTecnico = " . $seqTecnico);
                             $sqlAdjuntosTecnicos = "INSERT INTO T_DES_ADJUNTOS_TECNICOS (seqTecnico, $camposAdjuntosTecnicos)
 									SELECT '$seqTecnico', $camposAdjuntosTecnicos
 									FROM T_PRY_ADJUNTOS_TECNICOS

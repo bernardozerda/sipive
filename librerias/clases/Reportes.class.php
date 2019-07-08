@@ -3339,12 +3339,12 @@ if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01','Sin Clasific
                 fac.seqFormulario AS seqFormulario,
                 fac.seqFormularioActo AS seqFormularioActo,
                 cac.numDocumento AS Documento,
-                concat(cac.txtNombre1,' ',cac.txtNombre2,' ',cac.txtApellido1,' ',cac.txtApellido2) AS Nombre,
+                TRIM(CONCAT_WS(' ', UPPER(cac.txtNombre1),UPPER(cac.txtNombre2),UPPER(cac.txtApellido1),UPPER(cac.txtApellido2))) AS Nombre,
                 if(fac.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
                 concat('Res. ', aad.numActo) AS Resolucion,
                 year(aad.fchActo) AS Año,
                 aad.fchActo AS Fecha_Resolucion,
-                frm.fchVigencia AS Fecha_Vigencia,
+                fac.fchVigencia AS Fecha_Vigencia,
                 moda.txtModalidad,
                 sol.txtDescripcion AS Tipo,
                 sol.txtSolucion AS Rango,
@@ -3388,6 +3388,7 @@ if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01','Sin Clasific
               AND aad.seqCaracteristica = 1
             ORDER BY aad.fchActo DESC
         ";
+       // echo $sql;        die();
         $objRes = $aptBd->execute($sql);
         $this->obtenerReportesGeneral($objRes, "reporteAsignadosAAD");
     }

@@ -109,13 +109,13 @@ function proximoVencimiento($numDias) {
 function esFechaValida($fchFecha) {
     if (trim($fchFecha) != "") {
         list( $ano, $mes, $dia ) = mb_split("[\/-]", $fchFecha);
-        if($ano >= 1901) {
+        if ($ano >= 1901) {
             if (!@checkdate($mes, $dia, $ano)) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
-        }else{
+        } else {
             return false;
         }
     } else {
@@ -333,7 +333,7 @@ function formatoFechaGeneral($fecha) {
 
     $arrFecha = explode("De", $fecha);
     $txtMes = trim(strtolower($arrFecha[1]));
-    
+
     switch ($txtMes) {
         case "enero" : $numMes = "01";
             break;
@@ -500,9 +500,8 @@ function completarMesesArreglo(&$arrCompletar) {
  * @param String txtOrden     // ORDER BY del select
  * @version 1.0 Agosto de 2013
  */
-
 function obtenerDatosTabla($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion = "", $txtOrden = "") {
-    
+
     global $aptBd;
     $arrDatos = array();
     $txtCondicion = ( trim($txtCondicion) != "" ) ? "WHERE $txtCondicion" : "";
@@ -515,7 +514,7 @@ function obtenerDatosTabla($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion 
                 $txtOrden
             ";
         try {
-          // echo $sql;
+            // echo $sql;
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
                 if (trim($txtLLave) != "") {
@@ -549,14 +548,14 @@ function obtenerDatosTabla($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion 
  * @param String txtTabla
  * @version 1.0 Mayo de 2017
  */
-function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno){
+function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno) {
     global $aptBd;
 
     $arrReglas = array();
     $arrProyectos = array();
 
     // Para estas modalidades se buscan los proyectos con unidades disponibles para mostrar
-    $arrReglas['unidad'][6]  = 6;
+    $arrReglas['unidad'][6] = 6;
     $arrReglas['unidad'][12] = 12;
     $arrReglas['unidad'][13] = 13;
 
@@ -565,35 +564,27 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
     $arrReglas['proyecto'][8] = 8;
     $arrReglas['proyecto'][9] = 9;
 
-    /*********************************************************************************************/
+    /*     * ****************************************************************************************** */
 
     // Plan Gobierno 2 - Adquisicion - Individual
     $arrPryModalidad[2][6][1][] = 1; // adquisicion individual
-
     // Plan Gobierno 2 - construccion en sitio propio - colectivo opv
     $arrPryModalidad[2][7][2][] = 2; // Adquisición Colectivo OPV
-
     // Plan Gobierno 2 - mejoramiento estructural - territorial dirigido
     $arrPryModalidad[2][8][4][] = 5; // Mejoramiento Estructural
-
     // Plan Gobierno 2 - mejoramiento habitacional - territorial dirigido
     $arrPryModalidad[2][9][4][] = 4; // Habitacional
-
     // Plan Gobierno 3 - Adquisicion cierre financiero - proyectos sdht
     $arrPryModalidad[3][12][9][] = 11;  // proyectos sdht
-
     // Plan Gobierno 3 - Adquisicion cierre financiero - proyecto no sdht
     $arrPryModalidad[3][12][10][] = 12; // proyecto no sdht
-
     // Plan Gobierno 3 - Adquisicion cierre financiero - retorno reubicacion
     $arrPryModalidad[3][12][11][] = 13; //  retorno reubicacion
-
     // Plan Gobierno 3 - Adquisicion Leasing - proyectos no sdht
     $arrPryModalidad[3][13][10][] = 12;  // proyecto no sdht
-
     // Segun la modalidad buscamos los proyectos que
     // tengan cargados unidades y que esten disponibles
-    if( isset($arrReglas['unidad'][$seqModalidad]) ){
+    if (isset($arrReglas['unidad'][$seqModalidad])) {
 
         // buscando los proyectos que no tienen hijos
         $sql = "
@@ -607,7 +598,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
             ORDER BY pro.txtNombreProyecto
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $seqProyecto = $objRes->fields['seqProyecto'];
             $txtProyecto = $objRes->fields['txtNombreProyecto'];
@@ -629,9 +620,9 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
             ";
             $objRes1 = $aptBd->execute($sql);
 
-            if($objRes1->fields['cuenta'] > 0){
+            if ($objRes1->fields['cuenta'] > 0) {
                 $arrProyectos[$seqProyecto] = $txtProyecto;
-            }else{
+            } else {
 
                 // los proyectos hijos tienen unidades habitacionales asociadas y disponibles
                 $sql = "
@@ -644,7 +635,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
                       and (seqFormulario = 0
                         or seqFormulario = ''
                         or seqFormulario is NULL
-                        or seqFormulario = ".$seqFormulario."
+                        or seqFormulario = " . $seqFormulario . "
                     ) AND seqProyecto IN (
                       SELECT seqProyecto
                       FROM t_pry_proyecto
@@ -652,7 +643,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
                     )
                 ";
                 $objRes1 = $aptBd->execute($sql);
-                if($objRes1->fields['cuenta'] > 0){
+                if ($objRes1->fields['cuenta'] > 0) {
                     $arrProyectos[$seqProyecto] = $txtProyecto;
                 }
             }
@@ -660,11 +651,11 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
         }
 
 
-    // Para las modalidades de mejoramientos se tiene en cuenta el esquema
-    // la modalidad del proyecto porque estos no tienen unidades habitacionales
-    // es decir, registros en t_pry_unidad_proyecto
-    }elseif (isset($arrReglas['proyecto'][$seqModalidad])){
-        if( isset($arrPryModalidad[$seqPlanGobierno][$seqModalidad][$seqTipoEsquema])){
+        // Para las modalidades de mejoramientos se tiene en cuenta el esquema
+        // la modalidad del proyecto porque estos no tienen unidades habitacionales
+        // es decir, registros en t_pry_unidad_proyecto
+    } elseif (isset($arrReglas['proyecto'][$seqModalidad])) {
+        if (isset($arrPryModalidad[$seqPlanGobierno][$seqModalidad][$seqTipoEsquema])) {
             $sql = "
                 SELECT
                   pro.seqProyecto,
@@ -672,14 +663,14 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
                 FROM t_pry_proyecto pro
                 WHERE pro.bolActivo = 1
                   AND pro.seqProyecto <> 37
-                  AND pro.seqPlanGobierno = ".$seqPlanGobierno."
+                  AND pro.seqPlanGobierno = " . $seqPlanGobierno . "
                   AND pro.seqProyectoPadre IS NULL
-                  AND pro.seqTipoEsquema = ".$seqTipoEsquema."
-                  AND pro.seqPryTipoModalidad IN (".implode(",",$arrPryModalidad[$seqPlanGobierno][$seqModalidad][$seqTipoEsquema]).")
+                  AND pro.seqTipoEsquema = " . $seqTipoEsquema . "
+                  AND pro.seqPryTipoModalidad IN (" . implode(",", $arrPryModalidad[$seqPlanGobierno][$seqModalidad][$seqTipoEsquema]) . ")
                 ORDER BY pro.txtNombreProyecto
             ";
             $objRes = $aptBd->execute($sql);
-            while($objRes->fields){
+            while ($objRes->fields) {
                 $seqProyecto = $objRes->fields['seqProyecto'];
                 $txtProyecto = $objRes->fields['txtNombreProyecto'];
                 $arrProyectos[$seqProyecto] = $txtProyecto;
@@ -698,7 +689,7 @@ function obtenerProyectosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsqu
  * @param String txtTabla
  * @version 1.0 Mayo de 2017
  */
-function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno, $seqProyecto){
+function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno, $seqProyecto) {
     global $aptBd;
     $sql = "
         SELECT DISTINCT
@@ -707,14 +698,14 @@ function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqTip
         FROM T_PRY_PROYECTO pro
           INNER JOIN t_pry_unidad_proyecto upr on pro.seqProyecto = upr.seqProyecto
         WHERE pro.bolActivo = 1
-        AND pro.seqProyectoPadre = ".$seqProyecto."
+        AND pro.seqProyectoPadre = " . $seqProyecto . "
         AND upr.seqPlanGobierno = " . $seqPlanGobierno . "
         AND upr.seqModalidad = " . $seqModalidad . "
         AND upr.seqTipoEsquema = " . $seqTipoEsquema . "
         AND (upr.seqFormulario = 0
           OR upr.seqFormulario = ''
           OR upr.seqFormulario IS NULL
-          OR upr.seqFormulario = ".$seqFormulario."
+          OR upr.seqFormulario = " . $seqFormulario . "
         )
     ";
     $objRes = $aptBd->execute($sql);
@@ -733,7 +724,7 @@ function obtenerProyectosHijosPostulacion($seqFormulario, $seqModalidad, $seqTip
  * @param String txtTabla
  * @version 1.0 Mayo de 2017
  */
-function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno, $seqProyectoHijo){
+function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqTipoEsquema, $seqPlanGobierno, $seqProyectoHijo) {
     global $aptBd;
     $sql = "
         SELECT
@@ -742,14 +733,14 @@ function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqTipoEsque
         FROM t_pry_unidad_proyecto upr
         WHERE upr.bolActivo = 1
           AND upr.seqUnidadProyecto <> 1
-          AND upr.seqProyecto = ".$seqProyectoHijo."
+          AND upr.seqProyecto = " . $seqProyectoHijo . "
           AND upr.seqPlanGobierno = " . $seqPlanGobierno . "
           AND upr.seqModalidad = " . $seqModalidad . "
           AND upr.seqTipoEsquema = " . $seqTipoEsquema . "
           AND (upr.seqFormulario = 0
             OR upr.seqFormulario = ''
             OR upr.seqFormulario IS NULL
-            OR upr.seqFormulario = ".$seqFormulario."
+            OR upr.seqFormulario = " . $seqFormulario . "
           )
     ";
     $objRes = $aptBd->execute($sql);
@@ -761,18 +752,17 @@ function obtenerUnidadesPostulacion($seqFormulario, $seqModalidad, $seqTipoEsque
     return $arrUnidades;
 }
 
-
 /**
  * OBTIENE LAS SOLUCIONES SEGUN LA MODALIDAD ESPECIFICADA
  * @author Bernardo Zerda
  * @param String txtTabla
  * @version 1.0 Mayo de 2017
  */
-function obtenerSolucion($seqModalidad){
+function obtenerSolucion($seqModalidad) {
     global $aptBd;
     $arrSolucion = array();
     $txtValidacion = "";
-    if( $seqModalidad == 1 ){
+    if ($seqModalidad == 1) {
         $txtValidacion = " AND seqSolucion <> 1";
     }
     $sql = "
@@ -785,32 +775,28 @@ function obtenerSolucion($seqModalidad){
 			seqModalidad = " . $seqModalidad . "
 			$txtValidacion
 	";
-    $objRes = $aptBd->execute( $sql );
-    while( $objRes->fields ){
-        $arrSolucion[ $objRes->fields['seqSolucion'] ] = $objRes->fields['txtSolucion'];
+    $objRes = $aptBd->execute($sql);
+    while ($objRes->fields) {
+        $arrSolucion[$objRes->fields['seqSolucion']] = $objRes->fields['txtSolucion'];
         $objRes->MoveNext();
     }
     return $arrSolucion;
 }
 
-
 /**
  * REALIZA EL CALCULO DE VALOR DEL SUBSIDIO QUE LE CORRESPONDE
  */
-function valorSubsidio($claFormulario){
+function valorSubsidio($claFormulario) {
     global $arrConfiguracion;
 
     $valVivienda = 70; // SMMLV
-    $valTope     = ($claFormulario->seqTipoEsquema == 11)? 26 : 35; // SMMLV 26 para retorno reubicacion y 35 para el resto
+    $valTope = ($claFormulario->seqTipoEsquema == 11) ? 26 : 35; // SMMLV 26 para retorno reubicacion y 35 para el resto
     $valSubsidio = 0;
-    if($claFormulario->bolCerrado == 0) {
+    if ($claFormulario->bolCerrado == 0) {
         if ($claFormulario->seqPlanGobierno == 2) {
             if ($claFormulario->seqModalidad == 6) {
                 $arrValor = obtenerDatosTabla(
-                    "T_PRY_UNIDAD_PROYECTO",
-                    array("0", "valSDVEActual"),
-                    "0",
-                    "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
+                        "T_PRY_UNIDAD_PROYECTO", array("0", "valSDVEActual"), "0", "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
                 );
                 $valSubsidio = $arrValor[0];
             } else {
@@ -822,15 +808,11 @@ function valorSubsidio($claFormulario){
 
             if (doubleval($valSubsidio) == 0) {
                 $valSubsidio = array_shift(
-                    obtenerDatosTabla(
-                        "T_FRM_FORMULARIO",
-                        array("seqFormulario", "valAspiraSubsidio"),
-                        "seqFormulario",
-                        "seqFormulario = " . $claFormulario->seqFormulario
-                    )
+                        obtenerDatosTabla(
+                                "T_FRM_FORMULARIO", array("seqFormulario", "valAspiraSubsidio"), "seqFormulario", "seqFormulario = " . $claFormulario->seqFormulario
+                        )
                 );
             }
-
         } elseif ($claFormulario->seqPlanGobierno == 3) {
             $valSubsidioNAL = intval($claFormulario->valSubsidioNacional) / $arrConfiguracion['constantes']['salarioMinimo'];
             $valVUR = intval($claFormulario->valDonacion) / $arrConfiguracion['constantes']['salarioMinimo'];
@@ -859,60 +841,49 @@ function valorSubsidio($claFormulario){
             } elseif ($claFormulario->seqModalidad == 13) {
 
                 $arrValor = obtenerDatosTabla(
-                    "T_PRY_UNIDAD_PROYECTO",
-                    array("0", "valSDVEActual"),
-                    "0",
-                    "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
+                        "T_PRY_UNIDAD_PROYECTO", array("0", "valSDVEActual"), "0", "seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto
                 );
                 $valSubsidio = $arrValor[0];
-
             }
-
         } else {
             $valSubsidio = array_shift(
-                obtenerDatosTabla(
-                    "T_FRM_FORMULARIO",
-                    array("seqFormulario", "valAspiraSubsidio"),
-                    "seqFormulario",
-                    "seqFormulario = " . $claFormulario->seqFormulario
-                )
+                    obtenerDatosTabla(
+                            "T_FRM_FORMULARIO", array("seqFormulario", "valAspiraSubsidio"), "seqFormulario", "seqFormulario = " . $claFormulario->seqFormulario
+                    )
             );
         }
-    }else{
+    } else {
         $valSubsidio = array_shift(
-            obtenerDatosTabla(
-                "T_FRM_FORMULARIO",
-                array("seqFormulario", "valAspiraSubsidio"),
-                "seqFormulario",
-                "seqFormulario = " . $claFormulario->seqFormulario
-            )
+                obtenerDatosTabla(
+                        "T_FRM_FORMULARIO", array("seqFormulario", "valAspiraSubsidio"), "seqFormulario", "seqFormulario = " . $claFormulario->seqFormulario
+                )
         );
     }
     return $valSubsidio;
 }
 
-function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
+function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado) {
     global $aptBd;
 
     // plan de gobierno 1 [PG][MOD] = ESQUEMA
-    $arrEsquema[1][1][]  = 6;
-    $arrEsquema[1][2][]  = 6;
-    $arrEsquema[1][3][]  = 6;
-    $arrEsquema[1][5][]  = 6;
-    $arrEsquema[1][6][]  = 6;
+    $arrEsquema[1][1][] = 6;
+    $arrEsquema[1][2][] = 6;
+    $arrEsquema[1][3][] = 6;
+    $arrEsquema[1][5][] = 6;
+    $arrEsquema[1][6][] = 6;
     $arrEsquema[1][11][] = 6;
 
     // plan de gobierno 2
-    $arrEsquema[2][6][]  = 1;
-    $arrEsquema[2][6][]  = 7;
-    $arrEsquema[2][6][]  = 13;
-    $arrEsquema[2][6][]  = 2;
-    $arrEsquema[2][6][]  = 5;
-    $arrEsquema[2][7][]  = 2;
-    $arrEsquema[2][7][]  = 4;
-    $arrEsquema[2][3][]  = 4;
-    $arrEsquema[2][8][]  = 4;
-    $arrEsquema[2][9][]  = 4;
+    $arrEsquema[2][6][] = 1;
+    $arrEsquema[2][6][] = 7;
+    $arrEsquema[2][6][] = 13;
+    $arrEsquema[2][6][] = 2;
+    $arrEsquema[2][6][] = 5;
+    $arrEsquema[2][7][] = 2;
+    $arrEsquema[2][7][] = 4;
+    $arrEsquema[2][3][] = 4;
+    $arrEsquema[2][8][] = 4;
+    $arrEsquema[2][9][] = 4;
     $arrEsquema[2][10][] = 4;
     $arrEsquema[2][11][] = 13;
 
@@ -931,55 +902,50 @@ function obtenerTipoEsquema($seqModalidad, $seqPlanGobierno, $bolDesplazado){
     $arrEsquema[3][13][] = 17;
     $arrEsquema[3][13][] = 18;
 
-    if( $bolDesplazado == 1 ) {
+    if ($bolDesplazado == 1) {
         $arrEsquema[3][12][] = 11;
     }
 
     // obtiene los esquemas segun modalidad y plan de gobierno
     $arrTipoEsquemas = array();
-    if( isset( $arrEsquema[$seqPlanGobierno][$seqModalidad] ) ) {
+    if (isset($arrEsquema[$seqPlanGobierno][$seqModalidad])) {
         $arrTipoEsquemas = obtenerDatosTabla(
-            "t_pry_tipo_esquema",
-            array("seqTipoEsquema", "txtTipoEsquema"),
-            "seqTipoEsquema",
-            "estado = 1 and seqTipoEsquema IN (" . implode(",", $arrEsquema[$seqPlanGobierno][$seqModalidad]) . ")",
-            "txtTipoEsquema"
+                "t_pry_tipo_esquema", array("seqTipoEsquema", "txtTipoEsquema"), "seqTipoEsquema", "estado = 1 and seqTipoEsquema IN (" . implode(",", $arrEsquema[$seqPlanGobierno][$seqModalidad]) . ")", "txtTipoEsquema"
         );
     }
     return $arrTipoEsquemas;
 }
 
-function obtenerTextoConvenio($seqConvenio){
-    $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtConvenio","txtBanco","numCupos","numOcupados","numDisponibles","valCupos"), "seqConvenio");
+function obtenerTextoConvenio($seqConvenio) {
+    $arrConvenio = obtenerDatosTabla("V_FRM_CONVENIO", array("seqConvenio", "txtConvenio", "txtBanco", "numCupos", "numOcupados", "numDisponibles", "valCupos"), "seqConvenio");
     $txtConvenio = "Sin Convenio Seleccionado";
-    if( intval( $seqConvenio ) > 1 ){
-        $txtConvenio =
-            "<strong>Nombre:</strong> " . $arrConvenio[$seqConvenio]['txtConvenio'] . "<br>" .
-            "<strong>Banco:</strong> " . $arrConvenio[$seqConvenio]['txtBanco'] . "<br>" .
-            "<strong>Cupos:</strong> " . number_format($arrConvenio[$seqConvenio]['numCupos'],0,".",".") . "<br>" .
-            "<strong>Ocupados:</strong> " . number_format($arrConvenio[$seqConvenio]['numOcupados'],0,".",".") . "<br>" .
-            "<strong>Disponibles:</strong> " . number_format($arrConvenio[$seqConvenio]['numDisponibles'],0,".",".") . "<br>" .
-            "<strong>Valor unitario:</strong> $ " . number_format($arrConvenio[$seqConvenio]['valCupos'],0,".",".") . "<br>";
+    if (intval($seqConvenio) > 1) {
+        $txtConvenio = "<strong>Nombre:</strong> " . $arrConvenio[$seqConvenio]['txtConvenio'] . "<br>" .
+                "<strong>Banco:</strong> " . $arrConvenio[$seqConvenio]['txtBanco'] . "<br>" .
+                "<strong>Cupos:</strong> " . number_format($arrConvenio[$seqConvenio]['numCupos'], 0, ".", ".") . "<br>" .
+                "<strong>Ocupados:</strong> " . number_format($arrConvenio[$seqConvenio]['numOcupados'], 0, ".", ".") . "<br>" .
+                "<strong>Disponibles:</strong> " . number_format($arrConvenio[$seqConvenio]['numDisponibles'], 0, ".", ".") . "<br>" .
+                "<strong>Valor unitario:</strong> $ " . number_format($arrConvenio[$seqConvenio]['valCupos'], 0, ".", ".") . "<br>";
     }
     return "{\"convenio\":\"" . $txtConvenio . "\",\"valor\":\"" . $arrConvenio[$seqConvenio]['valCupos'] . "\"}";
 }
 
-function regularizarCampo($txtClave, $txtValor){
-    switch( substr($txtClave,0,3) ){
+function regularizarCampo($txtClave, $txtValor) {
+    switch (substr($txtClave, 0, 3)) {
         case "num":
-            $txtValor = doubleval(mb_ereg_replace("[^0-9]","", $txtValor));
+            $txtValor = doubleval(mb_ereg_replace("[^0-9]", "", $txtValor));
             break;
         case "val":
-            $txtValor = doubleval(mb_ereg_replace("[^0-9]","", $txtValor));
+            $txtValor = doubleval(mb_ereg_replace("[^0-9]", "", $txtValor));
             break;
         case "seq":
-            $txtValor = doubleval(mb_ereg_replace("[^0-9]","", $txtValor));
+            $txtValor = doubleval(mb_ereg_replace("[^0-9]", "", $txtValor));
             break;
         case "bol":
-            $txtValor = intval(mb_ereg_replace("[^0-9]","", $txtValor));
+            $txtValor = intval(mb_ereg_replace("[^0-9]", "", $txtValor));
             break;
         case "fch":
-            $txtValor = esFechaValida($txtValor)? $txtValor : null;
+            $txtValor = esFechaValida($txtValor) ? $txtValor : null;
             break;
         case "txt":
             $txtValor = trim($txtValor);
@@ -988,9 +954,9 @@ function regularizarCampo($txtClave, $txtValor){
     return $txtValor;
 }
 
-function rangoEdad( $numEdad ){
+function rangoEdad($numEdad) {
     $txtRango = "";
-    switch(true){
+    switch (true) {
         case $numEdad >= 0 and $numEdad <= 5:
             $txtRango = "0 a 5";
             break;
@@ -1013,50 +979,21 @@ function rangoEdad( $numEdad ){
     return $txtRango;
 }
 
-function obtenerMatriculaProfesional(){
+function obtenerMatriculaProfesional() {
+
+    global $aptBd;
 
     $txtMatriculaProfesional = "";
-    switch ($_SESSION['seqUsuario']) {
-        case 68:
-            $txtMatriculaProfesional = "2570050993 CND";
-            break;
-        case 105:
-            $txtMatriculaProfesional = "A20992010-80070556";
-            break;
-        case 110:
-            $txtMatriculaProfesional = "25202127963 CND";
-            break;
-        case 422:
-            $txtMatriculaProfesional = "A13832010-1018407205";
-            break;
-        case 423:
-            $txtMatriculaProfesional = "25202-227575 CND";
-            break;
-        case 508:
-            $txtMatriculaProfesional = "25202-329840 CND";
-            break;
-        case 498:
-            $txtMatriculaProfesional = "MP A25222002-79620368";
-            break;
-        case 499:
-            $txtMatriculaProfesional = "A25682008-80926066";
-            break;
-        case 551:
-            $txtMatriculaProfesional = "25202-340510 CND";
-            break;
-        case 283:
-            $txtMatriculaProfesional = "25202-384331 CND";
-            break;
-        case 566:
-            $txtMatriculaProfesional = "15202-358658 BYC";
-            break;
-        default :
-            $txtMatriculaProfesional = "________________________________________";
-            break;
+
+    $sql = "SELECT txtMatriculaProfesional FROM sipive.t_cor_usuario where seqUsuario in(" . $_SESSION['seqUsuario'] . ")";
+    $objRes = $aptBd->execute($sql);
+    if ($objRes->fields) {
+        $txtMatriculaProfesional = $objRes->fields['txtMatriculaProfesional'];
+    } else {
+        $txtMatriculaProfesional = "________________________________________";
     }
     return $txtMatriculaProfesional;
 }
-
 
 /**
  * RETORNA EN UN ARRAR EL CONTENIDO DE UN ARCHIVO
@@ -1071,7 +1008,7 @@ function obtenerMatriculaProfesional(){
  *      $arrRetorno['errores'] = array();
  *      $arrRetorno['archivo'] = array();
  */
-function cargarArchivo($txtNombreFile, $arrFormato = array()){
+function cargarArchivo($txtNombreFile, $arrFormato = array()) {
 
     $arrArchivo = array();
 
@@ -1102,27 +1039,27 @@ function cargarArchivo($txtNombreFile, $arrFormato = array()){
             $numPunto = strpos($_FILES[$txtNombreFile]['name'], ".") + 1;
             $numRestar = ( strlen($_FILES[$txtNombreFile]['name']) - $numPunto ) * -1;
             $txtExtension = substr($_FILES[$txtNombreFile]['name'], $numRestar);
-            if (!in_array(strtolower($txtExtension), array("txt","xls","xlsx") )) {
+            if (!in_array(strtolower($txtExtension), array("txt", "xls", "xlsx"))) {
                 $arrErrores[] = "Tipo de Archivo no permitido $txtExtension ";
             }
             break;
     }
 
-    if( empty( $arrErrores ) ){
+    if (empty($arrErrores)) {
 
         // si es un archivo de texto obtiene los datos
-        if( $_FILES[$txtNombreFile]['type'] == "text/plain" ){
-            foreach( file( $_FILES[$txtNombreFile]['tmp_name'] ) as $numLinea => $txtLinea ){
-                if( trim( $txtLinea ) != "" ) {
+        if ($_FILES[$txtNombreFile]['type'] == "text/plain") {
+            foreach (file($_FILES[$txtNombreFile]['tmp_name']) as $numLinea => $txtLinea) {
+                if (trim($txtLinea) != "") {
                     $arrArchivo[$numLinea] = explode("\t", trim(utf8_encode($txtLinea)));
-                    foreach( $arrArchivo[$numLinea] as $numColumna => $txtCelda ){
+                    foreach ($arrArchivo[$numLinea] as $numColumna => $txtCelda) {
                         $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
                     }
                 }
             }
-        }else{
+        } else {
 
-            try{
+            try {
 
                 // crea las clases para la obtencion de los datos
                 $txtTipoArchivo = PHPExcel_IOFactory::identify($_FILES[$txtNombreFile]['tmp_name']);
@@ -1132,17 +1069,16 @@ function cargarArchivo($txtNombreFile, $arrFormato = array()){
 
                 // obtiene las dimensiones del archivo para la obtencion del contenido por rangos
                 $numFilas = $objHoja->getHighestRow();
-                $numColumnas = PHPExcel_Cell::columnIndexFromString( $objHoja->getHighestColumn() ) - 1;
+                $numColumnas = PHPExcel_Cell::columnIndexFromString($objHoja->getHighestColumn()) - 1;
 
                 // obtiene los datos del rango obtenido
-                for( $numFila = 1; $numFila <= $numFilas; $numFila++ ){
-                    for( $numColumna = 0; $numColumna <= $numColumnas; $numColumna++ ){
+                for ($numFila = 1; $numFila <= $numFilas; $numFila++) {
+                    for ($numColumna = 0; $numColumna <= $numColumnas; $numColumna++) {
                         $numFilaArreglo = $numFila - 1;
-                        $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna,$numFila)->getValue();
-                        if( $arrFormato[$numColumna] == "fecha" and is_numeric( $arrArchivo[$numFilaArreglo][$numColumna] ) ) {
+                        $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                        if ($arrFormato[$numColumna] == "fecha" and is_numeric($arrArchivo[$numFilaArreglo][$numColumna])) {
                             $claFecha = PHPExcel_Shared_Date::ExcelToPHPObject($arrArchivo[$numFilaArreglo][$numColumna]);
                             $arrArchivo[$numFilaArreglo][$numColumna] = $claFecha->format("Y-m-d");
-
                         }
                     }
                 }
@@ -1160,17 +1096,13 @@ function cargarArchivo($txtNombreFile, $arrFormato = array()){
                         unset($arrArchivo[$numLinea]);
                     }
                 }
-
-            } catch ( Exception $objError ){
+            } catch (Exception $objError) {
                 $arrErrores[] = $objError->getMessage();
             }
-
-
         }
-
     }
 
-    if(count($arrArchivo) == 1){
+    if (count($arrArchivo) == 1) {
         $arrErrores[] = "Un archivo que contiene solo los titulos se considera vacío";
     }
 
@@ -1179,6 +1111,5 @@ function cargarArchivo($txtNombreFile, $arrFormato = array()){
 
     return $arrRetorno;
 }
-
 
 ?>

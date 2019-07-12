@@ -3935,7 +3935,7 @@ ORDER BY aad.fchActo DESC;
                   AND hog.seqParentesco = 1  
                   AND frm.seqFormulario IN (" . $this->seqFormularios . ")
                   AND hvi.fchActo = (SELECT 
-                                            fchActo
+                                            max(fchActo)
                                         FROM
                                             t_aad_hogares_vinculados
                                         WHERE
@@ -3949,7 +3949,7 @@ ORDER BY aad.fchActo DESC;
                 ORDER BY frm.seqFormulario
             ";
             try {
-                //echo $sql; die();
+               // echo $sql; die();
                 $objRes = $aptBd->execute($sql);
                 $this->obtenerReportesGeneral($objRes, "InformacionSolucion");
             } catch (Exception $objError) {

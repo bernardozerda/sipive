@@ -44,25 +44,25 @@ switch ($_FILES['documentos']['error']) {
         break;
 }
 
-if(empty($arrErrores)){
+if (empty($arrErrores)) {
     $arrArchivo = validarArchivo();
 }
 
-if(empty($arrErrores)){
+if (empty($arrErrores)) {
     $arrImpresion = sqlEstudioTitulos($arrArchivo);
 }
 
-if(!empty($arrErrores)){
+if (!empty($arrErrores)) {
     echo "<div class='alert alert-danger' role='alert' style='text-align: left;'>";
     foreach ($arrErrores as $txtTexto) {
         echo "<li class='$txtClaseLi'>" . $txtTexto . "</li>";
     }
     echo "</div>";
-}else{
+} else {
     echo "<div class='alert alert-success' role='alert' style='text-align: left;'>";
     echo "<table width='100%' border='0' cellpadding='3' cellspacing='0'>";
     echo "<tr><td colspan='2'><h3>Se procesaron " . count($arrImpresion) . " registros, a continuación los links de impresión:</h3></td></tr>";
-    foreach($arrImpresion as $numDocumento => $txtLink){
+    foreach ($arrImpresion as $numDocumento => $txtLink) {
         echo "<tr><td>$numDocumento</td>";
         echo "<td><a href='$txtLink'>$txtLink</a></td></tr>";
     }
@@ -70,22 +70,20 @@ if(!empty($arrErrores)){
     echo "</div>";
 }
 
-
-
-function validarArchivo(){
+function validarArchivo() {
     global $arrErrores;
 
     // titulos del archivo
-    $arrPlantilla[0]  = 'ID HOGAR';
-    $arrPlantilla[1]  = 'CC POSTULANTE PRINCIPAL';
-    $arrPlantilla[2]  = 'TIPO DE DOCUMENTO';
-    $arrPlantilla[3]  = 'NOMBRE POSTULANTE PRINCIPAL';
-    $arrPlantilla[4]  = 'PROYECTO';
-    $arrPlantilla[5]  = 'CONJUNTO';
-    $arrPlantilla[6]  = 'DESCRIPCION DE LA UNIDAD';
-    $arrPlantilla[7]  = 'PROPIETARIO';
-    $arrPlantilla[8]  = 'DIRECCION INMUEBLE';
-    $arrPlantilla[9]  = 'NUMERO CONTRATO LEASING';
+    $arrPlantilla[0] = 'ID HOGAR';
+    $arrPlantilla[1] = 'CC POSTULANTE PRINCIPAL';
+    $arrPlantilla[2] = 'TIPO DE DOCUMENTO';
+    $arrPlantilla[3] = 'NOMBRE POSTULANTE PRINCIPAL';
+    $arrPlantilla[4] = 'PROYECTO';
+    $arrPlantilla[5] = 'CONJUNTO';
+    $arrPlantilla[6] = 'DESCRIPCION DE LA UNIDAD';
+    $arrPlantilla[7] = 'PROPIETARIO';
+    $arrPlantilla[8] = 'DIRECCION INMUEBLE';
+    $arrPlantilla[9] = 'NUMERO CONTRATO LEASING';
     $arrPlantilla[10] = 'FECHA CONTRATO LEASING';
     $arrPlantilla[11] = 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD';
     $arrPlantilla[12] = 'VALOR INMUEBLE';
@@ -116,9 +114,9 @@ function validarArchivo(){
     $arrPlantilla[37] = 'OBSERVACION';
 
     $txtArchivo = utf8_encode(file_get_contents($_FILES['documentos']['tmp_name']));
-    $arrArchivo = mb_split("\r\n",$txtArchivo);
-    foreach($arrArchivo as $numLinea => $txtLinea){
-        if(trim($txtLinea) != "") {
+    $arrArchivo = mb_split("\r\n", $txtArchivo);
+    foreach ($arrArchivo as $numLinea => $txtLinea) {
+        if (trim($txtLinea) != "") {
             $arrArchivo[$numLinea] = mb_split("\t", $txtLinea);
 
             if ($numLinea == 0) {
@@ -127,74 +125,66 @@ function validarArchivo(){
                         $arrErrores[] = "La Columna '" . $arrPlantilla[$numColumna] . "' no está o no se encuentra en el lugar correcto";
                     }
                 }
-            }else{
+            } else {
 
                 // el formulario del archivo
                 $seqFormulario = $arrArchivo[$numLinea][0];
 
                 // estado actual del proceso
                 $seqEstadoProceso = array_shift(
-                    obtenerDatosTabla(
-                        "t_frm_formulario",
-                        array("seqFormulario","seqEstadoProceso"),
-                        "seqFormulario",
-                        "seqFormulario = " . $seqFormulario
-                    )
+                        obtenerDatosTabla(
+                                "t_frm_formulario", array("seqFormulario", "seqEstadoProceso"), "seqFormulario", "seqFormulario = " . $seqFormulario
+                        )
                 );
-                if($seqEstadoProceso != 24){
+                if ($seqEstadoProceso != 24) {
                     $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El estado para el documento " . $arrArchivo[$numLinea][0] . " no es correcto";
                 }
 
                 // campos no vacios
-                for($numColumna = 15 ; $numColumna < 37; $numColumna++){
-                    if(trim($arrArchivo[$numLinea][$numColumna]) == ""){
+                for ($numColumna = 15; $numColumna < 37; $numColumna++) {
+                    if (trim($arrArchivo[$numLinea][$numColumna]) == "") {
                         $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La columna '" . $arrPlantilla[$numColumna] . "' no puede estar vacia";
                     }
                 }
 
                 // fecha contrato leasing
-                if(!esFechaValida(trim($arrArchivo[$numLinea][10]))){
+                if (!esFechaValida(trim($arrArchivo[$numLinea][10]))) {
                     $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El formato de feha de '" . $arrPlantilla[10] . "' no es correcto";
                 }
 
                 // fecha del acto administrativo
-                if(!esFechaValida(trim($arrArchivo[$numLinea][14]))){
+                if (!esFechaValida(trim($arrArchivo[$numLinea][14]))) {
                     $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El formato de feha de la columna '" . $arrPlantilla[14] . "' no es correcto";
                 }
 
                 // fecha de la escritura
-                if(!esFechaValida(trim($arrArchivo[$numLinea][16]))){
+                if (!esFechaValida(trim($arrArchivo[$numLinea][16]))) {
                     $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El formato de feha de la columna '" . $arrPlantilla[16] . "' no es correcto";
                 }
 
                 // fecha folio
-                if(!esFechaValida(trim($arrArchivo[$numLinea][22]))){
+                if (!esFechaValida(trim($arrArchivo[$numLinea][22]))) {
                     $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": El formato de feha de la columna '" . $arrPlantilla[22] . "' no es correcto";
                 }
 
                 // valida todas las solumnas si / no / no aplica
-                for($numColumna = 23 ; $numColumna < 35; $numColumna++){
-                    if(! in_array(mb_strtolower($arrArchivo[$numLinea][$numColumna]),["si","no","no aplica"])){
+                for ($numColumna = 23; $numColumna < 35; $numColumna++) {
+                    if (!in_array(mb_strtolower($arrArchivo[$numLinea][$numColumna]), ["si", "no", "no aplica"])) {
                         $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": La columna '" . $arrPlantilla[$numColumna] . "' no tiene un valor valido";
                     }
                 }
 
                 // valida que haya desembolso para ese hogar
                 $seqDesembolso = array_shift(
-                    obtenerDatosTabla(
-                        "t_des_desembolso",
-                        array("seqFormulario","seqDesembolso"),
-                        "seqFormulario",
-                        "seqFormulario = " . $arrArchivo[$numLinea][0],
-                        "seqDesembolso DESC"
-                    )
+                        obtenerDatosTabla(
+                                "t_des_desembolso", array("seqFormulario", "seqDesembolso"), "seqFormulario", "seqFormulario = " . $arrArchivo[$numLinea][0], "seqDesembolso DESC"
+                        )
                 );
-                if(intval($seqDesembolso) == 0){
+                if (intval($seqDesembolso) == 0) {
                     $arrErrores[] = "Error Linea " . ($numLinea + 1) . ": No hay registro de desembolso para el documento '" . $arrArchivo[$numLinea][1];
                 }
-
             }
-        }else{
+        } else {
             unset($arrArchivo[$numLinea]);
         }
     }
@@ -202,20 +192,13 @@ function validarArchivo(){
     return $arrArchivo;
 }
 
-function sqlEstudioTitulos($arrArchivo){
+function sqlEstudioTitulos($arrArchivo) {
     global $arrErrores, $aptBd;
 
     unset($arrArchivo[0]);
 
-    // observaciones para los titulos
-    $arrObservaciones[] = "DETERMINACIÓN DEL APORTE DEL DISTRITO CAPITAL EN LA ESCRITURA";
-    $arrObservaciones[] = "CLAUSULAS DONDE SE ESPECIFIQUEN RESTRICCIONES Y PROHIBICIONES EN LA ESCRITURA";
-    $arrObservaciones[] = "RELACIÓN DE LOS INTEGRANTES DEL HOGAR EN LA ESCRITURA";
-    $arrObservaciones[] = "IMPUESTOS CON CARGO AL APORTE DEL DISTRITO CAPITAL";
-    $arrObservaciones[] = "NUMERO Y FECHA DEL CONTRATO DE LEASING HABITACIONAL";
-    $arrObservaciones[] = "BENEFICIO DEL APORTE SEA EL LOCATARIO DEL CONTRATO DE LEASING";
-    $arrObservaciones[] = "PROTOCOLIZACIÓN  DE LA RESOLUCIÓN O CARTA DE ASIGNACIÓN";
-    $arrObservaciones[] = "PROPIEDAD DE LA ENTIDAD FINANCIERA OTORGANTE DEL LEASING EN CTL";
+
+   
 
     // documentos analizados
     $arrDocumentos[] = "ESCRITURA PÚBLICA";
@@ -224,20 +207,25 @@ function sqlEstudioTitulos($arrArchivo){
 
     $arrImpresion = array();
 
-    try{
+    try {
 
         $aptBd->BeginTrans();
 
-        foreach($arrArchivo as $numLinea => $arrDatos) {
+        foreach ($arrArchivo as $numLinea => $arrDatos) {
+           // observaciones para los titulos
+            $arrObservaciones[] = ($arrDatos[28] == 'SI') ? "DETERMINACIÓN DEL APORTE DEL DISTRITO CAPITAL EN LA ESCRITURA" : '';
+            $arrObservaciones[] = ($arrDatos[29] == 'SI') ? "CLAUSULAS DONDE SE ESPECIFIQUEN RESTRICCIONES Y PROHIBICIONES EN LA ESCRITURA" : '';
+            $arrObservaciones[] = ($arrDatos[30] == 'SI') ? "RELACIÓN DE LOS INTEGRANTES DEL HOGAR EN LA ESCRITURA" : '';
+            $arrObservaciones[] = ($arrDatos[31] == 'SI') ? "IMPUESTOS CON CARGO AL APORTE DEL DISTRITO CAPITAL" : '';
+            $arrObservaciones[] = ($arrDatos[27] == 'SI') ? "NUMERO Y FECHA DEL CONTRATO DE LEASING HABITACIONAL" : '';
+            $arrObservaciones[] = ($arrDatos[32] == 'SI') ? "BENEFICIO DEL APORTE SEA EL LOCATARIO DEL CONTRATO DE LEASING" : '';
+            $arrObservaciones[] = ($arrDatos[24] == 'SI') ? "PROTOCOLIZACIÓN  DE LA RESOLUCIÓN O CARTA DE ASIGNACIÓN" : '';
+            $arrObservaciones[] = ($arrDatos[33] == 'SI') ? "PROPIEDAD DE LA ENTIDAD FINANCIERA OTORGANTE DEL LEASING EN CTL" : '';
 
             $seqDesembolso = array_shift(
-                obtenerDatosTabla(
-                    "t_des_desembolso",
-                    array("seqFormulario", "seqDesembolso"),
-                    "seqFormulario",
-                    "seqFormulario = " . $arrDatos[0],
-                    "seqDesembolso DESC"
-                )
+                    obtenerDatosTabla(
+                            "t_des_desembolso", array("seqFormulario", "seqDesembolso"), "seqFormulario", "seqFormulario = " . $arrDatos[0], "seqDesembolso DESC"
+                    )
             );
 
             $sql = "
@@ -291,8 +279,9 @@ function sqlEstudioTitulos($arrArchivo){
             $seqEstudioTitulos = $aptBd->Insert_ID();
 
             // inserta las observaciones genericas
-            foreach ($arrObservaciones as $txtObservacion){
-                $sql = "
+            foreach ($arrObservaciones as $txtObservacion) {
+                if ($txtObservacion != '') {
+                    $sql = "
                     INSERT INTO t_des_adjuntos_titulos(
                         seqTipoAdjunto,
                         seqEstudioTitulos,
@@ -303,11 +292,12 @@ function sqlEstudioTitulos($arrArchivo){
                         '$txtObservacion'
                     )
                 ";
-                $aptBd->execute($sql);
+                    $aptBd->execute($sql);
+                }
             }
 
             // inserta los documentos genericos
-            foreach ($arrDocumentos as $txtDocumento){
+            foreach ($arrDocumentos as $txtDocumento) {
                 $sql = "
                     INSERT INTO t_des_adjuntos_titulos(
                         seqTipoAdjunto,
@@ -338,15 +328,12 @@ function sqlEstudioTitulos($arrArchivo){
 
             // cambio de estado 31 == si || 28 == no
             // columna "se viabiliza juridicamente"
-            $seqEstadoProceso = (mb_strtolower($arrDatos[34]) == "no")? 28 : 31;
+            $seqEstadoProceso = (mb_strtolower($arrDatos[34]) == "no") ? 28 : 31;
             $sql = "update t_frm_formulario set seqEstadoProceso = " . $seqEstadoProceso . ", fchUltimaActualizacion = now() where seqFormulario = " . $arrDatos[0];
             $aptBd->execute($sql);
 
             $txtNombre = array_shift(obtenerDatosTabla(
-                "t_ciu_ciudadano",
-                array("numDocumento" , "CONCAT(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2) as txtNombre"),
-                "numDocumento",
-                "numDocumento = " . $arrDatos[1] . " and seqTipoDocumento in (1,2)"
+                            "t_ciu_ciudadano", array("numDocumento", "CONCAT(txtNombre1,' ',txtNombre2,' ',txtApellido1,' ',txtApellido2) as txtNombre"), "numDocumento", "numDocumento = " . $arrDatos[1] . " and seqTipoDocumento in (1,2)"
             ));
 
             $sql = "
@@ -374,18 +361,15 @@ function sqlEstudioTitulos($arrArchivo){
 
             $numDocumento = $arrDatos[1];
             $arrImpresion[$numDocumento] = $_SERVER['HTTP_ORIGIN'] . "/sipive/contenidos/desembolso/formatoEstudioTitulos.php?seqFormulario=" . $arrDatos[0];
-
         }
 
         $aptBd->CommitTrans();
-
-    } catch (Exception $objError){
+    } catch (Exception $objError) {
         $arrErrores[] = $objError->getMessage();
         $aptBd->RollbackTrans();
     }
 
     return $arrImpresion;
-
 }
 
 ?>

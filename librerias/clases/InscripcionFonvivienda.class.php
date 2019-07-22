@@ -1547,7 +1547,7 @@ class InscripcionFonvivienda {
                 break;
         }
 
-        echo $sql = "
+         $sql = "
             select numHogar
             from t_fnv_hogar
             left join t_frm_Formulario frm using(seqFormulario)

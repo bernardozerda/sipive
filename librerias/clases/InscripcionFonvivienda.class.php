@@ -1,7 +1,6 @@
 <?php
 
-class InscripcionFonvivienda
-{
+class InscripcionFonvivienda {
 
     public $arrErrores;
     public $arrMensajes;
@@ -33,8 +32,7 @@ class InscripcionFonvivienda
     private $numTotalLineas;
     private $txtCarpeta;
 
-    public function __construct()
-    {
+    public function __construct() {
 
         global $aptBd;
 
@@ -195,9 +193,9 @@ class InscripcionFonvivienda
         // estados que se tienen en cuenta poara el procesamiento
         $this->arrEstados[] = "por asignar";
 
-        $this->arrEstadosCoincidencias[1] = array(1,35,36,37,41,43,44,46,53,5,14,18);
-        $this->arrEstadosCoincidencias[2] = array(1,35,36,37,41,43,44,46,53);
-        $this->arrEstadosCoincidencias[3] = array(1,35,36,37,41,43,44,46,53);
+        $this->arrEstadosCoincidencias[1] = array(1, 35, 36, 37, 41, 43, 44, 46, 53, 5, 14, 18);
+        $this->arrEstadosCoincidencias[2] = array(1, 35, 36, 37, 41, 43, 44, 46, 53);
+        $this->arrEstadosCoincidencias[3] = array(1, 35, 36, 37, 41, 43, 44, 46, 53);
 
         // MCY
         $this->arrRangoIngresos[1][] = "HASTA 2 SMMLV"; // 10 salarios
@@ -234,81 +232,79 @@ class InscripcionFonvivienda
 
         $this->arrNovedades = array();
 
-        $arrCeroYUno  = array(0,1);
-        $arrSiYNo     = array("SI","NO");
-        $arrCeroAOnce = array(0,1,2,3,4,5,6,7,8,9,10,11);
+        $arrCeroYUno = array(0, 1);
+        $arrSiYNo = array("SI", "NO");
+        $arrCeroAOnce = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
 
         // Datos para la plantilla vipa
         $this->arrPlantilla[2]['ID HOGAR'] = null;
         $this->arrPlantilla[2]['NO. DOCUMENTO'] = null;
-        $this->arrPlantilla[2]['TIPO DOCUMENTO'] = obtenerDatosTabla("t_ciu_tipo_documento",array("seqTipoDocumento","txtTipoDocumento"),"seqTipoDocumento");
+        $this->arrPlantilla[2]['TIPO DOCUMENTO'] = obtenerDatosTabla("t_ciu_tipo_documento", array("seqTipoDocumento", "txtTipoDocumento"), "seqTipoDocumento");
         $this->arrPlantilla[2]['NOMBRE 1'] = null;
         $this->arrPlantilla[2]['NOMBRE 2'] = null;
         $this->arrPlantilla[2]['APELLIDO 1'] = null;
         $this->arrPlantilla[2]['APELLIDO 2'] = null;
-        $this->arrPlantilla[2]['SEXO'] = obtenerDatosTabla("t_ciu_sexo",array("seqSexo","txtSexo"),"seqSexo");
-        $this->arrPlantilla[2]['ESTADO CIVIL'] = obtenerDatosTabla("t_ciu_estado_civil",array("seqEstadoCivil","txtEstadoCivil"),"seqEstadoCivil");
+        $this->arrPlantilla[2]['SEXO'] = obtenerDatosTabla("t_ciu_sexo", array("seqSexo", "txtSexo"), "seqSexo");
+        $this->arrPlantilla[2]['ESTADO CIVIL'] = obtenerDatosTabla("t_ciu_estado_civil", array("seqEstadoCivil", "txtEstadoCivil"), "seqEstadoCivil");
         $this->arrPlantilla[2]['FECHA NACIMIENTO'] = null;
-        $this->arrPlantilla[2]['PARENTESCO'] = obtenerDatosTabla("t_ciu_parentesco",array("seqParentesco","txtParentesco"),"seqParentesco");
-        $this->arrPlantilla[2]['COND. ÉTNICA'] = obtenerDatosTabla("t_ciu_etnia",array("seqEtnia","txtEtnia"),"seqEtnia");
+        $this->arrPlantilla[2]['PARENTESCO'] = obtenerDatosTabla("t_ciu_parentesco", array("seqParentesco", "txtParentesco"), "seqParentesco");
+        $this->arrPlantilla[2]['COND. ÉTNICA'] = obtenerDatosTabla("t_ciu_etnia", array("seqEtnia", "txtEtnia"), "seqEtnia");
         $this->arrPlantilla[2]['DISCAPACIDAD'] = $arrCeroYUno;
         $this->arrPlantilla[2]['MAYOR A 65 AÑOS'] = $arrCeroYUno;
         $this->arrPlantilla[2]['CABEZA DE HOGAR'] = $arrCeroYUno;
-        $arrSalud = obtenerDatosTabla("t_ciu_salud",array("seqSalud","txtSalud"),"seqSalud");
-        foreach($arrSalud as $i => $txtValor){
-            $arrSalud[$i] = mb_ereg_replace(",",";",$txtValor);
+        $arrSalud = obtenerDatosTabla("t_ciu_salud", array("seqSalud", "txtSalud"), "seqSalud");
+        foreach ($arrSalud as $i => $txtValor) {
+            $arrSalud[$i] = mb_ereg_replace(",", ";", $txtValor);
         }
         $this->arrPlantilla[2]['AFILIACIÓN SALUD'] = $arrSalud;
-        $this->arrPlantilla[2]['NIVEL EDUCATIVO'] = obtenerDatosTabla("t_ciu_nivel_educativo",array("seqNivelEducativo","txtNivelEducativo"),"seqNivelEducativo");
+        $this->arrPlantilla[2]['NIVEL EDUCATIVO'] = obtenerDatosTabla("t_ciu_nivel_educativo", array("seqNivelEducativo", "txtNivelEducativo"), "seqNivelEducativo");
         $this->arrPlantilla[2]['AÑOS APROBADOS'] = $arrCeroAOnce;
-        $this->arrPlantilla[2]['HECHO VICTIMIZANTE'] = obtenerDatosTabla("t_frm_tipovictima",array("seqTipoVictima","txtTipoVictima"),"seqTipoVictima");
+        $this->arrPlantilla[2]['HECHO VICTIMIZANTE'] = obtenerDatosTabla("t_frm_tipovictima", array("seqTipoVictima", "txtTipoVictima"), "seqTipoVictima");
         $this->arrPlantilla[2]['LGTBI'] = $arrCeroYUno;
-        $this->arrPlantilla[2]['GRUPO LGBTI'] = obtenerDatosTabla("t_frm_grupo_lgtbi",array("seqGrupoLgtbi","txtGrupoLgtbi"),"seqGrupoLgtbi");
-        $arrOcupacion = obtenerDatosTabla("t_ciu_ocupacion",array("seqOcupacion","txtOcupacion"),"seqOcupacion");
-        foreach($arrOcupacion as $i => $txtValor){
-            $arrOcupacion[$i] = mb_ereg_replace("[/]","-",$txtValor);
+        $this->arrPlantilla[2]['GRUPO LGBTI'] = obtenerDatosTabla("t_frm_grupo_lgtbi", array("seqGrupoLgtbi", "txtGrupoLgtbi"), "seqGrupoLgtbi");
+        $arrOcupacion = obtenerDatosTabla("t_ciu_ocupacion", array("seqOcupacion", "txtOcupacion"), "seqOcupacion");
+        foreach ($arrOcupacion as $i => $txtValor) {
+            $arrOcupacion[$i] = mb_ereg_replace("[/]", "-", $txtValor);
         }
         $this->arrPlantilla[2]['OCUPACIÓN'] = $arrOcupacion;
         $this->arrPlantilla[2]['CORREO ELECTRÓNICO'] = null;
         $this->arrPlantilla[2]['DIRECCIÓN'] = null;
-        $this->arrPlantilla[2]['LOCALIDAD'] = obtenerDatosTabla("t_frm_localidad",array("seqLocalidad","txtLocalidad"),"seqLocalidad");
-        $arrBarrios = obtenerDatosTabla("t_frm_barrio",array("seqBarrio","txtBarrio"),"seqBarrio","","txtBarrio");
+        $this->arrPlantilla[2]['LOCALIDAD'] = obtenerDatosTabla("t_frm_localidad", array("seqLocalidad", "txtLocalidad"), "seqLocalidad");
+        $arrBarrios = obtenerDatosTabla("t_frm_barrio", array("seqBarrio", "txtBarrio"), "seqBarrio", "", "txtBarrio");
         $this->arrPlantilla[2]['BARRIO'] = array();
-        foreach($arrBarrios as $txtBarrio){
+        foreach ($arrBarrios as $txtBarrio) {
             $txtBarrio = mb_strtoupper(trim($txtBarrio));
-            if(! in_array($txtBarrio,$this->arrPlantilla[2]['BARRIO'])){
+            if (!in_array($txtBarrio, $this->arrPlantilla[2]['BARRIO'])) {
                 $this->arrPlantilla[2]['BARRIO'][] = $txtBarrio;
             }
         }
-        $this->arrPlantilla[2]['CIUDAD'] = obtenerDatosTabla("v_frm_ciudad",array("seqCiudad","txtCiudad"),"seqCiudad","","txtCiudad");
+        $this->arrPlantilla[2]['CIUDAD'] = obtenerDatosTabla("v_frm_ciudad", array("seqCiudad", "txtCiudad"), "seqCiudad", "", "txtCiudad");
         $this->arrPlantilla[2]['TELEFONOS1'] = null;
         $this->arrPlantilla[2]['TELEFONO2'] = null;
         $this->arrPlantilla[2]['CELULAR'] = null;
-        $this->arrPlantilla[2]['VIVIENDA ACTUAL'] = obtenerDatosTabla("t_frm_vivienda",array("seqVivienda","txtVivienda"),"seqVivienda");
+        $this->arrPlantilla[2]['VIVIENDA ACTUAL'] = obtenerDatosTabla("t_frm_vivienda", array("seqVivienda", "txtVivienda"), "seqVivienda");
         $this->arrPlantilla[2]['VAL. ARRIENDO'] = null;
         $this->arrPlantilla[2]['HOGARES EN VIVIENDA'] = null;
         $this->arrPlantilla[2]['DORMITORIOS QUE EMPLEA EL HOGAR'] = null;
-        $this->arrPlantilla[2]['ENCUESTA SISBEN'] = obtenerDatosTabla("t_frm_sisben",array("seqSisben","txtSisben"),"seqSisben","bolActivo = 1");
+        $this->arrPlantilla[2]['ENCUESTA SISBEN'] = obtenerDatosTabla("t_frm_sisben", array("seqSisben", "txtSisben"), "seqSisben", "bolActivo = 1");
         $this->arrPlantilla[2]['INGRESOS'] = null;
         $this->arrPlantilla[2]['VALOR AHORRO'] = null;
-        $this->arrPlantilla[2]['ENTIDAD AHORRO'] = obtenerDatosTabla("t_frm_banco",array("seqBanco","txtBanco"),"seqBanco");
+        $this->arrPlantilla[2]['ENTIDAD AHORRO'] = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "seqBanco");
         $this->arrPlantilla[2]['VALOR CREDITO'] = null;
-        $this->arrPlantilla[2]['ENTIDAD CRÉDITO'] = obtenerDatosTabla("t_frm_banco",array("seqBanco","txtBanco"),"seqBanco");
+        $this->arrPlantilla[2]['ENTIDAD CRÉDITO'] = obtenerDatosTabla("t_frm_banco", array("seqBanco", "txtBanco"), "seqBanco");
         $this->arrPlantilla[2]['VALOR SUBSIDIO NACIONAL'] = null;
         $this->arrPlantilla[2]['SOPORTE DEL SFV'] = null;
 
         $arrEntidadSubsidio = obtenerDatosTabla(
-            "t_frm_entidad_subsidio",
-            array("seqEntidadSubsidio","txtEntidadSubsidio"),
-            "seqEntidadSubsidio"
+                "t_frm_entidad_subsidio", array("seqEntidadSubsidio", "txtEntidadSubsidio"), "seqEntidadSubsidio"
         );
-        foreach($arrEntidadSubsidio as $seqEntidadSubsidio => $txtEntidadSubsidio){
+        foreach ($arrEntidadSubsidio as $seqEntidadSubsidio => $txtEntidadSubsidio) {
             $arrEntidadSubsidio[$seqEntidadSubsidio] = trim(mb_strtolower($txtEntidadSubsidio));
         }
         $this->arrPlantilla[2]['ENTIDAD SUBSIDIO'] = $arrEntidadSubsidio;
         $this->arrPlantilla[2]['PROYECTO'] = null;
         $this->arrPlantilla[2]['VALOR DONACIÓN / RECONOCIMIENTO ECONÓMICO'] = null;
-        $this->arrPlantilla[2]['ENTIDAD DE DONACIÓN / RECONOCIMIENTO'] = obtenerDatosTabla("t_frm_empresa_donante",array("seqEmpresaDonante","txtEmpresaDonante"),"seqEmpresaDonante");
+        $this->arrPlantilla[2]['ENTIDAD DE DONACIÓN / RECONOCIMIENTO'] = obtenerDatosTabla("t_frm_empresa_donante", array("seqEmpresaDonante", "txtEmpresaDonante"), "seqEmpresaDonante");
         $this->arrPlantilla[2]['SOPORTE DONACIÓN'] = null;
         $this->arrPlantilla[2]['LINEA VALIDADA'] = $arrSiYNo;
 
@@ -341,13 +337,13 @@ class InscripcionFonvivienda
         ";
         $objRes = $aptBd->execute($sql);
         $this->arrDatosUnidades = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
-            $txtNombreUnidad  = $objRes->fields['txtNombreProyecto'] . " - ";
-            $txtNombreUnidad .= ($objRes->fields['txtNombreConjunto'] == null)? '' : $objRes->fields['txtNombreConjunto'] . " - ";
+            $txtNombreUnidad = $objRes->fields['txtNombreProyecto'] . " - ";
+            $txtNombreUnidad .= ($objRes->fields['txtNombreConjunto'] == null) ? '' : $objRes->fields['txtNombreConjunto'] . " - ";
             $txtNombreUnidad .= $objRes->fields['txtNombreUnidad'];
-            $txtNombreUnidad  = mb_strtoupper($txtNombreUnidad);
+            $txtNombreUnidad = mb_strtoupper($txtNombreUnidad);
 
             $this->arrDatosUnidades[$seqUnidadProyecto]['proyecto'] = $objRes->fields['seqProyecto'];
             $this->arrDatosUnidades[$seqUnidadProyecto]['conjunto'] = $objRes->fields['seqConjunto'];
@@ -359,9 +355,6 @@ class InscripcionFonvivienda
 
             $objRes->MoveNext();
         }
-
-
-
     }
 
     /**
@@ -370,8 +363,7 @@ class InscripcionFonvivienda
      * @version 1.0 Jul 2018
      * @return boolean
      */
-
-    public function hayCarguesPendientes(){
+    public function hayCarguesPendientes() {
         global $aptBd;
         $sql = "
             select count(seqCargue) as cuenta
@@ -379,7 +371,7 @@ class InscripcionFonvivienda
             where seqEstado in (1,2)
         ";
         $objRes = $aptBd->execute($sql);
-        return ($objRes->fields['cuenta'] == 0)? false : true;
+        return ($objRes->fields['cuenta'] == 0) ? false : true;
     }
 
     /**
@@ -389,8 +381,7 @@ class InscripcionFonvivienda
      * @version 1.0 Jul 2018
      * @return void
      */
-
-    public function validarTitulos($seqTipo){
+    public function validarTitulos($seqTipo) {
 
         // valida si el archivo fue cargado y si corresponde a las extensiones válidas
         switch ($_FILES['archivo']['error']) {
@@ -419,43 +410,41 @@ class InscripcionFonvivienda
                 $numPunto = strpos($_FILES['archivo']['name'], ".") + 1;
                 $numRestar = ( strlen($_FILES['archivo']['name']) - $numPunto ) * -1;
                 $txtExtension = substr($_FILES['archivo']['name'], $numRestar);
-                if (!in_array(strtolower($txtExtension), array("txt") )) {
+                if (!in_array(strtolower($txtExtension), array("txt"))) {
                     $this->arrErrores[] = "Tipo de Archivo no permitido $txtExtension ";
                 }
                 break;
         }
 
-        if(empty($this->arrErrores)){
+        if (empty($this->arrErrores)) {
 
-            $aptArchivo = fopen($_FILES['archivo']['tmp_name'],"r");
-            $txtLinea = fgets( $aptArchivo );
-            if(mb_detect_encoding($txtLinea, "UTF-8,ISO-8859-1,WINDOWS-1252") != "UTF-8") {
+            $aptArchivo = fopen($_FILES['archivo']['tmp_name'], "r");
+            $txtLinea = fgets($aptArchivo);
+            if (mb_detect_encoding($txtLinea, "UTF-8,ISO-8859-1,WINDOWS-1252") != "UTF-8") {
                 $txtLinea = utf8_encode($txtLinea);
             }
-            $txtTitulo = str_replace(" " , "#" , $txtLinea );
-            $arrTitulos = preg_split("/[\s|]/",$txtTitulo);
+            $txtTitulo = str_replace(" ", "#", $txtLinea);
+            $arrTitulos = preg_split("/[\s|]/", $txtTitulo);
 
-            foreach($arrTitulos as $i => $txtTitulo){
-                $txtTitulo = trim(str_replace("#" , " " , $txtTitulo));
+            foreach ($arrTitulos as $i => $txtTitulo) {
+                $txtTitulo = trim(str_replace("#", " ", $txtTitulo));
                 $txtTitulo = str_replace(chr(239), '', $txtTitulo);
                 $txtTitulo = str_replace(chr(187), '', $txtTitulo);
                 $txtTitulo = str_replace(chr(191), '', $txtTitulo);
-                if($txtTitulo != ""){
+                if ($txtTitulo != "") {
                     $arrTitulos[$i] = $txtTitulo;
-                }else{
+                } else {
                     unset($arrTitulos[$i]);
                 }
             }
             fclose($aptArchivo);
 
-            foreach($this->arrFormato[$seqTipo] as $numColumna => $txtTitulo){
-                if(trim(mb_strtolower($arrTitulos[$numColumna])) != trim(mb_strtolower($txtTitulo))){
+            foreach ($this->arrFormato[$seqTipo] as $numColumna => $txtTitulo) {
+                if (trim(mb_strtolower($arrTitulos[$numColumna])) != trim(mb_strtolower($txtTitulo))) {
                     $this->arrErrores[] = "La columna $txtTitulo no se encuentra o no está en el lugar correcto";
                 }
             }
-
         }
-
     }
 
     /**
@@ -465,29 +454,28 @@ class InscripcionFonvivienda
      * @version 1.0 Jul 2018
      * @return void
      */
-
-    public function crearCargue($seqTipo){
+    public function crearCargue($seqTipo) {
         global $aptBd, $arrConfiguracion, $txtPrefijoRuta;
 
         $txtCarpeta = $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . $this->txtCarpeta;
         $txtFisico = time();
 
         // crea la carpeta si no existe
-        if(! is_dir($txtCarpeta )){
-            if(! mkdir($txtCarpeta) ){
+        if (!is_dir($txtCarpeta)) {
+            if (!mkdir($txtCarpeta)) {
                 $this->arrErrores[] = "No se pudo crear la carpeta contenedora de los archivos";
             }
         }
 
         // copia el archivo al servidor
-        if(empty($this->arrErrores)){
-            if(! copy($_FILES['archivo']['tmp_name'],$txtCarpeta . "/" . $txtFisico)){
+        if (empty($this->arrErrores)) {
+            if (!copy($_FILES['archivo']['tmp_name'], $txtCarpeta . "/" . $txtFisico)) {
                 $this->arrErrores[] = "No se pudo copiar el archivo a la carpeta destino";
             }
         }
 
         // crea el registro en la base de datos
-        if(empty($this->arrErrores)){
+        if (empty($this->arrErrores)) {
             try {
                 $aptBd->BeginTrans();
                 $sql = "
@@ -519,14 +507,12 @@ class InscripcionFonvivienda
                 $claFecha = new DateTime();
 
                 $this->arrMensajes[] = "Se ha creado el cargue satisfactoriamente, debe esperar " . (59 - $claFecha->format("i")) . " minutos para iniciar el procesamiento de novedades";
-
-            } catch (Exception $objError){
+            } catch (Exception $objError) {
                 $this->arrErrores[] = "No se pudo crear el registro del cargue en la base de datos " . $objError->getMessage();
                 $aptBd->RollbackTrans();
                 unlink($txtCarpeta . $txtFisico);
             }
         }
-
     }
 
     /**
@@ -535,8 +521,7 @@ class InscripcionFonvivienda
      * @version 1.0 Jul 2018
      * @return int
      */
-
-    public function carguePorProcesar(){
+    public function carguePorProcesar() {
         global $aptBd;
         $sql = "
             select seqCargue, seqTipo
@@ -552,9 +537,8 @@ class InscripcionFonvivienda
      * @author Bernardo Zerda
      * @version 1.0 Jul 2018
      * @return void
-     **/
-
-    public function iniciarCargue($seqCargue, $seqEstado){
+     * */
+    public function iniciarCargue($seqCargue, $seqEstado) {
         global $aptBd;
         try {
             $aptBd->BeginTrans();
@@ -568,7 +552,7 @@ class InscripcionFonvivienda
             ";
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "No se ha podido cambiar de estado el cargue";
             $aptBd->RollBackTrans();
         }
@@ -581,12 +565,11 @@ class InscripcionFonvivienda
      * @param $seqCargue
      * @return array
      */
-
-    public function cargarArchivo($seqTipo, $seqCargue){
+    public function cargarArchivo($seqTipo, $seqCargue) {
         global $aptBd, $txtPrefijoRuta, $arrConfiguracion;
 
         // obtiene el nombre del archivo que debe procesar
-        try{
+        try {
             $sql = "
                 select txtFisico
                 from t_fnv_cargue
@@ -594,38 +577,38 @@ class InscripcionFonvivienda
             ";
             $objRes = $aptBd->execute($sql);
             $txtFisico = $objRes->fields['txtFisico'];
-        } catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo obtener el nombre fisico del archivo a procesar";
             $txtFisico = "";
         }
 
         // si hay archivo
-        if($txtFisico != ""){
+        if ($txtFisico != "") {
 
             // si el arcivo existe lo procesa
             $arrArchivo = array();
-            $txtArchivo = $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . $this->txtCarpeta . "/" .$txtFisico;
-            if(file_exists($txtArchivo)){
+            $txtArchivo = $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . $this->txtCarpeta . "/" . $txtFisico;
+            if (file_exists($txtArchivo)) {
                 try {
                     foreach (file($txtArchivo) as $numLinea => $txtLinea) {
                         if (trim($txtLinea) != "") {
-                            $txtLinea = str_replace(" " , "~" , utf8_encode( $txtLinea ) );
-                            $arrArchivo[$numLinea] = preg_split("/[\s|]/",$txtLinea);
-                            $arrArchivo[$numLinea] = str_replace("~"," ",$arrArchivo[$numLinea]);
+                            $txtLinea = str_replace(" ", "~", utf8_encode($txtLinea));
+                            $arrArchivo[$numLinea] = preg_split("/[\s|]/", $txtLinea);
+                            $arrArchivo[$numLinea] = str_replace("~", " ", $arrArchivo[$numLinea]);
                             foreach ($arrArchivo[$numLinea] as $numColumna => $txtCelda) {
-                                if(isset($this->arrFormato[$seqTipo][$numColumna])) {
+                                if (isset($this->arrFormato[$seqTipo][$numColumna])) {
                                     $arrArchivo[$numLinea][$numColumna] = $txtCelda;
-                                }else{
+                                } else {
                                     unset($arrArchivo[$numLinea][$numColumna]);
                                 }
                             }
                         }
                     }
-                }catch (Exception $objError){
+                } catch (Exception $objError) {
                     $this->arrErrores[] = "Error al procesar el archivo";
                     $arrArchivo = array();
                 }
-            }else{
+            } else {
                 $this->arrErrores[] = "El archivo $txtFisico del cargue $seqCargue no existe";
             }
         }
@@ -639,8 +622,7 @@ class InscripcionFonvivienda
      * @param array $arrArchivo
      * @return array $arrArchivo
      */
-
-    public function limpiezaArchivo($seqTipo, $arrArchivo){
+    public function limpiezaArchivo($seqTipo, $arrArchivo) {
         global $aptBd;
 
         unset($arrArchivo[0]);
@@ -655,13 +637,13 @@ class InscripcionFonvivienda
             $txtMotivo = "";
 
             // para las lineas que no se deben tener en cuenta en MCY
-            if($seqTipo == 1) {
+            if ($seqTipo == 1) {
 
                 // debe haber marcacion de habitat ( si y no )
-                if(trim(mb_strtolower($arrLinea[28])) != "si"){
+                if (trim(mb_strtolower($arrLinea[28])) != "si") {
                     $txtMotivo = "Marcado habitat NO";
                     $bolBorrar = true;
-                }else {
+                } else {
 
                     // estados habilitados definidos
                     if (!in_array(trim(mb_strtolower($arrLinea[29])), $this->arrEstados)) {
@@ -685,29 +667,26 @@ class InscripcionFonvivienda
                         group by car.seqCargue
                     ";
                     $objRes = $aptBd->execute($sql);
-                    if($objRes->fields['cuenta'] != 0){
+                    if ($objRes->fields['cuenta'] != 0) {
                         $txtMotivo = "Ya existe el id de hogar " . trim($arrLinea[0]) . " en el cargue " . $objRes->fields['seqCargue'];
                         $bolBorrar = true;
                     }
-
                 }
+            } else {
 
-            }else{
-
-                if(trim(mb_strtolower($arrLinea[47])) != "si"){
+                if (trim(mb_strtolower($arrLinea[47])) != "si") {
                     $txtMotivo = "La linea " . ($numLinea + 1) . " no ha sido validada";
                     $bolBorrar = true;
                 }
-
             }
 
             // en caso de cumplirse la regla elimina el registro
             if ($bolBorrar == true) {
-                $this->arrLineasProcesadas['omitidas']['conteo']++;
+                $this->arrLineasProcesadas['omitidas']['conteo'] ++;
                 $this->arrLineasProcesadas['omitidas']['razon'][($numLinea + 1)] = $txtMotivo;
                 unset($arrArchivo[$numLinea]);
-            }else{
-                $this->arrLineasProcesadas['procesadas']++;
+            } else {
+                $this->arrLineasProcesadas['procesadas'] ++;
             }
         }
 
@@ -723,32 +702,31 @@ class InscripcionFonvivienda
      * @param array $arrArchivo
      * @return void
      */
-
-    public function hogares($seqTipo, $arrArchivo){
+    public function hogares($seqTipo, $arrArchivo) {
         global $arrConfiguracion;
-        if(! empty($arrArchivo)){
+        if (!empty($arrArchivo)) {
             $arrHogarVictima = array();
-            foreach($arrArchivo as $numLinea => $arrLinea){
+            foreach ($arrArchivo as $numLinea => $arrLinea) {
 
                 // validacion de las lineas de MCY
-                if($seqTipo == 1){
+                if ($seqTipo == 1) {
 
                     $numDocumento = doubleval($arrLinea[17]);
 
                     // VARIABLES DEL HOGAR
                     $numHogar = $arrLinea[0];
-                    $txtRangoIngresos = $this->ingresos($seqTipo, $arrLinea[1],$numLinea,$numDocumento);
+                    $txtRangoIngresos = $this->ingresos($seqTipo, $arrLinea[1], $numLinea, $numDocumento);
                     $seqPlanGobierno = 3;
-                    $seqModalidad = $this->modalidad($seqTipo, $arrLinea[26],$numLinea);
+                    $seqModalidad = $this->modalidad($seqTipo, $arrLinea[26], $numLinea);
                     $seqTipoEsquema = $this->esquema($seqTipo, $txtRangoIngresos);
-                    $seqSolucion = $this->solucion($seqTipo, $seqModalidad, $arrLinea[25],$numLinea);
-                    $seqProyecto = $this->solucionVivienda($seqTipo, null, "proyecto",$numLinea);
-                    $seqConjunto = $this->solucionVivienda($seqTipo, null, "conjunto",$numLinea);
-                    $seqUnidadProyecto = $this->solucionVivienda($seqTipo, null, "unidad",$numLinea);
-                    $valAspiraSubsidio = $this->valorSubsidio($seqTipo,$seqTipoEsquema,null,null);
-                    $seqLocalidad = $this->localidad($seqTipo,null,$numLinea);
-                    $seqBarrio = $this->barrio($seqTipo,null,null,$numLinea);
-                    $seqCiudad = $this->ciudad($seqTipo,null,null,$numLinea);
+                    $seqSolucion = $this->solucion($seqTipo, $seqModalidad, $arrLinea[25], $numLinea);
+                    $seqProyecto = $this->solucionVivienda($seqTipo, null, "proyecto", $numLinea);
+                    $seqConjunto = $this->solucionVivienda($seqTipo, null, "conjunto", $numLinea);
+                    $seqUnidadProyecto = $this->solucionVivienda($seqTipo, null, "unidad", $numLinea);
+                    $valAspiraSubsidio = $this->valorSubsidio($seqTipo, $seqTipoEsquema, null, null);
+                    $seqLocalidad = $this->localidad($seqTipo, null, $numLinea);
+                    $seqBarrio = $this->barrio($seqTipo, null, null, $numLinea);
+                    $seqCiudad = $this->ciudad($seqTipo, null, null, $numLinea);
                     $txtDireccion = trim($arrLinea[15]);
                     $numTelefono1 = trim($arrLinea[13]);
                     $numTelefono2 = null;
@@ -756,8 +734,8 @@ class InscripcionFonvivienda
                     $txtCorreo = $arrLinea[14];
                     $numHabitaciones = null;
                     $numHacinamiento = null;
-                    $seqSisben = $this->sisben($seqTipo,null,$numLinea);
-                    $seqVivienda = $this->vivienda($seqTipo,null,null,$numLinea);
+                    $seqSisben = $this->sisben($seqTipo, null, $numLinea);
+                    $seqVivienda = $this->vivienda($seqTipo, null, null, $numLinea);
                     $valArriendo = null;
                     $txtDireccionSolucion = trim(mb_strtoupper($arrLinea[24]));
                     $txtMatriculaInmobiliaria = null;
@@ -765,66 +743,64 @@ class InscripcionFonvivienda
                     $bolViabilizada = null;
                     $bolIdentificada = null;
                     $valAhorro1 = null;
-                    $seqBancoAhorro1 = $this->banco($seqTipo,null,null,$numLinea,37);
+                    $seqBancoAhorro1 = $this->banco($seqTipo, null, null, $numLinea, 37);
                     $valAhorro2 = null;
                     $seqBancoAhorro2 = 1;
                     $valCredito = null;
-                    $seqBancoCredito = $this->banco($seqTipo,null,null,$numLinea,39);
-                    $seqEntidadSubsidio = $this->subsidio($seqTipo,null,null,$seqTipoEsquema,null,$numLinea);
-                    $valSubsidioNacional = $this->subsidioNacional($seqTipo,$txtRangoIngresos,null);
-                    $fchResolucion = $this->fechas($seqTipo,$arrLinea[7],$numLinea);
-                    $txtSoporteSNal = ($fchResolucion != null)? "Res. " . $arrLinea[8] . " de " . $fchResolucion->format("Y") : null;
-                    $seqEmpresaDonante = $this->donacion($seqTipo,null,null, null, $numLinea);
+                    $seqBancoCredito = $this->banco($seqTipo, null, null, $numLinea, 39);
+                    $seqEntidadSubsidio = $this->subsidio($seqTipo, null, null, $seqTipoEsquema, null, $numLinea);
+                    $valSubsidioNacional = $this->subsidioNacional($seqTipo, $txtRangoIngresos, null);
+                    $fchResolucion = $this->fechas($seqTipo, $arrLinea[7], $numLinea);
+                    $txtSoporteSNal = ($fchResolucion != null) ? "Res. " . $arrLinea[8] . " de " . $fchResolucion->format("Y") : null;
+                    $seqEmpresaDonante = $this->donacion($seqTipo, null, null, null, $numLinea);
                     $valDonacion = null;
                     $txtSoporteDonacion = null;
-                    $valTotalRecursos =
-                        doubleval($valAhorro1) +
-                        doubleval($valAhorro2) +
-                        doubleval($valCredito) +
-                        doubleval($valSubsidioNacional) +
-                        doubleval($valDonacion);
+                    $valTotalRecursos = doubleval($valAhorro1) +
+                            doubleval($valAhorro2) +
+                            doubleval($valCredito) +
+                            doubleval($valSubsidioNacional) +
+                            doubleval($valDonacion);
 
                     // VARIABLES DEL CIUDADANO
-                    $seqTipoDocumento = $this->tipoDocumento($seqTipo, $arrLinea[16],$numLinea);
-                    $seqParentesco = $this->parentesco($seqTipo,null,$numLinea);
+                    $seqTipoDocumento = $this->tipoDocumento($seqTipo, $arrLinea[16], $numLinea);
+                    $seqParentesco = $this->parentesco($seqTipo, null, $numLinea);
                     $txtNombre1 = $this->limpiezaNombres($arrLinea[18]);
                     $txtNombre2 = null;
                     $txtApellido1 = $this->limpiezaNombres($arrLinea[19]);
                     $txtApellido2 = null;
-                    $fchNacimiento = $this->fechas($seqTipo,null,$numLinea);
-                    $seqSexo = $this->deducirSexo($seqTipo,$txtNombre1,$numLinea);
-                    $seqEstadoCivil = $this->estadoCivil($seqTipo, null,$numLinea);
-                    $seqNivelEducativo = $this->nivelEducativo($seqTipo,null,null,$numLinea);
+                    $fchNacimiento = $this->fechas($seqTipo, null, $numLinea);
+                    $seqSexo = $this->deducirSexo($seqTipo, $txtNombre1, $numLinea);
+                    $seqEstadoCivil = $this->estadoCivil($seqTipo, null, $numLinea);
+                    $seqNivelEducativo = $this->nivelEducativo($seqTipo, null, null, $numLinea);
                     $numAniosAprobados = 0;
                     $bolLgtbi = 0;
-                    $seqGrupoLgtbi = $this->lgtbi($seqTipo,null,null,$numLinea);
-                    $seqEtnia = $this->etnia($seqTipo,null,$numLinea);
-                    $arrCondicionEspecial = $this->condicionEspecial($seqTipo,null,null,null,$numLinea);
-                    $seqOcupacion = $this->ocupacion($seqTipo,null,$numLinea);
-                    $seqSalud = $this->salud($seqTipo,null,$numLinea);
-                    $seqTipoVictima = $this->tipoVictima($seqTipo,null,$numLinea);
+                    $seqGrupoLgtbi = $this->lgtbi($seqTipo, null, null, $numLinea);
+                    $seqEtnia = $this->etnia($seqTipo, null, $numLinea);
+                    $arrCondicionEspecial = $this->condicionEspecial($seqTipo, null, null, null, $numLinea);
+                    $seqOcupacion = $this->ocupacion($seqTipo, null, $numLinea);
+                    $seqSalud = $this->salud($seqTipo, null, $numLinea);
+                    $seqTipoVictima = $this->tipoVictima($seqTipo, null, $numLinea);
                     $valIngresos = 0;
-
-                }else{
+                } else {
 
                     $numDocumento = doubleval($arrLinea[1]);
 
-                    $this->lineaValidada($seqTipo,$arrLinea[47],$numLinea);
+                    $this->lineaValidada($seqTipo, $arrLinea[47], $numLinea);
 
                     // VARIABLES DEL HOGAR
                     $numHogar = $arrLinea[0];
                     $txtRangoIngresos = null;
-                    $seqPlanGobierno = ($seqTipo == 2)? 3 : 2;
-                    $seqModalidad = $this->modalidad($seqTipo,null,$numLinea);
+                    $seqPlanGobierno = ($seqTipo == 2) ? 3 : 2;
+                    $seqModalidad = $this->modalidad($seqTipo, null, $numLinea);
                     $seqTipoEsquema = $this->esquema($seqTipo, $arrLinea[42]);
-                    $seqSolucion = $this->solucion($seqTipo, null, null,$numLinea);
-                    $seqProyecto = $this->solucionVivienda($seqTipo, trim($arrLinea[43]), "proyecto",$numLinea);
-                    $seqConjunto = $this->solucionVivienda($seqTipo, trim($arrLinea[43]), "conjunto",$numLinea);
-                    $seqUnidadProyecto   = $this->solucionVivienda($seqTipo, trim($arrLinea[43]), "unidad",$numLinea);
-                    $valAspiraSubsidio = $this->valorSubsidio($seqTipo,null,$seqUnidadProyecto,trim($arrLinea[40]));
-                    $seqLocalidad = $this->localidad($seqTipo,$arrLinea[24],$numLinea);
-                    $seqBarrio = $this->barrio($seqTipo,$seqLocalidad,$arrLinea[25],$numLinea);
-                    $seqCiudad = $this->ciudad($seqTipo,$seqLocalidad,$arrLinea[26],$numLinea);
+                    $seqSolucion = $this->solucion($seqTipo, null, null, $numLinea);
+                    $seqProyecto = $this->solucionVivienda($seqTipo, trim($arrLinea[43]), "proyecto", $numLinea);
+                    $seqConjunto = $this->solucionVivienda($seqTipo, trim($arrLinea[43]), "conjunto", $numLinea);
+                    $seqUnidadProyecto = $this->solucionVivienda($seqTipo, trim($arrLinea[43]), "unidad", $numLinea);
+                    $valAspiraSubsidio = $this->valorSubsidio($seqTipo, null, $seqUnidadProyecto, trim($arrLinea[40]));
+                    $seqLocalidad = $this->localidad($seqTipo, $arrLinea[24], $numLinea);
+                    $seqBarrio = $this->barrio($seqTipo, $seqLocalidad, $arrLinea[25], $numLinea);
+                    $seqCiudad = $this->ciudad($seqTipo, $seqLocalidad, $arrLinea[26], $numLinea);
                     $txtDireccion = trim($arrLinea[23]);
                     $numTelefono1 = trim($arrLinea[27]);
                     $numTelefono2 = trim($arrLinea[28]);
@@ -832,54 +808,52 @@ class InscripcionFonvivienda
                     $txtCorreo = trim($arrLinea[22]);
                     $numHabitaciones = trim($arrLinea[32]);
                     $numHacinamiento = trim($arrLinea[33]);
-                    $seqSisben = $this->sisben($seqTipo,$arrLinea[34],$numLinea);
-                    $seqVivienda = $this->vivienda($seqTipo,$arrLinea[30],$arrLinea[31],$numLinea);
+                    $seqSisben = $this->sisben($seqTipo, $arrLinea[34], $numLinea);
+                    $seqVivienda = $this->vivienda($seqTipo, $arrLinea[30], $arrLinea[31], $numLinea);
                     $valArriendo = trim($arrLinea[31]);
-                    $txtDireccionSolucion = (isset($this->arrDatosUnidades[$seqUnidadProyecto]['direccion']))? $this->arrDatosUnidades[$seqUnidadProyecto]['direccion'] : trim($arrLinea[43]);
-                    $txtMatriculaInmobiliaria = (isset($this->arrDatosUnidades[$seqUnidadProyecto]['matricula']))? $this->arrDatosUnidades[$seqUnidadProyecto]['matricula'] : null;
-                    $txtChip = (isset($this->arrDatosUnidades[$seqUnidadProyecto]['chip']))? $this->arrDatosUnidades[$seqUnidadProyecto]['chip'] : null;
+                    $txtDireccionSolucion = (isset($this->arrDatosUnidades[$seqUnidadProyecto]['direccion'])) ? $this->arrDatosUnidades[$seqUnidadProyecto]['direccion'] : trim($arrLinea[43]);
+                    $txtMatriculaInmobiliaria = (isset($this->arrDatosUnidades[$seqUnidadProyecto]['matricula'])) ? $this->arrDatosUnidades[$seqUnidadProyecto]['matricula'] : null;
+                    $txtChip = (isset($this->arrDatosUnidades[$seqUnidadProyecto]['chip'])) ? $this->arrDatosUnidades[$seqUnidadProyecto]['chip'] : null;
                     $bolViabilizada = 1;
                     $bolIdentificada = 1;
                     $valAhorro1 = trim($arrLinea[36]);
-                    $seqBancoAhorro1 = $this->banco($seqTipo,$arrLinea[37],$valAhorro1,$numLinea,36);
+                    $seqBancoAhorro1 = $this->banco($seqTipo, $arrLinea[37], $valAhorro1, $numLinea, 36);
                     $valAhorro2 = null;
                     $seqBancoAhorro2 = 1;
                     $valCredito = trim($arrLinea[38]);
-                    $seqBancoCredito = $this->banco($seqTipo,$arrLinea[39],$valCredito,$numLinea,39);
-                    $seqEntidadSubsidio = $this->subsidio($seqTipo,trim($arrLinea[40]),trim($arrLinea[41]),null,trim($arrLinea[42]),$numLinea);
-                    $valSubsidioNacional = $this->subsidioNacional($seqTipo,null,trim($arrLinea[40]));
+                    $seqBancoCredito = $this->banco($seqTipo, $arrLinea[39], $valCredito, $numLinea, 39);
+                    $seqEntidadSubsidio = $this->subsidio($seqTipo, trim($arrLinea[40]), trim($arrLinea[41]), null, trim($arrLinea[42]), $numLinea);
+                    $valSubsidioNacional = $this->subsidioNacional($seqTipo, null, trim($arrLinea[40]));
                     $txtSoporteSNal = trim($arrLinea[41]);
-                    $seqEmpresaDonante = $this->donacion($seqTipo,$arrLinea[45],trim($arrLinea[44]),trim($arrLinea[46]),$numLinea);
+                    $seqEmpresaDonante = $this->donacion($seqTipo, $arrLinea[45], trim($arrLinea[44]), trim($arrLinea[46]), $numLinea);
                     $valDonacion = trim($arrLinea[44]);
                     $txtSoporteDonacion = trim($arrLinea[46]);
-                    $valTotalRecursos =
-                        doubleval($valAhorro1) +
-                        doubleval($valAhorro2) +
-                        doubleval($valCredito) +
-                        doubleval($valSubsidioNacional) +
-                        doubleval($valDonacion);
+                    $valTotalRecursos = doubleval($valAhorro1) +
+                            doubleval($valAhorro2) +
+                            doubleval($valCredito) +
+                            doubleval($valSubsidioNacional) +
+                            doubleval($valDonacion);
 
                     // VARIABLES DEL CIUDADANO
-                    $seqTipoDocumento = $this->tipoDocumento($seqTipo, $arrLinea[2],$numLinea);
-                    $seqParentesco = $this->parentesco($seqTipo,$arrLinea[10],$numLinea);
-                    $txtNombre1   = $this->limpiezaNombres($arrLinea[3]);
-                    $txtNombre2   = $this->limpiezaNombres($arrLinea[4]);
+                    $seqTipoDocumento = $this->tipoDocumento($seqTipo, $arrLinea[2], $numLinea);
+                    $seqParentesco = $this->parentesco($seqTipo, $arrLinea[10], $numLinea);
+                    $txtNombre1 = $this->limpiezaNombres($arrLinea[3]);
+                    $txtNombre2 = $this->limpiezaNombres($arrLinea[4]);
                     $txtApellido1 = $this->limpiezaNombres($arrLinea[5]);
                     $txtApellido2 = $this->limpiezaNombres($arrLinea[6]);
-                    $fchNacimiento = $this->fechas($seqTipo,$arrLinea[9],$numLinea);
-                    $seqSexo = $this->deducirSexo($seqTipo, $arrLinea[7],$numLinea);
-                    $seqEstadoCivil = $this->estadoCivil($seqTipo, $arrLinea[8],$numLinea);
-                    $seqNivelEducativo = $this->nivelEducativo($seqTipo,$arrLinea[16],$arrLinea[17],$numLinea);
+                    $fchNacimiento = $this->fechas($seqTipo, $arrLinea[9], $numLinea);
+                    $seqSexo = $this->deducirSexo($seqTipo, $arrLinea[7], $numLinea);
+                    $seqEstadoCivil = $this->estadoCivil($seqTipo, $arrLinea[8], $numLinea);
+                    $seqNivelEducativo = $this->nivelEducativo($seqTipo, $arrLinea[16], $arrLinea[17], $numLinea);
                     $numAniosAprobados = trim($arrLinea[17]);
                     $bolLgtbi = trim($arrLinea[19]);
-                    $seqGrupoLgtbi = $this->lgtbi($seqTipo,$arrLinea[19],$arrLinea[20],$numLinea);
-                    $seqEtnia = $this->etnia($seqTipo,$arrLinea[11],$numLinea);
-                    $arrCondicionEspecial = $this->condicionEspecial($seqTipo,$arrLinea[12],$arrLinea[13],$arrLinea[14],$numLinea);
-                    $seqOcupacion = $this->ocupacion($seqTipo,$arrLinea[21],$numLinea);
-                    $seqSalud = $this->salud($seqTipo,$arrLinea[15],$numLinea);
-                    $seqTipoVictima = $this->tipoVictima($seqTipo,$arrLinea[18],$numLinea);
+                    $seqGrupoLgtbi = $this->lgtbi($seqTipo, $arrLinea[19], $arrLinea[20], $numLinea);
+                    $seqEtnia = $this->etnia($seqTipo, $arrLinea[11], $numLinea);
+                    $arrCondicionEspecial = $this->condicionEspecial($seqTipo, $arrLinea[12], $arrLinea[13], $arrLinea[14], $numLinea);
+                    $seqOcupacion = $this->ocupacion($seqTipo, $arrLinea[21], $numLinea);
+                    $seqSalud = $this->salud($seqTipo, $arrLinea[15], $numLinea);
+                    $seqTipoVictima = $this->tipoVictima($seqTipo, $arrLinea[18], $numLinea);
                     $valIngresos = doubleval(trim($arrLinea[35]));
-
                 }
 
                 // armando el hogar con las variables del archivo
@@ -924,18 +898,18 @@ class InscripcionFonvivienda
                 $this->arrHogares[$numHogar]['txtSoporteDonacion'] = $txtSoporteDonacion;
                 $this->arrHogares[$numHogar]['valTotalRecursos'] = $valTotalRecursos;
 
-                if( ! isset($this->arrHogares[$numHogar]['bolDesplazado']) ){
+                if (!isset($this->arrHogares[$numHogar]['bolDesplazado'])) {
                     $this->arrHogares[$numHogar]['bolDesplazado'] = 0;
                 }
 
                 $arrHogarVictima[$numHogar][] = $seqTipoVictima;
-                if(in_array(2,$arrHogarVictima[$numHogar])){
+                if (in_array(2, $arrHogarVictima[$numHogar])) {
                     $this->arrHogares[$numHogar]['bolDesplazado'] = 1;
                 }
 
-                if(! isset($this->arrHogares[$numHogar]['valIngresosHogar'])){
+                if (!isset($this->arrHogares[$numHogar]['valIngresosHogar'])) {
                     $this->arrHogares[$numHogar]['valIngresosHogar'] = $valIngresos;
-                }else{
+                } else {
                     $this->arrHogares[$numHogar]['valIngresosHogar'] += $valIngresos;
                 }
 
@@ -961,12 +935,10 @@ class InscripcionFonvivienda
                 $this->arrHogares[$numHogar]['hogar'][$seqTipoDocumento][$numDocumento]['valIngresos'] = $valIngresos;
 
                 $this->numTotalLineas++;
-
             }
-        }else{
+        } else {
             $this->arrErrores[] = "No hay informacion valida dentro del archivo para procesar";
         }
-
     }
 
     /**
@@ -976,8 +948,7 @@ class InscripcionFonvivienda
      * POR CEDULA Y POR NOMBRES
      * @param $seqCargue
      */
-
-    public function coincidencias($seqCargue){
+    public function coincidencias($seqCargue) {
 
         mensaje("Cargando ciudadanos");
 
@@ -986,24 +957,24 @@ class InscripcionFonvivienda
         mensaje("Encontrando coincidencias para " . $this->numTotalLineas . " personas");
 
         $numProcesados = 1;
-        foreach($this->arrHogares as $numHogar => $arrHogar){
-            foreach($arrHogar['hogar'] as $seqTipoDocumento => $arrCiudadanos){
-                foreach($arrCiudadanos as $numDocumento => $arrNombre){
+        foreach ($this->arrHogares as $numHogar => $arrHogar) {
+            foreach ($arrHogar['hogar'] as $seqTipoDocumento => $arrCiudadanos) {
+                foreach ($arrCiudadanos as $numDocumento => $arrNombre) {
 
-                    $txtNombreArchivo  = trim($arrNombre['txtNombre1']);
-                    $txtNombreArchivo .= (trim($arrNombre['txtNombre2']) == "")? ""   : " " . trim($arrNombre['txtNombre2'])   ;
-                    $txtNombreArchivo .= (trim($arrNombre['txtApellido1']) == "")? "" : " " . trim($arrNombre['txtApellido1']) ;
-                    $txtNombreArchivo .= (trim($arrNombre['txtApellido2']) == "")? "" : " " . trim($arrNombre['txtApellido2']) ;
-                    $txtNombreArchivo = trim( mb_strtolower( $txtNombreArchivo ) );
+                    $txtNombreArchivo = trim($arrNombre['txtNombre1']);
+                    $txtNombreArchivo .= (trim($arrNombre['txtNombre2']) == "") ? "" : " " . trim($arrNombre['txtNombre2']);
+                    $txtNombreArchivo .= (trim($arrNombre['txtApellido1']) == "") ? "" : " " . trim($arrNombre['txtApellido1']);
+                    $txtNombreArchivo .= (trim($arrNombre['txtApellido2']) == "") ? "" : " " . trim($arrNombre['txtApellido2']);
+                    $txtNombreArchivo = trim(mb_strtolower($txtNombreArchivo));
 
                     $numProgreso = ($numProcesados / $this->numTotalLineas) * 100;
                     mensaje("(" . $numProcesados . " de " . $this->numTotalLineas . ") Buscando coincidencias para [$numDocumento] $txtNombreArchivo");
-                    $this->actualizarProgreso($seqCargue,$numProgreso);
+                    $this->actualizarProgreso($seqCargue, $numProgreso);
 
                     // Busqueda por cedula
-                    if(isset($this->arrCiudadanos[$numDocumento])){
+                    if (isset($this->arrCiudadanos[$numDocumento])) {
                         $this->arrHogares[$numHogar]['hogar'][$seqTipoDocumento][$numDocumento]['coincidencias']["N/A"][$numDocumento] = mb_strtoupper($this->arrCiudadanos[$numDocumento]);
-                    }else {
+                    } else {
                         // Busqueda por nombres
                         foreach ($this->arrCiudadanos as $numDocumentoCiudadano => $txtNombre) {
                             $numDistancia = levenshtein($txtNombreArchivo, $txtNombre);
@@ -1014,7 +985,7 @@ class InscripcionFonvivienda
                         foreach ($this->arrHogares[$numHogar]['hogar'][$seqTipoDocumento][$numDocumento]['coincidencias'] as $numDistancia => $arrCoincidencias) {
                             if ($i > 2) {
                                 unset($this->arrHogares[$numHogar]['hogar'][$seqTipoDocumento][$numDocumento]['coincidencias'][$numDistancia]);
-                            }else{
+                            } else {
                                 asort($this->arrHogares[$numHogar]['hogar'][$seqTipoDocumento][$numDocumento]['coincidencias'][$numDistancia]);
                             }
                             $i++;
@@ -1025,7 +996,6 @@ class InscripcionFonvivienda
                 }
             }
         }
-
     }
 
     /**
@@ -1033,14 +1003,13 @@ class InscripcionFonvivienda
      * @author Bernardo Zerda
      * @version 1.0 Jul 2018
      * @return void
-     **/
-
-    public function finalizarCargue($seqCargue, $seqEstado){
+     * */
+    public function finalizarCargue($seqCargue, $seqEstado) {
         global $aptBd;
         try {
             $aptBd->BeginTrans();
 
-            $txtErrores = (empty($this->arrErrores))? "'" . json_encode($this->arrLineasProcesadas, JSON_UNESCAPED_UNICODE) . "'" : "'" . json_encode($this->arrErrores, JSON_UNESCAPED_UNICODE) . "'";
+            $txtErrores = (empty($this->arrErrores)) ? "'" . json_encode($this->arrLineasProcesadas, JSON_UNESCAPED_UNICODE) . "'" : "'" . json_encode($this->arrErrores, JSON_UNESCAPED_UNICODE) . "'";
 
             $sql = "
               update t_fnv_cargue set 
@@ -1051,7 +1020,7 @@ class InscripcionFonvivienda
             ";
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "No se ha podido cambiar de estado el cargue";
             $aptBd->RollBackTrans();
         }
@@ -1064,34 +1033,32 @@ class InscripcionFonvivienda
      * @version 1.0 Jul 2018
      * @param int seqCargue
      */
-
-    public function salvarNovedades($seqCargue){
+    public function salvarNovedades($seqCargue) {
         global $aptBd;
         try {
             $aptBd->BeginTrans();
             foreach ($this->arrHogares as $numHogar => $arrHogar) {
 
-                $arrCampos  = array("seqCargue","seqEstadoHogar","numHogar");
-                $arrValores = array($seqCargue,1,$numHogar);
-                foreach($arrHogar as $txtClave => $txtValor){
-                    if(! is_array($txtValor)){
+                $arrCampos = array("seqCargue", "seqEstadoHogar", "numHogar");
+                $arrValores = array($seqCargue, 1, $numHogar);
+                foreach ($arrHogar as $txtClave => $txtValor) {
+                    if (!is_array($txtValor)) {
                         $arrCampos[] = $txtClave;
-                        $arrValores[] = ($txtValor === null)? "null" : "'$txtValor'";
+                        $arrValores[] = ($txtValor === null) ? "null" : "'$txtValor'";
                     }
-
                 }
-                $sql = "insert into t_fnv_hogar (" . implode("," , $arrCampos) . ") values (" . implode(",",$arrValores) . ")";
+                $sql = "insert into t_fnv_hogar (" . implode(",", $arrCampos) . ") values (" . implode(",", $arrValores) . ")";
                 $aptBd->execute($sql);
                 $seqHogar = $aptBd->Insert_ID();
 
-                foreach($arrHogar['hogar'] as $seqTipoDocumento => $arrCiudadanos){
-                    foreach($arrCiudadanos as $numDocumento => $arrCiudadano){
+                foreach ($arrHogar['hogar'] as $seqTipoDocumento => $arrCiudadanos) {
+                    foreach ($arrCiudadanos as $numDocumento => $arrCiudadano) {
 
-                        $arrCampos = array("seqHogar","seqTipoDocumento","numDocumento","bolPrincipal");
-                        $arrValores = array($seqHogar,$seqTipoDocumento,$numDocumento,0);
-                        foreach($arrCiudadano as $txtClave => $txtValor){
+                        $arrCampos = array("seqHogar", "seqTipoDocumento", "numDocumento", "bolPrincipal");
+                        $arrValores = array($seqHogar, $seqTipoDocumento, $numDocumento, 0);
+                        foreach ($arrCiudadano as $txtClave => $txtValor) {
 
-                            switch(true){
+                            switch (true) {
                                 case $txtValor === null:
                                     $arrCampos[] = $txtClave;
                                     $arrValores[] = "null";
@@ -1102,29 +1069,25 @@ class InscripcionFonvivienda
                                     break;
                                 case is_array($txtValor):
                                     $arrCampos[] = "txtCoincidencias";
-                                    $arrValores[] = "'" . json_encode($arrCiudadano['coincidencias'],JSON_UNESCAPED_UNICODE) . "'";
+                                    $arrValores[] = "'" . json_encode($arrCiudadano['coincidencias'], JSON_UNESCAPED_UNICODE) . "'";
                                     break;
                                 default:
                                     $arrCampos[] = $txtClave;
                                     $arrValores[] = "'" . $txtValor . "'";
                             }
-
                         }
 
-                        $sql = "insert into t_fnv_ciudadano (" . implode("," , $arrCampos) . ") values (" . implode(",",$arrValores) . ")";
+                        $sql = "insert into t_fnv_ciudadano (" . implode(",", $arrCampos) . ") values (" . implode(",", $arrValores) . ")";
                         $aptBd->execute($sql);
-
                     }
                 }
-
-
             }
             $aptBd->CommitTrans();
-        } catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "Hubo un error al almacenar las novedades";
             $this->arrErrores[] = $objError->getMessage();
             $aptBd->RollBackTrans();
-            $this->finalizarCargue($seqCargue,3);
+            $this->finalizarCargue($seqCargue, 3);
         }
     }
 
@@ -1134,8 +1097,7 @@ class InscripcionFonvivienda
      * @version 1.0 Jul 2018
      * @return array
      */
-
-    public function listadoCargues(){
+    public function listadoCargues() {
         global $aptBd;
         $sql = "
             select 
@@ -1160,8 +1122,7 @@ class InscripcionFonvivienda
      * @param $seqCargue
      * @return array
      */
-
-    public function obtenerArchivo($seqCargue){
+    public function obtenerArchivo($seqCargue) {
         global $aptBd;
         $arrArchivo = array();
         $sql = "
@@ -1172,7 +1133,7 @@ class InscripcionFonvivienda
             where car.seqCargue = $seqCargue
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $arrArchivo['nombre'] = $objRes->fields['txtArchivo'];
             $arrArchivo['fisico'] = $objRes->fields['txtFisico'];
             $objRes->MoveNext();
@@ -1186,8 +1147,7 @@ class InscripcionFonvivienda
      * @param $seqEstado
      * @return boolean
      */
-
-    public function eliminarCargue($seqCargue){
+    public function eliminarCargue($seqCargue) {
         global $aptBd, $txtPrefijoRuta, $arrConfiguracion;
 
         $sql = "
@@ -1200,15 +1160,15 @@ class InscripcionFonvivienda
             where car.seqCargue = $seqCargue            
         ";
         $objRes = $aptBd->execute($sql);
-        if($objRes->fields){
+        if ($objRes->fields) {
 
-            if(
-                $objRes->fields['seqEstado'] == 2 or
-                $objRes->fields['seqEstado'] == 5 or
-                $objRes->fields['seqEstado'] == 6
-            ){
+            if (
+                    $objRes->fields['seqEstado'] == 2 or
+                    $objRes->fields['seqEstado'] == 5 or
+                    $objRes->fields['seqEstado'] == 6
+            ) {
                 $this->arrErrores[] = "No se puede eliminar el cargue, se encuentra en el estado " . $objRes->fields['txtEstado'];
-            }else{
+            } else {
                 try {
                     $aptBd->BeginTrans();
 
@@ -1239,16 +1199,13 @@ class InscripcionFonvivienda
                     $this->arrMensajes[] = "Ha eliminado el cargue $seqCargue satisfactoriamente";
 
                     $aptBd->CommitTrans();
-
-                } catch (Exception $objError){
+                } catch (Exception $objError) {
                     $this->arrErrores[] = "Hubo problemas al eliminar el cargue " . $seqCargue;
                     $this->arrErrores[] = $objError->getMessage();
                     $aptBd->RollBackTrans();
                 }
-
             }
         }
-
     }
 
     /**
@@ -1257,8 +1214,7 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return string
      */
-
-    public function verErrores($seqCargue){
+    public function verErrores($seqCargue) {
         global $aptBd;
         $sql = "
             select txtErrores
@@ -1266,7 +1222,7 @@ class InscripcionFonvivienda
             where seqCargue = $seqCargue
         ";
         $objRes = $aptBd->execute($sql);
-        return json_decode($objRes->fields['txtErrores'],true);
+        return json_decode($objRes->fields['txtErrores'], true);
     }
 
     /**
@@ -1275,8 +1231,7 @@ class InscripcionFonvivienda
      * @version 1.0 Jul 2018
      * @param $seqCargue
      */
-
-    public function cargar($seqCargue, $numHogar = null){
+    public function cargar($seqCargue, $numHogar = null) {
         global $aptBd;
 
         $sql = "
@@ -1303,7 +1258,7 @@ class InscripcionFonvivienda
             where car.seqCargue = $seqCargue            
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $this->seqCargue = $objRes->fields['seqCargue'];
             $this->seqTipo = $objRes->fields['seqTipo'];
             $this->txtTipo = $objRes->fields['txtTipo'];
@@ -1318,10 +1273,10 @@ class InscripcionFonvivienda
             $this->txtDescripcion = $objRes->fields['txtDescripcion'];
             $this->seqUsuario = $objRes->fields['seqUsuario'];
             $this->txtUsuario = $objRes->fields['txtUsuario'];
-            if($objRes->fields['txtErrores'] != "") {
-                if($objRes->fields['seqEstado'] != 4 and $objRes->fields['seqEstado'] != 5 and $objRes->fields['seqEstado'] != 6) {
+            if ($objRes->fields['txtErrores'] != "") {
+                if ($objRes->fields['seqEstado'] != 4 and $objRes->fields['seqEstado'] != 5 and $objRes->fields['seqEstado'] != 6) {
                     $this->arrErrores = json_decode($objRes->fields['txtErrores'], true);
-                }else{
+                } else {
                     $this->arrLineasProcesadas = json_decode($objRes->fields['txtErrores'], true);
                 }
             }
@@ -1329,7 +1284,7 @@ class InscripcionFonvivienda
             $objRes->MoveNext();
         }
 
-        $txtCondicion = ($numHogar == null)? "" : "and hog.numHogar = $numHogar";
+        $txtCondicion = ($numHogar == null) ? "" : "and hog.numHogar = $numHogar";
 
         $sql = "
             select
@@ -1424,20 +1379,20 @@ class InscripcionFonvivienda
             $txtCondicion
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $numHogar = $objRes->fields['numHogar'];
-            if($objRes->fields['txtErrores'] != "") {
+            if ($objRes->fields['txtErrores'] != "") {
                 $this->arrErrores += json_decode($objRes->fields['txtErrores'], true);
             }
             unset($objRes->fields['txtErrores']);
             unset($objRes->fields['numHogar']);
-            foreach($objRes->fields as $txtClave => $txtValor){
+            foreach ($objRes->fields as $txtClave => $txtValor) {
                 $this->arrHogares[$numHogar][$txtClave] = $txtValor;
             }
             $objRes->MoveNext();
         }
 
-        foreach($this->arrHogares as $numHogar => $arrHogar){
+        foreach ($this->arrHogares as $numHogar => $arrHogar) {
 
             $sql = "
                 select 
@@ -1498,18 +1453,17 @@ class InscripcionFonvivienda
                 where ciu.seqHogar = " . $arrHogar['seqHogar'] . "            
             ";
             $objRes = $aptBd->execute($sql);
-            while($objRes->fields){
+            while ($objRes->fields) {
                 $seqCiudadano = $objRes->fields['seqCiudadano'];
-                $arrCoincidencias = json_decode($objRes->fields['txtCoincidencias'],true);
+                $arrCoincidencias = json_decode($objRes->fields['txtCoincidencias'], true);
                 unset($objRes->fields['txtCoincidencias']);
-                foreach($objRes->fields as $txtClave => $txtValor) {
+                foreach ($objRes->fields as $txtClave => $txtValor) {
                     $this->arrHogares[$numHogar]['ciudadanos'][$seqCiudadano][$txtClave] = $txtValor;
                 }
                 $this->arrHogares[$numHogar]['ciudadanos'][$seqCiudadano]['coincidencias'] = $arrCoincidencias;
                 $objRes->MoveNext();
             }
         }
-
     }
 
     /**
@@ -1518,8 +1472,7 @@ class InscripcionFonvivienda
      * @version 1.0 Jul 2018
      * @return array
      */
-
-    public function estadosHogar(){
+    public function estadosHogar() {
         global $aptBd;
 
         $sql = "
@@ -1539,40 +1492,39 @@ class InscripcionFonvivienda
      * @param $numHogar
      * @param $numDocumento
      */
-
-    public function procesarNovedades($seqFormulario, $numHogar, $numDocumento){
+    public function procesarNovedades($seqFormulario, $numHogar, $numDocumento) {
         $txtMensaje = "Marcado para postulante principal";
-        if($this->seqTipo <> 1){
+        if ($this->seqTipo <> 1) {
             $txtMensaje = "Hogar marcado, se respetarán los parentescos";
         }
 
-        if(isset($this->arrHogares[$numHogar]['ciudadanos'])){
-            foreach($this->arrHogares[$numHogar]['ciudadanos'] as $idCiudadano => $arrCiudadano){
+        if (isset($this->arrHogares[$numHogar]['ciudadanos'])) {
+            foreach ($this->arrHogares[$numHogar]['ciudadanos'] as $idCiudadano => $arrCiudadano) {
                 $numDocumentoCoincidencia = $arrCiudadano['numDocumento'];
-                if($numDocumentoCoincidencia == $numDocumento and $seqFormulario != 0){
+                if ($numDocumentoCoincidencia == $numDocumento and $seqFormulario != 0) {
                     $this->arrNovedades[$numDocumentoCoincidencia] = $txtMensaje;
-                }else{
-                    if(isset($arrCiudadano['coincidencias']['N/A'])){
+                } else {
+                    if (isset($arrCiudadano['coincidencias']['N/A'])) {
                         $claCiudadano = new Ciudadano();
                         $seqFormularioCoincidencia = $claCiudadano->formularioVinculado($arrCiudadano['numDocumento'], false, false);
-                        if(($seqFormularioCoincidencia != $seqFormulario) and ($seqFormularioCoincidencia != 0)) {
+                        if (($seqFormularioCoincidencia != $seqFormulario) and ( $seqFormularioCoincidencia != 0)) {
                             $this->arrErrores['ciudadano'][$numDocumentoCoincidencia] = "No se puede fusionar, pertenece al hogar <a href='#' class='text-danger' onclick='verHogar($seqFormularioCoincidencia)'>$seqFormularioCoincidencia</a>";
-                        }elseif($seqFormularioCoincidencia == 0){
+                        } elseif ($seqFormularioCoincidencia == 0) {
                             $this->arrNovedades[$numDocumentoCoincidencia] = "Se unirá al formulario seleccionado";
-                        }else{
+                        } else {
                             $this->arrNovedades[$numDocumentoCoincidencia] = "Ya pertenece al hogar seleccionado";
                         }
-                    }else{
-                        if($numDocumento == 0 and $arrCiudadano['bolPrincipal'] == 1){
+                    } else {
+                        if ($numDocumento == 0 and $arrCiudadano['bolPrincipal'] == 1) {
                             $this->arrNovedades[$numDocumentoCoincidencia] = $txtMensaje;
-                        }else{
+                        } else {
                             $this->arrNovedades[$numDocumentoCoincidencia] = "Se unirá al formulario seleccionado";
                         }
                     }
                 }
             }
             $this->arrHogares[$numHogar]['seqFormulario'] = $seqFormulario;
-        }else{
+        } else {
             $this->arrErrores['general'] = "Obtenga primero la informacion del cargue";
         }
     }
@@ -1581,12 +1533,12 @@ class InscripcionFonvivienda
      * VALIDA EL FORMULARIO DE NOVEDADES
      * @param $arrPost
      */
-    public function validarFormulario($arrPost){
+    public function validarFormulario($arrPost) {
         global $aptBd;
 
-        switch ($arrPost['seqEstadoHogar']){
+        switch ($arrPost['seqEstadoHogar']) {
             case 3: // No procesar
-                if(trim($arrPost['txtObservaciones']) == ""){
+                if (trim($arrPost['txtObservaciones']) == "") {
                     $this->arrErrores['general'][] = "Indique una observación para marcar al hogar como 'no procesar'";
                 }
                 break;
@@ -1595,30 +1547,32 @@ class InscripcionFonvivienda
                 break;
         }
 
-        $sql = "
+        echo $sql = "
             select numHogar
             from t_fnv_hogar
+            left join t_frm_Formulario frm using(seqFormulario)
+            left join t_frm_estado_proceso est using(seqEstadoProceso)
             where seqFormulario = " . $arrPost['seqFormulario'] . "
               and seqFormulario <> 0
               and numHogar <> " . $arrPost['numHogar'] . "
+              AND est.seqEtapa <> 1
         ";
         $objRes = $aptBd->execute($sql);
-        if($objRes->RecordCount() != 0){
+        if ($objRes->RecordCount() != 0) {
             $this->arrErrores['general'][] = "El formulario está siendo usado por el hogar " . $objRes->fields['numHogar'];
         }
-
     }
 
     /**
      * SALVA EL CARGUE PARA CONONCER LA REALCION ENTRE FRM Y FNV
      * @param $arrPost
      */
-    public function salvarSolucionNovedades($arrPost){
+    public function salvarSolucionNovedades($arrPost) {
         global $aptBd;
         try {
             $aptBd->BeginTrans();
 
-            $txtObservaciones = (trim($arrPost['txtObservaciones']) == "")? "null" : "'" . $arrPost['txtObservaciones'] . "'";
+            $txtObservaciones = (trim($arrPost['txtObservaciones']) == "") ? "null" : "'" . $arrPost['txtObservaciones'] . "'";
 
             $sql = "
                 update t_fnv_hogar set
@@ -1631,10 +1585,7 @@ class InscripcionFonvivienda
             $aptBd->execute($sql);
 
             $seqHogar = array_shift(obtenerDatosTabla(
-                "t_fnv_hogar",
-                array("seqHogar","numHogar"),
-                "numHogar",
-                "numHogar = " . $arrPost['numHogar'] . " and seqCargue = " . $arrPost['seqCargue']
+                            "t_fnv_hogar", array("seqHogar", "numHogar"), "numHogar", "numHogar = " . $arrPost['numHogar'] . " and seqCargue = " . $arrPost['seqCargue']
             ));
 
             $sql = "
@@ -1648,15 +1599,15 @@ class InscripcionFonvivienda
             $numHogar = $arrPost['numHogar'];
             $txtParentesco = "";
 
-            if($this->seqTipo == 1){
+            if ($this->seqTipo == 1) {
                 $txtParentesco = "seqParentesco = 1,";
-                if($arrPost['numDocumento'] == 0){
+                if ($arrPost['numDocumento'] == 0) {
                     $arrCiudadano = array_shift($this->arrHogares[$numHogar]['ciudadanos']);
                     $arrPost['numDocumento'] = $arrCiudadano['numDocumento'];
                 }
-            }else{
-                foreach($this->arrHogares[$numHogar]['ciudadanos'] as $arrMiembroHogar){
-                    if($arrMiembroHogar['seqParentesco'] == 1){
+            } else {
+                foreach ($this->arrHogares[$numHogar]['ciudadanos'] as $arrMiembroHogar) {
+                    if ($arrMiembroHogar['seqParentesco'] == 1) {
                         $arrCiudadano = $arrMiembroHogar;
                         $arrPost['numDocumento'] = $arrCiudadano['numDocumento'];
                     }
@@ -1676,12 +1627,11 @@ class InscripcionFonvivienda
             $this->arrMensajes[] = "Se han salvado la solución de las novedades";
 
             $aptBd->CommitTrans();
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores['general'][] = "No se pudo salvar la información del hogar";
             $this->arrErrores['general'][] = $objError->getMessage();
             $aptBd->RollBackTrans();
         }
-
     }
 
     /**
@@ -1692,12 +1642,12 @@ class InscripcionFonvivienda
      * @param $numDocumento
      * @return string
      */
-    private function ingresos($seqTipo, $txtIngresos,$numLinea,$numDocumento){
+    private function ingresos($seqTipo, $txtIngresos, $numLinea, $numDocumento) {
         $txtRangoIngresos = "";
-        if($seqTipo == 1){
-            if( in_array( trim( mb_strtoupper( $txtIngresos ) ) , $this->arrRangoIngresos[$seqTipo])){
+        if ($seqTipo == 1) {
+            if (in_array(trim(mb_strtoupper($txtIngresos)), $this->arrRangoIngresos[$seqTipo])) {
                 $txtRangoIngresos = trim(mb_strtoupper($txtIngresos));
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . " ($numDocumento): El valor de la columna " . $this->arrFormato[$seqTipo][1] . " es desconocido";
             }
         }
@@ -1711,8 +1661,8 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function tipoDocumento($seqTipo, $txtTipoDocumento,$numLinea){
-        if($seqTipo == 1) {
+    private function tipoDocumento($seqTipo, $txtTipoDocumento, $numLinea) {
+        if ($seqTipo == 1) {
             switch (trim(mb_strtolower($txtTipoDocumento))) {
                 case "c.c.":
                     $seqTipoDocumento = 1;
@@ -1725,22 +1675,18 @@ class InscripcionFonvivienda
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][15] . " es desconocido";
                     break;
             }
-        }else{
+        } else {
             $arrTipoDocumento = obtenerDatosTabla(
-                "t_ciu_tipo_documento",
-                array("seqTipoDocumento","txtTipoDocumento"),
-                "txtTipoDocumento",
-                "lower(txtTipoDocumento) = '" . mb_strtolower($txtTipoDocumento) ."'"
+                    "t_ciu_tipo_documento", array("seqTipoDocumento", "txtTipoDocumento"), "txtTipoDocumento", "lower(txtTipoDocumento) = '" . mb_strtolower($txtTipoDocumento) . "'"
             );
-            if(! empty($arrTipoDocumento)) {
+            if (!empty($arrTipoDocumento)) {
                 $seqTipoDocumento = $arrTipoDocumento[$txtTipoDocumento];
-            }else{
+            } else {
                 $seqTipoDocumento = 0;
             }
-            if(intval($seqTipoDocumento) == 0){
+            if (intval($seqTipoDocumento) == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][2] . " es desconocido";
             }
-
         }
         return $seqTipoDocumento;
     }
@@ -1752,18 +1698,18 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return string
      */
-    private function solucion($seqTipo, $seqModalidad, $txtSolucion,$numLinea){
+    private function solucion($seqTipo, $seqModalidad, $txtSolucion, $numLinea) {
         $seqSolucion = "";
-        if($seqTipo == 1){
-            if(! in_array(trim(mb_strtoupper($txtSolucion)), $this->arrSoluciones[$seqModalidad])){
+        if ($seqTipo == 1) {
+            if (!in_array(trim(mb_strtoupper($txtSolucion)), $this->arrSoluciones[$seqModalidad])) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][24] . " es desconocido";
-            }else{
-                $arrSolucion = array_keys($this->arrSoluciones[$seqModalidad],$txtSolucion);
+            } else {
+                $arrSolucion = array_keys($this->arrSoluciones[$seqModalidad], $txtSolucion);
                 $seqSolucion = $arrSolucion[0];
             }
-        }elseif($seqTipo == 2){
+        } elseif ($seqTipo == 2) {
             $seqSolucion = 19;
-        }else{
+        } else {
             $seqSolucion = 13;
         }
         return $seqSolucion;
@@ -1776,19 +1722,19 @@ class InscripcionFonvivienda
      * @param int $numLinea
      * @return int $seqModalidad
      */
-    private function modalidad($seqTipo,$txtModalidad,$numLinea){
+    private function modalidad($seqTipo, $txtModalidad, $numLinea) {
         $seqModalidad = "";
-        if($seqTipo == 1){
-            if(! in_array(trim(mb_strtoupper($txtModalidad)), $this->arrModalidad)){
+        if ($seqTipo == 1) {
+            if (!in_array(trim(mb_strtoupper($txtModalidad)), $this->arrModalidad)) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][25] . " es desconocido";
-            }else{
-                $arrModalidad = array_keys($this->arrModalidad,$txtModalidad);
-               // $seqModalidad = $arrModalidad[0];
+            } else {
+                $arrModalidad = array_keys($this->arrModalidad, $txtModalidad);
+                // $seqModalidad = $arrModalidad[0];
                 $seqModalidad = 12;
             }
-        }elseif($seqTipo == 2){
+        } elseif ($seqTipo == 2) {
             $seqModalidad = 12;
-        }else{
+        } else {
             $seqModalidad = 6;
         }
         return $seqModalidad;
@@ -1799,10 +1745,10 @@ class InscripcionFonvivienda
      * @param $txtNombres
      * @return mixed|string
      */
-    private function limpiezaNombres($txtNombres){
+    private function limpiezaNombres($txtNombres) {
         $txtNombres = trim(mb_strtoupper($txtNombres));
-        while(strpos($txtNombres,"  ") !== false){
-            $txtNombres = str_replace("  "," ",$txtNombres);
+        while (strpos($txtNombres, "  ") !== false) {
+            $txtNombres = str_replace("  ", " ", $txtNombres);
         }
         return $txtNombres;
     }
@@ -1810,7 +1756,7 @@ class InscripcionFonvivienda
     /**
      * CIUDADANOS EXISTETNES EN LA BASE DE DATOS
      */
-    private function ciudadanos(){
+    private function ciudadanos() {
         global $aptBd;
         $this->arrCiudadanos = array();
         $sql = "
@@ -1839,7 +1785,7 @@ class InscripcionFonvivienda
      * @param $seqCargue
      * @param $numProgreso
      */
-    private function actualizarProgreso($seqCargue, $numProgreso){
+    private function actualizarProgreso($seqCargue, $numProgreso) {
         global $aptBd;
         try {
             $aptBd->BeginTrans();
@@ -1850,7 +1796,7 @@ class InscripcionFonvivienda
             ";
             $aptBd->execute($sql);
             $aptBd->CommitTrans();
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo actualizar el progreso";
             $aptBd->RollBackTrans();
         }
@@ -1863,10 +1809,10 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function deducirSexo($seqTipo, $txtDeduccion, $numLinea){
+    private function deducirSexo($seqTipo, $txtDeduccion, $numLinea) {
         global $aptBd;
         $seqSexo = 0;
-        if($seqTipo == 1) {
+        if ($seqTipo == 1) {
             $numLargo = strlen($txtDeduccion);
             $numPosicion = (intval(strpos($txtDeduccion, " ")) == 0) ? $numLargo : intval(strpos($txtDeduccion, " "));
             $sql = "
@@ -1885,15 +1831,12 @@ class InscripcionFonvivienda
             } else {
                 $seqSexo = 2; // por defecto será mujer
             }
-        }else{
+        } else {
             $arrSexo = obtenerDatosTabla(
-                "t_ciu_sexo",
-                array("seqSexo","txtSexo"),
-                "txtSexo",
-                "lower(txtSexo) = '" . mb_strtolower($txtDeduccion) . "'"
+                    "t_ciu_sexo", array("seqSexo", "txtSexo"), "txtSexo", "lower(txtSexo) = '" . mb_strtolower($txtDeduccion) . "'"
             );
             $seqSexo = $arrSexo[$txtDeduccion];
-            if(intval($seqSexo) == 0){
+            if (intval($seqSexo) == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][7] . " es desconocido";
             }
         }
@@ -1904,7 +1847,7 @@ class InscripcionFonvivienda
      * OBTIENE LOS TIPOS DE CARGUE
      * @return array
      */
-    public function obtenerTipos(){
+    public function obtenerTipos() {
         global $aptBd;
         $sql = "
             select seqTipo, txtTipo
@@ -1912,7 +1855,7 @@ class InscripcionFonvivienda
         ";
         $objRes = $aptBd->execute($sql);
         $arrTipo = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqTipo = $objRes->fields['seqTipo'];
             $txtTipo = $objRes->fields['txtTipo'];
             $arrTipo[$seqTipo] = $txtTipo;
@@ -1928,19 +1871,16 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function estadoCivil($seqTipo,$txtEstadoCivil,$numLinea){
-        if($seqTipo == 2 or $seqTipo == 3){
+    private function estadoCivil($seqTipo, $txtEstadoCivil, $numLinea) {
+        if ($seqTipo == 2 or $seqTipo == 3) {
             $arrEstadoCivil = obtenerDatosTabla(
-                "t_ciu_estado_civil",
-                array("seqEstadoCivil","txtEstadoCivil"),
-                "txtEstadoCivil",
-                "lower(txtEstadoCivil) = '" . mb_strtolower($txtEstadoCivil) . "'"
+                    "t_ciu_estado_civil", array("seqEstadoCivil", "txtEstadoCivil"), "txtEstadoCivil", "lower(txtEstadoCivil) = '" . mb_strtolower($txtEstadoCivil) . "'"
             );
             $seqEstadoCivil = $arrEstadoCivil[$txtEstadoCivil];
-            if(intval($seqEstadoCivil) == 0){
+            if (intval($seqEstadoCivil) == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][8] . " es desconocido";
             }
-        }else{
+        } else {
             $seqEstadoCivil = 9; // No reporta
         }
         return $seqEstadoCivil;
@@ -1954,21 +1894,21 @@ class InscripcionFonvivienda
      * @return DateTime|null
      * @throws Exception
      */
-    private function fechas($seqTipo,$txtFecha,$numLinea){
+    private function fechas($seqTipo, $txtFecha, $numLinea) {
         $fchFecha = null;
-        $txtFecha = (trim($txtFecha) === "")? null : $txtFecha;
-        if($txtFecha != null) {
+        $txtFecha = (trim($txtFecha) === "") ? null : $txtFecha;
+        if ($txtFecha != null) {
             $arrDMY = array();
             $arrYMD = array();
             preg_match("/(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{2,4})/", $txtFecha, $arrDMY);
-            preg_match("/(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})/"  , $txtFecha, $arrYMD);
-            if(!empty($arrYMD)){
+            preg_match("/(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})/", $txtFecha, $arrYMD);
+            if (!empty($arrYMD)) {
                 $fchFecha = new DateTime($arrYMD[1] . "-" . $arrYMD[2] . "-" . $arrYMD[3]);
-            }elseif(! empty($arrDMY)){
+            } elseif (!empty($arrDMY)) {
                 $arrMatch[3] = ($arrDMY[3] < 100) ? $arrDMY[3] + 2000 : $arrDMY[3];
                 $fchFecha = new DateTime($arrDMY[3] . "-" . $arrDMY[2] . "-" . $arrDMY[1]);
-            }else{
-                if($seqTipo == 2) {
+            } else {
+                if ($seqTipo == 2) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El formato de la columna " . $this->arrFormato[$seqTipo][9] . " es desconocido (d/m/Y o Y/m/d)";
                 }
             }
@@ -1983,23 +1923,19 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function parentesco($seqTipo,$txtParentesco,$numLinea){
+    private function parentesco($seqTipo, $txtParentesco, $numLinea) {
         $seqParentesco = 0;
-        if($seqTipo == 2 or $seqTipo == 3){
-            $txtParentesco = ($txtParentesco == "")? 'Desconocido' : $txtParentesco;
+        if ($seqTipo == 2 or $seqTipo == 3) {
+            $txtParentesco = ($txtParentesco == "") ? 'Desconocido' : $txtParentesco;
             $arrParentesco = obtenerDatosTabla(
-                "t_ciu_parentesco",
-                array("seqParentesco","txtParentesco"),
-                "txtParentesco",
-                "lower(txtParentesco) = '" . mb_strtolower($txtParentesco) . "'"
-
+                    "t_ciu_parentesco", array("seqParentesco", "txtParentesco"), "txtParentesco", "lower(txtParentesco) = '" . mb_strtolower($txtParentesco) . "'"
             );
-            if(! empty($arrParentesco)){
+            if (!empty($arrParentesco)) {
                 $seqParentesco = $arrParentesco[$txtParentesco];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][10] . " es desconocido";
             }
-        }else{
+        } else {
             $seqParentesco = 14;
         }
         return $seqParentesco;
@@ -2012,22 +1948,18 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function etnia($seqTipo,$txtEtnia,$numLinea){
+    private function etnia($seqTipo, $txtEtnia, $numLinea) {
         $seqEtnia = 0;
-        if($seqTipo == 2 or $seqTipo == 3){
+        if ($seqTipo == 2 or $seqTipo == 3) {
             $arrEtnia = obtenerDatosTabla(
-                "t_ciu_etnia",
-                array("seqEtnia","txtEtnia"),
-                "txtEtnia",
-                "lower(txtEtnia) = '" . mb_strtolower($txtEtnia) . "'"
-
+                    "t_ciu_etnia", array("seqEtnia", "txtEtnia"), "txtEtnia", "lower(txtEtnia) = '" . mb_strtolower($txtEtnia) . "'"
             );
-            if(! empty($arrEtnia)){
+            if (!empty($arrEtnia)) {
                 $seqEtnia = $arrEtnia[$txtEtnia];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][11] . " es desconocido";
             }
-        }else{
+        } else {
             $seqEtnia = 1;
         }
         return $seqEtnia;
@@ -2042,32 +1974,31 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return mixed
      */
-    private function condicionEspecial($seqTipo,$numDiscapacidad,$numMayor65,$numCabezaHogar,$numLinea){
+    private function condicionEspecial($seqTipo, $numDiscapacidad, $numMayor65, $numCabezaHogar, $numLinea) {
 
         $arrCondicionEspecial[1] = 6;
         $arrCondicionEspecial[2] = 6;
         $arrCondicionEspecial[3] = 6;
 
-        if($seqTipo == 2 or $seqTipo == 3){
+        if ($seqTipo == 2 or $seqTipo == 3) {
 
-            if($numDiscapacidad != 0 and $numDiscapacidad != 1 ){
+            if ($numDiscapacidad != 0 and $numDiscapacidad != 1) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][12] . " es desconocido";
-            }else{
-                $arrCondicionEspecial[1] = ($numDiscapacidad == 1)? 3 : 6;
+            } else {
+                $arrCondicionEspecial[1] = ($numDiscapacidad == 1) ? 3 : 6;
             }
 
-            if($numMayor65 != 0 and $numMayor65 != 1 ){
+            if ($numMayor65 != 0 and $numMayor65 != 1) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][13] . " es desconocido";
-            }else{
-                $arrCondicionEspecial[2] = ($numMayor65 == 1)? 2 : 6;
+            } else {
+                $arrCondicionEspecial[2] = ($numMayor65 == 1) ? 2 : 6;
             }
 
-            if($numCabezaHogar != 0 and $numCabezaHogar != 1 ){
+            if ($numCabezaHogar != 0 and $numCabezaHogar != 1) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][14] . " es desconocido";
-            }else{
-                $arrCondicionEspecial[3] = ($numCabezaHogar == 1)? 1 : 6;
+            } else {
+                $arrCondicionEspecial[3] = ($numCabezaHogar == 1) ? 1 : 6;
             }
-
         }
 
         return $arrCondicionEspecial;
@@ -2080,22 +2011,18 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function salud($seqTipo,$txtSalud,$numLinea){
+    private function salud($seqTipo, $txtSalud, $numLinea) {
         $seqSalud = 0;
-        if($seqTipo == 2 or $seqTipo == 3){
+        if ($seqTipo == 2 or $seqTipo == 3) {
             $arrSalud = obtenerDatosTabla(
-                "t_ciu_salud",
-                array("seqSalud","txtSalud"),
-                "txtSalud",
-                "lower(txtSalud) = '" . mb_strtolower($txtSalud) . "'"
-
+                    "t_ciu_salud", array("seqSalud", "txtSalud"), "txtSalud", "lower(txtSalud) = '" . mb_strtolower($txtSalud) . "'"
             );
-            if(! empty($arrSalud)){
+            if (!empty($arrSalud)) {
                 $seqSalud = $arrSalud[$txtSalud];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][15] . " es desconocido";
             }
-        }else{
+        } else {
             $seqSalud = 0;
         }
         return $seqSalud;
@@ -2109,77 +2036,72 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function nivelEducativo($seqTipo,$txtNivelEducativo,$numAniosAprobados,$numLinea){
+    private function nivelEducativo($seqTipo, $txtNivelEducativo, $numAniosAprobados, $numLinea) {
         $seqNivelEducativo = 0;
-        if($seqTipo == 2 or $seqTipo == 3){
+        if ($seqTipo == 2 or $seqTipo == 3) {
             $arrNivelEducativo = obtenerDatosTabla(
-                "t_ciu_nivel_educativo",
-                array("seqNivelEducativo","txtNivelEducativo"),
-                "txtNivelEducativo",
-                "lower(txtNivelEducativo) = '" . mb_strtolower($txtNivelEducativo) . "'"
-
+                    "t_ciu_nivel_educativo", array("seqNivelEducativo", "txtNivelEducativo"), "txtNivelEducativo", "lower(txtNivelEducativo) = '" . mb_strtolower($txtNivelEducativo) . "'"
             );
 
-            if(! empty($arrNivelEducativo)){
+            if (!empty($arrNivelEducativo)) {
                 $seqNivelEducativo = $arrNivelEducativo[$txtNivelEducativo];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][16] . " es desconocido";
             }
 
-            switch (intval($seqNivelEducativo)){
+            switch (intval($seqNivelEducativo)) {
                 case 1:
-                    if($numAniosAprobados != 0){
+                    if ($numAniosAprobados != 0) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
                 case 2:
-                    if( ! ($numAniosAprobados >= 1 and $numAniosAprobados <= 4) ){
+                    if (!($numAniosAprobados >= 1 and $numAniosAprobados <= 4)) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
                 case 3:
-                    if( $numAniosAprobados != 5 ){
+                    if ($numAniosAprobados != 5) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
                 case 4:
-                    if( ! ($numAniosAprobados >= 6 and $numAniosAprobados <= 10) ){
+                    if (!($numAniosAprobados >= 6 and $numAniosAprobados <= 10)) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
                 case 5:
-                    if( $numAniosAprobados != 11 ){
+                    if ($numAniosAprobados != 11) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
                 case 6:
-                    if( ! ($numAniosAprobados >= 6 and $numAniosAprobados <= 11) ){
+                    if (!($numAniosAprobados >= 6 and $numAniosAprobados <= 11)) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
                 case 7:
-                    if( $numAniosAprobados != 11 ){
+                    if ($numAniosAprobados != 11) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
                 case 8:
-                    if( $numAniosAprobados != 11 ){
+                    if ($numAniosAprobados != 11) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
                 case 9:
-                    if( $numAniosAprobados != 11 ){
+                    if ($numAniosAprobados != 11) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
                 case 12:
-                    if( $numAniosAprobados != 11 ){
+                    if ($numAniosAprobados != 11) {
                         $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][17] . " no es valido";
                     }
                     break;
             }
-
-        }else{
+        } else {
             $seqNivelEducativo = 1;
         }
 
@@ -2193,22 +2115,18 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function tipoVictima($seqTipo,$txtTipoVictima,$numLinea){
+    private function tipoVictima($seqTipo, $txtTipoVictima, $numLinea) {
         $seqTipoVictima = 0;
-        if($seqTipo == 2 or $seqTipo == 3){
+        if ($seqTipo == 2 or $seqTipo == 3) {
             $arrTipoVictima = obtenerDatosTabla(
-                "t_frm_tipovictima",
-                array("seqTipoVictima","txtTipoVictima"),
-                "txtTipoVictima",
-                "lower(txtTipoVictima) = '" . mb_strtolower($txtTipoVictima) . "'"
-
+                    "t_frm_tipovictima", array("seqTipoVictima", "txtTipoVictima"), "txtTipoVictima", "lower(txtTipoVictima) = '" . mb_strtolower($txtTipoVictima) . "'"
             );
-            if(! empty($arrTipoVictima)){
+            if (!empty($arrTipoVictima)) {
                 $seqTipoVictima = $arrTipoVictima[$txtTipoVictima];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][18] . " es desconocido";
             }
-        }else{
+        } else {
             $seqTipoVictima = 0;
         }
         return $seqTipoVictima;
@@ -2222,33 +2140,28 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function lgtbi($seqTipo,$bolLgtbi,$txtLgtbi,$numLinea){
+    private function lgtbi($seqTipo, $bolLgtbi, $txtLgtbi, $numLinea) {
         $seqGrupoLgtbi = 0;
-        if($seqTipo == 2 or $seqTipo == 3){
+        if ($seqTipo == 2 or $seqTipo == 3) {
             $arrGrupoLgtbi = obtenerDatosTabla(
-                "t_frm_grupo_lgtbi",
-                array("seqGrupoLgtbi","txtGrupoLgtbi"),
-                "txtGrupoLgtbi",
-                "lower(txtGrupoLgtbi) = '" . mb_strtolower($txtLgtbi) . "'"
-
+                    "t_frm_grupo_lgtbi", array("seqGrupoLgtbi", "txtGrupoLgtbi"), "txtGrupoLgtbi", "lower(txtGrupoLgtbi) = '" . mb_strtolower($txtLgtbi) . "'"
             );
-            if(! empty($arrGrupoLgtbi)){
+            if (!empty($arrGrupoLgtbi)) {
                 $seqGrupoLgtbi = $arrGrupoLgtbi[$txtLgtbi];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][20] . " es desconocido";
             }
 
-            if($bolLgtbi != 0 and $bolLgtbi != 1){
+            if ($bolLgtbi != 0 and $bolLgtbi != 1) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][19] . " no es valido";
             }
 
-            if($seqGrupoLgtbi == 0 and $bolLgtbi == 1){
+            if ($seqGrupoLgtbi == 0 and $bolLgtbi == 1) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][19] . " no es valido";
-            }elseif($seqGrupoLgtbi != 0 and $bolLgtbi == 0){
+            } elseif ($seqGrupoLgtbi != 0 and $bolLgtbi == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][19] . " no es valido";
             }
-
-        }else{
+        } else {
             $seqGrupoLgtbi = 0;
         }
 
@@ -2262,23 +2175,19 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function ocupacion($seqTipo,$txtOcupacion,$numLinea){
+    private function ocupacion($seqTipo, $txtOcupacion, $numLinea) {
         $seqOcupacion = 0;
-        if($seqTipo == 2 or $seqTipo == 3){
-            $txtOcupacion = mb_ereg_replace("-","/",$txtOcupacion);
+        if ($seqTipo == 2 or $seqTipo == 3) {
+            $txtOcupacion = mb_ereg_replace("-", "/", $txtOcupacion);
             $arrOcupacion = obtenerDatosTabla(
-                "t_ciu_ocupacion",
-                array("seqOcupacion","txtOcupacion"),
-                "txtOcupacion",
-                "lower(txtOcupacion) = '" . mb_strtolower($txtOcupacion) . "'"
-
+                    "t_ciu_ocupacion", array("seqOcupacion", "txtOcupacion"), "txtOcupacion", "lower(txtOcupacion) = '" . mb_strtolower($txtOcupacion) . "'"
             );
-            if(! empty($arrOcupacion)){
+            if (!empty($arrOcupacion)) {
                 $seqOcupacion = $arrOcupacion[$txtOcupacion];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][21] . " es desconocido";
             }
-        }else{
+        } else {
             $seqOcupacion = 20;
         }
         return $seqOcupacion;
@@ -2291,21 +2200,17 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function localidad($seqTipo,$txtLocalidad,$numLinea){
+    private function localidad($seqTipo, $txtLocalidad, $numLinea) {
         $seqLocalidad = 0;
-        if($seqTipo == 1){
+        if ($seqTipo == 1) {
             $seqLocalidad = 1;
-        }else{
+        } else {
             $arrLocalidad = obtenerDatosTabla(
-                "t_frm_localidad",
-                array("seqLocalidad","txtLocalidad"),
-                "txtLocalidad",
-                "lower(txtLocalidad) = '" . mb_strtolower($txtLocalidad) . "'"
-
+                    "t_frm_localidad", array("seqLocalidad", "txtLocalidad"), "txtLocalidad", "lower(txtLocalidad) = '" . mb_strtolower($txtLocalidad) . "'"
             );
-            if(! empty($arrLocalidad)){
+            if (!empty($arrLocalidad)) {
                 $seqLocalidad = $arrLocalidad[$txtLocalidad];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][24] . " es desconocido";
             }
         }
@@ -2320,25 +2225,22 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function barrio($seqTipo,$seqLocalidad,$txtBarrio,$numLinea){
+    private function barrio($seqTipo, $seqLocalidad, $txtBarrio, $numLinea) {
         $seqBarrio = 0;
-        if($seqTipo == 1){
+        if ($seqTipo == 1) {
             $seqBarrio = 1143;
-        }else{
-            if(trim($txtBarrio) == ""){
+        } else {
+            if (trim($txtBarrio) == "") {
                 $txtBarrio = "DESCONOCIDO";
-            }else{
+            } else {
                 $txtBarrio = mb_strtoupper(trim($txtBarrio));
             }
 
             $arrBarrio = obtenerDatosTabla(
-                "t_frm_barrio",
-                array("seqBarrio", "txtBarrio"),
-                "txtBarrio",
-                "seqLocalidad = $seqLocalidad and lower(txtBarrio) = '" . mb_strtolower(trim($txtBarrio)) . "'"
+                    "t_frm_barrio", array("seqBarrio", "txtBarrio"), "txtBarrio", "seqLocalidad = $seqLocalidad and lower(txtBarrio) = '" . mb_strtolower(trim($txtBarrio)) . "'"
             );
 
-            foreach($arrBarrio as $txtClave => $seqBarrio){
+            foreach ($arrBarrio as $txtClave => $seqBarrio) {
                 $txtClave = mb_strtoupper($txtClave);
                 $arrBarrio[$txtClave] = $seqBarrio;
             }
@@ -2360,26 +2262,22 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function ciudad($seqTipo,$seqLocalidad,$txtCiudad,$numLinea){
+    private function ciudad($seqTipo, $seqLocalidad, $txtCiudad, $numLinea) {
         $seqCiudad = 0;
 
-        if($seqTipo == 1){
+        if ($seqTipo == 1) {
             $seqCiudad = 149;
-        }else{
+        } else {
             $arrCiudad = obtenerDatosTabla(
-                "v_frm_ciudad",
-                array("seqCiudad","txtCiudad"),
-                "txtCiudad",
-                "lower(txtCiudad) = '" . mb_strtolower($txtCiudad) . "'"
-
+                    "v_frm_ciudad", array("seqCiudad", "txtCiudad"), "txtCiudad", "lower(txtCiudad) = '" . mb_strtolower($txtCiudad) . "'"
             );
-            if(! empty($arrCiudad)){
+            if (!empty($arrCiudad)) {
                 $seqCiudad = $arrCiudad[$txtCiudad];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][26] . " es desconocido";
             }
 
-            if($seqCiudad != 0) {
+            if ($seqCiudad != 0) {
                 if ($seqLocalidad == 22 and $seqCiudad == 149) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][24] . " no coincide con la ciudad";
                 }
@@ -2399,26 +2297,22 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function vivienda($seqTipo,$txtVivienda,$valArriendo,$numLinea){
+    private function vivienda($seqTipo, $txtVivienda, $valArriendo, $numLinea) {
         $seqVivienda = 0;
-        if($seqTipo == 1){
+        if ($seqTipo == 1) {
             $seqVivienda = 5;
-        }else{
+        } else {
             $arrVivienda = obtenerDatosTabla(
-                "t_frm_vivienda",
-                array("seqVivienda","txtVivienda"),
-                "txtVivienda",
-                "lower(txtVivienda) = '" . mb_strtolower($txtVivienda) . "'"
-
+                    "t_frm_vivienda", array("seqVivienda", "txtVivienda"), "txtVivienda", "lower(txtVivienda) = '" . mb_strtolower($txtVivienda) . "'"
             );
-            if(! empty($arrVivienda)){
+            if (!empty($arrVivienda)) {
                 $seqVivienda = $arrVivienda[$txtVivienda];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][30] . " es desconocido";
             }
-            if($seqVivienda == 1 and $valArriendo == 0){
+            if ($seqVivienda == 1 and $valArriendo == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][31] . " no es válido de acuerdo con el tipo de vivienda";
-            }elseif($seqVivienda != 1 and $valArriendo != 0){
+            } elseif ($seqVivienda != 1 and $valArriendo != 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][31] . " no es válido de acuerdo con el tipo de vivienda";
             }
         }
@@ -2432,11 +2326,11 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function sisben($seqTipo,$txtSisben,$numLinea){
-        if($seqTipo == 1){
+    private function sisben($seqTipo, $txtSisben, $numLinea) {
+        if ($seqTipo == 1) {
             $seqSisben = 1;
-        }else{
-            switch(mb_strtolower(trim($txtSisben))){
+        } else {
+            switch (mb_strtolower(trim($txtSisben))) {
                 case "ninguno":
                     $seqSisben = 1;
                     break;
@@ -2461,28 +2355,24 @@ class InscripcionFonvivienda
      * @param $numPosicion
      * @return int
      */
-    private function banco($seqTipo,$txtAhorro,$valAhorro,$numLinea,$numPosicion){
+    private function banco($seqTipo, $txtAhorro, $valAhorro, $numLinea, $numPosicion) {
         $seqAhorro = 0;
-        if($seqTipo == 2 or $seqTipo == 3){
+        if ($seqTipo == 2 or $seqTipo == 3) {
             $arrAhorro = obtenerDatosTabla(
-                "t_frm_banco",
-                array("seqBanco","txtBanco"),
-                "txtBanco",
-                "lower(txtBanco) = '" . mb_strtolower($txtAhorro) . "'"
-
+                    "t_frm_banco", array("seqBanco", "txtBanco"), "txtBanco", "lower(txtBanco) = '" . mb_strtolower($txtAhorro) . "'"
             );
-            if(! empty($arrAhorro)){
+            if (!empty($arrAhorro)) {
                 $seqAhorro = $arrAhorro[$txtAhorro];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][$numPosicion] . " es desconocido";
             }
 
-            if($seqAhorro == 1 and $valAhorro != 0){
+            if ($seqAhorro == 1 and $valAhorro != 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][$numPosicion] . " no es válido para la el banco seleccionado";
-            }elseif($seqAhorro != 1 and $valAhorro == 0){
+            } elseif ($seqAhorro != 1 and $valAhorro == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][$numPosicion] . " no es válido para la el banco seleccionado";
             }
-        }else{
+        } else {
             $seqAhorro = 1;
         }
         return $seqAhorro;
@@ -2498,18 +2388,18 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function subsidio($seqTipo,$valSNal,$txtSoporteSNal,$seqTipoEsquema,$txtEntidadSubsidio,$numLinea){
+    private function subsidio($seqTipo, $valSNal, $txtSoporteSNal, $seqTipoEsquema, $txtEntidadSubsidio, $numLinea) {
         $seqEntidadSubsidio = 0;
-        if($seqTipo == 1){
+        if ($seqTipo == 1) {
             if ($seqTipoEsquema == 16) { // MVY de 2 a 4 SMMLV
                 $seqEntidadSubsidio = 12;
             } else { // MCY de 0 a 2 SMMLV
                 $seqEntidadSubsidio = 14;
             }
-        }else{
-            if(in_array(trim(mb_strtolower($txtEntidadSubsidio)),$this->arrPlantilla[$seqTipo]['ENTIDAD SUBSIDIO'])){
-                $seqEntidadSubsidio = array_keys($this->arrPlantilla[$seqTipo]['ENTIDAD SUBSIDIO'],trim(mb_strtolower($txtEntidadSubsidio)))[0];
-            }else{
+        } else {
+            if (in_array(trim(mb_strtolower($txtEntidadSubsidio)), $this->arrPlantilla[$seqTipo]['ENTIDAD SUBSIDIO'])) {
+                $seqEntidadSubsidio = array_keys($this->arrPlantilla[$seqTipo]['ENTIDAD SUBSIDIO'], trim(mb_strtolower($txtEntidadSubsidio)))[0];
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][42] . " no es válido";
             }
             if ($valSNal == 0 and $txtSoporteSNal != "") {
@@ -2530,35 +2420,30 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int
      */
-    private function donacion($seqTipo,$txtDonacion,$valDonacion,$txtSoporteDonacion,$numLinea){
+    private function donacion($seqTipo, $txtDonacion, $valDonacion, $txtSoporteDonacion, $numLinea) {
         $seqDonacion = 0;
-        if($seqTipo == 2 or $seqTipo == 3){
+        if ($seqTipo == 2 or $seqTipo == 3) {
             $arrDonacion = obtenerDatosTabla(
-                "t_frm_empresa_donante",
-                array("seqEmpresaDonante","txtEmpresaDonante"),
-                "txtEmpresaDonante",
-                "lower(txtEmpresaDonante) = '" . mb_strtolower($txtDonacion) . "'"
-
+                    "t_frm_empresa_donante", array("seqEmpresaDonante", "txtEmpresaDonante"), "txtEmpresaDonante", "lower(txtEmpresaDonante) = '" . mb_strtolower($txtDonacion) . "'"
             );
-            if(! empty($arrDonacion)){
+            if (!empty($arrDonacion)) {
                 $seqDonacion = $arrDonacion[$txtDonacion];
-            }else{
+            } else {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][45] . " es desconocido";
             }
 
-            if($seqDonacion == 1 and $valDonacion != 0){
+            if ($seqDonacion == 1 and $valDonacion != 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][44] . " no corresponde con la entidad donante";
-            }elseif($seqDonacion != 1 and $valDonacion == 0){
+            } elseif ($seqDonacion != 1 and $valDonacion == 0) {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][44] . " no corresponde con la entidad donante";
             }
 
-            if($valDonacion != 0 and $txtSoporteDonacion == ""){
+            if ($valDonacion != 0 and $txtSoporteDonacion == "") {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][46] . " no corresponde con el valor de la donación";
-            }elseif($valDonacion == 0 and $txtSoporteDonacion != ""){
+            } elseif ($valDonacion == 0 and $txtSoporteDonacion != "") {
                 $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][46] . " no corresponde con el valor de la donación";
             }
-
-        }else{
+        } else {
             $seqDonacion = 1;
         }
         return $seqDonacion;
@@ -2570,10 +2455,10 @@ class InscripcionFonvivienda
      * @param $txtRangoIngresos
      * @return int
      */
-    private function esquema($seqTipo,$txtRangoIngresos){
+    private function esquema($seqTipo, $txtRangoIngresos) {
         $seqTipoEsquema = 0;
-        if($seqTipo == 1){
-            switch($txtRangoIngresos){
+        if ($seqTipo == 1) {
+            switch ($txtRangoIngresos) {
                 case "HASTA 2 SMMLV": // 10 SMMLV
                     $seqTipoEsquema = 17;
                     break;
@@ -2587,9 +2472,9 @@ class InscripcionFonvivienda
                     $seqTipoEsquema = 16;
                     break;
             }
-        }elseif($seqTipo == 2){
+        } elseif ($seqTipo == 2) {
             $seqTipoEsquema = 12;
-        }else{
+        } else {
             $seqTipoEsquema = 1;
         }
         return $seqTipoEsquema;
@@ -2603,20 +2488,20 @@ class InscripcionFonvivienda
      * @param $valSubsidioNacional
      * @return float|int
      */
-    private function valorSubsidio($seqTipo,$seqTipoEsquema,$seqUnidadProyecto,$valSubsidioNacional){
+    private function valorSubsidio($seqTipo, $seqTipoEsquema, $seqUnidadProyecto, $valSubsidioNacional) {
         global $arrConfiguracion;
         $valAspiraSubsidio = 0;
-        if($seqTipo == 1) {
+        if ($seqTipo == 1) {
             if ($seqTipoEsquema == 16) { // MVY de 2 a 4 SMMLV
                 $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 8;
             } else { // MCY de 0 a 2 SMMLV
                 $valAspiraSubsidio = $arrConfiguracion['constantes']['salarioMinimo'] * 10;
             }
-        }elseif($seqTipo == 2){
+        } elseif ($seqTipo == 2) {
             $num35SMMLV = $arrConfiguracion['constantes']['salarioMinimo'] * 35;
             $valAspiraSubsidio = $num35SMMLV - $valSubsidioNacional;
-        }else{
-            $valAspiraSubsidio = (isset($this->arrDatosUnidades[$seqUnidadProyecto]['valor']))? $this->arrDatosUnidades[$seqUnidadProyecto]['valor'] : 0;
+        } else {
+            $valAspiraSubsidio = (isset($this->arrDatosUnidades[$seqUnidadProyecto]['valor'])) ? $this->arrDatosUnidades[$seqUnidadProyecto]['valor'] : 0;
         }
         return $valAspiraSubsidio;
     }
@@ -2628,64 +2513,64 @@ class InscripcionFonvivienda
      * @param $arrCiudadano
      * @return mixed
      */
-    private function modificarCiudadano($objCiudadano,$arrCiudadano){
+    private function modificarCiudadano($objCiudadano, $arrCiudadano) {
 
-        $objCiudadano->seqParentesco    = $arrCiudadano['seqParentesco'];
+        $objCiudadano->seqParentesco = $arrCiudadano['seqParentesco'];
         $objCiudadano->seqTipoDocumento = $arrCiudadano['seqTipoDocumento'];
-        $objCiudadano->numDocumento     = $arrCiudadano['numDocumento'];
-        $objCiudadano->txtNombre1       = $arrCiudadano['txtNombre1'];
-        $objCiudadano->txtNombre2       = $arrCiudadano['txtNombre2'];
-        $objCiudadano->txtApellido1     = $arrCiudadano['txtApellido1'];
-        $objCiudadano->txtApellido2     = $arrCiudadano['txtApellido2'];
-        $objCiudadano->valIngresos      = $arrCiudadano['valIngresos'];
+        $objCiudadano->numDocumento = $arrCiudadano['numDocumento'];
+        $objCiudadano->txtNombre1 = $arrCiudadano['txtNombre1'];
+        $objCiudadano->txtNombre2 = $arrCiudadano['txtNombre2'];
+        $objCiudadano->txtApellido1 = $arrCiudadano['txtApellido1'];
+        $objCiudadano->txtApellido2 = $arrCiudadano['txtApellido2'];
+        $objCiudadano->valIngresos = $arrCiudadano['valIngresos'];
 
-        if($arrCiudadano['seqGrupoLgtbi'] != 0){
+        if ($arrCiudadano['seqGrupoLgtbi'] != 0) {
             $objCiudadano->seqGrupoLgtbi = $arrCiudadano['seqGrupoLgtbi'];
             $objCiudadano->bolLgtb = 1;
         }
 
-        if($arrCiudadano['fchNacimiento'] !== null){
+        if ($arrCiudadano['fchNacimiento'] !== null) {
             $objCiudadano->fchNacimiento = $arrCiudadano['fchNacimiento'];
         }
 
-        if($arrCiudadano['seqNivelEducativo'] != 1){
+        if ($arrCiudadano['seqNivelEducativo'] != 1) {
             $objCiudadano->seqNivelEducativo = $arrCiudadano['seqNivelEducativo'];
             $objCiudadano->numAnosAprobados = $arrCiudadano['numAnosAprobados'];
         }
 
-        if($arrCiudadano['seqCondicionEspecial1'] != 6){
+        if ($arrCiudadano['seqCondicionEspecial1'] != 6) {
             $objCiudadano->seqCondicionEspecial = $arrCiudadano['seqCondicionEspecial1'];
         }
 
-        if($arrCiudadano['seqCondicionEspecial2'] != 6){
+        if ($arrCiudadano['seqCondicionEspecial2'] != 6) {
             $objCiudadano->seqCondicionEspecial2 = $arrCiudadano['seqCondicionEspecial2'];
         }
 
-        if($arrCiudadano['seqCondicionEspecial3'] != 6){
+        if ($arrCiudadano['seqCondicionEspecial3'] != 6) {
             $objCiudadano->seqCondicionEspecial3 = $arrCiudadano['seqCondicionEspecial3'];
         }
 
-        if($arrCiudadano['seqEstadoCivil'] != 9){
+        if ($arrCiudadano['seqEstadoCivil'] != 9) {
             $objCiudadano->seqEstadoCivil = $arrCiudadano['seqEstadoCivil'];
         }
 
-        if($arrCiudadano['seqEtnia'] != 1){
+        if ($arrCiudadano['seqEtnia'] != 1) {
             $objCiudadano->seqEtnia = $arrCiudadano['seqEtnia'];
         }
 
-        if($arrCiudadano['seqOcupacion'] != 20){
+        if ($arrCiudadano['seqOcupacion'] != 20) {
             $objCiudadano->seqOcupacion = $arrCiudadano['seqOcupacion'];
         }
 
-        if($arrCiudadano['seqSalud'] != 0){
+        if ($arrCiudadano['seqSalud'] != 0) {
             $objCiudadano->seqSalud = $arrCiudadano['seqSalud'];
         }
 
-        if($arrCiudadano['seqSexo'] != null){
+        if ($arrCiudadano['seqSexo'] != null) {
             $objCiudadano->seqSexo = $arrCiudadano['seqSexo'];
         }
 
-        if($arrCiudadano['seqTipoVictima'] != 0){
+        if ($arrCiudadano['seqTipoVictima'] != 0) {
             $objCiudadano->seqTipoVictima = $arrCiudadano['seqTipoVictima'];
         }
 
@@ -2699,112 +2584,112 @@ class InscripcionFonvivienda
      * @param $arrHogar
      * @return mixed
      */
-    private function modificarFormulario($claFormulario,$arrHogar){
+    private function modificarFormulario($claFormulario, $arrHogar) {
 
-        $claFormulario->fchUltimaActualizacion   = date("Y-m-d H:i:s");
-        $claFormulario->bolCerrado               = 1;
-        $claFormulario->bolIdentificada          = intval($arrHogar['bolIdentificada']);
-        $claFormulario->bolViabilizada           = intval($arrHogar['bolViabilizada']);
-        $claFormulario->seqModalidad             = intval($arrHogar['seqModalidad']);
-        $claFormulario->seqPlanGobierno          = intval($arrHogar['seqPlanGobierno']);
-        $claFormulario->seqProyecto              = intval($arrHogar['seqProyecto']);
-        $claFormulario->seqProyectoHijo          = intval($arrHogar['seqProyectoHijo']);
-        $claFormulario->seqUnidadProyecto        = intval($arrHogar['seqUnidadProyecto']);
-        $claFormulario->seqSolucion              = intval($arrHogar['seqSolucion']);
-        $claFormulario->seqTipoEsquema           = intval($arrHogar['seqTipoEsquema']);
-        $claFormulario->txtChip                  = trim($arrHogar['txtChip']);
-        $claFormulario->txtDireccionSolucion     = trim($arrHogar['txtDireccionSolucion']);
+        $claFormulario->fchUltimaActualizacion = date("Y-m-d H:i:s");
+        $claFormulario->bolCerrado = 1;
+        $claFormulario->bolIdentificada = intval($arrHogar['bolIdentificada']);
+        $claFormulario->bolViabilizada = intval($arrHogar['bolViabilizada']);
+        $claFormulario->seqModalidad = intval($arrHogar['seqModalidad']);
+        $claFormulario->seqPlanGobierno = intval($arrHogar['seqPlanGobierno']);
+        $claFormulario->seqProyecto = intval($arrHogar['seqProyecto']);
+        $claFormulario->seqProyectoHijo = intval($arrHogar['seqProyectoHijo']);
+        $claFormulario->seqUnidadProyecto = intval($arrHogar['seqUnidadProyecto']);
+        $claFormulario->seqSolucion = intval($arrHogar['seqSolucion']);
+        $claFormulario->seqTipoEsquema = intval($arrHogar['seqTipoEsquema']);
+        $claFormulario->txtChip = trim($arrHogar['txtChip']);
+        $claFormulario->txtDireccionSolucion = trim($arrHogar['txtDireccionSolucion']);
         $claFormulario->txtMatriculaInmobiliaria = trim($arrHogar['txtMatriculaInmobiliaria']);
-        $claFormulario->valTotalRecursos         = doubleval($arrHogar['valTotalRecursos']);
-        $claFormulario->valAspiraSubsidio        = doubleval($arrHogar['valAspiraSubsidio']);
+        $claFormulario->valTotalRecursos = doubleval($arrHogar['valTotalRecursos']);
+        $claFormulario->valAspiraSubsidio = doubleval($arrHogar['valAspiraSubsidio']);
 
-        foreach($claFormulario->arrCiudadano as $objCiudadano){
-            $arrHogar['bolDesplazado'] = ($objCiudadano->seqTipoVictima == 2)? 1 : $arrHogar['bolDesplazado'];
+        foreach ($claFormulario->arrCiudadano as $objCiudadano) {
+            $arrHogar['bolDesplazado'] = ($objCiudadano->seqTipoVictima == 2) ? 1 : $arrHogar['bolDesplazado'];
         }
         $claFormulario->bolDesplazado = intval($arrHogar['bolDesplazado']);
 
-        if($this->seqTipo == 1) {
+        if ($this->seqTipo == 1) {
             $claFormulario->seqEstadoProceso = 16;
-        }else{
+        } else {
             $claFormulario->seqEstadoProceso = 56;
         }
 
-        if($arrHogar['numCelular'] != ""){
+        if ($arrHogar['numCelular'] != "") {
             $claFormulario->numCelular = $arrHogar['numCelular'];
         }
 
-        if($arrHogar['numHabitaciones'] != ""){
+        if ($arrHogar['numHabitaciones'] != "") {
             $claFormulario->numHabitaciones = $arrHogar['numHabitaciones'];
         }
 
-        if($arrHogar['numHacinamiento'] != ""){
+        if ($arrHogar['numHacinamiento'] != "") {
             $claFormulario->numHacinamiento = $arrHogar['numHacinamiento'];
         }
 
-        if($arrHogar['numTelefono1'] != ""){
+        if ($arrHogar['numTelefono1'] != "") {
             $claFormulario->numTelefono1 = $arrHogar['numTelefono1'];
         }
 
-        if($arrHogar['numTelefono2'] != ""){
+        if ($arrHogar['numTelefono2'] != "") {
             $claFormulario->numTelefono1 = $arrHogar['numTelefono1'];
         }
 
-        if($arrHogar['seqBancoCredito'] != 1){
+        if ($arrHogar['seqBancoCredito'] != 1) {
             $claFormulario->seqBancoCredito = $arrHogar['seqBancoCredito'];
             $claFormulario->valCredito = $arrHogar['valCredito'];
         }
 
-        if($arrHogar['seqBancoCuentaAhorro'] != 1){
+        if ($arrHogar['seqBancoCuentaAhorro'] != 1) {
             $claFormulario->seqBancoCuentaAhorro = $arrHogar['seqBancoCuentaAhorro'];
             $claFormulario->valSaldoCuentaAhorro = $arrHogar['valSaldoCuentaAhorro'];
         }
 
-        if($arrHogar['seqBancoCuentaAhorro2'] != 1){
+        if ($arrHogar['seqBancoCuentaAhorro2'] != 1) {
             $claFormulario->seqBancoCuentaAhorro2 = $arrHogar['seqBancoCuentaAhorro2'];
             $claFormulario->valSaldoCuentaAhorro2 = $arrHogar['valSaldoCuentaAhorro2'];
         }
 
-        if($arrHogar['txtDireccion'] != ""){
-            if($arrHogar['txtDireccion'] != $claFormulario->txtDireccion){
+        if ($arrHogar['txtDireccion'] != "") {
+            if ($arrHogar['txtDireccion'] != $claFormulario->txtDireccion) {
                 $claFormulario->seqCiudad = $arrHogar['seqCiudad'];
                 $claFormulario->seqLocalidad = $arrHogar['seqLocalidad'];
                 $claFormulario->seqBarrio = $arrHogar['seqBarrio'];
                 $claFormulario->txtDireccion = $arrHogar['txtDireccion'];
             }
-        }else{
-            if($arrHogar['seqLocalidad'] != 1){
+        } else {
+            if ($arrHogar['seqLocalidad'] != 1) {
                 $claFormulario->seqLocalidad = $arrHogar['seqLocalidad'];
             }
-            if($arrHogar['seqBarrio'] != 1143){
+            if ($arrHogar['seqBarrio'] != 1143) {
                 $claFormulario->seqBarrio = $arrHogar['seqBarrio'];
             }
-            if($arrHogar['seqCiudad'] != 1100){
+            if ($arrHogar['seqCiudad'] != 1100) {
                 $claFormulario->seqCiudad = $arrHogar['seqCiudad'];
             }
         }
 
-        if($arrHogar['seqEmpresaDonante'] != 1){
+        if ($arrHogar['seqEmpresaDonante'] != 1) {
             $claFormulario->seqEmpresaDonante = $arrHogar['seqEmpresaDonante'];
             $claFormulario->valDonacion = $arrHogar['valDonacion'];
             $claFormulario->txtSoporteDonacion = $arrHogar['txtSoporteDonacion'];
         }
 
-        if($arrHogar['seqEntidadSubsidio'] != 1){
+        if ($arrHogar['seqEntidadSubsidio'] != 1) {
             $claFormulario->seqEntidadSubsidio = $arrHogar['seqEntidadSubsidio'];
             $claFormulario->valSubsidioNacional = $arrHogar['valSubsidioNacional'];
             $claFormulario->txtSoporteSubsidioNacional = $arrHogar['txtSoporteSubsidioNacional'];
         }
 
-        if($arrHogar['seqSisben'] != 1){
+        if ($arrHogar['seqSisben'] != 1) {
             $claFormulario->seqSisben = $arrHogar['seqSisben'];
         }
 
-        if($arrHogar['seqVivienda'] != 5){
+        if ($arrHogar['seqVivienda'] != 5) {
             $claFormulario->seqVivienda = $arrHogar['seqVivienda'];
             $claFormulario->valArriendo = $arrHogar['valArriendo'];
         }
 
-        if($arrHogar['txtCorreo'] != ""){
+        if ($arrHogar['txtCorreo'] != "") {
             $claFormulario->txtCorreo = $arrHogar['txtCorreo'];
         }
 
@@ -2817,11 +2702,11 @@ class InscripcionFonvivienda
      * @param $txtLineaValidada
      * @param $numLinea
      */
-    private function lineaValidada($seqTipo,$txtLineaValidada,$numLinea){
-        if(mb_strtolower(trim($txtLineaValidada)) != "si" and mb_strtolower(trim($txtLineaValidada)) != "no"){
+    private function lineaValidada($seqTipo, $txtLineaValidada, $numLinea) {
+        if (mb_strtolower(trim($txtLineaValidada)) != "si" and mb_strtolower(trim($txtLineaValidada)) != "no") {
             $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][47] . " es desconocido, los valores validos son: SI o NO";
         }
-        if(mb_strtolower(trim($txtLineaValidada)) == "no"){
+        if (mb_strtolower(trim($txtLineaValidada)) == "no") {
             $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": La linea no ha sido validada previamente";
         }
     }
@@ -2831,7 +2716,7 @@ class InscripcionFonvivienda
      * @param $seqTipo
      * @return mixed
      */
-    public function obtenerTitulos($seqTipo){
+    public function obtenerTitulos($seqTipo) {
         return $this->arrFormato[$seqTipo];
     }
 
@@ -2839,15 +2724,15 @@ class InscripcionFonvivienda
      * EXPORTABLE DE INFORMACION
      * @return array
      */
-    public function exportable(){
+    public function exportable() {
 
         $arrExportable = array();
 
-        foreach($this->arrHogares as $numHogar => $arrHogar){
+        foreach ($this->arrHogares as $numHogar => $arrHogar) {
             $bolPrincipal = false;
-            foreach($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano){
+            foreach ($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano) {
 
-                if($arrCiudadano['seqParentesco'] == 1 or $bolPrincipal == false) {
+                if ($arrCiudadano['seqParentesco'] == 1 or $bolPrincipal == false) {
 
                     $bolPrincipal = true;
 
@@ -2901,9 +2786,7 @@ class InscripcionFonvivienda
                     $arrExportable[$numHogar]['LINEA VALIDADA'] = "SI";
                     $arrExportable[$numHogar]['ESTADO HOGAR'] = $arrHogar['txtEstadoHogar'];
                     $arrExportable[$numHogar]['OBSERVACIONES'] = $arrHogar['txtObservaciones'];
-
                 }
-
             }
         }
 
@@ -2918,11 +2801,11 @@ class InscripcionFonvivienda
      * @param int $valSubsidioNacionalArchivo
      * @return float|int
      */
-    private function subsidioNacional($seqTipo,$txtRangoIngresos,$valSubsidioNacionalArchivo = 0){
+    private function subsidioNacional($seqTipo, $txtRangoIngresos, $valSubsidioNacionalArchivo = 0) {
         global $arrConfiguracion;
         $valSubsidioNacional = 0;
-        if($seqTipo == 1){
-            switch($txtRangoIngresos){
+        if ($seqTipo == 1) {
+            switch ($txtRangoIngresos) {
                 case "HASTA 2 SMMLV": // 10 SMMLV
                     $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 30;
                     break;
@@ -2936,7 +2819,7 @@ class InscripcionFonvivienda
                     $valSubsidioNacional = $arrConfiguracion['constantes']['salarioMinimo'] * 20;
                     break;
             }
-        }else{
+        } else {
             $valSubsidioNacional = $valSubsidioNacionalArchivo;
         }
         return $valSubsidioNacional;
@@ -2950,31 +2833,30 @@ class InscripcionFonvivienda
      * @param $numLinea
      * @return int|string|null
      */
-    private function solucionVivienda($seqTipo, $txtProyecto, $txtTipo, $numLinea){
+    private function solucionVivienda($seqTipo, $txtProyecto, $txtTipo, $numLinea) {
 
         $seqProyecto = 37;
         $seqConjunto = null;
         $seqUnidad = 1;
 
-        if($seqTipo == 3 or $seqTipo == 2){
+        if ($seqTipo == 3 or $seqTipo == 2) {
 
-            foreach($this->arrDatosUnidades as $seqUnidadProyecto => $arrDatosUnidad){
-                if(trim(mb_strtolower($txtProyecto)) == trim(mb_strtolower($arrDatosUnidad['nombre']))){
+            foreach ($this->arrDatosUnidades as $seqUnidadProyecto => $arrDatosUnidad) {
+                if (trim(mb_strtolower($txtProyecto)) == trim(mb_strtolower($arrDatosUnidad['nombre']))) {
                     $seqProyecto = $arrDatosUnidad['proyecto'];
                     $seqConjunto = $arrDatosUnidad['conjunto'];
                     $seqUnidad = $seqUnidadProyecto;
                 }
             }
 
-            if($seqTipo == 3) {
+            if ($seqTipo == 3) {
                 if ($seqUnidad == 1) {
                     $this->arrErrores[] = "Error linea " . ($numLinea + 1) . ": El valor de la columna " . $this->arrFormato[$seqTipo][43] . " es desconocido, no es posible obtener el dato de $txtTipo";
                 }
             }
-
         }
 
-        switch(trim(mb_strtolower($txtTipo))){
+        switch (trim(mb_strtolower($txtTipo))) {
             case "proyecto":
                 return $seqProyecto;
                 break;
@@ -2985,10 +2867,9 @@ class InscripcionFonvivienda
                 return $seqUnidad;
                 break;
         }
-
     }
 
-    /*************************************************************************************************************/
+    /*     * ********************************************************************************************************** */
 
     /**
      * CREA NUEVOS FORMULARIOS - FUSIONA - SEPARA
@@ -2996,25 +2877,25 @@ class InscripcionFonvivienda
      * TOMA LOS DATOS DE FNV Y LOS PONE EN FRM
      * @param $seqCargue
      */
-    public function procesarCargue($seqCargue){
+    public function procesarCargue($seqCargue) {
         global $aptBd;
 
         // obtiene la informacion del cargue
         $this->cargar($seqCargue);
 
         // quita los hogares que no estan listos para procesar
-        foreach($this->arrHogares as $numHogar => $arrHogar){
-            if($arrHogar['seqEstadoHogar'] != 2){
+        foreach ($this->arrHogares as $numHogar => $arrHogar) {
+            if ($arrHogar['seqEstadoHogar'] != 2) {
                 unset($this->arrHogares[$numHogar]);
             }
         }
 
-        try{
+        try {
 
             $aptBd->BeginTrans();
 
             // procesa los hogares listos para procesar
-            foreach($this->arrHogares as $numHogar => $arrHogar){
+            foreach ($this->arrHogares as $numHogar => $arrHogar) {
 
                 // formulario original para la comparacion del seguimiento
                 $claFormularioOriginal = new FormularioSubsidios();
@@ -3024,19 +2905,19 @@ class InscripcionFonvivienda
 
                 // Crea nuevos formularios = 0
                 // Accion con formulario existente <> 0
-                if($arrHogar['seqFormulario'] == 0){
+                if ($arrHogar['seqFormulario'] == 0) {
 
                     // nuevos ciudadanos
-                    foreach($arrHogar['ciudadanos'] as $arrCiudadano){
+                    foreach ($arrHogar['ciudadanos'] as $arrCiudadano) {
                         $claCiudadano = new Ciudadano();
-                        foreach($claCiudadano as $txtCampo => $txtValor){
-                            if(isset($arrCiudadano[$txtCampo])){
+                        foreach ($claCiudadano as $txtCampo => $txtValor) {
+                            if (isset($arrCiudadano[$txtCampo])) {
                                 $claCiudadano->$txtCampo = $arrCiudadano[$txtCampo];
                             }
                         }
                         $claCiudadano->guardarCiudadano();
-                        if(! empty($claCiudadano->arrErrores)){
-                            throw new Exception(implode("<br>",$claCiudadano->arrErrores));
+                        if (!empty($claCiudadano->arrErrores)) {
+                            throw new Exception(implode("<br>", $claCiudadano->arrErrores));
                         }
                         $seqCiudadano = $claCiudadano->seqCiudadano;
                         $claFormulario->arrCiudadano[$seqCiudadano] = $claCiudadano;
@@ -3047,21 +2928,20 @@ class InscripcionFonvivienda
 
                     // salva los datos del formulario
                     $claFormulario->guardarFormulario();
-                    if(! empty($claFormulario->arrErrores)){
-                        throw new Exception(implode("<br>",$claFormulario->arrErrores));
+                    if (!empty($claFormulario->arrErrores)) {
+                        throw new Exception(implode("<br>", $claFormulario->arrErrores));
                     }
 
                     // arma el hogar
                     $claFormulario->relacionarCiudadanoFormulario();
-                    if(! empty($claFormulario->arrErrores)){
-                        throw new Exception(implode("<br>",$claFormulario->arrErrores));
+                    if (!empty($claFormulario->arrErrores)) {
+                        throw new Exception(implode("<br>", $claFormulario->arrErrores));
                     }
 
                     // seguimientos
                     $claSeguimiento = new Seguimiento();
-                    $claSeguimiento->inscripcionMasiva($this->seqTipo, $claFormularioOriginal,$claFormulario);
-
-                }else{
+                    $claSeguimiento->inscripcionMasiva($this->seqTipo, $claFormularioOriginal, $claFormulario);
+                } else {
 
                     // formulario original para la comparacion del seguimiento
                     $claFormularioOriginal->cargarFormulario($arrHogar['seqFormulario']);
@@ -3071,156 +2951,151 @@ class InscripcionFonvivienda
 
                     // si es MCY aplica fusion de miembros de hogar
                     // de lo contrario aplica separacion de hogares
-                    if($this->seqTipo == 1){
+                    if ($this->seqTipo == 1) {
 
                         // procesamiento de ciudadanos
-                        foreach($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano){
+                        foreach ($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano) {
 
                             $bolExistente = false;
-                            foreach($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano){
-                                if(
-                                    $objCiudadano->seqTipoDocumento == $arrCiudadano['seqTipoDocumento']
-                                    and $objCiudadano->numDocumento == $arrCiudadano['numDocumento']
-                                ){
+                            foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
+                                if (
+                                        $objCiudadano->seqTipoDocumento == $arrCiudadano['seqTipoDocumento']
+                                        and $objCiudadano->numDocumento == $arrCiudadano['numDocumento']
+                                ) {
                                     $bolExistente = true;
-                                    $objCiudadano = $this->modificarCiudadano($objCiudadano,$arrCiudadano);
+                                    $objCiudadano = $this->modificarCiudadano($objCiudadano, $arrCiudadano);
                                     $objCiudadano->editarCiudadano($seqCiudadano);
                                     $claFormulario->arrCiudadano[$seqCiudadano] = $objCiudadano;
-                                    if(! empty($objCiudadano->arrErrores)){
-                                        throw new Exception(implode("<br>",$objCiudadano->arrErrores));
+                                    if (!empty($objCiudadano->arrErrores)) {
+                                        throw new Exception(implode("<br>", $objCiudadano->arrErrores));
                                     }
-                                }else{
+                                } else {
                                     $objCiudadano->seqParentesco = 14;
                                     $objCiudadano->editarCiudadano($seqCiudadano);
                                     $claFormulario->arrCiudadano[$seqCiudadano] = $objCiudadano;
-                                    if(! empty($objCiudadano->arrErrores)){
-                                        throw new Exception(implode("<br>",$objCiudadano->arrErrores));
+                                    if (!empty($objCiudadano->arrErrores)) {
+                                        throw new Exception(implode("<br>", $objCiudadano->arrErrores));
                                     }
                                 }
                             }
 
-                            if($bolExistente == false){
+                            if ($bolExistente == false) {
                                 $objCiudadano = new Ciudadano();
-                                $objCiudadano = $this->modificarCiudadano($objCiudadano,$arrCiudadano);
+                                $objCiudadano = $this->modificarCiudadano($objCiudadano, $arrCiudadano);
                                 $objCiudadano->guardarCiudadano();
                                 $seqCiudadano = $objCiudadano->seqCiudadano;
                                 $claFormulario->arrCiudadano[$seqCiudadano] = $objCiudadano;
-                                if(! empty($objCiudadano->arrErrores)){
-                                    throw new Exception(implode("<br>",$objCiudadano->arrErrores));
+                                if (!empty($objCiudadano->arrErrores)) {
+                                    throw new Exception(implode("<br>", $objCiudadano->arrErrores));
                                 }
                             }
-
                         }
 
                         // actualiza los datos del formulario
-                        $claFormulario = $this->modificarFormulario($claFormulario,$arrHogar);
+                        $claFormulario = $this->modificarFormulario($claFormulario, $arrHogar);
                         $claFormulario->editarFormulario($claFormulario->seqFormulario);
-                        if(! empty($claFormulario->arrErrores)){
-                            throw new Exception(implode("<br>",$claFormulario->arrErrores));
+                        if (!empty($claFormulario->arrErrores)) {
+                            throw new Exception(implode("<br>", $claFormulario->arrErrores));
                         }
 
                         // arma el hogar
                         $claFormulario->relacionarCiudadanoFormulario();
-                        if(! empty($claFormulario->arrErrores)){
-                            throw new Exception(implode("<br>",$claFormulario->arrErrores));
+                        if (!empty($claFormulario->arrErrores)) {
+                            throw new Exception(implode("<br>", $claFormulario->arrErrores));
                         }
 
                         // seguimientos
                         $claSeguimiento = new Seguimiento();
-                        $claSeguimiento->inscripcionMasiva($this->seqTipo, $claFormularioOriginal,$claFormulario);
-
-                    }else{
+                        $claSeguimiento->inscripcionMasiva($this->seqTipo, $claFormularioOriginal, $claFormulario);
+                    } else {
 
                         // formulario original para la comparacion del seguimiento
                         $claFormularioOriginal->cargarFormulario($arrHogar['seqFormulario']);
 
                         // obtiene los datos del formulario
                         $claFormulario->cargarFormulario($arrHogar['seqFormulario']);
-                        
+
                         // carga los datos del formulario para seprarar
                         $claFormularioSeparado = new FormularioSubsidios();
                         $claFormularioSeparado->cargarFormulario($arrHogar['seqFormulario']);
                         $claFormularioSeparado = $this->resetFormulario($claFormularioSeparado);
 
                         // mira los miembros existentes para actualizar o separar
-                        foreach($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
+                        foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
                             $bolPresente = false;
                             foreach ($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano) {
-                                if(
-                                    $objCiudadano->seqTipoDocumento == $arrCiudadano['seqTipoDocumento'] and
-                                    $objCiudadano->numDocumento == $arrCiudadano['numDocumento']
-                                ){
+                                if (
+                                        $objCiudadano->seqTipoDocumento == $arrCiudadano['seqTipoDocumento'] and
+                                        $objCiudadano->numDocumento == $arrCiudadano['numDocumento']
+                                ) {
                                     $bolPresente = true;
-                                    $objCiudadano = $this->modificarCiudadano($objCiudadano,$arrCiudadano);
+                                    $objCiudadano = $this->modificarCiudadano($objCiudadano, $arrCiudadano);
                                     $objCiudadano->editarCiudadano($objCiudadano->seqCiudadano);
                                     $claFormulario->arrCiudadano[$seqCiudadano] = $objCiudadano;
                                     unset($arrHogar['ciudadanos'][$idCiudadano]);
-                                    if(! empty($objCiudadano->arrErrores)){
-                                        throw new Exception(implode("<br>",$objCiudadano->arrErrores));
+                                    if (!empty($objCiudadano->arrErrores)) {
+                                        throw new Exception(implode("<br>", $objCiudadano->arrErrores));
                                     }
                                 }
                             }
-                            if($bolPresente == false){
+                            if ($bolPresente == false) {
                                 $claFormularioSeparado->arrCiudadano[$seqCiudadano] = $objCiudadano;
                                 unset($claFormulario->arrCiudadano[$seqCiudadano]);
                             }
                         }
 
                         // miembros de hogar para adicionar
-                        if(! empty($arrHogar['ciudadanos'])){
-                            foreach($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano){
+                        if (!empty($arrHogar['ciudadanos'])) {
+                            foreach ($arrHogar['ciudadanos'] as $idCiudadano => $arrCiudadano) {
                                 $objCiudadano = new Ciudadano();
-                                $objCiudadano = $this->modificarCiudadano($objCiudadano,$arrCiudadano);
+                                $objCiudadano = $this->modificarCiudadano($objCiudadano, $arrCiudadano);
                                 $objCiudadano->guardarCiudadano();
                                 $seqCiudadano = $objCiudadano->seqCiudadano;
                                 $claFormulario->arrCiudadano[$seqCiudadano] = $objCiudadano;
-                                if(! empty($objCiudadano->arrErrores)){
-                                    throw new Exception(implode("<br>",$objCiudadano->arrErrores));
+                                if (!empty($objCiudadano->arrErrores)) {
+                                    throw new Exception(implode("<br>", $objCiudadano->arrErrores));
                                 }
                             }
                         }
 
                         // datos del formulario
-                        $claFormulario = $this->modificarFormulario($claFormulario,$arrHogar);
+                        $claFormulario = $this->modificarFormulario($claFormulario, $arrHogar);
                         $claFormulario->editarFormulario($arrHogar['seqFormulario']);
-                        if(! empty($claFormulario->arrErrores)){
-                            throw new Exception(implode("<br>",$claFormulario->arrErrores));
+                        if (!empty($claFormulario->arrErrores)) {
+                            throw new Exception(implode("<br>", $claFormulario->arrErrores));
                         }
 
                         $claFormulario->relacionarCiudadanoFormulario();
-                        if(! empty($claFormulario->arrErrores)){
-                            throw new Exception(implode("<br>",$claFormulario->arrErrores));
+                        if (!empty($claFormulario->arrErrores)) {
+                            throw new Exception(implode("<br>", $claFormulario->arrErrores));
                         }
 
                         // datos del formulario separado
                         $claFormularioSeparado->seqFormulario = null;
                         $claFormularioSeparado->guardarFormulario();
-                        if(! empty($claFormularioSeparado->arrErrores)){
-                            throw new Exception(implode("<br>",$claFormularioSeparado->arrErrores));
+                        if (!empty($claFormularioSeparado->arrErrores)) {
+                            throw new Exception(implode("<br>", $claFormularioSeparado->arrErrores));
                         }
 
                         $claFormularioSeparado->relacionarCiudadanoFormulario();
-                        if(! empty($claFormularioSeparado->arrErrores)){
-                            throw new Exception(implode("<br>",$claFormularioSeparado->arrErrores));
+                        if (!empty($claFormularioSeparado->arrErrores)) {
+                            throw new Exception(implode("<br>", $claFormularioSeparado->arrErrores));
                         }
 
                         // seguimientos del formularo
                         $claSeguimiento = new Seguimiento();
-                        $claSeguimiento->inscripcionMasiva($this->seqTipo, $claFormularioOriginal,$claFormulario);
+                        $claSeguimiento->inscripcionMasiva($this->seqTipo, $claFormularioOriginal, $claFormulario);
 
                         // seguimientos del formularo separado
-                        $txtComentario =
-                            "POR INSTRUCCION SD RECURSOS PUBLICOS SE AJUSTA CONFORMACION HOGAR EQUIVALENTE AL GRUPO POSTULADO ANTE FONVIVIENDA. " .
-                            "SE EXCLUYEN MIEMBROS NO RELACIONADOS EN FONVIVIENDA PARA CONFORMAR NUEVO HOGAR. (FRM Anterior " . $claFormularioOriginal->seqFormulario . ") ";
+                        $txtComentario = "POR INSTRUCCION SD RECURSOS PUBLICOS SE AJUSTA CONFORMACION HOGAR EQUIVALENTE AL GRUPO POSTULADO ANTE FONVIVIENDA. " .
+                                "SE EXCLUYEN MIEMBROS NO RELACIONADOS EN FONVIVIENDA PARA CONFORMAR NUEVO HOGAR. (FRM Anterior " . $claFormularioOriginal->seqFormulario . ") ";
                         $claSeguimiento = new Seguimiento();
-                        $claSeguimiento->inscripcionMasiva($this->seqTipo, new FormularioSubsidios(),$claFormularioSeparado,$txtComentario);
-
+                        $claSeguimiento->inscripcionMasiva($this->seqTipo, new FormularioSubsidios(), $claFormularioSeparado, $txtComentario);
                     }
-
                 }
 
                 // vinculoacion con unidades
-                if(intval($arrHogar['seqUnidadProyecto']) != 0 and intval($arrHogar['seqUnidadProyecto']) != 1){
+                if (intval($arrHogar['seqUnidadProyecto']) != 0 and intval($arrHogar['seqUnidadProyecto']) != 1) {
                     $sql = "
                         update t_pry_unidad_proyecto set 
                           seqFormulario = " . $claFormulario->seqFormulario . "
@@ -3238,22 +3113,21 @@ class InscripcionFonvivienda
                       and numHogar = $numHogar
                 ";
                 $aptBd->execute($sql);
-
             }
 
             // actualizando el estado del cargue
             $numPendientes = 0;
             $numProcesados = 0;
-            foreach($this->arrHogares as $numHogar => $arrHogar){
-                if($arrHogar['seqEstadoHogar'] == 1 or $arrHogar['seqEstadoHogar'] == 3){
+            foreach ($this->arrHogares as $numHogar => $arrHogar) {
+                if ($arrHogar['seqEstadoHogar'] == 1 or $arrHogar['seqEstadoHogar'] == 3) {
                     $numPendientes++;
                 }
-                if($arrHogar['seqEstadoHogar'] == 4){
+                if ($arrHogar['seqEstadoHogar'] == 4) {
                     $numProcesados++;
                 }
             }
 
-            $this->seqEstado = (count($this->arrHogares) == $numProcesados)? 6 : 5;
+            $this->seqEstado = (count($this->arrHogares) == $numProcesados) ? 6 : 5;
             $sql = "
                 update t_fnv_cargue set
                     seqEstado = " . $this->seqEstado . "
@@ -3265,13 +3139,11 @@ class InscripcionFonvivienda
 
             $aptBd->CommitTrans();
 //            $aptBd->RollBackTrans();
-
-        }catch (Exception $objError){
+        } catch (Exception $objError) {
             $aptBd->RollBackTrans();
             $this->arrErrores['general'][] = "Hubo errores al procesar el hogar " . $numHogar;
             $this->arrErrores['general'][] = $objError->getMessage();
         }
-
     }
 
     /**
@@ -3280,12 +3152,12 @@ class InscripcionFonvivienda
      * ORIGINAL PARA FORMAR UNO NUEVO
      * @param $claFormulario
      */
-    public function resetFormulario($claFormulario){
+    public function resetFormulario($claFormulario) {
 
         $claFormulario->arrCiudadano = array();
         $claFormulario->seqBancoCuentaAhorro = 1;
-        $claFormulario->fchAperturaCuentaAhorro	= null;
-        $claFormulario->bolInmovilizadoCuentaAhorro	= 0;
+        $claFormulario->fchAperturaCuentaAhorro = null;
+        $claFormulario->bolInmovilizadoCuentaAhorro = 0;
         $claFormulario->valSaldoCuentaAhorro = 0;
         $claFormulario->txtSoporteCuentaAhorro = '';
         $claFormulario->seqBancoCuentaAhorro2 = 1;
@@ -3331,8 +3203,6 @@ class InscripcionFonvivienda
         $claFormulario->fchVigencia = null;
 
         return $claFormulario;
-
     }
 
 }
-

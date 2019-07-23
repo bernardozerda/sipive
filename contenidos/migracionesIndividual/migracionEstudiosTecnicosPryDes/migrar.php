@@ -206,14 +206,15 @@ include '../../../recursos/archivos/verificarSesion.php';
                     foreach ($arrDocumentosArchivo as $linea_doc => $documento) {
                         $seqDesembolso = obtenerValoresUtiles($documento, "seqDesembolso");
                         $seqUnidadProyecto = obtenerValoresUtiles($documento, "seqUnidadProyecto");
-                        $fchExpedicion = obtenerValoresUtiles($documento, "fchExpedicion");
+                        // $fchExpedicion = obtenerValoresUtiles($documento, "fchExpedicion");
                         $sqlTecnico = "INSERT INTO T_DES_TECNICO (seqDesembolso, $camposTecnico)
 									SELECT '$seqDesembolso', $camposTecnico
 									FROM T_PRY_TECNICO
 									WHERE seqTecnicoUnidad = $seqUnidadProyecto;";
                         if ($db->query($sqlTecnico)) {
                             $seqTecnico = $db->insert_id;
-                            $db->query("UPDATE T_DES_TECNICO SET fchCreacion = now(), fchActualizacion = now(), fchExpedicion = '".$fchExpedicion."' WHERE seqTecnico = " . $seqTecnico);
+                            // echo "<br>UPDATE T_DES_TECNICO SET fchCreacion = now(), fchActualizacion = now(), fchExpedicion = '".$fchExpedicion."' WHERE seqTecnico = " . $seqTecnico;
+                            $db->query("UPDATE T_DES_TECNICO SET fchCreacion = now(), fchActualizacion = now() WHERE seqTecnico = " . $seqTecnico);
                             $sqlAdjuntosTecnicos = "INSERT INTO T_DES_ADJUNTOS_TECNICOS (seqTecnico, $camposAdjuntosTecnicos)
 									SELECT '$seqTecnico', $camposAdjuntosTecnicos
 									FROM T_PRY_ADJUNTOS_TECNICOS

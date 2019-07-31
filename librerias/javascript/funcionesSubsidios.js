@@ -621,3 +621,60 @@ function limpiar() {
     //$("#nombre").val('');
 
 }
+//Función que permite identificar filas afectads a plantilla
+function filasPlantilla() {
+
+    var txtMensaje = "<div style='text-align:left'><b>Digite el número de hogares a legalizar</b>";
+    txtMensaje += "<p><span class='msgError' style='font-size:12px';><input type='text' name='numFilas' id='numFilas' onfocus=\"this.style.backgroundColor = '#ADD8E6';\"  onblur=\"soloNumeros(this); this.style.backgroundColor = '#FFFFFF';\" size='20' /></span></p>";
+    txtMensaje += "</div>";
+
+    var handleYes = function () {
+        var filas =$('input:text[name=numFilas]').val();
+        console.log("El numero de filas corresponde a: " + filas);
+        if (filas != '') {
+            location.href = './contenidos/legalizacionMCY/plantilla.php?filas=' + filas;
+            this.cancel();
+        } else {
+            filasPlantilla();
+        }
+
+
+    }
+
+    // COMPORTAMIENTO SI SE PRESIONA -- NO -- EN EL CUADRO
+    var handleNo = function () {
+        this.cancel();
+    }
+
+    var objAtributos = {
+        width: "450px",
+        effect: {
+            effect: YAHOO.widget.ContainerEffect.FADE,
+            duration: 0.75
+        },
+        fixedcenter: true,
+        zIndex: 1,
+        visible: false,
+        modal: true,
+        draggable: true,
+        close: false,
+        text: txtMensaje,
+        buttons: [
+            {
+                text: "Aceptar",
+                handler: handleYes
+            },
+            {
+                text: "Cancelar",
+                handler: handleNo,
+                isDefault: true
+            }
+        ]
+    }
+    var objDialogo1 = new YAHOO.widget.SimpleDialog("dlg", objAtributos);
+
+    // Muestra el cuadro de dialogo
+    objDialogo1.setHeader("Generar Plantilla");
+    objDialogo1.render(document.body);
+    objDialogo1.show();
+}

@@ -1573,6 +1573,7 @@ class aad {
                     }
 
                     $claFormulario->fchVigencia = (esFechaValida($claFormulario->fchVigencia)) ? $claFormulario->fchVigencia : null;
+                    //echo "<br>".$arrRegistro[2]."!=".$claFormulario->fchVigencia;
                     if ($arrRegistro[2] != $claFormulario->fchVigencia) {
                         $bolError = true;
                     }
@@ -2601,7 +2602,7 @@ class aad {
 
         foreach ($this->arrCaracteristicas as $txtClave => $seqCaracteristica) {
             $txtValorCaracteristica = (isset($arrPost[$txtClave]) and $arrPost[$txtClave] != "") ? "'" . $arrPost[$txtClave] . "'" : "NULL";
-            echo $sql = "
+            $sql = "
                 insert into t_aad_acto_administrativo (
                     seqTipoActo, 
                     numActo, 
@@ -2719,6 +2720,8 @@ class aad {
     private function aplicarEfectosModificatorias($arrArchivo) {
         global $aptBd;
         $arrFormularios = array();
+        $arrayTxtCampoForm = array();
+        $arrayTxtCampoCiu = array();
         $claCiudadano = new Ciudadano();
         foreach ($arrArchivo as $arrRegistro) {
 
@@ -2738,58 +2741,80 @@ class aad {
             switch ($arrRegistro[1]) {
                 case "Primer Nombre":
                     $txtCampo = "txtNombre1";
+                    $arrayTxtCampoCiu[] = $txtCampo;
                     $claCiudadano->txtNombre1 = mb_strtoupper(trim($arrRegistro[3]));
+                    $valor = "'" . mb_strtoupper(trim($arrRegistro[3])) . "'";
                     break;
                 case "Segundo Nombre":
                     $txtCampo = "txtNombre2";
+                    $arrayTxtCampoCiu[] = $txtCampo;
                     $claCiudadano->txtNombre2 = mb_strtoupper(trim($arrRegistro[3]));
+                    $valor = "'" . mb_strtoupper(trim($arrRegistro[3])) . "'";
                     break;
                 case "Primer Apellido":
                     $txtCampo = "txtApellido1";
+                    $arrayTxtCampoCiu[] = $txtCampo;
                     $claCiudadano->txtApellido1 = mb_strtoupper(trim($arrRegistro[3]));
+                    $valor = "'" . mb_strtoupper(trim($arrRegistro[3])) . "'";
                     break;
                 case "Segundo Apellido":
                     $txtCampo = "txtApellido2";
+                    $arrayTxtCampoCiu[] = $txtCampo;
                     $claCiudadano->txtApellido2 = mb_strtoupper(trim($arrRegistro[3]));
+                    $valor = "'" . mb_strtoupper(trim($arrRegistro[3])) . "'";
                     break;
                 case "Documento":
                     $txtCampo = "numDocumento";
+                    $arrayTxtCampoCiu[] = $txtCampo;
                     $claCiudadano->numDocumento = doubleval($arrRegistro[3]);
+                    $valor = doubleval($arrRegistro[3]);
                     break;
                 case "Tipo de Solucion":
                     $seqSolucion = array_shift(obtenerDatosTabla(
                                     "t_frm_solucion", array("seqSolucion", "txtSolucion"), "txtSolucion", "seqModalidad = " . $claFormulario->seqModalidad . " and lower(ltrim(rtrim(txtSolucion))) like '" . mb_strtoupper(trim($arrRegistro[3])) . "'"
                     ));
                     $txtCampo = "seqSolucion";
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $claFormulario->seqSolucion = $seqSolucion;
+                    $valor = $seqSolucion;
                     break;
                 case "Valor del Subsidio":
                     $txtCampo = "valAspiraSubsidio";
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $claFormulario->valAspiraSubsidio = doubleval($arrRegistro[3]);
+                    $valor = doubleval($arrRegistro[3]);
                     break;
                 case "Valor Complementario":
                     $txtCampo = "valComplementario";
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $claFormulario->valComplementario = doubleval($arrRegistro[3]);
+                    $valor = doubleval($arrRegistro[3]);
                     break;
                 case "Matricula Inmobiliaria":
                     $txtCampo = "txtMatriculaInmobiliaria";
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $claFormulario->txtMatriculaInmobiliaria = trim($arrRegistro[3]);
+                    $valor = "'" . trim($arrRegistro[3]) . "'";
                     break;
                 case "CHIP":
                     $txtCampo = "txtChip";
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $claFormulario->txtChip = trim($arrRegistro[3]);
+                    $valor = "'" . trim($arrRegistro[3]) . "'";
                     break;
                 case "Proyecto":
                     $arrProyecto = array_shift(obtenerDatosTabla(
                                     "t_pry_proyecto", array("seqProyecto", "txtNombreProyecto", "txtMatriculaInmobiliariaLote", "txtChipLote", "txtDireccion"), "txtNombreProyecto", "lower(ltrim(rtrim(txtNombreProyecto))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
                     ));
                     $txtCampo = "seqProyecto";
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $claFormulario->seqProyecto = $arrProyecto['seqProyecto'];
                     $claFormulario->seqProyectoHijo = null;
                     $claFormulario->seqUnidadProyecto = 1;
                     $claFormulario->txtMatriculaInmobiliaria = $arrProyecto['txtMatriculaInmobiliariaLote'];
                     $claFormulario->txtChip = $arrProyecto['txtChipLote'];
                     $claFormulario->txtDireccionSolucion = $arrProyecto['txtDireccion'];
+                    $valor = $arrProyecto['seqProyecto'];
                     break;
                 case "Unidad Habitacional":
                     list($txtNombreProyecto, $txtNombreUnidad) = mb_split("/", $arrRegistro[3]);
@@ -2812,42 +2837,49 @@ class aad {
                     $claFormulario->txtDireccionSolucion = $arrProyecto['txtDireccion'];
                     $claFormulario->valAspiraSubsidio = $arrUnidad['valSDVEActual'];
                     $txtCampo = "seqUnidadProyecto";
+                    $valor = $arrUnidad['seqUnidadProyecto'];
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $sql = "update t_pry_unidad_proyecto set seqFormulario = null where seqFormulario = " . $seqFormulario;
                     $aptBd->execute($sql);
                     break;
                 case "Valor Donacion":
                     $txtCampo = "valDonacion";
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $claFormulario->valDonacion = doubleval($arrRegistro[3]);
+                    $valor = doubleval($arrRegistro[3]);
                     break;
                 case "Soporte Donacion":
                     $txtCampo = "txtSoporteDonacion";
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $claFormulario->txtSoporteDonacion = trim($arrRegistro[3]);
+                    $valor = "'" . mb_strtoupper(trim($arrRegistro[3])) . "'";
                     break;
                 case "Entidad Donacion":
                     $seqEmpresaDonante = array_shift(obtenerDatosTabla(
                                     "t_frm_empresa_donante", array("seqEmpresaDonante", "txtEmpresaDonante"), "txtEmpresaDonante", "lower(ltrim(rtrim(txtEmpresaDonante))) like '" . mb_strtolower(trim($arrRegistro[3])) . "'"
                     ));
                     $txtCampo = "seqEmpresaDonante";
+                    $arrayTxtCampoForm[] = $txtCampo;
                     $claFormulario->seqEmpresaDonante = $seqEmpresaDonante;
+                    $valor = $seqEmpresaDonante;
                     break;
                 case "Fecha de Vigencia":
                     $txtCampo = "fchVigencia";
-
-                    $fchCorrecta = null;
+                    $arrayTxtCampoForm[] = $txtCampo;
+                    $fchCorrecta = $arrRegistro[3];
                     $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
                     if ($numTimeStamp > 0) {
                         $fchCorrecta = date("Y-m-d", $numTimeStamp);
                     }
                     $arrRegistro[3] = $fchCorrecta;
                     $claFormulario->fchVigencia = $fchCorrecta;
-
-                    $fchCorrecta = null;
+                    $valor = "'" . $fchCorrecta . "'";
+                    $fchCorrecta = $arrRegistro[2];
                     $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
                     if ($numTimeStamp > 0) {
                         $fchCorrecta = date("Y-m-d", $numTimeStamp);
                     }
                     $arrRegistro[2] = $fchCorrecta;
-
                     break;
             }
 
@@ -2859,13 +2891,51 @@ class aad {
 
             // asignando cambios del ciudadano
             $arrFormularios[$seqFormulario]->arrCiudadano[$seqCiudadano] = $claCiudadano;
-        }
+            if (in_array($txtCampo, $arrayTxtCampoCiu)) {
 
-        foreach ($arrFormularios as $seqFormulario => $claFormulario) {
-            foreach ($claFormulario->arrCiudadano as $seqCiudadano => $claCiudadano) {
-                $claCiudadano->editarCiudadano($seqCiudadano);
+                $sql = "
+                        update t_ciu_ciudadano set
+                         " . $txtCampo . " = $valor
+                        where seqCiudadano = $seqCiudadano
+                    ";
+                $aptBd->execute($sql);
             }
-            $claFormulario->editarFormulario($seqFormulario);
+            if (in_array($txtCampo, $arrayTxtCampoForm)) {
+                // $claFormulario->editarFormulario($seqFormulario);
+                try {
+                    $sql = "
+                        update t_frm_formulario set
+                         " . $txtCampo . " = $valor
+                        where seqFormulario = $seqFormulario
+                    ";
+                    $aptBd->execute($sql);
+                } catch (Exception $objError) {
+                    $this->arrErrores[] = "No se ha podido actualizar la informacion del formulario [$seqFormulario]";
+                    $this->arrErrores[] = $objError->getMessage();
+                }
+                // Actualiza la unidad del proyecto
+                if (empty($this->arrErrores)) {
+                    try {
+
+                        if ($claFormulario->seqUnidadProyecto > 1 && $txtCampo == 'seqUnidadProyecto') {
+                            $sql = "update t_pry_unidad_proyecto set
+                                    seqFormulario = " . $claFormulario->seqFormulario . "
+                                    where seqUnidadProyecto = " . $claFormulario->seqUnidadProyecto . "
+                                    ";
+                            $aptBd->execute($sql);
+                        } else if ($txtCampo == 'seqUnidadProyecto') {
+                            $sql = "update t_pry_unidad_proyecto set
+                                seqFormulario = 0
+                                where seqFormulario = " . $claFormulario->seqFormulario . "
+                               ";
+                            $aptBd->execute($sql);
+                        }
+                    } catch (Exception $objError) {
+                        $this->arrErrores[] = "No se ha podido actualizar la unidad del proyecto relacionada";
+                        $this->arrErrores[] = $objError->getMessage();
+                    }
+                }
+            }
         }
     }
 
@@ -3646,19 +3716,49 @@ class aad {
         global $aptBd;
 
         $claCiudadano = new Ciudadano();
-        $arrHogares = array();
+        $arrayForm = array();
+        $arrayForm[0] = 'fchVigencia';
+        $arrayForm[1] = 'numCelular';
+        $arrayForm[2] = 'numTelefono1';
+        $arrayForm[3] = 'numTelefono2';
+        $arrayForm[4] = 'txtCorreo';
+
+        $arrayFormActual = array();
+        $arrayFormActual[0] = 'seqPlanGobierno';
+        $arrayFormActual[1] = 'seqProyecto';
+        $arrayFormActual[2] = 'seqProyectoHijo';
+        $arrayFormActual[3] = 'seqUnidadProyecto';
+        $arrayFormActual[4] = 'valComplementario';
+        $arrayFormActual[5] = 'valCartaLeasing';
+
+        $arrayCiudadano = Array();
+        $sqlDetail = "
+                insert into t_aad_detalles (
+                  numActo,
+                  fchActo,
+                  seqFormularioActo, 
+                  seqCiudadanoActo, 
+                  txtInhabilidad, 
+                  txtCausa, 
+                  txtFuente, 
+                  txtCampo, 
+                  txtIncorrecto, 
+                  txtCorrecto, 
+                  txtEstadoReposicion, 
+                  valIndexacion
+                ) values";
         foreach ($arrArchivo as $numLinea => $arrRegistro) {
 
             if ($arrRegistro[1] == "Fecha de Vigencia") {
 
-                $fchCorrecta = null;
+                $fchCorrecta = $arrRegistro[2];
                 $numTimeStamp = (($arrRegistro[2] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
                 if ($numTimeStamp > 0 and $arrRegistro[2] != "") {
                     $fchCorrecta = date("Y-m-d", $numTimeStamp);
                 }
                 $arrRegistro[2] = $fchCorrecta;
 
-                $fchCorrecta = null;
+                $fchCorrecta = $arrRegistro[3];
                 $numTimeStamp = (($arrRegistro[3] - $this->minmDatesDiff) * $this->secInDay) + $this->secInDay;
                 if ($numTimeStamp > 0 and $arrRegistro[3] != "") {
                     $fchCorrecta = date("Y-m-d", $numTimeStamp);
@@ -3681,21 +3781,8 @@ class aad {
                 $arrHogares[$seqFormulario]['seqCiudadanoActo'] = $objRes->fields['seqCiudadanoActo'];
             }
 
-            $sql = "
-                insert into t_aad_detalles (
-                  numActo,
-                  fchActo,
-                  seqFormularioActo, 
-                  seqCiudadanoActo, 
-                  txtInhabilidad, 
-                  txtCausa, 
-                  txtFuente, 
-                  txtCampo, 
-                  txtIncorrecto, 
-                  txtCorrecto, 
-                  txtEstadoReposicion, 
-                  valIndexacion
-                ) values (
+            $sqlDetail .= "
+                (
                   " . $arrPost['numActo'] . ",
                   '" . $arrPost['fchActo'] . "',
                   " . $arrHogares[$seqFormulario]['seqFormularioActo'] . ",
@@ -3708,63 +3795,79 @@ class aad {
                   '" . trim($arrRegistro[3]) . "',
                   NULL,
                   NULL
-                ) 
-            ";
-            $aptBd->execute($sql);
+                ),";
         }
-
-        foreach ($arrHogares as $seqFormulario => $arrDato) {
-
-            $sql = "
-                insert into t_aad_hogares_vinculados (
+        $sqlDetail = substr_replace($sqlDetail, ';', -1, 1);
+        //   echo "<p>" . $sqlDetail . "</p>";
+        $aptBd->execute($sqlDetail);
+        $sqlUpdateForm = '';
+        $sqlHogVin = ' insert into t_aad_hogares_vinculados (
                   seqFormularioActo, 
                   numActo, 
                   fchActo, 
                   seqTipoActo, 
                   numActoReferencia, 
                   fchActoReferencia
-                )values(
+                )values ';
+        $sqlCiu = '';
+        foreach ($arrHogares as $seqFormulario => $arrDato) {
+
+            $sqlHogVin .= "(
                   " . $arrDato['seqFormularioActo'] . ",
                   " . $arrPost['numActo'] . ",
                   '" . $arrPost['fchActo'] . "',
                   " . $arrPost['seqTipoActo'] . ",
                   " . $arrRegistro[4] . ",
                   '" . $arrRegistro[5] . "'
-                ) 
-            ";
-            $aptBd->execute($sql);
+                ),";
 
             // actualizando formulario acto
             $claFormulario = new FormularioSubsidios();
             $claFormulario->cargarFormulario($seqFormulario);
-            $sql = "update t_aad_formulario_acto set ";
+            $sqlUpdateForm = "update t_aad_formulario_acto set ";
+            $sqlUpdateForm1 = '';
             foreach ($claFormulario as $txtCampo => $txtValor) {
                 if ($txtCampo != "arrCiudadano" and $txtCampo != "arrErrores") {
                     $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "NULL";
-                    $sql .= "$txtCampo = $txtValor,";
+                    if (in_array($txtCampo, $arrayFormActual)) {
+                        $sqlUpdateForm1 .= $txtCampo . "Actual = $txtValor,";
+                    } else if (in_array($txtCampo, $arrayForm)) {
+                        $sqlUpdateForm1 .= "$txtCampo = $txtValor,";
+                    }
                 }
             }
-            $sql = rtrim($sql, ",");
-            $sql .= " where seqFormularioActo = " . $arrDato['seqFormularioActo'];
-            $aptBd->execute($sql);
+            $sqlUpdateForm1 .= rtrim($sqlUpdateForm1, ",");
+            $sqlUpdateForm .= $sqlUpdateForm1;
+            $sqlUpdateForm .= " where seqFormularioActo = " . $arrDato['seqFormularioActo'] . ";";
+            // echo "<p>" . $sqlUpdateForm . "</p>";
+            $aptBd->execute($sqlUpdateForm);
 
             // actualizando ciudadano acto
             foreach ($claFormulario->arrCiudadano as $seqCiudadano => $claCiudadano) {
                 if ($claCiudadano->seqParentesco == 1) {
-                    $sql = "update t_aad_ciudadano_acto set ";
+                    $sqlCiu = "update t_aad_ciudadano_acto set ";
+                    $sqlCiu1 = '';
                     foreach ($claCiudadano as $txtCampo => $txtValor) {
                         if ($txtCampo != "arrErrores") {
                             $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "''";
-                            $sql .= "$txtCampo = $txtValor,";
+                            $txtCampo . " txtValor => " . $txtCampo . " srpos ->" . (strpos($txtCampo, "bol"));
+
+                            $txtValor = (strpos($txtCampo, "bol") === FALSE && $txtValor != '' ) ? $txtValor : 0;
+                            $txtValor = (strpos($txtCampo, "fch") === FALSE && $txtValor != '' ) ? $txtValor : 'NULL';
+                            $sqlCiu1 .= "$txtCampo = $txtValor,";
                         }
                     }
-                    $sql = rtrim($sql, ",");
-                    $sql .= " where seqCiudadanoActo = " . $arrDato['seqCiudadanoActo'];
-                    //  echo $sql; die();
-                    $aptBd->execute($sql);
+                    $sqlCiu1 = rtrim($sqlCiu1, ",");
+                    $sqlCiu .= $sqlCiu1;
+                    $sqlCiu .= " where seqCiudadanoActo = " . $arrDato['seqCiudadanoActo'];
+                    $aptBd->execute($sqlCiu);
+                    //echo "<br>" . $sql;
+                    //die();
                 }
             }
         }
+        $sqlHogVin = substr_replace($sqlHogVin, ';', -1, 1);
+        $aptBd->execute($sqlHogVin);
     }
 
     /**
@@ -3915,16 +4018,14 @@ class aad {
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
             $seqFormularioActo = $this->obtenerFac($seqFormulario, $arrRegistro[1], $arrRegistro[2]);
 
-            $sql = "
-                  select seqCiudadanoActo 
+            $sql = "select seqCiudadanoActo 
                   from t_aad_hogar_acto 
                   where seqParentesco = 1 
                     and seqFormularioActo = " . $seqFormularioActo;
             $objRes = $aptBd->execute($sql);
             $seqCiudadanoActo = $objRes->fields['seqCiudadanoActo'];
 
-            $sql = "
-                insert into t_aad_detalles (
+            $sql = "insert into t_aad_detalles (
                   numActo,
                   fchActo,
                   seqFormularioActo, 
@@ -4109,6 +4210,21 @@ class aad {
     private function vincularHogresIndexacion($arrPost, $arrArchivo) {
         global $aptBd;
 
+        $arrayForm = array();
+        $arrayForm[0] = 'fchVigencia';
+        $arrayForm[1] = 'numCelular';
+        $arrayForm[2] = 'numTelefono1';
+        $arrayForm[3] = 'numTelefono2';
+        $arrayForm[4] = 'txtCorreo';
+
+        $arrayFormActual = array();
+        $arrayFormActual[0] = 'seqPlanGobierno';
+        $arrayFormActual[1] = 'seqProyecto';
+        $arrayFormActual[2] = 'seqProyectoHijo';
+        $arrayFormActual[3] = 'seqUnidadProyecto';
+        $arrayFormActual[4] = 'valComplementario';
+        $arrayFormActual[5] = 'valCartaLeasing';
+
         foreach ($arrArchivo as $arrRegistro) {
 
             $seqFormulario = Ciudadano::formularioVinculado($arrRegistro[0]);
@@ -4175,16 +4291,35 @@ class aad {
             // actualizando formulario acto
             $claFormulario = new FormularioSubsidios();
             $claFormulario->cargarFormulario($seqFormulario);
-            $sql = "update t_aad_formulario_acto set ";
+            /* $sql = "update t_aad_formulario_acto set ";
+              foreach ($claFormulario as $txtCampo => $txtValor) {
+              if ($txtCampo != "arrCiudadano" and $txtCampo != "arrErrores") {
+              $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "NULL";
+              $sql .= "$txtCampo = $txtValor,";
+              }
+              }
+              $sql = rtrim($sql, ",");
+              $sql .= " where seqFormularioActo = " . $seqFormularioActo;
+              $aptBd->execute($sql); */
+
+
+            $sqlUpdateForm = "update t_aad_formulario_acto set ";
+            $sqlUpdateForm1 = '';
             foreach ($claFormulario as $txtCampo => $txtValor) {
                 if ($txtCampo != "arrCiudadano" and $txtCampo != "arrErrores") {
                     $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "NULL";
-                    $sql .= "$txtCampo = $txtValor,";
+                    if (in_array($txtCampo, $arrayFormActual)) {
+                        $sqlUpdateForm1 .= $txtCampo . "Actual = $txtValor,";
+                    } else if (in_array($txtCampo, $arrayForm)) {
+                        $sqlUpdateForm1 .= "$txtCampo = $txtValor,";
+                    }
                 }
             }
-            $sql = rtrim($sql, ",");
-            $sql .= " where seqFormularioActo = " . $seqFormularioActo;
-            $aptBd->execute($sql);
+            $sqlUpdateForm1 .= rtrim($sqlUpdateForm1, ",");
+            $sqlUpdateForm .= $sqlUpdateForm1;
+            $sqlUpdateForm .= " where seqFormularioActo = " . $arrDato['seqFormularioActo'] . ";";
+            // echo "<p>" . $sqlUpdateForm . "</p>";
+            $aptBd->execute($sqlUpdateForm);
         }
     }
 

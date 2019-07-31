@@ -36,7 +36,7 @@ $objPHPExcel->getDefaultStyle()->applyFromArray($arrFuentes['default']);
 // Protege la hoja para que no se modifiquen celdas inecesarias
 $objPHPExcel->getSecurity()->setLockWindows(false);
 $objPHPExcel->getSecurity()->setLockStructure(false);
-$objPHPExcel->getSheet(0)->getProtection()->setSheet(true);
+//$objPHPExcel->getSheet(0)->getProtection()->setSheet(true);
 $objPHPExcel->getActiveSheet()->getProtection()->setPassword($arrConfiguracion['baseDatos']['clave']);
 $objPHPExcel->getActiveSheet()->getStyle("A2:" . PHPExcel_Cell::stringFromColumnIndex(count($claTipoActo->arrFormatoArchivo) - 1) . $numFilasFormatear)
         ->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);

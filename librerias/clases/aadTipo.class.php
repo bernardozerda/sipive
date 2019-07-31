@@ -108,9 +108,9 @@ class aadTipo {
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Fecha de Vigencia";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Proyecto";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Unidad Habitacional";
-                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor Donacion";
+                            //$objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor Donacion";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor Complementario";
-                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Soporte Donacion";
+                            //$objTipoActo->arrFormatoArchivo[1]['rango'][] = "Soporte Donacion";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Entidad Donacion";
                             $objTipoActo->arrFormatoArchivo[2]['nombre'] = "Incorrecto";
                             $objTipoActo->arrFormatoArchivo[2]['tipo'] = "texto";
@@ -126,6 +126,7 @@ class aadTipo {
                             $objTipoActo->arrFormatoArchivo[5]['ayuda'] = "La fecha de la resolución que va a ser modificada con éste acto adminsitrativo.\nFormato aaaa-mm-dd";
                             break;
                         case 3: // Resolucion de inhabilitados
+
                             $objTipoActo->arrFormatoArchivo[0]['nombre'] = "Formulario";
                             $objTipoActo->arrFormatoArchivo[0]['tipo'] = "numero";
                             $objTipoActo->arrFormatoArchivo[0]['ayuda'] = "Número de identificación en la base de datos del formulario";

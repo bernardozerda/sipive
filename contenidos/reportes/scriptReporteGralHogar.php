@@ -417,6 +417,7 @@ function reporteGralHogar() {
          TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) > 13 && TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) < 18) adol ON frm.seqFormulario = adol.seqFormulario ";
 
     $sql .= " ORDER BY frm.seqFormulario)";
+     echo date("Ymd H:i:s") . " | " . $sql . "\r\n";
 //    echo $sql;
 //     die();
 
@@ -463,7 +464,8 @@ function generarArchivo($objRes, $name) {
         fwrite($archivo, $dato . "\r\n");
         $objRes->MoveNext();
     }
-    echo " \n fin";
+   echo date("Ymd "
+           . ":i:s") . " | FIN \r\n";
     fclose($archivo);
     //copy($rutaDestino . "/" . $name . ".xls", "//SDHT-0596-P9/Users/liliana.basto/Documents/compartida");
     //copy($rutaDestino."/".$archivo,"http://192.168.3.16/d:");

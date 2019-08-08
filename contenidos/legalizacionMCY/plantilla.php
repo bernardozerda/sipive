@@ -15,8 +15,6 @@ include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 
 $numFilasFormatear = (isset($_GET['filas']) and $_GET['filas'] != "") ? $_GET['filas'] : 100;
 
-
-
 //Se carga los titulos de la plantilla
 $arrTitulos[0]['nombre'] = "N°";
 $arrTitulos[0]['tipo'] = "texto";
@@ -62,40 +60,76 @@ $arrTitulos[20]['nombre'] = "FECHA ACTO ADMON";
 $arrTitulos[20]['tipo'] = "fecha";
 $arrTitulos[21]['nombre'] = "VALOR SUBSIDIO";
 $arrTitulos[21]['tipo'] = "texto";
-$arrTitulos[22]['nombre'] = "DENOMINACIÓN UNIDAD";
+$arrTitulos[22]['nombre'] = "CONSECUTIVO";
 $arrTitulos[22]['tipo'] = "texto";
-$arrTitulos[23]['nombre'] = "N° DE ESCRITURA";
-$arrTitulos[23]['tipo'] = "texto";
-$arrTitulos[24]['nombre'] = "NOTARIA";
+$arrTitulos[23]['nombre'] = "FECHA AUTORIZACIÓN";
+$arrTitulos[23]['tipo'] = "fecha";
+$arrTitulos[24]['nombre'] = "DIRECCIÓN VENDEDOR";
 $arrTitulos[24]['tipo'] = "texto";
-$arrTitulos[25]['nombre'] = "FECHA ESCRITURA";
-$arrTitulos[25]['tipo'] = "fecha";
-$arrTitulos[26]['nombre'] = "MATRÍCULA INMOBILIARIA";
-$arrTitulos[26]['tipo'] = "texto";
-$arrTitulos[27]['nombre'] = "VALOR INMUEBLE";
+$arrTitulos[25]['nombre'] = "TELEFONO1 VENDEDOR";
+$arrTitulos[25]['tipo'] = "numero";
+$arrTitulos[26]['nombre'] = "TELEFONO2 VENDEDOR";
+$arrTitulos[26]['tipo'] = "numero";
+$arrTitulos[27]['nombre'] = "CORREO VENDEDOR";
 $arrTitulos[27]['tipo'] = "texto";
-$arrTitulos[28]['nombre'] = "CERTIFICADO DE TRADICIÓN";
+$arrTitulos[28]['nombre'] = "DIRECCIÓN INMUEBLE";
 $arrTitulos[28]['tipo'] = "texto";
-$arrTitulos[29]['nombre'] = "ZONA DE MATRICULA";
+$arrTitulos[29]['nombre'] = "BARRIO INMUEBLE";
 $arrTitulos[29]['tipo'] = "texto";
-$arrTitulos[29]['rango'][] = "CENTRO";
-$arrTitulos[29]['rango'][] = "NORTE";
-$arrTitulos[29]['rango'][] = "SUR";
-$arrTitulos[30]['nombre'] = "FECHA DE MATRICULA";
-$arrTitulos[30]['tipo'] = "fecha";
-$arrTitulos[31]['nombre'] = "SUBSIDIO SDHT";
+$arrTitulos[30]['nombre'] = "LOCALIDAD INMUEBLE";
+$arrTitulos[30]['tipo'] = "texto";
+$arrTitulos[30]['rango'][] = "1-Usaquén";
+$arrTitulos[30]['rango'][] = "10-Engativá";
+$arrTitulos[30]['rango'][] = "11-Suba";
+$arrTitulos[30]['rango'][] = "12-Barrios Unidos";
+$arrTitulos[30]['rango'][] = "14-Los Mártires";
+$arrTitulos[30]['rango'][] = "15-Antonio Nariño";
+$arrTitulos[30]['rango'][] = "16-Puente Aranda";
+$arrTitulos[30]['rango'][] = "17-La Candelaria";
+$arrTitulos[30]['rango'][] = "18-Rafael Uribe Uribe";
+$arrTitulos[30]['rango'][] = "19-Ciudad Bolívar";
+$arrTitulos[30]['rango'][] = "2-Chapinero";
+$arrTitulos[30]['rango'][] = "3-Santa Fe";
+$arrTitulos[30]['rango'][] = "4-San Cristóbal";
+$arrTitulos[30]['rango'][] = "5-Usme";
+$arrTitulos[30]['rango'][] = "6-Tunjuelito";
+$arrTitulos[30]['rango'][] = "7-Bosa";
+$arrTitulos[30]['rango'][] = "8-Kennedy";
+$arrTitulos[30]['rango'][] = "9-Fontibón";
+$arrTitulos[30]['rango'][] = "1-Desconocido";
+$arrTitulos[31]['nombre'] = "OPCION LEASING";
 $arrTitulos[31]['tipo'] = "texto";
 $arrTitulos[31]['rango'][] = "SELECCIONE";
 $arrTitulos[31]['rango'][] = "SI";
 $arrTitulos[31]['rango'][] = "NO";
-$arrTitulos[32]['nombre'] = "SUBSIDIO FONVIVIENDA";
+$arrTitulos[32]['nombre'] = "N° DE ESCRITURA";
 $arrTitulos[32]['tipo'] = "texto";
-$arrTitulos[32]['rango'][] = "SI";
-$arrTitulos[32]['rango'][] = "NO";
-$arrTitulos[33]['nombre'] = "APROBO";
-$arrTitulos[33]['tipo'] = "texto";
-$arrTitulos[34]['nombre'] = "ELABORO";
+$arrTitulos[33]['nombre'] = "FECHA ESCRITURA";
+$arrTitulos[33]['tipo'] = "fecha";
+$arrTitulos[34]['nombre'] = "NOTARIA";
 $arrTitulos[34]['tipo'] = "texto";
+$arrTitulos[35]['nombre'] = "VALOR INMUEBLE";
+$arrTitulos[35]['tipo'] = "texto";
+$arrTitulos[36]['nombre'] = "MATRÍCULA INMOBILIARIA";
+$arrTitulos[36]['tipo'] = "texto";
+$arrTitulos[37]['nombre'] = "ZONA DE MATRICULA";
+$arrTitulos[37]['tipo'] = "texto";
+$arrTitulos[37]['rango'][] = "CENTRO";
+$arrTitulos[37]['rango'][] = "NORTE";
+$arrTitulos[37]['rango'][] = "SUR";
+$arrTitulos[38]['nombre'] = "FECHA CTL";
+$arrTitulos[38]['tipo'] = "fecha";
+$arrTitulos[39]['nombre'] = "N° CONTRATO LEASING";
+$arrTitulos[39]['tipo'] = "texto";
+$arrTitulos[40]['nombre'] = "FECHA CONTRATO LEASING";
+$arrTitulos[40]['tipo'] = "fecha";
+$arrTitulos[41]['nombre'] = "ELABORO";
+$arrTitulos[41]['tipo'] = "texto";
+$arrTitulos[42]['nombre'] = "REVISO";
+$arrTitulos[42]['tipo'] = "texto";
+$arrTitulos[43]['nombre'] = "APROBO";
+$arrTitulos[43]['tipo'] = "texto";
+
 
 // fuentes para el archivo
 $arrFuentes['default']['font']['name'] = "Calibri";
@@ -172,7 +206,10 @@ for ($i = 2; $i <= $numFilasFormatear; $i++) {
             $objValidacion->setErrorTitle("Error de datos");
             $objValidacion->setError("El valor digitado no es válido");
             $objValidacion->setPromptTitle("Los valores válidos son:");
-            if ($numColumna == 29) {
+
+            if ($numColumna == 30) {
+                $objValidacion->setFormula1('"' . implode(",", ["1-Usaquén", "3-Santa Fe", "4-San Cristóbal", "5-Usme", "6-Tunjuelito", "7-Bosa", "8-Kennedy", "9-Fontibón", "10-Engativá", "11-Suba", "12-Barrios Unidos", "14-Los Mártires", "15-Antonio Nariño", "17-La Candelaria", "18-Rafael Uribe Uribe", "19-Ciudad Bolívar"]) . '"');
+            } else if ($numColumna == 37) {
                 $objValidacion->setFormula1('"' . implode(",", ["CENTRO", "NORTE", "SUR"]) . '"');
             } else {
                 $objValidacion->setFormula1('"' . implode(",", ["SI", "NO"]) . '"');

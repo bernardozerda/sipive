@@ -2416,15 +2416,16 @@
                                                     {/if}
                                                 </td>
                                                 <td bgcolor="#E4E4E4" align="right" style="padding-right:5px" id="tdValSubsidio" height="25px" align="top">
-                                                    $ <input type="text"
-                                                             name="valAspiraSubsidio"
-                                                             id="valAspiraSubsidio"
-                                                             value="{$claFormulario->valAspiraSubsidio|number_format:'0':'.':'.'}"
-                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                             style="padding-right: 5px; width:100px; text-align:right;"
-                                                             onkeyup="formatoSeparadores(this)"
-                                                             {if not (
+                                                    {if $prov == 1}
+                                                        $ <input type="text"
+                                                                 name="valAspiraSubsidio"
+                                                                 id="valAspiraSubsidio"
+                                                                 value="{$claFormulario->valAspiraSubsidio|number_format:'4':',':'.'}"
+                                                                 onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                                 onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                                 style="padding-right: 5px; width:100px; text-align:right;"
+
+                                                                 {if not (
                                                    $claFormulario->seqModalidad == 8  ||
                                                    $claFormulario->seqModalidad == 9  ||
                                                    $claFormulario->seqModalidad == 10 ||
@@ -2432,170 +2433,190 @@
                                                    ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 ) ||
                                                    ( $claFormulario->seqModalidad == 13 && $claFormulario->seqTipoEsquema == 9 )
                                                  ) }
-                                                             readonly
-                                                             {/if}
-                                                                 />
-                                                    </td>
+                                                                 readonly
+                                                        {/if}
+                                                        {else}
+                                                            $ <input type="text"
+                                                            name="valAspiraSubsidio"
+                                                            id="valAspiraSubsidio"
+                                                            value="{$claFormulario->valAspiraSubsidio|number_format:'0':'.':'.'}"
+                                                            onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            style="padding-right: 5px; width:100px; text-align:right;"
+                                                            onkeyup="formatoSeparadores(this)"
+                                                            {if not (
+                                                   $claFormulario->seqModalidad == 8  ||
+                                                   $claFormulario->seqModalidad == 9  ||
+                                                   $claFormulario->seqModalidad == 10 ||
+                                                   ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
+                                                   ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 ) ||
+                                                   ( $claFormulario->seqModalidad == 13 && $claFormulario->seqTipoEsquema == 9 )
+                                                 ) }
+                                                            readonly
+                                                            {/if}
+                                                                />
+                                                            {/if}
+                                                            </td>
 
-                                                    {if $claFormulario->seqPlanGobierno == 2 || (( $claFormulario->seqModalidad == 13 && $claFormulario->seqTipoEsquema == 9 ))}
-                                                        <td bgcolor="#E4E4E4" class="tituloTabla" height="25px" align="top">
-                                                            Soporte Cambio
-                                                        </td>
-                                                        <td bgcolor="#E4E4E4" style="padding-left: 10px;" height="25px" align="top">
-                                                            <input type="text"
-                                                                   name="txtSoporteSubsidio"
-                                                                   id="txtSoporteSubsidio"
-                                                                   value="{$claFormulario->txtSoporteSubsidio}"
-                                                                   onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                                   onBlur="sinCaracteresEspeciales(this);
-                                                                           this.style.backgroundColor = '#FFFFFF';"
-                                                                   style="width:300px;"
-                                                                   />
-                                                        </td>
-                                                    {else}
-                                                        <td bgcolor="#E4E4E4">&nbsp;</td>
-                                                        <td bgcolor="#E4E4E4">&nbsp;</td>
-                                                    <input type="hidden" name="txtSoporteSubsidio" value="{$claFormulario->txtSoporteSubsidio}">
-                                                {/if}
-                                                </tr>
+                                                            {if $claFormulario->seqPlanGobierno == 2 || (( $claFormulario->seqModalidad == 13 && $claFormulario->seqTipoEsquema == 9 ))}
+                                                                <td bgcolor="#E4E4E4" class="tituloTabla" height="25px" align="top">
+                                                                    Soporte Cambio
+                                                                </td>
+                                                                <td bgcolor="#E4E4E4" style="padding-left: 10px;" height="25px" align="top">
+                                                                    <input type="text"
+                                                                           name="txtSoporteSubsidio"
+                                                                           id="txtSoporteSubsidio"
+                                                                           value="{$claFormulario->txtSoporteSubsidio}"
+                                                                           onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                                           onBlur="sinCaracteresEspeciales(this);
+                                                                                   this.style.backgroundColor = '#FFFFFF';"
+                                                                           style="width:300px;"
+                                                                           />
+                                                                </td>
+                                                            {else}
+                                                                <td bgcolor="#E4E4E4">&nbsp;</td>
+                                                                <td bgcolor="#E4E4E4">&nbsp;</td>
+                                                            <input type="hidden" name="txtSoporteSubsidio" value="{$claFormulario->txtSoporteSubsidio}">
+                                                        {/if}
+                                                        </tr>
 
-                                                <!-- VALOR COMPLEMENTARIO -->
-                                                {assign var=txtComplementario value='none'}
-                                                {if
+                                                        <!-- VALOR COMPLEMENTARIO -->
+                                                        {assign var=txtComplementario value='none'}
+                                                        {if
                                     ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 7 )  ||
                                     ( $claFormulario->seqModalidad == 6  && $claFormulario->seqTipoEsquema == 13 ) ||
                                     ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 14 ) ||
                                     ( $claFormulario->seqModalidad == 12 && $claFormulario->seqTipoEsquema == 15 )
-                                                }
-                                                {assign var=txtComplementario value=''}
-                                                {/if}
+                                                        }
+                                                        {assign var=txtComplementario value=''}
+                                                        {/if}
 
-                                                    <tr id="trValComplementario" style="display: {$txtComplementario};">
-                                                        <!-- VALOR AL QUE ASPIRA DEL SUBSIDIO -->
-                                                        <td class="tituloTabla" height="25px" align="top">
-                                                            Valor Complementario
-                                                        </td>
-                                                        <td bgcolor="#E4E4E4" align="right" style="padding-right:5px" height="25px" align="top">
-                                                            $ <input type="text"
-                                                                     name="valComplementario"
-                                                                     id="valComplementario"
-                                                                     value="{$claFormulario->valComplementario|number_format:'0':'.':'.'}"
-                                                                     onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                                                     onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                                     style="padding-right: 5px; width:100px; text-align:right;"
-                                                                     onkeyup="formatoSeparadores(this)"
-                                                                     />
-                                                        </td>
-                                                        <td bgcolor="#E4E4E4">&nbsp;</td>
-                                                        <td bgcolor="#E4E4E4">&nbsp;</td>
-                                                    </tr>
+                                                            <tr id="trValComplementario" style="display: {$txtComplementario};">
+                                                                <!-- VALOR AL QUE ASPIRA DEL SUBSIDIO -->
+                                                                <td class="tituloTabla" height="25px" align="top">
+                                                                    Valor Complementario
+                                                                </td>
+                                                                <td bgcolor="#E4E4E4" align="right" style="padding-right:5px" height="25px" align="top">
+                                                                    $ <input type="text"
+                                                                             name="valComplementario"
+                                                                             id="valComplementario"
+                                                                             value="{$claFormulario->valComplementario|number_format:'0':'.':'.'}"
+                                                                             onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                                                             onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                                             style="padding-right: 5px; width:100px; text-align:right;"
+                                                                             onkeyup="formatoSeparadores(this)"
+                                                                             />
+                                                                </td>
+                                                                <td bgcolor="#E4E4E4">&nbsp;</td>
+                                                                <td bgcolor="#E4E4E4">&nbsp;</td>
+                                                            </tr>
 
-                                                </table>
-                                                </p>
+                                                        </table>
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </div>
+
+                                        <!-- SEGUIMIENTO AL HOGAR -->
+                                        <div id="seg" style="height:{$numAltoPestanaPrincipal}; overflow:auto;">
+                                            {include file="seguimiento/seguimientoFormulario.tpl"}
+                                            <div id="contenidoBusqueda">
+                                                {include file="seguimiento/buscarSeguimiento.tpl"}
+                                            </div>
+                                        </div>
+
+                                        <!-- ACTOS ADMINISTRATIVOS -->
+                                        <div id="aad" style="height:{$numAltoPestanaPrincipal};">
+                                            {include file="subsidios/actosAdministrativos.tpl"}
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- SEGUIMIENTO AL HOGAR -->
-                                <div id="seg" style="height:{$numAltoPestanaPrincipal}; overflow:auto;">
-                                    {include file="seguimiento/seguimientoFormulario.tpl"}
-                                    <div id="contenidoBusqueda">
-                                        {include file="seguimiento/buscarSeguimiento.tpl"}
-                                    </div>
-                                </div>
+                                <!-- VARIABLES QUE YA NO SE USAN PERO SE COLOCAN PARA RESPETAR LOS VALORES DEL OBJETO -->
+                                <input type="hidden" id="valAporteAvanceObra"        name="valAporteAvanceObra"        value="{$claFormulario->valAporteAvanceObra}">
+                                <input type="hidden" id="txtSoporteAvanceObra"       name="txtSoporteAvanceObra"       value="{$claFormulario->txtSoporteAvanceObra}">
+                                <input type="hidden" id="valAporteMateriales"        name="valAporteMateriales"        value="{$claFormulario->valAporteMateriales}">
+                                <input type="hidden" id="txtSoporteAporteMateriales" name="txtSoporteAporteMateriales" value="{$claFormulario->txtSoporteAporteMateriales}">
+                                <input type="hidden" id="seqCesantias"               name="seqCesantias"               value="{$claFormulario->seqCesantias}">
+                                <input type="hidden" id="seqPuntoAtencion"           name="seqPuntoAtencion"           value="{$claFormulario->seqPuntoAtencion}">
+                                <input type="hidden" id="seqPeriodo"                 name="seqPeriodo"                 value="{$claFormulario->seqPeriodo}">
+                                <input type="hidden" id="seqUsuario"                 name="seqUsuario"                 value="{$claFormulario->seqUsuario}">
+                                <input type="hidden" id="numAdultosNucleo"           name="numAdultosNucleo"           value="{$claFormulario->numAdultosNucleo}">
+                                <input type="hidden" id="numCortes"                  name="numCortes"                  value="{$claFormulario->numCortes}">
+                                <input type="hidden" id="txtBarrio"                  name="txtBarrio"                  value="{$claFormulario->txtBarrio}">
+                                <input type="hidden" id="bolAltaCon"                 name="bolAltaCon"                 value="{$claFormulario->bolAltaCon}">
 
-                                <!-- ACTOS ADMINISTRATIVOS -->
-                                <div id="aad" style="height:{$numAltoPestanaPrincipal};">
-                                    {include file="subsidios/actosAdministrativos.tpl"}
+                                <!-- VARIABLES ADICIONALES INMODIFICABLES NECESARIAS -->
+                                <input type="hidden" id="seqCasaMano"   name="seqCasaMano"   value="{$claCasaMano->seqCasaMano}">
+                                <input type="hidden" id="seqFormulario" name="seqFormulario" value="{$claFormulario->seqFormulario}">
+                                <input type="hidden" id="cedula"        name="cedula"        value="{$arrPost.cedula}">
+                                <input type="hidden" id="txtFase"       name="txtFase"       value="{$arrFlujoHogar.fase}">
+                                <input type="hidden" id="txtFlujo"      name="txtFlujo"      value="{$arrFlujoHogar.flujo}">
+                                <input type="hidden"                    name="txtArchivo"    value="{$txtArchivo}">
+                                {*<input type="hidden" name="numDocumento" id="documentoMiembro" value="">*}
+
+
+                            </form>
+
+                            <div id="postulacionTabView"></div>
+                            <div id="objDireccionOculto" style="display:none"></div>
+                            <div id="objDireccionOcultoSolucion" style="display:none"></div>
+
+                            <div id="qmys" class="yui-pe-content" style="visibility: hidden">
+                                <div class="hd">Ingrese los datos datos requeridos</div>
+                                <div class="bd" style="padding: 10px">
+                                    <form method="POST" action="./contenidos/subsidios/quitarMiembroHogar.php">
+                                        <input type="hidden" name="numDocumento" id="documentoMiembro" value="">
+                                        <input type="hidden" name="seqFormulario" id="formularioMiembro" value="">
+                                        <table cellspacing="0" cellpadding="5" border="0" width="100%">
+                                            <tr>
+                                                <td width="120px">Grupo de Gestión</td>
+                                                <td width="300px">
+                                                    <select name="seqGrupoGestion1"
+                                                            id="seqGrupoGestion1"
+                                                            style="width:98%"
+                                                            onFocus="this.style.backgroundColor = '#ADD8E6';
+                                                                    document.getElementById('seqGrupoGestionError').innerHTML = '';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            onChange="obtenerGestion(this, 'tdGestion1', 'seqGestion1');">
+                                                        >
+                                                        <option value="0">Seleccione Grupo</option>
+                                                        {foreach from=$arrGrupoGestion key=seqGrupoGestion item=txtGrupoGestion}
+                                                            <option value="{$seqGrupoGestion}">{$txtGrupoGestion}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                    <div id="seqGrupoGestionError" class="msgError"></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gestión</td>
+                                                <td id="tdGestion1">
+                                                    <select name="seqGestion1"
+                                                            id="seqGestion1"
+                                                            style="width:98%"
+                                                            onFocus="this.style.backgroundColor = '#ADD8E6';
+                                                                    document.getElementById('seqGestionError').innerHTML = '';"
+                                                            onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                            >
+                                                        <option value="0">Seleccione Gesti&oacute;n</select>
+                                                    </select>
+                                                    <div id="seqGestionError" class="msgError"></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" colspan="2">
+                                                    <textarea id="txtComentario1"
+                                                              name="txtComentario1"
+                                                              style="width:100%; height: 70px"
+                                                              onFocus="this.style.backgroundColor = '#ADD8E6';
+                                                                      document.getElementById('txtComentarioError').innerHTML = '';"
+                                                              onBlur="this.style.backgroundColor = '#FFFFFF';"
+                                                              ></textarea>
+                                                    <div id="txtComentarioError" class="msgError"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- VARIABLES QUE YA NO SE USAN PERO SE COLOCAN PARA RESPETAR LOS VALORES DEL OBJETO -->
-                        <input type="hidden" id="valAporteAvanceObra"        name="valAporteAvanceObra"        value="{$claFormulario->valAporteAvanceObra}">
-                        <input type="hidden" id="txtSoporteAvanceObra"       name="txtSoporteAvanceObra"       value="{$claFormulario->txtSoporteAvanceObra}">
-                        <input type="hidden" id="valAporteMateriales"        name="valAporteMateriales"        value="{$claFormulario->valAporteMateriales}">
-                        <input type="hidden" id="txtSoporteAporteMateriales" name="txtSoporteAporteMateriales" value="{$claFormulario->txtSoporteAporteMateriales}">
-                        <input type="hidden" id="seqCesantias"               name="seqCesantias"               value="{$claFormulario->seqCesantias}">
-                        <input type="hidden" id="seqPuntoAtencion"           name="seqPuntoAtencion"           value="{$claFormulario->seqPuntoAtencion}">
-                        <input type="hidden" id="seqPeriodo"                 name="seqPeriodo"                 value="{$claFormulario->seqPeriodo}">
-                        <input type="hidden" id="seqUsuario"                 name="seqUsuario"                 value="{$claFormulario->seqUsuario}">
-                        <input type="hidden" id="numAdultosNucleo"           name="numAdultosNucleo"           value="{$claFormulario->numAdultosNucleo}">
-                        <input type="hidden" id="numCortes"                  name="numCortes"                  value="{$claFormulario->numCortes}">
-                        <input type="hidden" id="txtBarrio"                  name="txtBarrio"                  value="{$claFormulario->txtBarrio}">
-                        <input type="hidden" id="bolAltaCon"                 name="bolAltaCon"                 value="{$claFormulario->bolAltaCon}">
-
-                        <!-- VARIABLES ADICIONALES INMODIFICABLES NECESARIAS -->
-                        <input type="hidden" id="seqCasaMano"   name="seqCasaMano"   value="{$claCasaMano->seqCasaMano}">
-                        <input type="hidden" id="seqFormulario" name="seqFormulario" value="{$claFormulario->seqFormulario}">
-                        <input type="hidden" id="cedula"        name="cedula"        value="{$arrPost.cedula}">
-                        <input type="hidden" id="txtFase"       name="txtFase"       value="{$arrFlujoHogar.fase}">
-                        <input type="hidden" id="txtFlujo"      name="txtFlujo"      value="{$arrFlujoHogar.flujo}">
-                        <input type="hidden"                    name="txtArchivo"    value="{$txtArchivo}">
-                        {*<input type="hidden" name="numDocumento" id="documentoMiembro" value="">*}
-
-
-                    </form>
-
-                    <div id="postulacionTabView"></div>
-                    <div id="objDireccionOculto" style="display:none"></div>
-                    <div id="objDireccionOcultoSolucion" style="display:none"></div>
-
-                    <div id="qmys" class="yui-pe-content" style="visibility: hidden">
-                        <div class="hd">Ingrese los datos datos requeridos</div>
-                        <div class="bd" style="padding: 10px">
-                            <form method="POST" action="./contenidos/subsidios/quitarMiembroHogar.php">
-                                <input type="hidden" name="numDocumento" id="documentoMiembro" value="">
-                                <input type="hidden" name="seqFormulario" id="formularioMiembro" value="">
-                                <table cellspacing="0" cellpadding="5" border="0" width="100%">
-                                    <tr>
-                                        <td width="120px">Grupo de Gestión</td>
-                                        <td width="300px">
-                                            <select name="seqGrupoGestion1"
-                                                    id="seqGrupoGestion1"
-                                                    style="width:98%"
-                                                    onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                            document.getElementById('seqGrupoGestionError').innerHTML = '';"
-                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                    onChange="obtenerGestion(this, 'tdGestion1', 'seqGestion1');">
-                                                >
-                                                <option value="0">Seleccione Grupo</option>
-                                                {foreach from=$arrGrupoGestion key=seqGrupoGestion item=txtGrupoGestion}
-                                                    <option value="{$seqGrupoGestion}">{$txtGrupoGestion}</option>
-                                                {/foreach}
-                                            </select>
-                                            <div id="seqGrupoGestionError" class="msgError"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Gestión</td>
-                                        <td id="tdGestion1">
-                                            <select name="seqGestion1"
-                                                    id="seqGestion1"
-                                                    style="width:98%"
-                                                    onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                            document.getElementById('seqGestionError').innerHTML = '';"
-                                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                    >
-                                                <option value="0">Seleccione Gesti&oacute;n</select>
-                                            </select>
-                                            <div id="seqGestionError" class="msgError"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" colspan="2">
-                                            <textarea id="txtComentario1"
-                                                      name="txtComentario1"
-                                                      style="width:100%; height: 70px"
-                                                      onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                              document.getElementById('txtComentarioError').innerHTML = '';"
-                                                      onBlur="this.style.backgroundColor = '#FFFFFF';"
-                                                      ></textarea>
-                                            <div id="txtComentarioError" class="msgError"></div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
-                        </div>
-                    </div>

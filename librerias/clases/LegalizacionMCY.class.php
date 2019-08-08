@@ -9,6 +9,7 @@ class LegalizacionMCY {
     public $arrDocumentos;
     public $arrFormularios;
     public $arrDesembolso;
+    public $arrayLeasing;
     public $arrEsquema;
     public $arrModalidad;
 
@@ -19,6 +20,8 @@ class LegalizacionMCY {
         $this->arrDocumentos = array();
         $this->arrFormularios = array();
         $this->arrDesembolso = array();
+        $this->arrayLeasing = array();
+
         $this->arrExtensiones = array("txt", "xls", "xlsx");
         $this->arrModalidad = array(12);
         $this->arrEsquema = array(16, 17);
@@ -45,19 +48,28 @@ class LegalizacionMCY {
         $this->arrTitulos[] = "RANGO INGRESOS";
         $this->arrTitulos[] = "FECHA ACTO ADMON";
         $this->arrTitulos[] = "VALOR SUBSIDIO";
-        $this->arrTitulos[] = "DENOMINACIÓN UNIDAD";
+        $this->arrTitulos[] = "CONSECUTIVO";
+        $this->arrTitulos[] = "FECHA AUTORIZACIÓN";
+        $this->arrTitulos[] = "DIRECCIÓN VENDEDOR";
+        $this->arrTitulos[] = "TELEFONO1 VENDEDOR";
+        $this->arrTitulos[] = "TELEFONO2 VENDEDOR";
+        $this->arrTitulos[] = "CORREO VENDEDOR";
+        $this->arrTitulos[] = "DIRECCIÓN INMUEBLE";
+        $this->arrTitulos[] = "BARRIO INMUEBLE";
+        $this->arrTitulos[] = "LOCALIDAD INMUEBLE";
+        $this->arrTitulos[] = "OPCION LEASING";
         $this->arrTitulos[] = "N° DE ESCRITURA";
-        $this->arrTitulos[] = "NOTARIA";
         $this->arrTitulos[] = "FECHA ESCRITURA";
-        $this->arrTitulos[] = "MATRÍCULA INMOBILIARIA";
+        $this->arrTitulos[] = "NOTARIA";
         $this->arrTitulos[] = "VALOR INMUEBLE";
-        $this->arrTitulos[] = "CERTIFICADO DE TRADICIÓN";
+        $this->arrTitulos[] = "MATRÍCULA INMOBILIARIA";
         $this->arrTitulos[] = "ZONA DE MATRICULA";
-        $this->arrTitulos[] = "FECHA DE MATRICULA";
-        $this->arrTitulos[] = "SUBSIDIO SDHT";
-        $this->arrTitulos[] = "SUBSIDIO FONVIVIENDA";
-        $this->arrTitulos[] = "APROBO";
+        $this->arrTitulos[] = "FECHA CTL";
+        $this->arrTitulos[] = "N° CONTRATO LEASING";
+        $this->arrTitulos[] = "FECHA CONTRATO LEASING";
         $this->arrTitulos[] = "ELABORO";
+        $this->arrTitulos[] = "REVISO";
+        $this->arrTitulos[] = "APROBO";
     }
 
     public function cargarArchivo() {
@@ -132,11 +144,11 @@ class LegalizacionMCY {
                             for ($numColumna = 0; $numColumna <= $numColumnas; $numColumna++) {
                                 $numFilaArreglo = $numFila - 1;
                                 $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
-                                if ($numColumna == 25 and is_numeric($arrArchivo[$numFilaArreglo][$numColumna])) {
+                                if ($numColumna == 33 and is_numeric($arrArchivo[$numFilaArreglo][$numColumna])) {
                                     $claFecha = PHPExcel_Shared_Date::ExcelToPHPObject($arrArchivo[$numFilaArreglo][$numColumna]);
                                     $arrArchivo[$numFilaArreglo][$numColumna] = $claFecha->format("Y-m-d");
                                 }
-                                if ($numColumna == 30 and is_numeric($arrArchivo[$numFilaArreglo][$numColumna])) {
+                                if ($numColumna == 38 and is_numeric($arrArchivo[$numFilaArreglo][$numColumna])) {
                                     $claFecha1 = PHPExcel_Shared_Date::ExcelToPHPObject($arrArchivo[$numFilaArreglo][$numColumna]);
                                     $arrArchivo[$numFilaArreglo][$numColumna] = $claFecha1->format("Y-m-d");
                                 }
@@ -238,7 +250,7 @@ class LegalizacionMCY {
             }
             foreach ($arrArchivo as $numLinea => $arrLinea) {
                 foreach ($arrLinea as $key => $value) {
-                    if ($key == 25 and $arrLinea[3] == $objRes->fields['numDocumento']) {
+                    if ($key == 33 and $arrLinea[3] == $objRes->fields['numDocumento']) {
 
                         $fchEscritura = strtotime($value);
                         // echo "<br> ***" . $fchActo . " > " . $fchEscritura;
@@ -265,6 +277,8 @@ class LegalizacionMCY {
 
         $formularios = implode(",", $this->arrFormularios);
         $aptBd->BeginTrans();
+        $arraContratoLeasing = Array();
+        $arraFechaLeasing = Array();
 
         try {
             $sql = "INSERT INTO t_des_desembolso
@@ -298,16 +312,24 @@ class LegalizacionMCY {
                     }
                     $claDesembolso->txtNombreVendedor = $value[8];
                     $claDesembolso->numDocumentoVendedor = $value[7];
-                    $claDesembolso->txtDireccionInmueble = $value[9] . ' ' . $value[22];
-                    $claDesembolso->txtEscritura = $value[23];
-                    $claDesembolso->numNotaria = $value[24];
-                    $claDesembolso->fchEscritura = $value[25];
-                    $claDesembolso->txtMatriculaInmobiliaria = $value[26];
-                    $claDesembolso->valInmueble = $value[27];
-                    $claDesembolso->numValorInmueble = $value[27];
-                    $claDesembolso->txtCertificadoTradicion = $value[28];
-                    $claDesembolso->txtCedulaCatastral = $value[29];
-
+                    $claDesembolso->txtDireccionInmueble = $value[9] . ' ' . $value[28];
+                    $claDesembolso->txtBarrio = ($value[29] != "") ? $value[29] : "1143";
+                    $claDesembolso->txtLocalidad = ($value[30] != "") ? explode("-", $value[30])[0] : "1";
+                    $claDesembolso->txtEscritura = $value[32];
+                    $claDesembolso->numNotaria = $value[34];
+                    $claDesembolso->fchEscritura = $value[33];
+                    $claDesembolso->numAvaluo = $value[35];
+                    $claDesembolso->valInmueble = $value[35];
+                    $claDesembolso->txtMatriculaInmobiliaria = $value[36];
+                    $claDesembolso->numValorInmueble = $value[35];
+                    $claDesembolso->txtCertificadoTradicion = $value[38];
+                    $claDesembolso->txtCedulaCatastral = $value[37];
+                    $claDesembolso->seqTipoDocumento = (strtoupper($value[6]) == 'NIT' ) ? 6 : 1;
+                    $claDesembolso->numTelefonoVendedor = $value[25];
+                    $claDesembolso->numTelefonoVendedor2 = $value[26];
+                    $claDesembolso->txtCorreoVendedor = $value[27];
+                    $arraContratoLeasing[$claDesembolso->seqFormulario] = $value[39];
+                    $arraFechaLeasing[$claDesembolso->seqFormulario] = $value[40];
 
 
 
@@ -318,16 +340,16 @@ class LegalizacionMCY {
                             . "$claDesembolso->txtLicenciaConstruccion, $claDesembolso->txtUltimoPredial, $claDesembolso->txtUltimoReciboAgua, $claDesembolso->txtUltimoReciboEnergia, $claDesembolso->txtOtro, $claDesembolso->txtViabilizoJuridico, $claDesembolso->txtViabilizoTecnico, "
                             . "$claDesembolso->bolViabilizoJuridico, $claDesembolso->bolviabilizoTecnico, $claDesembolso->bolPoseedor, $claDesembolso->txtChip, $claDesembolso->numActaEntrega, $claDesembolso->txtActaEntrega, $claDesembolso->numCertificacionVendedor, $claDesembolso->txtCertificacionVendedor, "
                             . "$claDesembolso->numAutorizacionDesembolso, $claDesembolso->txtAutorizacionDesembolso, $claDesembolso->numFotocopiaVendedor, $claDesembolso->txtFotocopiaVendedor, $claDesembolso->seqTipoDocumento, '$claDesembolso->txtCompraVivienda', $claDesembolso->txtNit, $claDesembolso->txtRit, "
-                            . "$claDesembolso->txtRut, $claDesembolso->numNit, $claDesembolso->numRit, $claDesembolso->numRut, '$claDesembolso->txtTipoPredio', $claDesembolso->numTelefonoVendedor, '$claDesembolso->txtCedulaCatastral', $claDesembolso->numAreaConstruida, $claDesembolso->numAreaLote, $claDesembolso->txtTipoDocumentos, $claDesembolso->numEstrato, "
+                            . "$claDesembolso->txtRut, $claDesembolso->numNit, $claDesembolso->numRit, $claDesembolso->numRut, '$claDesembolso->txtTipoPredio', $claDesembolso->numTelefonoVendedor, '$claDesembolso->txtCedulaCatastral', $claDesembolso->numAreaConstruida, $claDesembolso->numAreaLote, '$claDesembolso->txtTipoDocumentos', $claDesembolso->numEstrato, "
                             . "'$claDesembolso->txtCiudad', $claDesembolso->fchCreacionBusquedaOferta, $claDesembolso->fchActualizacionBusquedaOferta, $claDesembolso->fchCreacionEscrituracion, $claDesembolso->fchActualizacionEscrituracion, $claDesembolso->numTelefonoVendedor2, '$claDesembolso->txtPropiedad', "
                             . "$claDesembolso->fchSentencia, $claDesembolso->numJuzgado, $claDesembolso->txtCiudadSentencia, $claDesembolso->numResolucion, $claDesembolso->fchResolucion, $claDesembolso->txtEntidad, $claDesembolso->txtCiudadResolucion, $claDesembolso->numContratoArrendamiento, $claDesembolso->txtContratoArrendamiento, "
                             . "$claDesembolso->numAperturaCAP, $claDesembolso->txtAperturaCAP, $claDesembolso->numCedulaArrendador, $claDesembolso->txtCedulaArrendador, $claDesembolso->numCuentaArrendador, $claDesembolso->txtCuentaArrendador, $claDesembolso->numRetiroRecursos,"
                             . "$claDesembolso->txtRetiroRecursos, $claDesembolso->numServiciosPublicos, '$claDesembolso->txtServiciosPublicos', '$claDesembolso->txtCorreoVendedor', $claDesembolso->seqCiudad, $claDesembolso->seqAplicacionSubsidio, $claDesembolso->seqProyectosSoluciones, $claDesembolso->seqFrmulario_Des";
                 }
-                $sql .="),";
+                $sql .= "),";
             }
             $sql = substr_replace($sql, ';', -1, 1);
-            echo "<br>" . $sql;
+            //  echo "<br>" . $sql;
             $aptBd->execute($sql);
 
             $aptBd->CommitTrans();
@@ -348,7 +370,7 @@ class LegalizacionMCY {
                     txtCorreoVendedor, seqCiudad, seqAplicacionSubsidio, seqProyectosSoluciones,  numContratoLeasing, fchContratoLeasing, numFoliosContratoLeasing, 
                     txtFoliosContratoLeasing)";
 
-                $sqlEsc .="(select 
+                $sqlEsc .= "(select 
                     seqDesembolso, seqFormulario, numEscrituraPublica, numCertificadoTradicion, numCartaAsignacion, numAltoRiesgo, numHabitabilidad,
                     numBoletinCatastral, numLicenciaConstruccion, numUltimoPredial, numUltimoReciboAgua, numUltimoReciboEnergia, numOtros, txtNombreVendedor,
                     numDocumentoVendedor, txtDireccionInmueble, txtBarrio, seqLocalidad, txtEscritura, numNotaria, fchEscritura, numAvaluo, valInmueble, 
@@ -366,8 +388,19 @@ class LegalizacionMCY {
 
                 echo "<br>" . $sqlEsc;
                 $aptBd->execute($sqlEsc);
+
                 $aptBd->CommitTrans();
                 if (empty($this->arrErrores)) {
+                    foreach ($arraContratoLeasing as $key => $value) {
+                        try {
+                            $updateEsc = "update t_des_escrituracion set  numContratoLeasing= '" . $value . "' WHERE seqFormulario = " . $key . ";";
+                            $aptBd->execute($updateEsc);
+                        } catch (Exception $exEsc) {
+                            $this->arrErrores[] = $exEsc->getMessage();
+                            $aptBd->RollBackTrans();
+                            $this->mostrarErrores();
+                        }
+                    }
                     $this->salvarDatosFaseII($arrArchivo);
                 } else {
                     $this->mostrarErrores();
@@ -396,16 +429,31 @@ class LegalizacionMCY {
                     numFolioMatricula,txtZonaMatricula,txtCiudadMatricula,fchMatricula,bolSubsidioSDHT,bolSubsidioFonvivienda,numResolucionFonvivienda,
                     numAnoResolucionFonvivienda,txtAprobo,fchCreacion,fchActualizacion,txtCiudadTitulo,txtCiudadIdentificacion,txtElaboro)
                     VALUES";
+            
+            $sqlSolicitud = "INSERT INTO t_des_solicitud(
+                numRegistroPresupuestal1, fchRegistroPresupuestal1, numRegistroPresupuestal2, fchRegistroPresupuestal2, valSolicitado, 
+                bolDocumentoBeneficiario, txtDocumentoBeneficiario, bolDocumentoVendedor, txtDocumentoVendedor, bolCertificacionBancaria, 
+                txtCertificacionBancaria, bolCartaAsignacion, txtCartaAsignacion, bolAutorizacion, txtAutorizacion, txtSubsecretaria, 
+                bolSubsecretariaEncargado, txtSubdireccion, bolSubdireccionEncargado, txtRevisoSubsecretaria, txtElaboroSubsecretaria, numRadiacion, 
+                fchRadicacion, numOrden,fchOrden,valOrden, seqDesembolso, txtConsecutivo, numProyectoInversion, txtNombreBeneficiarioGiro,
+                numDocumentoBeneficiarioGiro, txtDireccionBeneficiarioGiro, numTelefonoGiro, numCuentaGiro, txtTipoCuentaGiro, seqBancoGiro, 
+                fchCreacion, fchActualizacion, bolRut, txtRut, bolNit, txtNit, bolCedulaRepresentante, txtCedulaRepresentante, bolCamaraComercio,
+                txtCamaraComercio, bolGiroTercero, txtGiroTercero, bolBancoArrendador, txtBancoArrendador, bolActaEntregaFisica, txtActaEntregaFisica, 
+                bolActaLiquidacion, txtActaLiquidacion, txtCorreoGiro, bolCertificacionManejoRecursos, txtCertificacionManejoRecursos, bolSuperintendencia,  txtSuperIntendencia, bolRutBanco, txtRutBanco)
+                VALUES";
 
             $datos = $this->obtenerDatos();
-
+            //  var_dump($arrArchivo);
             foreach ($arrArchivo as $key => $value) {
-                $this->arrDesembolso[] = $datos[$value[3]]['seqDesembolso'];
-                $fchMatricula = strtotime($value[29]);
-                $bolSubsidioSDHT = ($value[30] == 'SI') ? 1 : 0;
-                $bolSubsidioFonvivienda = ($value[31] == 'SI') ? 1 : 0;
-                $sql .= "(" . $datos[$value[3]]['seqDesembolso'] . ", $value[23],'$value[25]',$value[24], $value[23],'$value[25]',$value[24], 0, '$value[29]', 'Bogotá', '$value[30]', "
-                        . "$bolSubsidioSDHT, $bolSubsidioFonvivienda, 0,0, '$value[33]',NOW(), NOW(), 'Bogotá', 'Bogotá', '$value[34]' ),";
+                if ($value[3] != "" ) {
+                    $this->arrDesembolso[] = $datos[$value[3]]['seqDesembolso'];
+                    $this->arrayLeasing[$datos[$value[3]]['seqDesembolso']][] = $value[31];
+                    $fchMatricula = strtotime($value[38]);
+                    $bolSubsidioSDHT = 1;
+                    $bolSubsidioFonvivienda = 1;
+                    $sql .= "(" . $datos[$value[3]]['seqDesembolso'] . ", $value[32],'$value[33]',$value[34], $value[32],'$value[33]',$value[34], 0, '$value[37]', 'Bogotá', '$value[38]', "
+                            . "$bolSubsidioSDHT, $bolSubsidioFonvivienda, 0,0, '$value[43]',NOW(), NOW(), 'Bogotá', 'Bogotá', '$value[41]' ),";
+                }
             }
             $sql = substr_replace($sql, ';', -1, 1);
             echo "<p>" . $sql . "</p>";
@@ -428,30 +476,64 @@ class LegalizacionMCY {
         global $aptBd;
 
         $desembolso = implode(",", $this->arrDesembolso);
-
-        $arrayObs[0]['texto'] = 'ESCRITURA PÚBLICA';
-        $arrayObs[0]['tipo'] = 1;
-        $arrayObs[1]['texto'] = 'CONSULTA PAGINA VUR FOLIO DE MATRÍCULA INMOBILIARIA';
-        $arrayObs[1]['tipo'] = 1;
-        $arrayObs[2]['texto'] = 'PROPIETARIOS SON BENEFICIARIOS DEL SDV';
+        /*         * *************************  COMPRAVENTA **************************************** */
+        $arrayObs[0]['texto'] = 'PROPIETARIOS SON BENEFICIARIOS DEL SDV.';
+        $arrayObs[0]['tipo'] = 4;
+        $arrayObs[1]['texto'] = 'NOMBRE Y C&Eacute;DULA DE LOS PROPIETARIOS';
+        $arrayObs[1]['tipo'] = 4;
+        $arrayObs[2]['texto'] = 'COMPRAVENTA REALIZADA CON SDV';
         $arrayObs[2]['tipo'] = 4;
-        $arrayObs[3]['texto'] = 'NOMBRE Y CÉDULA DE LOS PROPIETARIOS';
+        $arrayObs[3]['texto'] = 'SUBSIDIO SDHT VIGENTE Y ESTADO MARCADO PARA PAGO EN SISTEMA DE INFORMACION DEL PROGRAMA MI CASA YA.';
         $arrayObs[3]['tipo'] = 4;
-        $arrayObs[4]['texto'] = 'COMPRAVENTA REALIZADA CON SDV';
+        $arrayObs[4]['texto'] = 'HOGAR REACIONADO EN REPORTE PARA PAGO GENERADO POR SISTEMA DE INFORMACION DEL PROGRAMA MI CASA YA . ';
         $arrayObs[4]['tipo'] = 4;
-        $arrayObs[5]['texto'] = 'UNA VEZ VERIFICADA LA INFORMACION REPORTADA POR EL SISTEMA DE INFORMACION DEL PROGRAMA MI CASA YA Y LOS DOCUMENTOS ALLEGADOS'
-                . ' POR EL OFERENTE Y/O CONSTRUCTOR Y CONSULTADA LA VENTANILLA UNICA DE REGISTRO VUR SE PUEDE ESTABLECER QUE SE DA CUMPLIMIENTO A LOS REQUISITOS '
-                . 'EXIGIDOS POR LA RESOLUCION 654 DE 2018';
-        $arrayObs[5]['tipo'] = 2;
+        $arrayObs[5]['texto'] = 'ESCRITURA P&Uacute;BLICA';
+        $arrayObs[5]['tipo'] = 1;
+        $arrayObs[6]['texto'] = 'CONSULTA PAGINA VUR FOLIO DE MATRÍCULA INMOBILIARIA.';
+        $arrayObs[6]['tipo'] = 1;
+        $arrayObs[7]['texto'] = 'UNA VEZ VERIFICADA LA INFORMACION REPORTADA POR EL SISTEMA DE INFORMACION DEL PROGRAMA '
+                . 'MI CASA YA Y LOS DOCUMENTOS ALLEGADOS POR EL OFERENTE Y/O CONSTRUCTOR Y CONSULTADA LA VENTANILLA UNICA DE REGISTRO'
+                . 'VUR SE PUEDE ESTABLECER QUE SE DA CUMPLIMIENTO A LOS REQUISITOS EXIGIDOS POR LA RESOLUCION 654 DE 2018. ';
+        $arrayObs[7]['tipo'] = 2;
 
+        /*         * ************************* FIN COMPRAVENTA **************************************** */
+
+        /*         * *************************  LEASING **************************************** */
+
+        $arrayObsLea[0]['texto'] = 'RELACIÓN DE LOS INTEGRANTES DEL HOGAR EN LA ESCRITURA.';
+        $arrayObsLea[0]['tipo'] = 4;
+        $arrayObsLea[1]['texto'] = 'NUMERO Y FECHA DEL CONTRATO DE LEASING HABITACIONAL';
+        $arrayObsLea[1]['tipo'] = 4;
+        $arrayObsLea[2]['texto'] = 'BENEFICIRIO DEL APORTE SEA EL LOCATARIO DEL CONTRATO DE LEASING';
+        $arrayObsLea[2]['tipo'] = 4;
+        $arrayObsLea[3]['texto'] = 'PROPIEDAD DE LA ENTIDAD FINANCIERA OTORGANTE DEL LEASING EN CTL.';
+        $arrayObsLea[3]['tipo'] = 4;
+        $arrayObsLea[4]['texto'] = 'SUBSIDIO SDHT VIGENTE Y ESTADO MARCADO PARA PAGO EN SISTEMA DE INFORMACION DEL PROGRAMA MI CASA YA. ';
+        $arrayObsLea[4]['tipo'] = 4;
+        $arrayObsLea[5]['texto'] = 'HOGAR REACIONADO EN REPORTE PARA PAGO GENERADO POR SISTEMA DE INFORMACION DEL PROGRAMA MI CASA YA';
+        $arrayObsLea[5]['tipo'] = 4;
+        $arrayObsLea[6]['texto'] = 'ESCRITURA P&Uacute;BLICA.';
+        $arrayObsLea[6]['tipo'] = 1;
+        $arrayObsLea[7]['texto'] = 'CONSULTA PAGINA VUR FOLIO DE MATRÍCULA INMOBILIARIA';
+        $arrayObsLea[7]['tipo'] = 1;
+        $arrayObsLea[8]['texto'] = 'CONTRATO DE LEASING HABITACIONAL';
+        $arrayObsLea[8]['tipo'] = 1;
+        $arrayObsLea[9]['texto'] = 'UNA VEZ VERIFICADA LA INFORMACION REPORTADA POR EL SISTEMA DE INFORMACION DEL PROGRAMA MI CASA YA Y LOS DOCUMENTOS '
+                . 'ALLEGADOS POR EL OFERENTE Y/O CONSTRUCTOR Y CONSULTADA LA VENTANILLA UNICA DE REGISTRO VUR SE PUEDE ESTABLECER QUE SE DA CUMPLIMIENTO'
+                . ' A LOS REQUISITOS EXIGIDOS POR LA RESOLUCION 654 DE 2018. ';
+        $arrayObsLea[9]['tipo'] = 2;
+
+        /*         * ************************* FIN LEASING **************************************** */
         $aptBd->BeginTrans();
         try {
-            $seqAdjuntos = "SELECT distinct(seqEstudioTitulos) As seqEstudioTitulos FROM t_des_estudio_titulos where seqDesembolso in(" . $desembolso . ");";
+            $seqAdjuntos = "SELECT distinct(seqEstudioTitulos) As seqEstudioTitulos, seqDesembolso FROM t_des_estudio_titulos where seqDesembolso in(" . $desembolso . ");";
             $objRes = $aptBd->execute($seqAdjuntos);
 
             $sql = "INSERT INTO t_des_adjuntos_titulos (seqTipoAdjunto, seqEstudioTitulos, txtAdjunto) VALUES";
+            $array = Array();
             while ($objRes->fields) {
-                foreach ($arrayObs as $key => $value) {
+                $array = ($this->arrayLeasing[$objRes->fields['seqDesembolso']] == 'NO') ? $arrayObs : $arrayObsLea;
+                foreach ($array as $key => $value) {
                     echo "<br>" . $value['texto'];
                     $sql .= "(" . $value['tipo'] . "," . $objRes->fields['seqEstudioTitulos'] . ",'" . $value['texto'] . "' ),";
                 }
@@ -576,13 +658,13 @@ class LegalizacionMCY {
         $claDesembolso->numTelefonoVendedor = 'NULL';
         $claDesembolso->numAreaConstruida = 'NULL';
         $claDesembolso->numAreaLote = 'NULL';
-        $claDesembolso->txtTipoDocumentos = 'NULL';
-        $claDesembolso->numEstrato = 'NULL';
+        $claDesembolso->txtTipoDocumentos = 'empresa';
+        $claDesembolso->numEstrato = 2;
         $claDesembolso->txtCiudad = "Bogotá";
-        $claDesembolso->fchCreacionBusquedaOferta = 'NULL';
-        $claDesembolso->fchActualizacionBusquedaOferta = 'NULL';
-        $claDesembolso->fchCreacionEscrituracion = 'NULL';
-        $claDesembolso->fchActualizacionEscrituracion = 'NULL';
+        $claDesembolso->fchCreacionBusquedaOferta = 'NOW()';
+        $claDesembolso->fchActualizacionBusquedaOferta = 'NOW()';
+        $claDesembolso->fchCreacionEscrituracion = 'NOW()';
+        $claDesembolso->fchActualizacionEscrituracion = 'NOW()';
         $claDesembolso->numTelefonoVendedor2 = 'NULL';
         $claDesembolso->txtPropiedad = 'escritura';
         $claDesembolso->fchSentencia = 'NULL';
@@ -606,8 +688,8 @@ class LegalizacionMCY {
         $claDesembolso->txtServiciosPublicos = 'NULL';
         $claDesembolso->txtCorreoVendedor = 'NULL';
         $claDesembolso->seqCiudad = 149;
-        $claDesembolso->seqAplicacionSubsidio = 'NULL';
-        $claDesembolso->seqProyectosSoluciones = 'NULL';
+        $claDesembolso->seqAplicacionSubsidio = 1;
+        $claDesembolso->seqProyectosSoluciones = 37;
         $claDesembolso->seqFrmulario_Des = 'NULL';
     }
 

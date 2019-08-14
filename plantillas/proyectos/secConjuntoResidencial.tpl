@@ -149,7 +149,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" >Fecha&nbsp;Escritura</label><br /> 
-                            <input name="fchEscrituraHijo[]" type="text" id="fchEscrituraHijo_{$cont}" value="{$arrConjunto.fchEscritura}" size="12" style="text-align:center; background-color:#E4E4E4; width: 90%;position: relative; float: left" readonly class="form-control required4"/><a href="#" onClick="javascript: calendarioPopUp('fchEscrituraHijo_{$cont}');"><img src="recursos/imagenes/calendar.png"></a>
+                            <input name="fchEscrituraHijo[]" type="text" id="fchEscrituraHijo_{$cont}" value="{$arrConjunto.fchEscritura}" size="12" style="text-align:center; background-color:#E4E4E4; width: 90%;position: relative; float: left" readonly class="form-control required4"/>
                             <div id="val_fchEscrituraHijo_{$cont}" class="divError">Diligenciar Campo</div>
                         </div>
                         <div class="col-md-3">
@@ -164,7 +164,7 @@
                     </div>
 
 
-                    {foreach from=$arraConjuntoLicencias[$num] key=keyLicenciaCon item=valLicConj}
+                    {foreach from=$arraConjuntoLicencias[$cont] key=keyLicenciaCon item=valLicConj}
                         {if $valLicConj.seqTipoLicencia == 1}
                             <div class="form-group" >
                                 <div class="col-md-12">
@@ -187,12 +187,12 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="control-label" >Fecha&nbsp;Licencia</label><br />           
-                                            <input name="fchLicenciaUrbanismo1Hijo[]" type="text" id="fchLicenciaUrbanismo1Hijo_{$cont}" value="{$valLicConj.fchLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaUrbanismo1Hijo_{$cont}');"><img src="recursos/imagenes/calendar.png"></a>
+                                            <input name="fchLicenciaUrbanismo1Hijo[]" type="text" id="fchLicenciaUrbanismo1Hijo_{$cont}" value="{$valLicConj.fchLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/>
                                             <div id="val_fchLicenciaUrbanismo1Hijo_{$cont}" class="divError">Diligenciar Campo</div>
                                         </div>
                                         <div class="col-md-3">
                                             <label class="control-label" >Vigencia&nbsp;Licencia</label><br />            
-                                            <input name="fchVigenciaLicenciaUrbanismoHijo[]" type="text" id="fchVigenciaLicenciaUrbanismoHijo_{$cont}" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaUrbanismoHijo_{$cont}');" ><img src="recursos/imagenes/calendar.png"></a>
+                                            <input name="fchVigenciaLicenciaUrbanismoHijo[]" type="text" id="fchVigenciaLicenciaUrbanismoHijo_{$cont}" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/>
                                             <div id="val_fchVigenciaLicenciaUrbanismoHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                         </div>
                                     </fieldset>
@@ -215,12 +215,12 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="control-label" >Fecha&nbsp;Licencia</label><br />             
-                                                <input name="fchLicenciaConstruccion1Hijo[]" type="text" id="fchLicenciaConstruccion1Hijo_{$cont}" value="{$valLicConj.fchLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly /><a href="#" onClick="javascript: calendarioPopUp('fchLicenciaConstruccion1Hijo[]');" class="form-control required4"><img src="recursos/imagenes/calendar.png"></a>
+                                                <input name="fchLicenciaConstruccion1Hijo[]" type="text" id="fchLicenciaConstruccion1Hijo_{$cont}" value="{$valLicConj.fchLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly />
                                                 <div id="val_fchLicenciaConstruccion1Hijo_{$cont}" class="divError">Diligenciar Campo</div>
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="control-label" >Vigencia&nbsp;Licencia</label><br />            
-                                                <input name="fchVigenciaLicenciaConstruccionHijo[]" type="text" id="fchVigenciaLicenciaConstruccionHijo_{$cont}" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/><a href="#" onClick="javascript: calendarioPopUp('fchVigenciaLicenciaConstruccionHijo_{$cont}');"><img src="recursos/imagenes/calendar.png"></a>
+                                                <input name="fchVigenciaLicenciaConstruccionHijo[]" type="text" id="fchVigenciaLicenciaConstruccionHijo_{$cont}" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/>
                                                 <div id="val_fchVigenciaLicenciaConstruccionHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                             </div>
                                             <div class="col-md-3">

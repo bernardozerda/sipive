@@ -955,7 +955,7 @@ class Seguimiento {
     /**
      * COMPARACION DE VALORES
      */
-    private function compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, $numSeparadores = 0) {
+    public function compararValores($txtClave, $txtValorAnterior, $txtValorNuevo, $numSeparadores = 0) {
 
         $txtSeparador = str_repeat($this->txtSeparador, $numSeparadores);
         $txtSalto = $this->txtSalto;

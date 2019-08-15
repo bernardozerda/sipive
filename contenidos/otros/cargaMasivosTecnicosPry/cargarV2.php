@@ -13,6 +13,7 @@
 if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name'])) {
     $nombreArchivo = $_FILES['archivo']['tmp_name'];
     $lineas = file($nombreArchivo);
+    // prueba
     $consulta = "INSERT INTO t_pry_tecnico( 
                           seqTecnicoUnidad,
                           seqUnidadProyecto,
@@ -127,17 +128,20 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                           txtDescripcionVivienda,
                           txtNormaNSR98,
                           txtRequisitos,
+                          txtPermisoOcupacion,
                           txtExistencia,
                           txtDescipcionNormaNSR98,
                           txtDescripcionRequisitos,
+                          txtDescripcionPermisoOcupacion,
                           txtDescripcionExistencia,
                           fchVisita,
+                          fchExpedicion,
                           txtAprobo,
                           fchCreacion,
                           fchActualizacion) 
                           VALUES ";
 
-    $file = fopen("query_insert.sql", "a") or die("Pro blemas");
+    $file = fopen("query_insert.sql", "a") or die("Problemas");
     fputs($file, $consulta);
     fputs($file, "\n");
 
@@ -257,16 +261,17 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
         $txtDescripcionVivienda = trim($datos [113]);
         $txtNormaNSR98 = trim($datos [114]);
         $txtRequisitos = trim($datos [115]);
-        $txtExistencia = trim($datos [116]);
-        $txtDescipcionNormaNSR98 = trim($datos [117]);
-        $txtDescripcionRequisitos = trim($datos [118]);
-        $txtDescripcionExistencia = trim($datos [119]);
-        $fchVisita = trim($datos [121]);
-        $txtAprobo = trim($datos [122]);
-        $fchCreacion = (trim($datos [123])) == '' ? 'now()' : trim($datos [123]);
-        $fchActualizacion = trim($datos [124]);
-
-
+        $txtPermisoOcupacion = trim($datos [116]);
+        $txtExistencia = trim($datos [117]);
+        $txtDescipcionNormaNSR98 = trim($datos [118]);
+        $txtDescripcionRequisitos = trim($datos [119]);
+        $txtDescripcionPermisoOcupacion = trim($datos [120]);
+        $txtDescripcionExistencia = trim($datos [121]);
+        $fchVisita = trim($datos [123]);
+        $fchExpedicion = trim($datos [124]);
+        $txtAprobo = trim($datos [125]);
+        $fchCreacion = (trim($datos [126])) == '' ? 'now()' : 'trim($datos [125])';
+        $fchActualizacion = (trim($datos [127])) == '' ? 'now()' : 'trim($datos [126])';
 
         $valores = "(
                         $seqTecnicoUnidad,
@@ -361,13 +366,13 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                         '$numContadorAgua',
                         '$txtEstadoConexionAgua',
                         '$txtDescripcionAgua',
-                        $numContadorEnergia,
+                        '$numContadorEnergia',
                         '$txtEstadoConexionEnergia',
                         '$txtDescripcionEnergia',
                         $numContadorAlcantarillado,
                         '$txtEstadoConexionAlcantarillado',
                         '$txtDescripcionAlcantarillado',
-                        $numContadorGas,
+                        '$numContadorGas',
                         '$txtEstadoConexionGas',
                         '$txtDescripcionGas',
                         $numContadorTelefono,
@@ -382,15 +387,17 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
                         '$txtDescripcionVivienda',
                         '$txtNormaNSR98',
                         '$txtRequisitos',
+                        '$txtPermisoOcupacion',
                         '$txtExistencia',
                         '$txtDescipcionNormaNSR98',
                         '$txtDescripcionRequisitos',
+                        '$txtDescripcionPermisoOcupacion',
                         '$txtDescripcionExistencia',
                         '$fchVisita',
+                        '$fchExpedicion',
                         '$txtAprobo',
-                        '$fchCreacion',
-                        '$fchActualizacion'),";
-
+                        $fchCreacion,
+                        $fchActualizacion),";
 
         fputs($file, $valores);
         fputs($file, "\n");

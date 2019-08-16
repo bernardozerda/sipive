@@ -42,8 +42,9 @@ if (empty($claLegalizacionMcy->arrErrores)) {
             $tipo = $tipo[($cont - 1)];
             //echo "<br>".$tipo; die();
             $target_path = $destino . basename($_FILES['archivo']['name']);
+             echo "<br>" . $target_path . ", " . "reporte_" . date("M") . "." . $tipo;
             if (move_uploaded_file($_FILES['archivo']['tmp_name'], $target_path)) {
-                echo "<br>" . $target_path . ", " . "reporte_" . date("M") . "." . $tipo;
+               
                 $fecha = str_replace(":", "", $claLegalizacionMcy->fecha);
                 rename($target_path, $destino . "ReporteMCY_" .  str_replace(".", "", ucwords(strftime("%b",strtotime($claLegalizacionMcy->fecha)))). "_".$fecha."." . $tipo);
                 //rename($target_path, "reporte_" . date("M") . "." . $tipo);

@@ -32,17 +32,17 @@ if (empty($claLegalizacionMcy->arrErrores)) {
         $claLegalizacionMcy->validarformularios($arrArchivo);
         if (empty($claLegalizacionMcy->arrErrores)) {
             $destino = '../../recursos/informesMCY/';
-            if (!file_exists($destino)) {
+            if (!is_dir($destino)) {
                 mkdir($destino, 0777, true);
                 chmod($destino, 0777);
             }
-            var_dump($_FILES);
+          
             $tipo = explode(".", $_FILES['archivo']['name']);
             $cont = count($tipo);
             $tipo = $tipo[($cont - 1)];
             //echo "<br>".$tipo; die();
             $target_path = $destino . basename($_FILES['archivo']['name']);
-             echo "<br>" . $target_path . ", " . "reporte_" . date("M") . "." . $tipo;
+            // echo "<br>" . $target_path . ", " . "reporte_" . date("M") . "." . $tipo;
             if (move_uploaded_file($_FILES['archivo']['tmp_name'], $target_path)) {
                
                 $fecha = str_replace(":", "", $claLegalizacionMcy->fecha);

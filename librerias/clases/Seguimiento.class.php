@@ -1058,7 +1058,6 @@ class Seguimiento {
                 }
                 break;
         }
-
         return $txtCambios;
     }
 

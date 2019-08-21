@@ -56,7 +56,7 @@
                     </td>
                     {if isset($smarty.session.arrGrupos.6.20)}
                         <td class="col-sm-2">
-                            <span class="btn btn-default btn-sm"  onClick="cargarContenido('contenido', './contenidos/legalizacionMCY/eliminar.php', 'fchCreacion={$arrDatos.fchCreacion}', true);" class="text-danger"> 
+                            <span class="btn btn-default btn-sm"  onClick="if (confirm('Esta seguro que desea eliminar el registro?'))cargarContenido('contenido', './contenidos/legalizacionMCY/eliminar.php', 'fchCreacion={$arrDatos.fchCreacion}', true);" class="text-danger"> 
                                 <a href="#" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                             </span>
 

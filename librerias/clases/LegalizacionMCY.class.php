@@ -814,6 +814,7 @@ class LegalizacionMCY {
                 hva.fchActo as 'FECHA ACTO ADMON',
                 sol.valSolicitado as 'VALOR SUBSIDIO', 
                 des.txtDireccionInmueble as 'DIRECCIÓN INMUEBLE',
+                SUBSTRING_INDEX(loc.txtLocalidad, '-', -1) As LOCALIDAD,
                 des.txtEscritura as 'N° DE ESCRITURA',
                 des.fchEscritura as 'FECHA ESCRITURA',
                 des.numNotaria as 'NOTARIA',
@@ -839,6 +840,7 @@ class LegalizacionMCY {
                 t_ciu_tipo_documento tdo on(des.seqTipoDocumento = tdo.seqTipoDocumento)
                 left join 
                 t_frm_banco sBan on(sol.seqBancoGiro = sBan.seqBanco)
+                left join t_frm_localidad loc ON(des.seqLocalidad = loc.seqLocalidad)
                 WHERE
                  frm.seqModalidad in(12) and frm.seqTipoEsquema in(16, 17) and hog.seqParentesco = 1
                  AND sol.fchCreacion like '" . $fecha . "'";

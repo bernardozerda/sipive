@@ -2,6 +2,7 @@
 
 ini_set("memory_limit", "-1");
 date_default_timezone_set('america/bogota');
+session_start();
 
 $txtPrefijoRuta = "../../";
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
@@ -23,6 +24,8 @@ $arrErrores = array();
 $claLegalizacionMcy = new LegalizacionMCY();
 $claDesembolso = new Desembolso();
 $claSeguimiento = new Seguimiento();
+$textoSeg = "SUBSIDIO LEGALIZADO TENIENDO EN CUENTA LA INFORMACION REPORTADA POR EL SISTEMA DE INFORMACION DEL PROGRAMA MI CASA "
+        . "YA Y QUE SE CUMPLE CON LO ESTABLECIDO POR LA RESOLUCION 654 DE 2018";
 
 $arrArchivo = $claLegalizacionMcy->cargarArchivo();
 if (empty($claLegalizacionMcy->arrErrores)) {
@@ -36,22 +39,14 @@ if (empty($claLegalizacionMcy->arrErrores)) {
                 mkdir($destino, 0777, true);
                 chmod($destino, 0777);
             }
-          
+
             $tipo = explode(".", $_FILES['archivo']['name']);
             $cont = count($tipo);
             $tipo = $tipo[($cont - 1)];
             //echo "<br>".$tipo; die();
             $target_path = $destino . basename($_FILES['archivo']['name']);
             // echo "<br>" . $target_path . ", " . "reporte_" . date("M") . "." . $tipo;
-            if (move_uploaded_file($_FILES['archivo']['tmp_name'], $target_path)) {
-               
-                $fecha = str_replace(":", "", $claLegalizacionMcy->fecha);
-                rename($target_path, $destino . "ReporteMCY_" .  str_replace(".", "", ucwords(strftime("%b",strtotime($claLegalizacionMcy->fecha)))). "_".$fecha."." . $tipo);
-                //rename($target_path, "reporte_" . date("M") . "." . $tipo);
-                echo "<span style='color:green;'>El archivo " . basename($_FILES['archivo']['name']) . " ha sido subido</span><br>";
-            } else {
-                $claLegalizacionMcy->arrErrores[] = "Ha ocurrido un error al subir el archivo, trate de nuevo!";
-            }
+
             if (empty($claLegalizacionMcy->arrErrores)) {
                 $claLegalizacionMcy->salvarDatosFaseI($arrArchivo, $claDesembolso);
 
@@ -67,7 +62,16 @@ if (empty($claLegalizacionMcy->arrErrores)) {
                             $txtCambios .= $claSeguimiento->compararValores($keyF, $valAnterior, $valueF, 1);
                         }
                         // echo "<br>" . $txtCambios;
-                        $claLegalizacionMcy->salvarSeguimiento($key, $txtCambios);
+                        $claLegalizacionMcy->salvarSeguimiento($key, $txtCambios, $textoSeg);
+                    }
+                    if (move_uploaded_file($_FILES['archivo']['tmp_name'], $target_path)) {
+
+                        $fecha = str_replace(":", "", $claLegalizacionMcy->fecha);
+                        rename($target_path, $destino . "ReporteMCY_" . str_replace(".", "", ucwords(strftime("%b", strtotime($claLegalizacionMcy->fecha)))) . "_" . $fecha . "." . $tipo);
+                        //rename($target_path, "reporte_" . date("M") . "." . $tipo);
+                        echo "<span style='color:green;'>El archivo " . basename($_FILES['archivo']['name']) . " ha sido subido</span><br>";
+                    } else {
+                        $claLegalizacionMcy->arrErrores[] = "Ha ocurrido un error al subir el archivo, trate de nuevo!";
                     }
                     echo " <div class='alert alert-success'>Se almacenaron los datos con éxito!</div>";
                 } else {

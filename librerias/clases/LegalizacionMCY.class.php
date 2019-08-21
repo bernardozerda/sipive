@@ -524,7 +524,7 @@ class LegalizacionMCY {
                     $sqlBanco = "SELECT seqBanco FROM t_frm_banco where upper(txtbanco) like '%" . trim($banco) . "%'";
                     $objRes = $aptBd->execute($sqlBanco);
                     $txtValor = 1;
-                    //pr($objRes);
+
                     while ($objRes->fields) {
                         $txtValor = $objRes->fields['seqBanco'];
                         $objRes->MoveNext();
@@ -670,7 +670,7 @@ class LegalizacionMCY {
         $sql = "SELECT 
                     frm.seqFormulario,
                     numDocumento,
-                    concat_ws(txtNombre1, ' ', txtNombre2, ' ', txtApellido1, ' ', txtApellido2) AS nombre,
+                    CONCAT_WS(' ', txtNombre1, txtNombre2,  txtApellido1, txtApellido2) AS nombre,
                     frm.seqEstadoProceso,
                     frm.seqTipoEsquema,
                     frm.seqModalidad,
@@ -679,11 +679,15 @@ class LegalizacionMCY {
                     des.seqDesembolso,
                     des.txtEscritura,
                     des.numNotaria,
-                    des.fchEscritura
+                    des.fchEscritura,
+                    esc.seqEscrituracion,
+                    sol.seqSolicitud,
+                    est.seqEstudioTitulos, 
+                    hog.seqParentesco
                 FROM
                     t_frm_formulario frm
                         LEFT JOIN
-                    t_frm_hogar USING (seqFormulario)
+                    t_frm_hogar hog USING (seqFormulario)
                         LEFT JOIN
                     t_ciu_ciudadano USING (seqCiudadano)
                         LEFT JOIN
@@ -692,9 +696,15 @@ class LegalizacionMCY {
                     t_aad_hogares_vinculados hva USING (seqFormularioActo)
                     LEFT JOIN
                     t_des_desembolso des USING (seqFormulario)
+                    LEFT JOIN 
+                    t_des_escrituracion esc USING(seqDesembolso)
+                    LEFT JOIN
+                t_des_solicitud sol USING (seqDesembolso)
+                    LEFT JOIN 
+                    t_des_estudio_titulos est USING(seqDesembolso)
                 WHERE
-                    seqFormulario IN (" . $formularios . ")
-                        AND hva.seqTipoActo = 1";
+                    frm.seqFormulario IN(" . $formularios . ")
+                        AND hva.seqTipoActo = 1 ";
         $datos = Array();
         $objRes = $aptBd->execute($sql);
         while ($objRes->fields) {
@@ -716,7 +726,8 @@ class LegalizacionMCY {
                     group_concat(seqFormulario separator ',') as formularios ,
                      sol.fchCreacion, 
                      sol.txtConsecutivo,
-                     sol.fchOrden
+                     sol.fchOrden, 
+                     SUM(frm.valAspiraSubsidio) as valor
                  FROM
                      t_frm_formulario frm
                          LEFT JOIN
@@ -743,14 +754,16 @@ class LegalizacionMCY {
         return $datos;
     }
 
-    public function salvarSeguimiento($seqFormulario, $txtCambios) {
+    public function salvarSeguimiento($seqFormulario, $txtCambios, $texto) {
         global $aptBd;
         $datos = $this->obtenerDatos($seqFormulario);
         $nombre = "";
         $documento = 0;
         foreach ($datos as $key => $value) {
-            $nombre = $datos[$key]['nombre'];
-            $documento = $datos[$key]['numDocumento'];
+            if ($datos[$key]['seqParentesco'] == 1) {
+                $nombre = $datos[$key]['nombre'];
+                $documento = $datos[$key]['numDocumento'];
+            }
         }
         $sql = "
                  INSERT INTO T_SEG_SEGUIMIENTO (
@@ -766,7 +779,7 @@ class LegalizacionMCY {
                    " . $seqFormulario . ",
                    '" . date("Y-m-d H:i:s") . "',
                    " . $_SESSION['seqUsuario'] . ",
-                   'Este es el comentario de prueba',
+                   '" . $texto . "',
                    '" . utf8_encode($txtCambios) . "',
                    " . $documento . ",
                    '" . $nombre . "',
@@ -790,8 +803,8 @@ class LegalizacionMCY {
         $sql = "SELECT 
                 frm.seqFormulario as 'ID HOGAR',
                 numDocumento as 'DOCUMENTO PPAL',
-                concat_ws(txtNombre1, ' ', txtNombre2, ' ') AS NOMBRES,
-                concat_ws( txtApellido1, ' ', txtApellido2) AS APELLIDOS,
+                CONCAT_WS(' ',txtNombre1, txtNombre2) AS NOMBRES,
+                CONCAT_WS(' ', txtApellido1, txtApellido2) AS APELLIDOS,
                 des.numDocumentoVendedor as 'N° DOCUMENTO VENDEDOR',
                 des.txtNombreVendedor as 'NOMBRE VENDEDOR',
                 sol.txtNombreBeneficiarioGiro as 'TITULAR CUENTA',	
@@ -848,7 +861,85 @@ class LegalizacionMCY {
         echo $listError .= "</ui></div>";
     }
 
-    public function iniciarVariables($claDesembolso) {
+    public function eliminarCargue($seqFormulario) {
+
+        $datos = $this->obtenerDatos(implode(",", $seqFormulario));
+        $arrDesembolso = Array();
+        $arrEscrituracion = Array();
+        $arrSolucion = Array();
+        $arrEstudios = Array();
+
+        foreach ($datos as $key => $value) {
+
+            $arrDesembolso[] = $datos[$key]['seqDesembolso'];
+            $arrEscrituracion[] = $datos[$key]['seqEscrituracion'];
+            $arrSolucion[] = $datos[$key]['seqSolicitud'];
+            $arrEstudios[] = $datos[$key]['seqEstudioTitulos'];
+        }
+        $sqlSol = "DELETE FROM t_des_solicitud WHERE seqSolicitud IN(" . implode(",", $arrSolucion) . ")";
+        $sqlAdj = "DELETE FROM t_des_adjuntos_titulos WHERE seqEstudioTitulos IN(" . implode(",", $arrEstudios) . ")";
+        $sqlEst = "DELETE FROM t_des_estudio_titulos WHERE seqEstudioTitulos IN(" . implode(",", $arrEstudios) . ")";
+        $sqlEsc = "DELETE FROM t_des_escrituracion WHERE seqEscrituracion IN(" . implode(",", $arrEscrituracion) . ")";
+        $sqlDes = "DELETE FROM t_des_desembolso WHERE seqDesembolso IN(" . implode(",", $arrDesembolso) . ")";
+        $sqlForms = "UPDATE t_frm_formulario SET seqEstadoProceso = 15 WHERE seqFormulario IN(" . implode(",", $seqFormulario) . ") ";
+        $solicitud = $this->ejecutarConsulta($sqlSol);
+        if ($solicitud) {
+            $adjuntos = $this->ejecutarConsulta($sqlAdj);
+            if ($adjuntos) {
+                $estudios = $this->ejecutarConsulta($sqlEst);
+                if ($estudios) {
+                    $escritura = $this->ejecutarConsulta($sqlEsc);
+                    if ($escritura) {
+                        $desembolso = $this->ejecutarConsulta($sqlDes);
+                        if ($desembolso) {
+                            $Formulario = $this->ejecutarConsulta($sqlForms);
+                            if ($Formulario) {
+
+                                foreach ($seqFormulario as $key => $value) {
+                                    $texto = "POR SOL. PARA ADELANTAR CORRECCION CARGUE MASIVO LEGALIZACION SUBSIDIOS MCY. MENSAJE SDRPL RESP. LEGALIZACION MCY";
+                                    $this->salvarSeguimiento($value, '', $texto);
+                                }
+                                if (empty($this->arrErrores)) {
+                                    echo " <div class='alert alert-success'>Reporte Eliminado con éxito!!!</div>";
+                                } else {
+                                    $this->mostrarErrores();
+                                }
+                            } else {
+                                $this->mostrarErrores();
+                            }
+                        } else {
+                            $this->mostrarErrores();
+                        }
+                    } else {
+                        $this->mostrarErrores();
+                    }
+                } else {
+                    $this->mostrarErrores();
+                }
+            } else {
+                $this->mostrarErrores();
+            }
+        } else {
+            $this->mostrarErrores
+            ();
+        }
+    }
+
+    public function ejecutarConsulta($sql) {
+        global $aptBd;
+        try {
+            $aptBd->execute($sql);
+            return true;
+        } catch (Exception $objError) {
+            $this->arrErrores[] = "Error al eliminar registro";
+            $this->arrErrores[] = $objError->getMessage();
+//                $this->arrErrores[] = $sql;
+            return false;
+        }
+    }
+
+    public function iniciarVariables(
+    $claDesembolso) {
 
         $claDesembolso->numEscrituraPublica = 1;
         $claDesembolso->numCertificadoTradicion = 1;

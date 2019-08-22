@@ -748,7 +748,7 @@ class LegalizacionMCY {
         $datos = Array();
         $objRes = $aptBd->execute($sql);
         while ($objRes->fields) {
-            $datos[$objRes->fields['numDocumento']] = $objRes->fields;
+            $datos[] = $objRes->fields;
             $objRes->MoveNext();
         }
         return $datos;

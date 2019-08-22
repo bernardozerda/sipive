@@ -12,8 +12,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "PHPExcel.
 include( "../../librerias/phpExcel/Classes/PHPExcel/Writer/Excel2007.php" );
 
 // numero de filas vacias a formatear
-
-$numFilasFormatear = (isset($_GET['filas']) and $_GET['filas'] != "") ? $_GET['filas'] : 100;
+$numero = ($_GET['filas'] + 1);
+$numFilasFormatear = (isset($_GET['filas']) and $_GET['filas'] != "") ? $numero : 100;
 
 //Se carga los titulos de la plantilla
 $arrTitulos[0]['nombre'] = "No";

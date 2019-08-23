@@ -349,12 +349,14 @@ class LegalizacionMCY {
 
                         $claDesembolso->$key2 = $value2;
                     }
+                    $sqlLocalidad = "SELECT seqLocalidad FROM t_frm_localidad where txtLocalidad like '%" . explode("-", trim($value[30]))[1] . "%'";
+                    $regLocalidad =  $aptBd->execute($sqlLocalidad);
                     $claDesembolso->txtNombreVendedor = $value[8];
                     $claDesembolso->numDocumentoVendedor = $value[7];
                     $claDesembolso->txtDireccionInmueble = $value[9] . ' ' . $value[28];
                     $claDesembolso->txtBarrio = ($value[29] != "") ? $value[29] : "Desconocido";
-                    $claDesembolso->seqLocalidad = ($value[30] != "") ? explode("-", $value[30])[0] : "1";
-                    $claDesembolso->txtLocalidad = ($value[30] != "") ? explode("-", $value[30])[1] : "Desconocido";
+                    $claDesembolso->seqLocalidad = ($value[30] != "") ? $regLocalidad->fields['seqLocalidad'] : "1";
+                    //$claDesembolso->txtLocalidad = ($value[30] != "") ? : "Desconocido";
                     $claDesembolso->txtEscritura = $value[32];
                     $claDesembolso->numNotaria = $value[34];
                     $claDesembolso->fchEscritura = $value[33];
@@ -416,7 +418,7 @@ class LegalizacionMCY {
                 $sql .= "),";
             }
             $sql = substr_replace($sql, ';', -1, 1);
-            //  echo "<br>" . $sql;
+             // echo "<br>" . $sql; die();
             $aptBd->execute($sql);
 
             $aptBd->CommitTrans();
@@ -802,6 +804,7 @@ class LegalizacionMCY {
         global $aptBd;
         $sql = "SELECT 
                 frm.seqFormulario as 'ID HOGAR',
+                des.seqDesembolso,
                 numDocumento as 'DOCUMENTO PPAL',
                 CONCAT_WS(' ',txtNombre1, txtNombre2) AS NOMBRES,
                 CONCAT_WS(' ', txtApellido1, txtApellido2) AS APELLIDOS,
@@ -814,7 +817,7 @@ class LegalizacionMCY {
                 hva.fchActo as 'FECHA ACTO ADMON',
                 sol.valSolicitado as 'VALOR SUBSIDIO', 
                 des.txtDireccionInmueble as 'DIRECCIÓN INMUEBLE',
-                SUBSTRING_INDEX(loc.txtLocalidad, '-', -1) As LOCALIDAD,
+                loc.txtLocalidad As LOCALIDAD,
                 des.txtEscritura as 'N° DE ESCRITURA',
                 des.fchEscritura as 'FECHA ESCRITURA',
                 des.numNotaria as 'NOTARIA',

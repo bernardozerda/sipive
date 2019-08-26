@@ -350,7 +350,7 @@ class LegalizacionMCY {
                         $claDesembolso->$key2 = $value2;
                     }
                     $sqlLocalidad = "SELECT seqLocalidad FROM t_frm_localidad where txtLocalidad like '%" . explode("-", trim($value[30]))[1] . "%'";
-                    $regLocalidad =  $aptBd->execute($sqlLocalidad);
+                    $regLocalidad = $aptBd->execute($sqlLocalidad);
                     $claDesembolso->txtNombreVendedor = $value[8];
                     $claDesembolso->numDocumentoVendedor = $value[7];
                     $claDesembolso->txtDireccionInmueble = $value[9] . ' ' . $value[28];
@@ -418,7 +418,7 @@ class LegalizacionMCY {
                 $sql .= "),";
             }
             $sql = substr_replace($sql, ';', -1, 1);
-             // echo "<br>" . $sql; die();
+            // echo "<br>" . $sql; die();
             $aptBd->execute($sql);
 
             $aptBd->CommitTrans();
@@ -462,8 +462,11 @@ class LegalizacionMCY {
                 if (empty($this->arrErrores)) {
                     foreach ($arraContratoLeasing as $key => $value) {
                         try {
-                            $updateEsc = "update t_des_escrituracion set  numContratoLeasing= '" . $value . "' WHERE seqFormulario = " . $key . ";";
-                            $aptBd->execute($updateEsc);
+                            if ($value != "") {
+                                $fchLeg = ($arraFechaLeasing[$key] == '') ? 'NULL' : $arraFechaLeasing[$key];
+                                $updateEsc = "update t_des_escrituracion set  numContratoLeasing= '" . $value . "', fchContratoLeasing = '" . $fchLeg . "' WHERE seqFormulario = " . $key . ";";
+                                $aptBd->execute($updateEsc);
+                            }
                         } catch (Exception $exEsc) {
                             $this->arrErrores[] = $exEsc->getMessage();
                             $aptBd->RollBackTrans();

@@ -4,24 +4,32 @@
       integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
       crossorigin="anonymous"
       >
-
+{literal}
+    <style>
+        .row{
+            padding: 0;
+            margin: 0;
+            width: 100% !important;
+        }
+    </style>
+{/literal}
 <div class="panel panel-default">
     <div class="panel-heading">
         <h6 class="panel-title">Lista de Informes de Legalización Mi Casa Ya!</h6>
     </div>
     <div class="panel-body">
         <div id="mensajes"></div>
-        <table class="table table-striped">
+        <table id="example"  class="table table-striped table-hover" width="100%" data-order="[[ 1, &quot;asc&quot; ]]">
             <thead>
                 <tr>
-                    <th>Consecutivo</th>
-                    <th>Fecha Autorización</th>
-                    <th>N° Hogares</th>
-                    <th>Valor</th>
-                    <th>Detalles</th>
-                    <th>Archivo</th>
+                    <th class="col-sm-2">Consecutivo</th>
+                    <th class="col-sm-3">Fecha Autorización</th>
+                    <th class="col-sm-2">N° Hogares</th>
+                    <th class="col-sm-3">Valor</th>
+                    <th class="col-sm-2">Detalles</th>
+                    <th class="col-sm-2">Archivo</th>
                         {if isset($smarty.session.arrGrupos.6.20)}
-                        <th>Eliminar</th>  
+                        <th class="col-sm-2">Eliminar</th>  
                         {/if}
                 </tr>
             </thead>
@@ -56,7 +64,8 @@
                     </td>
                     {if isset($smarty.session.arrGrupos.6.20)}
                         <td class="col-sm-2">
-                            <span class="btn btn-default btn-sm"  onClick="if (confirm('Esta seguro que desea eliminar el registro?'))cargarContenido('contenido', './contenidos/legalizacionMCY/eliminar.php', 'fchCreacion={$arrDatos.fchCreacion}', true);" class="text-danger"> 
+                            <span class="btn btn-default btn-sm"  onClick="if (confirm('Esta seguro que desea eliminar el registro?'))
+                                        cargarContenido('contenido', './contenidos/legalizacionMCY/eliminar.php', 'fchCreacion={$arrDatos.fchCreacion}', true);" class="text-danger"> 
                                 <a href="#" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                             </span>
 

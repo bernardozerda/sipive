@@ -746,7 +746,7 @@ class LegalizacionMCY {
                      t_des_solicitud sol USING (seqDesembolso)
                  WHERE
                    frm.seqModalidad in(12) and frm.seqTipoEsquema in(16, 17) and hog.seqParentesco = 1
-                   group by  sol.fchCreacion";
+                   group by  sol.fchCreacion ORDER BY sol.txtConsecutivo";
         $datos = Array();
         $objRes = $aptBd->execute($sql);
         while ($objRes->fields) {

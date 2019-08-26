@@ -195,7 +195,7 @@ function obTenerDatosNoProyectos($estado) {
             WHERE
                 frm.seqProyecto IN (32 , 37, 58, 94,  95, 96, 97, 98, 99, 101, 103, 105, 0, NULL,'')
                     AND frm.seqEstadoProceso IN (" . $estado . ")
-                    AND fac.seqEstadoProceso IN (15) and hog.serParentesco = 1
+                    AND fac.seqEstadoProceso IN (15) and hog.seqParentesco = 1
                     GROUP BY frm.seqFormulario";
     return $sql;
 }

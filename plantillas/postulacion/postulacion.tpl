@@ -46,13 +46,13 @@
         </tr>
 
         <!-- SI TIENE SANCION SE MUESTRA -->
-        {if $objFormulario->bolSancion == 1}
+        {*  {if $objFormulario->bolSancion == 1}
             <tr>
                 <td style="background-color: #FF0000; color:white; text-align: center" colspan="2">
                     <strong>HOGAR SANCIONADO</strong>
                 </td>
             </tr>
-        {/if}
+        {/if} *}
         <input type="hidden" value="{$objFormulario->bolSancion}" id="bolSancion" name="bolSancion">
     </table>
 

@@ -67,9 +67,9 @@
     </table>
 
     <!-- SI TIENE SANCION SE MUESTRA -->
-    {if $objFormulario->bolSancion eq 1}
+   {*  {if $objFormulario->bolSancion eq 1}
         <p style="background-color: #FF0000; color:white;">HOGAR SANCIONADO</p>
-    {/if}
+    {/if} *}
     <input type="hidden" value="{$objFormulario->bolSancion}" id="bolSancion" name="bolSancion">
 
     <!-- TAB VIEW PRINCIPAL -->

@@ -49,13 +49,13 @@
                 <input type="submit" id="salvar" value="Salvar Postulación">
             </td>
         </tr>
-        {if $claFormulario->bolSancion != 0}
+       {* {if $claFormulario->bolSancion != 0}
             <tr>
                 <td style="background-color: #FF0000; color:white; text-align: center" colspan="4">
                     <strong>HOGAR SANCIONADO</strong>
                 </td>
             </tr>
-        {/if}
+        {/if}*}
         <input type="hidden" value="{$claFormulario->bolSancion}" id="bolSancion" name="bolSancion">
     </table>
 

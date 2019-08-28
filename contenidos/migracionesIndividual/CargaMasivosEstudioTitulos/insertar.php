@@ -21,6 +21,8 @@ $documentos2 = 'FOLIO DE MATR&Iacute;CULA INMOBILIARIA';
 $documentos3 = 'CERTIFICADO DE EXISTENCIA Y HABITABILIDAD VIABILIZADO';
 $documentos4 = 'RESOLUCI&Oacute;N O CARTA DE VINCULACI&Oacute;N DEL BENEFICIO OTORGADO POR SDHT';
 
+$arrayOpc = Array("SI", "NO", "NO APLICA");
+
 $arrViabilizados = Array();
 $arrNoViabilizados = Array();
 $idHogar = "";
@@ -75,8 +77,25 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $txtCiudadMatricula = 'Bogota';
             $txtElaboro = trim($datos [39]);
             $txtConcepto = trim(str_replace('"', '', $datos [42]));
-            $viabilizado = (trim($datos [41]) == 'SI') ? true : false;
+            $viabilizado = (trim(strtoupper($datos[41])) == 'SI') ? true : false;
             $numDocumento = trim($datos [1]);
+           
+            if (!in_array($datos[26], $arrayOpc) && !in_array($datos[27], $arrayOpc) && !in_array($datos[28], $arrayOpc)) {
+                echo "Error en la elaboracion de plantilla verifique  las columnas 27 A 29 Se encuentre el formato establecido 'SI/NO/NO APLICA'";
+                exit();
+            }
+            if (!in_array($datos[29], $arrayOpc) && !in_array($datos[30], $arrayOpc) && !in_array($datos[31], $arrayOpc) && !in_array($datos[32], $arrayOpc) && !in_array($datos[33], $arrayOpc)) {
+                echo "Error en la elaboracion de plantilla verifique  las columnas 30 A 34 Se encuentre el formato establecido 'SI/NO/NO APLICA'";
+                exit();
+            }
+            if (!in_array($datos[35], $arrayOpc) && !in_array($datos[36], $arrayOpc) && !in_array($datos[37], $arrayOpc) && !in_array($datos[38], $arrayOpc)) {
+                echo "Error en la elaboracion de plantilla verifique  las columnas 36 A 39 Se encuentre el formato establecido 'SI/NO/NO APLICA'";
+                exit();
+            }
+            if (!in_array($datos[41], $arrayOpc)) {
+                echo "Error en la elaboracion de plantilla verifique  las columnas 42 Se encuentre el formato establecido 'SI/NO/NO APLICA'";
+                exit();
+            }   
 
             if ($seqFormulario == "" || $numEscrituraIdentificacion == "" || $numNotariaIdentificacion == "" || $numEscrituraTitulo == "" || trim($datos [41]) == "") {
                 //echo "band 1";

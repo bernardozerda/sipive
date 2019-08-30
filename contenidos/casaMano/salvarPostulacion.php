@@ -94,7 +94,6 @@ $arrCamposCalificacion["esquemas"][] = 1;
 $arrCamposCalificacion["esquemas"][] = 9;
 
 $seqEstadoProceso = $_POST['seqEstadoProceso'];
-$arrEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO",array("seqEstadoProceso","seqEtapa"),"seqEstadoProceso","seqEstadoProceso = " . $seqEstadoProceso);
 $seqEtapa = $arrEtapa[$seqEstadoProceso];
 
 $seqEstadoProcesoFormulario = array_shift(

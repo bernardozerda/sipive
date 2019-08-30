@@ -91,7 +91,7 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $txtAutorizacionDesembolso = $datos[63];
             $numFotocopiaVendedor = $datos[64];
             $txtFotocopiaVendedor = $datos[65];
-            $seqTipoDocumento = $datos[13];
+            $seqTipoDocumento = $datos[9];
             $numAreaLote = $datos[32];
             $numAreaConstruida = $datos[33];
             $txtCedulaCatastral = $datos[31];

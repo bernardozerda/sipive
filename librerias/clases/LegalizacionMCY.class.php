@@ -807,24 +807,24 @@ class LegalizacionMCY {
         global $aptBd;
         $sql = "SELECT 
                 frm.seqFormulario as 'ID HOGAR',
-                des.seqDesembolso,
+               # des.seqDesembolso,
                 numDocumento as 'DOCUMENTO PPAL',
                 CONCAT_WS(' ',txtNombre1, txtNombre2) AS NOMBRES,
                 CONCAT_WS(' ', txtApellido1, txtApellido2) AS APELLIDOS,
-                des.numDocumentoVendedor as 'N° DOCUMENTO VENDEDOR',
-                des.txtNombreVendedor as 'NOMBRE VENDEDOR',
+                esc.numDocumentoVendedor as 'N° DOCUMENTO VENDEDOR',
+                esc.txtNombreVendedor as 'NOMBRE VENDEDOR',
                 sol.txtNombreBeneficiarioGiro as 'TITULAR CUENTA',	
                 sBan.txtBanco as 'ENTIDAD FINANCIERA',    
                 concat('N° ', sol.numCuentaGiro ) AS 'N° DE CUENTA',
                 hva.numActo as 'No ACTO ADMON',
                 hva.fchActo as 'FECHA ACTO ADMON',
                 sol.valSolicitado as 'VALOR SUBSIDIO', 
-                des.txtDireccionInmueble as 'DIRECCIÓN INMUEBLE',
+                esc.txtDireccionInmueble as 'DIRECCIÓN INMUEBLE',
                 loc.txtLocalidad As LOCALIDAD,
-                des.txtEscritura as 'N° DE ESCRITURA',
-                des.fchEscritura as 'FECHA ESCRITURA',
-                des.numNotaria as 'NOTARIA',
-                des.txtMatriculaInmobiliaria as 'MATRÍCULA INMOBILIARIA',
+                esc.txtEscritura as 'N° DE ESCRITURA',
+                esc.fchEscritura as 'FECHA ESCRITURA',
+                esc.numNotaria as 'NOTARIA',
+                esc.txtMatriculaInmobiliaria as 'MATRÍCULA INMOBILIARIA',
                 sol.txtElaboroSubsecretaria as 'ELABORO', 
                 sol.txtRevisoSubsecretaria as 'REVISO',
                 sol.txtSubdireccion as 'APROBO'
@@ -841,12 +841,14 @@ class LegalizacionMCY {
                 LEFT JOIN
                 t_des_desembolso des USING (seqFormulario)
                 LEFT JOIN
+                t_des_escrituracion esc USING (seqDesembolso)
+                LEFT JOIN
                 t_des_solicitud sol USING (seqDesembolso)
                 left join 
                 t_ciu_tipo_documento tdo on(des.seqTipoDocumento = tdo.seqTipoDocumento)
                 left join 
                 t_frm_banco sBan on(sol.seqBancoGiro = sBan.seqBanco)
-                left join t_frm_localidad loc ON(des.seqLocalidad = loc.seqLocalidad)
+                left join t_frm_localidad loc ON(esc.seqLocalidad = loc.seqLocalidad)
                 WHERE
                  frm.seqModalidad in(12) and frm.seqTipoEsquema in(16, 17) and hog.seqParentesco = 1
                  AND sol.fchCreacion like '" . $fecha . "'";

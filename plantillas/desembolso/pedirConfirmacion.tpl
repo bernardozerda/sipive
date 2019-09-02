@@ -3,7 +3,7 @@
 		<div id="dlgConfirmacionDesembolso" style="visibility: hidden; height: 1px;">
 			<div class="hd">Se solicita atención del usuario...</div>
 			<div class="bd" style="text-align:center">
-				<form method="POST" action="{$txtArchivo}">
+                            <form method="POST" action="{$txtArchivo}">
                 <p>{$txtMensaje}</p>
 					{foreach from=$arrPost key=txtClave item=txtValor}
 						{if not is_array( $txtValor )}

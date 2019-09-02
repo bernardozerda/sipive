@@ -76,9 +76,9 @@
                                name="txtNombreVendedor" 
                                id="txtNombreVendedor"
                                onFocus="this.style.backgroundColor = '#ADD8E6';
-                                        ponerPlaceholder(this.id, 'Nombre del {if $seqModalidad != 5} vendedor {else} arrenador {/if}');" 
+                                       ponerPlaceholder(this.id, 'Nombre del {if $seqModalidad != 5} vendedor {else} arrenador {/if}');" 
                                onBlur="this.style.backgroundColor = '#FFFFFF';
-                                        sinCaracteresEspeciales(this);"
+                                       sinCaracteresEspeciales(this);"
                                value="{$claDesembolso->txtNombreVendedor}"
                                style="width:98%"
                                />
@@ -108,9 +108,9 @@
                                name="numDocumentoVendedor" 
                                id="numDocumentoVendedor"
                                onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                   ponerPlaceholder(this.id, 'Documento');" 
+                                       ponerPlaceholder(this.id, 'Documento');" 
                                onBlur="javascript: soloNumeros(this);
-                                                   this.style.backgroundColor = '#FFFFFF';"
+                                       this.style.backgroundColor = '#FFFFFF';"
                                value="{$claDesembolso->numDocumentoVendedor}"
                                style="width:200px"
                                />
@@ -125,9 +125,9 @@
                                name="numTelefonoVendedor" 
                                id="numTelefonoVendedor"
                                onFocus="this.style.backgroundColor = '#ADD8E6';
-                                           ponerPlaceholder(this.id, 'Telefono 1');" 
+                                       ponerPlaceholder(this.id, 'Telefono 1');" 
                                onBlur="javascript: soloNumeros(this);
-                                           this.style.backgroundColor = '#FFFFFF';"
+                                       this.style.backgroundColor = '#FFFFFF';"
                                value="{$claDesembolso->numTelefonoVendedor}"
                                size="16"
                                />
@@ -136,9 +136,9 @@
                                name="numTelefonoVendedor2" 
                                id="numTelefonoVendedor2"
                                onFocus="this.style.backgroundColor = '#ADD8E6';
-                                           ponerPlaceholder(this.id, 'Telefono 2');" 
+                                       ponerPlaceholder(this.id, 'Telefono 2');" 
                                onBlur="javascript: soloNumeros(this);
-                                           this.style.backgroundColor = '#FFFFFF';"
+                                       this.style.backgroundColor = '#FFFFFF';"
                                value="{$claDesembolso->numTelefonoVendedor2}"
                                size="16"
                                />
@@ -149,7 +149,7 @@
                                name="txtCorreoVendedor" 
                                id="txtCorreoVendedor"
                                onFocus="this.style.backgroundColor = '#ADD8E6';
-                                           ponerPlaceholder(this.id, 'Correo electr&oacute;nico');" 
+                                       ponerPlaceholder(this.id, 'Correo electr&oacute;nico');" 
                                onBlur="this.style.backgroundColor = '#FFFFFF';"
                                value="{$claDesembolso->txtCorreoVendedor}"
                                style="width:200px"
@@ -195,7 +195,7 @@
                                    name="txtDireccionInmueble" 
                                    id="txtDireccionInmueble"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                       ponerPlaceholder(this.id, 'Direcci&oacute;n');" 
+                                           ponerPlaceholder(this.id, 'Direcci&oacute;n');" 
                                    onBlur="this.style.backgroundColor = '#FFFFFF';"
                                    style="width:98%;"
                                    value="{$claDesembolso->txtDireccionInmueble}"
@@ -269,7 +269,7 @@
                                 name="seqBarrio"
                                 id="seqBarrio"
                                 style="width:260px;"
-                        >
+                                >
                             <option value="0">Seleccione</option>
                             {if intval( $claDesembolso->seqLocalidad ) != 0}
                                 {foreach from=$arrBarrio key=seqBarrio item=txtBarrio}
@@ -277,7 +277,7 @@
                                             {if $claDesembolso->seqBarrio == $seqBarrio}
                                                 selected
                                             {/if}
-                                    >
+                                            >
                                         {$txtBarrio}
                                     </option>
                                 {/foreach}
@@ -325,7 +325,8 @@
                                        name="txtEscritura" 
                                        id="txtEscritura"
                                        onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                       onBlur="javascript: soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
+                                       onBlur="javascript: soloNumeros(this);
+                                               this.style.backgroundColor = '#FFFFFF';"
                                        style="width:40px"
                                        value="{$claDesembolso->txtEscritura}"
                                        /> del 
@@ -334,7 +335,7 @@
                                        id="fchEscritura"
                                        onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                        onBlur="javascript: sinCaracteresEspeciales(this);
-                                                               this.style.backgroundColor = '#FFFFFF';"
+                                               this.style.backgroundColor = '#FFFFFF';"
                                        maxlength="10"
                                        style="width:80px"
                                        value="{if $claDesembolso->fchEscritura != '0000-00-00'}{$claDesembolso->fchEscritura}{/if}"
@@ -345,7 +346,7 @@
                                        id="numNotaria"
                                        onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                        onBlur="javascript: soloNumeros(this);
-                                                               this.style.backgroundColor = '#FFFFFF';"
+                                               this.style.backgroundColor = '#FFFFFF';"
                                        maxlength="3"
                                        style="width:37px"
                                        value="{$claDesembolso->numNotaria}"
@@ -355,7 +356,7 @@
                                        id="txtCiudad"
                                        onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                        onBlur="javascript: soloLetras(this);
-                                                               this.style.backgroundColor = '#FFFFFF';"
+                                               this.style.backgroundColor = '#FFFFFF';"
                                        style="width:100px"
                                        value="{$claDesembolso->txtCiudad}"
                                        /></div> <!-- fin div Escritura_ga -->
@@ -374,7 +375,7 @@
                                    id="fchSentencia"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    maxlength="10"
                                    style="width:80px"
                                    value="{if $claDesembolso->fchSentencia != '0000-00-00'}{$claDesembolso->fchSentencia}{/if}"
@@ -385,7 +386,7 @@
                                    id="numJuzgado"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    maxlength="3"
                                    style="width:37px"
                                    value="{$claDesembolso->numJuzgado}"
@@ -395,7 +396,7 @@
                                    id="txtCiudadSentencia"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloLetras(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:100px"
                                    value="{$claDesembolso->txtCiudadSentencia}"
                                    /> 
@@ -414,7 +415,7 @@
                                    id="numResolucion"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    maxlength="5"
                                    style="width:50px"
                                    value="{$claDesembolso->numResolucion}"
@@ -424,7 +425,7 @@
                                    id="fchResolucion"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    maxlength="10"
                                    style="width:80px"
                                    value="{if $claDesembolso->fchResolucion != '0000-00-00'}{$claDesembolso->fchResolucion}{/if}"
@@ -434,7 +435,7 @@
                                    id="txtEntidad"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloLetras(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:100px"
                                    value="{$claDesembolso->txtEntidad}"
                                    /> ciudad 
@@ -443,7 +444,7 @@
                                    id="txtCiudadResolucion"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloLetras(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:100px"
                                    value="{$claDesembolso->txtCiudadResolucion}"
                                    />
@@ -461,22 +462,24 @@
                                    name="numContratoLeasing"
                                    id="numContratoLeasing"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                   onBlur="javascript: soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
+                                   onBlur="javascript: soloNumeros(this);
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:100px"
                                    value="{$claDesembolso->numContratoLeasing}"
-                            >
+                                   >
                         </td>
                         <td>Fecha del contrato</td>
                         <td>
-                             <input	type="text"
-                                    name="fchContratoLeasing"
-                                    id="fchContratoLeasing"
-                                    onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                    onBlur="javascript: sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
-                                    maxlength="10"
-                                    style="width:80px"
-                                    value="{if esFechaValida($claDesembolso->fchContratoLeasing)}{$claDesembolso->fchContratoLeasing}{/if}"
-                                    />  <a href="#" onClick="calendarioPopUp('fchContratoLeasing');">Calendario</a>
+                            <input	type="text"
+                                   name="fchContratoLeasing"
+                                   id="fchContratoLeasing"
+                                   onFocus="this.style.backgroundColor = '#ADD8E6';"
+                                   onBlur="javascript: sinCaracteresEspeciales(this);
+                                           this.style.backgroundColor = '#FFFFFF';"
+                                   maxlength="10"
+                                   style="width:80px"
+                                   value="{if esFechaValida($claDesembolso->fchContratoLeasing)}{$claDesembolso->fchContratoLeasing}{/if}"
+                                   />  <a href="#" onClick="calendarioPopUp('fchContratoLeasing');">Calendario</a>
                         </td>
                     </tr>
                 {/if}
@@ -489,9 +492,9 @@
                                name="txtMatriculaInmobiliaria" 
                                id="txtMatriculaInmobiliaria"
                                onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                       ponerPlaceholder(this.id, 'Matricula Inmibiliaria');" 
+                                       ponerPlaceholder(this.id, 'Matricula Inmibiliaria');" 
                                onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                       this.style.backgroundColor = '#FFFFFF';"
                                style="width:200px"
                                value="{$claDesembolso->txtMatriculaInmobiliaria}"
                                />
@@ -502,9 +505,9 @@
                                name="txtChip" 
                                id="txtChip"
                                onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                       ponerPlaceholder(this.id, 'Chip');" 
+                                       ponerPlaceholder(this.id, 'Chip');" 
                                onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                       this.style.backgroundColor = '#FFFFFF';"
                                style="width:200px"
                                value="{$claDesembolso->txtChip}"
                                />
@@ -520,9 +523,9 @@
                                    name="txtCedulaCatastral" 
                                    id="txtCedulaCatastral"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                           ponerPlaceholder(this.id, 'Cedula catastral');" 
+                                           ponerPlaceholder(this.id, 'Cedula catastral');" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:200px"
                                    value="{$claDesembolso->txtCedulaCatastral}"
                                    />
@@ -535,7 +538,7 @@
                                    id="numAreaLote"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:50px"
                                    maxlength="4"
                                    value="{$claDesembolso->numAreaLote}"
@@ -545,7 +548,7 @@
                                    id="numAreaConstruida"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:50px"
                                    maxlength="3"
                                    value="{$claDesembolso->numAreaConstruida}"
@@ -559,9 +562,9 @@
                                    name="numAvaluo" 
                                    id="numAvaluo"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                           ponerPlaceholder(this.id, 'Avaluo');" 
+                                           ponerPlaceholder(this.id, 'Avaluo');" 
                                    onBlur="javascript: soloNumeros(this);
-                                                           this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:200px"
                                    value="{$claDesembolso->numAvaluo}"
                                    />
@@ -572,8 +575,9 @@
                                    name="numValorInmueble" 
                                    id="numValorInmueble"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';
-                                                           ponerPlaceholder(this.id, 'Valor Inmueble');" 
-                                   onBlur="javascript: soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
+                                           ponerPlaceholder(this.id, 'Valor Inmueble');" 
+                                   onBlur="javascript: soloNumeros(this);
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:200px"
                                    value="{$claDesembolso->numValorInmueble}"
                                    />
@@ -696,7 +700,7 @@
                                    value="{$claDesembolso->numEscrituraPublica}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -708,7 +712,7 @@
                                    value="{$claDesembolso->txtEscrituraPublica}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -724,7 +728,8 @@
                                        id="numFoliosContratoLeasing"
                                        value="{$claDesembolso->numFoliosContratoLeasing}"
                                        onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                       onBlur="javascript: soloNumeros(this); this.style.backgroundColor = '#FFFFFF';"
+                                       onBlur="javascript: soloNumeros(this);
+                                               this.style.backgroundColor = '#FFFFFF';"
                                        style="width:40px"
                                        maxlength="3"
                                        />
@@ -735,7 +740,8 @@
                                        id="txtFoliosContratoLeasing"
                                        value="{$claDesembolso->txtFoliosContratoLeasing}"
                                        onFocus="this.style.backgroundColor = '#ADD8E6';"
-                                       onBlur="javascript: sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                       onBlur="javascript: sinCaracteresEspeciales(this);
+                                               this.style.backgroundColor = '#FFFFFF';"
                                        style="width:300px"
                                        class="inputLogin"
                                        />
@@ -754,7 +760,7 @@
                                    value="{$claDesembolso->numCertificadoTradicion}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -766,7 +772,7 @@
                                    value="{$claDesembolso->txtCertificadoTradicion}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -781,7 +787,7 @@
                                    value="{$claDesembolso->numCartaAsignacion}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -793,7 +799,7 @@
                                    value="{$claDesembolso->txtCartaAsignacion}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -808,7 +814,7 @@
                                    value="{$claDesembolso->numAltoRiesgo}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -819,7 +825,8 @@
                                    id="txtAltoRiesgo"
                                    value="{$claDesembolso->txtAltoRiesgo}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                   onBlur="javascript: sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                   onBlur="javascript: sinCaracteresEspeciales(this);
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -834,7 +841,7 @@
                                    value="{$claDesembolso->numHabitabilidad}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -846,7 +853,7 @@
                                    value="{$claDesembolso->txtHabitabilidad}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -861,7 +868,7 @@
                                    value="{$claDesembolso->numBoletinCatastral}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -873,7 +880,7 @@
                                    value="{$claDesembolso->txtBoletinCatastral}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -888,7 +895,7 @@
                                    value="{$claDesembolso->numLicenciaConstruccion}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -900,7 +907,7 @@
                                    value="{$claDesembolso->txtLicenciaConstruccion}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -915,7 +922,7 @@
                                    value="{$claDesembolso->numUltimoPredial}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -927,7 +934,7 @@
                                    value="{$claDesembolso->txtUltimoPredial}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -942,7 +949,7 @@
                                    value="{$claDesembolso->numUltimoReciboAgua}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -954,7 +961,7 @@
                                    value="{$claDesembolso->txtUltimoReciboAgua}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -969,7 +976,7 @@
                                    value="{$claDesembolso->numUltimoReciboEnergia}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -981,7 +988,7 @@
                                    value="{$claDesembolso->txtUltimoReciboEnergia}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -996,7 +1003,7 @@
                                    value="{$claDesembolso->numActaEntrega}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -1008,7 +1015,7 @@
                                    value="{$claDesembolso->txtActaEntrega}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1023,7 +1030,7 @@
                                    value="{$claDesembolso->numCertificacionVendedor}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -1034,7 +1041,8 @@
                                    id="txtCertificacionVendedor"
                                    value="{$claDesembolso->txtCertificacionVendedor}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
-                                   onBlur="javascript: sinCaracteresEspeciales(this); this.style.backgroundColor = '#FFFFFF';"
+                                   onBlur="javascript: sinCaracteresEspeciales(this);
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1050,7 +1058,7 @@
                                    value="{$claDesembolso->numAutorizacionDesembolso}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -1062,7 +1070,7 @@
                                    value="{$claDesembolso->txtAutorizacionDesembolso}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1077,7 +1085,7 @@
                                    value="{$claDesembolso->numFotocopiaVendedor}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -1089,7 +1097,7 @@
                                    value="{$claDesembolso->txtFotocopiaVendedor}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1104,7 +1112,7 @@
                                    value="{$claDesembolso->numRut}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -1116,7 +1124,7 @@
                                    value="{$claDesembolso->txtRut}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1131,7 +1139,7 @@
                                    value="{$claDesembolso->numRit}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -1143,7 +1151,7 @@
                                    value="{$claDesembolso->txtRit}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1158,7 +1166,7 @@
                                    value="{$claDesembolso->numNit}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -1170,7 +1178,7 @@
                                    value="{$claDesembolso->txtNit}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1185,7 +1193,7 @@
                                    value="{$claDesembolso->numOtros}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="3"
                                    />
@@ -1197,7 +1205,7 @@
                                    value="{$claDesembolso->txtOtro}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1224,7 +1232,7 @@
                                    value="{$claDesembolso->numContratoArrendamiento}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1236,7 +1244,7 @@
                                    value="{$claDesembolso->txtContratoArrendamiento}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1253,7 +1261,7 @@
                                    value="{$claDesembolso->numAperturaCAP}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1265,7 +1273,7 @@
                                    value="{$claDesembolso->txtAperturaCAP}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1282,7 +1290,7 @@
                                    value="{$claDesembolso->numCedulaArrendador}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1294,7 +1302,7 @@
                                    value="{$claDesembolso->txtCedulaArrendador}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1310,7 +1318,7 @@
                                    value="{$claDesembolso->numRut}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1322,7 +1330,7 @@
                                    value="{$claDesembolso->txtRut}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1337,7 +1345,7 @@
                                    value="{$claDesembolso->numRit}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1349,7 +1357,7 @@
                                    value="{$claDesembolso->txtRit}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1364,7 +1372,7 @@
                                    value="{$claDesembolso->numNit}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1376,7 +1384,7 @@
                                    value="{$claDesembolso->txtNit}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1393,7 +1401,7 @@
                                    value="{$claDesembolso->numCuentaArrendador}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1405,7 +1413,7 @@
                                    value="{$claDesembolso->txtCuentaArrendador}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1422,7 +1430,7 @@
                                    value="{$claDesembolso->numServiciosPublicos}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1434,7 +1442,7 @@
                                    value="{$claDesembolso->txtServiciosPublicos}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1451,7 +1459,7 @@
                                    value="{$claDesembolso->numRetiroRecursos}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1463,7 +1471,7 @@
                                    value="{$claDesembolso->txtRetiroRecursos}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1480,7 +1488,7 @@
                                    value="{$claDesembolso->numCertificadoTradicion}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1492,7 +1500,7 @@
                                    value="{$claDesembolso->txtCertificadoTradicion}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1509,7 +1517,7 @@
                                    value="{$claDesembolso->numBoletinCatastral}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1521,7 +1529,7 @@
                                    value="{$claDesembolso->txtBoletinCatastral}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />
@@ -1538,7 +1546,7 @@
                                    value="{$claDesembolso->numOtros}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: soloNumeros(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:40px"
                                    maxlength="2"
                                    />
@@ -1550,7 +1558,7 @@
                                    value="{$claDesembolso->txtOtro}"
                                    onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                    onBlur="javascript: sinCaracteresEspeciales(this);
-                                                       this.style.backgroundColor = '#FFFFFF';"
+                                           this.style.backgroundColor = '#FFFFFF';"
                                    style="width:300px"
                                    class="inputLogin"
                                    />

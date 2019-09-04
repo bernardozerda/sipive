@@ -4,7 +4,6 @@
  * ARCHIVO PARA EL FORMULARIO
  * DE BUSQUEDA DE LA OFERTA
  */
-
 $txtPrefijoRuta = "../../";
 
 include($txtPrefijoRuta . "recursos/archivos/verificarSesion.php");
@@ -39,12 +38,9 @@ if (in_array($claFormulario->seqEstadoProceso, $claFlujoDesembolsos->arrFases[$_
     $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $claDesembolso->seqLocalidad, "txtBarrio");
 
     $claDesembolso->seqBarrio = array_shift(
-        obtenerDatosTabla(
-            "T_FRM_BARRIO",
-            array("seqBarrio","txtBarrio"),
-            "txtBarrio",
-            "txtBarrio = '" . $claDesembolso->txtBarrio . "' and seqLocalidad = " . $claDesembolso->seqLocalidad
-        )
+            obtenerDatosTabla(
+                    "T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "txtBarrio", "txtBarrio = '" . $claDesembolso->txtBarrio . "' and seqLocalidad = " . $claDesembolso->seqLocalidad
+            )
     );
 
     // Obtienr los ultimos seguimientos
@@ -68,10 +64,10 @@ if (in_array($claFormulario->seqEstadoProceso, $claFlujoDesembolsos->arrFases[$_
     $claActosAdministrativos = new ActoAdministrativo();
     $arrActos = $claActosAdministrativos->cronologia($numDocumento);
 
-   /*******************************************************************************************************
-    * INFORMACION ACTO INDEXACION -- ESTOS ACTOS SON DEL MODULO DE PROYECTOS
-    * **************************************************************************************************** */
-   $sqlActoUnidad =  "
+    /*     * *****************************************************************************************************
+     * INFORMACION ACTO INDEXACION -- ESTOS ACTOS SON DEL MODULO DE PROYECTOS
+     * **************************************************************************************************** */
+    $sqlActoUnidad = "
                 SELECT 
                     uac.seqUnidadActo, 
                     uac.numActo, 
@@ -87,16 +83,16 @@ if (in_array($claFormulario->seqEstadoProceso, $claFlujoDesembolsos->arrFases[$_
                       WHERE seqFormulario = $seqFormulario
                 )
             ";
-   $objRes = $aptBd->execute( $sqlActoUnidad );
-   while( $objRes->fields ){
-      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['seqUnidadActo']		= $objRes->fields['seqUnidadActo'];
-      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['numActo']			= $objRes->fields['numActo'];
-      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['fchActo']			= formatoFechaTextoFecha($objRes->fields['fchActo']);
-      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['txtDescripcion']	= $objRes->fields['txtDescripcion'];
-      $arrActosAsociados[ $objRes->fields['seqUnidadActo'] ]['valIndexado']		= $objRes->fields['valIndexado'];
-      $objRes->MoveNext();
-   }
-   $claSmarty->assign("arrActosAsociados", $arrActosAsociados);
+    $objRes = $aptBd->execute($sqlActoUnidad);
+    while ($objRes->fields) {
+        $arrActosAsociados[$objRes->fields['seqUnidadActo']]['seqUnidadActo'] = $objRes->fields['seqUnidadActo'];
+        $arrActosAsociados[$objRes->fields['seqUnidadActo']]['numActo'] = $objRes->fields['numActo'];
+        $arrActosAsociados[$objRes->fields['seqUnidadActo']]['fchActo'] = formatoFechaTextoFecha($objRes->fields['fchActo']);
+        $arrActosAsociados[$objRes->fields['seqUnidadActo']]['txtDescripcion'] = $objRes->fields['txtDescripcion'];
+        $arrActosAsociados[$objRes->fields['seqUnidadActo']]['valIndexado'] = $objRes->fields['valIndexado'];
+        $objRes->MoveNext();
+    }
+    $claSmarty->assign("arrActosAsociados", $arrActosAsociados);
 
     $claSmarty->assign("arrActos", $arrActos); //  Pestania de actos administrativos
     $claSmarty->assign("arrRegistros", $arrRegistros); // Registros de seguimiento
@@ -109,17 +105,13 @@ if (in_array($claFormulario->seqEstadoProceso, $claFlujoDesembolsos->arrFases[$_
             }
 
             $arrBarrio = obtenerDatosTabla(
-                "T_FRM_BARRIO",
-                array("seqBarrio", "txtBarrio"),
-                "txtBarrio",
-                "txtBarrio like '" . $claDesembolso->arrEscrituracion['txtBarrio'] . "' and seqLocalidad = " . $claDesembolso->arrEscrituracion['seqLocalidad']
+                    "T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "txtBarrio", "txtBarrio like '" . $claDesembolso->arrEscrituracion['txtBarrio'] . "' and seqLocalidad = " . $claDesembolso->arrEscrituracion['seqLocalidad']
             );
 
             $txtBarrio = strtoupper($claDesembolso->arrEscrituracion['txtBarrio']);
             $claDesembolso->seqBarrio = $arrBarrio[$txtBarrio];
 
             $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqLocalidad = " . $claDesembolso->arrEscrituracion['seqLocalidad'], "txtBarrio");
-
         }
     }
     $claSmarty->assign("claDesembolso", $claDesembolso);
@@ -129,11 +121,9 @@ if (in_array($claFormulario->seqEstadoProceso, $claFlujoDesembolsos->arrFases[$_
     $claSmarty->assign("txtTutor", $txtTutor);
     $claSmarty->assign("txtFase", $_POST['fase']);
     $claSmarty->display($claFlujoDesembolsos->arrFases[$_POST['flujo']][$_POST['fase']]['plantilla']);
-
 } else {
     $arrEstados = estadosProceso();
     $arrErrores[] = "Este hogar no se encuentra listo para realizar el proceso de desembolso, el estado actual es: " . $arrEstados[$claFormulario->seqEstadoProceso];
     imprimirMensajes($arrErrores, array());
 }
-
 ?>

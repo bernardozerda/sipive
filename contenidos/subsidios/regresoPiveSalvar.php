@@ -61,6 +61,7 @@ if (empty($arrErrores)) {
     $claFormularioActual->cargarFormulario($seqFormulario);
     $claFormulario->cargarFormulario($seqFormulario);
     $texto = str_replace(" ", "", $claSeguimiento->validarSeguimientoPive($seqFormulario));
+    $texto = str_replace("&nbsp;", "", $texto);
     $characters = array("[", "]", "<b>", "</b>");
     $arrayTexto = explode("<br>", $texto);
 

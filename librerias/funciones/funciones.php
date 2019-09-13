@@ -1112,4 +1112,35 @@ function cargarArchivo($txtNombreFile, $arrFormato = array()) {
     return $arrRetorno;
 }
 
+function obtenerDatosTablas($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion = "", $txtOrden = "") {
+  
+  
+    global $aptBd;
+    $arrDatos = array();
+    $txtCondicion = ( trim($txtCondicion) != "" ) ? "WHERE $txtCondicion" : "";
+    $txtOrden = ( trim($txtOrden) != "" ) ? "ORDER BY $txtOrden" : "";
+    if (in_array($txtLLave, $arrCampos)) {
+        $sql = "
+                SELECT " . implode(",", $arrCampos) . "
+                FROM " . str_replace(",", " LEFT JOIN ",$txtTabla ) . " 
+                $txtCondicion
+                $txtOrden
+            ";
+        try {
+            // echo "<p>".$sql."</p>";
+            $objRes = $aptBd->execute($sql);
+            $arrDatos = Array();
+            while ($objRes->fields) {
+               $arrDatos[] = $objRes->fields;
+                $objRes->MoveNext();
+            }
+        } catch (Exception $objError) {
+            $arrDatos = array();
+        }
+    } else {
+        echo "La llave debe estar incluida dentro de los campos a retornar";
+    }
+    return $arrDatos;
+}
+
 ?>

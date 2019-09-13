@@ -57,7 +57,6 @@ if ($claDesembolso->arrJuridico['numResolucion'] == 0) {
                 $claDesembolso->arrJuridico['valResolucion'] = $arrInformacion['acto']['valor'];
                 $claDesembolso->arrJuridico['fchResolucionTexto'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrInformacion['acto']['fecha']))));
             }
-
         }
     }
 }
@@ -80,24 +79,17 @@ $numRegistros = array_shift(array_keys($claSeguimiento->obtenerRegistros(1, 0)))
 
 // si es modalidad de leasing carga los datos del contrato
 $arrContratoLeasing = array();
-if($claFormulario->seqModalidad == 13){
+if ($claFormulario->seqModalidad == 13) {
 
     $seqEscrituracion = $claDesembolso->arrEscrituracion['seqEscrituracion'];
     $arrContratoLeasing = obtenerDatosTabla(
-        "t_des_escrituracion",
-        array("seqEscrituracion","numContratoLeasing","fchContratoLeasing"),
-        "seqEscrituracion",
-        "seqEscrituracion = " . $seqEscrituracion
-    )[$seqEscrituracion];
+                    "t_des_escrituracion", array("seqEscrituracion", "numContratoLeasing", "fchContratoLeasing"), "seqEscrituracion", "seqEscrituracion = " . $seqEscrituracion
+            )[$seqEscrituracion];
     $arrContratoLeasing['txtFechaLeasing'] = utf8_encode(ucwords(strftime("%d de %B del %Y", strtotime($arrContratoLeasing['fchContratoLeasing']))));
 
     $arrConvenio = obtenerDatosTabla(
-        "v_frm_convenio",
-        array("seqConvenio","txtConvenio","txtBanco"),
-        "seqConvenio",
-        "seqConvenio = " . $claFormulario->seqConvenio
-    )[$claFormulario->seqConvenio];
-
+                    "v_frm_convenio", array("seqConvenio", "txtConvenio", "txtBanco"), "seqConvenio", "seqConvenio = " . $claFormulario->seqConvenio
+            )[$claFormulario->seqConvenio];
 }
 
 
@@ -115,7 +107,7 @@ $arrActos = $claActosAdministrativos->cronologia($numDocumento);
 
 foreach ($arrActos as $txtClave => $arrInformacion) {
     if ($arrInformacion['acto']['tipo'] == 1) {
-        if(in_array($arrInformacion['acto']['idEstadoProceso'],array(15,32,33,40,59))) {
+        if (in_array($arrInformacion['acto']['idEstadoProceso'], array(15, 32, 33, 40, 59))) {
             $claDesembolso->arrJuridico['numResolucion'] = $arrInformacion['acto']['numero'];
             $claDesembolso->arrJuridico['fchResolucion'] = $arrInformacion['acto']['fecha'];
             $claDesembolso->arrJuridico['valResolucion'] = $arrInformacion['acto']['valor'];
@@ -123,6 +115,13 @@ foreach ($arrActos as $txtClave => $arrInformacion) {
         }
     }
 }
+
+$arrDependencia = array_shift(obtenerDatosTablas(
+                                    "t_cor_usuario,t_cor_dependencia USING(seqDependencia)", Array("txtDependencia"), "txtDependencia", "seqUsuario = " .$_SESSION['seqUsuario']. ""
+                    ));
+$txtDependencia = $arrDependencia['txtDependencia'];
+
+//$txtDependencia = $arrDependencia['txtDependencia'];
 
 $claSmarty->assign("txtFuente12", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 11px;");
 $claSmarty->assign("txtFuente10", "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 9px;");
@@ -135,6 +134,6 @@ $claSmarty->assign("txtUsuarioSesion", utf8_encode($_SESSION['txtNombre'] . " " 
 $claSmarty->assign("numRegistro", $numRegistros);
 $claSmarty->assign("arrContratoLeasing", $arrContratoLeasing);
 $claSmarty->assign("arrConvenio", $arrConvenio);
-
+$claSmarty->assign("txtDependencia", $txtDependencia);
 $claSmarty->display("desembolso/formatoEstudioTitulos.tpl");
 ?>

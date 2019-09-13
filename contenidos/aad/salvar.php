@@ -69,7 +69,7 @@ if (empty($arrErrores)) {
 
                     if (empty($claTipoActo->arrErrores)) {
 
-                        $claActo->salvar($_POST, $arrArchivo);                       
+                        $claActo->salvar($_POST, $arrArchivo);
 
                         if (empty($claActo->arrErrores)) {
                             $arrMensajes = $claActo->arrMensajes;

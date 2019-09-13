@@ -229,7 +229,7 @@
                                                     </select>
                                                 </td>
                                                 <!-- NUMERO DEL DOCUMENTO -->
-                                                <td width="15%">Número Documento</td>
+                                                <td width="15%">Número Documento ****</td>
                                                 <td width="35%" align="center">
                                                     <input type="text"
                                                            id="numeroDoc"

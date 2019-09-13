@@ -201,7 +201,7 @@ class Ciudadano {
             $this->fchNacimiento = (esFechaValida($objRes->fields['fchNacimiento'])) ? $objRes->fields['fchNacimiento'] : null;
             $this->numAfiliacionSalud = intval($objRes->fields['numAfiliacionSalud']);
             $this->numAnosAprobados = intval($objRes->fields['numAnosAprobados']);
-            $this->numDocumento = intval($objRes->fields['numDocumento']);
+            $this->numDocumento = doubleval($objRes->fields['numDocumento']);
             $this->seqCajaCompensacion = intval($objRes->fields['seqCajaCompensacion']);
             $this->seqCiudadano = intval($objRes->fields['seqCiudadano']);
             $this->seqCondicionEspecial = intval($objRes->fields['seqCondicionEspecial']);

@@ -7,7 +7,6 @@
  * @version 1.0 Ago 2013
  * @version 2.0 Ago 2017
  */
-
 date_default_timezone_set("America/Bogota");
 
 $txtPrefijoRuta = "../../";
@@ -25,9 +24,9 @@ include($txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "aad.class.
 
 $arrErrores = array(); // Todos los errores van aqui
 
-/**********************************************************************************************************************
+/* * ********************************************************************************************************************
  * ARREGLOS PARA LA VERIFICACION DE DATOS ACTIVOS / INACTIVOS
- **********************************************************************************************************************/
+ * ******************************************************************************************************************** */
 $numMayorEdad = strtotime("-18 year", time());
 $numTerceraEdad = strtotime("-65 year", time());
 
@@ -39,12 +38,10 @@ $arrDocumentos[] = 3; // REGISTRO CIVIL
 $arrDocumentos[] = 4; // TARJETA DE IDENTIDAD
 $arrDocumentos[] = 6; // NIT
 $arrDocumentos[] = 7; // NUIP
-
 // tipos de documento invalidos para un menor de edad
 $arrDocumentosMayorEdad[] = 1; // Cedula Ciudadania
 $arrDocumentosMayorEdad[] = 2; // Cedula extranjeria
 $arrDocumentosMayorEdad[] = 6; // NIT
-
 // Esquemas que deben tener proyectos y unidades seleccionados
 $arrProyectoEsquema[] = 1;
 $arrProyectoEsquema[] = 2;
@@ -57,7 +54,7 @@ $arrEsquemaUnidades[] = 9;
 
 $arrEstadosCiviles = obtenerDatosTabla("t_ciu_estado_civil", array("seqEstadoCivil", "txtEstadoCivil"), "seqEstadoCivil", "bolActivo = 1");
 $arrParentescos = obtenerDatosTabla("t_ciu_parentesco", array("seqParentesco", "txtParentesco"), "seqParentesco", "bolActivo = 1");
-$txtCondicion = ($_POST['seqPlanGobierno'] != 3)? "seqSisben <> 9" : "bolActivo = 1";
+$txtCondicion = ($_POST['seqPlanGobierno'] != 3) ? "seqSisben <> 9" : "bolActivo = 1";
 $arrSisben = obtenerDatosTabla("t_frm_sisben", array("seqSisben", "txtSisben"), "seqSisben", $txtCondicion);
 $arrModalidad = obtenerDatosTabla("t_frm_modalidad", array("seqModalidad", "txtModalidad"), "seqModalidad", "seqPlanGobierno = " . $_POST['seqPlanGobierno']);
 
@@ -94,15 +91,14 @@ $arrCamposCalificacion["esquemas"][] = 1;
 $arrCamposCalificacion["esquemas"][] = 9;
 
 $seqEstadoProceso = $_POST['seqEstadoProceso'];
+
+$arrEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO", array("seqEtapa", "seqEstadoProceso"), "seqEstadoProceso", "seqEstadoProceso = " . $seqEstadoProceso);
 $seqEtapa = $arrEtapa[$seqEstadoProceso];
 
 $seqEstadoProcesoFormulario = array_shift(
-    obtenerDatosTabla(
-        "t_frm_formulario",
-        array("seqFormulario","seqEstadoProceso"),
-        "seqFormulario",
-        "seqFormulario = " . $_POST['seqFormulario']
-    )
+        obtenerDatosTabla(
+                "t_frm_formulario", array("seqFormulario", "seqEstadoProceso"), "seqFormulario", "seqFormulario = " . $_POST['seqFormulario']
+        )
 );
 
 //$bolValidacionSoporteDocumentos = false;
@@ -110,22 +106,22 @@ $seqEstadoProcesoFormulario = array_shift(
 //    $bolValidacionSoporteDocumentos = true;
 //}
 
-/**********************************************************************************************************************
+/* * ********************************************************************************************************************
  * LIMPIEZA DE CARACTERES
- **********************************************************************************************************************/
+ * ******************************************************************************************************************** */
 
-foreach ($_POST['hogar'] as $txtClave => $txtValor){
-    $_POST['hogar'][$txtClave] = regularizarCampo($txtClave,$txtValor);
+foreach ($_POST['hogar'] as $txtClave => $txtValor) {
+    $_POST['hogar'][$txtClave] = regularizarCampo($txtClave, $txtValor);
 }
-foreach ($_POST as $txtClave => $txtValor){
-    if($txtClave != "hogar") {
+foreach ($_POST as $txtClave => $txtValor) {
+    if ($txtClave != "hogar") {
         $_POST[$txtClave] = regularizarCampo($txtClave, $txtValor);
     }
 }
 
-/**********************************************************************************************************************
+/* * ********************************************************************************************************************
  * VALIDACIONES DEL FORMULARIO - PESTAÑA DE COMPOSICION FAMILIAR
- **********************************************************************************************************************/
+ * ******************************************************************************************************************** */
 
 if (!empty($_POST['hogar'])) {
 
@@ -140,9 +136,9 @@ if (!empty($_POST['hogar'])) {
     foreach ($_POST['hogar'] as $numDocumento => $arrCiudadano) {
 
         // nombre del ciudadano
-        $txtNombre  = trim($arrCiudadano['txtNombre1'] ) . " ";
+        $txtNombre = trim($arrCiudadano['txtNombre1']) . " ";
         $txtNombre .= (trim($arrCiudadano['txtNombre2']) != "") ? trim($arrCiudadano['txtNombre2']) . " " : "";
-        $txtNombre .= trim($arrCiudadano['txtApellido1'] ) . " " . trim( $arrCiudadano['txtApellido2'] );
+        $txtNombre .= trim($arrCiudadano['txtApellido1']) . " " . trim($arrCiudadano['txtApellido2']);
 
         // el primer nombre no puede ser vacio
         if ($arrCiudadano['txtNombre1'] == "") {
@@ -157,9 +153,9 @@ if (!empty($_POST['hogar'])) {
         // Estado Civil
         if ($arrCiudadano['seqEstadoCivil'] == 0) {
             $arrErrores[] = "El ciudadano con el numero de documento " . number_format($numDocumento) . " debe tener un estado civil.";
-        } else{
+        } else {
             $seqEstadoCivil = $arrCiudadano['seqEstadoCivil'];
-            if( ! isset( $arrEstadosCiviles[$seqEstadoCivil] ) ) {
+            if (!isset($arrEstadosCiviles[$seqEstadoCivil])) {
                 $arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " no tiene un estado civil válido";
             }
         }
@@ -167,7 +163,7 @@ if (!empty($_POST['hogar'])) {
         if ($_POST['seqPlanGobierno'] == 3) {
 
             // Nivel Educativo y años aprobados
-            if( intval( $arrCiudadano['seqNivelEducativo'] ) == 0 ){
+            if (intval($arrCiudadano['seqNivelEducativo']) == 0) {
                 $arrErrores[] = "El ciudadano con numero de documento " . number_format($numDocumento) . " no tiene nivel educativo valido";
             }
 
@@ -188,7 +184,7 @@ if (!empty($_POST['hogar'])) {
             if ($arrCiudadano['seqTipoDocumento'] != 1 and $arrCiudadano['seqTipoDocumento'] != 2) {
                 $arrErrores[] = "El tipo de documento seleccionado para el postulante principal no es válido";
             }
-        } elseif ($arrCiudadano['seqParentesco'] == 2){
+        } elseif ($arrCiudadano['seqParentesco'] == 2) {
             $numConyuge++;
         } else {
             $seqParentesco = $arrCiudadano['seqParentesco'];
@@ -243,7 +239,6 @@ if (!empty($_POST['hogar'])) {
 //                $arrCiudadano['seqCiudadUnion'] = 0;
 //
 //            }
-
         }
 
         // validacion para el soprote de documentos de estado civil
@@ -284,7 +279,6 @@ if (!empty($_POST['hogar'])) {
 //            }
 //
 //        }
-
 //        if ($arrCiudadano['seqEstadoCivil'] == 2) {
 //
 //            if($bolValidacionSoporteDocumentos == true) {
@@ -315,7 +309,6 @@ if (!empty($_POST['hogar'])) {
 //            }
 //
 //        }
-
         // Debe haber minimo dos personas con estado civil union marital
         if ($arrCiudadano['seqEstadoCivil'] == 7) {
             $numCuentaUnionMarital ++;
@@ -359,19 +352,16 @@ if (!empty($_POST['hogar'])) {
 ////                $arrCiudadano['seqCiudadUnion'] = 0;
 //
 //            }
-
         }
 
         // por lo menos debe haber una cedula de ciudadania
         if ($arrCiudadano['seqTipoDocumento'] == 1) {
             $numCedula++; // si es cedula de ciudadania ( por lo menos 1 colombiano mayor de edad )
-
 //            if($bolValidacionSoporteDocumentos == true){
 //                if( ! esFechaValida($arrCiudadano['fchExpedicion']) ){
 //                    $arrErrores[] = "Debe indicar la fecha de expedición del documeno de identidad";
 //                }
 //            }
-
         }
 
 //        if($bolValidacionSoporteDocumentos == true) {
@@ -415,9 +405,8 @@ if (!empty($_POST['hogar'])) {
 //            }
 //
 //        }
-
         // Si es mayor de edad compare contra la fecha de postulacion si debe tener cedula
-        if ( ! esFechaValida( $arrCiudadano['fchNacimiento'] ) ) {
+        if (!esFechaValida($arrCiudadano['fchNacimiento'])) {
             $arrErrores[] = "La fecha de Nacimiento del ciudadano " . number_format($numDocumento) . " no es valida, verifique los datos";
         } else {
 
@@ -428,12 +417,11 @@ if (!empty($_POST['hogar'])) {
 //                    $arrErrores[] = "Tipo de soporte inválido para personas nacidas antes de 1938 para el ciudadano con documento " . number_format($numDocumento);
 //                }
 //            }
-
             // fechas para comparar mayor de edad y tercera edad
             $numEdad = strtotime($arrCiudadano['fchNacimiento']);
 
             // la fecha de nacimiento no puede ser mayor a hoy
-            if( $numEdad > time() ){
+            if ($numEdad > time()) {
                 $arrErrores[] = "Fecha de nacimiento invalida para el documento " . number_format($numDocumento) . " no puede ser mayor a hoy";
             }
 
@@ -443,7 +431,7 @@ if (!empty($_POST['hogar'])) {
             }
 
             // se compara si es menor de 65 aNos y tenga condicion especial "Mayor 65 aNos"
-            if (($numEdad > $numTerceraEdad) and ($arrCiudadano["seqCondicionEspecial"] == $numCondicionEspecialMayor65 or
+            if (($numEdad > $numTerceraEdad) and ( $arrCiudadano["seqCondicionEspecial"] == $numCondicionEspecialMayor65 or
                     $arrCiudadano["seqCondicionEspecial2"] == $numCondicionEspecialMayor65 or
                     $arrCiudadano["seqCondicionEspecial3"] == $numCondicionEspecialMayor65)
             ) {
@@ -456,16 +444,14 @@ if (!empty($_POST['hogar'])) {
             }
 
             // se compara si es tercera edad al momento de la postulacion
-            if (($numEdad <= $numTerceraEdad) and ($arrCiudadano['seqCondicionEspecial'] != 2 and $arrCiudadano['seqCondicionEspecial2'] != 2 and $arrCiudadano['seqCondicionEspecial3'] != 2)) {
+            if (($numEdad <= $numTerceraEdad) and ( $arrCiudadano['seqCondicionEspecial'] != 2 and $arrCiudadano['seqCondicionEspecial2'] != 2 and $arrCiudadano['seqCondicionEspecial3'] != 2)) {
                 $arrErrores[] = "Debe tener condicion especial de Mayor de 65 Años para el ciudadano " . number_format($numDocumento);
             }
-
         } // fin fecha nacimiento valida
-
         // Averigua si la cedula que se esta procesando pertenece a otro formulario
         // si es asi, obtiene la cedula del postulante principal de aquel formulario y emite el error
         $seqFormulario = Ciudadano::formularioVinculado2($numDocumento, $arrCiudadano['seqTipoDocumento'], false, false);
-        if( $seqFormulario != 0 and $_POST['seqFormulario'] != $seqFormulario ){
+        if ($seqFormulario != 0 and $_POST['seqFormulario'] != $seqFormulario) {
             $sql = "
                         SELECT numDocumento
                         FROM T_FRM_HOGAR hog INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
@@ -481,12 +467,10 @@ if (!empty($_POST['hogar'])) {
         }
 
         // si es por desplazamiento forzado suma
-        if( $arrCiudadano['seqTipoVictima'] == 2){
+        if ($arrCiudadano['seqTipoVictima'] == 2) {
             $numVictimas++;
         }
-
     } // validaciones para cada miembro de hogar
-
     // errores que se producen dentro del grupo familiar
     switch (true) {
         case $numCabezaFamilia == 0:
@@ -527,20 +511,17 @@ if (!empty($_POST['hogar'])) {
 //            $arrErrores[] = "El ingreso del hogar no puede sumar cero";
 //        }
 //    }
-
 } else { // no hay miembros de hogar
-
     $arrErrores[] = "Debe haber por lo menos una persona dentro del grupo familiar";
-
 } // fin validacion si hay miembros del hogar
 
 
-/**********************************************************************************************************************
+/* * ********************************************************************************************************************
  * VALIDACIONES DEL FORMULARIO - DATOS DEL HOGAR
- **********************************************************************************************************************/
-if( $seqEtapa == 1 or $seqEtapa == 2 ) {
+ * ******************************************************************************************************************** */
+if ($seqEtapa == 1 or $seqEtapa == 2) {
 
-    if($_POST['seqPlanGobierno'] == 3) {
+    if ($_POST['seqPlanGobierno'] == 3) {
         switch (intval($_POST['seqVivienda'])) {
             case 1:
                 if (intval($_POST['valArriendo']) == 0) {
@@ -635,18 +616,17 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     }
 
     // Hogares que viven en la misma vivienda
-    if($_POST['seqPlanGobierno'] == 3) {
+    if ($_POST['seqPlanGobierno'] == 3) {
         if (intval($_POST['numHabitaciones']) == 0) {
             $arrErrores[] = "Indique el numero de hogares que habitan la vivienda";
         }
     }
-
 }
 
-/**********************************************************************************************************************
+/* * ********************************************************************************************************************
  * VALIDACIONES DEL FORMULARIO - DATOS DE LA POSTULACION
- **********************************************************************************************************************/
-if( $seqEtapa == 1 or $seqEtapa == 2 ) {
+ * ******************************************************************************************************************** */
+if ($seqEtapa == 1 or $seqEtapa == 2) {
 
     // modalidad
     if (!isset($arrModalidad[$_POST['seqModalidad']])) {
@@ -654,7 +634,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     }
 
     // tipo esquema
-    if ( $_POST['seqTipoEsquema'] == 0 ){
+    if ($_POST['seqTipoEsquema'] == 0) {
         $arrErrores[] = "Seleccione el tipo de esquema";
     }
 
@@ -676,7 +656,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         }
     }
 
-    if($_POST['seqEstadoProceso'] != 37) {
+    if ($_POST['seqEstadoProceso'] != 37) {
         if (in_array($_POST['seqTipoEsquema'], $arrEsquemaUnidades)) {
             if (intval($_POST['seqUnidadProyecto']) == 0 or intval($_POST['seqUnidadProyecto']) == 1) {
                 $arrErrores[] = "Debe seleccionar una unidad habitacional de la lista";
@@ -696,11 +676,11 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     }
 }
 
-/**********************************************************************************************************************
+/* * ********************************************************************************************************************
  * VALIDACIONES DEL FORMULARIO - DATOS FINANCIEROS
- **********************************************************************************************************************/
+ * ******************************************************************************************************************** */
 
-if( $seqEtapa == 1 or $seqEtapa == 2 ) {
+if ($seqEtapa == 1 or $seqEtapa == 2) {
 
     // Validaciones para el ahorro
     if (intval($_POST['valSaldoCuentaAhorro']) != 0) {
@@ -713,7 +693,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         if (!esFechaValida($_POST['fchAperturaCuentaAhorro'])) {
             $arrErrores[] = "Indique la fecha de apertura de la cuenta de ahorro";
         }
-    }else{
+    } else {
         if (($_POST['seqBancoCuentaAhorro'] != 1 ) || ( $_POST['txtSoporteCuentaAhorro'] != "" ) || ( $_POST['fchAperturaCuentaAhorro'] != "" )) {
             if ((intval($_POST['valSaldoCuentaAhorro']) == 0 ) || ( intval($_POST['valSaldoCuentaAhorro']) == "" )) {
                 $arrErrores[] = "Debe indicar un valor del ahorro";
@@ -732,7 +712,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         if (!esFechaValida($_POST['fchAperturaCuentaAhorro2'])) {
             $arrErrores[] = "Indique la fecha del campo otro ahorro";
         }
-    }else{
+    } else {
         if (($_POST['seqBancoCuentaAhorro2'] != 1 ) || ( $_POST['txtSoporteCuentaAhorro2'] != "" ) || ( $_POST['fchAperturaCuentaAhorro2'] != "" )) {
             if ((intval($_POST['valSaldoCuentaAhorro2']) == 0 ) || ( intval($_POST['valSaldoCuentaAhorro2']) == "" )) {
                 $arrErrores[] = "Debe indicar un valor del otro ahorro";
@@ -745,7 +725,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         if (trim($_POST['txtSoporteCesantias']) == "") {
             $arrErrores[] = "Indique el soporte para las cesantías";
         }
-    }else{
+    } else {
         if ($_POST['txtSoporteCesantias'] != "") {
             if ((intval($_POST['valSaldoCesantias']) == 0 ) || ( intval($_POST['valSaldoCesantias']) == "" )) {
                 $arrErrores[] = "Debe indicar un valor de la cesantia";
@@ -764,7 +744,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         if (!esFechaValida($_POST['fchAprobacionCredito'])) {
             $arrErrores[] = "Debe indicar la fecha de vencimiento del credito";
         }
-    }else{
+    } else {
         if (($_POST['seqBancoCredito'] != 1 ) || ( $_POST['txtSoporteCredito'] != "" ) || ( $_POST['fchAprobacionCredito'] != "" )) {
             if ((intval($_POST['valCredito']) == 0 ) || ( intval($_POST['valCredito']) == "" )) {
                 $arrErrores[] = "Debe indicar un valor del credito";
@@ -777,7 +757,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         if (trim($_POST['txtSoporteAporteLote']) == "") {
             $arrErrores[] = "Indique el soporte para el Acuerdo de pago / Lote / Terreno";
         }
-    }else{
+    } else {
         if (trim($_POST['txtSoporteAporteLote']) != "") {
             $arrErrores[] = "Debe indicar un valor del Acuerdo de pago / Lote / Terreno";
         }
@@ -791,7 +771,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         if (intval($_POST['seqEntidadSubsidio']) == 1) {
             $arrErrores[] = "Indique la entidad que otorga el subsidio nacional";
         }
-    }else{
+    } else {
         if (($_POST['seqEntidadSubsidio'] != 1 ) || ( $_POST['txtSoporteSubsidioNacional'] != "" )) {
             if ((intval($_POST['valSubsidioNacional']) == 0 ) || ( intval($_POST['valSubsidioNacional']) == "" )) {
                 $arrErrores[] = "Debe indicar un valor del Subsidio Nacional";
@@ -807,7 +787,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
         if (trim($_POST['txtSoporteDonacion']) == "") {
             $arrErrores[] = "Indique el soporte para la donaci&oacute;n";
         }
-    }else{
+    } else {
         if (($_POST['seqEmpresaDonante'] != 1 ) || ( $_POST['txtSoporteDonacion'] != "" )) {
             if ((intval($_POST['valDonacion']) == 0 ) || ( intval($_POST['valDonacion']) == "" )) {
                 $arrErrores[] = "Debe indicar un valor de la donacion";
@@ -816,7 +796,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     }
 
     // validaciones para la modalidad de leasing
-    if( $_POST['seqModalidad'] == 13 ) {
+    if ($_POST['seqModalidad'] == 13) {
         if ($_POST['seqEstadoProceso'] == 47 and $_POST['bolViabilidadLeasing'] == 0) {
             $arrErrores[] = "Para postular el hogar debe tener la solución viabilizada por un convenio.";
         }
@@ -830,7 +810,7 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
             if ($_POST['numDuracionLeasing'] != 0) {
                 $arrErrores[] = "No puede indicar la duración del convenio si la solución no esta viabilizada";
             }
-        }else{
+        } else {
             if ($_POST['seqConvenio'] == 1) {
                 $arrErrores[] = "Seleccione un convenio para el leasing";
             }
@@ -844,35 +824,34 @@ if( $seqEtapa == 1 or $seqEtapa == 2 ) {
     }
 
     // validacion del soporte y valor del subsidio para plan de gobierno 2
-    if( $_POST['seqPlanGobierno'] == 2 ){
-        if( $_POST['seqModalidad'] == 8 or $_POST['seqModalidad'] == 9 or $_POST['seqModalidad'] == 10 ){
-            if( $_POST['valAspiraSubsidio'] == 0 ){
+    if ($_POST['seqPlanGobierno'] == 2) {
+        if ($_POST['seqModalidad'] == 8 or $_POST['seqModalidad'] == 9 or $_POST['seqModalidad'] == 10) {
+            if ($_POST['valAspiraSubsidio'] == 0) {
                 $arrErrores[] = "Indique el valor del subsidio";
             }
-            if( $_POST['valAspiraSubsidio'] != 0 and $_POST['txtSoporteSubsidio'] == "" ){
+            if ($_POST['valAspiraSubsidio'] != 0 and $_POST['txtSoporteSubsidio'] == "") {
                 $arrErrores[] = "Indique el soporte para el valor del subsidio";
             }
         }
     }
-
 }
 
-if($_POST['seqTipoEsquema'] == 16 or $_POST['seqTipoEsquema'] == 17){
+if ($_POST['seqTipoEsquema'] == 16 or $_POST['seqTipoEsquema'] == 17) {
     $arrErrores = Array();
 }
-/**********************************************************************************************************************
+/* * ********************************************************************************************************************
  * VALIDACIONES ESPECIALES
- **********************************************************************************************************************/
+ * ******************************************************************************************************************** */
 
 // Salvar el registro si no hay errores
 if (empty($arrErrores)) {
 
     $claCasaMano = new CasaMano();
-    $arrCasaMano = $claCasaMano->cargar($_POST['seqFormulario'],$_POST['seqCasaMano']);
+    $arrCasaMano = $claCasaMano->cargar($_POST['seqFormulario'], $_POST['seqCasaMano']);
     $claCasaMano = end($arrCasaMano);
 
     // validar los permisos de usuario en sesion para editar informacion o cambiar datos cuando el frm esta cerrado
-    if( $_SESSION['privilegios']['editar'] == 1 ){
+    if ($_SESSION['privilegios']['editar'] == 1) {
 
         // valida los cambios en las variables de calificacion
         // elimina ciudadanos
@@ -880,7 +859,7 @@ if (empty($arrErrores)) {
         foreach ($claCasaMano->objPostulacion->arrCiudadano as $objCiudadano) {
             $numDocumento = $objCiudadano->numDocumento;
             $arrCedulasFormulario[] = $numDocumento;
-            if (! isset($_POST['hogar'][$numDocumento])) {
+            if (!isset($_POST['hogar'][$numDocumento])) {
                 $arrMensajes[] = "Ha modificado datos sensibles a la calificacion de hogares (eliminar ciudadanos), el hogar será devuelto a etapa de inscripcion";
                 $bolCambiosCalificacion = true;
             }
@@ -895,7 +874,7 @@ if (empty($arrErrores)) {
         }
 
         // Revisa cambios en las variables de calificacion en el formulario
-        foreach( $arrCamposCalificacion['formulario'] as $txtClave => $txtValor){
+        foreach ($arrCamposCalificacion['formulario'] as $txtClave => $txtValor) {
             if ($claCasaMano->objPostulacion->$txtClave != $_POST[$txtClave]) {
                 $arrMensajes[] = "Ha modificado datos sensibles a la calificacion de hogares ($txtValor), el hogar será devuelto a etapa de inscripcion";
                 $bolCambiosCalificacion = true;
@@ -903,15 +882,14 @@ if (empty($arrErrores)) {
         }
 
         // Revisa cambios en las variables de calificacion en los ciudadanos
-        foreach( $arrCamposCalificacion['ciudadano'] as $txtClave => $txtValor ) {
-            foreach ($claCasaMano->objPostulacion->arrCiudadano as $seqCiudadano => $objCiudadano ){
+        foreach ($arrCamposCalificacion['ciudadano'] as $txtClave => $txtValor) {
+            foreach ($claCasaMano->objPostulacion->arrCiudadano as $seqCiudadano => $objCiudadano) {
                 $numDocumento = $objCiudadano->numDocumento;
-                if( isset( $_POST['hogar'][ $numDocumento ] ) ){
-                    if( $objCiudadano->$txtClave != $_POST['hogar'][$numDocumento][$txtClave] ) {
-                        $arrMensajes[] =
-                            "Ha modificado datos sensibles a la calificacion del ciudadano " .
-                            number_format($objCiudadano->numDocumento) .
-                            " ($txtValor), el hogar será devuelto a etapa de inscripcion";
+                if (isset($_POST['hogar'][$numDocumento])) {
+                    if ($objCiudadano->$txtClave != $_POST['hogar'][$numDocumento][$txtClave]) {
+                        $arrMensajes[] = "Ha modificado datos sensibles a la calificacion del ciudadano " .
+                                number_format($objCiudadano->numDocumento) .
+                                " ($txtValor), el hogar será devuelto a etapa de inscripcion";
                         $bolCambiosCalificacion = true;
                     }
                 }
@@ -921,9 +899,9 @@ if (empty($arrErrores)) {
         // Estando en etapa de inscripcion y postulacion
         // si se modifican datos sensibles a la calificacion
         // el estado del proceso se regresa a inscripcion
-        if( $bolCambiosCalificacion == true ){
-            if($seqEtapa == 1 or $seqEtapa == 2) {
-                if( in_array( $claCasaMano->objPostulacion->seqTipoEsquema , $arrCamposCalificacion["esquemas"] ) ){
+        if ($bolCambiosCalificacion == true) {
+            if ($seqEtapa == 1 or $seqEtapa == 2) {
+                if (in_array($claCasaMano->objPostulacion->seqTipoEsquema, $arrCamposCalificacion["esquemas"])) {
                     $_POST['seqEstadoProceso'] = 37;
                 }
             }
@@ -932,9 +910,9 @@ if (empty($arrErrores)) {
         // Si esta en etapas posteriores a postulacion (asignacion / desembolso)
         // solo podrá cambiar los datos de contacto y los datos de conformacion del hogar
         // los demas datos se sobreescriben con lo que hay en la base de datos
-        if( $seqEtapa != 1 and $seqEtapa != 2 ){
+        if ($seqEtapa != 1 and $seqEtapa != 2) {
             $arrMensajes = array();
-            if( $_SESSION['privilegios']['cambiar'] == 0 ) {
+            if ($_SESSION['privilegios']['cambiar'] == 0) {
                 foreach ($claCasaMano->objPostulacion as $txtClave => $txtValor) {
                     if ($txtClave != "arrCiudadano") {
                         if (!in_array($txtClave, $arrIgnorarCampos)) {
@@ -953,8 +931,8 @@ if (empty($arrErrores)) {
         }
 
         // el numero de formulario se valida la primera vez que se pone, despues no lo puede cambiar
-        if( $claCasaMano->objPostulacion->txtFormulario == "" ){
-            if ( trim($_POST['txtFormulario']) != "") {
+        if ($claCasaMano->objPostulacion->txtFormulario == "") {
+            if (trim($_POST['txtFormulario']) != "") {
                 $txtFormato = "/^[0-9]{2,3}[-][0-9]{3,6}$/"; // dos digitos de tutor y hasta seis de numero de formulario
                 $txtFormulario = trim($_POST['txtFormulario']);
                 if (preg_match($txtFormato, $txtFormulario)) {
@@ -968,37 +946,36 @@ if (empty($arrErrores)) {
                     $arrErrores[] = "El numero del formulario no tiene el formato correcto";
                 }
             }
-        }else{
-            if ( $claCasaMano->objPostulacion->txtFormulario != $_POST['txtFormulario'] ) {
+        } else {
+            if ($claCasaMano->objPostulacion->txtFormulario != $_POST['txtFormulario']) {
                 $arrErrores[] = "No puede cambiar el numero de formulario";
             }
         }
 
-        if( $claCasaMano->objPostulacion->bolCerrado == 1 ){
-            if( $_SESSION['privilegios']['cambiar'] == 1 ) {
+        if ($claCasaMano->objPostulacion->bolCerrado == 1) {
+            if ($_SESSION['privilegios']['cambiar'] == 1) {
                 if ($_POST['bolCerrado'] == 0) {
                     $_POST['fchPostulacion'] = null;
                     $_POST['txtFormulario'] = "";
                     $_POST['seqUnidadProyecto'] = 1;
                     $_POST['seqEstadoProceso'] = 37;
-                }else{
-                    if(esFechaValida($claCasaMano->objPostulacion->fchPostulacion)){
+                } else {
+                    if (esFechaValida($claCasaMano->objPostulacion->fchPostulacion)) {
                         $_POST['fchPostulacion'] = $claCasaMano->objPostulacion->fchPostulacion;
                     }
                 }
-            }else{
+            } else {
                 $arrErrores[] = "No tiene permisos para cambiar información de un formulario cerrado";
             }
-        }else {
+        } else {
             if ($_POST['bolCerrado'] == 1) {
-                if( $_POST['txtFormulario'] == "" ){
+                if ($_POST['txtFormulario'] == "") {
                     $arrErrores[] = "Debe dar el número de formulario";
                 }
                 $_POST['fchPostulacion'] = date("Y-m-d H:i:s");
             }
         }
-
-    }else {
+    } else {
         $arrErrores[] = "No tiene permisos para modificar registros";
     }
 
@@ -1007,59 +984,56 @@ if (empty($arrErrores)) {
     $arrGruposPermitidos[] = 20;
     $arrGruposPermitidos[] = 6;
     $bolPuedeModificar = false;
-    foreach( $_SESSION['arrGrupos'][$seqProyecto] as $seqGrupo => $numGrupo ){
-        if( in_array( $seqGrupo , $arrGruposPermitidos ) ){
+    foreach ($_SESSION['arrGrupos'][$seqProyecto] as $seqGrupo => $numGrupo) {
+        if (in_array($seqGrupo, $arrGruposPermitidos)) {
             $bolPuedeModificar = true;
         }
     }
-    if( $bolPuedeModificar == false ){
+    if ($bolPuedeModificar == false) {
         $arrErrores[] = "No tiene privilegios para modificar la información";
     }
-
 }
 
-/**********************************************************************************************************************
+/* * ********************************************************************************************************************
  * SALVANDO EL REGISTRO DE LA POSTULACION
- **********************************************************************************************************************/
+ * ******************************************************************************************************************** */
 
 if (empty($arrErrores)) {
     $_POST['fchUltimaActualizacion'] = date("Y-m-d H:i:s");
     $claCasaMano->salvar($_POST);
     $arrErrores = $claCasaMano->arrErrores;
-    foreach($claCasaMano->arrMensajes as $txtMensaje){
+    foreach ($claCasaMano->arrMensajes as $txtMensaje) {
         $arrMensajes[] = $txtMensaje;
     }
 }
 
 
-/**********************************************************************************************************************
+/* * ********************************************************************************************************************
  * SINCRONIZANDO FORMULARIO Y ACTO ADMINISTRATIVO
- **********************************************************************************************************************/
-if(empty($arrErrores)) {
+ * ******************************************************************************************************************** */
+
+if (empty($arrErrores)) {
     if ($seqEtapa == 4 or $seqEtapa == 5) {
 
         $claActoAdministrativo = new aad();
 
         $arrProcesos = $claActoAdministrativo->obtenerProcesos($_POST['seqFormulario']);
 
-        if(! empty($arrProcesos)){
+        if (!empty($arrProcesos)) {
 
             $seqFormularioActo = null;
-            foreach($arrProcesos as $txtResolucion => $arrProceso){
+            foreach ($arrProcesos as $txtResolucion => $arrProceso) {
                 $seqFormularioActo = $arrProceso['cabeza'];
             }
 
-            $arrErrores = $claActoAdministrativo->actualizarFac($seqFormularioActo,$_POST);
-
+            $arrErrores = $claActoAdministrativo->actualizarFac($seqFormularioActo, $_POST);
         }
-
     }
 }
 
-/*********************************************************************************************************************
+/* * *******************************************************************************************************************
  * IMPRESION DE LOS MENSAJES GENERADOS POR EL CODIGO
- ********************************************************************************************************************/
+ * ****************************************************************************************************************** */
 
-imprimirMensajes($arrErrores,$arrMensajes);
-
+imprimirMensajes($arrErrores, $arrMensajes);
 ?>

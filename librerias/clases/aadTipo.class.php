@@ -108,7 +108,7 @@ class aadTipo {
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Fecha de Vigencia";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Proyecto";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Unidad Habitacional";
-                            //$objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor Donacion";
+                            $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Modalidad";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Valor Complementario";
                             //$objTipoActo->arrFormatoArchivo[1]['rango'][] = "Soporte Donacion";
                             $objTipoActo->arrFormatoArchivo[1]['rango'][] = "Entidad Donacion";

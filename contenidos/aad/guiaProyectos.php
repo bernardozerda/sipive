@@ -1,23 +1,23 @@
 <?php
-   /**
-    * CONTENIDO DEL POPUP DE AYUDA. OBTIENE CODIGO DE PROYECTO Y UNIDAD HABITACIONAL
-    * @author Jaison Ospina
-    * @version 1.0 Mayo de 2015
-    **/
 
-	$txtPrefijoRuta = "../../";
+/**
+ * CONTENIDO DEL POPUP DE AYUDA. OBTIENE CODIGO DE PROYECTO Y UNIDAD HABITACIONAL
+ * @author Jaison Ospina
+ * @version 1.0 Mayo de 2015
+ * */
+$txtPrefijoRuta = "../../";
 
-	include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
-	include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
-	include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
-	include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
-	include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
+include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );
+include( $txtPrefijoRuta . "recursos/archivos/lecturaConfiguracion.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funciones.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/inclusionSmarty.php" );
+include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 
-    // obtiene las unidades habitacionales del proyecto seleccionado
-    $arrUnidades = array();
-    if( $_POST['seqProyecto'] != 0 ) {
+// obtiene las unidades habitacionales del proyecto seleccionado
+$arrUnidades = array();
+if ($_POST['seqProyecto'] != 0) {
 
-        $sql = "
+    $sql = "
             select
                 pry.seqProyecto as seqProyectoPadre,
                 pry.txtNombreProyecto as txtNombreProyectoPadre,
@@ -56,29 +56,27 @@
             and seqProyectoPadre = " . $_POST['seqProyecto'] . "
             order by txtNombreProyectoPadre, txtNombreProyecto, bolDisponible, txtNombreUnidad
         ";
-        $objRes = $aptBd->execute( $sql );
+    $objRes = $aptBd->execute($sql);
 
-        while( $objRes->fields ){
-            $seqProyecto = ( $objRes->fields['seqProyecto'] == 0 )? $objRes->fields['seqProyectoPadre'] : $objRes->fields['seqProyecto'];
-            $txtProyecto = ( $objRes->fields['txtNombreProyecto'] == "" )? $objRes->fields['txtNombreProyectoPadre'] : $objRes->fields['txtNombreProyecto'];
-            $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
-            $arrUnidades['nombre'] = $txtProyecto;
-            $arrUnidades['total']++;
-            if( $objRes->fields['bolDisponible'] == 0){
-                $arrUnidades['disponibles']++;
-            }
-            $arrUnidades['unidades'][$seqUnidadProyecto]['descripcion'] = trim($txtProyecto) . " / " . $objRes->fields['txtNombreUnidad'];
-            $arrUnidades['unidades'][$seqUnidadProyecto]['documento'] = $objRes->fields['numDocumento'];
-            $arrUnidades['unidades'][$seqUnidadProyecto]['nombre'] = $objRes->fields['txtNombre'];
-            $arrUnidades['unidades'][$seqUnidadProyecto]['disponible'] = $objRes->fields['bolDisponible'];
-            $objRes->MoveNext();
+    while ($objRes->fields) {
+        $seqProyecto = ( $objRes->fields['seqProyecto'] == 0 ) ? $objRes->fields['seqProyectoPadre'] : $objRes->fields['seqProyecto'];
+        $txtProyecto = ( $objRes->fields['txtNombreProyecto'] == "" ) ? $objRes->fields['txtNombreProyectoPadre'] : $objRes->fields['txtNombreProyecto'];
+        $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
+        $arrUnidades['nombre'] = $txtProyecto;
+        $arrUnidades['total'] ++;
+        if ($objRes->fields['bolDisponible'] == 0) {
+            $arrUnidades['disponibles'] ++;
         }
-
+        $arrUnidades['unidades'][$seqUnidadProyecto]['descripcion'] = trim($txtProyecto) . " / " . $objRes->fields['txtNombreUnidad'];
+        $arrUnidades['unidades'][$seqUnidadProyecto]['documento'] = $objRes->fields['numDocumento'];
+        $arrUnidades['unidades'][$seqUnidadProyecto]['nombre'] = $objRes->fields['txtNombre'];
+        $arrUnidades['unidades'][$seqUnidadProyecto]['disponible'] = $objRes->fields['bolDisponible'];
+        $objRes->MoveNext();
     }
+}
 
-    $claSmarty->assign("arrUnidades", $arrUnidades);
-    $claSmarty->display("aad/guiaProyectos.tpl");
+$claSmarty->assign("arrUnidades", $arrUnidades);
+$claSmarty->display("aad/guiaProyectos.tpl");
 
 //    pr( $arrUnidades );
-
 ?>

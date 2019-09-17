@@ -3677,10 +3677,6 @@ class aad {
                     if (in_array($txtCampo, $this->arrayFormActual)) {
                         $txtCampos .= $txtCampo . "Actual,";
                         $txtValores .= "'" . $txtValor . "',";
-                        if (in_array($txtCampo, $this->arrayFormActual)) {
-                            $txtCampos .= $txtCampo . "Actual,";
-                            $txtValores .= "'" . $txtValor . "',";
-                        }
                     }
                 }
                 $txtCampos = rtrim($txtCampos, ",");

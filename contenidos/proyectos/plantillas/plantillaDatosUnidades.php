@@ -201,7 +201,7 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
      
         $tipoVivienda = ($value['txtNombreConjunto'] == "") ? 'Ninguno' : strtoupper($value['txtNombreConjunto']);
         $validacion = ($value['bolActivo'] == 1) ? 'SI' : 'NO';
-        $seqPlanGobierno = ($value['seqPlanGobierno'] > 0) ? ($arrPlanGobierno[$value['seqPlanGobierno']]) : 'Seleccione';
+        $seqPlanGobierno = ($value['seqPlanGobierno'] > 0) ? ($value['seqPlanGobierno']."-".$arrPlanGobierno[$value['seqPlanGobierno']]) : 'Seleccione';
         //echo "<br>". $cols." ->".$value['txtNombreProyecto'];
         $sheet->setCellValue('A' . $cols, $value['seqUnidadProyecto']);
         $sheet->setCellValue('B' . $cols, $value['txtNombreProyecto']);

@@ -46,7 +46,7 @@ $arrConjuntoResidencial = $claDatosProy->obtenerConjuntoResidencial($idProyecto)
 if (count($arrConjuntoResidencial) > 0) {
     $arrayProyectos = $arrConjuntoResidencial;
 }
-
+$tipo = 3;
 $arrErrores = array();
 $claSmarty->assign("seqPryEstadoProceso", $seqPryEstadoProceso);
 $claSmarty->assign("arrGrupoGestion", $arrGrupoGestion);

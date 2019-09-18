@@ -42,13 +42,15 @@
             <th bgcolor="#E4E4E4" align="center" ><b>Id</b></th>
             <th bgcolor="#E4E4E4" ><b>Proyecto</b></th>          
             <th bgcolor="#E4E4E4" ><b>Oferente</b></th>
-                {if $id != 1}
-                <th bgcolor="#E4E4E4" >Editar</th>
-                {else}
+                {if $id == 1}
                 <th bgcolor="#E4E4E4" >&nbsp;</th>
+                 {elseif $id == 6}
+                 <th bgcolor="#E4E4E4" >Cambio de Estado<br> Unidades</th>
+                {else}
+                <th bgcolor="#E4E4E4" >Editar</th>
                 {/if}
                 {if $id == 6}
-                <th bgcolor="#E4E4E4" >Seguimiento</th>
+                <th bgcolor="#E4E4E4" >Cambio Modalidad / Esquema</th>
                 {/if}
         </tr>
     </thead>

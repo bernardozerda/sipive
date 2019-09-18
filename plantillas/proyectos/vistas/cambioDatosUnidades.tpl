@@ -10,7 +10,7 @@
         <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%">                
 
             <li class="nav-item active"  style="{$nav}">       
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#estados" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" >Modificar Datos de Unidades <br></a>
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#estados" role="tab" aria-controls="profile" aria-selected="false" style="{$styleLic}" >Cambio Modalidad / Esquema <br></a>
             </li>
         </ul>        
         <div id="estados" class="tab-pane active"  role="tabpanel" aria-labelledby="profile-tab" style="min-height: 300px; max-height: 550px; overflow-y: auto">

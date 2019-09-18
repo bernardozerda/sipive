@@ -272,7 +272,7 @@ class DatosUnidades {
             $sql .= " and  upr.seqUnidadProyecto in (" . $seqUnidades . ")";
         }
         $sql .= " GROUP BY seqUnidadProyecto";
-        //   echo "<p>" . $sql . "</p>"; die();
+         //  echo "<p>" . $sql . "</p>"; die();
         $objRes = $aptBd->execute($sql);
         $datos = Array();
         while ($objRes->fields) {

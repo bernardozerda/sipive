@@ -27,12 +27,16 @@ if ($_FILES['archivo']['type'] != 'text/plain') {
 
 if ($_FILES['archivo']['error'] == 0) {
     $arrayUnidades = mb_split("\n", file_get_contents($_FILES['archivo']['tmp_name']));
-    $cantUnidades = count(mb_split("\n", file_get_contents($_FILES['archivo']['tmp_name'])));
     $arrUnidades = str_replace("\n", ",", file_get_contents($_FILES['archivo']['tmp_name']));
+
     $quitar = implode(',', $arrayUnidades);
     $quitar = preg_replace("/\s+/", " ", $quitar);
     $quitar = str_replace(" ,", ",", $quitar);
     $arrayUnidades = explode(",", $quitar);
+    $arrayUnidades = array_filter($arrayUnidades);
+    $cantUnidades = count($arrayUnidades);
+    // print_r(array_filter($arrayUnidades));
+    $arrUnidades = implode(",", $arrayUnidades);
 }
 
 $claDatosUnidades = new DatosUnidades();
@@ -56,7 +60,7 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
     foreach ($infUnidades as $key => $value) {
         $datosObtConsultaU[] = $value['seqUnidadProyecto'];
     }
-
+//echo "<p>".$cantUnidadesConsultadas ."!= ".$cantUnidades."</p>";
     if ($cantUnidadesConsultadas != $cantUnidades) {
         $resultado = array_diff($arrayUnidades, $datosObtConsultaU);
         echo "<div class='alert alert-danger'><strong>Atención!!! </strong>Los siguientes número(s) de unidades no se encuentran o no pertenecen a el proyecto <b>" . $infUnidades[0]['txtNombreProyecto'] . "</b>:<br>";
@@ -196,12 +200,12 @@ if ($_REQUEST['seqProyectoPadre'] != "" && $_REQUEST['seqProyectoPadre'] != null
         $datosModalidad = ($value['seqModalidad'] > 0) ? array_values($arrPryTipoModalidad[$value['seqModalidad']]) : 'Seleccione';
         $modActual = $value['seqModalidad'] . "-" . $datosModalidad[0];
         $datosEsquema = ($value['seqTipoEsquema'] > 0) ? array_values($arrPryEsquema[$value['seqTipoEsquema']]) : 'Seleccione';
-        $esqActual = ($datosEsquema != 'Seleccione')?$datosEsquema[1] . "-" . $datosEsquema[0]:$datosEsquema;
-       
-     
+        $esqActual = ($datosEsquema != 'Seleccione') ? $datosEsquema[1] . "-" . $datosEsquema[0] : $datosEsquema;
+
+
         $tipoVivienda = ($value['txtNombreConjunto'] == "") ? 'Ninguno' : strtoupper($value['txtNombreConjunto']);
         $validacion = ($value['bolActivo'] == 1) ? 'SI' : 'NO';
-        $seqPlanGobierno = ($value['seqPlanGobierno'] > 0) ? ($value['seqPlanGobierno']."-".$arrPlanGobierno[$value['seqPlanGobierno']]) : 'Seleccione';
+        $seqPlanGobierno = ($value['seqPlanGobierno'] > 0) ? ($value['seqPlanGobierno'] . "-" . $arrPlanGobierno[$value['seqPlanGobierno']]) : 'Seleccione';
         //echo "<br>". $cols." ->".$value['txtNombreProyecto'];
         $sheet->setCellValue('A' . $cols, $value['seqUnidadProyecto']);
         $sheet->setCellValue('B' . $cols, $value['txtNombreProyecto']);

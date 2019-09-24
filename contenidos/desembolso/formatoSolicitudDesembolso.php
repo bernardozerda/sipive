@@ -146,8 +146,9 @@ $claSmarty->assign("claFormulario", $claFormulario);
 $claSmarty->assign("txtUsuarioSesion", $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']);
 $claSmarty->assign("numRegistro", $numRegistros);
 $claSmarty->assign("numSolicitudes", $numSolicitudes);
-$claSmarty->assign("txtModalidad", ucwords(mb_ereg_replace("nueva","usada",mb_strtolower($arrModalidad[$claFormulario->seqModalidad]))));
-
+//echo mb_strtolower($arrModalidad[$claFormulario->seqModalidad]);
+//$claSmarty->assign("txtModalidad", ucwords(mb_ereg_replace("nueva","usada",mb_strtolower($arrModalidad[$claFormulario->seqModalidad]))));
+$claSmarty->assign("txtModalidad", mb_strtolower($arrModalidad[$claFormulario->seqModalidad]));
 $claSmarty->display("desembolso/formatoSolicitudDesembolso.tpl");
 
 //	pr( $claDesembolso );

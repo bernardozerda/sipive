@@ -1824,15 +1824,16 @@
                                                {if $seqTipoEsquema ==1}disabled{/if}
                                                />
                                     </td>
+
                                 </tr>
 
 
                                 <!-- Descripcion de la vivienda -->
                                 <tr>
-                                    <td>Descripción de la vivienda</td>
-                                    <td align="center" colspan="4">
+                                    <td colspan="4">Descripción de la vivienda<br>
                                         <textarea name="txtDescripcionVivienda" 
-                                                  style="width:96%"
+                                                  rows="5"
+                                                  style="width:96%;"
                                                   onFocus="this.style.backgroundColor = '#ADD8E6';" 
                                                   onBlur="this.style.backgroundColor = '#FFFFFF';
                                                           sinCaracteresEspeciales(this);" 
@@ -1841,14 +1842,15 @@
                                     </td>
                                     <td>&nbsp;</td>
                                 </tr>
-
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
                             </table>
 
 
                             <table cellpadding="2" cellspacing="0" border="0" width="100%"> 
                                 <tr>
-                                    <td width="420px">Cumple la vivienda con los requisitos de existencia y habitabilidad</td>
-                                    <td>
+                                    <td nowrap>Cumple la vivienda con los requisitos de existencia y habitabilidad<br>
                                         <select id="txtExistencia" 
                                                 name="txtExistencia"
                                                 onFocus="this.style.backgroundColor = '#ADD8E6';" 
@@ -1860,9 +1862,17 @@
                                             <option value="no" {if strtoupper($claDesembolso->arrTecnico.txtExistencia) == "NO"} selected {/if} >No</option>
                                         </select>
                                     </td>
+
+                                    <td >Fecha de Expedición<br>
+                                        <input type="text" name="fchExpedicion" id="fchExpedicion" value="{$claDesembolso->arrTecnico.fchExpedicion}" onfocus="this.style.backgroundColor = '#ADD8E6';" onblur="sinCaracteresEspeciales(this);
+                                                this.style.backgroundColor = '#FFFFFF';" style="width:100px;" maxlength="10" readonly="">
+                                        <a href="#" onclick="javascript: calendarioPopUp('fchExpedicion');">Calendario</a>&nbsp;&nbsp;
+                                        <a onclick="document.getElementById('fchExpedicion').value = '';" href="#">Limpiar</a>
+                                    </td>
+                                    <td  style="width:250px;">&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2"><b>Recomendaciones</b>
+                                    <td colspan="3"><b>Recomendaciones</b>
                                         <textarea name="txtDescripcionExistencia"
                                                   id="txtDescripcionExistencia" 
                                                   style="width:96%; height: 100px;"
@@ -1872,6 +1882,8 @@
                                                   {if $seqTipoEsquema ==1}disabled{/if}
                                                   >{$claDesembolso->arrTecnico.txtDescripcionExistencia}</textarea>
                                     </td>
+
+
                                 </tr>
                             </table>
 

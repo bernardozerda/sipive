@@ -629,7 +629,7 @@ function filasPlantilla() {
     txtMensaje += "</div>";
 
     var handleYes = function () {
-        var filas =$('input:text[name=numFilas]').val();
+        var filas = $('input:text[name=numFilas]').val();
         console.log("El numero de filas corresponde a: " + filas);
         if (filas != '') {
             location.href = './contenidos/legalizacionMCY/plantilla.php?filas=' + filas;
@@ -677,4 +677,34 @@ function filasPlantilla() {
     objDialogo1.setHeader("Generar Plantilla");
     objDialogo1.render(document.body);
     objDialogo1.show();
+}
+
+function datosExternos() {
+
+    var numDocumento = $('input:text[id=numDocumento]').val();
+    var tipoDoc = $('#seqTipoDocumento').val();
+    var url = "./contenidos/otros/externo/externo.php?";
+    //console.log("pasoo" + tipoDoc);
+    var parametros = {
+        "numDocumento": numDocumento,
+        "tipoDoc": tipoDoc
+    };
+    //alert("paso => " + $("#numeroIdentificacion").val());
+    $.ajax({
+        type: "POST",
+        data: parametros,
+        url: url,
+        // Adjuntar los campos del formulario enviado.
+        success: function (data)
+        {
+
+            $('#resultado').html(data);
+
+        },
+        fail: function () {
+            alert('Problemas al mostrar el popup de errores');
+        }
+    });
+    console.log(numDocumento);
+    // return result;
 }

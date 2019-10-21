@@ -49,7 +49,9 @@ $seqMenuInicial = $arrProyectosA[$seqProyectoPost]->seqMenu;
 if ($seqMenuInicial != 0) {
     $arrMenuInicial = $claMenu->cargarMenu($seqProyectoPost, $seqMenuInicial);
     include( $txtPrefijoRuta . "contenidos/" . $arrMenuInicial[$seqMenuInicial]->txtCodigo . ".php" );
-} else {
+} else if ($seqProyectoPost == 8) {
+    $claSmarty->assign("txtArchivoInicio", "inicioExterno.tpl");
+} else {    
     $claSmarty->assign("txtArchivoInicio", "sinInicio.tpl");
 }
 

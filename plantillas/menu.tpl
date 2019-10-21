@@ -16,45 +16,47 @@
 
             <!-- MENU DE LA IZQUIERDA (RECURSIVO A N NIVELES) -->
             <ul class="nav navbar-nav">
-                {$claMenu->imprimirMenuPrincipal($arrMenu)}
+                {$claMenu->imprimirMenuPrincipal($arrMenu)} 
             </ul>
 
             <!-- MENU DE LA DERECHA -->
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-cog"></span> Opciones <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            {foreach from=$arrProyectos key=seqProyecto item=objProyecto}
-                                <a href="#" onClick="cargarContenido('bodyHtml', './index.php', 'proyecto={$seqProyecto}', true);">
-                                    <span class="glyphicon glyphicon-menu-right"></span> {$objProyecto->txtProyecto}
+          {if $smarty.session.seqProyecto != 8}
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-cog"></span> Opciones {$seqProyecto}<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                {foreach from=$arrProyectos key=seqProyecto item=objProyecto}
+                                    <a href="#" onClick="cargarContenido('bodyHtml', './index.php', 'proyecto={$seqProyecto}', true);">
+                                        <span class="glyphicon glyphicon-menu-right"></span> {$objProyecto->txtProyecto}
+                                    </a>
+                                {/foreach}
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="./consultaGeneralInterna.php" target="_blank">
+                                    <span class="glyphicon glyphicon-search"></span> Consulta general
                                 </a>
-                            {/foreach}
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="./consultaGeneralInterna.php" target="_blank">
-                                <span class="glyphicon glyphicon-search"></span> Consulta general
-                            </a>
-                        </li>
+                            </li>
 
-                        <li>
-                            <a href="#" onclick="abrirAyuda()">
-                                <span class="glyphicon glyphicon-globe"></span> Ayuda en línea
-                            </a>
-                        </li>
+                            <li>
+                                <a href="#" onclick="abrirAyuda()">
+                                    <span class="glyphicon glyphicon-globe"></span> Ayuda en línea
+                                </a>
+                            </li>
 
 
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" id="ayuda" onClick="popUpAyuda()">
-                        <img src="./recursos/imagenes/library.png" width="10px">
-                    </a>
-                </li>
-            </ul>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" id="ayuda" onClick="popUpAyuda()">
+                            <img src="./recursos/imagenes/library.png" width="10px">
+                        </a>
+                    </li>
+                </ul>
+            {/if}
 
         </div>
     </div>

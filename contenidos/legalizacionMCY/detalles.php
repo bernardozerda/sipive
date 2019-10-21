@@ -17,7 +17,8 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Legalizac
 $claLegalizacionMcy = new LegalizacionMCY();
 $claReporte = new Reportes();
 $fecha = $_REQUEST['fchCreacion'];
-$objRes = $claLegalizacionMcy->datosDetalles($fecha);
+$txtConsecutivo = $_REQUEST['txtConsecutivo'];
+$objRes = $claLegalizacionMcy->datosDetalles($fecha, $txtConsecutivo);
 //var_dump($objRes); die();
 $claReporte->obtenerReportesGeneral($objRes, 'reporteMCY_');
 ob_end_flush();

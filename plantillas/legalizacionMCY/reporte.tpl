@@ -51,7 +51,7 @@
                     </td>
                     <td class="col-sm-2" nowrap>
                         <span class="btn btn-default btn-sm" >
-                            <a href="contenidos/legalizacionMCY/detalles.php?fchCreacion={$arrDatos.fchCreacion}">
+                            <a href="contenidos/legalizacionMCY/detalles.php?fchCreacion={$arrDatos.fchCreacion}&txtConsecutivo={$arrDatos.txtConsecutivo}">
                                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a>
                         </span>
                     </td>

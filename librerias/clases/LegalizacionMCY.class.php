@@ -248,6 +248,7 @@ class LegalizacionMCY {
                         AND hva.seqTipoActo = 1 order by hva.fchActo desc ";
 
         $objRes = $aptBd->execute($sql);
+       
         if ($cantHogares != $objRes->numRows()) {
             $this->arrErrores[] = "La cantidad de hogares no corresponde al ingresado en la plantilla ";
         }
@@ -268,34 +269,37 @@ class LegalizacionMCY {
             }
             foreach ($arrArchivo as $numLinea => $arrLinea) {
                 foreach ($arrLinea as $key => $value) {
-                    if ($arrLinea[3] == $objRes->fields['numDocumento']) {
-                        $fchEscritura = "";
-                        if ($key == 20) {
-                            $fechaActo = strtotime($value);
-                            if ($fechaActo != $fchActo) {
-                                $this->arrErrores[] = "El Hogar con documento: " . $objRes->fields['numDocumento'] . ", no tiene fecha coincidente del acto administrativo en el sistema ";
+                    if ($key < 44) {
+                        if ($arrLinea[3] == $objRes->fields['numDocumento']) {
+                            $fchEscritura = "";
+                            if ($key == 20) {
+                                $fechaActo = strtotime($value);
+                                if ($fechaActo != $fchActo) {
+                                    $this->arrErrores[] = "El Hogar con documento: " . $objRes->fields['numDocumento'] . ", no tiene fecha coincidente del acto administrativo en el sistema ";
+                                }
                             }
-                        }
-                        if ($key == 33) {
-                            $fchEscritura = strtotime($value);
-                            // echo "<br> ***" . $fchActo . " > " . $fchEscritura;
-                            if ($fchEscritura < $fchActo) {
-                                // echo "<br>" . $objRes->fields['fchActo'] . " > " . $value;
-                                $this->arrErrores[] = "El Hogar con documento: " . $objRes->fields['numDocumento'] . ", tiene una fecha de escrituración menor a la fecha del acto ";
+                            if ($key == 33) {
+                                $fchEscritura = strtotime($value);
+                                // echo "<br> ***" . $fchActo . " > " . $fchEscritura;
+                                if ($fchEscritura < $fchActo) {
+                                    // echo "<br>" . $objRes->fields['fchActo'] . " > " . $value;
+                                    $this->arrErrores[] = "El Hogar con documento: " . $objRes->fields['numDocumento'] . ", tiene una fecha de escrituración menor a la fecha del acto ";
+                                }
                             }
-                        }
-                        if ($key == 38) {
-                            $fchCtl = strtotime($value);
-                            if ($fchEscritura > $fchCtl) {
-                                $this->arrErrores[] = "El Hogar con documento: " . $objRes->fields['numDocumento'] . ", tiene una fecha consulta CTL menor a la fecha de escrituración";
+                            if ($key == 38) {
+                                $fchCtl = strtotime($value);
+                                if ($fchEscritura > $fchCtl) {
+                                    $this->arrErrores[] = "El Hogar con documento: " . $objRes->fields['numDocumento'] . ", tiene una fecha consulta CTL menor a la fecha de escrituración";
+                                }
                             }
-                        }
 
-                        if ($key != 39 and $key != 40 and $key != 29 and $value == "") {
-                            $this->arrErrores[] = "El Hogar con documento: " . $objRes->fields['numDocumento'] . ", no contiene informacion en la columna: " . $this->arrTitulos[$key];
-                        }
-                        if ($key == 21 and $objRes->fields['valAspiraSubsidio'] != $value) {
-                            $this->arrErrores[] = "El valor del subsidio del Hogar con documento: " . $objRes->fields['numDocumento'] . " no coincide con el reportado en el sistema";
+                            if ($key != 39 and $key != 40 and $key != 29 and $value == "") {
+                                echo "<br>" . $key . " = > " . $value;
+                                $this->arrErrores[] = "El Hogar con documento: " . $objRes->fields['numDocumento'] . ", no contiene informacion en la columna: " . $this->arrTitulos[$key];
+                            }
+                            if ($key == 21 and $objRes->fields['valAspiraSubsidio'] != $value) {
+                                $this->arrErrores[] = "El valor del subsidio del Hogar con documento: " . $objRes->fields['numDocumento'] . " no coincide con el reportado en el sistema";
+                            }
                         }
                     }
                 }
@@ -748,8 +752,8 @@ class LegalizacionMCY {
                      inner JOIN
                      t_des_solicitud sol USING (seqDesembolso)
                  WHERE
-                   frm.seqModalidad in(12) and frm.seqTipoEsquema in(16, 17) and hog.seqParentesco = 1
-                   group by  sol.fchCreacion ORDER BY sol.txtConsecutivo";
+                   frm.seqModalidad in(12) and frm.seqTipoEsquema in(16, 17) and hog.seqParentesco = 1 and hva.seqTipoActo = 1
+                   group by  sol.fchCreacion, sol.txtConsecutivo ORDER BY sol.fchCreacion desc, sol.txtConsecutivo asc";
         $datos = Array();
         $objRes = $aptBd->execute($sql);
         while ($objRes->fields) {
@@ -802,7 +806,7 @@ class LegalizacionMCY {
         }
     }
 
-    public function datosDetalles($fecha) {
+    public function datosDetalles($fecha, $txtConsecutivo) {
 
         global $aptBd;
         $sql = "SELECT 
@@ -850,8 +854,8 @@ class LegalizacionMCY {
                 t_frm_banco sBan on(sol.seqBancoGiro = sBan.seqBanco)
                 left join t_frm_localidad loc ON(esc.seqLocalidad = loc.seqLocalidad)
                 WHERE
-                 frm.seqModalidad in(12) and frm.seqTipoEsquema in(16, 17) and hog.seqParentesco = 1
-                 AND sol.fchCreacion like '" . $fecha . "'";
+                 frm.seqModalidad in(12) and frm.seqTipoEsquema in(16, 17) and hog.seqParentesco = 1 and hva.seqTipoActo = 1
+                 AND sol.fchCreacion like '" . $fecha . "' and sol.txtConsecutivo = '$txtConsecutivo' ";
 
         $objRes = $aptBd->execute($sql);
         $datos = Array();

@@ -39,10 +39,10 @@ $datosSeguimientos = $clafunciones->consultaSegumientosHogar($seqFormulario);
         opacity: 0.9;
         z-index: 1000;
     }
-   
+
     .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
         font-size: 13px !important;
-        
+
     }
     .row{
         margin: 0px;
@@ -50,7 +50,14 @@ $datosSeguimientos = $clafunciones->consultaSegumientosHogar($seqFormulario);
     }
 </style>
 <script>
-obtenerCssTable();
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "pagingType": "full_numbers",
+            "lengthMenu": [10, 25, 50, 75, 100],
+            "order": [[0, "desc"]]
+        });
+    });
+
 </script>
 
 <div class="marca-de-agua">

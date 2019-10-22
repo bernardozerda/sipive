@@ -683,28 +683,41 @@ function datosExternos() {
 
     var numDocumento = $('input:text[id=numDocumento]').val();
     var tipoDoc = $('#seqTipoDocumento').val();
-    var url = "./contenidos/otros/externo/externo.php?";
-    //console.log("pasoo" + tipoDoc);
-    var parametros = {
-        "numDocumento": numDocumento,
-        "tipoDoc": tipoDoc
-    };
-    //alert("paso => " + $("#numeroIdentificacion").val());
-    $.ajax({
-        type: "POST",
-        data: parametros,
-        url: url,
-        // Adjuntar los campos del formulario enviado.
-        success: function (data)
-        {
+    if (numDocumento != "") {
+        $(".invalid-tooltip").hide();
 
-            $('#resultado').html(data);
 
-        },
-        fail: function () {
-            alert('Problemas al mostrar el popup de errores');
-        }
-    });
-    console.log(numDocumento);
-    // return result;
+        var url = "./contenidos/otros/externo/externo.php?";
+        //console.log("pasoo" + tipoDoc);
+        var parametros = {
+            "numDocumento": numDocumento,
+            "tipoDoc": tipoDoc
+        };
+        //alert("paso => " + $("#numeroIdentificacion").val());
+        $.ajax({
+            type: "POST",
+            data: parametros,
+            url: url,
+            // Adjuntar los campos del formulario enviado.
+            success: function (data)
+            {
+
+                $('#resultado').html(data);
+
+            },
+            fail: function () {
+                alert('Problemas al mostrar el popup de errores');
+            }
+        });
+
+        // return result; 
+    } else {
+
+        $(".invalid-tooltip").css('border-color: ', '5px solid #C00000');
+        $(".invalid-tooltip").css('background-color', 'pink');
+        $(".invalid-tooltip").css('color', '#FFF');
+        $(".invalid-tooltip").css('font-weight', 'bold');
+        $(".invalid-tooltip").show();
+
+    }
 }

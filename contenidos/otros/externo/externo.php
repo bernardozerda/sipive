@@ -44,7 +44,14 @@ $datosSeguimientos = $clafunciones->consultaSegumientosHogar($seqFormulario);
         font-size: 13px !important;
         
     }
+    .row{
+        margin: 0px;
+        width: 100%
+    }
 </style>
+<script>
+obtenerCssTable();
+</script>
 
 <div class="marca-de-agua">
     <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">

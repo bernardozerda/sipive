@@ -715,7 +715,8 @@ function datosExternos() {
 
         $(".invalid-tooltip").css('border-color: ', '5px solid #C00000');
         $(".invalid-tooltip").css('background-color', 'pink');
-        $(".invalid-tooltip").css('color', '#FFF');
+        $(".invalid-tooltip").css('color', '#666');
+        $(".invalid-tooltip").css('padding-left', '10px');
         $(".invalid-tooltip").css('font-weight', 'bold');
         $(".invalid-tooltip").show();
 

@@ -20,7 +20,7 @@
                     <option value="5">PAS</option>
                     <option value="6">NIT</option>
                     <option value="7">NUIP</option>
-                    <option value="8">NUIP</option>
+                    <option value="8">Desconocido</option>
                 </select>
 
             </div>

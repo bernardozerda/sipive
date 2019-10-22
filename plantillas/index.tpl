@@ -81,7 +81,7 @@
                                         {if $smarty.session.seqProyecto != 8}
                                             <img src="./recursos/imagenes/cabezote_ws.png">
                                             {else}
-                                                <div style="min-height: 10px"><p>&nbsp;</p></div>
+                                                <div style="min-height: 7px; width: 100%"><p>&nbsp;</p></div>
                                             {/if}
                                             <div style="position: absolute; width: 24%; float: left; top: 8px;left:74%;">
                                                 <a href="#" onClick="location.href = './autenticacion.php'" >

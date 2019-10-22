@@ -61,109 +61,115 @@ $datosSeguimientos = $clafunciones->consultaSegumientosHogar($seqFormulario);
 </script>
 
 <div class="marca-de-agua">
-    <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-        <thead>
-            <tr >
-                <th colspan="6" class="th-sm"><h5>DATOS BÁSICOS</h5></th>
-        </tr>
-        </thead>
-
-        <?php
-        $cont = 0;
-        foreach ($datosBasicos[0] as $key => $value) {
-            ?>
-            <?php if ($cont % 3 == 0) { ?> <tr>
-
-                <?php } else { ?>
-                    <th class="th-sm">
-                <h5 style="margin: 0px; padding: 0px;   "><?= $key ?></h5></th>                  
-                <td> <?= $value ?></td>  
-                <td>&nbsp;</td>
-            <?php } if ($cont % 3 == 0) { ?>
-                </tr> <?php } ?>
+    <?php if ($seqFormulario > 0) { ?>
+        <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+                <tr >
+                    <th colspan="6" class="th-sm"><h5>DATOS BÁSICOS</h5></th>
+            </tr>
+            </thead>
 
             <?php
-            $cont++;
-        }
-        ?>
-    </table>
-    <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            $cont = 0;
+            foreach ($datosBasicos[0] as $key => $value) {
+                ?>
+                <?php if ($cont % 3 == 0) { ?> <tr>
 
-        <thead>
-            <tr>
-                <th colspan="9"><h4>MIEMBROS DEL HOGAR</h4></th>
-        </tr>
-        <tr>
-            <th class="th-sm">Ciudadano </th>
-            <th class="th-sm">Parentesco</th>
-            <th class="th-sm">Estado Civil</th>
-            <th class="th-sm">Documento</th>
-            <th class="th-sm">Tipo de Documento </th>
-            <th class="th-sm">Nombre  </th>
-            <th class="th-sm">Ingresos  </th>
-            <th class="th-sm">Tipo de Victima  </th>
-            <th class="th-sm">Grupo LGTBI  </th>
-        </tr>
-        </thead>
-        <tbody>  
-            <?php foreach ($miembrosHogar as $key => $value) { ?>   
+                    <?php } else { ?>
+                        <th class="th-sm">
+                    <h5 style="margin: 0px; padding: 0px;   "><?= $key ?></h5></th>                  
+                    <td> <?= $value ?></td>  
+                    <td>&nbsp;</td>
+                <?php } if ($cont % 3 == 0) { ?>
+                    </tr> <?php } ?>
+
+                <?php
+                $cont++;
+            }
+            ?>
+        </table>
+        <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+
+            <thead>
                 <tr>
-                    <td><?= $value['Ciudadano'] ?></td>
-                    <td ><?= $value['Parentesco'] ?></td>
-                    <td ><?= $value['Estado Civil'] ?></td>
-                    <td><?= $value['Documento'] ?></td>
-                    <td><?= $value['Tipo de Documento'] ?></td>
-                    <td nowrap><?= $value['Nombre'] ?></td>
-                    <td><?= $value['Ingresos'] ?></td>
-                    <td><?= $value['Tipo de Victima'] ?></td>
-                    <td><?= $value['Grupo LGTBI'] ?></td>
-                </tr>
-            <?php } ?>
-        </tbody>
-        <tfoot>
+                    <th colspan="9"><h4>MIEMBROS DEL HOGAR</h4></th>
+            </tr>
             <tr>
-                <th class="th-sm">Ciudadano</th>
+                <th class="th-sm">Ciudadano </th>
                 <th class="th-sm">Parentesco</th>
                 <th class="th-sm">Estado Civil</th>
                 <th class="th-sm">Documento</th>
                 <th class="th-sm">Tipo de Documento </th>
-                <th class="th-sm">Nombre </th>
+                <th class="th-sm">Nombre  </th>
                 <th class="th-sm">Ingresos  </th>
                 <th class="th-sm">Tipo de Victima  </th>
-                <th class="th-sm">Grupo LGTBI </th>
+                <th class="th-sm">Grupo LGTBI  </th>
             </tr>
-        </tfoot>
-    </table>
-    <table id="example" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th colspan="9"><h4>SEGUIMIENTOS DEL HOGAR</h4></th>
-        </tr>
-        <tr>
-            <th class="th-sm">Fecha Movimiento</th>               
-            <th class="th-sm" style="width: 50%">Comentario</th>
-            <th class="th-sm">Usuario </th>
-
-
-        </tr>
-        </thead>
-        <tbody>  
-            <?php foreach ($datosSeguimientos as $key => $value) { ?>   
-                <tr>                   
-                    <td><?= $value['fchMovimiento'] ?></td>                 
-                    <td><?= $value['txtComentario'] ?></td>
-                    <td><?= $value['txtAtendido'] ?></td>
-
-
+            </thead>
+            <tbody>  
+                <?php foreach ($miembrosHogar as $key => $value) { ?>   
+                    <tr>
+                        <td><?= $value['Ciudadano'] ?></td>
+                        <td ><?= $value['Parentesco'] ?></td>
+                        <td ><?= $value['Estado Civil'] ?></td>
+                        <td><?= $value['Documento'] ?></td>
+                        <td><?= $value['Tipo de Documento'] ?></td>
+                        <td nowrap><?= $value['Nombre'] ?></td>
+                        <td><?= $value['Ingresos'] ?></td>
+                        <td><?= $value['Tipo de Victima'] ?></td>
+                        <td><?= $value['Grupo LGTBI'] ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="th-sm">Ciudadano</th>
+                    <th class="th-sm">Parentesco</th>
+                    <th class="th-sm">Estado Civil</th>
+                    <th class="th-sm">Documento</th>
+                    <th class="th-sm">Tipo de Documento </th>
+                    <th class="th-sm">Nombre </th>
+                    <th class="th-sm">Ingresos  </th>
+                    <th class="th-sm">Tipo de Victima  </th>
+                    <th class="th-sm">Grupo LGTBI </th>
                 </tr>
-            <?php } ?>
-        </tbody>
-        <tfoot>
-            <tr>              
-                <th class="th-sm">Fecha Movimiento</th>               
-                <th class="th-sm">Comentario</th>
-                <th class="th-sm">Usuario </th>                
+            </tfoot>
+        </table>
+        <table id="example" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th colspan="9"><h4>SEGUIMIENTOS DEL HOGAR</h4></th>
             </tr>
-        </tfoot>
-    </table>
+            <tr>
+                <th class="th-sm">Fecha Movimiento</th>               
+                <th class="th-sm" style="width: 50%">Comentario</th>
+                <th class="th-sm">Usuario </th>
+
+
+            </tr>
+            </thead>
+            <tbody>  
+                <?php foreach ($datosSeguimientos as $key => $value) { ?>   
+                    <tr>                   
+                        <td><?= $value['fchMovimiento'] ?></td>                 
+                        <td><?= $value['txtComentario'] ?></td>
+                        <td><?= $value['txtAtendido'] ?></td>
+
+
+                    </tr>
+                <?php } ?>
+            </tbody>
+            <tfoot>
+                <tr>              
+                    <th class="th-sm">Fecha Movimiento</th>               
+                    <th class="th-sm">Comentario</th>
+                    <th class="th-sm">Usuario </th>                
+                </tr>
+            </tfoot>
+        </table>
+    <?php } else { ?>
+        <div class="alert alert-info" role="alert">
+            El número de documento no se encuentra registrado en SIPIVE
+        </div>
+    <?php } ?>
 </div>

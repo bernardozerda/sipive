@@ -22,11 +22,38 @@ $datosBasicos = $clafunciones->consultaBasicaHogar($seqFormulario);
 $miembrosHogar = $clafunciones->consultaMiembros($seqFormulario);
 $datosSeguimientos = $clafunciones->consultaSegumientosHogar($seqFormulario);
 ?>
-<div>
+<style>
+    .marca-de-agua {
+        background-image: url("recursos/imagenes/marcAgua.png");
+        background-repeat: repeat;
+        background-position: center;
+        width: 100%;
+        height: auto;
+        margin: auto;
+
+    }
+    .marca-de-agua img {
+        padding: 0;
+        width: 100%;
+        height: auto;
+        opacity: 0.9;
+        z-index: 1000;
+    }
+   
+    .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+        font-size: 13px !important;
+        
+    }
+</style>
+
+<div class="marca-de-agua">
     <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-        <tr>
-            <th colspan="6"><h4>DATOS BÁSICOS</h4></th>
+        <thead>
+            <tr >
+                <th colspan="6" class="th-sm"><h5>DATOS BÁSICOS</h5></th>
         </tr>
+        </thead>
+
         <?php
         $cont = 0;
         foreach ($datosBasicos[0] as $key => $value) {
@@ -34,12 +61,12 @@ $datosSeguimientos = $clafunciones->consultaSegumientosHogar($seqFormulario);
             <?php if ($cont % 3 == 0) { ?> <tr>
 
                 <?php } else { ?>
-                    <th><h5><?= $key ?></h5></th>                  
-                    <td> <?= $value ?></td>  
-                    <td>&nbsp;</td>
-                <?php } if ($cont % 3 == 0) { ?> </tr> <?php } ?>
-
-
+                    <th class="th-sm">
+                <h5 style="margin: 0px; padding: 0px;   "><?= $key ?></h5></th>                  
+                <td> <?= $value ?></td>  
+                <td>&nbsp;</td>
+            <?php } if ($cont % 3 == 0) { ?>
+                </tr> <?php } ?>
 
             <?php
             $cont++;
@@ -68,11 +95,11 @@ $datosSeguimientos = $clafunciones->consultaSegumientosHogar($seqFormulario);
             <?php foreach ($miembrosHogar as $key => $value) { ?>   
                 <tr>
                     <td><?= $value['Ciudadano'] ?></td>
-                    <td><?= $value['Parentesco'] ?></td>
-                    <td><?= $value['Estado Civil'] ?></td>
+                    <td ><?= $value['Parentesco'] ?></td>
+                    <td ><?= $value['Estado Civil'] ?></td>
                     <td><?= $value['Documento'] ?></td>
                     <td><?= $value['Tipo de Documento'] ?></td>
-                    <td><?= $value['Nombre'] ?></td>
+                    <td nowrap><?= $value['Nombre'] ?></td>
                     <td><?= $value['Ingresos'] ?></td>
                     <td><?= $value['Tipo de Victima'] ?></td>
                     <td><?= $value['Grupo LGTBI'] ?></td>
@@ -102,7 +129,7 @@ $datosSeguimientos = $clafunciones->consultaSegumientosHogar($seqFormulario);
             <th class="th-sm">Fecha Movimiento</th>               
             <th class="th-sm" style="width: 50%">Comentario</th>
             <th class="th-sm">Usuario </th>
-          
+
 
         </tr>
         </thead>
@@ -112,7 +139,7 @@ $datosSeguimientos = $clafunciones->consultaSegumientosHogar($seqFormulario);
                     <td><?= $value['fchMovimiento'] ?></td>                 
                     <td><?= $value['txtComentario'] ?></td>
                     <td><?= $value['txtAtendido'] ?></td>
-                  
+
 
                 </tr>
             <?php } ?>

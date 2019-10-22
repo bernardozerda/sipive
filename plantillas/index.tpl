@@ -81,8 +81,8 @@
                                         {if $smarty.session.seqProyecto != 8}
                                             <img src="./recursos/imagenes/cabezote_ws.png">
                                             {else}
-                                                <img src="./recursos/imagenes/logoBogota.png" /><p>&nbsp;</p>
-                                                {/if}
+                                                <div style="min-height: 10px"><p>&nbsp;</p></div>
+                                            {/if}
                                             <div style="position: absolute; width: 24%; float: left; top: 8px;left:74%;">
                                                 <a href="#" onClick="location.href = './autenticacion.php'" >
                                                     <img src="./recursos/imagenes/Logout.png" />
@@ -115,39 +115,47 @@
                             </tbody>
                         </table>
                     </center>
-                    
-                        <footer>
-                            <div>
-                                <center>
-                                    <div id="oScroll" style="width: 1000px; margin-top: 0px; margin-bottom: 5px; height: 35px" >
-                                        <div id="scroll" ><MARQUEE DIRECTION=LEFT class="alert alert-danger" style="padding:5px;">
-                                                {if $smarty.session.seqProyecto != 8}
+
+                    <footer>
+                        <div>
+                            <center>
+                                <div id="oScroll" style="width: 1000px; margin-top: 0px; margin-bottom: 5px; height: 35px" >
+                                    <div id="scroll" >
+                                        {if $smarty.session.seqProyecto != 8}
+                                            <MARQUEE DIRECTION=LEFT class="alert alert-danger" style="padding:5px;">
+                                            
                                                 *** SE HA PUBLICADO UNA NUEVA VERSIÓN DEL APLICATIVO
                                                 *** POR FAVOR DIGITAR SIMULTÁNEAMENTE LAS TECLAS CONTROL Y F5
-                                                *** REPETIR ESTA ACCIÓN EN MÁS DE UNA OCASION.    {/if}
+                                                *** REPETIR ESTA ACCIÓN EN MÁS DE UNA OCASION.   
+                                                {else}
+                                                    <MARQUEE>
+                                            {/if}
                                             </MARQUEE> </div><br/>
                                     </div>
                                     <div style="position: relative; float: left; width:100%">
                                         <div class="well well-small" style="background-color: white;">
                                             <div class="row">
-                                                <div class="col-sm-4 col-sm-offset-3" style="font-size: 11px; text-align: left">
-                                                    <strong>Dirección:</strong> Carrera 13 # 52 - 25, Bogotá D.C.<br />
-                                                    <strong>Código postal:</strong> 110231<br />
-                                                    <strong>Teléfono:</strong> +57 (1) 358 16 00, Extensión: 1000 a 1003<br />
-                                                    <strong>Correo electrónico institucional:</strong> <a href="mailto:servicioalciudadano@habitatbogota.gov.co">servicioalciudadano@habitatbogota.gov.co</a><br />
-                                                    <strong>Correo electrónico notificaciones judiciales:</strong> <a href="mailto:servicioalciudadano@habitatbogota.gov.co">notificacionesjudiciales@habitatbogota.gov.co</a><br />
-                                                    <strong>Horario de Atención:</strong> Lunes a viernes de 7:00 am. a 4:30 pm.<br />
-                                                    <strong>Ciudad:</strong> Bogotá - Colombia
-                                                </div>
+                                                {if $smarty.session.seqProyecto != 8}
+                                                    <div class="col-sm-4 col-sm-offset-3" style="font-size: 11px; text-align: left">
+                                                        <strong>Dirección:</strong> Carrera 13 # 52 - 25, Bogotá D.C.<br />
+                                                        <strong>Código postal:</strong> 110231<br />
+                                                        <strong>Teléfono:</strong> +57 (1) 358 16 00, Extensión: 1000 a 1003<br />
+                                                        <strong>Correo electrónico institucional:</strong> <a href="mailto:servicioalciudadano@habitatbogota.gov.co">servicioalciudadano@habitatbogota.gov.co</a><br />
+                                                        <strong>Correo electrónico notificaciones judiciales:</strong> <a href="mailto:servicioalciudadano@habitatbogota.gov.co">notificacionesjudiciales@habitatbogota.gov.co</a><br />
+                                                        <strong>Horario de Atención:</strong> Lunes a viernes de 7:00 am. a 4:30 pm.<br />
+                                                        <strong>Ciudad:</strong> Bogotá - Colombia
+                                                    </div>
+                                               
                                                 <div class="col-sm-2" style="padding-top: 20px;">
                                                     <img src="./recursos/imagenes/pie_ws.png" />
-                                                </div>
+                                                </div> 
+                                                {/if}
                                             </div>
                                         </div>
                                     </div>
                                 </center>
                             </div>
                         </footer>
-                    
-                </body>
-                </html>
+
+                    </body>
+                    </html>

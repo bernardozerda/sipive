@@ -3,6 +3,7 @@
  * PRIMERA VERSION DE SALVAR ACTUALIZACION 
  *
  */
+
 $txtPrefijoRuta = "../../";
 
 include( $txtPrefijoRuta . "recursos/archivos/verificarSesion.php" );

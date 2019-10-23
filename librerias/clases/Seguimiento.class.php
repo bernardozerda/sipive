@@ -817,6 +817,7 @@ class Seguimiento {
 // Registro de campos cambiados
         $txtCambiosHogar = "";
         $txtCambiosFormulario = "";
+        $txtCambios = "";
 
 // Cambios en el hogar
         $arrCedulasFormulario = array();
@@ -825,8 +826,8 @@ class Seguimiento {
             $arrCedulasFormulario[] = $numDocumento;
             if (isset($arrPost['hogar'][$numDocumento])) {
                 foreach ($objCiudadano as $txtClave => $txtValor) {
-                    if (!in_array($txtClave, $this->arrIgnorarCampos)) {
-                        if (array_key_exists($numDocumento, $arrPost['hogar']) and array_key_exists($txtClave, $arrPost['hogar'][$numDocumento])) {
+                    if (!in_array($txtClave, $this->arrIgnorarCampos)) {                        
+                        if (array_key_exists($numDocumento, $arrPost['hogar']) or array_key_exists($txtClave, $arrPost['hogar'][$numDocumento])) {
                             $arrPost['hogar'][$numDocumento][$txtClave] = regularizarCampo($txtClave, $arrPost['hogar'][$numDocumento][$txtClave]);
                             $txtCambiosHogar .= $this->compararValores($txtClave, $txtValor, $arrPost['hogar'][$numDocumento][$txtClave], 2);
                         }
@@ -867,7 +868,7 @@ class Seguimiento {
             }
         }
 
-        $txtCambios = "";
+        
         if (trim($txtCambiosHogar) != "") {
             $txtCambios .= "<b>[ " . $claFormulario->seqFormulario . " ] Cambios en el hogar</b>" . $this->txtSalto . $txtCambiosHogar;
         }

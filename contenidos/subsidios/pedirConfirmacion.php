@@ -17,7 +17,7 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Ciudadano
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "FormularioSubsidios.class.php" );
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
 
-$bolConfirmacion = false;
+$bolConfirmacion = true;
 $arrErrores = array();
 $arrMensajes = array();
 
@@ -118,6 +118,9 @@ if ($bolConfirmacion == true) {
 
     foreach ($claFormulario as $txtClave => $txtValor) {
         if ($txtClave != "arrCiudadano") {
+            echo "<br>".$txtClave;
+            var_dump($_POST);
+            pr($claSeguimiento->arrIgnorarCampos);
             if (array_key_exists($txtClave, $_POST) and in_array($txtClave, $claSeguimiento->arrIgnorarCampos)) {
                 $_POST['anterior'][$txtClave] = $claFormulario->$txtClave;
                 $claFormulario->$txtClave = regularizarCampo($txtClave, $_POST[$txtClave]);

@@ -107,7 +107,8 @@ if (isset($_FILES["archivo"]) && is_uploaded_file($_FILES['archivo']['tmp_name']
             $numEstrato = $estrato[1];
             $txtTipoDocumentos = $datos[13];
             $txtCiudad = $datos[15];
-            $txtPropiedad = $datos[19];
+            //$txtPropiedad = $datos[19];
+            $txtPropiedad = 'escritura';
             $txtCorreoVendedor = $datos[20];
             $seqCiudad = $datos[21];
 

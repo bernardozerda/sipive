@@ -28,7 +28,7 @@
                 <label for="numDocumento"><b>Documento Ciudadano</b</label>
                 <input type="text"  id="numDocumento" class="form-control is-valid" value="" required>
                 <div class="invalid-tooltip" style="display: none">
-                   Digite el numero de Documento.
+                    Digite el numero de Documento.
                 </div>
             </div>
             <div class="col-md-4 mb-3 md-form"><p>&nbsp;</p>
@@ -37,7 +37,7 @@
         </div>
     </div>
 </div>
-<div class="panel panel-default" style="width: 900px; ">
+<div class="panel panel-default" style=" min-width: 900px; width: 95% ">
     <div class="panel-body">
         <div id="resultado"> </div>
     </div>

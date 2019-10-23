@@ -822,6 +822,7 @@ class FormularioSubsidios {
                     valTotalRecursos = " . doubleval($this->valTotalRecursos) . "
                 where seqFormulario = " . $seqFormulario . "
             ";
+           // echo "<p>".$sql."</p>";
             $aptBd->execute($sql);
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se ha podido actualizar la informacion del formulario [$seqFormulario]";

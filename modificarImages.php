@@ -41,65 +41,25 @@ function getDirectorySize($path) {
                     $totalcount += $result['count'];
                     $dircount += $result['dircount'];
                 } elseif (is_file($nextpath)) {
-                    $tamano = filesize($nextpath);
+                    echo "<br>" . $nextpath;
+                    $imagen = $nextpath;
+                    $ancho_nuevo = 0;
+                    $alto_nuevo = 0;
+
                     $medidasimagen = getimagesize($nextpath);
-                    $info = new SplFileInfo($nextpath);
-                    $tipo = $info->getExtension();
-                    // var_dump($info->getBasename());                    die();
-                    //Si las imagenes tienen una resolución y un peso aceptable se suben tal cual
-                    if ($medidasimagen[0] > 1280 && $tamano > 200000) {
-                        $nombrearchivo = $info->getBasename();
-                        //Redimensionar
-                        $rtOriginal = $nextpath;
-                        $original = "";
-                        if ($tipo == 'jpeg') {
-                            $original = imagecreatefromjpeg($rtOriginal);
-                        } else if ($tipo == 'png') {
-                            $original = imagecreatefrompng($rtOriginal);
-                        } else if ($tipo == 'gif') {
-                            $original = imagecreatefromgif($rtOriginal);
-                        } else if ($tipo == 'jpg' || $tipo == 'JPG') {
-                            $original = imagecreatefromjpeg($rtOriginal);
-                        }
-
-                        list($ancho, $alto) = getimagesize($rtOriginal);
-
-                        $x_ratio = $max_ancho / $ancho;
-                        $y_ratio = $max_alto / $alto;
-
-                        if (($ancho <= $max_ancho) && ($alto <= $max_alto)) {
-                            $ancho_final = $ancho;
-                            $alto_final = $alto;
-                        } elseif (($x_ratio * $alto) < $max_alto) {
-                            $alto_final = ceil($x_ratio * $alto);
-                            $ancho_final = $max_ancho;
-                        } else {
-                            $ancho_final = ceil($y_ratio * $ancho);
-                            $alto_final = $max_alto;
-                        }
-
-                        $lienzo = imagecreatetruecolor($ancho_final, $alto_final);
-
-                        imagecopyresampled($lienzo, $original, 0, 0, 0, 0, $ancho_final, $alto_final, $ancho, $alto);
-
-                        imagedestroy($original);
-
-                        $cal = 8;
-
-                        if ($tipo == 'jpeg' || $tipo == 'jpg' || $tipo == 'JPG') {
-                            imagejpeg($lienzo, $patch . "/" . $nombrearchivo);
-                        } else if ($tipo == 'png') {
-                            imagepng($lienzo, $patch . "/" . $nombrearchivo);
-                        } else if ($tipo == 'gif') {
-                            imagegif($lienzo, $patch . "/" . $nombrearchivo);
-                        }
-
-                        fwrite($archivo, $cont . "\t" . $nombrearchivo . "\r\n");
-                        echo "\n*** " . $nombrearchivo . " posicion " . $cont;
-                        $cont++;
+                    if ($medidasimagen[0] > $medidasimagen[1]) {
+                        $ancho_nuevo = 1280;
+                        $alto_nuevo = 900;
+                    } else {
+                        $ancho_nuevo = 900;
+                        $alto_nuevo = 1280;
                     }
-                    $totalsize += $tamano;
-                    $totalcount++;
+                    # ruta de la imagen final, si se pone el mismo nombre que la imagen, esta se sobreescribe
+                    //$imagen_final = 'imagen2.jpg';
+
+                    redim($imagen, $imagen, $ancho_nuevo, $alto_nuevo);
+
+                    $tamano = filesize($nextpath);
                 }
             }
         }
@@ -110,6 +70,71 @@ function getDirectorySize($path) {
     $total['cant'] = $cont;
 
     return $total;
+}
+
+function redim($ruta1, $ruta2, $ancho, $alto) {
+    # se obtene la dimension y tipo de imagen
+    $datos = getimagesize($ruta1);
+
+    $ancho_orig = $datos[0]; # Anchura de la imagen original
+    $alto_orig = $datos[1];    # Altura de la imagen original
+    $tipo = $datos[2];
+
+    if ($tipo == 1) { # GIF
+        if (function_exists("imagecreatefromgif"))
+            $img = imagecreatefromgif($ruta1);
+        else
+            return false;
+    }
+    else if ($tipo == 2) { # JPG
+        if (function_exists("imagecreatefromjpeg"))
+            $img = imagecreatefromjpeg($ruta1);
+        else
+            return false;
+    }
+    else if ($tipo == 3) { # PNG
+        if (function_exists("imagecreatefrompng"))
+            $img = imagecreatefrompng($ruta1);
+        else
+            return false;
+    }
+
+    # Se calculan las nuevas dimensiones de la imagen
+    if ($ancho_orig > $alto_orig) {
+        $ancho_dest = $ancho;
+        $alto_dest = ($ancho_dest / $ancho_orig) * $alto_orig;
+    } else {
+        $alto_dest = $alto;
+        $ancho_dest = ($alto_dest / $alto_orig) * $ancho_orig;
+    }
+
+    // imagecreatetruecolor, solo estan en G.D. 2.0.1 con PHP 4.0.6+
+    $img2 = @imagecreatetruecolor($ancho_dest, $alto_dest) or $img2 = imagecreate($ancho_dest, $alto_dest);
+
+    // Redimensionar
+    // imagecopyresampled, solo estan en G.D. 2.0.1 con PHP 4.0.6+
+    @imagecopyresampled($img2, $img, 0, 0, 0, 0, $ancho_dest, $alto_dest, $ancho_orig, $alto_orig) or imagecopyresized($img2, $img, 0, 0, 0, 0, $ancho_dest, $alto_dest, $ancho_orig, $alto_orig);
+
+    // Crear fichero nuevo, según extensión.
+    if ($tipo == 1) // GIF
+        if (function_exists("imagegif"))
+            imagegif($img2, $ruta2);
+        else
+            return false;
+
+    if ($tipo == 2) // JPG
+        if (function_exists("imagejpeg"))
+            imagejpeg($img2, $ruta2);
+        else
+            return false;
+
+    if ($tipo == 3)  // PNG
+        if (function_exists("imagepng"))
+            imagepng($img2, $ruta2);
+        else
+            return false;
+
+    return true;
 }
 
 function sizeFormat($size) {
@@ -130,7 +155,7 @@ function sizeFormat($size) {
 //$nombre_fichero = '/recursos/imagenes/desembolsos';
 //$path = "../sipive/recursos/imagenes/desembolsos";
 //$path = "recursos/imagenes/14125";
-$path = 'D:\ImagenesBosa601';
+$path = 'D:\Reservas-2019\Senderos (47 VIP)';
 $ar = getDirectorySize($path);
 
 

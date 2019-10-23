@@ -3219,7 +3219,7 @@ class aad {
                     seqEstadoProceso = 18
                     ,fchUltimaActualizacion = NOW()
                     ,bolSancion = 1
-                    ,fchVigencia = DATE_ADD(now(), INTERVAL 1 YEAR)
+                    #,fchVigencia = DATE_ADD(now(), INTERVAL 1 YEAR) no aplica de vigencia de futura
                     ,seqProyecto = 37
                     ,seqProyectoHijo = null
                     ,seqUnidadProyecto = 1

@@ -1336,7 +1336,7 @@ class GestionFinancieraProyectos
 
         $this->informacionGiroConstructor($seqProyecto);
 
-        $sql = "
+         $sql = "
             select
                 con.seqProyecto as 'Identificador del Proyecto',
                 con.txtNombreProyecto as 'Nombre del Proyecto',
@@ -1345,7 +1345,8 @@ class GestionFinancieraProyectos
                 ciu.numDocumento as 'Documento',
                 upper(concat(ciu.txtNombre1, ' ', ciu.txtNombre2,' ', ciu.txtApellido1,' ', ciu.txtApellido2)) as 'Nombre',
                 sum(gfd.valGiro) as 'Disponible',
-                0 as 'Valor a Girar'
+                0 as 'Valor a Girar',
+                case when (upr.bolActivo = 1) then 'SI' else 'NO' end AS 'Und Activa'
             from t_pry_aad_giro_fiducia gfi
             inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
             inner join t_pry_proyecto con on gfd.seqProyecto = con.seqProyecto

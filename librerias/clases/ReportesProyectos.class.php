@@ -174,25 +174,25 @@ class Reportes {
         if (empty($arrErrores)) {
 
             $sql = "SELECT
-						frm.seqFormulario,
-						frm.txtFormulario,
-						ciu.numDocumento,
-						UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS Nombre,
-						if(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
-						moa.txtModalidad,
-						sol.txtSolucion,
-						frm.txtDireccion,
-						frm.numCelular,
-						frm.numTelefono1,
-						frm.numTelefono2
-						FROM 
-						T_FRM_FORMULARIO frm
-						INNER JOIN T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
-						INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
-						INNER JOIN T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
-						INNER JOIN T_FRM_SOLUCION sol ON frm.seqSolucion = sol.seqSolucion
-						WHERE hog.seqParentesco = 1
-						AND frm.seqFormulario in (" . $this->seqFormularios . ")";
+                    frm.seqFormulario,
+                    frm.txtFormulario,
+                    ciu.numDocumento,
+                    UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS Nombre,
+                    if(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
+                    moa.txtModalidad,
+                    sol.txtSolucion,
+                    frm.txtDireccion,
+                    frm.numCelular,
+                    frm.numTelefono1,
+                    frm.numTelefono2
+                    FROM 
+                    T_FRM_FORMULARIO frm
+                    INNER JOIN T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
+                    INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
+                    INNER JOIN T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
+                    INNER JOIN T_FRM_SOLUCION sol ON frm.seqSolucion = sol.seqSolucion
+                    WHERE hog.seqParentesco = 1
+                    AND frm.seqFormulario in (" . $this->seqFormularios . ")";
 
             try {
                 $objRes = $aptBd->execute($sql);
@@ -231,92 +231,92 @@ class Reportes {
         if (empty($arrErrores)) {
 
             $sql = "SELECT 
-						frm.seqFormulario,
-						frm.txtFormulario,
-						if(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
-						tpv.txtTipoVictima AS TipoVictima,
-						moa.txtModalidad AS Modalidad,
-						CONCAT(sol.txtDescripcion, ' (',  sol.txtSolucion, ')') AS Solucion,
-						locfrm.txtLocalidad AS Localidad,
-						if(trim(frm.txtBarrio) = '', 'Desconocido', frm.txtBarrio) AS Barrio,
-						locdes.txtLocalidad AS LocalidadDesembolso,
-						if(trim(des.txtBarrio) = '', 'Desconocido', des.txtBarrio) AS BarrioDesembolso,
-						if((trim(des.txtCompraVivienda) = '' or des.txtCompraVivienda is null), 'Ninguna', des.txtCompraVivienda) as TipoViviendaComprar,
-						(
-						  SELECT 
-						  tdo1.txtTipoDocumento
-						  FROM 
-						  T_FRM_HOGAR hog1
-						  INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
-						  INNER JOIN T_CIU_TIPO_DOCUMENTO tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
-						  WHERE hog1.seqFormulario = hog.seqFormulario
-						  AND hog1.seqParentesco = 1
-						) AS TipoDocumentoPPAL,
-						(
-						  SELECT 
-						  ciu1.numDocumento
-						  FROM 
-						  T_FRM_HOGAR hog1
-						  INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
-						  WHERE hog1.seqFormulario = hog.seqFormulario
-						  AND hog1.seqParentesco = 1
-						) AS NumeroDocumentoPPAL,
-						(
-						  SELECT 
-						  UPPER(CONCAT(ciu1.txtNombre1, ' ', ciu1.txtNombre2, ' ', ciu1.txtApellido1, ' ', ciu1.txtApellido2))
-						  FROM 
-						  T_FRM_HOGAR hog1
-						  INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
-						  WHERE hog1.seqFormulario = hog.seqFormulario
-						  AND hog1.seqParentesco = 1
-						) AS NombrePPAL,
-						(
-						  SELECT 
-						  tdo1.txtTipoDocumento
-						  FROM  T_CIU_TIPO_DOCUMENTO tdo1
-						  WHERE ciu.seqTipoDocumento = tdo1.seqTipoDocumento
-						)AS TipoDocumento,
-						ciu.numDocumento AS Documento,
-						UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS Nombre,
-						sex.txtSexo AS Sexo,
-						if(ciu.bolLgtb = 1, 'Si', 'No') AS LGBT,
-						ces1.txtCondicionEspecial as CondicionEspecial1,
-						ces2.txtCondicionEspecial as CondicionEspecial2,
-						ces3.txtCondicionEspecial as CondicionEspecial3,
-						ucwords( cabezaFamilia( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtCabezaFamilia,
-						ucwords( mayor65anos( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtMayor65Anos,
-						ucwords( discapacitado( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtDiscapacitado,
-						ucwords( ningunaCondicionEspecial( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtNingunaCondicionEspecial,
-						par.txtParentesco AS Parentesco,
-						ciu.fchNacimiento AS FechaNacimiento,
-						FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365)) AS Edad,
-						rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365))) AS RangoEdad,
-						etn.txtEtnia AS Etnia,
-						(
-							SELECT
-								sum(dsol.valSolicitado)
-							FROM T_DES_SOLICITUD dsol 
-							WHERE
-								frm.seqFormulario = des.seqFormulario AND 
-								dsol.seqDesembolso = des.seqDesembolso
-						) as ValorSolicitado
-						FROM T_FRM_FORMULARIO frm
-						INNER JOIN T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
-						INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
-						LEFT JOIN T_CIU_PARENTESCO par ON hog.seqParentesco = par.seqParentesco
-						LEFT JOIN T_CIU_SEXO sex ON ciu.seqSexo = sex.seqSexo
-						LEFT JOIN T_FRM_TIPOVICTIMA tpv ON ciu.seqTipoVictima = tpv.seqTipoVictima
-						LEFT JOIN T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
-						LEFT JOIN T_FRM_SOLUCION sol ON frm.seqSolucion = sol.seqSolucion
-						LEFT JOIN T_CIU_ETNIA etn ON ciu.seqEtnia = etn.seqEtnia
-						LEFT JOIN T_CIU_CONDICION_ESPECIAL ces1 ON ciu.seqCondicionEspecial = ces1.seqCondicionEspecial
-						LEFT JOIN T_CIU_CONDICION_ESPECIAL ces2 ON ciu.seqCondicionEspecial2 = ces2.seqCondicionEspecial
-						LEFT JOIN T_CIU_CONDICION_ESPECIAL ces3 ON ciu.seqCondicionEspecial3 = ces3.seqCondicionEspecial
-						LEFT JOIN T_FRM_LOCALIDAD locfrm ON frm.seqLocalidad = locfrm.seqLocalidad
-						LEFT JOIN T_DES_DESEMBOLSO des ON des.seqFormulario = frm.seqFormulario
-						LEFT JOIN T_FRM_LOCALIDAD locdes ON des.seqLocalidad = locdes.seqLocalidad
-						WHERE  frm.seqFormulario in (" . $this->seqFormularios . ")
-					";
+                    frm.seqFormulario,
+                    frm.txtFormulario,
+                    if(frm.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
+                    tpv.txtTipoVictima AS TipoVictima,
+                    moa.txtModalidad AS Modalidad,
+                    CONCAT(sol.txtDescripcion, ' (',  sol.txtSolucion, ')') AS Solucion,
+                    locfrm.txtLocalidad AS Localidad,
+                    if(trim(frm.txtBarrio) = '', 'Desconocido', frm.txtBarrio) AS Barrio,
+                    locdes.txtLocalidad AS LocalidadDesembolso,
+                    if(trim(des.txtBarrio) = '', 'Desconocido', des.txtBarrio) AS BarrioDesembolso,
+                    if((trim(des.txtCompraVivienda) = '' or des.txtCompraVivienda is null), 'Ninguna', des.txtCompraVivienda) as TipoViviendaComprar,
+                    (
+                      SELECT 
+                      tdo1.txtTipoDocumento
+                      FROM 
+                      T_FRM_HOGAR hog1
+                      INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
+                      INNER JOIN T_CIU_TIPO_DOCUMENTO tdo1 on ciu1.seqTipoDocumento = tdo1.seqTipoDocumento
+                      WHERE hog1.seqFormulario = hog.seqFormulario
+                      AND hog1.seqParentesco = 1
+                    ) AS TipoDocumentoPPAL,
+                    (
+                      SELECT 
+                      ciu1.numDocumento
+                      FROM 
+                      T_FRM_HOGAR hog1
+                      INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
+                      WHERE hog1.seqFormulario = hog.seqFormulario
+                      AND hog1.seqParentesco = 1
+                    ) AS NumeroDocumentoPPAL,
+                    (
+                      SELECT 
+                      UPPER(CONCAT(ciu1.txtNombre1, ' ', ciu1.txtNombre2, ' ', ciu1.txtApellido1, ' ', ciu1.txtApellido2))
+                      FROM 
+                      T_FRM_HOGAR hog1
+                      INNER JOIN T_CIU_CIUDADANO ciu1 on hog1.seqCiudadano = ciu1.seqCiudadano
+                      WHERE hog1.seqFormulario = hog.seqFormulario
+                      AND hog1.seqParentesco = 1
+                    ) AS NombrePPAL,
+                    (
+                      SELECT 
+                      tdo1.txtTipoDocumento
+                      FROM  T_CIU_TIPO_DOCUMENTO tdo1
+                      WHERE ciu.seqTipoDocumento = tdo1.seqTipoDocumento
+                    )AS TipoDocumento,
+                    ciu.numDocumento AS Documento,
+                    UPPER(CONCAT(ciu.txtNombre1, ' ', ciu.txtNombre2, ' ', ciu.txtApellido1, ' ', ciu.txtApellido2)) AS Nombre,
+                    sex.txtSexo AS Sexo,
+                    if(ciu.bolLgtb = 1, 'Si', 'No') AS LGBT,
+                    ces1.txtCondicionEspecial as CondicionEspecial1,
+                    ces2.txtCondicionEspecial as CondicionEspecial2,
+                    ces3.txtCondicionEspecial as CondicionEspecial3,
+                    ucwords( cabezaFamilia( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtCabezaFamilia,
+                    ucwords( mayor65anos( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtMayor65Anos,
+                    ucwords( discapacitado( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtDiscapacitado,
+                    ucwords( ningunaCondicionEspecial( ciu.seqCondicionEspecial , ciu.seqCondicionEspecial2 , ciu.seqCondicionEspecial3 ) ) as txtNingunaCondicionEspecial,
+                    par.txtParentesco AS Parentesco,
+                    ciu.fchNacimiento AS FechaNacimiento,
+                    FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365)) AS Edad,
+                    rangoEdad(FLOOR((DATEDIFF(NOW(), ciu.fchNacimiento) / 365))) AS RangoEdad,
+                    etn.txtEtnia AS Etnia,
+                    (
+                            SELECT
+                                    sum(dsol.valSolicitado)
+                            FROM T_DES_SOLICITUD dsol 
+                            WHERE
+                                    frm.seqFormulario = des.seqFormulario AND 
+                                    dsol.seqDesembolso = des.seqDesembolso
+                    ) as ValorSolicitado
+                    FROM T_FRM_FORMULARIO frm
+                    INNER JOIN T_FRM_HOGAR hog ON hog.seqFormulario = frm.seqFormulario
+                    INNER JOIN T_CIU_CIUDADANO ciu ON hog.seqCiudadano = ciu.seqCiudadano
+                    LEFT JOIN T_CIU_PARENTESCO par ON hog.seqParentesco = par.seqParentesco
+                    LEFT JOIN T_CIU_SEXO sex ON ciu.seqSexo = sex.seqSexo
+                    LEFT JOIN T_FRM_TIPOVICTIMA tpv ON ciu.seqTipoVictima = tpv.seqTipoVictima
+                    LEFT JOIN T_FRM_MODALIDAD moa ON frm.seqModalidad = moa.seqModalidad
+                    LEFT JOIN T_FRM_SOLUCION sol ON frm.seqSolucion = sol.seqSolucion
+                    LEFT JOIN T_CIU_ETNIA etn ON ciu.seqEtnia = etn.seqEtnia
+                    LEFT JOIN T_CIU_CONDICION_ESPECIAL ces1 ON ciu.seqCondicionEspecial = ces1.seqCondicionEspecial
+                    LEFT JOIN T_CIU_CONDICION_ESPECIAL ces2 ON ciu.seqCondicionEspecial2 = ces2.seqCondicionEspecial
+                    LEFT JOIN T_CIU_CONDICION_ESPECIAL ces3 ON ciu.seqCondicionEspecial3 = ces3.seqCondicionEspecial
+                    LEFT JOIN T_FRM_LOCALIDAD locfrm ON frm.seqLocalidad = locfrm.seqLocalidad
+                    LEFT JOIN T_DES_DESEMBOLSO des ON des.seqFormulario = frm.seqFormulario
+                    LEFT JOIN T_FRM_LOCALIDAD locdes ON des.seqLocalidad = locdes.seqLocalidad
+                    WHERE  frm.seqFormulario in (" . $this->seqFormularios . ")
+                    ";
             try {
                 $objRes = $aptBd->execute($sql);
 
@@ -3134,6 +3134,12 @@ class Reportes {
             select
               if(con.seqProyectoPadre is null,con.seqProyecto,con.seqProyectoPadre) as seqProyecto,
               if(con.seqProyectoPadre is null,con.txtNombreProyecto,pry.txtNombreProyecto) as txtNombreProyecto,
+              (SELECT count(*) as cant FROM T_PRY_UNIDAD_PROYECTO und LEFT JOIN t_pry_proyecto proy USING (seqProyecto) WHERE und.bolActivo =1
+              and (und.seqProyecto = con.seqProyecto OR und.seqProyecto = con.seqProyectoPadre )) as cantUnd,
+              (SELECT count(*) as cant FROM t_pry_unidad_proyecto    und
+                    INNER JOIN t_frm_formulario frm USING (seqFormulario)
+                    LEFT JOIN t_pry_proyecto proy ON (und.seqProyecto = proy.seqProyecto)
+                     WHERE seqEstadoProceso = 40 AND bolCerrado = 1 and (und.seqProyecto = con.seqProyecto OR und.seqProyecto = con.seqProyectoPadre )) as legalizadas, 
               uac.seqTipoActoUnidad,
               uac.numActo,
               uac.fchActo,
@@ -3158,6 +3164,8 @@ class Reportes {
             $seqProyecto = $objRes->fields['seqProyecto'];
 
             $arrReporte[$seqProyecto]['nombre'] = $objRes->fields['txtNombreProyecto'];
+            $arrReporte[$seqProyecto]['total'] = $objRes->fields['cantUnd'];
+            $arrReporte[$seqProyecto]['legalizadas'] = $objRes->fields['legalizadas'];
             $arrReporte[$seqProyecto]['entidad'] = "";
 
             $arrReporte[$seqProyecto]['aprobado'] = doubleval(
@@ -3310,42 +3318,46 @@ class Reportes {
         }
 
         $arrTitulos[0]['nombre'] = "NOMBRE DEL PROYECTO";
-        $arrTitulos[1]['nombre'] = "ENTIDAD FINANCIERA";
-        $arrTitulos[2]['nombre'] = "VALOR PROYECTO APROBADO";
-        $arrTitulos[3]['nombre'] = "VALOR INDEXACIONES APROBADAOS";
-        $arrTitulos[4]['nombre'] = "VALOR TOTAL VALOR MODIFICADO DEL PROYECTO SDHT";
-        $arrTitulos[5]['nombre'] = "ACTUAL VALOR TOTAL DEL PROYECTO";
-        $arrTitulos[6]['nombre'] = "VALOR GIRADO A FIDUCIA";
-        $arrTitulos[7]['nombre'] = "% VALOR GIRADO A FIDUCIA";
-        $arrTitulos[8]['nombre'] = "TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
-        $arrTitulos[9]['nombre'] = "% TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
-        $arrTitulos[10]['nombre'] = "ACTUAL VALOR TOTAL DISPONIBLE EN FIDUCIA";
-        $arrTitulos[11]['nombre'] = "% ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
-        $arrTitulos[12]['nombre'] = "BALANCE VR PROYECTO VS GIRO FIDUCIA";
-        $arrTitulos[13]['nombre'] = "BALANCE VR PROYECTO VS GIRO CONSTRUCTOR";
-        $arrTitulos[14]['nombre'] = "VALOR TOTAL REINTEGROS";
-        $arrTitulos[15]['nombre'] = "PENDIENTE REINTEGROS";
-        $arrTitulos[16]['nombre'] = "TOTAL RENDIMIENTOS REGISTRADOS";
-        $arrTitulos[17]['nombre'] = "OBSERVACIONES";
+        $arrTitulos[1]['nombre'] = "TOTAL UNIDADES  ";
+        $arrTitulos[2]['nombre'] = "UND. LEGALIZADAS";
+        $arrTitulos[3]['nombre'] = "ENTIDAD FINANCIERA";
+        $arrTitulos[4]['nombre'] = "VALOR PROYECTO APROBADO";
+        $arrTitulos[5]['nombre'] = "VALOR INDEXACIONES APROBADAOS";
+        $arrTitulos[6]['nombre'] = "VALOR TOTAL VALOR MODIFICADO DEL PROYECTO SDHT";
+        $arrTitulos[7]['nombre'] = "ACTUAL VALOR TOTAL DEL PROYECTO";
+        $arrTitulos[8]['nombre'] = "VALOR GIRADO A FIDUCIA";
+        $arrTitulos[9]['nombre'] = "% VALOR GIRADO A FIDUCIA";
+        $arrTitulos[10]['nombre'] = "TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
+        $arrTitulos[11]['nombre'] = "% TOTAL VALOR AUTORIZACION GIROS A CONSTRUCTORAS APROBADOS";
+        $arrTitulos[12]['nombre'] = "ACTUAL VALOR TOTAL DISPONIBLE EN FIDUCIA";
+        $arrTitulos[13]['nombre'] = "% ACTUAL VALOR TOTAL  DISPONIBLE EN FIDUCIA";
+        $arrTitulos[14]['nombre'] = "BALANCE VR PROYECTO VS GIRO FIDUCIA";
+        $arrTitulos[15]['nombre'] = "BALANCE VR PROYECTO VS GIRO CONSTRUCTOR";
+        $arrTitulos[16]['nombre'] = "VALOR TOTAL REINTEGROS";
+        $arrTitulos[17]['nombre'] = "PENDIENTE REINTEGROS";
+        $arrTitulos[18]['nombre'] = "TOTAL RENDIMIENTOS REGISTRADOS";
+        $arrTitulos[19]['nombre'] = "OBSERVACIONES";
 
         $arrTitulos[0]['formato'] = "texto";
         $arrTitulos[1]['formato'] = "texto";
-        $arrTitulos[2]['formato'] = "moneda";
-        $arrTitulos[3]['formato'] = "moneda";
+        $arrTitulos[2]['formato'] = "texto";
+        $arrTitulos[3]['formato'] = "texto";
         $arrTitulos[4]['formato'] = "moneda";
         $arrTitulos[5]['formato'] = "moneda";
         $arrTitulos[6]['formato'] = "moneda";
-        $arrTitulos[7]['formato'] = "porcentaje";
+        $arrTitulos[7]['formato'] = "moneda";
         $arrTitulos[8]['formato'] = "moneda";
         $arrTitulos[9]['formato'] = "porcentaje";
         $arrTitulos[10]['formato'] = "moneda";
         $arrTitulos[11]['formato'] = "porcentaje";
         $arrTitulos[12]['formato'] = "moneda";
-        $arrTitulos[13]['formato'] = "moneda";
+        $arrTitulos[13]['formato'] = "porcentaje";
         $arrTitulos[14]['formato'] = "moneda";
         $arrTitulos[15]['formato'] = "moneda";
         $arrTitulos[16]['formato'] = "moneda";
-        $arrTitulos[17]['formato'] = "texto";
+        $arrTitulos[17]['formato'] = "moneda";
+        $arrTitulos[18]['formato'] = "moneda";
+        $arrTitulos[19]['formato'] = "texto";
 
         if ($bolRetornarDatos == false) {
             $this->exportarArchivo("Reporte General", $arrTitulos, $arrReporte);

@@ -683,13 +683,12 @@
 
                                 <!-- TEXTO DE PIE DE PAGINA PAGINA 2 -->
                                 <tr><td align="justify" style="padding-right: 20px;">
-                                        El presente certificado se expide con base en una visita adelantada por parte del equipo técnico
-                                        de la Subdirección de Recursos Públicos y/o Privados de la Subsecretaría de Gestión Financiera; en esta no se observa
-                                        que la vivienda presente afectaciones o fallas estructurales que pongan en riesgo a sus habitantes
-                                        o afecten la habitabilidad del inmueble. La vivienda dispone de los servicios públicos básicos
-                                        y cumple con lo establecido en la normatividad vigente.<br>
-                                            La Secretaria Distrital de Hábitat <strong>NO</strong> se hace responsable por la calidad estructural de la vivienda,
-                                            la calidad de los materiales empleados, ni la correcta ejecución del proceso constructivo adelantado en la construcción de esta vivienda.
+                                        El presente certificado se expide con base en la  visita de campo realizada por parte del equipo técnico de la Subdirección de Recursos Públicos
+                                        y/o Privados de la Subsecretaría de Gestión Financiera; mediante la cual se evidencia que la vivienda dispone de los servicios públicos básicos 
+                                        y cumple con los requisitos establecidos en el Reglamento Operativo de la SDHT previos a la entrega de las viviendas.<br>
+                                            La Secretaría Distrital del Hábitat en el marco de sus competencias, <strong>NO</strong>  se hace responsable por la calidad estructural de la 
+                                            vivienda, la calidad de los materiales empleados, el suelo donde fue construida, ni la correcta y debida ejecución del proceso constructivo 
+                                            adelantado en la construcción de la misma.
 
                                             <!--
                                                         El presente certificado se expide a los {$numDiaActual} dias del mes de {$txtMesActual} de {$numAnoActual}.-->

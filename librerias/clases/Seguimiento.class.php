@@ -826,7 +826,8 @@ class Seguimiento {
             $arrCedulasFormulario[] = $numDocumento;
             if (isset($arrPost['hogar'][$numDocumento])) {
                 foreach ($objCiudadano as $txtClave => $txtValor) {
-                    if (!in_array($txtClave, $this->arrIgnorarCampos)) {                        
+                    if (!in_array($txtClave, $this->arrIgnorarCampos)) {      
+                        //Se cambios condicion AND por OR array_key_exists($txtClave, $arrPost['hogar'][$numDocumento]
                         if (array_key_exists($numDocumento, $arrPost['hogar']) or array_key_exists($txtClave, $arrPost['hogar'][$numDocumento])) {
                             $arrPost['hogar'][$numDocumento][$txtClave] = regularizarCampo($txtClave, $arrPost['hogar'][$numDocumento][$txtClave]);
                             $txtCambiosHogar .= $this->compararValores($txtClave, $txtValor, $arrPost['hogar'][$numDocumento][$txtClave], 2);

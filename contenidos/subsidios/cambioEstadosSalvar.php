@@ -387,7 +387,8 @@ if (empty($arrErrores)) {
             $claFormulario->seqModalidad = 6;  // Adquisición de Vivienda Nueva
             $claFormulario->seqSolucion = 13; // 70 SMMLV
             $claFormulario->seqTipoEsquema = 1;  // Individual
-            $claFormulario->seqPlanGobierno = 2;  // Bogotá Humana
+            $claFormulario->seqPlanGobierno = 2;  // Bogotá Humana  
+            $claFormulario->seqConvenio = 1; // Convenio
             //$claFormulario->seqProyecto     = 32; // INDIVIDUAL PROYECTO SDVE
         } else {
             $claFormulario->seqPlanGobierno = 3;

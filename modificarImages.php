@@ -155,7 +155,7 @@ function sizeFormat($size) {
 //$nombre_fichero = '/recursos/imagenes/desembolsos';
 //$path = "../sipive/recursos/imagenes/desembolsos";
 //$path = "recursos/imagenes/14125";
-$path = 'D:\Reservas-2019\Senderos (47 VIP)';
+$path = 'D:\Reservas-2019\ModificacionFotosSenderos\Torre2';
 $ar = getDirectorySize($path);
 
 

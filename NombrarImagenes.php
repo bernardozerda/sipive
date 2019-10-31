@@ -7,10 +7,10 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 
 
-//$ruta = 'D:\Reservas-2019\Senderos (47 VIP)';
+$ruta = 'D:\Reservas-2019\OPV 25 Nov\19CEH-Mz52\14747';
 //listar($ruta);
 //crearCarpetas();
-//girarImagen($ruta);
+girarImagen($ruta);
 //eliminarReporteGral();
 
 function listar($directorio) {

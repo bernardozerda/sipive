@@ -79,7 +79,7 @@
                     </tr>
                     <tr>
                         <td>{$objTecnico->txtLicenciaConstruccion}</td>
-                        <td>{$objTecnico->fchEjecutaLicConstruccion}</td>
+                        <td>{$objTecnico->fchEjecutoriaLicencia}</td>
                         <td>{$objTecnico->txtExpideLicenciaUrbanismo}</td>
                     </tr>
                 </table><br>
@@ -428,7 +428,7 @@
                     </tr>
                     <tr>
                         <td>{$objTecnico->txtLicenciaConstruccion}</td>
-                        <td>{$objTecnico->fchEjecutaLicConstruccion}</td>
+                        <td>{$objTecnico->fchEjecutoriaLicencia}</td>
                         <td>{$objTecnico->txtExpideLicenciaUrbanismo}</td>
                     </tr>
                 </table><br>
@@ -527,7 +527,7 @@
                     <tr>
                         <td>
                             <b>Cumple la vivienda con los requisitos de existencia y habitabilidad:</b> {$objTecnico->txtExistencia|ucwords}&nbsp;
-                            {if $objTecnico->txtExistencia|ucwords == 'SI' } <b> Viabilizó: </b> &nbsp;{$objTecnico->txtAprobo} {/if}
+                            {if $objTecnico->txtExistencia|upper == 'SI' } <b> Viabilizó: </b> &nbsp;{$objTecnico->txtAprobo} {/if}
                             <br/><br/>
                     <u>Recomendaciones:</u><br>
                     {$objTecnico->txtDescripcionExistencia}&nbsp;
@@ -629,7 +629,7 @@
                         </tr>
                         <tr>
                             <td>{$objTecnico->txtLicenciaConstruccion}</td>
-                            <td>{$objTecnico->fchEjecutaLicConstruccion}</td>
+                            <td>{$objTecnico->fchEjecutoriaLicencia}</td>
                             <td>{$objTecnico->txtExpideLicenciaUrbanismo}</td>
                         </tr>
                     </table><br>

@@ -61,7 +61,8 @@ $sql = "
         seqTipoLicencia,
         txtLicencia,
         txtExpideLicencia,
-        fchLicencia
+        fchLicencia,
+        fchEjecutoriaLicencia
     from t_pry_proyecto_licencias lic
     where lic.seqProyecto = " . $idHijo . "    
 ";
@@ -70,6 +71,11 @@ while ($objRes->fields) {
     if ($objRes->fields['seqTipoLicencia'] == 2) {
         $objTecnico->txtLicenciaConstruccion = $objRes->fields['txtLicencia'];
         $objTecnico->fchLicencia = $objRes->fields['fchLicencia'];
+       
+        $objTecnico->fchEjecutoriaLicencia = $objRes->fields['fchEjecutoriaLicencia'];
+        if($objTecnico->fchEjecutoriaLicencia == "0000-00-00" or $objTecnico->fchEjecutoriaLicencia ==""){
+            $objTecnico->fchEjecutoriaLicencia = $objRes->fields['fchLicencia'];
+        }
     } elseif ($objRes->fields['seqTipoLicencia'] == 1) {
         $objTecnico->txtExpideLicenciaUrbanismo = $objRes->fields['txtExpideLicencia'];
     }

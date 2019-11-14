@@ -4,27 +4,22 @@
  * CLASE PARA LA INSCRIPCION / POSTULACION / ASIGNACION DE
  * EL ESQUEMA DE CASA EN MANO
  */
-class CasaMano
-{
+class CasaMano {
 
     public $arrFases;
-
     public $seqCasaMano;
     public $seqFormulario;
     public $fchRegistroVivienda;
-
     public $bolRevisionJuridica;
     public $fchRevisionJuridica;
     public $numDiasRevisionJuridica;
     public $txtRevisionJuridica;
     public $numDiasLimiteRevsionJuridica;
-
     public $bolRevisionTecnica;
     public $fchRevisionTecnica;
     public $numDiasRevisionTecnica;
     public $txtRevisionTecnica;
     public $numDiasLimiteRevsionTecnica;
-
     public $bolPrimeraVerificacion;
     public $fchPrimeraVerificacion;
     public $seqPrimeraVerificacion;
@@ -32,45 +27,42 @@ class CasaMano
     public $bolSegundaVerificacion;
     public $fchSegundaVerificacion;
     public $seqSegundaVerificacion;
-
     public $objRegistroOferta;
     public $objRevisionJuridica;
     public $objRevisionTecnica;
     public $objPostulacion;
     public $objPrimeraVerificacion;
     public $objSegundaVerificacion;
-
     public $arrMensajes;
     public $arrErrores;
 
-    function CasaMano()
-    {
+    function CasaMano() {
 
         $this->arrFases = array();
 
         // postulacion individual
         // proyectos de la SDHT
 
-        $this->arrFases['pin']['modalidad'] = array( 1 , 2 , 3 , 4 , 5 , 6 , 7 , 9 , 12 , 13 , 11);
-        $this->arrFases['pin']['esquema'] = array( 0 , 1 , 2 , 3 , 4 , 6 , 7 , 8 , 9 , 12 , 14 , 16 , 17 , 18 , null );
+        $this->arrFases['pin']['modalidad'] = array(1, 2, 3, 4, 5, 6, 7, 9, 12, 13, 11);
+        $this->arrFases['pin']['esquema'] = array(0, 1, 2, 3, 4, 6, 7, 8, 9, 12, 14, 16, 17, 18, null);
 
-        $this->arrFases['pin']['postulacion']['grupos'] = array(6,7,8);
-        $this->arrFases['pin']['postulacion']['permitido']['etapas'] = array(2,3,4,5);
+        $this->arrFases['pin']['postulacion']['grupos'] = array(6, 7, 8);
+        $this->arrFases['pin']['postulacion']['permitido']['etapas'] = array(2, 3, 4, 5);
         $this->arrFases['pin']['postulacion']['permitido']['estados'] = array();
         $this->arrFases['pin']['postulacion']['prohibido']['etapas'] = array(1);
         $this->arrFases['pin']['postulacion']['prohibido']['estados'] = array();
-        $this->arrFases['pin']['postulacion']['atras'] = array(46,37);
-        $this->arrFases['pin']['postulacion']['adelante'] = array(46,6,47);
+        $this->arrFases['pin']['postulacion']['atras'] = array(46, 37);
+        $this->arrFases['pin']['postulacion']['adelante'] = array(46, 6, 47);
         $this->arrFases['pin']['postulacion']['salvar'] = "./contenidos/casaMano/salvarPostulacion.php";
         $this->arrFases['pin']['postulacion']['plantilla'] = "casaMano/postulacion.tpl";
 
         // proyectos fuera de la SDHT
         // retorno o reubicación
-        $this->arrFases['cem']['modalidad'] = array( 6 , 11 , 12 );
-        $this->arrFases['cem']['esquema'] = array( 5 , 6 , 10 , 11 , 13 , 15 );
+        $this->arrFases['cem']['modalidad'] = array(6, 11, 12);
+        $this->arrFases['cem']['esquema'] = array(5, 6, 10, 11, 13, 15);
 
         $this->arrFases['cem']['panelHogar']['grupos'] = array(6, 7, 8, 14, 13);
-        $this->arrFases['cem']['panelHogar']['permitido']['etapas'] = array(1,2,3,4,5);
+        $this->arrFases['cem']['panelHogar']['permitido']['etapas'] = array(1, 2, 3, 4, 5);
         $this->arrFases['cem']['panelHogar']['permitido']['estados'] = array();
         $this->arrFases['cem']['panelHogar']['prohibido']['etapas'] = array();
         $this->arrFases['cem']['panelHogar']['prohibido']['estados'] = array();
@@ -107,7 +99,7 @@ class CasaMano
         $this->arrFases['cem']['revisionTecnica']['plantilla'] = "desembolso/revisionTecnica.tpl";
 
         $this->arrFases['cem']['postulacion']['grupos'] = array(6, 7, 8);
-        $this->arrFases['cem']['postulacion']['permitido']['etapas'] = array(2,3,4,5);
+        $this->arrFases['cem']['postulacion']['permitido']['etapas'] = array(2, 3, 4, 5);
         $this->arrFases['cem']['postulacion']['permitido']['estados'] = array();
         $this->arrFases['cem']['postulacion']['prohibido']['etapas'] = array(1);
         $this->arrFases['cem']['postulacion']['prohibido']['estados'] = array();
@@ -153,7 +145,6 @@ class CasaMano
 
         $this->arrErrores = array();
         $this->arrMensajes = array();
-
     }
 
     /**
@@ -163,8 +154,7 @@ class CasaMano
      * @param integer $seqCasaMano // identificador de casa en mano
      * @return array arrCasaMano     // arreglo que tiene todos los registros de casa en mano para un hogar
      */
-    function cargar($seqFormulario, $seqCasaMano = 0)
-    {
+    function cargar($seqFormulario, $seqCasaMano = 0) {
         global $aptBd;
         $arrCasaMano = array();
 
@@ -230,7 +220,6 @@ class CasaMano
                     $objRes->MoveNext();
                 }
             }
-
         } catch (Exception $objError) {
             $this->arrErrores[] = $objError->msg;
         }
@@ -238,8 +227,7 @@ class CasaMano
         return $arrCasaMano;
     }
 
-    public function cargarRegistroOferta()
-    {
+    public function cargarRegistroOferta() {
         global $aptBd;
 
         try {
@@ -344,18 +332,16 @@ class CasaMano
             while ($objRes->fields) {
                 $this->objRegistroOferta = array();
                 foreach ($objRes->fields as $txtCampo => $txtValor) {
-                    $this->objRegistroOferta[$txtCampo] = regularizarCampo($txtCampo,$txtValor);
+                    $this->objRegistroOferta[$txtCampo] = regularizarCampo($txtCampo, $txtValor);
                 }
                 $objRes->MoveNext();
             }
-
         } catch (Exception $objError) {
             $this->arrErrores[] = $objError->msg;
         }
     }
 
-    public function cargarRevisionJuridica()
-    {
+    public function cargarRevisionJuridica() {
         global $aptBd;
 
         try {
@@ -407,15 +393,12 @@ class CasaMano
                     $objRes->MoveNext();
                 }
             }
-
         } catch (Exception $objError) {
             $this->arrErrores[] = $objError->msg;
         }
-
     }
 
-    public function cargarRevisionTecnica()
-    {
+    public function cargarRevisionTecnica() {
         global $aptBd;
         global $txtPrefijoRuta;
 
@@ -586,46 +569,40 @@ class CasaMano
                     $objRes->MoveNext();
                 }
             }
-
         } catch (Exception $objError) {
             $this->arrErrores[] = $objError->msg;
         }
-
     }
 
-    public function cargarPostulacion()
-    {
+    public function cargarPostulacion() {
         $claFormulario = new FormularioSubsidios;
         $claFormulario->cargarFormulario($this->seqFormulario);
         $this->objPostulacion = $claFormulario;
     }
 
-    public function cargarPrimeraVerificacion()
-    {
+    public function cargarPrimeraVerificacion() {
         global $aptBd;
         return true;
     }
 
-    public function cargarSegundaVerificacion()
-    {
+    public function cargarSegundaVerificacion() {
         global $aptBd;
         return true;
     }
 
-    public function salvar($arrPost)
-    {
+    public function salvar($arrPost) {
         global $aptBd;
 
         // Si el flujo es de casa en mano modifica la tabla t_cem_casa_mano
-        if( $arrPost['txtFlujo'] == "cem"){
+        if ($arrPost['txtFlujo'] == "cem") {
 
             // grupos asignados a la caja de vivienda popular que deben diferenciarse en la tabla CEM
             $txtGrupo = "SDHT";
             $seqProyecto = $_SESSION['seqProyecto'];
             if (
-                in_array(31, $_SESSION['arrGrupos'][$seqProyecto]) or
-                in_array(32, $_SESSION['arrGrupos'][$seqProyecto]) or
-                in_array(33, $_SESSION['arrGrupos'][$seqProyecto])
+                    in_array(31, $_SESSION['arrGrupos'][$seqProyecto]) or
+                    in_array(32, $_SESSION['arrGrupos'][$seqProyecto]) or
+                    in_array(33, $_SESSION['arrGrupos'][$seqProyecto])
             ) {
                 $txtGrupo = "CVP";
             }
@@ -667,7 +644,6 @@ class CasaMano
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se ha podido adicionar el registro de casa en mano";
                 }
-
             } else {
 
                 // actualizando el registro de casa en mano
@@ -713,7 +689,7 @@ class CasaMano
                     }
                     $sql = trim($sql, ",");
                     $sql .= " WHERE seqCasaMano = " . intval($arrPost['seqCasaMano']) . " " .
-                        "AND seqFormulario = " . intval($arrPost['seqFormulario']);
+                            "AND seqFormulario = " . intval($arrPost['seqFormulario']);
 
                     try {
                         $aptBd->execute($sql);
@@ -749,18 +725,16 @@ class CasaMano
         }
 
         return $arrPost['seqCasaMano'];
-
     }
 
-    private function primeraVerificacion($arrPost)
-    {
+    private function primeraVerificacion($arrPost) {
         global $aptBd;
 
         if (intval($arrPost['seqCasaMano']) != 0) {
 
             // No se ha realizado la verificacion
             if ($this->bolPrimeraVerificacion == 0) {
-                switch(true){
+                switch (true) {
                     case $this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2:
                         $seqEstadoProceso = 37; // Hogar Actualizado
                         break;
@@ -775,7 +749,7 @@ class CasaMano
 
             // Verificacion sin cruce (registros sin cruces)
             if ($this->bolPrimeraVerificacion == 1) {
-                switch(true){
+                switch (true) {
                     case $this->bolRevisionJuridica == 2 or $this->bolRevisionTecnica == 2:
                         $seqEstadoProceso = 37; // Primera verificacion pendiente
                         break;
@@ -793,7 +767,7 @@ class CasaMano
                 $seqEstadoProceso = 45; // Primera verificacion pendiente
             }
 
-            if($seqEstadoProceso == 46 and ( time() > strtotime($this->fchPrimeraVerificacion) )){
+            if ($seqEstadoProceso == 46 and ( time() > strtotime($this->fchPrimeraVerificacion) )) {
                 $seqEstadoProceso = 37;
             }
 
@@ -808,7 +782,7 @@ class CasaMano
                     ";
                     $aptBd->execute($sql);
 
-                    if($arrPost['seqCruce'] != 0) {
+                    if ($arrPost['seqCruce'] != 0) {
                         $sql = "
                             update t_cru_resultado set
                                 seqEstadoProceso = " . $seqEstadoProceso . "
@@ -816,21 +790,17 @@ class CasaMano
                               and seqCruce = " . $arrPost['seqCruce'];
                         $aptBd->execute($sql);
                     }
-
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se pudo modificar el estado del proceso";
                     $this->arrErrores[] = $objError->getMessage();
                 }
-
             }
-
         } else {
             $this->arrErrores[] = "No se encuentra el registro de casa en mano para hacer la verificacion de conceptos";
         }
     }
 
-    private function segundaVerificacion($arrPost)
-    {
+    private function segundaVerificacion($arrPost) {
         global $aptBd;
 
         try {
@@ -849,25 +819,19 @@ class CasaMano
                 where seqFormulario = " . $arrPost['seqFormulario'] . "
                   and seqCruce = " . $arrPost['seqCruce'];
             $aptBd->execute($sql);
-
         } catch (Exception $objError) {
             $this->arrErrores[] = "No se pudo modificar el estado del proceso";
             $this->arrErrores[] = $objError->getMessage();
         }
-
     }
 
-    public function salvarRegistroOferta($arrPost)
-    {
+    public function salvarRegistroOferta($arrPost) {
         global $aptBd;
 
         // adiciona el texto del barrio a nivel informativo (existe para datos viejos)
         // se usa el seuencial para datos nuevos (plan gobierno 3)
         $arrTextoBarrio = obtenerDatosTabla(
-            "T_FRM_BARRIO",
-            array("seqBarrio", "txtBarrio"),
-            "seqBarrio",
-            "seqBarrio = " . $arrPost['seqBarrio']
+                "T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqBarrio = " . $arrPost['seqBarrio']
         );
         $seqBarrio = $arrPost['seqBarrio'];
         $arrPost['txtBarrio'] = $arrTextoBarrio[$seqBarrio];
@@ -955,13 +919,12 @@ class CasaMano
                     $this->arrErrores[] = "No se ha podido adicionar el registro de la oferta";
                     //$this->arrErrores[] = $objError->getMessage();
                 }
-
             } else {
 
                 $sql = "UPDATE T_CEM_REGISTRO_VIVIENDA SET ";
                 foreach ($arrPost as $txtCampo => $txtValor) {
                     $sql .= $txtCampo . " = " . $txtValor . ",";
-                 }
+                }
                 $sql = trim($sql, ",");
                 $sql .= " WHERE seqCasaMano = " . $arrPost['seqCasaMano'];
 
@@ -971,7 +934,6 @@ class CasaMano
                     $this->arrErrores[] = "No se ha podido actualizar el registro de la oferta";
                     $this->arrErrores[] = $objError->getMessage();
                 }
-
             }
 
             $sql = "
@@ -990,24 +952,22 @@ class CasaMano
                 //$this->arrErrores[] = $objError->getMessage();
             }
 
-            if( empty( $this->arrErrores ) ){
+            if (empty($this->arrErrores)) {
                 $this->arrMensajes = $claSeguimiento->arrMensajes;
             }
-
-        }else{
+        } else {
             $this->arrErrores = $claSeguimiento->arrErrores;
         }
     }
 
-    public function salvarRevisionJuridica($arrPost)
-    {
+    public function salvarRevisionJuridica($arrPost) {
         global $aptBd;
 
         $claSeguimiento = new Seguimiento();
         $claSeguimiento->arrIgnorarCampos = array();
         $claSeguimiento->salvarSeguimiento($arrPost, "cambiosRevisionJuridicaCEM");
 
-        if( empty( $claSeguimiento->arrErrores ) ) {
+        if (empty($claSeguimiento->arrErrores)) {
             // Obtiene el registro de la oferta que
             // esta asociada con el registro de casa en mano
             $sql = "
@@ -1058,7 +1018,6 @@ class CasaMano
                     $this->arrErrores[] = "No se ha podido adicionar la revisión jurídica";
                     $this->arrErrores[] = $objError->getMessage();
                 }
-
             } else {
 
                 $sql = "
@@ -1079,15 +1038,12 @@ class CasaMano
                     $this->arrErrores[] = "No se ha podido actualizar la revisión jurídica";
                     $this->arrErrores[] = $objError->getMessage();
                 }
-
-
             }
 
             /**
              * ELIMINA LOS REGISTROS DE LOS
              * DOCUMENTOS Y RECOMENDACIONES
              */
-
             $sql = "
                  DELETE 
                  FROM T_CEM_ADJUNTOS_JURIDICOS
@@ -1099,7 +1055,6 @@ class CasaMano
              * INSERTA LOS REGISTROS DE
              * LOS DOCUMENOS ANALIZADOS
              */
-
             if (!empty($arrPost['documento'])) {
                 foreach ($arrPost['documento'] as $txtDocumento) {
                     $sql = " 
@@ -1142,17 +1097,15 @@ class CasaMano
                 }
             }
 
-            if( empty( $this->arrErrores ) ){
+            if (empty($this->arrErrores)) {
                 $this->arrMensajes = $claSeguimiento->arrMensajes;
             }
-
-        }else{
+        } else {
             $this->arrErrores = $claSeguimiento->arrErrores;
         }
     }
 
-    public function salvarRevisionTecnica($arrPost)
-    {
+    public function salvarRevisionTecnica($arrPost) {
         global $aptBd;
         global $txtPrefijoRuta;
 
@@ -1160,7 +1113,7 @@ class CasaMano
         $claSeguimiento->arrIgnorarCampos = array();
         $claSeguimiento->salvarSeguimiento($arrPost, "cambiosRevisionTecnicaCEM");
 
-        if( empty( $claSeguimiento->arrErrores ) ) {
+        if (empty($claSeguimiento->arrErrores)) {
 
             // Obtiene el registro de la oferta que
             // esta asociada con el registro de casa en mano
@@ -1248,7 +1201,6 @@ class CasaMano
                     $this->arrErrores[] = "No se ha podido adicionar el registro técnico";
                     $this->arrErrores[] = $objError->getMessage();
                 }
-
             } else {
 
                 $arrPost['fchActualizacion'] = "'" . date("Y-m-d H:i:s") . "'";
@@ -1265,13 +1217,11 @@ class CasaMano
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se ha podido actualizar el registro técnico";
                 }
-
             }
 
             /**
              * SALVAR LAS IMAGENES
              */
-
             $arrNombreArchivoCargado = (is_array($arrNombreArchivoCargado)) ? $arrNombreArchivoCargado : array();
             if (is_dir($txtPrefijoRuta . "recursos/imagenes/desembolsos")) {
                 if ($aptDir = opendir($txtPrefijoRuta . "recursos/imagenes/desembolsos")) {
@@ -1345,37 +1295,33 @@ class CasaMano
                             $this->arrErrores[] = "No se pudo almacenar una de las observaciones ( $numIndice )";
                         }
                     }
-
                 } else {
                     $this->arrErrores[] = "La informacion del registro se salvo pero las imágenes no pudieron salvarse, no se pudo abrir el directorio de imagenes";
                 }
             } else {
                 $this->arrErrores[] = "La informacion del registro se salvo pero las imágenes no pudieron salvarse, falta la carpeta de imagenes";
             }
-        }else{
+        } else {
             $this->arrErrores = $claSeguimiento->arrErrores;
         }
 
-        if( empty( $this->arrErrores ) ){
+        if (empty($this->arrErrores)) {
             $this->arrMensajes = $claSeguimiento->arrMensajes;
         }
-
-
     }
 
-    public function salvarPostulacion($arrPost)
-    {
+    public function salvarPostulacion($arrPost) {
         // parte de lo que esta en la base de datos
         $claSeguimiento = new Seguimiento();
         $claFormulario = new FormularioSubsidios();
         $claFormulario->cargarFormulario($arrPost['seqFormulario']);
 
         $claSeguimiento->arrIgnorarCampos = array();
-        $claSeguimiento->salvarSeguimiento($arrPost,"cambiosPostulacion");
+        $claSeguimiento->salvarSeguimiento($arrPost, "cambiosPostulacion");
 
-        if( ! empty( $claSeguimiento->arrErrores ) ){
+        if (!empty($claSeguimiento->arrErrores)) {
             $this->arrErrores += $claSeguimiento->arrErrores;
-        }else {
+        } else {
 
             // Ciudadanos eliminados y actualizados
             foreach ($claFormulario->arrCiudadano as $seqCiudadano => $objCiudadano) {
@@ -1407,9 +1353,8 @@ class CasaMano
                         $objCiudadano->cargarCiudadano($seqCiudadano);
                     }
                     foreach ($objCiudadano as $txtClave => $txtValor) {
-                        if( isset( $arrDatos[$txtClave] )) {
+                        if (isset($arrDatos[$txtClave])) {
                             $objCiudadano->$txtClave = regularizarCampo($txtClave, $arrDatos[$txtClave]);
-
                         }
                     }
                     if ($seqCiudadano == 0) {
@@ -1424,8 +1369,6 @@ class CasaMano
                     } else {
                         $this->arrErrores += $objCiudadano->arrErrores;
                     }
-
-
                 }
 
                 //pr($claFormulario->arrCiudadano);
@@ -1439,7 +1382,7 @@ class CasaMano
             // cambios en el formulario
             foreach ($claFormulario as $txtClave => $txtValor) {
                 if ($txtClave != "arrCiudadano") {
-                    if(isset( $arrPost[$txtClave] ) || is_null($arrPost[$txtClave])) {
+                    if (isset($arrPost[$txtClave]) || is_null($arrPost[$txtClave])) {
                         //echo "$txtClave ==> " . $claFormulario->$txtClave . " ==> " . $arrPost[$txtClave] . "<br>";
                         $claFormulario->$txtClave = regularizarCampo($txtClave, $arrPost[$txtClave]);
                     }
@@ -1447,37 +1390,43 @@ class CasaMano
             }
 
             $claFormulario->txtBarrio = array_shift(
-                obtenerDatosTabla(
-                    "T_FRM_BARRIO",
-                    array("seqBarrio","txtBarrio"),
-                    "seqBarrio",
-                    "seqBarrio = " . $claFormulario->seqBarrio
-                )
+                    obtenerDatosTabla(
+                            "T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqBarrio = " . $claFormulario->seqBarrio
+                    )
             );
-
+            $numVictima = 0;
+            //var_dump($arrPost['hogar']);
+            foreach ($arrPost['hogar'] as $key => $value) {
+                foreach ($value as $keyCiu => $valueCiu) {
+                    if ($keyCiu == 'seqTipoVictima' && $valueCiu == 2) {
+                        $numVictima++;
+                    }
+                }
+            }
+            $claFormulario->bolDesplazado = ($numVictima > 0) ? 1 : 0;
+            //echo "<p>" . $claFormulario->bolDesplazado . "</p>";
             $claFormulario->editarFormulario($arrPost['seqFormulario']);
             if (!empty($claFormulario->arrErrores)) {
                 $this->arrErrores += $claFormulario->arrErrores;
-            }else{
+            } else {
                 $this->arrMensajes = $claSeguimiento->arrMensajes;
             }
         }
     }
 
-    public function cambios($arrPost)
-    {
+    public function cambios($arrPost) {
 
         $bolCambios = false;
         $claSeguimiento = new Seguimiento();
 
-        /******************************************************************
+        /*         * ****************************************************************
          * Cambios en registro de oferta
-         ******************************************************************/
+         * **************************************************************** */
         if (trim($arrPost['txtFase']) == "registroOferta") {
-            if(is_array( $this->objRegistroOferta )){
+            if (is_array($this->objRegistroOferta)) {
                 foreach ($this->objRegistroOferta as $txtClave => $txtValor) {
                     if (isset($arrPost[$txtClave])) {
-                        $arrPost[$txtClave] = regularizarCampo($txtClave,$arrPost[$txtClave]);
+                        $arrPost[$txtClave] = regularizarCampo($txtClave, $arrPost[$txtClave]);
                         switch (substr($txtClave, 0, 3)) {
                             case "num":
                                 $bolCambios = (intval($txtValor) != intval($arrPost[$txtClave])) ? true : $bolCambios;
@@ -1510,9 +1459,9 @@ class CasaMano
 //        echo "Registro de vivienda<br>";
 //        var_dump($bolCambios);
 
-        /******************************************************************
+        /*         * ****************************************************************
          * Cambios en revision juridica
-         ******************************************************************/
+         * **************************************************************** */
         if (trim($arrPost['txtFase']) == "revisionJuridica") {
 
             if (empty($this->objRevisionJuridica)) {
@@ -1568,16 +1517,14 @@ class CasaMano
                         }
                     }
                 }
-
             }
-
         }
 //            echo "Revision Juridica<br>";
 //            var_dump($bolCambios);
 
-        /******************************************************************
+        /*         * ****************************************************************
          * Cambios en revision tecnica
-         ******************************************************************/
+         * **************************************************************** */
         if (trim($arrPost['txtFase']) == "revisionTecnica") {
 
             if (empty($this->objRevisionTecnica)) {
@@ -1642,9 +1589,9 @@ class CasaMano
 //            echo "Revision tecnica<br>";
 //            var_dump($bolCambios);
 
-        /******************************************************************
+        /*         * ****************************************************************
          * Cambios en postulacion
-         ******************************************************************/
+         * **************************************************************** */
 
         if (trim($arrPost['txtFase']) == "postulacion") {
 
@@ -1661,13 +1608,12 @@ class CasaMano
             $claSeguimiento->arrIgnorarCampos[] = "txtCorreo";
             $claSeguimiento->arrIgnorarCampos[] = "valTotalRecursos";
 
-            $txtCambios = $claSeguimiento->cambiosPostulacion( $_POST );
-            $bolCambios = ( trim($txtCambios) == "" )? false : true;
+            $txtCambios = $claSeguimiento->cambiosPostulacion($_POST);
+            $bolCambios = ( trim($txtCambios) == "" ) ? false : true;
 
 //            echo "Postulacion<br>";
 //            pr($txtCambios);
 //            pr($bolCambios);
-
         }
 
         return $bolCambios;
@@ -1678,22 +1624,18 @@ class CasaMano
      * SABER SI PUEDE O NO INGRESAR A CADA PANTALLA
      * @param array $arrFlujoHogar // contiene flujo y fase para ver los permisos
      */
-    public function puedeIngresar($arrFlujoHogar)
-    {
+    public function puedeIngresar($arrFlujoHogar) {
 
-        $bolPermiso  = false;                    // Determina si tiene o no permisos
-        $txtFlujo    = $arrFlujoHogar['flujo'];  // Determina e flujo
-        $txtFase     = $arrFlujoHogar['fase'];   // Determina la fase
+        $bolPermiso = false;                    // Determina si tiene o no permisos
+        $txtFlujo = $arrFlujoHogar['flujo'];  // Determina e flujo
+        $txtFase = $arrFlujoHogar['fase'];   // Determina la fase
         $seqProyecto = $_SESSION['seqProyecto']; // Es el identificador del proyecto (SDV=3)
-        $arrEstados  = estadosProceso();         // Los estados del proceso
-        $arrEtapas   = obtenerDatosTabla("T_FRM_ETAPA",array("seqEtapa","txtEtapa"),"seqEtapa");
+        $arrEstados = estadosProceso();         // Los estados del proceso
+        $arrEtapas = obtenerDatosTabla("T_FRM_ETAPA", array("seqEtapa", "txtEtapa"), "seqEtapa");
 
         $seqEstadoProceso = $this->objPostulacion->seqEstadoProceso; // Estado actual del proceso
         $seqEtapa = array_shift(obtenerDatosTabla(
-            "T_FRM_ESTADO_PROCESO",
-            array("seqEstadoProceso","seqEtapa"),
-            "seqEstadoProceso",
-            "seqEstadoProceso = " . $this->objPostulacion->seqEstadoProceso
+                        "T_FRM_ESTADO_PROCESO", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = " . $this->objPostulacion->seqEstadoProceso
         ));
 
         // Jerarquia de las validaciones de ingreso:
@@ -1702,36 +1644,35 @@ class CasaMano
         // - Estados del proceso permitidos
         // - Etapas prohibidas
         // - Estados prohibidos
-        if ( is_array($this->arrFases[$txtFlujo]['modalidad']) and
-            is_array($this->arrFases[$txtFlujo]['esquema']) and
-            in_array($this->objPostulacion->seqModalidad, $this->arrFases[$txtFlujo]['modalidad']) and
-            in_array($this->objPostulacion->seqTipoEsquema, $this->arrFases[$txtFlujo]['esquema'])
+        if (is_array($this->arrFases[$txtFlujo]['modalidad']) and
+                is_array($this->arrFases[$txtFlujo]['esquema']) and
+                in_array($this->objPostulacion->seqModalidad, $this->arrFases[$txtFlujo]['modalidad']) and
+                in_array($this->objPostulacion->seqTipoEsquema, $this->arrFases[$txtFlujo]['esquema'])
         ) {
-            if( ! empty( $this->arrFases[$txtFlujo][$txtFase]['permitido']['etapas'] ) ) {// Etapas permitidos
+            if (!empty($this->arrFases[$txtFlujo][$txtFase]['permitido']['etapas'])) {// Etapas permitidos
                 if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['permitido']['etapas'])) {
                     $bolPermiso = true;
                 }
-            }elseif( ! empty( $this->arrFases[$txtFlujo][$txtFase]['permitido']['estados'] ) ){                        // Estados permitidos
+            } elseif (!empty($this->arrFases[$txtFlujo][$txtFase]['permitido']['estados'])) {                        // Estados permitidos
                 if (in_array($seqEstadoProceso, $this->arrFases[$txtFlujo][$txtFase]['permitido']['estados'])) {
                     $bolPermiso = true;
                 }
             }
-            if( ! empty( $this->arrFases[$txtFlujo][$txtFase]['prohibido']['etapas'] ) ) {                             // Etapas prohibidas
+            if (!empty($this->arrFases[$txtFlujo][$txtFase]['prohibido']['etapas'])) {                             // Etapas prohibidas
                 if (in_array($seqEtapa, $this->arrFases[$txtFlujo][$txtFase]['prohibido']['etapas'])) {
                     $bolPermiso = false;
-                    $this->arrErrores[] = "El hogar no pertenece a las etapas permitidas para el ingreso, la etapa actual es \"" . $arrEtapas[ $seqEtapa ] . "\"";
+                    $this->arrErrores[] = "El hogar no pertenece a las etapas permitidas para el ingreso, la etapa actual es \"" . $arrEtapas[$seqEtapa] . "\"";
                 }
-            }elseif( ! empty( $this->arrFases[$txtFlujo][$txtFase]['prohibido']['estados'] ) ){                        // Estados prohibidos
+            } elseif (!empty($this->arrFases[$txtFlujo][$txtFase]['prohibido']['estados'])) {                        // Estados prohibidos
                 if (in_array($seqEstadoProceso, $this->arrFases[$txtFlujo][$txtFase]['prohibido']['estados'])) {
                     $bolPermiso = false;
-                    $this->arrErrores[] = "El hogar no pertenece a los estados del proceso permitidos para el ingreso, el estado actual es \"" . $arrEstados[ $seqEstadoProceso ] . "\"";
+                    $this->arrErrores[] = "El hogar no pertenece a los estados del proceso permitidos para el ingreso, el estado actual es \"" . $arrEstados[$seqEstadoProceso] . "\"";
                 }
             }
-        }else{
-            $this->arrErrores[] =
-                "El hogar no pertenece a las modalidades o esquemas permitidos para el ingreso, " .
-                "la modalidad actual es \"" . $arrModalidad[$this->objPostulacion->seqModalidad] .
-                "\" y el esquema es " . $arrTipoEsquema[$this->objPostulacion->seqTipoEsquema];
+        } else {
+            $this->arrErrores[] = "El hogar no pertenece a las modalidades o esquemas permitidos para el ingreso, " .
+                    "la modalidad actual es \"" . $arrModalidad[$this->objPostulacion->seqModalidad] .
+                    "\" y el esquema es " . $arrTipoEsquema[$this->objPostulacion->seqTipoEsquema];
         }
 
         return $bolPermiso;

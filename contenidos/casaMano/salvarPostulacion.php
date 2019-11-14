@@ -469,6 +469,7 @@ if (!empty($_POST['hogar'])) {
         // si es por desplazamiento forzado suma
         if ($arrCiudadano['seqTipoVictima'] == 2) {
             $numVictimas++;
+            $_POST['bolDesplazado'] = 1;
         }
     } // validaciones para cada miembro de hogar
     // errores que se producen dentro del grupo familiar
@@ -1026,7 +1027,7 @@ if (empty($arrErrores)) {
                 $seqFormularioActo = $arrProceso['cabeza'];
             }
 
-            $arrErrores = $claActoAdministrativo->actualizarFac($seqFormularioActo, $_POST);
+            //$arrErrores = $claActoAdministrativo->actualizarFac($seqFormularioActo, $_POST);
         }
     }
 }

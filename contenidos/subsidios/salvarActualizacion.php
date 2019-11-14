@@ -487,6 +487,7 @@ if (empty($arrErrores)) {
             // si es por desplazamiento forzado suma
             if( $arrCiudadano['seqTipoVictima'] == 2){
                 $numVictimas++;
+                 $_POST['bolDesplazado'] = 1;
             }
 
         } // validaciones para cada miembro de hogar

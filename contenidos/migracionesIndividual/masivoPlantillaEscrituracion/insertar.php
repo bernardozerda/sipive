@@ -591,7 +591,7 @@ function insertarEscrituracion($arreglo, $cantF, $dato, $idSeqDesembolso, $docum
         $query = $campos . $valores;
         $result = $db->query($query);
         $queryCiu = $sqlSeg . $valSeg;
-        $result = $db->query($queryCiu);
+        //$result = $db->query($queryCiu);
         $formular = substr_replace($formular, '', -1, 1);
         $migra = migrarInformacion2($formular, $db, 23, 22, "Estudio de Predio");
 

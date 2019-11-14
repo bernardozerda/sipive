@@ -117,10 +117,7 @@ if ($bolConfirmacion == true) {
     );
 
     foreach ($claFormulario as $txtClave => $txtValor) {
-        if ($txtClave != "arrCiudadano") {
-            echo "<br>".$txtClave;
-            var_dump($_POST);
-            pr($claSeguimiento->arrIgnorarCampos);
+        if ($txtClave != "arrCiudadano") {           
             if (array_key_exists($txtClave, $_POST) and in_array($txtClave, $claSeguimiento->arrIgnorarCampos)) {
                 $_POST['anterior'][$txtClave] = $claFormulario->$txtClave;
                 $claFormulario->$txtClave = regularizarCampo($txtClave, $_POST[$txtClave]);

@@ -260,8 +260,7 @@ function migrarInformacion2($separado_por_comas, $db, $code, $estadoV) {
 				seqGestion,
                                 bolMostrar
 			 ) VALUES";
-        $seqFormularios = "";
-
+      
         $seqFormularios = "";
 
         foreach ($resultados as $value) {

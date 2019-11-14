@@ -75,7 +75,7 @@
                 <table cellspacing="0" cellpadding="3" border="0" width="100%">
                     <tr>
                         <td style="width:100px;">
-                            <b>Estado</b>
+                            <b>Estado </b>
                         </td>
                         <td align="left">
                             {if is_array($arrEstadosFlujo.adelante) && in_array( $claFormulario->seqEstadoProceso , $arrEstadosFlujo.adelante )}
@@ -201,12 +201,12 @@
                                 <tr>
                                     <td style="padding-right:15px;" align="right" height="20px" valign="middle"
                                         bgcolor="#E4E4E4">
-                                        {if $claFormulario->bolSancion != 1}
+                                        <!-- {if $claFormulario->bolSancion != 1}-->
                                             <a href="#"
                                                onClick="mostrarOcultar('agregarMiembro');
                                                        document.getElementById('tipoDocumento').focus();"
                                                > Agregar Miembro al Hogar </a>
-                                        {/if}
+                                       <!-- {/if}-->
                                     </td>
                                 </tr>
                                 <tr>
@@ -229,7 +229,7 @@
                                                     </select>
                                                 </td>
                                                 <!-- NUMERO DEL DOCUMENTO -->
-                                                <td width="15%">Número Documento ****</td>
+                                                <td width="15%">Número Documento </td>
                                                 <td width="35%" align="center">
                                                     <input type="text"
                                                            id="numeroDoc"
@@ -1031,9 +1031,9 @@
                                                 {$arrParentesco.$parentesco.txtParentesco}
                                             </td>
                                             <td align="right" style="padding-right:7px">
-                                                $ {$objCiudadano->valIngresos|number_format:0:',':'.'}
+                                                $ {$objCiudadano->valIngresos|number_format:0:',':'.'} 
                                             </td>
-                                            {if $claFormulario->bolSancion != 1}
+                                           {** {if $claFormulario->bolSancion != 1}**}
                                                 <td align="center" width="18px" height="22px">
                                                     <div	style="width:12px; height:14px; cursor:pointer; border: 1px solid #999999;"
                                                          onClick="modificarMiembroHogar('{$objCiudadano->numDocumento}')"
@@ -1054,7 +1054,7 @@
                                                     onMouseOut="this.style.backgroundColor = '#FFFFFF'"
                                                     >X</div>
                                             </td>
-                                            {/if}
+                                            {**{/if}**}
                                             </tr>
 
                                             <!-- TODAS ESTAS VARIABLES DEBEN ESTAR DENTRO DE ESTA TABLA -->

@@ -669,6 +669,7 @@ class InscripcionFonvivienda {
                     $objRes = $aptBd->execute($sql);
                     if ($objRes->fields['cuenta'] != 0) {
                         $txtMotivo = "Ya existe el id de hogar " . trim($arrLinea[0]) . " en el cargue " . $objRes->fields['seqCargue'];
+                        $this->arrLineasProcesadas['Error']['razon'][($numLinea + 1)] = $txtMotivo;
                         $bolBorrar = true;
                     }
                 }
@@ -1547,7 +1548,7 @@ class InscripcionFonvivienda {
                 break;
         }
 
-         $sql = "
+        $sql = "
             select numHogar
             from t_fnv_hogar
             left join t_frm_Formulario frm using(seqFormulario)
@@ -3203,6 +3204,29 @@ class InscripcionFonvivienda {
         $claFormulario->fchVigencia = null;
 
         return $claFormulario;
+    }
+
+    public function inhabilitarCargueProy($seqCargue, $array) {
+
+        global $aptBd;
+
+        $condicion = str_replace(',', "' OR txtdireccionsolUcIon LIKE '", $array);
+
+        $sql = "
+            UPDATE t_fnv_hogar set seqEstadoHogar = 3, 
+            txtObservaciones='HOGAR QUE SE PRESENTA CON PROYECTO GESTIONADO POR SDHT. NO APLICA PARA MCY COMPLEMENTARIO. INFORME RESP. MCY' where
+          seqcargue = $seqCargue and 
+           (txtdireccionsolUcIon LIKE '" . $condicion . "') and seqEstadoHogar = 1
+          ";
+
+        try {
+            $aptBd->execute($sql);
+            $this->arrMensajes[] = "Los hogares marcados han sido procesados satisfactoriamente";
+            $aptBd->CommitTrans();
+        } catch (Exception $objError) {
+            $aptBd->RollBackTrans();
+            $this->arrErrores['general'][] = $objError->getMessage();
+        }
     }
 
 }

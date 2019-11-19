@@ -3,14 +3,14 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
       integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
       crossorigin="anonymous"
->
+      >
 
 {if not empty($claInscripcion->arrErrores.general)}
     <div class="alert alert-danger alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         {foreach from=$claInscripcion->arrErrores.general item=txtError}
             <li>{$txtError}</li>
-        {/foreach}
+            {/foreach}
     </div>
 {/if}
 
@@ -60,7 +60,7 @@
                         <a href="#"
                            data-toggle="modal"
                            data-target="#lineasProcesadas"
-                        >
+                           >
                             Ver Detalles
                         </a>
                         <br>
@@ -89,23 +89,24 @@
                 </thead>
                 <tbody>
                     {foreach from=$claInscripcion->arrHogares key=numHogar item=arrHogar}
+                        {assign var="clase" value=""}
                         <tr>
                             <td align="center" width="100px">{$arrHogar.seqHogar}</td>
                             <td align="center" width="100px">{$numHogar}</td>
                             <td>{$arrHogar.txtDireccionSolucion}</td>
                             <td width="100px">
-                                {if $arrHogar.seqEstadoHogar == 1}     <span class="text-muted">
-                                {elseif $arrHogar.seqEstadoHogar == 2} <span class="text-primary">
-                                {elseif $arrHogar.seqEstadoHogar == 3} <span class="text-danger">
-                                {elseif $arrHogar.seqEstadoHogar == 4} <span class="text-success">
+                                {if $arrHogar.seqEstadoHogar == 1} {assign var="clase" value="text-muted"}
+                                {elseif $arrHogar.seqEstadoHogar == 2} {assign var="clase" value="text-primary"}
+                                {elseif $arrHogar.seqEstadoHogar == 3} {assign var="clase" value="text-danger"}
+                                {elseif $arrHogar.seqEstadoHogar == 4} {assign var="clase" value="text-success"}
                                 {else} <span> {/if}
-                                {$arrHogar.txtEstadoHogar}</span>
+                                    <span class="{$clase}"> {$arrHogar.txtEstadoHogar}</span>
                             </td>
                             <td>
                                 <a href="#"
                                    class=""
-                                   onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/detalles.php','seqCargue={$claInscripcion->seqCargue}&numHogar={$numHogar}')"
-                                >
+                                   onclick="cargarContenido('contenido', './contenidos/inscripcionFonvivienda/detalles.php', 'seqCargue={$claInscripcion->seqCargue}&numHogar={$numHogar}')"
+                                   >
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </a>
                             </td>
@@ -119,17 +120,17 @@
     <div class="panel-footer text-center">
         <button type="button"
                 class="btn btn-default btn-sm"
-                onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/inscripcionFonvivienda.php','',true);"
+                onclick="cargarContenido('contenido', './contenidos/inscripcionFonvivienda/inscripcionFonvivienda.php', '', true);"
                 style="width: 100px"
-        >
+                >
             Volver
         </button>
         {if $claInscripcion->seqEstado != 2}
             <button type="button"
                     class="btn btn-success btn-sm"
-                    onclick="location.href='./contenidos/inscripcionFonvivienda/exportable.php?seqCargue={$claInscripcion->seqCargue}';"
+                    onclick="location.href = './contenidos/inscripcionFonvivienda/exportable.php?seqCargue={$claInscripcion->seqCargue}';"
                     style="width: 100px"
-            >
+                    >
                 Exportar
             </button>
         {/if}
@@ -137,13 +138,23 @@
             {if $claInscripcion->seqEstado != 2}
                 <button type="button"
                         class="btn btn-danger btn-sm {if $bolProcesar == false} disabled {/if}"
-                        onclick="cargarContenido('contenido','./contenidos/inscripcionFonvivienda/procesarCargue.php','seqCargue={$claInscripcion->seqCargue}',true);"
+                        onclick="cargarContenido('contenido', './contenidos/inscripcionFonvivienda/procesarCargue.php', 'seqCargue={$claInscripcion->seqCargue}', true);"
                         style="width: 100px"
                         {if $bolProcesar == false} disabled {/if}
-                >
+                        >
                     Procesar
                 </button>
             {/if}
+            <button type="button"
+                    data-toggle="modal"
+                    data-target="#listaPry"
+                    class="btn btn-primary btn-sm {if $bolProcesar == false} disabled {/if}"                       
+                    style="width: 100px"
+                    onclick="$('#listPry').val('');"
+                    {if $bolProcesar == false} disabled {/if}
+                    >
+                Ctrl Proyecto
+            </button>
         {/if}
     </div>
 </div>
@@ -181,7 +192,33 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="listaPry" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width:900px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Lista de Proyectos a Modificar</h4>
+            </div>
 
+            <div class="modal-body">
+
+                <label for="exampleFormControlSelect2">Example multiple select</label>
+                <select multiple class="form-control" id="listPry" name="listPry" style="min-height: 300px">
+                    {foreach from=$arraProy key=numLinea item=txtRazon}
+                        <option>{$txtRazon}</option>
+                    {/foreach}
+                </select>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        onclick="cargarContenido('contenido', './contenidos/inscripcionFonvivienda/procesarProyectos.php', 'seqCargue={$claInscripcion->seqCargue}&lista=' + $('#listPry').val(), true);">Registrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <div id="listadoAadProyectos"></div>
 <div id="listadoCdpListener"></div>
 

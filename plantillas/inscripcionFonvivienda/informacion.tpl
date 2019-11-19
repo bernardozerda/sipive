@@ -148,10 +148,10 @@
             <button type="button"
                     data-toggle="modal"
                     data-target="#listaPry"
-                    class="btn btn-primary btn-sm {if $bolProcesar == false} disabled {/if}"                       
+                    class="btn btn-primary btn-sm {if $bolProcesarProy == false} disabled {/if}"                       
                     style="width: 100px"
                     onclick="$('#listPry').val('');"
-                    {if $bolProcesar == false} disabled {/if}
+                    {if $bolProcesarProy == false} disabled {/if}
                     >
                 Ctrl Proyecto
             </button>
@@ -197,13 +197,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Lista de Proyectos a Modificar</h4>
+                <h4 class="modal-title" id="myModalLabel">Lista de Proyectos a Bloquear</h4>
             </div>
 
             <div class="modal-body">
 
-                <label for="exampleFormControlSelect2">Example multiple select</label>
-                <select multiple class="form-control" id="listPry" name="listPry" style="min-height: 300px">
+                <label for="listPry">
+                    <div class="alert alert-info">
+                        Proceso mediante el cual se realiza bloqueo del hogar según el proyecto.
+                    </div>
+                </label>
+                <select multiple class="form-control" id="listPry" name="listPry" style="min-height: 150px">
                     {foreach from=$arraProy key=numLinea item=txtRazon}
                         <option>{$txtRazon}</option>
                     {/foreach}

@@ -3214,8 +3214,8 @@ class InscripcionFonvivienda {
 
         $sql = "
             UPDATE t_fnv_hogar set seqEstadoHogar = 3, 
-            txtObservaciones='HOGAR QUE SE PRESENTA CON PROYECTO GESTIONADO POR SDHT. NO APLICA PARA MCY COMPLEMENTARIO. INFORME RESP. MCY' where
-          seqcargue = $seqCargue and 
+            txtObservaciones='HOGAR QUE SE PRESENTA CON PROYECTO GESTIONADO POR SDHT. NO APLICA PARA MCY COMPLEMENTARIO. INFORME RESP. MCY' 
+            where  seqcargue = $seqCargue and 
            (txtdireccionsolUcIon LIKE '" . $condicion . "') and seqEstadoHogar = 1
           ";
 

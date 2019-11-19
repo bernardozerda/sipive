@@ -17,16 +17,23 @@ $claInscripcion = new InscripcionFonvivienda();
 
 $claInscripcion->inhabilitarCargueProy($_POST['seqCargue'], $_REQUEST['lista']);
 $claInscripcion->cargar($_POST['seqCargue']);
-
+$arraProy = Array();
 $bolProcesar = false;
 foreach ($claInscripcion->arrHogares as $numHogar => $arrHogar) {
     //if($arrHogar['seqEstadoHogar'] == 2){
+
     if ($arrHogar['seqEstadoHogar'] >= 2 && $arrHogar['seqEstadoHogar'] < 4 && $claInscripcion->seqEstado < 6) {
         $bolProcesar = true;
+    } else if ($arrHogar['seqEstadoHogar'] < 4 && $claInscripcion->seqEstado < 6) {
+        $bolProcesarProy = true;
     }
+    $arraProy[] = $arrHogar['txtDireccionSolucion'];
 }
+$arraProy = array_unique($arraProy);
 
 $claSmarty->assign("bolProcesar", $bolProcesar);
+$claSmarty->assign("bolProcesarProy", $bolProcesarProy);
 $claSmarty->assign("claInscripcion", $claInscripcion);
+$claSmarty->assign("arraProy", $arraProy);
 $claSmarty->display("inscripcionFonvivienda/informacion.tpl");
 ?>

@@ -149,7 +149,11 @@
                     <input type="hidden" name="seqTipoLicencia[]" id="seqTipoLicencia[]" value="2" >
                     <div id="val_txtLicenciaConstructor" class="divError">Este campo es requerido</div>
                 </div>
-
+                <div class="col-md-4"> 
+                    <label class="control-label">Entidad Expedici&oacute;n</label>                         
+                    <input name="txtExpideLicencia[]" type="text" id="txtExpideConstructorC" value="{$valueLic.txtExpideLicencia}" onblur="sinCaracteresEspeciales(this);" style="width:200px;" class="form-control required5">
+                    <div id="val_txtExpideConstructorC" class="divError">Este campo es requerido</div>
+                </div>
                 <div class="col-md-4"> 
                     <label class="control-label">Fecha de Licencia</label> 
                     <div class="inner-addon left-addon">

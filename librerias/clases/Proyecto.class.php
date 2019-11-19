@@ -544,8 +544,8 @@ class Proyecto {
                     $seqUsuario
                     ) ";
         try {
-           // echo "<br>" . $sql;
-         //   die();
+            // echo "<br>" . $sql;
+            //   die();
             $aptBd->execute($sql);
             $seqProyecto = $aptBd->Insert_ID();
             // 
@@ -1010,7 +1010,7 @@ class Proyecto {
         }
         $sql = substr_replace($sql, ';', -1, 1);
         //$sql .= $sqlLicencia;
-        // echo "<br><br> update" . $sql;
+        // echo "<p> Almacenar" . $sql . "</p>";
         try {
             $aptBd->execute($sql);
         } catch (Exception $objError) {
@@ -1022,14 +1022,24 @@ class Proyecto {
 
     public function obtenerListaLicencias($seqProyecto) {
         global $aptBd;
-        $sql = "select * from t_pry_proyecto_licencias where seqProyecto = " . $seqProyecto . " ORDER BY seqTipoLicencia";
+        $sql = "select * from t_pry_proyecto_licencias where seqProyecto = " . $seqProyecto . " group by seqTipoLicencia ORDER BY seqTipoLicencia ";
+        //echo "<p>".$sql."</p>";
         $objRes = $aptBd->execute($sql);
 
         $datos = Array();
+        $datos[0] = 0;
+        $datos[1] = 0;
         while ($objRes->fields) {
-            $datos[] = $objRes->fields;
+            if ($objRes->fields['seqTipoLicencia'] == 1) {
+                $datos[0] = $objRes->fields;
+            } else {
+                $datos[1] = $objRes->fields;
+            }
+
             $objRes->MoveNext();
         }
+
+        //  pr($datos);
         return $datos;
     }
 
@@ -1052,8 +1062,9 @@ class Proyecto {
         $arrErrores = array();
         $sqlExistentes = "SELECT seqProyectoLicencia FROM t_pry_proyecto_licencias WHERE seqProyecto = $seqProyecto";
         $exeExistentes = $aptBd->execute($sqlExistentes);
+
         //$cant = $exeExistentes->numRows();
-       
+
         $datos = Array();
         $datosDiff = Array();
         while ($exeExistentes->fields) {
@@ -1094,7 +1105,7 @@ class Proyecto {
                     $arrErrores[] = "No se ha podido cargar las licencias<b></b>";
                     pr($objError->getMessage());
                 }
-            } else if ($cant > $exeExistentes->numRows()) {
+            } else if ($cant != $exeExistentes->numRows()) {
 
                 $arrayInsLicencias = Array();
                 $arrayInsLicencias[$seqProyecto]['txtLicencia'][] = $txtLicencia;
@@ -1104,6 +1115,7 @@ class Proyecto {
                 $arrayInsLicencias[$seqProyecto]['fchLicenciaProrroga'][] = $fchLicenciaProrroga;
                 $arrayInsLicencias[$seqProyecto]['fchLicenciaProrroga1'][] = $fchLicenciaProrroga1;
                 $arrayInsLicencias[$seqProyecto]['fchLicenciaProrroga2'][] = $fchLicenciaProrroga2;
+                $arrayInsLicencias[$seqProyecto]['fchEjecutoriaLicencia'][] = $fchEjecutoriaLicencia;
                 $arrayInsLicencias[$seqProyecto]['txtResEjecutoria'][] = $txtResEjecutoria;
                 $arrayInsLicencias[$seqProyecto]['seqTipoLicencia'][] = $seqTipoLicencia;
                 $this->almacenarLicencias($seqProyecto, $arrayInsLicencias, count($arrayInsLicencias));
@@ -1193,10 +1205,13 @@ class Proyecto {
                 $arrayInsLicencias[$idProyecto]['txtExpideLicencia'][0] = $txtExpideLicenciaUrbanismoHijo;
                 $arrayInsLicencias[$idProyecto]['fchLicencia'][0] = $fchLicenciaUrbanismo1Hijo;
                 $arrayInsLicencias[$idProyecto]['fchVigenciaLicencia'][0] = $fchVigenciaLicenciaUrbanismoHijo;
+                $arrayInsLicencias[$idProyecto]['fchEjecutoriaLicencia'][0] = $fchEjecutoriaLicenciaUrbanismoHijo;
                 $arrayInsLicencias[$idProyecto]['seqTipoLicencia'][0] = 1;
                 $arrayInsLicencias[$idProyecto]['txtLicencia'][1] = $txtLicenciaConstruccionHijo;
                 $arrayInsLicencias[$idProyecto]['fchLicencia'][1] = $fchLicenciaConstruccion1Hijo;
+                $arrayInsLicencias[$idProyecto]['txtExpideLicencia'][1] = $txtExpideLicenciaConstruccionHijo;
                 $arrayInsLicencias[$idProyecto]['fchVigenciaLicencia'][1] = $fchVigenciaLicenciaConstruccionHijo;
+                $arrayInsLicencias[$idProyecto]['fchEjecutoriaLicencia'][1] = $fchEjecutoriaLicenciaConstruccionHijo;
                 $arrayInsLicencias[$idProyecto]['seqTipoLicencia'][1] = 2;
                 //var_dump($arrayInsLicencias);
                 $this->almacenarLicencias($idProyecto, $arrayInsLicencias, 2);
@@ -1224,7 +1239,7 @@ class Proyecto {
         }
         for ($index = 0; $index < $cant; $index++) {
             $txtNombreProyectoHijo = '';
-          //  pr($arrayConjuntos[$seqProyecto]);
+            //  pr($arrayConjuntos[$seqProyecto]);
             foreach ($arrayConjuntos[$seqProyecto] as $key => $value) {
                 if ($value[($index)] == NULL || $value[($index)] == "" || $value[($index)] == "0000-00-00") {
                     $$key = 0;
@@ -1271,13 +1286,16 @@ class Proyecto {
                 $arrayInsLicencias[$seqProyectoHijo]['txtExpideLicencia'][0] = $txtExpideLicenciaUrbanismoHijo;
                 $arrayInsLicencias[$seqProyectoHijo]['fchLicencia'][0] = $fchLicenciaUrbanismo1Hijo;
                 $arrayInsLicencias[$seqProyectoHijo]['fchVigenciaLicencia'][0] = $fchVigenciaLicenciaUrbanismoHijo;
+                $arrayInsLicencias[$seqProyectoHijo]['fchEjecutoriaLicencia'][0] = $fchEjecutoriaLicenciaUrbanismoHijo;
                 $arrayInsLicencias[$seqProyectoHijo]['seqTipoLicencia'][0] = 1;
                 $arrayInsLicencias[$seqProyectoHijo]['seqProyectoLicencia'][1] = $seqProyectoLicenciaConsHijo;
                 $arrayInsLicencias[$seqProyectoHijo]['txtLicencia'][1] = $txtLicenciaConstruccionHijo;
                 $arrayInsLicencias[$seqProyectoHijo]['fchLicencia'][1] = $fchLicenciaConstruccion1Hijo;
+                $arrayInsLicencias[$seqProyectoHijo]['txtExpideLicencia'][1] = $txtExpideLicenciaConstruccionHijo;
+                $arrayInsLicencias[$seqProyectoHijo]['fchEjecutoriaLicencia'][1] = $fchEjecutoriaLicenciaConstruccionHijo;
                 $arrayInsLicencias[$seqProyectoHijo]['fchVigenciaLicencia'][1] = $fchVigenciaLicenciaConstruccionHijo;
                 $arrayInsLicencias[$seqProyectoHijo]['seqTipoLicencia'][1] = 2;
-              
+
                 $this->modificarLicencias($seqProyectoHijo, $arrayInsLicencias, count($arrayInsLicencias));
             } else if ($cant >= $exeExistentes->numRows()) {
 
@@ -1294,10 +1312,13 @@ class Proyecto {
                 $arrayconjuntos[$seqProyecto]['txtLicenciaUrbanismoHijo'][] = $txtLicenciaUrbanismoHijo;
                 $arrayconjuntos[$seqProyecto]['fchLicenciaUrbanismo1Hijo'][] = $fchLicenciaUrbanismo1Hijo;
                 $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaUrbanismoHijo'][] = $fchVigenciaLicenciaUrbanismoHijo;
+                $arrayconjuntos[$seqProyecto]['fchEjecutoriaLicenciaUrbanismoHijo'][] = $fchEjecutoriaLicenciaUrbanismoHijo;
                 $arrayconjuntos[$seqProyecto]['txtExpideLicenciaUrbanismoHijo'][] = $txtExpideLicenciaUrbanismoHijo;
                 $arrayconjuntos[$seqProyecto]['txtLicenciaConstruccionHijo'][] = $txtLicenciaConstruccionHijo;
                 $arrayconjuntos[$seqProyecto]['fchLicenciaConstruccion1Hijo'][] = $fchLicenciaConstruccion1Hijo;
                 $arrayconjuntos[$seqProyecto]['fchVigenciaLicenciaConstruccionHijo'][] = $fchVigenciaLicenciaConstruccionHijo;
+                $arrayconjuntos[$seqProyecto]['fchEjecutoriaLicenciaConstruccionHijo'][] = $fchEjecutoriaLicenciaConstruccionHijo;
+                $arrayconjuntos[$seqProyecto]['txtExpideLicenciaConstruccionHijo'][] = $txtExpideLicenciaConstruccionHijo;
                 $arrayconjuntos[$seqProyecto]['txtNombreVendedorHijo'][] = $txtNombreVendedorHijo;
                 $arrayconjuntos[$seqProyecto]['seqTipoDocumentoVendedorHijo'][] = $seqTipoDocumentoVendedorHijo;
                 $arrayconjuntos[$seqProyecto]['numNitVendedorHijo'][] = $numNitVendedorHijo;

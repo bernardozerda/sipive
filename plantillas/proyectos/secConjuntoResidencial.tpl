@@ -195,6 +195,11 @@
                                             <input name="fchVigenciaLicenciaUrbanismoHijo[]" type="text" id="fchVigenciaLicenciaUrbanismoHijo_{$cont}" value="{$valLicConj.fchVigenciaLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/>
                                             <div id="val_fchVigenciaLicenciaUrbanismoHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <label class="control-label" >Fecha Ejecutoria</label><br />            
+                                            <input name="fchEjecutoriaLicenciaUrbanismoHijo[]" type="text" id="fchEjecutoriaLicenciaUrbanismoHijo_{$cont}" value="{$valLicConj.fchEjecutoriaLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/>
+                                            <div id="val_fchEjecutoriaLicenciaUrbanismoHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                                        </div>
                                     </fieldset>
                                 </div>
                             </div>
@@ -214,6 +219,11 @@
                                                 <div id="val_txtLicenciaConstruccionHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                             </div>
                                             <div class="col-md-3">
+                                                <label class="control-label" >Entidad Expedición</label><br />
+                                                <input type='text' name='txtExpideLicenciaConstruccionHijo[]' id='txtExpideLicenciaConstruccionHijo_{$cont}' value="{$valLicConj.txtExpideLicencia}" onBlur='sinCaracteresEspeciales(this);' size='13' class="form-control required4">
+                                                <div id="val_txtExpideLicenciaConstruccionHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                                            </div>
+                                            <div class="col-md-3">
                                                 <label class="control-label" >Fecha&nbsp;Licencia</label><br />             
                                                 <input name="fchLicenciaConstruccion1Hijo[]" type="text" id="fchLicenciaConstruccion1Hijo_{$cont}" value="{$valLicConj.fchLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly />
                                                 <div id="val_fchLicenciaConstruccion1Hijo_{$cont}" class="divError">Diligenciar Campo</div>
@@ -224,11 +234,16 @@
                                                 <div id="val_fchVigenciaLicenciaConstruccionHijo_{$cont}" class="divError">Diligenciar Campo</div>
                                             </div>
                                             <div class="col-md-3">
+                                                <label class="control-label" >Fecha Ejecutoria</label><br />            
+                                                <input name="fchEjecutoriaLicenciaConstruccionHijo[]" type="text" id="fchEjecutoriaLicenciaConstruccionHijo_{$cont}" value="{$valLicConj.fchEjecutoriaLicencia}" size="12" style="background-color:#E4E4E4; width: 60%;position: relative; float: left" readonly class="form-control required4"/>
+                                                <div id="val_fchEjecutoriaLicenciaConstruccionHijo_{$cont}" class="divError">Diligenciar Campo</div>
+                                            </div>
+                                            <div class="col-md-3">
                                                 <label class="control-label" >Eliminar</label><br />     
                                                 <img src="recursos/imagenes/remove.png" width="22px" onclick="return confirmaRemoverLineaFormulario(this);" style="position: relative; float: left; width:15% ">
-
                                             </div>
                                         </div>
+                                        <div><p>&nbsp;</p></div>
                                     </fieldset>
                                 </div>
                                 <p>&nbsp;</p>

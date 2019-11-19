@@ -1113,8 +1113,8 @@ function cargarArchivo($txtNombreFile, $arrFormato = array()) {
 }
 
 function obtenerDatosTablas($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion = "", $txtOrden = "") {
-  
-  
+
+
     global $aptBd;
     $arrDatos = array();
     $txtCondicion = ( trim($txtCondicion) != "" ) ? "WHERE $txtCondicion" : "";
@@ -1122,7 +1122,7 @@ function obtenerDatosTablas($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion
     if (in_array($txtLLave, $arrCampos)) {
         $sql = "
                 SELECT " . implode(",", $arrCampos) . "
-                FROM " . str_replace(",", " LEFT JOIN ",$txtTabla ) . " 
+                FROM " . str_replace(",", " LEFT JOIN ", $txtTabla) . " 
                 $txtCondicion
                 $txtOrden
             ";
@@ -1131,7 +1131,7 @@ function obtenerDatosTablas($txtTabla, $arrCampos, $txtLLave = "", $txtCondicion
             $objRes = $aptBd->execute($sql);
             $arrDatos = Array();
             while ($objRes->fields) {
-               $arrDatos[] = $objRes->fields;
+                $arrDatos[] = $objRes->fields;
                 $objRes->MoveNext();
             }
         } catch (Exception $objError) {

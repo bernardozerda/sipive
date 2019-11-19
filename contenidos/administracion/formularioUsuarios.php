@@ -39,14 +39,16 @@
     if( isset( $_POST['seqEditar'] ) and is_numeric( $_POST['seqEditar'] ) and $_POST['seqEditar'] > 0 ){
         $arrUsuario = $claUsuario->cargarUsuario( $_POST['seqEditar'] );
     }
-    
+       
     // obtiene la relacion entre Proyectos y grupos
     $arrProyecto = $claProyecto->cargarProyecto();
     $arrGrupo   = $claGrupo->cargarGrupo();
+    $arrDependencia = $claUsuario->obtenerDependencia();
     
     // Asignaciones a la plantilla
     $claSmarty->assign( "seqEditar" , $seqUsuario );
     $claSmarty->assign( "arrGrupo" , $arrGrupo );
+    $claSmarty->assign( "arrDependencia" , $arrDependencia );
     $claSmarty->assign( "arrProyecto" , $arrProyecto );
     $claSmarty->assign( "objUsuario" , $arrUsuario[ $seqUsuario ] );
     $claSmarty->assign( "arrConfiguracion" , $arrConfiguracion );

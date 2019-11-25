@@ -525,6 +525,7 @@ class CasaMano {
                      fchVisita,
                      txtAprobo,
                      fchCreacion,
+                     fchExpedicion,
                      fchActualizacion
                  FROM T_CEM_TECNICO
                  WHERE seqCasaMano = " . $this->seqCasaMano . "
@@ -1195,6 +1196,7 @@ class CasaMano {
                 $sql .= implode(",", $arrPost) . ")";
 
                 try {
+                   // echo "<p> 1 ".$sql."</p>";
                     $aptBd->execute($sql);
                     $seqTecnico = $aptBd->Insert_ID();
                 } catch (Exception $objError) {
@@ -1213,6 +1215,7 @@ class CasaMano {
                 $sql .= "WHERE seqCasaMano = " . $arrPost['seqCasaMano'];
 
                 try {
+                    //echo "<p> 2 ".$sql."</p>";
                     $aptBd->execute($sql);
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se ha podido actualizar el registro técnico";

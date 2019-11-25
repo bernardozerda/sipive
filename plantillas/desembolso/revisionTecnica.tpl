@@ -87,7 +87,7 @@
                     <table cellpadding="2" cellspacing="0" border="0" width="95%" style="border: 1px solid #999999;">
                         <tr><td colspan="2" align="center" style="padding-left:30px; padding-right:30px; font-weight:bold;">
                                 REVISION CERTIFICADO DE EXISTENCIA Y HABITABILIDAD VIVIENDA
-                                Y RSULTADO DE LA CONSULTA PARA EFECTOS DE LO
+                                Y RESULTADO DE LA CONSULTA PARA EFECTOS DE LO
                                 ORDENADO EN EL ARTICULO 34 DE LA RESOLUCION 966 DE 2004 DEL 
                                 MINISTERIO DE AMBIENTE, VIVIENDA Y DESARROLLO TERRITORIAL 
                             </td></tr>
@@ -127,7 +127,19 @@
                                                 <img src="./recursos/imagenes/plus_icon.gif" width="14" height="15" alt="Adicionar" align="center">
                                             </button>
                                         </td>
-                                    </tr></table>
+                                    </tr>
+                                    <tr>
+                                        <td><p>&nbsp;</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td >Fecha de Expedición<br>
+                                            <input type="text" name="fchExpedicion" id="fchExpedicion" value="{$claDesembolso->arrTecnico.fchExpedicion}" onfocus="this.style.backgroundColor = '#ADD8E6';" onblur="sinCaracteresEspeciales(this);
+                                                this.style.backgroundColor = '#FFFFFF';" style="width:100px;" maxlength="10" readonly="">
+                                            <a href="#" onclick="javascript: calendarioPopUp('fchExpedicion');">Calendario</a>&nbsp;&nbsp;
+                                            <a onclick="document.getElementById('fchExpedicion').value = '';" href="#">Limpiar</a>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr><td colspan="2" id="resultadoAnalisis" style="padding-left:30px; padding-right:30px;"><br>

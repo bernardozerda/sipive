@@ -86,6 +86,7 @@ if (empty($_POST)) {
         foreach ($claCasaMano->arrFases['cem'] as $txtFase => $arrPermisos) {
             $arrPermisoPanel[$txtFase] = $claCasaMano->puedeIngresar(["flujo" => "cem", "fase" => $txtFase]);
         }
+      
     }
 
     if (empty($arrErrores)) {
@@ -400,7 +401,7 @@ if (empty($_POST)) {
             $arrActosAsociados[$objRes->fields['seqUnidadActo']]['valIndexado'] = $objRes->fields['valIndexado'];
             $objRes->MoveNext();
         }
-
+       
         // ASIGNACION DE VARIABLES A LA PLANTILLA
         $claSmarty->assign("arrActos", $arrActos);
         $claSmarty->assign("arrConvenio", $arrConvenio);

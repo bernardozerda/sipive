@@ -4076,25 +4076,27 @@ class Seguimiento {
 
             if (intval($_POST['bolSoloSeguimiento']) == 1) {
                 $txtCambios = "";
-                if (empty($arrPost['anterior'])) {
-                    $txtCambios = "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Formulario:</b>" . $this->txtSalto;
+                if (!empty($arrPost['anterior'])) {
+                    $txtCambios .= "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Formulario:</b>" . $this->txtSalto;
                 }
 
-
                 foreach ($arrPost['anterior'] as $txtClave => $value) {
-                    if (empty($arrPost['anterior']['hogar'])) {
-                        $txtCambios .= $this->compararValores($txtClave, $arrPost['anterior'][$txtClave], $arrPost[$txtClave]);
+                    if (!empty($arrPost['anterior'])) {                        
+                        if ($txtClave != 'hogar') {
+                             $txtCambios .= $this->compararValores($txtClave, $arrPost['anterior'][$txtClave], $arrPost[$txtClave]);
+                        }
                     }
                 }
                 if (!empty($arrPost['anterior']['hogar'])) {
                     foreach ($arrPost['anterior']['hogar'] as $numDocumento => $arrCiudadano) {
                         foreach ($arrCiudadano as $txtClaveCiu => $valueCiu) {
                             $arrPost['anterior'][$numDocumento][$txtClaveCiu] = $valueCiu;
-                            $txtCambios .= $this->compararValores($txtClaveCiu, $valueCiu, $arrPost['hogar'][$numDocumento][$txtClaveCiu]);
+                             $txtCambios .= $this->compararValores($txtClaveCiu, $valueCiu, $arrPost['hogar'][$numDocumento][$txtClaveCiu]);
                         }
                     }
                 }
             }
+          
             $sql = "
                  INSERT INTO T_SEG_SEGUIMIENTO (
                    seqFormulario,

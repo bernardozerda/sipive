@@ -3158,13 +3158,18 @@ class Reportes {
               if(con.seqProyectoPadre is null, con.txtNombreProyecto, pry.txtNombreProyecto),
               uac.seqTipoActoUnidad
         ";
+       // echo "<p>" . $sql . "</p>";
+        //die();
         $objRes = $aptBd->execute($sql);
         while ($objRes->fields) {
 
             $seqProyecto = $objRes->fields['seqProyecto'];
-
+            $sqlCant = "SELECT  COUNT(*) AS cant FROM T_PRY_UNIDAD_PROYECTO und  LEFT JOIN t_pry_proyecto proy USING (seqProyecto)
+        WHERE  und.bolActivo = 1 and (proy.seqProyecto = " . $objRes->fields['seqProyecto'] . " or proy.seqProyectoPadre = " . $objRes->fields['seqProyecto'].")";
+           $dato = $aptBd->GetAll($sqlCant);
+           //echo ($dato[0]['cant']); die();
             $arrReporte[$seqProyecto]['nombre'] = $objRes->fields['txtNombreProyecto'];
-            $arrReporte[$seqProyecto]['total'] = $objRes->fields['cantUnd'];
+            $arrReporte[$seqProyecto]['total'] = $dato[0]['cant'];
             $arrReporte[$seqProyecto]['legalizadas'] = $objRes->fields['legalizadas'];
             $arrReporte[$seqProyecto]['entidad'] = "";
 

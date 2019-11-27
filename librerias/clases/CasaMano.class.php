@@ -1196,7 +1196,7 @@ class CasaMano {
                 $sql .= implode(",", $arrPost) . ")";
 
                 try {
-                   // echo "<p> 1 ".$sql."</p>";
+                    // echo "<p> 1 ".$sql."</p>";
                     $aptBd->execute($sql);
                     $seqTecnico = $aptBd->Insert_ID();
                 } catch (Exception $objError) {

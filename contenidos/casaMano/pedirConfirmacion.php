@@ -75,18 +75,21 @@ if ($bolCambios == true) {
     $arrIgnorarCampos[] = "seqBarrio";
     $arrIgnorarCampos[] = "txtCorreo";
     $arrIgnorarCampos[] = "bolDesplazado";
-    $arrIgnorarCampos[] = "seqProyecto";
-    $arrIgnorarCampos[] = "seqProyectoHijo";
-    $arrIgnorarCampos[] = "seqUnidadProyecto";
+    
+    // Se comenta campo  puesto que los cambios a estos se hacen mediante acto admon
+    
+//    $arrIgnorarCampos[] = "seqProyecto";
+//    $arrIgnorarCampos[] = "seqProyectoHijo";
+//    $arrIgnorarCampos[] = "seqUnidadProyecto";
 
-//        $arrIgnorarCamposCiudadano[] = "seqTipoDocumento";
-//        $arrIgnorarCamposCiudadano[] = "numDocumento";
+//   $arrIgnorarCamposCiudadano[] = "seqTipoDocumento";
+//   $arrIgnorarCamposCiudadano[] = "numDocumento";
     $arrIgnorarCamposCiudadano[] = "txtNombre1";
     $arrIgnorarCamposCiudadano[] = "txtNombre2";
     $arrIgnorarCamposCiudadano[] = "txtApellido1";
     $arrIgnorarCamposCiudadano[] = "txtApellido2";
     $arrIgnorarCamposCiudadano[] = "seqTipoVictima";
-
+    
     $arrPostHogar = $_POST['hogar'];
     unset($_POST['hogar']);
     if ($_POST['txtFase'] == "postulacion") {
@@ -94,6 +97,8 @@ if ($bolCambios == true) {
             if ($txtClave != "arrCiudadano") {
                 if (!in_array($txtClave, $arrIgnorarCampos)) {
                     $_POST[$txtClave] = $txtValor;
+                } else {
+                    $_POST['anterior'][$txtClave] = $txtValor;
                 }
             } else {
                 foreach ($claCasaMano->objPostulacion->$txtClave as $seqCiudadano => $objCiudadano) {
@@ -102,11 +107,12 @@ if ($bolCambios == true) {
                         foreach ($objCiudadano as $txtCampo => $txtValue) {
                             if (!in_array($txtCampo, $arrIgnorarCamposCiudadano)) {
                                 $_POST['hogar'][$numDocumento][$txtCampo] = $txtValue;
+                                //unset($arrPostHogar[$numDocumento][$txtCampo]);
                             } else {
-                                $_POST['hogar'][$numDocumento][$txtCampo] = $arrPostHogar[$numDocumento][$txtCampo];
+                                $_POST['anterior']['hogar'][$numDocumento][$txtCampo] = $txtValue;
                             }
                         }
-                        unset($arrPostHogar[$numDocumento]);
+                        // unset($arrPostHogar[$numDocumento]);
                     }
                 }
 
@@ -123,7 +129,7 @@ if ($bolCambios == true) {
     try {
         $aptBd->BeginTrans();
         $claCasaMano->salvar($_POST);
-        if (empty($claCasaMano->arrErrores)) {
+        if (empty($claCasaMano->arrErrores)) {           
             $aptBd->CommitTrans();
         } else {
             $aptBd->RollbackTrans();

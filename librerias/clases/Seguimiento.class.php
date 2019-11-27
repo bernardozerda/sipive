@@ -826,7 +826,7 @@ class Seguimiento {
             $arrCedulasFormulario[] = $numDocumento;
             if (isset($arrPost['hogar'][$numDocumento])) {
                 foreach ($objCiudadano as $txtClave => $txtValor) {
-                    if (!in_array($txtClave, $this->arrIgnorarCampos)) {      
+                    if (!in_array($txtClave, $this->arrIgnorarCampos)) {
                         //Se cambios condicion AND por OR array_key_exists($txtClave, $arrPost['hogar'][$numDocumento]
                         if (array_key_exists($numDocumento, $arrPost['hogar']) or array_key_exists($txtClave, $arrPost['hogar'][$numDocumento])) {
                             $arrPost['hogar'][$numDocumento][$txtClave] = regularizarCampo($txtClave, $arrPost['hogar'][$numDocumento][$txtClave]);
@@ -869,7 +869,7 @@ class Seguimiento {
             }
         }
 
-        
+
         if (trim($txtCambiosHogar) != "") {
             $txtCambios .= "<b>[ " . $claFormulario->seqFormulario . " ] Cambios en el hogar</b>" . $this->txtSalto . $txtCambiosHogar;
         }
@@ -4076,11 +4076,25 @@ class Seguimiento {
 
             if (intval($_POST['bolSoloSeguimiento']) == 1) {
                 $txtCambios = "";
+                if (empty($arrPost['anterior'])) {
+                    $txtCambios = "<b>[ " . $arrPost['seqFormulario'] . " ] Datos del Formulario:</b>" . $this->txtSalto;
+                }
+
+
                 foreach ($arrPost['anterior'] as $txtClave => $value) {
-                    $txtCambios .= $this->compararValores($txtClave, $arrPost['anterior'][$txtClave], $arrPost[$txtClave]);
+                    if (empty($arrPost['anterior']['hogar'])) {
+                        $txtCambios .= $this->compararValores($txtClave, $arrPost['anterior'][$txtClave], $arrPost[$txtClave]);
+                    }
+                }
+                if (!empty($arrPost['anterior']['hogar'])) {
+                    foreach ($arrPost['anterior']['hogar'] as $numDocumento => $arrCiudadano) {
+                        foreach ($arrCiudadano as $txtClaveCiu => $valueCiu) {
+                            $arrPost['anterior'][$numDocumento][$txtClaveCiu] = $valueCiu;
+                            $txtCambios .= $this->compararValores($txtClaveCiu, $valueCiu, $arrPost['hogar'][$numDocumento][$txtClaveCiu]);
+                        }
+                    }
                 }
             }
-
             $sql = "
                  INSERT INTO T_SEG_SEGUIMIENTO (
                    seqFormulario,
@@ -4843,7 +4857,7 @@ class Seguimiento {
             $txtComentario = "Vinculado a la " . $arrTipoActo[$seqTipoActo]->txtTipoActo . " " . $numActo . " del " . $fchActo . ". ";
             $txtComentario = (isset($arrDatos['comentario']) and trim($arrDatos['comentario']) != "") ? $txtComentario . $arrDatos['comentario'] : $txtComentario;
 
-             $sql .= " (" . $seqFormulario . ",
+            $sql .= " (" . $seqFormulario . ",
                          now(),
                          " . $_SESSION['seqUsuario'] . ",
                          '" . $txtComentario . "',

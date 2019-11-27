@@ -75,13 +75,11 @@ if ($bolCambios == true) {
     $arrIgnorarCampos[] = "seqBarrio";
     $arrIgnorarCampos[] = "txtCorreo";
     $arrIgnorarCampos[] = "bolDesplazado";
-    
+
     // Se comenta campo  puesto que los cambios a estos se hacen mediante acto admon
-    
 //    $arrIgnorarCampos[] = "seqProyecto";
 //    $arrIgnorarCampos[] = "seqProyectoHijo";
 //    $arrIgnorarCampos[] = "seqUnidadProyecto";
-
 //   $arrIgnorarCamposCiudadano[] = "seqTipoDocumento";
 //   $arrIgnorarCamposCiudadano[] = "numDocumento";
     $arrIgnorarCamposCiudadano[] = "txtNombre1";
@@ -89,7 +87,7 @@ if ($bolCambios == true) {
     $arrIgnorarCamposCiudadano[] = "txtApellido1";
     $arrIgnorarCamposCiudadano[] = "txtApellido2";
     $arrIgnorarCamposCiudadano[] = "seqTipoVictima";
-    
+
     $arrPostHogar = $_POST['hogar'];
     unset($_POST['hogar']);
     if ($_POST['txtFase'] == "postulacion") {
@@ -129,7 +127,7 @@ if ($bolCambios == true) {
     try {
         $aptBd->BeginTrans();
         $claCasaMano->salvar($_POST);
-        if (empty($claCasaMano->arrErrores)) {           
+        if (empty($claCasaMano->arrErrores)) {
             $aptBd->CommitTrans();
         } else {
             $aptBd->RollbackTrans();

@@ -14,20 +14,27 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Formulari
 include( $txtPrefijoRuta . $arrConfiguracion['librerias']['clases'] . "Seguimiento.class.php" );
 
 $claInscripcion = new InscripcionFonvivienda();
+$tipo = $_REQUEST['tipo'];
 
-$claInscripcion->inhabilitarCargueProy($_POST['seqCargue'], $_REQUEST['lista']);
+$claInscripcion->inhabilitarCargueProy($_POST['seqCargue'], $_REQUEST['lista'], $tipo);
 $claInscripcion->cargar($_POST['seqCargue']);
 $arraProy = Array();
 $bolProcesar = false;
+$arrPryProcess = Array();
 foreach ($claInscripcion->arrHogares as $numHogar => $arrHogar) {
     //if($arrHogar['seqEstadoHogar'] == 2){
 
-    if ($arrHogar['seqEstadoHogar'] >= 2 && $arrHogar['seqEstadoHogar'] < 4 && $claInscripcion->seqEstado < 6) {
+    if ($arrHogar['seqEstadoHogar'] == 2) {
         $bolProcesar = true;
-    } else if ($arrHogar['seqEstadoHogar'] < 4 && $claInscripcion->seqEstado < 6) {
+    } 
+    if ($arrHogar['seqEstadoHogar'] < 3) {
         $bolProcesarProy = true;
     }
     $arraProy[] = $arrHogar['txtDireccionSolucion'];
+
+    if ($arrHogar['txtEstadoHogar'] == 'No procesar') {
+        $arrPryProcess[$arrHogar['txtDireccionSolucion']] = true;
+    }
 }
 $arraProy = array_unique($arraProy);
 
@@ -35,5 +42,6 @@ $claSmarty->assign("bolProcesar", $bolProcesar);
 $claSmarty->assign("bolProcesarProy", $bolProcesarProy);
 $claSmarty->assign("claInscripcion", $claInscripcion);
 $claSmarty->assign("arraProy", $arraProy);
+$claSmarty->assign("arrPryProcess", $arrPryProcess);
 $claSmarty->display("inscripcionFonvivienda/informacion.tpl");
 ?>

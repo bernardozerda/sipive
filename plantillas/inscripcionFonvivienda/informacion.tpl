@@ -144,17 +144,18 @@
                         >
                     Procesar
                 </button>
+
+                <button type="button"
+                        data-toggle="modal"
+                        data-target="#listaPry"
+                        class="btn btn-primary btn-sm {if $bolProcesarProy == false} disabled {/if}"                       
+                        style="width: 100px"
+                        onclick="$('#listPry').val('');"
+                        {if $bolProcesarProy == false} disabled {/if}
+                        >
+                    Ctrl Proyecto
+                </button>
             {/if}
-            <button type="button"
-                    data-toggle="modal"
-                    data-target="#listaPry"
-                    class="btn btn-primary btn-sm {if $bolProcesarProy == false} disabled {/if}"                       
-                    style="width: 100px"
-                    onclick="$('#listPry').val('');"
-                    {if $bolProcesarProy == false} disabled {/if}
-                    >
-                Ctrl Proyecto
-            </button>
         {/if}
     </div>
 </div>
@@ -202,14 +203,14 @@
 
             <div class="modal-body">
 
-                <label for="listPry">
+                <label for="listPry" >
                     <div class="alert alert-info">
                         Proceso mediante el cual se realiza bloqueo del hogar según el proyecto.
                     </div>
                 </label>
                 <select multiple class="form-control" id="listPry" name="listPry" style="min-height: 150px">
                     {foreach from=$arraProy key=numLinea item=txtRazon}
-                        <option>{$txtRazon}</option>
+                        <option{if $arrPryProcess[$txtRazon]== true} style="background: #31708f; color:#fff"{/if}>{$txtRazon}</option>
                     {/foreach}
                 </select>
 
@@ -217,7 +218,9 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        onclick="cargarContenido('contenido', './contenidos/inscripcionFonvivienda/procesarProyectos.php', 'seqCargue={$claInscripcion->seqCargue}&lista=' + $('#listPry').val(), true);">Registrar</button>
+                        onclick="cargarContenido('contenido', './contenidos/inscripcionFonvivienda/procesarProyectos.php', 'seqCargue={$claInscripcion->seqCargue}&tipo=1&lista=' + $('#listPry').val(), true);">Registrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        onclick="cargarContenido('contenido', './contenidos/inscripcionFonvivienda/procesarProyectos.php', 'seqCargue={$claInscripcion->seqCargue}&tipo=2&lista=' + $('#listPry').val(), true);">Revertir</button>
             </div>
 
         </div>

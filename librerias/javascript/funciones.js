@@ -4479,7 +4479,7 @@ function desembolsoSolicitud(seqFormulario, seqSolicitud) {
     try {
 
         var txtUrl = "./contenidos/desembolso/formatoSolicitudDesembolso.php";
-        txtUrl += "?seqFormulario=" + seqFormulario + "&seqSolicitud=" + seqSolicitud;
+        txtUrl += "?seqFormulario=" + seqFormulario + "&seqSolicitud=" + seqSolicitud+'&tipo='+$("#bolTipoSudireccion").val();
 
         var txtParametros = "resizable=0,location=0,scrollbars=1,width=750,height=700,left=100,top=100";
 

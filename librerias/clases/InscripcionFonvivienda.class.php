@@ -3206,17 +3206,27 @@ class InscripcionFonvivienda {
         return $claFormulario;
     }
 
-    public function inhabilitarCargueProy($seqCargue, $array) {
+    public function inhabilitarCargueProy($seqCargue, $array, $tipo) {
 
         global $aptBd;
+        $seqEstadoHogar = 1;
+        $seqEstadoPrev = 1;
+        $observacion = "";
+        if ($tipo == 1) {
+            $seqEstadoHogar = 3;
+            $txtObservacion = 'HOGAR QUE SE PRESENTA CON PROYECTO GESTIONADO POR SDHT. NO APLICA PARA MCY COMPLEMENTARIO. INFORME RESP. MCY';
+        } else {
+            $seqEstadoHogar = 1;
+            $seqEstadoPrev = 3;
+        }
 
         $condicion = str_replace(',', "' OR txtdireccionsolUcIon LIKE '", $array);
 
-        $sql = "
-            UPDATE t_fnv_hogar set seqEstadoHogar = 3, 
-            txtObservaciones='HOGAR QUE SE PRESENTA CON PROYECTO GESTIONADO POR SDHT. NO APLICA PARA MCY COMPLEMENTARIO. INFORME RESP. MCY' 
+       $sql = "
+            UPDATE t_fnv_hogar set seqEstadoHogar = " . $seqEstadoHogar . ", 
+            txtObservaciones='" . $txtObservacion . "' 
             where  seqcargue = $seqCargue and 
-           (txtdireccionsolUcIon LIKE '" . $condicion . "') and seqEstadoHogar = 1
+           (txtdireccionsolUcIon LIKE '" . $condicion . "') and seqEstadoHogar = " . $seqEstadoPrev . "
           ";
 
         try {

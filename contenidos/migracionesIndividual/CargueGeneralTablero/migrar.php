@@ -238,7 +238,7 @@ if (isset($code)) {
 
                         $datos[1] = "UPDATE t_pry_unidad_proyecto SET fchInformacionSolucion  = CASE seqFormulario";
                         $datos[2] = 52;
-                        $datos[3] = "DEFICION EXPEDIENTES A LEGALIZAR";
+                        $datos[3] = "DEFINICION EXPEDIENTES A LEGALIZAR";
                     }
                     if ($code == 22) {
                         $datos[0] = "SELECT seqFormulario as dato, numDocumento, 

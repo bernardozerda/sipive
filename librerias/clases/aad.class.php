@@ -2942,11 +2942,11 @@ class aad {
                     $aptBd->execute($sql);
                     if ($txtCampo == "seqModalidad") {
 
-                        echo $sql = "
+                        $sql = "
                         update t_frm_formulario set
                          " . $txtCampo . " = $valor, "
-                        . "seqPlanGobierno =$claFormulario->seqPlanGobierno, "
-                        . "seqSolucion = $claFormulario->seqSolucion
+                                . "seqPlanGobierno =$claFormulario->seqPlanGobierno, "
+                                . "seqSolucion = $claFormulario->seqSolucion
                         where seqFormulario = $seqFormulario
                     ";
                         $aptBd->execute($sql);
@@ -3672,10 +3672,12 @@ class aad {
                 $txtCampos = "";
                 $txtValores = "";
                 foreach ($claFormulario as $txtCampo => $txtValor) {
-                    $txtCampos .= $txtCampo . ",";
-                    $txtValores .= "'" . $txtValor . "',";
+
                     if (in_array($txtCampo, $this->arrayFormActual)) {
                         $txtCampos .= $txtCampo . "Actual,";
+                        $txtValores .= "'" . $txtValor . "',";
+                    } else {
+                        $txtCampos .= $txtCampo . ",";
                         $txtValores .= "'" . $txtValor . "',";
                     }
                 }
@@ -3939,10 +3941,12 @@ class aad {
             $txtCampos = "";
             $txtValores = "";
             foreach ($claFormulario as $txtCampo => $txtValor) {
-                $txtCampos .= $txtCampo . ",";
-                $txtValores .= "'" . $txtValor . "',";
+
                 if (in_array($txtCampo, $this->arrayFormActual)) {
                     $txtCampos .= $txtCampo . "Actual,";
+                    $txtValores .= "'" . $txtValor . "',";
+                } else {
+                    $txtCampos .= $txtCampo . ",";
                     $txtValores .= "'" . $txtValor . "',";
                 }
             }

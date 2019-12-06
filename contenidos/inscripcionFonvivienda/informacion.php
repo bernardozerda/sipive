@@ -18,10 +18,10 @@ $arrPryProcess = Array();
 
 foreach ($claInscripcion->arrHogares as $numHogar => $arrHogar) {
 
-    if ($arrHogar['seqEstadoHogar'] == 2) {
+    if ($arrHogar['seqEstadoHogar'] == 2 || $arrHogar['seqEstadoHogar'] == 3) {
         $bolProcesar = true;
     } 
-    if ($arrHogar['seqEstadoHogar'] < 3) {
+    if ($arrHogar['seqEstadoHogar'] < 4) {
         $bolProcesarProy = true;
     }
 

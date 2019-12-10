@@ -30,12 +30,12 @@ if (intval($_POST['seqFormulario']) != 0 and intval($_POST['seqCasaMano']) != 0)
     $arrCasaMano = $claCasaMano->cargar($_POST['seqFormulario'], $_POST['seqCasaMano']);
     $claCasaMano = array_shift($arrCasaMano);
 }
-//pr($claCasaMano);
+//pr($claCasaMano->objRegistroOferta);
 // datos que vienen del registro de oferta y que no hay que pedir de nuevo en postulacion
 $claCasaMano->objPostulacion->txtBarrio = $arrBarrio[$claCasaMano->objPostulacion->seqBarrio];
-$claCasaMano->objPostulacion->txtDireccionSolucion = $claCasaMano->objRegistroOferta->txtDireccionInmueble;
-$claCasaMano->objPostulacion->txtMatriculaInmobiliaria = $claCasaMano->objRegistroOferta->txtMatriculaInmobiliaria;
-$claCasaMano->objPostulacion->txtChip = $claCasaMano->objRegistroOferta->txtChip;
+$claCasaMano->objPostulacion->txtDireccionSolucion = $claCasaMano->objRegistroOferta['txtDireccionInmueble'];
+$claCasaMano->objPostulacion->txtMatriculaInmobiliaria = $claCasaMano->objRegistroOferta['txtMatriculaInmobiliaria'];
+$claCasaMano->objPostulacion->txtChip = $claCasaMano->objRegistroOferta['txtChip'];
 
 $bolPermiso = $claCasaMano->puedeIngresar($arrFlujoHogar);
 if ($bolPermiso == true) {
@@ -105,7 +105,7 @@ if ($bolPermiso == true) {
     $arrBarrio = obtenerDatosTabla("T_FRM_BARRIO", array("seqBarrio", "txtBarrio"), "seqBarrio", "seqBarrio <> 1");
     $arrPlanGobierno = obtenerDatosTabla("T_FRM_PLAN_GOBIERNO", array("seqPlanGobierno", "txtPlanGobierno"), "seqPlanGobierno", "", "txtPlanGobierno");
 
-
+    //var_dump($claCasaMano);
 
     $claSmarty->assign("arrPlanGobierno", $arrPlanGobierno);
     $claSmarty->assign("arrConvenio", $arrConvenio);

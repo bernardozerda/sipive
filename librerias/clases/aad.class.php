@@ -49,6 +49,9 @@ class aad {
         $this->arrayFormActual[7] = 'seqSolucion';
         $this->arrayFormActual[5] = 'txtMatriculaInmobiliaria';
         $this->arrayFormActual[9] = 'valAspiraSubsidio';
+        $this->arrayFormActual[10] = 'seqTipoEsquema';
+        $this->arrayFormActual[11] = 'txtDireccionSolucion';
+        $this->arrayFormActual[12] = 'seqConvenio';
 
         $this->minmDatesDiff = 25569;
         $this->secInDay = 86400;

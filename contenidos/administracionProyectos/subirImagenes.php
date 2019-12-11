@@ -22,12 +22,26 @@ if (isset($_FILES["archivo"])) {
             }
         }
     }
-    $countNombre = count($arraImagenes) + 1;
+
+    $destinoIn = '../../recursos/proyectos/proyecto-' . $idProyecto . '/inactivas';
+    $dirIn = @dir($destinoIn);
+    $arraImagenesIn = Array();
+    if ($dirIn) {
+        while (($archivo = $dirIn->read()) !== false) {
+            if ($archivo[0] != ".") {
+                $arraImagenesIn[] = 'proyecto-' . $idProyecto . '/inactivas/' . $archivo;
+                continue;
+            }
+        }
+    }
+    $countNombre = count($arraImagenes) + count($arraImagenesIn) + 1;
     foreach ($arraImagenes as $key => $value) {
         $nombreImg = explode("/", $value);
+
+
         $retorna .=' <div class = "col-md-3">
         <label ><h5><b>' . $nombreImg[2] . '</b>
-          <img src="recursos/imagenes/deleted.png" onclick="moverImagen("'.$value.'", 1,"' . $nombreImg[2] . '",' . $idProyecto . ' );">  
+          <img src="recursos/imagenes/deleted.png" onclick="moverImagen(\'proyecto-' . $idProyecto . '/imagenes/' . $nombreImg[2] . '\', 1,\'' . $nombreImg[2] . '\',\'' . $idProyecto . '\' );">  
         </h5></label><br>
             <img src = "' . $url . 'recursos/proyectos/' . $value . '" class = "img-circle" alt = "Card image cap" height = "100" width = "100" />
             </div>';
@@ -42,30 +56,36 @@ if (isset($_FILES["archivo"])) {
             $tamano = $_FILES['archivo']['size'][$key];
             $tipo = explode("/", $_FILES['archivo']['type'][$key])[1];
             // echo "<p>" . $tamano ." < ". $tmax . "</p>";
-            if ($tipo == "jpg" || $tipo == "JPG" || $tipo == "jpeg" || $tipo == "JPEG") {
-                if ($tamano < $tmax) {
-                    $target_path = $target_path . basename($_FILES['archivo']['name'][$key]);
-                    $nameIni = basename($_FILES['archivo']['name'][$key]);
+            if (count($arraImagenes) < 12) {
+                if ($tipo == "jpg" || $tipo == "JPG" || $tipo == "jpeg" || $tipo == "JPEG") {
+                    if ($tamano < $tmax) {
+                        $target_path = $target_path . basename($_FILES['archivo']['name'][$key]);
+                        $nameIni = basename($_FILES['archivo']['name'][$key]);
 
-                    if (move_uploaded_file($_FILES['archivo']['tmp_name'][$key], $target_path)) {
-                        rename($destino . "" . $nameIni, $destino . "" . $idProyecto . "_" . $countNombre . "." . $tipo);
-                        $retorna .='<div class="col-md-3">
+                        if (move_uploaded_file($_FILES['archivo']['tmp_name'][$key], $target_path)) {
+                            rename($destino . "" . $nameIni, $destino . "" . $idProyecto . "_" . $countNombre . "." . $tipo);
+                            $retorna .='<div class="col-md-3">
                                     <label ><h5><b>' . $idProyecto . '_' . $countNombre . "." . $tipo . ' </b></h5></label><br>
                                     <img src="' . $url . 'recursos/proyectos/proyecto-' . $idProyecto . '/imagenes/' . $idProyecto . '_' . $countNombre . '.' . $tipo . '" class="img-circle" alt="Card image cap" height="100" width="100" />        
                                     </div>';
-                        $countNombre++;
+                            $countNombre++;
+                        } else {
+                            $retorna .='<div class="col-md-3"><label>error al subir la imagen ' . basename($_FILES['archivo']['name'][$key]) . ' por favor intentelo nuevamente</label><br>'
+                                    . '<img src="' . $url . 'recursos/imagenes/errorImg.png" class="img-circle" alt="Card image cap" height="100" width="100" />'
+                                    . '</div>';
+                        }
                     } else {
-                        $retorna .='<div class="col-md-3"><label>error al subir la imagen ' . basename($_FILES['archivo']['name'][$key]) . ' por favor intentelo nuevamente</label><br>'
-                                . '<img src="' . $url . 'recursos/imagenes/errorImg.png" class="img-circle" alt="Card image cap" height="100" width="100" />'
+                        $retorna .='<div class="col-md-3"><label>La imagen ' . basename($_FILES['archivo']['name'][$key]) . ' No cumple con el limite de tamaño estrablecido</label><br>'
+                                . '<img src="' . $url . 'recursos/imagenes/errorImg.png" class="img-circle" alt="Card image cap" height="80" width="80" />'
                                 . '</div>';
                     }
                 } else {
-                    $retorna .='<div class="col-md-3"><label>La imagen ' . basename($_FILES['archivo']['name'][$key]) . ' No cumple con el limite de tamaño estrablecido</label><br>'
-                            . '<img src="' . $url . 'recursos/imagenes/errorImg.png" class="img-circle" alt="Card image cap" height="80" width="80" />'
+                    $retorna .='<div class="col-md-3"><label>La extension  .' . $tipo . ' de la imagen ' . basename($_FILES['archivo']['name'][$key]) . '. No cumple con el formato .jpg</label><br>'
+                            . '<img src="' . $url . 'recursos/imagenes/errorImg.png" class="img-circle" alt="Card image cap" height="100" width="100" />'
                             . '</div>';
                 }
             } else {
-                $retorna .='<div class="col-md-3"><label>La extension  .' . $tipo . ' de la imagen ' . basename($_FILES['archivo']['name'][$key]) . '. No cumple con el formato .jpg</label><br>'
+                $retorna .='<div class="col-md-3"><label>La extension  .' . $tipo . ' de la imagen ' . basename($_FILES['archivo']['name'][$key]) . '. La cantidad de imagenes excede el maximo permitido <strong>12</strong></label><br>'
                         . '<img src="' . $url . 'recursos/imagenes/errorImg.png" class="img-circle" alt="Card image cap" height="100" width="100" />'
                         . '</div>';
             }

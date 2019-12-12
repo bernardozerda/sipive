@@ -308,7 +308,7 @@ class Usuario {
 
         // Actualiza los datos basicos del usuario
         if (empty($arrErrores)) {
-            $sql = "
+           echo $sql = "
                     UPDATE T_COR_USUARIO SET 
                         txtNombre = \"" . mb_ereg_replace('\"', '', $txtNombre) . "\" , 
                         txtApellido = \"" . mb_ereg_replace('\"', '', $txtApellido) . "\", 

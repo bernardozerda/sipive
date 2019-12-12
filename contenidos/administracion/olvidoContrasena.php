@@ -194,6 +194,8 @@ if (empty($arrErrores)) {
                     1,
                     $arrUsuario[$seqUsuario]->numVencimiento,
                     $arrPermisos,
+                    $arrUsuario[$seqUsuario]->seqDependencia,
+                    $arrUsuario[$seqUsuario]->txtMatriculaProfesional,
                     $arrPrivilegios
                 );
 

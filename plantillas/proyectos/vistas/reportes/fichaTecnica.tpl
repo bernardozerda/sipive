@@ -136,11 +136,11 @@
                                 <th><b>Permiso de Ocupación</b></th>
                                 <th><b>Cer. existencia y Habiltabilidad </b></th>
                                 <th><b>(%) Desembolsado</b></th>
-                                <th><b>Saldo por Desembolsar </b></th>                                
+                                <th><b>Saldo por Desembolsar<br>(Incluye Reintegros) </b></th>                                
                             </tr>
                         </thead>
                         <tr>
-                            <td>{$avance}<b>%</b><br><b>$</b>{$valAvance|number_format:0:".":","}</td>
+                            <td>{$avance}<b>%</b><br><b></td>
                             <td>{$fechaAvance}</td>
                             <td >{$cantOcupacion} Unidades</td>  
                             <td>{$cantExistencia} Unidades</td>
@@ -154,7 +154,8 @@
                             </td>
                             <td>
                                 <div class="col-sm-12 text-right">
-                                    $ {$arrFinanciera.$seqProyecto.saldoDesembolso|number_format:0:',':'.'}
+                                   {* $ {$arrFinanciera.$seqProyecto.saldoDesembolso|number_format:0:',':'.'}*}
+                                   {$valTotal|number_format:0:',':'.'}
                                 </div>
                                 <div class="col-sm-12 text-right">
                                     {$arrFinanciera.$seqProyecto.porcentajeSaldoDesembolso|number_format:2:',':'.'}%

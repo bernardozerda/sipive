@@ -138,6 +138,7 @@ $arrFinanciera[$seqProyecto]['menor'] = array();
 
 // procesando el resumen de proyecto para ordenar los datos
 
+$valTotal = 0;
 foreach ($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion) {
 
     if ($arrResolucion['idTipo'] == 1) {
@@ -176,6 +177,20 @@ foreach ($claGestion->arrResoluciones as $seqUnidadActo => $arrResolucion) {
     }
 }
 
+
+// total Reintegros
+
+$sql = "SELECT sum(valConsignacion) as valor FROM t_pry_aad_reintegros
+left join t_pry_aad_reintegros_detalle using(seqReintegro)
+where seqProyecto = " . $seqProyecto . " and txtTipo like 'reintegro';";
+$reqVal = $aptBd->GetAll($sql);
+$totalReintegro = $reqVal[0]['valor'];
+
+$valTotal = $arrFinanciera[$seqProyecto]['aprobado']['total'] + $arrFinanciera[$seqProyecto]['indexado']['total'] + $arrFinanciera[$seqProyecto]['menor']['total'];
+//echo "<br> aprobado".$arrFinanciera[$seqProyecto]['aprobado']['total'];
+//echo "<br> indexado".$arrFinanciera[$seqProyecto]['indexado']['total'];
+//echo "<br> menor".$arrFinanciera[$seqProyecto]['menor']['total'];
+//$valTotal +=$arrFinanciera[$seqProyecto]['saldoDesembolso']-$arrFinanciera[$seqProyecto]['constructor'];
 //die();
 $arrListadoGirosConstructor = $claGestion->listadoGirosConstructor($seqProyecto);
 foreach ($arrListadoGirosConstructor as $i => $arrGiro) {
@@ -190,9 +205,23 @@ foreach ($arrListadoGirosFiducia as $i => $arrGiro) {
 $arrFinanciera[$seqProyecto]['entidadFiducia'] = array_shift(obtenerDatosTabla(
                 "t_pry_datos_fiducia", array("seqProyecto", "txtRazonSocialFiducia", "numNitFiducia"), "seqProyecto", "seqProyecto = " . $seqProyecto
         ));
+
+
+$sumaTotal = ($valTotal + $totalReintegro) - $arrFinanciera[$seqProyecto]['constructor'];
+$porcentaje = ($arrFinanciera[$seqProyecto]['constructor'] / ($valTotal + $totalReintegro) * 100 );
+//$porcentaje = ($porcentaje == 1)?0:$porcentaje;
+$arrFinanciera[$seqProyecto]['porcentajeSaldoDesembolso'] = 100 - $porcentaje;
+if ($arrFinanciera[$seqProyecto]['porcentajeSaldoDesembolso'] > 0) {
+    $sumaTotal = ($valTotal ) - $arrFinanciera[$seqProyecto]['constructor'];
+    $porcentaje = ($arrFinanciera[$seqProyecto]['constructor'] / ($valTotal ) * 100 );
+    $arrFinanciera[$seqProyecto]['porcentajeSaldoDesembolso'] = 100 - $porcentaje;
+}
+
+//echo "<br><p> *** reintegro".$sumaTotal."</p>";
 //var_dump($arrFinanciera[$seqProyecto]['aprobado']); 
 $claSmarty->assign("arrProyectos", $arrProyectos);
 $claSmarty->assign("id", $id);
+$claSmarty->assign("valTotal", $sumaTotal);
 $claSmarty->assign("tipo", $tipo);
 $claSmarty->assign("cantUnidades", $cantUnidades);
 $claSmarty->assign("cantUnidadesVinculadas", $cantUnidadesVinculadas);

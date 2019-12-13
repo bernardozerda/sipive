@@ -206,7 +206,7 @@ $arrFinanciera[$seqProyecto]['entidadFiducia'] = array_shift(obtenerDatosTabla(
                 "t_pry_datos_fiducia", array("seqProyecto", "txtRazonSocialFiducia", "numNitFiducia"), "seqProyecto", "seqProyecto = " . $seqProyecto
         ));
 
-echo "<br>valTotal = "."aprobado ".$arrFinanciera[$seqProyecto]['aprobado']['total']." + indexado ".$arrFinanciera[$seqProyecto]['indexado']['total']." + menor " .$arrFinanciera[$seqProyecto]['menor']['total'];
+//echo "<br>valTotal = "."aprobado ".$arrFinanciera[$seqProyecto]['aprobado']['total']." + indexado ".$arrFinanciera[$seqProyecto]['indexado']['total']." + menor " .$arrFinanciera[$seqProyecto]['menor']['total'];
 $sumaTotal = ($valTotal + $totalReintegro) - $arrFinanciera[$seqProyecto]['constructor'];
 $porcentaje = ($arrFinanciera[$seqProyecto]['constructor'] / ($valTotal + $totalReintegro) * 100 );
 //$porcentaje = ($porcentaje == 1)?0:$porcentaje;

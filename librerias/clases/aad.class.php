@@ -3001,7 +3001,9 @@ class aad {
                         update t_frm_formulario set
                           seqProyecto = null,
                           seqProyectoHijo = null,
-                          seqUnidadProyecto = null
+                          seqUnidadProyecto = null,
+                          txtMatriculaInmobiliaria = '', 
+                          txtDireccionSolucion = ''
                         where seqFormulario = $seqFormulario
                     ";
                     $aptBd->execute($sql);
@@ -3035,7 +3037,7 @@ class aad {
                 $sql = "
                     update t_frm_formulario set
                         seqEstadoProceso = 8,
-                        bolSancion = 1,
+                        #bolSancion = 1,
                         fchVigencia = null,
                         fchUltimaActualizacion = now()
                     where seqFormulario = $seqFormulario
@@ -3221,11 +3223,13 @@ class aad {
                 update t_frm_formulario set
                     seqEstadoProceso = 18
                     ,fchUltimaActualizacion = NOW()
-                    ,bolSancion = 1
+                    #,bolSancion = 1
                     #,fchVigencia = DATE_ADD(now(), INTERVAL 1 YEAR) no aplica de vigencia de futura
                     ,seqProyecto = 37
                     ,seqProyectoHijo = null
                     ,seqUnidadProyecto = 1
+                    ,txtMatriculaInmobiliaria = ''
+                    ,txtDireccionSolucion=''
                 where seqFormulario = " . $seqFormulario . "
             ";
             $aptBd->execute($sql);
@@ -3949,8 +3953,10 @@ class aad {
                     $txtCampos .= $txtCampo . "Actual,";
                     $txtValores .= "'" . $txtValor . "',";
                 } else {
-                    $txtCampos .= $txtCampo . ",";
-                    $txtValores .= "'" . $txtValor . "',";
+                    if ($txtCampo != 'bolSancion') {
+                        $txtCampos .= $txtCampo . ",";
+                        $txtValores .= "'" . $txtValor . "',";
+                    }
                 }
             }
             $txtCampos = rtrim($txtCampos, ",");
@@ -4200,7 +4206,8 @@ class aad {
             $sql = "update t_aad_formulario_acto set ";
             foreach ($claFormulario as $txtCampo => $txtValor) {
                 if ($txtCampo != "arrCiudadano" and $txtCampo != "arrErrores") {
-                    $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "NULL";
+                    if ($txtCampo != 'bolSancion')
+                        $txtValor = (trim($txtValor) != "") ? "'" . $txtValor . "'" : "NULL";
                     if (in_array($txtCampo, $this->arrayFormActual)) {
                         $sql .= $txtCampo . "Actual = $txtValor,";
                     } else {

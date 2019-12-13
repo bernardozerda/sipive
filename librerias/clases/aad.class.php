@@ -75,7 +75,7 @@ class aad {
         $txtCondicion .= ($fchFinal == null) ? "" : " AND hvi.fchActo <= '" . $fchFinal . "'";
         $txtCondicion .= (empty($arrDocumentos)) ? "" : " AND cac.numDocumento IN (" . implode(",", $arrDocumentos) . ")";
         try {
-            /* $sql = "
+            $sql = "
               select distinct
               hvi.seqTipoActo,
               hvi.numActo,
@@ -88,18 +88,18 @@ class aad {
               $txtCondicion
               ORDER BY
               hvi.fchActo desc
-              "; */
-            $sql = "SELECT distinct
-                hvi.seqTipoActo, 
-                hvi.numActo, 
-                hvi.fchActo
-                FROM
-                    t_aad_acto_administrativo hvi
-                    WHERE 1 = 1
+              ";
+            /* $sql = "SELECT distinct
+              hvi.seqTipoActo,
+              hvi.numActo,
+              hvi.fchActo
+              FROM
+              t_aad_acto_administrativo hvi
+              WHERE 1 = 1
               $txtCondicion
               ORDER BY
-              hvi.fchActo desc";
-
+              hvi.fchActo desc"; */
+//echo "<p>".$sql."</p>";
             $objRes = $aptBd->execute($sql);
             while ($objRes->fields) {
                 $seqTipoActo = $objRes->fields['seqTipoActo'];
@@ -459,7 +459,7 @@ class aad {
                 $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[8];
                 break;
             case 6: // renuncia
-                $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[153];
+                $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[154];
                 break;
             case 7: // notificaciones
                 $this->arrCaracteristicas['txtResolucion'] = $arrCaracteristicas[39];

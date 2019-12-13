@@ -1,7 +1,6 @@
 <?php
 
-class GestionFinancieraProyectos
-{
+class GestionFinancieraProyectos {
 
     public $arrProyectos;
     public $arrFiducia;
@@ -13,15 +12,14 @@ class GestionFinancieraProyectos
     public $arrTitulos;
     private $arrExtensiones;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->arrProyectos = array();
         $this->arrFiducia = array();
         $this->arrResoluciones = array();
         $this->arrGiroConstructor = array();
         $this->arrErrores = array();
         $this->arrMensajes = array();
-        $this->arrExtensiones = array("txt","xls","xlsx");
+        $this->arrExtensiones = array("txt", "xls", "xlsx");
         $this->txtCreador = "SiPIVE - SDHT";
 
         $this->arrTitulos['giroFiducia'][] = "Identificador del Proyecto";
@@ -40,10 +38,9 @@ class GestionFinancieraProyectos
         $this->arrTitulos['giroConstructor'][] = "Nombre";
         $this->arrTitulos['giroConstructor'][] = "Disponible";
         $this->arrTitulos['giroConstructor'][] = "Valor a Girar";
-
     }
 
-    public function proyectos(){
+    public function proyectos() {
         global $aptBd;
 
         $sql = "
@@ -56,15 +53,14 @@ class GestionFinancieraProyectos
             order by txtNombreProyecto
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqProyecto = $objRes->fields['seqProyecto'];
             $this->arrProyectos[$seqProyecto] = $objRes->fields['txtNombreProyecto'];
             $objRes->MoveNext();
         }
-
     }
 
-    public function informacionResoluciones($seqProyecto){
+    public function informacionResoluciones($seqProyecto) {
 
         $this->arrResoluciones = array();
 
@@ -75,28 +71,25 @@ class GestionFinancieraProyectos
         $this->giros($seqProyecto);
 
         // calcula saldos
-        foreach($this->arrResoluciones as $seqUnidadActo => $arrResolucion){
+        foreach ($this->arrResoluciones as $seqUnidadActo => $arrResolucion) {
 
             // saldo por resolucion
-            $this->arrResoluciones[$seqUnidadActo]['saldo'] =
-                doubleval( $this->arrResoluciones[$seqUnidadActo]['total'] ) -
-                doubleval( $this->arrResoluciones[$seqUnidadActo]['liberaciones'] ) -
-                doubleval( $this->arrResoluciones[$seqUnidadActo]['giros'] );
+            $this->arrResoluciones[$seqUnidadActo]['saldo'] = doubleval($this->arrResoluciones[$seqUnidadActo]['total']) -
+                    doubleval($this->arrResoluciones[$seqUnidadActo]['liberaciones']) -
+                    doubleval($this->arrResoluciones[$seqUnidadActo]['giros']);
 
             // saldo por RP
-            if(is_array($arrResolucion['cdp'])) {
+            if (is_array($arrResolucion['cdp'])) {
                 foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
-                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'] =
-                        doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP']) +
-                        doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['liberaciones']) -
-                        doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros']);
+                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'] = doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP']) +
+                            doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['liberaciones']) -
+                            doubleval($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros']);
                 }
             }
         }
-
     }
 
-    private function datosBasicos($seqProyecto){
+    private function datosBasicos($seqProyecto) {
         global $aptBd;
 
         $sql = "
@@ -159,7 +152,7 @@ class GestionFinancieraProyectos
             $this->arrResoluciones[$seqUnidadActo]['numero'] = $objRes->fields['numActo'];
             $this->arrResoluciones[$seqUnidadActo]['fecha'] = new DateTime($objRes->fields['fchActo']);
             $this->arrResoluciones[$seqUnidadActo]['total'] += doubleval($objRes->fields['valIndexado']);
-            if(intval($seqRegistroPresupuestal)) {
+            if (intval($seqRegistroPresupuestal)) {
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['proyectoInversion'] = $objRes->fields['numProyectoInversionCDP'];
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['numeroCDP'] = $objRes->fields['numNumeroCDP'];
                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['fechaCDP'] = new DateTime($objRes->fields['fchFechaCDP']);
@@ -184,15 +177,14 @@ class GestionFinancieraProyectos
 
             $objRes->MoveNext();
         }
-
     }
 
-    private function liberaciones($seqProyecto){
+    private function liberaciones($seqProyecto) {
         global $aptBd;
 
         $arrRegistrosPresupuestales = $this->obtenerRegistrosPresupuestales();
 
-        if(! empty($arrRegistrosPresupuestales) ) {
+        if (!empty($arrRegistrosPresupuestales)) {
             $sql = "
                 select distinct
                     lib.seqLiberacion,
@@ -221,12 +213,11 @@ class GestionFinancieraProyectos
                     $this->arrResoluciones[$seqUnidadActo]['liberaciones'] += $objRes->fields['valLiberado'];
                     $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal];
 
-                    if(isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])) {
+                    if (isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])) {
                         $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'][$seqLiberacion]['valor'] = $objRes->fields['valLiberado'];
                         $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'][$seqLiberacion]['fecha'] = new DateTime($objRes->fields['fchLiberacion']);
                         $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['detalle'][$seqLiberacion]['usuario'] = $objRes->fields['txtUsuario'];
                     }
-
                 }
 
                 // acumulado de liberciones por RP
@@ -235,8 +226,8 @@ class GestionFinancieraProyectos
                 $objRes->MoveNext();
             }
 
-            foreach($this->arrResoluciones as $seqUnidadActo => $arrResolucion){
-                if(is_array($arrResolucion['cdp'])) {
+            foreach ($this->arrResoluciones as $seqUnidadActo => $arrResolucion) {
+                if (is_array($arrResolucion['cdp'])) {
                     foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
                         if (isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])) {
                             $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal];
@@ -247,17 +238,15 @@ class GestionFinancieraProyectos
                     }
                 }
             }
-
-
         }
     }
 
-    private function giros($seqProyecto){
+    private function giros($seqProyecto) {
         global $aptBd;
 
         $arrRegistrosPresupuestales = $this->obtenerRegistrosPresupuestales();
 
-        if(! empty($arrRegistrosPresupuestales) ) {
+        if (!empty($arrRegistrosPresupuestales)) {
 
             $sql = "
                 select
@@ -270,12 +259,12 @@ class GestionFinancieraProyectos
                 from t_pry_aad_giro_fiducia gfi
                 inner join t_pry_aad_giro_fiducia_detalle gfd on gfi.seqGiroFiducia = gfd.seqGiroFiducia
                 inner join t_pry_proyecto pry on gfd.seqProyecto = pry.seqProyecto
-                where gfd.seqRegistroPresupuestal in (" . implode("," , array_keys($arrRegistrosPresupuestales)) . ")            
+                where gfd.seqRegistroPresupuestal in (" . implode(",", array_keys($arrRegistrosPresupuestales)) . ")            
             ";
 
             $objRes = $aptBd->execute($sql);
             $arrDetalle = array();
-            while($objRes->fields){
+            while ($objRes->fields) {
 
                 $seqGiroFiducia = $objRes->fields['seqGiroFiducia'];
                 $seqUnidadActo = $objRes->fields['seqUnidadActo'];
@@ -283,11 +272,10 @@ class GestionFinancieraProyectos
                 $seqUnidadProyecto = intval($objRes->fields['seqUnidadProyecto']);
 
                 // acumula el saldo por resolucion
-                if(isset($this->arrResoluciones[$seqUnidadActo])){
+                if (isset($this->arrResoluciones[$seqUnidadActo])) {
                     $this->arrResoluciones[$seqUnidadActo]['giros'] += $objRes->fields['valGiro'];
 
                     $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'][$seqGiroFiducia] = $objRes->fields['valGiro'];
-
                 }
 
                 // acumulado de giros por RP
@@ -297,9 +285,9 @@ class GestionFinancieraProyectos
             }
 
             // acumulado de giros por RP
-            if(is_array($this->arrResoluciones)) {
+            if (is_array($this->arrResoluciones)) {
                 foreach ($this->arrResoluciones as $seqUnidadActo => $arrResolucion) {
-                    if(is_array($arrResolucion['cdp'])) {
+                    if (is_array($arrResolucion['cdp'])) {
                         foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
                             if (isset($arrRegistrosPresupuestales[$seqRegistroPresupuestal])) {
                                 $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['giros'] = $arrRegistrosPresupuestales[$seqRegistroPresupuestal]['giros'];
@@ -307,8 +295,7 @@ class GestionFinancieraProyectos
                             if (isset($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal])) {
                                 foreach ($arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'] as $seqUnidadProyecto => $arrDetalleGiro) {
                                     if (isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto])) {
-                                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'] =
-                                            $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'];
+                                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'] = $arrDetalle[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['unidades'][$seqUnidadProyecto]['detalle'];
                                     }
                                 }
                             }
@@ -316,15 +303,14 @@ class GestionFinancieraProyectos
                     }
                 }
             }
-
         }
     }
 
-    private function obtenerRegistrosPresupuestales(){
+    private function obtenerRegistrosPresupuestales() {
         $arrRegistrosPresupuestales = array();
-        foreach($this->arrResoluciones as $seqUnidadActo => $arrResolucion){
-            if(isset($arrResolucion['cdp'])){
-                foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP){
+        foreach ($this->arrResoluciones as $seqUnidadActo => $arrResolucion) {
+            if (isset($arrResolucion['cdp'])) {
+                foreach ($arrResolucion['cdp'] as $seqRegistroPresupuestal => $arrCDP) {
                     $arrRegistrosPresupuestales[$seqRegistroPresupuestal] = $arrCDP;
                 }
             }
@@ -332,57 +318,57 @@ class GestionFinancieraProyectos
         return $arrRegistrosPresupuestales;
     }
 
-    public function salvarLiberacion($arrPost){
+    public function salvarLiberacion($arrPost) {
         global $aptBd;
 
         // carga la infomacion previa para hacer las validaciones
         $this->informacionResoluciones($arrPost['seqProyecto']);
 
         // datos necesarios
-        $valLiberado = doubleval(mb_ereg_replace("[^0-9]","", $arrPost['valor']));
+        $valLiberado = doubleval(mb_ereg_replace("[^0-9]", "", $arrPost['valor']));
         $seqUnidadActoPrimario = $arrPost['seqUnidadActoPrimario'];
         $seqUnidadActo = $arrPost['seqUnidadActo'];
         $seqRegistroPresupuestal = $arrPost['seqRegistroPresupuestal'];
 
         // validacion del valor
-        if($valLiberado == 0){
+        if ($valLiberado == 0) {
             $this->arrErrores[] = "No debe dejar vacío el valor a liberar";
         }
 
         // validacion para liberacion del CDP
-        if(isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'])){
-            if($valLiberado > $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']){
+        if (isset($this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo'])) {
+            if ($valLiberado > $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['saldo']) {
                 $this->arrErrores[] = "No hay suficientes recursos para liberar del RP " .
-                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['numeroRP'] . " del " .
-                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['fechaRP']->format("Y");
+                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['numeroRP'] . " del " .
+                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['fechaRP']->format("Y");
             }
-        }else{
-            if($valLiberado > $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP']){
+        } else {
+            if ($valLiberado > $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['valorRP']) {
                 $this->arrErrores[] = "No hay suficientes recursos para liberar del RP " .
-                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['numeroRP'] . " del " .
-                    $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['fechaRP']->format("Y");
+                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['numeroRP'] . " del " .
+                        $this->arrResoluciones[$seqUnidadActo]['cdp'][$seqRegistroPresupuestal]['fechaRP']->format("Y");
             }
         }
 
         // validacion contra la resolucion de liberacion
-        if(isset($this->arrResoluciones[$seqUnidadActoPrimario]['saldo'])){
-            if($valLiberado > abs($this->arrResoluciones[$seqUnidadActoPrimario]['saldo'])){
+        if (isset($this->arrResoluciones[$seqUnidadActoPrimario]['saldo'])) {
+            if ($valLiberado > abs($this->arrResoluciones[$seqUnidadActoPrimario]['saldo'])) {
                 $this->arrErrores[] = "No hay suficientes recursos para liberar de la resolución " .
-                    $this->arrResoluciones[$seqUnidadActoPrimario]['numero'] . " del " .
-                    $this->arrResoluciones[$seqUnidadActoPrimario]['fecha']->format("Y");
+                        $this->arrResoluciones[$seqUnidadActoPrimario]['numero'] . " del " .
+                        $this->arrResoluciones[$seqUnidadActoPrimario]['fecha']->format("Y");
             }
-        }else{
-            if($valLiberado > abs($this->arrResoluciones[$seqUnidadActoPrimario]['total'])){
+        } else {
+            if ($valLiberado > abs($this->arrResoluciones[$seqUnidadActoPrimario]['total'])) {
                 $this->arrErrores[] = "No hay suficientes recursos para liberar de la resolución " .
-                    $this->arrResoluciones[$seqUnidadActoPrimario]['numero'] . " del " .
-                    $this->arrResoluciones[$seqUnidadActoPrimario]['fecha']->format("Y");
+                        $this->arrResoluciones[$seqUnidadActoPrimario]['numero'] . " del " .
+                        $this->arrResoluciones[$seqUnidadActoPrimario]['fecha']->format("Y");
             }
         }
 
         // salva registro
-        if(empty($this->arrErrores)){
+        if (empty($this->arrErrores)) {
 
-            try{
+            try {
                 $aptBd->BeginTrans();
 
                 $sql = "
@@ -412,20 +398,18 @@ class GestionFinancieraProyectos
                 $this->informacionResoluciones($arrPost['seqProyecto']);
 
                 $aptBd->CommitTrans();
-            } catch ( Exception $objError ){
+            } catch (Exception $objError) {
                 $aptBd->RollbackTrans();
                 $this->arrErrores[] = $objError->getMessage();
                 $this->Mensajes[] = array();
             }
-
         }
-
     }
 
-    public function eliminarLiberacion($arrPost){
+    public function eliminarLiberacion($arrPost) {
         global $aptBd;
 
-        try{
+        try {
             $aptBd->BeginTrans();
 
             $claSeguimiento = new SeguimientoProyectos();
@@ -445,15 +429,14 @@ class GestionFinancieraProyectos
             $this->informacionResoluciones($arrPost['seqProyecto']);
 
             $aptBd->CommitTrans();
-        } catch ( Exception $objError ){
+        } catch (Exception $objError) {
             $aptBd->RollbackTrans();
             $this->arrErrores[] = $objError->getMessage();
             $this->Mensajes[] = array();
         }
-
     }
 
-    public function cargarArchivo(){
+    public function cargarArchivo() {
 
         $arrArchivo = array();
 
@@ -490,25 +473,25 @@ class GestionFinancieraProyectos
                 break;
         }
 
-        if( empty( $this->arrErrores ) ){
+        if (empty($this->arrErrores)) {
 
             // si es un archivo de texto obtiene los datos
-            if( $_FILES['archivo']['type'] == "text/plain" ){
-                foreach( file( $_FILES['archivo']['tmp_name'] ) as $numLinea => $txtLinea ){
-                    if( trim( $txtLinea ) != "" ) {
+            if ($_FILES['archivo']['type'] == "text/plain") {
+                foreach (file($_FILES['archivo']['tmp_name']) as $numLinea => $txtLinea) {
+                    if (trim($txtLinea) != "") {
                         $arrArchivo[$numLinea] = explode("\t", trim($txtLinea));
-                        foreach( $arrArchivo[$numLinea] as $numColumna => $txtCelda ){
-                            if( $numColumna < count( $this->arrFormatoArchivo ) ) {
+                        foreach ($arrArchivo[$numLinea] as $numColumna => $txtCelda) {
+                            if ($numColumna < count($this->arrFormatoArchivo)) {
                                 $arrArchivo[$numLinea][$numColumna] = trim($txtCelda);
-                            }else{
-                                unset( $arrArchivo[$numLinea][$numColumna] );
+                            } else {
+                                unset($arrArchivo[$numLinea][$numColumna]);
                             }
                         }
                     }
                 }
-            }else{
+            } else {
 
-                try{
+                try {
 
                     // crea las clases para la obtencion de los datos
                     $txtTipoArchivo = PHPExcel_IOFactory::identify($_FILES['archivo']['tmp_name']);
@@ -518,23 +501,22 @@ class GestionFinancieraProyectos
 
                     // obtiene las dimensiones del archivo para la obtencion del contenido por rangos
                     $numFilas = $objHoja->getHighestRow();
-                    $numColumnas = PHPExcel_Cell::columnIndexFromString( $objHoja->getHighestColumn() ) - 1;
+                    $numColumnas = PHPExcel_Cell::columnIndexFromString($objHoja->getHighestColumn()) - 1;
 
                     // obtiene los datos del rango obtenido
-                    for( $numFila = 1; $numFila <= $numFilas; $numFila++ ){
-                        for( $numColumna = 0; $numColumna <= $numColumnas; $numColumna++ ){
+                    for ($numFila = 1; $numFila <= $numFilas; $numFila++) {
+                        for ($numColumna = 0; $numColumna <= $numColumnas; $numColumna++) {
                             $numFilaArreglo = $numFila - 1;
-                            $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna,$numFila)->getValue();
-                            if( $this->arrFormatoArchivo[$numColumna]['tipo'] == "fecha" and is_numeric( $arrArchivo[$numFilaArreglo][$numColumna] ) ) {
+                            $arrArchivo[$numFilaArreglo][$numColumna] = $objHoja->getCellByColumnAndRow($numColumna, $numFila)->getValue();
+                            if ($this->arrFormatoArchivo[$numColumna]['tipo'] == "fecha" and is_numeric($arrArchivo[$numFilaArreglo][$numColumna])) {
                                 $claFecha = PHPExcel_Shared_Date::ExcelToPHPObject($arrArchivo[$numFilaArreglo][$numColumna]);
                                 $arrArchivo[$numFilaArreglo][$numColumna] = $claFecha->format("Y-m-d");
-
                             }
                         }
                     }
 
                     // si no tiene la celda de clave llena no carga
-                    if( $objPHPExcel->getProperties()->getCreator() == $this->txtCreador ) {
+                    if ($objPHPExcel->getProperties()->getCreator() == $this->txtCreador) {
 
                         // limpia las lineas vacias
                         foreach ($arrArchivo as $numLinea => $arrLinea) {
@@ -549,97 +531,85 @@ class GestionFinancieraProyectos
                                 unset($arrArchivo[$numLinea]);
                             }
                         }
-
-                    }else{
+                    } else {
                         $this->arrErrores[] = "No se va a cargar el archivo porque no corresponde a la plantilla que se obtiene de la aplicación";
                     }
-
-                } catch ( Exception $objError ){
+                } catch (Exception $objError) {
                     $this->arrErrores[] = $objError->getMessage();
                 }
-
-
             }
-
         }
 
-        if(count($arrArchivo) == 1){
+        if (count($arrArchivo) == 1) {
             $this->arrErrores[] = "Un archivo que contiene solo los titulos se considera vacío";
         }
 
         return $arrArchivo;
     }
 
-    public function validarArchivo($arrPost, $arrArchivo, $txtFormato){
+    public function validarArchivo($arrPost, $arrArchivo, $txtFormato) {
 
         $this->validarTitulos($arrArchivo[0], $txtFormato);
 
         $arrRetorno = array();
 
-        for($i = 1; $i < count($arrArchivo); $i++){
+        for ($i = 1; $i < count($arrArchivo); $i++) {
 
-            $seqProyecto       = intval($arrArchivo[$i][0]);
+            $seqProyecto = intval($arrArchivo[$i][0]);
             $txtNombreProyecto = trim(mb_strtolower($arrArchivo[$i][1]));
             $seqUnidadProyecto = intval($arrArchivo[$i][2]);
             $txtUnidadProyecto = trim(mb_strtolower($arrArchivo[$i][3]));
-            if($txtFormato == "giroConstructor") {
+            if ($txtFormato == "giroConstructor") {
                 $valDisponible = doubleval($arrArchivo[$i][6]);
-                $valGiro       = $arrArchivo[$i][7];
-            }else{
+                $valGiro = $arrArchivo[$i][7];
+            } else {
                 $valDisponible = null;
-                $valGiro       = $arrArchivo[$i][6];
+                $valGiro = $arrArchivo[$i][6];
             }
 
             // valida el identificador del proyecto
-            if($seqProyecto == 0){
+            if ($seqProyecto == 0) {
                 $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos['giroConstructor'][0] . " no es válido";
-            }else{
+            } else {
 
                 // debe coincidir el identificador del proyecto con el identificador en el archivo
                 $arrProyecto = obtenerDatosTabla(
-                    "t_pry_proyecto",
-                    array("0", "seqProyecto","seqProyectoPadre"),
-                    "0",
-                    "seqProyecto = '" . $seqProyecto . "'"
+                        "t_pry_proyecto", array("0", "seqProyecto", "seqProyectoPadre"), "0", "seqProyecto = '" . $seqProyecto . "'"
                 );
 
                 // debe coincidir el proyecto en el arcivo con el del formulario
-                if($arrPost['seqProyecto'] != $arrProyecto[0]['seqProyecto'] and $arrPost['seqProyecto'] != $arrProyecto[0]['seqProyectoPadre']){
+                if ($arrPost['seqProyecto'] != $arrProyecto[0]['seqProyecto'] and $arrPost['seqProyecto'] != $arrProyecto[0]['seqProyectoPadre']) {
                     $this->arrErrores[] = "Error linea " . ($i + 1) . ": El proyecto no coincide con el seleccionado en el formulario";
                 }
 
                 // debe coincidir el nombre del proyecto con el identificador en el archivo
                 $arrProyecto = obtenerDatosTabla(
-                    "t_pry_proyecto",
-                    array("lower(txtNombreProyecto)","seqProyecto","seqProyectoPadre"),
-                    "lower(txtNombreProyecto)",
-                    "lower(txtNombreProyecto) = '" . $txtNombreProyecto . "'"
+                        "t_pry_proyecto", array("lower(txtNombreProyecto)", "seqProyecto", "seqProyectoPadre"), "lower(txtNombreProyecto)", "lower(txtNombreProyecto) = '" . $txtNombreProyecto . "'"
                 );
 
-                if($arrProyecto[$txtNombreProyecto]['seqProyecto'] != $seqProyecto and $arrProyecto[$txtNombreProyecto]['seqProyectoPadre'] != $seqProyecto){
+                if ($arrProyecto[$txtNombreProyecto]['seqProyecto'] != $seqProyecto and $arrProyecto[$txtNombreProyecto]['seqProyectoPadre'] != $seqProyecto) {
                     $this->arrErrores[] = "Error linea " . ($i + 1) . ": El identificador del proyecto no coincide con el nombre consignado en el archivo";
                 }
-
             }
 
             // cantidad de unidades del proyecto
             $numUnidades = $this->cantidadUnidades($seqProyecto);
 
             // validacion de los campos de las unidades
-            if($numUnidades == 0){
-                if($seqUnidadProyecto != 0){
+            if ($numUnidades == 0) {
+                if ($seqUnidadProyecto != 0) {
                     $this->arrErrores[] = "Error linea " . ($i + 1) . ": El proyecto no tiene unidades relacionadas, no debe tener identificador de unidad";
                 }
-                if($txtUnidadProyecto != ""){
+                if ($txtUnidadProyecto != "") {
                     $this->arrErrores[] = "Error linea " . ($i + 1) . ": El proyecto no tiene unidades relacionadas, no debe tener nombre de unidad";
                 }
-            }else{
+            } else {
 
                 // validacion del dato de la unidad
-                if($seqUnidadProyecto == 0){
+                if ($seqUnidadProyecto == 0) {
                     $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos['giroConstructor'][2] . " no es válido";
                 }
-                if($txtUnidadProyecto == ""){
+                if ($txtUnidadProyecto == "") {
                     $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos['giroConstructor'][3] . " no es válido";
                 }
 
@@ -647,112 +617,108 @@ class GestionFinancieraProyectos
                 $arrUnidad = $this->proyectoUnidad($seqUnidadProyecto);
 
                 // la unidad debe coincidir en nombre e identificador
-                if($arrUnidad[$seqUnidadProyecto]['txtNombreUnidad'] != $txtUnidadProyecto){
+                if ($arrUnidad[$seqUnidadProyecto]['txtNombreUnidad'] != $txtUnidadProyecto) {
                     $this->arrErrores[] = "Error linea " . ($i + 1) . ": El nombre de la unidad no coincide con el identificador";
                 }
 
                 // la unidad debe pertenecer al proyecto
-                if($arrUnidad[$seqUnidadProyecto]['seqProyecto'] != $seqProyecto){
+                if ($arrUnidad[$seqUnidadProyecto]['seqProyecto'] != $seqProyecto) {
                     $this->arrErrores[] = "Error linea " . ($i + 1) . ": La unidad no pertenece al proyecto";
                 }
-
             }
 
-            if($txtFormato == "giroConstructor"){
-                if(doubleval($valGiro) > $valDisponible){
+            if ($txtFormato == "giroConstructor") {
+                if (doubleval($valGiro) > $valDisponible) {
                     $this->arrErrores[] = "Error linea " . ($i + 1) . ": No puede girar un monto mayor al disponible";
                 }
             }
 
             // validacion del monto agirar
-            if(! is_numeric($valGiro)){
+            if (!is_numeric($valGiro)) {
                 $this->arrErrores[] = "Error linea " . ($i + 1) . ": El valor de la columna " . $this->arrTitulos['giroConstructor'][5] . " no es válido";
             }
 
-            if(empty($this->arrErrores)){
-                if(doubleval($valGiro) != 0) {
+            if (empty($this->arrErrores)) {
+                if (doubleval($valGiro) != 0) {
 
                     $seqProyecto = $arrPost['seqProyecto'];
 
-                    if($txtFormato == "giroConstructor"){
+                    if ($txtFormato == "giroConstructor") {
                         $arrRetorno[$seqProyecto][$seqUnidadProyecto] = $valGiro;
-                    }else {
+                    } else {
                         $seqUnidadActo = $arrPost['seqUnidadActo'];
                         $seqRegistroPresupuestal = $arrPost['seqRegistroPresupuestal'];
                         $arrRetorno[$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal][$seqUnidadProyecto] = $valGiro;
                     }
                 }
             }
-
         }
 
         return $arrRetorno;
     }
 
-    private function validarTitulos($arrTitulos, $txtFormato){
+    private function validarTitulos($arrTitulos, $txtFormato) {
         $arrValidar = $this->arrTitulos[$txtFormato];
 
-        if(! empty($arrValidar)) {
+        if (!empty($arrValidar)) {
             foreach ($arrValidar as $i => $txtTitulo) {
                 if (mb_strtolower(trim($txtTitulo)) != mb_strtolower(trim($arrTitulos[$i]))) {
                     $this->arrErrores[] = "La columna del archivo " . $txtTitulo . " no se encuentra o no está en el lugar correcto";
                 }
             }
-        }else{
+        } else {
             $this->arrErrores[] = "Formato de archivo desconocido o no esta definido ($txtFormato)";
         }
     }
 
-    public function salvarGiroFiducia($arrPost){
+    public function salvarGiroFiducia($arrPost) {
         global $aptBd;
 
         /**
          * VALIDACIONES DE LOS CAMPOS
          */
-
-        if($arrPost['seqProyecto'] == 0){
+        if ($arrPost['seqProyecto'] == 0) {
             $this->arrErrores[] = "Seleccione el proyecto para el que desea hacer el giro";
         }
 
-        if($arrPost['seqUnidadActo'] == 0){
+        if ($arrPost['seqUnidadActo'] == 0) {
             $this->arrErrores[] = "Seleccione el acto administrativo para el que desea hacer el giro";
         }
 
-        if($arrPost['seqRegistroPresupuestal'] == 0){
+        if ($arrPost['seqRegistroPresupuestal'] == 0) {
             $this->arrErrores[] = "Seleccione el registro presupuestal para el que desea hacer el giro";
         }
 
-        if((! isset($arrPost['unidades'])) or empty($arrPost['unidades'])){
+        if ((!isset($arrPost['unidades'])) or empty($arrPost['unidades'])) {
             $this->arrErrores[] = "No ha seleccionado las unidades para el giro";
         }
 
-        if(trim($arrPost['txtCertificacion']) == ""){
+        if (trim($arrPost['txtCertificacion']) == "") {
             $this->arrErrores[] = "No puede dejar el campo Certificacion vacío";
         }
 
-        if((! isset($arrPost['documentos'])) or empty($arrPost['documentos'])){
+        if ((!isset($arrPost['documentos'])) or empty($arrPost['documentos'])) {
             $this->arrErrores[] = "Seleccione al menos un documento para salvar el giro";
         }
 
-        if(trim($arrPost['txtSubsecretario']) == "" and trim($arrPost['txtSubdirector']) == ""){
+        if (trim($arrPost['txtSubsecretario']) == "" and trim($arrPost['txtSubdirector']) == "") {
             $this->arrErrores[] = "Debe estar al menos el nombre del Subsecretario o el del Subdirector";
         }
 
-        if(trim($arrPost['txtReviso']) == ""){
+        if (trim($arrPost['txtReviso']) == "") {
             $this->arrErrores[] = "Debe dar el nombre de quien revisa el documento";
         }
 
-        $arrPost['txtSubsecretario'] = (trim($arrPost['txtSubsecretario']) == "")? "null" :  trim($arrPost['txtSubsecretario']);
-        $arrPost['txtSubdirector']   = (trim($arrPost['txtSubdirector']) == "")? "null"   :  trim($arrPost['txtSubdirector']);
-        $arrPost['txtReviso']        = (trim($arrPost['txtReviso']) == "")? "null"        :  trim($arrPost['txtReviso']);
+        $arrPost['txtSubsecretario'] = (trim($arrPost['txtSubsecretario']) == "") ? "null" : trim($arrPost['txtSubsecretario']);
+        $arrPost['txtSubdirector'] = (trim($arrPost['txtSubdirector']) == "") ? "null" : trim($arrPost['txtSubdirector']);
+        $arrPost['txtReviso'] = (trim($arrPost['txtReviso']) == "") ? "null" : trim($arrPost['txtReviso']);
 
         /**
          * SALVA EL REGISTRO
          */
+        if (empty($this->arrErrores)) {
 
-        if(empty($this->arrErrores)){
-
-            try{
+            try {
                 $aptBd->BeginTrans();
 
                 $sql = "
@@ -811,18 +777,15 @@ class GestionFinancieraProyectos
                 $seqRegistroPresupuestal = $arrPost['seqRegistroPresupuestal'];
                 $valTotalGiro = 0;
 
-                foreach ($arrPost['unidades'][$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal] as $seqUnidadProyecto => $valGiro){
+                foreach ($arrPost['unidades'][$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal] as $seqUnidadProyecto => $valGiro) {
 
-                    if(intval($seqUnidadProyecto) != 0) {
+                    if (intval($seqUnidadProyecto) != 0) {
                         $seqProyectoInsertar = array_shift(
-                            obtenerDatosTabla(
-                                "t_pry_unidad_proyecto",
-                                array("seqUnidadProyecto", "seqProyecto"),
-                                "seqUnidadProyecto",
-                                "seqUnidadProyecto = " . $seqUnidadProyecto
-                            )
+                                obtenerDatosTabla(
+                                        "t_pry_unidad_proyecto", array("seqUnidadProyecto", "seqProyecto"), "seqUnidadProyecto", "seqUnidadProyecto = " . $seqUnidadProyecto
+                                )
                         );
-                    }else{
+                    } else {
                         $seqProyectoInsertar = $seqProyecto;
                         $seqUnidadProyecto = "null";
                     }
@@ -852,11 +815,7 @@ class GestionFinancieraProyectos
 
                 $claSeguimiento = new SeguimientoProyectos();
                 $claSeguimiento->giroFiducia(
-                    $seqProyecto,
-                    $seqUnidadActo,
-                    $seqRegistroPresupuestal,
-                    count($arrPost['unidades'][$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal]),
-                    $valTotalGiro
+                        $seqProyecto, $seqUnidadActo, $seqRegistroPresupuestal, count($arrPost['unidades'][$seqProyecto][$seqUnidadActo][$seqRegistroPresupuestal]), $valTotalGiro
                 );
 
                 $this->arrErrores = $claSeguimiento->arrErrores;
@@ -864,20 +823,17 @@ class GestionFinancieraProyectos
                 $aptBd->CommitTrans();
 
                 return $seqGiroFiducia;
-
-            } catch ( Exception $objError ){
+            } catch (Exception $objError) {
                 $aptBd->RollbackTrans();
                 $this->arrMensajes = array();
                 $this->arrErrores[] = $objError->getMessage();
 
                 return 0;
             }
-
         }
-
     }
 
-    private function obtenerSecuencia($seqProyecto){
+    private function obtenerSecuencia($seqProyecto) {
         global $aptBd;
 
         $sql = "
@@ -895,7 +851,7 @@ class GestionFinancieraProyectos
         return array_shift($aptBd->GetAll($sql))['numSecuencia'];
     }
 
-    public function pdfGiroFiducia($seqProyecto, $seqGiroFiducia){
+    public function pdfGiroFiducia($seqProyecto, $seqGiroFiducia) {
         global $aptBd;
 
         $arrDatosFormato = array();
@@ -918,10 +874,11 @@ class GestionFinancieraProyectos
             where seqProyecto = $seqProyecto          
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $arrDatosFormato['secciones']['Beneficiario del giro'][0][0] = "Nombre del Vendedor";
-            $arrDatosFormato['secciones']['Beneficiario del giro'][0][1] = $objRes->fields['txtNombreVendedor'];;
+            $arrDatosFormato['secciones']['Beneficiario del giro'][0][1] = $objRes->fields['txtNombreVendedor'];
+            ;
 
             $arrDatosFormato['secciones']['Beneficiario del giro'][1][0] = "NIT del Vendedor";
             $arrDatosFormato['secciones']['Beneficiario del giro'][1][1] = $objRes->fields['numNitVendedor'];
@@ -930,10 +887,10 @@ class GestionFinancieraProyectos
             $arrDatosFormato['secciones']['Beneficiario del giro'][2][1] = $objRes->fields['txtNombreProyecto'];
 
             $arrDatosFormato['secciones']['Información para el giro'][0][0] = "Número del contrato suscrito";
-            $arrDatosFormato['secciones']['Información para el giro'][0][1] = (intval($objRes->fields['numContrato']) == 0)? "No disponible" : number_format(intval($objRes->fields['numContrato']),0,',','.');
+            $arrDatosFormato['secciones']['Información para el giro'][0][1] = (intval($objRes->fields['numContrato']) == 0) ? "No disponible" : number_format(intval($objRes->fields['numContrato']), 0, ',', '.');
 
             $arrDatosFormato['secciones']['Información para el giro'][1][0] = "Fecha del contrato suscrito";
-            $arrDatosFormato['secciones']['Información para el giro'][1][1] = (!esFechaValida($objRes->fields['fchContrato']))? "No disponible" : strftime("%d de %B de %Y" , strtotime( $objRes->fields['fchContrato'] ) );
+            $arrDatosFormato['secciones']['Información para el giro'][1][1] = (!esFechaValida($objRes->fields['fchContrato'])) ? "No disponible" : strftime("%d de %B de %Y", strtotime($objRes->fields['fchContrato']));
 
             $arrDatosFormato['secciones']['Información para el giro'][3][0] = "Nombre de la entidad financiera";
             $arrDatosFormato['secciones']['Información para el giro'][3][1] = $objRes->fields['txtBanco'];
@@ -1015,59 +972,59 @@ class GestionFinancieraProyectos
                 gfd.seqRegistroPresupuestal      
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $fchCreacion = new DateTime($objRes->fields['fchCreacion']);
 
             $arrDatosFormato['secuencia'] = "SDHT-SGF-SDRPL-" . $seqProyecto . "-" . $objRes->fields['numSecuencia'] . "-" . $fchCreacion->format(y);
 
             $arrDatosFormato['secciones']['Beneficiario del giro'][3][0] = "Valor del giro";
-            $arrDatosFormato['secciones']['Beneficiario del giro'][3][1] = "$ " . number_format($objRes->fields['valGiros'],0,',','.');
+            $arrDatosFormato['secciones']['Beneficiario del giro'][3][1] = "$ " . number_format($objRes->fields['valGiros'], 0, ',', '.');
 
             $arrDatosFormato['secciones']['Beneficiario del giro'][4][0] = "Cantidad de unidades";
-            $arrDatosFormato['secciones']['Beneficiario del giro'][4][1] = number_format($objRes->fields['numUnidades'],0,',','.');
+            $arrDatosFormato['secciones']['Beneficiario del giro'][4][1] = number_format($objRes->fields['numUnidades'], 0, ',', '.');
 
 
             $arrDatosFormato['certificacion'] = $objRes->fields['txtCertificacion'];
 
             $arrDatosFormato['documentos']['Del Oferente'][0][0] = "Copia cedula de ciudadanía";
-            $arrDatosFormato['documentos']['Del Oferente'][0][1] = (intval($objRes->fields['bolCedulaOferente']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['Del Oferente'][0][1] = (intval($objRes->fields['bolCedulaOferente']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['Del Oferente'][1][0] = "Copia del Registro de Información Tributaria / RIT";
-            $arrDatosFormato['documentos']['Del Oferente'][1][1] = (intval($objRes->fields['bolRitOferente']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['Del Oferente'][1][1] = (intval($objRes->fields['bolRitOferente']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['Del Oferente'][2][0] = "Copia del Registro Único Tributario / RUT";
-            $arrDatosFormato['documentos']['Del Oferente'][2][1] = (intval($objRes->fields['bolRutOferente']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['Del Oferente'][2][1] = (intval($objRes->fields['bolRutOferente']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['Del Oferente'][3][0] = "Copia del Certificado de existencia y representación legal";
-            $arrDatosFormato['documentos']['Del Oferente'][3][1] = (intval($objRes->fields['bolExistenciaOferente']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['Del Oferente'][3][1] = (intval($objRes->fields['bolExistenciaOferente']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][0][0] = "Copia constitución Encargo Fiduciario";
-            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][0][1] = (intval($objRes->fields['bolConstitucionFiducia']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][0][1] = (intval($objRes->fields['bolConstitucionFiducia']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][1][0] = "Copia cedula de ciudadanía";
-            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][1][1] = (intval($objRes->fields['bolCedulaFiducia']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][1][1] = (intval($objRes->fields['bolCedulaFiducia']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][2][0] = "Certificación Bancaria de la cuenta en la cual se va a realizar el giro";
-            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][2][1] = (intval($objRes->fields['bolBancariaFiducia']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][2][1] = (intval($objRes->fields['bolBancariaFiducia']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][3][0] = "Copia del Certificado de existencia y representación legal expedido por la Superintendencia Financiera";
-            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][3][1] = (intval($objRes->fields['bolSuperintendenciaFiducia']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][3][1] = (intval($objRes->fields['bolSuperintendenciaFiducia']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][4][0] = "Copia del Certificado de existencia y representación legal expedido por la Cámara de Comercio";
-            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][4][1] = (intval($objRes->fields['bolCamaraFiducia']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][4][1] = (intval($objRes->fields['bolCamaraFiducia']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][5][0] = "Copia del Registro Único Tributario – RUT de la entidad financiera";
-            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][5][1] = (intval($objRes->fields['bolRutFiducia']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['De la Entidad Financiera con la cual se constituyó el  Encargo Fiduciario'][5][1] = (intval($objRes->fields['bolRutFiducia']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['Del Proyecto'][0][0] = "Copia Resolución 488 de 2016 y 541 de 2016";
-            $arrDatosFormato['documentos']['Del Proyecto'][0][1] = (intval($objRes->fields['bolResolucionProyecto']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['Del Proyecto'][0][1] = (intval($objRes->fields['bolResolucionProyecto']) == 1) ? "SI" : "NO";
 
             $arrDatosFormato['documentos']['Del Proyecto'][1][0] = "Copia memorando de solicitud de aprobación póliza de cumplimiento mediante radicado No. 3-2015-35230- con fecha del 05 junio de 2015";
-            $arrDatosFormato['documentos']['Del Proyecto'][1][1] = (intval($objRes->fields['bolMemorandoProyecto']) == 1)? "SI" : "NO";
+            $arrDatosFormato['documentos']['Del Proyecto'][1][1] = (intval($objRes->fields['bolMemorandoProyecto']) == 1) ? "SI" : "NO";
 
 
-            switch(true){
+            switch (true) {
 
                 // ambas firmas
                 case $objRes->fields['txtSubdirector'] != "" and $objRes->fields['txtSubsecretario'] != "":
@@ -1076,7 +1033,7 @@ class GestionFinancieraProyectos
                     $txtEncargoSubsecretario = ($objRes->fields['bolEncargoSubsecretario'] == 1) ? "(E)" : "";
 
                     $arrDatosFormato['firmas'][0][0] = utf8_decode("Subdirector(a) de Recursos Públicos " . $txtEncargoSubdirector);
-                    $arrDatosFormato['firmas'][1][0] = utf8_decode(mb_strtoupper($objRes->fields['txtSubdirector']) );
+                    $arrDatosFormato['firmas'][1][0] = utf8_decode(mb_strtoupper($objRes->fields['txtSubdirector']));
                     $arrDatosFormato['firmas'][0][1] = utf8_decode("Subsecretario(a) de Gestión Financiera " . $txtEncargoSubsecretario);
                     $arrDatosFormato['firmas'][1][1] = utf8_decode(mb_strtoupper($objRes->fields['txtSubsecretario']));
 
@@ -1105,7 +1062,6 @@ class GestionFinancieraProyectos
                     $arrDatosFormato['firmas'][1][1] = "";
 
                     break;
-
             }
 
             $arrDatosFormato['subfirmas'][0][0] = utf8_decode("Revisó");
@@ -1121,10 +1077,10 @@ class GestionFinancieraProyectos
         return $arrDatosFormato;
     }
 
-    public function listadoGirosFiducia($seqProyecto = 0){
+    public function listadoGirosFiducia($seqProyecto = 0) {
         global $aptBd;
         $arrListado = array();
-        $txtCondicion = ($seqProyecto == 0)? "" : "where if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) = $seqProyecto";
+        $txtCondicion = ($seqProyecto == 0) ? "" : "where if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) = $seqProyecto";
         $sql = "
             select 
               if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) as seqProyecto,
@@ -1146,16 +1102,16 @@ class GestionFinancieraProyectos
               if(pry1.seqProyecto is null,pry.txtNombreProyecto,pry1.txtNombreProyecto)        
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $seqGiroFiducia = $objRes->fields['seqGiroFiducia'];
             $fchCreacion = new DateTime($objRes->fields['fchCreacion']);
 
-            $arrListado[$seqGiroFiducia]['proyecto']  = $objRes->fields['txtNombreProyecto'];
+            $arrListado[$seqGiroFiducia]['proyecto'] = $objRes->fields['txtNombreProyecto'];
             $arrListado[$seqGiroFiducia]['secuencia'] = "SDHT-SGF-SDRPL-" . $objRes->fields['seqProyecto'] . "-" . $objRes->fields['numSecuencia'] . "-" . $fchCreacion->format(y);
-            $arrListado[$seqGiroFiducia]['unidades']  = $objRes->fields['numUnidades'];
-            $arrListado[$seqGiroFiducia]['giro']      = $objRes->fields['valGiro'];
-            $arrListado[$seqGiroFiducia]['fecha']     = $fchCreacion;
+            $arrListado[$seqGiroFiducia]['unidades'] = $objRes->fields['numUnidades'];
+            $arrListado[$seqGiroFiducia]['giro'] = $objRes->fields['valGiro'];
+            $arrListado[$seqGiroFiducia]['fecha'] = $fchCreacion;
 
             $objRes->MoveNext();
         }
@@ -1163,10 +1119,10 @@ class GestionFinancieraProyectos
         return $arrListado;
     }
 
-    public function listadoGirosConstructor($seqProyecto = 0){
+    public function listadoGirosConstructor($seqProyecto = 0) {
         global $aptBd;
 
-        $txtCondicion = ($seqProyecto == 0)? "" : "where if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) = $seqProyecto";
+        $txtCondicion = ($seqProyecto == 0) ? "" : "where if(pry1.seqProyecto is null,pry.seqProyecto,pry1.seqProyecto) = $seqProyecto";
 
         $arrListado = array();
         $sql = "
@@ -1189,23 +1145,20 @@ class GestionFinancieraProyectos
                 gcon.fchCreacion
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqGiroConstructor = $objRes->fields['seqGiroConstructor'];
             $arrListado[$seqGiroConstructor]['idProyecto'] = $objRes->fields['seqProyecto'];
-            $arrListado[$seqGiroConstructor]['proyecto']   = $objRes->fields['txtNombreProyecto'];
-            $arrListado[$seqGiroConstructor]['unidades']   = $objRes->fields['numUnidades'];
-            $arrListado[$seqGiroConstructor]['giro']       = $objRes->fields['valGiro'];
-            $arrListado[$seqGiroConstructor]['fecha']      = new DateTime($objRes->fields['fchGiro']);
+            $arrListado[$seqGiroConstructor]['proyecto'] = $objRes->fields['txtNombreProyecto'];
+            $arrListado[$seqGiroConstructor]['unidades'] = $objRes->fields['numUnidades'];
+            $arrListado[$seqGiroConstructor]['giro'] = $objRes->fields['valGiro'];
+            $arrListado[$seqGiroConstructor]['fecha'] = new DateTime($objRes->fields['fchGiro']);
             $objRes->MoveNext();
         }
 
         return $arrListado;
-
-
-
     }
 
-    public function eliminarGiroFiducia($seqGiroFiducia){
+    public function eliminarGiroFiducia($seqGiroFiducia) {
         global $aptBd;
 
         try {
@@ -1223,14 +1176,13 @@ class GestionFinancieraProyectos
 
             $this->arrMensajes[] = "Ha eliminado el giro con identificador " . $seqGiroFiducia . " de manera satisfactoria";
             $aptBd->CommitTrans();
-        }catch(Exception $objError){
+        } catch (Exception $objError) {
             $aptBd->RollbackTrans();
             $this->arrErrores[] = $objError->getMessage();
         }
-
     }
 
-    public function verGiroFiducia($seqGiroFiducia){
+    public function verGiroFiducia($seqGiroFiducia) {
         global $aptBd;
         $arrRetorno = array();
         $sql = "
@@ -1266,7 +1218,7 @@ class GestionFinancieraProyectos
             where gfi.seqGiroFiducia = $seqGiroFiducia
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $seqProyecto = $objRes->fields['seqProyecto'];
             $seqUnidadActo = $objRes->fields['seqUnidadActo'];
@@ -1302,10 +1254,9 @@ class GestionFinancieraProyectos
         $arrRetorno['seqGiroFiducia'] = $seqGiroFiducia;
 
         return $arrRetorno;
-
     }
 
-    public function proyectosDisponibles(){
+    public function proyectosDisponibles() {
         global $aptBd;
 
         $sql = "
@@ -1321,7 +1272,7 @@ class GestionFinancieraProyectos
         ";
         $objRes = $aptBd->execute($sql);
         $arrProyectos = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqProyecto = $objRes->fields['seqProyecto'];
             $txtNombreProyecto = $objRes->fields['txtNombreProyecto'];
             $arrProyectos[$seqProyecto] = $txtNombreProyecto;
@@ -1331,12 +1282,12 @@ class GestionFinancieraProyectos
         return $arrProyectos;
     }
 
-    public function plantillaGiroConstructor($seqProyecto){
+    public function plantillaGiroConstructor($seqProyecto) {
         global $aptBd;
 
         $this->informacionGiroConstructor($seqProyecto);
 
-         $sql = "
+        $sql = "
             select
                 con.seqProyecto as 'Identificador del Proyecto',
                 con.txtNombreProyecto as 'Nombre del Proyecto',
@@ -1363,7 +1314,7 @@ class GestionFinancieraProyectos
         ";
         $objRes = $aptBd->execute($sql);
         $arrRetorno = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqUnidadProyecto = intval($objRes->fields['Identificador de la Unidad']);
             $numPosicion = count($arrRetorno);
             $objRes->fields['Disponible'] -= $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['giro'];
@@ -1372,10 +1323,9 @@ class GestionFinancieraProyectos
         }
 
         return $arrRetorno;
-
     }
 
-    private function cantidadUnidades($seqProyecto){
+    private function cantidadUnidades($seqProyecto) {
         global $aptBd;
         $sql = "
             select count(seqUnidadProyecto) as cantidad
@@ -1391,7 +1341,7 @@ class GestionFinancieraProyectos
         return $objRes->fields['cantidad'];
     }
 
-    private function proyectoUnidad($seqUnidadProyecto){
+    private function proyectoUnidad($seqUnidadProyecto) {
         global $aptBd;
 
         $sql = "
@@ -1405,17 +1355,16 @@ class GestionFinancieraProyectos
         ";
         $objRes = $aptBd->execute($sql);
         $arrUnidad = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
             $arrUnidad[$seqUnidadProyecto]['txtNombreUnidad'] = $objRes->fields['txtNombreUnidad'];
             $arrUnidad[$seqUnidadProyecto]['seqProyecto'] = $objRes->fields['seqProyecto'];
             $objRes->MoveNext();
         }
         return $arrUnidad;
-
     }
 
-    public function informacionGiroConstructor($seqProyecto){
+    public function informacionGiroConstructor($seqProyecto) {
         global $aptBd;
 
         // giros realizados a la fiducia
@@ -1443,7 +1392,7 @@ class GestionFinancieraProyectos
                 upper(upr.txtNombreUnidad)
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
             $this->arrGiroConstructor['total'] += $objRes->fields['valGiro'];
             $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['total'] = $objRes->fields['valGiro'];
@@ -1473,7 +1422,7 @@ class GestionFinancieraProyectos
                 upper(upr.txtNombreUnidad)          
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqUnidadProyecto = $objRes->fields['seqUnidadProyecto'];
             $this->arrGiroConstructor['giro'] += $objRes->fields['valGiro'];
             $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['giro'] = $objRes->fields['valGiro'];
@@ -1481,56 +1430,59 @@ class GestionFinancieraProyectos
         }
 
         $this->arrGiroConstructor['saldo'] = $this->arrGiroConstructor['total'] - $this->arrGiroConstructor['giro'];
-        foreach($this->arrGiroConstructor['detalle'] as $seqUnidadProyecto => $arrGiro){
+        foreach ($this->arrGiroConstructor['detalle'] as $seqUnidadProyecto => $arrGiro) {
 
-            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo'] =
-                $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['total'] -
-                $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['giro'];
-
+            $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo'] = $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['total'] -
+                    $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['giro'];
         }
+        $sql = "SELECT sum(valConsignacion) as valor FROM t_pry_aad_reintegros
+                left join t_pry_aad_reintegros_detalle using(seqReintegro)
+                where seqProyecto = " . $seqProyecto . " and txtTipo like 'reintegro';";
+        $reqVal = $aptBd->GetAll($sql);
+        $totalReintegro = $reqVal[0]['valor'];
 
-
-
+        $this->arrGiroConstructor['saldo'] -= $totalReintegro;
+        if ($this->arrGiroConstructor['saldo'] < 0) {
+            $this->arrGiroConstructor['saldo'] += $totalReintegro;
+        }
     }
 
-    public function salvarGiroConstuctor($arrPost){
+    public function salvarGiroConstuctor($arrPost) {
         global $aptBd;
 
         /**
          * VALIDACIONES DE LOS CAMPOS
          */
-
-        if($arrPost['seqProyecto'] == 0){
+        if ($arrPost['seqProyecto'] == 0) {
             $this->arrErrores[] = "Seleccione el proyecto para el que desea hacer el giro";
         }
 
-        if(! esFechaValida($arrPost['fchGiro'])){
+        if (!esFechaValida($arrPost['fchGiro'])) {
             $this->arrErrores[] = "Seleccione la fecha del giro";
         }
 
-        if((! isset($arrPost['unidades'])) or empty($arrPost['unidades'])){
+        if ((!isset($arrPost['unidades'])) or empty($arrPost['unidades'])) {
             $this->arrErrores[] = "No ha seleccionado las unidades para el giro";
-        }else{
-            foreach ($arrPost['unidades'] as $seqProyecto => $arrUnidades){
-                foreach($arrUnidades as $seqUnidadProyecto => $valGiro) {
+        } else {
+            foreach ($arrPost['unidades'] as $seqProyecto => $arrUnidades) {
+                foreach ($arrUnidades as $seqUnidadProyecto => $valGiro) {
 
-                    $txtTexto = ($seqUnidadProyecto != 0)?
-                        "a la uidad " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreUnidad'] :
-                        "al proyecto " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreProyecto'];
+                    $txtTexto = ($seqUnidadProyecto != 0) ?
+                            "a la uidad " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreUnidad'] :
+                            "al proyecto " . $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['txtNombreProyecto'];
 
-                    if(strpos($valGiro,".") !== false){
+                    if (strpos($valGiro, ".") !== false) {
                         $this->arrErrores[] = "No use decimales para cargar el giro " . $txtTexto;
                     }
 
-                    if(strpos($valGiro,",") !== false){
+                    if (strpos($valGiro, ",") !== false) {
                         $this->arrErrores[] = "No use decimales para cargar el giro " . $txtTexto;
                     }
 
-                    $valGiro = round($valGiro,0);
-                    if($valGiro > $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo']){
+                    $valGiro = round($valGiro, 0);
+                    if ($valGiro > $this->arrGiroConstructor['detalle'][$seqUnidadProyecto]['saldo']) {
                         $this->arrErrores[] = "No tiene saldo suficiente para girar " . $txtTexto;
                     }
-
                 }
             }
         }
@@ -1538,10 +1490,9 @@ class GestionFinancieraProyectos
         /**
          * SALVA EL REGISTRO
          */
+        if (empty($this->arrErrores)) {
 
-        if(empty($this->arrErrores)){
-
-            try{
+            try {
                 $aptBd->BeginTrans();
 
                 $sql = "
@@ -1567,12 +1518,9 @@ class GestionFinancieraProyectos
                     foreach ($arrDato as $seqUnidadProyecto => $valGiro) {
                         if (intval($seqUnidadProyecto) != 0) {
                             $seqProyectoInsertar = array_shift(
-                                obtenerDatosTabla(
-                                    "t_pry_unidad_proyecto",
-                                    array("seqUnidadProyecto", "seqProyecto"),
-                                    "seqUnidadProyecto",
-                                    "seqUnidadProyecto = " . $seqUnidadProyecto
-                                )
+                                    obtenerDatosTabla(
+                                            "t_pry_unidad_proyecto", array("seqUnidadProyecto", "seqProyecto"), "seqUnidadProyecto", "seqUnidadProyecto = " . $seqUnidadProyecto
+                                    )
                             );
                         } else {
                             $seqProyectoInsertar = $seqProyecto;
@@ -1608,23 +1556,17 @@ class GestionFinancieraProyectos
                 $aptBd->RollbackTrans();
 
                 return $seqGiroConstructor;
-
-            } catch ( Exception $objError ){
+            } catch (Exception $objError) {
                 $aptBd->RollbackTrans();
                 $this->arrMensajes = array();
                 $this->arrErrores[] = $objError->getMessage();
 
                 return 0;
             }
-
         }
-
-
-
-
     }
 
-    public function eliminarGiroConstructor($seqGiroConstructor){
+    public function eliminarGiroConstructor($seqGiroConstructor) {
         global $aptBd;
 
         try {
@@ -1642,14 +1584,13 @@ class GestionFinancieraProyectos
 
             $this->arrMensajes[] = "Ha eliminado el giro con identificador " . $seqGiroConstructor . " de manera satisfactoria";
             $aptBd->CommitTrans();
-        }catch(Exception $objError){
+        } catch (Exception $objError) {
             $aptBd->RollbackTrans();
             $this->arrErrores[] = $objError->getMessage();
         }
-
     }
 
-    public function verGiroConstructor($seqGiroConstructor){
+    public function verGiroConstructor($seqGiroConstructor) {
         global $aptBd;
         $arrRetorno = array();
         $sql = "
@@ -1666,7 +1607,7 @@ class GestionFinancieraProyectos
             where gcon.seqGiroConstructor = $seqGiroConstructor
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
             $seqProyecto = $objRes->fields['seqProyecto'];
             $seqUnidadProyecto = intval($objRes->fields['seqUnidadProyecto']);
             $arrRetorno['seqProyecto'] = $objRes->fields['seqProyecto'];
@@ -1680,59 +1621,56 @@ class GestionFinancieraProyectos
         $arrRetorno['seqGiroConstructor'] = $seqGiroConstructor;
 
         return $arrRetorno;
-
     }
 
-    public function validarFormularioReintegros($arrPost){
+    public function validarFormularioReintegros($arrPost) {
         global $aptBd;
 
-        if($arrPost['salvar'] != "salvar"){
+        if ($arrPost['salvar'] != "salvar") {
 
             $txtValidar = $arrPost['salvar'];
             $arrValidar = $arrPost[$txtValidar];
 
-            if($arrValidar['seqBanco'] == 0){
+            if ($arrValidar['seqBanco'] == 0) {
                 $this->arrErrores[] = "Seleccione el banco para el " . $txtValidar;
             }
 
-            if(trim($arrValidar['numCuenta']) == ""){
+            if (trim($arrValidar['numCuenta']) == "") {
                 $this->arrErrores[] = "Digite el numero de cuenta para el " . $txtValidar;
             }
 
-            if(! esFechaValida($arrValidar['fchConsignacion'])){
+            if (!esFechaValida($arrValidar['fchConsignacion'])) {
                 $this->arrErrores[] = "Digite una fecha valida para el " . $txtValidar;
             }
 
-            if(doubleval($arrValidar['valConsignacion']) == 0){
+            if (doubleval($arrValidar['valConsignacion']) == 0) {
                 $this->arrErrores[] = "Digite el valor del " . $txtValidar;
             }
-
         }
-
     }
 
-    public function salvarReintegros($arrPost){
+    public function salvarReintegros($arrPost) {
         global $aptBd;
 
-        if(
-            intval($arrPost['reintegro']['seqBanco']) != 0 or
-            doubleval($arrPost['reintegro']['numCuenta']) != 0 or
-            esFechaValida($arrPost['reintegro']['fchConsignacion']) == true or
-            doubleval($arrPost['reintegro']['valConsignacion']) != 0
-        ){
+        if (
+                intval($arrPost['reintegro']['seqBanco']) != 0 or
+                doubleval($arrPost['reintegro']['numCuenta']) != 0 or
+                esFechaValida($arrPost['reintegro']['fchConsignacion']) == true or
+                doubleval($arrPost['reintegro']['valConsignacion']) != 0
+        ) {
             $this->arrErrores[] = "Falta por adicionar el registro de reintegro para salvar el registro";
         }
 
-        if(
-            intval($arrPost['rendimiento']['seqBanco']) != 0 or
-            doubleval($arrPost['rendimiento']['numCuenta']) != 0 or
-            esFechaValida($arrPost['rendimiento']['fchConsignacion']) == true or
-            doubleval($arrPost['rendimiento']['valConsignacion']) != 0
-        ){
+        if (
+                intval($arrPost['rendimiento']['seqBanco']) != 0 or
+                doubleval($arrPost['rendimiento']['numCuenta']) != 0 or
+                esFechaValida($arrPost['rendimiento']['fchConsignacion']) == true or
+                doubleval($arrPost['rendimiento']['valConsignacion']) != 0
+        ) {
             $this->arrErrores[] = "Falta por adicionar el registro de rendimiento para salvar el registro";
         }
 
-        if(empty($this->arrErrores)) {
+        if (empty($this->arrErrores)) {
 
             if (intval($arrPost['seqProyecto']) == 0) {
                 $this->arrErrores[] = "Seleccione el proyecto";
@@ -1751,23 +1689,19 @@ class GestionFinancieraProyectos
             }
 
             $seqReintegro = array_shift(
-                obtenerDatosTabla(
-                    "t_pry_aad_reintegros",
-                    array("seqReintegro","count(seqProyecto) as cuenta"),
-                    "seqReintegro",
-                    "numActa = " . intval($arrPost['numActa']) . " and fchActa = '" . $arrPost['fchActa'] . "'"
-                )
+                    obtenerDatosTabla(
+                            "t_pry_aad_reintegros", array("seqReintegro", "count(seqProyecto) as cuenta"), "seqReintegro", "numActa = " . intval($arrPost['numActa']) . " and fchActa = '" . $arrPost['fchActa'] . "'"
+                    )
             );
 
-            if(intval($seqReintegro) != 0){
+            if (intval($seqReintegro) != 0) {
                 $this->arrErrores[] = "Ya existe un acta " . intval($arrPost['numActa']) . " de " . $arrPost['fchActa'];
             }
-
         }
 
-        if(empty($this->arrErrores)) {
+        if (empty($this->arrErrores)) {
 
-            try{
+            try {
                 $aptBd->BeginTrans();
 
                 $sql = "
@@ -1808,13 +1742,12 @@ class GestionFinancieraProyectos
                             $seqReintegro,
                             '" . $arrDato['txtTipo'] . "',
                             " . $arrDato['seqBanco'] . ",
-                            " . $arrDato['numCuenta'] .  ",
+                            " . $arrDato['numCuenta'] . ",
                             '" . $arrDato['fchConsignacion'] . "',
                             " . $arrDato['valConsignacion'] . "
                         ) 
                     ";
                     $aptBd->execute($sql);
-
                 }
 
                 $this->arrMensajes[] = "Registro salvado satisfactoriamente";
@@ -1826,23 +1759,17 @@ class GestionFinancieraProyectos
                 $aptBd->CommitTrans();
 
                 return $seqReintegro;
-
-            } catch ( Exception $objError ){
+            } catch (Exception $objError) {
                 $aptBd->RollbackTrans();
                 $this->arrMensajes = array();
                 $this->arrErrores[] = $objError->getMessage();
 
                 return 0;
             }
-
         }
-
-
-
-
     }
 
-    public function listadoReintegros(){
+    public function listadoReintegros() {
         global $aptBd;
 
         $sql = "
@@ -1866,7 +1793,7 @@ class GestionFinancieraProyectos
         ";
         $objRes = $aptBd->execute($sql);
         $arrListado = array();
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $seqReintegro = $objRes->fields['seqReintegro'];
             $txtTipo = mb_strtolower($objRes->fields['txtTipo']);
@@ -1883,7 +1810,7 @@ class GestionFinancieraProyectos
         return $arrListado;
     }
 
-    public function eliminarReintegro($seqReintegro){
+    public function eliminarReintegro($seqReintegro) {
         global $aptBd;
 
         try {
@@ -1901,14 +1828,13 @@ class GestionFinancieraProyectos
 
             $this->arrMensajes[] = "Ha eliminado el registro con identificador " . $seqReintegro . " de manera satisfactoria";
             $aptBd->CommitTrans();
-        }catch(Exception $objError){
+        } catch (Exception $objError) {
             $aptBd->RollbackTrans();
             $this->arrErrores[] = $objError->getMessage();
         }
-
     }
 
-    public function verReintegro($seqReintegro){
+    public function verReintegro($seqReintegro) {
         global $aptBd;
         $arrRetorno = array();
         $sql = "
@@ -1926,7 +1852,7 @@ class GestionFinancieraProyectos
             where rei.seqReintegro = $seqReintegro
         ";
         $objRes = $aptBd->execute($sql);
-        while($objRes->fields){
+        while ($objRes->fields) {
 
             $arrRetorno['seqProyecto'] = $objRes->fields['seqProyecto'];
             $arrRetorno['numActa'] = $objRes->fields['numActa'];
@@ -1946,15 +1872,13 @@ class GestionFinancieraProyectos
         }
 
         return $arrRetorno;
-
     }
 
-    public function reporteGeneral(){
+    public function reporteGeneral() {
         $claReporte = new Reportes();
         return $claReporte->reporteGeneral(true);
     }
 
 }
-
 
 ?>

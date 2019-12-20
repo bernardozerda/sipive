@@ -3683,6 +3683,8 @@ class aad {
                     if (in_array($txtCampo, $this->arrayFormActual)) {
                         $txtCampos .= $txtCampo . "Actual,";
                         $txtValores .= "'" . $txtValor . "',";
+                        $txtCampos .= $txtCampo. ",";
+                        $txtValores .= "'" . $txtValor . "',";
                     } else {
                         $txtCampos .= $txtCampo . ",";
                         $txtValores .= "'" . $txtValor . "',";
@@ -3951,6 +3953,8 @@ class aad {
 
                 if (in_array($txtCampo, $this->arrayFormActual)) {
                     $txtCampos .= $txtCampo . "Actual,";
+                    $txtValores .= "'" . $txtValor . "',";
+                    $txtCampos .= $txtCampo . ",";
                     $txtValores .= "'" . $txtValor . "',";
                 } else {
                     if ($txtCampo != 'bolSancion') {

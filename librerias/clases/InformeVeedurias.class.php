@@ -114,6 +114,8 @@ class InformeVeedurias {
                 uvi.valIndexado,
                 frm.seqFormulario,
                 frm.seqEstadoProceso,
+                case when vest.txtEstado is null then 
+                (select txtEstado from t_frm_formulario frm2 left join v_frm_estado using(seqEstadoProceso) where frm2.seqFormulario =upr.seqFormulario) else vest.txtEstado end as estado ,
                 frm.bolCerrado,
                 IF(frm.bolDesplazado = 1,'Desplazado','Vulnerable') as bolDesplazado,
                 aad.numActo as numActoHogar, 
@@ -176,6 +178,7 @@ class InformeVeedurias {
             left  join t_vee_escrituracion esc on des.seqDesembolsoVeeduria = esc.seqDesembolsoVeeduria
             left  join v_frm_ciudad ciu1 on des.seqCiudad = ciu1.seqCiudad
             left  join t_frm_localidad loc on des.seqLocalidad = loc.seqLocalidad
+            left join v_frm_estado vest  on frm.seqEstadoProceso = vest.seqEstadoProceso
             where pry.seqCorte = $seqCorte
             and pry.bolActivo = 1
             order by pry.txtNombreProyecto, uac.seqTipoActoUnidad    
@@ -450,6 +453,7 @@ class InformeVeedurias {
             $arrReporte['Proyectos'][$seqUnidadProyecto]['seqFormulario'] = $objRes->fields['seqFormularioUnidad'];
             $arrReporte['Proyectos'][$seqUnidadProyecto]['Proyecto Padre'] = $txtNombreProyectoPadre;
             $arrReporte['Proyectos'][$seqUnidadProyecto]['Proyecto Hijo'] = $txtNombreProyectoHijo;
+            $arrReporte['Proyectos'][$seqUnidadProyecto]['Estado'] = $objRes->fields['estado'];
             $arrReporte['Proyectos'][$seqUnidadProyecto]['Nit Proyecto'] = $txtNitProyecto;
             $arrReporte['Proyectos'][$seqUnidadProyecto]['Localidad Proyecto'] = $txtLocalidad;
             $arrReporte['Proyectos'][$seqUnidadProyecto]['Barrio Proyecto'] = $txtBarrio;

@@ -216,6 +216,9 @@ function reporteGralHogar() {
                  IF(edad27.seqFormulario IS NOT NULL,
                     'SI',
                     'NO') AS '27-59',
+                    IF(edad28.seqFormulario IS NOT NULL,
+                    'SI',
+                    'NO') AS '28-59',
                     IF(edad14.seqFormulario IS NOT NULL,
                     'SI',
                     'NO') AS '14-28',
@@ -391,7 +394,16 @@ function reporteGralHogar() {
                 LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
                 WHERE
                     TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) > 26 && TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) < 60) edad27 ON frm.seqFormulario = edad27.seqFormulario       
-                     LEFT JOIN
+                     
+                LEFT JOIN
+                (SELECT DISTINCT
+                    (seqFormulario)
+                FROM
+                    t_ciu_ciudadano
+                LEFT JOIN t_frm_hogar hog1 USING (seqCiudadano)
+                WHERE
+                    TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) > 27 && TIMESTAMPDIFF(YEAR, fchNacimiento, CURDATE()) < 60) edad28 ON frm.seqFormulario = edad28.seqFormulario       
+                LEFT JOIN
                 (SELECT DISTINCT
                     (seqFormulario)
                 FROM

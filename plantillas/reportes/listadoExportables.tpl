@@ -46,6 +46,7 @@
 {assign var=hogaresCalificados 				value=$arrExportables.hogaresCalificados}
 {assign var=baseMetrovivienda 				value=$arrExportables.baseMetrovivienda}
 {assign var=reporteAsignadosAAD 			value=$arrExportables.reporteAsignadosAAD}
+{assign var=reporteAsignadosActual 			value=$arrExportables.reporteAsignadosActual}
 {assign var=reporteAsignacionUnidades 		value=$arrExportables.reporteAsignacionUnidades}
 {assign var=reporteAsignacionUnidadesMejoramiento value=$arrExportables.reporteAsignacionUnidadesMejoramiento}
 {assign var=reporteEpigrafeAAD 				value=$arrExportables.reporteEpigrafeAAD}
@@ -860,6 +861,21 @@
                         </td>
                     </tr>
                 {/if}
+                ***** {$reporteAsignadosActual}**
+                {if $reporteAsignadosActual == 1}
+                    <tr {if $x is not even} style="background:#{$backColor};" {/if}>
+                        <td class="tituloCampo" align="left" width="60%">Reporte Asign Actos Admon Actual</td>
+                        <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
+                            <a onclick="someterFormulario(
+                                            'mensajes',
+                                            'listadoExportable',
+                                            './contenidos/reportes/ReportesExportables.php?reporte=reporteAsignadosActual',
+                                            true,
+                                            false)"
+                               href="#">Exportable</a>
+                        </td>
+                    </tr>
+                {/if}
 
                 {if $reporteAsignacionUnidades == 1}
                     <tr {if $x is not even} style="background:#{$backColor};" {/if}>
@@ -1155,9 +1171,9 @@
                     <tr {if $x is not even} style="background:#{$backColor};" {/if}>
                         <td class="tituloCampo" align="left" width="60%">Informe Gral de Hogares</td>
                         <td class="tituloCampo" align="left">{assign var=x  value=$x+1}
-                           <!-- <a href="./contenidos/reportes/listadoReportesGral.php" target="_blank">Ir </a>
-                             <a onclick="descargarArchivo('./contenidos/reportes/ReportesExportables.php?reporte=reporteTotalCiudadano');"
-                                href="#">Exportable</a>-->
+                            <!-- <a href="./contenidos/reportes/listadoReportesGral.php" target="_blank">Ir </a>
+                              <a onclick="descargarArchivo('./contenidos/reportes/ReportesExportables.php?reporte=reporteTotalCiudadano');"
+                                 href="#">Exportable</a>-->
                             <a onclick="someterFormulario(
                                             'mensajes',
                                             'listadoExportable',

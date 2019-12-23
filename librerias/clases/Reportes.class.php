@@ -3388,9 +3388,98 @@ if( ciu.fchNacimiento is null or ciu.fchNacimiento <= '1900-01-01','Sin Clasific
               AND aad.seqCaracteristica = 1
             ORDER BY aad.fchActo DESC
         ";
-       // echo $sql;        die();
+        // echo $sql;        die();
         $objRes = $aptBd->execute($sql);
         $this->obtenerReportesGeneral($objRes, "reporteAsignadosAAD");
+    }
+
+    public function exportableActosAdministrativosAsignacionActual() {
+        global $aptBd;
+
+        // Se ocultan los campos:
+        // par.txtParentesco AS Parentesco, tac.txtNombreTipoActo AS Tipo_Acto, fac.valCredito
+        // Se ocultan las relaciones:
+        // LEFT JOIN T_CIU_PARENTESCO par ON hac.seqParentesco = par.seqParentesco
+        // LEFT JOIN T_AAD_TIPO_ACTO tac ON aad.seqTipoActo = tac.seqTipoActo
+        $sql = "
+            SELECT DISTINCT 
+                fac.seqFormulario AS seqFormulario,
+                fac.seqFormularioActo AS seqFormularioActo,
+                cac.numDocumento AS Documento,
+                TRIM(CONCAT_WS(' ', UPPER(cac.txtNombre1),UPPER(cac.txtNombre2),UPPER(cac.txtApellido1),UPPER(cac.txtApellido2))) AS Nombre,
+                if(fac.bolDesplazado = 1, 'Si', 'No') AS Desplazado,
+                concat('Res. ', aad.numActo) AS Resolucion,
+                year(aad.fchActo) AS Año,
+                aad.fchActo AS Fecha_Resolucion,
+                fac.fchVigencia AS Fecha_Vigencia,
+                moda.txtModalidad,
+                sol.txtDescripcion AS Tipo,
+                sol.txtSolucion AS Rango,
+                fac.valAspiraSubsidio AS Vr_SDV,
+                fac.valCartaLeasing AS Vr_CartaLeasing,
+                fac.valComplementario as Vr_Complementario,
+                CONCAT(txtEtapa ,' - ', txtEstadoProceso ) AS Estado_Proceso,
+                esq.txtTipoEsquema AS Esquema,
+                pry.txtNombreProyecto AS Proyecto,
+                prh.txtNombreProyecto AS Conjunto_Residencial,
+                und.txtNombreUnidad AS Unidad_Residencial,
+                fac.txtMatriculaInmobiliaria AS Matricula_Inmobiliaria,
+                fac.txtDireccionSolucion AS Direccion,
+                bh1.txtBanco AS Banco_Ahorro_1,
+                bh2.txtBanco AS Banco_Ahorro_2,
+                bcr.txtBanco AS Banco_Credito,
+                ets.txtEntidadSubsidio AS Entidad_Subsidio,
+                edn.txtEmpresaDonante AS Entidad_Donante,
+                fac.fchUltimaActualizacion AS Fecha_Actualizacion,
+                fac.fchLegalizado As 'fecha Legalizacion',
+                fac.seqPlanGobiernoActual,
+                pry2.txtNombreProyecto as 'Nombre Proy Actual',
+                prh2.txtNombreProyecto as 'Nombre Proy hijo Actual',
+                und2.txtNombreUnidad AS 'Unidad_Residencial Actual',
+                fac.valComplementarioActual,
+                fac.valCartaLeasingActual,
+                mod2.txtModalidad AS 'Modalidad Actual',
+                sol2.txtDescripcion AS Tipo,
+                sol2.txtSolucion AS Rango, 
+                fac.txtMatriculaInmobiliariaActual,
+                fac.valAspiraSubsidioActual,
+                esq2.txtTipoEsquema AS Esquema,
+                fac.txtDireccionSolucionActual,
+                con2.txtConvenio   
+                FROM T_AAD_ACTO_ADMINISTRATIVO aad
+            LEFT JOIN T_AAD_HOGARES_VINCULADOS hvi ON aad.fchActo = hvi.fchActo AND aad.numActo = hvi.numActo
+            LEFT JOIN T_AAD_FORMULARIO_ACTO fac ON hvi.seqFormularioActo = fac.seqFormularioActo
+            LEFT JOIN T_FRM_BANCO bh1 ON fac.seqBancoCuentaAhorro = bh1.seqBanco
+            LEFT JOIN T_FRM_BANCO bh2 ON fac.seqBancoCuentaAhorro = bh2.seqBanco
+            LEFT JOIN T_FRM_BANCO bcr ON fac.seqBancoCredito = bcr.seqBanco
+            LEFT JOIN T_FRM_ENTIDAD_SUBSIDIO ets ON fac.seqEntidadSubsidio = ets.seqEntidadSubsidio
+            LEFT JOIN T_FRM_EMPRESA_DONANTE edn ON fac.seqEmpresaDonante = edn.seqEmpresaDonante
+            LEFT JOIN T_FRM_ESTADO_PROCESO est ON fac.seqEstadoProceso = est.seqEstadoProceso
+            LEFT JOIN T_FRM_ETAPA etp ON est.seqEtapa = etp.seqEtapa
+            LEFT JOIN T_AAD_HOGAR_ACTO hac ON fac.seqFormularioActo = hac.seqFormularioActo
+            LEFT JOIN T_AAD_CIUDADANO_ACTO cac ON hac.seqCiudadanoActo = cac.seqCiudadanoActo
+            LEFT JOIN T_FRM_MODALIDAD moda ON fac.seqModalidad = moda.seqModalidad
+            LEFT JOIN T_FRM_SOLUCION sol ON fac.seqSolucion = sol.seqSolucion
+            LEFT JOIN T_PRY_PROYECTO pry ON fac.seqProyecto = pry.seqProyecto
+            LEFT JOIN T_PRY_PROYECTO prh ON fac.seqProyectoHijo = prh.seqProyecto
+            LEFT JOIN T_FRM_FORMULARIO frm ON fac.seqFormulario = frm.seqFormulario
+            LEFT JOIN T_PRY_UNIDAD_PROYECTO und ON fac.seqUnidadProyecto = und.seqUnidadProyecto
+            LEFT JOIN T_PRY_TIPO_ESQUEMA AS esq ON fac.seqTipoEsquema = esq.seqTipoEsquema
+            
+            LEFT JOIN T_PRY_PROYECTO pry2 ON fac.seqProyectoActual = pry2.seqProyecto
+            LEFT JOIN T_PRY_PROYECTO prh2 ON fac.seqProyectoHijoActual = prh2.seqProyecto
+            LEFT JOIN T_PRY_UNIDAD_PROYECTO und2 ON fac.seqUnidadProyectoActual = und2.seqUnidadProyecto
+            LEFT JOIN T_FRM_MODALIDAD mod2 ON fac.seqModalidadActual = mod2.seqModalidad
+            LEFT JOIN T_PRY_TIPO_ESQUEMA AS esq2 ON fac.seqTipoEsquemaActual = esq2.seqTipoEsquema
+            LEFT JOIN T_FRM_SOLUCION sol2 ON fac.seqSolucionActual = sol2.seqSolucion
+            LEFT JOIN T_frm_convenio con2 ON fac.seqConvenioActual = con2.seqConvenio
+            WHERE (hac.seqParentesco = 1 OR hac.seqParentesco IS NULL)
+              AND aad.seqCaracteristica = 1
+            ORDER BY aad.fchActo DESC
+        ";
+      //   echo $sql;        die();
+        $objRes = $aptBd->execute($sql);
+        $this->obtenerReportesGeneral($objRes, "reporteAsignadosActual");
     }
 
     public function exportableAsignacionUnidades() {
@@ -3949,7 +4038,7 @@ ORDER BY aad.fchActo DESC;
                 ORDER BY frm.seqFormulario
             ";
             try {
-               // echo $sql; die();
+                // echo $sql; die();
                 $objRes = $aptBd->execute($sql);
                 $this->obtenerReportesGeneral($objRes, "InformacionSolucion");
             } catch (Exception $objError) {

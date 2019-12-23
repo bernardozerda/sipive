@@ -57,7 +57,8 @@ $arrExportables["seguimientoDesembolsos"] = 0; // Registros que tienen giros rea
 $arrExportables["cartasMovilizacion"] = 0; // Para ver los codigos que se generan desde la pagina de servicios al ciudadano
 $arrExportables["baseMetrovivienda"] = 0; // Base de metrovivienda
 $arrExportables["archivoDesembolso"] = 0;
-$arrExportables["reporteAsignadosAAD"] = 0; //Reporte AAD Asignacion
+$arrExportables["reporteAsignadosAAD"] = 0;
+$arrExportables["reporteAsignadosActual"] = 0; //Reporte AAD Asignacion
 $arrExportables["reporteAsignacionUnidades"] = 0; //Reporte Asignacion Unidades
 $arrExportables["reporteAsignacionUnidadesmejoramiento"] = 0; //Reporte Asignacion Unidades Mejoramiento
 $arrExportables["reporteEpigrafeAAD"] = 0; //Reporte AAD Epigrafe
@@ -212,6 +213,7 @@ foreach ($arrGruposPertenece as $seqGrupo) {
             $arrExportables["cartasMovilizacion"] = 1;
             $arrExportables["hogaresCalificados"] = 1;
             $arrExportables["reporteAsignadosAAD"] = 1;
+            $arrExportables["reporteAsignadosActual"] = 1;
             $arrExportables["reporteAsignacionUnidades"] = 1;
             $arrExportables["reporteAsignacionUnidadesMejoramiento"] = 1;
             $arrExportables["reporteEpigrafeAAD"] = 1;

@@ -122,6 +122,9 @@ switch ($reporte) {
     case "reporteAsignadosAAD":
         $claReporte->exportableActosAdministrativosAsignacion();
         break;
+    case "reporteAsignadosActual":
+        $claReporte->exportableActosAdministrativosAsignacionActual();
+        break;
     case "reporteAsignacionUnidades":
         $claReporte->exportableAsignacionUnidades();
         break;

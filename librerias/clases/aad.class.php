@@ -3629,8 +3629,8 @@ class aad {
             case 5: // no asignado
                 $this->vincularHogresAsignacion($arrPost, $arrArchivo); // usa la misma que asignacion
                 break;
-            case 6: // renuncia
-                $this->vincularHogaresRenuncia($arrPost, $arrArchivo);
+            case 6: // renuncia 18
+                $this->vincularHogaresRenuncia($arrPost, $arrArchivo, 18);
                 break;
             case 7: // notificaciones
                 $this->vincularHogaresNotificacion($arrPost, $arrArchivo);
@@ -3638,14 +3638,14 @@ class aad {
             case 8: // indexaciones
                 $this->vincularHogresIndexacion($arrPost, $arrArchivo);
                 break;
-            case 9: // perdida
-                $this->vincularHogaresRenuncia($arrPost, $arrArchivo);
+            case 9: // perdida 21
+                $this->vincularHogaresRenuncia($arrPost, $arrArchivo, 21);
                 break;
-            case 10: // revocatoria
-                $this->vincularHogaresRenuncia($arrPost, $arrArchivo);
+            case 10: // revocatoria 58
+                $this->vincularHogaresRenuncia($arrPost, $arrArchivo, 58);
                 break;
-            case 11: // exclusion
-                $this->vincularHogaresRenuncia($arrPost, $arrArchivo);
+            case 11: // exclusion 63
+                $this->vincularHogaresRenuncia($arrPost, $arrArchivo, 63);
                 break;
             default:
                 $this->arrErrores[] = "No se conoce el tipo de acto administrativo " . $this->seqTipoActo;
@@ -3683,7 +3683,7 @@ class aad {
                     if (in_array($txtCampo, $this->arrayFormActual)) {
                         $txtCampos .= $txtCampo . "Actual,";
                         $txtValores .= "'" . $txtValor . "',";
-                        $txtCampos .= $txtCampo. ",";
+                        $txtCampos .= $txtCampo . ",";
                         $txtValores .= "'" . $txtValor . "',";
                     } else {
                         $txtCampos .= $txtCampo . ",";
@@ -4177,7 +4177,7 @@ class aad {
      * @param $arrPost
      * @param $arrArchivo
      */
-    private function vincularHogaresRenuncia($arrPost, $arrArchivo) {
+    private function vincularHogaresRenuncia($arrPost, $arrArchivo, $seqEstado) {
         global $aptBd;
 
         foreach ($arrArchivo as $arrRegistro) {
@@ -4222,6 +4222,8 @@ class aad {
             $sql = rtrim($sql, ",");
             $sql .= " where seqFormularioActo = " . $seqFormularioActo;
             $aptBd->execute($sql);
+            $sql1 = "update t_aad_formulario_acto set seqEstadoProceso = " . $seqEstado . " where seqFormularioActo = " . $seqFormularioActo;
+            $aptBd->execute($sql1);
         }
     }
 

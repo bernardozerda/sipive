@@ -68,7 +68,7 @@ include '../../../recursos/archivos/verificarSesion.php';
                     global $db;
                     $band = true;
                     $msg = "";
-                    $sql1 = "SELECT seqEstadoProceso, seqFormulario, fchRadicacion, txtRadicadoForest FROM sipive.t_frm_formulario 
+                    $sql1 = "SELECT seqEstadoProceso, seqFormulario, fchRadicacion, txtRadicadoForest FROM t_frm_formulario 
                             inner join t_frm_hogar using(seqFormulario)
                             inner join t_ciu_ciudadano using(seqCiudadano)
                             inner join t_pry_unidad_proyecto using(seqFormulario)

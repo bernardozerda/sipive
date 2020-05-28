@@ -3758,7 +3758,65 @@ class Reportes {
                         where seqProyecto = pry.seqProyecto
                            or seqProyectoPadre = pry.seqProyecto
                       )
-                    ) as valDesembolsado
+                    ) as valDesembolsado,
+                    (((SELECT 
+            SUM(uvi.valIndexado) AS valAprobado
+        FROM
+            t_pry_aad_unidad_acto uac
+                LEFT JOIN
+            t_pry_aad_unidades_vinculadas uvi ON uac.seqUnidadActo = uvi.seqUnidadActo
+        WHERE
+            uac.seqTipoActoUnidad = 1
+                AND uvi.seqProyecto IN (SELECT 
+                    seqProyecto
+                FROM
+                    t_pry_proyecto
+                WHERE
+                    seqProyecto = pry.seqProyecto
+                        OR seqProyectoPadre = pry.seqProyecto))+(
+                        SELECT 
+            case when (SUM(uvi.valIndexado)) > 0 then (SUM(uvi.valIndexado) )else 0 end AS valIndexado
+        FROM
+            t_pry_aad_unidad_acto uac
+                LEFT JOIN
+            t_pry_aad_unidades_vinculadas uvi ON uac.seqUnidadActo = uvi.seqUnidadActo
+        WHERE
+            uac.seqTipoActoUnidad = 2
+                AND uvi.seqProyecto IN (SELECT 
+                    seqProyecto
+                FROM
+                    t_pry_proyecto
+                WHERE
+                    seqProyecto = pry.seqProyecto
+                        OR seqProyectoPadre = pry.seqProyecto))
++(SELECT 
+            case when (SUM(uvi.valIndexado)) is not null  then (SUM(uvi.valIndexado) ) else 0 end AS valDisminucion
+        FROM
+            t_pry_aad_unidad_acto uac
+                LEFT JOIN
+            t_pry_aad_unidades_vinculadas uvi ON uac.seqUnidadActo = uvi.seqUnidadActo
+        WHERE
+            uac.seqTipoActoUnidad = 3
+                AND uvi.seqProyecto IN (SELECT 
+                    seqProyecto
+                FROM
+                    t_pry_proyecto
+                WHERE
+                    seqProyecto = pry.seqProyecto
+                        OR seqProyectoPadre = pry.seqProyecto)))-( (SELECT 
+            SUM(gcd.valGiro) AS valGiroConstructor
+        FROM
+            t_pry_aad_giro_constructor_detalle gcd
+        WHERE
+            gcd.seqProyecto IN (SELECT 
+                    seqProyecto
+                FROM
+                    t_pry_proyecto
+                WHERE
+                    seqProyecto = pry.seqProyecto
+                        OR seqProyectoPadre = pry.seqProyecto))-(SELECT  case when sum(valConsignacion) is not null then (sum(valConsignacion)) else 0 end  as valor FROM t_pry_aad_reintegros
+left join t_pry_aad_reintegros_detalle using(seqReintegro)
+where seqProyecto = pry.seqProyecto and txtTipo like 'reintegro') )) as valTotal
                 from t_pry_proyecto pry
                 left join t_pry_proyecto_oferente pof on pry.seqProyecto = pof.seqProyecto
                 left join t_pry_entidad_oferente eof on pof.seqOferente = eof.seqOferente
@@ -3801,6 +3859,7 @@ class Reportes {
                 ) cun on pry.seqProyecto = cun.seqProyecto
                 where pry.seqProyecto = $seqProyecto
             ";
+            //echo "<p>".$sql."</p>";
             $arrReporte[] = array_shift($aptBd->GetAll($sql));
 
             $objRes->MoveNext();
@@ -3839,6 +3898,7 @@ class Reportes {
         $arrTitulos[30]['nombre'] = 'Modificación de aportes';
         $arrTitulos[31]['nombre'] = 'Giro a encargo fiduciario';
         $arrTitulos[32]['nombre'] = 'Valor Desembolsado a constuctor';
+        $arrTitulos[33]['nombre'] = 'Saldo por Desembolsar';
 
         $arrTitulos[0]['formato'] = 'Identificador';
         $arrTitulos[1]['formato'] = 'Nombre';
@@ -3873,6 +3933,7 @@ class Reportes {
         $arrTitulos[30]['formato'] = 'Modificación de aportes';
         $arrTitulos[31]['formato'] = 'Giro a encargo fiduciario';
         $arrTitulos[32]['formato'] = 'Valor Desembolsado a constuctor';
+        $arrTitulos[33]['formato'] = 'Saldo por Desembolsar';
 
         $this->exportarArchivo("Reporte Ficha Técnica", $arrTitulos, $arrReporte);
     }

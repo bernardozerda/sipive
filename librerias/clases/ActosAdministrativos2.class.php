@@ -195,7 +195,7 @@ Class TipoActoAdministrativo {
         $this->arrErrores = array();
         $arrTipoActoLibre = array(2, 3); // Tipos de acto en donde los textos pueden ser vacios
         unset($arrArchivo[0]); // Quita la fila de titulos
-        if(!empty($arrArchivo)) {
+        if (!empty($arrArchivo)) {
             foreach ($arrArchivo as $numFila => $arrFila) {
                 $this->cargarTipoActo($this->seqTipoActo);
                 foreach ($arrFila as $numColumna => $txtValor) {
@@ -217,25 +217,25 @@ Class TipoActoAdministrativo {
                             $bolError = ((!in_array($this->seqTipoActo, $arrTipoActoLibre)) and trim($txtValor) == "") ? true : false;
                             break;
                     }
-                    if ($bolError == false and isset($this->arrFormatoArchivo[$numColumna]['rango']) and !empty($this->arrFormatoArchivo[$numColumna]['tipo'])) {
+                    if ($bolError == false and isset($this->arrFormatoArchivo[$numColumna]['rango']) and ! empty($this->arrFormatoArchivo[$numColumna]['tipo'])) {
                         if (!in_array(strtolower($txtValor), $this->arrFormatoArchivo[$numColumna]['rango'])) {
                             $bolError = true;
                         }
                     }
                     if ($bolError == true) {
                         $this->arrErrores[] = "Error en la linea " . ($numFila + 1) . ", columna " .
-                            $this->arrFormatoArchivo[$numColumna]['nombre'] . ": El valor " .
-                            $txtValor . " no es válido";
+                                $this->arrFormatoArchivo[$numColumna]['nombre'] . ": El valor " .
+                                $txtValor . " no es válido";
                     }
-                    unset( $this->arrFormatoArchivo[$numColumna] );
+                    unset($this->arrFormatoArchivo[$numColumna]);
                 }
-                if(!empty($this->arrFormatoArchivo)){
-                    foreach($this->arrFormatoArchivo as $numColumna => $arrDatos) {
+                if (!empty($this->arrFormatoArchivo)) {
+                    foreach ($this->arrFormatoArchivo as $numColumna => $arrDatos) {
                         $this->arrErrores[] = "Error en la linea " . ($numFila + 1) . ", falta el valor para la columna " . $arrDatos['nombre'];
                     }
                 }
             }
-        }else{
+        } else {
             $this->arrErrores[] = "El archivo debe contener datos para al menos un hogar";
         }
     }
@@ -274,11 +274,11 @@ Class TipoActoAdministrativo {
                 switch ($arrPost['seqTipoActo']) {
                     case 2: // Resolucion de modificacion
                         $numRegistro = count($arrFormularios['datos'][$numDocumento]);
-                        $arrFormularios['datos'][$numDocumento][$numRegistro]['campo']      = $arrLinea[1];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['campo'] = $arrLinea[1];
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['incorrecto'] = $arrLinea[2];
-                        $arrFormularios['datos'][$numDocumento][$numRegistro]['correcto']   = $arrLinea[3];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['correcto'] = $arrLinea[3];
                         $arrFormularios['datos'][$numDocumento][$numRegistro]['resolucion'] = $arrLinea[4];
-                        $arrFormularios['datos'][$numDocumento][$numRegistro]['fecha']      = $arrLinea[5];
+                        $arrFormularios['datos'][$numDocumento][$numRegistro]['fecha'] = $arrLinea[5];
                         break;
                     case 3: // Resolucion de inhabilitados
                         $seqFormulario = $numDocumento;
@@ -300,11 +300,11 @@ Class TipoActoAdministrativo {
                         $arrFormularios['datos'][$numDocumento]['fecha'] = $arrLinea[2];
                         $arrFormularios['datos'][$numDocumento]['valor'] = $arrLinea[3];
                         break;
-                   case 10: // revocatoria
+                    case 10: // revocatoria
                         $arrFormularios['datos'][$numDocumento]['numero'] = $arrLinea[1];
-                        $arrFormularios['datos'][$numDocumento]['fecha']  = $arrLinea[2];
+                        $arrFormularios['datos'][$numDocumento]['fecha'] = $arrLinea[2];
                         break;
-                   case 11:
+                    case 11:
                         $arrFormularios['datos'][$numDocumento]['estado'] = $arrLinea[1];
                         break;
                 }
@@ -331,16 +331,13 @@ Class TipoActoAdministrativo {
                     case 2: // Modificatoria
 
                         $seqEtapa = array_shift(
-                            obtenerDatosTabla(
-                                "t_frm_estado_proceso",
-                                array("seqEstadoProceso","seqEtapa"),
-                                "seqEstadoProceso",
-                                "seqEstadoProceso = " . $objFormulario->seqEstadoProceso
-                            )
+                                obtenerDatosTabla(
+                                        "t_frm_estado_proceso", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = " . $objFormulario->seqEstadoProceso
+                                )
                         );
 
-                        if($seqEtapa != 4 and $seqEtapa != 5){
-                            $txtEtapa = obtenerNombres("t_frm_etapa","seqEtapa",$seqEtapa);
+                        if ($seqEtapa != 4 and $seqEtapa != 5) {
+                            $txtEtapa = obtenerNombres("t_frm_etapa", "seqEtapa", $seqEtapa);
                             $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no puede ser modificado, el formulario se encuentra en etapa de " . $txtEtapa;
                         }
 
@@ -390,122 +387,100 @@ Class TipoActoAdministrativo {
                                     case "unidad habitacional":
                                         if (trim($arrRegistro['incorrecto']) == "") {
                                             $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: No puede dejar este campo vacio";
-                                        }else{
+                                        } else {
 
-                                            $arrRegistro['incorrecto'] = mb_split("/",$arrRegistro['incorrecto']);
-                                            foreach($arrRegistro['incorrecto'] as $i => $txtValor){
+                                            $arrRegistro['incorrecto'] = mb_split("/", $arrRegistro['incorrecto']);
+                                            foreach ($arrRegistro['incorrecto'] as $i => $txtValor) {
                                                 $arrRegistro['incorrecto'][$i] = trim($txtValor);
                                             }
 
                                             $txtProyecto = $arrRegistro['incorrecto'][0];
-                                            $txtUnidad   = $arrRegistro['incorrecto'][1];
+                                            $txtUnidad = $arrRegistro['incorrecto'][1];
 
                                             $arrProyecto = array();
                                             $arrProyecto = obtenerDatosTabla(
-                                                "T_PRY_PROYECTO",
-                                                array("txtNombreProyecto" , "seqProyecto", "seqProyectoPadre"),
-                                                "txtNombreProyecto",
-                                                "txtNombreProyecto like '" . $txtProyecto ."'"
+                                                    "T_PRY_PROYECTO", array("txtNombreProyecto", "seqProyecto", "seqProyectoPadre"), "txtNombreProyecto", "txtNombreProyecto like '" . $txtProyecto . "'"
                                             );
 
-                                            if( intval($arrProyecto[ $txtProyecto ]['seqProyectoPadre']) == 0 ){
-                                                $seqProyecto = intval($arrProyecto[ $txtProyecto ]['seqProyecto']);
+                                            if (intval($arrProyecto[$txtProyecto]['seqProyectoPadre']) == 0) {
+                                                $seqProyecto = intval($arrProyecto[$txtProyecto]['seqProyecto']);
                                                 $seqProyectoHijo = null;
                                                 $seqUnidadProyecto = array_shift(
-                                                    obtenerDatosTabla(
-                                                        "T_PRY_UNIDAD_PROYECTO",
-                                                        array("txtNombreUnidad","seqUnidadProyecto"),
-                                                        "txtNombreUnidad",
-                                                        "txtNombreUnidad like '" . $txtUnidad ."' and seqProyecto = " . $seqProyecto
-                                                    )
+                                                        obtenerDatosTabla(
+                                                                "T_PRY_UNIDAD_PROYECTO", array("txtNombreUnidad", "seqUnidadProyecto"), "txtNombreUnidad", "txtNombreUnidad like '" . $txtUnidad . "' and seqProyecto = " . $seqProyecto
+                                                        )
                                                 );
-                                            }else{
-                                                $seqProyecto = intval($arrProyecto[ $txtProyecto ]['seqProyectoPadre']);
-                                                $seqProyectoHijo = intval($arrProyecto[ $txtProyecto ]['seqProyecto']);
+                                            } else {
+                                                $seqProyecto = intval($arrProyecto[$txtProyecto]['seqProyectoPadre']);
+                                                $seqProyectoHijo = intval($arrProyecto[$txtProyecto]['seqProyecto']);
                                                 $seqUnidadProyecto = array_shift(
-                                                    obtenerDatosTabla(
-                                                        "T_PRY_UNIDAD_PROYECTO",
-                                                        array("txtNombreUnidad","seqUnidadProyecto"),
-                                                        "txtNombreUnidad",
-                                                        "txtNombreUnidad like '" . $txtUnidad ."' and seqProyecto = " . $seqProyectoHijo
-                                                    )
+                                                        obtenerDatosTabla(
+                                                                "T_PRY_UNIDAD_PROYECTO", array("txtNombreUnidad", "seqUnidadProyecto"), "txtNombreUnidad", "txtNombreUnidad like '" . $txtUnidad . "' and seqProyecto = " . $seqProyectoHijo
+                                                        )
                                                 );
                                             }
 
-                                            if( $seqProyecto != $objFormulario->seqProyecto ){
+                                            if ($seqProyecto != $objFormulario->seqProyecto) {
                                                 $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: " . trim($arrRegistro['incorrecto'][0]) . " no es el proyecto asociado actualmente";
                                             }
 
-                                            if( intval($seqProyectoHijo) != intval($objFormulario->seqProyectoHijo) ) {
+                                            if (intval($seqProyectoHijo) != intval($objFormulario->seqProyectoHijo)) {
                                                 $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: " . trim($arrRegistro['incorrecto'][0]) . " no es el conjunto residencial asociado actualmente";
                                             }
 
-                                            if( $seqUnidadProyecto != $objFormulario->seqUnidadProyecto ){
+                                            if ($seqUnidadProyecto != $objFormulario->seqUnidadProyecto) {
                                                 $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Incorrecto: " . trim($arrRegistro['incorrecto'][1]) . " no es la unidad asociada actualmente";
                                             }
-
                                         }
                                         if (trim($arrRegistro['correcto']) == "") {
                                             $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: No puede dejar este campo vacio";
-                                        }else{
-                                            $arrRegistro['correcto'] = mb_split("/",$arrRegistro['correcto']);
-                                            foreach($arrRegistro['correcto'] as $i => $txtValor){
+                                        } else {
+                                            $arrRegistro['correcto'] = mb_split("/", $arrRegistro['correcto']);
+                                            foreach ($arrRegistro['correcto'] as $i => $txtValor) {
                                                 $arrRegistro['correcto'][$i] = trim($txtValor);
                                             }
 
                                             $txtProyecto = $arrRegistro['correcto'][0];
-                                            $txtUnidad   = $arrRegistro['correcto'][1];
+                                            $txtUnidad = $arrRegistro['correcto'][1];
 
                                             $arrProyecto = array();
                                             $arrProyecto = obtenerDatosTabla(
-                                                "T_PRY_PROYECTO",
-                                                array("txtNombreProyecto" , "seqProyecto", "seqProyectoPadre"),
-                                                "txtNombreProyecto",
-                                                "txtNombreProyecto like '" . $txtProyecto ."'"
+                                                    "T_PRY_PROYECTO", array("txtNombreProyecto", "seqProyecto", "seqProyectoPadre"), "txtNombreProyecto", "txtNombreProyecto like '" . $txtProyecto . "'"
                                             );
 
-                                            if( intval($arrProyecto[ $txtProyecto ]['seqProyectoPadre']) == 0 ){
-                                                $seqProyecto = intval($arrProyecto[ $txtProyecto ]['seqProyecto']);
+                                            if (intval($arrProyecto[$txtProyecto]['seqProyectoPadre']) == 0) {
+                                                $seqProyecto = intval($arrProyecto[$txtProyecto]['seqProyecto']);
                                                 $seqProyectoHijo = null;
                                                 $seqUnidadProyecto = array_shift(
-                                                    obtenerDatosTabla(
-                                                        "T_PRY_UNIDAD_PROYECTO",
-                                                        array("txtNombreUnidad","seqUnidadProyecto"),
-                                                        "txtNombreUnidad",
-                                                        "txtNombreUnidad like '" . $txtUnidad ."' and seqProyecto = " . $seqProyecto
-                                                    )
+                                                        obtenerDatosTabla(
+                                                                "T_PRY_UNIDAD_PROYECTO", array("txtNombreUnidad", "seqUnidadProyecto"), "txtNombreUnidad", "txtNombreUnidad like '" . $txtUnidad . "' and seqProyecto = " . $seqProyecto
+                                                        )
                                                 );
-                                            }else{
-                                                $seqProyecto = intval($arrProyecto[ $txtProyecto ]['seqProyectoPadre']);
-                                                $seqProyectoHijo = intval($arrProyecto[ $txtProyecto ]['seqProyecto']);
+                                            } else {
+                                                $seqProyecto = intval($arrProyecto[$txtProyecto]['seqProyectoPadre']);
+                                                $seqProyectoHijo = intval($arrProyecto[$txtProyecto]['seqProyecto']);
                                                 $seqUnidadProyecto = array_shift(
-                                                    obtenerDatosTabla(
-                                                        "T_PRY_UNIDAD_PROYECTO",
-                                                        array("txtNombreUnidad","seqUnidadProyecto"),
-                                                        "txtNombreUnidad",
-                                                        "txtNombreUnidad like '" . $txtUnidad ."' and seqProyecto = " . $seqProyectoHijo
-                                                    )
+                                                        obtenerDatosTabla(
+                                                                "T_PRY_UNIDAD_PROYECTO", array("txtNombreUnidad", "seqUnidadProyecto"), "txtNombreUnidad", "txtNombreUnidad like '" . $txtUnidad . "' and seqProyecto = " . $seqProyectoHijo
+                                                        )
                                                 );
                                             }
 
-                                            if( intval($seqProyecto) == 0 ){
+                                            if (intval($seqProyecto) == 0) {
                                                 $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: " . trim($arrRegistro['correcto'][0]) . " no se encontró el proyecto";
                                             }
 
                                             $seqFormularioUnidad = array_shift(
-                                                obtenerDatosTabla(
-                                                    "T_PRY_UNIDAD_PROYECTO",
-                                                    array("seqUnidadProyecto","seqFormulario"),
-                                                    "seqUnidadProyecto",
-                                                    "seqUnidadProyecto = $seqUnidadProyecto"
-                                                )
+                                                    obtenerDatosTabla(
+                                                            "T_PRY_UNIDAD_PROYECTO", array("seqUnidadProyecto", "seqFormulario"), "seqUnidadProyecto", "seqUnidadProyecto = $seqUnidadProyecto"
+                                                    )
                                             );
 
-                                            if( intval($seqUnidadProyecto) == 0 ){
+                                            if (intval($seqUnidadProyecto) == 0) {
                                                 $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: No existe la unidad habitacional " . trim($arrRegistro['correcto'][1]);
-                                            }else{
-                                                if( intval($seqFormularioUnidad) != 0 ){
-                                                    $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: La unidad habitacional " . trim($arrRegistro['correcto'][1]) . " esta tomada por el hogar de " .  number_format(Ciudadano::documentoVinculado($seqFormularioUnidad),"0",".",",");
+                                            } else {
+                                                if (intval($seqFormularioUnidad) != 0) {
+                                                    $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Correcto: La unidad habitacional " . trim($arrRegistro['correcto'][1]) . " esta tomada por el hogar de " . number_format(Ciudadano::documentoVinculado($seqFormularioUnidad), "0", ".", ",");
                                                 }
                                             }
                                         }
@@ -549,18 +524,18 @@ Class TipoActoAdministrativo {
                         }
 
                         $claActoModificado = new ActoAdministrativo();
-                        $arrActoModificado = $claActoModificado->cargarActoAdministrativo(intval($arrRegistro['resolucion']),$arrRegistro['fecha']);
-                        if( isset( $arrActoModificado[ intval($arrRegistro['resolucion']) . strtotime($arrRegistro['fecha']) ] ) ) {
+                        $arrActoModificado = $claActoModificado->cargarActoAdministrativo(intval($arrRegistro['resolucion']), $arrRegistro['fecha']);
+                        if (isset($arrActoModificado[intval($arrRegistro['resolucion']) . strtotime($arrRegistro['fecha'])])) {
                             $objActoModificado = $arrActoModificado[intval($arrRegistro['resolucion']) . strtotime($arrRegistro['fecha'])];
-                            if( $objActoModificado->seqTipoActo == 1 ) {
+                            if ($objActoModificado->seqTipoActo == 1) {
                                 $objActoModificado->obtenerHogares($objFormulario->seqFormulario);
                                 if (empty($objActoModificado->arrHogares)) {
                                     $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Resolución y Fecha (" . number_format($arrRegistro['resolucion']) . " del " . $arrRegistro['fecha'] . "): El hogar no esta vinculado a este acto administrativo";
                                 }
-                            }else{
+                            } else {
                                 $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Resolución y Fecha (" . number_format($arrRegistro['resolucion']) . " del " . $arrRegistro['fecha'] . "): No es una acto adminsitrativo de asignación";
                             }
-                        }else{
+                        } else {
                             $this->arrErrores[] = "Error documento " . number_format($numDocumento) . ", " . ucwords(strtolower($arrRegistro['campo'])) . ", campo Resolución y Fecha (" . number_format($arrRegistro['resolucion']) . " del " . $arrRegistro['fecha'] . "): No existe";
                         }
                         break;
@@ -647,10 +622,10 @@ Class TipoActoAdministrativo {
                             $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no puede ser asignado, el Formulario se encuentra Abierto ";
                         }
                         $claActo = new ActoAdministrativo();
-                        $claActo = array_shift($claActo->cargarActoAdministrativo($arrFormularios['datos'][$numDocumento]['numero'],$arrFormularios['datos'][$numDocumento]['numero'],array($numDocumento)));
-                        if($claActo == null){
-                           $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no se encuentra vinculado a la resolución  " .
-                                                 $arrFormularios['datos'][$numDocumento]['numero'] . " del " . $arrFormularios['datos'][$numDocumento]['fecha'];
+                        $claActo = array_shift($claActo->cargarActoAdministrativo($arrFormularios['datos'][$numDocumento]['numero'], $arrFormularios['datos'][$numDocumento]['numero'], array($numDocumento)));
+                        if ($claActo == null) {
+                            $this->arrErrores[] = "El hogar del documento " . number_format($numDocumento) . " no se encuentra vinculado a la resolución  " .
+                                    $arrFormularios['datos'][$numDocumento]['numero'] . " del " . $arrFormularios['datos'][$numDocumento]['fecha'];
                         }
                         break;
                     case 11: // Exclusion
@@ -930,9 +905,9 @@ Class ActoAdministrativo {
                     TRIM( cac.txtApellido2 )
                     ) 
                     ) AS txtNombre,
-                    hac.txtCampo,
-                    hac.txtIncorrecto,
-                    hac.txtCorrecto,
+                    det.txtCampo,
+                    det.txtIncorrecto,
+                    det.txtCorrecto,
                     hvi.numActoReferencia, 
                     hvi.fchActoReferencia
                 FROM T_AAD_HOGAR_ACTO hac
@@ -940,8 +915,11 @@ Class ActoAdministrativo {
                 INNER JOIN T_AAD_FORMULARIO_ACTO fac ON hac.seqFormularioActo = fac.seqFormularioActo
                 INNER JOIN T_AAD_HOGARES_VINCULADOS hvi ON hvi.seqFormularioActo = fac.seqFormularioActo
                 INNER JOIN T_CIU_TIPO_DOCUMENTO tdo ON cac.seqTipoDocumento = tdo.seqTipoDocumento
+                LEFT JOIN 
+                t_aad_detalles det on hac.seqFormularioActo = det.seqFormularioActo
                 WHERE hvi.numActo = " . $this->numActo . "
                 AND hvi.fchActo = '" . $this->fchActo . "'
+                    AND det.numActo = '" . $this->numActo . "'
                 $txtCondicion
                 ORDER BY cac.numDocumento
             ";
@@ -956,7 +934,7 @@ Class ActoAdministrativo {
                     $this->arrMasInformacion[$numDocumento]['arrModificaciones'][$numCuenta]['txtCampo'] = $objRes->fields['txtCampo'];
                     $this->arrMasInformacion[$numDocumento]['arrModificaciones'][$numCuenta]['txtIncorrecto'] = $objRes->fields['txtIncorrecto'];
                     $this->arrMasInformacion[$numDocumento]['arrModificaciones'][$numCuenta]['txtCorrecto'] = $objRes->fields['txtCorrecto'];
-                    if(intval($this->arrCaracteristicas[4]) == 0) {
+                    if (intval($this->arrCaracteristicas[4]) == 0) {
                         $this->arrCaracteristicas[4] = $objRes->fields['numActoReferencia'];
                         $this->arrCaracteristicas[7] = $objRes->fields['fchActoReferencia'];
                     }
@@ -1597,11 +1575,11 @@ Class ActoAdministrativo {
                         $arrFormularios['datos'][$numDocumento]['fecha'] = $arrLinea[2];
                         $arrFormularios['datos'][$numDocumento]['valor'] = $arrLinea[3];
                         break;
-                   case 10:
+                    case 10:
                         $arrFormularios['datos'][$numDocumento]['numero'] = $arrLinea[1];
                         $arrFormularios['datos'][$numDocumento]['fecha'] = $arrLinea[2];
                         break;
-                   case 11: // Exclusion
+                    case 11: // Exclusion
                         $arrFormularios['datos'][$numDocumento]['estado'] = $arrLinea[1];
                         $arrFormularios['datos'][$numDocumento]['comentario'] = $arrLinea[2];
                         break;
@@ -1623,13 +1601,13 @@ Class ActoAdministrativo {
 
                     foreach ($objFormulario as $txtClave => $txtValor) {
                         if (!in_array($txtClave, $arrIgnorar)) {
-                            if( substr($txtClave,0,3) == "fch" ){
-                                if( ! esFechaValida( $txtValor ) ){
+                            if (substr($txtClave, 0, 3) == "fch") {
+                                if (!esFechaValida($txtValor)) {
                                     $txtValor = "NULL";
-                                }else{
+                                } else {
                                     $txtValor = "'" . $txtValor . "'";
                                 }
-                            }else{
+                            } else {
                                 $txtValor = "'" . $txtValor . "'";
                             }
                             $txtCamposSql .= trim($txtClave) . ",";
@@ -1659,13 +1637,13 @@ Class ActoAdministrativo {
                             $numActoReferencia = $arrFormularios['datos'][$numDocumento]['numero'];
                             $fchActoReferencia = $arrFormularios['datos'][$numDocumento]['fecha'];
                             break;
-                       case 10: // revocatoria
-                           $numActoReferencia = $arrFormularios['datos'][$numDocumento]['numero'];
-                           $fchActoReferencia = $arrFormularios['datos'][$numDocumento]['fecha'];
-                           break;
+                        case 10: // revocatoria
+                            $numActoReferencia = $arrFormularios['datos'][$numDocumento]['numero'];
+                            $fchActoReferencia = $arrFormularios['datos'][$numDocumento]['fecha'];
+                            break;
                     }
 
-                    $fchActoReferencia = ( esFechaValida( $fchActoReferencia ) )? "'" . $fchActoReferencia . "'" : "NULL";
+                    $fchActoReferencia = ( esFechaValida($fchActoReferencia) ) ? "'" . $fchActoReferencia . "'" : "NULL";
 
                     $sql = "
                          INSERT INTO T_AAD_HOGARES_VINCULADOS ( 
@@ -1685,7 +1663,6 @@ Class ActoAdministrativo {
                          )
                       ";
                     $aptBd->execute($sql);
-
                 } catch (Exception $objError) {
                     $this->arrErrores[] = "No se pudo copiar el formulario del documento " . number_format($numDocumento) . " al modulo de actos administrativos ";
                 }
@@ -1751,7 +1728,6 @@ Class ActoAdministrativo {
                                   ";
                                     break;
                                 case 2: // modificatorias
-
                                     //pr( $arrFormularios['datos'] );
 
                                     if (isset($arrFormularios['datos'][$objFormulario->seqFormulario][$objCiudadano->numDocumento])) {
@@ -1773,7 +1749,7 @@ Class ActoAdministrativo {
                                            ),";
                                         }
                                         $txtValoresSql = trim($txtValoresSql, ",");
-                                    }elseif( isset($arrFormularios['datos'][$objCiudadano->numDocumento]) ){
+                                    } elseif (isset($arrFormularios['datos'][$objCiudadano->numDocumento])) {
                                         $txtValoresSql = "";
                                         foreach ($arrFormularios['datos'][$objCiudadano->numDocumento] as $i => $arrRegistro) {
                                             $txtValoresSql .= "
@@ -2089,7 +2065,7 @@ Class ActoAdministrativo {
                             }
 
                             $txtCambios .= "seqEstadoProceso, Valor Anterior: " . $objFormulario->seqEstadoProceso . ", Valor Nuevo: $seqEstadoProceso\n";
-                           //$seqFormularioActo
+                            //$seqFormularioActo
                             $sql = "
                                     UPDATE T_FRM_FORMULARIO SET
                                        seqEstadoProceso = $seqEstadoProceso
@@ -2328,43 +2304,31 @@ Class ActoAdministrativo {
 
                                             $arrProyecto = array();
                                             $arrProyecto = obtenerDatosTabla(
-                                                "T_PRY_PROYECTO",
-                                                array("txtNombreProyecto","seqProyecto","seqProyectoPadre"),
-                                                "txtNombreProyecto",
-                                                "txtNombreProyecto = '" . $segmentoConjunto ."'"
+                                                    "T_PRY_PROYECTO", array("txtNombreProyecto", "seqProyecto", "seqProyectoPadre"), "txtNombreProyecto", "txtNombreProyecto = '" . $segmentoConjunto . "'"
                                             );
 
-                                            if( intval( $arrProyecto[$segmentoConjunto]['seqProyectoPadre'] ) == 0 ){
-                                                $seqProyecto = intval( $arrProyecto[$segmentoConjunto]['seqProyecto'] );
+                                            if (intval($arrProyecto[$segmentoConjunto]['seqProyectoPadre']) == 0) {
+                                                $seqProyecto = intval($arrProyecto[$segmentoConjunto]['seqProyecto']);
                                                 $seqProyectoHijo = 'null';
                                                 $seqUnidadProyecto = array_shift(
-                                                    obtenerDatosTabla(
-                                                        "T_PRY_UNIDAD_PROYECTO",
-                                                        array("txtNombreUnidad","seqUnidadProyecto"),
-                                                        "txtNombreUnidad",
-                                                        "txtNombreUnidad = '" . $segmentoUnidad ."' and seqProyecto = " . $seqProyecto
-                                                    )
+                                                        obtenerDatosTabla(
+                                                                "T_PRY_UNIDAD_PROYECTO", array("txtNombreUnidad", "seqUnidadProyecto"), "txtNombreUnidad", "txtNombreUnidad = '" . $segmentoUnidad . "' and seqProyecto = " . $seqProyecto
+                                                        )
                                                 );
-                                            }else{
-                                                $seqProyecto = intval( $arrProyecto[$segmentoConjunto]['seqProyectoPadre'] );
-                                                $seqProyectoHijo = intval( $arrProyecto[$segmentoConjunto]['seqProyecto'] );
+                                            } else {
+                                                $seqProyecto = intval($arrProyecto[$segmentoConjunto]['seqProyectoPadre']);
+                                                $seqProyectoHijo = intval($arrProyecto[$segmentoConjunto]['seqProyecto']);
                                                 $seqUnidadProyecto = array_shift(
-                                                    obtenerDatosTabla(
-                                                        "T_PRY_UNIDAD_PROYECTO",
-                                                        array("txtNombreUnidad","seqUnidadProyecto"),
-                                                        "txtNombreUnidad",
-                                                        "txtNombreUnidad = '" . $segmentoUnidad ."' and seqProyecto = " . $seqProyectoHijo
-                                                    )
+                                                        obtenerDatosTabla(
+                                                                "T_PRY_UNIDAD_PROYECTO", array("txtNombreUnidad", "seqUnidadProyecto"), "txtNombreUnidad", "txtNombreUnidad = '" . $segmentoUnidad . "' and seqProyecto = " . $seqProyectoHijo
+                                                        )
                                                 );
                                             }
 
                                             $valAspiraSubsidio = array_shift(
-                                                obtenerDatosTabla(
-                                                    "T_PRY_UNIDAD_PROYECTO",
-                                                    array("seqUnidadProyecto","valSDVEActual"),
-                                                    "seqUnidadProyecto",
-                                                    "seqUnidadProyecto = " . $seqUnidadProyecto
-                                                )
+                                                    obtenerDatosTabla(
+                                                            "T_PRY_UNIDAD_PROYECTO", array("seqUnidadProyecto", "valSDVEActual"), "seqUnidadProyecto", "seqUnidadProyecto = " . $seqUnidadProyecto
+                                                    )
                                             );
 
                                             // Actualiza la unidad en el formulario
@@ -2392,33 +2356,24 @@ Class ActoAdministrativo {
 
                                             $arrProyecto = array();
                                             $arrProyecto = obtenerDatosTabla(
-                                                "T_PRY_PROYECTO",
-                                                array("txtNombreProyecto","seqProyecto","seqProyectoPadre"),
-                                                "txtNombreProyecto",
-                                                "txtNombreProyecto = '" . $segmentoConjunto ."'"
+                                                    "T_PRY_PROYECTO", array("txtNombreProyecto", "seqProyecto", "seqProyectoPadre"), "txtNombreProyecto", "txtNombreProyecto = '" . $segmentoConjunto . "'"
                                             );
 
-                                            if( intval( $arrProyecto[$segmentoConjunto]['seqProyectoPadre'] ) == 0 ){
-                                                $seqProyecto = intval( $arrProyecto[$segmentoConjunto]['seqProyecto'] );
+                                            if (intval($arrProyecto[$segmentoConjunto]['seqProyectoPadre']) == 0) {
+                                                $seqProyecto = intval($arrProyecto[$segmentoConjunto]['seqProyecto']);
                                                 $seqProyectoHijo = null;
                                                 $seqUnidadProyecto = array_shift(
-                                                    obtenerDatosTabla(
-                                                        "T_PRY_UNIDAD_PROYECTO",
-                                                        array("txtNombreUnidad","seqUnidadProyecto"),
-                                                        "txtNombreUnidad",
-                                                        "txtNombreUnidad = '" . $segmentoUnidad ."' and seqProyecto = " . $seqProyecto
-                                                    )
+                                                        obtenerDatosTabla(
+                                                                "T_PRY_UNIDAD_PROYECTO", array("txtNombreUnidad", "seqUnidadProyecto"), "txtNombreUnidad", "txtNombreUnidad = '" . $segmentoUnidad . "' and seqProyecto = " . $seqProyecto
+                                                        )
                                                 );
-                                            }else{
-                                                $seqProyecto = intval( $arrProyecto[$segmentoConjunto]['seqProyectoPadre'] );
-                                                $seqProyectoHijo = intval( $arrProyecto[$segmentoConjunto]['seqProyecto'] );
+                                            } else {
+                                                $seqProyecto = intval($arrProyecto[$segmentoConjunto]['seqProyectoPadre']);
+                                                $seqProyectoHijo = intval($arrProyecto[$segmentoConjunto]['seqProyecto']);
                                                 $seqUnidadProyecto = array_shift(
-                                                    obtenerDatosTabla(
-                                                        "T_PRY_UNIDAD_PROYECTO",
-                                                        array("txtNombreUnidad","seqUnidadProyecto"),
-                                                        "txtNombreUnidad",
-                                                        "txtNombreUnidad = '" . $segmentoUnidad ."' and seqProyecto = " . $seqProyectoHijo
-                                                    )
+                                                        obtenerDatosTabla(
+                                                                "T_PRY_UNIDAD_PROYECTO", array("txtNombreUnidad", "seqUnidadProyecto"), "txtNombreUnidad", "txtNombreUnidad = '" . $segmentoUnidad . "' and seqProyecto = " . $seqProyectoHijo
+                                                        )
                                                 );
                                             }
 
@@ -2459,7 +2414,6 @@ Class ActoAdministrativo {
                             $arrEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = " . $objFormulario->seqEstadoProceso);
                             $seqEtapa = $arrEtapa[$objFormulario->seqEstadoProceso];
                             //$seqEstadoProceso = ( $seqEtapa == 1 ) ? 52 : 8;                    
-                            
                             //Corrige para cargue de Postulados-inhabilitados Cambio 22-07-2016 Ing Hector Matamoros
                             if ($seqEtapa <= 2 && $objFormulario->bolCerrado == 0) {
                                 $seqEstadoProceso = 52;
@@ -2467,7 +2421,6 @@ Class ActoAdministrativo {
                                 if ($seqEtapa >= 2 && $objFormulario->bolCerrado == 1) {
                                     $seqEstadoProceso = 8;
                                 }
-                                
                             }
 
                             /* $sql = "
@@ -2476,7 +2429,7 @@ Class ActoAdministrativo {
                               WHERE seqFormulario = " . $objFormulario->seqFormulario . "
                               "; */
 
-                             $sql = "
+                            $sql = "
                                     UPDATE T_FRM_FORMULARIO SET
                                        seqEstadoProceso = $seqEstadoProceso, 
                                            txtDireccionSolucion =  '',
@@ -2688,17 +2641,19 @@ Class ActoAdministrativo {
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['fecha'] = $txtFechaActo;
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['marca'] = strtotime($objActo->fchActo);
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['modificaciones'] = $objActo->arrMasInformacion[$numDocumento]['arrModificaciones'];
-                    }elseif(in_array($txtActoRelacionado2, $arrActosExistentes)){
-
-                    }else {
+                    } elseif (in_array($txtActoRelacionado2, $arrActosExistentes)) {
+                        
+                    } else {
                         $arrInformacion[$txtClave]['acto']['tipo'] = $objActo->seqTipoActo;
                         $arrInformacion[$txtClave]['acto']['nombre'] = $txtNombreActo;
                         $arrInformacion[$txtClave]['acto']['numero'] = $objActo->numActo;
                         $arrInformacion[$txtClave]['acto']['fecha'] = $txtFechaActo;
                         $arrInformacion[$txtClave]['acto']['marca'] = strtotime($objActo->fchActo);
                         $arrInformacion[$txtClave]['acto']['modificaciones'] = $objActo->arrMasInformacion[$numDocumento]['arrModificaciones'];
-                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[4];
-                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[7];
+                       // $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[4];
+                        //$arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[7];
+                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->numActo;
+                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->fchActo;
                         $arrInformacion[$txtClave]['acto']['seqformActo'] = $objActo->seqformActo;
                         $arrInformacion[$txtClave]['acto']['seqEstadoProceso'] = $objActo->seqEstadoProceso;
                     }
@@ -2716,7 +2671,7 @@ Class ActoAdministrativo {
                 case 4: // recursos de reposicion
                     $arrActos[$txtClave]->obtenerResultado($seqFormulario);
                     $txtActoRelacionado = $objActo->arrCaracteristicas[5] . strtotime($objActo->arrCaracteristicas[6]);
-                    if (in_array($txtActoRelacionado, $arrActosExistentes) and isset( $arrInformacion[$txtActoRelacionado] )) {
+                    if (in_array($txtActoRelacionado, $arrActosExistentes) and isset($arrInformacion[$txtActoRelacionado])) {
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['tipo'] = $objActo->seqTipoActo;
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['nombre'] = $txtNombreActo;
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['numero'] = $objActo->numActo;
@@ -2730,8 +2685,7 @@ Class ActoAdministrativo {
                         $arrInformacion[$txtClave]['acto']['fecha'] = $txtFechaActo;
                         $arrInformacion[$txtClave]['acto']['marca'] = strtotime($objActo->fchActo);
                         $arrInformacion[$txtClave]['acto']['resultado'] = $objActo->arrMasInformacion[$numDocumento]['txtEstadoReposicion'];
-                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[5];
-                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[6];
+                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->numActo;
                         $arrInformacion[$txtClave]['acto']['seqformActo'] = $objActo->seqformActo;
                         $arrInformacion[$txtClave]['acto']['seqEstadoProceso'] = $objActo->seqEstadoProceso;
                     }
@@ -2759,8 +2713,10 @@ Class ActoAdministrativo {
                         $arrInformacion[$txtClave]['acto']['numero'] = $objActo->numActo;
                         $arrInformacion[$txtClave]['acto']['fecha'] = $txtFechaActo;
                         $arrInformacion[$txtClave]['acto']['marca'] = strtotime($objActo->fchActo);
-                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[18];
-                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[19];
+                        /*$arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[18];
+                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[19];*/
+                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->numActo;
+                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->fchActo;
                         $arrInformacion[$txtClave]['acto']['seqformActo'] = $objActo->seqformActo;
                         $arrInformacion[$txtClave]['acto']['seqEstadoProceso'] = $objActo->seqEstadoProceso;
                     }
@@ -2780,8 +2736,10 @@ Class ActoAdministrativo {
                         $arrInformacion[$txtClave]['acto']['numero'] = $objActo->numActo;
                         $arrInformacion[$txtClave]['acto']['fecha'] = $txtFechaActo;
                         $arrInformacion[$txtClave]['acto']['marca'] = strtotime($objActo->fchActo);
-                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[49];
-                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[50];
+                        /*$arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[49];
+                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[50];*/
+                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->numActo;
+                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->fchActo;
                         $arrInformacion[$txtClave]['acto']['seqformActo'] = $objActo->seqformActo;
                         $arrInformacion[$txtClave]['acto']['seqEstadoProceso'] = $objActo->seqEstadoProceso;
                     }
@@ -2789,7 +2747,7 @@ Class ActoAdministrativo {
                 case 10: // revocatorias
                     $arrActos[$txtClave]->obtenerRevocatorias($seqFormulario);
                     //$txtActoRelacionado = $objActo->arrCaracteristicas[91] . strtotime($objActo->arrCaracteristicas[92]);
-                   $txtActoRelacionado = $arrActos[$txtClave]->arrMasInformacion[$numDocumento]['resolucion'] . strtotime($arrActos[$txtClave]->arrMasInformacion[$numDocumento]['fecha']);
+                    $txtActoRelacionado = $arrActos[$txtClave]->arrMasInformacion[$numDocumento]['resolucion'] . strtotime($arrActos[$txtClave]->arrMasInformacion[$numDocumento]['fecha']);
                     if (in_array($txtActoRelacionado, $arrActosExistentes)) {
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['tipo'] = $objActo->seqTipoActo;
                         $arrInformacion[$txtActoRelacionado]['relacionado'][$txtClave]['nombre'] = $txtNombreActo;
@@ -2802,8 +2760,10 @@ Class ActoAdministrativo {
                         $arrInformacion[$txtClave]['acto']['numero'] = $objActo->numActo;
                         $arrInformacion[$txtClave]['acto']['fecha'] = $txtFechaActo;
                         $arrInformacion[$txtClave]['acto']['marca'] = strtotime($objActo->fchActo);
-                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[91];
-                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[92];
+                       /* $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[91];
+                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[92];*/
+                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->numActo;
+                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->fchActo;
                         $arrInformacion[$txtClave]['acto']['seqformActo'] = $objActo->seqformActo;
                         $arrInformacion[$txtClave]['acto']['seqEstadoProceso'] = $objActo->seqEstadoProceso;
                     }
@@ -2825,8 +2785,10 @@ Class ActoAdministrativo {
                         $arrInformacion[$txtClave]['acto']['fecha'] = $txtFechaActo;
                         $arrInformacion[$txtClave]['acto']['marca'] = strtotime($objActo->fchActo);
                         $arrInformacion[$txtClave]['acto']['resultado'] = $objActo->arrMasInformacion[$numDocumento]['txtEstadoReposicion'];
-                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[140];
-                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[141];
+                       /* $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->arrCaracteristicas[140];
+                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] = $objActo->arrCaracteristicas[141];*/
+                        $arrInformacion[$txtClave]['acto']['numeroReferencia'] = $objActo->numActo;
+                        $arrInformacion[$txtClave]['acto']['fechaReferencia'] =$objActo->fchActo;
                         $arrInformacion[$txtClave]['acto']['seqformActo'] = $objActo->seqformActo;
                         $arrInformacion[$txtClave]['acto']['seqEstadoProceso'] = $objActo->seqEstadoProceso;
                     }
@@ -2953,8 +2915,7 @@ Class ActoAdministrativo {
         return $arrEstados;
     }
 
-
-    public function eliminarActoAdministrativo( $numActo , $fchActo , $txtMotivo ){
+    public function eliminarActoAdministrativo($numActo, $fchActo, $txtMotivo) {
         global $aptBd;
 
         // determina si el acto administrativo tiene giros
@@ -2972,14 +2933,14 @@ Class ActoAdministrativo {
                 hvi.fchActo
         ";
         $arrGiros = $aptBd->GetAll($sql);
-        if( doubleval($arrGiros[0]['valGiros']) == 0 ) {
+        if (doubleval($arrGiros[0]['valGiros']) == 0) {
 
-           $aptBd->BeginTrans();
+            $aptBd->BeginTrans();
 
-           try {
+            try {
 
-              // consulta la informacion relacionada con el acto
-              $sql = "
+                // consulta la informacion relacionada con el acto
+                $sql = "
                     select
                     hac.seqFormularioActo,
                     hac.seqCiudadanoActo
@@ -2988,74 +2949,73 @@ Class ActoAdministrativo {
                     where hvi.numActo = " . $numActo . "
                     and hvi.fchActo = '" . $fchActo . "'
                 ";
-              $objRes = $aptBd->execute($sql);
-              while ($objRes->fields) {
-                 $arrFormularioActo[] = $objRes->fields['seqFormularioActo'];
-                 $arrCiudadanoActo[] = $objRes->fields['seqCiudadanoActo'];
-                 $objRes->MoveNext();
-              }
+                $objRes = $aptBd->execute($sql);
+                while ($objRes->fields) {
+                    $arrFormularioActo[] = $objRes->fields['seqFormularioActo'];
+                    $arrCiudadanoActo[] = $objRes->fields['seqCiudadanoActo'];
+                    $objRes->MoveNext();
+                }
 
-              // elimina los hogares
-              if(! empty( $arrFormularioActo ) ) {
-                 $sql = "
+                // elimina los hogares
+                if (!empty($arrFormularioActo)) {
+                    $sql = "
                     delete 
                     from t_aad_hogar_acto 
                     where seqFormularioActo in (" . implode(",", $arrFormularioActo) . ")
                 ";
-                 $aptBd->execute($sql);
-              }
+                    $aptBd->execute($sql);
+                }
 
-              // elimina los vinculados
-              if(! empty( $arrFormularioActo ) ) {
-                 $sql = "
+                // elimina los vinculados
+                if (!empty($arrFormularioActo)) {
+                    $sql = "
                     delete 
                     from t_aad_hogares_vinculados 
                     where seqFormularioActo in (" . implode(",", $arrFormularioActo) . ")
                 ";
-                 $aptBd->execute($sql);
-              }
+                    $aptBd->execute($sql);
+                }
 
-              // elimina los ciudadnos vinculados
-              if(! empty( $arrCiudadanoActo ) ) {
-                 $sql = "
+                // elimina los ciudadnos vinculados
+                if (!empty($arrCiudadanoActo)) {
+                    $sql = "
                     delete 
                     from t_aad_ciudadano_acto 
                     where seqCiudadanoActo in (" . implode(",", $arrCiudadanoActo) . ")
                 ";
-                 $aptBd->execute($sql);
-              }
+                    $aptBd->execute($sql);
+                }
 
-              // elimina los formularios
-              if(! empty( $arrFormularioActo ) ) {
-                 $sql = "
+                // elimina los formularios
+                if (!empty($arrFormularioActo)) {
+                    $sql = "
                     delete 
                     from t_aad_formulario_acto 
                     where seqFormularioActo in (" . implode(",", $arrFormularioActo) . ")
                 ";
-                 $aptBd->execute($sql);
-              }
+                    $aptBd->execute($sql);
+                }
 
-              // elimina el acto administrativo
-              $sql = "
+                // elimina el acto administrativo
+                $sql = "
                     delete 
                     from t_aad_acto_administrativo
                     where numActo = " . $numActo . "
                     and fchActo = '" . $fchActo . "'
                 ";
-              $aptBd->execute($sql);
+                $aptBd->execute($sql);
 
-              // Registro de las actividades
-              $claRegistroActividades = new RegistroActividades();
-              $claRegistroActividades->registrarActividad("Borrado", 145, $_SESSION['seqUsuario'], "AAD " . $numActo . " del " . $fchActo . ": " . $txtMotivo);
+                // Registro de las actividades
+                $claRegistroActividades = new RegistroActividades();
+                $claRegistroActividades->registrarActividad("Borrado", 145, $_SESSION['seqUsuario'], "AAD " . $numActo . " del " . $fchActo . ": " . $txtMotivo);
 
-              $aptBd->CommitTrans();
-
-           } catch (Exception $objError) {
-              $this->arrErrores[] = "Problemas al eliminar el acto adminsitrativo, no se borró ningpun registro";
-              //$this->arrErrores[] = $objError->getMessage();
-              $aptBd->RollbackTrans();
-           }
-        }else{
+                $aptBd->CommitTrans();
+            } catch (Exception $objError) {
+                $this->arrErrores[] = "Problemas al eliminar el acto adminsitrativo, no se borró ningpun registro";
+                //$this->arrErrores[] = $objError->getMessage();
+                $aptBd->RollbackTrans();
+            }
+        } else {
             $this->arrErrores[] = "No puede eliminar el Acto Administrativo " . $numActo . " del " . $fchActo . " porque tiene giros asociados";
         }
     }

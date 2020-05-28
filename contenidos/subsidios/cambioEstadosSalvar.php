@@ -25,6 +25,7 @@ $arrMensajes = array();
 // hacia atras en el proceso
 // solo funciona para archivos masivos
 $arrEstadosNombre = estadosProceso();
+//var_dump($arrEstadosNombre);
 $arrEstadosOrden = array();
 foreach ($arrEstadosNombre as $seqEstadoProceso => $txtEstadoProceso) {
     $numOrden = count($arrEstadosOrden);
@@ -191,16 +192,18 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
 
         $claFormulario->seqEstadoProceso = $arrDatos['estado'];
         $claFormulario->fchUltimaActualizacion = date("Y-m-d H:i:s");
-
+        $seqEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = " . $claFormulario->seqEstadoProceso);
+        // echo "<br> ****" . $seqEtapa[$claFormulario->seqEstadoProceso];
+        // die();
         // para paso a riego
-        if ($arrDatos['estado'] == 6) {
+        if ($arrDatos['estado'] == 6) { // etapa 2
             $claFormulario->seqProyecto = 37; // Ninguno
             $claFormulario->seqProyectoHijo = 0;
             $claFormulario->seqUnidadProyecto = 1; // Ninguno
         }
 
         // para paso a inscrito
-        if ($arrDatos['estado'] == 36) {
+        if ($arrDatos['estado'] == 36) { //etapa 1
             //$claFormulario->txtFormulario = "";
             $claFormulario->fchInscripcion = "";
             $claFormulario->fchPostulacion = "";
@@ -229,7 +232,7 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
         }
 
         // Para paso a Inscrito Inactivo
-        if ($arrDatos['estado'] == 35) {
+        if ($arrDatos['estado'] == 35) { // etapa 1
             //$claFormulario->txtFormulario = "";
             $claFormulario->fchPostulacion = "0000-00-00";
             $claFormulario->fchVigencia = "0000-00-00";
@@ -259,47 +262,10 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
             @mysql_query($sqlLibera);
         }
 
-        // Para paso a Asignacion Revocado
-        if ($arrDatos['estado'] == 21) {
-            $claFormulario->txtDireccionSolucion = "";
-            $claFormulario->seqUnidadProyecto = 1;
-            $claFormulario->txtMatriculaInmobiliaria = "";
-            $claFormulario->txtChip = "";
-            $claFormulario->valAvaluo = 0;
-            $claFormulario->valTotal = 0;
-            // Libera Unidad Habitacional
-            @$sqlLibera = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = null WHERE seqFormulario = $seqFormulario";
-            mysql_query($sqlLibera);
-        }
+
 
         // Para paso a Postulación Renuncia
-        if ($arrDatos['estado'] == 14) {
-            $claFormulario->txtDireccionSolucion = "";
-            $claFormulario->seqUnidadProyecto = 1;
-            $claFormulario->txtMatriculaInmobiliaria = "";
-            $claFormulario->txtChip = "";
-            $claFormulario->valAvaluo = 0;
-            $claFormulario->valTotal = 0;
-            $claFormulario->valSaldoCuentaAhorro = 0;
-            $claFormulario->seqBancoCuentaAhorro = 1;
-            $claFormulario->txtSoporteCuentaAhorro = "";
-            $claFormulario->fchAperturaCuentaAhorro = "";
-            $claFormulario->bolInmovilizadoCuentaAhorro = 0;
-            $claFormulario->valSaldoCuentaAhorro2 = 0;
-            $claFormulario->seqBancoCuentaAhorro2 = 1;
-            $claFormulario->txtSoporteCuentaAhorro2 = "";
-            $claFormulario->fchAperturaCuentaAhorro2 = "";
-            $claFormulario->bolInmovilizadoCuentaAhorro2 = 0;
-            //$claFormulario->valAspiraSubsidio = 0;
-            $claFormulario->txtSoporteSubsidio = "";
-            $claFormulario->valTotalRecursos = $claFormulario->valSubsidioNacional + $claFormulario->valAporteLote + $claFormulario->valSaldoCesantias + $claFormulario->valAporteAvanceObra + $claFormulario->valCredito + $claFormulario->valAporteMateriales + $claFormulario->valDonacion;
-            // Libera Unidad Habitacional
-            @$sqlLibera = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = null WHERE seqFormulario = $seqFormulario";
-            mysql_query($sqlLibera);
-        }
-
-        // Para paso a asignación Renuncia
-        if ($arrDatos['estado'] == 18) {
+        if ($arrDatos['estado'] == 14) { // etapa 2
             $claFormulario->txtDireccionSolucion = "";
             $claFormulario->seqUnidadProyecto = 1;
             $claFormulario->txtMatriculaInmobiliaria = "";
@@ -325,12 +291,12 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
         }
 
         // Para paso a Inscrito Inhabilitado
-        if ($arrDatos['estado'] == 39) {
+        if ($arrDatos['estado'] == 39) {// etapa 1
             $claFormulario->bolCerrado = 1;
         }
 
         // para paso a hogar calificado (53) o postulado (54)
-        if ($arrDatos['estado'] == 53 || $arrDatos['estado'] == 1) {
+        if ($arrDatos['estado'] == 53 || $arrDatos['estado'] == 1) { //etapa 1 y  2
             $claFormulario->txtDireccionSolucion = "";
             $claFormulario->seqUnidadProyecto = 1;
             $claFormulario->txtMatriculaInmobiliaria = "";
@@ -341,6 +307,46 @@ foreach ($arrArchivo as $seqFormulario => $arrDatos) {
             mysql_query($sqlLibera);
 //            $claFormulario->seqTipoEsquema = "1";
         }
+
+        // Para paso a Asignacion Revocado
+        if ($arrDatos['estado'] == 21) { // etapa4
+            $claFormulario->txtDireccionSolucion = "";
+            $claFormulario->seqUnidadProyecto = 1;
+            $claFormulario->txtMatriculaInmobiliaria = "";
+            $claFormulario->txtChip = "";
+            $claFormulario->valAvaluo = 0;
+            $claFormulario->valTotal = 0;
+            // Libera Unidad Habitacional
+            @$sqlLibera = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = null WHERE seqFormulario = $seqFormulario";
+            mysql_query($sqlLibera);
+        }
+        // Para paso a asignación Renuncia
+        if ($arrDatos['estado'] == 18) { // etapa 4
+            $claFormulario->txtDireccionSolucion = "";
+            $claFormulario->seqUnidadProyecto = 1;
+            $claFormulario->txtMatriculaInmobiliaria = "";
+            $claFormulario->txtChip = "";
+            $claFormulario->valAvaluo = 0;
+            $claFormulario->valTotal = 0;
+            $claFormulario->valSaldoCuentaAhorro = 0;
+            $claFormulario->seqBancoCuentaAhorro = 1;
+            $claFormulario->txtSoporteCuentaAhorro = "";
+            $claFormulario->fchAperturaCuentaAhorro = "";
+            $claFormulario->bolInmovilizadoCuentaAhorro = 0;
+            $claFormulario->valSaldoCuentaAhorro2 = 0;
+            $claFormulario->seqBancoCuentaAhorro2 = 1;
+            $claFormulario->txtSoporteCuentaAhorro2 = "";
+            $claFormulario->fchAperturaCuentaAhorro2 = "";
+            $claFormulario->bolInmovilizadoCuentaAhorro2 = 0;
+            //$claFormulario->valAspiraSubsidio = 0;
+            $claFormulario->txtSoporteSubsidio = "";
+            $claFormulario->valTotalRecursos = $claFormulario->valSubsidioNacional + $claFormulario->valAporteLote + $claFormulario->valSaldoCesantias + $claFormulario->valAporteAvanceObra + $claFormulario->valCredito + $claFormulario->valAporteMateriales + $claFormulario->valDonacion;
+            // Libera Unidad Habitacional
+            @$sqlLibera = "UPDATE T_PRY_UNIDAD_PROYECTO SET seqFormulario = null WHERE seqFormulario = $seqFormulario";
+            mysql_query($sqlLibera);
+        }
+
+
 
         $claFormulario->txtComentario = $arrDatos['comentario'];
 
@@ -375,28 +381,32 @@ if (empty($arrErrores)) {
             }
         }
 
+        $seqEtapa = obtenerDatosTabla("T_FRM_ESTADO_PROCESO", array("seqEstadoProceso", "seqEtapa"), "seqEstadoProceso", "seqEstadoProceso = " . $claFormulario->seqEstadoProceso);
+        // echo "<br> ****" . $seqEtapa[$claFormulario->seqEstadoProceso];
+        if ($seqEtapa[$claFormulario->seqEstadoProceso] != 4 && $seqEtapa[$claFormulario->seqEstadoProceso] != 5) {
 
-        // Para cambios especiales de Mejoramiento y Adquisicion
-        if (isset($_POST['especial']) and $_POST['especial'] == "mejoramiento") {
-            $claFormulario->seqModalidad = 9;  // Mejoramiento Habitacional
-            $claFormulario->seqSolucion = 16; // 70 SMMLV
-            $claFormulario->seqTipoEsquema = 4;  // Territorial Dirigido
-            $claFormulario->seqPlanGobierno = 2;  // Bogotá Humana
-            $claFormulario->seqProyecto = 98; // TERRITORIAL DIRIGIDA - HABITACIONAL URBANO
-        } elseif (isset($_POST['especial']) and $_POST['especial'] == "adquisicion") {
-            $claFormulario->seqModalidad = 6;  // Adquisición de Vivienda Nueva
-            $claFormulario->seqSolucion = 13; // 70 SMMLV
-            $claFormulario->seqTipoEsquema = 1;  // Individual
-            $claFormulario->seqPlanGobierno = 2;  // Bogotá Humana  
-            $claFormulario->seqConvenio = 1; // Convenio
-            //$claFormulario->seqProyecto     = 32; // INDIVIDUAL PROYECTO SDVE
-        } else {
-            $claFormulario->seqPlanGobierno = 3;
+
+            // Para cambios especiales de Mejoramiento y Adquisicion
+            if (isset($_POST['especial']) and $_POST['especial'] == "mejoramiento") {
+                $claFormulario->seqModalidad = 9;  // Mejoramiento Habitacional
+                $claFormulario->seqSolucion = 16; // 70 SMMLV
+                $claFormulario->seqTipoEsquema = 4;  // Territorial Dirigido
+                $claFormulario->seqPlanGobierno = 2;  // Bogotá Humana
+                $claFormulario->seqProyecto = 98; // TERRITORIAL DIRIGIDA - HABITACIONAL URBANO
+            } elseif (isset($_POST['especial']) and $_POST['especial'] == "adquisicion") {
+                $claFormulario->seqModalidad = 6;  // Adquisición de Vivienda Nueva
+                $claFormulario->seqSolucion = 13; // 70 SMMLV
+                $claFormulario->seqTipoEsquema = 1;  // Individual
+                $claFormulario->seqPlanGobierno = 2;  // Bogotá Humana  
+                $claFormulario->seqConvenio = 1; // Convenio
+                //$claFormulario->seqProyecto     = 32; // INDIVIDUAL PROYECTO SDVE
+            } else {
+                $claFormulario->seqPlanGobierno = 3;
+            }
+
+            $claFormulario->seqCesantias = ($claFormulario->seqCesantias == 0) ? 1 : $claFormulario->seqCesantias;
+            $claFormulario->seqPeriodo = ($claFormulario->seqPeriodo == 0) ? 1 : $claFormulario->seqPeriodo;
         }
-
-        $claFormulario->seqCesantias = ($claFormulario->seqCesantias == 0) ? 1 : $claFormulario->seqCesantias;
-        $claFormulario->seqPeriodo = ($claFormulario->seqPeriodo == 0) ? 1 : $claFormulario->seqPeriodo;
-
         $claFormulario->editarFormulario($seqFormulario);
         if (empty($claFormulario->arrErrores)) {
 

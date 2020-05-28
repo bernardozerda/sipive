@@ -31,9 +31,9 @@ class MYPDF extends TCPDF {
         $this->setPageMark();
         $path = K_PATH_IMAGES;
         $path = explode('librerias', $path);
-        $image_file = $path[0] . 'recursos/imagenes/escudo.jpg';
+        $image_file = $path[0] . 'recursos/imagenes/habitatLogo.jpg';
 
-        $this->Image($image_file, 90, 10, 25, 25); //, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($image_file, 80, 15, 55, 17); //, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
     }
 
     // Page footer
@@ -50,15 +50,15 @@ class MYPDF extends TCPDF {
         $path = K_PATH_IMAGES;
         $path = explode('librerias', $path);
         $image_file = $path[0] . 'recursos/imagenes/certificados.png';
-        $image_file2 = $path[0] . 'recursos/imagenes/bta_positiva.jpg';
+        $image_file2 = $path[0] . 'recursos/imagenes/escudo2.jpg';
 
-        $this->Image($image_file, 60, 252, 80, 25); //, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($image_file, 80, 252, 60, 18); //, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
-        $this->Image($image_file2, 150, 252, 40, 25);
-        $txt = 'Calle 52 No. 13-64, Conmutador: 358 1600,          www.habitatbogota.gov.co,   @habitatComunica,        Código Postal: 11231';
+        $this->Image($image_file2, 170, 252, 25, 22);
+        $txt = 'Calle 52 No. 13-64, Conmutador: 358 1600,          www.habitatbogota.gov.co,                                             Código Postal: 11231';
 
 
-        $this->MultiCell(35, 5, '' . $txt, 0, 'L', 0, 0, '', '', true);
+        $this->MultiCell(35, 3, '' . $txt, 0, 'L', 0, 0, '', '', true);
     }
 
 }
@@ -135,8 +135,8 @@ $style = array(
     'fgcolor' => array(0, 0, 0),
     'bgcolor' => false, //array(255,255,255),
     'text' => true,
-    'font' => 'helvetica',
-    'fontsize' => 8,
+    'font' => 'calibri',
+    'fontsize' => 11,
     'stretchtext' => 4
 );
 

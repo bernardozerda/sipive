@@ -5,7 +5,7 @@
             <tr>
 
                 <!-- BOTON -->
-                {if $esCoordinador == 1 or $smarty.session.seqUsuario == 5}
+                {if $esCoordinador == 1 or $smarty.session.seqUsuario == 5  or $smarty.session.seqUsuario == 414}
                     <td width="60px" align="center" valign="top">
                         <button type="button" value="Actualizar Acto" style="width:50px; position: relative; margin-right: 3%" onclick="modificarActo('actosAdministrativos/modificarActo','{$seqFormulario}','{$arrActo.acto.seqformActo}');">
                             <img src="./recursos/imagenes/modify.png" width="16px" height="16px">
@@ -23,14 +23,14 @@
                             <strong>{$arrActo.acto.nombre}:</strong>
                             {$arrActo.acto.numero} del {$arrActo.acto.fecha}
                         </li>
-                        {if ($esCoordinador == 1 or $smarty.session.seqUsuario == 5) and isset($arrActo.acto.seqEstadoProceso) }
+                        {if ($esCoordinador == 1 or $smarty.session.seqUsuario == 5 or $smarty.session.seqUsuario == 414) and isset($arrActo.acto.seqEstadoProceso) }
                             <li><strong>Estado:</strong> {$arrActo.acto.seqEstadoProceso}</li>
                         {/if}
                         {if $arrActo.acto.tipo == 1}
                             <li><strong>Valor de los giros realizados:</strong> $ {$arrActo.acto.giros|number_format}</li>
                         {elseif $arrActo.acto.tipo == 2}
                             <li>
-                                <strong>Modificaciones realizadas:</strong>
+                                <strong>Modificaciones realizadas:888</strong>
                                 <ul>
                                     {foreach from=$arrActo.acto.modificaciones item=arrModificacion}
                                         <li><strong>{$arrModificacion.txtCampo}:</strong> Se cambió {$arrModificacion.txtIncorrecto} por {$arrModificacion.txtCorrecto}</li>

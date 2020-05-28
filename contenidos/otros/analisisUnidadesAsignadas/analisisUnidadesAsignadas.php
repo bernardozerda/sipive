@@ -18,6 +18,7 @@ $sql = "
         und.valSDVEComplementario,
         und.valSDVEActual,
         IF(LOWER(tec.txtExistencia) = 'si','SI','NO') as 'viabilidadTecnica',
+        IF(tec.fchExpedicion='0000:00:00',NULL,tec.fchExpedicion) as fchExpedicion,
         und.seqFormulario,
         ciu.numDocumento AS 'documentoPpal',
         UPPER(CONCAT(ciu.txtNombre1,' ',ciu.txtNombre2,' ',ciu.txtApellido1,' ',ciu.txtApellido2)) AS 'nombrePpal',
@@ -25,7 +26,7 @@ $sql = "
         CONCAT(eta.txtEtapa,' - ',epr.txtEstadoProceso) AS 'estadoProceso',
         und.txtMatriculaInmobiliaria,
         IF(und.bolLegalizado=0,'NO','SI') as bolLegalizado,
-        IF(und.fchLegalizado='0000:00:00',NULL,und.fchLegalizado) as fchLegalizado,
+        IF(und.fchLegalizado='0000:00:00',NULL,und.fchLegalizado) as fchLegalizado,         
         IF(und.fchDevolucionExpediente='0000:00:00',NULL,und.fchDevolucionExpediente) as fchDevolucionExpediente,
         pgo.txtPlanGobierno,
         moa.txtModalidad,
@@ -51,7 +52,7 @@ if (isset($_REQUEST['seqProyecto'])) {
     $sql .= " And (CASE WHEN pry.seqProyectoPadre > 0  then pry.seqProyectoPadre = " . $_REQUEST['seqProyecto'] . " else pry.seqProyecto =" . $_REQUEST['seqProyecto'] . " end)";
 }
  $sql .= " ORDER BY pryP.txtNombreProyecto, und.seqUnidadProyecto ASC ";
-//echo $sql."<br>"; die();
+echo $sql."<br>"; die();
 $arrRegistros = $aptBd->GetAll($sql);
 foreach ($arrRegistros as $numLinea => $arrRegistro) {
     if (trim($arrRegistro['txtNombreProyectoPadre']) == "") {
@@ -85,6 +86,7 @@ $txtArchivo .= "Valor Aprobado" . $txtSeparador;
 $txtArchivo .= "Valor Complementario" . $txtSeparador;
 $txtArchivo .= "Valor Actual" . $txtSeparador;
 $txtArchivo .= "Viabilidad Técnica" . $txtSeparador;
+$txtArchivo .= "Fecha expedicion" . $txtSeparador;
 $txtArchivo .= "seqFormulario" . $txtSeparador;
 $txtArchivo .= "Documento" . $txtSeparador;
 $txtArchivo .= "Nombre" . $txtSeparador;

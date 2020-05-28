@@ -861,7 +861,7 @@
                         </td>
                     </tr>
                 {/if}
-                ***** {$reporteAsignadosActual}**
+             
                 {if $reporteAsignadosActual == 1}
                     <tr {if $x is not even} style="background:#{$backColor};" {/if}>
                         <td class="tituloCampo" align="left" width="60%">Reporte Asign Actos Admon Actual</td>

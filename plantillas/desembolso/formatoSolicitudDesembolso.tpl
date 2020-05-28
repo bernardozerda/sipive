@@ -434,7 +434,7 @@
                 {if $arrSolicitud.txtSubdireccion|trim != ""}
                     {$arrSolicitud.txtSubdireccion|mb_strtolower|mb_strtoupper}
                     <br>
-                    SUBDIRECTORA DE RECURSOS PÚBLICOS {if $arrSolicitud.bolSubdireccionEncargado == 1} (E) {/if}
+                    {$generoSec} DE RECURSOS PÚBLICOS {if $arrSolicitud.bolSubdireccionEncargado == 1} (E) {/if}
 
                 {/if}
                 <br><br>

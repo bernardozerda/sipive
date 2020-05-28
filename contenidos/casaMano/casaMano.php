@@ -401,6 +401,7 @@ if (empty($_POST)) {
             $arrActosAsociados[$objRes->fields['seqUnidadActo']]['valIndexado'] = $objRes->fields['valIndexado'];
             $objRes->MoveNext();
         }
+        //var_dump($arrActos);
        
         // ASIGNACION DE VARIABLES A LA PLANTILLA
         $claSmarty->assign("arrActos", $arrActos);

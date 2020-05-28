@@ -233,7 +233,7 @@ class FormularioSubsidios {
         $this->fchUltimaActualizacion = ( esFechaValida($this->fchUltimaActualizacion) ) ? "'" . $this->fchUltimaActualizacion . "'" : "NULL";
         $this->fchArriendoDesde = ( esFechaValida($this->fchArriendoDesde) ) ? "'" . $this->fchArriendoDesde . "'" : "NULL";
         $this->fchNotificacion = ( esFechaValida($this->fchNotificacion) ) ? "'" . $this->fchNotificacion . "'" : "NULL";
-        $this->fchVigencia = ( esFechaValida($this->fchVigencia) ) ? "'" . $this->fchVigencia . "'" : "NULL";
+        $this->fchVigencia = ( esFechaValida($this->fchVigencia) ) ? "'2020-12-31'" : "2020-12-31";
 
         $sql = "
             INSERT INTO T_FRM_FORMULARIO (
@@ -623,7 +623,8 @@ class FormularioSubsidios {
                 $this->fchPostulacion = (esFechaValida($objRes->fields['fchPostulacion'])) ? $objRes->fields['fchPostulacion'] : NULL;
                 $this->fchUltimaActualizacion = (esFechaValida($objRes->fields['fchUltimaActualizacion'])) ? $objRes->fields['fchUltimaActualizacion'] : NULL;
                 $this->fchVencimiento = (esFechaValida($objRes->fields['fchVencimiento'])) ? $objRes->fields['fchVencimiento'] : NULL;
-                $this->fchVigencia = (esFechaValida($objRes->fields['fchVigencia'])) ? $objRes->fields['fchVigencia'] : NULL;
+               // $this->fchVigencia = (esFechaValida($objRes->fields['fchVigencia'])) ? $objRes->fields['fchVigencia'] : NULL;
+                $this->fchVigencia = (esFechaValida('2020-12-31')) ? '2020-12-31' : '2020-12-31';
                 $this->numAdultosNucleo = doubleval($objRes->fields['numAdultosNucleo']);
                 $this->numCelular = doubleval($objRes->fields['numCelular']);
                 $this->numCortes = doubleval($objRes->fields['numCortes']);

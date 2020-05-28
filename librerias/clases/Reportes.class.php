@@ -5940,6 +5940,99 @@ WHERE
         //pr($resultado);
         return $resultado;
     }
+    
+    public function reporteMensualActosAdmon() {
+        global $aptBd;
+        $sql = "
+       SELECT DISTINCT 
+    cac.numDocumento as Documento,
+    TRIM(CONCAT_WS(' ',
+                UPPER(cac.txtNombre1),
+                UPPER(cac.txtNombre2),
+                UPPER(cac.txtApellido1),
+                UPPER(cac.txtApellido2))) AS Nombre,
+                fac.seqFormularioActo AS seqFormularioActo,
+    fac.seqFormulario AS 'ID Hogar',
+    DATE_FORMAT(frm.fchInscripcion, '%d/%m/%Y') AS 'Fecha Inscripción',
+    case when fac.txtFormulario is null then frm.txtFormulario  else fac.txtFormulario end as 'Carpeta postulacion',    
+    DATE_FORMAT(fac.fchPostulacion, '%d/%m/%Y') AS 'Fecha Postulación',   
+    case when frm.bolDesplazado != fac.bolDesplazado then concat(fac.bolDesplazado, '/-/',frm.bolDesplazado)  else fac.bolDesplazado end as Desplazado,
+    CONCAT('Res. ', aad.numActo) AS 'Resolución Asignación',
+    YEAR(aad.fchActo) AS ano,
+    aad.fchActo AS 'F_Resolucion',
+    IF(moda.txtModalidad = modAAc.txtModalidad,
+        modAAc.txtModalidad,
+        CONCAT_WS(' / ',
+                moda.txtModalidad,
+                modAAc.txtModalidad)) AS Modalidad,
+    IF(tesq.txtTipoEsquema = esqAac.txtTipoEsquema,
+        esqAac.txtTipoEsquema,
+        CONCAT_WS(' / ',
+                tesq.txtTipoEsquema,
+                esqAac.txtTipoEsquema)) AS Esquema,
+    CONCAT(fac.seqFormulario,
+            'Res. ',
+            aad.numActo,
+            'de',
+            YEAR(aad.fchActo)) AS LLAVE,
+    (SELECT 
+            COUNT(seqFormulario)
+        FROM
+            T_AAD_FORMULARIO_ACTO frmac
+        WHERE
+	frmac.seqFormulario = fac.seqFormulario) AS cantidad,
+    IF(estForm.txtEstadoProceso = estAct.txtEstadoProceso,
+        estForm.txtEstadoProceso,
+        CONCAT_WS(' / ',
+                estForm.txtEstadoProceso,
+                estAct.txtEstadoProceso)) AS 'Estado Proceso',
+		CASE when frm.fchVigencia != fac.fchVigencia then frm.fchVigencia else fac.fchVigencia end as Vigencia,      
+    IF((frm.valcartaLeasing + frm.valComplementario + frm.valAspiraSubsidio) = (fac.valcartaLeasing + fac.valComplementario + fac.valAspiraSubsidio),
+        (fac.valcartaLeasing + fac.valComplementario + fac.valAspiraSubsidio),
+        CONCAT_WS(' / ',
+                (frm.valcartaLeasing + frm.valComplementario + frm.valAspiraSubsidio),
+                (fac.valcartaLeasing + fac.valComplementario + fac.valAspiraSubsidio))) AS Valor, 
+                sol.fchOrden,
+		case when sol.fchOrden is null then   fac.fchLegalizado  else sol.fchOrden end as Legalizacion
+FROM
+    T_AAD_ACTO_ADMINISTRATIVO aad
+        LEFT JOIN
+    T_AAD_HOGARES_VINCULADOS hvi ON aad.fchActo = hvi.fchActo
+        AND aad.numActo = hvi.numActo
+        LEFT JOIN
+    T_AAD_FORMULARIO_ACTO fac ON hvi.seqFormularioActo = fac.seqFormularioActo
+        LEFT JOIN
+    T_frm_FORMULARIO frm ON fac.seqFormulario = frm.seqFormulario
+        LEFT JOIN
+    T_AAD_HOGAR_ACTO hac ON fac.seqFormularioActo = hac.seqFormularioActo
+        LEFT JOIN
+    T_AAD_CIUDADANO_ACTO cac ON hac.seqCiudadanoActo = cac.seqCiudadanoActo
+        LEFT JOIN
+    t_frm_modalidad moda ON moda.seqModalidad = frm.seqModalidad
+        LEFT JOIN
+    t_pry_tipo_esquema tesq ON frm.seqTipoEsquema = tesq.seqTipoEsquema
+        LEFT JOIN
+    t_frm_modalidad modAAc ON modAAc.seqModalidad = fac.seqModalidad
+        LEFT JOIN
+    t_pry_tipo_esquema esqAac ON fac.seqTipoEsquema = esqAac.seqTipoEsquema
+        LEFT JOIN
+    t_frm_estado_proceso estForm ON (frm.seqEstadoProceso = estForm.seqEstadoProceso)
+        LEFT JOIN
+    t_frm_estado_proceso estAct ON (fac.seqEstadoProceso = estAct.seqEstadoProceso)
+    LEFT JOIN 
+    t_des_desembolso des ON(frm.seqFormulario = des.seqFormulario)
+    LEFT JOIN 
+    t_des_solicitud sol ON (des.seqDesembolso = sol.seqDesembolso)
+WHERE
+    modAAc.seqModalidad NOT IN (3 , 4, 5, 8, 9)
+        AND hvi.seqTipoActo = 1
+GROUP BY fac.seqFormularioActo
+ORDER BY frm.seqFormulario asc,
+ fac.seqFormularioActo DESC
+      ";
+        $objRes = $aptBd->execute($sql);
+        $this->obtenerReportesGeneral($objRes, "W INFORME METAS");
+    }
 
 }
 

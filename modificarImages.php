@@ -155,7 +155,7 @@ function sizeFormat($size) {
 //$nombre_fichero = '/recursos/imagenes/desembolsos';
 //$path = "../sipive/recursos/imagenes/desembolsos";
 //$path = "recursos/imagenes/14125";
-$path = 'D:\Reservas-2019\ModificacionFotosSenderos\Torre2';
+$path = 'C:\Users\liliana.basto\Documents\2020\MAYO\TECNICA\LACOLMENA\imagenes';
 $ar = getDirectorySize($path);
 
 

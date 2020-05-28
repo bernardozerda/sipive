@@ -5,6 +5,7 @@
 {assign var=seqLocalidad value=$claDesembolso->seqLocalidad}
 {assign var=seqSolucion value=$claFormulario->seqSolucion}
 {assign var=seqBancoGiro value=$arrSolicitud.seqBancoGiro}
+{assign var=txtDependencia value=$txtDependencia}
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es-es" lang="es-es">
 <head>
@@ -37,7 +38,7 @@
             <b>Solicitud de Desembolso</b><br>
             <b>Modalidad de {$txtModalidad}</b>
             <hr>
-            <div style="{$txtFuente10}; text-align:left; width:100%">
+            <div style="{$txtFuente10}; text-align:left; width:90%">
                 <b>Fecha:</b> {$txtFecha}<br>
                 <b>Consecutivo:</b> {$arrSolicitud.txtConsecutivo}<br>
                 <b>No. Registro:</b> {$numRegistro|number_format:0:'.':','}
@@ -438,7 +439,7 @@
                 {/if}
                 <br><br>
                 <span style="{$txtFuente10}">
-								ELABORÓ: {$txtUsuarioSesion|mb_strtolower|mb_strtoupper} - SUBDIRECCIÓN DE RECURSOS PÚBLICOS<br>
+								ELABORÓ: {$txtUsuarioSesion|mb_strtolower|mb_strtoupper} - {$txtDependencia|mb_strtolower|mb_strtoupper}<br>
 							</span>
                 <span style="{$txtFuente10}">
 								REVISÓ: {$arrSolicitud.txtRevisoSubsecretaria|mb_strtolower|mb_strtoupper}

@@ -246,6 +246,7 @@
                             <th bgcolor="#F5F5F5" >Descarga</th>
                             <th bgcolor="#F5F5F5" >Descarga X Hogar </th>
                             <th bgcolor="#F5F5F5" >Importar</th>
+                            <th bgcolor="#F5F5F5" >Mensual</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -255,6 +256,7 @@
                             <th bgcolor="#F5F5F5" >Descarga</th>                             
                             <th bgcolor="#F5F5F5" >Descarga X Hogar </th>
                             <th bgcolor="#F5F5F5" >Importar</th>
+                            <th bgcolor="#F5F5F5" >Mensual</th>
                         </tr>
                     </tfoot>
 
@@ -275,10 +277,93 @@
                                         $('#name').val('{$valueReportes.txtNombreReporte}');" href="#">
                                     <span class="glyphicon glyphicon-export" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a>
                             </td>
+                            <td><a class="btn btn-info btn-lg"  href="./contenidos/reportes/exportarRepMensual.php?nombre={$valueReportes.txtNombreReporte}" target="_blank"><span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
 
                         </tr>
 
                     {/foreach}
+                    <tr>
+                        <td>reporteGralHogar_20200203_151423</td>
+                        <td>2020-02-03</td> 
+                        <td style="text-align: center" >
+                            <a class="btn btn-info btn-lg"  href="./recursos/reportes/general/reporteGralHogar_20200302_081948.xls">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>reporteGralHogar_20191231_172316</td>
+                        <td>2019-12-31</td> 
+                        <td style="text-align: center" >
+                            <a class="btn btn-info btn-lg"   href="./recursos/reportes/general/reporteGralHogar_20200302_084054.xls">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>reporteGralHogar_20191202_065001</td>
+                        <td>2019-12-02</td> 
+                        <td style="text-align: center" >
+                            <a class="btn btn-info btn-lg"   href="./recursos/reportes/general/reporteGralHogar_20200302_083309.xls">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>reporteGralHogar_20191101_081556</td>
+                        <td>2019-11-01</td> 
+                        <td style="text-align: center" >
+                            <a class="btn btn-info btn-lg"   href="./recursos/reportes/general/reporteGralHogar_20200227_112953.xls">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>reporteGralHogar_20191001_072434</td>
+                        <td>2019-10-01</td> 
+                        <td style="text-align: center" >
+                            <a class="btn btn-info btn-lg"   href="./recursos/reportes/general/reporteGralHogar_20200227_112031.xls">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>reporteGralHogar_20190902_080331</td>
+                        <td>2019-09-02</td> 
+                        <td style="text-align: center" >
+                            <a class="btn btn-info btn-lg"   href="./recursos/reportes/general/reporteGralHogar_20200227_111521.xls">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>reporteGralHogar_20190801_100436</td>
+                        <td>2019-08-01  </td> 
+                        <td style="text-align: center" >
+                            <a class="btn btn-info btn-lg"   href="./recursos/reportes/general/reporteGralHogar_20200227_111231">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>reporteGralHogar_20190703_124236</td>
+                        <td>2019-07-03</td> 
+                        <td style="text-align: center" >
+                            <a class="btn btn-info btn-lg"   href="./recursos/reportes/general/reporteGralHogar_20200227_110853.xls">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>reporteGralHogar_20190401_114001</td>
+                        <td>2019-04-01</td> 
+                        <td style="text-align: center" >
+                            <a class="btn btn-info btn-lg"   href="./recursos/reportes/general/reporteGralHogar_20200227_105812.xls">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true" style="cursor: pointer; text-align: center"></span></a></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
                 </table>
                 </p>
             </div>

@@ -7,10 +7,10 @@ include( $txtPrefijoRuta . $arrConfiguracion['librerias']['funciones'] . "funcio
 include( $txtPrefijoRuta . $arrConfiguracion['carpetas']['recursos'] . "archivos/coneccionBaseDatos.php" );
 
 
-$ruta = 'D:\Reservas-2019\OPV 25 Nov\19CEH-Mz52\14747';
+$ruta = 'D:\CONVENIO408';
 //listar($ruta);
-//crearCarpetas();
-girarImagen($ruta);
+crearCarpetas();
+//girarImagen($ruta);
 //eliminarReporteGral();
 
 function listar($directorio) {
@@ -57,17 +57,16 @@ function listar($directorio) {
 function crearCarpetas() {
     global $aptBd;
 
-    /*  $sql = "select seqUnidadProyecto from t_pry_unidad_proyecto WHERE seqUnidadProyecto in (13885	,
-
-      )"; */
-    $sql = "select * from t_pry_unidad_proyecto 
+     $sql = "select seqUnidadProyecto from t_pry_unidad_proyecto WHERE seqProyecto in (	208 )"; 
+   /*echo  $sql = "select * from t_pry_unidad_proyecto 
  left join t_pry_tecnico using(seqUnidadProyecto)
-where seqProyecto = 225 and seqTecnicoUnidad is null";
+where seqProyecto = 242 ";*/
     $objRes = $aptBd->execute($sql);
+    var_dump($objRes);
     $txtArchivo = "Archivo;Existe\n";
     while ($objRes->fields) {
         echo "<br>C:\Users\liliana.basto\Documents\Reservas-2019\\" . $objRes->fields['seqUnidadProyecto'];
-        mkdir("C:\Users\liliana.basto\Documents\MZ65\\" . $objRes->fields['seqUnidadProyecto'], 0777);
+        mkdir("D:\CONVENIO408\MZ55\\" . $objRes->fields['seqUnidadProyecto'], 0777);
         $objRes->MoveNext();
     }
 

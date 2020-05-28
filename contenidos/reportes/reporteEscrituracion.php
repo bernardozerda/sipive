@@ -13,9 +13,9 @@ function obtenerReporteEscrituracion($arrDocumentos) {
     $objPHPExcel = new PHPExcel();
 //conexion
 
-    $conexion = mysql_connect("localhost", "sdht_usuario", "Ochochar*1");
+    $conexion = mysql_connect("192.168.3.94", "sdht_usuario", "Ochochar*1");
     mysql_set_charset('utf8', $conexion);
-    mysql_select_db("sipive", $conexion);
+    mysql_select_db("sipive_capacitacion", $conexion);
     // mysql_select_db("sdth_subsidiosentrega", $conexion);
 
     $sql = "SELECT 

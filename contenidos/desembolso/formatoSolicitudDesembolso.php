@@ -133,7 +133,11 @@ $numSolicitudes = count($claDesembolso->arrSolicitud['resumen']['fechas']);
 $result = $aptBd->execute("select txtFlujo from T_DES_FLUJO where seqFormulario = " . $_GET['seqFormulario']);
 $txtflujo = $result->fields['txtFlujo'];
 $claSmarty->assign("Flujo", $txtflujo);
-
+$arrDependencia = array_shift(obtenerDatosTablas(
+                                    "t_cor_usuario,t_cor_dependencia USING(seqDependencia)", Array("txtDependencia"), "txtDependencia", "seqUsuario = " .$_SESSION['seqUsuario']. ""
+                    ));
+$txtDependencia = $arrDependencia['txtDependencia'];
+//echo "<br>****".$txtDependencia;
 $claSmarty->assign("arrResolucionModificacion", $arrResolucionModificacion);
 $claSmarty->assign("arrResolucionIndexacion", $arrResolucionIndexacion);
 $claSmarty->assign("arrNombreProyectos", $arrNombreProyectos);
@@ -145,6 +149,7 @@ $claSmarty->assign("claCiudadano", $objCiudadano);
 $claSmarty->assign("claDesembolso", $claDesembolso);
 $claSmarty->assign("arrSolicitud", $claDesembolso->arrSolicitud['detalles'][$seqSolicitud]);
 $claSmarty->assign("claFormulario", $claFormulario);
+$claSmarty->assign("txtDependencia", $txtDependencia);
 $claSmarty->assign("txtUsuarioSesion", $_SESSION['txtNombre'] . " " . $_SESSION['txtApellido']);
 $claSmarty->assign("numRegistro", $numRegistros);
 $claSmarty->assign("numSolicitudes", $numSolicitudes);
